@@ -242,7 +242,7 @@ const ResaleProperties = () => {
             Exclusive — JBJ Global Real Estate
           </span>
           <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A]">
-            Exclusive Resale <span className="text-[#102540]">Properties</span>
+            Exclusive Resale <span className="text-[#0A0A0A]">Properties</span>
           </h1>
           <p className="text-lg max-w-2xl mx-auto font-medium text-[#1A1A1A]/80">
             Exclusive investor resale portfolio curated by JBJ Global Real Estate — premium properties from verified investors at competitive prices, available for immediate purchase.
@@ -251,17 +251,17 @@ const ResaleProperties = () => {
       </section>
 
       {/* Premium sticky filter bar — clears 88px fixed header */}
-      <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+      <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(10,10,10,0.06)]">
         <div className="w-full px-3 sm:px-4">
           <div className="relative bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl px-3 py-3 sm:px-4 sm:py-3.5">
 
             {/* Navy left accent bar */}
-            <span aria-hidden className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full bg-[#102540]" />
+            <span aria-hidden className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full bg-[#0A0A0A]" />
 
             {/* Row 1: prominent search input */}
             <div className="flex items-center gap-2 mb-2.5 pl-2">
               <div className={cn(filterSearchPillWrapper, "h-11 flex-1 !bg-transparent border-[#B89555]/40")}>
-                <Search className="w-4 h-4 mr-2 text-[#102540] flex-shrink-0" />
+                <Search className="w-4 h-4 mr-2 text-[#0A0A0A] flex-shrink-0" />
                 <input
                   type="text"
                   placeholder="Search by property name, project, area, developer…"
@@ -547,7 +547,7 @@ const ResaleProperties = () => {
                       variant="ghost"
                       data-cta="dark"
                       data-allow-dark-cta
-                      style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                      style={{ backgroundColor: "#0A0A0A", color: "#FFFFFF" }}
                       className="allow-white jj-cta-dark w-full mt-4 h-10 font-semibold rounded-xl"
                     >
                       Register Interest
@@ -560,9 +560,9 @@ const ResaleProperties = () => {
             </div>
           ) : (
             /* Empty State — Premium navy + champagne + gold */
-            <div className="max-w-5xl mx-auto text-center py-14 px-8 sm:px-14 md:px-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+            <div className="max-w-5xl mx-auto text-center py-14 px-8 sm:px-14 md:px-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(10,10,10,0.06)]">
               <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6] flex items-center justify-center mx-auto mb-6 border border-[#B89555]/40">
-                <Building2 className="w-10 h-10 text-[#102540]" />
+                <Building2 className="w-10 h-10 text-[#0A0A0A]" />
               </div>
               <h3 className="text-2xl font-bold mb-3 text-[#1A1A1A]">
                 Recently Sold Out
@@ -578,7 +578,7 @@ const ResaleProperties = () => {
               {/* Subscribe CTA */}
               <div className="bg-[#EFE6D6] rounded-2xl p-6 border border-[#B89555]/40">
                 <div className="flex items-center gap-2 justify-center mb-4">
-                  <Bell className="w-5 h-5 text-[#102540]" />
+                  <Bell className="w-5 h-5 text-[#0A0A0A]" />
                   <h4 className="font-semibold text-lg text-[#1A1A1A]">Stay in the Loop</h4>
                 </div>
                 <p className="text-sm mb-4 text-[#1A1A1A]/70">
@@ -603,7 +603,7 @@ const ResaleProperties = () => {
                       variant="ghost"
                       data-cta="dark"
                       data-allow-dark-cta
-                      style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                      style={{ backgroundColor: "#0A0A0A", color: "#FFFFFF" }}
                       className="allow-white jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                     >
                       Subscribe
@@ -619,7 +619,7 @@ const ResaleProperties = () => {
                     variant="ghost"
                     data-cta="dark"
                     data-allow-dark-cta
-                    style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                    style={{ backgroundColor: "#0A0A0A", color: "#FFFFFF" }}
                     className="allow-white jj-cta-dark font-semibold h-11 px-6 rounded-xl"
                   >
                     Browse Off-Plan Properties
@@ -644,12 +644,12 @@ const ResaleProperties = () => {
       {/* List Your Resale CTA band — connects /resale-properties → /list-property */}
       <section className="px-4 sm:px-6 md:px-10 py-10 md:py-14 bg-[#F7F2EA]">
         <div className="max-w-5xl mx-auto">
-          <div className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+          <div className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(10,10,10,0.06)]">
             <div className="flex-1">
               <span
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3 bg-[#102540] text-white border border-[#B89555]/40 allow-white"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3 bg-[#0A0A0A] text-white border border-[#B89555]/40 allow-white"
               >
                 Investor Resale
               </span>
@@ -667,7 +667,7 @@ const ResaleProperties = () => {
                   variant="ghost"
                   data-cta="dark"
                   data-allow-dark-cta
-                  style={{ backgroundColor: "#102540", color: "#FFFFFF" }}
+                  style={{ backgroundColor: "#0A0A0A", color: "#FFFFFF" }}
                   className="allow-white jj-cta-dark font-semibold h-11 px-6 w-full sm:w-auto rounded-xl"
                 >
                   List my property

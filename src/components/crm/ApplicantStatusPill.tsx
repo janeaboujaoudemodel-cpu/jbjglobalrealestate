@@ -7,7 +7,7 @@
  * Palette is deliberately muted (champagne / muted gold / muted navy /
  * muted emerald / muted burgundy / warm neutral) — never bright startup
  * colours and never gold text (faded-gold prohibition). All text is
- * ink (#1A1A1A) or muted navy (#102540) on tinted champagne surfaces
+ * ink (#1A1A1A) or muted navy (#0A0A0A) on tinted champagne surfaces
  * with a 1px hairline border.
  */
 import { cn } from "@/lib/utils";
@@ -108,7 +108,7 @@ export const APPLICANT_STATUS_META: Record<string, ApplicantStatusMeta> = {
     icon: CalendarClock,
     order: 50,
     className:
-      "bg-[#E4EAF2] text-[#102540] border-[#102540]/30",
+      "bg-[#E4EAF2] text-[#0A0A0A] border-[#0A0A0A]/30",
   },
   interview_completed: {
     id: "interview_completed",
@@ -117,7 +117,7 @@ export const APPLICANT_STATUS_META: Record<string, ApplicantStatusMeta> = {
     icon: CheckCheck,
     order: 60,
     className:
-      "bg-[#D6E0EE] text-[#102540] border-[#102540]/40",
+      "bg-[#D6E0EE] text-[#0A0A0A] border-[#0A0A0A]/40",
   },
   approved: {
     id: "approved",

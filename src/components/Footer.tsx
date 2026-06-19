@@ -448,7 +448,7 @@ const Footer = () => {
       data-hairline-luminance={hairline.luminance.toFixed(4)}
       className="relative overflow-x-hidden isolate"
       style={{
-        background: "#102540",
+        background: "#0A0A0A",
         color: "rgba(255,255,255,0.92)",
         fontFamily: "Inter, system-ui, sans-serif",
         // Expose alphas as CSS vars so descendants can opt in if needed.

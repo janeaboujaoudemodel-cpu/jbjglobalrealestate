@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
  * - Floating stat cards (broker ecosystem proof points)
  *
  * Strict palette: champagne surfaces, gold hairlines, ink text.
- * Navy (#102540) reserved for primary CTA only.
+ * Navy (#0A0A0A) reserved for primary CTA only.
  */
 export default function PremiumCareersHero() {
   const stats: { icon: any; label: string; value: string }[] = [
@@ -80,7 +80,7 @@ export default function PremiumCareersHero() {
         >
           Build your career at the<br />
           <span className="relative inline-block">
-            <span className="relative z-10 text-[#102540]">
+            <span className="relative z-10 text-[#0A0A0A]">
               luxury frontier of Dubai
             </span>
             <span
@@ -98,7 +98,7 @@ export default function PremiumCareersHero() {
 
         <p
           data-no-contrast-guard
-          className="allow-white mt-6 max-w-2xl mx-auto text-base md:text-lg leading-relaxed rounded-xl px-5 py-3 bg-[#102540] border border-[#B89555]/60 shadow-[0_10px_30px_-18px_rgba(16,37,64,0.55)]"
+          className="allow-white mt-6 max-w-2xl mx-auto text-base md:text-lg leading-relaxed rounded-xl px-5 py-3 bg-[#0A0A0A] border border-[#B89555]/60 shadow-[0_10px_30px_-18px_rgba(10,10,10,0.55)]"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           Join an AI-powered brokerage ecosystem trusted by elite consultants,
@@ -112,14 +112,14 @@ export default function PremiumCareersHero() {
             {/* Soft animated glow ring */}
             <span
               aria-hidden
-              className="absolute inset-0 -m-1 rounded-xl bg-[#102540]/35 blur-xl careers-hero-glow"
+              className="absolute inset-0 -m-1 rounded-xl bg-[#0A0A0A]/35 blur-xl careers-hero-glow"
             />
             <a
               href="#open-positions"
               data-allow-dark-cta
               data-no-contrast-guard
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              className="relative inline-flex items-center justify-center gap-2 rounded-xl px-7 h-12 font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_8px_24px_-8px_rgba(16,37,64,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] transition-all allow-white"
+              className="relative inline-flex items-center justify-center gap-2 rounded-xl px-7 h-12 font-semibold bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 shadow-[0_8px_24px_-8px_rgba(10,10,10,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] transition-all allow-white"
             >
               <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Explore Open Positions</span>
             </a>
@@ -140,7 +140,7 @@ export default function PremiumCareersHero() {
           {stats.map(({ icon: Icon, label, value }, i) => (
             <div
               key={label}
-              className="group relative rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7]/85 backdrop-blur-sm px-4 py-5 text-left transition-all hover:-translate-y-[2px] hover:shadow-[0_18px_40px_-22px_rgba(16,37,64,0.35)] hover:border-[#B89555]"
+              className="group relative rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7]/85 backdrop-blur-sm px-4 py-5 text-left transition-all hover:-translate-y-[2px] hover:shadow-[0_18px_40px_-22px_rgba(10,10,10,0.35)] hover:border-[#B89555]"
               style={{
                 animation: `careersHeroFloat 6s ease-in-out ${i * 0.4}s infinite`,
               }}
@@ -153,7 +153,7 @@ export default function PremiumCareersHero() {
                   {label}
                 </p>
               </div>
-              <p className="text-xl md:text-2xl font-semibold text-[#102540] tracking-tight">
+              <p className="text-xl md:text-2xl font-semibold text-[#0A0A0A] tracking-tight">
                 {value}
               </p>
             </div>

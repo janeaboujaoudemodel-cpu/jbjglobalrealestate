@@ -516,10 +516,10 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const isLight = variant === 'light';
     const isCareersPhoneInput = className?.includes("careers-phone-input");
     const buttonStyles = isCareersPhoneInput
-      ? "jbj-form-trigger-filled hover:bg-[#102540] hover:text-white hover:border-[#102540] focus:border-[#102540] rounded-lg"
+      ? "jbj-form-trigger-filled hover:bg-[#0A0A0A] hover:text-white hover:border-[#0A0A0A] focus:border-[#0A0A0A] rounded-lg"
       : isLight 
       ? "jbj-form-trigger-filled"
-      : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#102540] hover:text-white hover:border-[#B89555] focus:border-[#B89555]";
+      : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#0A0A0A] hover:text-white hover:border-[#B89555] focus:border-[#B89555]";
     const inputStyles = isCareersPhoneInput
       ? "jbj-form-field rounded-lg"
       : isLight
@@ -549,7 +549,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       "focus:ring-0 focus:outline-none";
 
 
-    // NOTE: removed all hover/selected bg-[#102540]/N tints — they were
+    // NOTE: removed all hover/selected bg-[#0A0A0A]/N tints — they were
     // either painting items navy-on-cream or triggering the navy-pill
     // white-text guard. Use champagne tints only (cream #EFE6D6) so text
     // stays ink and the global contrast guards never fire.
@@ -583,7 +583,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 data-no-contrast-guard
                 data-allow-dark-cta
                 style={isCareersPhoneInput
-                  ? { backgroundColor: "#102540", border: "2px solid #102540", color: "#FFFFFF", boxShadow: "none" }
+                  ? { backgroundColor: "#0A0A0A", border: "2px solid #0A0A0A", color: "#FFFFFF", boxShadow: "none" }
                   : isLight ? undefined : { backgroundColor: "#1A1A1A", color: "#FFFFFF" }}
               >
                 <span className="flex items-center gap-2 truncate" style={isLight ? undefined : { color: "#FFFFFF" }}>

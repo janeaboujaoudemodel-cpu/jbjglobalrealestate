@@ -90,13 +90,13 @@ const ExploreServicesExpander = () => {
             data-on-dark
             data-no-contrast-guard
             data-allow-dark-cta
-            className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/50 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3 transition-colors"
+            className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/50 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3 transition-colors"
             style={{ color: "#FFFFFF" }}
           >
             <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             <span className="allow-white" style={{ color: "#FFFFFF" }}>Premium Real Estate Services</span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-[#102540] hover:text-[#B89555] tracking-tight transition-colors cursor-default">
+          <h2 className="text-xl md:text-2xl font-bold text-[#0A0A0A] hover:text-[#B89555] tracking-tight transition-colors cursor-default">
             Explore Our Services
           </h2>
           <p className="mt-1 text-sm text-[#1A1A1A]/70">
@@ -109,7 +109,7 @@ const ExploreServicesExpander = () => {
           data-on-dark
           data-no-contrast-guard
           data-allow-dark-cta
-          className="allow-white shrink-0 self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/55 text-white text-xs md:text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+          className="allow-white shrink-0 self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/55 text-white text-xs md:text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(10,10,10,0.55)]"
           style={{ color: "#FFFFFF" }}
         >
           <Crown className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
@@ -125,7 +125,7 @@ const ExploreServicesExpander = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/55 bg-[#102540] divide-x divide-white/30"
+        className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/55 bg-[#0A0A0A] divide-x divide-white/30"
         role="tablist"
         aria-label="Services"
       >
@@ -146,7 +146,7 @@ const ExploreServicesExpander = () => {
               className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-[background-color] ${
                 isActive
                   ? `bg-[#EFE6D6] hover:bg-[#EFE6D6] text-[#1A1A1A] hover:text-[#1A1A1A]`
-                  : `text-white hover:bg-[#1a3d63]`
+                  : `text-white hover:bg-[#1F1F1F]`
               } ${s.available === false ? "opacity-80" : ""}`}
             >
               <Icon className={`w-4 h-4 ${isActive ? "" : "allow-white"}`} style={isActive ? { color: "#1A1A1A", stroke: "#1A1A1A" } : { color: "#FFFFFF", stroke: "#FFFFFF" }} />

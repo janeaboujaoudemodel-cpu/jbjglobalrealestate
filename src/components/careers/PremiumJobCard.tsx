@@ -74,7 +74,7 @@ const TAG_STYLES: Record<
   featured: {
     label: "Featured",
     icon: Star,
-    bg: "bg-[#102540]",
+    bg: "bg-[#0A0A0A]",
     ring: "border-[#B89555]",
     text: "!text-white",
   },
@@ -155,7 +155,7 @@ export default function PremiumJobCard({
           {selected && isOpenForApply && (
             <span
               data-no-contrast-guard
-              className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#102540] border border-[#B89555]/60"
+              className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0A0A0A] border border-[#B89555]/60"
               aria-label="Selected"
             >
               <CheckCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
@@ -202,12 +202,12 @@ export default function PremiumJobCard({
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
           <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-            <Briefcase className="w-3.5 h-3.5 text-[#102540]" />
+            <Briefcase className="w-3.5 h-3.5 text-[#0A0A0A]" />
             {department}
           </span>
           {location && (
             <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-              <MapPin className="w-3.5 h-3.5 text-[#102540]" />
+              <MapPin className="w-3.5 h-3.5 text-[#0A0A0A]" />
               {location}
             </span>
           )}

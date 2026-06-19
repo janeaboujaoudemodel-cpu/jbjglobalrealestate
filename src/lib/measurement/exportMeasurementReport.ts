@@ -18,7 +18,7 @@ export interface MeasurementReportData {
 
 const INK = "#1A1A1A";
 const GOLD = "#B89555";
-const NAVY = "#102540";
+const NAVY = "#0A0A0A";
 const CHAMP = "#F7F2EA";
 const EMERALD = "#047857";
 

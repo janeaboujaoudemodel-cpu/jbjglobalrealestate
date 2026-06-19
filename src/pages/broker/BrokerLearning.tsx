@@ -403,7 +403,7 @@ export default function BrokerLearning() {
                   <DialogHeader>
                     <div className="flex items-start gap-3">
                       <div
-                        className="shrink-0 w-12 h-12 rounded-xl bg-[#102540] grid place-items-center text-white border border-[#B89555]/70"
+                        className="shrink-0 w-12 h-12 rounded-xl bg-[#0A0A0A] grid place-items-center text-white border border-[#B89555]/70"
                         data-allow-dark-cta
                         data-no-contrast-guard
                       >
@@ -500,7 +500,7 @@ export default function BrokerLearning() {
                         <button
                           type="button"
                           onClick={() => setLessonIndex((i) => i + 1)}
-                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)]"
+                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(10,10,10,0.25)]"
                           data-allow-dark-cta
                           data-no-contrast-guard
                           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
@@ -515,7 +515,7 @@ export default function BrokerLearning() {
                             setModuleProgress((p) => ({ ...p, [activeModule.id]: 100 }));
                             closeModule();
                           }}
-                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)]"
+                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(10,10,10,0.25)]"
                           data-allow-dark-cta
                           data-no-contrast-guard
                           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
@@ -658,7 +658,7 @@ function TrainingCard({
             <button
               type="button"
               onClick={onStart}
-              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(16,37,64,0.25)] leading-none"
+              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 shadow-[0_4px_12px_rgba(10,10,10,0.25)] leading-none"
               data-allow-dark-cta
               data-no-contrast-guard
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}

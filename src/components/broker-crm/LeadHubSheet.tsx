@@ -266,7 +266,7 @@ export default function LeadHubSheet({ lead, open, onOpenChange }: Props) {
               <Button
                 onClick={() => createEvent.mutate()}
                 disabled={createEvent.isPending}
-                className="bg-[#102540] text-white hover:bg-[#1a3d63] w-full"
+                className="bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] w-full"
                 data-allow-dark-cta
               >
                 {createEvent.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Plus className="h-4 w-4 mr-1.5" />}
@@ -321,7 +321,7 @@ export default function LeadHubSheet({ lead, open, onOpenChange }: Props) {
               <Button
                 onClick={() => createTask.mutate()}
                 disabled={createTask.isPending}
-                className="bg-[#102540] text-white hover:bg-[#1a3d63] w-full"
+                className="bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] w-full"
                 data-allow-dark-cta
               >
                 {createTask.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Plus className="h-4 w-4 mr-1.5" />}
@@ -341,7 +341,7 @@ export default function LeadHubSheet({ lead, open, onOpenChange }: Props) {
                     onClick={() => toggleTask.mutate(t)}
                     className={`h-5 w-5 rounded-md border grid place-items-center transition-colors ${
                       t.status === "done"
-                        ? "bg-[#102540] border-[#102540] text-white"
+                        ? "bg-[#0A0A0A] border-[#0A0A0A] text-white"
                         : "bg-[#FDFBF7] border-[#B89555]/40"
                     }`}
                     title="Toggle complete"
@@ -385,7 +385,7 @@ export default function LeadHubSheet({ lead, open, onOpenChange }: Props) {
               <Button
                 onClick={() => createNote.mutate()}
                 disabled={createNote.isPending}
-                className="bg-[#102540] text-white hover:bg-[#1a3d63] w-full"
+                className="bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] w-full"
                 data-allow-dark-cta
               >
                 {createNote.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Plus className="h-4 w-4 mr-1.5" />}

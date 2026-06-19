@@ -55,7 +55,7 @@ interface DLDMarketWidgetProps {
 const TONE = {
   emerald: { text: "text-[#1E5F3F]", soft: "bg-[#1E5F3F]/8", border: "border-[#1E5F3F]/25", dot: "bg-[#1E5F3F]", bar: "bg-[#1E5F3F]" },
   navy:    { text: "text-[#1F3A5F]", soft: "bg-[#1F3A5F]/8", border: "border-[#1F3A5F]/25", dot: "bg-[#1F3A5F]", bar: "bg-[#1F3A5F]" },
-  steel:   { text: "text-[#102540]", soft: "bg-[#102540]/8", border: "border-[#102540]/25", dot: "bg-[#102540]", bar: "bg-[#102540]" },
+  steel:   { text: "text-[#0A0A0A]", soft: "bg-[#0A0A0A]/8", border: "border-[#0A0A0A]/25", dot: "bg-[#0A0A0A]", bar: "bg-[#0A0A0A]" },
   bronze:  { text: "text-[#B89555]", soft: "bg-[#B89555]/8", border: "border-[#B89555]/25", dot: "bg-[#B89555]", bar: "bg-[#B89555]" },
   copper:  { text: "text-[#8C4A2B]", soft: "bg-[#8C4A2B]/8", border: "border-[#8C4A2B]/25", dot: "bg-[#8C4A2B]", bar: "bg-[#8C4A2B]" },
   ink:     { text: "text-[#1A1A1A]", soft: "bg-[#1A1A1A]/5",  border: "border-[#1A1A1A]/15", dot: "bg-[#1A1A1A]", bar: "bg-[#1A1A1A]" },
@@ -105,8 +105,8 @@ const DownloadReportDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="gold" size="sm" className="gap-2 !text-[#102540] hover:!text-[#102540]">
-          <Download className="w-4 h-4 text-[#102540]" />
+        <Button variant="gold" size="sm" className="gap-2 !text-[#0A0A0A] hover:!text-[#0A0A0A]">
+          <Download className="w-4 h-4 text-[#0A0A0A]" />
           Download Report
         </Button>
       </DialogTrigger>
@@ -239,7 +239,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Header */}
           <div className="text-center mb-10">
-            <div data-allow-dark-cta data-no-contrast-guard className="allow-white inline-flex items-center gap-2 bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/60 rounded-full px-4 py-1.5 mb-4 transition-colors">
+            <div data-allow-dark-cta data-no-contrast-guard className="allow-white inline-flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/60 rounded-full px-4 py-1.5 mb-4 transition-colors">
               <Banknote className="w-4 h-4 text-white" />
               <span className="text-white text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
             </div>
@@ -301,7 +301,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-4 h-4 text-[#B89555]" />
-                <h3 className="text-[#102540] font-semibold text-sm">Off-Plan vs Secondary</h3>
+                <h3 className="text-[#0A0A0A] font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
 
               <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
@@ -336,10 +336,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-4">
                 <Banknote className="w-4 h-4 text-[#B89555]" />
-                <h3 className="text-[#102540] font-semibold text-sm">Cash vs Mortgage</h3>
+                <h3 className="text-[#0A0A0A] font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
               <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div className="h-full bg-[#102540] rounded-l-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
+                <div className="h-full bg-[#0A0A0A] rounded-l-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
                   <span className="text-white text-[10px] font-bold">{cashPct}%</span>
                 </div>
                 <div className="h-full bg-[#B89555] flex-1 rounded-r-full flex items-center justify-center">
@@ -348,12 +348,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-[#102540]/8 border border-[#102540]/25 rounded-lg p-3">
+                <div className="bg-[#0A0A0A]/8 border border-[#0A0A0A]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#102540]" />
-                    <span className="text-[#102540] text-[10px] uppercase tracking-wider font-bold">Cash</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#0A0A0A]" />
+                    <span className="text-[#0A0A0A] text-[10px] uppercase tracking-wider font-bold">Cash</span>
                   </div>
-                  <p className="text-[#102540] text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
+                  <p className="text-[#0A0A0A] text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
                   <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
                 <div className="bg-[#B89555]/8 border border-[#B89555]/25 rounded-lg p-3">
@@ -375,7 +375,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-5">
                 <MapPin className="w-4 h-4 text-[#B89555]" />
-                <h3 className="text-[#102540] text-sm font-bold">Top 10 Areas by Transactions</h3>
+                <h3 className="text-[#0A0A0A] text-sm font-bold">Top 10 Areas by Transactions</h3>
               </div>
 
               <div className="space-y-1.5">
@@ -407,7 +407,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                           </span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-[#102540] text-xs font-bold">{area.transactions.toLocaleString()}</span>
+                          <span className="text-[#0A0A0A] text-xs font-bold">{area.transactions.toLocaleString()}</span>
                           <span className="text-[#1E5F3F] text-xs font-extrabold bg-[#1E5F3F]/8 border border-[#1E5F3F]/25 px-2 py-0.5 rounded-full">
                             {area.change}
                           </span>
@@ -454,7 +454,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-5">
                 <Globe className="w-4 h-4 text-[#B89555]" />
-                <h3 className="text-[#102540] text-sm font-bold">Top 10 Buyer Nationalities</h3>
+                <h3 className="text-[#0A0A0A] text-sm font-bold">Top 10 Buyer Nationalities</h3>
               </div>
 
               <div className="space-y-1.5">

@@ -28,13 +28,13 @@
    * checkbox in the app. Also exposed as Tailwind `brand.*`
    * and JS constants in `src/lib/brand-tokens.ts`.
    * Old `--t-*` names below are aliases for back-compat. */
-  --brand-blue:        #102540;
-  --brand-blue-hover:  #1a3d63;
+  --brand-blue:        #0A0A0A;
+  --brand-blue-hover:  #1F1F1F;
   --brand-blue-deep:   #143052;
-  --brand-blue-soft:   rgba(16, 37, 64, 0.22);
-  --brand-blue-ring:   rgba(16, 37, 64, 0.18);
-  --brand-blue-tint:   rgba(16, 37, 64, 0.06);
-  --brand-blue-muted:  rgba(16, 37, 64, 0.58);
+  --brand-blue-soft:   rgba(10,10,10,0.22);
+  --brand-blue-ring:   rgba(10,10,10,0.18);
+  --brand-blue-tint:   rgba(10,10,10,0.06);
+  --brand-blue-muted:  rgba(10,10,10,0.58);
 
   --brand-gold:        #B89555;
   --brand-gold-hover:  #C9A66B;
@@ -282,8 +282,8 @@ label[data-required]::after {
 
 [data-careers-page] .careers-navy,
 [data-careers-page] .careers-navy * {
-  color: #102540;
-  -webkit-text-fill-color: #102540;
+  color: #0A0A0A;
+  -webkit-text-fill-color: #0A0A0A;
 }
 
 [data-careers-page] .careers-white,
@@ -391,7 +391,7 @@ label[data-required]::after {
   background-color: #FDFBF7 !important;
   border: 2px solid var(--t-form-blue) !important;
   border-radius: 0.625rem !important;
-  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 1px 2px rgba(10,10,10,0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
   transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease, transform 200ms ease !important;
@@ -400,8 +400,8 @@ label[data-required]::after {
 [data-careers-page] .careers-blue-field:hover,
 [data-careers-page] input.careers-blue-field:hover,
 [data-careers-page] button[role="combobox"].careers-blue-field:hover {
-  border-color: #1a3d63 !important;
-  box-shadow: 0 4px 14px -8px rgba(16, 37, 64, 0.28) !important;
+  border-color: #1F1F1F !important;
+  box-shadow: 0 4px 14px -8px rgba(10,10,10,0.28) !important;
   background-color: #FDFBF7 !important;
 }
 
@@ -415,7 +415,7 @@ label[data-required]::after {
   background-color: #FDFBF7 !important;
   box-shadow:
     0 0 0 3px var(--t-form-blue-ring),
-    0 8px 24px -16px rgba(16, 37, 64, 0.35) !important;
+    0 8px 24px -16px rgba(10,10,10,0.35) !important;
   transform: translateY(-1px) !important;
   outline: none !important;
 }
@@ -425,7 +425,7 @@ label[data-required]::after {
 [data-careers-page] input.careers-blue-field:disabled,
 [data-careers-page] input.careers-blue-field[disabled] {
   background-color: rgba(247, 242, 234, 0.6) !important;
-  border-color: rgba(16, 37, 64, 0.35) !important;
+  border-color: rgba(10,10,10,0.35) !important;
   box-shadow: none !important;
   color: rgba(26, 26, 26, 0.55);
   -webkit-text-fill-color: rgba(26, 26, 26, 0.55);
@@ -517,10 +517,10 @@ label[data-required]::after {
 
 /* Country-code pill: softer navy with 2px navy border (matches blue fields) */
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] {
-  background: linear-gradient(180deg, #143052 0%, #102540 100%) !important;
+  background: linear-gradient(180deg, #143052 0%, #0A0A0A 100%) !important;
   border: 2px solid var(--t-form-blue) !important;
   border-radius: 0.625rem !important;
-  box-shadow: 0 4px 12px -6px rgba(16, 37, 64, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 12px -6px rgba(10,10,10,0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
 [data-careers-page] .careers-phone-input input,
@@ -530,7 +530,7 @@ label[data-required]::after {
   border-radius: 0.625rem !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
-  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.06) !important;
+  box-shadow: 0 1px 2px rgba(10,10,10,0.06) !important;
   appearance: none !important;
   -webkit-appearance: none !important;
 }
@@ -564,7 +564,7 @@ label[data-required]::after {
   background-color: #FDFBF7 !important;
   border: 2px solid var(--t-form-blue) !important;
   border-radius: 0.625rem !important;
-  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.06) !important;
+  box-shadow: 0 1px 2px rgba(10,10,10,0.06) !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
 }
@@ -582,7 +582,7 @@ label[data-required]::after {
   background-color: #FDFBF7 !important;
   border: 1px solid #B89555 !important;
   border-radius: 0.625rem !important;
-  box-shadow: 0 1px 2px rgba(16, 37, 64, 0.06) !important;
+  box-shadow: 0 1px 2px rgba(10,10,10,0.06) !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
 }
@@ -619,8 +619,8 @@ label[data-required]::after {
 [data-careers-page] .careers-open-badge[data-state],
 [data-careers-page] .careers-open-badge[data-state="open"],
 [data-careers-page] .careers-open-badge[data-state="closed"] {
-  background: #102540 !important;
-  background-color: #102540 !important;
+  background: #0A0A0A !important;
+  background-color: #0A0A0A !important;
   border: 1px solid #B89555 !important;
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
@@ -642,7 +642,7 @@ label[data-required]::after {
 /* ---- Open Positions card: navy surface + animated linear sheen on hover ---- */
 [data-careers-page] .careers-card-navy {
   position: relative;
-  background: linear-gradient(180deg, #143052 0%, #102540 100%) !important;
+  background: linear-gradient(180deg, #143052 0%, #0A0A0A 100%) !important;
   border: 1px solid #B89555 !important;
   box-shadow:
     0 28px 60px -34px rgba(7, 27, 51, 0.65),
@@ -679,7 +679,7 @@ label[data-required]::after {
     0 32px 70px -34px rgba(7, 27, 51, 0.75),
     0 0 0 1px rgba(184, 149, 85, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
-  background: linear-gradient(180deg, #1a3d63 0%, #143052 100%) !important;
+  background: linear-gradient(180deg, #1F1F1F 0%, #143052 100%) !important;
 }
 [data-careers-page] .careers-card-navy:hover::before {
   transform: translateX(110%);
@@ -724,7 +724,7 @@ label[data-required]::after {
  * GLOBAL FORM STANDARD — JBJ Public Lead-Capture Form
  *
  * Mirrors the /careers visual exactly:
- *   - Identity fields  → 2px navy #102540 border on white bg + ink text
+ *   - Identity fields  → 2px navy #0A0A0A border on white bg + ink text
  *   - Preference fields (opt-in via [data-field-tone="gold"]) →
  *                       2px gold #B89555 border on white bg + ink text
  *   - Labels: navy by default, ink for consent/terms
@@ -736,8 +736,8 @@ label[data-required]::after {
  * ============================================================ */
 
 [data-jbj-form] label:not([for*="consent"]):not([for*="terms"]):not([for*="agree"]) {
-  color: #102540;
-  -webkit-text-fill-color: #102540;
+  color: #0A0A0A;
+  -webkit-text-fill-color: #0A0A0A;
   font-weight: 600 !important;
 }
 
@@ -759,12 +759,12 @@ label[data-required]::after {
   [data-searchable-trigger]
 ):not([data-field-tone="gold"]):not(.jbj-gold-field) {
   background-color: #FDFBF7 !important;
-  border: 2px solid #102540 !important;
+  border: 2px solid #0A0A0A !important;
   border-radius: 0.625rem !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
   box-shadow:
-    0 1px 2px rgba(16, 37, 64, 0.06),
+    0 1px 2px rgba(10,10,10,0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
   transition: border-color 200ms ease, box-shadow 200ms ease,
               background-color 200ms ease, transform 200ms ease !important;
@@ -781,8 +781,8 @@ label[data-required]::after {
   textarea, select, button[role="combobox"],
   [data-jbj-field], [data-searchable-trigger]
 ):not([data-field-tone="gold"]):not(.jbj-gold-field):hover {
-  border-color: #1a3d63 !important;
-  box-shadow: 0 4px 14px -8px rgba(16, 37, 64, 0.28) !important;
+  border-color: #1F1F1F !important;
+  box-shadow: 0 4px 14px -8px rgba(10,10,10,0.28) !important;
 }
 
 [data-jbj-form] :where(
@@ -796,10 +796,10 @@ label[data-required]::after {
   [data-jbj-field], [data-searchable-trigger]
 ):not([data-field-tone="gold"]):not(.jbj-gold-field):focus-visible {
   outline: none !important;
-  border-color: #102540 !important;
+  border-color: #0A0A0A !important;
   box-shadow:
-    0 0 0 3px rgba(16, 37, 64, 0.18),
-    0 8px 24px -16px rgba(16, 37, 64, 0.35) !important;
+    0 0 0 3px rgba(10,10,10,0.18),
+    0 8px 24px -16px rgba(10,10,10,0.35) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -841,8 +841,8 @@ label[data-required]::after {
 
 /* Phone country-code trigger always navy fill + white text inside JBJ forms */
 [data-jbj-form] [data-phone-code-trigger] {
-  background-color: #102540 !important;
-  border: 2px solid #102540 !important;
+  background-color: #0A0A0A !important;
+  border: 2px solid #0A0A0A !important;
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
   box-shadow: none !important;
@@ -860,7 +860,7 @@ label[data-required]::after {
 
 /* Dropzones (file uploads) get the same navy dashed border */
 [data-jbj-form] [data-jbj-dropzone] {
-  border: 2px dashed #102540 !important;
+  border: 2px dashed #0A0A0A !important;
   border-radius: 0.75rem !important;
   background-color: rgba(253, 251, 247, 0.6) !important;
   color: #1A1A1A;
@@ -877,24 +877,24 @@ input.jbj-blue-field,
 textarea.jbj-blue-field,
 button[role="combobox"].jbj-blue-field {
   background-color: #FDFBF7 !important;
-  border: 2px solid #102540 !important;
+  border: 2px solid #0A0A0A !important;
   border-radius: 0.625rem !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
   box-shadow:
-    0 1px 2px rgba(16, 37, 64, 0.06),
+    0 1px 2px rgba(10,10,10,0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
   transition: border-color 200ms ease, box-shadow 200ms ease,
               background-color 200ms ease, transform 200ms ease !important;
 }
-.jbj-blue-field:hover { border-color: #1a3d63 !important; }
+.jbj-blue-field:hover { border-color: #1F1F1F !important; }
 .jbj-blue-field:focus,
 .jbj-blue-field:focus-visible {
   outline: none !important;
-  border-color: #102540 !important;
+  border-color: #0A0A0A !important;
   box-shadow:
-    0 0 0 3px rgba(16, 37, 64, 0.18),
-    0 8px 24px -16px rgba(16, 37, 64, 0.35) !important;
+    0 0 0 3px rgba(10,10,10,0.18),
+    0 8px 24px -16px rgba(10,10,10,0.35) !important;
 }
 
 .jbj-gold-field,
@@ -1013,8 +1013,8 @@ button[role="checkbox"][data-state="checked"]:not([data-no-gold-check]) svg {
   button[role="combobox"],
   [data-searchable-trigger]
 ):hover:not(:focus):not(:focus-within) {
-  border-color: #1a3d63 !important;
-  box-shadow: 0 4px 14px -10px rgba(16, 37, 64, 0.45) !important;
+  border-color: #1F1F1F !important;
+  box-shadow: 0 4px 14px -10px rgba(10,10,10,0.45) !important;
 }
 
 /* Premium focus glow: layered navy ring + faded gold halo */
@@ -1033,29 +1033,29 @@ button[role="checkbox"][data-state="checked"]:not([data-no-gold-check]) svg {
   .PhoneInputInput
 ):focus-visible {
   background-color: #FDFBF7 !important;
-  border-color: #102540 !important;
+  border-color: #0A0A0A !important;
   box-shadow:
-    0 0 0 3px rgba(16, 37, 64, 0.18),
+    0 0 0 3px rgba(10,10,10,0.18),
     0 0 0 5px rgba(184, 149, 85, 0.28),
-    0 12px 28px -16px rgba(16, 37, 64, 0.40) !important;
+    0 12px 28px -16px rgba(10,10,10,0.40) !important;
   transform: translateY(-1px);
 }
 
 /* Labels gain a soft uppercase eyebrow on focus-within (parent .space-y-2) */
 [data-careers-page] form .space-y-2:focus-within > label {
-  color: #102540;
-  -webkit-text-fill-color: #102540;
+  color: #0A0A0A;
+  -webkit-text-fill-color: #0A0A0A;
   letter-spacing: 0.02em;
 }
 
 /* Premium checkbox treatment */
 [data-careers-page] form button[role="checkbox"] {
-  border: 2px solid #102540 !important;
+  border: 2px solid #0A0A0A !important;
   background-color: #FDFBF7 !important;
   transition: all 180ms ease;
 }
 [data-careers-page] form button[role="checkbox"][data-state="checked"] {
-  background-color: #102540 !important;
+  background-color: #0A0A0A !important;
   box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.28);
 }
 

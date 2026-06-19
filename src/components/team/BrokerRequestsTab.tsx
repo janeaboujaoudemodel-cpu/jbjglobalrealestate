@@ -87,7 +87,7 @@ export default function BrokerRequestsTab() {
         </p>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-[#102540] hover:bg-[#1a3d63] text-white" data-allow-dark-cta>
+            <Button className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white" data-allow-dark-cta>
               <Plus className="h-4 w-4 mr-1.5" /> New request
             </Button>
           </DialogTrigger>
@@ -181,7 +181,7 @@ export default function BrokerRequestsTab() {
               <Button
                 disabled={!subject.trim() || create.isPending}
                 onClick={submit}
-                className="bg-[#102540] hover:bg-[#1a3d63] text-white"
+                className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white"
                 data-allow-dark-cta
               >
                 Submit request

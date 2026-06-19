@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
  * so active/idle/hover state is consistent everywhere.
  *
  * Rules (Phase 3):
- *  • Active   → solid JBJ navy (#102540), white label, gold hairline.
+ *  • Active   → solid JBJ navy (#0A0A0A), white label, gold hairline.
  *  • Idle     → champagne fill, ink label, faded gold hairline.
  *  • Hover    → deeper champagne tint; text NEVER turns white-on-white.
  *  • Count badge slot is rendered INSIDE the pill, never detached/floating.
@@ -33,7 +33,7 @@ export const HRPill = React.forwardRef<HTMLButtonElement, HRPillProps>(
     // runtime DOM mutation. Active = navy fill + white text at ALL states
     // (idle, hover, focus). Idle = champagne + ink. No ambiguity.
     const lockedStyle: React.CSSProperties = active
-      ? { backgroundColor: "#102540", color: "#FFFFFF", borderColor: "#B89555" }
+      ? { backgroundColor: "#0A0A0A", color: "#FFFFFF", borderColor: "#B89555" }
       : { backgroundColor: "#FDFBF7", color: "#1A1A1A" };
     return (
       <button
@@ -49,7 +49,7 @@ export const HRPill = React.forwardRef<HTMLButtonElement, HRPillProps>(
           "inline-flex items-center gap-1.5 rounded-full border font-semibold whitespace-nowrap transition-colors select-none",
           pad,
           active
-            ? "border-[#B89555] shadow-sm hover:bg-[#1a3d63]"
+            ? "border-[#B89555] shadow-sm hover:bg-[#1F1F1F]"
             : "border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555]",
           className,
         )}

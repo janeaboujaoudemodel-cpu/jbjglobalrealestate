@@ -14,12 +14,12 @@
  * ============================================================ */
 
 export const BRAND = {
-  blue:       "#102540",
-  blueHover:  "#1a3d63",
+  blue:       "#0A0A0A",
+  blueHover:  "#1F1F1F",
   blueDeep:   "#143052",
-  blueSoft:   "rgba(16, 37, 64, 0.22)",
-  blueRing:   "rgba(16, 37, 64, 0.18)",
-  blueTint:   "rgba(16, 37, 64, 0.06)",
+  blueSoft:   "rgba(10,10,10,0.22)",
+  blueRing:   "rgba(10,10,10,0.18)",
+  blueTint:   "rgba(10,10,10,0.06)",
 
   gold:       "#B89555",
   goldHover:  "#C9A66B",

@@ -119,7 +119,7 @@ const MortgageCalculatorPage = () => {
                     data-no-contrast-guard
                     className="allow-white rounded-xl p-4 text-left"
                     style={{
-                      background: `linear-gradient(135deg, #102540 0%, #0A1830 55%, #000 100%)`,
+                      background: `linear-gradient(135deg, #0A0A0A 0%, #0A1830 55%, #000 100%)`,
                       border: `1px solid rgba(96,165,250,0.32)`,
                     }}
                   >
@@ -173,7 +173,7 @@ const MortgageCalculatorPage = () => {
                   data-no-contrast-guard
                   className="allow-white rounded-xl p-5"
                   style={{
-                    background: "linear-gradient(135deg, #102540 0%, #08152B 60%, #000 100%)",
+                    background: "linear-gradient(135deg, #0A0A0A 0%, #08152B 60%, #000 100%)",
                     border: "1px solid rgba(96,165,250,0.30)",
                   }}
                 >
@@ -276,7 +276,7 @@ const MortgageCalculatorPage = () => {
         [data-mortgage-dark] .text-\\[\\#1A1A1A\\]\\/60 {
           color: #FFFFFF !important;
         }
-        [data-mortgage-dark] .text-\\[\\#102540\\] { color: #93C5FD !important; }
+        [data-mortgage-dark] .text-\\[\\#0A0A0A\\] { color: #93C5FD !important; }
         [data-mortgage-dark] .border-\\[\\#B89555\\]\\/30 { border-color: rgba(96,165,250,0.30) !important; }
         [data-mortgage-dark] .bg-\\[\\#EFE6D6\\] { background: rgba(96,165,250,0.18) !important; }
         [data-mortgage-dark] .bg-\\[\\#B89555\\] { background: #60A5FA !important; }

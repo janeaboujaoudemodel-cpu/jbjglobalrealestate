@@ -312,7 +312,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const showMobileFiberglass = isTransparentRoute && (isFullyTransparent || mobileHeroAtRest || forceHomeMobileFiberglass);
   const showMobileChampagne = !showMobileFiberglass && (showSolidBackground || !isTransparentRoute);
   const mobileFiberglassBackground =
-    'linear-gradient(180deg, rgba(16,37,64,0.48) 0%, rgba(16,37,64,0.30) 100%)';
+    'linear-gradient(180deg, rgba(10,10,10,0.48) 0%, rgba(10,10,10,0.30) 100%)';
   // Deterministic: on the homepage at mobile widths, always render the fiberglass
   // header at rest (state-independent), so a slow first paint never flashes white.
   const homeMobileFiberglassActive = isHomeHeroPath && isAtPageTop && !forceSolid;

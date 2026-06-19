@@ -472,13 +472,13 @@ const AIHub = () => {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            BOTTOM CTA BAND — navy (#102540) with white text, gold hairline
+            BOTTOM CTA BAND — navy (#0A0A0A) with white text, gold hairline
         ════════════════════════════════════════════════════════════════ */}
         <section
           data-allow-dark-cta
           data-on-dark
           className="py-16 md:py-20 relative overflow-hidden"
-          style={{ background: "#102540" }}
+          style={{ background: "#0A0A0A" }}
         >
           <div
             aria-hidden

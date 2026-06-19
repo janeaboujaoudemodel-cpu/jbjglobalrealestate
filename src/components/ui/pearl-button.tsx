@@ -20,7 +20,7 @@ type CommonProps = {
   /**
    * Visual variant.
    * - "primary" (default): mother-of-pearl champagne + ink text + gold icons.
-   * - "secondary": approved navy `#102540` + white text/icons, slate-gray hover for contrast.
+   * - "secondary": approved navy `#0A0A0A` + white text/icons, slate-gray hover for contrast.
    *   Use as the secondary action when paired with a primary PearlButton.
    */
   variant?: PearlButtonVariant;
@@ -66,11 +66,11 @@ const primaryClass =
 
 // Approved navy + white text/icons; approved navy hover only.
 const secondaryClass =
-  "surface-navy allow-white text-white bg-[#102540] hover:bg-[#1a3d63] " +
+  "surface-navy allow-white text-white bg-[#0A0A0A] hover:bg-[#1F1F1F] " +
   "border border-[#B89555]/55 hover:border-[#B89555] " +
-  "shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_28px_-12px_rgba(16,37,64,0.55),0_2px_6px_-2px_rgba(0,0,0,0.25)] " +
-  "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_0_0_1px_rgba(184,149,85,0.55),0_18px_44px_-10px_rgba(16,37,64,0.6),0_6px_14px_-4px_rgba(0,0,0,0.3)] " +
-  "focus-visible:ring-white/70 focus-visible:ring-offset-[#102540]";
+  "shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_28px_-12px_rgba(10,10,10,0.55),0_2px_6px_-2px_rgba(0,0,0,0.25)] " +
+  "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_0_0_1px_rgba(184,149,85,0.55),0_18px_44px_-10px_rgba(10,10,10,0.6),0_6px_14px_-4px_rgba(0,0,0,0.3)] " +
+  "focus-visible:ring-white/70 focus-visible:ring-offset-[#0A0A0A]";
 
 function InnerContent({
   leadingIcon,

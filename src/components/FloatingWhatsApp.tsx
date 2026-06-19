@@ -71,7 +71,7 @@ const FloatingWhatsApp = () => {
       <button
         onClick={handleRestore}
         data-surface="navy"
-        className="surface-navy fixed bottom-6 right-6 z-50 w-10 h-10 bg-[#102540] hover:bg-[#1a3d63] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        className="surface-navy fixed bottom-6 right-6 z-50 w-10 h-10 bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
         aria-label="Show WhatsApp chat"
       >
         <MessageCircle className="w-5 h-5 text-white" />
@@ -126,7 +126,7 @@ const FloatingWhatsApp = () => {
         target="_blank"
         rel="noopener noreferrer"
         data-surface="navy"
-        className="surface-navy relative flex items-center gap-2 bg-[#102540] hover:bg-[#1a3d63] text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+        className="surface-navy relative flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
         style={{
           boxShadow: '0 0 30px rgba(200,167,102,0.6), 0 0 50px rgba(255,255,255,0.4), 0 4px 25px rgba(0,0,0,0.4)',
         }}

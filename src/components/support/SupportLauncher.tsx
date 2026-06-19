@@ -232,7 +232,7 @@ export default function SupportLauncher() {
           data-no-contrast-guard
           whileTap={{ scale: 0.96 }}
           className="allow-white inline-flex items-center gap-1.5 h-9 px-3 rounded-full
-            bg-[#102540] hover:bg-[#1a3d63] border border-[#B89555]/70
+            bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70
             text-[11px] font-semibold uppercase tracking-[0.22em] text-white
             shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_1px_rgba(184,149,85,0.24)]
             transition-colors"
@@ -267,10 +267,10 @@ export default function SupportLauncher() {
           className={`allow-white group fixed right-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 border-[#B89555]/70 text-white transform-gpu
             transition-opacity duration-300
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#102540]
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]
             ${overHero
               ? "opacity-0 pointer-events-none bg-transparent border-transparent shadow-none"
-              : "pointer-events-auto bg-[#102540] hover:bg-[#1a3d63] hover:border-[#B89555] shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]"}
+              : "pointer-events-auto bg-[#0A0A0A] hover:bg-[#1F1F1F] hover:border-[#B89555] shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]"}
           `}
           style={{ writingMode: "vertical-rl", transform: "translateY(-50%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
 

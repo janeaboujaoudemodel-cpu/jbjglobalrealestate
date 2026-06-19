@@ -123,7 +123,7 @@ function DirectChatPane({ peer }: { peer: DirectoryEntry | null }) {
             const mine = m.user_id === user?.id;
             return (
               <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[78%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap break-words ${mine ? "bg-[#102540] text-white" : "bg-white border border-[#B89555]/25 text-[#1A1A1A]"}`}>
+                <div className={`max-w-[78%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap break-words ${mine ? "bg-[#0A0A0A] text-white" : "bg-white border border-[#B89555]/25 text-[#1A1A1A]"}`}>
                   {m.message}
                   <div className={`text-[10px] mt-1 ${mine ? "text-white/65" : "text-[#1A1A1A]/55"}`}>{formatDisplayDate(m.created_at)}</div>
                 </div>
@@ -140,7 +140,7 @@ function DirectChatPane({ peer }: { peer: DirectoryEntry | null }) {
           placeholder={`Message ${peer.full_name.split(" ")[0]}…`}
           className="bg-white border-[#B89555]/30 text-[#1A1A1A]"
         />
-        <Button type="submit" disabled={!draft.trim() || send.isPending} className="bg-[#102540] hover:bg-[#1a3d63] text-white" data-allow-dark-cta>
+        <Button type="submit" disabled={!draft.trim() || send.isPending} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white" data-allow-dark-cta>
           <Send className="h-4 w-4" />
         </Button>
       </form>

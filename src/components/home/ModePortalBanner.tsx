@@ -8,7 +8,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
  *
  * Visual inverse of <VerificationBanner />:
  *   - Champagne/mother-of-pearl background (full-bleed)
- *   - Navy (#102540) text + icon (inverted tone)
+ *   - Navy (#0A0A0A) text + icon (inverted tone)
  *   - Navy CTA pill with white label + white arrow (same shape, padding,
  *     radius, shadow as the Get Verified champagne pill — only contrast flips)
  *
@@ -65,7 +65,7 @@ export default function ModePortalBanner() {
         className="pointer-events-none absolute inset-0 opacity-[0.08]"
         style={{
           background:
-            "radial-gradient(900px 220px at 12% 50%, rgba(16,37,64,0.55), transparent 60%), radial-gradient(700px 200px at 92% 50%, rgba(16,37,64,0.45), transparent 65%)",
+            "radial-gradient(900px 220px at 12% 50%, rgba(10,10,10,0.55), transparent 60%), radial-gradient(700px 200px at 92% 50%, rgba(10,10,10,0.45), transparent 65%)",
         }}
       />
       {/* Top + bottom champagne hairlines */}
@@ -78,22 +78,22 @@ export default function ModePortalBanner() {
           <div
             className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/55 flex items-center justify-center"
           >
-            <Icon className="w-5 h-5" style={{ color: "#102540", stroke: "#102540" }} strokeWidth={2.2} />
+            <Icon className="w-5 h-5" style={{ color: "#0A0A0A", stroke: "#0A0A0A" }} strokeWidth={2.2} />
           </div>
 
           {/* Text — navy eyebrow + title, ink body */}
           <div className="flex-1 text-center sm:text-left min-w-0">
             <div className="flex items-center justify-center sm:justify-start gap-2 mb-0.5">
-              <Sparkles className="w-3 h-3" style={{ color: "#102540", stroke: "#102540" }} />
+              <Sparkles className="w-3 h-3" style={{ color: "#0A0A0A", stroke: "#0A0A0A" }} />
               <span
                 className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.18em]"
-                style={{ color: "#102540" }}
+                style={{ color: "#0A0A0A" }}
               >
                 {cfg.eyebrow}
               </span>
             </div>
             <p className="text-sm sm:text-base font-medium leading-snug" style={{ color: "#1A1A1A" }}>
-              <span className="font-semibold" style={{ color: "#102540" }}>{cfg.title}.</span>{" "}
+              <span className="font-semibold" style={{ color: "#0A0A0A" }}>{cfg.title}.</span>{" "}
               <span style={{ color: "rgba(26,26,26,0.78)" }}>{cfg.copy}</span>
             </p>
           </div>
@@ -102,7 +102,7 @@ export default function ModePortalBanner() {
               Same dimensions/shadow/hover-lift as the champagne Get Verified pill. */}
           <Link
             to={cfg.href}
-            className="jj-cta-dark group relative flex-shrink-0 h-11 min-w-[220px] px-6 text-sm font-semibold tracking-wide rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.20),inset_0_1px_0_rgba(255,255,255,0.25)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap border border-[#B89555]/70 bg-[#102540] hover:bg-[#1a3d63]"
+            className="jj-cta-dark group relative flex-shrink-0 h-11 min-w-[220px] px-6 text-sm font-semibold tracking-wide rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.20),inset_0_1px_0_rgba(255,255,255,0.25)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap border border-[#B89555]/70 bg-[#0A0A0A] hover:bg-[#1F1F1F]"
             data-surface="navy"
             data-cta="dark"
             data-allow-dark-cta

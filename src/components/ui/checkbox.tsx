@@ -13,10 +13,10 @@ const Checkbox = React.forwardRef<
     data-no-contrast-guard
     data-allow-dark-cta
     className={cn(
-      "peer h-4 w-4 shrink-0 rounded-sm border border-[#B89555] bg-[#FDFBF7] ring-offset-background data-[state=checked]:bg-[#102540] data-[state=checked]:border-[#102540] data-[state=checked]:text-white hover:data-[state=checked]:bg-[#102540] focus:data-[state=checked]:bg-[#102540] active:data-[state=checked]:bg-[#102540] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#102540]/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+      "peer h-4 w-4 shrink-0 rounded-sm border border-[#B89555] bg-[#FDFBF7] ring-offset-background data-[state=checked]:bg-[#0A0A0A] data-[state=checked]:border-[#0A0A0A] data-[state=checked]:text-white hover:data-[state=checked]:bg-[#0A0A0A] focus:data-[state=checked]:bg-[#0A0A0A] active:data-[state=checked]:bg-[#0A0A0A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A0A0A]/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
       className,
     )}
-    style={props.checked ? { backgroundColor: "#102540", borderColor: "#102540" } : undefined}
+    style={props.checked ? { backgroundColor: "#0A0A0A", borderColor: "#0A0A0A" } : undefined}
     {...props}
   >
     <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center")} style={{ color: "#FFFFFF" }}>

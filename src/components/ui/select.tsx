@@ -27,7 +27,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 text-[#102540]/70 opacity-70" />
+      <ChevronDown className="h-4 w-4 text-[#0A0A0A]/70 opacity-70" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -127,7 +127,7 @@ const SelectContent = React.forwardRef<
       data-surface="light"
       className={cn(
         "jbj-form-popover relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl",
-        "text-[#102540]",
+        "text-[#0A0A0A]",
         "shadow-[0_10px_40px_rgba(0,0,0,0.12),0_4px_15px_rgba(0,0,0,0.08)]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper" &&
@@ -214,11 +214,11 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "jbj-form-option relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm text-[#102540] outline-none transition-all duration-200",
+      "jbj-form-option relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm text-[#0A0A0A] outline-none transition-all duration-200",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[#102540]/5 hover:text-[#102540]",
-      "focus:bg-[#102540]/5 focus:text-[#102540]",
-      "data-[highlighted]:bg-[#102540]/5 data-[highlighted]:text-[#102540]",
+      "hover:bg-[#0A0A0A]/5 hover:text-[#0A0A0A]",
+      "focus:bg-[#0A0A0A]/5 focus:text-[#0A0A0A]",
+      "data-[highlighted]:bg-[#0A0A0A]/5 data-[highlighted]:text-[#0A0A0A]",
       className,
     )}
     {...props}

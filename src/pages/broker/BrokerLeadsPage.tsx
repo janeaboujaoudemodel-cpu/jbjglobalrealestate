@@ -53,7 +53,7 @@ export default function BrokerLeadsPage() {
         <button
           type="button"
           onClick={() => setAddOpen(true)}
-          className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] transition-colors allow-white"
+          className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] transition-colors allow-white"
           data-allow-dark-cta
         >
           <Plus className="h-4 w-4" /> Add Lead
@@ -98,7 +98,7 @@ export default function BrokerLeadsPage() {
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); openInAssistant(l.id); }}
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#102540] hover:underline"
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0A0A0A] hover:underline"
                       >
                         <Sparkles className="h-3 w-3" /> Open in Assistant <ArrowRight className="h-3 w-3" />
                       </button>

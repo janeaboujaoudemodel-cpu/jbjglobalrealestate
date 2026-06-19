@@ -1,45 +1,69 @@
-## Goal
-Eliminate every non-brand color (purple, violet, indigo, neon cyan, deep black backgrounds) from public AI pages so the whole site reads in the locked **Champagne / Gold / Mother-of-Pearl + Ink** palette that already governs the header, footer, and Home.
+# Plan: Navy → Black + Off-Palette Sweep + SEO/Sitemap Cleanup
 
-## Heads-up: memory conflict (need your decision)
-Memory `mem://brand/ai-premium-purple-standard` currently says "violet/purple gradient theme is RESERVED for AI elements." Your request reverses that rule. The plan below assumes I **retire that standard** (purple/violet banned site-wide, AI surfaces use the same champagne/gold/ink as everything else). If you'd rather keep purple only inside *interior* AI widgets (not on AI marketing pages), say so before approving.
+## Scope confirmed
+- **Navy → Black**: full reversal site-wide (all surfaces).
+- **Color sweep**: public marketing pages only (Home, AI Hub + tools, Services, Properties browse, Communities, News, Market Intel public, Guides, FAQ, Contact, public Developer/Project/Area profile pages). Owner dashboard, CRM, broker portal, developer portal, admin internals are untouched.
+- **Database**: no changes (palette is CSS only).
 
-## Scope (visible front-end only — no business logic, no backend)
+## Locked palette after this pass
+| Token | Hex | Use |
+|---|---|---|
+| Page | `#FDFBF7` | Page background |
+| Surface (champagne) | `#F7F2EA` | Section band |
+| Raised (cream) | `#EFE6D6` | Cards, active pills |
+| Gold | `#B89555` | 1px hairline ONLY |
+| Ink | `#1A1A1A` | Body text |
+| **Black (new dark CTA)** | **`#0A0A0A`** | All dark buttons, banners, dark bands — replaces navy |
+| Black hover | `#1F1F1F` | Hover state |
+| Price orange | unchanged | `<PricePill />` only |
+| AI purple | unchanged for AI-internal owner tools | already retired on public AI Hub |
 
-### Pass 1 — `/ai-hub` (the page you're looking at)
-Rebuild the top half so it matches the lower "How It Works / FAQ" half:
-- Hero: remove `background: "#07060F"`, neon orbs, dark video composite, purple eyebrow chip, purple→cyan gradient on "Tools Hub" headline, dark CTA buttons. Replace with champagne page band (`.jj-band` page tone), gold 1px hairline eyebrow, ink headline, gold-accented "Tools Hub" word, and the locked CTA primitives (`.jj-cta-dark` navy + `.jj-cta-champagne`).
-- Tools Library section: swap any purple/cyan tile accents for `<IconTile tone="gold" />` and champagne raised surface.
-- Bottom CTA band (currently "deep violet"): convert to navy `#102540` (approved dark CTA band) with white text — same treatment as the Get Verified banner, no purple.
-- Keep ALL content, ALL tool cards, ALL CTAs, ALL FAQs. Only colors/surfaces change.
+## Pass 1 — Navy → Black global flip
+Retire the locked "Black-CTA → Navy global" rule and replace with the inverse.
 
-### Pass 2 — AI tool pages with purple/violet/indigo (13 files)
-`AIFinancialAdvisor.tsx`, `AIClientMatcherPage.tsx`, `AICalendar.tsx`, plus toolkit pages `PDFEditor`, `PDFSuite`, `VoiceStudio`, `VoiceSuite`, `PdfFromPhotos`, `ImageResize`, `BrochureGeneratorPage`, `BeautyFilters`, `BackgroundAI`, `VideoResizePack`.
-For each: replace `bg-purple-*`, `from-violet-*`, `text-indigo-*`, raw `#7c3aed/#8b5cf6/#a78bfa`, etc. with the champagne tokens (`bg-[#F7F2EA]`, ink text `#1A1A1A`, gold hairline `#B89555`, `<IconTile tone="gold" />`, `<PricePill />` where prices appear). Dark hero bands → champagne `.jj-band` or navy `#102540` per the CTA primitive system.
+- Edit `src/index.css`:
+  - Remove the existing `bg-[#102540]` / `bg-[#1a3d63]` auto-paint rules.
+  - Add new guard: any `bg-[#102540]`, `bg-[#1a3d63]`, `bg-[#0f1e35]`, `bg-navy*`, `bg-blue-9*` on a `[data-marketing-page]` root → `background-color: #0A0A0A !important`; hover → `#1F1F1F`; keep white text + white icons + 1px gold hairline ring.
+- Edit CTA primitives in `src/index.css` (`.jj-cta-dark`, `.jj-pill-active`, locked navy classes): swap navy hex for `#0A0A0A` (rest) / `#1F1F1F` (hover). Keep gold hairline + white foreground.
+- Search-replace in public components (Header, Footer, Hero CTA bars, AI Hub bottom CTA band, Get Verified banner, support launcher tag, mode chips) every literal `#102540`, `#1a3d63`, `#0f1e35`, `bg-navy-*`, `bg-blue-900/950` → `#0A0A0A` / `#1F1F1F`.
+- Footer: confirmed dark already — repaint navy accents to `#0A0A0A`, keep single champagne hairline.
 
-### Pass 3 — Global guard so this never regresses
-Add a CSS guard in `src/index.css` that auto-remaps the banned hues on any `[data-marketing-page]` root:
-- `bg-purple-*`, `bg-violet-*`, `bg-indigo-*`, `bg-fuchsia-*` → champagne raised `#EFE6D6`
-- `text-purple-*`, `text-violet-*`, `text-indigo-*` → ink `#1A1A1A`
-- Bare `bg-black` / `bg-[#07060F]` / `bg-[#0F0820]` on marketing pages → champagne page `#FDFBF7`
-Mirrors the existing "Black-CTA → Navy" and "No Bright Yellow-Gold" guards.
+## Pass 2 — Off-palette sweep on public marketing pages
+Targets only routes flagged "public marketing". For each file, replace:
+- Purple/violet/indigo/fuchsia (`bg-purple-*`, `from-violet-*`, `text-indigo-*`, raw `#7c3aed/#8b5cf6/#a78bfa/#6366f1/#d946ef`) → champagne `#F7F2EA` surfaces, ink `#1A1A1A` text, gold `#B89555` hairline.
+- Cyan/teal/sky decorative gradients → champagne band.
+- Zinc/slate/gray surface tints → champagne or page.
+- Raw `bg-black` / `bg-[#000]` CTAs → `#0A0A0A` via new primitive.
+- Neon glow shadows → soft gold hairline ring.
 
-### Pass 4 — Memory + lint
-- Rewrite `mem://brand/ai-premium-purple-standard` to "RETIRED — AI surfaces use champagne/gold/ink like the rest of the site."
-- Add a new core line: "No purple/violet/indigo/fuchsia anywhere on marketing pages. AI = same champagne theme."
-- Extend `scripts/contrast/` with a `check-no-purple.mjs` companion to `check-no-blue.mjs` so CI catches future regressions.
+Files in scope (initial sweep list, expanded after exploration):
+`src/pages/Index.tsx`, `src/pages/AIHub.tsx` (final pass), all `src/pages/AI*.tsx` public tool pages, `src/pages/Services.tsx`, `src/pages/Properties.tsx`, `src/pages/Communities.tsx`, `src/pages/News.tsx`, `src/pages/MarketIntelligence*.tsx`, `src/pages/AreaGuides.tsx`, `src/pages/Guides/*`, `src/pages/FAQ*`, `src/pages/Contact.tsx`, `src/pages/Developer.tsx`, `src/pages/Project.tsx`, `src/pages/Area.tsx`, plus shared marketing components under `src/components/home/*`, `src/components/marketing/*`, `src/components/ai-tools/AIToolPremiumLayout.tsx`.
 
-## Validation (only what you asked for)
-After Pass 1 finishes, I'll take `browser--screenshot` proofs of `/ai-hub` (hero, tools library, CTA band) at desktop and mobile widths and post them inline. Then I'll repeat the same screenshot pass for each repainted AI tool page in Pass 2 (one batched gallery, one shot per page) so you can verify visually before I close the task.
+Owner/CRM/broker/developer-portal/admin files are explicitly skipped — no edits.
+
+## Pass 3 — CI + memory rewrites
+- Extend `scripts/contrast/check-no-purple.mjs` to also fail on raw `#102540` / `#1a3d63` / `bg-navy-*` outside opt-out files.
+- Update memories:
+  - `mem://ui-ux/visual-standards/black-cta-to-navy-global` → **RETIRED — superseded by Navy→Black**.
+  - `mem://constraints/navy-pill-white-text-lock` → **RETIRED**.
+  - New: `mem://ui-ux/visual-standards/navy-to-black-global` describing the inverse guard, `#0A0A0A`/`#1F1F1F`, white text + gold hairline, opt-outs (`data-allow-navy`, `data-no-contrast-guard`).
+  - Update `mem://index.md` Core lines that reference navy `#102540` to point at `#0A0A0A`.
+
+## Pass 4 — SEO + sitemap cleanup
+- `public/sitemap.xml`: regenerate from current public routes in `src/routes/PublicRoutes.tsx`. Remove any lingering `/services/ai-tools`, duplicate `/ai-hub` variants, dead AI tool sub-routes. Single canonical `/ai-hub`.
+- `src/seo/serviceSeoCatalog.ts`: drop any service entries that point at removed AI tool URLs.
+- `src/components/SEOHead.tsx` / `CanonicalAndHreflang.tsx`: verify canonical helper points self-route; no edits unless drift found.
+- `public/robots.txt`: confirm `Sitemap:` directive matches `https://jbjglobalrealestate.lovable.app/sitemap.xml`.
+- Run `seo_chat--list_findings`, fix anything flagged, then `seo_chat--trigger_scan` (needs your approval).
+
+## Pass 5 — Visual validation
+Take screenshots at desktop (1440) and mobile (390) for:
+`/`, `/ai-hub`, `/services`, `/properties`, `/communities`, `/news`, `/market-intelligence`, `/guides`, `/faq`, `/contact`, plus one sample `/developer/:slug` and `/project/:slug`.
+
+Confirm: no purple/violet/indigo/cyan visible, no navy visible, all dark CTAs are clean black `#0A0A0A` with white text + gold hairline, header/footer match.
 
 ## Out of scope
-- No edits to interior owner/CRM/dashboard tools (those aren't on the public AI surface you're seeing).
-- No content/copy changes, no removed tools, no route changes.
-- No backend/RLS/edge-function work.
-
-## Technical notes
-- Touched files: `src/pages/AIHub.tsx`, the 13 AI tool pages listed above, `src/index.css` (guard block), `scripts/contrast/check-no-purple.mjs` (new), `mem://brand/ai-premium-purple-standard` (rewrite), `mem://index.md` (core line + memory description update).
-- Reuses existing primitives: `.jj-band`, `.jj-cta-dark`, `.jj-cta-champagne`, `<IconTile />`, `<PricePill />`, `<DeveloperLink />`, `SectionDividerGoldFullBleed`.
-- "No Removal" policy honored: zero features, sections, or tool cards deleted.
-
-Approve and I'll start with `/ai-hub` so you see the repaint immediately, then sweep the rest.
+- Owner dashboard, CRM, broker/developer portals, admin pages.
+- Data-viz semantic colors (Emerald/Red/Blue/Amber) — untouched even on public marketing.
+- Any content, copy, layout, business logic, backend, or database changes.
+- AI purple is already retired on public AI Hub; owner-only AI tools keep purple.

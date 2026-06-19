@@ -69,7 +69,7 @@ const PALETTE: Record<
   },
   owner: {
     label: "Mode: Owner",
-    base: "#102540",
+    base: "#0A0A0A",
     baseDark: "#0A1830",
     rowFrom: "#FDFBF7",
     dark: "#1A1A1A",

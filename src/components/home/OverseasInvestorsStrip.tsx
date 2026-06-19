@@ -1,6 +1,6 @@
 /**
  * OverseasInvestorsStrip — full-bleed navy band on the homepage.
- * Painted with the approved navy accent (#102540 / hover #1a3d63) — same
+ * Painted with the approved navy accent (#0A0A0A / hover #1F1F1F) — same
  * blue used on the "Get Verified / Join Benzini Community" banner.
  * White foreground, white/75 secondary, white/15 hairlines.
  */
@@ -20,7 +20,7 @@ const OverseasInvestorsStrip = () => {
       data-surface="dark"
       data-on-dark
       data-no-contrast-guard
-      className="allow-white w-full bg-[#102540] border-y border-[#B89555]/40"
+      className="allow-white w-full bg-[#0A0A0A] border-y border-[#B89555]/40"
     >
       <Link
         to="/overseas-investors"

@@ -49,11 +49,11 @@ type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
 /* ────────────────────────────── theme tokens ────────────────────────────── */
-const BLUE = "#102540";
-const BLUE_HOVER = "#1a3d63";
+const BLUE = "#0A0A0A";
+const BLUE_HOVER = "#1F1F1F";
 const BLUE_DEEP = "#0B1B33";
 const BLUE_GRADIENT =
-  "linear-gradient(135deg, #0B1B33 0%, #102540 50%, #1a3d63 100%)";
+  "linear-gradient(135deg, #0B1B33 0%, #0A0A0A 50%, #1F1F1F 100%)";
 const GOLD = "#B89555";
 const CHAMPAGNE = "#FDFBF7";
 const CHAMPAGNE_SURFACE = "#F7F2EA";
@@ -445,7 +445,7 @@ function SegmentedPill({
 function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => void; purpose?: Purpose }) {
   // Pick screen uses the navy hero theme as its accent system, so cards
   // visually match the band above. Inner Start CTAs are white-fill / navy-ink.
-  const accent = THEME_NAVY.primary;          // #102540
+  const accent = THEME_NAVY.primary;          // #0A0A0A
   const accentDeep = THEME_NAVY.primaryDeep;  // #0B1B33
   const accentGlow = THEME_NAVY.badgeBorder;  // purple #A855F7
   const cardGradient =

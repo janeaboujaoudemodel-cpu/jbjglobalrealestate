@@ -310,7 +310,7 @@ export default function NewFormRequestDialog({ open, onOpenChange }: Props) {
 
           {/* Attachments */}
           <Group title="Supporting documents">
-            <label className="flex items-center gap-2 cursor-pointer text-sm text-[#1A1A1A] hover:text-[#102540]">
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-[#1A1A1A] hover:text-[#0A0A0A]">
               <span className="inline-flex items-center gap-2 h-9 px-3 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
                 {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
                 {uploading ? "Uploading…" : "Attach files"}
@@ -360,7 +360,7 @@ export default function NewFormRequestDialog({ open, onOpenChange }: Props) {
             onClick={submit}
             disabled={create.isPending || !formType}
             data-allow-dark-cta
-            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] disabled:opacity-50 disabled:cursor-not-allowed border border-[#B89555]/40 transition-colors"
+            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] disabled:opacity-50 disabled:cursor-not-allowed border border-[#B89555]/40 transition-colors"
           >
             {create.isPending ? "Sending…" : "Send request"}
           </button>

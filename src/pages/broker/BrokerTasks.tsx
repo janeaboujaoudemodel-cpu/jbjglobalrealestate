@@ -16,7 +16,7 @@ import {
 import { toast } from "sonner";
 
 const COLUMNS: { id: TaskStatus; label: string; accent: string }[] = [
-  { id: "todo",  label: "To Do",       accent: "#102540" },
+  { id: "todo",  label: "To Do",       accent: "#0A0A0A" },
   { id: "doing", label: "In Progress", accent: "#B89555" },
   { id: "done",  label: "Done",        accent: "#1F5132" },
 ];
@@ -126,7 +126,7 @@ export default function BrokerTasks() {
             onChange={(e) => setDraft({ ...draft, title: e.target.value })}
             onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
             placeholder="New task title…"
-            className="flex-1 bg-[#FDFBF7] border border-[#B89555]/30 rounded-md px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 focus:outline-none focus:border-[#102540]"
+            className="flex-1 bg-[#FDFBF7] border border-[#B89555]/30 rounded-md px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 focus:outline-none focus:border-[#0A0A0A]"
           />
           <select
             value={draft.priority}
@@ -149,7 +149,7 @@ export default function BrokerTasks() {
             onClick={submit}
             disabled={!draft.title.trim() || create.isPending}
             data-allow-dark-cta
-            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#102540] text-white text-sm font-semibold hover:bg-[#1a3d63] border border-[#B89555]/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] border border-[#B89555]/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Plus className="h-4 w-4" /> Add task
           </button>
@@ -162,9 +162,9 @@ export default function BrokerTasks() {
           <button
             type="button"
             onClick={toggleAllVisible}
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1A1A1A] hover:text-[#102540]"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1A1A1A] hover:text-[#0A0A0A]"
           >
-            {allVisibleSelected ? <CheckCircle2 className="h-4 w-4 text-[#102540]" /> : <Circle className="h-4 w-4" />}
+            {allVisibleSelected ? <CheckCircle2 className="h-4 w-4 text-[#0A0A0A]" /> : <Circle className="h-4 w-4" />}
             {allVisibleSelected ? "Deselect all" : "Select all"}
           </button>
           <span className="text-xs text-[#1A1A1A]/55">
@@ -243,7 +243,7 @@ export default function BrokerTasks() {
                 <li key={t.id} className="flex items-center gap-3 px-4 py-3">
                   <button onClick={() => toggleOne(t.id)} aria-label="Select task">
                     {selected.has(t.id)
-                      ? <CheckCircle2 className="h-4 w-4 text-[#102540]" />
+                      ? <CheckCircle2 className="h-4 w-4 text-[#0A0A0A]" />
                       : <Circle className="h-4 w-4 text-[#1A1A1A]/45" />}
                   </button>
                   <div className="flex-1 min-w-0">
@@ -288,13 +288,13 @@ function TaskCard({
   return (
     <div
       className={`bg-[#FDFBF7] rounded-md p-3 border border-[#B89555]/25 border-l-4 ${PRIORITY_RING[t.priority]} ${
-        selected ? "ring-2 ring-[#102540]/40" : ""
+        selected ? "ring-2 ring-[#0A0A0A]/40" : ""
       }`}
     >
       <div className="flex items-start gap-2">
         <button onClick={onToggle} className="mt-0.5 shrink-0" aria-label="Select task">
           {selected
-            ? <CheckCircle2 className="h-4 w-4 text-[#102540]" />
+            ? <CheckCircle2 className="h-4 w-4 text-[#0A0A0A]" />
             : <Circle className="h-4 w-4 text-[#1A1A1A]/40" />}
         </button>
         <div className="flex-1 min-w-0">
@@ -316,7 +316,7 @@ function TaskCard({
         <select
           value={t.status}
           onChange={(e) => onStatus(e.target.value as TaskStatus)}
-          className="text-[11px] bg-[#FDFBF7] border border-[#B89555]/35 rounded px-2 py-1 text-[#1A1A1A] focus:outline-none focus:border-[#102540]"
+          className="text-[11px] bg-[#FDFBF7] border border-[#B89555]/35 rounded px-2 py-1 text-[#1A1A1A] focus:outline-none focus:border-[#0A0A0A]"
         >
           <option value="todo">To Do</option>
           <option value="doing">In Progress</option>
