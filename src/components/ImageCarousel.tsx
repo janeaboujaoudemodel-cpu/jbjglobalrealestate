@@ -26,6 +26,9 @@ const dedupeKey = (rawUrl: string): string => {
   // Cloudinary / Imgix style segments: /w_400/, /c_fill,w_800/, /q_80/ …
   u = u.replace(/\/(w|h|c|q|f|s|t|fit|crop|dpr|ar|g|e|fl|l|o|r|x|y|z)_[a-z0-9,_.:%-]+\//g, "/");
 
+  // CloudFront / Strapi /x/{w}x{h}/ size segment
+  u = u.replace(/\/x\/\d+x\d*\//g, "/x/");
+
   // WordPress / generic: -150x150 before extension
   u = u.replace(/-\d{2,4}x\d{2,4}(?=\.[a-z]+$)/g, "");
 
@@ -45,6 +48,29 @@ const dedupeKey = (rawUrl: string): string => {
   const fingerprint = parts.slice(-3).join("/");
   return fingerprint || u;
 };
+
+/** Aggressive fallback dedupe by basename only (no folder/host). Catches the
+ *  case where the SAME image is uploaded twice — once via Supabase Storage,
+ *  once via the developer CDN — under different folder paths but identical
+ *  filename. We only collapse via this when basename has a meaningful length. */
+const basenameKey = (rawUrl: string): string => {
+  try {
+    const clean = (rawUrl || "").toLowerCase().split("?")[0].split("#")[0];
+    const last = clean.split("/").filter(Boolean).pop() || "";
+    // Strip CDN size suffixes from basename too
+    const stripped = last
+      .replace(/-\d{2,4}x\d{2,4}(?=\.[a-z]+$)/g, "")
+      .replace(/_(thumb|thumbs|small|sm|med|medium|large|lg|xl|xxl|hd|hires|lowres|preview|tn|orig|original|max|maxres|full)(?=\.[a-z]+$)/g, "")
+      .replace(/_\d{2,4}(?=\.[a-z]+$)/g, "");
+    // Ignore short / generic basenames like "1.jpg", "image.jpg" that
+    // would collapse unrelated photos.
+    if (stripped.replace(/\.[a-z]+$/, "").length < 8) return "";
+    return stripped;
+  } catch {
+    return "";
+  }
+};
+
 
 const sizeScore = (rawUrl: string): number => {
   const url = rawUrl || "";
