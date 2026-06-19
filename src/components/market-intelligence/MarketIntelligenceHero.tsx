@@ -102,16 +102,18 @@ export const MarketIntelligenceHero = ({
           </motion.button>
           
           {/* Title */}
-          <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+          <motion.h1
+            data-no-contrast-guard
+            className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold !text-white mb-6 leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
             variants={fadeInUp}
           >
             {title}
           </motion.h1>
-          
+
           {/* Description */}
-          <motion.p 
-            className="text-lg md:text-xl text-white/95 font-light leading-relaxed max-w-3xl mx-auto mb-10 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]"
+          <motion.p
+            data-no-contrast-guard
+            className="allow-white text-lg md:text-xl !text-white/95 font-light leading-relaxed max-w-3xl mx-auto mb-10 drop-shadow-[0_1px_6px_rgba(0,0,0,0.75)]"
             variants={fadeInUp}
           >
             {description}
