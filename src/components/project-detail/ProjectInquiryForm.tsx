@@ -568,6 +568,57 @@ export function ProjectInquiryForm({
           )}
         </div>
 
+        {/* Timeline + Preferred contact time */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="timeline" className="text-foreground text-sm font-medium">When are you looking to buy?</Label>
+            <Select
+              value={formData.timeline}
+              onValueChange={(value) => setFormData({ ...formData, timeline: value })}
+            >
+              <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+                <SelectValue placeholder="Select timeline" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-[9999]">
+                {TIMELINE_OPTIONS.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="contactTime" className="text-foreground text-sm font-medium">Preferred contact time</Label>
+            <Select
+              value={formData.contactTime}
+              onValueChange={(value) => setFormData({ ...formData, contactTime: value })}
+            >
+              <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+                <SelectValue placeholder="Select time" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-[9999]">
+                {CONTACT_TIME_OPTIONS.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={formData.whatsappPreferred}
+            onChange={(e) => setFormData({ ...formData, whatsappPreferred: e.target.checked })}
+            className="w-4 h-4 rounded border-2 border-[#B89555]/60 accent-[#B89555]"
+          />
+          I prefer to be contacted on WhatsApp
+        </label>
+
         {/* Message (Optional) */}
         <div className="space-y-2">
           <Label htmlFor="message" className="text-foreground text-sm font-medium">Additional Notes</Label>
