@@ -116,10 +116,10 @@ const MarketIntelligence = () => {
   }, []);
 
   return (
-    {/* Remapped: --mi-navy → ink (#0A0A0A) and --mi-navy-soft → soft-ink (#1F1F1F)
-        so the entire Market Intelligence surface snaps to the global champagne+gold+ink palette.
-        Neon page shell removed — Market Intelligence now matches the rest of the site. */}
+    // Remapped: --mi-navy → ink, --mi-navy-soft → soft-ink. Neon shell removed so
+    // the entire Market Intelligence tree matches the global champagne+gold+ink palette.
     <div className="min-h-screen bg-background [--mi-gold:40_35%_53%] [--mi-navy:0_0%_4%] [--mi-navy-soft:0_0%_12%]">
+
 
       <SEOHead 
         title="Market Intelligence | Dubai Real Estate Insights | BUY · SELL · RENT | JBJ GLOBAL REAL ESTATE"
