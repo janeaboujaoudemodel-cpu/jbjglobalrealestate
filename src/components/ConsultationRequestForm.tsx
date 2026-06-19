@@ -349,25 +349,27 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                  <div className="flex flex-wrap gap-2">
-                    {BEDROOM_OPTIONS.map((b) => {
-                      const active = selected.includes(b.value);
-                      return (
-                        <button
-                          key={b.value}
-                          type="button"
-                          onClick={() => toggle(b.value)}
-                          data-cta={active ? "champagne-active" : undefined}
-                          className={
-                            active
-                              ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
-                              : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
-                          }
-                        >
-                          {b.label}
-                        </button>
-                      );
-                    })}
+                  <div className="rounded-xl border border-[#B89555]/35 p-4 md:p-5">
+                    <div className="flex flex-wrap gap-2">
+                      {BEDROOM_OPTIONS.map((b) => {
+                        const active = selected.includes(b.value);
+                        return (
+                          <button
+                            key={b.value}
+                            type="button"
+                            onClick={() => toggle(b.value)}
+                            data-cta={active ? "champagne-active" : undefined}
+                            className={
+                              active
+                                ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
+                                : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                            }
+                          >
+                            {b.label}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </FormItem>
               );
