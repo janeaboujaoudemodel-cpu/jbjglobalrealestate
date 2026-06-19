@@ -22,8 +22,9 @@ export function getPreviewAsVisitor(): boolean {
 
 export function setPreviewAsVisitor(on: boolean) {
   try {
-    if (on) sessionStorage.setItem(KEY, "1");
-    else sessionStorage.removeItem(KEY);
+    // Persist BOTH on and off explicitly so we never fall back to the
+    // visitor-default after the owner has chosen Owner Mode.
+    sessionStorage.setItem(KEY, on ? "1" : "0");
   } catch {}
   window.dispatchEvent(new CustomEvent(EVT, { detail: { on } }));
 }
