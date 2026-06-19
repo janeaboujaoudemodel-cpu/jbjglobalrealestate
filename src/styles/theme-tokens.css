@@ -140,11 +140,15 @@ label[data-required]::after {
 .jbj-form-field:focus,
 .jbj-form-field:focus-visible {
   background-color: transparent !important;
-  border: 2px solid var(--t-form-blue) !important;
+  border: 1.5px solid var(--t-form-stroke) !important;
   border-radius: 0.5rem !important;
   box-shadow: none !important;
   color: var(--t-form-blue);
   -webkit-text-fill-color: var(--t-form-blue);
+}
+
+.jbj-form-field:hover {
+  border-color: var(--t-form-stroke-hover) !important;
 }
 
 .jbj-form-field::placeholder {
@@ -175,7 +179,7 @@ label[data-required]::after {
 
 .jbj-form-field:focus,
 .jbj-form-field:focus-visible {
-  border-color: var(--t-form-blue) !important;
+  border-color: var(--t-form-stroke-hover) !important;
   box-shadow: 0 0 0 3px var(--t-form-blue-ring) !important;
 }
 
