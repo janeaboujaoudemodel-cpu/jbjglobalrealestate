@@ -35,6 +35,13 @@ const TIMELINE_OPTIONS = [
   { value: "exploring", label: "Just exploring" },
 ];
 
+const CONTACT_METHOD_OPTIONS = [
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "phone", label: "Phone call" },
+  { value: "email", label: "Email" },
+  { value: "any", label: "Any of the above" },
+];
+
 const CONTACT_TIME_OPTIONS = [
   { value: "morning", label: "Morning (9am – 12pm)" },
   { value: "afternoon", label: "Afternoon (12pm – 5pm)" },
@@ -81,13 +88,14 @@ export function ProjectInquiryForm({
     email: "",
     phone: "",
     bedrooms: "",
-    size: "",
+    sizeMin: "",
+    sizeMax: "",
     preferredDeveloper: developerName || "",
     selectedEmirate: "",
     location: projectLocation || "",
     timeline: "",
     contactTime: "",
-    whatsappPreferred: false,
+    contactMethod: "",
     message: ""
   });
 
@@ -220,10 +228,13 @@ export function ProjectInquiryForm({
       // Build extended note with timeline + preferred contact time so nothing is lost
       const timelineLabel = TIMELINE_OPTIONS.find(o => o.value === formData.timeline)?.label;
       const contactTimeLabel = CONTACT_TIME_OPTIONS.find(o => o.value === formData.contactTime)?.label;
+      const contactMethodLabel = CONTACT_METHOD_OPTIONS.find(o => o.value === formData.contactMethod)?.label;
+      const sizeRange = [formData.sizeMin, formData.sizeMax].filter(Boolean).join(" – ");
       const extras: string[] = [];
       if (timelineLabel) extras.push(`Purchase timeline: ${timelineLabel}`);
       if (contactTimeLabel) extras.push(`Preferred contact time: ${contactTimeLabel}`);
-      if (formData.whatsappPreferred) extras.push(`Prefers WhatsApp`);
+      if (contactMethodLabel) extras.push(`Preferred contact method: ${contactMethodLabel}`);
+      if (sizeRange) extras.push(`Size range: ${sizeRange} sqft`);
       if (intent) extras.push(`Intent: ${intent}`);
       const meta = `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`;
       const composedNotes = [formData.message, extras.join(" · "), meta]
@@ -239,7 +250,7 @@ export function ProjectInquiryForm({
         source_details: projectName,
         source_page: window.location.pathname,
         preferred_bedrooms: formData.bedrooms || null,
-        preferred_size_sqft: formData.size ? parseInt(formData.size) : null,
+        preferred_size_sqft: formData.sizeMin ? parseInt(formData.sizeMin) : null,
         preferred_developer: finalDeveloper || null,
         preferred_location: finalLocation || null,
         notes: composedNotes,
@@ -263,13 +274,14 @@ export function ProjectInquiryForm({
         email: "",
         phone: "",
         bedrooms: "",
-        size: "",
+        sizeMin: "",
+        sizeMax: "",
         preferredDeveloper: developerName || "",
         selectedEmirate: "",
         location: projectLocation || "",
         timeline: "",
         contactTime: "",
-        whatsappPreferred: false,
+        contactMethod: "",
         message: ""
       });
       setIsOtherDeveloper(false);
