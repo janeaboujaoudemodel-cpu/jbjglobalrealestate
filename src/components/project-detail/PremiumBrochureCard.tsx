@@ -8,6 +8,8 @@ const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english
 import { maybeProxyStorageUrl, proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 interface PremiumBrochureCardProps {
   projectName: string;
+  projectId?: string;
+  projectSlug?: string;
   brochureUrl?: string;
   projectImageUrl?: string;
   onDownloadClick: () => void;
