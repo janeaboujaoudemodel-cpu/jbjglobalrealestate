@@ -29,6 +29,8 @@ const consultationSchema = z.object({
       message: getPhoneValidation(val).message
     })),
   serviceNeeded: z.string().min(1, "Please select a service"),
+  bedrooms: z.string().optional(),
+  sizeBucket: z.string().optional(),
   nationality: z.string().optional(),
   preferredLanguage: z.string().optional(),
   preferredTime: z.string().optional(),
@@ -40,6 +42,26 @@ const consultationSchema = z.object({
     message: "You must agree to the Terms of Service and Privacy Policy",
   }),
 });
+
+const BEDROOM_OPTIONS = [
+  { value: "studio", label: "Studio" },
+  { value: "1", label: "1 BR" },
+  { value: "2", label: "2 BR" },
+  { value: "3", label: "3 BR" },
+  { value: "4", label: "4 BR" },
+  { value: "5", label: "5 BR" },
+  { value: "6", label: "6 BR" },
+  { value: "7+", label: "7+ BR" },
+];
+
+const SIZE_BUCKETS = [
+  { value: "any", label: "Any" },
+  { value: "lt-800", label: "< 800 sqft" },
+  { value: "800-1200", label: "800 – 1,200 sqft" },
+  { value: "1200-1800", label: "1,200 – 1,800 sqft" },
+  { value: "1800-2500", label: "1,800 – 2,500 sqft" },
+  { value: "2500-plus", label: "2,500+ sqft" },
+];
 
 type ConsultationFormData = z.infer<typeof consultationSchema>;
 
