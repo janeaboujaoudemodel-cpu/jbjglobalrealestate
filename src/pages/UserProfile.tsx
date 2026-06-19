@@ -48,10 +48,12 @@ import {
   Pencil,
   ArrowLeft,
   CheckCircle,
-  X
+  X,
+  Palette
 } from "lucide-react";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { useUserMode } from "@/hooks/useUserMode";
 
 const UserProfile = () => {
   const navigate = useNavigate();
