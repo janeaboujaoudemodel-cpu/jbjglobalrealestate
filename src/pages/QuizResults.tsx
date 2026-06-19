@@ -1228,7 +1228,7 @@ const QuizResults = () => {
     const tiffany: [number, number, number] = [184, 149, 85];
     const cyan: [number, number, number] = [184, 149, 85];
     const white: [number, number, number] = [255, 255, 255];
-    const muted: [number, number, number] = [247, 242, 234];
+    const muted: [number, number, number] = [60, 60, 60];
     const fmtBedsLocal = (p: any) =>
       p.bedrooms_min != null && p.bedrooms_max != null
         ? p.bedrooms_min === 0
