@@ -728,26 +728,24 @@ export function ProjectInquiryForm({
           />
         </div>
 
-        {/* Submit Button - Large Primary with premium hover */}
-        <Button 
-          type="submit" 
-          disabled={isSubmitting} 
-          variant="primary" 
-          size="lg"
-          className="w-full h-16 text-lg font-semibold shadow-lg hover:shadow-[0_14px_45px_rgba(200,167,102,0.4)] hover:-translate-y-1 transition-all duration-300"
+        {/* Submit — metallic gold CTA (inside-page primary) */}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="jj-cta-gold-metallic w-full h-16 text-lg font-semibold inline-flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
               Submitting...
             </>
           ) : (
             <>
-              <Send className="w-5 h-5 mr-2" />
+              <Send className="w-5 h-5" />
               Register Your Interest
             </>
           )}
-        </Button>
+        </button>
       </form>
 
     </div>
