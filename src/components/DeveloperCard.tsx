@@ -47,6 +47,7 @@ function getDeveloperTier(slug: string): { label: string; color: string } | null
 const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCardProps) => {
   const tier = getDeveloperTier(developer.slug || "");
   const isEager = index < 8;
+  const override = getDeveloperLogoOverride(developer.name);
 
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full">
@@ -69,6 +70,11 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
               loading={isEager ? "eager" : "lazy"}
               referrerPolicy="no-referrer"
               className="block max-h-full max-w-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+              style={{
+                filter: override.invert
+                  ? "invert(1) brightness(1)"
+                  : "contrast(1.08) saturate(1.1)",
+              }}
             />
           ) : (
             <div className="flex flex-col items-center justify-center gap-2">
