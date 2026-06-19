@@ -84,11 +84,9 @@ const quarterlyArchive = [
 
 // Reusable Section Wrapper Component - 3 Layer System
 const SectionWrapper = ({ id, children }: { id: string; children: React.ReactNode }) => (
-  <section id={id} className="scroll-mt-24">
-    {/* Layer 2: Active Champagne with thin black contour */}
-    <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
-      {/* Layer 3: Champagne Card with gold border */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-8 border-2 border-[#B89555]/40">
+  <section id={id} className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+    <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
+      <div className="jj-card-inner p-6 md:p-7">
         {children}
       </div>
     </div>
@@ -138,9 +136,6 @@ const MarketReportsPage = () => {
         videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
 
-      {/* Gold Glow Divider */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
-
       {/* Main Content with TOC Sidebar */}
       <div className="pt-8 pb-10 bg-[#FDFBF7]">
         {/* Fixed TOC Sidebar */}
@@ -157,7 +152,7 @@ const MarketReportsPage = () => {
         </div>
 
         {/* Layer 2 wrapper with gutters */}
-        <div className="mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 space-y-8">
+        <div className="space-y-0">
 
               {/* Introduction Section */}
               <SectionWrapper id="introduction">
