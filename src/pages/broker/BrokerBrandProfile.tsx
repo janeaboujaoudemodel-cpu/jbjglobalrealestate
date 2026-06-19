@@ -113,6 +113,11 @@ export default function BrokerBrandProfile() {
         if (data?.id) setRow((r) => ({ ...r, id: data.id }));
       }
       toast.success("Brand profile saved — your next brochure will be co-branded");
+      // Return to the previous page after a successful save
+      setTimeout(() => {
+        if (window.history.length > 1) navigate(-1);
+        else navigate("/broker-dashboard");
+      }, 350);
     } catch (e: any) {
       toast.error(e?.message || "Save failed");
     } finally {
