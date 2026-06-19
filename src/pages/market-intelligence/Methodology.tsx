@@ -241,7 +241,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
@@ -288,7 +288,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
@@ -335,7 +335,7 @@ const Methodology = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeInUp}
-                className="scroll-mt-24 py-12 jj-card-inner rounded-xl px-8"
+                className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
