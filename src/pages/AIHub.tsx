@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
 import { SEOHead } from "@/components/SEOHead";
+import { SEOFaqSchema } from "@/components/SEOFaqSchema";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserMode } from "@/hooks/useUserMode";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
