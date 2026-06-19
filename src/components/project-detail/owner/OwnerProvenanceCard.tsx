@@ -321,6 +321,17 @@ export default function OwnerProvenanceCard({
           qc.invalidateQueries({ queryKey: ["project"] });
         }}
       />
+
+      <EnrichBedroomsDialog
+        open={bedOpen}
+        onOpenChange={setBedOpen}
+        projectId={projectId}
+        projectName={projectName}
+        onApplied={() => {
+          refetch();
+          qc.invalidateQueries({ queryKey: ["project"] });
+        }}
+      />
     </>
   );
 }
