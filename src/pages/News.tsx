@@ -276,7 +276,7 @@ const News = () => {
       {/* Hero Section — Neon newsroom (dark) */}
       <section className="jj-neon-hero relative py-20 md:py-28 overflow-hidden" data-surface="dark" data-no-contrast-guard>
         <div className="max-w-[1200px] mx-auto px-6 relative z-10">
-          <Link to="/" className="allow-white inline-flex items-center gap-2 text-white/70 hover:text-[#67E8F9] mb-8 transition-colors group" data-no-contrast-guard>
+          <Link to="/" className="allow-white inline-flex items-center gap-2 text-white/70 hover:text-[#B89555] mb-8 transition-colors group" data-no-contrast-guard>
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform allow-white" />
             <span className="allow-white">Back to Home</span>
           </Link>
@@ -327,7 +327,7 @@ const News = () => {
                     className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium allow-white ${
                       isActive
                         ? "jj-neon-chip"
-                        : "bg-white/[0.04] text-white/75 border border-white/15 hover:border-[rgba(34,211,238,0.5)] hover:text-[#67E8F9]"
+                        : "bg-white/[0.04] text-white/75 border border-white/15 hover:border-[rgba(184,149,85,0.55)] hover:text-[#B89555]"
                     }`}
                     style={isActive ? { letterSpacing: "0.04em", textTransform: "none", fontSize: "0.875rem" } : undefined}
                   >
