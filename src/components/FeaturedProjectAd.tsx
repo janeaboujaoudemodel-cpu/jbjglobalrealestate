@@ -58,8 +58,8 @@ export const FeaturedProjectAd = ({
             
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-              {/* Subtitle / Tagline */}
-              <p className="text-[#1A1A1A] text-sm md:text-base font-medium tracking-wide mb-2 uppercase">
+              {/* Subtitle / Tagline — gold on dark for hierarchy */}
+              <p className="text-[#E8D5A3] text-sm md:text-base font-semibold tracking-[0.15em] mb-2 uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {subtitle}
               </p>
               
