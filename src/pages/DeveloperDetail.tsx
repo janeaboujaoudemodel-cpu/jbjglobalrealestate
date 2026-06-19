@@ -238,7 +238,7 @@ const DeveloperDetail = () => {
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-premium-bg via-premium-bg/60 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-premium-bg/70 via-transparent to-transparent" />
         {/* Hero Title Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-4 drop-shadow-lg">
@@ -264,9 +264,8 @@ const DeveloperDetail = () => {
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Logo plate - Full-fit, no white corners */}
           <div 
-            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+            className="jj-metallic-active w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
-              background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
               boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
             }}
