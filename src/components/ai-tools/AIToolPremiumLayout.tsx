@@ -186,7 +186,7 @@ const AIToolPremiumLayout = ({
   const gradientWord = gradientWordIndex >= 0 ? titleWords.slice(gradientWordIndex).join(" ") : titleWords.slice(1).join(" ");
 
   return (
-    <div data-surface="page" className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
+    <div data-marketing-page data-surface="page" className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
       {/* Hero Section — champagne tone with subtle gold accent */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-[#F7F2EA] via-[#FDFBF7] to-[#FDFBF7] border-b border-[#B89555]/30">
         <div className="container mx-auto px-4">

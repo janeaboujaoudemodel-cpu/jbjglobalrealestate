@@ -1,6 +1,4 @@
 import { useState, useMemo } from "react";
-import VideoBackground from "@/components/VideoBackground";
-import aihubHeroVideo from "@/../public/video/aihub-bg.mp4.asset.json";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -166,7 +164,7 @@ const FILTERS: { id: ToolCategory | "all"; label: string }[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Neon dark tool card
+// Champagne tool card (gold hairline, ink text, mother-of-pearl surface)
 // ─────────────────────────────────────────────────────────────────────────────
 function ToolCard({ tool, index }: { tool: ToolDef; index: number }) {
   const Icon = tool.icon;
@@ -179,75 +177,38 @@ function ToolCard({ tool, index }: { tool: ToolDef; index: number }) {
     >
       <Link
         to={tool.link}
-        data-allow-dark-cta
-        data-no-contrast-guard
-        className="group relative h-full flex flex-col rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1"
-        style={{
-          background:
-            "linear-gradient(160deg, rgba(28,18,48,0.92) 0%, rgba(12,10,24,0.96) 60%, rgba(8,6,18,0.98) 100%)",
-          border: "1px solid rgba(168,120,255,0.22)",
-          boxShadow:
-            "0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -22px rgba(140,90,255,0.45)",
-        }}
+        className="group relative h-full flex flex-col rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-[#FDFBF7] border border-[#B89555]/40 hover:border-[#B89555]/70 hover:shadow-[0_18px_40px_-22px_rgba(184,149,85,0.35)]"
       >
-        {/* Neon edge glow */}
-        <div
-          aria-hidden
-          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-          style={{
-            boxShadow:
-              "0 0 0 1px rgba(168,120,255,0.55) inset, 0 0 28px rgba(124,77,255,0.45), 0 0 60px rgba(34,211,238,0.18)",
-          }}
-        />
-        {/* Top accent line */}
+        {/* Gold hairline top accent */}
         <div
           aria-hidden
           className="absolute top-0 left-4 right-4 h-px pointer-events-none"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(168,120,255,0.65), transparent)" }}
+          style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.7), transparent)" }}
         />
 
         <div className="flex items-start justify-between mb-4 gap-3 relative">
-          <div
-            className="flex items-center justify-center w-11 h-11 rounded-xl"
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(124,77,255,0.22) 0%, rgba(34,211,238,0.16) 100%)",
-              border: "1px solid rgba(168,120,255,0.45)",
-              boxShadow: "0 0 18px rgba(124,77,255,0.35)",
-            }}
-          >
-            <Icon className="w-5 h-5 allow-white" style={{ color: "#E9D5FF" }} />
+          <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#EFE6D6] border border-[#B89555]/50">
+            <Icon className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <span
-            className="text-[10px] font-semibold tracking-[0.18em] uppercase px-2 py-1 rounded-md allow-white"
-            style={{
-              color: "#A7F3D0",
-              background: "rgba(16,185,129,0.10)",
-              border: "1px solid rgba(16,185,129,0.35)",
-            }}
+            className="text-[10px] font-semibold tracking-[0.18em] uppercase px-2 py-1 rounded-md bg-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A]"
           >
             Free
           </span>
         </div>
 
-        <h3 className="text-[15px] font-semibold leading-snug mb-1.5 relative allow-white" style={{ color: "#FFFFFF" }}>
+        <h3 className="text-[15px] font-semibold leading-snug mb-1.5 relative text-[#1A1A1A]">
           {tool.title}
         </h3>
-        <p
-          className="text-[13px] leading-relaxed line-clamp-2 flex-1 relative allow-white"
-          style={{ color: "rgba(226,232,240,0.72)" }}
-        >
+        <p className="text-[13px] leading-relaxed line-clamp-2 flex-1 relative text-[#1A1A1A]/70">
           {tool.description}
         </p>
 
         <div className="mt-4 flex items-center justify-between text-[12px] font-semibold relative">
-          <span
-            className="opacity-70 group-hover:opacity-100 transition-opacity allow-white"
-            style={{ color: "#C4B5FD" }}
-          >
+          <span className="text-[#1A1A1A]/75 group-hover:text-[#1A1A1A] transition-colors">
             Open tool
           </span>
-          <ArrowUpRight className="w-4 h-4 allow-white" style={{ color: "#22D3EE" }} />
+          <ArrowUpRight className="w-4 h-4 text-[#1A1A1A]" />
         </div>
       </Link>
     </motion.div>
@@ -299,84 +260,32 @@ const AIHub = () => {
         canonicalPath="/ai-hub"
       />
 
-      <main data-marketing-page style={{ background: "#07060F" }}>
+      <main data-marketing-page className="bg-[#FDFBF7]">
         {/* ════════════════════════════════════════════════════════════════
-            HERO — full-bleed video, neon overlay, locked dark surface
+            HERO — champagne page band, gold hairline accents, ink type
         ════════════════════════════════════════════════════════════════ */}
-        <section
-          data-hero-dark
-          data-allow-dark-cta
-          data-no-contrast-guard
-          className="jj-hero-fullscreen relative flex items-center overflow-hidden min-h-[88vh]"
-        >
-          {/* Video bg */}
-          <div className="absolute inset-0 z-0">
-            <VideoBackground
-              src={aihubHeroVideo.url}
-              poster="/video/aihub-bg-poster.jpg"
-              opacity={1}
-              eager
-            />
-
-          </div>
-
-          {/* Cinematic composite — lighter so neon video shows through */}
+        <section className="jj-band jj-band--page relative overflow-hidden py-20 md:py-28">
+          {/* Soft gold radial wash */}
           <div
-            className="absolute inset-0 z-[2] pointer-events-none"
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(180deg, rgba(7,6,15,0.55) 0%, rgba(7,6,15,0.30) 40%, rgba(7,6,15,0.65) 100%)",
+                "radial-gradient(900px 500px at 50% 0%, rgba(184,149,85,0.10), transparent 65%)",
             }}
           />
-          <div
-            className="absolute inset-0 z-[2] pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 80%)",
-            }}
-          />
-
-          {/* Neon ambient orbs (subtle, video already provides neon) */}
-          <div
-            className="absolute top-1/4 left-1/4 w-[520px] h-[520px] rounded-full blur-[140px] z-[1] pointer-events-none"
-            style={{ background: "rgba(124,77,255,0.22)" }}
-          />
-          <div
-            className="absolute bottom-1/4 right-1/4 w-[460px] h-[460px] rounded-full blur-[130px] z-[1] pointer-events-none"
-            style={{ background: "rgba(34,211,238,0.16)" }}
-          />
-
-
-          {/* Soft transition to page bottom */}
-          <div
-            className="absolute inset-x-0 bottom-0 h-32 z-[2] pointer-events-none"
-            style={{ background: "linear-gradient(180deg, transparent, #07060F)" }}
-          />
-
           <motion.div
-            className="relative z-10 w-full py-24 px-4"
+            className="relative z-10 w-full px-4"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
           >
             <div className="max-w-4xl mx-auto text-center">
-              {/* Neon eyebrow */}
+              {/* Gold hairline eyebrow */}
               <motion.div variants={fadeInUp} className="mb-6 inline-block">
-                <span
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full allow-white"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(124,77,255,0.18) 0%, rgba(34,211,238,0.12) 100%)",
-                    backdropFilter: "blur(20px)",
-                    border: "1px solid rgba(168,120,255,0.55)",
-                    boxShadow: "0 0 24px rgba(124,77,255,0.35)",
-                  }}
-                >
-                  <Sparkles className="w-3.5 h-3.5" style={{ color: "#C4B5FD" }} />
-                  <span
-                    className="font-semibold text-[10px] md:text-xs uppercase tracking-[0.24em]"
-                    style={{ color: "#E9D5FF" }}
-                  >
+                <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/60">
+                  <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                  <span className="font-semibold text-[10px] md:text-xs uppercase tracking-[0.24em] text-[#1A1A1A]">
                     Free for All Users · AI Command Center
                   </span>
                 </span>
@@ -384,112 +293,68 @@ const AIHub = () => {
 
               <motion.h1
                 variants={fadeInUp}
-                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 leading-[1.05] allow-white"
-                style={{
-                  color: "#FFFFFF",
-                  textShadow:
-                    "0 2px 24px rgba(0,0,0,0.7), 0 0 60px rgba(124,77,255,0.35)",
-                }}
+                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 leading-[1.05] text-[#1A1A1A]"
               >
                 JBJ Royal{" "}
-                <span
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #C4B5FD 0%, #A78BFA 40%, #22D3EE 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  Tools Hub
-                </span>
+                <span style={{ color: "#B89555" }}>Tools Hub</span>
               </motion.h1>
 
               <motion.p
                 variants={fadeInUp}
-                className="text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-3 allow-white"
-                style={{ color: "rgba(255,255,255,0.95)", textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}
+                className="text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-3 text-[#1A1A1A]/85"
               >
                 Your Complete AI Tools Command Center
               </motion.p>
 
               <motion.p
                 variants={fadeInUp}
-                className="text-sm md:text-base max-w-xl mx-auto mb-8 allow-white"
-                style={{ color: "rgba(226,232,240,0.78)", textShadow: "0 1px 6px rgba(0,0,0,0.55)" }}
+                className="text-sm md:text-base max-w-xl mx-auto mb-8 text-[#1A1A1A]/65"
               >
                 60+ free tools · Property analysis · Investment calculators · Productivity suite
               </motion.p>
 
+              {/* Gold hairline divider */}
               <motion.div
                 variants={fadeInUp}
                 className="w-24 h-px mx-auto mb-9"
                 style={{
                   background:
-                    "linear-gradient(90deg, transparent, rgba(168,120,255,0.85), rgba(34,211,238,0.85), transparent)",
-                  boxShadow: "0 0 12px rgba(124,77,255,0.5)",
+                    "linear-gradient(90deg, transparent, rgba(184,149,85,0.85), transparent)",
                 }}
               />
 
-              {/* THREE CTAs — neon dark, white text/icons */}
+              {/* THREE CTAs — navy primary + champagne + navy portal */}
               <motion.div
                 variants={fadeInUp}
                 className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto"
               >
                 <button
-                  data-allow-dark-cta
-                  data-no-contrast-guard
+                  data-cta="dark"
                   onClick={() => navigate(dashboardHref)}
-                  className="allow-white inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full transition-all hover:-translate-y-0.5"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #1A1033 0%, #0F0820 100%)",
-                    border: "1px solid rgba(168,120,255,0.5)",
-                    color: "#FFFFFF",
-                    boxShadow:
-                      "0 0 0 1px rgba(168,120,255,0.15) inset, 0 8px 24px -10px rgba(124,77,255,0.55)",
-                  }}
+                  className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
                 >
-                  {user ? <User className="w-4 h-4 allow-white" /> : <LogIn className="w-4 h-4 allow-white" />}
-                  <span className="allow-white">{user ? "My Dashboard" : "Sign In / Create Account"}</span>
+                  {user ? <User className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
+                  <span>{user ? "My Dashboard" : "Sign In / Create Account"}</span>
                 </button>
 
                 <button
-                  data-allow-dark-cta
-                  data-no-contrast-guard
+                  data-cta="champagne"
                   onClick={() =>
                     document.getElementById("discover-tools")?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="allow-white inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full transition-all hover:-translate-y-0.5"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #7C4DFF 0%, #5B21B6 100%)",
-                    border: "1px solid rgba(196,181,253,0.6)",
-                    color: "#FFFFFF",
-                    boxShadow:
-                      "0 0 24px rgba(124,77,255,0.55), 0 8px 24px -10px rgba(91,33,182,0.7)",
-                  }}
+                  className="jj-cta-champagne inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
                 >
-                  <Sparkles className="w-4 h-4 allow-white" />
-                  <span className="allow-white">Explore Free Tools</span>
+                  <Sparkles className="w-4 h-4" />
+                  <span>Explore Free Tools</span>
                 </button>
 
                 <button
-                  data-allow-dark-cta
-                  data-no-contrast-guard
+                  data-cta="dark"
                   onClick={() => navigate(portalCta.href)}
-                  className="allow-white inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full transition-all hover:-translate-y-0.5"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #1A1033 0%, #0F0820 100%)",
-                    border: "1px solid rgba(34,211,238,0.55)",
-                    color: "#FFFFFF",
-                    boxShadow:
-                      "0 0 0 1px rgba(34,211,238,0.15) inset, 0 8px 24px -10px rgba(34,211,238,0.5)",
-                  }}
+                  className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
                 >
-                  <portalCta.icon className="w-4 h-4 allow-white" />
-                  <span className="allow-white">{portalCta.label}</span>
+                  <portalCta.icon className="w-4 h-4" />
+                  <span>{portalCta.label}</span>
                 </button>
               </motion.div>
             </div>
@@ -497,14 +362,9 @@ const AIHub = () => {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            TRUST STRIP — neon dark chips
+            TRUST STRIP — champagne raised tiles, gold hairline
         ════════════════════════════════════════════════════════════════ */}
-        <section
-          data-allow-dark-cta
-          data-no-contrast-guard
-          className="py-14 md:py-16"
-          style={{ background: "#07060F" }}
-        >
+        <section className="jj-band jj-band--surface py-14 md:py-16">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 max-w-6xl mx-auto">
               {QUICK_BENEFITS.map((b, idx) => {
@@ -516,31 +376,17 @@ const AIHub = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.06 }}
-                    className="rounded-2xl p-5 text-center allow-white"
-                    style={{
-                      background:
-                        "linear-gradient(160deg, rgba(28,18,48,0.85) 0%, rgba(10,8,22,0.92) 100%)",
-                      border: "1px solid rgba(168,120,255,0.20)",
-                      boxShadow: "0 12px 30px -18px rgba(124,77,255,0.45)",
-                    }}
+                    className="rounded-2xl p-5 text-center bg-[#FDFBF7] border border-[#B89555]/40"
                   >
                     <div className="flex justify-center mb-3">
-                      <div
-                        className="flex items-center justify-center w-11 h-11 rounded-xl"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, rgba(124,77,255,0.25) 0%, rgba(34,211,238,0.18) 100%)",
-                          border: "1px solid rgba(168,120,255,0.45)",
-                          boxShadow: "0 0 18px rgba(124,77,255,0.35)",
-                        }}
-                      >
-                        <Icon className="w-5 h-5 allow-white" style={{ color: "#E9D5FF" }} />
+                      <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#EFE6D6] border border-[#B89555]/50">
+                        <Icon className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                     </div>
-                    <h3 className="font-semibold text-sm mb-1 allow-white" style={{ color: "#FFFFFF" }}>
+                    <h3 className="font-semibold text-sm mb-1 text-[#1A1A1A]">
                       {b.title}
                     </h3>
-                    <p className="text-xs leading-relaxed allow-white" style={{ color: "rgba(226,232,240,0.7)" }}>
+                    <p className="text-xs leading-relaxed text-[#1A1A1A]/70">
                       {b.desc}
                     </p>
                   </motion.div>
@@ -551,49 +397,23 @@ const AIHub = () => {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            DISCOVER — search + category filters + unified grid
+            DISCOVER — search + category filters + unified grid (champagne)
         ════════════════════════════════════════════════════════════════ */}
         <section
           id="discover-tools"
-          data-allow-dark-cta
-          data-no-contrast-guard
-          className="py-14 md:py-20"
-          style={{
-            background:
-              "radial-gradient(1200px 600px at 50% 0%, rgba(124,77,255,0.10), transparent 60%), #07060F",
-          }}
+          className="jj-band jj-band--page py-14 md:py-20"
         >
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center max-w-3xl mx-auto mb-10">
-              <span
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-4 allow-white"
-                style={{
-                  background: "rgba(124,77,255,0.12)",
-                  border: "1px solid rgba(168,120,255,0.45)",
-                  color: "#C4B5FD",
-                }}
-              >
-                <Sparkles className="w-3 h-3" style={{ color: "#C4B5FD" }} />
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-4 bg-[#F7F2EA] border border-[#B89555]/60 text-[#1A1A1A]">
+                <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
                 All Free Tools
               </span>
-              <h2
-                className="text-3xl md:text-5xl font-bold tracking-tight mb-3 allow-white"
-                style={{ color: "#FFFFFF" }}
-              >
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-3 text-[#1A1A1A]">
                 Discover All Free{" "}
-                <span
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #C4B5FD 0%, #22D3EE 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  AI Tools
-                </span>
+                <span style={{ color: "#B89555" }}>AI Tools</span>
               </h2>
-              <p className="text-base allow-white" style={{ color: "rgba(226,232,240,0.7)" }}>
+              <p className="text-base text-[#1A1A1A]/70">
                 Filter by category or search across the full hub.
               </p>
             </div>
@@ -601,24 +421,13 @@ const AIHub = () => {
             {/* Search + filters */}
             <div className="flex flex-col gap-4 mb-10">
               <div className="relative max-w-2xl mx-auto w-full">
-                <Search
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 allow-white"
-                  style={{ color: "rgba(196,181,253,0.7)" }}
-                />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/60" />
                 <input
                   type="text"
                   value={toolSearch}
                   onChange={(e) => setToolSearch(e.target.value)}
                   placeholder="Search tools…"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                  className="allow-white w-full pl-11 pr-4 h-12 rounded-xl text-sm font-medium focus:outline-none transition-all"
-                  style={{
-                    background: "rgba(15,10,32,0.85)",
-                    border: "1px solid rgba(168,120,255,0.35)",
-                    color: "#FFFFFF",
-                    boxShadow: "0 0 0 1px rgba(168,120,255,0.10) inset",
-                  }}
+                  className="w-full pl-11 pr-4 h-12 rounded-xl text-sm font-medium focus:outline-none focus:border-[#B89555] transition-all bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
                 />
               </div>
 
@@ -629,23 +438,10 @@ const AIHub = () => {
                     <button
                       key={f.id}
                       onClick={() => setToolFilter(f.id)}
-                      data-allow-dark-cta
-                      data-no-contrast-guard
-                      className="allow-white px-4 h-10 rounded-full text-[11px] font-semibold uppercase tracking-[0.16em] transition-all"
-                      style={
+                      className={
                         active
-                          ? {
-                              background:
-                                "linear-gradient(135deg, #7C4DFF 0%, #5B21B6 100%)",
-                              border: "1px solid rgba(196,181,253,0.65)",
-                              color: "#FFFFFF",
-                              boxShadow: "0 0 24px rgba(124,77,255,0.5)",
-                            }
-                          : {
-                              background: "rgba(20,14,40,0.75)",
-                              border: "1px solid rgba(168,120,255,0.25)",
-                              color: "rgba(226,232,240,0.8)",
-                            }
+                          ? "jj-pill-active px-4 h-10 rounded-full text-[11px] font-semibold uppercase tracking-[0.16em] transition-all"
+                          : "px-4 h-10 rounded-full text-[11px] font-semibold uppercase tracking-[0.16em] transition-all bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555]/70"
                       }
                     >
                       {f.label}
@@ -656,10 +452,7 @@ const AIHub = () => {
             </div>
 
             {filteredTools.length === 0 ? (
-              <div
-                className="text-center py-16 text-sm allow-white"
-                style={{ color: "rgba(226,232,240,0.55)" }}
-              >
+              <div className="text-center py-16 text-sm text-[#1A1A1A]/60">
                 No tools match your search.
               </div>
             ) : (
@@ -679,90 +472,61 @@ const AIHub = () => {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            BOTTOM CTA BAND — distinct from footer (deep violet, NOT black)
+            BOTTOM CTA BAND — navy (#102540) with white text, gold hairline
         ════════════════════════════════════════════════════════════════ */}
         <section
           data-allow-dark-cta
-          data-no-contrast-guard
+          data-on-dark
           className="py-16 md:py-20 relative overflow-hidden"
-          style={{
-            background:
-              "linear-gradient(135deg, #1B0F3A 0%, #2A1466 45%, #1B0F3A 100%)",
-          }}
+          style={{ background: "#102540" }}
         >
           <div
             aria-hidden
-            className="absolute -top-32 left-1/3 w-[520px] h-[520px] rounded-full blur-[140px] pointer-events-none"
-            style={{ background: "rgba(124,77,255,0.35)" }}
+            className="absolute inset-x-0 top-0 h-px"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.65), transparent)" }}
           />
           <div
             aria-hidden
-            className="absolute -bottom-32 right-1/4 w-[460px] h-[460px] rounded-full blur-[130px] pointer-events-none"
-            style={{ background: "rgba(34,211,238,0.22)" }}
+            className="absolute inset-x-0 bottom-0 h-px"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.65), transparent)" }}
           />
-
           <div className="container mx-auto px-4 max-w-3xl text-center relative">
             <h2
               className="text-3xl md:text-4xl font-bold tracking-tight mb-4 allow-white"
               style={{ color: "#FFFFFF" }}
             >
               {user ? (
-                <>Welcome back to your{" "}
-                  <span
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #C4B5FD 0%, #22D3EE 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}
-                  >
-                    Command Center
-                  </span>
+                <>
+                  Welcome back to your{" "}
+                  <span style={{ color: "#E8C76A" }}>Command Center</span>
                 </>
               ) : (
                 <>
                   Start using{" "}
-                  <span
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #C4B5FD 0%, #22D3EE 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}
-                  >
-                    All Free AI Tools
-                  </span>
+                  <span style={{ color: "#E8C76A" }}>All Free AI Tools</span>
                 </>
               )}
             </h2>
-            <p className="mb-8 max-w-xl mx-auto allow-white" style={{ color: "rgba(226,232,240,0.8)" }}>
+            <p
+              className="mb-8 max-w-xl mx-auto allow-white"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+            >
               60+ free tools for property analysis, corporate documents, creative design, and productivity.
             </p>
             <button
-              data-allow-dark-cta
-              data-no-contrast-guard
+              data-cta="dark"
               onClick={() =>
                 user
                   ? document.getElementById("discover-tools")?.scrollIntoView({ behavior: "smooth" })
                   : navigate("/auth?redirect=/ai-hub")
               }
-              className="allow-white inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm font-semibold transition-all hover:-translate-y-0.5"
-              style={{
-                background:
-                  "linear-gradient(135deg, #7C4DFF 0%, #5B21B6 100%)",
-                border: "1px solid rgba(196,181,253,0.65)",
-                color: "#FFFFFF",
-                boxShadow:
-                  "0 0 28px rgba(124,77,255,0.55), 0 12px 30px -12px rgba(91,33,182,0.8)",
-              }}
+              className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm font-semibold"
             >
-              <Sparkles className="w-4 h-4 allow-white" />
-              <span className="allow-white">
+              <Sparkles className="w-4 h-4" />
+              <span>
                 {user ? "Explore Tools Above" : "Sign In / Create Account"}
               </span>
-              <ArrowUpRight className="w-4 h-4 allow-white" />
+              <ArrowUpRight className="w-4 h-4" />
             </button>
           </div>
         </section>
