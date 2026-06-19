@@ -36,11 +36,12 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   magdevelopments: { invert: true },
   maggroup: { invert: true },
   // Kingdom By MAG — branded as a white "Kingdom" wordmark on a dark grey
-  // square. Invert so we get a clean black wordmark on white, no grey box.
-  kingdombymag: { invert: true },
-  kingdom: { invert: true },
-  kingdomdevelopment: { invert: true },
-  kingdomdevelopments: { invert: true },
+  // square plate. The grey plate clashes with our white logo plate, so we
+  // skip the bitmap and render a clean ink wordmark instead.
+  kingdombymag: { forceNameplate: true },
+  kingdom: { forceNameplate: true },
+  kingdomdevelopment: { forceNameplate: true },
+  kingdomdevelopments: { forceNameplate: true },
 };
 
 
