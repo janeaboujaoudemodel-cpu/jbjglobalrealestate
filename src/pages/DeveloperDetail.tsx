@@ -89,6 +89,7 @@ const DeveloperDetail = () => {
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
   // IntersectionObserver for fixed filter positioning
@@ -131,7 +132,7 @@ const DeveloperDetail = () => {
   }, [isFilterFixed, bottomReached]);
 
   // Reset showAll when filters or developer changes
-  useEffect(() => { setShowAllProjects(false); }, [slug, selectedEmirate, filters]);
+  useEffect(() => { setShowAllProjects(false); setVisibleCount(6); }, [slug, selectedEmirate, filters]);
 
   // Apply emirate filter first, then apply other filters
   const projectsInEmirate = useMemo(() => {
@@ -448,23 +449,23 @@ const DeveloperDetail = () => {
             </div>
           ) : filteredProjects.length > 0 ? (
             <div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(showAllProjects ? filteredProjects : filteredProjects.slice(0, 9)).map((project) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500">
+                {filteredProjects.slice(0, visibleCount).map((project) => (
                   <ProjectCard key={project.id} project={project} currency={filters.currency} sizeUnit={filters.sizeUnit} />
                 ))}
               </div>
-              {!showAllProjects && filteredProjects.length > 9 && (
+              {visibleCount < filteredProjects.length && (
                 <div className="flex justify-center mt-10">
                   <button
-                    onClick={() => setShowAllProjects(true)}
+                    onClick={() => setVisibleCount((c) => Math.min(c + 6, filteredProjects.length))}
                     className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-300 border-2 border-[#B89555]/40 hover:border-[#B89555]/80 hover:-translate-y-0.5"
                     style={{
                       background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
-                      boxShadow: '0 4px 20px rgba(200,167,102,0.2)',
+                      boxShadow: '0 4px 20px rgba(184,149,85,0.2)',
                     }}
                   >
                     <span className="text-foreground">
-                      Explore All {filteredProjects.length} {developer.name} Projects
+                      View more · Showing {visibleCount} of {filteredProjects.length}
                     </span>
                     <ChevronDown className="w-5 h-5 text-[#1A1A1A] group-hover:translate-y-0.5 transition-transform" />
                   </button>
