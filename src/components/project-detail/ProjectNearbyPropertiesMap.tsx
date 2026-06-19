@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { pushBackStack } from "@/lib/browsingHistory";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+type FilterMode = "all" | "developer" | "area";
 
 // Red pin — current project
 const RED_PIN_SVG = `
@@ -61,6 +63,8 @@ interface ProjectNearbyPropertiesMapProps {
   currentProjectId: string;
   currentProjectName: string;
   currentProjectSlug?: string | null;
+  currentDeveloperId?: string | null;
+  currentDeveloperName?: string | null;
   /** May be null when the project itself has no coords — we'll derive a centroid from area peers. */
   latitude: number | null;
   longitude: number | null;
@@ -76,14 +80,18 @@ type NearbyRow = {
   longitude: number | null;
   price_from: number | null;
   cover_image_url: string | null;
+  developer_id: string | null;
   developer_name: string | null;
   developer_slug: string | null;
+  area_name: string | null;
 };
 
 export default function ProjectNearbyPropertiesMap({
   currentProjectId,
   currentProjectName,
   currentProjectSlug,
+  currentDeveloperId,
+  currentDeveloperName,
   latitude,
   longitude,
   areaName,
@@ -96,12 +104,14 @@ export default function ProjectNearbyPropertiesMap({
   const hasOwnCoords =
     typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
 
+  const [filterMode, setFilterMode] = useState<FilterMode>("all");
+
   const { data: nearbyProjects } = useQuery({
-    queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude],
-    enabled: hasOwnCoords || !!areaName,
+    queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude, currentDeveloperId],
+    enabled: hasOwnCoords || !!areaName || !!currentDeveloperId,
     queryFn: async (): Promise<NearbyRow[]> => {
       const select =
-        "id, name, slug, latitude, longitude, price_from, cover_image_url, developer:developers(name, slug)";
+        "id, name, slug, latitude, longitude, price_from, cover_image_url, area_name, developer_id, developer:developers(name, slug)";
 
       const shape = (rows: any[]): NearbyRow[] =>
         (rows || [])
@@ -113,8 +123,10 @@ export default function ProjectNearbyPropertiesMap({
             longitude: p.longitude,
             price_from: p.price_from,
             cover_image_url: p.cover_image_url,
+            developer_id: p.developer_id ?? null,
             developer_name: p.developer?.name ?? null,
             developer_slug: p.developer?.slug ?? null,
+            area_name: p.area_name ?? null,
           }))
           .filter(
             (p) =>
@@ -125,27 +137,46 @@ export default function ProjectNearbyPropertiesMap({
               !(p.latitude === 0 && p.longitude === 0),
           );
 
-      // 1) Try matching by area name (works whether or not the current project has coords)
+      const merged = new Map<string, NearbyRow>();
+
+      // 1) Area peers
       if (areaName) {
         const { data: byArea } = await supabase
           .from("projects")
           .select(select)
           .neq("id", currentProjectId)
+          .eq("is_published", true)
           .or(`area_name.ilike.%${areaName}%,location.ilike.%${areaName}%`)
           .not("latitude", "is", null)
           .not("longitude", "is", null)
           .limit(40);
-        const valid = shape(byArea as any[]);
-        if (valid.length > 0) return valid;
+        shape(byArea as any[]).forEach((r) => merged.set(r.id, r));
       }
 
-      // 2) Fallback: lat/lng bounding box (~11 km radius) — only when we have own coords
-      if (hasOwnCoords) {
+      // 2) Same developer peers
+      if (currentDeveloperId) {
+        const { data: byDev } = await supabase
+          .from("projects")
+          .select(select)
+          .neq("id", currentProjectId)
+          .eq("developer_id", currentDeveloperId)
+          .eq("is_published", true)
+          .not("latitude", "is", null)
+          .not("longitude", "is", null)
+          .limit(40);
+        shape(byDev as any[]).forEach((r) => {
+          if (!merged.has(r.id)) merged.set(r.id, r);
+        });
+      }
+
+      // 3) Bounding-box fallback
+      if (merged.size === 0 && hasOwnCoords) {
         const delta = 0.1;
         const { data } = await supabase
           .from("projects")
           .select(select)
           .neq("id", currentProjectId)
+          .eq("is_published", true)
           .gte("latitude", (latitude as number) - delta)
           .lte("latitude", (latitude as number) + delta)
           .gte("longitude", (longitude as number) - delta)
@@ -153,15 +184,41 @@ export default function ProjectNearbyPropertiesMap({
           .not("latitude", "is", null)
           .not("longitude", "is", null)
           .limit(40);
-        return shape(data as any[]);
+        shape(data as any[]).forEach((r) => merged.set(r.id, r));
       }
 
-      return [];
+      return Array.from(merged.values());
     },
     staleTime: 5 * 60 * 1000,
   });
 
-  const markers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
+  const allMarkers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
+
+  const sameDevCount = useMemo(
+    () => (currentDeveloperId ? allMarkers.filter((m) => m.developer_id === currentDeveloperId).length : 0),
+    [allMarkers, currentDeveloperId],
+  );
+  const sameAreaCount = useMemo(
+    () =>
+      areaName
+        ? allMarkers.filter((m) => {
+            const a = (m.area_name || "").toLowerCase();
+            return a.includes(areaName.toLowerCase());
+          }).length
+        : 0,
+    [allMarkers, areaName],
+  );
+
+  const markers = useMemo(() => {
+    if (filterMode === "developer" && currentDeveloperId) {
+      return allMarkers.filter((m) => m.developer_id === currentDeveloperId);
+    }
+    if (filterMode === "area" && areaName) {
+      const a = areaName.toLowerCase();
+      return allMarkers.filter((m) => (m.area_name || "").toLowerCase().includes(a));
+    }
+    return allMarkers;
+  }, [allMarkers, filterMode, currentDeveloperId, areaName]);
 
   // Derive a map center: project coords if available, otherwise the centroid of area peers.
   const center = useMemo<[number, number] | null>(() => {
@@ -171,11 +228,15 @@ export default function ProjectNearbyPropertiesMap({
       const lng = markers.reduce((s, m) => s + (m.longitude as number), 0) / markers.length;
       return [lat, lng];
     }
+    if (allMarkers.length > 0) {
+      const lat = allMarkers.reduce((s, m) => s + (m.latitude as number), 0) / allMarkers.length;
+      const lng = allMarkers.reduce((s, m) => s + (m.longitude as number), 0) / allMarkers.length;
+      return [lat, lng];
+    }
     return null;
-  }, [hasOwnCoords, latitude, longitude, markers]);
+  }, [hasOwnCoords, latitude, longitude, markers, allMarkers]);
 
-  if (!center || markers.length === 0) return null;
-
+  if (!center || allMarkers.length === 0) return null;
 
   const handleOpenNearby = (slug: string | null) => {
     if (!slug) return;
@@ -185,15 +246,41 @@ export default function ProjectNearbyPropertiesMap({
     navigate(`/project/${slug}`);
   };
 
-  return (
-    <div
-      className={`rounded-2xl overflow-hidden ${className}`}
-      style={{
-        height: 380,
-        border: "1px solid rgba(184,149,85,0.40)",
-        boxShadow: "0 4px 16px rgba(184,149,85,0.15)",
-      }}
+  const chip = (mode: FilterMode, label: string, count: number, disabled = false) => (
+    <button
+      key={mode}
+      type="button"
+      onClick={() => !disabled && setFilterMode(mode)}
+      disabled={disabled}
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${
+        filterMode === mode
+          ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+          : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
+      } ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
+      data-no-contrast-guard
     >
+      {label}
+      <span className={`text-[10px] tabular-nums ${filterMode === mode ? "text-white/70" : "text-[#1A1A1A]/60"}`}>
+        {count}
+      </span>
+    </button>
+  );
+
+  return (
+    <div className={className}>
+      <div className="mb-2 flex items-center gap-2 flex-wrap">
+        {chip("all", "All nearby", allMarkers.length)}
+        {chip("developer", currentDeveloperName ? `Same developer · ${currentDeveloperName}` : "Same developer", sameDevCount, sameDevCount === 0)}
+        {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
+      </div>
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          height: 380,
+          border: "1px solid rgba(184,149,85,0.40)",
+          boxShadow: "0 4px 16px rgba(184,149,85,0.15)",
+        }}
+      >
       <style>{`
         .jj-map-pin { background: none !important; border: none !important; }
         .leaflet-popup-content-wrapper { border-radius: 12px; border: 1px solid rgba(184,149,85,0.35); }
@@ -298,6 +385,7 @@ export default function ProjectNearbyPropertiesMap({
           </Marker>
         ))}
       </MapContainer>
+      </div>
     </div>
   );
 }
