@@ -369,9 +369,9 @@ const AICalendar = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
+    <section data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       {/* Header */}
-      <div className="bg-gradient-to-r from-cyan-900/30 via-cyan-800/20 to-cyan-900/30 border-b border-cyan-500/30">
+      <div className="bg-[#F7F2EA] border-b border-[#B89555]/40">
         <div className="container mx-auto px-4 py-12">
           {/* Back Arrow */}
           <Button
