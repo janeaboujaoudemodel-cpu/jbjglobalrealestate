@@ -1507,6 +1507,8 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
         onOpenChange={setLeadCaptureOpen}
         projectId={project.id}
         projectName={project.name}
+        projectLocation={project.location}
+        developerName={project.developer?.name}
         documentType={captureDocType}
         documentUrl={captureDocUrl}
       />
