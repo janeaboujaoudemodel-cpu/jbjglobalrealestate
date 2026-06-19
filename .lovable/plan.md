@@ -1,69 +1,48 @@
-# Plan: Navy → Black + Off-Palette Sweep + SEO/Sitemap Cleanup
+# Pass 8 — Kill Tiffany Cyan/Teal + Dark-Navy Hero on Public Pages
 
-## Scope confirmed
-- **Navy → Black**: full reversal site-wide (all surfaces).
-- **Color sweep**: public marketing pages only (Home, AI Hub + tools, Services, Properties browse, Communities, News, Market Intel public, Guides, FAQ, Contact, public Developer/Project/Area profile pages). Owner dashboard, CRM, broker portal, developer portal, admin internals are untouched.
-- **Database**: no changes (palette is CSS only).
+The earlier navy→black flip (#102540) didn't catch a second dark theme: a deep teal/navy background (`#031E18` / `#0F1C18` / `#022C22`) paired with Tiffany cyan accents (`#5EEAD4`, `#22D3EE`, `#67E8F9`, `#0E7490`). The `/quiz-results` screenshot is one example. This pass removes that theme from public marketing pages and folds it into the locked palette.
 
-## Locked palette after this pass
-| Token | Hex | Use |
-|---|---|---|
-| Page | `#FDFBF7` | Page background |
-| Surface (champagne) | `#F7F2EA` | Section band |
-| Raised (cream) | `#EFE6D6` | Cards, active pills |
-| Gold | `#B89555` | 1px hairline ONLY |
-| Ink | `#1A1A1A` | Body text |
-| **Black (new dark CTA)** | **`#0A0A0A`** | All dark buttons, banners, dark bands — replaces navy |
-| Black hover | `#1F1F1F` | Hover state |
-| Price orange | unchanged | `<PricePill />` only |
-| AI purple | unchanged for AI-internal owner tools | already retired on public AI Hub |
+## Files in scope (public only, 9 files)
 
-## Pass 1 — Navy → Black global flip
-Retire the locked "Black-CTA → Navy global" rule and replace with the inverse.
+| File | What's wrong |
+|---|---|
+| `src/pages/QuizResults.tsx` | Full dark-teal hero, cyan gradient cards/badges/buttons, cyan medal pills, PDF report uses navy+cyan |
+| `src/pages/Quiz.tsx` | Same cyan/teal accents on the quiz flow |
+| `src/pages/MortgageCalculator.tsx` | Cyan accents |
+| `src/pages/News.tsx` | Cyan accents |
+| `src/pages/InteriorDesignAI.tsx` | Cyan accents (public AI tool) |
+| `src/components/matchmaker/MatchCriteriaTable.tsx` | Cyan match table (used inside QuizResults) |
+| `src/index.css` | Any leftover cyan/teal token rules |
+| `src/components/tools/toolThemes.ts` | Cyan tool theme preset (only public tool entries) |
+| `src/pages/owner/AIHomeFinderSubmissionsPage.tsx` | Owner page — **leave unchanged** (out of scope: owner dashboard) |
 
-- Edit `src/index.css`:
-  - Remove the existing `bg-[#102540]` / `bg-[#1a3d63]` auto-paint rules.
-  - Add new guard: any `bg-[#102540]`, `bg-[#1a3d63]`, `bg-[#0f1e35]`, `bg-navy*`, `bg-blue-9*` on a `[data-marketing-page]` root → `background-color: #0A0A0A !important`; hover → `#1F1F1F`; keep white text + white icons + 1px gold hairline ring.
-- Edit CTA primitives in `src/index.css` (`.jj-cta-dark`, `.jj-pill-active`, locked navy classes): swap navy hex for `#0A0A0A` (rest) / `#1F1F1F` (hover). Keep gold hairline + white foreground.
-- Search-replace in public components (Header, Footer, Hero CTA bars, AI Hub bottom CTA band, Get Verified banner, support launcher tag, mode chips) every literal `#102540`, `#1a3d63`, `#0f1e35`, `bg-navy-*`, `bg-blue-900/950` → `#0A0A0A` / `#1F1F1F`.
-- Footer: confirmed dark already — repaint navy accents to `#0A0A0A`, keep single champagne hairline.
+## Replacement map (locked palette)
 
-## Pass 2 — Off-palette sweep on public marketing pages
-Targets only routes flagged "public marketing". For each file, replace:
-- Purple/violet/indigo/fuchsia (`bg-purple-*`, `from-violet-*`, `text-indigo-*`, raw `#7c3aed/#8b5cf6/#a78bfa/#6366f1/#d946ef`) → champagne `#F7F2EA` surfaces, ink `#1A1A1A` text, gold `#B89555` hairline.
-- Cyan/teal/sky decorative gradients → champagne band.
-- Zinc/slate/gray surface tints → champagne or page.
-- Raw `bg-black` / `bg-[#000]` CTAs → `#0A0A0A` via new primitive.
-- Neon glow shadows → soft gold hairline ring.
+| Current | Replace with |
+|---|---|
+| `#031E18` / `#0F1C18` / `#022C22` / `#04161C` (dark teal bg) | `#FDFBF7` page or `#F7F2EA` champagne band |
+| `from-[#5EEAD4] to-[#22D3EE]` (cyan gradient pill/CTA) | Solid black `#0A0A0A` + white text + 1px gold `#B89555` hairline (`.jj-cta-dark` primitive) |
+| Cyan border / ring (`#67E8F9`, `#5EEAD4`) | Gold hairline `rgba(184,149,85,.55)` |
+| Cyan text on dark | Ink `#1A1A1A` on champagne |
+| `shadow-cyan-400/20` glows | Removed (no neon glows in palette) |
+| Top1/Top2/Top3 medal pills | Champagne pill `#EFE6D6` + ink text + gold hairline; "#1 Best Match" pill becomes `.jj-pill-active` |
+| PDF report navy+cyan letterhead | Black `#0A0A0A` + gold `#B89555` (already standard for JBJ exports) |
 
-Files in scope (initial sweep list, expanded after exploration):
-`src/pages/Index.tsx`, `src/pages/AIHub.tsx` (final pass), all `src/pages/AI*.tsx` public tool pages, `src/pages/Services.tsx`, `src/pages/Properties.tsx`, `src/pages/Communities.tsx`, `src/pages/News.tsx`, `src/pages/MarketIntelligence*.tsx`, `src/pages/AreaGuides.tsx`, `src/pages/Guides/*`, `src/pages/FAQ*`, `src/pages/Contact.tsx`, `src/pages/Developer.tsx`, `src/pages/Project.tsx`, `src/pages/Area.tsx`, plus shared marketing components under `src/components/home/*`, `src/components/marketing/*`, `src/components/ai-tools/AIToolPremiumLayout.tsx`.
+## Passes
 
-Owner/CRM/broker/developer-portal/admin files are explicitly skipped — no edits.
-
-## Pass 3 — CI + memory rewrites
-- Extend `scripts/contrast/check-no-purple.mjs` to also fail on raw `#102540` / `#1a3d63` / `bg-navy-*` outside opt-out files.
-- Update memories:
-  - `mem://ui-ux/visual-standards/black-cta-to-navy-global` → **RETIRED — superseded by Navy→Black**.
-  - `mem://constraints/navy-pill-white-text-lock` → **RETIRED**.
-  - New: `mem://ui-ux/visual-standards/navy-to-black-global` describing the inverse guard, `#0A0A0A`/`#1F1F1F`, white text + gold hairline, opt-outs (`data-allow-navy`, `data-no-contrast-guard`).
-  - Update `mem://index.md` Core lines that reference navy `#102540` to point at `#0A0A0A`.
-
-## Pass 4 — SEO + sitemap cleanup
-- `public/sitemap.xml`: regenerate from current public routes in `src/routes/PublicRoutes.tsx`. Remove any lingering `/services/ai-tools`, duplicate `/ai-hub` variants, dead AI tool sub-routes. Single canonical `/ai-hub`.
-- `src/seo/serviceSeoCatalog.ts`: drop any service entries that point at removed AI tool URLs.
-- `src/components/SEOHead.tsx` / `CanonicalAndHreflang.tsx`: verify canonical helper points self-route; no edits unless drift found.
-- `public/robots.txt`: confirm `Sitemap:` directive matches `https://jbjglobalrealestate.lovable.app/sitemap.xml`.
-- Run `seo_chat--list_findings`, fix anything flagged, then `seo_chat--trigger_scan` (needs your approval).
-
-## Pass 5 — Visual validation
-Take screenshots at desktop (1440) and mobile (390) for:
-`/`, `/ai-hub`, `/services`, `/properties`, `/communities`, `/news`, `/market-intelligence`, `/guides`, `/faq`, `/contact`, plus one sample `/developer/:slug` and `/project/:slug`.
-
-Confirm: no purple/violet/indigo/cyan visible, no navy visible, all dark CTAs are clean black `#0A0A0A` with white text + gold hairline, header/footer match.
+1. **QuizResults.tsx** — replace hero band, 3 medal tiers, "#1 Best Match" badge, circular icon tiles (3×), download/share/restart CTAs, and the jsPDF `navy`/`cyan` tuples → black `[10,10,10]` + gold `[184,149,85]`.
+2. **Quiz.tsx, MortgageCalculator.tsx, News.tsx, InteriorDesignAI.tsx, MatchCriteriaTable.tsx** — same cyan→gold-hairline / dark-teal→champagne swap. No layout/copy changes.
+3. **toolThemes.ts** — only `cyan` preset entries used by public tool pages get re-pointed to the gold/champagne preset. Owner-internal entries untouched.
+4. **index.css** — remove any cyan/teal rule blocks introduced for this theme; no new tokens needed.
+5. **CI guard** — extend `scripts/contrast/check-no-blue.mjs` (or add `check-no-cyan.mjs`) to fail on raw `#5EEAD4|#22D3EE|#67E8F9|#0E7490|#031E18|#0F1C18|#022C22` in `src/pages/**` and `src/components/**` excluding the owner dashboard / CRM / portal trees.
+6. **Visual validation** — desktop (1440) screenshots of `/quiz-results` (with the same query string), `/quiz`, `/mortgage-calculator`, `/news`, `/interior-design-ai` after the swap.
 
 ## Out of scope
-- Owner dashboard, CRM, broker/developer portals, admin pages.
-- Data-viz semantic colors (Emerald/Red/Blue/Amber) — untouched even on public marketing.
-- Any content, copy, layout, business logic, backend, or database changes.
-- AI purple is already retired on public AI Hub; owner-only AI tools keep purple.
+- Owner dashboard, CRM, broker/developer portal, admin pages (memory: public-only sweep).
+- Data-viz semantic colors (Emerald/Red/Blue/Amber on charts/KPIs).
+- AI premium purple on owner-only AI tools.
+- Content, copy, business logic, backend, database.
+
+## Memory updates
+- Extend `mem://constraints/no-bright-yellow-gold` sibling: add `mem://constraints/no-tiffany-cyan-public` banning `#5EEAD4|#22D3EE|#67E8F9|#0E7490` and dark-teal backgrounds on public pages.
+- Add a one-liner to `mem://index.md` Core: "No Tiffany cyan/teal on public pages. Cyan accents → gold hairline; dark-teal bg → champagne."

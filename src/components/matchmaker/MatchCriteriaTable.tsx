@@ -287,23 +287,23 @@ const verdictStyles: Record<
   { bg: string; ring: string; fg: string; Icon: typeof Check; label: string }
 > = {
   match: {
-    bg: "rgba(94,234,212,0.20)",
-    ring: "rgba(94,234,212,0.72)",
-    fg: "#5EEAD4",
+    bg: "rgba(16,185,129,0.12)",
+    ring: "rgba(16,185,129,0.55)",
+    fg: "#047857",
     Icon: Check,
     label: "Match",
   },
   close: {
-    bg: "rgba(34,211,238,0.14)",
-    ring: "rgba(34,211,238,0.50)",
-    fg: "#67E8F9",
+    bg: "rgba(217,119,6,0.12)",
+    ring: "rgba(217,119,6,0.55)",
+    fg: "#B45309",
     Icon: Minus,
     label: "Close",
   },
   miss: {
-    bg: "rgba(103,232,249,0.07)",
-    ring: "rgba(103,232,249,0.25)",
-    fg: "#A0D7DC",
+    bg: "rgba(178,58,72,0.10)",
+    ring: "rgba(178,58,72,0.45)",
+    fg: "#B23A48",
     Icon: X,
     label: "Miss",
   },
@@ -333,10 +333,10 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
       className="aihf-panel rounded-2xl p-5 md:p-7 mb-8 overflow-x-auto"
       style={{
         background:
-          "linear-gradient(160deg, rgba(8,47,73,0.55) 0%, rgba(3,30,24,0.85) 100%)",
-        border: "1px solid rgba(94,234,212,0.55)",
+          "#F7F2EA",
+        border: "1px solid rgba(184,149,85,0.55)",
         boxShadow:
-          "0 30px 80px rgba(34,211,238,0.18), inset 0 0 40px rgba(103,232,249,0.08)",
+          "none",
       }}
     >
       <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -361,8 +361,8 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
             <th
               className="text-left text-xs font-semibold uppercase tracking-wide p-3 sticky left-0"
               style={{
-                color: "#67E8F9",
-                background: "rgba(3,30,24,0.95)",
+                color: "#1A1A1A",
+                background: "#EFE6D6",
                 minWidth: 170,
               }}
             >
@@ -371,15 +371,15 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
             {projects.map((p, i) => {
               const rankBg =
                 i === 0
-                  ? "linear-gradient(135deg, #5EEAD4 0%, #22D3EE 100%)"
+                  ? "#EFE6D6"
                   : i === 1
-                  ? "linear-gradient(135deg, #22D3EE 0%, #0E7490 100%)"
-                  : "linear-gradient(135deg, #0E7490 0%, #031E18 100%)";
+                  ? "#F7F2EA"
+                  : "#FDFBF7";
               return (
                 <th
                   key={p.id || i}
                   className="text-left text-xs font-semibold uppercase tracking-wide p-3 align-bottom"
-                  style={{ color: "#67E8F9", minWidth: 220 }}
+                  style={{ color: "#1A1A1A", minWidth: 220 }}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     {p.cover_image_url ? (
@@ -387,7 +387,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                         src={p.cover_image_url}
                         alt=""
                         className="w-10 h-10 rounded-lg object-cover"
-                        style={{ border: "1px solid rgba(94,234,212,0.45)" }}
+                        style={{ border: "1px solid rgba(184,149,85,0.45)" }}
                       />
                     ) : null}
                     <div className="flex flex-col gap-1">
@@ -395,7 +395,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                         className="inline-flex items-center justify-center rounded-full px-2 py-0.5 text-[10px] font-bold"
                         style={{
                           background: rankBg,
-                          color: "#02110F",
+                          color: "#1A1A1A",
                           letterSpacing: "0.04em",
                         }}
                       >
@@ -405,7 +405,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                   </div>
                   <div
                     className="text-sm font-bold normal-case tracking-normal leading-tight"
-                    style={{ color: "#FFFFFF" }}
+                    style={{ color: "#1A1A1A" }}
                   >
                     {p.name}
                   </div>
@@ -422,9 +422,9 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                 style={{
                   background:
                     ri % 2
-                      ? "rgba(8,47,73,0.55)"
-                      : "rgba(14,116,144,0.32)",
-                  borderTop: "1px solid rgba(94,234,212,0.28)",
+                      ? "#F7F2EA"
+                      : "#EFE6D6",
+                  borderTop: "1px solid rgba(184,149,85,0.28)",
                   minWidth: 170,
                 }}
               >
@@ -441,9 +441,9 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                     style={{
                       background:
                         ri % 2
-                          ? "rgba(8,47,73,0.45)"
-                          : "rgba(14,116,144,0.22)",
-                      borderTop: "1px solid rgba(94,234,212,0.22)",
+                          ? "#FDFBF7"
+                          : "#F7F2EA",
+                      borderTop: "1px solid rgba(184,149,85,0.22)",
                     }}
                   >
                     <div className="flex items-start gap-2">
@@ -461,7 +461,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                         <div className="text-xs font-semibold" style={{ color: s.fg }}>
                           {s.label}
                         </div>
-                        <div className="text-sm leading-snug" style={{ color: "#FFFFFF" }}>
+                        <div className="text-sm leading-snug" style={{ color: "#1A1A1A" }}>
                           {cell.value}
                         </div>
                       </div>
@@ -478,12 +478,12 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
               className="align-top p-3 sticky left-0"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.10) 100%)",
-                borderTop: "2px solid rgba(94,234,212,0.55)",
+                  "#EFE6D6",
+                borderTop: "2px solid rgba(184,149,85,0.55)",
                 minWidth: 170,
               }}
             >
-              <div className="text-xs font-bold uppercase tracking-wide" style={{ color: "#67E8F9" }}>
+              <div className="text-xs font-bold uppercase tracking-wide" style={{ color: "#1A1A1A" }}>
                 Match summary
               </div>
               <div className="aihf-muted text-[11px] mt-0.5">
@@ -496,8 +496,8 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                 className="align-top p-3"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(94,234,212,0.10) 0%, rgba(3,30,24,0.55) 100%)",
-                  borderTop: "2px solid rgba(94,234,212,0.55)",
+                    "#F7F2EA",
+                  borderTop: "2px solid rgba(184,149,85,0.55)",
                 }}
               >
                 <div className="flex flex-wrap items-center gap-1.5">
@@ -527,7 +527,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                 </div>
                 <div
                   className="mt-1.5 text-[11px] font-semibold"
-                  style={{ color: i === 0 ? "#5EEAD4" : "#67E8F9" }}
+                  style={{ color: i === 0 ? "#047857" : "#1A1A1A" }}
                 >
                   {i === 0
                     ? `Best fit — ${t.match}/${t.total} criteria`

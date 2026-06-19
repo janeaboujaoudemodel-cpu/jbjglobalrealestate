@@ -67,7 +67,7 @@ export const toolThemes: Record<ToolTheme["id"], ToolTheme> = {
   navy: make("navy", "Navy", "#1E4E8C", "#0A1830"),
   burgundy: make("burgundy", "Burgundy", "#8B1E2E", "#2E0810"),
   violet: make("violet", "Violet", "#6D28D9", "#1E0F3A"),
-  teal: make("teal", "Teal", "#0E7490", "#062430"),
+  teal: make("teal", "Teal", "#B89555", "#0A0A0A"),
   rose: make("rose", "Rose", "#BE185D", "#3A0820"),
   amber: make("amber", "Amber", "#B45309", "#2A1505"),
   indigo: make("indigo", "Indigo", "#4338CA", "#11103A"),

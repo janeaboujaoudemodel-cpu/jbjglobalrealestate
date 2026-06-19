@@ -250,51 +250,52 @@ const NATIONALITIES = getCountryList();
 
 const AIHF_STYLE = `
   .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div), .aihf-root svg {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
     opacity: 1 !important;
   }
-  .aihf-root svg, .aihf-root svg * { stroke: #FFFFFF !important; }
-  .aihf-root .aihf-muted { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
-  .aihf-root .aihf-tiffany { color: #67E8F9 !important; -webkit-text-fill-color: #67E8F9 !important; }
+  .aihf-root svg, .aihf-root svg * { stroke: #1A1A1A !important; }
+  .aihf-root .aihf-muted { color: rgba(26,26,26,0.70) !important; -webkit-text-fill-color: rgba(26,26,26,0.70) !important; }
+  .aihf-root .aihf-tiffany { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
   .aihf-root .aihf-card {
-    background: linear-gradient(135deg, rgba(8,47,73,0.72), rgba(3,30,24,0.86)) !important;
-    border: 1px solid rgba(45,212,191,0.45) !important;
-    box-shadow: 0 24px 70px rgba(45,212,191,0.16), inset 0 0 34px rgba(103,232,249,0.06) !important;
+    background: #F7F2EA !important;
+    border: 1px solid rgba(184,149,85,0.55) !important;
+    box-shadow: none !important;
   }
   .aihf-root .aihf-option {
-    background: rgba(5,28,24,0.82) !important;
-    border-color: rgba(45,212,191,0.42) !important;
+    background: #FDFBF7 !important;
+    border-color: rgba(184,149,85,0.45) !important;
   }
   .aihf-root .aihf-option:hover, .aihf-root .aihf-option[aria-pressed="true"] {
-    background: linear-gradient(135deg, rgba(45,212,191,0.22), rgba(6,182,212,0.13)) !important;
-    border-color: rgba(103,232,249,0.86) !important;
-    box-shadow: 0 14px 38px rgba(45,212,191,0.20) !important;
+    background: #EFE6D6 !important;
+    border-color: rgba(184,149,85,0.85) !important;
+    box-shadow: none !important;
   }
   .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
     min-width: 12rem;
     min-height: 4rem;
-    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 100%) !important;
-    border: 1px solid rgba(103,232,249,0.80) !important;
-    box-shadow: 0 18px 42px rgba(34,211,238,0.28) !important;
+    background: #0A0A0A !important;
+    border: 1px solid rgba(184,149,85,0.65) !important;
+    box-shadow: none !important;
   }
   .aihf-root .aihf-cta, .aihf-root .aihf-cta *, .aihf-root .aihf-cta svg {
-    color: #02110F !important;
-    -webkit-text-fill-color: #02110F !important;
-    stroke: #02110F !important;
-    opacity: 1 !important;
-  }
-  .aihf-root .aihf-input, .aihf-root input, .aihf-root [data-searchable-trigger] {
-    background: rgba(2,17,15,0.82) !important;
-    border: 1px solid rgba(45,212,191,0.52) !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+    opacity: 1 !important;
   }
-  .aihf-root input::placeholder { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
-  .aihf-popover, .aihf-popover * { background-color: #04161C !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-  .aihf-popover { border: 1px solid rgba(45,212,191,0.55) !important; }
-  .aihf-popover svg, .aihf-popover svg * { stroke: #FFFFFF !important; color: #FFFFFF !important; }
-  .aihf-popover .jbj-form-option:hover { background-color: rgba(45,212,191,0.14) !important; }
+  .aihf-root .aihf-cta:hover { background: #1F1F1F !important; }
+  .aihf-root .aihf-input, .aihf-root input, .aihf-root [data-searchable-trigger] {
+    background: #FDFBF7 !important;
+    border: 1px solid rgba(184,149,85,0.55) !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+  }
+  .aihf-root input::placeholder { color: rgba(26,26,26,0.55) !important; -webkit-text-fill-color: rgba(26,26,26,0.55) !important; }
+  .aihf-popover, .aihf-popover * { background-color: #FDFBF7 !important; color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; }
+  .aihf-popover { border: 1px solid rgba(184,149,85,0.55) !important; }
+  .aihf-popover svg, .aihf-popover svg * { stroke: #1A1A1A !important; color: #1A1A1A !important; }
+  .aihf-popover .jbj-form-option:hover { background-color: #EFE6D6 !important; }
 `;
 
 const Quiz = () => {
@@ -870,7 +871,7 @@ const Quiz = () => {
         data-no-contrast-guard
         data-on-dark
         className="aihf-root allow-white min-h-screen flex flex-col"
-        style={{ background: "#04161C" }}
+        style={{ background: "#F7F2EA" }}
       >
         <style>{AIHF_STYLE}</style>
         {/* Header */}
@@ -900,7 +901,7 @@ const Quiz = () => {
             data-no-contrast-guard
             className="allow-white w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
             style={{
-              background: "linear-gradient(135deg, #0E7490 0%, #062430 45%, #000000 100%)",
+              background: "#0A0A0A",
               border: "1px solid rgba(94,234,212,0.45)",
               boxShadow: "0 0 0 1px rgba(94,234,212,0.25), 0 24px 60px rgba(14,116,144,0.35), inset 0 0 32px rgba(94,234,212,0.10)",
             }}
@@ -913,14 +914,14 @@ const Quiz = () => {
                 color: "#A7F3D0",
               }}
             >
-              <Gift className="w-4 h-4 allow-white" style={{ color: "#5EEAD4" }} />
+              <Gift className="w-4 h-4 allow-white" style={{ color: "#B89555" }} />
               <span className="text-sm font-medium allow-white" style={{ color: "#A7F3D0" }}>Completely Free</span>
             </div>
 
             <div
               className="w-20 h-20 rounded-full mx-auto mb-7 flex items-center justify-center"
               style={{
-                background: "linear-gradient(135deg, #5EEAD4 0%, #0E7490 60%, #000 100%)",
+                background: "#0A0A0A",
                 border: "1px solid rgba(94,234,212,0.55)",
                 boxShadow: "0 0 28px rgba(94,234,212,0.45)",
               }}
@@ -934,7 +935,7 @@ const Quiz = () => {
 
             <p className="allow-white text-lg mb-7 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
               Find your perfect property match with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
-              <span className="font-semibold" style={{ color: "#5EEAD4" }}>FREE</span>.
+              <span className="font-semibold" style={{ color: "#B89555" }}>FREE</span>.
             </p>
 
             <div className="max-w-sm mx-auto mb-8">
@@ -946,7 +947,7 @@ const Quiz = () => {
                 }}
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <Gift className="w-5 h-5 allow-white" style={{ color: "#5EEAD4" }} />
+                  <Gift className="w-5 h-5 allow-white" style={{ color: "#B89555" }} />
                   <span className="font-semibold allow-white" style={{ color: "#FFFFFF" }}>FREE Access</span>
                 </div>
                 <ul className="space-y-2.5 text-sm">
@@ -954,9 +955,9 @@ const Quiz = () => {
                     <li key={label} className="flex items-center gap-2.5 allow-white" style={{ color: "rgba(255,255,255,0.88)" }}>
                       <span
                         className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ background: "linear-gradient(135deg, #5EEAD4, #0E7490)" }}
+                        style={{ background: "#B89555" }}
                       >
-                        <Check className="w-3 h-3" style={{ color: "#04161C" }} strokeWidth={3} />
+                        <Check className="w-3 h-3" style={{ color: "#FFFFFF" }} strokeWidth={3} />
                       </span>
                       <span className="allow-white">{label}</span>
                     </li>
@@ -973,7 +974,7 @@ const Quiz = () => {
               ].map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-2 allow-white">
                   <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(94,234,212,0.22)" }}>
-                    <Icon className="w-3 h-3 allow-white" style={{ color: "#5EEAD4" }} />
+                    <Icon className="w-3 h-3 allow-white" style={{ color: "#B89555" }} />
                   </div>
                   <span className="allow-white">{label}</span>
                 </div>
@@ -986,7 +987,7 @@ const Quiz = () => {
               data-no-contrast-guard
               className="allow-white font-semibold px-10 py-6 text-lg"
               style={{
-                background: "linear-gradient(135deg, #5EEAD4 0%, #0E7490 55%, #000 100%)",
+                background: "#0A0A0A",
                 border: "1px solid rgba(94,234,212,0.55)",
                 color: "#FFFFFF",
                 boxShadow: "0 0 28px rgba(94,234,212,0.45)",
@@ -1009,10 +1010,10 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+      <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm">
+        <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -1023,7 +1024,7 @@ const Quiz = () => {
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
               </button>
-              <div className="flex items-center gap-3 text-[#5EEAD4]">
+              <div className="flex items-center gap-3 text-[#B89555]">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Almost there!</span>
               </div>
@@ -1035,7 +1036,7 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#2DD4BF] to-[#06B6D4] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#2DD4BF]/30">
+              <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 mx-auto mb-4 flex items-center justify-center">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
                <h2 className="text-white text-3xl font-bold mb-2">
@@ -1046,7 +1047,7 @@ const Quiz = () => {
               </p>
             </div>
 
-            <div className="bg-[#051C18]/80 border border-[#2DD4BF]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+            <div className="bg-[#F7F2EA] border border-[#B89555]/55 rounded-2xl p-6 md:p-8">
               <div className="space-y-5">
                 <div>
                   <Label className="text-white mb-2 block">Full Name *</Label>
@@ -1054,7 +1055,7 @@ const Quiz = () => {
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Enter your full name"
-                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
+                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -1064,7 +1065,7 @@ const Quiz = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
+                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -1074,7 +1075,7 @@ const Quiz = () => {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+971 XX XXX XXXX"
-                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
+                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -1086,8 +1087,8 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
                   />
                 </div>
                 <div>
@@ -1099,8 +1100,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
                   />
                 </div>
               </div>
@@ -1110,8 +1111,8 @@ const Quiz = () => {
                 disabled={!isFormValid() || isSubmitting}
                 className={`aihf-cta w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
-                    ? "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
-                    : "bg-gradient-to-r from-[#2DD4BF] to-[#06B6D4] text-[#02110F] hover:brightness-110"
+                    ? "bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] border border-[#B89555]/60"
+                    : "bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] border border-[#B89555]/60"
                 }`}
               >
                 {isSubmitting ? (
@@ -1133,13 +1134,13 @@ const Quiz = () => {
               </Button>
 
               {!needsPayment && (
-                <p className="text-[#5EEAD4] text-base font-semibold text-center mt-4">
+                <p className="text-[#B89555] text-base font-semibold text-center mt-4">
                   Your first AI Property Match & Analysis is FREE!
                 </p>
               )}
 
               {needsPayment && (
-                <p className="text-[#5EEAD4] text-sm font-medium text-center mt-4">
+                <p className="text-[#B89555] text-sm font-medium text-center mt-4">
                   You've used your free trial. Upgrade to VIP for unlimited access.
                 </p>
               )}
@@ -1159,10 +1160,10 @@ const Quiz = () => {
   // Quiz Questions Screen
   return (
     <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-gradient-to-b from-[#02110F] via-[#031E18] to-[#020B0A] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
       {/* Header */}
-      <div className="border-b border-[#2DD4BF]/20 bg-[#02110F]/60 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[#B89555]/30 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <button
@@ -1178,9 +1179,9 @@ const Quiz = () => {
             </div>
           </div>
           {/* Gold gradient progress bar */}
-          <div className="h-2 bg-[#2DD4BF]/15 rounded-full overflow-hidden">
+          <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div 
-              className="h-full rounded-full bg-gradient-to-r from-[#2DD4BF] via-[#5EEAD4] to-[#06B6D4] transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-[#B89555] transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -1207,7 +1208,7 @@ const Quiz = () => {
                   onClick={handleSelectAll}
                   disabled={allSelected()}
                   data-no-contrast-guard
-                  className="aihf-option text-white hover:text-white border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
+                  className="aihf-option text-[#1A1A1A] hover:text-[#1A1A1A] border-[#B89555]/55 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -1217,7 +1218,7 @@ const Quiz = () => {
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
                   data-no-contrast-guard
-                  className="aihf-option text-white hover:text-white border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
+                  className="aihf-option text-[#1A1A1A] hover:text-[#1A1A1A] border-[#B89555]/55 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -1240,13 +1241,13 @@ const Quiz = () => {
                     data-no-contrast-guard
                     className={`aihf-option relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                       isSelected
-                        ? "border-[#2DD4BF] bg-gradient-to-br from-[#062821] to-[#051C18] shadow-lg shadow-[#2DD4BF]/20"
-                        : "border-[#2DD4BF]/30 bg-[#051C18] hover:border-[#2DD4BF]/50 hover:shadow-md"
+                        ? "border-[#B89555] bg-[#EFE6D6]"
+                        : "border-[#B89555]/45 bg-[#FDFBF7] hover:border-[#B89555]/85"
                     }`}
                   >
                     {currentQuestion.type === "multiple" && (
                       <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        isSelected ? "border-[#2DD4BF] bg-[#2DD4BF]" : "border-[#2DD4BF]/30"
+                        isSelected ? "border-[#B89555] bg-[#B89555]" : "border-[#B89555]/45"
                       }`}>
                         {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
                       </div>
@@ -1285,9 +1286,9 @@ const Quiz = () => {
 
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-[#2DD4BF]/30 bg-[#031E18] backdrop-blur-sm p-5">
+            <div className="sticky top-24 rounded-2xl border border-[#B89555]/55 bg-[#F7F2EA] p-5">
               <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#5EEAD4]" />
+                <Sparkles className="w-4 h-4 text-[#B89555]" />
                 Your Preferences
               </h3>
               <div className="space-y-3">
