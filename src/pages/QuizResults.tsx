@@ -1272,102 +1272,233 @@ const QuizResults = () => {
     const pageW = doc.internal.pageSize.getWidth();
     const pageH = doc.internal.pageSize.getHeight();
     const M = 42;
-    const ink: [number, number, number] = [253, 251, 247];
-    const navy: [number, number, number] = [10, 10, 10];
-    const tiffany: [number, number, number] = [184, 149, 85];
-    const cyan: [number, number, number] = [184, 149, 85];
-    const white: [number, number, number] = [255, 255, 255];
-    const muted: [number, number, number] = [60, 60, 60];
+    // Champagne / gold / ink palette — single source of truth
+    const page: [number, number, number] = [253, 251, 247];    // #FDFBF7
+    const champagne: [number, number, number] = [247, 242, 234]; // #F7F2EA
+    const ink: [number, number, number] = [26, 26, 26];        // #1A1A1A
+    const inkMuted: [number, number, number] = [90, 90, 90];
+    const gold: [number, number, number] = [184, 149, 85];     // #B89555
     const fmtBedsLocal = (p: any) =>
       p.bedrooms_min != null && p.bedrooms_max != null
         ? p.bedrooms_min === 0
-          ? `Studio${p.bedrooms_max > 0 ? `-${p.bedrooms_max} BR` : ""}`
-          : `${p.bedrooms_min}-${p.bedrooms_max} BR`
-        : "Type TBC";
+          ? `Studio${p.bedrooms_max > 0 ? ` – ${p.bedrooms_max} BR` : ""}`
+          : `${p.bedrooms_min} – ${p.bedrooms_max} BR`
+        : "Bedroom mix on request";
     const fmtPriceLocal = (p: any) => {
       if (!p.price_from) return "Price on Request";
       const lo = `AED ${(p.price_from / 1_000_000).toFixed(1)}M`;
-      return p.price_to && p.price_to > p.price_from ? `${lo} - AED ${(p.price_to / 1_000_000).toFixed(1)}M` : `From ${lo}`;
+      return p.price_to && p.price_to > p.price_from
+        ? `${lo} – AED ${(p.price_to / 1_000_000).toFixed(1)}M`
+        : `From ${lo}`;
     };
-    doc.setFillColor(...ink);
+
+    // Optional broker brand (broker mode + signed in) — pulled from crm_brokers
+    let brokerBrand: {
+      agentName?: string;
+      company?: string;
+      phone?: string;
+      email?: string;
+      whatsapp?: string;
+      title?: string;
+    } | null = null;
+    if (isBrokerMode && user?.id) {
+      try {
+        const { data: b } = await supabase
+          .from("crm_brokers")
+          .select("full_name, current_company, company_phone, company_email, personal_phone, personal_email, phone_e164, whatsapp, position_title, role_title")
+          .eq("auth_user_id", user.id)
+          .maybeSingle();
+        if (b) {
+          brokerBrand = {
+            agentName: b.full_name || undefined,
+            company: b.current_company || undefined,
+            phone: b.company_phone || b.personal_phone || b.phone_e164 || undefined,
+            email: b.company_email || b.personal_email || undefined,
+            whatsapp: b.whatsapp || undefined,
+            title: b.position_title || b.role_title || undefined,
+          };
+        }
+      } catch { /* ignore */ }
+    }
+
+    // ===== Page background =====
+    doc.setFillColor(...page);
     doc.rect(0, 0, pageW, pageH, "F");
-    doc.setFillColor(...navy);
-    doc.rect(0, 0, pageW, 76, "F");
-    doc.setDrawColor(...cyan);
-    doc.setLineWidth(0.7);
-    doc.line(0, 76, pageW, 76);
+
+    // ===== Letterhead (white, monogram + wordmark, gold hairline) =====
+    const HEADER_H = 88;
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, pageW, HEADER_H, "F");
+    // monogram
+    try {
+      const monogramUrl = `${window.location.origin}/jbj-monogram-dark-on-light.png`;
+      const mono = await loadImageAsDataUrl(monogramUrl, 2000);
+      if (mono) {
+        doc.addImage(mono.data, mono.type, M, 18, 52, 52, undefined, "FAST");
+      }
+    } catch { /* ignore */ }
+    // wordmark (right)
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.setTextColor(...tiffany);
-    doc.text("JBJ GLOBAL REAL ESTATE", M, 34);
+    doc.setFontSize(11);
+    doc.setTextColor(...ink);
+    doc.text("JBJ GLOBAL REAL ESTATE", pageW - M, 38, { align: "right" });
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(...muted);
-    doc.text(`Property #${rankIndex + 1} brochure · AI Home Finder`, M, 52);
-    let y = 108;
+    doc.setFontSize(8.5);
+    doc.setTextColor(...inkMuted);
+    doc.text(`AI Home Finder · Property #${rankIndex + 1}`, pageW - M, 54, { align: "right" });
+    // gold hairline
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.6);
+    doc.line(M, HEADER_H, pageW - M, HEADER_H);
+
+    // ===== Hero: title + developer =====
+    let y = HEADER_H + 28;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
-    doc.setTextColor(...white);
-    doc.text(project.name || "Property brochure", M, y);
-    y += 16;
-    doc.setFontSize(10);
-    doc.setTextColor(...tiffany);
-    doc.text(`by ${project.developer?.name || "JBJ GLOBAL REAL ESTATE"}`, M, y);
-    y += 18;
-    const cover = await loadImageAsDataUrl(project.cover_image_url || project.images?.[0]?.image_url || null, 3500);
-    if (cover) {
-      try { doc.addImage(cover.data, cover.type, M, y, pageW - 2 * M, 210, undefined, "FAST"); } catch { /* ignore */ }
-      doc.setDrawColor(...tiffany);
-      doc.roundedRect(M, y, pageW - 2 * M, 210, 8, 8, "S");
-      y += 232;
+    doc.setTextColor(...ink);
+    const titleLines = doc.splitTextToSize(project.name || "Property brochure", pageW - 2 * M) as string[];
+    titleLines.slice(0, 2).forEach((line) => { doc.text(line, M, y); y += 22; });
+    // "by {developer}" — "by" ink/70, name gold
+    if (project.developer?.name) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10.5);
+      const by = "by ";
+      doc.setTextColor(90, 90, 90);
+      doc.text(by, M, y);
+      const byW = doc.getTextWidth(by);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(...gold);
+      doc.text(String(project.developer.name), M + byW, y);
+      y += 14;
     }
-    const facts = [
-      ["Location", `${project.location || "Dubai"}${project.emirate ? `, ${project.emirate}` : ""}`],
-      ["Price", fmtPriceLocal(project)],
-      ["Bedrooms", fmtBedsLocal(project)],
-      ["Handover", project.handover_date || "TBA"],
+    y += 8;
+
+    // ===== Cover image (gold hairline, no fill) =====
+    const cover = await loadImageAsDataUrl(
+      project.cover_image_url || project.images?.[0]?.image_url || null,
+      3500
+    );
+    if (cover) {
+      const coverH = 230;
+      try { doc.addImage(cover.data, cover.type, M, y, pageW - 2 * M, coverH, undefined, "FAST"); } catch { /* ignore */ }
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.6);
+      doc.rect(M, y, pageW - 2 * M, coverH, "S");
+      y += coverH + 18;
+    }
+
+    // ===== Fact tiles (champagne fill, ink text, gold hairline) =====
+    const facts: Array<[string, string]> = [
+      ["LOCATION", `${project.location || "Dubai"}${project.emirate ? `, ${project.emirate}` : ""}`],
+      ["PRICE", fmtPriceLocal(project)],
+      ["BEDROOMS", fmtBedsLocal(project)],
+      ["HANDOVER", project.handover_date || "On Request"],
     ];
     const colW = (pageW - 2 * M - 12) / 2;
+    const tileH = 44;
     facts.forEach((f, i) => {
       const x = M + (i % 2) * (colW + 12);
-      const yy = y + Math.floor(i / 2) * 42;
-      doc.setFillColor(5, 38, 44);
-      doc.setDrawColor(16, 90, 100);
-      doc.roundedRect(x, yy, colW, 34, 6, 6, "FD");
+      const yy = y + Math.floor(i / 2) * (tileH + 10);
+      doc.setFillColor(...champagne);
+      doc.setDrawColor(...gold);
+      doc.setLineWidth(0.5);
+      doc.roundedRect(x, yy, colW, tileH, 4, 4, "FD");
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8);
-      doc.setTextColor(...tiffany);
-      doc.text(f[0].toUpperCase(), x + 10, yy + 13);
+      doc.setFontSize(7.5);
+      doc.setTextColor(...gold);
+      doc.text(f[0], x + 12, yy + 16);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
-      doc.setTextColor(...white);
-      doc.text(String(f[1]), x + 10, yy + 27);
+      doc.setFontSize(10.5);
+      doc.setTextColor(...ink);
+      const v = doc.splitTextToSize(String(f[1]), colW - 24) as string[];
+      doc.text(v[0] || "", x + 12, yy + 32);
     });
-    y += 96;
+    y += Math.ceil(facts.length / 2) * (tileH + 10) + 12;
+
+    // ===== Presentation overview =====
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.setTextColor(...tiffany);
+    doc.setFontSize(11);
+    doc.setTextColor(...ink);
     doc.text("Presentation overview", M, y);
+    // small gold underline
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.6);
+    doc.line(M, y + 4, M + 60, y + 4);
     y += 18;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.setTextColor(...muted);
+    doc.setTextColor(40, 40, 40);
+    const footerReserve = brokerBrand ? 110 : 78;
     for (const paragraph of buildPropertyPresentationParagraphs(project, 3)) {
       const lines = doc.splitTextToSize(paragraph, pageW - 2 * M) as string[];
-      lines.slice(0, 5).forEach((line) => { doc.text(line, M, y); y += 13; });
-      y += 5;
-      if (y > pageH - 90) break;
+      for (const line of lines) {
+        if (y > pageH - footerReserve) break;
+        doc.text(line, M, y);
+        y += 13;
+      }
+      y += 6;
+      if (y > pageH - footerReserve) break;
     }
+
+    // ===== Footer (gold hairline + link + optional broker block) =====
     const url = `${window.location.origin}/project/${project.slug}`;
-    doc.setTextColor(...tiffany);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.text("View full listing:", M, pageH - 58);
-    const linkLines = doc.splitTextToSize(url.replace(/([/?&=#-])/g, "$1\u200B"), pageW - 2 * M - 92) as string[];
-    doc.text(linkLines.map((l) => l.replace(/\u200B/g, "")).slice(0, 2), M + 88, pageH - 58);
-    doc.link(M + 88, pageH - 70, pageW - 2 * M - 92, 28, { url });
+    const footerTop = pageH - (brokerBrand ? 90 : 56);
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.6);
+    doc.line(M, footerTop, pageW - M, footerTop);
+
+    if (brokerBrand) {
+      // Two-column co-branded footer
+      const fy = footerTop + 16;
+      // Left: agent + company
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10.5);
+      doc.setTextColor(...ink);
+      doc.text(brokerBrand.agentName || "Your Agent", M, fy);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(90, 90, 90);
+      if (brokerBrand.title) doc.text(brokerBrand.title, M, fy + 12);
+      if (brokerBrand.company) {
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(...gold);
+        doc.text(brokerBrand.company, M, fy + 24);
+      }
+      // Right: phone / email / whatsapp
+      const rx = pageW - M;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(...ink);
+      let ry = fy;
+      if (brokerBrand.phone) { doc.text(brokerBrand.phone, rx, ry, { align: "right" }); ry += 12; }
+      if (brokerBrand.email) { doc.text(brokerBrand.email, rx, ry, { align: "right" }); ry += 12; }
+      if (brokerBrand.whatsapp) { doc.text(`WhatsApp ${brokerBrand.whatsapp}`, rx, ry, { align: "right" }); }
+      // Listing URL on bottom strip
+      doc.setFontSize(8);
+      doc.setTextColor(...gold);
+      doc.text(url, M, pageH - 14);
+      doc.link(M, pageH - 22, pageW - 2 * M, 14, { url });
+    } else {
+      // JBJ-only footer
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9.5);
+      doc.setTextColor(...ink);
+      doc.text("View full listing", M, footerTop + 18);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...gold);
+      doc.text(url, M, footerTop + 32);
+      doc.link(M, footerTop + 22, pageW - 2 * M, 14, { url });
+      doc.setFontSize(8);
+      doc.setTextColor(140, 140, 140);
+      doc.text("JBJ Global Real Estate · CONTACT@JBJ.AE · jbj.ae", pageW - M, footerTop + 32, { align: "right" });
+    }
+
     triggerDownload(doc.output("blob"), `JBJ-${project.slug}-Brochure.pdf`);
-    toast.success("Property brochure downloaded");
+    toast.success(
+      brokerBrand
+        ? "Co-branded brochure downloaded"
+        : "Property brochure downloaded"
+    );
   };
 
   // Cache the most recent generated PDF (blob + filename) so share handlers can attach it
