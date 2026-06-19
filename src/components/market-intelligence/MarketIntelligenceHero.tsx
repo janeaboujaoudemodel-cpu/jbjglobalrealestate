@@ -65,10 +65,8 @@ export const MarketIntelligenceHero = ({
       <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl z-[1] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl z-[1] pointer-events-none" />
 
-      {/* Legibility overlays — composite stack guarantees AA contrast over any frame */}
-      {/* 1. Base vertical anchor: heavier top + bottom, breathable middle so imagery still reads */}
-      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/85 via-black/70 to-black/95 pointer-events-none" />
-      {/* 2. Centered spotlight darkener focused on the text column */}
+      {/* Legibility overlays — single deep stack so the title always reads, regardless of which side page bg is */}
+      <div className="absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.78)_45%,rgba(0,0,0,0.92)_100%)] pointer-events-none" />
       <div
         className="absolute inset-0 z-[2] pointer-events-none"
         style={{
@@ -76,8 +74,6 @@ export const MarketIntelligenceHero = ({
             'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 75%)',
         }}
       />
-      {/* 3. Bottom fade-to-page so the hero blends into the next section */}
-      <div className="absolute inset-x-0 bottom-0 h-1/4 z-[2] bg-gradient-to-b from-transparent to-background pointer-events-none" />
 
       <motion.div 
         className="relative z-10 w-full py-24"
