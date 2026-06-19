@@ -61,7 +61,8 @@ const INK = "#0A0A0A";
 // Reusable champagne card with gold hairline.
 const BlackCard: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className = "" }) => (
   <div
-    className={`relative overflow-hidden rounded-2xl ${className}`}
+    data-surface="light"
+    className={`surface-light relative overflow-hidden rounded-2xl ${className}`}
     style={{
       backgroundColor: "#FDFBF7",
       border: `1px solid ${GOLD}`,
@@ -149,14 +150,14 @@ export const DLDDailySnapshot = () => {
                   data-no-contrast-guard
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#B89555]/55 bg-white/[0.06]"
                 >
-                  <Icon className="allow-white h-4 w-4 text-white" />
+                  <Icon className="h-4 w-4 text-[#1A1A1A]" />
                 </div>
-                <TrendingUp className="allow-white h-3.5 w-3.5 text-[#B89555]" />
+                <TrendingUp className="h-3.5 w-3.5 text-[#B89555]" />
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
                 {label}
               </p>
-              <p className="mt-1 text-2xl font-bold tabular-nums text-white md:text-3xl">{value}</p>
+              <p className="mt-1 text-2xl font-bold tabular-nums text-[#1A1A1A] md:text-3xl">{value}</p>
             </BlackCard>
           ))}
         </motion.div>
@@ -168,14 +169,14 @@ export const DLDDailySnapshot = () => {
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
               Cash vs Mortgage
             </p>
-            <h3 className="mt-1 text-xl font-bold text-white">Buyer financing mix</h3>
+            <h3 className="mt-1 text-xl font-bold text-[#1A1A1A]">Buyer financing mix</h3>
 
             <div className="mt-6 space-y-5">
               {/* CASH */}
               <div>
                 <div className="mb-2 flex items-center justify-between text-sm">
-                  <span className="font-semibold text-white">Cash buyers</span>
-                  <span className="tabular-nums text-white">
+                  <span className="font-semibold text-[#1A1A1A]">Cash buyers</span>
+                  <span className="tabular-nums text-[#1A1A1A]">
                     {data.cash_count.toLocaleString("en-AE")} · {aed(data.cash_volume_aed)}
                   </span>
                 </div>
@@ -185,7 +186,7 @@ export const DLDDailySnapshot = () => {
                 >
                   <motion.div
                     className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: "#FFFFFF", transformOrigin: "left center" }}
+                    style={{ backgroundColor: INK, transformOrigin: "left center" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
