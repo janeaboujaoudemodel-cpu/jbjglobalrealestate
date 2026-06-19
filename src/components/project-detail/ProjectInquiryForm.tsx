@@ -370,50 +370,98 @@ export function ProjectInquiryForm({
           />
         </div>
 
-        {/* Bedrooms - full width row (never squeezed) */}
+        {/* Bedrooms — multi-select pill row (real-estate standard) */}
         <div className="space-y-2">
-          <Label htmlFor="bedrooms" className="text-foreground text-sm font-medium">Bedrooms</Label>
-          <Select
-            value={formData.bedrooms}
-            onValueChange={(value) => setFormData({ ...formData, bedrooms: value })}
-          >
-            <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
-              <SelectValue placeholder="Select bedrooms" />
-            </SelectTrigger>
-            <SelectContent className="bg-background border-border">
-              {BEDROOM_OPTIONS.map(option => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Preferred Size - segmented buckets (pro real-estate UX) */}
-        <div className="space-y-2">
-          <Label className="text-foreground text-sm font-medium">Preferred Size</Label>
+          <Label className="text-foreground text-sm font-medium">
+            Bedrooms <span className="text-foreground/55 font-normal">(select one or more)</span>
+          </Label>
           {(() => {
-            const SIZE_BUCKETS: { label: string; min: string; max: string }[] = [
-              { label: "Any", min: "", max: "" },
-              { label: "< 800", min: "", max: "800" },
-              { label: "800 – 1,200", min: "800", max: "1200" },
-              { label: "1,200 – 1,800", min: "1200", max: "1800" },
-              { label: "1,800 – 2,500", min: "1800", max: "2500" },
-              { label: "2,500+ sqft", min: "2500", max: "" },
-            ];
-            const activeIdx = SIZE_BUCKETS.findIndex(
-              (b) => b.min === (formData.sizeMin || "") && b.max === (formData.sizeMax || "")
-            );
+            const selected = (formData.bedrooms || "")
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean);
+            const toggle = (v: string) => {
+              const next = selected.includes(v)
+                ? selected.filter((x) => x !== v)
+                : [...selected, v];
+              setFormData({ ...formData, bedrooms: next.join(",") });
+            };
             return (
               <div className="flex flex-wrap gap-2">
-                {SIZE_BUCKETS.map((b, i) => {
-                  const active = i === activeIdx || (activeIdx === -1 && i === 0);
+                {BEDROOM_OPTIONS.map((b) => {
+                  const active = selected.includes(b.value);
                   return (
                     <button
-                      key={b.label}
+                      key={b.value}
                       type="button"
-                      onClick={() => setFormData({ ...formData, sizeMin: b.min, sizeMax: b.max })}
+                      onClick={() => toggle(b.value)}
+                      data-cta={active ? "champagne-active" : undefined}
+                      className={
+                        active
+                          ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] transition-all"
+                          : "h-10 px-4 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60 transition-all"
+                      }
+                    >
+                      {b.label}
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* Preferred Size — multi-select bucket pills */}
+        <div className="space-y-2">
+          <Label className="text-foreground text-sm font-medium">
+            Preferred Size <span className="text-foreground/55 font-normal">(select one or more)</span>
+          </Label>
+          {(() => {
+            const SIZE_BUCKETS: { key: string; label: string; min: string; max: string }[] = [
+              { key: "any", label: "Any", min: "", max: "" },
+              { key: "lt-800", label: "< 800", min: "", max: "800" },
+              { key: "800-1200", label: "800 – 1,200", min: "800", max: "1200" },
+              { key: "1200-1800", label: "1,200 – 1,800", min: "1200", max: "1800" },
+              { key: "1800-2500", label: "1,800 – 2,500", min: "1800", max: "2500" },
+              { key: "2500-plus", label: "2,500+ sqft", min: "2500", max: "" },
+            ];
+            const sel = (formData.sizeMin || "").split(",").filter(Boolean);
+            // Encode multi-select via sizeMin field as comma-separated keys.
+            const selectedKeys = sel.length ? sel : ["any"];
+            const toggle = (key: string) => {
+              if (key === "any") {
+                setFormData({ ...formData, sizeMin: "any", sizeMax: "" });
+                return;
+              }
+              const without = selectedKeys.filter((x) => x !== "any");
+              const next = without.includes(key)
+                ? without.filter((x) => x !== key)
+                : [...without, key];
+              const final = next.length ? next : ["any"];
+              // Pick numeric envelope for legacy fields
+              const buckets = SIZE_BUCKETS.filter((b) => final.includes(b.key) && b.key !== "any");
+              const minNum = buckets.length
+                ? Math.min(...buckets.map((b) => parseInt(b.min || "0", 10)))
+                : 0;
+              const maxNum = buckets.length
+                ? Math.max(...buckets.map((b) => parseInt(b.max || "999999", 10)))
+                : 0;
+              setFormData({
+                ...formData,
+                sizeMin: final.join(","),
+                sizeMax: maxNum && maxNum !== 999999 ? String(maxNum) : "",
+              });
+              void minNum;
+            };
+            return (
+              <div className="flex flex-wrap gap-2">
+                {SIZE_BUCKETS.map((b) => {
+                  const active = selectedKeys.includes(b.key);
+                  return (
+                    <button
+                      key={b.key}
+                      type="button"
+                      onClick={() => toggle(b.key)}
                       data-cta={active ? "champagne-active" : undefined}
                       className={
                         active
