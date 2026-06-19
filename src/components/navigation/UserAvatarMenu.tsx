@@ -220,6 +220,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         {(mode === "broker" || isOwner) && (
           <Row to="/broker/brand" icon={Palette} label="Brand Profile" />
         )}
+        {mode === "developer" && (
+          <Row to="/developer-hub/company-registration" icon={Palette} label="Brand Profile" />
+        )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
 
