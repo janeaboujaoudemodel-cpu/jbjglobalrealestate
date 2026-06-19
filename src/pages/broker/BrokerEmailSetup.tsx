@@ -154,8 +154,8 @@ function ProviderPanel({
           <Input id={`${provider}-client-id`} value={clientId} onChange={(e) => setClientId(e.target.value)} placeholder={provider === "gmail" ? "xxxx.apps.googleusercontent.com" : "Application (client) ID"} className="bg-white" />
         </div>
         <div className="grid gap-1.5">
-          <Label htmlFor={`${provider}-client-secret`}>Client Secret</Label>
-          <Input id={`${provider}-client-secret`} type="password" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} placeholder="••••••••••••" className="bg-white" />
+          <Label htmlFor={`${provider}-client-secret`}>Client Secret {existing ? <span className="text-[11px] text-[#1A1A1A]/55">(leave blank to keep current)</span> : null}</Label>
+          <Input id={`${provider}-client-secret`} type="password" autoComplete="new-password" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} placeholder={existing ? "•••••••• (stored — hidden for security)" : "••••••••••••"} className="bg-white" />
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor={`${provider}-label`}>Label (optional)</Label>
