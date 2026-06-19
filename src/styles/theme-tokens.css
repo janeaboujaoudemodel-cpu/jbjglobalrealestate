@@ -54,11 +54,14 @@
   --t-gold-soft:      var(--brand-gold-soft);
   --t-gold-faint:     var(--brand-gold-faint);
   --t-gold-ring:      var(--brand-gold-ring);
-  --t-form-blue:      var(--brand-blue);
-  --t-form-blue-soft: var(--brand-blue-soft);
-  --t-form-blue-muted: var(--brand-blue-muted);
-  --t-form-blue-ring: var(--brand-blue-ring);
-  --t-form-blue-tint: var(--brand-blue-tint);
+  /* Form field strokes: soft champagne-gold (no more black borders globally).
+     The token name is kept as -form-blue for backwards compatibility but the
+     value is now gold. */
+  --t-form-blue:      rgba(184, 149, 85, 0.55);
+  --t-form-blue-soft: rgba(184, 149, 85, 0.30);
+  --t-form-blue-muted: rgba(26, 26, 26, 0.55);
+  --t-form-blue-ring: rgba(184, 149, 85, 0.28);
+  --t-form-blue-tint: rgba(184, 149, 85, 0.10);
 
   --t-careers-navy: #071B33;
   --t-careers-navy-hover: #0E2848;
