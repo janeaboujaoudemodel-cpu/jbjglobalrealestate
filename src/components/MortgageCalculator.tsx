@@ -543,8 +543,9 @@ const MortgageCalculator = ({
                 type="text"
                 value={formatNumberWithCommas(propertyPrice)}
                 onChange={(e) => handlePriceChange(parseFormattedNumber(e.target.value))}
-                className="bg-background border-border text-foreground focus:border-[#B89555]"
+                className="bg-[#FDFBF7] border border-[#B89555]/55 text-[#1A1A1A] focus:border-[#B89555]"
               />
+
               <div className="py-4">
                 <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={PROPERTY_PRICE_MIN} max={PROPERTY_PRICE_MAX} step={PROPERTY_PRICE_STEP} ariaLabel="Property Price" isNavy={isNavy} />
               </div>

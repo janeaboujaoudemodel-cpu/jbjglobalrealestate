@@ -4635,6 +4635,53 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
   button[data-phone-code-trigger] { animation: none !important; }
 }
 
+/* =========================================================================
+ * FINAL FORM-CONTROL BORDER LOCK (global)
+ * Any input/textarea/select-trigger/combobox/popover/dialog on a light page
+ * MUST render with a soft champagne-gold border at rest, hover, and focus.
+ * Kills the "black border" regression no matter what raw Tailwind border
+ * utility a component carries (border, border-2, border-input, border-foreground,
+ * border-black, border-zinc-900, etc.).
+ * Opt-out:  data-no-contrast-guard  |  data-allow-dark-cta  |  .allow-white
+ * ========================================================================= */
+:root:not(.dark) :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
+  textarea,
+  select,
+  button[role="combobox"],
+  [data-radix-select-trigger],
+  [data-radix-popover-trigger][role="combobox"]
+):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([data-on-dark]) {
+  border-color: rgba(184, 149, 85, 0.55) !important;
+}
+:root:not(.dark) :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
+  textarea,
+  select,
+  button[role="combobox"],
+  [data-radix-select-trigger]
+):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([data-on-dark]):hover {
+  border-color: #B89555 !important;
+}
+:root:not(.dark) :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
+  textarea,
+  select,
+  button[role="combobox"],
+  [data-radix-select-trigger]
+):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([data-on-dark]):focus,
+:root:not(.dark) :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
+  textarea,
+  select,
+  button[role="combobox"],
+  [data-radix-select-trigger]
+):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([data-on-dark]):focus-visible {
+  border-color: #B89555 !important;
+  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.18) !important;
+  outline: none !important;
+}
+
 
 .jj-gold-accent,
 .text-gold,

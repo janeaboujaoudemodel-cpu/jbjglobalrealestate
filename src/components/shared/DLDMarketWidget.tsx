@@ -483,16 +483,16 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
           </div>
 
-          {/* Gifts row — UNTOUCHED per user request */}
+          {/* Gifts row — champagne+gold premium treatment */}
           {ytd2026.gifts && ytd2026.gifts > 0 && (
-            <div className="mt-6 bg-gradient-to-r from-purple-50 via-fuchsia-50 to-pink-50 border-2 border-purple-300/80 rounded-xl p-4 flex items-center justify-between shadow-[0_4px_20px_rgba(168,85,247,0.15)]">
+            <div className="mt-6 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)] animate-pulse" />
-                <span className="text-purple-800 text-xs uppercase tracking-wider font-extrabold">Gift Transactions</span>
+                <div className="w-2.5 h-2.5 rounded-full bg-[#B89555]" />
+                <span className="text-[#1A1A1A] text-xs uppercase tracking-wider font-extrabold">Gift Transactions</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-2xl font-extrabold bg-gradient-to-br from-purple-500 via-fuchsia-500 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(168,85,247,0.35)]">{ytd2026.gifts.toLocaleString()}</span>
-                <span className="text-purple-700 text-xs font-bold">{giftsPct}% of total</span>
+                <span className="text-2xl font-extrabold text-[#1A1A1A] tabular-nums">{ytd2026.gifts.toLocaleString()}</span>
+                <span className="text-[#1A1A1A]/65 text-xs font-bold">{giftsPct}% of total</span>
               </div>
             </div>
           )}
