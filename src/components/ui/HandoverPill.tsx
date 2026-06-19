@@ -11,10 +11,9 @@ interface HandoverPillProps {
 }
 
 /**
- * Site-wide handover label. ALWAYS metallic champagne-gold (orange retired
- * across the platform). Use anywhere a project's handover date or "Ready"
- * status is shown.
- *
+ * Site-wide handover label. Mirrors the "Starting price" chrome
+ * (`.price-pill-premium`) — translucent champagne glass, 1.5px solid gold
+ * hairline, ink text, 8px radius. Never filled metallic, never orange.
  * Per memory: never display the word "Handover" — only the date or "Ready".
  */
 export function HandoverPill({ value, className, hideIfEmpty }: HandoverPillProps) {
@@ -33,10 +32,29 @@ export function HandoverPill({ value, className, hideIfEmpty }: HandoverPillProp
       data-handover-pill
       data-no-contrast-guard
       className={cn(
-        "jj-cta-gold-metallic inline-flex items-center whitespace-nowrap px-2.5 py-1 text-[11px] md:text-xs font-bold",
+        "inline-flex items-center whitespace-nowrap",
         className,
       )}
-      style={{ borderRadius: 6 }}
+      style={{
+        // Visual twin of .price-pill-premium
+        background: "rgba(253, 251, 247, 0.55)",
+        backdropFilter: "blur(14px) saturate(160%)",
+        WebkitBackdropFilter: "blur(14px) saturate(160%)",
+        border: "1.5px solid #B89555",
+        borderRadius: 8,
+        boxShadow:
+          "0 6px 18px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.85), 0 0 0 1px rgba(184,149,85,0.25)",
+        padding: "6px 12px",
+        color: "#1A1A1A",
+        fontFamily:
+          "'Inter', system-ui, -apple-system, sans-serif",
+        fontWeight: 900,
+        fontSize: 14,
+        lineHeight: 1,
+        letterSpacing: "-0.01em",
+        fontVariantNumeric: "tabular-nums",
+        WebkitTextFillColor: "#1A1A1A",
+      }}
     >
       {display}
     </span>

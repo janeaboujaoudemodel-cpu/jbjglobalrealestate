@@ -4255,21 +4255,10 @@ hr[data-gold-hairline],
      (bg-popover token is near-white); we force transparent so the
      parent champagne surface shows through.
    ============================================================ */
-button[data-phone-code-trigger],
-button[data-phone-code-trigger]:hover,
-button[data-phone-code-trigger]:focus,
-button[data-phone-code-trigger]:focus-visible {
-  background-color: #F7F2EA !important;
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
-  border: 1px solid rgba(184, 149, 85, 0.55) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-button[data-phone-code-trigger]:hover {
-  background-color: #EFE6D6 !important;
-  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
-  border-color: #B89555 !important;
-}
+/* Phone trigger metallic surface is defined LATER in this file, near the
+   global popper-content lock. The metallic rules there win because they
+   come later in cascade order. This block intentionally left as a no-op
+   placeholder so future edits land in one place. */
 button[data-phone-code-trigger] :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:hover :is(span, svg, [class*="lucide"]),
 button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]),
@@ -4478,67 +4467,48 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
  * Hover: brighter sweep, slight lift, soft gold glow.
  * Never apply to hero CTAs.
  * ------------------------------------------------------------------------ */
+/* --------------------------------------------------------------------------
+ * .jj-cta-gold-metallic — BYTE-IDENTICAL to .jj-metallic-active (sqft pill in
+ * HorizontalUtilityBar.tsx). Same palette, same size, same animation timing.
+ * No white diagonal sweep — sqft does not have one and the user requires
+ * identical hue/intensity.
+ * ------------------------------------------------------------------------ */
 .jj-cta-gold-metallic {
   position: relative !important;
   isolation: isolate;
   color: #1A1A1A !important;
-  /* Palette MATCHES .jbj-shimmer-champagne (active sqft/sqm pill). */
   background-image: linear-gradient(
-    110deg,
-    #E6D3A8 0%,
-    #F5E9CC 25%,
-    #D8BE82 50%,
-    #F5E9CC 75%,
-    #E6D3A8 100%
+    120deg,
+    #d8b86a 0%,
+    #f4e3a8 25%,
+    #b89555 50%,
+    #f4e3a8 75%,
+    #d8b86a 100%
   ) !important;
-  background-size: 200% 100% !important;
+  background-size: 220% 220% !important;
   background-position: 0% 50% !important;
   border: 1px solid rgba(184, 149, 85, 0.65) !important;
   border-radius: 0.75rem !important;
   box-shadow:
-    0 6px 18px -8px rgba(184, 149, 85, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 0 rgba(184, 149, 85, 0.35) !important;
+    inset 0 0 0 1px rgba(255, 244, 210, 0.45),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.18),
+    0 6px 18px -8px rgba(184, 149, 85, 0.55) !important;
   transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease !important;
   overflow: hidden;
-  /* Continuous champagne gradient drift — IDENTICAL keyframes to sqft pill. */
-  animation: jbj-champagne-shimmer 3s linear infinite !important;
+  animation: jbj-champagne-shimmer 4.5s ease-in-out infinite !important;
 }
 .jj-cta-gold-metallic:hover:not(:disabled) {
   transform: translateY(-1px);
   border-color: rgba(184, 149, 85, 0.95) !important;
   box-shadow:
-    0 12px 30px -10px rgba(184, 149, 85, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(184, 149, 85, 0.5) !important;
-  animation-duration: 1.6s !important;
+    inset 0 0 0 1px rgba(255, 244, 210, 0.55),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.22),
+    0 12px 30px -10px rgba(184, 149, 85, 0.7) !important;
 }
 .jj-cta-gold-metallic:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   animation: none !important;
-}
-/* Diagonal metallic sweep — matches @keyframes metallicSweep on active pills. */
-.jj-cta-gold-metallic::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 60%;
-  pointer-events: none;
-  background: linear-gradient(
-    110deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.55) 50%,
-    transparent 100%
-  );
-  transform: translateX(-120%) skewX(-18deg);
-  z-index: 0;
-  animation: metallicSweep 3.2s ease-in-out infinite !important;
-}
-.jj-cta-gold-metallic:hover::before {
-  animation-duration: 1.6s !important;
 }
 .jj-cta-gold-metallic > * {
   position: relative;
@@ -4549,16 +4519,15 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   color: #1A1A1A !important;
 }
 @media (prefers-reduced-motion: reduce) {
-  .jj-cta-gold-metallic,
-  .jj-cta-gold-metallic::before { animation: none !important; }
+  .jj-cta-gold-metallic { animation: none !important; }
 }
 
 /* --------------------------------------------------------------------------
  * GLOBAL POPOVER / SELECT / COMBOBOX SURFACE LOCK
- * Every Radix popper-rendered floating surface (SelectContent, PopoverContent,
- * Combobox, country picker, nationality, language picker, etc.) must render
- * champagne-on-soft-gold — NEVER white-on-black. Inline opt-outs:
- * [data-no-contrast-guard], [data-on-dark], or .allow-white on the content.
+ * Every Radix popper-rendered floating surface MUST render champagne-on-
+ * soft-gold. NO `revert !important` anywhere — that wipes inline styles to
+ * transparent and broke the country picker. Dark popovers opt-in via
+ * [data-on-dark] with explicit dark tokens.
  * ------------------------------------------------------------------------ */
 [data-radix-popper-content-wrapper] > [role="listbox"],
 [data-radix-popper-content-wrapper] > [role="dialog"],
@@ -4589,29 +4558,60 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
   background-color: rgba(184, 149, 85, 0.12) !important;
   color: #1A1A1A !important;
 }
-/* Dark opt-out — explicit dark popovers (e.g., owner toolbars) keep dark. */
-[data-radix-popper-content-wrapper] > [data-no-contrast-guard],
-[data-radix-popper-content-wrapper] > [data-on-dark],
-[data-radix-popper-content-wrapper] > .allow-white {
-  background-color: revert !important;
-  background-image: revert !important;
-  border: revert !important;
-  color: revert !important;
-  box-shadow: revert !important;
+/* Explicit dark popovers — owner toolbars etc. opt in with [data-on-dark]. */
+[data-radix-popper-content-wrapper] > [data-on-dark] {
+  background-color: #1A1A1A !important;
+  background-image: none !important;
+  border: 1px solid rgba(184, 149, 85, 0.45) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.55) !important;
+}
+[data-radix-popper-content-wrapper] > [data-on-dark] [role="option"],
+[data-radix-popper-content-wrapper] > [data-on-dark] [role="menuitem"],
+[data-radix-popper-content-wrapper] > [data-on-dark] [cmdk-item] {
+  color: #FFFFFF !important;
 }
 
-/* Duplicate phone-code lock — keep champagne (no black). */
+/* --------------------------------------------------------------------------
+ * Phone country trigger — METALLIC, identical to sqft pill. Beats the inline
+ * `style.backgroundColor:"#1A1A1A"` fallback in phone-input.tsx because we
+ * use `!important` on every property.
+ * ------------------------------------------------------------------------ */
 button[data-phone-code-trigger],
 button[data-phone-code-trigger]:hover,
 button[data-phone-code-trigger]:focus,
 button[data-phone-code-trigger]:focus-visible {
-  background-color: #F7F2EA !important;
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
-  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  background-color: #d8b86a !important;
+  background-image: linear-gradient(
+    120deg,
+    #d8b86a 0%,
+    #f4e3a8 25%,
+    #b89555 50%,
+    #f4e3a8 75%,
+    #d8b86a 100%
+  ) !important;
+  background-size: 220% 220% !important;
+  background-position: 0% 50% !important;
+  border: 1px solid rgba(184, 149, 85, 0.65) !important;
+  border-radius: 0.5rem !important;
+  color: #1A1A1A !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 210, 0.45),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.18) !important;
+  animation: jbj-champagne-shimmer 4.5s ease-in-out infinite !important;
 }
-button[data-phone-code-trigger]:hover {
-  background-color: #EFE6D6 !important;
+button[data-phone-code-trigger] :is(span, svg, [class*="lucide"]),
+button[data-phone-code-trigger]:hover :is(span, svg, [class*="lucide"]),
+button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
 }
+@media (prefers-reduced-motion: reduce) {
+  button[data-phone-code-trigger] { animation: none !important; }
+}
+
 
 .jj-gold-accent,
 .text-gold,

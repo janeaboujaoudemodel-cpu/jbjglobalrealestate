@@ -56,7 +56,28 @@ export default function RecommendedProjects({
       return true;
     });
 
-    // If user has browsing context, use behavior-aware scoring
+    // PRIMARY: prefer other projects in THE SAME AREA as the project being
+    // viewed (e.g. viewing Vindera → show other "The Valley" projects).
+    if (currentLocation) {
+      const areaKey = currentLocation.toLowerCase();
+      const sameArea = otherProjects.filter((p) =>
+        p.location?.toLowerCase().includes(areaKey),
+      );
+      if (sameArea.length >= 3) {
+        const withPrice = sameArea
+          .filter((p) => p.price_from && p.price_from > 0)
+          .sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
+        if (withPrice.length >= 3) {
+          const lowIdx = 0;
+          const midIdx = Math.floor(withPrice.length / 2);
+          const highIdx = withPrice.length - 1;
+          return [withPrice[highIdx], withPrice[midIdx], withPrice[lowIdx]];
+        }
+        return sameArea.slice(0, 3);
+      }
+    }
+
+    // SECONDARY: behavior-aware scoring using browsing dominant area.
     if (browsingContext.hasData && browsingContext.dominantArea) {
       const userArea = browsingContext.dominantArea.toLowerCase();
       

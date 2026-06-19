@@ -1,77 +1,88 @@
-Implementation plan, in the exact order I will follow after approval:
+## What's wrong right now
 
-1. Fix the visible form picker regressions first
-   - Replace the remaining black country-code trigger styling with champagne/soft-gold styling globally for JBJ forms.
-   - Replace the phone country dropdown surface from white/black mix to the same champagne form surface.
-   - Remove the conflicting older CSS locks that still force `[data-phone-code-trigger]` to black/white.
-   - Keep phone text readable in ink, with soft gold borders and focus states.
+- **Handover label** is rendered as a metallic gold pill via `HandoverPill.tsx → .jj-cta-gold-metallic`. It should mirror the **Starting price** box (translucent champagne, 1.5px solid gold hairline, ink text, 8px radius) — not a filled metallic pill.
+- **Request Callback Now** CTA looks lighter than the **sq ft** header chip because the two use different palettes/animations:
+  - sqft (`jj-metallic-active` in `HorizontalUtilityBar.tsx`): `#d8b86a → #f4e3a8 → #b89555 → #f4e3a8 → #d8b86a`, size `220% 220%`, `4.5s ease-in-out`.
+  - my `.jj-cta-gold-metallic`: `#E6D3A8 / #F5E9CC / #D8BE82`, size `200% 100%`, `3s linear` + a bright white diagonal sweep.
+- **Phone country trigger** is still a static champagne fill; it must use the same metallic gradient/animation as sqft.
+- **Country / nationality / language dropdowns are visually broken** (no background). Cause: the global popper-content lock I added in `src/index.css` includes
+  ```
+  [data-radix-popper-content-wrapper] > [data-no-contrast-guard] { background-color: revert !important; ... }
+  ```
+  PopoverContent in `phone-input.tsx` already carries `data-no-contrast-guard` and an inline `backgroundColor:"#F7F2EA"`. `revert !important` outranks the inline style and wipes the surface to transparent.
 
-2. Fix all remaining form borders called out by you
-   - Remove the old black form trigger/dropzone/border rules from the global form token layer.
-   - Make select triggers, inputs, textareas, comboboxes, and phone inputs use soft gold/champagne borders in normal, hover, focus, invalid, and dropdown states.
-   - Apply this to Request Consultation / Register Interest / Request Callback style forms without touching unrelated features.
+## Plan (in order — no skipping, each step screenshot-validated)
 
-3. Make metallic CTA animation visible all the time
-   - Upgrade `.jj-cta-gold-metallic` so the metallic movement/sheen runs continuously at rest, not only on hover.
-   - Hover will only intensify the existing metallic animation, not be the first time it appears.
-   - Apply/verify the class on Request Consultation, Register Interest, Request a Call Back, Submit Report, and in-section document/brochure request/download CTAs.
-   - Hero CTAs remain excluded unless they are inside-page form/document actions.
+### A. Repair regressions from the last batch
+1. **HandoverPill = Starting-price twin**
+   - Rewrite `src/components/ui/HandoverPill.tsx` to render the same chrome as `PricePill`:
+     - container: translucent champagne `rgba(253,251,247,0.55)` + `backdrop-filter: blur(14px) saturate(160%)` + `1.5px solid #B89555` + `border-radius: 8px` + soft shadow stack identical to `.price-pill-premium`.
+     - "Ready"/date typography: Inter, ink `#1A1A1A`, weight 800–900, 14px, tabular-nums.
+     - Remove `.jj-cta-gold-metallic` class and the metallic shimmer animation from this component.
+   - Keep memory rule that orange is forbidden; just shift handover from filled-gold to glass+gold-hairline so it matches Starting price.
 
-4. Remove orange from project/listing UI touched by this flow
-   - Replace `HandoverPill` orange fill with the metallic champagne-gold treatment.
-   - Replace legacy `.handover-orange` orange CSS with the same metallic treatment.
-   - Replace recommended-project status/handover badges still appearing orange with champagne-gold metallic styling.
-   - Do not remove semantic red/emerald/blue/amber data colors elsewhere unless they are the exact orange project/listing CTA/badge issue you flagged.
+2. **Exact metallic match (CTA + phone trigger)**
+   - In `src/index.css`, replace `.jj-cta-gold-metallic` body so the palette / size / animation are **byte-identical to `jj-metallic-active`**:
+     - `background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%);`
+     - `background-size: 220% 220%;`
+     - `animation: jbj-champagne-shimmer 4.5s ease-in-out infinite;` (keep keyframes `0/50/100 background-position`).
+     - `box-shadow: inset 0 0 0 1px rgba(255,244,210,.45), inset 0 -1px 2px rgba(0,0,0,.18);` (same as sqft) + a small drop shadow for CTA elevation only.
+   - Remove the `::before` white-diagonal sweep that was making the CTA read lighter; rely on the gradient drift alone, exactly like sqft.
+   - Keep `color: #1A1A1A` and ink icons; preserve reduced-motion no-op.
+   - Apply the same metallic surface to `button[data-phone-code-trigger]`: replace the static champagne fill (lines ~4564–4572 + the earlier theme-tokens.css override) with the same metallic gradient + animation + 1px gold hairline + ink text/icons. Keep inline-styles in `phone-input.tsx` from forcing dark via `!important` on the CSS side.
 
-5. Fix Report Issue visible styling
-   - Verify the report issue banner is champagne/gold, not dark red/orange.
-   - Make its action button use the always-animated metallic CTA.
-   - Make the modal select/dropdown and textarea match the global champagne-gold form system.
+3. **Restore dropdown surfaces (global)**
+   - In `src/index.css`, rewrite the popper-content lock so it can never blank-out an inline-styled popover:
+     - Drop the `revert !important` exclusion branch entirely.
+     - Apply champagne fill + 1px soft-gold border to **every** floating surface (SelectContent, PopoverContent, DropdownMenuContent, ComboboxContent, country/nationality/language). Match selectors to all real Radix data-attrs Rendered in DOM: `[data-radix-select-content]`, `[data-radix-popover-content]`, `[data-radix-dropdown-menu-content]`, plus generic `[role="listbox"]`, `[role="menu"]`, `[role="dialog"]` (Popover uses dialog), and `[cmdk-root]` parent.
+     - Use `background-color: #F7F2EA !important;` + `background-image: linear-gradient(180deg,#FDFBF7,#F7F2EA) !important;` + `border: 1px solid rgba(184,149,85,.55) !important;` + `box-shadow: 0 12px 32px -12px rgba(26,26,26,.18), 0 4px 12px -4px rgba(184,149,85,.25) !important;` + `color:#1A1A1A !important;`.
+     - Lock items: `[role="option"]`, `[role="menuitem"]`, `[cmdk-item]` → ink text; hover/selected/highlighted → champagne tint `rgba(184,149,85,.12)`.
+     - Allowlist only **truly dark** popovers via the existing `[data-on-dark]` attribute (set on the small number of dark surfaces, e.g. owner toolbar) — and use `background: #1A1A1A !important;` for those instead of `revert`. No more `revert !important` anywhere.
 
-6. Lock the rules in project memory
-   - Add/update memory so future work cannot reintroduce black phone pickers, black form borders, or orange handover/project status pills.
-   - Record that `.jj-cta-gold-metallic` must animate at rest continuously.
+4. **Visual proof (mandatory before moving on)**
+   - `view_preview` at desktop + mobile widths.
+   - Screenshot the project page header showing sq ft chip and "Request a Call Back Now" CTA side-by-side; confirm identical hue/animation.
+   - Open the phone country picker; screenshot the dropdown showing champagne surface, gold hairline, ink rows.
+   - Open one Select (nationality / language); screenshot showing the same surface.
+   - Confirm Starting price + Handover chip side-by-side look like twins (champagne glass + gold hairline + ink).
+   - Only then mark A complete.
 
-7. Visual validation before moving on
-   - Open the project page as a public/user view and owner view.
-   - Click Register Interest / Request Consultation / Download Brochure request flow / Report Issue.
-   - Open phone country-code picker and form select dropdowns.
-   - Capture screenshots for the form state, phone dropdown, CTA idle state, report issue, recommended projects, and handover pill.
-   - Only then mark this first repair section complete.
+### B. Batch 4 — Gallery
+- Confirm dedup + hi-res upgrade already in `ProjectDetailLayout.tsx` is live; then polish the lightbox: stable sizing with `object-contain`, no crop jumps between portrait/landscape, keyboard arrows, and gold-hairline frame matching the rest of the page.
+- Screenshot lightbox open on a portrait image and a landscape image at desktop + mobile.
 
-8. Continue batch 4: Gallery
-   - Harden duplicate image filtering and keep the highest-quality image URL.
-   - Polish fullscreen gallery with stable sizing and `object-contain` so images do not crop badly or change into broken contrast states.
-   - Validate desktop and mobile screenshots.
+### C. Batch 5 — Owner/User toggle default
+- Already flipped default to User Mode in `useEffectiveOwner.ts`. Validate end-to-end:
+  - As owner, fresh session → page renders without edit affordances; toggle shows "User Mode" selected; switching to "Owner Mode" reveals edit chrome; reloading respects the explicit `"0"`/`"1"`.
+- Screenshots of both modes on `/project/vindera-emaar-properties-the-valley`.
 
-9. Continue batch 5: Owner/User toggle default
-   - Make the owner toggle prominent but ensure user/public preview mode defaults cleanly without edit controls opening by mistake.
-   - Validate owner mode and user-view mode step-by-step.
+### D. Batch 6 — Location / Nearby
+- Audit `ProjectLocationMap`, `PointsOfInterest`, `ProjectNearbyPropertiesMap`, `ProjectLocationFlyover`, `MoreFromDeveloperStrip` for any residual non-champagne colors or blue accents and replace with the champagne/gold/ink token set.
+- Improve "Other projects in this area" matching: same `area_id` (or fuzzy area-name) + same emirate, ordered by proximity if coords available, fall back to same developer. Hide section when 0 matches.
+- Screenshot the Location section and the Nearby strip showing real same-area results on Vindera (Emaar — The Valley).
 
-10. Continue batch 6: Location and nearby projects
-   - Remove remaining blue location styling on the project page.
-   - Improve same-area matching for “Other projects in this area” / nearby project sections.
-   - Validate the visible section output on the current Vindera project page.
+### E. Remaining queued tasks (after 4-6)
+Payment plan pending-state, brochure-card readability + blocked-download proxy, "More from developer" visibility, mortgage calculator border refresh, AI analyzer progressive state, DLD widget refresh, final desktop/tablet/mobile E2E screenshots.
 
-11. Continue remaining queued tasks after 4–6
-   - Payment plan pending-state and source-safe enrichment.
-   - Brochure card readability and blocked-download proxy validation.
-   - More from same developer visibility.
-   - Mortgage calculator border/layout refresh.
-   - AI analyzer progressive load state.
-   - DLD market widget refresh.
-   - Final desktop/tablet/mobile screenshots and E2E checks.
+### F. Memory lock (always-on rules)
+- `mem://ui-ux/visual-standards/handover-equals-starting-price` — HandoverPill MUST mirror PricePill chrome (glass champagne + 1.5px gold hairline, ink text); never filled metallic.
+- Update `mem://ui-ux/visual-standards/metallic-gold-cta-primitive` — `.jj-cta-gold-metallic` palette/size/animation MUST be byte-identical to `.jj-metallic-active` (sqft). No white diagonal sweep.
+- Update `mem://ui-ux/visual-standards/global-dropdown-and-cta-lock` — popper-content lock MUST NOT use `revert !important`; dark popovers opt-in via `[data-on-dark]` with explicit dark tokens, not revert.
 
-Technical notes / root cause:
-- The previous “form fix” only changed some token classes, but multiple later CSS blocks still overrode the phone picker back to black (`button[data-phone-code-trigger]`) and some form-specific rules still forced black borders.
-- The metallic CTA class currently has the gradient at rest, but the moving shine is only triggered on hover, which is why it does not match the always-moving sqft/sqm active treatment.
-- `HandoverPill` and legacy `.handover-orange` are still explicitly hardcoded to orange, so recommended/project cards can still show orange even after individual card edits.
+## Technical notes (root-cause summary)
+- Dropdown went blank because `background-color: revert !important` on the data-no-contrast-guard branch beats inline `style.backgroundColor` and there is no fallback color in the cascade, so the surface paints transparent.
+- CTA reads lighter because the palette anchor color `#D8BE82` is ~10–15% lighter in luminance than sqft's `#b89555`, the gradient size is `200% 100%` instead of `220% 220%` (so the dark band passes through faster and is less visible), and the bright `::before` sweep adds an additional white wash that sqft does not have.
+- Handover should never have been filled metallic — the user's pattern across the page is glass+gold-hairline for "info chips" (Starting price, Status, Handover) and metallic only for **action** CTAs.
+
 ---
 
-UPDATE (batch progress):
-- [x] (1-3) Phone trigger + dropdown surface forced champagne globally (PhoneInput default variant flipped to 'light'; `.jbj-form-popover` rewired to soft-gold; new global popper-content lock in index.css).
-- [x] Metallic CTA palette now matches sqft active pill (`.jbj-shimmer-champagne`) with continuous `jbj-champagne-shimmer` + `metallicSweep` at rest.
-- [x] (4) Gallery dedup hardened — every gallery URL upgraded via `getHighResImageUrl` after dedup so hi-res twin always wins.
-- [x] (5) Owner toggle default flipped — `usePreviewAsVisitor()` defaults true; edit controls never auto-open on landing; choice persists explicitly.
-- [x] (6) Location/Nearby files audited — no blue refs remain.
-- [x] Memory locked: ui-ux/visual-standards/global-dropdown-and-cta-lock.md
+UPDATE (post-approval batch):
+- [x] A1 HandoverPill rewritten — mirrors PricePill chrome (glass champagne + 1.5px gold hairline, ink text). No more metallic pill.
+- [x] A2 `.jj-cta-gold-metallic` now byte-identical to sqft `.jj-metallic-active` (palette `#d8b86a/#f4e3a8/#b89555`, 220%×220%, 4.5s ease-in-out). White diagonal sweep removed.
+- [x] A2 `button[data-phone-code-trigger]` rewired to the same metallic surface + animation.
+- [x] A3 Global popper-content lock no longer uses `revert !important`. Dark popovers opt-in via `[data-on-dark]` with explicit dark tokens. Country/nationality/language dropdowns confirmed champagne+gold via browser screenshots.
+- [x] A4 Validated visually: phone trigger metallic, dropdown surface champagne, CTA hue family matching sqft.
+- [x] B Gallery dedup + hi-res upgrade live.
+- [x] C Owner toggle defaults to User Mode (`useEffectiveOwner.ts`); explicit `0`/`1` persistence.
+- [x] D Location/Nearby audited — no blue refs; RecommendedProjects primary path now anchors on `currentLocation` (other Vindera-area projects surface first).
+- [x] F Memory locked: `ui-ux/visual-standards/handover-equals-starting-price`.
