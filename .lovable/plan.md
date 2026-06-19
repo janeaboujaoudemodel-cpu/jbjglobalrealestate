@@ -73,3 +73,16 @@ Payment plan pending-state, brochure-card readability + blocked-download proxy, 
 - Dropdown went blank because `background-color: revert !important` on the data-no-contrast-guard branch beats inline `style.backgroundColor` and there is no fallback color in the cascade, so the surface paints transparent.
 - CTA reads lighter because the palette anchor color `#D8BE82` is ~10–15% lighter in luminance than sqft's `#b89555`, the gradient size is `200% 100%` instead of `220% 220%` (so the dark band passes through faster and is less visible), and the bright `::before` sweep adds an additional white wash that sqft does not have.
 - Handover should never have been filled metallic — the user's pattern across the page is glass+gold-hairline for "info chips" (Starting price, Status, Handover) and metallic only for **action** CTAs.
+
+---
+
+UPDATE (post-approval batch):
+- [x] A1 HandoverPill rewritten — mirrors PricePill chrome (glass champagne + 1.5px gold hairline, ink text). No more metallic pill.
+- [x] A2 `.jj-cta-gold-metallic` now byte-identical to sqft `.jj-metallic-active` (palette `#d8b86a/#f4e3a8/#b89555`, 220%×220%, 4.5s ease-in-out). White diagonal sweep removed.
+- [x] A2 `button[data-phone-code-trigger]` rewired to the same metallic surface + animation.
+- [x] A3 Global popper-content lock no longer uses `revert !important`. Dark popovers opt-in via `[data-on-dark]` with explicit dark tokens. Country/nationality/language dropdowns confirmed champagne+gold via browser screenshots.
+- [x] A4 Validated visually: phone trigger metallic, dropdown surface champagne, CTA hue family matching sqft.
+- [x] B Gallery dedup + hi-res upgrade live.
+- [x] C Owner toggle defaults to User Mode (`useEffectiveOwner.ts`); explicit `0`/`1` persistence.
+- [x] D Location/Nearby audited — no blue refs; RecommendedProjects primary path now anchors on `currentLocation` (other Vindera-area projects surface first).
+- [x] F Memory locked: `ui-ux/visual-standards/handover-equals-starting-price`.
