@@ -229,12 +229,23 @@ export function ProjectInquiryForm({
       const timelineLabel = TIMELINE_OPTIONS.find(o => o.value === formData.timeline)?.label;
       const contactTimeLabel = CONTACT_TIME_OPTIONS.find(o => o.value === formData.contactTime)?.label;
       const contactMethodLabel = CONTACT_METHOD_OPTIONS.find(o => o.value === formData.contactMethod)?.label;
-      const sizeRange = [formData.sizeMin, formData.sizeMax].filter(Boolean).join(" – ");
+      // sizeMin is now a comma-separated list of bucket keys (e.g. "800-1200,1800-2500" or "any").
+      const sizeBucketsSel = (formData.sizeMin || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s && s !== "any");
+      const sizeRange = sizeBucketsSel.length ? sizeBucketsSel.join(", ") : "";
+      const parsedSizeMin = (() => {
+        const nums = sizeBucketsSel
+          .map((k) => parseInt((k.match(/^(\d+)/) || [])[1] || "0", 10))
+          .filter((n) => n > 0);
+        return nums.length ? Math.min(...nums) : null;
+      })();
       const extras: string[] = [];
       if (timelineLabel) extras.push(`Purchase timeline: ${timelineLabel}`);
       if (contactTimeLabel) extras.push(`Preferred contact time: ${contactTimeLabel}`);
       if (contactMethodLabel) extras.push(`Preferred contact method: ${contactMethodLabel}`);
-      if (sizeRange) extras.push(`Size range: ${sizeRange} sqft`);
+      if (sizeRange) extras.push(`Preferred size buckets: ${sizeRange} sqft`);
       if (intent) extras.push(`Intent: ${intent}`);
       const meta = `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`;
       const composedNotes = [formData.message, extras.join(" · "), meta]
@@ -250,7 +261,7 @@ export function ProjectInquiryForm({
         source_details: projectName,
         source_page: window.location.pathname,
         preferred_bedrooms: formData.bedrooms || null,
-        preferred_size_sqft: formData.sizeMin ? parseInt(formData.sizeMin) : null,
+        preferred_size_sqft: parsedSizeMin,
         preferred_developer: finalDeveloper || null,
         preferred_location: finalLocation || null,
         notes: composedNotes,
