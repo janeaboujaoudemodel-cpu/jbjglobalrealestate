@@ -5,6 +5,7 @@
  * (1-year) on `crm_brokers.logo_url` / `headshot_url` so PDF generators can embed without auth.
  */
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
