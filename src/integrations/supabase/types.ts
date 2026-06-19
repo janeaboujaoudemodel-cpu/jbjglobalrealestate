@@ -7654,6 +7654,7 @@ export type Database = {
           account_status_reason: string | null
           activated_at: string | null
           activation_verified_at: string | null
+          agent_display_name: string | null
           assigned_to: string | null
           auth_user_id: string | null
           bayut_url: string | null
@@ -7661,6 +7662,7 @@ export type Database = {
           blocked_at: string | null
           blocked_by_user_id: string | null
           blocked_reason: string | null
+          brand_primary_hex: string | null
           broker_type: string | null
           city: string | null
           closed_deals_count: number
@@ -7684,6 +7686,7 @@ export type Database = {
           google_reviews_count: number | null
           google_reviews_score: number | null
           google_reviews_url: string | null
+          headshot_url: string | null
           id: string
           imported_at: string | null
           imported_by: string | null
@@ -7704,6 +7707,7 @@ export type Database = {
           last_contact_at: string | null
           last_verified_at: string | null
           linkedin_url: string | null
+          logo_url: string | null
           must_reset_password: boolean
           nationality: string | null
           notes: string | null
@@ -7728,6 +7732,7 @@ export type Database = {
           seniority: string | null
           source_history: Json
           specialty: string[]
+          tagline: string | null
           updated_at: string | null
           upload_source: string | null
           user_id: string | null
@@ -7743,6 +7748,7 @@ export type Database = {
           account_status_reason?: string | null
           activated_at?: string | null
           activation_verified_at?: string | null
+          agent_display_name?: string | null
           assigned_to?: string | null
           auth_user_id?: string | null
           bayut_url?: string | null
@@ -7750,6 +7756,7 @@ export type Database = {
           blocked_at?: string | null
           blocked_by_user_id?: string | null
           blocked_reason?: string | null
+          brand_primary_hex?: string | null
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -7773,6 +7780,7 @@ export type Database = {
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
+          headshot_url?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
@@ -7793,6 +7801,7 @@ export type Database = {
           last_contact_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           must_reset_password?: boolean
           nationality?: string | null
           notes?: string | null
@@ -7817,6 +7826,7 @@ export type Database = {
           seniority?: string | null
           source_history?: Json
           specialty?: string[]
+          tagline?: string | null
           updated_at?: string | null
           upload_source?: string | null
           user_id?: string | null
@@ -7832,6 +7842,7 @@ export type Database = {
           account_status_reason?: string | null
           activated_at?: string | null
           activation_verified_at?: string | null
+          agent_display_name?: string | null
           assigned_to?: string | null
           auth_user_id?: string | null
           bayut_url?: string | null
@@ -7839,6 +7850,7 @@ export type Database = {
           blocked_at?: string | null
           blocked_by_user_id?: string | null
           blocked_reason?: string | null
+          brand_primary_hex?: string | null
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -7862,6 +7874,7 @@ export type Database = {
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
+          headshot_url?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
@@ -7882,6 +7895,7 @@ export type Database = {
           last_contact_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           must_reset_password?: boolean
           nationality?: string | null
           notes?: string | null
@@ -7906,6 +7920,7 @@ export type Database = {
           seniority?: string | null
           source_history?: Json
           specialty?: string[]
+          tagline?: string | null
           updated_at?: string | null
           upload_source?: string | null
           user_id?: string | null
