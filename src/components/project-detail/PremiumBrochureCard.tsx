@@ -8,6 +8,8 @@ const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english
 import { maybeProxyStorageUrl, proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 interface PremiumBrochureCardProps {
   projectName: string;
+  projectId?: string;
+  projectSlug?: string;
   brochureUrl?: string;
   projectImageUrl?: string;
   onDownloadClick: () => void;
@@ -22,69 +24,88 @@ interface PremiumBrochureCardProps {
  */
 const PremiumBrochureCard = ({
   projectName,
-  brochureUrl,
+  projectId,
+  projectSlug,
+  brochureUrl: brochureUrlProp,
   projectImageUrl,
   onDownloadClick,
   isLocked = false,
   location,
 }: PremiumBrochureCardProps) => {
   const [isDownloading, setIsDownloading] = React.useState(false);
+  const [isFetching, setIsFetching] = React.useState(false);
+  // Allow the auto-fetch result to override the prop without remounting.
+  const [resolvedUrl, setResolvedUrl] = React.useState<string | undefined>(brochureUrlProp);
+  React.useEffect(() => setResolvedUrl(brochureUrlProp), [brochureUrlProp]);
+  const brochureUrl = resolvedUrl;
 
-  // Fetch and download as blob to bypass ad-blocker blocking Supabase URLs.
-  // IMPORTANT: never use window.open() as a fallback — Chrome blocks it as a
-  // popup when called from an async context, producing the "blocked by Chrome"
-  // page. Instead, fall back to a same-tab anchor click on the proxied URL.
-  const handleBlobDownload = async () => {
-    if (!brochureUrl) {
-      onDownloadClick();
-      return;
-    }
-
+  const streamPdf = async (sourceUrl: string) => {
     const filename = `${projectName.replace(/\s+/g, "-")}-Brochure.pdf`;
-    // ALWAYS route through the backend download-file edge function — even for
-    // third-party CDNs (provident.ae, propertyfinder.ae, emaar.com, etc.).
-    // The function streams the file back with Content-Disposition: attachment,
-    // which bypasses Chrome's cross-origin "download blocked" page.
-    const safeUrl = proxyAnyDownloadUrl(brochureUrl, { filename, disposition: "attachment" });
-
+    const safeUrl = proxyAnyDownloadUrl(sourceUrl, { filename, disposition: "attachment" });
     setIsDownloading(true);
     try {
       const response = await fetch(safeUrl);
-      if (!response.ok) throw new Error('Download failed');
-
+      if (!response.ok) throw new Error("Download failed");
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${projectName.replace(/\s+/g, '-')}-Brochure.pdf`;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.warn('Blob download failed, falling back to anchor click:', error);
-      // Same-tab anchor click avoids Chrome's popup blocker entirely.
+      console.warn("Blob download failed, falling back to anchor click:", error);
       try {
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = safeUrl;
-        link.download = `${projectName.replace(/\s+/g, '-')}-Brochure.pdf`;
-        link.rel = 'noopener';
+        link.download = filename;
+        link.rel = "noopener";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       } catch (fallbackErr) {
-        console.error('Anchor-click download failed:', fallbackErr);
+        console.error("Anchor-click download failed:", fallbackErr);
       }
     } finally {
       setIsDownloading(false);
     }
   };
-  const handleClick = () => {
-    if (!isLocked && brochureUrl) {
-      handleBlobDownload();
-    } else {
+
+  const handleClick = async () => {
+    if (isLocked) {
       onDownloadClick();
+      return;
     }
+    if (brochureUrl) {
+      streamPdf(brochureUrl);
+      return;
+    }
+    // No URL — try to auto-fetch from developer-direct or Provident (partner).
+    // Forbidden secondary portals are rejected server-side.
+    if (!projectId && !projectSlug) {
+      onDownloadClick();
+      return;
+    }
+    setIsFetching(true);
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.functions.invoke("brochure-auto-fetch", {
+        body: { projectId, slug: projectSlug },
+      });
+      if (!error && data?.found && data.url) {
+        setResolvedUrl(data.url);
+        await streamPdf(data.url);
+        return;
+      }
+    } catch (e) {
+      console.warn("brochure-auto-fetch failed:", e);
+    } finally {
+      setIsFetching(false);
+    }
+    // Nothing found anywhere allowed → open lead modal as a real request.
+    onDownloadClick();
   };
 
   return (
@@ -274,6 +295,11 @@ const PremiumBrochureCard = ({
           <>
             <Lock className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
             <span className="group-hover:text-[#1A1A1A] transition-colors">Unlock Brochure</span>
+          </>
+        ) : isFetching ? (
+          <>
+            <Loader2 className="w-5 h-5 text-foreground animate-spin" />
+            <span>Fetching Brochure…</span>
           </>
         ) : isDownloading ? (
           <>

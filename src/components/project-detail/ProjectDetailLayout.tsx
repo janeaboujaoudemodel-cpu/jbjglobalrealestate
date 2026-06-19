@@ -1428,8 +1428,10 @@ export default function ProjectDetailLayout({
                 <div className="flex justify-center">
                   <PremiumBrochureCard
                     projectName={project.name}
+                    projectId={project.id}
+                    projectSlug={project.slug}
                     brochureUrl={brochurePrimary?.url}
-projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefined}
+                    projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefined}
                     onDownloadClick={() => brochurePrimary 
                       ? handleDocumentDownload("brochure", brochurePrimary?.url)
                       : setLeadCaptureOpen(true)
