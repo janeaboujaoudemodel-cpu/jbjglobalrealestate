@@ -89,6 +89,7 @@ const DeveloperDetail = () => {
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
   // IntersectionObserver for fixed filter positioning
