@@ -14447,6 +14447,51 @@ export type Database = {
         }
         Relationships: []
       }
+      dld_daily_snapshot: {
+        Row: {
+          cash_count: number
+          cash_volume_aed: number
+          created_at: string
+          id: string
+          mortgage_count: number
+          mortgage_volume_aed: number
+          snapshot_date: string
+          source: string
+          top_areas: Json
+          total_transactions: number
+          total_volume_aed: number
+          updated_at: string
+        }
+        Insert: {
+          cash_count?: number
+          cash_volume_aed?: number
+          created_at?: string
+          id?: string
+          mortgage_count?: number
+          mortgage_volume_aed?: number
+          snapshot_date: string
+          source?: string
+          top_areas?: Json
+          total_transactions?: number
+          total_volume_aed?: number
+          updated_at?: string
+        }
+        Update: {
+          cash_count?: number
+          cash_volume_aed?: number
+          created_at?: string
+          id?: string
+          mortgage_count?: number
+          mortgage_volume_aed?: number
+          snapshot_date?: string
+          source?: string
+          top_areas?: Json
+          total_transactions?: number
+          total_volume_aed?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       dld_market_data: {
         Row: {
           data_json: Json
@@ -36687,6 +36732,23 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      dld_daily_snapshot_latest: {
+        Row: {
+          cash_count: number | null
+          cash_volume_aed: number | null
+          created_at: string | null
+          id: string | null
+          mortgage_count: number | null
+          mortgage_volume_aed: number | null
+          snapshot_date: string | null
+          source: string | null
+          top_areas: Json | null
+          total_transactions: number | null
+          total_volume_aed: number | null
+          updated_at: string | null
+        }
+        Relationships: []
       }
       employee_payment_history_safe: {
         Row: {
