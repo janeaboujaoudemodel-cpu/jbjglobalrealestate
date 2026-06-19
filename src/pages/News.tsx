@@ -313,7 +313,7 @@ const News = () => {
       </div>
 
       {/* Category Filter — neon chips on dark glass */}
-      <div className="sticky top-[40px] z-20 bg-[#050B18]/95 backdrop-blur-md border-b border-[rgba(34,211,238,0.18)]" data-surface="dark" data-no-contrast-guard>
+      <div className="sticky top-[40px] z-20 bg-[#050B18]/95 backdrop-blur-md border-b border-[rgba(184,149,85,0.30)]" data-surface="dark" data-no-contrast-guard>
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="py-3">
             <div className="flex flex-nowrap gap-2 py-2 overflow-x-auto scrollbar-hide pr-4">
