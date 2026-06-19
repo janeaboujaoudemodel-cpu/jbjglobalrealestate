@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { pushBackStack } from "@/lib/browsingHistory";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+type FilterMode = "all" | "developer" | "area";
 
 // Red pin — current project
 const RED_PIN_SVG = `
