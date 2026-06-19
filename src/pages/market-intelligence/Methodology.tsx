@@ -291,8 +291,8 @@ const Methodology = () => {
                 className="scroll-mt-24 py-6 jj-card-inner rounded-xl px-6"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
-                    <AlertTriangle className="w-5 h-5 text-red-600" />
+                  <div className="jj-icon-box-active w-10 h-10 rounded-lg">
+                    <AlertTriangle className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-[#1A1A1A]">Presentation</span>{" "}
@@ -300,7 +300,7 @@ const Methodology = () => {
                   </h2>
                 </div>
                 
-                <div className="bg-red-50 border-2 border-red-300 rounded-lg p-6">
+                <div className="bg-[#EFE6D6] border border-[#B89555]/40 rounded-lg p-6">
                   <p className="text-[#1A1A1A] leading-relaxed mb-4">
                     Market intelligence content follows these fixed rules:
                   </p>
@@ -322,7 +322,7 @@ const Methodology = () => {
                       <span>No guaranteed outcomes or implied returns</span>
                     </li>
                   </ul>
-                  <p className="text-[#1A1A1A]/70 leading-relaxed mt-4 pt-4 border-t border-red-200">
+                  <p className="text-[#1A1A1A]/70 leading-relaxed mt-4 pt-4 border-t border-[#B89555]/30">
                     Charts, summaries, and explanations reflect recorded activity, not future expectations.
                   </p>
                 </div>
