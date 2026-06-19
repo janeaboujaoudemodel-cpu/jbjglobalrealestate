@@ -33,7 +33,7 @@ export const SERVICE_SEO_CATALOG: ServiceSeoSource[] = [
     title: "AI Tools & Calculators | JBJ Global Real Estate",
     description:
       "Clarity-first tools that support decision-making through structured inputs, transparent outputs, and consistent formatting.",
-    canonicalPath: "/services/ai-tools",
+    canonicalPath: "/ai-hub",
   },
   {
     slug: "architecture",

@@ -89,7 +89,7 @@ const CurrencyExchange = lazy(() => import("@/pages/services/CurrencyExchange"))
 const Concierge = lazy(() => import("@/pages/services/Concierge"));
 const CompanySetup = lazy(() => import("@/pages/services/CompanySetup"));
 const SignatureCollection = lazy(() => import("@/pages/services/SignatureCollection"));
-const AITools = lazy(() => import("@/pages/services/AITools"));
+
 const BrokerCertification = lazy(() => import("@/pages/services/BrokerCertification"));
 const ComplaintProcedures = lazy(() => import("@/pages/services/ComplaintProcedures"));
 const CustomerHappinessCenter = lazy(() => import("@/pages/services/CustomerHappinessCenter"));
@@ -312,7 +312,7 @@ export const PublicRoutes = () => (
     <Route path="/services/concierge" element={<Concierge />} />
     <Route path="/services/company-setup" element={<CompanySetup />} />
     <Route path="/services/signature-collection" element={<SignatureCollection />} />
-    <Route path="/services/ai-tools" element={<AITools />} />
+    <Route path="/services/ai-tools" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/services/broker-certification" element={<BrokerCertification />} />
     <Route path="/services/complaint-procedures" element={<ComplaintProcedures />} />
     <Route path="/services/customer-happiness-center" element={<CustomerHappinessCenter />} />

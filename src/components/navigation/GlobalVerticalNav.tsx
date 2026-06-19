@@ -186,7 +186,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Snagging", href: "/services/snagging", icon: ClipboardCheck },
   { label: "Currency Exchange", href: "/services/currency-exchange", icon: HandCoins },
   { label: "Signature Collection", href: "/services/signature-collection", icon: FileSignature },
-  { label: "AI Tools Service", href: "/services/ai-tools", icon: Bot },
+  { label: "AI Tools Service", href: "/ai-hub", icon: Bot },
   { label: "Broker Certification", href: "/services/broker-certification", icon: BadgeCheck },
   { label: "Complaint Procedures", href: "/services/complaint-procedures", icon: ScrollText },
   { label: "Customer Happiness", href: "/services/customer-happiness-center", icon: SmilePlus },

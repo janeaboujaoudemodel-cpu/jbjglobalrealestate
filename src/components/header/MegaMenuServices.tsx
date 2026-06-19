@@ -24,7 +24,7 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
 
   const additionalServices = [
     { name: 'Signature Collection', href: '/services/signature-collection', icon: FileText },
-    { name: 'AI Tools & Calculators', href: '/services/ai-tools', icon: Calculator },
+    { name: 'AI Tools & Calculators', href: '/ai-hub', icon: Calculator },
     { name: 'Broker Certification', href: '/services/broker-certification', icon: Award },
     { name: 'Complaint Procedures', href: '/services/complaint-procedures', icon: ClipboardCheck },
     { name: 'Happiness Center', href: '/services/customer-happiness-center', icon: Globe },
