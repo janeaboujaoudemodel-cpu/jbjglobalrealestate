@@ -115,7 +115,7 @@ const MarketReportsPage = () => {
   const featuredReports = reports;
 
   return (
-    <div data-neon-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Dubai Real Estate Market Reports | BUY · SELL · RENT Analysis | JBJ GLOBAL REAL ESTATE"
         description="Download monthly, quarterly, and annual Dubai real estate market reports. Data-driven insights powered by official government Open Data. No predictions, just clear analysis."
@@ -142,7 +142,7 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content with TOC Sidebar */}
-      <div className="pt-16 pb-16 bg-[#1A1A1A]">
+      <div className="pt-16 pb-16 bg-[#FDFBF7]">
         {/* Fixed TOC Sidebar */}
         <div className="hidden lg:block">
           <MarketIntelligenceTableOfContents 

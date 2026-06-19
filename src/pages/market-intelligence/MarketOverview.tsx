@@ -136,7 +136,7 @@ const MarketOverview = () => {
   };
 
   return (
-    <div data-neon-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Dubai Real Estate Market Overview | BUY · SELL · RENT Trends | JBJ GLOBAL REAL ESTATE"
         description="UAE & Dubai real estate market trends and analysis. Transaction volumes, price movements, and rent trends powered by official government Open Data. No predictions, just insights."
@@ -174,7 +174,7 @@ const MarketOverview = () => {
       />
 
       {/* Main Content - Full width edge-to-edge with 3-layer system */}
-      <div className="pt-16 pb-16 bg-[#1A1A1A]">
+      <div className="pt-16 pb-16 bg-[#FDFBF7]">
         {/* Introduction Section */}
         <section id="introduction" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
           <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
