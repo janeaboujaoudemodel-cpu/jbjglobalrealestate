@@ -87,9 +87,8 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               />
             ) : (
               <div
-                className="w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+                className="jj-metallic-active w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
                 style={{
-                  background: '#FFFFFF',
                   border: '3px solid hsl(42 45% 59%)',
                   boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
                 }}

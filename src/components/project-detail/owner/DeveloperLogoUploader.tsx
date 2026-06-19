@@ -43,9 +43,8 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
 
   return (
     <div
-      className="w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group"
+      className="jj-metallic-active w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group"
       style={{
-        background: '#FFFFFF',
         border: '3px solid hsl(42 45% 59%)',
         boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
       }}
