@@ -25,7 +25,25 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   // H&H Development / H and H Development — black filled logo, white H letters.
   hhdevelopment: { invert: true },
   handhdevelopment: { invert: true },
+  // MAG — white wordmark on grey/black plate; invert so it renders as
+  // a clean black mark on our champagne plate, matching Emaar/Damac/Aldar.
+  mag: { invert: true },
+  magpd: { invert: true },
+  magpropertydevelopment: { invert: true },
+  magoflife: { invert: true },
+  maglifestyledevelopment: { invert: true },
+  magdevelopment: { invert: true },
+  magdevelopments: { invert: true },
+  maggroup: { invert: true },
+  // Kingdom By MAG — branded as a white "Kingdom" wordmark on a dark grey
+  // square plate. The grey plate clashes with our white logo plate, so we
+  // skip the bitmap and render a clean ink wordmark instead.
+  kingdombymag: { forceNameplate: true },
+  kingdom: { forceNameplate: true },
+  kingdomdevelopment: { forceNameplate: true },
+  kingdomdevelopments: { forceNameplate: true },
 };
+
 
 export function getDeveloperLogoOverride(
   name?: string | null,

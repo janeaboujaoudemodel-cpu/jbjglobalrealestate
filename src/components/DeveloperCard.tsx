@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Building2, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import type { Developer } from "@/hooks/useProjects";
 
 interface DeveloperCardProps {
@@ -46,6 +47,7 @@ function getDeveloperTier(slug: string): { label: string; color: string } | null
 const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCardProps) => {
   const tier = getDeveloperTier(developer.slug || "");
   const isEager = index < 8;
+  const override = getDeveloperLogoOverride(developer.name);
 
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full">
@@ -61,13 +63,22 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
       >
         {/* Logo plate — uniform white surface, full-fit logo, no crops */}
         <div className="relative aspect-[5/3] bg-white border-b border-[#B89555]/25 flex items-center justify-center p-8">
-          {isValidDeveloperLogoUrl(developer.logo_url) ? (
+          {override.forceNameplate ? (
+            <span className="text-[#1A1A1A] font-bold text-2xl md:text-3xl tracking-tight text-center px-2">
+              {developer.name}
+            </span>
+          ) : isValidDeveloperLogoUrl(developer.logo_url) ? (
             <img
               src={developer.logo_url}
               alt={`${developer.name} logo`}
               loading={isEager ? "eager" : "lazy"}
               referrerPolicy="no-referrer"
               className="block max-h-full max-w-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+              style={{
+                filter: override.invert
+                  ? "invert(1) brightness(1)"
+                  : "contrast(1.08) saturate(1.1)",
+              }}
             />
           ) : (
             <div className="flex flex-col items-center justify-center gap-2">
