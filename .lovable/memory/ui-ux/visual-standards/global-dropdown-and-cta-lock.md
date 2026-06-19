@@ -31,3 +31,9 @@ type: constraint
 
 ## Owner mode
 - `usePreviewAsVisitor()` defaults to `true` so owners land in User View on first paint.
+
+## Global form dropdown gold lock (added 2026-06-19)
+- Every Select / Combobox / Popover trigger inside a `<form>` or `[data-jbj-form]` is auto-painted with the metallic champagne-gold gradient identical to `[data-phone-code-trigger]` (linear-gradient #d8b86a → #f4e3a8 → #b89555 → #f4e3a8 → #d8b86a, 1px rgba(184,149,85,.85) border, ink #3a2a08 text/icons).
+- Active / selected / highlighted option inside any `[data-radix-popper-content-wrapper]` (select-item[data-state=checked], cmdk-item[data-selected=true], role=option[aria-selected=true|data-highlighted]) gets a faded gold-gradient fill so the chosen row glows (matches "United Arab Emirates" reference screenshot).
+- Opt-outs: `[data-no-gold-trigger]`, `[data-cta]`, `[data-allow-dark-cta]`, `[data-on-dark]`, `.jj-cta-*`. Filter/sort dropdowns outside forms keep their existing styling.
+- Rule lives in `src/index.css` under "GLOBAL FORM DROPDOWN GOLD LOCK".
