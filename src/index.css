@@ -4492,7 +4492,9 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
     #d8b86a 100%
   ) !important;
   background-size: 220% 220% !important;
-  background-position: 0% 50% !important;
+  /* NOTE: do NOT set background-position with !important here — it would
+     override the jj-metal-sheen keyframe and freeze the animation
+     (matches sqft pill behaviour which has no static position override). */
   border: 1px solid rgba(184, 149, 85, 0.65) !important;
   border-radius: 0.75rem !important;
   box-shadow:
