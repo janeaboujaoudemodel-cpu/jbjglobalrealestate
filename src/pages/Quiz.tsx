@@ -1036,7 +1036,7 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#2DD4BF] to-[#06B6D4] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#2DD4BF]/30">
+              <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 mx-auto mb-4 flex items-center justify-center">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
                <h2 className="text-white text-3xl font-bold mb-2">
@@ -1047,7 +1047,7 @@ const Quiz = () => {
               </p>
             </div>
 
-            <div className="bg-[#051C18]/80 border border-[#2DD4BF]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+            <div className="bg-[#F7F2EA] border border-[#B89555]/55 rounded-2xl p-6 md:p-8">
               <div className="space-y-5">
                 <div>
                   <Label className="text-white mb-2 block">Full Name *</Label>
@@ -1055,7 +1055,7 @@ const Quiz = () => {
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Enter your full name"
-                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
+                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -1065,7 +1065,7 @@ const Quiz = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
+                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -1075,7 +1075,7 @@ const Quiz = () => {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+971 XX XXX XXXX"
-                    className="bg-[#051C18] border-[#2DD4BF]/30 text-white placeholder:text-white/60 focus:border-[#2DD4BF]"
+                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -1087,8 +1087,8 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
                   />
                 </div>
                 <div>
@@ -1100,8 +1100,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="aihf-input bg-[#051C18] border-[#2DD4BF]/30 text-white hover:bg-[#062821] hover:text-white"
-                    className="aihf-popover bg-[#051C18] border-[#2DD4BF]/30"
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
                   />
                 </div>
               </div>
@@ -1179,7 +1179,7 @@ const Quiz = () => {
             </div>
           </div>
           {/* Gold gradient progress bar */}
-          <div className="h-2 bg-[#2DD4BF]/15 rounded-full overflow-hidden">
+          <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div 
               className="h-full rounded-full bg-[#B89555] transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
@@ -1208,7 +1208,7 @@ const Quiz = () => {
                   onClick={handleSelectAll}
                   disabled={allSelected()}
                   data-no-contrast-guard
-                  className="aihf-option text-white hover:text-white border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
+                  className="aihf-option text-[#1A1A1A] hover:text-[#1A1A1A] border-[#B89555]/55 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -1218,7 +1218,7 @@ const Quiz = () => {
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
                   data-no-contrast-guard
-                  className="aihf-option text-white hover:text-white border-[#2DD4BF]/40 font-semibold disabled:opacity-50"
+                  className="aihf-option text-[#1A1A1A] hover:text-[#1A1A1A] border-[#B89555]/55 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -1241,13 +1241,13 @@ const Quiz = () => {
                     data-no-contrast-guard
                     className={`aihf-option relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                       isSelected
-                        ? "border-[#2DD4BF] bg-gradient-to-br from-[#062821] to-[#051C18] shadow-lg shadow-[#2DD4BF]/20"
-                        : "border-[#2DD4BF]/30 bg-[#051C18] hover:border-[#2DD4BF]/50 hover:shadow-md"
+                        ? "border-[#B89555] bg-[#EFE6D6]"
+                        : "border-[#B89555]/45 bg-[#FDFBF7] hover:border-[#B89555]/85"
                     }`}
                   >
                     {currentQuestion.type === "multiple" && (
                       <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        isSelected ? "border-[#2DD4BF] bg-[#2DD4BF]" : "border-[#2DD4BF]/30"
+                        isSelected ? "border-[#B89555] bg-[#B89555]" : "border-[#B89555]/45"
                       }`}>
                         {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
                       </div>
