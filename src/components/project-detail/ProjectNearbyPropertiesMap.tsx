@@ -192,7 +192,33 @@ export default function ProjectNearbyPropertiesMap({
     staleTime: 5 * 60 * 1000,
   });
 
-  const markers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
+  const allMarkers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
+
+  const sameDevCount = useMemo(
+    () => (currentDeveloperId ? allMarkers.filter((m) => m.developer_id === currentDeveloperId).length : 0),
+    [allMarkers, currentDeveloperId],
+  );
+  const sameAreaCount = useMemo(
+    () =>
+      areaName
+        ? allMarkers.filter((m) => {
+            const a = (m.area_name || "").toLowerCase();
+            return a.includes(areaName.toLowerCase());
+          }).length
+        : 0,
+    [allMarkers, areaName],
+  );
+
+  const markers = useMemo(() => {
+    if (filterMode === "developer" && currentDeveloperId) {
+      return allMarkers.filter((m) => m.developer_id === currentDeveloperId);
+    }
+    if (filterMode === "area" && areaName) {
+      const a = areaName.toLowerCase();
+      return allMarkers.filter((m) => (m.area_name || "").toLowerCase().includes(a));
+    }
+    return allMarkers;
+  }, [allMarkers, filterMode, currentDeveloperId, areaName]);
 
   // Derive a map center: project coords if available, otherwise the centroid of area peers.
   const center = useMemo<[number, number] | null>(() => {
@@ -202,11 +228,15 @@ export default function ProjectNearbyPropertiesMap({
       const lng = markers.reduce((s, m) => s + (m.longitude as number), 0) / markers.length;
       return [lat, lng];
     }
+    if (allMarkers.length > 0) {
+      const lat = allMarkers.reduce((s, m) => s + (m.latitude as number), 0) / allMarkers.length;
+      const lng = allMarkers.reduce((s, m) => s + (m.longitude as number), 0) / allMarkers.length;
+      return [lat, lng];
+    }
     return null;
-  }, [hasOwnCoords, latitude, longitude, markers]);
+  }, [hasOwnCoords, latitude, longitude, markers, allMarkers]);
 
-  if (!center || markers.length === 0) return null;
-
+  if (!center || allMarkers.length === 0) return null;
 
   const handleOpenNearby = (slug: string | null) => {
     if (!slug) return;
@@ -216,15 +246,41 @@ export default function ProjectNearbyPropertiesMap({
     navigate(`/project/${slug}`);
   };
 
-  return (
-    <div
-      className={`rounded-2xl overflow-hidden ${className}`}
-      style={{
-        height: 380,
-        border: "1px solid rgba(184,149,85,0.40)",
-        boxShadow: "0 4px 16px rgba(184,149,85,0.15)",
-      }}
+  const chip = (mode: FilterMode, label: string, count: number, disabled = false) => (
+    <button
+      key={mode}
+      type="button"
+      onClick={() => !disabled && setFilterMode(mode)}
+      disabled={disabled}
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${
+        filterMode === mode
+          ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+          : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
+      } ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
+      data-no-contrast-guard
     >
+      {label}
+      <span className={`text-[10px] tabular-nums ${filterMode === mode ? "text-white/70" : "text-[#1A1A1A]/60"}`}>
+        {count}
+      </span>
+    </button>
+  );
+
+  return (
+    <div className={className}>
+      <div className="mb-2 flex items-center gap-2 flex-wrap">
+        {chip("all", "All nearby", allMarkers.length)}
+        {chip("developer", currentDeveloperName ? `Same developer · ${currentDeveloperName}` : "Same developer", sameDevCount, sameDevCount === 0)}
+        {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
+      </div>
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          height: 380,
+          border: "1px solid rgba(184,149,85,0.40)",
+          boxShadow: "0 4px 16px rgba(184,149,85,0.15)",
+        }}
+      >
       <style>{`
         .jj-map-pin { background: none !important; border: none !important; }
         .leaflet-popup-content-wrapper { border-radius: 12px; border: 1px solid rgba(184,149,85,0.35); }
