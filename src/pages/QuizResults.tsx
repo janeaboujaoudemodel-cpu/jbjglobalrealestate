@@ -42,87 +42,80 @@ const JBJ_CONSULTANT_WHATSAPP = "971501234567"; // International format, no + or
 
 const AIHF_RESULTS_STYLE = `
   .aihf-results, .aihf-results :is(h1,h2,h3,h4,p,span,a,button,div), .aihf-results svg {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
     opacity: 1 !important;
   }
-  .aihf-results svg, .aihf-results svg * { stroke: #FFFFFF !important; }
-  .aihf-results .aihf-muted { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
-  .aihf-results .aihf-tiffany { color: #67E8F9 !important; -webkit-text-fill-color: #67E8F9 !important; }
+  .aihf-results svg, .aihf-results svg * { stroke: #1A1A1A !important; }
+  .aihf-results .aihf-muted { color: rgba(26,26,26,0.70) !important; -webkit-text-fill-color: rgba(26,26,26,0.70) !important; }
+  .aihf-results .aihf-tiffany { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
   .aihf-results .aihf-panel {
-    background: linear-gradient(135deg, rgba(8,47,73,0.78), rgba(3,30,24,0.90)) !important;
-    border: 1px solid rgba(45,212,191,0.52) !important;
-    box-shadow: 0 28px 80px rgba(34,211,238,0.18), inset 0 0 40px rgba(103,232,249,0.07) !important;
+    background: #F7F2EA !important;
+    border: 1px solid rgba(184,149,85,0.55) !important;
+    box-shadow: 0 1px 0 rgba(184,149,85,0.18) !important;
   }
   .aihf-results .aihf-tile {
-    background: rgba(2,17,15,0.72) !important;
-    border: 1px solid rgba(45,212,191,0.38) !important;
+    background: #EFE6D6 !important;
+    border: 1px solid rgba(184,149,85,0.45) !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta:hover, .aihf-results .aihf-cta:focus-visible {
-    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 100%) !important;
-    border: 1px solid rgba(103,232,249,0.80) !important;
-    box-shadow: 0 18px 42px rgba(34,211,238,0.24) !important;
+    background: #0A0A0A !important;
+    border: 1px solid rgba(184,149,85,0.65) !important;
+    box-shadow: none !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta *, .aihf-results .aihf-cta svg {
-    color: #02110F !important;
-    -webkit-text-fill-color: #02110F !important;
-    stroke: #02110F !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
   }
+  .aihf-results .aihf-cta:hover { background: #1F1F1F !important; }
   .aihf-results .aihf-cta-glow {
-    background: linear-gradient(135deg, #5EEAD4 0%, #22D3EE 55%, #0E7490 100%) !important;
-    border: 1px solid rgba(103,232,249,0.95) !important;
-    box-shadow:
-      0 22px 48px rgba(34,211,238,0.45),
-      0 0 32px rgba(94,234,212,0.55),
-      inset 0 1px 0 rgba(255,255,255,0.45),
-      inset 0 -3px 6px rgba(2,17,15,0.18) !important;
+    background: #0A0A0A !important;
+    border: 1px solid rgba(184,149,85,0.85) !important;
+    box-shadow: none !important;
     transform: translateZ(0);
-    transition: transform .25s ease, box-shadow .25s ease !important;
+    transition: transform .25s ease, background-color .25s ease !important;
   }
   .aihf-results .aihf-cta-glow:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow:
-      0 28px 60px rgba(34,211,238,0.6),
-      0 0 48px rgba(94,234,212,0.75),
-      inset 0 1px 0 rgba(255,255,255,0.55) !important;
+    background: #1F1F1F !important;
+    transform: translateY(-1px);
   }
   .aihf-results .aihf-outline {
-    background: rgba(5,28,24,0.82) !important;
-    border: 1px solid rgba(45,212,191,0.55) !important;
+    background: #FDFBF7 !important;
+    border: 1px solid rgba(184,149,85,0.55) !important;
   }
-  /* Price pill — repaint inside AI Home Finder so it doesn't bleed champagne/gold */
+  /* Price pill — champagne+ink inside results */
   .aihf-results .price-pill-premium {
-    background: linear-gradient(135deg, rgba(2,17,15,0.92) 0%, rgba(3,30,24,0.92) 100%) !important;
-    border: 1px solid rgba(94,234,212,0.55) !important;
-    box-shadow: inset 0 0 18px rgba(103,232,249,0.08) !important;
+    background: #EFE6D6 !important;
+    border: 1px solid rgba(184,149,85,0.55) !important;
+    box-shadow: none !important;
     max-width: 100% !important;
     flex-wrap: wrap !important;
     padding: 6px 10px !important;
   }
   .aihf-results .price-pill-eyebrow {
-    color: #67E8F9 !important;
-    -webkit-text-fill-color: #67E8F9 !important;
-    background: rgba(94,234,212,0.12) !important;
-    border-color: rgba(94,234,212,0.40) !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    background: transparent !important;
+    border-color: rgba(184,149,85,0.40) !important;
   }
   .aihf-results .price-pill-value {
     color: var(--price-orange) !important;
     -webkit-text-fill-color: var(--price-orange) !important;
   }
-  /* Kill the global champagne-white hover flash on price pills inside results */
   .aihf-results .group:hover .price-pill-premium,
   .aihf-results .group:focus-within .price-pill-premium,
   .aihf-results .price-pill-premium:hover,
   .aihf-results .price-pill-premium:focus-visible {
-    background: linear-gradient(135deg, rgba(2,17,15,0.95) 0%, rgba(3,30,24,0.95) 100%) !important;
-    border-color: rgba(94,234,212,0.85) !important;
-    box-shadow: 0 10px 26px rgba(34,211,238,0.30), inset 0 0 18px rgba(103,232,249,0.12) !important;
+    background: #EFE6D6 !important;
+    border-color: rgba(184,149,85,0.85) !important;
+    box-shadow: none !important;
   }
   .aihf-results .group:hover .price-pill-premium .price-pill-eyebrow,
   .aihf-results .group:focus-within .price-pill-premium .price-pill-eyebrow,
   .aihf-results .price-pill-premium:hover .price-pill-eyebrow {
-    color: #67E8F9 !important;
-    -webkit-text-fill-color: #67E8F9 !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
     opacity: 1 !important;
   }
   .aihf-results .group:hover .price-pill-premium .price-pill-value,
@@ -131,109 +124,97 @@ const AIHF_RESULTS_STYLE = `
     color: var(--price-orange) !important;
     -webkit-text-fill-color: var(--price-orange) !important;
   }
-  /* Favorite/Heart + shortlist + Add-Badge buttons — Tiffany cyan inside results.
-     FavoriteButton renders .jj-favorite-trigger; ShortlistBadgeButton's trigger
-     is targeted via its lucide-award child icon. */
+  /* Favorite / shortlist buttons — champagne pill + gold hairline */
   .aihf-results .jj-favorite-trigger,
   .aihf-results button:has(> svg.lucide-award) {
-    background: linear-gradient(135deg, rgba(2,17,15,0.78) 0%, rgba(3,30,24,0.82) 100%) !important;
-    border: 1px solid rgba(94,234,212,0.55) !important;
-    box-shadow: 0 6px 18px rgba(34,211,238,0.18), inset 0 0 12px rgba(103,232,249,0.08) !important;
+    background: #EFE6D6 !important;
+    border: 1px solid rgba(184,149,85,0.55) !important;
+    box-shadow: none !important;
   }
   .aihf-results .jj-favorite-trigger:hover,
   .aihf-results button:has(> svg.lucide-award):hover {
-    border-color: rgba(94,234,212,0.95) !important;
-    box-shadow: 0 10px 26px rgba(34,211,238,0.35), inset 0 0 16px rgba(103,232,249,0.14) !important;
+    border-color: rgba(184,149,85,0.95) !important;
+    box-shadow: none !important;
   }
   .aihf-results .jj-favorite-trigger svg,
   .aihf-results button:has(> svg.lucide-award) svg {
-    stroke: #5EEAD4 !important;
-    color: #5EEAD4 !important;
-    filter: drop-shadow(0 0 6px rgba(94,234,212,0.45));
+    stroke: #1A1A1A !important;
+    color: #1A1A1A !important;
+    filter: none;
   }
   .aihf-results button:has(> svg.lucide-award) span {
-    color: #5EEAD4 !important;
-    -webkit-text-fill-color: #5EEAD4 !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
   }
-  /* Favorited heart: keep the saved state legible with a Tiffany-friendly pink */
   .aihf-results .jj-favorite-trigger svg.fill-red-500,
   .aihf-results .jj-favorite-trigger svg[fill="currentColor"].text-red-500 {
-    fill: #FF6B8A !important;
-    stroke: #FF6B8A !important;
-    color: #FF6B8A !important;
+    fill: #B89555 !important;
+    stroke: #B89555 !important;
+    color: #B89555 !important;
   }
-  /* Tiffany dropdown menu (Add Badge) — global, NOT scoped to .aihf-results
-     because Radix portals the menu outside the page root. */
+  /* Add Badge dropdown — champagne menu */
   [data-aihf-menu],
   [data-aihf-menu][role="menu"] {
-    background: linear-gradient(160deg, #04161C 0%, #031E18 100%) !important;
-    background-color: #04161C !important;
-    border: 1px solid rgba(94,234,212,0.55) !important;
-    box-shadow: 0 20px 50px rgba(34,211,238,0.25) !important;
-    color: #FFFFFF !important;
+    background: #FDFBF7 !important;
+    background-color: #FDFBF7 !important;
+    border: 1px solid rgba(184,149,85,0.55) !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08) !important;
+    color: #1A1A1A !important;
   }
   [data-aihf-menu] [role="menuitem"],
   [data-aihf-menu] [role="menuitem"] * {
     background-color: transparent !important;
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
   }
   [data-aihf-menu] [role="menuitem"][data-medal="gold"],
-  [data-aihf-menu] [role="menuitem"][data-medal="gold"] * { color: #FFD27A !important; -webkit-text-fill-color: #FFD27A !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="gold"] * { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
   [data-aihf-menu] [role="menuitem"][data-medal="silver"],
-  [data-aihf-menu] [role="menuitem"][data-medal="silver"] * { color: #E8F0FF !important; -webkit-text-fill-color: #E8F0FF !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="silver"] * { color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; }
   [data-aihf-menu] [role="menuitem"][data-medal="bronze"],
-  [data-aihf-menu] [role="menuitem"][data-medal="bronze"] * { color: #FFB07A !important; -webkit-text-fill-color: #FFB07A !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="bronze"] * { color: #8a6a3a !important; -webkit-text-fill-color: #8a6a3a !important; }
   [data-aihf-menu] [role="menuitem"][data-medal="remove"],
-  [data-aihf-menu] [role="menuitem"][data-medal="remove"] * { color: #FF8FA3 !important; -webkit-text-fill-color: #FF8FA3 !important; }
+  [data-aihf-menu] [role="menuitem"][data-medal="remove"] * { color: #B23A48 !important; -webkit-text-fill-color: #B23A48 !important; }
   [data-aihf-menu] [role="menuitem"]:hover,
   [data-aihf-menu] [role="menuitem"]:focus,
   [data-aihf-menu] [role="menuitem"][data-highlighted] {
-    background: rgba(94,234,212,0.18) !important;
-    color: #67E8F9 !important;
-    -webkit-text-fill-color: #67E8F9 !important;
+    background: #EFE6D6 !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
   }
   [data-aihf-menu] [role="menuitem"]:hover *,
   [data-aihf-menu] [role="menuitem"]:focus *,
   [data-aihf-menu] [role="menuitem"][data-highlighted] * {
-    color: #67E8F9 !important;
-    -webkit-text-fill-color: #67E8F9 !important;
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
   }
 
-  /* Share dialog X close — Tiffany glow pill (override shadcn's champagne/gold default).
-     The shadcn DialogContent renders <DialogPrimitive.Close> as a direct <button>
-     child with a sr-only "Close" span — no aria-label. We target it as the
-     absolute-positioned direct button child of our aihf dialog. */
+  /* Share dialog close — champagne pill + gold hairline */
   [data-aihf-dialog] > button,
   .aihf-results > button[aria-label="Close"] {
-    background: linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.22) 100%) !important;
-    background-image: linear-gradient(135deg, rgba(94,234,212,0.18) 0%, rgba(34,211,238,0.22) 100%) !important;
-    border: 1px solid rgba(94,234,212,0.75) !important;
+    background: #EFE6D6 !important;
+    background-image: none !important;
+    border: 1px solid rgba(184,149,85,0.65) !important;
     border-radius: 9999px !important;
     opacity: 1 !important;
-    box-shadow:
-      0 0 18px rgba(94,234,212,0.55),
-      inset 0 0 10px rgba(103,232,249,0.18) !important;
-    color: #67E8F9 !important;
+    box-shadow: none !important;
+    color: #1A1A1A !important;
   }
   [data-aihf-dialog] > button:hover,
   .aihf-results > button[aria-label="Close"]:hover {
-    background: linear-gradient(135deg, rgba(94,234,212,0.32) 0%, rgba(34,211,238,0.36) 100%) !important;
-    background-image: linear-gradient(135deg, rgba(94,234,212,0.32) 0%, rgba(34,211,238,0.36) 100%) !important;
-    border-color: rgba(103,232,249,0.95) !important;
-    box-shadow:
-      0 0 28px rgba(94,234,212,0.85),
-      inset 0 0 14px rgba(103,232,249,0.28) !important;
+    background: #F7F2EA !important;
+    border-color: rgba(184,149,85,0.95) !important;
+    box-shadow: none !important;
     transform: translateY(-1px);
   }
   [data-aihf-dialog] > button svg,
   [data-aihf-dialog] > button svg *,
   .aihf-results > button[aria-label="Close"] svg,
   .aihf-results > button[aria-label="Close"] svg * {
-    color: #5EEAD4 !important;
-    stroke: #5EEAD4 !important;
-    -webkit-text-fill-color: #5EEAD4 !important;
-    filter: drop-shadow(0 0 6px rgba(94,234,212,0.7));
+    color: #1A1A1A !important;
+    stroke: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    filter: none;
   }
 `;
 
