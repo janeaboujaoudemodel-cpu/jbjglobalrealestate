@@ -772,6 +772,31 @@ export default function ProjectDetailLayout({
             </Button>
           </div>
 
+          {/* Broker-only: branded materials shortcut */}
+          {isBrokerMode && (
+            <div className="mt-2">
+              <BrokerBrandedMaterialsCard
+                projectId={project.id}
+                projectName={project.name}
+                hasBrochure={Boolean(brochurePrimary?.url)}
+                hasBrand={brokerHasBrand}
+                onDownloadBrochure={() => {
+                  if (brochurePrimary?.url) {
+                    handleDocumentDownload("brochure", brochurePrimary.url);
+                  } else {
+                    setCaptureDocType("brochure");
+                    setCaptureDocUrl(undefined);
+                    setLeadCaptureOpen(true);
+                  }
+                }}
+                onGeneratePresentation={() => {
+                  // Route to the presentation engine pre-filled with this project
+                  window.location.href = `/presentations?projectId=${encodeURIComponent(project.id)}&projectName=${encodeURIComponent(project.name)}`;
+                }}
+              />
+            </div>
+          )}
+
           {/* Breadcrumb Navigation */}
           <ProjectBreadcrumb projectName={project.name} location={project.location} surface="dark" />
         </div>
