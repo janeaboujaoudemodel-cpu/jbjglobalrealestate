@@ -202,7 +202,7 @@ export const DLDDailySnapshot = () => {
               <div>
                 <div className="mb-2 flex items-center justify-between text-sm">
                   <span className="font-semibold text-[#B89555]">Mortgage buyers</span>
-                  <span className="tabular-nums text-white">
+                  <span className="tabular-nums text-[#1A1A1A]">
                     {data.mortgage_count.toLocaleString("en-AE")} · {aed(data.mortgage_volume_aed)}
                   </span>
                 </div>
@@ -236,14 +236,14 @@ export const DLDDailySnapshot = () => {
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
               Top 10 Areas by Transactions
             </p>
-            <h3 className="mt-1 text-xl font-bold text-white">Where Dubai is buying</h3>
+            <h3 className="mt-1 text-xl font-bold text-[#1A1A1A]">Where Dubai is buying</h3>
 
             <div className="mt-5 space-y-3">
               {top.map((row, i) => {
                 const pct = max > 0 ? row.count / max : 0;
                 return (
                   <div key={`${row.area}-${i}`} className="grid grid-cols-[140px_1fr_auto] items-center gap-3">
-                    <span className="truncate text-sm font-semibold text-white">
+                    <span className="truncate text-sm font-semibold text-[#1A1A1A]">
                       <span className="mr-1.5 text-[#B89555]">{String(i + 1).padStart(2, "0")}</span>
                       {row.area}
                     </span>
@@ -260,12 +260,12 @@ export const DLDDailySnapshot = () => {
                         transition={{ duration: 0.7, ease: "easeOut", delay: i * 0.03 }}
                       />
                     </div>
-                    <span className="text-xs tabular-nums text-white">{row.count}</span>
+                    <span className="text-xs tabular-nums text-[#1A1A1A]">{row.count}</span>
                   </div>
                 );
               })}
               {top.length === 0 && (
-                <p className="text-sm text-white/60">No area data available for this snapshot.</p>
+                <p className="text-sm text-[#1A1A1A]/60">No area data available for this snapshot.</p>
               )}
             </div>
           </BlackCard>
@@ -279,10 +279,10 @@ export const DLDDailySnapshot = () => {
                 data-no-contrast-guard
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-white/[0.06]"
               >
-                <Flag className="allow-white h-5 w-5 text-white" />
+                <Flag className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div className="flex-1">
-                <h4 className="text-base font-bold text-white md:text-lg">Notice something incorrect?</h4>
+                <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Notice something incorrect?</h4>
                 <p className="mt-1 text-sm leading-relaxed text-white/70">
                   Spotted a number that doesn't match your records or an area we're missing? Send us a quick
                   note — every report is reviewed by our market desk within 24 hours.
@@ -305,10 +305,10 @@ export const DLDDailySnapshot = () => {
                 data-no-contrast-guard
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/55 bg-white/[0.06]"
               >
-                <PhoneCall className="allow-white h-5 w-5 text-white" />
+                <PhoneCall className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div className="flex-1">
-                <h4 className="text-base font-bold text-white md:text-lg">Expert Consultation</h4>
+                <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Expert Consultation</h4>
                 <p className="mt-1 text-sm leading-relaxed text-white/70">
                   Want this data interpreted for your portfolio? Book a 30-minute call with Jane Bou Jaoude
                   — founder-led, no automated bots, free of charge.
