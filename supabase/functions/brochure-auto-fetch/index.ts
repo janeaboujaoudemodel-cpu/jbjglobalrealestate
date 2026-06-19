@@ -67,20 +67,17 @@ Deno.serve(async (req) => {
         if (!ct.includes("pdf")) continue;
 
         const bytes = new Uint8Array(await resp.arrayBuffer());
-        const path = `auto/${project.id}.pdf`;
+        const path = `auto-brochures/${project.id}.pdf`;
 
         const up = await supa.storage
-          .from("project-brochures")
+          .from("project-documents")
           .upload(path, bytes, { contentType: "application/pdf", upsert: true });
         if (up.error) continue;
 
-        const pub = supa.storage.from("project-brochures").getPublicUrl(path);
+        const pub = supa.storage.from("project-documents").getPublicUrl(path);
         const url = pub.data.publicUrl;
 
-        await supa
-          .from("projects")
-          .update({ brochure_url: url, brochure_source: decision.reason })
-          .eq("id", project.id);
+        await supa.from("projects").update({ brochure_url: url }).eq("id", project.id);
 
         return json({ found: true, url, source: decision.reason, origin: candidateUrl });
       } catch {
