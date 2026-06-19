@@ -63,7 +63,11 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
       >
         {/* Logo plate — uniform white surface, full-fit logo, no crops */}
         <div className="relative aspect-[5/3] bg-white border-b border-[#B89555]/25 flex items-center justify-center p-8">
-          {isValidDeveloperLogoUrl(developer.logo_url) ? (
+          {override.forceNameplate ? (
+            <span className="text-[#1A1A1A] font-bold text-2xl md:text-3xl tracking-tight text-center px-2">
+              {developer.name}
+            </span>
+          ) : isValidDeveloperLogoUrl(developer.logo_url) ? (
             <img
               src={developer.logo_url}
               alt={`${developer.name} logo`}
