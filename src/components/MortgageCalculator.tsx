@@ -494,6 +494,15 @@ const MortgageCalculator = ({
           </div>
         </div>
 
+        <MortgageParityPanel
+          propertyPrice={propertyPrice}
+          loanAmount={calculations.loanAmount}
+          monthlyPayment={calculations.monthlyPayment}
+          downPaymentPercent={downPaymentPercent}
+          interestRate={interestRate}
+          loanTermYears={loanTermYears}
+          isNavy={isNavy}
+        />
 
       </div>
     );
