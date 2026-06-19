@@ -6064,3 +6064,71 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   background: var(--mortgage-range-thumb, #FFFFFF);
   box-shadow: var(--mortgage-range-thumb-shadow, 0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * NO-PURPLE GUARD — marketing pages only
+ *
+ * Companion to the No-Bright-Yellow-Gold and Black-CTA→Navy guards.
+ * Eliminates purple / violet / indigo / fuchsia surfaces and text on any
+ * page tagged [data-marketing-page]. AI tool pages, AI Hub, Services, etc.
+ * inherit the locked champagne palette automatically — no manual sweep
+ * needed when a third-party component or stray Tailwind class slips in.
+ *
+ * Opt-outs (use sparingly, only when the bg is verifiably dark navy/ink):
+ *   - [data-no-contrast-guard]
+ *   - [data-allow-dark-cta] / [data-on-dark]
+ *   - .allow-white
+ *   - .jj-cta-dark / .surface-navy / .surface-ink
+ * ═══════════════════════════════════════════════════════════════════════════ */
+[data-marketing-page] :where(
+  [class*="bg-purple-"],
+  [class*="bg-violet-"],
+  [class*="bg-indigo-"],
+  [class*="bg-fuchsia-"]
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.jj-cta-dark):not(.jj-cta-dark *) {
+  background-color: #EFE6D6 !important;
+  background-image: none !important;
+  border-color: rgba(184, 149, 85, 0.40) !important;
+}
+
+[data-marketing-page] :where(
+  [class*="text-purple-"],
+  [class*="text-violet-"],
+  [class*="text-indigo-"],
+  [class*="text-fuchsia-"]
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.jj-cta-dark):not(.jj-cta-dark *) {
+  color: #1A1A1A !important;
+}
+
+[data-marketing-page] :where(
+  [class*="from-purple-"],
+  [class*="to-purple-"],
+  [class*="via-purple-"],
+  [class*="from-violet-"],
+  [class*="to-violet-"],
+  [class*="via-violet-"],
+  [class*="from-indigo-"],
+  [class*="to-indigo-"],
+  [class*="via-indigo-"],
+  [class*="from-fuchsia-"],
+  [class*="to-fuchsia-"],
+  [class*="via-fuchsia-"]
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.jj-cta-dark):not(.jj-cta-dark *) {
+  background-image: none !important;
+  background-color: #EFE6D6 !important;
+}
+
+[data-marketing-page] :where(
+  [class*="border-purple-"],
+  [class*="border-violet-"],
+  [class*="border-indigo-"],
+  [class*="border-fuchsia-"],
+  [class*="ring-purple-"],
+  [class*="ring-violet-"],
+  [class*="ring-indigo-"],
+  [class*="ring-fuchsia-"]
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.jj-cta-dark):not(.jj-cta-dark *) {
+  border-color: rgba(184, 149, 85, 0.40) !important;
+  --tw-ring-color: rgba(184, 149, 85, 0.40) !important;
+}
+
