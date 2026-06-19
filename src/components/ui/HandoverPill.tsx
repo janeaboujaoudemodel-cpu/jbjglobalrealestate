@@ -11,8 +11,9 @@ interface HandoverPillProps {
 }
 
 /**
- * Site-wide handover label. ALWAYS orange, ALWAYS the same size/shape.
- * Use anywhere a project's handover date or "Ready" status is shown.
+ * Site-wide handover label. ALWAYS metallic champagne-gold (orange retired
+ * across the platform). Use anywhere a project's handover date or "Ready"
+ * status is shown.
  *
  * Per memory: never display the word "Handover" — only the date or "Ready".
  */
@@ -32,9 +33,10 @@ export function HandoverPill({ value, className, hideIfEmpty }: HandoverPillProp
       data-handover-pill
       data-no-contrast-guard
       className={cn(
-        "inline-flex items-center whitespace-nowrap rounded-md bg-orange-500 px-2.5 py-1 text-[11px] md:text-xs font-bold text-white shadow-sm allow-white",
+        "jj-cta-gold-metallic inline-flex items-center whitespace-nowrap px-2.5 py-1 text-[11px] md:text-xs font-bold",
         className,
       )}
+      style={{ borderRadius: 6 }}
     >
       {display}
     </span>
