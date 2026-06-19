@@ -17,7 +17,7 @@ export default function JessicaAIPanel() {
       className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-0 mt-2 mb-10"
     >
       <div
-        className="group relative overflow-hidden rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] shadow-[0_18px_44px_-28px_rgba(16,37,64,0.22)] transition-all hover:shadow-[0_22px_50px_-22px_rgba(16,37,64,0.32)] hover:-translate-y-[1px]"
+        className="group relative overflow-hidden rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] shadow-[0_18px_44px_-28px_rgba(10,10,10,0.22)] transition-all hover:shadow-[0_22px_50px_-22px_rgba(10,10,10,0.32)] hover:-translate-y-[1px]"
       >
         {/* Soft glow corner */}
         <div
@@ -25,7 +25,7 @@ export default function JessicaAIPanel() {
           className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full blur-3xl opacity-60 group-hover:opacity-80 transition-opacity"
           style={{
             background:
-              "radial-gradient(closest-side, rgba(16,37,64,0.18), rgba(16,37,64,0) 70%)",
+              "radial-gradient(closest-side, rgba(10,10,10,0.18), rgba(10,10,10,0) 70%)",
           }}
         />
 
@@ -38,7 +38,7 @@ export default function JessicaAIPanel() {
             />
             <div
               data-no-contrast-guard
-              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#0A0A0A] to-[#1F1F1F] border border-[#B89555]/70 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_24px_-12px_rgba(16,37,64,0.55)]"
+              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#0A0A0A] to-[#1F1F1F] border border-[#B89555]/70 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_24px_-12px_rgba(10,10,10,0.55)]"
             >
               <Bot
                 className="w-10 h-10 allow-white"
@@ -94,7 +94,7 @@ export default function JessicaAIPanel() {
               to="/hr-agent"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="careers-white inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555]/70 shadow-[0_8px_22px_-10px_rgba(16,37,64,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] transition-all"
+              className="careers-white inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555]/70 shadow-[0_8px_22px_-10px_rgba(10,10,10,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] transition-all"
             >
               <MessageCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
               <span className="allow-white" style={{ color: "#FFFFFF" }}>

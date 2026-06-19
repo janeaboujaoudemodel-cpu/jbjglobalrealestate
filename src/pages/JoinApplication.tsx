@@ -771,7 +771,7 @@ export default function JoinApplication() {
 
 
           {!user && (
-            <Card className="relative overflow-hidden border border-[#B89555]/55 bg-[linear-gradient(135deg,rgba(253,251,247,0.95),rgba(247,242,234,0.85))] backdrop-blur-md rounded-2xl shadow-[0_18px_44px_-32px_rgba(16,37,64,0.35)] mb-6">
+            <Card className="relative overflow-hidden border border-[#B89555]/55 bg-[linear-gradient(135deg,rgba(253,251,247,0.95),rgba(247,242,234,0.85))] backdrop-blur-md rounded-2xl shadow-[0_18px_44px_-32px_rgba(10,10,10,0.35)] mb-6">
               <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
               <div className="pointer-events-none absolute -top-16 -right-10 h-40 w-40 rounded-full bg-[#0A0A0A]/10 blur-3xl" />
               <CardContent className="pt-6 sm:pt-7 pb-6">
@@ -904,7 +904,7 @@ export default function JoinApplication() {
 
           {/* Application Form */}
           <div ref={formAnchorRef} />
-          <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-[0_22px_60px_-40px_rgba(16,37,64,0.45)] overflow-hidden">
+          <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-[0_22px_60px_-40px_rgba(10,10,10,0.45)] overflow-hidden">
             <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
             <CardHeader className="text-center pt-10 pb-6">
               <span className="inline-flex items-center justify-center gap-1.5 mx-auto rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A] mb-3 w-fit">

@@ -59,7 +59,7 @@ export default function JBJContactBlock({
       <div
         className="relative overflow-hidden rounded-[28px] border border-[#B89555]/55
                    bg-[linear-gradient(135deg,rgba(253,251,247,0.96),rgba(247,242,234,0.85))]
-                   shadow-[0_30px_70px_-40px_rgba(16,37,64,0.45)]
+                   shadow-[0_30px_70px_-40px_rgba(10,10,10,0.45)]
                    backdrop-blur-xl px-6 sm:px-10 py-10"
       >
         <div className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-[#0A0A0A]/15 blur-3xl" />
@@ -96,7 +96,7 @@ export default function JBJContactBlock({
                   <div
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="grid place-items-center h-10 w-10 rounded-xl bg-[#0A0A0A] border border-[#B89555]/60 shadow-[0_6px_14px_-8px_rgba(16,37,64,0.55)] transition-transform duration-300 group-hover:scale-105"
+                    className="grid place-items-center h-10 w-10 rounded-xl bg-[#0A0A0A] border border-[#B89555]/60 shadow-[0_6px_14px_-8px_rgba(10,10,10,0.55)] transition-transform duration-300 group-hover:scale-105"
                   >
                     <Icon className="h-5 w-5 text-white" />
                   </div>

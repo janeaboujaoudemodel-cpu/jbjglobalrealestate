@@ -251,7 +251,7 @@ const ResaleProperties = () => {
       </section>
 
       {/* Premium sticky filter bar — clears 88px fixed header */}
-      <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+      <section className="z-30 bg-[#F7F2EA]/95 backdrop-blur-md py-3 md:py-4 sticky top-[88px] border-y border-[#B89555]/25 shadow-[0_8px_24px_rgba(10,10,10,0.06)]">
         <div className="w-full px-3 sm:px-4">
           <div className="relative bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl px-3 py-3 sm:px-4 sm:py-3.5">
 
@@ -560,7 +560,7 @@ const ResaleProperties = () => {
             </div>
           ) : (
             /* Empty State — Premium navy + champagne + gold */
-            <div className="max-w-5xl mx-auto text-center py-14 px-8 sm:px-14 md:px-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+            <div className="max-w-5xl mx-auto text-center py-14 px-8 sm:px-14 md:px-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(10,10,10,0.06)]">
               <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6] flex items-center justify-center mx-auto mb-6 border border-[#B89555]/40">
                 <Building2 className="w-10 h-10 text-[#0A0A0A]" />
               </div>
@@ -644,7 +644,7 @@ const ResaleProperties = () => {
       {/* List Your Resale CTA band — connects /resale-properties → /list-property */}
       <section className="px-4 sm:px-6 md:px-10 py-10 md:py-14 bg-[#F7F2EA]">
         <div className="max-w-5xl mx-auto">
-          <div className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(16,37,64,0.06)]">
+          <div className="rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_8px_24px_rgba(10,10,10,0.06)]">
             <div className="flex-1">
               <span
                 data-allow-dark-cta

@@ -17,7 +17,7 @@ import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from '@/components/tools/toolThem
 /* ── Navy palette tokens (matches PropertyEvaluator) ── */
 const NAVY = '#0A0A0A';
 const NAVY_DEEP = '#0A1830';
-const NAVY_BORDER = 'rgba(16,37,64,0.45)';
+const NAVY_BORDER = 'rgba(10,10,10,0.45)';
 
 /* ── Section header (blue band with white content) ── */
 const SectionHeader = ({

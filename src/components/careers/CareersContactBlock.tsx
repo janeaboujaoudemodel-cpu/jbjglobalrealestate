@@ -36,7 +36,7 @@ export default function CareersContactBlock() {
       <div
         className="relative overflow-hidden rounded-[28px] border border-[#B89555]/55
                    bg-[linear-gradient(135deg,rgba(253,251,247,0.96),rgba(247,242,234,0.85))]
-                   shadow-[0_30px_70px_-40px_rgba(16,37,64,0.45)]
+                   shadow-[0_30px_70px_-40px_rgba(10,10,10,0.45)]
                    backdrop-blur-xl px-6 sm:px-10 py-10"
       >
         {/* Decorative blurs */}
@@ -76,7 +76,7 @@ export default function CareersContactBlock() {
                     icon={Icon}
                     tone="navy"
                     size="md"
-                    className="shadow-[0_6px_14px_-8px_rgba(16,37,64,0.55)] transition-transform duration-300 group-hover:scale-105"
+                    className="shadow-[0_6px_14px_-8px_rgba(10,10,10,0.55)] transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="min-w-0 flex-1">
                     <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#0A0A0A]/70">

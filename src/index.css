@@ -5163,9 +5163,9 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 
 /* Guided required-field pulse: applied via data-field-pulse="1" */
 @keyframes jjFieldPulse {
-  0%   { box-shadow: 0 0 0 0 rgba(16,37,64,0.55); }
-  60%  { box-shadow: 0 0 0 8px rgba(16,37,64,0.00); }
-  100% { box-shadow: 0 0 0 0 rgba(16,37,64,0.00); }
+  0%   { box-shadow: 0 0 0 0 rgba(10,10,10,0.55); }
+  60%  { box-shadow: 0 0 0 8px rgba(10,10,10,0.00); }
+  100% { box-shadow: 0 0 0 0 rgba(10,10,10,0.00); }
 }
 [data-field-pulse="1"] {
   animation: jjFieldPulse 1.4s ease-out;
@@ -5213,16 +5213,16 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 [data-ai-listing-shell] .border-\[\#B89555\]\/30,
 [data-ai-listing-shell] .border-\[\#B89555\]\/40,
 [data-ai-listing-shell] .border-\[\#B89555\]\/50 {
-  border-color: rgba(16,37,64,0.18) !important;
+  border-color: rgba(10,10,10,0.18) !important;
 }
 
 /* Dashed upload zone */
 [data-ai-listing-shell] .border-dashed.border-\[\#B89555\]\/40,
 [data-ai-listing-shell] .border-dashed {
-  border-color: rgba(16,37,64,0.35) !important;
+  border-color: rgba(10,10,10,0.35) !important;
 }
 [data-ai-listing-shell] .border-dashed:hover {
-  border-color: rgba(16,37,64,0.6) !important;
+  border-color: rgba(10,10,10,0.6) !important;
 }
 
 /* Selected listing-type card: navy outline + white bg, ink check */
@@ -5242,13 +5242,13 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
 [data-ai-listing-shell] textarea.bg-\[\#FDFBF7\] {
   background-color: #FFFFFF !important;
   color: #1A1A1A !important;
-  border-color: rgba(16,37,64,0.25) !important;
+  border-color: rgba(10,10,10,0.25) !important;
 }
 
 /* Tag pills (Google Drive / Bayut / etc) inside white cards */
 [data-ai-listing-shell] .bg-\[\#EFE6D6\]\/10.text-\[\#1A1A1A\] {
   background-color: #FFFFFF !important;
-  border-color: rgba(16,37,64,0.15) !important;
+  border-color: rgba(10,10,10,0.15) !important;
   color: #1A1A1A !important;
 }
 
@@ -5273,7 +5273,7 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   border: 1.5px solid #0A0A0A !important;
 }
 [data-ai-listing-shell] button.border-\[\#B89555\]\/50.text-\[\#B89555\]:hover {
-  background-color: rgba(16,37,64,0.05) !important;
+  background-color: rgba(10,10,10,0.05) !important;
   color: #0A0A0A !important;
   border-color: #0A0A0A !important;
 }
@@ -5288,14 +5288,14 @@ html body [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
   border: 1.5px solid #0A0A0A !important;
 }
 [data-ai-listing-shell] button.bg-gradient-to-r.from-\[\#FDFBF7\]:hover {
-  background: rgba(16,37,64,0.05) !important;
+  background: rgba(10,10,10,0.05) !important;
   color: #1A1A1A !important;
 }
 
 /* KPI / extracted-data mini cards (price predictor summary) */
 [data-ai-listing-shell] .bg-gradient-to-br.from-\[\#FDFBF7\] {
   background: #FFFFFF !important;
-  border-color: rgba(16,37,64,0.15) !important;
+  border-color: rgba(10,10,10,0.15) !important;
 }
 
 /* Listing-type card placeholder image area */

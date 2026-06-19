@@ -65,7 +65,7 @@ export default function ModePortalBanner() {
         className="pointer-events-none absolute inset-0 opacity-[0.08]"
         style={{
           background:
-            "radial-gradient(900px 220px at 12% 50%, rgba(16,37,64,0.55), transparent 60%), radial-gradient(700px 200px at 92% 50%, rgba(16,37,64,0.45), transparent 65%)",
+            "radial-gradient(900px 220px at 12% 50%, rgba(10,10,10,0.55), transparent 60%), radial-gradient(700px 200px at 92% 50%, rgba(10,10,10,0.45), transparent 65%)",
         }}
       />
       {/* Top + bottom champagne hairlines */}

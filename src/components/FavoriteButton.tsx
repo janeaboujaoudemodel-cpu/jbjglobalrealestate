@@ -117,7 +117,7 @@ const FavoriteButton = ({
             />
           </button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={8} data-surface="navy" className="z-[10100] bg-[#0A0A0A] text-white border-[#B89555]/55 text-xs shadow-[0_10px_28px_-14px_rgba(16,37,64,0.9)]">
+        <TooltipContent side="bottom" sideOffset={8} data-surface="navy" className="z-[10100] bg-[#0A0A0A] text-white border-[#B89555]/55 text-xs shadow-[0_10px_28px_-14px_rgba(10,10,10,0.9)]">
           <p className="text-white allow-white">{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
         </TooltipContent>
       </Tooltip>
@@ -144,7 +144,7 @@ const FavoriteButton = ({
               )}
             </button>
           </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={8} data-surface="navy" className="z-[10100] bg-[#0A0A0A] text-white border-[#B89555]/55 text-xs shadow-[0_10px_28px_-14px_rgba(16,37,64,0.9)]">
+        <TooltipContent side="bottom" sideOffset={8} data-surface="navy" className="z-[10100] bg-[#0A0A0A] text-white border-[#B89555]/55 text-xs shadow-[0_10px_28px_-14px_rgba(10,10,10,0.9)]">
             <p className="text-white allow-white">{isShortlisted ? "Remove from shortlist" : "Add to shortlist"}</p>
           </TooltipContent>
         </Tooltip>

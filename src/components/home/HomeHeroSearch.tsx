@@ -210,7 +210,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
-                background: "linear-gradient(180deg, rgba(16,37,64,0.46) 0%, rgba(16,37,64,0.30) 100%)",
+                background: "linear-gradient(180deg, rgba(10,10,10,0.46) 0%, rgba(10,10,10,0.30) 100%)",
                 backdropFilter: "blur(16px) saturate(145%)",
                 WebkitBackdropFilter: "blur(16px) saturate(145%)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18)",

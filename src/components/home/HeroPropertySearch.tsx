@@ -33,7 +33,7 @@ const HeroPropertySearch = () => {
         data-surface="dark"
         className="surface-dark relative flex items-center gap-2 sm:gap-3 rounded-2xl p-2 sm:p-2.5"
         style={{
-          background: "rgba(16, 37, 64, 0.82)",
+          background: "rgba(10,10,10,0.82)",
           WebkitBackdropFilter: "blur(18px) saturate(160%)",
           backdropFilter: "blur(18px) saturate(160%)",
           border: "1px solid rgba(212, 184, 150, 0.55)",

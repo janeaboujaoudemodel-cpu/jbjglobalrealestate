@@ -111,7 +111,7 @@ const AIComparisonWidget = () => {
             <button
               data-surface="navy"
               data-allow-dark-cta
-              className="surface-navy allow-white w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#0A0A0A] text-white border border-[#B89555]/55 hover:bg-[#1F1F1F] hover:border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(16,37,64,0.5)] active:scale-[0.98] transition-all duration-300 group"
+              className="surface-navy allow-white w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#0A0A0A] text-white border border-[#B89555]/55 hover:bg-[#1F1F1F] hover:border-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(10,10,10,0.5)] active:scale-[0.98] transition-all duration-300 group"
               style={{ color: "#FFFFFF" }}
             >
               <BarChart3 className="allow-white w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />

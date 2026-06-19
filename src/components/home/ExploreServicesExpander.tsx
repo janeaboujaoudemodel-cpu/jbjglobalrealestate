@@ -109,7 +109,7 @@ const ExploreServicesExpander = () => {
           data-on-dark
           data-no-contrast-guard
           data-allow-dark-cta
-          className="allow-white shrink-0 self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/55 text-white text-xs md:text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(16,37,64,0.55)]"
+          className="allow-white shrink-0 self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/55 text-white text-xs md:text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(10,10,10,0.55)]"
           style={{ color: "#FFFFFF" }}
         >
           <Crown className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />

@@ -50,7 +50,7 @@ function PremiumCard({
 }) {
   return (
     <div
-      className={`relative rounded-[1.25rem] border border-[#B89555]/35 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_30px_-18px_rgba(16,37,64,0.25)] overflow-hidden ${padded ? "p-5 md:p-7" : ""} ${className}`}
+      className={`relative rounded-[1.25rem] border border-[#B89555]/35 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_30px_-18px_rgba(10,10,10,0.25)] overflow-hidden ${padded ? "p-5 md:p-7" : ""} ${className}`}
     >
       {/* Top gold hairline + inner radial glow */}
       <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
@@ -113,7 +113,7 @@ function Kpi({
   tone?: IconTileTone;
 }) {
   const body = (
-    <div className="group relative h-full rounded-[1.1rem] border border-[#B89555]/30 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] px-4 py-5 hover:border-[#B89555]/65 hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-20px_rgba(16,37,64,0.35)] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] transition-all duration-300 overflow-hidden">
+    <div className="group relative h-full rounded-[1.1rem] border border-[#B89555]/30 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] px-4 py-5 hover:border-[#B89555]/65 hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-20px_rgba(10,10,10,0.35)] shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] transition-all duration-300 overflow-hidden">
       {/* gold hairline along top */}
       <span className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
       <div className="flex items-center justify-between">
@@ -237,7 +237,7 @@ export default function BrokerDashboardLanding() {
         <div
           aria-hidden="true"
           data-allow-dark-cta
-          className="pointer-events-none absolute inset-x-0 inset-y-2 rounded-[1.6rem] bg-[#0A0A0A] border border-[#B89555]/55 shadow-[0_22px_60px_-30px_rgba(16,37,64,0.55)]"
+          className="pointer-events-none absolute inset-x-0 inset-y-2 rounded-[1.6rem] bg-[#0A0A0A] border border-[#B89555]/55 shadow-[0_22px_60px_-30px_rgba(10,10,10,0.55)]"
         />
         <div className="relative m-1 rounded-[1.4rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-9 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] overflow-hidden">
           <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
@@ -330,7 +330,7 @@ export default function BrokerDashboardLanding() {
                 to="/broker/leads"
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="allow-white inline-flex items-center gap-2 h-11 pl-5 pr-3 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/65 text-white text-sm font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_28px_-12px_rgba(16,37,64,0.55)] hover:-translate-y-0.5 transition-all duration-300"
+                className="allow-white inline-flex items-center gap-2 h-11 pl-5 pr-3 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/65 text-white text-sm font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_28px_-12px_rgba(10,10,10,0.55)] hover:-translate-y-0.5 transition-all duration-300"
                 style={{ color: "#FFFFFF" }}
               >
                 <span style={{ color: "#FFFFFF" }}>Add lead</span>
@@ -440,7 +440,7 @@ export default function BrokerDashboardLanding() {
               to="/broker/ai"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/65 text-white text-xs font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_26px_-14px_rgba(16,37,64,0.55)] hover:-translate-y-0.5 transition-all duration-300"
+              className="allow-white mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/65 text-white text-xs font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_26px_-14px_rgba(10,10,10,0.55)] hover:-translate-y-0.5 transition-all duration-300"
               style={{ color: "#FFFFFF" }}
             >
               <Sparkles className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} strokeWidth={2.2} />
@@ -537,7 +537,7 @@ export default function BrokerDashboardLanding() {
               <Link
                 key={d.grant_id}
                 to={`/broker/crm/database/${d.database_id}`}
-                className="group relative block p-4 rounded-xl bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/65 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-18px_rgba(16,37,64,0.3)] transition-all duration-300 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] overflow-hidden"
+                className="group relative block p-4 rounded-xl bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/65 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-18px_rgba(10,10,10,0.3)] transition-all duration-300 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] overflow-hidden"
               >
                 <span className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
                 <div className="flex items-start justify-between gap-3">

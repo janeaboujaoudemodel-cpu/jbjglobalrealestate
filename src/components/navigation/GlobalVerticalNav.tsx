@@ -1305,7 +1305,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             }
             .jj-side-tile svg,
             .jj-side-tile svg * { color: #B89555 !important; stroke: #B89555 !important; transition: color 180ms ease, stroke 180ms ease !important; }
-            .jj-side-tile:hover { background-color: #0A0A0A !important; border-color: #0A0A0A !important; box-shadow: 0 2px 6px rgba(16,37,64,.25) !important; }
+            .jj-side-tile:hover { background-color: #0A0A0A !important; border-color: #0A0A0A !important; box-shadow: 0 2px 6px rgba(10,10,10,.25) !important; }
             .jj-side-tile:hover svg,
             .jj-side-tile:hover svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
             .jj-side-tile.is-active { background-color: #0A0A0A !important; border-color: #0A0A0A !important; }
