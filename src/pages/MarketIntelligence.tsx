@@ -12,6 +12,7 @@ import {
   MarketReports,
   DataSourcesPanel,
 } from "@/components/market-intelligence";
+import DLDDailySnapshot from "@/components/market-intelligence/DLDDailySnapshot";
 import {
   MI_CARD_TITLE,
   MI_BODY_MUTED,
