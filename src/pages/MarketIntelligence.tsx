@@ -246,6 +246,10 @@ const MarketIntelligence = () => {
         <MarketOverviewDashboard />
       </div>
 
+      {/* DLD Daily Snapshot — KPI strip, Cash vs Mortgage, Top-10, Notice + Consultation */}
+      <DLDDailySnapshot />
+
+
       {/* Area Intelligence Grid - Edge to Edge */}
       <AreaIntelligenceGrid />
 
