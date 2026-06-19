@@ -128,7 +128,7 @@ const serviceCards = [
       "AI-powered analysis"
     ],
     cta: "Open Tools",
-    link: "/services/ai-tools"
+    link: "/ai-hub"
   },
   {
     icon: Award,

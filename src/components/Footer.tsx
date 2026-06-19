@@ -212,7 +212,7 @@ const Footer = () => {
     { label: "Currency Exchange", href: "/services/currency-exchange" },
     { label: "Concierge Services", href: "/services/concierge" },
     { label: "Company Setup", href: "/services/company-setup" },
-    { label: "AI Tools", href: "/services/ai-tools" },
+    { label: "AI Tools", href: "/ai-hub" },
     { label: "Customer Happiness", href: "/services/customer-happiness-center" },
     { label: "Architecture", href: "/services/architecture" },
     { label: "Interior Design", href: "/services/interior-design" },
