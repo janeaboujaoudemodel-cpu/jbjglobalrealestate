@@ -560,18 +560,20 @@ export const ConsultationRequestForm = ({
             control={form.control}
             name="agreeTerms"
             render={({ field }) => (
-              <FormItem className="flex items-start gap-3">
+              <FormItem className="flex items-start gap-3 space-y-0">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
+                    className="mt-0.5"
                   />
                 </FormControl>
-                <p className="text-[#1A1A1A] text-sm leading-tight font-normal">
-                  I agree to the <a href="/terms" className="text-[#1A1A1A] underline">Terms</a> and <a href="/privacy" className="text-[#1A1A1A] underline">Privacy Policy</a> *
-                </p>
-                <FormMessage />
+                <div className="flex-1 min-w-0 space-y-1">
+                  <p className="text-[#1A1A1A] text-sm leading-tight font-normal">
+                    I agree to the <a href="/terms" className="text-[#1A1A1A] underline">Terms</a> and <a href="/privacy" className="text-[#1A1A1A] underline">Privacy Policy</a> *
+                  </p>
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
