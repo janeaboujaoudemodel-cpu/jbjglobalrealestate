@@ -54,7 +54,7 @@ export const FeaturedProjectAd = ({
             {/* Fallback gradient behind image */}
             <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-black to-black -z-10" />
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/20" />
             
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
