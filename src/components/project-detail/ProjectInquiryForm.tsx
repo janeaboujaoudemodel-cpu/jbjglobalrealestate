@@ -391,17 +391,26 @@ export function ProjectInquiryForm({
             </Select>
           </div>
 
-          {/* Size (Optional) */}
+          {/* Size range (Optional) */}
           <div className="space-y-2">
-            <Label htmlFor="size" className="text-foreground text-sm font-medium">Size (sqft)</Label>
-            <Input
-              id="size"
-              type="number"
-              value={formData.size}
-              onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-              placeholder="e.g., 1500"
-              className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
-            />
+            <Label className="text-foreground text-sm font-medium">Size (sqft) — optional</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                value={formData.sizeMin}
+                onChange={(e) => setFormData({ ...formData, sizeMin: e.target.value })}
+                placeholder="From"
+                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+              />
+              <span className="text-foreground/60 text-sm">to</span>
+              <Input
+                type="number"
+                value={formData.sizeMax}
+                onChange={(e) => setFormData({ ...formData, sizeMax: e.target.value })}
+                placeholder="To"
+                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+              />
+            </div>
           </div>
         </div>
 
@@ -621,15 +630,25 @@ export function ProjectInquiryForm({
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={formData.whatsappPreferred}
-            onChange={(e) => setFormData({ ...formData, whatsappPreferred: e.target.checked })}
-            className="w-4 h-4 rounded border-2 border-[#B89555]/60 accent-[#B89555]"
-          />
-          I prefer to be contacted on WhatsApp
-        </label>
+        {/* Preferred contact method — dropdown, not a checkbox */}
+        <div className="space-y-2">
+          <Label htmlFor="contactMethod" className="text-foreground text-sm font-medium">Preferred contact method</Label>
+          <Select
+            value={formData.contactMethod}
+            onValueChange={(value) => setFormData({ ...formData, contactMethod: value })}
+          >
+            <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+              <SelectValue placeholder="How should we reach out?" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border">
+              {CONTACT_METHOD_OPTIONS.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Message (Optional) */}
         <div className="space-y-2">
