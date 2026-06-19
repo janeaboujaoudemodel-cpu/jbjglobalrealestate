@@ -1,88 +1,27 @@
-## Strict ordered implementation plan
+# Fix: Remove the heavy "cream box + gold frame" around every form field
 
-I will complete these in order and will not move to the next block until the current block is fixed and validated with screenshots.
+## What's broken (from screenshot)
+On the Register Interest form (and every other lead form using the same recipe), each field — Developer, Select Emirate, Location, Select timeline, Select time, Preferred contact method, Additional Notes, etc. — is rendered inside a **cream-filled rectangle with a thick `border-2 border-[#B89555]/50` gold frame**. That makes each field look like a boxed card. The user wants the boxed look removed so fields read as clean inputs with a single soft-gold hairline (the global rule already added in `index.css`).
 
-### 1. Global form border and field surface lock
-- Replace black/gray borders across form fields, selects, phone inputs, popovers, dialogs, mortgage inputs, and lead forms with soft gold borders.
-- Lock all standard form surfaces to champagne/cream backgrounds with ink text.
-- Fix country, nationality, language, bedroom, size, timeline, and contact-method dropdowns globally so they use premium champagne surfaces, soft-gold borders, readable row height, larger icons/flags, and no black borders.
-- Validation: open project forms, country picker, nationality/select dropdowns, mortgage inputs, and capture screenshots proving no black borders remain.
+The only places a wrapper is still wanted are the **multi-select pill groups** (Bedrooms, Preferred Size sqft) — but right now the group's border hugs the pills with zero padding, so the gold frame visually touches "Any / < 800 / 2,500+ sqft". That needs breathing room.
 
-### 2. Inside-page primary CTA metallic animation lock
-- Apply the exact active square-foot/square-meter header metallic animation to inside-page primary CTAs only:
-  - Register Interest / Register Your Interest
-  - Request a Call Back / Request Callback
-  - Request Consultation / Request a Consultation
-  - Submit/Download/Request brochure primary actions
-- Do not touch hero-section CTAs.
-- Keep phone country-code trigger static/premium like a form control, not animated.
-- Validation: screenshot the horizontal header active sqft/sqm chip beside inside-page primary CTAs, and verify CSS animation is running rather than frozen.
+## Scope (all lead-capture / consultation surfaces)
+1. `src/components/ConsultationRequestForm.tsx` — primary offender. Drop the `bg-[#FDFBF7] border-2 border-[#B89555]/50` recipe on `inputClass`, `selectTriggerClass`, and the textarea/popover triggers (nationality/language Comboboxes). Replace with a minimal `h-12 rounded-lg` className and let the global soft-gold hairline rule in `src/index.css` paint the border at rest/hover/focus. The phone trigger already follows the new static-metallic rule and is left alone.
+2. `src/components/project-detail/ProjectInquiryForm.tsx` — same recipe (`border-2 border-[#B89555]/50 bg-gradient-to-br from-[#FDFBF7]…`) on every SelectTrigger and Popover trigger. Strip the gradient + 2px border; rely on the global hairline.
+3. `src/components/project-detail/LeadCaptureModal.tsx` — same gradient+thick-border on the inner Card and field triggers. Keep the modal panel, but the inner field controls drop the boxed look.
+4. `src/components/forms/LeadFormModule.tsx` — `bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-[#B89555]/30 p-6 md:p-8` outer panel can stay (panel ≠ per-field box), but its inner field classes follow the new rule too.
+5. Wrap the **Bedrooms pill group** and **Preferred Size pill group** (only — these are the multi-selects) in a `rounded-xl border border-[#B89555]/35 p-4 md:p-5` container so the gold hairline sits with ≥16px of padding from the pill row and never touches a pill or label. Group label sits above the box. No other field gets a wrapper.
 
-### 3. Lead forms layout and multi-select preferences
-- Make Register Interest and Request Call Back forms sit on a clear premium champagne panel, not visually attached to Report Issue.
-- Convert preferred bedrooms and preferred size from single-choice to multi-select chips/controls.
-- Store submitted selections as joined values in the existing lead payload/notes without changing the backend schema unless needed.
-- Validation: select multiple bedrooms and multiple sizes, submit the visual flow up to the non-destructive point, and screenshot selected multi-options.
+## Global rule lock
+Add a short note + memory update so future edits don't re-introduce the boxed look:
+- Update `.lovable/memory/ui-ux/visual-standards/global-dropdown-and-cta-lock.md` (or add a sibling `form-field-no-boxed-frame.md`) with: "Form fields render as clean inputs with the global 1px gold hairline. Never wrap a single field in `bg-[#FDFBF7] border-2 border-[#B89555]/…`. Only multi-select pill groups may carry a wrapper, and it must keep ≥16px inner padding."
 
-### 4. Gallery duplicate and image-quality cleanup
-- Remove duplicate low/high quality copies of the same image from gallery display.
-- Normalize gallery image URLs through the high-resolution image utility before deduping.
-- Ensure project pages show one best-quality version per image.
-- Validation: open gallery/lightbox and screenshot that the duplicate pair is gone and remaining image is high quality.
+## Validation (visual only, per user)
+- `browser--view_preview` to `/project/vindera-emaar-properties-the-valley` at desktop (1440) and mobile (390) widths.
+- Screenshot the Register Interest form section, confirm:
+  - No field shows a cream-filled rectangle / thick gold frame; each input is clean with a single soft-gold hairline.
+  - Bedrooms + Preferred Size pill groups sit inside one padded wrapper with no border touching the pills or "2,500+ sqft" text.
+  - Open the Timeline and Contact Method selects and confirm the popover surface (champagne gradient + gold hairline) is unchanged from the previous fix.
+- Cross-check one other surface (`ProjectInquiryForm` modal trigger or `LeadCaptureModal`) to confirm the recipe change propagated.
 
-### 5. Owner/User view default and visibility
-- Ensure owners land in User/Public view by default, without auto-open edit UI.
-- Keep an obvious Owner/User toggle available for owners.
-- Ensure Owner Mode only appears after explicit user selection and persists correctly in the session.
-- Validation: fresh load screenshot in User Mode with no edit chrome; switch to Owner Mode and screenshot edit controls appearing.
-
-### 6. Location and same-area nearby projects
-- Remove residual blue styling from project location/map/nearby UI and convert to champagne/gold/ink.
-- Fix same-area recommendations by matching area/location/emirate and prioritizing off-plan projects.
-- Hide ready/completed projects from recommendations unless the user is explicitly searching ready properties.
-- Validation: screenshot location section with no blue accents and nearby/recommended projects showing same-area off-plan results.
-
-### 7. Payment plan correctness and display
-- Fix “To be decided” display so real structured payment data renders when available.
-- Improve fallback display without inventing percentages; show developer-provided text clearly and premium-styled if no structured breakdown exists.
-- Replace old emerald/amber/blue UI where it conflicts with the champagne/gold system, keeping semantic colors restrained only where needed.
-- Validation: screenshot payment plan showing real values or a clear verified fallback, not a broken TBD state.
-
-### 8. Brochure readability
-- Improve brochure cover wordmark, project name, and location readability with stronger premium contrast panels/scrims.
-- Replace black border on brochure CTA with soft gold and apply metallic animation only if it is a primary inside-page CTA.
-- Validation: screenshot brochure card proving JBJ wordmark and project name/location are readable.
-
-### 9. More from same developer
-- Fix More From Developer section visibility.
-- Show real off-plan projects by the same developer, excluding current project and ready/completed recommendations unless explicitly applicable.
-- Validation: screenshot section visible with real same-developer projects.
-
-### 10. Mortgage calculator layout refresh
-- Remove black borders from property price and all calculator controls.
-- Rework the lower cards/residency sections into a Property Finder-inspired layout while preserving JBJ champagne/gold/ink palette.
-- Validation: screenshot mortgage section desktop and mobile with soft-gold borders and clean card layout.
-
-### 11. JBJ AI Project Intelligence performance and state
-- Reduce perceived delay by opening instantly with a premium skeleton/progressive state.
-- Keep the panel responsive while analysis loads.
-- Validation: click/open AI analyzer and screenshot immediate visible loading state plus loaded state if available.
-
-### 12. Dubai Market Intelligence / DLD widget refresh
-- Replace old statistic/card layout and stale color usage with premium champagne/gold/ink plus restrained semantic data colors.
-- Fix “Notice something incorrect” dark-red styling.
-- Fix top 10 areas and buyer nationalities layout direction/alignment so it reads naturally and professionally.
-- Refresh displayed “live data” state using the existing data hook/fallback path without fabricating data.
-- Validation: screenshot stats, top areas, nationalities, offline/secondary visit sections, and notice section.
-
-### 13. Rule lock and backend/function checks
-- Lock the recommendation rule: default recommendations promote off-plan projects; ready/completed projects only surface when the user explicitly searches ready properties.
-- Check whether any edge function controls recommendations or project enrichment; redeploy only affected functions if code changes require it.
-- Keep the existing scraping allowlist rules intact.
-- Validation: technical check of filters/functions plus visual screenshot confirming no “Ready” recommendations in default project recommendations.
-
-### 14. Full E2E validation package
-- Navigate as a public user through project page sections in order.
-- Validate forms, dropdowns, gallery, owner/user toggle, location/nearby, payment plan, brochure, developer strip, mortgage, AI intelligence, and DLD widget.
-- Capture desktop and mobile screenshots for each completed block.
-- Only then mark the work complete.
+No backend / functional changes.
