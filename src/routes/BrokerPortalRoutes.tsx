@@ -34,6 +34,7 @@ const BrokerDeveloperVisits  = lazy(() => import("@/pages/broker/BrokerDeveloper
 const BrokerMessages         = lazy(() => import("@/pages/broker/BrokerMessages"));
 const BrokerEmailHub         = lazy(() => import("@/pages/broker/BrokerEmailHub"));
 const BrokerEmailSetup       = lazy(() => import("@/pages/broker/BrokerEmailSetup"));
+const BrokerBrandProfile     = lazy(() => import("@/pages/broker/BrokerBrandProfile"));
 
 const Wrap = (
   <AuthRequiredRoute>
@@ -83,6 +84,7 @@ export const BrokerPortalRoutes = () => (
     <Route path="crm/settings" element={<Navigate to="/broker/settings" replace />} />
     <Route path="crm/projects" element={<Navigate to="/broker/crm?tab=databases" replace />} />
     <Route path="settings" element={<BrokerAccount />} />
+    <Route path="brand" element={<BrokerBrandProfile />} />
     <Route path="ai" element={<AIBrokerWorkspace />} />
 
     <Route path="deals" element={<BrokerDealsPage variant="deals" />} />

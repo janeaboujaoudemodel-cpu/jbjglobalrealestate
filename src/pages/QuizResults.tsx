@@ -1300,22 +1300,26 @@ const QuizResults = () => {
       email?: string;
       whatsapp?: string;
       title?: string;
+      tagline?: string;
+      logoUrl?: string;
     } | null = null;
     if (isBrokerMode && user?.id) {
       try {
         const { data: b } = await supabase
           .from("crm_brokers")
-          .select("full_name, current_company, company_phone, company_email, personal_phone, personal_email, phone_e164, whatsapp, position_title, role_title")
+          .select("full_name, agent_display_name, current_company, company_phone, company_email, personal_phone, personal_email, phone_e164, whatsapp, position_title, role_title, tagline, logo_url")
           .eq("auth_user_id", user.id)
           .maybeSingle();
         if (b) {
           brokerBrand = {
-            agentName: b.full_name || undefined,
+            agentName: b.agent_display_name || b.full_name || undefined,
             company: b.current_company || undefined,
             phone: b.company_phone || b.personal_phone || b.phone_e164 || undefined,
             email: b.company_email || b.personal_email || undefined,
             whatsapp: b.whatsapp || undefined,
             title: b.position_title || b.role_title || undefined,
+            tagline: b.tagline || undefined,
+            logoUrl: b.logo_url || undefined,
           };
         }
       } catch { /* ignore */ }
