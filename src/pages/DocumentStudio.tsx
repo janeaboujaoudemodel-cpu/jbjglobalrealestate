@@ -42,13 +42,16 @@ const TOOL_LINKS = [
     path: "/toolkit/corporate-suite/company-profile",
   },
   {
-    id: "presentations",
-    label: "Presentations",
-    icon: Presentation,
-    description: "Design stunning AI-powered presentations",
-    path: "/presentations",
-  },
+  // Presentations tile REMOVED — broken slide builder retired per owner directive (June 2026).
+  // {
+  //   id: "presentations",
+  //   label: "Presentations",
+  //   icon: Presentation,
+  //   description: "Design stunning AI-powered presentations",
+  //   path: "/presentations",
+  // },
 ];
+
 
 const DocumentStudio = () => {
   const navigate = useNavigate();

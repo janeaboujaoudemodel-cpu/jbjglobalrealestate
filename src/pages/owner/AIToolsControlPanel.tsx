@@ -82,7 +82,7 @@ const ALL_TOOLS: ToolDef[] = [
   { id: "cover-letter", title: "JBJ Cover Letter Generator", description: "Generate tailored cover letters.", link: "/toolkit/corporate-suite/cover-letter", category: "corporate" },
   { id: "logo-creator", title: "JBJ AI Logo Creator", description: "Generate professional logos.", link: "/toolkit/corporate-suite/logo-creator", category: "corporate" },
   { id: "company-profile", title: "JBJ Company Profile Builder", description: "Build company profile PDFs.", link: "/toolkit/corporate-suite/company-profile", category: "corporate" },
-  { id: "presentation-tool", title: "JBJ Presentation Builder", description: "Build professional slide decks.", link: "/presentations", category: "corporate" },
+  // { id: "presentation-tool", ... } REMOVED — broken slide builder retired per owner directive
   { id: "landing-page-builder", title: "JBJ Landing Page Builder", description: "Create one-page business sites.", link: "/toolkit/corporate-suite/landing-page", category: "corporate" },
   { id: "esign", title: "JBJ E-Sign", description: "Contract signing with multi-signer workflows.", link: "/e-signature", category: "corporate" },
   { id: "scan-sign", title: "JBJ Scan & Sign", description: "Camera scan, handwritten signature & PDF export.", link: "/toolkit/scan-sign", category: "corporate" },

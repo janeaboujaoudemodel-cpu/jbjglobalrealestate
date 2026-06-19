@@ -414,7 +414,10 @@ export const PublicRoutes = () => (
     <Route path="/contract-forms" element={<AuthRequiredRoute><ContractForms /></AuthRequiredRoute>} />
     <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
     <Route path="/breakfast-booking" element={<BreakfastBooking />} />
+    {/* /presentations was the broken slide-deck builder — removed per owner directive (June 2026).
+        Any stale link now lands on /document-studio which is the active document tool. */}
     <Route path="/presentations" element={<Navigate to="/document-studio" replace />} />
+
     <Route path="/document-studio" element={<OwnerGuard><DocumentStudio /></OwnerGuard>} />
 
     {/* ── Broker Pages (Tier 2 — login required) ── */}

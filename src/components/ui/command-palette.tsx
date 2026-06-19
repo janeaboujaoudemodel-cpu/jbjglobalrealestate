@@ -88,7 +88,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     { id: 'property-evaluator', title: 'Property Evaluator', subtitle: 'AI property valuation', icon: <Building2 className="w-4 h-4" />, action: () => go('/property-evaluator', 'property-evaluator'), category: 'AI Tools', keywords: ['property', 'evaluator', 'valuation'] },
     { id: 'rental-index', title: 'Dubai Rental Index', subtitle: 'Official rental rates', icon: <TrendingUp className="w-4 h-4" />, action: () => go('/dubai-rental-index', 'rental-index'), category: 'AI Tools', keywords: ['rental', 'index', 'dubai', 'rera'] },
     { id: 'mortgage-calculator', title: 'Mortgage Calculator', subtitle: 'Calculate monthly payments', icon: <FileText className="w-4 h-4" />, action: () => go('/mortgage-calculator', 'mortgage-calculator'), category: 'AI Tools', keywords: ['mortgage', 'calculator', 'finance'] },
-    { id: 'presentations', title: 'Presentations', subtitle: 'AI slide deck builder', icon: <FileText className="w-4 h-4" />, action: () => go('/presentations', 'presentations'), category: 'AI Tools', keywords: ['presentation', 'slides', 'deck'] },
+    // Presentations entry REMOVED — broken slide builder retired per owner directive
     { id: 'spreadsheet', title: 'Spreadsheet', subtitle: 'Smart spreadsheet editor', icon: <FileText className="w-4 h-4" />, action: () => go('/spreadsheet', 'spreadsheet'), category: 'AI Tools', keywords: ['spreadsheet', 'excel', 'data'] },
     { id: 'qr-generator', title: 'QR Code Generator', subtitle: 'Generate custom QR codes', icon: <Globe className="w-4 h-4" />, action: () => go('/qr-generator', 'qr-generator'), category: 'AI Tools', keywords: ['qr', 'code', 'generator'] },
     
