@@ -219,29 +219,41 @@ const PremiumBrochureCard = ({
 
             {/* Bottom: Brochure info — solid near-black panel for guaranteed contrast on any photo */}
             <div
-              className="mt-auto -mx-2 px-4 py-4 rounded-lg"
+              data-no-contrast-guard
+              data-on-dark
+              className="mt-auto -mx-2 px-4 py-4 rounded-lg allow-white"
               style={{
-                background: "linear-gradient(180deg, rgba(8,12,20,0) 0%, rgba(8,12,20,0.75) 30%, rgba(8,12,20,0.94) 100%)",
+                background: "linear-gradient(180deg, rgba(8,12,20,0.55) 0%, rgba(8,12,20,0.88) 35%, rgba(8,12,20,0.98) 100%)",
                 backdropFilter: "blur(4px)",
               }}
             >
-              <p className="text-[#F3D98A] text-[11px] uppercase tracking-[0.32em] font-extrabold mb-2"
-                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.85)" }}>
+              <p
+                data-no-contrast-guard
+                className="text-[11px] uppercase tracking-[0.32em] font-extrabold mb-2 allow-white"
+                style={{ color: "#F3D98A", textShadow: "0 1px 2px rgba(0,0,0,0.9)" }}
+              >
                 Project Brochure
               </p>
 
-              <h3 className="text-white text-2xl font-bold mb-3 line-clamp-2 leading-tight"
-                  style={{ textShadow: "0 2px 6px rgba(0,0,0,0.85), 0 0 14px rgba(0,0,0,0.5)" }}>
+              <h3
+                data-no-contrast-guard
+                className="text-2xl font-bold mb-3 line-clamp-2 leading-tight allow-white"
+                style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)" }}
+              >
                 {projectName}
               </h3>
 
               <div className="w-20 h-[2px] bg-gradient-to-r from-[#B89555] to-[#B89555]/20 mb-3" />
 
-              <p className="text-white text-[11px] uppercase tracking-[0.2em] font-semibold"
-                 style={{ textShadow: "0 1px 3px rgba(0,0,0,0.85)" }}>
+              <p
+                data-no-contrast-guard
+                className="text-[11px] uppercase tracking-[0.2em] font-semibold allow-white"
+                style={{ color: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
+              >
                 {location || 'Dubai • UAE'}
               </p>
             </div>
+
 
 
             {/* Premium 3D gold lock indicator */}
