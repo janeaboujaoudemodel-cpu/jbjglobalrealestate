@@ -1,3 +1,5 @@
+Status: Batch A done — (1) global form borders → champagne/gold; phone picker champagne. Batch B done — (2) `.jj-cta-gold-metallic` primitive added; (3) bedrooms + preferred size now multi-select on Register Interest and Request Consultation forms, submit buttons use metallic gold; (13) Report Issue banner + modal redesigned to champagne+gold with metallic CTA; (14) Recommended Projects defaults to off-plan only (excludes Ready/Completed/Handed Over), sale-status badges replaced with champagne+gold treatment, memory locked. Remaining: 4, 5, 6, 7, 8, 9, 10, 11, 12, 15.
+
 Root cause: the visible problems are not one component. Some previous fixes changed the wrong or lower-level components, while global CSS, phone input styling, owner-only edit controls, recommendation filters, gallery URL de-duping, and backend enrichment still override the intended design/behavior.
 
 I will implement this in the exact order below and validate each step before moving to the next.
