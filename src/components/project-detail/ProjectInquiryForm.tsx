@@ -348,7 +348,7 @@ export function ProjectInquiryForm({
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Your full name"
-            className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+            className="h-12 text-base px-4"
             required
           />
         </div>
@@ -362,7 +362,7 @@ export function ProjectInquiryForm({
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="your@email.com"
-            className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+            className="h-12 text-base px-4"
             required
           />
         </div>
@@ -376,7 +376,7 @@ export function ProjectInquiryForm({
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+971 XX XXX XXXX"
-            className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+            className="h-12 text-base px-4"
             required
           />
         </div>
@@ -502,7 +502,7 @@ export function ProjectInquiryForm({
                 value={otherDeveloperName}
                 onChange={(e) => setOtherDeveloperName(e.target.value)}
                 placeholder="Enter developer name"
-                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] flex-1"
+                className="h-12 text-base px-4 flex-1"
               />
               <Button 
                 type="button" 
@@ -523,7 +523,7 @@ export function ProjectInquiryForm({
                   variant="outline"
                   role="combobox"
                   aria-expanded={developerOpen}
-                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-[#B89555]/50 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]"
+                  className="w-full h-12 justify-between text-base px-4 font-normal text-[#1A1A1A]"
                 >
                   {formData.preferredDeveloper || "Select developer..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -576,7 +576,7 @@ export function ProjectInquiryForm({
             value={formData.selectedEmirate}
             onValueChange={(value) => setFormData({ ...formData, selectedEmirate: value, location: "" })}
           >
-            <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+            <SelectTrigger className="h-12 text-base px-4 text-[#1A1A1A]">
               <SelectValue placeholder="Select emirate..." />
             </SelectTrigger>
             <SelectContent className="bg-background border-border">
@@ -601,7 +601,7 @@ export function ProjectInquiryForm({
                 value={otherLocationName}
                 onChange={(e) => setOtherLocationName(e.target.value)}
                 placeholder="Enter location name"
-                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] flex-1"
+                className="h-12 text-base px-4 flex-1"
               />
               <Button 
                 type="button" 
@@ -622,7 +622,7 @@ export function ProjectInquiryForm({
                   variant="outline"
                   role="combobox"
                   aria-expanded={locationOpen}
-                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-[#B89555]/50 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]"
+                  className="w-full h-12 justify-between text-base px-4 font-normal text-[#1A1A1A]"
                 >
                   {formData.location || "Select location..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -673,7 +673,7 @@ export function ProjectInquiryForm({
               value={formData.timeline}
               onValueChange={(value) => setFormData({ ...formData, timeline: value })}
             >
-              <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+              <SelectTrigger className="h-12 text-base px-4">
                 <SelectValue placeholder="Select timeline" />
               </SelectTrigger>
               <SelectContent className="bg-background border-border">
@@ -692,7 +692,7 @@ export function ProjectInquiryForm({
               value={formData.contactTime}
               onValueChange={(value) => setFormData({ ...formData, contactTime: value })}
             >
-              <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+              <SelectTrigger className="h-12 text-base px-4">
                 <SelectValue placeholder="Select time" />
               </SelectTrigger>
               <SelectContent className="bg-background border-border">
@@ -713,7 +713,7 @@ export function ProjectInquiryForm({
             value={formData.contactMethod}
             onValueChange={(value) => setFormData({ ...formData, contactMethod: value })}
           >
-            <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+            <SelectTrigger className="h-12 text-base px-4">
               <SelectValue placeholder="How should we reach out?" />
             </SelectTrigger>
             <SelectContent className="bg-background border-border">
@@ -734,7 +734,7 @@ export function ProjectInquiryForm({
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             placeholder="Any specific requirements or questions..."
-            className="min-h-[100px] text-base px-4 py-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
+            className="min-h-[100px] text-base px-4 py-4"
             rows={4}
           />
         </div>
