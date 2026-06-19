@@ -63,7 +63,15 @@ export default function RecommendedDevelopers({
   if (recommended.length === 0) return null;
 
   return (
-    <section className="py-12 bg-[#1A1A1A]">
+    <section
+      className="py-14 jj-band"
+      style={{
+        background:
+          "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
+        borderTop: "1px solid rgba(184,149,85,0.25)",
+        borderBottom: "1px solid rgba(184,149,85,0.25)",
+      }}
+    >
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -72,13 +80,11 @@ export default function RecommendedDevelopers({
         >
           {/* Header */}
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555] rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#FDFBF7] border border-[#B89555]/60 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
               <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
               <span className="text-[#1A1A1A]">Explore Developers</span>
             </span>
-            <h2
-              className="text-white text-2xl md:text-3xl font-bold"
-            >
+            <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold">
               Similar Developers
             </h2>
           </div>
