@@ -49,13 +49,12 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
   );
 };
 
-/* ICON BOX — approved navy with white icon (global standard) */
+/* Icon box — champagne/gold standard */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    data-no-contrast-guard
-    className={`w-10 h-10 rounded-none flex items-center justify-center transition-all duration-300 bg-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-gold)/0.45)] shadow-sm allow-white ${className}`}
+    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
   >
-    <Icon className="w-5 h-5 text-white allow-white" />
+    <Icon className="w-5 h-5 text-[#1A1A1A]" />
   </div>
 );
 
@@ -64,7 +63,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all group h-full rounded-none hover:shadow-[0_16px_38px_hsl(var(--mi-navy)/0.14)] bg-card border border-[hsl(var(--mi-navy)/0.42)] hover:border-[hsl(var(--mi-navy)/0.72)]">
+      <Card className="jj-card-inner transition-all group h-full rounded-xl hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4 gap-2">
@@ -114,12 +113,12 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
             </div>
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-blue-700">Supply Score</span>
-                <span className="font-bold text-blue-700">{area.supplyScore}/100</span>
+                <span className="font-semibold text-[#1A1A1A]">Supply Score</span>
+                <span className="font-bold text-[#1A1A1A]">{area.supplyScore}/100</span>
               </div>
-              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-blue-100">
+              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-[#EFE6D6]">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400"
+                  className="h-full rounded-full bg-[#B89555]"
                   style={{ width: `${area.supplyScore}%` }}
                 />
               </div>
@@ -148,7 +147,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
             <Link
             to={`/area/${slugify(area.area)}`}
             data-no-contrast-guard
-            className="allow-white flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-none transition-colors bg-white text-[hsl(var(--mi-navy))] border border-[hsl(var(--mi-navy)/0.50)] hover:bg-[hsl(var(--mi-navy))] hover:text-white hover:border-[hsl(var(--mi-navy))]"
+            className="jj-cta-champagne flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-lg transition-colors"
           >
             <span className="group-hover:allow-white">View Area Details</span>
             <ArrowUpRight className="w-4 h-4" />
@@ -161,7 +160,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
 export const AreaIntelligenceGrid = () => {
   return (
-    <section className="surface-light py-16 bg-muted" data-surface="light">
+    <section className="surface-light py-10 bg-[#FDFBF7]" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -197,7 +196,7 @@ export const AreaIntelligenceGrid = () => {
             <Link
               to="/areas"
               data-no-contrast-guard
-              className="allow-white inline-flex items-center justify-center gap-2 px-8 py-4 rounded-none text-base font-semibold bg-[hsl(var(--mi-navy))] text-white border border-[hsl(var(--mi-gold))] hover:bg-[hsl(var(--mi-navy-soft))] transition-colors shadow-lg"
+              className="jj-cta-champagne inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-base font-semibold transition-colors shadow-lg"
             >
               <BarChart2 className="w-5 h-5 allow-white" />
               <span className="allow-white">Explore All Area Guides</span>
