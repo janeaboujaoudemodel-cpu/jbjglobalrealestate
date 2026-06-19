@@ -509,13 +509,10 @@ const MarketReportsPage = () => {
               </SectionWrapper>
 
               {/* Custom Report CTA */}
-              <section id="custom-report" className="scroll-mt-24">
-                <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 overflow-hidden">
+              <section id="custom-report" className="scroll-mt-24 jj-section-champagne py-6 mb-3">
+                <div className="px-4 md:px-8 lg:px-16 lg:pr-72 xl:pr-72">
+                  <Card className="jj-card-inner overflow-hidden">
                     <CardContent className="p-8 md:p-10 text-center relative">
-                      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
-                      <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
-                      
                       <div className="relative z-10">
                         <div className="jj-icon-box-active w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5">
                           <FileText className="w-7 h-7" />
