@@ -370,48 +370,65 @@ export function ProjectInquiryForm({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Bedrooms with 6 and 7+ */}
-          <div className="space-y-2">
-            <Label htmlFor="bedrooms" className="text-foreground text-sm font-medium">Bedrooms</Label>
-            <Select
-              value={formData.bedrooms}
-              onValueChange={(value) => setFormData({ ...formData, bedrooms: value })}
-            >
-              <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
-                <SelectValue placeholder="Select bedrooms" />
-              </SelectTrigger>
-              <SelectContent className="bg-background border-border">
-                {BEDROOM_OPTIONS.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        {/* Bedrooms - full width row (never squeezed) */}
+        <div className="space-y-2">
+          <Label htmlFor="bedrooms" className="text-foreground text-sm font-medium">Bedrooms</Label>
+          <Select
+            value={formData.bedrooms}
+            onValueChange={(value) => setFormData({ ...formData, bedrooms: value })}
+          >
+            <SelectTrigger className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]">
+              <SelectValue placeholder="Select bedrooms" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border">
+              {BEDROOM_OPTIONS.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-          {/* Size range (Optional) */}
-          <div className="space-y-2">
-            <Label className="text-foreground text-sm font-medium">Size (sqft) — optional</Label>
-            <div className="flex items-center gap-2">
-              <Input
-                type="number"
-                value={formData.sizeMin}
-                onChange={(e) => setFormData({ ...formData, sizeMin: e.target.value })}
-                placeholder="From"
-                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
-              />
-              <span className="text-foreground/60 text-sm">to</span>
-              <Input
-                type="number"
-                value={formData.sizeMax}
-                onChange={(e) => setFormData({ ...formData, sizeMax: e.target.value })}
-                placeholder="To"
-                className="h-12 text-base px-4 border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]"
-              />
-            </div>
-          </div>
+        {/* Preferred Size - segmented buckets (pro real-estate UX) */}
+        <div className="space-y-2">
+          <Label className="text-foreground text-sm font-medium">Preferred Size</Label>
+          {(() => {
+            const SIZE_BUCKETS: { label: string; min: string; max: string }[] = [
+              { label: "Any", min: "", max: "" },
+              { label: "< 800", min: "", max: "800" },
+              { label: "800 – 1,200", min: "800", max: "1200" },
+              { label: "1,200 – 1,800", min: "1200", max: "1800" },
+              { label: "1,800 – 2,500", min: "1800", max: "2500" },
+              { label: "2,500+ sqft", min: "2500", max: "" },
+            ];
+            const activeIdx = SIZE_BUCKETS.findIndex(
+              (b) => b.min === (formData.sizeMin || "") && b.max === (formData.sizeMax || "")
+            );
+            return (
+              <div className="flex flex-wrap gap-2">
+                {SIZE_BUCKETS.map((b, i) => {
+                  const active = i === activeIdx || (activeIdx === -1 && i === 0);
+                  return (
+                    <button
+                      key={b.label}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, sizeMin: b.min, sizeMax: b.max })}
+                      data-cta={active ? "champagne-active" : undefined}
+                      className={
+                        active
+                          ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] transition-all"
+                          : "h-10 px-4 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60 transition-all"
+                      }
+                    >
+                      {b.label}
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          <p className="text-foreground/55 text-xs">Optional — helps us match you to the right unit mix.</p>
         </div>
 
         {/* Developer Selection - Searchable Combobox */}
