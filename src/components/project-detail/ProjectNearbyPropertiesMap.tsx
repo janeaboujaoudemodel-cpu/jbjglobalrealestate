@@ -63,6 +63,8 @@ interface ProjectNearbyPropertiesMapProps {
   currentProjectId: string;
   currentProjectName: string;
   currentProjectSlug?: string | null;
+  currentDeveloperId?: string | null;
+  currentDeveloperName?: string | null;
   /** May be null when the project itself has no coords — we'll derive a centroid from area peers. */
   latitude: number | null;
   longitude: number | null;
@@ -71,6 +73,18 @@ interface ProjectNearbyPropertiesMapProps {
 }
 
 type NearbyRow = {
+  id: string;
+  name: string;
+  slug: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  price_from: number | null;
+  cover_image_url: string | null;
+  developer_id: string | null;
+  developer_name: string | null;
+  developer_slug: string | null;
+  area_name: string | null;
+};
   id: string;
   name: string;
   slug: string | null;
