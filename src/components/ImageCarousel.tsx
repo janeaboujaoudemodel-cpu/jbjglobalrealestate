@@ -23,16 +23,46 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // FIXED: Filter out map images and location thumbnails from gallery
+  // Normalize a CDN URL into a stable key so the same photo at different
+  // resolutions (thumb / w_400 / ?width=1200 / -150x150) collapses to one entry.
+  const dedupeKey = (rawUrl: string): string => {
+    let u = (rawUrl || "").toLowerCase().split("?")[0].split("#")[0];
+    u = u.replace(/\/(w|h|c|q|f|s|t)_[a-z0-9,_.]+\//g, "/");
+    u = u.replace(/-\d{2,4}x\d{2,4}(?=\.[a-z]+$)/g, "");
+    u = u.replace(/_(thumb|small|medium|large|xl|xxl|hd|hires|lowres|preview|tn)(?=\.[a-z]+$)/g, "");
+    u = u.replace(/\/(thumb|thumbs|small|medium|large|xl|preview|tn)\//g, "/");
+    u = u.replace(/\/+$/g, "");
+    return u;
+  };
+  const sizeScore = (rawUrl: string): number => {
+    const url = rawUrl || "";
+    const m = url.match(/(\d{3,4})x(\d{3,4})/);
+    if (m) return parseInt(m[1], 10) * parseInt(m[2], 10);
+    const w = url.match(/[?&](w|width)=(\d{3,4})/i);
+    if (w) return parseInt(w[2], 10) * parseInt(w[2], 10);
+    if (/thumb|small|preview|tn|lowres/i.test(url)) return 100 * 100;
+    if (/large|xl|xxl|hd|hires|original|maxres/i.test(url)) return 1920 * 1080;
+    return 1024 * 768;
+  };
+
+  // Filter out map/location thumbs AND collapse duplicates (keep highest-res variant)
   const images = useMemo(() => {
-    return (rawImages || []).filter(img => {
+    const filtered = (rawImages || []).filter((img) => {
       const url = img.image_url?.toLowerCase() || "";
-      // Exclude map images, location images, and thumbnails
       if (url.includes("map") && !url.includes("maptype=satellite")) return false;
       if (url.includes("location") && url.includes("thumbnail")) return false;
       if (url.includes("google.com/maps")) return false;
       return true;
     });
+    const best = new Map<string, typeof filtered[number]>();
+    for (const img of filtered) {
+      const key = dedupeKey(img.image_url);
+      const existing = best.get(key);
+      if (!existing || sizeScore(img.image_url) > sizeScore(existing.image_url)) {
+        best.set(key, img);
+      }
+    }
+    return Array.from(best.values());
   }, [rawImages]);
 
   const hasMultiple = useMemo(() => (images?.length ?? 0) > 1, [images]);
@@ -182,28 +212,36 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
               )}
             </div>
             <div className="grid grid-cols-6 gap-2">
-              {images.slice(0, 6).map((image, index) => (
-                <button
-                  key={image.id}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`aspect-[4/3] rounded overflow-hidden border-2 transition-colors relative ${
-                    index === currentIndex ? "border-primary" : "border-transparent hover:border-border"
-                  }`}
-                  type="button"
-                >
-                  <img
-                    src={getHighResImageUrl(image.image_url, "464x312")}
-                    alt={image.alt_text || `Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  {index === 5 && images.length > 6 && (
-                    <div className="absolute inset-0 bg-background/70 backdrop-blur-sm flex items-center justify-center">
-                      <span className="text-foreground font-semibold">+{images.length - 6}</span>
-                    </div>
-                  )}
-                </button>
-              ))}
+              {images.slice(0, 6).map((image, index) => {
+                const isOverflowTile = index === 5 && images.length > 6;
+                return (
+                  <button
+                    key={image.id}
+                    onClick={() => {
+                      setCurrentIndex(index);
+                      // "+N" opens the full lightbox so the user can browse ALL photos
+                      if (isOverflowTile) setIsFullscreen(true);
+                    }}
+                    className={`aspect-[4/3] rounded overflow-hidden border-2 transition-colors relative ${
+                      index === currentIndex ? "border-primary" : "border-transparent hover:border-border"
+                    }`}
+                    type="button"
+                    aria-label={isOverflowTile ? `View all ${images.length} photos` : `View photo ${index + 1}`}
+                  >
+                    <img
+                      src={getHighResImageUrl(image.image_url, "464x312")}
+                      alt={image.alt_text || `Thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    {isOverflowTile && (
+                      <div className="absolute inset-0 bg-[#1A1A1A]/70 backdrop-blur-sm flex items-center justify-center">
+                        <span className="text-white font-semibold text-lg">+{images.length - 6}</span>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
