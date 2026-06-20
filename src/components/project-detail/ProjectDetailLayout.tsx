@@ -77,6 +77,7 @@ import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearbyPropertiesMap";
 import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import BuyerNationalityInsights from "@/components/project-detail/BuyerNationalityInsights";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { SectionDividerGoldFullBleed } from "@/components/ui/section-divider-gold-fullbleed";
 
@@ -1315,27 +1316,29 @@ export default function ProjectDetailLayout({
                 longitude={project.longitude ?? null}
                />
 
-              {/* Nearby Properties Map (other developers in this area) */}
-              {((typeof project.latitude === 'number' && typeof project.longitude === 'number') || !!project.area_name) && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Other projects in this area</h3>
-                  <ProjectNearbyPropertiesMap
-                    currentProjectId={project.id}
-                    currentProjectName={project.name}
-                    currentProjectSlug={project.slug ?? null}
-                    currentDeveloperId={project.developer?.id ?? (project as any).developer_id ?? null}
-                    currentDeveloperName={project.developer?.name ?? null}
-                    latitude={typeof project.latitude === 'number' ? project.latitude : null}
-                    longitude={typeof project.longitude === 'number' ? project.longitude : null}
-                    areaName={project.area_name}
-                  />
-                  <p className="mt-2 text-xs text-[#1A1A1A]/70">
-                    {typeof project.latitude === 'number' && typeof project.longitude === 'number'
-                      ? 'Red pin = this project · Champagne pins = other developers nearby. Click a pin to open that project — you can always return here using the chip at the top.'
-                      : `Champagne pins = other developers in ${project.area_name}. Click a pin to open that project — you can always return here using the chip at the top.`}
-                  </p>
-                </div>
-              )}
+              {/* Nearby Properties Map — ALWAYS rendered so visitors can see
+                  other developer projects in the same area, regardless of
+                  whether this project has coords or an area_name. */}
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-foreground mb-3">
+                  Other projects in {project.area_name || project.emirate || 'this area'}
+                </h3>
+                <ProjectNearbyPropertiesMap
+                  currentProjectId={project.id}
+                  currentProjectName={project.name}
+                  currentProjectSlug={project.slug ?? null}
+                  currentDeveloperId={project.developer?.id ?? (project as any).developer_id ?? null}
+                  currentDeveloperName={project.developer?.name ?? null}
+                  latitude={typeof project.latitude === 'number' ? project.latitude : null}
+                  longitude={typeof project.longitude === 'number' ? project.longitude : null}
+                  areaName={project.area_name || project.emirate || null}
+                />
+                <p className="mt-2 text-xs text-[#1A1A1A]/70">
+                  {typeof project.latitude === 'number' && typeof project.longitude === 'number'
+                    ? 'Red pin = this project · Champagne pins = other developers nearby. Click a pin to open that project — you can always return here using the chip at the top.'
+                    : `Champagne pins = other developers in ${project.area_name || project.emirate || 'this area'}. Click a pin to open that project — you can always return here using the chip at the top.`}
+                </p>
+              </div>
 
 
               {/* Nearby Points of Interest - Below Map */}
@@ -1347,15 +1350,9 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* More from the same developer — rendered unconditionally so it
-              shows even when the project has no coords/area_name. The strip
-              returns null on its own when there is no sibling inventory. */}
-          <MoreFromDeveloperStrip
-            currentProjectId={project.id}
-            developerId={project.developer?.id ?? (project as any).developer_id ?? null}
-            developerName={project.developer?.name ?? (project as any).developer_name ?? null}
-            developerSlug={project.developer?.slug ?? null}
-          />
+          {/* MoreFromDeveloperStrip moved to the bottom of the page so that the
+              "Other projects in this area" map above is not visually replaced
+              by sibling developer inventory. See render at end of layout. */}
 
           {/* MASTER PLAN SECTION (Reelly-style) */}
           {(project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0) && (
@@ -1482,7 +1479,7 @@ export default function ProjectDetailLayout({
 
           {/* BOOK-STYLE ALL DOCUMENTS STRIP + OWNER DROPZONE */}
           <div className="mb-14">
-            {project.documents.length > 0 && (
+            {project.documents.length > 0 ? (
               <BookStyleDocuments
                 documents={project.documents.map(d => ({
                   id: d.id,
@@ -1494,6 +1491,52 @@ export default function ProjectDetailLayout({
                 projectImageUrl={project.images?.[0]?.url || undefined}
                 onDownload={(url, filename) => handleDocumentDownload("brochure", url, filename)}
               />
+            ) : (
+              <div className="relative">
+                <div className="mb-5">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">The Library</p>
+                  <h3 className="text-[#1A1A1A] text-2xl md:text-3xl font-semibold tracking-tight">Project Documents</h3>
+                  <div className="w-16 h-px bg-[#B89555] mt-3" />
+                  <p className="text-[14px] text-[#1A1A1A]/75 mt-3 max-w-2xl">
+                    Request the brochure, fact sheet and floor plans for {project.name}. Our team will share them with you directly.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {([
+                    { key: "brochure", label: "Brochure", desc: "Full project booklet" },
+                    { key: "fact_sheet", label: "Fact Sheet", desc: "Specs at a glance" },
+                    { key: "floor_plan", label: "Floor Plans", desc: "Layouts & sizes" },
+                  ] as const).map((slot) => (
+                    <button
+                      key={slot.key}
+                      type="button"
+                      onClick={() => {
+                        setCaptureDocType(slot.key as any);
+                        setCaptureDocUrl(undefined);
+                        setLeadCaptureOpen(true);
+                      }}
+                      className="group text-left rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 hover:border-[#B89555] p-5 transition-all shadow-sm hover:shadow-md"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <span
+                          className="inline-flex w-9 h-9 items-center justify-center rounded-lg ring-1 ring-[#B89555]/50"
+                          style={{ background: "linear-gradient(135deg,#F7ECD0 0%,#EFE6D6 100%)" }}
+                        >
+                          <FileText className="w-4 h-4 text-[#1A1A1A]" />
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 font-bold">{slot.desc}</p>
+                          <p className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">{slot.label}</p>
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#1A1A1A]">
+                        Request {slot.label.toLowerCase()}
+                        <span aria-hidden>→</span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
             <OwnerDocDropzone projectId={project.id} />
           </div>
@@ -1530,6 +1573,22 @@ export default function ProjectDetailLayout({
              <DLDMarketWidget />
              <SectionDividerGoldFullBleed />
            </div>
+
+           {/* BUYER NATIONALITY INSIGHTS — project + area */}
+           <BuyerNationalityInsights
+             projectName={project.name}
+             areaName={project.area_name || project.location || null}
+           />
+
+           {/* MORE FROM THIS DEVELOPER — moved to bottom so it doesn't replace the area map */}
+           <MoreFromDeveloperStrip
+             currentProjectId={project.id}
+             developerId={project.developer?.id ?? (project as any).developer_id ?? null}
+             developerName={project.developer?.name ?? (project as any).developer_name ?? null}
+             developerSlug={project.developer?.slug ?? null}
+           />
+
+
 
 
            {/* INVESTMENT METRICS SECTION */}
