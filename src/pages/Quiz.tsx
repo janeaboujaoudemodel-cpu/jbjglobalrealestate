@@ -1196,10 +1196,11 @@ const Quiz = () => {
           {/* Main Question Area */}
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
-              className="text-white text-2xl md:text-3xl font-bold mb-8 text-center"
+              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
             >
               {currentQuestion.question}
             </h2>
+
 
             {/* Multiple Select Controls */}
             {currentQuestion.type === "multiple" && currentQuestion.hasSelectAll && (
