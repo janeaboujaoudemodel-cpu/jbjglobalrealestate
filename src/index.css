@@ -1090,7 +1090,23 @@ All colors MUST be HSL.
    ------------------------------------------------------------------ */
 @media (min-width: 1024px) {
   .jj-rail-safe { padding-right: var(--rail-safe-right); }
+
+  /* Auto-rail-safe: any non-full-bleed centered container inside <main>
+     reserves the right Contact-Us rail width so content (grids, filter
+     chips, KPI cards, tables) never gets cropped on lg+.
+     Opt out per-element with class `jj-fullbleed` or attr
+     `data-no-rail-safe`. Opt out per-page on <body data-no-rail-safe>. */
+  body:not([data-no-rail-safe]) main .container:not(.jj-fullbleed):not([data-no-rail-safe]),
+  body:not([data-no-rail-safe]) main .max-w-7xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  body:not([data-no-rail-safe]) main .max-w-6xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  body:not([data-no-rail-safe]) main .max-w-5xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  body:not([data-no-rail-safe]) main .max-w-\[1600px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  body:not([data-no-rail-safe]) main .max-w-\[1440px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  body:not([data-no-rail-safe]) main .max-w-\[1280px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]) {
+    padding-right: max(var(--rail-safe-right), 1rem);
+  }
 }
+
 
 .jj-band--page    { background: #FDFBF7; }
 .jj-band--surface { background: #F7F2EA; }
