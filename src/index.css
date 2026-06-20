@@ -6413,18 +6413,28 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
 }
 
-/* 1) Repaint ONLY the locked CTA primitives and explicit opt-in wrappers.
-      data-surface="dark|ink|navy" and raw bg-[#0A0A0A]/bg-black are used
-      site-wide as contrast HINTS (white-text allowed inside). They must
-      NEVER auto-paint emerald — that bled the gradient over photos
-      (Explore Our Services card) and over the hero search pill. */
+/* 1) Repaint the locked CTA primitives + all global dark-box surfaces
+      with the emerald ink gradient so the brand is consistent. Problem
+      wrappers (photo overlays, white-inner pills) opt out explicitly via
+      [data-ink-emerald-opt-out] — see ExploreServicesExpander hero panel
+      and HomeHeroSearch pill. */
 html body :is(
   .jj-cta-dark,
   .jj-navy-cta,
   [data-cta="dark"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  .surface-dark,
+  .surface-ink,
+  .surface-navy,
   [data-ink-emerald],
-  [data-hero-dark]
-):not([data-ink-emerald-opt-out]):not(header):not(header *):not(footer):not(footer *):not(aside):not(aside *):not([data-app-chrome]):not([data-app-chrome] *) {
+  [data-hero-dark],
+  [class~="bg-[#0A0A0A]"],
+  [class~="bg-[#1A1A1A]"],
+  [class~="bg-[#1F1F1F]"],
+  [class~="bg-black"]
+):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *):not(header):not(header *):not(footer):not(footer *):not(aside):not(aside *):not([data-app-chrome]):not([data-app-chrome] *) {
   background-image: var(--gradient-ink) !important;
   background-color: transparent !important;
   border-color: rgba(184, 149, 85, 0.55) !important;
@@ -6433,10 +6443,14 @@ html body :is(
 html body :is(
   .jj-cta-dark,
   .jj-navy-cta,
-  [data-cta="dark"]
-):not([data-ink-emerald-opt-out]):hover {
+  [data-cta="dark"],
+  [class~="bg-[#0A0A0A]"],
+  [class~="bg-[#1A1A1A]"],
+  [class~="bg-black"]
+):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *):hover {
   background-image: var(--gradient-ink-hover) !important;
 }
+
 
 
 /* 2) White-on-light contrast guard exception: any descendant of an
