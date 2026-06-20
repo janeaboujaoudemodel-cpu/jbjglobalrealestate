@@ -37,7 +37,7 @@ export const MarketIntelligenceHero = ({
   actions 
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section data-hero-dark data-surface="dark" className="relative flex min-h-[460px] items-center overflow-hidden bg-[#0A0A0A] md:min-h-[540px]">
+    <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen relative flex items-center overflow-hidden bg-[#0A0A0A]">
 
       {/* Video or Image Background */}
       <div className="absolute inset-0 z-0">
@@ -74,13 +74,14 @@ export const MarketIntelligenceHero = ({
           <motion.button 
             className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 50%, rgba(184,149,85,0.12) 100%)',
               backdropFilter: 'blur(20px)',
-              border: '1.5px solid rgba(200,167,102,0.6)',
+              border: '1px solid rgba(184,149,85,0.72)',
               boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
             }}
             variants={fadeInUp}
           >
+            <BadgeIcon className="h-3.5 w-3.5 text-[#B89555]" />
             <span
               className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]"
               style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
