@@ -25,29 +25,19 @@ wrapper.
 
 JS mirror in `src/lib/brand-tokens.ts` → `BRAND.inkEmerald`.
 
-## Where it applies (OPT-IN ONLY — scope corrected after PASS 9 v1 regression)
+## Where it applies (automatic)
 
-CSS PASS 9 block at the END of `src/index.css` repaints ONLY these:
+CSS PASS 9 block at the END of `src/index.css` repaints any of these
+without per-file edits, so the brand is consistent across all dark
+surfaces:
 
-- `.jj-cta-dark`, `.jj-navy-cta`, `[data-cta="dark"]` (the locked dark-CTA primitives)
-- Any wrapper explicitly tagged `[data-ink-emerald]` or `[data-hero-dark]`
+- `.jj-cta-dark`, `.jj-navy-cta`, `[data-cta="dark"]`
+- `[data-surface="dark"|"ink"|"navy"]`, `.surface-dark`, `.surface-ink`, `.surface-navy`
+- Any element with `[data-ink-emerald]` or `[data-hero-dark]`
+- Tailwind classes `bg-[#0A0A0A]`, `bg-[#1A1A1A]`, `bg-[#1F1F1F]`, `bg-black`
 
 Gold hairline `#B89555` is preserved as the border on the same primitives.
-Hover swaps to `--gradient-ink-hover` on the CTA primitives.
-
-### Forbidden auto-paint targets (do NOT add back)
-
-PASS 9 must NEVER auto-paint these — they are used site-wide as text-color
-HINTS for the contrast contract, not as a request for an emerald background:
-
-- `[data-surface="dark"]`, `[data-surface="ink"]`, `[data-surface="navy"]`
-- `.surface-dark`, `.surface-ink`, `.surface-navy`
-- Raw Tailwind utilities `bg-[#0A0A0A]`, `bg-[#1A1A1A]`, `bg-[#1F1F1F]`, `bg-black`
-
-Adding any of these back will bleed the emerald gradient over photo cards
-(Explore Our Services), white inner segments (hero search pill Search
-button), and glass surfaces. If a wrapper genuinely needs the emerald
-background, opt in with `data-ink-emerald` instead.
+Hover swaps to `--gradient-ink-hover`.
 
 ## Where it does NOT apply (opt-out)
 
@@ -55,7 +45,15 @@ background, opt in with `data-ink-emerald` instead.
 - Champagne page/surface/raised — unchanged.
 - 88px header + sidebar L-frame (`header`, `aside`, `[data-app-chrome]`) — skipped by the guard.
 - Footer obsidian band (`footer`) — skipped by the guard.
-- Explicit per-element escape hatch: `[data-ink-emerald-opt-out]`.
+- Explicit per-element escape hatch: `[data-ink-emerald-opt-out]` (and all its
+  descendants). REQUIRED on any wrapper that uses `data-surface="dark"` purely
+  as a contrast hint while owning a photo overlay or holding white inner
+  segments. Currently applied to:
+  - `ExploreServicesExpander.tsx` hero panel root (photo card)
+  - `HomeHeroSearch.tsx` outer pill wrapper (white input + Search button)
+  Add it on any future wrapper where the gradient would bleed over imagery
+  or white pill segments.
+
 
 
 ## Contrast guard exception
