@@ -7502,3 +7502,156 @@ html body .jj-emerald-metallic :is(p, span, a, svg, [class*="lucide"]) * {
   stroke: #FFFFFF !important;
 }
 
+
+/* ============================================================
+   PASS 16 — Sidebar premium pearl + active-only emerald pill
+   Outranks PASSES 5/12/13/14/15. Scope: [data-sidebar-emerald].
+   ============================================================ */
+
+/* ── Shell: clean mother-of-pearl base ───────────────────── */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] {
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #FBFCFB 55%, #F5F9F6 100%) !important;
+  background-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #FBFCFB 60%, #F5F9F6 100%) !important;
+}
+/* Kill gold logo-strip hairlines */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::before,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::after {
+  background: linear-gradient(180deg, transparent 0%, rgba(4,120,87,0.30) 50%, transparent 100%) !important;
+}
+/* Kill gold left-border on expanded subitem column */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l {
+  border-left-color: rgba(4, 120, 87, 0.18) !important;
+}
+
+/* ── Section header — IDLE (no [data-active]) ─────────────
+   Transparent, ink-emerald label, emerald-tile icon. Matches
+   the "AI Home Finder" reference. Overrides PASS 12 fill. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) {
+  background-image: none !important;
+  background-color: transparent !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+  border-color: transparent !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child {
+  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255,255,255,0.85) !important;
+  box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child svg,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) > div:first-child svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Hover on idle section → subtle emerald wash, NEVER gold */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover {
+  background-color: rgba(4,120,87,0.06) !important;
+  background-image: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]):hover * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+/* ── Section header — ACTIVE only ───────────────────────── */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child {
+  background-color: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.40) !important;
+  box-shadow: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(52,211,153,0.32), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+/* Kill underline pseudo on section labels — clean look */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] [data-sidebar-section-label]::after {
+  display: none !important;
+}
+
+/* ── Highlight hubs (AI Home Finder, List Your Property,
+        Careers, Resale Properties) — match idle section style. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child {
+  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255,255,255,0.85) !important;
+  box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child svg,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > svg.lucide-chevron-right {
+  color: #047857 !important;
+  stroke: #047857 !important;
+}
+/* Hover on highlight row → subtle emerald wash, ink stays ink, NO gold */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover {
+  background-color: rgba(4,120,87,0.06) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover [data-sidebar-highlight-label] {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+/* Suppress any leftover gold underline pseudo on highlight labels */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label]::after {
+  display: none !important;
+}
+
+/* ── Pulse dot when section closed but has active child → emerald */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] span.animate-pulse {
+  background-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section]:not([data-active="true"]) span.animate-pulse {
+  background-color: #047857 !important;
+}
+
+/* ── Sidebar logo wordmark — ink text always */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child a span {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
