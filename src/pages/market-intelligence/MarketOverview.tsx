@@ -372,7 +372,7 @@ const MarketOverview = () => {
             <SectionTitle title="Quarterly Transaction Trends" />
             
             <div className="grid md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-              {QUARTERLY_TRENDS.map((quarter, index) => (
+              {QUARTERLY_TRENDS.map((quarter) => (
                 <Card key={quarter.quarter} className="jj-card-inner">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg text-[#1A1A1A]">
@@ -384,9 +384,9 @@ const MarketOverview = () => {
                     <p className="text-[#1A1A1A]/70 text-xs">Transactions</p>
                     <div className="mt-3 pt-3 border-t border-[#B89555]/20">
                       <p className="text-[#1A1A1A]/70 text-sm">AED {quarter.avgPrice}/sqft</p>
-                      <div className="w-full bg-[#EFE6D6] rounded-full h-1.5 mt-2">
+                      <div className="w-full bg-[#EFE6D6] border border-[#B89555]/30 rounded-full h-2 mt-2 overflow-hidden">
                         <div 
-                          className="bg-gradient-to-r from-gold to-gold-light h-1.5 rounded-full" 
+                          className="bg-[#1A1A1A] h-full rounded-full" 
                           style={{ width: `${quarter.index}%` }}
                         />
                       </div>
