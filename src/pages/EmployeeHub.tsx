@@ -121,7 +121,7 @@ const EmployeeCard = ({
       <Card className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/60 hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)] transition-all duration-300 h-full relative overflow-hidden ${isTopPerformer ? 'ring-2 ring-gold shadow-[0_4px_20px_rgba(200,167,102,0.3)]' : ''}`}>
         {/* New Joiner Badge */}
         {newJoinerLabel && (
-          <div className="absolute top-0 left-0 bg-gradient-to-br from-emerald-500 to-green-600 text-white px-3 py-1 text-xs font-bold flex items-center gap-1 rounded-br-xl z-10">
+          <div className="absolute top-0 left-0 bg-[#0A0A0A] text-[#B89555] border border-[#B89555]/40 px-3 py-1 text-xs font-bold flex items-center gap-1 rounded-br-xl z-10">
             <Sparkles className="h-3 w-3" />
             {newJoinerLabel}
           </div>
