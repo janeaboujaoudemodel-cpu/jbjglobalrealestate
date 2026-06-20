@@ -43,7 +43,7 @@ interface AIBrokerStatsDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const CHART_COLORS = ["#A8925A", "#059669", "#3B82F6", "#8B5CF6", "#F59E0B"];
+const CHART_COLORS = ["#A8925A", "#059669", "#3B82F6", "#B89555", "#F59E0B"];
 
 export function AIBrokerStatsDialog({
   brokerId,

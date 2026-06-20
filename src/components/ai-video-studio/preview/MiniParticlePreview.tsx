@@ -57,7 +57,7 @@ function MiniMoneyRain() {
 
 // ── CONFETTI ──────────────────────────────────────────────────────────────────
 function MiniConfetti() {
-  const COLORS = ['#DC2626','#3B82F6','#059669','#F59E0B','#8B5CF6','#EC4899','#06B6D4'];
+  const COLORS = ['#DC2626','#3B82F6','#059669','#F59E0B','#B89555','#B89555','#B89555'];
   const pieces = useMemo(() => Array.from({ length: 22 }, (_, i) => ({
     id: i,
     left: seeded(i * 3, 100),
@@ -214,9 +214,9 @@ function MiniFire() {
 // ── AURORA ────────────────────────────────────────────────────────────────────
 function MiniAurora() {
   const LAYERS = [
-    'rgba(56,189,248,0.5),rgba(167,139,250,0.6)',
-    'rgba(16,185,129,0.4),rgba(59,130,246,0.55)',
-    'rgba(245,158,11,0.3),rgba(236,72,153,0.45)',
+    'rgba(184,149,85,0.5),rgba(167,139,250,0.6)',
+    'rgba(16,185,129,0.4),rgba(184,149,85,0.55)',
+    'rgba(245,158,11,0.3),rgba(184,149,85,0.45)',
   ];
 
   return (
@@ -321,7 +321,7 @@ function MiniStarShower() {
 
 // ── DIAMOND SPARKLE ───────────────────────────────────────────────────────────
 function MiniDiamondSparkle() {
-  const DIAMOND_COLORS = ['#60A5FA','#A78BFA','#F0ABFC','#38BDF8','#818CF8'];
+  const DIAMOND_COLORS = ['#60A5FA','#B89555','#F0ABFC','#38BDF8','#818CF8'];
   const diamonds = useMemo(() => Array.from({ length: 14 }, (_, i) => ({
     id: i,
     left: seeded(i * 3, 90),

@@ -111,7 +111,7 @@ const CATEGORY_TABS: Array<{
   { key: 'broker', label: 'Brokers', contactType: 'broker', accent: '#B89555', surface: '#F7F2EA',
     emptyTitle: 'No brokers registered yet',
     emptySubtitle: 'When visitors register as brokers, they will appear here automatically.' },
-  { key: 'developer', label: 'Developers', contactType: 'developer', accent: '#7C3AED', surface: '#F1ECFE',
+  { key: 'developer', label: 'Developers', contactType: 'developer', accent: '#B89555', surface: '#F1ECFE',
     emptyTitle: 'No developers registered yet',
     emptySubtitle: 'When visitors register as developers, they will appear here automatically.' },
 ];

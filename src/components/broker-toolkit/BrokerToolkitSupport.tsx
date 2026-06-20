@@ -112,7 +112,7 @@ export function BrokerToolkitSupport() {
                   viewport={{ once: true }}
                 >
                   <Link to={member.link}>
-                    <Card className="bg-pink-900/80 border-2 border-pink-500/50 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(236,72,153,0.3)] h-full group cursor-pointer transition-all duration-300">
+                    <Card className="bg-pink-900/80 border-2 border-pink-500/50 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(184,149,85,0.3)] h-full group cursor-pointer transition-all duration-300">
                       <CardContent className="p-5">
                         <div className="flex items-start gap-4">
                           <div className="w-12 h-12 bg-pink-500/30 border border-pink-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">

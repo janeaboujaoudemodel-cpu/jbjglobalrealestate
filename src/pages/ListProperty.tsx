@@ -78,7 +78,7 @@ const THEME_NAVY: ModeTheme = {
   primary: BLUE,
   primaryDeep: BLUE_DEEP,
   badgeBorder: "#A855F7",
-  badgeBg: "rgba(168,85,247,0.14)",
+  badgeBg: "rgba(184,149,85,0.14)",
   heroGradient: BLUE_GRADIENT,
   sectionGradient: BLUE_GRADIENT,
   ctaText: "#FFFFFF",
@@ -102,7 +102,7 @@ const THEME_PURPLE: ModeTheme = {
   primary: "#5B21B6",
   primaryDeep: "#2E1065",
   badgeBorder: "#A855F7",
-  badgeBg: "rgba(168,85,247,0.16)",
+  badgeBg: "rgba(184,149,85,0.16)",
   heroGradient:
     "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)",
   sectionGradient:
@@ -594,7 +594,7 @@ function PickerCard({
           <span
             className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
             style={{
-              backgroundColor: "rgba(168,85,247,0.18)",
+              backgroundColor: "rgba(184,149,85,0.18)",
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
               border: `1px solid ${PURPLE}`,
@@ -646,7 +646,7 @@ function PickerCard({
             color: NAVY_DEEP,
             WebkitTextFillColor: NAVY_DEEP,
             border: `1.5px solid ${NAVY_DEEP}`,
-            boxShadow: `0 6px 18px -8px rgba(168,85,247,0.55)`,
+            boxShadow: `0 6px 18px -8px rgba(184,149,85,0.55)`,
           }}
         >
           <span style={{ color: NAVY_DEEP, WebkitTextFillColor: NAVY_DEEP, fontWeight: 800 }}>Start</span>

@@ -65,7 +65,7 @@ function MoneyRain() {
 
 // ── Confetti Burst ────────────────────────────────────────────────────────────
 function ConfettiBurst() {
-  const particles = useParticles(55, ['#DC2626', '#3B82F6', '#059669', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4']);
+  const particles = useParticles(55, ['#DC2626', '#3B82F6', '#059669', '#F59E0B', '#B89555', '#B89555', '#B89555']);
   return (
     <>
       <style>{`
@@ -179,7 +179,7 @@ function StarShower() {
 
 // ── Luxury Sparkle ────────────────────────────────────────────────────────────
 function LuxurySparkle() {
-  const particles = useParticles(22, ['#60A5FA', '#A78BFA', '#F0ABFC', '#38BDF8', '#818CF8']);
+  const particles = useParticles(22, ['#60A5FA', '#B89555', '#F0ABFC', '#38BDF8', '#818CF8']);
   return (
     <>
       <style>{`
@@ -258,9 +258,9 @@ function AuroraShimmer() {
           50%      { transform: scaleY(1.2) translateY(-10%); }
         }
       `}</style>
-      {['rgba(56,189,248,0.3),rgba(167,139,250,0.4),rgba(240,171,252,0.3)',
-        'rgba(16,185,129,0.25),rgba(59,130,246,0.35),rgba(139,92,246,0.25)',
-        'rgba(245,158,11,0.2),rgba(236,72,153,0.25),rgba(99,102,241,0.2)',
+      {['rgba(184,149,85,0.3),rgba(167,139,250,0.4),rgba(240,171,252,0.3)',
+        'rgba(16,185,129,0.25),rgba(184,149,85,0.35),rgba(139,92,246,0.25)',
+        'rgba(245,158,11,0.2),rgba(184,149,85,0.25),rgba(99,102,241,0.2)',
       ].map((grad, i) => (
         <div key={i} style={{
           position: 'absolute',

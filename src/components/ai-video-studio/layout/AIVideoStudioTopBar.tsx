@@ -40,7 +40,7 @@ export function AIVideoStudioTopBar({
         );
       case 'processing':
         return (
-          <div className="flex items-center gap-2 text-sm" style={{ color: '#A78BFA' }}>
+          <div className="flex items-center gap-2 text-sm" style={{ color: '#B89555' }}>
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>Rendering {renderJob.progress}%</span>
           </div>

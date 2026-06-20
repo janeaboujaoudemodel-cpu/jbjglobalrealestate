@@ -36,14 +36,14 @@ const SECTIONS = [
   },
   {
     title: 'Panels',
-    color: '#A78BFA',
+    color: '#B89555',
     shortcuts: [
       { keys: ['T'], desc: 'Toggle Transitions panel' },
     ],
   },
   {
     title: 'General',
-    color: '#F472B6',
+    color: '#B89555',
     shortcuts: [
       { keys: ['?'], desc: 'Open this cheat sheet' },
     ],

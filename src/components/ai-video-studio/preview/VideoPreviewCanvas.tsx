@@ -33,7 +33,7 @@ const EXAMPLE_VIDEOS = [
     label: 'Desert Estate',
     sublabel: 'Al Barari · 6BR',
     img: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=320&q=75&auto=format&fit=crop',
-    accent: '#F472B6',
+    accent: '#B89555',
   },
 ];
 

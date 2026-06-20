@@ -544,7 +544,7 @@ function StatsCard({
     default: "border-[#B89555] bg-[#EFE6D6]/15 shadow-[0_4px_16px_rgba(200,167,102,0.4)] scale-[1.03]",
     warning: "border-yellow-500 bg-yellow-100 shadow-[0_4px_16px_rgba(234,179,8,0.4)] scale-[1.03]",
     danger: "border-red-500 bg-red-100 shadow-[0_4px_16px_rgba(239,68,68,0.4)] scale-[1.03]",
-    info: "border-blue-500 bg-blue-100 shadow-[0_4px_16px_rgba(59,130,246,0.4)] scale-[1.03]",
+    info: "border-blue-500 bg-blue-100 shadow-[0_4px_16px_rgba(184,149,85,0.4)] scale-[1.03]",
     orange: "border-orange-500 bg-orange-100 shadow-[0_4px_16px_rgba(249,115,22,0.4)] scale-[1.03]",
   };
 

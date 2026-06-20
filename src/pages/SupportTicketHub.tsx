@@ -204,7 +204,7 @@ const SupportTicketHub = () => {
               <p className="text-yellow-300 text-sm font-medium">Open</p>
               <p className="text-3xl font-bold text-yellow-400">{ticketCounts.open}</p>
             </div>
-            <div className="bg-gradient-to-br from-blue-900/30 to-blue-950/50 rounded-xl p-4 border border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+            <div className="bg-gradient-to-br from-blue-900/30 to-blue-950/50 rounded-xl p-4 border border-blue-500/30 shadow-[0_0_20px_rgba(184,149,85,0.1)]">
               <p className="text-blue-300 text-sm font-medium">In Progress</p>
               <p className="text-3xl font-bold text-blue-400">{ticketCounts.inProgress}</p>
             </div>
