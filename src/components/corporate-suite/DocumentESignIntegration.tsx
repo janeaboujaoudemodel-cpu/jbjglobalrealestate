@@ -145,7 +145,7 @@ export default function DocumentESignIntegration({ documentReady, onSignDocument
               <Button
                 size="sm"
                 onClick={() => setSendMode(true)}
-                className="w-full h-7 text-[10px] gap-1 bg-gradient-to-r from-indigo-600 to-blue-700 text-white"
+                className="jj-cta-dark w-full h-7 text-[10px] gap-1"
               >
                 <Mail size={10} /> Send Document for Signature
               </Button>
@@ -184,7 +184,7 @@ export default function DocumentESignIntegration({ documentReady, onSignDocument
                     size="sm"
                     onClick={handleSendForSignature}
                     disabled={sending}
-                    className="flex-1 h-7 text-[10px] gap-1 bg-gradient-to-r from-indigo-600 to-blue-700 text-white"
+                    className="jj-cta-dark flex-1 h-7 text-[10px] gap-1"
                   >
                     {sending ? <Loader2 size={10} className="animate-spin" /> : <Send size={10} />}
                     Send

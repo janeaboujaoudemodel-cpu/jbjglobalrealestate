@@ -463,7 +463,7 @@ const CompanyCommunicationHub = () => {
           <div className="flex items-center gap-2">
             <Button 
               size="sm"
-              className="h-8 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+              className="jj-cta-dark h-8 px-3 font-medium transition-all duration-200 hover:scale-105"
               onClick={() => toast.success('Starting voice call...')}
             >
               <Phone className="w-4 h-4 mr-1" />
@@ -471,7 +471,7 @@ const CompanyCommunicationHub = () => {
             </Button>
             <Button 
               size="sm"
-              className="h-8 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+              className="jj-cta-dark h-8 px-3 font-medium transition-all duration-200 hover:scale-105"
               onClick={() => toast.success('Starting video call...')}
             >
               <Video className="w-4 h-4 mr-1" />

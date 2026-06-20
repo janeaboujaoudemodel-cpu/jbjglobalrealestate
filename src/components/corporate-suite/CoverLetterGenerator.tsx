@@ -191,7 +191,7 @@ export default function CoverLetterGenerator() {
               <ArrowLeft size={15} /> Back
             </Button>
             <div className="w-px h-5 bg-[hsl(var(--border))]" />
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
               <FileEdit size={15} className="text-white" />
             </div>
             <div>
@@ -465,7 +465,7 @@ export default function CoverLetterGenerator() {
             </div>
           </div>
 
-          <Button onClick={generate} disabled={generating} className="w-full gap-2 bg-gradient-to-r from-violet-600 to-purple-700 text-white hover:opacity-90 h-10">
+          <Button onClick={generate} disabled={generating} className="jj-cta-dark w-full gap-2 h-10">
             {generating
               ? <><RefreshCw size={14} className="animate-spin" /> Generating…</>
               : <><Sparkles size={14} /> {letter ? "Regenerate" : "Generate with AI"}</>

@@ -159,7 +159,7 @@ ${services.length ? `<div class="services"><h2>Our Services</h2><div class="serv
               <ArrowLeft size={15} /> Back
             </Button>
             <div className="w-px h-5 bg-[hsl(var(--border))]" />
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-sky-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
               <Globe size={15} className="text-white" />
             </div>
             <div>

@@ -92,7 +92,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
           <div className="relative">
             <Avatar className="h-20 w-20 border-4 border-white shadow-xl shadow-rose-200/50">
               <AvatarImage src={persona.avatar} alt={persona.name} className="object-cover object-top" />
-              <AvatarFallback className="bg-gradient-to-br from-rose-400 to-rose-600 text-white text-xl font-bold">
+              <AvatarFallback className="bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A] text-xl font-bold">
                 {persona.name.split(' ').map(n => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
@@ -105,7 +105,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
               <h2 className="text-xl font-bold text-[#1A1A1A]">
                 {persona.name}
               </h2>
-              <Badge className="bg-gradient-to-r from-rose-500 to-pink-500 text-white border-0 text-xs">
+              <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 text-xs">
                 <Palette className="w-3 h-3 mr-1" />
                 {persona.role}
               </Badge>
@@ -172,7 +172,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
 
           <Button 
             onClick={() => setShowIdeaBox(!showIdeaBox)}
-            className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-lg shadow-rose-200/50"
+            className="jj-cta-dark w-full"
           >
             <Sparkles className="w-4 h-4 mr-2" />
             Describe Your Idea
@@ -218,7 +218,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                 <Button 
                   onClick={handleSubmitIdea}
                   disabled={isProcessing || !ideaText.trim()}
-                  className="bg-gradient-to-r from-rose-500 to-pink-500 text-white"
+                  className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40"
                 >
                   {isProcessing ? (
                     <>
