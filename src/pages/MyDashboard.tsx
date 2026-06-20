@@ -66,6 +66,7 @@ const SECTION_IDS: Record<string, string> = {
   '#activity': 'activity-section',
   '#badges': 'badges-section',
   '#ai-tools': 'ai-tools-section',
+  '#brand-update': 'brand-update-section',
 };
 
 /** Useful Links card for dashboard */
