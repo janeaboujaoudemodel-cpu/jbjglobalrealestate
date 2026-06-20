@@ -508,13 +508,13 @@ import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } fr
 /* ─── SECTION KEYS ─── */
 const SECTION_KEYS = [
   "TOOLS & WORKSPACE",
+  "MY ACCOUNT",
   "PROPERTIES",
   "INSIGHTS & GUIDES",
   "SERVICES",
   "BROKER & ACADEMY",
   "INVESTOR",
   "COMPANY & LEGAL",
-  "MY ACCOUNT",
   "ADMIN & OWNER",
 ] as const;
 type SectionKey = typeof SECTION_KEYS[number];
