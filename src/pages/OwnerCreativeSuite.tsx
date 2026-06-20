@@ -91,7 +91,7 @@ const tools = [
     title: "Job Offer Templates",
     description: "Generate job offers with auto-filled company info, stamps, signatures, and current date.",
     href: "/owner/job-offer-template",
-    color: "from-lime-600 to-green-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Templates",
   },
 ];
