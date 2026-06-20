@@ -1,47 +1,53 @@
-I verified the live preview with screenshots/navigation. The current failures are real: the sidebar account entry is hidden by section behavior/scrolling, services/tool headers look merged, homepage full-bleed wrappers are creating wrong layers and huge blank lazy placeholders, the mortgage CTA route is fragile, footer/sidebar emerald accents are incomplete, and the hero search/filter contrast needs correction.
+I will implement this in controlled batches and verify each batch in the browser before moving on.
 
-Plan:
+Batch 1 — Billing & Subscriptions fully wired
+- Create/upgrade the Billing & Subscriptions page into a real account page with SEO metadata.
+- Keep `/account/billing` behind login and keep `/billing` redirecting to it.
+- Fix the vertical sidebar MY ACCOUNT behavior so Billing & Subscriptions and Brand Update stay visible when MY ACCOUNT is expanded.
+- Remove the current rule that collapses MY ACCOUNT immediately after clicking one of its entries.
+- Add Billing & Subscriptions to sitemap and SEO config.
+- Validate by opening the expanded vertical sidebar and clicking Billing & Subscriptions.
 
-1. Vertical sidebar: make Billing & Subscriptions actually visible
-- Keep the canonical account shortcut list.
-- In `GlobalVerticalNav.tsx`, change the MY ACCOUNT behavior so clicking it expands normally and does not immediately collapse on account navigation state.
-- Ensure `Billing & Subscriptions` and `Brand Update` render inside the visible MY ACCOUNT section, not only in the flyout/hidden list.
-- Improve MY ACCOUNT/sidebar title accents to emerald where requested, while keeping readable ink labels on champagne.
+Batch 2 — Remove white page gutters and restore full edge-to-edge layers
+- Fix the main layout wrapper so public pages no longer sit inside the extra white/champagne gutter container.
+- Make the page layer stretch from the vertical sidebar line to the right edge.
+- Keep individual cards at their existing widths; only the background layer/strap expands.
+- Apply this to homepage and shared public-page shell without breaking standalone dashboards/portals.
+- Validate hero, developer marquee, services, handpicked cards, continue searching, overseas investors, guides/reports, and footer at desktop.
 
-2. Services and AI tools tabs: premium emerald, not split/merged
-- Update `ExploreServicesExpander.tsx` and `ToolkitShowcaseCard.tsx` so the top header and horizontal tab strip are visually separated by a soft light divider/gap.
-- Remove the active-tab underline effect.
-- Make active tabs a refined lighter ombre pill with distinct emerald/champagne tones, not half-black/half-green.
-- Keep inactive labels/icons white on emerald.
-- Remove any “Buy Property” underline behavior and give it the requested ombre active background.
+Batch 3 — Homepage straps and portal color separation
+- Keep Get Verified in its current dark/black style.
+- Make the Mode Portal strip a distinct lighter emerald ombre, not the same tone as Get Verified and not flat green.
+- Ensure these strap sections are edge-to-edge: Continue Searching, Invest in Dubai from Anywhere, Explore Our Guides & Reports.
+- Preserve normal cards as padded cards.
+- Validate with screenshots on homepage mid-scroll.
 
-3. Homepage band/card system: one full-width layer behind padded cards
-- Adjust `PremiumSectionCard`/homepage usage so only the background layer/band is edge-to-edge from the sidebar line to the right edge.
-- Keep actual cards padded left/right inside the layer.
-- Apply full-width behavior only to hero and named bands/straps: partners developer marquee, Get Verified/User Portal, Continue Searching, Overseas Investors, Guides/Reports, and similar full strips.
-- Keep cards like Mortgage Calculator, JLT/Hub cards, Handpicked/Featured Listings, Explore Our Services, and tools inside padded content, with one background layer only.
-- Remove extra visible stacked layers behind cards.
+Batch 4 — Approved emerald lock, no random green
+- Add a single approved emerald/black ombre token/class system in global CSS.
+- Replace flat green title/icon/button styling with the same approved emerald ombre used by Contact Us / Explore Areas CTAs.
+- Lock sidebar section accents, footer titles, titles/icons, pills, and relevant CTAs to this approved emerald style.
+- Avoid changing semantic red/blue/amber data colors where they are required.
 
-4. Get Verified / User Portal / Ready section
-- Change the Investor/Broker/Developer portal strip away from champagne to a lighter emerald ombre, distinct from the dark emerald CTA.
-- Make the “Ready to Get Started?” section smaller and more premium on desktop and mobile.
-- Match newsletter titles/line accents to emerald styling.
+Batch 5 — Hero search contrast and CSS winner rule
+- Inspect and override the rule currently fading the hero search/filter bar.
+- Force visible input text, placeholders, labels, icons, and search button states.
+- Keep the search bar premium and readable on the dark hero.
+- Validate normal, hover, focus, and typed text states.
 
-5. Mortgage calculator CTA and loading/blank-section issue
-- Fix “Try Our AI Mortgage Calculator” to route reliably to `/mortgage-calculator` and not feel broken.
-- Reduce the huge blank placeholders from lazy sections so the page no longer appears stuck with massive empty beige areas before footer.
-- Keep lazy loading but use realistic reserved heights/root margins for homepage sections.
+Batch 6 — Handpicked project contact buttons
+- Fix Email / Call / Chat buttons on project cards so they are emerald ombre with white text and white icons on normal load.
+- Keep hover/focus readable with the same white text/icons, not faded or inverted.
+- Add a stronger winning selector if current CSS guard overrides them.
+- Validate on the Handpicked For You cards.
 
-6. Footer and sidebar emerald promotion
-- Keep footer background champagne as requested.
-- Change footer link/title accents to emerald.
-- Apply matching emerald title accents in the vertical sidebar without making labels low contrast.
+Batch 7 — Stay in the Loop newsletter upgrade
+- Upgrade the compact newsletter input to an emerald filled bar with white text.
+- Add animated type/delete placeholder behavior for “Enter Your Email”.
+- Add emerald neon/glow border and matching glowing submit button.
+- Keep submit icon white with a subtle 3D/glow effect.
+- Validate the footer/Ready section newsletter at desktop and mobile.
 
-7. Hero homepage filter/search contrast
-- Improve contrast inside the hero search/filter bar so text/buttons are readable and premium.
-- Preserve the full-bleed hero stopping at the vertical sidebar line.
-
-8. Verification pass after implementation
-- Use browser screenshots after changes at desktop and mobile.
-- Check expanded sidebar MY ACCOUNT, homepage services/tools tabs, mortgage CTA navigation, footer styling, and the blank-gap issue.
-- Report exactly what was verified, without claiming anything not checked.
+Batch 8 — Final E2E screenshot proof
+- Test and screenshot four viewports: desktop, laptop/tablet, mobile tall, mobile small.
+- Proof points: sidebar billing visible, Billing page route works, hero search contrast, edge-to-edge layers, portal color separation, project-card contact buttons, newsletter glow, footer/sidebar emerald accents.
+- Report only verified results and screenshots; no claims without browser proof.
