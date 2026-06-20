@@ -260,19 +260,28 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           className={`allow-white group fixed right-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-l-xl
-            border border-r-0 border-[#B89555]/70 text-white transform-gpu
+            border border-r-0 text-white transform-gpu
             transition-opacity duration-300
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]
             ${overHero
               ? "opacity-0 pointer-events-none bg-transparent border-transparent shadow-none"
-              : "pointer-events-auto bg-[#0A0A0A] hover:bg-[#1F1F1F] hover:border-[#B89555] shadow-[-10px_0_28px_rgba(0,0,0,0.34),0_0_0_1px_rgba(184,149,85,0.24)] hover:shadow-[-18px_0_42px_rgba(0,0,0,0.44),0_0_34px_rgba(184,149,85,0.58)]"}
+              : "pointer-events-auto"}
           `}
-          style={{ writingMode: "vertical-rl", transform: "translateY(-50%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          style={{
+            writingMode: "vertical-rl",
+            transform: "translateY(-50%)",
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            backgroundImage: "var(--jj-emerald-ombre)",
+            borderColor: "rgba(52,211,153,0.55)",
+          }}
 
         >
           <Sparkles className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-          <span className="allow-white text-[11px] font-semibold uppercase tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact us</span>
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          {/* Label hidden on portrait tablet & phone — icon only there.
+              Visible from large landscape tablet / desktop up. */}
+          <span className="hidden lg:inline allow-white text-[11px] font-semibold uppercase tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact us</span>
+          <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
         </button>
 
 

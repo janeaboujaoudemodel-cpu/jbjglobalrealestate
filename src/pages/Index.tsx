@@ -250,8 +250,9 @@ const Index = () => {
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/90 z-[3]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-black/55 z-[3]" />
+          {/* Lighter overlay: video visibility prioritized, headline still legible via its own text-shadow */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/45 z-[3]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-[3]" />
         </div>
         
         {/* MERGED HERO CONTENT — tagline + CTAs + pillars */}

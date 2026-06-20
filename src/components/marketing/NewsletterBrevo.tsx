@@ -128,20 +128,20 @@ export const NewsletterBrevo = ({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               data-no-contrast-guard
-              className="h-12 w-full rounded-xl border px-4 pr-4 font-semibold tracking-wide text-white placeholder:text-transparent focus-visible:ring-0"
+              className="h-12 w-full rounded-xl border px-4 pr-4 font-semibold tracking-wide focus-visible:ring-0"
               style={{
                 backgroundImage: 'var(--jj-emerald-ombre)',
-                borderColor: 'rgba(52,211,153,0.78)',
+                borderColor: 'rgba(52,211,153,0.55)',
                 color: '#FFFFFF',
                 WebkitTextFillColor: '#FFFFFF',
-                boxShadow: '0 0 0 1px rgba(52,211,153,0.25), 0 0 24px rgba(52,211,153,0.28), inset 0 1px 0 rgba(255,255,255,0.18)',
+                boxShadow: '0 0 0 1px rgba(52,211,153,0.20), 0 0 22px rgba(52,211,153,0.28), inset 0 1px 0 rgba(255,255,255,0.14)',
               }}
               required
               disabled={isSubmitting}
             />
             {!email && (
               <span
-                className="jj-newsletter-placeholder pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide text-white/90"
+                className="jj-newsletter-placeholder pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide"
                 aria-hidden="true"
               />
             )}
@@ -150,13 +150,19 @@ export const NewsletterBrevo = ({
             type="submit"
             disabled={isSubmitting}
             data-no-contrast-guard
-            className="jj-emerald-fill relative h-12 overflow-hidden rounded-xl px-5 font-semibold transition-all duration-300"
-            style={{ boxShadow: '0 0 0 1px rgba(52,211,153,0.34), 0 0 26px rgba(52,211,153,0.34), 0 12px 24px -14px rgba(0,0,0,0.85)' }}
+            className="jj-newsletter-emerald relative h-12 overflow-hidden rounded-xl px-5 font-semibold transition-all duration-300 hover:brightness-110"
+            style={{
+              backgroundImage: 'var(--jj-emerald-light-ombre)',
+              borderColor: 'rgba(52,211,153,0.55)',
+              border: '1px solid rgba(52,211,153,0.55)',
+              boxShadow: '0 0 0 1px rgba(52,211,153,0.20), 0 0 22px rgba(52,211,153,0.34), inset 0 1px 0 rgba(255,255,255,0.18)',
+              color: '#FFFFFF',
+            }}
           >
             {isSubmitting ? (
-              <Loader2 className="w-4 h-4 animate-spin text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
+              <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#FFFFFF' }} />
             ) : (
-              <Send className="w-4 h-4 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
+              <Send className="w-4 h-4" style={{ color: '#FFFFFF' }} />
             )}
           </Button>
         </form>

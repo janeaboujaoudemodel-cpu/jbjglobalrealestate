@@ -1,6 +1,7 @@
 /**
- * CombinedContactNewsletter Component
- * Combines "Connect With Our Team" + "Stay in the Loop" into one premium container
+ * CombinedContactNewsletter — emerald-ombre card with white text and white
+ * icons. No gold borders, no light-green outlines. Used for the
+ * "Ready to Get Started" / "Get in touch" / "Stay in the Loop" block.
  */
 
 import { Phone, Mail, MessageCircle } from "lucide-react";
@@ -39,33 +40,41 @@ const CombinedContactNewsletter = ({
     },
   ];
 
-
   return (
     <section id="ready-to-get-started" className={`py-6 sm:py-8 md:py-10 bg-[#FDFBF7] ${className}`}>
       <div className="w-full px-4 md:px-6">
-        <div className="relative rounded-2xl bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-5 md:p-7 border border-[#B89555]/40 shadow-[0_12px_40px_-24px_rgba(184,149,85,0.40)] max-w-4xl mx-auto">
+        <div
+          data-ink-emerald
+          data-no-contrast-guard
+          className="jj-emerald-card jj-loop-block relative rounded-2xl p-5 md:p-7 max-w-4xl mx-auto"
+        >
           {/* Header */}
           <div className="relative text-center mb-5">
             <span
               data-no-contrast-guard
-              className="jj-text-emerald inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-3 bg-[#E8F2EC] border border-[#064E3B]/30"
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-3 border"
+              style={{
+                color: "#FFFFFF",
+                borderColor: "rgba(255,255,255,0.35)",
+                backgroundColor: "rgba(255,255,255,0.08)",
+              }}
             >
-              <span className="jj-text-emerald">Get in touch</span>
+              Get in touch
             </span>
-            <h2 data-no-contrast-guard className="jj-title-emerald text-xl md:text-2xl font-bold mb-2 uppercase tracking-[0.14em]">
+            <h2 className="text-xl md:text-2xl font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
               {title}
             </h2>
             <div className="mx-auto mt-1 mb-2 flex items-center justify-center gap-2">
-              <span className="h-px w-8 bg-[#047857]/50" />
-              <span className="jj-text-emerald text-[10px] tracking-[0.4em]">✦</span>
-              <span className="h-px w-8 bg-[#047857]/50" />
+              <span className="jj-loop-divider h-px w-12" />
+              <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
+              <span className="jj-loop-divider h-px w-12" />
             </div>
-            <p className="text-[#1A1A1A]/75 text-xs md:text-sm max-w-lg mx-auto">
+            <p className="text-xs md:text-sm max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.88)" }}>
               {subtitle}
             </p>
           </div>
 
-          {/* Contact Cards — white surfaces, emerald icons */}
+          {/* Contact cards — translucent white tiles on emerald, white icons/text */}
           <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 max-w-2xl mx-auto mb-5">
             {contactCards.map((card) => (
               <a
@@ -73,32 +82,44 @@ const CombinedContactNewsletter = ({
                 href={card.href}
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-                className="group flex flex-row sm:flex-col items-center gap-2 sm:gap-2 p-2.5 sm:p-3 rounded-xl bg-white hover:bg-[#F7FAF8] transition-all duration-300"
+                data-no-contrast-guard
+                className="group flex flex-row sm:flex-col items-center gap-2 sm:gap-2 p-2.5 sm:p-3 rounded-xl transition-all duration-300 hover:brightness-110"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.22)",
+                  color: "#FFFFFF",
+                }}
               >
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#E8F2EC] border border-[#064E3B]/30 flex items-center justify-center flex-shrink-0">
-                  <card.icon className="w-4 h-4 sm:w-5 sm:h-5 jj-icon-emerald" />
+                <div
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.12)",
+                    border: "1px solid rgba(255,255,255,0.30)",
+                  }}
+                >
+                  <card.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 </div>
                 <div className="text-left sm:text-center">
-                  <p data-no-contrast-guard className="jj-text-emerald text-[10px] uppercase tracking-wider font-semibold mb-0.5">{card.label}</p>
-                  <p className="text-xs sm:text-sm font-semibold text-[#0A0A0A]">{card.value}</p>
+                  <p className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{ color: "#FFFFFF" }}>{card.label}</p>
+                  <p className="text-xs sm:text-sm font-semibold" style={{ color: "#FFFFFF" }}>{card.value}</p>
                 </div>
               </a>
             ))}
           </div>
 
-          {/* Divider — emerald hairline */}
+          {/* Divider */}
           <div className="relative flex items-center gap-3 max-w-2xl mx-auto mb-5">
-            <div className="flex-1 h-px bg-[#047857]/30" />
-            <span className="jj-text-emerald text-xs">✦</span>
-            <div className="flex-1 h-px bg-[#047857]/30" />
+            <div className="jj-loop-divider flex-1 h-px" />
+            <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
+            <div className="jj-loop-divider flex-1 h-px" />
           </div>
 
-          {/* Newsletter Section */}
+          {/* Newsletter */}
           <div className="relative max-w-md mx-auto text-center">
-            <h3 data-no-contrast-guard className="jj-title-emerald text-base md:text-lg font-bold mb-2 uppercase tracking-[0.12em]">
+            <h3 className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.12em]" style={{ color: "#FFFFFF" }}>
               Stay in the Loop
             </h3>
-            <p className="text-[#1A1A1A]/75 text-xs md:text-sm mb-4">
+            <p className="text-xs md:text-sm mb-4" style={{ color: "rgba(255,255,255,0.88)" }}>
               Be the first to access new listings, market updates, and personalized guidance.
             </p>
             <NewsletterBrevo variant="compact" source="combined_cta" />
