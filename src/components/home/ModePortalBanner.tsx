@@ -56,59 +56,56 @@ export default function ModePortalBanner() {
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      data-surface="champagne"
-      className="relative overflow-hidden bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA]"
+      data-ink-emerald
+      data-on-dark
+      data-no-contrast-guard
+      className="allow-white relative overflow-hidden"
+      style={{ backgroundImage: "linear-gradient(135deg, #0F8B6A 0%, #047857 60%, #065F46 100%)" }}
     >
-      {/* Subtle navy sheen overlay — opposite of gold sheen on Get Verified */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.08]"
-        style={{
-          background:
-            "radial-gradient(900px 220px at 12% 50%, rgba(10,10,10,0.55), transparent 60%), radial-gradient(700px 200px at 92% 50%, rgba(10,10,10,0.45), transparent 65%)",
-        }}
-      />
       {/* Top + bottom champagne hairlines */}
-      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
-      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
 
       <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
-          {/* Mode icon tile — cream tile, navy icon, gold hairline */}
+          {/* Mode icon tile — translucent white tile, white icon */}
           <div
-            className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/55 flex items-center justify-center"
+            className="flex-shrink-0 w-10 h-10 rounded-lg bg-white/15 border border-white/40 flex items-center justify-center"
           >
-            <Icon className="w-5 h-5" style={{ color: "#0A0A0A", stroke: "#0A0A0A" }} strokeWidth={2.2} />
+            <Icon className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
           </div>
 
-          {/* Text — navy eyebrow + title, ink body */}
+          {/* Text — white on lighter emerald */}
           <div className="flex-1 text-center sm:text-left min-w-0">
             <div className="flex items-center justify-center sm:justify-start gap-2 mb-0.5">
-              <Sparkles className="w-3 h-3" style={{ color: "#0A0A0A", stroke: "#0A0A0A" }} />
+              <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               <span
-                className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.18em]"
-                style={{ color: "#0A0A0A" }}
+                className="allow-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.18em]"
+                style={{ color: "#FFFFFF" }}
               >
                 {cfg.eyebrow}
               </span>
             </div>
-            <p className="text-sm sm:text-base font-medium leading-snug" style={{ color: "#1A1A1A" }}>
-              <span className="font-semibold" style={{ color: "#0A0A0A" }}>{cfg.title}.</span>{" "}
-              <span style={{ color: "rgba(26,26,26,0.78)" }}>{cfg.copy}</span>
+            <p className="allow-white text-sm sm:text-base font-medium leading-snug" style={{ color: "#FFFFFF" }}>
+              <span className="allow-white font-semibold" style={{ color: "#FFFFFF" }}>{cfg.title}.</span>{" "}
+              <span className="allow-white" style={{ color: "rgba(255,255,255,0.88)" }}>{cfg.copy}</span>
             </p>
           </div>
 
-          {/* CTA — navy pill, white label + white arrow.
-              Same dimensions/shadow/hover-lift as the champagne Get Verified pill. */}
+          {/* CTA — deep emerald-to-black pill, white label, gold hairline. */}
           <Link
             to={cfg.href}
-            className="jj-cta-dark group relative flex-shrink-0 h-11 min-w-[220px] px-6 text-sm font-semibold tracking-wide rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.20),inset_0_1px_0_rgba(255,255,255,0.25)] hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap border border-[#B89555]/70 bg-[#0A0A0A] hover:bg-[#1F1F1F]"
-            data-surface="navy"
+            className="group relative flex-shrink-0 h-11 min-w-[220px] px-6 text-sm font-semibold tracking-wide rounded-md hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap border border-[#B89555]/60"
             data-cta="dark"
             data-allow-dark-cta
             data-no-contrast-guard
             aria-label={cfg.cta}
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            style={{
+              backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #0A0A0A 100%)",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              boxShadow: "0 6px 18px -6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.20)",
+            }}
           >
             <span
               className="allow-white relative z-10 font-semibold"
