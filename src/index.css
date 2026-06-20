@@ -6730,3 +6730,12 @@ html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
   animation: jbj-placeholder-type 4.8s steps(1, end) infinite;
 }
 
+html body [data-chrome="sidebar"] :is([data-sidebar-section-label], [data-sidebar-section-icon], [data-sidebar-subitem-icon]) {
+  color: var(--emerald-ink) !important;
+  -webkit-text-fill-color: var(--emerald-ink) !important;
+  stroke: var(--emerald-ink) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section] {
+  color: var(--emerald-ink) !important;
+}
+
