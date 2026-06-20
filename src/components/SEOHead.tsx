@@ -248,7 +248,7 @@ export const pagesSEO = {
     description: 'Manage JBJ Global Real Estate account billing, subscriptions, invoices, payment methods and usage.',
     keywords: 'JBJ billing, account subscription, payment method, invoices, plan usage, JBJ Global Real Estate account',
     canonicalPath: '/account/billing',
-    noIndex: true,
+    noIndex: false,
   },
   faq: {
     title: 'Frequently Asked Questions - Dubai Real Estate',
