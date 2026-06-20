@@ -8007,3 +8007,48 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highligh
 html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover {
   background-color: rgba(184,149,85,0.08) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 22 — Light Surface Wins Globally
+   ----------------------------------------------------------------
+   A dark overlay/parent must NEVER force white text into a champagne,
+   cream, raised, gold, page, or light own-surface. This final rule is
+   intentionally last so modal cards, sheets, popovers, and panels remain
+   ink-on-champagne even when mounted inside dark portals/overlays.
+   Dark CTAs inside those light cards keep their own white text.
+   ════════════════════════════════════════════════════════════════ */
+html body :is(
+  [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  .jj-card-inner, .jj-layer-2,
+  [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
+):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]),
+html body :is(
+  [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  .jj-card-inner, .jj-layer-2,
+  [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
+):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button):not(.allow-white):not(.allow-white *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body :is(
+  [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  .jj-card-inner, .jj-layer-2,
+  [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
+) :is(svg, [class*="lucide"]):not(.allow-white):not(.allow-white *):not([data-on-dark] *):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-cta="dark"] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
