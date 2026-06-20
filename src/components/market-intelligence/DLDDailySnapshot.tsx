@@ -226,7 +226,9 @@ export const DLDDailySnapshot = () => {
                     <div className="h-full w-full" />
                   </motion.div>
                 </div>
-                <p className="mt-1 text-[11px] tabular-nums text-[#1A1A1A]/70">{mortgageShare}% of all transactions</p>
+                <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} /> Mortgage · {mortgageShare}% of all transactions
+                </p>
               </div>
             </div>
 
