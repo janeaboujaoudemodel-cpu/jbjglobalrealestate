@@ -45,6 +45,7 @@ import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
 
 // Owner-only + post-paint extras (lazy, idle-mounted — never blocks FCP)
 import DeferredAppExtras from "@/components/util/DeferredAppExtras";
+import ChampagneCtaInkGuard from "@/components/util/ChampagneCtaInkGuard";
 
 
 // ── QueryClient ──
@@ -104,6 +105,7 @@ const App = () => {
                   <CanonicalAndHreflang />
                   {/* Owner-only + analytics extras — lazy, idle-mounted */}
                   <DeferredAppExtras />
+                  <ChampagneCtaInkGuard />
 
                    
             {/* BrandIntroSplash disabled until further notice */}
