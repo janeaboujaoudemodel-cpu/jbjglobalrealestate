@@ -241,6 +241,8 @@ const NAV_ITEMS: NavItem[] = [
 
   // ── Account ──
   { label: "My Dashboard", href: "/my-dashboard", icon: LayoutDashboard, section: "MY ACCOUNT", megaMenu: 'account' },
+  { label: "Billing & Subscriptions", href: "/account/billing", icon: CreditCard },
+  { label: "Brand Update", href: "/my-dashboard#brand-update", icon: Palette },
   { label: "My Tasks", href: "/my-dashboard#tasks", icon: ListChecks },
   { label: "Notifications", href: "/my-dashboard#notifications", icon: Bell },
   { label: "Inbox", href: "/my-dashboard#inbox", icon: Inbox },
@@ -249,8 +251,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Shortlisted", href: "/favorites?tab=shortlist", icon: Star },
   { label: "Saved Filters", href: "/favorites?tab=saved-filters", icon: Sparkles },
   { label: "Settings", href: "/profile?tab=settings", icon: Settings },
-  { label: "Billing & Subscriptions", href: "/account/billing", icon: CreditCard },
-  { label: "Brand Update", href: "/my-dashboard#brand-update", icon: Palette },
   { label: "My Tickets", href: "/my-tickets", icon: Ticket },
 
 
@@ -508,13 +508,13 @@ import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } fr
 /* ─── SECTION KEYS ─── */
 const SECTION_KEYS = [
   "TOOLS & WORKSPACE",
+  "MY ACCOUNT",
   "PROPERTIES",
   "INSIGHTS & GUIDES",
   "SERVICES",
   "BROKER & ACADEMY",
   "INVESTOR",
   "COMPANY & LEGAL",
-  "MY ACCOUNT",
   "ADMIN & OWNER",
 ] as const;
 type SectionKey = typeof SECTION_KEYS[number];
@@ -607,7 +607,7 @@ export default function GlobalVerticalNav() {
   }, [isDeveloperMode, isOwner, showBrokerSurfaces, showInvestorSurfaces]);
 
   // Collapsible sections state — accordion: only one open at a time
-  const [openSection, setOpenSection] = useState<SectionKey | null>(null);
+  const [openSection, setOpenSection] = useState<SectionKey | null>('MY ACCOUNT');
 
   // Data hooks for rich flyouts
   const { data: developers } = useDevelopers(false);
@@ -707,23 +707,6 @@ export default function GlobalVerticalNav() {
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
-  // Close mega menu and auto-expand active section on route change
-  useEffect(() => {
-    closeMegaMenu();
-    setMobileOpen(false);
-    // Auto-close My Account section on any navigation to prevent stuck state
-    if (openSection === 'MY ACCOUNT') {
-      setOpenSection(null);
-    }
-     // Auto-expand the section containing the active route
-     for (const [section, items] of Object.entries(sectionGroups)) {
-       if (items.some(item => isRouteActive(item.href))) {
-         setOpenSection(section as SectionKey);
-         break;
-       }
-     }
-   }, [location.pathname, closeMegaMenu]);
-
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
     if (href === "/properties") return location.pathname === "/properties" || location.pathname.startsWith("/properties/");
@@ -757,6 +740,23 @@ export default function GlobalVerticalNav() {
     sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS.filter(it => shouldShowItem(it, "TOOLS & WORKSPACE"));
     return { highlightItems: highlights, sectionGroups: sections };
   }, [shouldShowItem]);
+
+  // Close mega menu and auto-expand active section on route change.
+  useEffect(() => {
+    closeMegaMenu();
+    setMobileOpen(false);
+    let matchedActiveSection = false;
+    for (const [section, items] of Object.entries(sectionGroups)) {
+      if (items.some(item => isRouteActive(item.href))) {
+        setOpenSection(section as SectionKey);
+        matchedActiveSection = true;
+        break;
+      }
+    }
+    if (!matchedActiveSection && location.pathname === '/') {
+      setOpenSection('MY ACCOUNT');
+    }
+  }, [location.pathname, closeMegaMenu, sectionGroups]);
 
   // Auto-open is now handled by the route-change effect above
 
@@ -1147,7 +1147,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               // an expanded section — just navigate.
                               collapseAfterNavigation();
                               if (sectionKey === 'MY ACCOUNT') {
-                                setOpenSection(null);
+                                setOpenSection('MY ACCOUNT');
                               }
                             }}
                             data-sidebar-subitem

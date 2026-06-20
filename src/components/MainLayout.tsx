@@ -251,7 +251,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   }, [showLayoutDebug, location.pathname]);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div className="min-h-screen bg-[#F7F2EA]">
       <AuditorReadOnlyBanner />
       {/* Mobile Desktop Banner */}
       {/* Desktop banner removed — now only shows as bottom toast */}
@@ -286,8 +286,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "pl-0" : "sm:pl-[48px] [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]"} ${needsHeaderSpacing && !isHomePage ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
-          <div data-content-gutter={usesStandalonePortalChrome ? undefined : "1"} className={usesStandalonePortalChrome ? "" : "px-4 sm:px-6 lg:px-8"}>
+        <main className={`w-full max-w-full overflow-x-hidden bg-[#F7F2EA] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "pl-0" : "sm:pl-[48px] [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]"} ${needsHeaderSpacing && !isHomePage ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+          <div data-content-gutter={undefined} className="w-full max-w-full">
 
 
           {layoutGuardTriggered && isServiceRoute && (

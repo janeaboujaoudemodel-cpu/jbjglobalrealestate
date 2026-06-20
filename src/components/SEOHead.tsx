@@ -243,6 +243,13 @@ export const pagesSEO = {
     keywords: 'Dubai mortgage calculator, UAE home loan calculator, property payment calculator, mortgage rates Dubai, home loan Dubai, property finance UAE, JBJ mortgage tool',
     canonicalPath: '/mortgage-calculator',
   },
+  accountBilling: {
+    title: 'Billing & Subscriptions',
+    description: 'Manage JBJ Global Real Estate account billing, subscriptions, invoices, payment methods and usage.',
+    keywords: 'JBJ billing, account subscription, payment method, invoices, plan usage, JBJ Global Real Estate account',
+    canonicalPath: '/account/billing',
+    noIndex: false,
+  },
   faq: {
     title: 'Frequently Asked Questions - Dubai Real Estate',
     description: 'Find answers to common questions about buying, selling, and renting property in Dubai. Expert guidance from JBJ Global Real Estate.',

@@ -6432,17 +6432,24 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --ink-emerald-accent: #6EE7B7;
   --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
+  --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj-emerald-ombre-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+  --jj-emerald-light-ombre: linear-gradient(135deg, #13A078 0%, #0A6B53 56%, #064E3B 100%);
+  --jj-emerald-neon: #34D399;
   /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
-     Slightly brighter than --ink-emerald-1 so it reads as emerald on champagne. */
-  --emerald-ink: #047857;
-  --emerald-ink-soft: #0F8B6A;
+     Locked to the approved emerald/black ombre family — no flat green. */
+  --emerald-ink: #064E3B;
+  --emerald-ink-soft: #0A6B53;
 }
 
 /* Title + accent utilities — opt-in only, never global. */
 .jj-title-emerald,
 .jj-title-emerald * {
-  color: var(--emerald-ink) !important;
-  -webkit-text-fill-color: var(--emerald-ink) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
 .jj-text-emerald {
   color: var(--emerald-ink) !important;
@@ -6455,17 +6462,20 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 /* Emerald-outline pill (Email/Call/Chat trio) — champagne fill, emerald hairline,
    emerald icon+label; on hover fill emerald with white text. */
 .jj-pill-emerald {
-  background-color: #FDFBF7;
-  border: 1px solid rgba(6, 78, 59, 0.45);
-  color: var(--emerald-ink);
-  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(52, 211, 153, 0.58) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -14px rgba(6, 78, 59, 0.85), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, filter 200ms ease;
 }
-.jj-pill-emerald svg { color: var(--emerald-ink); stroke: var(--emerald-ink); }
+.jj-pill-emerald svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 .jj-pill-emerald:hover {
-  background-image: var(--gradient-ink);
-  background-color: transparent;
-  border-color: rgba(184, 149, 85, 0.65);
-  color: #FFFFFF;
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  border-color: rgba(52, 211, 153, 0.82) !important;
+  color: #FFFFFF !important;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -14px rgba(6, 78, 59, 0.95), 0 0 18px rgba(52,211,153,0.22), inset 0 1px 0 rgba(255,255,255,0.22) !important;
 }
 .jj-pill-emerald:hover svg { color: #FFFFFF; stroke: #FFFFFF; }
 
@@ -6541,6 +6551,14 @@ html body .jj-text-emerald * {
   color: var(--emerald-ink) !important;
   -webkit-text-fill-color: var(--emerald-ink) !important;
 }
+html body .jj-title-emerald,
+html body .jj-title-emerald * {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
 html body .jj-icon-emerald,
 html body .jj-icon-emerald *,
 html body .jj-icon-emerald svg,
@@ -6551,13 +6569,13 @@ html body .jj-icon-emerald svg * {
 }
 html body .jj-pill-emerald,
 html body .jj-pill-emerald * {
-  color: var(--emerald-ink) !important;
-  -webkit-text-fill-color: var(--emerald-ink) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 html body .jj-pill-emerald svg,
 html body .jj-pill-emerald svg * {
-  stroke: var(--emerald-ink) !important;
-  color: var(--emerald-ink) !important;
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
 }
 html body .jj-pill-emerald:hover,
 html body .jj-pill-emerald:hover * {
@@ -6653,5 +6671,71 @@ html body .jj-pill-emerald:focus :is(svg, [class*="lucide"]) * {
 .jj-cta-float:active {
   transform: translateY(0) scale(1);
   box-shadow: 0 4px 12px -6px rgba(4, 120, 87, 0.30);
+}
+
+/* FINAL LOCK — approved emerald/black ombre primitives. */
+html body .jj-emerald-fill,
+html body .jj-emerald-fill * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-emerald-fill {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border-color: rgba(52, 211, 153, 0.58) !important;
+}
+html body .jj-emerald-fill:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+}
+html body .jj-emerald-fill :is(svg, [class*="lucide"]),
+html body .jj-emerald-fill :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body .jj-hero-search-lock,
+html body .jj-hero-search-lock * {
+  opacity: 1 !important;
+}
+html body .jj-hero-search-lock input,
+html body .jj-hero-search-lock input:focus {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  caret-color: #064E3B !important;
+}
+html body .jj-hero-search-lock input::placeholder {
+  color: rgba(26,26,26,0.78) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.78) !important;
+}
+
+@keyframes jbj-placeholder-type {
+  0%, 12% { content: ""; }
+  18% { content: "E"; }
+  24% { content: "En"; }
+  30% { content: "Ent"; }
+  36% { content: "Enter"; }
+  44% { content: "Enter Your"; }
+  52%, 76% { content: "Enter Your Email"; }
+  82% { content: "Enter Your"; }
+  88% { content: "Enter"; }
+  94%, 100% { content: ""; }
+}
+
+html body .jj-newsletter-emerald input::placeholder {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
+  content: "Enter Your Email";
+  animation: jbj-placeholder-type 4.8s steps(1, end) infinite;
+}
+
+html body [data-chrome="sidebar"] :is([data-sidebar-section-label], [data-sidebar-section-icon], [data-sidebar-subitem-icon]) {
+  color: var(--emerald-ink) !important;
+  -webkit-text-fill-color: var(--emerald-ink) !important;
+  stroke: var(--emerald-ink) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section] {
+  color: var(--emerald-ink) !important;
 }
 

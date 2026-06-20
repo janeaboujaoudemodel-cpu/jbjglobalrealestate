@@ -48,7 +48,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
   ({ padding = "md", tone, wrapperClassName = "", className = "", width = "full", children, ...rest }, ref) => {
     const inner =
       width === "contained"
-        ? "w-full max-w-[1760px] mx-auto"
+        ? "w-full max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8"
         : "jj-fullbleed-band w-full";
 
     // Transparent wrapper: NEVER paints a background unless tone is explicit.
