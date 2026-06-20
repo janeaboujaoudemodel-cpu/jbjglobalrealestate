@@ -1,31 +1,31 @@
-## Plan to fix the global contrast system
+I found the remaining contrast conflicts and will fix them in the global system rather than patching only one visible page.
 
-1. **Remove the conflicting late CSS layers**
-   - Clean the duplicate/fighting rules at the end of `src/index.css`:
-     - `TRUE FINAL LIGHT-OWN-BACKGROUND LOCK`
-     - `STABLE SURFACE CONTRACT`
-     - broad `[data-on-dark]` / `.allow-white` repaint behavior where it can win on light surfaces.
-   - Keep contrast decisions based on the rendered/declared surface, not permission flags.
+Plan:
 
-2. **Replace them with one final contract**
-   - Add one final static CSS block with this strict polarity:
-     - Light own surface: champagne / cream / white / gold / muted / card / popover / secondary / accent → ink text/icons.
-     - Dark own surface: black / ink / dark / navy / dark CTA → white text/icons.
-     - Nested surfaces override their parent, so a light card inside a dark section stays ink, and a dark button inside a light card stays white.
-   - Include SVG/icon stroke/fill handling so the i-icon and Lucide icons follow the same contrast rule.
-   - Remove broad `div`/generic descendant repaint where it causes black-on-black or white-on-light leaks.
+1. Clean the final CSS contrast contract in `src/index.css`
+   - Stop treating `data-no-contrast-guard`, `allow-white`, and `data-allow-dark-cta` as blanket permission to escape contrast.
+   - Make the contract surface-aware:
+     - Light/champagne/gold/white own-surface always forces ink text/icons.
+     - Dark/black/navy/ink own-surface always forces white text/icons.
+     - Nested own-surfaces override the parent correctly.
+   - Add explicit protection for inline dark gradients and inline light backgrounds, because these are where the current selector gap remains.
 
-3. **Strengthen automated detection**
-   - Update the contrast architecture script so it fails if future CSS reintroduces multiple final contrast contracts, broad `data-on-dark` repaint rules, or generic unscoped `color: #FFFFFF !important` / `color: #1A1A1A !important` sweeps.
-   - Update the visible contrast scanner to flag:
-     - white/light foreground on champagne/white/gold/light gradients,
-     - black/dark foreground on black/dark/navy/green/purple surfaces,
-     - SVG stroke contrast, not just text color.
+2. Fix the confirmed `/list-property` failures
+   - The segmented listing pills currently use `data-no-contrast-guard` and inline styles, so the inactive white buttons can keep white text and active dark-gradient chooser cards can inherit ink.
+   - Remove the unnecessary escape flags from the segmented pills/cards or add correct `data-surface`/CTA markers so the global rule can classify them correctly.
+   - Ensure active dark-gradient cards/buttons render white and inactive white cards/buttons render ink/deep accent.
 
-4. **Visual validation only after the CSS change**
-   - Use the browser preview and rendered scans across key front/back-office routes: `/`, `/properties`, `/developers`, `/market-intelligence`, `/market-report`, `/guides`, `/faq`, `/list-property`, `/owner`, `/owner/crm`, `/admin`.
-   - Check desktop and mobile viewport sizes.
-   - Do not mark complete unless the visible screenshots/scanner show no white-on-light or black-on-dark failures on the tested routes.
+3. Fix the welcome guide modal contrast leak
+   - The modal visually showed white text on a light champagne/white card even though the DOM intended ink.
+   - Mark the modal card as a light surface and remove/neutralize any inherited hero/dark text-fill leakage.
+   - Keep the “Start the quick tour” button as a true dark CTA with white text/icons.
 
-5. **Report honestly**
-   - If any route requires login or cannot be fully validated from the preview session, state that clearly instead of claiming full E2E coverage.
+4. Harden the automated visual scanner
+   - Add the important routes to the default scan list, not only `/` and `/founder`.
+   - Make the scanner catch the exact cases now seen: white text-fill on light modal/card surfaces, black text-fill on dark gradients, and SVG stroke/fill polarity failures.
+
+5. Validate visually before reporting done
+   - Re-run the architecture guard.
+   - Re-run the rendered contrast scan across: `/`, `/properties`, `/developers`, `/market-intelligence`, `/market-report`, `/guides`, `/faq`, `/list-property`, `/tools`, `/owner`, `/owner/crm`, `/admin`, `/compare`, `/document-studio`.
+   - Use browser screenshots/inspection for `/` welcome modal and `/list-property` because those are confirmed visual failures.
+   - I will only report fixed if the rendered checks pass; if an authenticated route cannot be fully inspected, I will state that clearly.
