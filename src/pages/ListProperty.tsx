@@ -568,6 +568,8 @@ function PickerCard({
         background: cardGradient,
         border: `1px solid ${PURPLE}`,
         boxShadow: `0 18px 40px -18px ${NAVY}AA`,
+        color: "#FFFFFF",
+        WebkitTextFillColor: "#FFFFFF",
       }}
     >
       {/* shimmer ombre glow */}
