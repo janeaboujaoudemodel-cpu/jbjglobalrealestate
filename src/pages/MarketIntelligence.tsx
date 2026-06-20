@@ -163,13 +163,25 @@ const MarketIntelligence = () => {
             className="mt-8 flex flex-wrap gap-3"
             variants={fadeInUp}
           >
-            <a href="#overview" data-no-contrast-guard className={heroCtaClass}>
-              <span>Explore Market Dashboard</span>
-              <ArrowUpRight className="w-5 h-5" />
+            <a
+              href="#overview"
+              data-no-contrast-guard
+              data-on-dark
+              className={heroCtaClass}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Explore Market Dashboard</span>
+              <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </a>
-            <Link to="/market-report" data-no-contrast-guard className={heroCtaClass}>
-              <span>View Daily Reports</span>
-              <ArrowUpRight className="w-5 h-5" />
+            <Link
+              to="/market-report"
+              data-no-contrast-guard
+              data-on-dark
+              className={heroCtaClass}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View Daily Reports</span>
+              <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </Link>
           </motion.div>
         </motion.div>
