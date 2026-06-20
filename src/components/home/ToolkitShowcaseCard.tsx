@@ -154,7 +154,7 @@ export function ToolkitShowcaseCard() {
 
           {/* Active tool hero panel — image fills card; soft bottom fade
               only; frosted-glass CTA so the image shows through. */}
-          <div key={active.id} data-ink-emerald-opt-out data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
+          <div key={active.id} data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center animate-fade-in"
               style={{ backgroundImage: `url(${active.image})` }}
