@@ -138,7 +138,6 @@ export function ToolkitShowcaseCard() {
                 <button
                   key={t.id}
                   data-tab-id={t.id}
-                  data-cta="dark"
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveId(t.id)}
