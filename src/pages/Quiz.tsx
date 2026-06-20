@@ -1011,16 +1011,16 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
+      <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
+        <div className="border-b border-[#B89555]/25 bg-[#F7F2EA]">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowForm(false)}
                 data-no-contrast-guard
-                className="allow-white text-white transition-colors flex items-center gap-2"
+                className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
@@ -1038,12 +1038,12 @@ const Quiz = () => {
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
               <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 mx-auto mb-4 flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-white" />
+                <Sparkles className="w-8 h-8 text-[#B89555]" />
               </div>
-               <h2 className="text-white text-3xl font-bold mb-2">
+               <h2 className="text-[#1A1A1A] text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
-              <p className="text-white/70">
+              <p className="text-[#1A1A1A]/70">
                 Enter your details to receive your personalized property recommendations
               </p>
             </div>
