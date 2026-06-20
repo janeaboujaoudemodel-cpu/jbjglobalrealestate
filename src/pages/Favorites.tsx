@@ -446,17 +446,17 @@ const Favorites = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-[#FDFBF7]/60 rounded-2xl p-6 border border-[#B89555]/20">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center">
-                        <Sparkles className="w-6 h-6 text-white" />
+                      <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                        <Sparkles className="w-6 h-6 text-[#B89555]" />
                       </div>
                       <div>
                         <h3 className="text-[#1A1A1A] font-semibold">AI Comparison</h3>
-                        <p className="text-[#1A1A1A]/40 text-sm">Get instant analysis</p>
+                        <p className="text-[#1A1A1A]/60 text-sm">Get instant analysis</p>
                       </div>
                     </div>
-                    <p className="text-[#1A1A1A]/50 text-sm mb-4">Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.</p>
+                    <p className="text-[#1A1A1A]/70 text-sm mb-4">Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.</p>
                     <Link to="/compare">
-                      <Button className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white">
+                      <Button data-cta="dark" className="jj-cta-dark w-full">
                         Compare with AI <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>

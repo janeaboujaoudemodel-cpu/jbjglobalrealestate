@@ -22,12 +22,12 @@ import { BookShelf } from '@/components/books/BookShelf';
 import { INVESTOR_BOOKS } from '@/data/bookCollections';
 
 const quickCards = [
-  { title: 'Dashboard', desc: 'Overview of your investments', icon: BarChart3, href: '/investor-dashboard', color: 'from-fuchsia-500 to-purple-600' },
-  { title: 'Favorites', desc: 'Saved properties', icon: Heart, href: '/favorites', color: 'from-rose-500 to-pink-600' },
-  { title: 'Shortlisted', desc: 'Compare properties', icon: Star, href: '/compare', color: 'from-amber-500 to-orange-600' },
-  { title: 'My Profile', desc: 'Account settings', icon: User, href: '/profile', color: 'from-blue-500 to-indigo-600' },
-  { title: 'My Listings', desc: 'Manage your listings', icon: FileSignature, href: '/listing-portal', color: 'from-emerald-500 to-teal-600' },
-  { title: 'My Documents', desc: 'Uploaded documents', icon: FolderOpen, href: '/investor-documents', color: 'from-cyan-500 to-blue-600' },
+  { title: 'Dashboard', desc: 'Overview of your investments', icon: BarChart3, href: '/investor-dashboard', color: 'from-[#B89555] to-[#8a6f3f]' },
+  { title: 'Favorites', desc: 'Saved properties', icon: Heart, href: '/favorites', color: 'from-[#B89555] to-[#8a6f3f]' },
+  { title: 'Shortlisted', desc: 'Compare properties', icon: Star, href: '/compare', color: 'from-[#B89555] to-[#8a6f3f]' },
+  { title: 'My Profile', desc: 'Account settings', icon: User, href: '/profile', color: 'from-[#B89555] to-[#8a6f3f]' },
+  { title: 'My Listings', desc: 'Manage your listings', icon: FileSignature, href: '/listing-portal', color: 'from-[#B89555] to-[#8a6f3f]' },
+  { title: 'My Documents', desc: 'Uploaded documents', icon: FolderOpen, href: '/investor-documents', color: 'from-[#B89555] to-[#8a6f3f]' },
 ];
 
 const aiTools = [
@@ -307,12 +307,13 @@ const InvestorHub = () => {
         </div>
 
         {/* Explore All Tools CTA */}
-        <div className="bg-gradient-to-r from-indigo-900/30 to-fuchsia-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
-          <Sparkles className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
-          <h3 className="text-xl font-bold text-white mb-2">Explore All AI Tools</h3>
-          <p className="text-white/70 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
+        <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-8 text-center">
+          <Sparkles className="w-8 h-8 text-[#B89555] mx-auto mb-3" />
+          <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">Explore All AI Tools</h3>
+          <p className="text-[#1A1A1A]/70 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
+            <Button onClick={() => navigate('/ai-hub')} data-cta="dark" className="jj-cta-dark font-medium">
+
               Go to JBJ Tools Hub
               <ArrowUpRight className="w-4 h-4 ml-2" />
             </Button>

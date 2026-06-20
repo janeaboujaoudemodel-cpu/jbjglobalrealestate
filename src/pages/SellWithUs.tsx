@@ -317,7 +317,7 @@ const SellWithUs = () => {
                         </Select>
                       </div>
                     </div>
-                    <Button onClick={handleQuickValuation} disabled={isValuating} className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-6 rounded-xl">
+                    <Button onClick={handleQuickValuation} disabled={isValuating} data-cta="dark" className="jj-cta-dark w-full font-semibold py-6 rounded-xl">
                       {isValuating ? <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Analyzing...</> : <><Search className="w-4 h-4 mr-2" />Get Instant Valuation</>}
                     </Button>
                     <p className="text-xs text-[#1A1A1A]/70 text-center">Sources: DLD Public Records · RERA · JBJ Analysis Framework</p>
@@ -471,7 +471,7 @@ const SellWithUs = () => {
                   <Sparkles className="w-10 h-10 text-white/85 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Get Started Now</h3>
                   <p className="text-[#1A1A1A]/70 text-sm mb-6">Use our AI tools to get an instant valuation</p>
-                  <Button onClick={() => scrollTo(valuationRef)} className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium rounded-xl w-full">
+                  <Button onClick={() => scrollTo(valuationRef)} data-cta="dark" className="jj-cta-dark font-medium rounded-xl w-full">
                     <Sparkles className="mr-2 h-4 w-4" /> AI Valuation
                   </Button>
                 </motion.div>
