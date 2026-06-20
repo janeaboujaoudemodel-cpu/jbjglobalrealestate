@@ -332,16 +332,16 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
       <div>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-[#EFE6D6] border border-[#B89555]/45 mb-8">
-            <TabsTrigger value="property" className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
+            <TabsTrigger value="property" data-cta="dark" className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Property Details
             </TabsTrigger>
-            <TabsTrigger value="modifications" className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
+            <TabsTrigger value="modifications" data-cta="dark" className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Modifications
             </TabsTrigger>
-            <TabsTrigger value="owner" className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
+            <TabsTrigger value="owner" data-cta="dark" className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Owner Info
             </TabsTrigger>
-            <TabsTrigger value="results" disabled={!evaluation} className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
+            <TabsTrigger value="results" data-cta="dark" disabled={!evaluation} className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Results
             </TabsTrigger>
           </TabsList>
