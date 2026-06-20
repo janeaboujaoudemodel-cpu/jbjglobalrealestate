@@ -60,7 +60,7 @@ export const AIToolRoutes = () => (
     <Route path="/ai-budget-planner" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
     <Route path="/ai-personal-shopper" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-home-finder" element={<Navigate to="/quiz" replace />} />
+    {/* /ai-home-finder is canonical (defined in PublicRoutes); /quiz redirects there. */}
     <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/my-ai-history" element={<MyAIHistory />} />
     <Route path="/meeting-center" element={<MeetingCenter />} />
