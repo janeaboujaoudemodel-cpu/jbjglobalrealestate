@@ -556,45 +556,47 @@ export const ConsultationRequestForm = ({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="agreeTerms"
-            render={({ field }) => (
-              <FormItem className="flex items-start gap-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    className="mt-0.5"
-                  />
-                </FormControl>
-                <div className="flex-1 min-w-0 space-y-1">
-                  <p className="text-[#1A1A1A] text-sm leading-tight font-normal">
-                    I agree to the <a href="/terms" className="text-[#1A1A1A] underline">Terms</a> and <a href="/privacy" className="text-[#1A1A1A] underline">Privacy Policy</a> *
-                  </p>
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
+            <FormField
+              control={form.control}
+              name="agreeTerms"
+              render={({ field }) => (
+                <FormItem className="flex items-start gap-3 space-y-0 flex-1 min-w-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="mt-0.5"
+                    />
+                  </FormControl>
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <p className="text-[#1A1A1A] text-sm leading-tight font-normal">
+                      I agree to the <a href="/terms" className="text-[#1A1A1A] underline">Terms</a> and <a href="/privacy" className="text-[#1A1A1A] underline">Privacy Policy</a> *
+                    </p>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="jj-cta-gold-metallic w-full h-14 text-base font-bold inline-flex items-center justify-center gap-2"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              <>
-                <span>Request Consultation</span>
-                <Send className="w-4 h-4" />
-              </>
-            )}
-          </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="jj-cta-gold-metallic h-14 px-8 text-base font-bold inline-flex items-center justify-center gap-2 shrink-0 w-full sm:w-auto"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <span>Request Consultation</span>
+                  <Send className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </div>
         </form>
       </Form>
     </motion.div>
