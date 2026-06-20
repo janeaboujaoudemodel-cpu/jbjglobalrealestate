@@ -1013,7 +1013,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
   };
 
   const renderNavContent = () => (
-    <div className="flex flex-col h-full">
+    <div data-sidebar-emerald className="flex flex-col h-full">
       {/* ━━━ LOGO HEADER (88px) — clean, no collapse control ━━━ */}
       <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-3 before:bottom-3 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)] after:content-[''] after:absolute after:left-3 after:right-3 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
@@ -1300,19 +1300,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {/* Section icons — unified gold tile, blue on hover */}
           <style>{`
             .jj-side-tile {
-              background-color: #FDFBF7 !important;
-              border: 1px solid #B89555 !important;
-              color: #B89555 !important;
-              transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease !important;
+              background: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
+              border: 1px solid rgba(255,255,255,0.85) !important;
+              color: #FFFFFF !important;
+              box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
+              transition: transform 180ms ease, box-shadow 180ms ease !important;
             }
             .jj-side-tile svg,
-            .jj-side-tile svg * { color: #B89555 !important; stroke: #B89555 !important; transition: color 180ms ease, stroke 180ms ease !important; }
-            .jj-side-tile:hover { background-color: #0A0A0A !important; border-color: #0A0A0A !important; box-shadow: 0 2px 6px rgba(10,10,10,.25) !important; }
-            .jj-side-tile:hover svg,
-            .jj-side-tile:hover svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
-            .jj-side-tile.is-active { background-color: #0A0A0A !important; border-color: #0A0A0A !important; }
-            .jj-side-tile.is-active svg,
-            .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+            .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; transition: color 180ms ease, stroke 180ms ease !important; }
+            .jj-side-tile:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 10px -2px rgba(4,120,87,0.55), 0 0 0 2px rgba(16,185,129,0.35), inset 0 0 0 1px rgba(255,255,255,0.4) !important; }
+            .jj-side-tile.is-active { box-shadow: 0 0 0 2px rgba(16,185,129,0.55), 0 2px 8px rgba(4,120,87,0.45) !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
