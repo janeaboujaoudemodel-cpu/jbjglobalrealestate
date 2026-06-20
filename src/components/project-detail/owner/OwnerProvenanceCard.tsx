@@ -90,7 +90,7 @@ export default function OwnerProvenanceCard({
   const [historyOpen, setHistoryOpen] = useState(false);
   const [enrichOpen, setEnrichOpen] = useState(false);
   const [enrichSection, setEnrichSection] = useState<string | undefined>(undefined);
-  const [bedOpen, setBedOpen] = useState(false);
+  
 
   const { data: logs = [], refetch } = useQuery({
     queryKey: ["admin-edit-log", projectId],
