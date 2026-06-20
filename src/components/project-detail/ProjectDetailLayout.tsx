@@ -41,6 +41,7 @@ import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { ProjectAIAnalyzer } from "@/components/project-detail/ProjectAIAnalyzer";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
+import GeneratePresentationCard from "@/components/project-detail/GeneratePresentationCard";
 import BookStyleDocuments from "@/components/project-detail/BookStyleDocuments";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import OwnerDocDropzone from "@/components/project-detail/owner/OwnerDocDropzone";
@@ -1476,6 +1477,13 @@ export default function ProjectDetailLayout({
               </div>
             </div>
           </div>
+
+          {/* GENERATE PRESENTATION — broker / owner / developer modes only */}
+          <div className="mb-14">
+            <GeneratePresentationCard project={project as any} />
+          </div>
+
+
 
           {/* BOOK-STYLE ALL DOCUMENTS STRIP + OWNER DROPZONE */}
           <div className="mb-14">

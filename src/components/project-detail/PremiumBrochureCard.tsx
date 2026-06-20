@@ -188,10 +188,12 @@ const PremiumBrochureCard = ({
             <div
               data-no-contrast-guard
               data-on-dark
-              className="absolute top-4 left-8 flex items-center gap-2.5 pr-3 py-1.5 rounded-md allow-white"
+              className="absolute top-4 left-7 flex items-center gap-3 pr-4 py-2 rounded-md allow-white"
               style={{
-                background: "linear-gradient(90deg, rgba(8,12,20,0.88) 0%, rgba(8,12,20,0.65) 75%, rgba(8,12,20,0) 100%)",
-                paddingLeft: 6,
+                background: "rgba(8,12,20,0.92)",
+                paddingLeft: 7,
+                border: "1px solid rgba(184,149,85,0.55)",
+                boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
               }}
             >
               <div
@@ -212,11 +214,11 @@ const PremiumBrochureCard = ({
               </div>
               <p
                 data-no-contrast-guard
-                className="text-[12px] font-bold uppercase tracking-[0.22em] leading-none whitespace-nowrap allow-white"
-                style={{ color: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95), 0 0 18px rgba(0,0,0,0.7)" }}
+                className="text-[14px] uppercase leading-none whitespace-nowrap allow-white"
+                style={{ color: "#FFFFFF", letterSpacing: "0.18em", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
               >
-                <span style={{ color: "#F3D98A" }} className="font-extrabold">JBJ</span>{" "}
-                <span className="font-medium tracking-[0.24em]" style={{ color: "#FFFFFF" }}>Global Real Estate</span>
+                <span style={{ color: "#F3D98A", fontWeight: 800 }}>JBJ</span>{" "}
+                <span style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.2em" }}>Global Real Estate</span>
               </p>
             </div>
 
