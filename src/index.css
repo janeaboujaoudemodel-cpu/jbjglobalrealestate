@@ -7255,3 +7255,133 @@ html body footer p:last-child {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================
+   PASS 14 — Emerald Sidebar Lock (Batch B)
+   Scope: [data-sidebar-emerald] only — never leaks elsewhere.
+   Rules:
+   - Main category labels (highlights + section accordion buttons): emerald-ombre text
+   - Icon tiles (main + sub): FILLED emerald-ombre with WHITE glyph + white hairline ring
+   - Hover: 3D emerald glow lift, never gold
+   - Subitem labels: ink #1A1A1A (readable on champagne), white on hover-emerald tile
+   - No gold borders/dividers anywhere inside the sidebar nav rows
+   ============================================================ */
+
+/* Kill gold left-border on expanded section column */
+[data-sidebar-emerald] .border-l { border-left-color: rgba(4, 120, 87, 0.25) !important; }
+
+/* Emerald gradient utility (reuse) */
+[data-sidebar-emerald] :where([data-sidebar-section], a.group)[class*="!text-[#B89555]"],
+[data-sidebar-emerald] [data-sidebar-section-label],
+[data-sidebar-emerald] a.group > span.flex-1[class*="!text-[#B89555]"] {
+  background: linear-gradient(135deg, #0a3d2e 0%, #047857 45%, #10b981 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+/* Main category icon tiles — filled emerald, white glyph, white ring */
+[data-sidebar-emerald] a.group > span.w-5.h-5,
+[data-sidebar-emerald] [data-sidebar-section] > div.w-5.h-5 {
+  background: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 1px 2px rgba(4, 120, 87, 0.35), inset 0 0 0 1px rgba(16, 185, 129, 0.25) !important;
+  transition: all 200ms ease !important;
+}
+[data-sidebar-emerald] a.group > span.w-5.h-5 > svg,
+[data-sidebar-emerald] [data-sidebar-section] svg[data-sidebar-section-icon] {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Chevrons next to category labels — emerald */
+[data-sidebar-emerald] a.group > svg.lucide-chevron-right,
+[data-sidebar-emerald] [data-sidebar-section] > svg.lucide-chevron-down {
+  color: #047857 !important;
+  stroke: #047857 !important;
+}
+
+/* Hover lift / glow on main category rows */
+[data-sidebar-emerald] a.group:hover > span.w-5.h-5,
+[data-sidebar-emerald] [data-sidebar-section]:hover > div.w-5.h-5 {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 10px -2px rgba(4, 120, 87, 0.55), 0 0 0 2px rgba(16, 185, 129, 0.35), inset 0 0 0 1px rgba(255,255,255,0.4) !important;
+}
+
+/* Suppress gold hover-underline pseudo on rows */
+[data-sidebar-emerald] a.group span[class*="after:bg-[#0A0A0A]"]::after,
+[data-sidebar-emerald] [data-sidebar-section-label]::after {
+  background: linear-gradient(90deg, #047857, #10b981) !important;
+}
+
+/* ── Subcategory rows ────────────────────────────────────── */
+/* Strip any white/gold filled box on subitems (My Account etc.) */
+[data-sidebar-emerald] a[data-sidebar-subitem] {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+[data-sidebar-emerald] a[data-sidebar-subitem]:hover {
+  background: rgba(4, 120, 87, 0.06) !important;
+}
+
+/* Subitem icon tile — filled emerald, white glyph, white ring */
+[data-sidebar-emerald] a[data-sidebar-subitem] > span.w-5.h-5 {
+  background: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 1px 2px rgba(4, 120, 87, 0.3), inset 0 0 0 1px rgba(16, 185, 129, 0.2) !important;
+  transition: all 200ms ease !important;
+}
+[data-sidebar-emerald] a[data-sidebar-subitem] svg[data-sidebar-subitem-icon] {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-sidebar-emerald] a[data-sidebar-subitem]:hover > span.w-5.h-5 {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 10px -2px rgba(4, 120, 87, 0.55), 0 0 0 2px rgba(16, 185, 129, 0.35), inset 0 0 0 1px rgba(255,255,255,0.4) !important;
+}
+
+/* Subitem labels — ink at rest, emerald-ombre on hover */
+[data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+  transition: all 180ms ease !important;
+}
+[data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
+  background: linear-gradient(135deg, #0a3d2e 0%, #047857 45%, #10b981 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+/* "View All Tools" pinned row — emerald outline pill, no gold */
+[data-sidebar-emerald] a[href="/ai-hub"] {
+  background: rgba(4, 120, 87, 0.04) !important;
+  border-color: rgba(4, 120, 87, 0.45) !important;
+  color: #1A1A1A !important;
+}
+[data-sidebar-emerald] a[href="/ai-hub"] > span.w-5.h-5 {
+  background: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+}
+[data-sidebar-emerald] a[href="/ai-hub"] > span.w-5.h-5 svg,
+[data-sidebar-emerald] a[href="/ai-hub"] > svg.lucide-chevron-right {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+[data-sidebar-emerald] a[href="/ai-hub"] > svg.lucide-chevron-right {
+  color: #047857 !important;
+  stroke: #047857 !important;
+}
+
+/* Active-section pulse dot → emerald */
+[data-sidebar-emerald] span.bg-\[\#B89555\].animate-pulse {
+  background: #10b981 !important;
+}
+
+/* Replace gold horizontal divider before View All Tools with emerald glow */
+[data-sidebar-emerald] [aria-hidden="true"][style*="rgba(184,149,85"] {
+  background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.35) 50%, transparent 100%) !important;
+}
