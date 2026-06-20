@@ -5414,6 +5414,61 @@ html body :where(
   stroke: #FFFFFF !important;
 }
 
+/* ============================================================
+ * ABSOLUTE OWN-LIGHT-SURFACE CONTRAST LOCK
+ * True champagne / cream / gold / white surfaces ALWAYS own ink text/icons.
+ * This deliberately beats `.allow-white`, `[data-no-contrast-guard]`, and
+ * `[data-on-dark]` when they are incorrectly placed on a light own-background.
+ * Only actual dark/black CTA primitives can keep white inside light layouts.
+ * ============================================================ */
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"], [class*="bg-pearl"],
+  [class*="bg-beige"], [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  [data-cta="champagne"], [data-cta="outline"],
+  .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
+  .jj-card-inner, .jj-layer-2
+):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+:where(
+  .bg-white, [class*="bg-white/"],
+  .bg-\[\#FFFFFF\], .bg-\[\#FFF\],
+  .bg-\[\#FDFBF7\], .bg-\[\#FAF5EC\], .bg-\[\#F7F2EA\],
+  .bg-\[\#F5F0E6\], .bg-\[\#F2EADB\], .bg-\[\#EFE6D6\],
+  .bg-\[\#EADFC8\], .bg-\[\#E8DCC4\], .bg-\[\#E5D9BE\],
+  .bg-\[\#B89555\],
+  [class*="bg-champagne"], [class*="bg-cream"], [class*="bg-pearl"],
+  [class*="bg-beige"], [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl,
+  .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"],
+  [data-surface="champagne"], [data-surface="cream"],
+  [data-surface="raised"], [data-surface="gold"],
+  [data-cta="champagne"], [data-cta="outline"],
+  .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
+  .jj-card-inner, .jj-layer-2
+):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"])
+  :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#0A0A0A]"] *):not([class*="bg-[#1A1A1A]"]):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-black"]):not([class*="bg-black"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
 /* FINAL SIDEBAR LOCK — expanded section titles gold; expanded sub-items ink with gold icons. */
 html body [data-sidebar-section],
 html body [data-sidebar-section] [data-sidebar-section-label],
