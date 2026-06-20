@@ -5,7 +5,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, BookOpen, ChevronRight, ListChecks, Sparkles } from "lucide-react";
+import { Loader2, BookOpen, ChevronRight, ListChecks, Sparkles, Palette } from "lucide-react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
