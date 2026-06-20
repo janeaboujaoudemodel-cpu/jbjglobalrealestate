@@ -272,8 +272,7 @@ const AIHF_STYLE = `
     box-shadow: none !important;
   }
   .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
-    min-width: 12rem;
-    min-height: 4rem;
+    min-width: 7rem;
     background: #0A0A0A !important;
     border: 1px solid rgba(184,149,85,0.65) !important;
     box-shadow: none !important;
@@ -871,31 +870,31 @@ const Quiz = () => {
       <section
         data-allow-dark-cta
         data-no-contrast-guard
-        data-on-dark
-        className="aihf-root allow-white min-h-screen flex flex-col"
-        style={{ background: "#F7F2EA" }}
+        className="aihf-root min-h-screen flex flex-col"
+        style={{ background: "#FDFBF7" }}
       >
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[rgba(184,149,85,0.25)] backdrop-blur-sm" style={{ background: "rgba(10,10,10,0.6)" }}>
+        <div className="border-b border-[#B89555]/25" style={{ background: "#F7F2EA" }}>
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => navigate(-1)}
                 data-no-contrast-guard
-                className="allow-white transition-colors flex items-center gap-2"
-                style={{ color: "rgba(255,255,255,0.85)" }}
+                className="transition-colors flex items-center gap-2"
+                style={{ color: "#1A1A1A" }}
               >
-                <ChevronLeft className="w-5 h-5 allow-white" />
-                <span className="allow-white">Exit</span>
+                <ChevronLeft className="w-5 h-5" />
+                <span>Exit</span>
               </button>
-              <div className="flex items-center gap-3" style={{ color: "rgba(255,255,255,0.75)" }}>
-                <Clock className="w-4 h-4 allow-white" />
-                <span className="text-sm allow-white">~{estimatedTime} seconds</span>
+              <div className="flex items-center gap-3" style={{ color: "#1A1A1A" }}>
+                <Clock className="w-4 h-4" />
+                <span className="text-sm">~{estimatedTime} seconds</span>
               </div>
             </div>
           </div>
         </div>
+
 
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div
@@ -998,7 +997,7 @@ const Quiz = () => {
               <ArrowUpRight className="w-5 h-5 ml-2 allow-white" />
             </Button>
 
-            <p className="allow-white text-xs mt-6" style={{ color: "rgba(255,255,255,0.65)" }}>
+            <p className="text-xs mt-6" style={{ color: "rgba(26,26,26,0.65)" }}>
               Save money by choosing the right property the first time.
             </p>
           </div>
@@ -1011,16 +1010,16 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
+      <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
+        <div className="border-b border-[#B89555]/25 bg-[#F7F2EA]">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowForm(false)}
                 data-no-contrast-guard
-                className="allow-white text-white transition-colors flex items-center gap-2"
+                className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
@@ -1038,12 +1037,12 @@ const Quiz = () => {
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
               <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 mx-auto mb-4 flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-white" />
+                <Sparkles className="w-8 h-8 text-[#B89555]" />
               </div>
-               <h2 className="text-white text-3xl font-bold mb-2">
+               <h2 className="text-[#1A1A1A] text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
-              <p className="text-white/70">
+              <p className="text-[#1A1A1A]/70">
                 Enter your details to receive your personalized property recommendations
               </p>
             </div>
@@ -1051,7 +1050,7 @@ const Quiz = () => {
             <div className="bg-[#F7F2EA] border border-[#B89555]/55 rounded-2xl p-6 md:p-8">
               <div className="space-y-5">
                 <div>
-                  <Label className="text-white mb-2 block">Full Name *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Full Name *</Label>
                   <Input
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -1060,7 +1059,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Email Address *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Email Address *</Label>
                   <Input
                     type="email"
                     value={formData.email}
@@ -1070,7 +1069,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Phone Number *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Phone Number *</Label>
                   <Input
                     type="tel"
                     value={formData.phone}
@@ -1080,7 +1079,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Nationality *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Nationality *</Label>
                   <SearchableSelect
                     value={formData.nationality}
                     onChange={(value) => setFormData({ ...formData, nationality: value })}
@@ -1093,7 +1092,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Preferred Language *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Language *</Label>
                   <SearchableSelect
                     value={formData.preferredLanguage}
                     onChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
@@ -1146,8 +1145,8 @@ const Quiz = () => {
                 </p>
               )}
 
-              <p className="text-white/70 text-xs text-center mt-6 leading-relaxed">
-                Powered by <span className="text-white font-semibold">JBJ Global Real Estate</span>
+              <p className="text-[#1A1A1A]/70 text-xs text-center mt-6 leading-relaxed">
+                Powered by <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
@@ -1161,21 +1160,21 @@ const Quiz = () => {
   // Quiz Questions Screen
   return (
     <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
       {/* Header */}
-      <div className="border-b border-[#B89555]/30 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[#B89555]/25 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
               data-no-contrast-guard
-              className="allow-white text-white hover:text-white transition-colors flex items-center gap-2"
+              className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
             </button>
-            <div className="text-white/70 text-sm">
+            <div className="text-[#1A1A1A]/70 text-sm">
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
@@ -1189,16 +1188,18 @@ const Quiz = () => {
         </div>
       </div>
 
+
       {/* Question Content with optional Preferences Sidebar */}
       <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
         <div className="w-full max-w-4xl flex gap-8 justify-center">
           {/* Main Question Area */}
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
-              className="text-white text-2xl md:text-3xl font-bold mb-8 text-center"
+              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
             >
               {currentQuestion.question}
             </h2>
+
 
             {/* Multiple Select Controls */}
             {currentQuestion.type === "multiple" && currentQuestion.hasSelectAll && (
@@ -1254,7 +1255,7 @@ const Quiz = () => {
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
-                    <span className="font-medium text-sm md:text-base text-white">
+                    <span className="font-medium text-sm md:text-base text-[#1A1A1A]">
                       {option.label}
                     </span>
                   </button>
@@ -1268,19 +1269,19 @@ const Quiz = () => {
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
                 data-no-contrast-guard
-                className="aihf-cta px-8 py-6 text-lg font-semibold"
+                className="aihf-cta h-11 px-5 text-sm font-semibold"
               >
-                <ChevronLeft className="w-5 h-5 mr-2" />
+                <ChevronLeft className="w-4 h-4 mr-2" />
                 Back
               </Button>
               <Button
                 onClick={handleNext}
                 disabled={!isAnswered()}
                 data-no-contrast-guard
-                className="aihf-cta font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="aihf-cta h-11 px-6 text-sm font-semibold hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
-                <ChevronRight className="w-5 h-5 ml-2" />
+                <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
           </div>
@@ -1288,7 +1289,7 @@ const Quiz = () => {
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
             <div className="sticky top-24 rounded-2xl border border-[#B89555]/55 bg-[#F7F2EA] p-5">
-              <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#B89555]" />
                 Your Preferences
               </h3>
@@ -1301,15 +1302,15 @@ const Quiz = () => {
                     : q.options.find(o => o.value === answer)?.label || String(answer);
                   return (
                     <div key={q.id} className="text-xs">
-                      <p className="text-white/60 uppercase tracking-wider text-[10px] mb-0.5">
+                      <p className="text-[#1A1A1A]/55 uppercase tracking-wider text-[10px] mb-0.5">
                         {q.id.replace(/_/g, " ")}
                       </p>
-                      <p className="text-white font-medium truncate">{displayValue}</p>
+                      <p className="text-[#1A1A1A] font-medium truncate">{displayValue}</p>
                     </div>
                   );
                 })}
                 {Object.keys(answers).length === 0 && (
-                  <p className="text-white/60 text-xs italic">Answer questions to see your preferences here</p>
+                  <p className="text-[#1A1A1A]/55 text-xs italic">Answer questions to see your preferences here</p>
                 )}
               </div>
             </div>
