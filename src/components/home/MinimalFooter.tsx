@@ -1,14 +1,6 @@
 /**
  * MinimalFooter — single-line public footer per founder directive.
- * Links: Privacy · Cookies · Sitemap · Contact. Copyright underneath.
- *
- * Unified champagne theme across all devices, matching the vertical sidebar
- * header gradient (left → right) so they read as one continuous frame.
- * Offset by the 200px sidebar on desktop so it aligns with the sidebar footer row
- * (Contact / Support / Sign Out / Collapse).
- *
- * The full corporate footer (Footer.tsx) remains available for back-office /
- * marketing surfaces.
+ * Mother-of-pearl white band with emerald accent links and copyright.
  */
 import { Link } from "react-router-dom";
 
@@ -23,17 +15,12 @@ const MinimalFooter = () => {
   return (
     <footer
       className={[
-        // Champagne band — full-bleed edge-to-edge UNDER the fixed vertical
-        // sidebar so there is no gap between the sidebar's right border and
-        // the footer (whether the sidebar is expanded 200px or collapsed 48px).
-        "w-full bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6]",
-        "border-t border-[#B89555]/40",
+        "w-full bg-gradient-to-r from-[#FFFFFF] via-[#FBFCFB] to-[#F5F9F6]",
+        "border-t border-[#047857]/25",
       ].join(" ")}
       data-surface="champagne"
+      data-jj-minimal-footer
     >
-      {/* Inner content offsets by the live sidebar width so links stay
-          optically centered in the visible content area; the band itself
-          extends behind the sidebar. */}
       <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-5 md:py-6 transition-[padding-left] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]">
         <nav
           aria-label="Footer"
@@ -45,6 +32,7 @@ const MinimalFooter = () => {
                 to={l.href}
                 data-no-contrast-guard
                 className="jj-text-emerald text-[12px] md:text-[13px] font-semibold transition-opacity hover:opacity-80"
+                style={{ color: "#047857" }}
               >
                 {l.label}
               </Link>
@@ -53,6 +41,7 @@ const MinimalFooter = () => {
                   aria-hidden
                   data-decorative="true"
                   className="jj-text-emerald"
+                  style={{ color: "#047857" }}
                 >
                   ·
                 </span>
@@ -65,12 +54,16 @@ const MinimalFooter = () => {
           className="mx-auto mt-4 h-px w-40 max-w-full"
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(184,149,85,0.55), transparent)",
+              "linear-gradient(90deg, transparent, rgba(4,120,87,0.55), transparent)",
           }}
           aria-hidden
         />
 
-        <p className="mt-3 text-center text-[11px] md:text-[12px] text-[#1A1A1A]/70 tracking-[0.02em]">
+        <p
+          className="mt-3 text-center text-[11px] md:text-[12px] font-semibold tracking-[0.02em]"
+          style={{ color: "#047857" }}
+          data-no-contrast-guard
+        >
           © 2026 JBJ GLOBAL REAL ESTATE. All rights reserved.
         </p>
       </div>

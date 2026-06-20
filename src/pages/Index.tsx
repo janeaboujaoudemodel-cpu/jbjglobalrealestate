@@ -262,7 +262,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-5xl mx-auto text-center pt-[max(3vh,40px)] sm:pt-[5vh] md:pt-[8vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-4 md:space-y-5">
+          <div className="w-full max-w-5xl mx-auto text-center pt-[max(18vh,160px)] sm:pt-[24vh] md:pt-[32vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-4 md:space-y-5">
             {/* Eyebrow tagline removed per owner directive — keep hero copy minimal */}
 
             {/* Headline — exact copy from reference photo */}
@@ -409,9 +409,10 @@ const Index = () => {
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="py-4">
         <LazyVisible minHeight={420} rootMargin="1200px">
           <div
-            className="rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.25),0_10px_30px_-18px_rgba(184,149,85,0.35)]"
+            className="rounded-2xl border border-[#047857]/35 bg-[#FDFBF7] p-5 md:p-8 shadow-[0_1px_0_rgba(4,120,87,0.20),0_10px_30px_-18px_rgba(4,120,87,0.35)]"
             style={{ contain: "layout paint" }}
           >
+
             <Suspense fallback={<SectionLoader />}>
               <MortgageCalculator compact />
             </Suspense>

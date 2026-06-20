@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useContext, forwardRef } from "react";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ChevronsUp, ChevronsDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
@@ -9,10 +9,10 @@ interface PageNavigationProps {
 }
 
 /**
- * Floating gold arrow that scrolls to the top or bottom of the page.
- * - Shows ↓ (jump to bottom) when user is in the top half.
- * - Shows ↑ (back to top) when user is past the top half.
- * - Non-draggable (per global rule), pinned bottom-right.
+ * Premium emerald triple-chevron page-direction button.
+ * - Shows ⇣ (jump to bottom) when user is in the top half.
+ * - Shows ⇡ (back to top) when user is past the top half.
+ * - Emerald pill + white glyph at both states, with hover glow.
  * - Auto-hides when chat / concierge / support drawers are open.
  */
 const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false }, ref) => {
@@ -71,16 +71,15 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     }
   };
 
-  const Icon = direction === "up" ? ArrowUp : ArrowDown;
+  const Icon = direction === "up" ? ChevronsUp : ChevronsDown;
   const label = direction === "up" ? "Scroll to top" : "Scroll to bottom";
 
   return (
     <div
       ref={ref}
       className={cn(
-        // Aligned under the right-edge "Talk to us" stack, nudged down + right
-        "fixed bottom-16 z-[55] pointer-events-auto",
-        isRTL ? "left-0" : "right-0",
+        "fixed bottom-20 z-[55] pointer-events-auto",
+        isRTL ? "left-4" : "right-4",
       )}
       data-no-contrast-guard
     >
@@ -89,17 +88,26 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         onClick={handleClick}
         aria-label={label}
         title={label}
+        data-jj-page-nav-arrow
+        data-no-contrast-guard
         className={cn(
-          "group inline-flex items-center justify-center h-9 w-9 bg-transparent border-0 shadow-none p-0",
-          "text-[#0A0A0A] hover:text-[#1F1F1F]",
-          "transition-all duration-200 hover:-translate-y-[1px] active:scale-95",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A0A0A]/70 rounded-sm",
+          "allow-white group inline-flex items-center justify-center h-10 w-10 rounded-full",
+          "transition-all duration-300 hover:-translate-y-1 active:scale-95",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70",
         )}
+        style={{
+          backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+          border: "1px solid rgba(52,211,153,0.55)",
+          boxShadow:
+            "0 12px 28px -10px rgba(6,78,59,0.55), 0 0 0 1px rgba(52,211,153,0.20), 0 0 18px rgba(52,211,153,0.30)",
+          color: "#FFFFFF",
+        }}
       >
         <Icon
-          className="h-6 w-6 transition-transform duration-200 group-hover:scale-110"
+          className="h-5 w-5 allow-white transition-transform duration-300 group-hover:scale-110"
           strokeWidth={2.5}
           data-no-contrast-guard
+          style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
         />
       </button>
     </div>

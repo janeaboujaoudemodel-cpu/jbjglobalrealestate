@@ -123,26 +123,14 @@ const ExploreServicesExpander = () => {
         </Link>
       </div>
 
-      {/* Thin emerald glow divider — separates the dark header from the tab
-          strip without a thick white wedge. */}
-      <div
-        aria-hidden="true"
-        className="h-px w-full"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(52,211,153,0.55) 35%, rgba(52,211,153,0.85) 50%, rgba(52,211,153,0.55) 65%, transparent 100%)",
-          boxShadow: "0 0 12px rgba(52,211,153,0.55), 0 0 4px rgba(52,211,153,0.85)",
-        }}
-      />
-
-      {/* Segmented header — lighter emerald ombre strip, no underline,
-          active tab uses a refined lighter ombre pill (not split colors). */}
+      {/* No divider — emerald band flows directly into the segmented tabs.
+          Taller premium strip, darker emerald active fill matching Explore Now. */}
       <div
         ref={tabsRef}
         data-ink-emerald
         data-on-dark
         data-no-contrast-guard
-        className="allow-white flex items-stretch overflow-x-auto no-scrollbar divide-x divide-white/15"
+        className="allow-white flex items-stretch overflow-x-auto no-scrollbar"
         style={{ backgroundImage: "linear-gradient(180deg, #0a6b53 0%, #064E3B 100%)" }}
         role="tablist"
         aria-label="Services"
@@ -160,10 +148,17 @@ const ExploreServicesExpander = () => {
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
-                ...(isActive ? { backgroundImage: "var(--jj-emerald-light-ombre)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.22), 0 0 18px rgba(52,211,153,0.20)" } : {}),
+                ...(isActive
+                  ? {
+                      backgroundImage:
+                        "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+                      boxShadow:
+                        "inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -2px 0 rgba(52,211,153,0.55), 0 0 22px rgba(52,211,153,0.18)",
+                    }
+                  : {}),
               }}
               data-no-contrast-guard
-              className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-3 text-[13px] font-semibold whitespace-nowrap rounded-none transition-colors duration-200 ${
+              className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-4 md:py-5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-colors duration-200 ${
                 isActive ? "jj-tab-active-metallic" : "hover:bg-white/10"
               } ${s.available === false ? "opacity-80" : ""}`}
             >
@@ -173,6 +168,7 @@ const ExploreServicesExpander = () => {
           );
         })}
       </div>
+
 
 
 
