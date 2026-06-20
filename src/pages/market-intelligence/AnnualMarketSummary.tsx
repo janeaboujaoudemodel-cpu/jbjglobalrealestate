@@ -160,7 +160,7 @@ const AnnualMarketSummary = () => {
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <Badge className="mb-3 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
+                <Badge className="mb-3 bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40">
                   ANNUAL MARKET SUMMARY
                 </Badge>
                 <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
