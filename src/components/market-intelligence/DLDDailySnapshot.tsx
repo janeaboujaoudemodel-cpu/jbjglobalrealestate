@@ -182,21 +182,19 @@ export const DLDDailySnapshot = () => {
                 </div>
                 <div
                   data-no-contrast-guard
-                  className="relative h-3 w-full overflow-hidden rounded-full"
-                  style={{ backgroundColor: "#EFE6D6", border: `1px solid rgba(184,149,85,0.35)` }}
+                  className="dld-bar-track"
+                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
                   <motion.div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: "#0A0A0A", transformOrigin: "left center", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }}
+                    className="dld-bar-fill-ink"
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.9, ease: "easeOut" }}
-                  >
-                    <div className="h-full w-full" />
-                  </motion.div>
+                  />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
                   <span className="inline-block h-2 w-2 rounded-full bg-[#0A0A0A]" /> Cash · {cashShare}% of all transactions
