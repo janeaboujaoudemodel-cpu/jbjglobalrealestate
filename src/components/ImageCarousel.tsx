@@ -412,43 +412,43 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
             onTouchEnd={onTouchEnd}
             data-no-contrast-guard
           >
-            {/* Top bar — champagne with gold hairline */}
-            <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-[#FDFBF7]/95 backdrop-blur-sm border-b border-[#B89555]/40">
-              <div className="text-[#1A1A1A] text-sm md:text-base font-semibold truncate">
+            {/* Top bar — champagne with gold hairline. shrink-0 so it never collapses. */}
+            <div className="shrink-0 flex items-center justify-between gap-3 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 bg-[#FDFBF7] border-b border-[#B89555]/40">
+              <div className="min-w-0 text-[#1A1A1A] text-sm md:text-base font-semibold truncate">
                 {projectName}
                 <span className="ml-3 text-[#1A1A1A]/60 font-normal tabular-nums">
                   {fsIndex + 1} / {total}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <button
                   type="button"
                   onClick={() => handleDownload(images[fsIndex].image_url, fsIndex)}
-                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 flex items-center justify-center transition-colors shadow-sm"
+                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555] flex items-center justify-center transition-colors shadow-sm"
                   aria-label="Download image"
                   title="Download"
                 >
-                  <Download className="w-5 h-5 text-[#1A1A1A]" />
+                  <Download className="w-5 h-5 text-[#B89555]" />
                 </button>
                 <button
                   type="button"
                   onClick={closeFullscreen}
-                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 flex items-center justify-center transition-colors shadow-sm"
+                  className="h-10 w-10 md:h-11 md:w-11 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555] flex items-center justify-center transition-colors shadow-sm"
                   aria-label="Close gallery"
                   title="Close"
                 >
-                  <X className="w-5 h-5 text-[#1A1A1A]" />
+                  <X className="w-5 h-5 text-[#B89555]" />
                 </button>
               </div>
             </div>
 
-            {/* Stage — image fills available space */}
-            <div className="relative flex-1 flex items-center justify-center overflow-hidden bg-[#F7F2EA] p-2 md:p-4">
+            {/* Stage — image fills available space. min-h-0 / min-w-0 lets flex child actually shrink. */}
+            <div className="relative flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-hidden bg-[#F7F2EA] p-2 md:p-4">
               <img
                 key={images[fsIndex].id}
                 src={getHighResImageUrl(images[fsIndex].image_url)}
                 alt={images[fsIndex].alt_text || `Photo ${fsIndex + 1}`}
-                className="w-full h-full object-contain"
+                className="max-w-full max-h-full w-auto h-auto object-contain"
                 draggable={false}
               />
 
@@ -457,33 +457,33 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                   <button
                     type="button"
                     onClick={fsPrev}
-                    className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 backdrop-blur-sm flex items-center justify-center transition-colors shadow-md"
+                    className="absolute left-2 sm:left-3 md:left-6 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555] flex items-center justify-center transition-colors shadow-md"
                     aria-label="Previous photo"
                   >
-                    <ArrowLeft className="w-6 h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
+                    <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
                   </button>
                   <button
                     type="button"
                     onClick={fsNext}
-                    className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 h-12 w-12 md:h-14 md:w-14 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555]/70 backdrop-blur-sm flex items-center justify-center transition-colors shadow-md"
+                    className="absolute right-2 sm:right-3 md:right-6 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 rounded-full bg-[#FDFBF7] hover:bg-[#EFE6D6] border border-[#B89555] flex items-center justify-center transition-colors shadow-md"
                     aria-label="Next photo"
                   >
-                    <ArrowRight className="w-6 h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
+                    <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
                   </button>
                 </>
               )}
             </div>
 
-            {/* Thumbnail filmstrip — champagne tone */}
+            {/* Thumbnail filmstrip — champagne tone. shrink-0 so it never eats the stage. */}
             {hasMultiple && (
-              <div className="bg-[#FDFBF7]/95 backdrop-blur-sm border-t border-[#B89555]/40 px-3 md:px-6 py-3 overflow-x-auto">
+              <div className="shrink-0 bg-[#FDFBF7] border-t border-[#B89555]/40 px-3 md:px-6 py-2.5 md:py-3 overflow-x-auto">
                 <div className="flex gap-2 min-w-min">
                   {images.map((img, i) => (
                     <button
                       key={img.id}
                       type="button"
                       onClick={() => setFsIndex(i)}
-                      className={`relative h-14 md:h-16 aspect-[4/3] rounded overflow-hidden border-2 flex-shrink-0 transition-all ${
+                      className={`relative h-12 sm:h-14 md:h-16 aspect-[4/3] rounded overflow-hidden border-2 flex-shrink-0 transition-all ${
                         i === fsIndex ? "border-[#B89555] scale-105" : "border-transparent opacity-70 hover:opacity-100"
                       }`}
                       aria-label={`Go to photo ${i + 1}`}
