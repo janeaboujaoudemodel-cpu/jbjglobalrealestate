@@ -28,7 +28,7 @@ const ScanSignDocuments = () => {
               <span className="text-green-300 text-sm font-medium">Document Assistant</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Scan & Sign <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">Documents</span>
+              Scan & Sign <span className="text-[#B89555]">Documents</span>
             </h1>
             <p className="text-white/70 max-w-2xl mx-auto">Use this assistant to scan, sign, and manage your documents easily. Design your signature or upload one to get started.</p>
             <p className="text-xs text-[#1A1A1A] mt-2">Powered by JBJ Global Real Estate</p>

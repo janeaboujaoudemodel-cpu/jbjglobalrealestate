@@ -591,12 +591,12 @@ const VideoMeeting = () => {
         <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-black flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center mx-auto mb-4">
-                <Video className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mx-auto mb-4">
+                <Video className="w-10 h-10 text-[#B89555]" />
               </div>
-              <h1 className="text-3xl font-bold text-white mb-2">JBJ <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400">Video Meet</span></h1>
+              <h1 className="text-3xl font-bold text-white mb-2">JBJ <span className="text-[#B89555]">Video Meet</span></h1>
               <p className="text-white/70">Free professional video meetings for everyone</p>
-              <div className="flex items-center justify-center gap-2 mt-2 text-violet-400 text-xs">
+              <div className="flex items-center justify-center gap-2 mt-2 text-[#B89555] text-xs">
                 <Shield className="w-3 h-3" />
                 <span>End-to-end encrypted • Unlimited time</span>
               </div>
@@ -694,7 +694,7 @@ const VideoMeeting = () => {
 
               <Button 
                 onClick={createNewMeeting}
-                className="w-full bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700"
+                data-cta="dark" className="jj-cta-dark w-full"
               >
                 <Video className="w-4 h-4 mr-2" />
                 Start New Meeting
@@ -1030,7 +1030,7 @@ const VideoMeeting = () => {
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center bg-[#F7F2EA]">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
+                    <div className="w-24 h-24 rounded-full bg-[#0A0A0A] border border-[#B89555]/40 flex items-center justify-center text-[#B89555] text-3xl font-bold">
                       {participant.odername.charAt(0).toUpperCase()}
                     </div>
                   </div>

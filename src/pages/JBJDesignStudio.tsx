@@ -315,8 +315,8 @@ const JBJDesignStudio: React.FC = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
-                <Palette className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                <Palette className="w-6 h-6 text-[#B89555]" />
               </div>
               <div>
                 <h1 className="text-white text-2xl font-bold">
@@ -553,7 +553,7 @@ const JBJDesignStudio: React.FC = () => {
                       <div className="flex gap-2 mt-4">
                         <Button 
                           onClick={handleDownload}
-                          className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600"
+                          data-cta="dark" className="jj-cta-dark flex-1"
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Download
@@ -692,32 +692,32 @@ const JBJDesignStudio: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
                     {/* AI Designer Persona */}
                     <div className="p-4 rounded-xl bg-[#F7F2EA]/50 border border-[#1A1A1A]">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-3">
-                        <Sparkles className="w-8 h-8 text-white" />
+                      <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mx-auto mb-3">
+                        <Sparkles className="w-8 h-8 text-[#B89555]" />
                       </div>
-                      <h4 className="text-white font-medium">Maya Chen</h4>
-                      <p className="text-[#1A1A1A] text-sm">Lead AI Designer</p>
-                      <p className="text-white/90 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
+                      <h4 className="text-[#1A1A1A] font-medium">Maya Chen</h4>
+                      <p className="text-[#1A1A1A]/70 text-sm">Lead AI Designer</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
                     </div>
 
                     {/* Brand Manager Persona */}
-                    <div className="p-4 rounded-xl bg-[#F7F2EA]/50 border border-[#1A1A1A]">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-3">
-                        <Crown className="w-8 h-8 text-white" />
+                    <div className="p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30">
+                      <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mx-auto mb-3">
+                        <Crown className="w-8 h-8 text-[#B89555]" />
                       </div>
-                      <h4 className="text-white font-medium">Victoria Reynolds</h4>
-                      <p className="text-[#1A1A1A] text-sm">Brand Director</p>
-                      <p className="text-white/90 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
+                      <h4 className="text-[#1A1A1A] font-medium">Victoria Reynolds</h4>
+                      <p className="text-[#1A1A1A]/70 text-sm">Brand Director</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
                     </div>
 
                     {/* Content Designer Persona */}
-                    <div className="p-4 rounded-xl bg-[#F7F2EA]/50 border border-[#1A1A1A]">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center mx-auto mb-3">
-                        <Book className="w-8 h-8 text-white" />
+                    <div className="p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30">
+                      <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mx-auto mb-3">
+                        <Book className="w-8 h-8 text-[#B89555]" />
                       </div>
-                      <h4 className="text-white font-medium">James Porter</h4>
-                      <p className="text-[#1A1A1A] text-sm">Content Designer</p>
-                      <p className="text-white/90 text-xs mt-2">Creates books, reports, and long-form visual content</p>
+                      <h4 className="text-[#1A1A1A] font-medium">James Porter</h4>
+                      <p className="text-[#1A1A1A]/70 text-sm">Content Designer</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-2">Creates books, reports, and long-form visual content</p>
                     </div>
                   </div>
                 </div>
