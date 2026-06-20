@@ -220,14 +220,11 @@ export const ToolAnimatedFrame = ({
 }) => (
   <div
     data-tool-shell-root
-    data-tool-darkbody="true"
     className={`min-h-screen w-full p-0 ${className}`}
     style={
       {
         background:
-          "radial-gradient(1200px 700px at 50% -10%, " +
-          theme.accent +
-          "26, transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
+          "radial-gradient(1200px 700px at 50% -10%, rgba(184,149,85,0.12), transparent 60%), #FDFBF7",
         ["--tool-accent" as string]: theme.accent,
         ["--tool-accent-border" as string]: theme.accentBorder,
       } as CSSProperties
@@ -265,11 +262,9 @@ export const ToolAnimatedFrame = ({
       <div
         className="relative min-h-screen overflow-hidden"
         style={{
-          background:
-            "linear-gradient(180deg, rgba(7,16,31,0.92) 0%, rgba(4,7,13,0.96) 100%)",
+          background: "#F7F2EA",
           boxShadow:
-            "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px " +
-            theme.accentBorder,
+            "0 30px 80px -30px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(184,149,85,0.45)",
         }}
       >
         {children}
