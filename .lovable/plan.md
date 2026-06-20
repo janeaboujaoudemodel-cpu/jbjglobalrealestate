@@ -1,77 +1,78 @@
-# Emerald System Hardening + Global Consistency Pass
+# Global Layout Gutter + Anti-Underflow Fix
 
-## 1. Lock the rule (CSS, non-negotiable)
-Add a permanent CSS guard in `src/index.css` (PASS 10):
-- ANY element whose own background is emerald (`#047857`, `#064E3B`, `#0F8B6A`, `var(--emerald-ink)`, `var(--emerald-ink-soft)`, `var(--gradient-ink)`, `var(--gradient-ink-hover)`, `.jj-cta-dark`, `[data-cta="dark"]`, `[data-ink-emerald]`, `.jj-pill-emerald:hover`) MUST render text + icons + SVG strokes WHITE at idle, hover, focus, active, disabled. No exceptions, no opt-outs.
-- Remove the regression from last turn that flipped Services / Tool / Hero white labels to black. Restore white on dark.
-- Save this as `mem://constraints/white-on-emerald-lock` and add to Core.
+## Problem (from screenshots)
 
-## 2. Hover contrast — Email / Call / Chat pills
-`src/components/ProjectCard.tsx` + `.jj-pill-emerald` in `index.css`:
-- Idle: champagne fill, emerald border, emerald icon + label.
-- Hover: emerald gradient fill, WHITE icon + WHITE label (locked via PASS 10).
+1. **Project page** — KPI cards (Starting Price / Handover / Bedrooms / Size), property-type tile, and chip sub-nav (Price / Payments / Handover / Property Type / Bedrooms / Status) sit flush against the vertical sidebar's right edge. No breathing room.
+2. **Dubai Market Intelligence** — KPI grid (`AED 145.5B`, `+24…`, `TRANSACTIONS 48,980`, etc.) is clipped on the **left** by the sidebar and on the **right** by the viewport. The section is rendering wider than the post-sidebar viewport and sliding underneath the fixed chrome.
+3. Same pattern repeats on every page that uses `.jj-band` full-bleed sections or wide grids.
 
-## 3. JBJ Royal Tools Hub + Explore Our Services headers
-`src/components/tools/RoyalToolsHub.tsx`, `src/pages/JBJDesignStudio.tsx`, `src/components/home/ExploreServicesExpander.tsx`, `src/components/home/ToolkitShowcaseCard.tsx`:
-- Title + subtitle (Property Evaluator, Mortgage Calculator, tool names + subtitles) render WHITE on the dark/emerald panel.
-- Remove ALL gold borders/hairlines on these two section headers only. Replace gold divider with emerald hairline `rgba(4,120,87,.55)`.
-- Scope is strictly these two sections — gold hairline standard preserved elsewhere.
+## Root cause
 
-## 4. Premium 3D hover for primary CTAs
-New utility `.jj-cta-float` in `index.css`:
-- Idle: emerald gradient, white text, soft emerald shadow.
-- Hover: `translateY(-2px) scale(1.01)`, deeper layered shadow (`0 14px 32px -10px rgba(4,120,87,.45), 0 4px 12px rgba(0,0,0,.15)`), brighter gradient.
-- Apply to: `View All Projects`, `Mortgage Calculator` CTA, `Explore Now`, `Get Evaluation`, `Open Investor Portal`, `Get Verified`, footer primary buttons.
+`src/components/MainLayout.tsx` line 289 — `<main>` reserves left padding equal to the sidebar width (`sm:pl-[200px]` / `sm:pl-[48px]`) but never adds an **inner horizontal gutter**. Pages and `.jj-band` sections then render edge-to-edge inside `<main>`, so:
 
-## 5. Emerald promotion (consistent, restrained)
-- Footer (`src/components/Footer.tsx`): section titles emerald, icons emerald, primary links hover emerald. No gold accent on footer divider — emerald hairline.
-- Contact cards (WhatsApp / Call Us / Email in `CombinedContactNewsletter.tsx`): stronger emerald — filled emerald icon tile + emerald label, hover floats with shadow.
-- Mode picker (`src/components/auth/ModePickerDialog.tsx` or equivalent): emerald accents on selected pill, emerald primary CTA.
-- Contact Us screen / `/contact`: emerald headline, emerald CTAs, emerald icon tiles.
-- Vertical sidebar (`src/components/layout/VerticalSidebar.tsx`): section group titles in emerald (AI Home Finder / Tools & Workspace / Properties / etc.). Item labels stay ink; active item = emerald hairline + emerald icon.
+- Cards touch the 0px right edge of the sidebar (no `px-*` on the page wrappers).
+- `.jj-band` full-bleed sections (defined in `src/index.css`) use `margin-left: calc(50% - 50vw)` style tricks that compute against the **viewport**, not against the post-sidebar inner box — so they extend *under* the fixed sidebar.
 
-## 6. Sidebar: add Billing & Subscriptions
-- New sidebar entry under MY ACCOUNT → "Billing & Subscriptions" linking to `/account/billing` (new route, reuses existing billing components if present; otherwise stub page with sections: Current Plan, Payment Method, Invoices, Usage). Owner/broker/developer/investor all see it.
+## Fix — 3 layers
 
-## 7. My Account → Brand Update card (above dashboard)
-`src/pages/MyAccount.tsx` (or owner/broker/developer dashboards):
-- New `<BrandPresentationCard />` above dashboard for `owner`, `broker`, `developer` modes ONLY (hidden for `investor`).
-- Lets user upload/update: agent photo OR company/agency logo, display name, title, phone, email used in generated presentations.
-- Saves to existing profile/company table; presentation generator reads from there.
+### 1. Global inner gutter on `<main>` (the primary fix)
 
-## 8. Mobile Contact Us launcher
-`src/components/support/ContactUsLauncher.tsx` (right-edge tab):
-- On `< md` breakpoint: render icon-only (phone icon), 44×44 circular emerald pill, no "Contact Us" vertical label.
-- Desktop/tablet unchanged.
+`src/components/MainLayout.tsx`, line 289 — add responsive horizontal padding to the `<main>` element so EVERY page automatically gets breathing room from both the sidebar and the right viewport edge:
 
-## 9. Kill white-pearl back layers globally
-Identify the duplicated outer wrapper (likely `PremiumSectionCard` rendering both an outer band + inner card, or `.jj-band` + nested card).
-- Rule: a section is EITHER a full-bleed band OR a single rounded card — never both stacked.
-- Fix JBJ Royal Tools Hub, Top Areas in Dubai, AI Property Comparison, and any other section showing a squared pearl strip behind a rounded card.
-- Pattern to keep: Mortgage Calculator (one rounded champagne card, inner sub-cards). Pattern to remove: outer square pearl + inner rounded card.
-- Audit `src/components/home/*` and `src/pages/Index.tsx` for `PremiumSectionCard` + nested `Card` duplication.
+```
+px-4 sm:px-6 lg:px-8
+```
 
-## 10. Responsive + E2E QA
-For each change, verify via browser at 4 viewports: 1920 desktop, 1024 tablet, 768 iPad, 390 mobile.
-Capture screenshots as proof for:
-- Homepage hero / Explore Services / Royal Tools Hub header
-- Featured Listings card hover (Email/Call/Chat)
-- View All Projects button hover
-- Footer
-- Contact Us screen + mobile launcher
-- Mode picker
-- Sidebar with new Billing entry
-- My Account with Brand card (per role)
-- Sections after pearl-layer removal
+Skip the gutter only when `usesStandalonePortalChrome` (back-office / broker portal already manages its own chrome).
 
-Reply with screenshot proof per item before moving to next.
+Add CSS variable `--jj-content-gutter: clamp(16px, 2vw, 32px)` to `:root` in `src/index.css` so bands/sections can reference the same value.
 
-## 11. Memory updates
-- New: `mem://constraints/white-on-emerald-lock` (Core).
-- Update: `mem://style/color-palette/ink-emerald-gradient-standard` — add hover-white rule, gold-removal scope for tool/service headers, `.jj-cta-float` premium hover.
-- New: `mem://ui-ux/visual-standards/no-double-wrapper-rule` — sections are band OR card, never both.
+### 2. Clamp `.jj-band` full-bleed to the post-sidebar viewport
+
+`src/index.css` — `.jj-band` (and `.jj-band-page`, `.jj-band-surface`, `.jj-band-raised`) currently extend to `100vw`. Replace the full-bleed math so it spans the **inner viewport** (viewport width minus active sidebar width) instead of true viewport width:
+
+```css
+.jj-band {
+  /* old: margin-left: calc(50% - 50vw); width: 100vw; */
+  margin-left: calc(-1 * var(--jj-content-gutter));
+  margin-right: calc(-1 * var(--jj-content-gutter));
+  width: auto;
+}
+```
+
+This makes bands break out of the page gutter but stay inside `<main>`, which is already offset by the sidebar. No more underflow.
+
+Add a body-level fallback for legacy `margin-left: calc(50% - 50vw)` usages: 
+
+```css
+body.jj-vertical-nav-active main [style*="50vw"],
+body.jj-vertical-nav-active main .full-bleed {
+  max-width: 100% !important;
+}
+```
+
+### 3. Horizontal scrollers stay inside the gutter
+
+The project-detail chip sub-nav and Market Intel KPI grid use `overflow-x-auto` rows. They're fine — once the parent `<main>` has `px-4 sm:px-6 lg:px-8`, the scroll track starts inside the gutter automatically. No per-component changes required.
+
+For the KPI grid specifically (Dubai Market Intel) — verify in `src/pages/owner/OwnerMarketIntel.tsx` that the grid is not wrapped in a `<div className="-mx-*">` negative-margin bleed. If it is, remove it.
 
 ## Out of scope
-- No backend schema changes beyond a single `brand_presentation` profile columns set (photo_url, company_logo_url, display_title) if not already present.
-- No new tools, no copy rewrites, no route renames.
-- Existing gold hairline standard preserved everywhere except the two named section headers.
+
+- No changes to sidebar width, header height, or `.jj-cta-*` primitives.
+- No changes to mobile (`<sm`) — the sidebar isn't fixed there.
+- No new design tokens beyond `--jj-content-gutter`.
+- No content/layout edits inside individual pages; the gutter must come from the shell.
+
+## Verification (after build)
+
+1. Project page `/project/vindera` at 1920×1080 — KPI cards must show ≥16px gap from the sidebar's right edge and the right viewport edge.
+2. `/owner/market-intel` — first KPI card's left edge must be ≥16px from the sidebar; `+24%` must be fully visible on the right.
+3. Home page bands (Royal Tools, Top Areas, Continue Searching) — band background still spans full inner width but no card touches the sidebar.
+4. Mobile 390×844 — no regression; layout unchanged.
+5. Sidebar collapsed state (`body.jj-vertical-nav-collapsed`) — gutter unchanged, content still has breathing room.
+
+## Memory update
+
+Add to `mem://ui-ux/navigation/header-sidebar-alignment-standard-v11-locked`:
+> Global content gutter is `px-4 sm:px-6 lg:px-8` on `<main>` (variable `--jj-content-gutter`). Full-bleed `.jj-band` clamps to inner viewport via negative gutter margins — never `100vw`. No section may extend under the fixed sidebar.
