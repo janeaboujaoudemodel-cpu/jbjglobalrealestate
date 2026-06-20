@@ -123,9 +123,17 @@ const ExploreServicesExpander = () => {
         </Link>
       </div>
 
-      {/* Soft champagne divider — separates the dark header from the tab strip
-          so they no longer read as one merged block. */}
-      <div aria-hidden="true" className="h-[3px] w-full bg-gradient-to-r from-transparent via-[#FDFBF7]/70 to-transparent" />
+      {/* Thin emerald glow divider — separates the dark header from the tab
+          strip without a thick white wedge. */}
+      <div
+        aria-hidden="true"
+        className="h-px w-full"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(52,211,153,0.55) 35%, rgba(52,211,153,0.85) 50%, rgba(52,211,153,0.55) 65%, transparent 100%)",
+          boxShadow: "0 0 12px rgba(52,211,153,0.55), 0 0 4px rgba(52,211,153,0.85)",
+        }}
+      />
 
       {/* Segmented header — lighter emerald ombre strip, no underline,
           active tab uses a refined lighter ombre pill (not split colors). */}
