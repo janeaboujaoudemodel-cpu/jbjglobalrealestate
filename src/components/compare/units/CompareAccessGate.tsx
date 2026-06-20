@@ -12,16 +12,19 @@ export default function CompareAccessGate() {
         <div
           className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
           style={{
-            background: "linear-gradient(135deg, rgba(124,58,237,0.25), rgba(236,72,153,0.18))",
-            border: "1px solid rgba(192,132,252,0.5)",
+            background: "#F7F2EA",
+            border: "1px solid rgba(184,149,85,0.55)",
+            boxShadow: "0 8px 24px -10px rgba(184,149,85,0.35)",
           }}
         >
-          <Lock className="w-7 h-7" style={{ color: "#FFFFFF" }} />
+          <Lock className="w-7 h-7" style={{ color: "#B89555" }} />
         </div>
-        <h1 className="text-white text-3xl font-bold mb-3">Broker-only tool</h1>
-        <p className="text-white/70 mb-8">
+        <h1 className="text-3xl font-bold mb-3" style={{ color: "#1A1A1A" }}>
+          Broker-only tool
+        </h1>
+        <p className="mb-8" style={{ color: "rgba(26,26,26,0.7)" }}>
           The Property &amp; Unit Comparison engine is part of the JBJ Broker Toolkit.
-          Switch to <strong className="text-white">Broker mode</strong> to access it.
+          Switch to <strong style={{ color: "#1A1A1A" }}>Broker mode</strong> to access it.
         </p>
         <button
           onClick={async () => {
@@ -32,13 +35,8 @@ export default function CompareAccessGate() {
               toast.error("Could not switch mode. Please sign in.");
             }
           }}
-          data-no-contrast-guard
-          data-allow-dark-cta
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white"
-          style={{
-            background: "linear-gradient(135deg, #3B82F6, #7C3AED, #EC4899)",
-            boxShadow: "0 10px 30px rgba(124,58,237,0.4)",
-          }}
+          data-cta="dark"
+          className="jj-cta-dark inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold"
         >
           <Users className="w-4 h-4" /> Switch to Broker mode
         </button>
