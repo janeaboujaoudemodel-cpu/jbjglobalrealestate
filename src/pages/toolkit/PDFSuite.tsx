@@ -39,7 +39,7 @@ export default function PDFSuite() {
 
       <div className="min-h-screen bg-[#FDFBF7]">
         {/* ── Suite Header ── */}
-        <div className="border-b border-[#B89555]/30 bg-gradient-to-b from-slate-50 to-white">
+        <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Back link */}
             <Link to="/toolkit"
@@ -50,12 +50,12 @@ export default function PDFSuite() {
 
             {/* Title row */}
             <div className="flex items-center gap-4 mb-5">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
-                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0 bg-[#EFE6D6] border border-[#B89555]/40">
+                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-[#B89555]" />
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-tight">
-                  PDF & Documents <span className="text-blue-600">Suite</span>
+                  PDF & Documents <span className="text-[#B89555]">Suite</span>
                 </h1>
                 <p className="text-xs sm:text-sm mt-0.5 hidden sm:block text-[#1A1A1A]/70">
                   Edit · Scan · Sign · Generate professional documents
