@@ -73,7 +73,7 @@ export function BrokerToolkitOperations() {
     <section id="section-operations" className="py-8 md:py-10 bg-[#1A1A1A]">
       <div className="container mx-auto px-4">
         {/* Active Indigo Layer */}
-        <div className="bg-gradient-to-br from-indigo-900/90 via-indigo-900/80 to-indigo-950/90 border border-indigo-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
+        <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
