@@ -114,13 +114,13 @@ const SECTIONS = [
 
 // Color mappings for section tabs
 const sectionColors: Record<string, { active: string; inactive: string; border: string }> = {
-  sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-white/70 hover:text-sky-400', border: 'border-sky-400' },
-  emerald: { active: 'text-emerald-400 bg-emerald-500/10', inactive: 'text-white/70 hover:text-emerald-400', border: 'border-emerald-400' },
-  indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-white/70 hover:text-indigo-400', border: 'border-indigo-400' },
-  amber: { active: 'text-[#1A1A1A] bg-amber-500/10', inactive: 'text-white/70 hover:text-[#1A1A1A]', border: 'border-amber-400' },
-  lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-white/70 hover:text-lime-400', border: 'border-lime-400' },
-  violet: { active: 'text-violet-400 bg-violet-500/10', inactive: 'text-white/70 hover:text-violet-400', border: 'border-violet-400' },
-  fuchsia: { active: 'text-fuchsia-400 bg-fuchsia-500/10', inactive: 'text-white/70 hover:text-fuchsia-400', border: 'border-fuchsia-400' },
+ sky:     { active: 'text-[#1A1A1A] bg-[#EFE6D6]', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-[#B89555]' },
+ emerald: { active: 'text-[#1A1A1A] bg-[#EFE6D6]', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-[#B89555]' },
+ indigo:  { active: 'text-[#1A1A1A] bg-[#EFE6D6]', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-[#B89555]' },
+ amber:   { active: 'text-[#1A1A1A] bg-[#EFE6D6]', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-[#B89555]' },
+ lime:    { active: 'text-[#1A1A1A] bg-[#EFE6D6]', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-[#B89555]' },
+ violet:  { active: 'text-[#1A1A1A] bg-[#EFE6D6]', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-[#B89555]' },
+ fuchsia: { active: 'text-[#1A1A1A] bg-[#EFE6D6]', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-[#B89555]' },
 };
 
 const LoadingSpinner = () => (
