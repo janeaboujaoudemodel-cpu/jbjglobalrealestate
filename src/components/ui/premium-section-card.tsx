@@ -45,7 +45,7 @@ const TONE: Record<NonNullable<Props["tone"]>, string> = {
 };
 
 export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
-  ({ padding = "md", tone, wrapperClassName = "", className = "", width = "contained", children, ...rest }, ref) => {
+  ({ padding = "md", tone, wrapperClassName = "", className = "", width = "full", children, ...rest }, ref) => {
     const inner =
       width === "contained"
         ? "w-full max-w-[1760px] mx-auto px-3 sm:px-5 lg:px-8"
