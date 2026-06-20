@@ -223,17 +223,24 @@ export default function MortgageParityPanel({
             <p className={`text-[11px] ${subClass}`}>per month</p>
           </div>
         </div>
-        <input
-          type="range"
-          min={2}
-          max={10}
-          step={0.05}
-          value={compareRate}
-          onChange={(e) => setCompareRate(Number(e.target.value))}
-          data-no-contrast-guard
-          className="allow-white mortgage-range-input w-full mt-3"
-          aria-label="Compare rate"
-        />
+        <div className="mt-3">
+          <input
+            type="range"
+            data-mortgage-slider="Compare rate"
+            data-no-contrast-guard
+            min={2}
+            max={10}
+            step={0.05}
+            value={compareRate}
+            aria-label="Compare rate"
+            onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
+            onChange={(e) => setCompareRate(Number(e.target.value))}
+            className="mortgage-range-input w-full"
+            style={{
+              background: `linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) 0 / ${((compareRate - 2) / (10 - 2)) * 100}% 100% no-repeat, ${isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6"}`,
+            } as React.CSSProperties}
+          />
+        </div>
         <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
           <Scale className="w-3.5 h-3.5" />
           <span>Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(monthlyPayment - compareMonthly))}</span> ({(monthlyPayment > compareMonthly ? "save" : "extra")} on Bank B)</span>

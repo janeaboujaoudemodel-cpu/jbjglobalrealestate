@@ -1,70 +1,109 @@
-I verified the current preview and code. The homepage hero search is still a mixed white + emerald + gold-bordered pill, the hero overlay is too dark, newsletter/CTA contrast is being overridden by global guards, and the sidebar/contact surfaces still contain gold/light-green styles. I will fix this in strict batches and validate each batch before moving on.
+I will implement this in strict batches and validate each batch before moving to the next. I will not claim completion without screenshot proof.
 
-Plan:
+Batch 1 — Global emerald ombre rule lock
+- Add one canonical emerald system in `src/index.css`:
+  - approved fill = the current Free Consultation/search-filter dark emerald-to-black ombre
+  - no gold on emerald surfaces at rest, hover, focus, active, disabled
+  - white text/icons/SVG strokes on emerald fill
+  - emerald-only glow/border, with stronger glow only on hover where requested
+- Extend the lock to approved primitives used by buttons, pills, filter bars, sidebar rows, sliders, and newsletter fields.
+- Remove/override lingering gold hover/border rules that affect emerald UI.
+- Validation: inspect the computed CSS in preview for affected buttons and capture screenshot of hero/top-area button states.
 
-1. Hero video visibility + unified hero search bar
-   - Reduce the two dark overlay layers in `src/pages/Index.tsx` so the video is visibly brighter while keeping white headline contrast.
-   - Replace the mixed hero search treatment in `src/components/home/HomeHeroSearch.tsx` with one continuous emerald/black ombre search section:
-     - no green outline border around the whole pill
-     - no gold divider
-     - emerald glow border only
-     - input area visually belongs to the same search section
-     - search button keeps white text/icon
-     - Free Consultation segment uses emerald glow border, not gold
-   - Add animated type/delete helper text examples:
-     - “Find me a property in Downtown”
-     - “I want to sell my property”
-     - “I want to compare my property”
-     - “How much is my property valued for?”
-     - “How much is rent in Marina?”
-     - “I’m looking for Golden Visa or mortgage”
-   - Keep the input fully typable: animation only appears when the user has not typed.
-   - Validate with desktop screenshot of the hero.
+Batch 2 — Hero search/filter bar
+- Update `HomeHeroSearch.tsx` and CSS so the Search segment exactly matches the Free Consultation segment color/fill.
+- Remove the brighter Search button fill and all gold borders/dividers.
+- Add an animated emerald/black border/glow around the full filter bar.
+- Replace current sentence-swap placeholder with real letter-by-letter type/delete animation cycling through the requested phrases, only while the input is empty.
+- Keep user typing fully functional.
+- Reduce any remaining heavy hero overlay/shadow only enough to reveal the video while preserving headline contrast.
+- Validation screenshot: desktop hero showing unified Search / Free Consultation styling and visible video.
 
-2. Responsive Contact Us launcher
-   - Update `src/components/support/SupportLauncher.tsx`:
-     - desktop/tablet landscape may keep compact vertical treatment
-     - phone and portrait iPad/tablet should show only a call/support icon, not the large vertical “Contact us” label
-     - replace gold border/glow with emerald ombre/glow
-   - Validate at desktop, iPad portrait, and phone viewport screenshots.
+Batch 3 — Newsletter / Stay in the Loop
+- Update `NewsletterBrevo.tsx` compact variant and CSS:
+  - Enter Your Email placeholder types/deletes letter-by-letter, not word-by-word
+  - input fill matches approved emerald ombre
+  - submit button fill matches the input, not lighter green
+  - no gold border at rest or hover
+  - glow appears on hover only for the submit button/input as requested
+  - all text/icons remain white
+- Validation screenshot: Ready to Get Started / Stay in the Loop section.
 
-3. Stay in the Loop and newsletter white-on-emerald lock
-   - Fix `src/components/CombinedContactNewsletter.tsx` and `src/components/marketing/NewsletterBrevo.tsx` so:
-     - “Stay in the Loop” text is white when on emerald
-     - “Enter Your Email”/animated placeholder is white
-     - submit button is emerald ombre with white icon/text
-     - glow/border matches the same emerald ombre system, not light-green or gold
-   - Add a scoped global lock in `src/index.css` so newsletter emerald fields/buttons cannot be forced back to ink/black by contrast guards.
-   - Validate with screenshot at the Ready/Get in Touch section.
+Batch 4 — Vertical sidebar categories and subcategories
+- Update `GlobalVerticalNav.tsx` and sidebar CSS:
+  - top highlight rows from AI Home Finder through Resale Properties use the same emerald main-category style as Tools & Workspace/My Account
+  - all main categories remain white text/icons on emerald at rest and hover, never gold
+  - hover adds 3D emerald glow only
+  - My Account subcategory rows lose the white filled highlight boxes
+  - subcategory labels become white, icons emerald, icon borders white/emerald animated as requested
+  - active/hover subcategory states use emerald reversal/glow, never gold
+- Validation screenshot: expanded sidebar with AI Home Finder through My Account and Billing & Subscriptions visible.
 
-4. Global emerald CTA/text contrast rule for “Explore” buttons
-   - Find the winning CSS rule currently forcing black text on emerald buttons.
-   - Add a scoped hard lock for approved emerald CTA primitives (`.jj-emerald-fill`, `.jj-pill-emerald`, and relevant emerald data attributes) so all text/icons remain white on emerald at idle, hover, focus, active, disabled.
-   - Apply to visible “Explore” / top area CTA cases without converting champagne-only buttons unnecessarily.
-   - Validate by scrolling to the affected area and screenshotting the buttons.
+Batch 5 — Explore Our Services and JBJ Royal Tools Hub
+- Update `ExploreServicesExpander.tsx` and `ToolkitShowcaseCard.tsx`:
+  - remove thick white/champagne divider between section header and tab bar
+  - replace it with a thin emerald glow divider
+  - service/tool tab header uses static emerald ombre for inactive tabs
+  - active tab uses metallic animated emerald treatment
+  - tab labels/icons and active panel title/subtitle stay white
+  - no gold hover/borders in these headers/tabs
+- Validation screenshot: Explore Our Services and JBJ Royal Tools Hub headers/tabs.
 
-5. Vertical sidebar emerald rules
-   - Update `src/components/navigation/GlobalVerticalNav.tsx` and final CSS locks in `src/index.css`:
-     - section headers like “MY ACCOUNT” use emerald/black ombre fill with white icons/text
-     - section icon boxes use emerald border/glow, no gold
-     - subcategory rows like “My Dashboard”, “Billing & Subscriptions”, “Brand Update” stay on white/champagne surfaces
-     - subcategory icons use emerald ombre/accent with white icon-tile borders as requested
-     - remove remaining gold borders from sidebar contact/support/collapse controls except where project memory strictly requires collapse gold; if conflict appears, I will scope the emerald rule to the requested sidebar menu/category surfaces first.
-   - Validate expanded sidebar screenshot showing MY ACCOUNT + Billing & Subscriptions.
+Batch 6 — Home CTAs, top areas, project contact buttons, continue-searching cards
+- Update `AreasWeCover.tsx`, `ProjectCard.tsx`, `ContinueSearching.tsx`, `OverseasInvestorsStrip.tsx`, and related CTA CSS:
+  - Top Areas Explore button text forced white on emerald; Read Area Guides and Explore All Areas use emerald CTA styles, not black/gold
+  - Handpicked project card Email/Call/Chat titles/icons white on emerald
+  - Continue Searching bottom overlay becomes reduced emerald style so more photo remains visible; developer/project text remains readable without black block dominance
+  - Invest in Dubai strip becomes animated/premium emerald instead of static black
+  - View Library / Explore Guides and Reports buttons use emerald styling where present
+  - 2026 rights reserved and page up/down arrow adopt emerald, with a premium arrow style and hover 3D glow
+- Validation screenshots: Top Areas, Handpicked cards, Continue Searching, overseas strip, footer/up-arrow.
 
-6. Contact cards / Ready to Get Started / Get in Touch icons
-   - Update `src/components/CombinedContactNewsletter.tsx`, `src/components/ProjectCard.tsx`, and shared emerald CTA CSS so WhatsApp, Call Us, Email, Ready to Get Started, and Get in Touch use the full approved emerald/black ombre with white icons/text.
-   - Remove light-green fills and gold borders from those emerald contact controls.
-   - Validate with screenshots of project cards and the Ready/Get in Touch section.
+Batch 7 — Verification / portal straps
+- Update `VerificationBanner.tsx` and `ModePortalBanner.tsx`:
+  - Get Verified button matches Open Investor Portal button shape, border treatment, emerald fill, and 3D hover glow
+  - Get Verified strap and portal strap use opposite emerald gradient directions so they do not visually merge
+  - remove gold hairlines from this emerald pair
+- Validation screenshot: Get Verified + portal banners.
 
-7. Final verification pass
-   - Manually navigate as a user through:
-     - homepage hero
-     - sidebar expanded and collapsed
-     - contact launcher on desktop/iPad/phone
-     - Ready/Get in Touch section
-     - Top Areas/Explore buttons
-   - Capture proof screenshots for each completed area.
-   - Check console for runtime errors after the visual changes.
+Batch 8 — Mortgage calculator layout and controls
+- Update `MortgageCalculator.tsx`, `MortgageParityPanel.tsx`, and the mortgage page styling:
+  - title/icon accents use emerald ombre
+  - slider fills use emerald, including Compare Two Bank Rates where the track currently has only a thumb
+  - fix Compare rate slider responsiveness by matching the working range control styling and filled progress behavior
+  - secondary buttons like Try Our AI Mortgage Calculator / Enter Manually use emerald 3D border while keeping secondary fill behavior
+  - split the long calculator into a cleaner two-stage/easier layout consistent with the app’s UI/UX
+  - remove gold from mortgage card borders/icons where it conflicts with emerald instructions
+- Validation screenshot: mortgage calculator controls and Compare Two Bank Rates slider.
 
-Implementation will be limited to frontend presentation files and global CSS locks needed to stop the current winning contrast rules from undoing the emerald/white styling.
+Batch 9 — Final user-path validation
+- Navigate as a user through:
+  - homepage hero
+  - sidebar expanded/collapsed
+  - Explore Services
+  - JBJ Tools Hub
+  - Top Areas
+  - Handpicked cards
+  - Continue Searching
+  - Ready/Get in Touch/Stay in the Loop
+  - Mortgage Calculator
+  - footer/up-arrow
+- Capture screenshots after each batch and one final set.
+- Check browser console for runtime errors and inspect the specific CSS rules if any text still flips black/gold.
+
+Technical files likely touched
+- `src/index.css`
+- `src/components/home/HomeHeroSearch.tsx`
+- `src/components/marketing/NewsletterBrevo.tsx`
+- `src/components/navigation/GlobalVerticalNav.tsx`
+- `src/components/home/ExploreServicesExpander.tsx`
+- `src/components/home/ToolkitShowcaseCard.tsx`
+- `src/components/home/AreasWeCover.tsx`
+- `src/components/ProjectCard.tsx`
+- `src/components/ContinueSearching.tsx`
+- `src/components/home/OverseasInvestorsStrip.tsx`
+- `src/components/verification/VerificationBanner.tsx`
+- `src/components/home/ModePortalBanner.tsx`
+- `src/components/MortgageCalculator.tsx`
+- `src/components/mortgage/MortgageParityPanel.tsx`
+- plus footer/back-to-top component once identified during implementation.

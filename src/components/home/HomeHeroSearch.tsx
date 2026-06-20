@@ -18,6 +18,16 @@ import { CalendarCheck, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useTypewriter } from "@/hooks/useTypewriter";
+
+const HERO_TYPEWRITER_PHRASES = [
+  "Find me a property in Downtown",
+  "I want to sell my property",
+  "I want to compare my property",
+  "How much is my property valued for?",
+  "How much is rent in Marina?",
+  "I'm looking for Golden Visa or mortgage",
+];
 import { saveRecentSearch } from "@/lib/searchHistory";
 
 interface HomeHeroSearchProps {
@@ -28,6 +38,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const navigate = useNavigate();
   const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
+  const animatedPlaceholder = useTypewriter(HERO_TYPEWRITER_PHRASES);
 
   const runSearch = useCallback(async () => {
     if (searching) return;
@@ -104,18 +115,19 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         className="w-full max-w-4xl mx-auto"
       >
         {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
-            the same emerald/black gradient surface with an emerald-only glow ring.
-            NO gold dividers, NO light-green outline rings — only the approved emerald system. */}
+            the SAME emerald/black gradient surface — NO color split between segments.
+            NO gold dividers, NO gold borders. Animated emerald glow border wraps the bar. */}
+        <div className="jj-emerald-glow-wrap relative">
         <div
           data-surface="dark"
           data-ink-emerald
           data-no-contrast-guard
-          className="jj-hero-search-bar group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl overflow-hidden transition-all duration-300"
+          className="jj-hero-search-bar group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl overflow-hidden"
           style={{
             backgroundImage: "var(--jj-emerald-ombre)",
-            border: "1px solid rgba(52,211,153,0.55)",
+            border: "1px solid rgba(255,255,255,0.10)",
             boxShadow:
-              "0 0 0 1px rgba(52,211,153,0.18), 0 0 32px rgba(52,211,153,0.30), 0 18px 42px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.10)",
+              "0 18px 42px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.10)",
           }}
         >
           {/* INPUT segment — transparent on emerald, white text + animated placeholder */}
@@ -143,21 +155,24 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
                 background: "transparent",
               }}
             />
-            {/* Animated typewriter placeholder — only when empty, no interaction blocking */}
+            {/* Animated letter-by-letter typewriter placeholder — only when empty */}
             {!draft && (
               <span
                 aria-hidden="true"
-                className="jj-hero-typewriter pointer-events-none absolute left-5 sm:left-6 lg:left-7 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden"
+                className="pointer-events-none absolute left-5 sm:left-6 lg:left-7 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden"
                 style={{
                   color: "rgba(255,255,255,0.78)",
                   WebkitTextFillColor: "rgba(255,255,255,0.78)",
                   maxWidth: "calc(100% - 16px)",
                 }}
-              />
+              >
+                {animatedPlaceholder}
+                <span className="jj-type-caret" aria-hidden="true">|</span>
+              </span>
             )}
           </div>
 
-          {/* SEARCH button — slightly brighter emerald with white text */}
+          {/* SEARCH button — IDENTICAL emerald fill to Free Consultation, white text. */}
           <button
             type="button"
             onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
@@ -168,9 +183,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              backgroundImage: "var(--jj-emerald-light-ombre)",
-              borderLeft: "1px solid rgba(52,211,153,0.45)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18)",
+              backgroundImage: "var(--jj-emerald-ombre)",
+              borderLeft: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
             }}
           >
             <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
@@ -181,7 +196,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             )}
           </button>
 
-          {/* FREE CONSULTATION — same emerald system, emerald hairline (no gold) */}
+          {/* FREE CONSULTATION — same emerald system, no gold */}
           <button
             type="button"
             onClick={openBooking}
@@ -192,7 +207,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
               backgroundImage: "var(--jj-emerald-ombre)",
-              borderLeft: "1px solid rgba(52,211,153,0.45)",
+              borderLeft: "1px solid rgba(255,255,255,0.08)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
             }}
           >
@@ -202,6 +217,8 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           </button>
 
         </div>
+        </div>
+
 
 
         {/* Mobile-only stacked CTAs — champagne mother-of-pearl fiberglass */}
