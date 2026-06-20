@@ -195,15 +195,17 @@ const ExploreServicesExpander = () => {
             ) : (
               <Link
                 to={active.href}
-                data-surface="dark"
+                data-ink-emerald
+                data-on-dark
                 data-no-contrast-guard
                 data-allow-dark-cta
-                className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1A1A1A]/55 hover:bg-[#1A1A1A]/75 backdrop-blur-md text-white font-semibold text-sm border border-white/60 transition-[background-color] shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}
+                className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white font-semibold text-sm border border-white/40 transition-[background-color,box-shadow] shadow-[0_8px_24px_rgba(4,120,87,0.45)] hover:shadow-[0_10px_28px_rgba(4,120,87,0.55)]"
+                style={{ backgroundImage: "var(--gradient-ink)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
               >
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore Now</span>
                 <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </Link>
+
             )}
           </div>
         </div>
