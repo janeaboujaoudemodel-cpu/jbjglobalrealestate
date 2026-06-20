@@ -1290,7 +1290,7 @@ const Quiz = () => {
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
             <div className="sticky top-24 rounded-2xl border border-[#B89555]/55 bg-[#F7F2EA] p-5">
-              <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#B89555]" />
                 Your Preferences
               </h3>
