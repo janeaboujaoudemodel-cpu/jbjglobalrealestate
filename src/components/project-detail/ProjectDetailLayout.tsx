@@ -77,6 +77,7 @@ import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearbyPropertiesMap";
 import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import BuyerNationalityInsights from "@/components/project-detail/BuyerNationalityInsights";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { SectionDividerGoldFullBleed } from "@/components/ui/section-divider-gold-fullbleed";
 
