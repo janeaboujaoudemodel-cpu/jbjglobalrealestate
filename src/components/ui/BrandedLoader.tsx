@@ -14,8 +14,20 @@ interface BrandedLoaderProps {
 export function BrandedLoader({ text, className = "", variant = "light" }: BrandedLoaderProps) {
   const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
 
+  // Center inside the visible content area (right of sidebar, below header).
+  // CSS vars --app-content-left / --app-content-top are set by shell layouts
+  // (OwnerDashboardShell, BrokerPortalLayout, MainLayout). They fall back to
+  // 0 / 88px so public pages still center correctly under the global header.
   return (
-    <div className={`fixed inset-0 flex flex-col items-center justify-center gap-4 ${className}`}>
+    <div
+      className={`fixed flex flex-col items-center justify-center gap-4 z-[60] pointer-events-none ${className}`}
+      style={{
+        top: "var(--app-content-top, 88px)",
+        left: "var(--app-content-left, 0px)",
+        right: 0,
+        bottom: 0,
+      }}
+    >
       <div className="relative w-16 h-16 flex items-center justify-center">
         {/* Soft gold pulsing ring */}
         <span
