@@ -126,10 +126,11 @@ const ExploreServicesExpander = () => {
       {/* Unified segmented header — rectangular pill band, dividers between categories */}
       <div
         ref={tabsRef}
-        data-surface="dark"
+        data-ink-emerald
         data-on-dark
         data-no-contrast-guard
-        className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#047857]/45 bg-[#0A0A0A] divide-x divide-white/30"
+        className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#047857]/45 divide-x divide-white/30"
+        style={{ backgroundImage: "var(--gradient-ink)" }}
         role="tablist"
         aria-label="Services"
       >
@@ -140,25 +141,25 @@ const ExploreServicesExpander = () => {
             <button
               key={s.id}
               data-tab-id={s.id}
-              data-surface={isActive ? "champagne" : "dark"}
               data-cta={isActive ? "champagne" : "dark"}
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
               style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}
               data-no-contrast-guard
-              className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-[background-color] ${
+              className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-[background-color] ${
                 isActive
                   ? `bg-[#EFE6D6] hover:bg-[#EFE6D6] text-[#1A1A1A] hover:text-[#1A1A1A]`
-                  : `text-white hover:bg-[#1F1F1F]`
+                  : `text-white hover:bg-white/10`
               } ${s.available === false ? "opacity-80" : ""}`}
             >
               <Icon className={`w-4 h-4 ${isActive ? "" : "allow-white"}`} style={isActive ? { color: "#1A1A1A", stroke: "#1A1A1A" } : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}>{s.title}</span>
+              <span className={isActive ? "" : "allow-white"} style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}>{s.title}</span>
             </button>
           );
         })}
       </div>
+
 
 
 
