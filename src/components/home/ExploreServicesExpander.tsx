@@ -146,7 +146,6 @@ const ExploreServicesExpander = () => {
             <button
               key={s.id}
               data-tab-id={s.id}
-              data-cta="dark"
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
