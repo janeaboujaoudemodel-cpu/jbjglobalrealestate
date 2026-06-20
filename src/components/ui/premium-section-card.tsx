@@ -49,7 +49,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
     const inner =
       width === "contained"
         ? "w-full max-w-[1760px] mx-auto px-3 sm:px-5 lg:px-8"
-        : "w-full";
+        : "jj-fullbleed-band w-full";
 
     // Transparent wrapper: NEVER paints a background unless tone is explicit.
     // Kills the "white-pearl back layer" that was leaking past rounded child cards.
