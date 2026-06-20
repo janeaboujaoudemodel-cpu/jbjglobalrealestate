@@ -125,7 +125,7 @@ export function ToolkitShowcaseCard() {
             data-on-dark
             data-no-contrast-guard
             className="allow-white flex items-stretch overflow-x-auto no-scrollbar"
-            style={{ backgroundImage: "linear-gradient(180deg, #0a6b53 0%, #064E3B 100%)" }}
+            style={{ backgroundImage: "var(--gradient-ink)", backgroundColor: "#064E3B" }}
             role="tablist"
             aria-label="Royal tools"
           >
