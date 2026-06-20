@@ -269,7 +269,7 @@ export default function TrainingManagement() {
         </div>
         <Button
           onClick={() => setShowAssignDialog(true)}
-          className="bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-[#1A1A1A] font-semibold"
+          className="jj-cta-champagne font-semibold"
         >
           <UserPlus className="h-4 w-4 mr-2" />
           Assign Training
