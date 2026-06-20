@@ -82,9 +82,9 @@ const MarketAreaDetail = () => {
       />
 
       {/* Hero */}
-      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
+      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.16),transparent_62%)]" />
         
         <motion.div 
           className="relative z-10 container mx-auto px-4 py-24"
@@ -93,15 +93,15 @@ const MarketAreaDetail = () => {
           variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
         >
           <motion.div variants={fadeInUp}>
-            <Link to="/market-intelligence/areas" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
+            <Link to="/market-intelligence/areas" className="allow-white inline-flex items-center gap-2 text-[#F7F2EA] hover:text-white mb-6">
               <ArrowLeft className="w-4 h-4" />
               Back to All Areas
             </Link>
           </motion.div>
 
           <motion.div className="flex items-center gap-3 mb-4" variants={fadeInUp}>
-            <MapPin className="w-8 h-8 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">Area Intelligence</span>
+            <MapPin className="allow-white w-8 h-8 text-[#F7F2EA]" />
+            <span className="allow-white text-[#F7F2EA] text-sm uppercase tracking-[0.3em]">Area Intelligence</span>
           </motion.div>
 
           <motion.h1 
@@ -115,11 +115,11 @@ const MarketAreaDetail = () => {
             {getTrendBadge(area.trend)}
             <div className="flex items-center gap-2">
               {area.yoyChange > 0 ? (
-                <TrendingUp className="w-5 h-5 text-emerald-400" />
+                <TrendingUp className="w-5 h-5 text-[#B89555]" />
               ) : (
                 <TrendingDown className="w-5 h-5 text-red-400" />
               )}
-              <span className={`text-lg font-semibold ${area.yoyChange > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              <span className={`text-lg font-semibold ${area.yoyChange > 0 ? 'text-[#F7F2EA]' : 'text-red-300'}`}>
                 {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}% YoY
               </span>
             </div>
