@@ -45,9 +45,9 @@ import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
 
 // Owner-only + post-paint extras (lazy, idle-mounted — never blocks FCP)
 import DeferredAppExtras from "@/components/util/DeferredAppExtras";
-// ChampagneCtaInkGuard removed: contrast is owned 100% by static CSS in
+// Runtime contrast repaint removed: contrast is owned 100% by static CSS in
 // src/index.css. Re-introducing any JS repaint here will re-introduce
-// the platform-wide hover/scroll flicker and the "all buttons go ink" bug.
+// the platform-wide hover/scroll flicker and global CTA color regressions.
 
 
 
@@ -108,7 +108,7 @@ const App = () => {
                   <CanonicalAndHreflang />
                   {/* Owner-only + analytics extras — lazy, idle-mounted */}
                   <DeferredAppExtras />
-                  {/* ChampagneCtaInkGuard removed — see import comment */}
+                  {/* Runtime contrast repaint intentionally removed — see import comment */}
 
                    
             {/* BrandIntroSplash disabled until further notice */}
