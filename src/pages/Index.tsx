@@ -337,7 +337,7 @@ const Index = () => {
 
 
       {/* FEATURED LISTINGS */}
-      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <FeaturedListings />
