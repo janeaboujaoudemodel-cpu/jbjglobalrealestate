@@ -469,7 +469,7 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
   },
   {
     name: 'AI Home Finder (Quiz)',
-    route: '/quiz',
+    route: '/ai-home-finder',
     navPath: 'Header, AI Hub, Footer',
     visibility: 'Public',
     status: 'working',
@@ -477,9 +477,9 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
     fixNeeded: null,
     proofPack: {
       routeFile: 'src/App.tsx',
-      routeSnippet: `<Route path="/quiz" element={<Quiz />} />`,
+      routeSnippet: `<Route path="/ai-home-finder" element={<Quiz />} />`,
       navFile: 'src/pages/AIHub.tsx',
-      navSnippet: `{ id: "ai-home-finder", link: "/quiz" }`,
+      navSnippet: `{ id: "ai-home-finder", link: "/ai-home-finder" }`,
       apiWiringFile: null,
       apiWiringSnippet: 'NO API WIRING - client-side quiz with filtering logic',
       statusJustification: 'Route verified, multiple nav links, client-side quiz with property filtering.',

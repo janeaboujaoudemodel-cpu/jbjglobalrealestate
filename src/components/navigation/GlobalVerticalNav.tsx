@@ -70,7 +70,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   
-  { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
+  { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, highlight: true },
   { label: "List Your Property", href: "/list-property", icon: ClipboardCheck, highlight: true },
   { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
@@ -311,7 +311,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
-  { label: "AI Home Finder", href: "/quiz", icon: Home, section: "TOOLS" },
+  { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, section: "TOOLS" },
   { label: "Property Comparison", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
@@ -405,7 +405,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'AML / KYC', icon: Shield, href: '/aml-kyc' },
   ],
   'ai-tools': [
-    { label: 'AI Home Finder', icon: Home, href: '/quiz' },
+    { label: 'AI Home Finder', icon: Home, href: '/ai-home-finder' },
     { label: 'Property Comparison', icon: GitCompare, href: '/compare' },
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
@@ -414,7 +414,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent&mode=manual' },
   ],
   creative: [
-    { label: 'AI Home Finder', icon: Home, href: '/quiz' },
+    { label: 'AI Home Finder', icon: Home, href: '/ai-home-finder' },
     { label: 'Property Comparison', icon: GitCompare, href: '/compare' },
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
@@ -785,7 +785,7 @@ export default function GlobalVerticalNav() {
     // — premium GOLD label to match the main section headers.
     if (
       item.href === '/join' ||
-      item.href === '/quiz' ||
+      item.href === '/ai-home-finder' ||
       (item.href === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
@@ -812,7 +812,7 @@ export default function GlobalVerticalNav() {
   // On those rows, icon glyphs go white for contrast and the tile uses translucent white.
   const isSaturatedColorRow = (item: NavItem) =>
     item.href === '/join' ||
-    item.href === '/quiz' ||
+    item.href === '/ai-home-finder' ||
     (item.href === '/list-property' && (item as any).highlight) ||
     item.href === '/resale-properties';
 

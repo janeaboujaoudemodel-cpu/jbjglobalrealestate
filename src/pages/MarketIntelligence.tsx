@@ -237,7 +237,7 @@ const MarketIntelligence = () => {
         subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
         primaryLink="/contact"
         primaryText="Speak With Our Team"
-        secondaryLink="/quiz"
+        secondaryLink="/ai-home-finder"
         secondaryText="AI Home Finder"
       />
     </div>

@@ -475,7 +475,7 @@ export default function ExecutiveAssistant() {
               </CardContent>
             </Card>
             
-            <Card className="bg-[#FDFBF7] border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(184,149,85,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>

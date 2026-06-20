@@ -46,7 +46,7 @@ function statusStyle(status: string): { cls: string; label: string } {
     case "skipped":
       return { cls: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", label: "Skipped" };
     case "processing":
-      return { cls: "bg-[#F5F3FF] text-[#5B21B6] border border-[#8B5CF6]/40", label: "Processing…" };
+      return { cls: "bg-[#F5F3FF] text-[#5B21B6] border border-[#B89555]/40", label: "Processing…" };
     case "error":
       return { cls: "bg-[#FEF2F2] text-[#991B1B] border border-[#EF4444]/40", label: "Error" };
     case "pending":
@@ -102,12 +102,12 @@ export function IngestionCard({
             </p>
             <Badge className={`${status.cls} font-medium`}>{status.label}</Badge>
             {isAi && (
-              <Badge className="bg-[#F5F3FF] text-[#5B21B6] border border-[#8B5CF6]/40">
+              <Badge className="bg-[#F5F3FF] text-[#5B21B6] border border-[#B89555]/40">
                 <Sparkles className="w-3 h-3 mr-1" /> AI
               </Badge>
             )}
             {job.merge_mode === "extract" && job.status === "merged" && (
-              <Badge className="bg-[#F5F3FF] text-[#5B21B6] border border-[#8B5CF6]/40">
+              <Badge className="bg-[#F5F3FF] text-[#5B21B6] border border-[#B89555]/40">
                 Extract-only
               </Badge>
             )}

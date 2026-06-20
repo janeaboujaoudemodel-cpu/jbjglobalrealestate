@@ -107,7 +107,7 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
             ? "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)"
             : "#FFFFFF",
           ["--mortgage-range-thumb-shadow" as any]: isNavy
-            ? "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(96,165,250,0.85), 0 4px 14px rgba(30,64,175,0.55)"
+            ? "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(184,149,85,0.85), 0 4px 14px rgba(30,64,175,0.55)"
             : "0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset",
         } as CSSProperties
       }
@@ -144,7 +144,7 @@ const MortgageCalculator = ({
     background:
       "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)",
     border: "1px solid rgba(147,197,253,0.42)",
-    boxShadow: "inset 0 0 22px rgba(96,165,250,0.10)",
+    boxShadow: "inset 0 0 22px rgba(184,149,85,0.10)",
     // Slider theme overrides (cascade into <Slider />)
     ["--slider-track-bg" as any]: "rgba(255,255,255,0.10)",
     ["--slider-range-bg" as any]:
@@ -152,7 +152,7 @@ const MortgageCalculator = ({
     ["--slider-thumb-bg" as any]:
       "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)",
     ["--slider-thumb-shadow" as any]:
-      "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(96,165,250,0.85), 0 4px 14px rgba(30,64,175,0.55)",
+      "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(184,149,85,0.85), 0 4px 14px rgba(30,64,175,0.55)",
   } as CSSProperties;
 
   useEffect(() => {
@@ -279,13 +279,13 @@ const MortgageCalculator = ({
           style={{
             background: "linear-gradient(135deg, rgba(30,78,140,0.52), rgba(8,21,43,0.92))",
             border: "1px solid rgba(147,197,253,0.55)",
-            boxShadow: "0 0 24px rgba(96,165,250,0.18)",
+            boxShadow: "0 0 24px rgba(184,149,85,0.18)",
           }}
         >
           {selectedProject.developer?.logo_url ? (
             <img src={selectedProject.developer.logo_url} alt="" className="w-10 h-10 rounded-xl object-contain bg-white/90 p-1" />
           ) : (
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(96,165,250,0.18)" }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(184,149,85,0.18)" }}>
               <Building2 className="w-5 h-5 allow-white" style={{ color: "#BFDBFE" }} />
             </div>
           )}
@@ -330,7 +330,7 @@ const MortgageCalculator = ({
               style={{
                 background: "rgba(4,13,28,0.98)",
                 border: "1px solid rgba(147,197,253,0.35)",
-                boxShadow: "0 20px 50px rgba(0,0,0,0.45), 0 0 24px rgba(96,165,250,0.20)",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.45), 0 0 24px rgba(184,149,85,0.20)",
               }}
             >
               {!projectsLoading && projectResults.length === 0 && (
@@ -347,7 +347,7 @@ const MortgageCalculator = ({
                   {project.developer?.logo_url ? (
                     <img src={project.developer.logo_url} alt="" className="w-9 h-9 rounded-lg object-contain bg-white/90 p-1" />
                   ) : (
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(96,165,250,0.16)" }}>
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(184,149,85,0.16)" }}>
                       <Building2 className="w-4 h-4 allow-white" style={{ color: "#BFDBFE" }} />
                     </div>
                   )}
@@ -460,7 +460,7 @@ const MortgageCalculator = ({
                 : "linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 50%, #ECE2D2 100%)",
               border: isNavy ? "1px solid rgba(191,219,254,0.78)" : "1px solid rgba(184,149,85,0.55)",
               boxShadow: isNavy
-                ? "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(96,165,250,0.42), inset 0 1px 0 rgba(255,255,255,0.55)"
+                ? "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(184,149,85,0.42), inset 0 1px 0 rgba(255,255,255,0.55)"
                 : "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
             }}
           >

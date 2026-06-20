@@ -1179,7 +1179,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                   onClick={() => handleAnalyzeCV(cv, true)}
                                   data-allow-dark-cta
                                   data-no-contrast-guard
-                                  className="h-9 rounded-lg col-span-2 bg-[#1A1033] hover:bg-[#2A1A4A] text-white border border-[#7C3AED]/60 font-semibold px-3"
+                                  className="h-9 rounded-lg col-span-2 bg-[#1A1033] hover:bg-[#2A1A4A] text-white border border-[#B89555]/60 font-semibold px-3"
                                 >
                                   {isAnalyzing
                                     ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin text-white allow-white" />

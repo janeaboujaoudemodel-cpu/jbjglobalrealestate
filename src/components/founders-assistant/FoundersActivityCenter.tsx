@@ -233,7 +233,7 @@ const FoundersActivityCenter: React.FC = () => {
             <p className="text-xs text-[#1A1A1A]/70">Pending</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(184,149,85,0.1)]">
           <CardContent className="p-4 text-center">
             <TrendingUp className="w-6 h-6 text-blue-600 mx-auto mb-2" />
             <p className="text-2xl font-bold text-blue-600">{stats.today}</p>

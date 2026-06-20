@@ -133,7 +133,7 @@ export const aiPropertyTools: ToolDefinition[] = [
     id: 'ai-home-finder',
     name: 'AI Home Finder',
     description: 'AI-powered quiz to find your perfect property match based on your preferences.',
-    href: '/quiz',
+    href: '/ai-home-finder',
     icon: Home,
     category: 'ai-property',
     status: 'active',

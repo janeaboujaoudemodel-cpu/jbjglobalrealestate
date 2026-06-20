@@ -55,7 +55,7 @@ interface LeadStatus {
   count: number;
 }
 
-const COLORS = ["#B89555", "#059669", "#3B82F6", "#8B5CF6", "#F59E0B"];
+const COLORS = ["#B89555", "#059669", "#3B82F6", "#B89555", "#F59E0B"];
 
 export default function JBJBrokerReports() {
   const navigate = useNavigate();
@@ -336,7 +336,7 @@ export default function JBJBrokerReports() {
                     }} 
                   />
                   <Bar dataKey="messages" fill="#22C55E" name="Messages" />
-                  <Bar dataKey="calls" fill="#8B5CF6" name="Calls" />
+                  <Bar dataKey="calls" fill="#B89555" name="Calls" />
                   <Bar dataKey="emails" fill="#3B82F6" name="Emails" />
                 </BarChart>
               </ResponsiveContainer>

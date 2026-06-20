@@ -218,7 +218,7 @@ const hubSections: HubSection[] = [
       { href: "/broker-toolkit", label: "Royal Tools Hub" },
       
       // Property Intelligence
-      { href: "/quiz", label: "AI Home Finder" },
+      { href: "/ai-home-finder", label: "AI Home Finder" },
       { href: "/property-evaluator", label: "Property Evaluator" },
       { href: "/mortgage-calculator", label: "Mortgage Calculator" },
       { href: "/rental-index", label: "Rental Index" },

@@ -44,7 +44,7 @@ interface Stats {
 
 const PIPELINE_COLORS: Record<string, string> = {
   new: "#3B82F6",
-  contacted: "#8B5CF6",
+  contacted: "#B89555",
   interested: "#059669",
   qualified: "#059669",
   negotiation: "#F59E0B",

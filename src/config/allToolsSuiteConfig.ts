@@ -103,7 +103,7 @@ export const ALL_TOOL_CATEGORIES: ToolCategory[] = [
     tools: [
       { id: 'property-evaluator', name: 'Property Evaluator', icon: DollarSign, description: 'Comprehensive property value assessment', href: '/property-evaluator' },
       { id: 'property-comparison', name: 'Compare Properties', icon: Layers, description: 'Side-by-side property comparison tool', href: '/compare' },
-      { id: 'home-finder', name: 'AI Home Finder', icon: Sparkles, description: 'Find your perfect home with AI matching', href: '/quiz' },
+      { id: 'home-finder', name: 'AI Home Finder', icon: Sparkles, description: 'Find your perfect home with AI matching', href: '/ai-home-finder' },
     ],
   },
   {

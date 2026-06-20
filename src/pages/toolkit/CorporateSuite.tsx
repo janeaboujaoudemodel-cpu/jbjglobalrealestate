@@ -46,7 +46,7 @@ const tools = [
     icon: FileEdit,
     href: "/toolkit/corporate-suite/cover-letter",
     badge: "AI",
-    accentColor: "#A78BFA",
+    accentColor: "#B89555",
   },
   {
     id: "logo-creator",
@@ -78,7 +78,7 @@ const tools = [
     icon: Globe,
     href: "/toolkit/corporate-suite/landing-page",
     badge: "New",
-    accentColor: "#06B6D4",
+    accentColor: "#B89555",
   },
   {
     id: "e-sign",

@@ -25,7 +25,7 @@ const StartingPointSection = () => {
     { to: "/landlord-guide", icon: Home, label: t('hero.landlords', 'Landlord'), sub: t('hero.manageProperty', 'Manage Property') },
     { to: "/tenant-guide", icon: User, label: t('hero.tenants', 'Tenant'), sub: t('hero.tenantGuide', 'Tenant Guide') },
     { to: "/investor-hub", icon: Layers, label: t('hero.investors'), sub: t('hero.investorPortal', 'Investor Portal') },
-    { to: "/quiz", icon: Users, label: t('hero.visitors'), sub: t('hero.discoverDubai', 'Discover Dubai') },
+    { to: "/ai-home-finder", icon: Users, label: t('hero.visitors'), sub: t('hero.discoverDubai', 'Discover Dubai') },
     { to: "/partners", icon: Briefcase, label: t('hero.partners', 'Partner'), sub: t('hero.partnerWithUs', 'Partner With Us') },
     { to: "/join", icon: GraduationCap, label: t('hero.careers'), sub: t('hero.lookingForJob', 'Looking for a Job?') },
   ];

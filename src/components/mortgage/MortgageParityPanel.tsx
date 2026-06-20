@@ -88,7 +88,7 @@ export default function MortgageParityPanel({
   const cardBg = isNavy
     ? "linear-gradient(135deg, #0B2244 0%, #08152B 55%, #000 100%)"
     : "#F7F2EA";
-  const cardBorder = isNavy ? "1px solid rgba(96,165,250,0.30)" : "1px solid rgba(184,149,85,0.30)";
+  const cardBorder = isNavy ? "1px solid rgba(184,149,85,0.30)" : "1px solid rgba(184,149,85,0.30)";
   const inkClass = isNavy ? "text-white" : "text-[#1A1A1A]";
   const subClass = isNavy ? "text-white/70" : "text-[#1A1A1A]/70";
 
@@ -115,7 +115,7 @@ export default function MortgageParityPanel({
                 className={`allow-white px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? "" : "opacity-70 hover:opacity-100"}`}
                 style={{
                   background: active
-                    ? (isNavy ? "rgba(96,165,250,0.22)" : "#EFE6D6")
+                    ? (isNavy ? "rgba(184,149,85,0.22)" : "#EFE6D6")
                     : "transparent",
                   border: active
                     ? (isNavy ? "1px solid rgba(147,197,253,0.55)" : "1px solid #B89555")

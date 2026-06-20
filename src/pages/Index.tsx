@@ -99,7 +99,7 @@ const staggerContainer = {
 // Hero action pills — News sits in the visual center; mode-specific extras append on the right
 const baseHeroActions = [
   { label: "Browse Properties", icon: Search, href: "/properties" },
-  { label: "AI Home Finder", icon: Home, href: "/quiz" },
+  { label: "AI Home Finder", icon: Home, href: "/ai-home-finder" },
   { label: "News", icon: Newspaper, href: "/news" },
   { label: "Market Intelligence", icon: BarChart3, href: "/market-intelligence" },
 ];

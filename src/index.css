@@ -6266,3 +6266,122 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   ) !important;
   color: #3a2a08 !important;
 }
+
+/* ============================================================================
+ * GLOBAL OFF-BRAND COLOR NEUTRALIZER  (PASS 8)
+ *
+ * Brand palette is champagne/gold/ink. Every off-brand Tailwind color family
+ * (blue/purple/pink/indigo/cyan/teal/violet/fuchsia/sky/rose/lime/orange/
+ *  yellow/emerald/green/red/amber) that bleeds into the marketing surfaces,
+ * tool pages, AI tools and toolkit workspace is remapped to the brand tokens.
+ *
+ * Opt-outs (so charts, data viz, AI purple icon tiles, alerts and admin
+ * status pills keep their semantic meaning):
+ *   - [data-allow-color]              — explicit opt-out anywhere
+ *   - [data-no-contrast-guard]        — already used by AI purple tiles
+ *   - [data-chart], .recharts-wrapper — charts and data viz
+ *   - [data-kpi], [data-status-pill]  — semantic KPIs / status badges
+ *   - [role="alert"], [role="status"] — toasts and a11y alerts
+ *   - .sonner-toast, [data-sonner-toaster] — toast notifications
+ *   - .jj-ai-purple, .ai-icon-tile    — explicit AI purple affordances
+ *   - .allow-color                    — utility opt-out
+ * ============================================================================ */
+
+@layer utilities {
+  /* GRADIENT STOPS — neutralize from-/via-/to- for every non-brand family */
+  html body :is(
+    [class*="from-blue-"], [class*="from-indigo-"], [class*="from-violet-"],
+    [class*="from-purple-"], [class*="from-fuchsia-"], [class*="from-pink-"],
+    [class*="from-rose-"], [class*="from-red-"], [class*="from-orange-"],
+    [class*="from-amber-"], [class*="from-yellow-"], [class*="from-lime-"],
+    [class*="from-green-"], [class*="from-emerald-"], [class*="from-teal-"],
+    [class*="from-cyan-"], [class*="from-sky-"],
+    [class*="from-[#"]
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart]):not([data-chart] *):not(.recharts-wrapper):not(.recharts-wrapper *):not([data-kpi]):not([data-status-pill]):not([role="alert"]):not([role="status"]):not(.sonner-toast):not([data-sonner-toaster] *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *):not(.bg-gradient-jj):not([class*="from-[#FDFBF7]"]):not([class*="from-[#F7F2EA]"]):not([class*="from-[#EFE6D6]"]):not([class*="from-[#B89555]"]):not([class*="from-[#1A1A1A]"]):not([class*="from-[#0A0A0A]"]) {
+    --tw-gradient-from: #F7F2EA !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent) !important;
+  }
+  html body :is(
+    [class*="via-blue-"], [class*="via-indigo-"], [class*="via-violet-"],
+    [class*="via-purple-"], [class*="via-fuchsia-"], [class*="via-pink-"],
+    [class*="via-rose-"], [class*="via-red-"], [class*="via-orange-"],
+    [class*="via-amber-"], [class*="via-yellow-"], [class*="via-lime-"],
+    [class*="via-green-"], [class*="via-emerald-"], [class*="via-teal-"],
+    [class*="via-cyan-"], [class*="via-sky-"]
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart] *):not(.recharts-wrapper *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *) {
+    --tw-gradient-stops: var(--tw-gradient-from), #EFE6D6, var(--tw-gradient-to, transparent) !important;
+  }
+  html body :is(
+    [class*="to-blue-"], [class*="to-indigo-"], [class*="to-violet-"],
+    [class*="to-purple-"], [class*="to-fuchsia-"], [class*="to-pink-"],
+    [class*="to-rose-"], [class*="to-red-"], [class*="to-orange-"],
+    [class*="to-amber-"], [class*="to-yellow-"], [class*="to-lime-"],
+    [class*="to-green-"], [class*="to-emerald-"], [class*="to-teal-"],
+    [class*="to-cyan-"], [class*="to-sky-"]
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart] *):not(.recharts-wrapper *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *) {
+    --tw-gradient-to: #EFE6D6 !important;
+  }
+
+  /* SOLID BACKGROUNDS — neutralize bg-{family}-{shade} to champagne raised.
+     Skips when inside a dark surface so dark cards keep their own bg. */
+  html body :is(
+    [class*="bg-blue-"], [class*="bg-indigo-"], [class*="bg-violet-"],
+    [class*="bg-purple-"], [class*="bg-fuchsia-"], [class*="bg-pink-"],
+    [class*="bg-rose-"], [class*="bg-orange-"],
+    [class*="bg-yellow-"], [class*="bg-lime-"],
+    [class*="bg-teal-"], [class*="bg-cyan-"], [class*="bg-sky-"]
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart]):not([data-chart] *):not(.recharts-wrapper):not(.recharts-wrapper *):not([data-kpi]):not([data-status-pill]):not([role="alert"]):not([role="status"]):not(.sonner-toast):not([data-sonner-toaster] *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"] *) {
+    background-color: #EFE6D6 !important;
+    background-image: none !important;
+  }
+
+  /* BORDERS / RINGS — neutralize off-brand colored hairlines to gold */
+  html body :is(
+    [class*="border-blue-"], [class*="border-indigo-"], [class*="border-violet-"],
+    [class*="border-purple-"], [class*="border-fuchsia-"], [class*="border-pink-"],
+    [class*="border-rose-"], [class*="border-orange-"], [class*="border-yellow-"],
+    [class*="border-teal-"], [class*="border-cyan-"], [class*="border-sky-"],
+    [class*="ring-blue-"], [class*="ring-indigo-"], [class*="ring-violet-"],
+    [class*="ring-purple-"], [class*="ring-fuchsia-"], [class*="ring-pink-"],
+    [class*="ring-rose-"], [class*="ring-orange-"], [class*="ring-yellow-"],
+    [class*="ring-teal-"], [class*="ring-cyan-"], [class*="ring-sky-"]
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart] *):not(.recharts-wrapper *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *) {
+    border-color: rgba(184, 149, 85, 0.45) !important;
+    --tw-ring-color: rgba(184, 149, 85, 0.45) !important;
+  }
+
+  /* TEXT COLORS — neutralize off-brand text to ink (#1A1A1A).
+     Excludes semantic families (amber/yellow/green/emerald/red/orange) which are
+     used on dark cards (KPIs, free badges, etc).  Also opt-out when ancestor is
+     a dark surface so legitimately dark cards keep light text. */
+  html body :is(
+    [class*="text-blue-"], [class*="text-indigo-"], [class*="text-violet-"],
+    [class*="text-purple-"], [class*="text-fuchsia-"], [class*="text-pink-"],
+    [class*="text-rose-"], [class*="text-lime-"], [class*="text-teal-"],
+    [class*="text-cyan-"], [class*="text-sky-"]
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart] *):not(.recharts-wrapper *):not([data-kpi]):not([data-status-pill]):not([role="alert"]):not([role="status"]):not(.sonner-toast):not([data-sonner-toaster] *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *):not(.text-price-orange):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"] *):not([data-on-dark] *):not([data-allow-dark-cta] *):not(.jj-cta-dark *) {
+    color: #1A1A1A !important;
+    -webkit-text-fill-color: #1A1A1A !important;
+    stroke: #1A1A1A !important;
+  }
+
+  /* INLINE STYLE NEON HEXES — common offender hex tokens used as inline bg.
+     Remap to champagne raised so verdict strips / hero blobs flatten out. */
+  html body [style*="#7C3AED" i]:not([data-allow-color]):not(.jj-ai-purple):not(.ai-icon-tile),
+  html body [style*="#8B5CF6" i]:not([data-allow-color]):not(.jj-ai-purple):not(.ai-icon-tile),
+  html body [style*="#A78BFA" i]:not([data-allow-color]):not(.jj-ai-purple):not(.ai-icon-tile),
+  html body [style*="#C084FC" i]:not([data-allow-color]):not(.jj-ai-purple):not(.ai-icon-tile),
+  html body [style*="#EC4899" i]:not([data-allow-color]),
+  html body [style*="#F472B6" i]:not([data-allow-color]),
+  html body [style*="#DB2777" i]:not([data-allow-color]),
+  html body [style*="#3B82F6" i]:not([data-allow-color]):not([data-chart] *):not(.recharts-wrapper *),
+  html body [style*="#60A5FA" i]:not([data-allow-color]):not([data-chart] *):not(.recharts-wrapper *),
+  html body [style*="#2563EB" i]:not([data-allow-color]):not([data-chart] *):not(.recharts-wrapper *),
+  html body [style*="#06B6D4" i]:not([data-allow-color]),
+  html body [style*="#22D3EE" i]:not([data-allow-color]),
+  html body [style*="#0EA5E9" i]:not([data-allow-color]) {
+    background-color: #EFE6D6 !important;
+    background-image: none !important;
+    color: #1A1A1A !important;
+  }
+}

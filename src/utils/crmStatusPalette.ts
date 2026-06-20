@@ -14,7 +14,7 @@ export interface StatusColor {
 
 const C: Record<CrmStatusTone, Omit<StatusColor, "label" | "tone">> = {
   red:       { bg: "FCA5A5", fg: "7F1D1D", cssBg: "#FCA5A5", cssFg: "#7F1D1D" },
-  emerald:   { bg: "A7F3D0", fg: "065F46", cssBg: "#A7F3D0", cssFg: "#065F46" },
+  emerald:   { bg: "A7F3D0", fg: "065F46", cssBg: "#FFFFFF", cssFg: "#065F46" },
   amber:     { bg: "FDE68A", fg: "92400E", cssBg: "#FDE68A", cssFg: "#92400E" },
   blue:      { bg: "BFDBFE", fg: "1E3A8A", cssBg: "#BFDBFE", cssFg: "#1E3A8A" },
   champagne: { bg: "EFE6D6", fg: "1A1A1A", cssBg: "#EFE6D6", cssFg: "#1A1A1A" },

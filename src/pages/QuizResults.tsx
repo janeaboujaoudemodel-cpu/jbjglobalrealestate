@@ -256,7 +256,7 @@ const QuizResults = () => {
 
   const startNewMatch = () => {
     clearMatchmakerSession();
-    navigate("/quiz");
+    navigate("/ai-home-finder");
   };
 
 
@@ -1616,7 +1616,7 @@ const QuizResults = () => {
   };
 
   const handleConsultantWhatsApp = () => {
-    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
+    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Home Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
     openLinkSync(`https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
     generatePdfInBackground();
     toast.success("Opening WhatsApp to JBJ — attach the downloaded PDF");
@@ -1780,7 +1780,7 @@ const QuizResults = () => {
                         className="border-0"
                         style={{
                           background: "#F7F2EA",
-                          border: "1px solid rgba(94,234,212,0.55)",
+                          border: "1px solid rgba(184,149,85,0.55)",
                           boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
                           color: "#FFFFFF",
                         }}
@@ -1901,7 +1901,7 @@ const QuizResults = () => {
                           className="border-0"
                           style={{
                             background: "#F7F2EA",
-                            border: "1px solid rgba(94,234,212,0.55)",
+                            border: "1px solid rgba(184,149,85,0.55)",
                             boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
                             color: "#FFFFFF",
                           }}
@@ -2057,7 +2057,7 @@ const QuizResults = () => {
           className="aihf-results allow-white sm:max-w-md border-0"
           style={{
             background: "#F7F2EA",
-            border: "1px solid rgba(94,234,212,0.45)",
+            border: "1px solid rgba(184,149,85,0.45)",
             boxShadow:
               "0 24px 70px rgba(45,212,191,0.25), inset 0 0 34px rgba(103,232,249,0.07)",
             color: "#FFFFFF",
@@ -2107,7 +2107,7 @@ const QuizResults = () => {
               </Button>
             </div>
 
-            <div className="pt-3 space-y-2" style={{ borderTop: "1px solid rgba(94,234,212,0.30)" }}>
+            <div className="pt-3 space-y-2" style={{ borderTop: "1px solid rgba(184,149,85,0.30)" }}>
               <p className="text-xs font-semibold flex items-center gap-1.5" style={{ color: "#FFFFFF" }}>
                 <Building2 className="w-3.5 h-3.5 aihf-tiffany" />
                 Send to a JBJ Consultant
@@ -2139,7 +2139,7 @@ const QuizResults = () => {
         onOpenChange={setShowVipModal}
         onSuccess={() => {
           setShowVipModal(false);
-          navigate("/quiz");
+          navigate("/ai-home-finder");
         }}
         userInfo={{
           fullName: user?.email?.split("@")[0] || "",

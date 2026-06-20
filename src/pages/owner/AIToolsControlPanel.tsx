@@ -32,7 +32,7 @@ interface ToolDef {
 
 const ALL_TOOLS: ToolDef[] = [
   // Property
-  { id: "ai-home-finder", title: "JBJ AI Home Finder", description: "Match buyers to listings with AI-powered filters.", link: "/quiz", category: "property" },
+  { id: "ai-home-finder", title: "JBJ AI Home Finder", description: "Match buyers to listings with AI-powered filters.", link: "/ai-home-finder", category: "property" },
   { id: "property-evaluator", title: "JBJ Property Evaluator", description: "AI-driven valuation based on live market data.", link: "/property-evaluator", category: "property" },
   { id: "property-comparison", title: "JBJ Property Comparison", description: "Compare properties side-by-side with AI insights.", link: "/compare", category: "property" },
   { id: "mortgage-calculator", title: "JBJ Mortgage Calculator", description: "Estimate monthly payments and financing options.", link: "/mortgage-calculator", category: "property" },

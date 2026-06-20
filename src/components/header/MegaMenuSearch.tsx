@@ -89,7 +89,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     { href: '/market-intelligence', label: 'Market Intelligence', icon: FileText },
     { href: '/developers', label: 'Developers', icon: Building2 },
     { href: '/join', label: 'Careers', icon: Users },
-    { href: '/quiz', label: 'AI Home Finder', icon: Sparkles },
+    { href: '/ai-home-finder', label: 'AI Home Finder', icon: Sparkles },
   ];
 
   return (

@@ -327,7 +327,7 @@ const Footer = () => {
     { href: "/property-evaluator", label: "JBJ Property Evaluator" },
     { href: "/rental-index", label: "JBJ Rental Index" },
     { href: "/mortgage-calculator", label: "Mortgage Calculator" },
-    { href: "/quiz", label: "AI Home Finder" },
+    { href: "/ai-home-finder", label: "AI Home Finder" },
     { href: "/business-card-scanner", label: "Business Card Scanner" },
     { href: "/whiteboard", label: "Whiteboard" },
     { href: "/mindmap", label: "Mind Map" },

@@ -66,7 +66,7 @@ const ROUTE_INVENTORY = [
   { path: '/services/rental-advisory', name: 'Rental Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/services/investment-advisory', name: 'Investment Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/toolkit', name: 'Toolkit Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/quiz', name: 'AI Home Finder', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/ai-home-finder', name: 'AI Home Finder', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/mortgage-calculator', name: 'Mortgage Calculator', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/calculator/roi', name: 'ROI Calculator', access: 'public', dashboard: false, sidebar: false, registry: true },
   { path: '/guides', name: 'Guides Library', access: 'public', dashboard: false, sidebar: false, registry: true },

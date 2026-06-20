@@ -877,7 +877,7 @@ const Quiz = () => {
       >
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[rgba(94,234,212,0.25)] backdrop-blur-sm" style={{ background: "rgba(4,22,28,0.6)" }}>
+        <div className="border-b border-[rgba(184,149,85,0.25)] backdrop-blur-sm" style={{ background: "rgba(10,10,10,0.6)" }}>
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -899,44 +899,42 @@ const Quiz = () => {
 
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div
-            data-allow-dark-cta
-            data-no-contrast-guard
-            className="allow-white w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
+            className="w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
             style={{
-              background: "#0A0A0A",
-              border: "1px solid rgba(94,234,212,0.45)",
-              boxShadow: "0 0 0 1px rgba(94,234,212,0.25), 0 24px 60px rgba(14,116,144,0.35), inset 0 0 32px rgba(94,234,212,0.10)",
+              background: "#F7F2EA",
+              border: "1px solid rgba(184,149,85,0.45)",
+              boxShadow: "0 24px 60px rgba(10,10,10,0.06)",
             }}
           >
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7"
               style={{
-                background: "rgba(94,234,212,0.18)",
-                border: "1px solid rgba(94,234,212,0.50)",
-                color: "#A7F3D0",
+                background: "rgba(184,149,85,0.12)",
+                border: "1px solid rgba(184,149,85,0.45)",
               }}
             >
-              <Gift className="w-4 h-4 allow-white" style={{ color: "#B89555" }} />
-              <span className="text-sm font-medium allow-white" style={{ color: "#A7F3D0" }}>Completely Free</span>
+              <Gift className="w-4 h-4" style={{ color: "#B89555" }} />
+              <span className="text-sm font-medium" style={{ color: "#1A1A1A" }}>Completely Free</span>
             </div>
 
             <div
               className="w-20 h-20 rounded-full mx-auto mb-7 flex items-center justify-center"
               style={{
-                background: "#0A0A0A",
-                border: "1px solid rgba(94,234,212,0.55)",
-                boxShadow: "0 0 28px rgba(94,234,212,0.45)",
+                background: "#FDFBF7",
+                border: "1px solid rgba(184,149,85,0.65)",
+                boxShadow: "0 0 28px rgba(184,149,85,0.20)",
               }}
             >
-              <Wand2 className="w-10 h-10 allow-white" style={{ color: "#FFFFFF" }} />
+              <Wand2 className="w-10 h-10" style={{ color: "#B89555" }} />
             </div>
 
-            <h1 className="allow-white text-4xl md:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#FFFFFF" }}>
-              AI Property Finder
+
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#1A1A1A" }}>
+              AI Home Finder
             </h1>
 
-            <p className="allow-white text-lg mb-7 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
-              Find your perfect property match with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
+            <p className="text-lg mb-7 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(26,26,26,0.75)" }}>
+              Find your perfect home with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
               <span className="font-semibold" style={{ color: "#B89555" }}>FREE</span>.
             </p>
 
@@ -944,44 +942,45 @@ const Quiz = () => {
               <div
                 className="rounded-2xl p-5 text-left"
                 style={{
-                  background: "linear-gradient(135deg, rgba(14,116,144,0.35) 0%, rgba(0,0,0,0.5) 100%)",
-                  border: "1px solid rgba(94,234,212,0.40)",
+                  background: "#FDFBF7",
+                  border: "1px solid rgba(184,149,85,0.45)",
                 }}
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <Gift className="w-5 h-5 allow-white" style={{ color: "#B89555" }} />
-                  <span className="font-semibold allow-white" style={{ color: "#FFFFFF" }}>FREE Access</span>
+                  <Gift className="w-5 h-5" style={{ color: "#B89555" }} />
+                  <span className="font-semibold" style={{ color: "#1A1A1A" }}>FREE Access</span>
                 </div>
                 <ul className="space-y-2.5 text-sm">
-                  {["Unlimited AI Property Matches", "AI Comparison Reports", "Download Excel Report"].map((label) => (
-                    <li key={label} className="flex items-center gap-2.5 allow-white" style={{ color: "rgba(255,255,255,0.88)" }}>
+                  {["Unlimited AI Home Matches", "AI Comparison Reports", "Download Excel Report"].map((label) => (
+                    <li key={label} className="flex items-center gap-2.5" style={{ color: "rgba(26,26,26,0.85)" }}>
                       <span
                         className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
                         style={{ background: "#B89555" }}
                       >
                         <Check className="w-3 h-3" style={{ color: "#FFFFFF" }} strokeWidth={3} />
                       </span>
-                      <span className="allow-white">{label}</span>
+                      <span>{label}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-9" style={{ color: "rgba(255,255,255,0.75)" }}>
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-9" style={{ color: "rgba(26,26,26,0.65)" }}>
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
-                <div key={label} className="flex items-center gap-2 allow-white">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(94,234,212,0.22)" }}>
-                    <Icon className="w-3 h-3 allow-white" style={{ color: "#B89555" }} />
+                <div key={label} className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(184,149,85,0.18)" }}>
+                    <Icon className="w-3 h-3" style={{ color: "#B89555" }} />
                   </div>
-                  <span className="allow-white">{label}</span>
+                  <span>{label}</span>
                 </div>
               ))}
             </div>
+
 
             <Button
               onClick={() => setStarted(true)}
@@ -990,9 +989,9 @@ const Quiz = () => {
               className="allow-white font-semibold px-10 py-6 text-lg"
               style={{
                 background: "#0A0A0A",
-                border: "1px solid rgba(94,234,212,0.55)",
+                border: "1px solid rgba(184,149,85,0.55)",
                 color: "#FFFFFF",
-                boxShadow: "0 0 28px rgba(94,234,212,0.45)",
+                boxShadow: "0 0 28px rgba(184,149,85,0.45)",
               }}
             >
               Find My Property

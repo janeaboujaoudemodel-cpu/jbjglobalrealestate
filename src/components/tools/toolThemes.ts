@@ -42,36 +42,45 @@ export type ToolTheme = {
   pageWash: string;
 };
 
-const make = (
-  id: ToolTheme["id"],
-  label: string,
-  accent: string,
-  dark: string,
-): ToolTheme => ({
+/**
+ * BRAND LOCK — all tool themes flatten to the JBJ champagne/gold/ink palette.
+ * Accent = gold #B89555 (hairline only), dark = clean ink #0A0A0A, hero wash =
+ * champagne. No more emerald/navy/burgundy/violet/teal/rose/amber/indigo per
+ * tool — every tool reads as one unified brand surface.
+ */
+const BRAND_GOLD = "#B89555";
+const BRAND_INK = "#0A0A0A";
+const BRAND_CHAMPAGNE = "#FDFBF7";
+const BRAND_RAISED = "#EFE6D6";
+
+const brandTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
   id,
   label,
-  accent,
-  heroGradient: `linear-gradient(135deg, ${accent} 0%, ${dark} 55%, #000000 100%)`,
-  accentSoft: `${accent}1A`,
-  accentBorder: `${accent}73`,
-  ctaGradient: `linear-gradient(135deg, ${accent} 0%, ${dark} 60%, #000000 100%)`,
-  ctaHover: `linear-gradient(135deg, #000000 0%, ${dark} 40%, ${accent} 100%)`,
-  chipBg: `${accent}1F`,
-  chipBorder: `${accent}66`,
-  borderConic: `conic-gradient(from 0deg, ${accent}, #000000, ${accent}, #000000, ${accent})`,
-  pageWash: `radial-gradient(1200px 600px at 50% -10%, ${accent}14, transparent 60%), #FDFBF7`,
+  accent: BRAND_GOLD,
+  // Hero band: clean ink black with a subtle gold radial — matches /compare hero
+  heroGradient: `radial-gradient(1200px 600px at 50% -10%, rgba(184,149,85,0.18), transparent 60%), ${BRAND_INK}`,
+  accentSoft: `rgba(184,149,85,0.10)`,
+  accentBorder: `rgba(184,149,85,0.45)`,
+  // Primary CTA: clean ink black with gold hairline — matches .jj-cta-dark
+  ctaGradient: BRAND_INK,
+  ctaHover: `#1F1F1F`,
+  chipBg: `rgba(184,149,85,0.12)`,
+  chipBorder: `rgba(184,149,85,0.45)`,
+  // Outer shell border: subtle gold hairline (no animated rainbow conic)
+  borderConic: `conic-gradient(from 0deg, ${BRAND_GOLD}, rgba(184,149,85,0.35), ${BRAND_GOLD}, rgba(184,149,85,0.35), ${BRAND_GOLD})`,
+  // Page wash: champagne, no colored radial
+  pageWash: `radial-gradient(1200px 600px at 50% -10%, rgba(184,149,85,0.08), transparent 60%), ${BRAND_CHAMPAGNE}`,
 });
 
 export const toolThemes: Record<ToolTheme["id"], ToolTheme> = {
-  emerald: make("emerald", "Emerald", "#0F7A4D", "#082018"),
-  navy: make("navy", "Navy", "#1E4E8C", "#0A1830"),
-  burgundy: make("burgundy", "Burgundy", "#8B1E2E", "#2E0810"),
-  violet: make("violet", "Violet", "#6D28D9", "#1E0F3A"),
-  teal: make("teal", "Teal", "#B89555", "#0A0A0A"),
-  rose: make("rose", "Rose", "#BE185D", "#3A0820"),
-  amber: make("amber", "Amber", "#B45309", "#2A1505"),
-  indigo: make("indigo", "Indigo", "#4338CA", "#11103A"),
-
+  emerald: brandTheme("emerald", "Champagne"),
+  navy: brandTheme("navy", "Champagne"),
+  burgundy: brandTheme("burgundy", "Champagne"),
+  violet: brandTheme("violet", "Champagne"),
+  teal: brandTheme("teal", "Champagne"),
+  rose: brandTheme("rose", "Champagne"),
+  amber: brandTheme("amber", "Champagne"),
+  indigo: brandTheme("indigo", "Champagne"),
 };
 
 /** Universal champagne page background + ink text */

@@ -47,7 +47,7 @@ export const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { label: 'Saved Filters', icon: SlidersHorizontal, href: '/favorites?tab=saved-filters' },
       { label: 'Compare', icon: GitCompare, href: '/compare' },
       { label: 'Activity Log', icon: Eye, href: '/my-dashboard#activity' },
-      { label: 'AI Home Finder', icon: Home, href: '/quiz' },
+      { label: 'AI Home Finder', icon: Home, href: '/ai-home-finder' },
     ],
   },
   {

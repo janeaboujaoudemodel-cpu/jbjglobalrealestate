@@ -82,7 +82,7 @@ const shortcuts = [
 
 const investorShortcuts = [
   { label: "Browse Properties", desc: "Explore verified listings", icon: Home, href: "/properties" },
-  { label: "AI Home Finder", desc: "Get personalized matches", icon: Search, href: "/quiz" },
+  { label: "AI Home Finder", desc: "Get personalized matches", icon: Search, href: "/ai-home-finder" },
   { label: "ROI Calculator", desc: "Analyze investment returns", icon: Calculator, href: "/ai-roi-calculator" },
   { label: "Market Intelligence", desc: "Data-driven insights", icon: BarChart3, href: "/market-intelligence/overview" },
   { label: "Property Evaluator", desc: "AI-powered valuations", icon: TrendingUp, href: "/property-evaluator" },

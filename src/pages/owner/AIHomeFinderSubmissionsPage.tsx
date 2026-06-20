@@ -35,7 +35,7 @@ interface Submission {
 
 const tierStyles: Record<Submission["result_tier"], { label: string; bg: string; fg: string }> = {
   exact:    { label: "Exact",    bg: "rgba(16,185,129,0.18)", fg: "#34D399" },
-  close:    { label: "Close",    bg: "rgba(34,211,238,0.18)", fg: "#22D3EE" },
+  close:    { label: "Close",    bg: "rgba(34,211,238,0.18)", fg: "#B89555" },
   nearest:  { label: "Nearest",  bg: "rgba(245,158,11,0.18)", fg: "#FBBF24" },
   fallback: { label: "Fallback", bg: "rgba(148,163,184,0.18)", fg: "#94A3B8" },
 };
@@ -171,7 +171,7 @@ export default function AIHomeFinderSubmissionsPage() {
       </div>
 
       <Sheet open={!!openId} onOpenChange={(v) => !v && setOpenId(null)}>
-        <SheetContent className="w-full sm:max-w-3xl overflow-y-auto bg-[#02110F] text-white border-l border-[#5EEAD4]/40">
+        <SheetContent className="w-full sm:max-w-3xl overflow-y-auto bg-[#02110F] text-white border-l border-[#B89555]/40">
           {open && <SubmissionDetail submission={open} />}
         </SheetContent>
       </Sheet>
@@ -212,18 +212,18 @@ function SubmissionDetail({ submission }: { submission: Submission }) {
       <div className="grid gap-3 md:grid-cols-2 mb-6">
         <a
           href={`mailto:${submission.email}`}
-          className="flex items-center gap-2 p-3 rounded-xl bg-[#031E18] border border-[#5EEAD4]/40 hover:border-[#5EEAD4]"
+          className="flex items-center gap-2 p-3 rounded-xl bg-[#031E18] border border-[#B89555]/40 hover:border-[#B89555]"
         >
-          <Mail className="w-4 h-4 text-[#5EEAD4]" />
+          <Mail className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm">{submission.email}</span>
         </a>
         <a
           href={`https://wa.me/${submission.phone.replace(/[^0-9]/g, "")}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 p-3 rounded-xl bg-[#031E18] border border-[#5EEAD4]/40 hover:border-[#5EEAD4]"
+          className="flex items-center gap-2 p-3 rounded-xl bg-[#031E18] border border-[#B89555]/40 hover:border-[#B89555]"
         >
-          <MessageCircle className="w-4 h-4 text-[#5EEAD4]" />
+          <MessageCircle className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm">{submission.phone}</span>
         </a>
       </div>
@@ -255,7 +255,7 @@ function SubmissionDetail({ submission }: { submission: Submission }) {
             key={p.id}
             to={`/project/${p.slug}`}
             target="_blank"
-            className="flex items-center gap-3 p-3 rounded-xl bg-[#031E18] border border-[#5EEAD4]/30 hover:border-[#5EEAD4]"
+            className="flex items-center gap-3 p-3 rounded-xl bg-[#031E18] border border-[#B89555]/30 hover:border-[#B89555]"
           >
             {p.cover_image_url && (
               <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded-lg object-cover" />

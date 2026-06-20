@@ -258,7 +258,7 @@ const InvestorDashboard = () => {
 
       {/* Activity Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-2 border-blue-500/30 hover:shadow-[0_4px_20px_rgba(59,130,246,0.15)] transition-shadow">
+        <Card className="border-2 border-blue-500/30 hover:shadow-[0_4px_20px_rgba(184,149,85,0.15)] transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-full bg-blue-500/10">
@@ -286,7 +286,7 @@ const InvestorDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-purple-500/30 hover:shadow-[0_4px_20px_rgba(168,85,247,0.15)] transition-shadow">
+        <Card className="border-2 border-purple-500/30 hover:shadow-[0_4px_20px_rgba(184,149,85,0.15)] transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-full bg-purple-500/10">

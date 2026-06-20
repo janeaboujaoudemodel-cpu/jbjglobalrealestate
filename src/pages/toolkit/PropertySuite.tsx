@@ -25,7 +25,7 @@ const LoadingSpinner = () => (
 );
 
 const ALL_TABS = [
-  { value: "finder", label: "AI Home Finder", shortLabel: "Finder", icon: Home, color: "#8B5CF6" },
+  { value: "finder", label: "AI Home Finder", shortLabel: "Finder", icon: Home, color: "#B89555" },
   { value: "evaluator", label: "Evaluator", shortLabel: "Eval", icon: Calculator, color: "#3B82F6" },
   { value: "compare", label: "Compare", shortLabel: "Compare", icon: Layers, color: "#DC2626" },
   { value: "rental", label: "Rental Index", shortLabel: "Rental", icon: BarChart3, color: "#22C55E" },

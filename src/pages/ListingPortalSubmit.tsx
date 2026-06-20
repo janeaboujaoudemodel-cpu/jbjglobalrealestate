@@ -697,7 +697,7 @@ const ListingPortalSubmit = () => {
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(circle at 85% 12%, rgba(168,85,247,0.22) 0%, transparent 55%)" }}
+          style={{ background: "radial-gradient(circle at 85% 12%, rgba(184,149,85,0.22) 0%, transparent 55%)" }}
         />
         <div className="container mx-auto px-4 relative">
           {/* Horizontal step header */}
@@ -914,7 +914,7 @@ const ListingPortalSubmit = () => {
                           data-allow-dark-cta
                           data-no-contrast-guard
                           style={{
-                            background: 'linear-gradient(135deg, #A855F7 0%, #7C3AED 50%, #5B21B6 100%)',
+                            background: 'linear-gradient(135deg, #A855F7 0%, #B89555 50%, #5B21B6 100%)',
                             border: '2px solid #FFFFFF',
                             color: '#FFFFFF',
                             WebkitTextFillColor: '#FFFFFF',

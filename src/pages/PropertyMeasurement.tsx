@@ -353,12 +353,12 @@ const PropertyMeasurement = () => {
         }
         .pm-card-active {
           background: linear-gradient(135deg, #10B981 0%, #047857 45%, #04140C 100%) !important;
-          border: 1px solid rgba(167,243,208,0.75) !important;
-          box-shadow: 0 0 0 1px rgba(167,243,208,0.45), 0 10px 36px rgba(16,185,129,0.35), inset 0 0 30px rgba(16,185,129,0.22) !important;
+          border: 1px solid rgba(184,149,85,0.75) !important;
+          box-shadow: 0 0 0 1px rgba(184,149,85,0.45), 0 10px 36px rgba(16,185,129,0.35), inset 0 0 30px rgba(16,185,129,0.22) !important;
           color: #ECFDF5 !important;
           -webkit-text-fill-color: #ECFDF5 !important;
         }
-        .pm-card svg, .pm-card-active svg { color: #A7F3D0 !important; }
+        .pm-card svg, .pm-card-active svg { color: #FFFFFF !important; }
         .pm-input {
           background: linear-gradient(135deg, rgba(8,40,28,0.7), rgba(2,8,5,0.8)) !important;
           border: 1px solid rgba(16,185,129,0.4) !important;
@@ -496,16 +496,16 @@ const PropertyMeasurement = () => {
                                 ? "linear-gradient(135deg, #10B981 0%, #047857 45%, #000000 100%)"
                                 : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
                               border: active
-                                ? "1px solid rgba(110,231,183,0.65)"
+                                ? "1px solid rgba(184,149,85,0.65)"
                                 : "1px solid rgba(16,185,129,0.28)",
                               boxShadow: active
-                                ? "0 0 0 1px rgba(110,231,183,0.35), 0 8px 28px rgba(16,185,129,0.28), inset 0 0 24px rgba(16,185,129,0.18)"
+                                ? "0 0 0 1px rgba(184,149,85,0.35), 0 8px 28px rgba(16,185,129,0.28), inset 0 0 24px rgba(16,185,129,0.18)"
                                 : "inset 0 0 0 1px rgba(255,255,255,0.04)",
                             }}
                           >
                             <type.icon
                               className="w-6 h-6 mx-auto mb-2"
-                              style={{ color: active ? "#A7F3D0" : "rgba(255,255,255,0.85)" }}
+                              style={{ color: active ? "#FFFFFF" : "rgba(255,255,255,0.85)" }}
                             />
                             <p
                               className="text-sm font-medium text-center"
@@ -533,11 +533,11 @@ const PropertyMeasurement = () => {
                       className="property-measurement-name-input allow-white mt-2 focus-visible:ring-emerald-400 placeholder:!text-[rgba(246,251,248,0.55)] placeholder:!opacity-100 !text-[#FFFFFF]"
                       style={{
                         background: "linear-gradient(135deg, rgba(4,40,28,0.85), rgba(0,0,0,0.85))",
-                        border: "1px solid rgba(110,231,183,0.55)",
+                        border: "1px solid rgba(184,149,85,0.55)",
                         color: "#FFFFFF",
                         WebkitTextFillColor: "#FFFFFF",
                         opacity: 1,
-                        caretColor: "#A7F3D0",
+                        caretColor: "#FFFFFF",
                         fontWeight: 500,
                       }}
                     />
@@ -565,7 +565,7 @@ const PropertyMeasurement = () => {
                                 ? "linear-gradient(135deg, #10B981 0%, #047857 55%, #000000 100%)"
                                 : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
                               border: active
-                                ? "1px solid rgba(110,231,183,0.65)"
+                                ? "1px solid rgba(184,149,85,0.65)"
                                 : "1px solid rgba(16,185,129,0.28)",
                               color: active ? "#ECFDF5" : "rgba(255,255,255,0.85)",
                               boxShadow: active ? "0 0 18px rgba(16,185,129,0.35)" : "none",
@@ -589,7 +589,7 @@ const PropertyMeasurement = () => {
                         "linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)",
                       color: "rgba(255,255,255,0.96)",
                       boxShadow: "0 0 28px rgba(16,185,129,0.45)",
-                      border: "1px solid rgba(110,231,183,0.45)",
+                      border: "1px solid rgba(184,149,85,0.45)",
                     }}
                   >
                     Continue
@@ -742,7 +742,7 @@ const PropertyMeasurement = () => {
                     className="pm-card p-4 rounded-xl border-dashed transition-all flex flex-col items-center justify-center gap-2 min-h-[100px] hover:opacity-90"
                     style={{ borderStyle: "dashed" }}
                   >
-                    <Plus className="w-6 h-6" style={{ color: "#A7F3D0" }} />
+                    <Plus className="w-6 h-6" style={{ color: "#FFFFFF" }} />
                     <span className="pm-text-dim text-sm">Add Custom Room</span>
                   </button>
                 </div>
@@ -806,9 +806,9 @@ const PropertyMeasurement = () => {
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
                           {room.isComplete ? (
-                            <CheckCircle2 className="w-5 h-5" style={{ color: "#A7F3D0" }} />
+                            <CheckCircle2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                           ) : (
-                            <Camera className="w-5 h-5" style={{ color: "#A7F3D0" }} />
+                            <Camera className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                           )}
                           <h4 className="pm-text-strong font-medium">{room.name}</h4>
                         </div>
@@ -861,12 +861,12 @@ const PropertyMeasurement = () => {
                           >
                             {room.mediaType === "photo" ? (
                               <>
-                                <Camera className="w-8 h-8 mx-auto mb-2" style={{ color: "#A7F3D0" }} />
+                                <Camera className="w-8 h-8 mx-auto mb-2" style={{ color: "#FFFFFF" }} />
                                 <p className="pm-text-dim text-sm">Click to upload 2-3 photos of <strong className="pm-text-strong">{room.name}</strong></p>
                               </>
                             ) : (
                               <>
-                                <Video className="w-8 h-8 mx-auto mb-2" style={{ color: "#A7F3D0" }} />
+                                <Video className="w-8 h-8 mx-auto mb-2" style={{ color: "#FFFFFF" }} />
                                 <p className="pm-text-dim text-sm">Click to upload video walkthrough of <strong className="pm-text-strong">{room.name}</strong></p>
                               </>
                             )}
@@ -882,9 +882,9 @@ const PropertyMeasurement = () => {
                                   className="pm-card relative rounded-lg px-3 py-2 flex items-center gap-2"
                                 >
                                   {file.type.startsWith("image/") ? (
-                                    <Camera className="w-4 h-4" style={{ color: "#A7F3D0" }} />
+                                    <Camera className="w-4 h-4" style={{ color: "#FFFFFF" }} />
                                   ) : (
-                                    <Video className="w-4 h-4" style={{ color: "#A7F3D0" }} />
+                                    <Video className="w-4 h-4" style={{ color: "#FFFFFF" }} />
                                   )}
                                   <span className="pm-text-strong text-sm truncate max-w-[120px]">{file.name}</span>
                                   <button

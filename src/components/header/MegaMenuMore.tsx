@@ -47,7 +47,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Mortgage Calculator', href: '/mortgage-calculator', icon: Calculator },
     { label: 'Compare Properties', href: '/compare', icon: Layers },
     { label: 'Property Map', href: '/map', icon: MapPin },
-    { label: 'AI Home Finder', href: '/quiz', icon: Sparkles },
+    { label: 'AI Home Finder', href: '/ai-home-finder', icon: Sparkles },
   ];
 
   const investorLinks = [
