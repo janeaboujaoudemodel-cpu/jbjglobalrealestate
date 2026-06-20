@@ -17,6 +17,7 @@ import {
   CalendarClock,
   Settings,
   Ticket,
+  CreditCard,
   type LucideIcon,
 } from "lucide-react";
 
