@@ -100,9 +100,9 @@ interface RentalAnalysis {
   disclaimer: string;
 }
 
-const WHITE_ICON_STYLE: React.CSSProperties = {
-  color: "#FFFFFF",
-  stroke: "#FFFFFF",
+const BRAND_ICON_STYLE: React.CSSProperties = {
+  color: "#1A1A1A",
+  stroke: "#1A1A1A",
 };
 
 const FormLabel = ({
@@ -116,7 +116,7 @@ const FormLabel = ({
 }) => (
   <Label
     className="flex items-center gap-2 mb-2 text-sm font-semibold"
-    style={{ color: "#FFFFFF" }}
+    style={{ color: "#1A1A1A" }}
   >
     {Icon && (
       <span
@@ -126,7 +126,7 @@ const FormLabel = ({
           border: `1px solid ${theme.accentBorder}`,
         }}
       >
-        <Icon className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+        <Icon className="w-3.5 h-3.5" style={BRAND_ICON_STYLE} />
       </span>
     )}
     <span>
@@ -157,14 +157,14 @@ const SectionHeader = ({
         border: `1px solid ${theme.accentBorder}`,
       }}
     >
-      <Icon className="w-5 h-5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+      <Icon className="w-5 h-5" style={BRAND_ICON_STYLE} />
     </span>
     <div>
-      <h2 className="text-xl font-bold" style={{ color: "#FFFFFF" }}>
+      <h2 className="text-xl font-bold" style={{ color: "#1A1A1A" }}>
         {title}
       </h2>
       {subtitle && (
-        <p className="text-sm ri-dim" style={{ color: "rgba(255,255,255,0.82)" }}>
+        <p className="text-sm ri-dim" style={{ color: "rgba(26,26,26,0.72)" }}>
           {subtitle}
         </p>
       )}
@@ -234,78 +234,52 @@ const RentalIndex = () => {
       theme={theme}
       eyebrowIcon={TrendingUp}
       eyebrow="AI Rental Index"
-      darkBody
       title={
         <>
-          Dubai <span style={{ color: "#FFFFFF", textShadow: `0 0 24px ${theme.accent}` }}>Rental Index</span> Evaluator
+          Dubai <span style={{ color: "#B89555" }}>Rental Index</span> Evaluator
         </>
       }
       subtitle="AI-powered rental estimates for any Dubai property. Live market rates, trends and investment context — sourced from DLD, RERA and our internal data fabric."
     >
-      {/* Page-local hard contrast lock — mirrors /property-measurement pattern */}
+      {/* Brand-aligned local tokens — champagne surfaces, ink text, gold hairline */}
       <style>{`
-        .ri-root, .ri-root * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-        .ri-root label, .ri-root p, .ri-root span, .ri-root h1, .ri-root h2, .ri-root h3, .ri-root h4, .ri-root a, .ri-root button, .ri-root div { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-        .ri-root .ri-dim { color: rgba(255,255,255,0.82) !important; -webkit-text-fill-color: rgba(255,255,255,0.82) !important; }
-        .ri-root .ri-accent, .ri-root .ri-white-lock, .ri-root .ri-white-lock * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-        /* Brighten icon tiles + svg icons (white over burgundy) */
-        .ri-root [class*="rounded-md"][class*="w-6"][class*="h-6"],
-        .ri-root [class*="rounded-xl"][class*="w-11"][class*="h-11"] {
-          background: rgba(255,255,255,0.10) !important;
-          border-color: rgba(255,255,255,0.45) !important;
-        }
-        .ri-root svg, .ri-root svg *, .ri-root .lucide, .ri-root [class*="lucide-"] {
-          color: #FFFFFF !important;
-          stroke: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
-          opacity: 1 !important;
-        }
-        .ri-root svg path, .ri-root svg circle, .ri-root svg line, .ri-root svg polyline, .ri-root svg rect {
-          stroke: #FFFFFF !important;
-        }
+        .ri-root { color: #1A1A1A; }
+        .ri-root .ri-dim { color: rgba(26,26,26,0.72); }
+        .ri-root .ri-accent { color: #B89555; }
         .ri-card {
-          background: linear-gradient(135deg, #3a0a14 0%, #1f0509 55%, #08020300 100%), #110204;
-          border: 1px solid rgba(139,30,46,0.55) !important;
+          background: #F7F2EA;
+          border: 1px solid rgba(184,149,85,0.45);
           border-radius: 1rem;
         }
         .ri-card-soft {
-          background: linear-gradient(135deg, #2a070f 0%, #160305 100%);
-          border: 1px solid rgba(139,30,46,0.45) !important;
+          background: #FDFBF7;
+          border: 1px solid rgba(184,149,85,0.35);
           border-radius: 1rem;
         }
         .ri-input, .ri-root [data-radix-select-trigger], .ri-root input, .ri-root [role="combobox"] {
-          background: rgba(10,2,4,0.65) !important;
-          border: 1px solid rgba(255,255,255,0.30) !important;
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
+          background: #FDFBF7 !important;
+          border: 1px solid rgba(184,149,85,0.45) !important;
+          color: #1A1A1A !important;
+          -webkit-text-fill-color: #1A1A1A !important;
         }
-        .ri-input::placeholder, .ri-root input::placeholder { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
+        .ri-input::placeholder, .ri-root input::placeholder {
+          color: rgba(26,26,26,0.45) !important;
+          -webkit-text-fill-color: rgba(26,26,26,0.45) !important;
+        }
         .ri-input:focus, .ri-root input:focus, .ri-root [data-radix-select-trigger]:focus {
-          border-color: rgba(255,255,255,0.70) !important;
-          box-shadow: 0 0 0 3px rgba(139,30,46,0.45) !important;
+          border-color: #B89555 !important;
+          box-shadow: 0 0 0 3px rgba(184,149,85,0.20) !important;
           outline: none !important;
         }
         .ri-root .ri-tile {
-          background: rgba(10,2,4,0.55);
-          border: 1px solid rgba(255,255,255,0.25);
+          background: #FDFBF7;
+          border: 1px solid rgba(184,149,85,0.35);
           border-radius: 0.75rem;
         }
         .ri-root .ri-tile-strong {
-          background: linear-gradient(135deg, rgba(139,30,46,0.45), rgba(139,30,46,0.15));
-          border: 1px solid rgba(255,255,255,0.55);
+          background: #EFE6D6;
+          border: 1px solid rgba(184,149,85,0.55);
           border-radius: 0.75rem;
-        }
-        .ri-root .ri-disclaimer-wrap, .ri-root .ri-disclaimer-wrap *,
-        .ri-root .ri-disclaimer-wrap :is(h1,h2,h3,h4,p,span,a,button,div) {
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
-          opacity: 1 !important;
-        }
-        .ri-root .ri-disclaimer-wrap svg, .ri-root .ri-disclaimer-wrap svg * {
-          color: #FFFFFF !important;
-          stroke: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
-          opacity: 1 !important;
         }
       `}</style>
 
