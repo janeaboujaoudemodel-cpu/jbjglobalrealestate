@@ -53,10 +53,15 @@ const dedupeKey = (rawUrl: string): string => {
  *  case where the SAME image is uploaded twice — once via Supabase Storage,
  *  once via the developer CDN — under different folder paths but identical
  *  filename. We only collapse via this when basename has a meaningful length. */
+const UUID_PREFIX_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}-/i;
+const LEADING_TIMESTAMP_RE = /^\d{10,}-\d+-/;
+
 const basenameKey = (rawUrl: string): string => {
   try {
     const clean = (rawUrl || "").toLowerCase().split("?")[0].split("#")[0];
-    const last = clean.split("/").filter(Boolean).pop() || "";
+    let last = clean.split("/").filter(Boolean).pop() || "";
+    // Strip Supabase Storage upload prefixes: {uuid}-{filename} and {timestamp}-{idx}-{filename}
+    last = last.replace(UUID_PREFIX_RE, "").replace(LEADING_TIMESTAMP_RE, "");
     // Strip CDN size suffixes from basename too
     const stripped = last
       .replace(/-\d{2,4}x\d{2,4}(?=\.[a-z]+$)/g, "")
@@ -64,7 +69,7 @@ const basenameKey = (rawUrl: string): string => {
       .replace(/_\d{2,4}(?=\.[a-z]+$)/g, "");
     // Ignore short / generic basenames like "1.jpg", "image.jpg" that
     // would collapse unrelated photos.
-    if (stripped.replace(/\.[a-z]+$/, "").length < 8) return "";
+    if (stripped.replace(/\.[a-z]+$/, "").length < 6) return "";
     return stripped;
   } catch {
     return "";
