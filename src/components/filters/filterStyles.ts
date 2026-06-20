@@ -15,35 +15,39 @@
  */
 
 // Pill / chip trigger (filter buttons, sort buttons, map toggle, etc.)
+// NOTE: hover lift via transform is BANNED here — these pills sit inside a
+// horizontally-scrolling row with overflow clipping, so any translate-y crops
+// the top border. We use shadow-only hover for the 3D feel instead.
 export const filterPillBase =
   "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 " +
   "rounded-full text-xs md:text-[13px] font-semibold whitespace-nowrap select-none " +
   "overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0 touch-manipulation " +
-  "transition-all cursor-pointer " +
+  "transition-[background-color,border-color,box-shadow,color] duration-200 cursor-pointer " +
   // Visible focus ring for keyboard users
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]";
 
 // Inactive (no value selected). Champagne fill, gold border, ink label.
 export const filterPillInactiveLight =
   "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] " +
-  "hover:bg-[#F7F2EA] hover:border-[#B89555] hover:-translate-y-0.5";
+  "hover:bg-[#F7F2EA] hover:border-[#B89555] hover:shadow-[0_4px_12px_rgba(184,149,85,0.18)]";
 
 // Inactive on a dark surface (only for the "dark" variant, e.g. over hero photos).
 // Solid champagne tint at 90% so labels never sit on translucent dark glass.
 export const filterPillInactiveDark =
   "bg-[#FDFBF7]/95 border border-[#B89555]/70 text-[#1A1A1A] " +
-  "hover:bg-[#FDFBF7] hover:border-[#B89555]";
+  "hover:bg-[#FDFBF7] hover:border-[#B89555] hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]";
 
 // Active (filter has a value). Solid ink, white label — the only state that uses
 // white text. Gold ring marks it as the brand-active state without harming contrast.
 export const filterPillActive =
   "bg-[#1A1A1A] text-white border border-[#1A1A1A] font-bold shadow-md " +
-  "ring-1 ring-[#B89555] hover:bg-[#0d0d0d] hover:border-[#0d0d0d]";
+  "ring-1 ring-[#B89555] hover:bg-[#0d0d0d] hover:border-[#0d0d0d] hover:shadow-[0_6px_16px_rgba(0,0,0,0.30)]";
 
 // Helper: pick the right inactive variant based on surrounding surface
 export function pillInactive(variant: "light" | "dark" = "light") {
   return variant === "dark" ? filterPillInactiveDark : filterPillInactiveLight;
 }
+
 
 // Toggle pill inside popovers (bedrooms, statuses, views, …)
 export const togglePillBase =

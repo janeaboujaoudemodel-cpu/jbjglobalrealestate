@@ -436,7 +436,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
               <TabsList className="w-full mb-3 bg-[#FDFBF7]/60">
                 <TabsTrigger value="unit" className="flex-1 text-xs">{t('filter.perUnit')}</TabsTrigger>
@@ -446,7 +446,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-1 block">{t('filter.minPrice')}</label>
+                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">{t('filter.minPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -459,11 +459,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     placeholder="0"
                     className="w-full h-9 px-3 pr-12 bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg text-sm text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-none"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/40 font-medium">AED</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-1 block">{t('filter.maxPrice')}</label>
+                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">{t('filter.maxPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -476,7 +476,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     placeholder="Any"
                     className="w-full h-9 px-3 pr-12 bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg text-sm text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-none"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/40 font-medium">AED</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
                 </div>
               </div>
             </div>
@@ -502,7 +502,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 type="button"
                 variant="outline"
                 onClick={() => { setDraftPriceMin(''); setDraftPriceMax(''); }}
-                className="h-9 px-3 text-xs rounded-lg"
+                className="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] hover:text-[#1A1A1A]"
               >
                 {t('filter.reset') || 'Reset'}
               </Button>
@@ -525,12 +525,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.paymentsTitle')}</h4>
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-[#1A1A1A]/60">{t('filter.maxPreHandover')}</span>
+                  <span className="text-xs text-[#1A1A1A]/70">{t('filter.maxPreHandover')}</span>
                   <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7] px-2 py-0.5 rounded border border-[#B89555]/30">{draftPaymentPlanMax}%</span>
                 </div>
                 <Slider
@@ -542,7 +542,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div>
-                <label className="text-xs text-[#1A1A1A]/60 mb-1 block">{t('filter.afterHandover')}</label>
+                <label className="text-xs text-[#1A1A1A]/70 mb-1 block">{t('filter.afterHandover')}</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -567,7 +567,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   type="button"
                   variant="outline"
                   onClick={() => { setDraftPaymentPlanMax(100); setDraftAfterHandover(''); setDraftPostHandoverOnly(false); }}
-                  className="h-9 px-3 text-xs rounded-lg"
+                  className="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] hover:text-[#1A1A1A]"
                 >
                   {t('filter.reset') || 'Reset'}
                 </Button>
@@ -591,11 +591,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.handoverTitle')}</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-2 block">{t('filter.from')}</label>
+                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">{t('filter.from')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
@@ -622,7 +622,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-2 block">{t('filter.to')}</label>
+                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">{t('filter.to')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
@@ -661,7 +661,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-72 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-72 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <Tabs
               value={filters.propertyCategory || 'residential'}
               onValueChange={(val) => {
@@ -697,7 +697,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-72 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-72 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <div className="flex flex-wrap gap-2">
               {BEDROOM_OPTIONS.map((opt) => (
                 <button
@@ -710,7 +710,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               ))}
             </div>
             <div className="flex gap-2 mt-3">
-              <Button type="button" variant="outline" onClick={() => update({ bedrooms: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" variant="outline" onClick={() => update({ bedrooms: [] })} className="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] hover:text-[#1A1A1A]">{t('filter.reset') || 'Reset'}</Button>
               <Button type="button" onClick={() => setBedroomsOpen(false)} className="flex-1 h-9 bg-[#1A1A1A] text-white font-bold text-xs rounded-lg hover:bg-[#1A1A1A]">{t('filter.applyFilter') || 'Done'}</Button>
             </div>
           </PopoverContent>
@@ -725,7 +725,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-64 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-64 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <div className="flex flex-wrap gap-2">
               {STATUS_OPTIONS.map((opt) => (
                 <button
@@ -743,7 +743,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               ))}
             </div>
             <div className="flex gap-2 mt-3">
-              <Button type="button" variant="outline" onClick={() => update({ statuses: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" variant="outline" onClick={() => update({ statuses: [] })} className="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] hover:text-[#1A1A1A]">{t('filter.reset') || 'Reset'}</Button>
               <Button type="button" onClick={() => setStatusOpen(false)} className="flex-1 h-9 bg-[#1A1A1A] text-white font-bold text-xs rounded-lg hover:bg-[#1A1A1A]">{t('filter.applyFilter') || 'Done'}</Button>
             </div>
           </PopoverContent>
@@ -758,7 +758,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-64 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-64 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <div className="flex flex-wrap gap-2">
               {CONSTRUCTION_OPTIONS.map((opt) => (
                 <button
@@ -771,7 +771,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               ))}
             </div>
             <div className="flex gap-2 mt-3">
-              <Button type="button" variant="outline" onClick={() => update({ constructionStatuses: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" variant="outline" onClick={() => update({ constructionStatuses: [] })} className="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] hover:text-[#1A1A1A]">{t('filter.reset') || 'Reset'}</Button>
               <Button type="button" onClick={() => setConstructionOpen(false)} className="flex-1 h-9 bg-[#1A1A1A] text-white font-bold text-xs rounded-lg hover:bg-[#1A1A1A]">{t('filter.applyFilter') || 'Done'}</Button>
             </div>
           </PopoverContent>
@@ -787,7 +787,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
             <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.propertyViews')}</h4>
             <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto">
               {VIEWS_OPTIONS.map((opt) => (
@@ -801,7 +801,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               ))}
             </div>
             <div className="flex gap-2 mt-3">
-              <Button type="button" variant="outline" onClick={() => update({ views: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" variant="outline" onClick={() => update({ views: [] })} className="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] hover:text-[#1A1A1A]">{t('filter.reset') || 'Reset'}</Button>
               <Button type="button" onClick={() => setViewsOpen(false)} className="flex-1 h-9 bg-[#1A1A1A] text-white font-bold text-xs rounded-lg hover:bg-[#1A1A1A]">{t('filter.applyFilter') || 'Done'}</Button>
             </div>
           </PopoverContent>
@@ -954,14 +954,15 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-72 p-3 bg-[#FDFBF7] border border-[#B89555]/30 z-[10200] shadow-xl"
+        data-no-contrast-guard
+        className="w-72 p-3 bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/30 z-[10200] shadow-xl"
         side="bottom"
         align="end"
         sideOffset={6}
       >
         <h4 className="text-sm font-bold text-[#1A1A1A] mb-2">{t('filter.savedFilters')}</h4>
         {savedFilters.length === 0 ? (
-          <p className="text-xs text-[#1A1A1A]/50 py-4 text-center">{t('filter.noSavedFilters')}</p>
+          <p className="text-xs text-[#1A1A1A]/70 py-4 text-center">{t('filter.noSavedFilters')}</p>
         ) : (
           <div className="space-y-1 max-h-60 overflow-y-auto">
             {savedFilters.map((sf, idx) => (
@@ -972,7 +973,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold text-[#1A1A1A] truncate">{sf.name}</p>
-                  <p className="text-[10px] text-[#1A1A1A]/40">{new Date(sf.createdAt).toLocaleDateString()}</p>
+                  <p className="text-[10px] text-[#1A1A1A]/70">{new Date(sf.createdAt).toLocaleDateString()}</p>
                 </div>
                 {confirmDeleteIndex === idx ? (
                   <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
