@@ -290,7 +290,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   Design Studio
                 </span>
               </h1>
-              <p className="text-[#1A1A1A] text-sm md:text-base max-w-xl mx-auto" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.95 }}>
+              <p className="text-[#1A1A1A]/80 text-sm md:text-base max-w-xl mx-auto">
                 Upload a photo or describe your space. Our AI generates stunning designs instantly.
               </p>
             </motion.div>
