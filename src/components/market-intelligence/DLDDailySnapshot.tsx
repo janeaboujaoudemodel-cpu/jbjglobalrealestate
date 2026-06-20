@@ -188,8 +188,8 @@ export const DLDDailySnapshot = () => {
                   <motion.div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    className="absolute inset-y-0 left-0 rounded-full bg-[#0A0A0A]"
-                    style={{ transformOrigin: "left center", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }}
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{ backgroundColor: "#0A0A0A", transformOrigin: "left center", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
