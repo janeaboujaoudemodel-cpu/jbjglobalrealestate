@@ -147,44 +147,37 @@ const SuitesHub = () => {
                 >
                   <Link
                     to={suite.href}
-                    className={`group block relative p-6 md:p-8 rounded-2xl border-2 ${borderMap[suite.glowColor]} bg-[#FDFBF7]/80 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl ${glowMap[suite.glowColor]} hover:scale-[1.01]`}
+                    className="group block relative p-6 md:p-8 rounded-2xl border border-[#B89555]/30 hover:border-[#B89555]/70 bg-[#FDFBF7] transition-all duration-300 hover:shadow-[0_8px_32px_rgba(184,149,85,0.18)] hover:scale-[1.01]"
                   >
-                    {/* Gradient glow */}
-                    <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${suite.gradient} opacity-[0.04] group-hover:opacity-[0.08] transition-opacity`} />
-
                     <div className="relative">
-                      {/* Icon + Title */}
                       <div className="flex items-start gap-4 mb-4">
-                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${suite.gradient} flex items-center justify-center shrink-0`}>
-                          <Icon className="w-7 h-7 text-white" />
+                        <div className="w-14 h-14 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center shrink-0">
+                          <Icon className="w-7 h-7 text-[#1A1A1A]" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h2 className="text-xl font-bold text-white mb-1">{suite.title}</h2>
-                          <span className={`text-xs font-medium ${textMap[suite.glowColor]}`}>
+                          <h2 className="text-xl font-bold text-[#1A1A1A] mb-1">{suite.title}</h2>
+                          <span className="text-xs font-medium text-[#1A1A1A]/70">
                             {suite.toolCount} tools included
                           </span>
                         </div>
                       </div>
 
-                      {/* Description */}
-                      <p className="text-white/70 text-sm leading-relaxed mb-5">
+                      <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-5">
                         {suite.description}
                       </p>
 
-                      {/* Tool highlights */}
                       <div className="flex flex-wrap gap-2 mb-5">
                         {suite.highlights.map(h => (
                           <span
                             key={h}
-                            className={`text-[11px] px-2.5 py-1 rounded-full border ${borderMap[suite.glowColor].split(' ')[0]} bg-[#FDFBF7]/80 ${textMap[suite.glowColor]} font-medium`}
+                            className="text-[11px] px-2.5 py-1 rounded-full border border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A] font-medium"
                           >
                             {h}
                           </span>
                         ))}
                       </div>
 
-                      {/* CTA */}
-                      <div className={`flex items-center gap-2 text-sm font-semibold ${textMap[suite.glowColor]} group-hover:translate-x-1 transition-transform`}>
+                      <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] group-hover:translate-x-1 transition-transform">
                         Open Suite
                         <ArrowRight className="w-4 h-4" />
                       </div>
