@@ -123,7 +123,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
             the SAME emerald/black gradient surface — NO color split between segments.
             NO gold dividers, NO gold borders. Animated emerald glow border wraps the bar. */}
-        <div className="jj-emerald-glow-wrap jj-emerald-pill relative rounded-2xl">
+        <div className="jj-emerald-glow-wrap jj-emerald-pill jj-hero-search-premium relative rounded-2xl">
         <div
           data-surface="dark"
           data-ink-emerald
@@ -191,11 +191,11 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             aria-label="Search properties now"
             disabled={searching}
             data-no-contrast-guard
-            className="relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-110"
+            className="jj-hero-search-action relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              backgroundImage: "var(--jj-emerald-ombre)",
+              background: "rgba(0,0,0,0.18)",
               borderLeft: "1px solid rgba(255,255,255,0.08)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
             }}
@@ -214,11 +214,11 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             onClick={openBooking}
             aria-label="Book your free consultation now"
             data-no-contrast-guard
-            className="hidden md:flex items-center justify-center self-stretch h-full px-5 lg:px-6 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
+            className="jj-hero-search-action hidden md:flex items-center justify-center self-stretch h-full px-5 lg:px-6 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
-              backgroundImage: "var(--jj-emerald-ombre)",
+              background: "rgba(0,0,0,0.18)",
               borderLeft: "1px solid rgba(255,255,255,0.08)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
             }}

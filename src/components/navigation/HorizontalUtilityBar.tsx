@@ -97,7 +97,7 @@ export default function HorizontalUtilityBar() {
     <>
       <div
         data-jj-utility-bar
-        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555]/45 after:to-transparent"
+        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#047857]/35 after:to-transparent"
       >
 
 
@@ -108,14 +108,14 @@ export default function HorizontalUtilityBar() {
               <button
                 data-no-contrast-guard
                 onClick={() => setSearchOpen(true)}
-                style={{ color: "#B89555" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/10 transition-colors focus:outline-none"
+                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Search"
               >
                 <Search
                   data-no-contrast-guard
                   className="w-[18px] h-[18px]"
-                  style={{ color: "#B89555", stroke: "#B89555" }}
+                  style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                 />
               </button>
             </TooltipTrigger>
@@ -131,14 +131,14 @@ export default function HorizontalUtilityBar() {
               <button
                 data-no-contrast-guard
                 onClick={() => setFilterOpen(true)}
-                style={{ color: "#B89555" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/10 transition-colors focus:outline-none"
+                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Filter"
               >
                 <SlidersHorizontal
                   data-no-contrast-guard
                   className="w-[18px] h-[18px]"
-                  style={{ color: "#B89555", stroke: "#B89555" }}
+                  style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                 />
               </button>
             </TooltipTrigger>
@@ -151,14 +151,14 @@ export default function HorizontalUtilityBar() {
               <Link
                 to="/favorites"
                 data-no-contrast-guard
-                style={{ color: "#B89555" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[#B89555]/10 transition-colors focus:outline-none"
+                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
+                className="h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Favorites"
               >
                 <Heart
                   data-no-contrast-guard
                   className="w-[18px] h-[18px]"
-                  style={{ color: "#B89555", stroke: "#B89555", fill: "none" }}
+                  style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }}
                 />
               </Link>
             </TooltipTrigger>

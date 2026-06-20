@@ -61,15 +61,12 @@ export default function ModePortalBanner() {
       data-no-contrast-guard
       className="allow-white relative overflow-hidden"
       style={{
-        /* Reverse direction from <VerificationBanner /> so the two
-           stacked emerald bands don't visually merge — light → deep. */
         backgroundImage:
-          "linear-gradient(135deg, #0A6B53 0%, #13A078 55%, #064E3B 100%)",
+          "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
       }}
     >
-      {/* Top + bottom emerald hairlines (no gold). */}
-      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#34D399]/55 to-transparent" />
-      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#34D399]/55 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#34D399]/25 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#34D399]/25 to-transparent" />
 
       <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">

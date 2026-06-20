@@ -310,7 +310,6 @@ const Index = () => {
 
       {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block,
           pushed further down with extra spacing above. */}
-      <div aria-hidden="true" className="w-full mt-4 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
       <PremiumSectionCard padding="none" width="full" wrapperClassName="pt-6 md:pt-8">
         <Suspense fallback={null}>
           <VerificationBanner />
