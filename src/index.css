@@ -6877,3 +6877,247 @@ html body [aria-label="Contact us"] {
 }
 
 
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 12 — EMERALD CTA / HERO / SIDEBAR LOCK (final)
+   ----------------------------------------------------------------
+   Wins over PASS 11 + sidebar PASS 10 + all earlier black-on-light
+   guards. Single canonical emerald system:
+     - approved fill = var(--jj-emerald-ombre) (deep emerald → black)
+     - white text + white icons + white SVG strokes everywhere on it
+     - NO gold anywhere on an emerald surface (rest, hover, focus,
+       active, disabled)
+     - animated emerald glow around .jj-emerald-glow-wrap
+     - letter-by-letter typing handled in JS via useTypewriter; the
+       only animation CSS here is the blinking caret.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Blinking caret used by the JS letter-by-letter typewriter. */
+@keyframes jj-type-caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.jj-type-caret {
+  display: inline-block;
+  margin-left: 1px;
+  animation: jj-type-caret-blink 1s steps(2, end) infinite;
+  color: inherit;
+}
+
+/* Kill the old word-by-word CSS placeholder animations — they fought
+   the new JS letter-by-letter typewriter. */
+html body .jj-hero-typewriter::before,
+html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
+  content: "" !important;
+  animation: none !important;
+}
+
+/* Animated emerald glow border that pulses around hero search bar
+   and the newsletter input/submit. Sits behind the inner element so
+   it does NOT recolor the inner fill. */
+@keyframes jj-emerald-border-pulse {
+  0%,100% { opacity: 0.55; }
+  50%     { opacity: 1; }
+}
+.jj-emerald-glow-wrap { position: relative; isolation: isolate; }
+.jj-emerald-glow-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from 0deg, #064E3B, #13A078, #34D399, #13A078, #064E3B, #000000, #064E3B);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+  animation: jj-emerald-border-pulse 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.45));
+}
+.jj-emerald-glow-wrap > * { position: relative; z-index: 2; }
+.jj-emerald-glow-wrap:hover::before { filter: drop-shadow(0 0 18px rgba(52, 211, 153, 0.75)); }
+
+/* Newsletter container shouldn't add its own border now that the
+   glow-wrap supplies the outline. */
+html body .jj-newsletter-emerald > input,
+html body .jj-newsletter-emerald button.jj-newsletter-emerald,
+html body .jj-newsletter-emerald > [class*="jj-newsletter"] {
+  border: 0 !important;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   SIDEBAR PASS 12 — emerald categories, no gold hover anywhere,
+   subitem rows lose the white pill fill and use an emerald-bordered
+   icon tile with a white label.
+   ──────────────────────────────────────────────────────────────── */
+
+/* Top-level highlight rows (AI Home Finder, List Your Property,
+   Careers, Resale Properties) and main section headers: lock to
+   white text + white icons on the emerald-ombre pill at rest AND
+   hover. Beats the old `text-[#B89555]` inline classes. */
+html body [data-chrome="sidebar"] [data-sidebar-section],
+html body [data-chrome="sidebar"] [data-sidebar-section]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-section]:focus,
+html body [data-chrome="sidebar"] [data-sidebar-section] *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:hover *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:focus * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border-radius: 10px !important;
+  box-shadow: 0 6px 16px -10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10);
+  transition: transform 220ms ease, box-shadow 220ms ease, background-image 220ms ease;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section]:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(52,211,153,0.32), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+/* Inside icon tile on the section row: translucent white tile,
+   white glyph — NEVER gold. */
+html body [data-chrome="sidebar"] [data-sidebar-section] > div:first-child {
+  background-color: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+}
+
+/* Subitem rows: NO white pill background. Transparent row, white
+   label, emerald-tinted icon inside a thin emerald border tile. */
+html body [data-chrome="sidebar"] [data-sidebar-subitem] {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem],
+html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-label],
+html body [data-chrome="sidebar"] a[data-sidebar-subitem].group,
+html body [data-chrome="sidebar"] a[data-sidebar-subitem].group [data-sidebar-subitem-label] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+/* Icon tile inside subitem row: emerald-glow hairline border, transparent
+   center, emerald icon. On hover the tile fills with emerald-ombre and
+   the icon flips white (3D reverse). */
+html body [data-chrome="sidebar"] [data-sidebar-subitem] > span:first-child {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 1px solid rgba(52, 211, 153, 0.65) !important;
+  box-shadow: 0 0 0 1px rgba(52,211,153,0.18), 0 0 10px rgba(52,211,153,0.20);
+  transition: background-image 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
+  color: #34D399 !important;
+  -webkit-text-fill-color: #34D399 !important;
+  stroke: #34D399 !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover {
+  background-color: rgba(52,211,153,0.06) !important;
+  transform: translateX(2px);
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover > span:first-child {
+  background-image: var(--jj-emerald-ombre) !important;
+  box-shadow: 0 0 0 1px rgba(52,211,153,0.55), 0 0 16px rgba(52,211,153,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+  transform: translateY(-1px);
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Sidebar highlight rows (AI Home Finder, List Your Property,
+   Careers, Resale Properties) — same emerald-pill treatment as the
+   section header rows. They live directly inside the sidebar nav
+   <div> but DON'T carry [data-sidebar-section]; tag them via the
+   first-anchor selector. */
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 6px 16px -10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10);
+  transition: transform 220ms ease, box-shadow 220ms ease, background-image 220ms ease;
+}
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(52,211,153,0.32), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"] *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Highlight-row icon tile — translucent white square, white glyph. */
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] > span:first-child,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] > span:first-child,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"] > span:first-child,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"] > span:first-child {
+  background-color: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   TOP-AREAS "Explore" PILL — make sure the tiny pill on the area
+   card honours the white-on-emerald lock (the `<span>` rendering
+   was being recolored by the white-on-light contrast guard).
+   ──────────────────────────────────────────────────────────────── */
+html body span.jj-pill-emerald,
+html body span.jj-pill-emerald * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body span.jj-pill-emerald :is(svg, [class*="lucide"]),
+html body span.jj-pill-emerald :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   SCROLL-TO-TOP — premium emerald, 3D glow on hover.
+   ──────────────────────────────────────────────────────────────── */
+html body button[aria-label="Scroll to top"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(52,211,153,0.55) !important;
+  box-shadow:
+    0 14px 32px -12px rgba(6,78,59,0.55),
+    0 0 0 1px rgba(52,211,153,0.20),
+    0 0 18px rgba(52,211,153,0.30) !important;
+  transition: transform 220ms cubic-bezier(0.22,1,0.36,1),
+              box-shadow 220ms ease,
+              background-image 220ms ease;
+}
+html body button[aria-label="Scroll to top"]:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  transform: translateY(-3px) scale(1.04);
+  box-shadow:
+    0 22px 44px -14px rgba(6,78,59,0.70),
+    0 0 0 1px rgba(52,211,153,0.55),
+    0 0 28px rgba(52,211,153,0.55) !important;
+}
+
+/* Footer copyright line → emerald accent */
+html body footer p:last-child {
+  color: var(--emerald-ink, #064E3B) !important;
+  -webkit-text-fill-color: var(--emerald-ink, #064E3B) !important;
+}
