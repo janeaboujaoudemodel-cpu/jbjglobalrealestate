@@ -25,18 +25,29 @@ wrapper.
 
 JS mirror in `src/lib/brand-tokens.ts` → `BRAND.inkEmerald`.
 
-## Where it applies (automatic)
+## Where it applies (OPT-IN ONLY — scope corrected after PASS 9 v1 regression)
 
-CSS PASS 9 block at the END of `src/index.css` repaints any of these
-without per-file edits:
+CSS PASS 9 block at the END of `src/index.css` repaints ONLY these:
 
-- `.jj-cta-dark`, `.jj-navy-cta`, `[data-cta="dark"]`
-- `[data-surface="dark"|"ink"|"navy"]`, `.surface-dark`, `.surface-ink`, `.surface-navy`
-- Any element with `[data-ink-emerald]` or `[data-hero-dark]`
-- Tailwind classes `bg-[#0A0A0A]`, `bg-[#1A1A1A]`, `bg-[#1F1F1F]`, `bg-black`
+- `.jj-cta-dark`, `.jj-navy-cta`, `[data-cta="dark"]` (the locked dark-CTA primitives)
+- Any wrapper explicitly tagged `[data-ink-emerald]` or `[data-hero-dark]`
 
 Gold hairline `#B89555` is preserved as the border on the same primitives.
-Hover swaps to `--gradient-ink-hover`.
+Hover swaps to `--gradient-ink-hover` on the CTA primitives.
+
+### Forbidden auto-paint targets (do NOT add back)
+
+PASS 9 must NEVER auto-paint these — they are used site-wide as text-color
+HINTS for the contrast contract, not as a request for an emerald background:
+
+- `[data-surface="dark"]`, `[data-surface="ink"]`, `[data-surface="navy"]`
+- `.surface-dark`, `.surface-ink`, `.surface-navy`
+- Raw Tailwind utilities `bg-[#0A0A0A]`, `bg-[#1A1A1A]`, `bg-[#1F1F1F]`, `bg-black`
+
+Adding any of these back will bleed the emerald gradient over photo cards
+(Explore Our Services), white inner segments (hero search pill Search
+button), and glass surfaces. If a wrapper genuinely needs the emerald
+background, opt in with `data-ink-emerald` instead.
 
 ## Where it does NOT apply (opt-out)
 
@@ -45,6 +56,7 @@ Hover swaps to `--gradient-ink-hover`.
 - 88px header + sidebar L-frame (`header`, `aside`, `[data-app-chrome]`) — skipped by the guard.
 - Footer obsidian band (`footer`) — skipped by the guard.
 - Explicit per-element escape hatch: `[data-ink-emerald-opt-out]`.
+
 
 ## Contrast guard exception
 
