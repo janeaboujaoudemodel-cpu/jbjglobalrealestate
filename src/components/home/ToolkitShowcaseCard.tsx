@@ -143,7 +143,7 @@ export function ToolkitShowcaseCard() {
                   data-no-contrast-guard
                   className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-[background-color] ${
                     isActive
-                      ? `bg-white/18 text-white hover:bg-white/22 shadow-[inset_0_-2px_0_rgba(255,255,255,0.72)]`
+                      ? `bg-white/[0.18] text-white hover:bg-white/[0.22] shadow-[inset_0_-2px_0_rgba(255,255,255,0.72)]`
                       : `text-white hover:bg-white/10`
                   }`}
                 >
