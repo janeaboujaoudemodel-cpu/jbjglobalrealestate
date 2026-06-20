@@ -18,6 +18,7 @@ import {
   Settings,
   Ticket,
   CreditCard,
+  Palette,
   type LucideIcon,
 } from "lucide-react";
 
@@ -46,6 +47,7 @@ export const ACCOUNT_SHORTCUTS: AccountShortcut[] = [
   { href: "/toolkit",                     label: "AI Tools",          icon: Sparkles,         description: "Professional AI-powered tools", inHeader: true, inSidebar: true },
   { href: "/profile?tab=settings",        label: "Settings",          icon: Settings,         inSidebar: true },
   { href: "/account/billing",             label: "Billing & Subscriptions", icon: CreditCard, description: "Plan, payment method, invoices, usage", inHeader: true, inSidebar: true },
+  { href: "/my-dashboard#brand-update",   label: "Brand Update",      icon: Palette,          description: "Brand palette, logo and identity assets", inHeader: true, inSidebar: true },
   { href: "/my-tickets",                  label: "My Tickets",        icon: Ticket,           inSidebar: true },
 ];
 
