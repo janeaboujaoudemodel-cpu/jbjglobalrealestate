@@ -38,6 +38,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const navigate = useNavigate();
   const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
+  const animatedPlaceholder = useTypewriter(HERO_TYPEWRITER_PHRASES);
 
   const runSearch = useCallback(async () => {
     if (searching) return;
