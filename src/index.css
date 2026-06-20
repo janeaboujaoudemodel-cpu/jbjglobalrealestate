@@ -6470,3 +6470,12 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   ) !important;
   color: #3a2a08 !important;
 }
+
+/* Market Intelligence hero CTA final contrast lock — old button classes must not render white/green on champagne. */
+[data-hero-dark] :where(.button-custom-cta, .button-ghost-green, .button-gray-dark, .mi-hero-cta),
+[data-hero-dark] :where(.button-custom-cta, .button-ghost-green, .button-gray-dark, .mi-hero-cta) :where(span, svg, img) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+}
