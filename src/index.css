@@ -5145,6 +5145,25 @@ html body :is(
   opacity: 1 !important;
 }
 
+/* Listing-pill OVERRIDE — inactive segmented pill is a white own-surface and
+ * must keep its inline ink color even when its parent section uses a dark
+ * gradient. Wins over the dark-surface contract above by appearing later in
+ * the cascade with the same specificity. */
+html body .jj-listing-pill[data-listing-pill="inactive"],
+html body .jj-listing-pill[data-listing-pill="inactive"] :is(span, svg, [class*="lucide"]) {
+  color: var(--jj-pill-fg, #1A1A1A) !important;
+  -webkit-text-fill-color: var(--jj-pill-fg, #1A1A1A) !important;
+  stroke: var(--jj-pill-fg, currentColor) !important;
+  opacity: 1 !important;
+}
+html body .jj-listing-pill[data-listing-pill="active"],
+html body .jj-listing-pill[data-listing-pill="active"] :is(span, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 /* Light SVG children must not keep hard-coded white strokes. */
 html body :is(
   .bg-white,
