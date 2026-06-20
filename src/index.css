@@ -7892,3 +7892,118 @@ html body [data-service-photo-copy] * {
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 21 — Champagne Chrome Lock (header + footer + sidebar bottom)
+   ----------------------------------------------------------------
+   Lock the vertical sidebar's champagne gradient as the single tone
+   for the horizontal header, the footer, and the sidebar bottom.
+   Contact / Support / Collapse + footer text/links → solid black.
+   Kill any "full green" hover wash on highlight items in the sidebar.
+   Wins after every previous pass.
+   ════════════════════════════════════════════════════════════════ */
+
+/* 1) Horizontal header — champagne to match the sidebar */
+html body [data-jj-utility-bar] {
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
+  background-color: #F7F2EA !important;
+}
+/* keep the gold hairline at the header bottom — leave PASS 15/18 rules alone */
+
+/* 2) Footer — champagne band, BLACK text & dot */
+html body footer[data-jj-minimal-footer] {
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
+  background-color: #F7F2EA !important;
+}
+html body footer[data-jj-minimal-footer] p,
+html body footer[data-jj-minimal-footer] p:last-child,
+html body footer[data-jj-minimal-footer] a,
+html body footer[data-jj-minimal-footer] a:visited,
+html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body footer[data-jj-minimal-footer] a:hover {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 0.7 !important;
+}
+
+/* 3) Sidebar bottom panel — champagne (kills white seam) */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto > div[class*="bg-gradient-to-t"] {
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
+  background-color: #F7F2EA !important;
+}
+
+/* 4) Contact + Support pinned buttons — BLACK text + BLACK icon on champagne */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"]:hover {
+  background-color: #EFE6D6 !important;
+  background-image: none !important;
+  border-color: #B89555 !important;
+}
+
+/* 5) Collapse button — BLACK text + BLACK icon on champagne, no emerald */
+html body [data-sidebar-collapse-control],
+html body [data-sidebar-collapse-control] *,
+html body .jbj-sidebar-collapse-control,
+html body .jbj-sidebar-collapse-control * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-sidebar-collapse-control] svg,
+html body [data-sidebar-collapse-control] svg *,
+html body .jbj-sidebar-collapse-control svg,
+html body .jbj-sidebar-collapse-control svg * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body button.jbj-sidebar-collapse-control,
+html body [data-sidebar-collapse-control]:not(.jj-side-tile) {
+  border-color: rgba(184,149,85,0.45) !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+html body button.jbj-sidebar-collapse-control:hover,
+html body [data-sidebar-collapse-control]:not(.jj-side-tile):hover {
+  background: #EFE6D6 !important;
+  background-image: none !important;
+  border-color: #B89555 !important;
+  box-shadow: 0 6px 14px -8px rgba(26,26,26,0.25) !important;
+}
+
+/* 6) Highlight items (first 4 categories: AI Home Finder, List Your
+      Property, Careers, Resale Properties) — hover must match section
+      idle hover: subtle wash only, NEVER a full green fill. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:active {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover {
+  background-color: rgba(184,149,85,0.08) !important;
+}
