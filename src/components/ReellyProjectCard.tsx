@@ -150,7 +150,7 @@ const ReellyProjectCard = ({
                 className="object-cover w-full h-full"
                 placeholderLabel=""
               />
-            </>
+            
            
              {/* Top-Left: Sale Status Badge */}
               {(() => {
