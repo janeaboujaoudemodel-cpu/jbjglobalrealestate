@@ -1303,15 +1303,15 @@ const Quiz = () => {
                     : q.options.find(o => o.value === answer)?.label || String(answer);
                   return (
                     <div key={q.id} className="text-xs">
-                      <p className="text-white/60 uppercase tracking-wider text-[10px] mb-0.5">
+                      <p className="text-[#1A1A1A]/55 uppercase tracking-wider text-[10px] mb-0.5">
                         {q.id.replace(/_/g, " ")}
                       </p>
-                      <p className="text-white font-medium truncate">{displayValue}</p>
+                      <p className="text-[#1A1A1A] font-medium truncate">{displayValue}</p>
                     </div>
                   );
                 })}
                 {Object.keys(answers).length === 0 && (
-                  <p className="text-white/60 text-xs italic">Answer questions to see your preferences here</p>
+                  <p className="text-[#1A1A1A]/55 text-xs italic">Answer questions to see your preferences here</p>
                 )}
               </div>
             </div>
