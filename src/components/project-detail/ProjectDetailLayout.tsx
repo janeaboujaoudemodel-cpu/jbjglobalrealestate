@@ -1478,7 +1478,7 @@ export default function ProjectDetailLayout({
 
           {/* BOOK-STYLE ALL DOCUMENTS STRIP + OWNER DROPZONE */}
           <div className="mb-14">
-            {project.documents.length > 0 && (
+            {project.documents.length > 0 ? (
               <BookStyleDocuments
                 documents={project.documents.map(d => ({
                   id: d.id,
@@ -1490,6 +1490,52 @@ export default function ProjectDetailLayout({
                 projectImageUrl={project.images?.[0]?.url || undefined}
                 onDownload={(url, filename) => handleDocumentDownload("brochure", url, filename)}
               />
+            ) : (
+              <div className="relative">
+                <div className="mb-5">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">The Library</p>
+                  <h3 className="text-[#1A1A1A] text-2xl md:text-3xl font-semibold tracking-tight">Project Documents</h3>
+                  <div className="w-16 h-px bg-[#B89555] mt-3" />
+                  <p className="text-[14px] text-[#1A1A1A]/75 mt-3 max-w-2xl">
+                    Request the brochure, fact sheet and floor plans for {project.name}. Our team will share them with you directly.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {([
+                    { key: "brochure", label: "Brochure", desc: "Full project booklet" },
+                    { key: "fact_sheet", label: "Fact Sheet", desc: "Specs at a glance" },
+                    { key: "floor_plan", label: "Floor Plans", desc: "Layouts & sizes" },
+                  ] as const).map((slot) => (
+                    <button
+                      key={slot.key}
+                      type="button"
+                      onClick={() => {
+                        setCaptureDocType(slot.key as any);
+                        setCaptureDocUrl(undefined);
+                        setLeadCaptureOpen(true);
+                      }}
+                      className="group text-left rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 hover:border-[#B89555] p-5 transition-all shadow-sm hover:shadow-md"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <span
+                          className="inline-flex w-9 h-9 items-center justify-center rounded-lg ring-1 ring-[#B89555]/50"
+                          style={{ background: "linear-gradient(135deg,#F7ECD0 0%,#EFE6D6 100%)" }}
+                        >
+                          <FileText className="w-4 h-4 text-[#1A1A1A]" />
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 font-bold">{slot.desc}</p>
+                          <p className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">{slot.label}</p>
+                        </div>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#1A1A1A]">
+                        Request {slot.label.toLowerCase()}
+                        <span aria-hidden>→</span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
             <OwnerDocDropzone projectId={project.id} />
           </div>
