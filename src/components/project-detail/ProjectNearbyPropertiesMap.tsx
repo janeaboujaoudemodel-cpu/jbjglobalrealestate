@@ -236,7 +236,19 @@ export default function ProjectNearbyPropertiesMap({
     return null;
   }, [hasOwnCoords, latitude, longitude, markers, allMarkers]);
 
-  if (!center || allMarkers.length === 0) return null;
+  // When we have no center at all (no own coords AND no peers found), fall back to Dubai centroid
+  // so the user still sees a map for the project (red pin will be omitted if no coords).
+  const resolvedCenter: [number, number] = center ?? [25.1972, 55.2744];
+  const hasAnyPin = hasOwnCoords || allMarkers.length > 0;
+  if (!hasAnyPin) {
+    return (
+      <div className={`rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center ${className}`}>
+        <p className="text-[14px] text-[#1A1A1A]/75">
+          No other developer projects mapped near {currentProjectName} yet.
+        </p>
+      </div>
+    );
+  }
 
   const handleOpenNearby = (slug: string | null) => {
     if (!slug) return;
