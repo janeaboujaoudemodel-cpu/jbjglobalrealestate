@@ -5,27 +5,36 @@ interface Props {
   onChange: (m: "projects" | "units") => void;
 }
 
-/** Glass pill segmented control for the /compare top toggle (sits on dark CompareAIShell). */
+/** Champagne segmented control for the /compare top toggle. */
 export default function CompareModeToggle({ mode, onChange }: Props) {
-  const Btn = ({ value, icon: Icon, label }: { value: "projects" | "units"; icon: typeof Building; label: string }) => {
+  const Btn = ({
+    value,
+    icon: Icon,
+    label,
+  }: {
+    value: "projects" | "units";
+    icon: typeof Building;
+    label: string;
+  }) => {
     const active = mode === value;
     return (
       <button
         type="button"
         onClick={() => onChange(value)}
-        data-no-contrast-guard
-        data-allow-dark-cta
         className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all"
         style={{
-          color: "#FFFFFF",
-          background: active
-            ? "linear-gradient(135deg, #3B82F6 0%, #7C3AED 50%, #EC4899 100%)"
-            : "rgba(255,255,255,0.06)",
-          border: active ? "1px solid rgba(255,255,255,0.4)" : "1px solid rgba(255,255,255,0.15)",
-          boxShadow: active ? "0 6px 24px rgba(124,58,237,0.4)" : "none",
+          color: active ? "#FFFFFF" : "#1A1A1A",
+          background: active ? "#0A0A0A" : "#FDFBF7",
+          border: active
+            ? "1px solid rgba(184,149,85,0.7)"
+            : "1px solid rgba(184,149,85,0.45)",
+          boxShadow: active
+            ? "0 6px 18px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.08)"
+            : "inset 0 1px 0 rgba(255,255,255,0.6)",
         }}
+        {...(active ? { "data-allow-dark-cta": true } : {})}
       >
-        <Icon className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+        <Icon className="w-4 h-4" style={{ color: active ? "#FFFFFF" : "#B89555" }} />
         {label}
       </button>
     );
@@ -34,7 +43,10 @@ export default function CompareModeToggle({ mode, onChange }: Props) {
   return (
     <div
       className="inline-flex items-center gap-1 p-1 rounded-full"
-      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(12px)" }}
+      style={{
+        background: "#F7F2EA",
+        border: "1px solid rgba(184,149,85,0.45)",
+      }}
       role="tablist"
       aria-label="Comparison mode"
     >

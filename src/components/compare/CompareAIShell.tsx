@@ -1,24 +1,24 @@
 /**
- * CompareAIShell — Premium animated AI-tool wrapper for /compare and /compare-manual.
+ * CompareAIShell — Champagne/gold premium wrapper for /compare and /compare-manual.
  *
- * AI-tool exception: this shell uses the vivid blue → pink → violet "Flo" palette,
- * scoped strictly to comparison routes. The rest of the site keeps champagne-gold.
- *
- * Background = deep navy `#0B1020` with three slow-drifting blurred blobs
- * (electric blue, hot pink, deep violet) animated via framer-motion. Subtle
- * grain overlay. No gray/silver anywhere.
+ * Brand-locked: page #FDFBF7 → surface #F7F2EA → raised #EFE6D6 with
+ * 1px gold #B89555 hairlines. No blue/purple/pink anywhere. Ink #1A1A1A text.
  */
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
 
 export const COMPARE_AI_PALETTE = {
-  base: "#0B1020",
-  blue: "#3B82F6",
-  pink: "#EC4899",
-  violet: "#7C3AED",
-  gradient: "linear-gradient(135deg, #3B82F6 0%, #7C3AED 50%, #EC4899 100%)",
-  gradientText: "linear-gradient(90deg, #60A5FA 0%, #C084FC 50%, #F472B6 100%)",
+  page: "#FDFBF7",
+  surface: "#F7F2EA",
+  raised: "#EFE6D6",
+  gold: "#B89555",
+  goldSoft: "rgba(184,149,85,0.18)",
+  goldHairline: "rgba(184,149,85,0.55)",
+  ink: "#1A1A1A",
+  // Gradient kept as champagne sweep for any legacy callers
+  gradient: "linear-gradient(135deg, #EFE6D6 0%, #F7F2EA 50%, #FDFBF7 100%)",
+  gradientText: "linear-gradient(90deg, #1A1A1A 0%, #1A1A1A 100%)",
 } as const;
 
 interface CompareAIShellProps {
@@ -29,11 +29,11 @@ export default function CompareAIShell({ children }: CompareAIShellProps) {
   const reduceMotion = useReducedMotion();
 
   const blob = (
-    color: string,
     size: number,
     initial: { x: string; y: string },
     duration: number,
     delay = 0,
+    opacity = 0.22,
   ) => (
     <motion.div
       aria-hidden
@@ -41,9 +41,9 @@ export default function CompareAIShell({ children }: CompareAIShellProps) {
       style={{
         width: size,
         height: size,
-        background: color,
+        background: "radial-gradient(circle, rgba(184,149,85,0.35), transparent 70%)",
         filter: "blur(120px)",
-        opacity: 0.55,
+        opacity,
         willChange: "transform",
       }}
       initial={initial}
@@ -55,49 +55,23 @@ export default function CompareAIShell({ children }: CompareAIShellProps) {
               y: [initial.y, "-20%", "25%", initial.y],
             }
       }
-      transition={{
-        duration,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay,
-      }}
+      transition={{ duration, repeat: Infinity, ease: "easeInOut", delay }}
     />
   );
 
   return (
     <div
       data-compare-ai-shell
-      data-no-contrast-guard
-      data-allow-dark-cta
+      data-marketing-page
       className="relative min-h-screen overflow-hidden"
-      style={{ background: COMPARE_AI_PALETTE.base, color: "#F8FAFC" }}
+      style={{ background: COMPARE_AI_PALETTE.page, color: COMPARE_AI_PALETTE.ink }}
     >
-      {/* Animated gradient blobs */}
+      {/* Subtle champagne ambient blobs — purely decorative */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {blob(COMPARE_AI_PALETTE.blue, 720, { x: "-10%", y: "-15%" }, 22, 0)}
-        {blob(COMPARE_AI_PALETTE.violet, 640, { x: "55%", y: "10%" }, 26, 2)}
-        {blob(COMPARE_AI_PALETTE.pink, 560, { x: "20%", y: "55%" }, 24, 4)}
+        {blob(720, { x: "-10%", y: "-15%" }, 22, 0, 0.28)}
+        {blob(640, { x: "55%", y: "10%" }, 26, 2, 0.22)}
+        {blob(560, { x: "20%", y: "55%" }, 24, 4, 0.18)}
       </div>
-
-      {/* Grain overlay (cheap CSS noise) */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>\")",
-        }}
-      />
-
-      {/* Vignette + base wash for readability */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 0%, rgba(11,16,32,0.55) 70%, rgba(11,16,32,0.85) 100%)",
-        }}
-      />
 
       {/* Content layer */}
       <div className="relative z-10">{children}</div>
@@ -105,7 +79,7 @@ export default function CompareAIShell({ children }: CompareAIShellProps) {
   );
 }
 
-/** Glass card primitive for sections inside CompareAIShell. */
+/** Champagne glass card primitive for sections inside CompareAIShell. */
 export function GlassCard({
   children,
   className = "",
@@ -115,13 +89,13 @@ export function GlassCard({
 }) {
   return (
     <div
-      data-no-contrast-guard
-      className={`relative rounded-2xl backdrop-blur-xl ${className}`}
+      className={`relative rounded-2xl ${className}`}
       style={{
-        background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.10)",
+        background: COMPARE_AI_PALETTE.surface,
+        border: `1px solid ${COMPARE_AI_PALETTE.goldHairline}`,
         boxShadow:
-          "0 20px 60px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)",
+          "0 20px 60px -30px rgba(184,149,85,0.25), inset 0 1px 0 rgba(255,255,255,0.6)",
+        color: COMPARE_AI_PALETTE.ink,
       }}
     >
       {children}
@@ -129,7 +103,7 @@ export function GlassCard({
   );
 }
 
-/** Gradient text helper. */
+/** Gold-ink accent text helper (replaces former vivid gradient). */
 export function GradientText({
   children,
   className = "",
@@ -139,8 +113,8 @@ export function GradientText({
 }) {
   return (
     <span
-      className={`bg-clip-text text-transparent ${className}`}
-      style={{ backgroundImage: COMPARE_AI_PALETTE.gradientText }}
+      className={className}
+      style={{ color: COMPARE_AI_PALETTE.gold, fontWeight: 700 }}
     >
       {children}
     </span>
