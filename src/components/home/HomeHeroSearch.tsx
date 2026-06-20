@@ -107,13 +107,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         <div
           data-surface="dark"
           data-ink-emerald-opt-out
-          className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
-            overflow-hidden bg-transparent border border-[#B89555]/55
-            focus-within:border-[#B89555] hover:border-[#B89555]/80
+          className="jj-hero-search-lock group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
+            overflow-hidden bg-[#FFFFFF] border border-[#34D399]/70
+            focus-within:border-[#34D399] hover:border-[#34D399]
             transition-all duration-300"
           style={{
             boxShadow:
-              "0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
+              "0 0 0 1px rgba(255,255,255,0.38), 0 0 30px rgba(52,211,153,0.22), 0 18px 42px rgba(0,0,0,0.34)",
           }}
         >
 
@@ -168,21 +168,21 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               data-surface="light"
               aria-label="Search properties now"
               disabled={searching}
-              className="surface-light relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
-                text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 bg-white
-                disabled:cursor-wait transition-colors duration-200 hover:bg-[#F8F8F8]"
+              className="jj-emerald-fill relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
+                text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0
+                disabled:cursor-wait transition-colors duration-200"
               style={{
-                color: "#1A1A1A",
+                color: "#FFFFFF",
               }}
             >
               <span
-                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
-                className="relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover/search:after:w-full"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                className="relative inline-block"
               >
                 {searching ? "Searching…" : "Search"}
               </span>
               {searching && (
-                <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#1A1A1A" }} strokeWidth={2.4} />
+                <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
               )}
             </button>
             <span
