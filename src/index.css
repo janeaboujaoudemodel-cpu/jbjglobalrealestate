@@ -7805,3 +7805,46 @@ html body :is(a, button, span, div).jj-pill-emerald:is(:hover,:focus,:active) :i
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 19 — Task 1 verified hero/header segmentation lock.
+   One clean premium emerald shell; button segments are darker overlays,
+   not separate green/black blocks. Header icons match the same system. */
+html body .jj-hero-search-premium .jj-hero-search-bar {
+  background: linear-gradient(135deg, #075B45 0%, #064E3B 48%, #032419 100%) !important;
+  background-image: linear-gradient(135deg, #075B45 0%, #064E3B 48%, #032419 100%) !important;
+}
+html body .jj-hero-search-premium input,
+html body .jj-hero-search-premium input:focus,
+html body .jj-hero-search-premium input:hover {
+  background: transparent !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+}
+html body .jj-hero-search-premium .jj-hero-search-action,
+html body .jj-hero-search-premium .jj-hero-search-action:hover,
+html body .jj-hero-search-premium .jj-hero-search-action:focus,
+html body .jj-hero-search-premium .jj-hero-search-action:active {
+  background: linear-gradient(135deg, rgba(4, 120, 87, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%) !important;
+  background-image: linear-gradient(135deg, rgba(4, 120, 87, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%) !important;
+  border-left: 1px solid rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-hero-search-premium .jj-hero-search-action:hover {
+  filter: brightness(1.12) saturate(1.08) !important;
+}
+html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]),
+html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]):hover {
+  background: linear-gradient(135deg, #075B45 0%, #064E3B 52%, #032419 100%) !important;
+  background-image: linear-gradient(135deg, #075B45 0%, #064E3B 52%, #032419 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]) :is(svg, [class*="lucide"]),
+html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
