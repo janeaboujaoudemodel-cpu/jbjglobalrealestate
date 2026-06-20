@@ -28,7 +28,7 @@ const fadeInUp = {
 };
 
 const heroCtaClass =
-  "jj-cta-champagne group inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-colors md:px-8 md:py-4 md:text-base";
+  "jj-cta-champagne group inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-colors shadow-[0_10px_28px_rgba(0,0,0,0.22)] md:px-8 md:py-4 md:text-base";
 
 // Organization schema for main Market Intelligence page
 const organizationSchema = {
