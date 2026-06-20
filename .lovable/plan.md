@@ -1,87 +1,48 @@
-## What's wrong now
+# Auto-enrich every project in the background
 
-On `/project/:slug`, several sections that used to render are either visually missing or appearing in the wrong order, and one new insight you want (top buyer nationalities for the project + its area) doesn't exist yet.
+## What you'll see
+- The "Enrich bedrooms" button and dialog on the owner provenance card disappear completely. No more one-by-one prompts.
+- Enrichment runs silently 24/7 in the background and keeps every project topped up — images, documents, amenities, payment plans, POIs, videos, floor plans, unit types, service charge, descriptions, highlights, ROI **and** bedrooms (min/max + types).
+- Only approved sources are used: developer-direct (Reelly partner API + developer websites) and Provident. Property Finder / Bayut / Dubizzle are removed entirely.
 
-After reading `src/pages/ProjectDetail.tsx`, `src/components/project-detail/ProjectDetailLayout.tsx` (1650 lines), `ProjectNearbyPropertiesMap.tsx`, and `src/components/shared/DLDMarketWidget.tsx`, here is what actually broke and what to fix.
+## Changes
 
-## Fix plan
+### 1. Remove the bedroom-enrich UI (no feature loss, the work moves to the background)
+- `src/components/project-detail/owner/OwnerProvenanceCard.tsx` — drop the "Enrich bedrooms" button, the `EnrichBedroomsDialog` import and state.
+- `src/components/project-detail/owner/EnrichBedroomsDialog.tsx` — delete file.
+- Memory file `bedroom-enrichment.md` — update to reflect background-only flow.
 
-### 1. Restore the Brochure section so it ALWAYS renders
-- The brochure block (lines 1424–1481) is currently gated only by the parent layout but `PremiumBrochureCard` becomes invisible on some projects because:
-  - For Reelly projects, `documents: []` is hard-coded in `ProjectDetail.tsx` → no `brochurePrimary`, and `isLocked={!brochurePrimary || …}` collapses the card area visually.
-  - When there are no `project.images`, the card has no cover and renders as an empty wrapper.
-- Action: render the brochure two-column block unconditionally for every project (DB + Reelly). When no real brochure exists, show the "Request brochure" variant (lead-capture CTA) — never hide it.
-- Always pass a cover image fallback (`cover_image_url || first image || developer logo || JBJ monogram tile`).
+### 2. Fix the source-allowlist violation in `enrich-project-bedrooms`
+Current function scrapes Property Finder + Bayut — banned by the no-secondary-source-scraping rule.
+- Rewrite `supabase/functions/enrich-project-bedrooms/index.ts` to read **only** from Reelly (`reelly_raw_data.typical_units` / `unit_blocks`) and Provident HTML (already whitelisted). No Firecrawl on PF/Bayut.
+- Keep it as a helper called by the background runner, not exposed to UI.
 
-### 2. Restore the "Documents" library (fact sheet / floor plan / brochure)
-- `BookStyleDocuments` (lines 1484–1497) only renders when `project.documents.length > 0`. For Reelly projects this is always empty, so the whole shelf disappears.
-- Action:
-  - Always render the section header "Project Documents".
-  - When at least one doc exists, render the book-style strip exactly as before.
-  - When none exist, render a champagne placeholder shelf with the three slots (Brochure · Fact Sheet · Floor Plan) each opening the existing `LeadCaptureModal` with the right `captureDocType`.
-  - Keep `OwnerDocDropzone` visible only to owners.
+### 3. Extend the background runner to do **full** enrichment, including bedrooms
+File: `supabase/functions/background-enrichment-runner/index.ts`
+- Add bedroom extraction from `typical_units` → write `bedrooms_min`, `bedrooms_max`, `bedroom_types` (Studio = 0) when missing.
+- Broaden candidate query: include projects WHERE `reelly_id IS NOT NULL` OR `source_url ILIKE '%provident%'` OR `data_source = 'developer_direct'`. Skip anything blocked by `supabase/functions/_shared/sourceAllowlist.ts`.
+- Re-run pass: drop the `!p.reelly_raw_data` filter — instead re-process projects where `detail_fetched_at` is null OR older than 30 days, so already-touched projects still get newly published fields.
+- Keep the existing rate-limit (500 ms) and 200-line log cap.
 
-### 3. Lock the section order (the order you've been asking for)
-Render order inside `ProjectDetailLayout.tsx` for every project:
+### 4. Make it run automatically (no manual button click)
+- New migration: enable `pg_cron` + `pg_net` (if not already), then schedule a cron job every 6 hours that POSTs to `background-enrichment-runner` with `{action:"start"}`. The function already no-ops when a job is already running, so overlap is safe.
+- Add an "auto-trigger on publish" hook: a lightweight DB trigger on `projects` that, when `is_published` flips to true, calls `net.http_post` to the same edge function so newly published projects get enriched within minutes instead of waiting for the next cron tick.
 
-```text
-Hero / gallery
-Quick facts
-House details
-Floor plans
-Amenities
-Media (video / tour)
-Location map + headline
-"Other projects in this area" map  ← uses ProjectNearbyPropertiesMap
-Points of interest
-Master plan
-Payment plan
-Brochure (always)
-Documents shelf (always)
-Mortgage calculator
-JBJ AI Analyzer (project-scoped)
-DLD Market Widget (full-bleed band)  ← transactions, top areas, nationalities
-Buyer Nationality Insights (new — project + area)  ← see step 5
-Investment metrics
-FAQs
-More from this developer
-Newsletter / CTA
-```
-
-### 4. "Other projects in this area" map under the location map
-- Currently `ProjectNearbyPropertiesMap` is rendered only when `lat/lng || area_name` exists, and `MoreFromDeveloperStrip` sits right under the map — which is what you're seeing as "only more from my properties".
-- Action:
-  - Move `MoreFromDeveloperStrip` to the bottom of the page (above Newsletter), so it never visually replaces the area map.
-  - Render `ProjectNearbyPropertiesMap` ALWAYS — when the project has no coords AND no area, fall back to the emirate centroid and query peers by `emirate`. Title becomes "Other projects in {area_name || emirate}".
-  - Keep the red pin = current project, champagne pins = other developers nearby.
-
-### 5. New "Buyer Nationality Insights" (project + area)
-- Create `src/components/project-detail/BuyerNationalityInsights.tsx`.
-- Two side-by-side cards on desktop, stacked on mobile:
-  - Card A — "Top buyers in {project.name}" (project-level): top 5 nationalities buying in this project. Source: aggregate `dld_daily_snapshot` / `dld_market_data` filtered by project name match where available; when no project-level data, mark "Area proxy" badge.
-  - Card B — "Top buyers in {area_name}" (area-level): top 5 nationalities buying in the surrounding area (e.g. Dubai Creek Harbour). Source: same DLD tables filtered by area.
-- Each row: flag · nationality · share % · bar. Champagne surface, gold hairline, ink text — matches `DLDMarketWidget`.
-- Add a small "Data: DLD · YTD {year}" caption and the existing investment disclaimer.
-- Wire it into the page directly below `DLDMarketWidget`.
-
-### 6. Verify visually before claiming done
-For 3 representative projects (one DB project with brochure, one DB project without brochure, one Reelly project), screenshot the full page at desktop 1440 and mobile 390 and confirm:
-- Brochure block visible (download or request variant)
-- Documents shelf visible (real or placeholder)
-- "Other projects in this area" map visible with at least 1 pin or empty-state message
-- DLD widget present
-- New Buyer Nationality Insights card visible with project + area columns
-- JBJ AI Analyzer visible above DLD
-- `MoreFromDeveloperStrip` only appears once, at the bottom
+### 5. Owner visibility (kept, not removed)
+- `EnrichmentCenter` page stays as a read-only monitor: progress, counts, last run, errors. No "Enrich one project" actions surfaced anywhere on the listing pages.
+- The owner notifications it already emits every 50 projects + on completion remain.
 
 ## Technical notes
+- Approved-source guard lives in `supabase/functions/_shared/sourceAllowlist.ts` — every fetch path in the background runner and the rewritten bedrooms helper must call it before issuing a request.
+- Cron SQL goes through the **insert** tool (contains project URL + anon key); schema changes (trigger function + extensions) go through the migration tool.
+- No DB grants needed beyond the existing `enrichment_jobs` policies.
+- `admin_edit_log` rows still get written for every applied field so Undo continues to work.
 
-- Files touched:
-  - `src/components/project-detail/ProjectDetailLayout.tsx` (re-order + unconditional brochure + unconditional docs + always-on nearby map)
-  - `src/components/project-detail/BookStyleDocuments.tsx` (add empty-state placeholder shelf)
-  - `src/components/project-detail/PremiumBrochureCard.tsx` (image fallback chain)
-  - `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` (emirate-fallback query)
-  - `src/components/project-detail/BuyerNationalityInsights.tsx` (new)
-  - `src/pages/ProjectDetail.tsx` (no doc-array hard-empty for Reelly; still empty but the layout no longer hides on length 0)
-- No DB migration required for steps 1–4. Step 5 reads from existing `dld_daily_snapshot` / `dld_market_data` (already in schema); if a query needs a new index it will be added in a follow-up migration.
-- No removal of any existing feature — strict no-removal policy respected.
+## Files touched
+- delete `src/components/project-detail/owner/EnrichBedroomsDialog.tsx`
+- edit `src/components/project-detail/owner/OwnerProvenanceCard.tsx`
+- rewrite `supabase/functions/enrich-project-bedrooms/index.ts`
+- edit `supabase/functions/background-enrichment-runner/index.ts`
+- new migration: pg_cron + pg_net extensions, publish-trigger function
+- insert: cron schedule row
+- edit memory file `bedroom-enrichment.md`
