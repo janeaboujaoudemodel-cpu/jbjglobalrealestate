@@ -785,7 +785,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                                 <div className="flex items-center gap-2">
                                   <Button 
                                     size="sm"
-                                    className="h-9 px-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+                                    className="jj-cta-dark h-9 px-3 font-medium transition-all duration-200 hover:scale-105"
                                     onClick={(e) => { e.stopPropagation(); handleChat(employee); }}
                                   >
                                     <MessageSquare className="h-4 w-4 mr-1.5" />
