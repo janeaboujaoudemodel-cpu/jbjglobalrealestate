@@ -1,54 +1,51 @@
-# Palette + Contrast Lock Pass
+## Goal
+Restore the project gallery/lightbox to one clean standard viewing screen on every device, with fixed navigation, gold header controls, and no duplicated low/high-resolution versions of the same photo.
 
-Match the rest of the chrome to the vertical sidebar's champagne gradient and replace the remaining emerald/green accents that broke contrast.
+## Tasks
 
-## Reference color (locked from current sidebar)
+1. **Repair the fullscreen gallery layout**
+   - Update `src/components/ImageCarousel.tsx` so fullscreen is always one stable viewport, not a giant image that changes size by photo ratio.
+   - Use a fixed header, fixed image stage, and fixed thumbnail filmstrip.
+   - The main photo will use `object-contain` inside the stage so every photo fits the same screen without cropping or pushing layout.
+   - Remove the broken behavior where portrait/landscape photos resize the whole modal.
 
-```
-linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%)
-hairline accent: #B89555
-text/icons on this surface: #1A1A1A (true black)
-```
+2. **Connect the header properly**
+   - Keep the top bar attached to the gallery, always visible.
+   - Show the project name and counter as: `Project name  2 / 20`.
+   - Keep the close and download buttons in the same header row.
+   - Repaint the close/download icon buttons to gold icon/border styling, with black text/icons only where needed for contrast.
 
-This is the only background allowed for the four chrome regions below. No white, no emerald.
+3. **Fix navigation controls**
+   - Keep left/right arrows inside the gallery stage and centered vertically.
+   - Make arrow buttons responsive: smaller on mobile, larger on desktop.
+   - Prevent arrows from overlapping the header or thumbnails.
 
-## Tasks (executed one at a time, each verified with a screenshot before moving on)
+4. **Fix thumbnail strip**
+   - Keep the thumbnails as a bottom filmstrip, horizontally scrollable.
+   - Make it a stable height on desktop/tablet/mobile.
+   - Highlight the selected image with gold border.
 
-### Task A — Horizontal header background
-- File: `src/components/navigation/HorizontalUtilityBar.tsx` (+ any `.jj-horizontal-utility-bar` rules in `src/index.css`).
-- Replace current white/emerald bar background with the champagne gradient above.
-- Keep the single gold hairline at the bottom edge.
-- Verify: screenshot of header at 1440px and 1144px — must visually continue the sidebar tone with no white seam.
+5. **Harden duplicate photo removal globally for this gallery**
+   - Move/strengthen URL normalization in the gallery image pipeline so `/x/464x312/`, `/x/1920x1080/`, query transforms, thumbnail suffixes, and repeated storage variants collapse into one photo.
+   - Always keep the best/highest quality variant.
+   - Ensure the count in the header and thumbnail strip uses the de-duplicated list only, so the same image cannot appear twice as low-res + high-res.
 
-### Task B — Footer background + text
-- File: `src/components/home/MinimalFooter.tsx`.
-- Swap the current `from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC]` for the exact sidebar gradient.
-- Change every link, separator dot, and the `© 2026 JBJ GLOBAL REAL ESTATE` line from emerald `#047857` to black `#1A1A1A` (hover: `#1A1A1A` at 70% opacity).
-- Keep the single gold hairline divider.
-- Verify: footer screenshot — black text on champagne, no emerald.
+6. **Responsive validation checklist before claiming completion**
+   - Test desktop: `1366×768` and `1920×1080`.
+   - Test tablet: `1024×768` and `834×1194`.
+   - Test mobile: `390×844` and `360×800`.
+   - For each viewport, verify:
+     - One standard gallery screen.
+     - Header stays visible.
+     - Counter updates correctly.
+     - Gold close/download controls are visible.
+     - Main image fits the stage.
+     - Thumbnails do not cover the image.
+     - Arrows work and do not overlap critical controls.
+     - Duplicate low/high-res variants are not shown.
 
-### Task C — Bottom of vertical sidebar (Contact / Support / Collapse)
-- File: `src/components/navigation/GlobalVerticalNav.tsx` lines ~1180–1270 (expanded) and the matching collapsed rail block ~1293+.
-- Repaint the bottom panel from the white/`#FDFBF7` fill to the same champagne gradient so it merges with the sidebar body (currently visible white seam).
-- Contact button, Support button, and Collapse toggle:
-  - Text color: `#1A1A1A`
-  - Icon color/stroke: `#1A1A1A`
-  - Border: `#B89555` hairline (keep)
-  - Hover background: `#EFE6D6` (no emerald, no gold fill)
-  - Remove inline `color:'#B89555'` and emerald hover styles on these three controls.
-- Sign Out stays red (unchanged).
-- Verify: screenshot of sidebar bottom in both expanded and collapsed states.
-
-### Task D — First-four-categories hover (vertical sidebar)
-- File: `src/components/navigation/GlobalVerticalNav.tsx` — the "saturated colored rows" branch around line 813 and the row-background logic that paints a full emerald/green fill on hover for the first four nav items.
-- Remove the full-fill hover. Replace with the same subtle hover used by the remaining categories: transparent row, only the icon tile + underline animation change (`navHoverUnderline` already defined at line 832, gold-hairline icon tile at line 844).
-- No category may flash a solid green band on hover.
-- Verify: hover each of the first four items in the preview, screenshot showing identical hover treatment to items 5+.
-
-### Task E — Final regression sweep
-- Take a full-page screenshot at 1440px confirming: champagne header → champagne sidebar → champagne footer form one continuous tone; bottom-of-sidebar controls render black on champagne; no green hover flash on any sidebar category.
-
-## Guardrails
-- Do not touch any other page, card, button, or CTA.
-- Do not reintroduce gold fills, emerald fills, or white panels in these regions.
-- After each task: visual check in the preview before starting the next.
+## Technical notes
+- Primary files to modify:
+  - `src/components/ImageCarousel.tsx`
+  - likely `src/lib/imageUtils.ts` only if shared image dedupe helpers should be centralized.
+- I will not modify unrelated listing content, project data, or owner media management behavior beyond preventing duplicate display in the gallery.
