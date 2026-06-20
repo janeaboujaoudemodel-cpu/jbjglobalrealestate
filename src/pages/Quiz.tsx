@@ -929,12 +929,12 @@ const Quiz = () => {
             </div>
 
 
-            <h1 className="allow-white text-4xl md:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#FFFFFF" }}>
-              AI Property Finder
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#1A1A1A" }}>
+              AI Home Finder
             </h1>
 
-            <p className="allow-white text-lg mb-7 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
-              Find your perfect property match with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
+            <p className="text-lg mb-7 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(26,26,26,0.75)" }}>
+              Find your perfect home with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
               <span className="font-semibold" style={{ color: "#B89555" }}>FREE</span>.
             </p>
 
@@ -942,44 +942,45 @@ const Quiz = () => {
               <div
                 className="rounded-2xl p-5 text-left"
                 style={{
-                  background: "linear-gradient(135deg, rgba(10,10,10,0.35) 0%, rgba(0,0,0,0.5) 100%)",
-                  border: "1px solid rgba(184,149,85,0.40)",
+                  background: "#FDFBF7",
+                  border: "1px solid rgba(184,149,85,0.45)",
                 }}
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <Gift className="w-5 h-5 allow-white" style={{ color: "#B89555" }} />
-                  <span className="font-semibold allow-white" style={{ color: "#FFFFFF" }}>FREE Access</span>
+                  <Gift className="w-5 h-5" style={{ color: "#B89555" }} />
+                  <span className="font-semibold" style={{ color: "#1A1A1A" }}>FREE Access</span>
                 </div>
                 <ul className="space-y-2.5 text-sm">
-                  {["Unlimited AI Property Matches", "AI Comparison Reports", "Download Excel Report"].map((label) => (
-                    <li key={label} className="flex items-center gap-2.5 allow-white" style={{ color: "rgba(255,255,255,0.88)" }}>
+                  {["Unlimited AI Home Matches", "AI Comparison Reports", "Download Excel Report"].map((label) => (
+                    <li key={label} className="flex items-center gap-2.5" style={{ color: "rgba(26,26,26,0.85)" }}>
                       <span
                         className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
                         style={{ background: "#B89555" }}
                       >
                         <Check className="w-3 h-3" style={{ color: "#FFFFFF" }} strokeWidth={3} />
                       </span>
-                      <span className="allow-white">{label}</span>
+                      <span>{label}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-9" style={{ color: "rgba(255,255,255,0.75)" }}>
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-9" style={{ color: "rgba(26,26,26,0.65)" }}>
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
-                <div key={label} className="flex items-center gap-2 allow-white">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(184,149,85,0.22)" }}>
-                    <Icon className="w-3 h-3 allow-white" style={{ color: "#B89555" }} />
+                <div key={label} className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(184,149,85,0.18)" }}>
+                    <Icon className="w-3 h-3" style={{ color: "#B89555" }} />
                   </div>
-                  <span className="allow-white">{label}</span>
+                  <span>{label}</span>
                 </div>
               ))}
             </div>
+
 
             <Button
               onClick={() => setStarted(true)}
