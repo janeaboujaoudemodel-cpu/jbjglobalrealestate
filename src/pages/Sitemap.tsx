@@ -42,6 +42,7 @@ import {
   Newspaper,
   Headphones,
   Calendar,
+  CreditCard,
 } from "lucide-react";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
@@ -275,6 +276,18 @@ const hubSections: HubSection[] = [
       { href: "/ai-calendar", label: "Calendar & Notes" },
       // { href: "/presentations", label: "Presentations" }, // REMOVED — broken tool retired
       { href: "/resale-properties", label: "Resale Properties" },
+    ],
+  },
+  {
+    id: "my-account",
+    title: "My Account",
+    icon: CreditCard,
+    links: [
+      { href: "/my-dashboard", label: "My Dashboard" },
+      { href: "/profile?tab=settings", label: "Settings" },
+      { href: "/account/billing", label: "Billing & Subscriptions" },
+      { href: "/my-dashboard#brand-update", label: "Brand Update" },
+      { href: "/my-tickets", label: "My Tickets" },
     ],
   },
   {
