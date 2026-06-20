@@ -607,7 +607,7 @@ export default function GlobalVerticalNav() {
   }, [isDeveloperMode, isOwner, showBrokerSurfaces, showInvestorSurfaces]);
 
   // Collapsible sections state — accordion: only one open at a time
-  const [openSection, setOpenSection] = useState<SectionKey | null>(null);
+  const [openSection, setOpenSection] = useState<SectionKey | null>('MY ACCOUNT');
 
   // Data hooks for rich flyouts
   const { data: developers } = useDevelopers(false);
@@ -745,11 +745,16 @@ export default function GlobalVerticalNav() {
   useEffect(() => {
     closeMegaMenu();
     setMobileOpen(false);
+    let matchedActiveSection = false;
     for (const [section, items] of Object.entries(sectionGroups)) {
       if (items.some(item => isRouteActive(item.href))) {
         setOpenSection(section as SectionKey);
+        matchedActiveSection = true;
         break;
       }
+    }
+    if (!matchedActiveSection && location.pathname === '/') {
+      setOpenSection('MY ACCOUNT');
     }
   }, [location.pathname, closeMegaMenu, sectionGroups]);
 
