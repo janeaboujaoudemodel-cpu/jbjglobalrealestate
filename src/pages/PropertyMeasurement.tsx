@@ -395,7 +395,7 @@ const PropertyMeasurement = () => {
 
             <h1 className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: "rgba(255,255,255,0.96)" }}>
               Property{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-emerald-500">
+              <span className="text-[#B89555]">
                 Measurement
               </span>
             </h1>
@@ -954,9 +954,9 @@ const PropertyMeasurement = () => {
             <Card
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white !border-emerald-400/40 !border bg-gradient-to-br from-emerald-700 to-emerald-900 shadow-[0_0_40px_rgba(16,185,129,0.25)]"
+              className="allow-white !border-[#B89555]/40 !border bg-[#0A0A0A]"
             >
-              <CardHeader className="border-b border-emerald-400/30">
+              <CardHeader className="border-b border-[#B89555]/30">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2 allow-white">
                     <CheckCircle2 className="w-6 h-6 text-white allow-white" />

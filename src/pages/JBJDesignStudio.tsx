@@ -57,22 +57,22 @@ import { ColorPaletteManager, DesignProjectManager, AIDesignAssistant } from '@/
 
 // Template categories with icons
 const TEMPLATE_CATEGORIES = [
-  { id: 'instagram', label: 'Instagram', icon: Instagram, color: 'from-pink-500 to-purple-600' },
-  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: 'from-blue-600 to-blue-800' },
-  { id: 'youtube', label: 'YouTube', icon: Youtube, color: 'from-red-500 to-red-700' },
-  { id: 'facebook', label: 'Facebook', icon: Facebook, color: 'from-blue-500 to-blue-700' },
-  { id: 'whatsapp', label: 'WhatsApp', icon: Phone, color: 'from-green-500 to-green-700' },
+  { id: 'instagram', label: 'Instagram', icon: Instagram, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'youtube', label: 'YouTube', icon: Youtube, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'facebook', label: 'Facebook', icon: Facebook, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'whatsapp', label: 'WhatsApp', icon: Phone, color: 'from-[#B89555] to-[#8a6f3f]' },
   { id: 'email-signature', label: 'Email Signatures', icon: Mail, color: 'from-gold to-gold-dark' },
   { id: 'business-card', label: 'Business Cards', icon: BusinessCard, color: 'from-zinc-700 to-black' },
-  { id: 'brochure', label: 'Brochures & Flyers', icon: FileText, color: 'from-indigo-500 to-indigo-700' },
-  { id: 'presentation', label: 'Presentations', icon: Presentation, color: 'from-orange-500 to-orange-700' },
-  { id: 'logo', label: 'Logos & Branding', icon: Crown, color: 'from-amber-500 to-amber-700' },
-  { id: 'property', label: 'Property Marketing', icon: Building2, color: 'from-emerald-500 to-emerald-700' },
-  { id: 'events', label: 'Events & Campaigns', icon: Megaphone, color: 'from-rose-500 to-rose-700' },
-  { id: 'video', label: 'Video Thumbnails', icon: Video, color: 'from-cyan-500 to-cyan-700' },
+  { id: 'brochure', label: 'Brochures & Flyers', icon: FileText, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'presentation', label: 'Presentations', icon: Presentation, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'logo', label: 'Logos & Branding', icon: Crown, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'property', label: 'Property Marketing', icon: Building2, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'events', label: 'Events & Campaigns', icon: Megaphone, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'video', label: 'Video Thumbnails', icon: Video, color: 'from-[#B89555] to-[#8a6f3f]' },
   { id: 'print', label: 'Print Materials', icon: Newspaper, color: 'from-slate-500 to-slate-700' },
-  { id: 'portfolio', label: 'Portfolios', icon: GraduationCap, color: 'from-violet-500 to-violet-700' },
-  { id: 'books', label: 'Books & Reports', icon: Book, color: 'from-amber-600 to-amber-800' },
+  { id: 'portfolio', label: 'Portfolios', icon: GraduationCap, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'books', label: 'Books & Reports', icon: Book, color: 'from-[#B89555] to-[#8a6f3f]' },
 ];
 
 // Pre-built templates with real sizes
@@ -315,8 +315,8 @@ const JBJDesignStudio: React.FC = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
-                <Palette className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                <Palette className="w-6 h-6 text-[#B89555]" />
               </div>
               <div>
                 <h1 className="text-white text-2xl font-bold">
@@ -553,7 +553,7 @@ const JBJDesignStudio: React.FC = () => {
                       <div className="flex gap-2 mt-4">
                         <Button 
                           onClick={handleDownload}
-                          className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600"
+                          data-cta="dark" className="jj-cta-dark flex-1"
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Download
@@ -692,32 +692,32 @@ const JBJDesignStudio: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
                     {/* AI Designer Persona */}
                     <div className="p-4 rounded-xl bg-[#F7F2EA]/50 border border-[#1A1A1A]">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-3">
-                        <Sparkles className="w-8 h-8 text-white" />
+                      <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mx-auto mb-3">
+                        <Sparkles className="w-8 h-8 text-[#B89555]" />
                       </div>
-                      <h4 className="text-white font-medium">Maya Chen</h4>
-                      <p className="text-[#1A1A1A] text-sm">Lead AI Designer</p>
-                      <p className="text-white/90 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
+                      <h4 className="text-[#1A1A1A] font-medium">Maya Chen</h4>
+                      <p className="text-[#1A1A1A]/70 text-sm">Lead AI Designer</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
                     </div>
 
                     {/* Brand Manager Persona */}
-                    <div className="p-4 rounded-xl bg-[#F7F2EA]/50 border border-[#1A1A1A]">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-3">
-                        <Crown className="w-8 h-8 text-white" />
+                    <div className="p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30">
+                      <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mx-auto mb-3">
+                        <Crown className="w-8 h-8 text-[#B89555]" />
                       </div>
-                      <h4 className="text-white font-medium">Victoria Reynolds</h4>
-                      <p className="text-[#1A1A1A] text-sm">Brand Director</p>
-                      <p className="text-white/90 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
+                      <h4 className="text-[#1A1A1A] font-medium">Victoria Reynolds</h4>
+                      <p className="text-[#1A1A1A]/70 text-sm">Brand Director</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
                     </div>
 
                     {/* Content Designer Persona */}
-                    <div className="p-4 rounded-xl bg-[#F7F2EA]/50 border border-[#1A1A1A]">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center mx-auto mb-3">
-                        <Book className="w-8 h-8 text-white" />
+                    <div className="p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30">
+                      <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mx-auto mb-3">
+                        <Book className="w-8 h-8 text-[#B89555]" />
                       </div>
-                      <h4 className="text-white font-medium">James Porter</h4>
-                      <p className="text-[#1A1A1A] text-sm">Content Designer</p>
-                      <p className="text-white/90 text-xs mt-2">Creates books, reports, and long-form visual content</p>
+                      <h4 className="text-[#1A1A1A] font-medium">James Porter</h4>
+                      <p className="text-[#1A1A1A]/70 text-sm">Content Designer</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-2">Creates books, reports, and long-form visual content</p>
                     </div>
                   </div>
                 </div>

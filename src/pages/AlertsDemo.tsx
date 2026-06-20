@@ -128,7 +128,7 @@ export default function AlertsDemo() {
             </div>
 
             <div className="flex gap-3">
-              <Button className="flex-1 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold rounded-xl">
+              <Button data-cta="dark" className="jj-cta-dark flex-1 font-bold rounded-xl">
                 <Headphones className="w-4 h-4 mr-2" /> My Tickets
               </Button>
               <Button className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[#A68444] text-[#1A1A1A] font-bold rounded-xl">

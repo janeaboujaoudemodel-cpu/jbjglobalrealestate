@@ -11,7 +11,7 @@ const tools = [
     title: "Documents & Spreadsheets",
     description: "Rich text editor with AI OCR scanning, find & replace, QR codes, stamps, and ombré colors.",
     href: "/documents",
-    color: "from-amber-600 to-yellow-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "OCR + AI",
   },
   {
@@ -19,7 +19,7 @@ const tools = [
     title: "E-Signature (DocuSign)",
     description: "Create, sign, and manage contracts with AI-designed signatures, stamps, and QR verification.",
     href: "/e-signature",
-    color: "from-blue-600 to-indigo-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Contracts",
   },
   {
@@ -27,7 +27,7 @@ const tools = [
     title: "Smart Stamp Generator",
     description: "Generate professional bilingual company stamps with logo, monogram, and compliance text.",
     href: "/broker-toolkit/stamp",
-    color: "from-emerald-600 to-teal-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Branding",
   },
   {
@@ -35,7 +35,7 @@ const tools = [
     title: "QR Code Generator",
     description: "Create custom QR codes for URLs, contacts, WiFi, email, phone — with color customization.",
     href: "/qr-generator",
-    color: "from-violet-600 to-purple-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Universal",
   },
   {
@@ -43,7 +43,7 @@ const tools = [
     title: "Business Card Designer",
     description: "Design premium business cards with QR codes, multiple shapes, and digital export.",
     href: "/toolkit/corporate-suite/business-card",
-    color: "from-pink-600 to-rose-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Design",
   },
   {
@@ -51,7 +51,7 @@ const tools = [
     title: "CV / Resume Builder",
     description: "Build professional CVs with photo, QR code, accent colors, and multiple templates.",
     href: "/cv-builder",
-    color: "from-cyan-600 to-sky-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Career",
   },
   {
@@ -59,7 +59,7 @@ const tools = [
     title: "Cover Letter Generator",
     description: "AI-generated cover letters tailored to job descriptions with professional formatting.",
     href: "/toolkit/corporate-suite/cover-letter",
-    color: "from-orange-600 to-amber-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "AI",
   },
   {
@@ -67,7 +67,7 @@ const tools = [
     title: "Company Profile",
     description: "Create branded company profiles with services, team, and contact sections.",
     href: "/toolkit/corporate-suite/company-profile",
-    color: "from-teal-600 to-emerald-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Corporate",
   },
   {
@@ -75,7 +75,7 @@ const tools = [
     title: "Brand Color Palette",
     description: "Manage your 5-color brand identity with live preview. Changes apply across all creative tools.",
     href: "/owner/brand-palette",
-    color: "from-amber-500 to-yellow-500",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Brand",
   },
   {
@@ -83,7 +83,7 @@ const tools = [
     title: "Logo Maker",
     description: "Create unique logos with AI-powered design suggestions and customizable templates.",
     href: "/toolkit/corporate-suite/logo",
-    color: "from-fuchsia-600 to-pink-600",
+    color: "from-[#B89555] to-[#8a6f3f]",
     badge: "Branding",
   },
   {

@@ -444,7 +444,7 @@ export default function BlankLetterStudio() {
                   placeholder="e.g. Write a job offer letter for Jane Doe as Senior Broker, AED 18,000/month, start 1 June 2026."
                   className="text-sm resize-none flex-1" />
                 <Button onClick={handleGenerate} disabled={generating}
-                  className="self-stretch bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:opacity-90 text-white">
+                  data-cta="dark" className="jj-cta-dark self-stretch">
                   {generating ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1.5" />}
                   Generate
                 </Button>
