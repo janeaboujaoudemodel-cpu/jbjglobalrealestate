@@ -557,7 +557,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                   <Button
                     onClick={() => handleAISummary(selectedBriefing)}
                     disabled={aiSummaryLoading}
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
+                    className="jj-cta-dark"
                   >
                     {aiSummaryLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
                     Generate AI Summary
