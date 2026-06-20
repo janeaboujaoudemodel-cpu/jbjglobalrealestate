@@ -161,7 +161,7 @@ const ExploreServicesExpander = () => {
       {/* Hero panel — image fills full card; only a soft bottom gradient
           keeps the text/CTA legible. Button uses frosted-glass white so the
           image shows through behind it. */}
-      <div key={active.id} data-surface="dark" data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
+      <div key={active.id} data-surface="dark" data-ink-emerald-opt-out data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center animate-fade-in"
           style={{ backgroundImage: `url(${active.image})` }}

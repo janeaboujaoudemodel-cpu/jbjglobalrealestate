@@ -106,6 +106,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         {/* Single continuous pill: white search field, then dark action segments */}
         <div
           data-surface="dark"
+          data-ink-emerald-opt-out
           className="group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
             overflow-hidden bg-transparent border border-[#B89555]/55
             focus-within:border-[#B89555] hover:border-[#B89555]/80
@@ -115,6 +116,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               "0 18px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10)",
           }}
         >
+
 
           {/* LEFT: input — full white, edge-to-edge until the Search button.
               NOTE: Intentionally NOT wrapped in a <form>. A global rule in
