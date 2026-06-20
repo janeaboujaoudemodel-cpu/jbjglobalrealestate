@@ -299,7 +299,7 @@ const Index = () => {
 
       {/* EXPLORE OUR SERVICES — separator section between Partners marquee and the
           Get Verified / Mode Portal pair, with generous breathing room above and below. */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto pt-16 pb-16 md:pt-20 md:pb-20">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto pt-16 pb-16 md:pt-20 md:pb-20">
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <ExploreServicesCard />
@@ -337,7 +337,7 @@ const Index = () => {
 
 
       {/* FEATURED LISTINGS */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <FeaturedListings />
@@ -356,7 +356,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* RESALE PROPERTIES */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <ResalePropertiesSection />
@@ -388,7 +388,7 @@ const Index = () => {
 
 
       {/* TOOLKIT SHOWCASE CARD */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <ToolkitShowcaseCard />
@@ -397,7 +397,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <AIComparisonWidget />
