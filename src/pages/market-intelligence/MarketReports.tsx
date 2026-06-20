@@ -132,7 +132,7 @@ const MarketReportsPage = () => {
         badgeIcon={FileText}
         title="Market Reports"
         description="Downloadable reports with clear charts, government Open Data attribution, and editorial analysis for informed decisions."
-        videoSrc="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
+        videoSrc="/__l5e/assets-v1/7946e43d-6faf-4450-8730-d79ee0d2cc12/mi-market-reports.mp4"
         videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
 
