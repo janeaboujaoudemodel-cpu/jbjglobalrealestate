@@ -10,14 +10,9 @@ import {
   Plane, 
   MessageCircle,
   ArrowRight,
-  ChevronLeft,
-  ChevronRight,
   Scale,
-  Coins,
-  Users,
   Handshake,
   Wrench,
-  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PearlButton } from "@/components/ui/pearl-button";
@@ -264,15 +259,26 @@ const ExploreServicesCard = () => {
         {/* Content overlay — always visible, updates instantly */}
         <div className="absolute inset-0 z-10 flex flex-col justify-end p-5 sm:p-6 md:p-10">
           <h4 
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 transition-all duration-300" 
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 transition-all duration-300" 
             style={{ 
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F1E6 50%, #B89555 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: '#FFFFFF',
+              WebkitTextFillColor: '#FFFFFF',
+              textShadow: '0 2px 16px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)',
             }}
           >
             {currentService.title}
           </h4>
+
+          <p
+            className="max-w-xl text-sm sm:text-base md:text-lg font-medium leading-relaxed mb-5"
+            style={{
+              color: 'rgba(255,255,255,0.92)',
+              WebkitTextFillColor: 'rgba(255,255,255,0.92)',
+              textShadow: '0 2px 12px rgba(0,0,0,0.95)',
+            }}
+          >
+            {currentService.description}
+          </p>
 
 
 
@@ -301,33 +307,7 @@ const ExploreServicesCard = () => {
                 {CTA_LABELS[currentService.id] ?? "Coming Soon"}
               </Button>
             )}
-
-
-            {/* Navigation Arrows */}
-            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-              <button
-                onClick={goToPrevious}
-                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-95"
-                style={{
-                  background: 'linear-gradient(145deg, #FDFBF7, #ECE2D2)',
-                  border: '2px solid rgba(200, 167, 102, 0.7)',
-                  boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
-                }}
-              >
-                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
-              </button>
-              <button
-                onClick={goToNext}
-                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-95"
-                style={{
-                  background: 'linear-gradient(145deg, #FDFBF7, #ECE2D2)',
-                  border: '2px solid rgba(200, 167, 102, 0.7)',
-                  boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
-                }}
-              >
-                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
-              </button>
-            </div>
+            <div className="shrink-0" />
           </div>
         </div>
       </div>
