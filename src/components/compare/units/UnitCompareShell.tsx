@@ -306,20 +306,18 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                   <div className="flex flex-wrap gap-2">
                     <FieldManagerPopover visible={visible} onChange={setVisible} />
                     <button
-                      data-no-contrast-guard data-allow-dark-cta
+                      data-cta="dark"
                       onClick={exportPdf}
                       disabled={tableUnits.length < 1}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-[#1A1A1A] disabled:opacity-50"
-                      style={{ background: "#0A0A0A" }}
+                      className="jj-cta-dark inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-50"
                     >
                       <FileText className="w-4 h-4" /> Export PDF
                     </button>
                     <button
-                      data-no-contrast-guard data-allow-dark-cta
+                      data-cta="champagne"
                       onClick={() => saveComparison.mutate()}
                       disabled={saveComparison.isPending || tableUnits.length < 1}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#1A1A1A] disabled:opacity-50"
-                      style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.55)" }}
+                      className="jj-cta-champagne inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
                     >
                       <Download className="w-4 h-4" /> Save
                     </button>
