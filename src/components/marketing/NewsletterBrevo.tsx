@@ -130,41 +130,43 @@ export const NewsletterBrevo = ({
     return (
       <>
         <form onSubmit={handleSubmit} className={`flex gap-2 ${className}`}>
-          <div className="jj-newsletter-emerald relative flex-1">
+          <div className="jj-newsletter-emerald jj-emerald-glow-wrap relative flex-1">
             <Input
               type="email"
               placeholder=" "
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               data-no-contrast-guard
-              className="h-12 w-full rounded-xl border px-4 pr-4 font-semibold tracking-wide focus-visible:ring-0"
+              className="h-12 w-full rounded-xl border-0 px-4 pr-4 font-semibold tracking-wide focus-visible:ring-0"
               style={{
                 backgroundImage: 'var(--jj-emerald-ombre)',
-                borderColor: 'rgba(52,211,153,0.55)',
                 color: '#FFFFFF',
                 WebkitTextFillColor: '#FFFFFF',
-                boxShadow: '0 0 0 1px rgba(52,211,153,0.20), 0 0 22px rgba(52,211,153,0.28), inset 0 1px 0 rgba(255,255,255,0.14)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
               }}
               required
               disabled={isSubmitting}
             />
             {!email && (
               <span
-                className="jj-newsletter-placeholder pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide"
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap"
                 aria-hidden="true"
-              />
+                style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}
+              >
+                {animatedPlaceholder}
+                <span className="jj-type-caret" aria-hidden="true">|</span>
+              </span>
             )}
           </div>
           <Button
             type="submit"
             disabled={isSubmitting}
             data-no-contrast-guard
-            className="jj-newsletter-emerald relative h-12 overflow-hidden rounded-xl px-5 font-semibold transition-all duration-300 hover:brightness-110"
+            className="jj-newsletter-emerald jj-emerald-glow-wrap relative h-12 overflow-hidden rounded-xl px-5 font-semibold transition-all duration-300 hover:brightness-110"
             style={{
-              backgroundImage: 'var(--jj-emerald-light-ombre)',
-              borderColor: 'rgba(52,211,153,0.55)',
-              border: '1px solid rgba(52,211,153,0.55)',
-              boxShadow: '0 0 0 1px rgba(52,211,153,0.20), 0 0 22px rgba(52,211,153,0.34), inset 0 1px 0 rgba(255,255,255,0.18)',
+              backgroundImage: 'var(--jj-emerald-ombre)',
+              border: '0',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
               color: '#FFFFFF',
             }}
           >
