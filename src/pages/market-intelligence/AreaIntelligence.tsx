@@ -231,8 +231,8 @@ const AreaIntelligence = () => {
                         { num: "5", title: "Cost Structure", desc: "Approved service charges and municipality fees applicable to properties within the area." }
                       ].map((item, idx) => (
                         <div key={idx} className="flex gap-4 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl">
-                          <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center flex-shrink-0">
-                            <span className="text-[#1A1A1A] font-bold">{item.num}</span>
+                          <div className="w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555] flex items-center justify-center flex-shrink-0">
+                            <span className="text-[#B89555] font-bold">{item.num}</span>
                           </div>
                           <div>
                             <h4 className="font-semibold text-[#1A1A1A]">{item.title}</h4>

@@ -259,19 +259,19 @@ const Methodology = () => {
                   </p>
                   <ol className="space-y-4">
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold flex items-center justify-center text-sm">1</span>
+                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">1</span>
                       <span className="text-[#1A1A1A] pt-1">Cross-checked against its original government source</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold flex items-center justify-center text-sm">2</span>
+                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">2</span>
                       <span className="text-[#1A1A1A] pt-1">Verified for publication date and scope</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold flex items-center justify-center text-sm">3</span>
+                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">3</span>
                       <span className="text-[#1A1A1A] pt-1">Reviewed for consistency with regulatory definitions</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold flex items-center justify-center text-sm">4</span>
+                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">4</span>
                       <span className="text-[#1A1A1A] pt-1">Used exactly as published, without reinterpretation</span>
                     </li>
                   </ol>

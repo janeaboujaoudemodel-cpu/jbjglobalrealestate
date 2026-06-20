@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   MARKET_OVERVIEW_STATS,
   QUARTERLY_TRENDS,
-  PROPERTY_TYPE_TRENDS,
 } from "@/config/open-data-config";
 import {
   MI_EYEBROW,
@@ -150,7 +149,7 @@ export const MarketOverviewDashboard = () => {
           </div>
 
           {/* Charts Section */}
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
               <Card className="h-full rounded-xl jj-card-inner transition-all">
@@ -195,36 +194,8 @@ export const MarketOverviewDashboard = () => {
               </Card>
             </motion.div>
 
-            {/* Property Type Breakdown */}
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full rounded-xl jj-card-inner transition-all">
-                <CardHeader>
-                  <CardTitle className="text-[hsl(var(--mi-navy))] flex items-center gap-3">
-                    <IconBox icon={Building2} className="w-10 h-10" />
-                    <span>Price by Property Type</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {PROPERTY_TYPE_TRENDS.map((prop) => (
-                      <div key={prop.type} className="flex items-center justify-between py-3 border-b last:border-0 border-border/60">
-                        <div>
-                          <p className="text-base font-semibold leading-snug text-foreground">{prop.type}</p>
-                          <p className={MI_CAPTION}>{prop.volume.toLocaleString()} transactions</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm font-bold leading-none tracking-tight text-foreground">AED {prop.avgPrice.toLocaleString()}/sqft</p>
-                          <p className={`${MI_CHIP} mt-1 ${prop.change >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
-                            {prop.change >= 0 ? '+' : ''}{prop.change}% YoY
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
           </div>
+
 
           {/* Data Attribution */}
           <motion.div
