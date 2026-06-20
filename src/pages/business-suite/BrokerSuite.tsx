@@ -9,8 +9,8 @@ const tools = [
     href: "/ai-lead-qualification",
     colorClass: "text-purple-400",
     borderColorClass: "border-purple-500/30",
-    gradientFrom: "from-purple-600",
-    gradientTo: "to-violet-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: MessageSquare,
@@ -19,8 +19,8 @@ const tools = [
     href: "/ai-objection-handler",
     colorClass: "text-rose-400",
     borderColorClass: "border-rose-500/30",
-    gradientFrom: "from-rose-600",
-    gradientTo: "to-pink-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Calendar,
@@ -29,8 +29,8 @@ const tools = [
     href: "/ai-followup-scheduler",
     colorClass: "text-cyan-400",
     borderColorClass: "border-cyan-500/30",
-    gradientFrom: "from-cyan-600",
-    gradientTo: "to-teal-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Video,
@@ -39,8 +39,8 @@ const tools = [
     href: "/ai-meeting-summarizer",
     colorClass: "text-violet-400",
     borderColorClass: "border-violet-500/30",
-    gradientFrom: "from-violet-600",
-    gradientTo: "to-purple-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: FileCheck,
@@ -49,8 +49,8 @@ const tools = [
     href: "/ai-contract-reviewer",
     colorClass: "text-red-400",
     borderColorClass: "border-red-500/30",
-    gradientFrom: "from-red-600",
-    gradientTo: "to-rose-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
 ];
 
