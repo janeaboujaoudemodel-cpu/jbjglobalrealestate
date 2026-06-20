@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Clock, Database, History, Undo2, Eye, Sparkles, X, BedDouble } from "lucide-react";
+import { Clock, Database, History, Undo2, Eye, Sparkles, X } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { toast } from "sonner";
 import AIEnrichDialog from "./AIEnrichDialog";
-import EnrichBedroomsDialog from "./EnrichBedroomsDialog";
+// Bedroom enrichment moved to background runner — no per-project UI.
 
 interface Props {
   projectId: string;
@@ -234,15 +234,6 @@ export default function OwnerProvenanceCard({
           </Button>
           <Button
             type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setBedOpen(true)}
-            className="flex-1 h-8 text-[11px] min-w-[140px]"
-          >
-            <BedDouble className="w-3.5 h-3.5" /> Enrich bedrooms
-          </Button>
-          <Button
-            type="button"
             variant="primary"
             size="sm"
             onClick={() => openEnrich(undefined)}
@@ -322,16 +313,6 @@ export default function OwnerProvenanceCard({
         }}
       />
 
-      <EnrichBedroomsDialog
-        open={bedOpen}
-        onOpenChange={setBedOpen}
-        projectId={projectId}
-        projectName={projectName}
-        onApplied={() => {
-          refetch();
-          qc.invalidateQueries({ queryKey: ["project"] });
-        }}
-      />
     </>
   );
 }
