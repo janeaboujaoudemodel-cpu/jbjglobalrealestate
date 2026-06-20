@@ -124,7 +124,7 @@ const MarketIntelligence = () => {
       />
 
       {/* Hero — full-screen video, no logo / no badges / no keyword strip / no founder card */}
-      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen relative flex w-full items-center overflow-hidden bg-[#0A0A0A]">
+      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen relative flex w-full items-end pb-16 md:pb-24 lg:pb-28 overflow-hidden bg-[#0A0A0A]">
         <VideoBackground
           src={marketIntelligenceVideo}
           poster={marketIntelligenceHero}
@@ -161,11 +161,11 @@ const MarketIntelligence = () => {
             className="mt-8 flex flex-wrap gap-3"
             variants={fadeInUp}
           >
-            <a href="#overview" className={heroCtaClass}>
+            <a href="#overview" data-no-contrast-guard className={heroCtaClass}>
               <span>Explore Market Dashboard</span>
               <ArrowUpRight className="w-5 h-5" />
             </a>
-            <Link to="/market-report" className={heroCtaClass}>
+            <Link to="/market-report" data-no-contrast-guard className={heroCtaClass}>
               <span>View Daily Reports</span>
               <ArrowUpRight className="w-5 h-5" />
             </Link>
