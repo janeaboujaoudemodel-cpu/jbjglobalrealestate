@@ -7696,3 +7696,112 @@ html body .jj-pill-emerald[class]:is(:hover,:focus,:active,:focus-visible) :is(s
   stroke: #FFFFFF !important;
   fill: none !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 18 — FINAL EMERALD UNIFICATION
+   ----------------------------------------------------------------
+   1) Horizontal header icons: gold → emerald
+   2) Sidebar collapse / expand button: gold → emerald
+   3) Kill any green/gold underline under sidebar highlight links
+      (e.g. "Buy Property") — they are nav links, never underlined
+   4) Strip the white/champagne layer behind "Ready to Get Started"
+      so only the emerald card shows
+   5) Reinforce .jj-pill-emerald white-on-emerald (Email/Call/Chat
+      + Top-Areas Explore pill). Wins after every later rule.
+   ════════════════════════════════════════════════════════════════ */
+
+/* 1) Horizontal header — emerald accents instead of gold */
+html body [data-jj-utility-bar] button[aria-label="Search"],
+html body [data-jj-utility-bar] button[aria-label="Filter"],
+html body [data-jj-utility-bar] a[aria-label="Favorites"] {
+  color: #047857 !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Search"]:hover,
+html body [data-jj-utility-bar] button[aria-label="Filter"]:hover,
+html body [data-jj-utility-bar] a[aria-label="Favorites"]:hover {
+  background-color: rgba(4,120,87,0.10) !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Search"] svg,
+html body [data-jj-utility-bar] button[aria-label="Filter"] svg,
+html body [data-jj-utility-bar] a[aria-label="Favorites"] svg {
+  color: #047857 !important;
+  stroke: #047857 !important;
+}
+/* sq ft / sq m segmented control — emerald hairline */
+html body [data-jj-utility-bar] .inline-flex[class*="border-[#B89555]"] {
+  border-color: rgba(4,120,87,0.55) !important;
+}
+/* header bottom hairline (after pseudo) — already champagne gold, fine */
+
+/* 2) Sidebar collapse button — emerald */
+html body [data-sidebar-collapse-control],
+html body [data-sidebar-collapse-control] *,
+html body .jbj-sidebar-collapse-control,
+html body .jbj-sidebar-collapse-control * {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+}
+html body [data-sidebar-collapse-control] svg,
+html body [data-sidebar-collapse-control] svg *,
+html body .jbj-sidebar-collapse-control svg,
+html body .jbj-sidebar-collapse-control svg * {
+  color: #047857 !important;
+  stroke: #047857 !important;
+}
+html body button.jbj-sidebar-collapse-control,
+html body [data-sidebar-collapse-control]:not(.jj-side-tile) {
+  border-color: rgba(4,120,87,0.45) !important;
+  background: transparent !important;
+}
+html body button.jbj-sidebar-collapse-control:hover,
+html body [data-sidebar-collapse-control]:not(.jj-side-tile):hover {
+  background: linear-gradient(135deg, rgba(236,253,245,0.95), rgba(209,250,229,0.95)) !important;
+  border-color: #047857 !important;
+  box-shadow:
+    0 10px 24px -10px rgba(4,120,87,0.55),
+    0 0 0 1px rgba(4,120,87,0.45),
+    0 0 12px rgba(52,211,153,0.30) !important;
+}
+
+/* 3) Kill underline / after-bar on sidebar highlight links and
+      Buy/Off-Plan style section labels — no decorative bar under text */
+html body [data-sidebar-highlight]::after,
+html body [data-sidebar-highlight-label]::after,
+html body [data-sidebar-section-label]::after,
+html body [data-sidebar-subitem-label]::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  height: 0 !important;
+}
+
+/* 4) Ready to Get Started — strip the outer light layer behind the
+      emerald card so only the card itself is visible. The wrapping
+      <section> in CombinedContactNewsletter uses bg-[#FDFBF7]. */
+html body section#ready-to-get-started {
+  background-color: transparent !important;
+  background-image: none !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+html body section#ready-to-get-started > div {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* 5) jj-pill-emerald — re-assert white text/icons (covers Email/Call/Chat
+      on listing cards AND the Top-Areas "Explore" pill rendered as span). */
+html body :is(a, button, span, div).jj-pill-emerald,
+html body :is(a, button, span, div).jj-pill-emerald *,
+html body :is(a, button, span, div).jj-pill-emerald:is(:hover,:focus,:active,:focus-visible),
+html body :is(a, button, span, div).jj-pill-emerald:is(:hover,:focus,:active,:focus-visible) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is(a, button, span, div).jj-pill-emerald :is(svg, [class*="lucide"]),
+html body :is(a, button, span, div).jj-pill-emerald :is(svg, [class*="lucide"]) *,
+html body :is(a, button, span, div).jj-pill-emerald:is(:hover,:focus,:active) :is(svg, [class*="lucide"]),
+html body :is(a, button, span, div).jj-pill-emerald:is(:hover,:focus,:active) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
