@@ -37,7 +37,7 @@ const FeaturedListings = () => {
             <Home className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("featured.title", "Featured Properties")}</span>
           </span>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A]">
+          <h2 data-no-contrast-guard className="jj-title-emerald text-2xl md:text-3xl font-bold">
             {t("featured.heading", "Handpicked For You")}
           </h2>
         </div>

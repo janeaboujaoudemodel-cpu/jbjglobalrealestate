@@ -421,37 +421,28 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Email about ${project.name}`}
-            data-surface="champagne"
-            data-cta="champagne"
-            className="jj-cta-champagne w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
-            style={{ color: "#1A1A1A" }}
+            className="jj-pill-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
-            <span className="truncate text-xs font-semibold" style={{ color: "#1A1A1A" }}>Email</span>
+            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold">Email</span>
           </a>
           <a
             href={callHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Call about ${project.name}`}
-            data-surface="champagne"
-            data-cta="champagne"
-            className="jj-cta-champagne w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
-            style={{ color: "#1A1A1A" }}
+            className="jj-pill-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
-            <span className="truncate text-xs font-semibold" style={{ color: "#1A1A1A" }}>Call</span>
+            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold">Call</span>
           </a>
           <a
             href={whatsappHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`WhatsApp about ${project.name}`}
-            data-surface="champagne"
-            data-cta="champagne"
-            className="jj-cta-champagne w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
-            style={{ color: "#1A1A1A" }}
+            className="jj-pill-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
-            <span className="truncate text-xs font-semibold" style={{ color: "#1A1A1A" }}>Chat</span>
+            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold">Chat</span>
           </a>
         </div>
       </div>

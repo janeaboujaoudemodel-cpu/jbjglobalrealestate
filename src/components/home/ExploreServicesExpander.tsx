@@ -96,7 +96,7 @@ const ExploreServicesExpander = () => {
             <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             <span className="allow-white" style={{ color: "#FFFFFF" }}>Premium Real Estate Services</span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-[#0A0A0A] hover:text-[#B89555] tracking-tight transition-colors cursor-default">
+          <h2 data-no-contrast-guard className="jj-title-emerald text-xl md:text-2xl font-bold tracking-tight cursor-default">
             Explore Our Services
           </h2>
           <p className="mt-1 text-sm text-[#1A1A1A]/70">
@@ -161,7 +161,7 @@ const ExploreServicesExpander = () => {
       {/* Hero panel — image fills full card; only a soft bottom gradient
           keeps the text/CTA legible. Button uses frosted-glass white so the
           image shows through behind it. */}
-      <div key={active.id} data-surface="dark" data-ink-emerald-opt-out data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
+      <div key={active.id} data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center animate-fade-in"
           style={{ backgroundImage: `url(${active.image})` }}

@@ -1,82 +1,85 @@
-## What's actually broken
+## Goal
+Elevate the Ink Emerald (`var(--gradient-ink)` / emerald #0B3B2E family) from "dark-CTA repaint" into a **deliberate brand accent system** used consistently across titles, icons, key CTAs, and signature surfaces — so the site feels cohesive, premium, and unmistakably JBJ. No black/champagne removed; emerald becomes the *hero accent* alongside gold.
 
-Both bugs share one root cause: the PASS 9 ink-emerald rule (added in the last session at the bottom of `src/index.css`) is too aggressive.
+---
 
-That rule paints `background-image: var(--gradient-ink) !important; background-color: transparent !important;` on **any** element matching `[data-surface="dark"]` / `.surface-dark` / `[data-surface="ink"]` / `[data-surface="navy"]` — not just real CTAs.
+## 1. Bug fix — Continue Searching cards show no project image
+**File:** `src/components/home/ContinueSearchingRail.tsx` (and/or the card primitive it renders)
 
-`data-surface="dark"` is used in 28+ places across the app purely as a **text-color hint** for the contrast guard (it tells the cascade "white text is allowed inside me"). It was never meant to repaint the element's own background. PASS 9 hijacks it and:
+Symptom (screenshot 1): every card is a solid emerald gradient with only the developer logo tile + title — the actual project cover photo never paints. Root cause is the same PASS 9 emerald repaint bleeding into the card's image surface (the card root or its image wrapper carries `data-surface="dark"` / `bg-[#0A0A0A]` for the fallback color, so the gradient overrides the `<img>`'s background).
 
-1. **Explore Our Services card (image cropped to right half).**
-   `ExploreServicesExpander.tsx` line 172 — the inner text overlay `<div data-surface="dark" className="… max-w-xl">` covering the left half of the hero photo gets repainted with the solid emerald gradient. That's the dark-green wall the user circled. The image is fine; it's just hidden behind a PASS-9-painted overlay.
+**Fix:** add `data-ink-emerald-opt-out` to the card image wrapper (the `<div>` that holds the `<img>` / background-image), and ensure the image element itself uses `object-cover` over a neutral champagne fallback. Verify by reading the component first.
 
-2. **Hero search bar ("Search" word white-on-white / invisible placeholder).**
-   `HomeHeroSearch.tsx` line 108 — the pill wrapper has `data-surface="dark"`. PASS 9 makes its background transparent and paints emerald behind it, then a separate cascade rule forces white text on every non-excluded descendant. Combined with the white input/Search-button segments inside the pill, the visible result is "Search" rendered white on the white button surface.
+---
 
-Same family of regressions will appear anywhere else a `data-surface="dark"` wrapper holds a photo, glass surface, or white inner segment (Footer, AssistantChat, AreaHeroSection, FeaturedListings, ToolkitShowcaseCard, HeroPropertySearch, ModeSwitcher, ProjectDetailLayout, etc.). 28 files use this attribute today.
+## 2. JBJ Royal Tools Hub — make the active tool panel show its full image
+**File:** `src/pages/JBJDesignStudio.tsx` or `src/components/tools/RoyalToolsHub.tsx` (whichever renders the Property Evaluator / Comparison / AI Home Finder / Mortgage / Rental Index / List-for-Sale tabbed panel from screenshot 2)
 
-## Fix
+Currently the left half is a solid emerald wall and the photo only shows on the right. Same root cause. **Fix:** add `data-ink-emerald-opt-out` to the panel's image container so the full magnifier-on-blueprints photo shows edge-to-edge. The `Get Evaluation` button stays emerald (already correct — that's the target CTA style).
 
-Tighten PASS 9 so it only repaints elements that **explicitly opt in** to the emerald ink, never the generic text-color hint attributes.
+---
 
-### 1. `src/index.css` — PASS 9 block (lines 6395–6465)
+## 3. Explore Our Services — match `Explore Now` button to Get Evaluation
+**File:** `src/components/home/ExploreServicesExpander.tsx`
 
-Replace the surface list in the repaint selector with the opt-in attributes and the locked CTA primitives only.
+The card image opt-out is already in place. Now upgrade the **`Explore Now`** button to the same emerald-gradient pill used by `Get Evaluation` (apply `.jj-cta-dark` or `data-cta="dark"` class so PASS 9 paints it with `var(--gradient-ink)` + gold hairline + white text). Same hover behavior.
 
-Before (current):
+---
+
+## 4. Handpicked For You — emerald-tint the Email / Call / Chat trio
+**File:** `src/components/properties/PropertyCard.tsx` (or the action-row sub-component)
+
+Currently the three pill buttons are champagne with ink text (screenshot 3). Promote them to **emerald-outline pills**: 1px emerald hairline border + emerald icon + emerald label on champagne fill; on hover, fill emerald with white text/icon. This applies **everywhere these three actions appear** (project detail page, search results, favorites, broker views) — single-source change in the card component.
+
+---
+
+## 5. Section title + icon emerald promotion
+Promote signature section titles & their icon tiles to emerald (instead of black ink) so the brand color leads the eye:
+
+- **Top Areas in Dubai** (screenshot 5) — title in emerald, `<IconTile tone="emerald">` for the `📍 TOP AREAS` chip, **Area names** ("Dubai Islands", "Business Bay", "Dubai South") in emerald.
+- **Explore Our Guides & Reports** — title + icon in emerald.
+- **Ready to Get Started** (screenshot 4) — `GET IN TOUCH` chip already emerald (good); upgrade the three contact cards (WhatsApp / Call Us / Email): icon tile in emerald, label "WHATSAPP/CALL US/EMAIL" in emerald, value in ink.
+- **Featured Properties → Handpicked For You** (screenshot 3) — `🏠 FEATURED PROPERTIES` chip stays emerald (already good).
+- **Recently Viewed → Continue Searching** — clock-history icon chip in emerald.
+
+**Implementation:** introduce a new design token + utility class:
+
+```css
+/* index.css */
+:root { --emerald-ink: #0B3B2E; --emerald-ink-soft: #134E3A; }
+.jj-title-emerald { color: var(--emerald-ink); }
+[data-icon-tile-tone="emerald-strong"] { background: var(--gradient-ink); color: #fff; }
 ```
-.jj-cta-dark, .jj-navy-cta, [data-cta="dark"],
-[data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
-.surface-dark, .surface-ink, .surface-navy,
-[data-ink-emerald], [data-hero-dark],
-[class~="bg-[#0A0A0A]"], [class~="bg-[#1A1A1A]"], [class~="bg-[#1F1F1F]"], [class~="bg-black"]
-```
 
-After:
-```
-.jj-cta-dark, .jj-navy-cta, [data-cta="dark"],
-[data-ink-emerald], [data-hero-dark]
-```
+Then update `<IconTile />` to accept `tone="emerald"` (already exists per memory) and ensure it maps to the new strong emerald, and add `<SectionHeader emerald />` prop (or just apply `.jj-title-emerald` to specific section h2s).
 
-Drop the broad `data-surface="dark|ink|navy"`, `.surface-dark|ink|navy`, and raw `bg-[#0A0A0A]/bg-[#1A1A1A]/bg-[#1F1F1F]/bg-black` selectors from PASS 9. Those classes/attributes remain valid for the contrast contract but no longer trigger an emerald repaint.
+---
 
-Update the hover block identically (only `.jj-cta-dark`, `.jj-navy-cta`, `[data-cta="dark"]` stay).
+## 6. Scroll-to-top / scroll arrows → emerald & restyled
+**File:** `src/components/ui/ScrollToTop.tsx` (and any inline up/down chevrons in `src/pages/Index.tsx`)
 
-Net effect: the emerald gradient survives **only** on real dark CTA buttons (already gold-hairlined, white text, opt-in) and on any wrapper the developer explicitly tags `data-ink-emerald` / `data-hero-dark` (Property Measurement hero, etc. — already done last session).
+Replace the plain ↑/↓ arrow buttons with a **circular emerald pill** (44px, `var(--gradient-ink)` fill, white chevron, gold hairline ring, soft emerald shadow). Use a different icon variant — `ArrowUpToLine` / `ArrowDownToLine` from lucide — for a more distinctive shape than the current basic arrow.
 
-### 2. `src/pages/Index.tsx` — no change required, but verify
+---
 
-Once PASS 9 stops repainting `data-surface="dark"`, the HomeHeroSearch pill returns to its intended transparent state over the hero video. The Search button reads black-on-white again, the placeholder is visible, and the typed text uses its inline `#1A1A1A` color.
+## 7. Memory updates
+Update `mem://style/color-palette/ink-emerald-gradient-standard` to record the **promotion**:
 
-### 3. `src/components/home/ExploreServicesExpander.tsx` — small cleanup
+- Emerald is now a **brand accent**, not just a CTA repaint
+- Approved emerald uses: signature CTAs, section titles (curated list), icon tiles on key chips, area/zone names, scroll-to-top control, contact card icons + labels
+- Forbidden: emerald on body text, on photo overlays (must opt-out), on every button (keep ink CTAs for tertiary actions), on input fields
 
-Remove the stray `data-surface="dark"` from the **inner text overlay** at line 172. It was only there as a text-color hint and is structurally wrong (the overlay sits on top of a photo, not on a dark surface). Keep `data-surface="dark"` on the hero panel root (line 164) — it's now harmless after the PASS 9 scope-down and still helps the existing contrast contract keep the headline/description white over the photo.
+Also add a new short rule to `mem://index.md` Core section:
+> Emerald promotion: titles in Top Areas / Guides / Reports / Ready-to-Get-Started, contact-card icons+labels, area names, scroll-to-top, and primary CTAs (`Explore Now`, `Get Evaluation`, `View All Projects`, Email/Call/Chat trio) use `var(--gradient-ink)` family. Body text + photo overlays always opt-out.
 
-### 4. Sweep for similar regressions
-
-After step 1, walk every page that uses `data-surface="dark"` over imagery or white inner content. Files to spot-check in the preview (no edits expected, just verify the emerald wall is gone):
-
-- `src/components/home/ToolkitShowcaseCard.tsx`
-- `src/components/home/FeaturedListings.tsx`
-- `src/components/home/HeroPropertySearch.tsx`
-- `src/components/home/OverseasInvestorsStrip.tsx`
-- `src/components/area-detail/AreaHeroSection.tsx`
-- `src/components/market-intelligence/MarketIntelligenceHero.tsx`
-- `src/components/project-detail/ProjectDetailLayout.tsx`
-- `src/components/PropertiesHeroVideo.tsx`
-- `src/components/ModeSwitcher.tsx`
-- `src/components/Footer.tsx`
-- `src/pages/About.tsx`, `src/pages/Awards.tsx`
-
-If any still need the emerald gradient as their actual background, tag them explicitly with `data-ink-emerald` (the opt-in path).
-
-### 5. Memory
-
-Update `mem://style/color-palette/ink-emerald-gradient-standard` to record the scope correction: **PASS 9 paints only `.jj-cta-dark`, `.jj-navy-cta`, `[data-cta="dark"]`, and explicit `[data-ink-emerald]` / `[data-hero-dark]` opt-ins. It must never auto-paint `data-surface="dark"` or raw `bg-[#0A0A0A]` utilities, because those are used as contrast hints and would bleed the gradient over photos, glass surfaces, and white inner segments.**
+---
 
 ## Verification
+1. Browser screenshot homepage at desktop width — verify: Continue Searching cards show real photos; Royal Tools Hub photo edge-to-edge; Explore Now matches Get Evaluation; Email/Call/Chat are emerald-outlined; Top Areas title + area names are emerald; Ready-to-Get-Started cards have emerald icons + labels; scroll-to-top is an emerald pill.
+2. Spot-check the project detail page to confirm Email/Call/Chat upgrade carries through.
+3. Confirm no regression: hero search bar, Explore Our Services photo, Buy Property card image still show photos (opt-outs intact).
 
-After the edit, in the live preview:
-
-1. `/` — Explore Our Services card: the full Buy Property / Sell / Rent photo is visible edge-to-edge, only a soft bottom gradient remains for text legibility.
-2. `/` — Hero pill: placeholder "Search projects, developers, areas, tools…" is visible in mid-gray, "Search" button reads as black-on-white, "Free Consultation" reads as white-on-dark.
-3. Spot-check 3–4 of the sweep files above; confirm no green wall appears over imagery or glass panels.
+## Out of scope
+- No backend / data / RLS changes.
+- No new pages or routes.
+- Existing black CTAs not listed above stay as-is.
