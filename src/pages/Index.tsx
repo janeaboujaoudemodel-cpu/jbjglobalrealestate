@@ -202,7 +202,7 @@ const Index = () => {
   }, []);
 
   return (
-    <section data-home-page className="relative w-full min-h-screen bg-[#F7F2EA]">
+    <section data-home-page className="relative w-full min-h-screen bg-[#F7F2EA] overflow-hidden">
 
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
@@ -444,7 +444,7 @@ const Index = () => {
 
 
       <PodcastVisibilityGate>
-        <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
+        <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
           <LazyVisible minHeight={400}>
             <Suspense fallback={<SectionLoader />}>
               <JBJPodcastSection />
@@ -454,7 +454,7 @@ const Index = () => {
       </PodcastVisibilityGate>
 
       {/* TOP AREAS IN DUBAI */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <AreasWeCover />
@@ -463,7 +463,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* READY TO GET STARTED — restored under Top Areas */}
-      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={300}>
           <Suspense fallback={<SectionLoader />}>
             <CTABand />
