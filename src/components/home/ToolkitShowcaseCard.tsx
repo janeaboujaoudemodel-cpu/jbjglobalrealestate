@@ -156,7 +156,7 @@ export function ToolkitShowcaseCard() {
                   }}
                   data-no-contrast-guard
                   className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-3 text-[13px] font-semibold whitespace-nowrap rounded-none transition-colors duration-200 ${
-                    isActive ? "" : "hover:bg-white/10"
+                    isActive ? "jj-tab-active-metallic" : "hover:bg-white/10"
                   }`}
                 >
                   <Icon className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
