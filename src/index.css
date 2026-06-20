@@ -5051,7 +5051,19 @@ html body :is(
   [style*="background" i][style*="#022c22" i],
   [style*="background" i][style*="#064e3b" i],
   [style*="background" i][style*="#2e1065" i],
-  [style*="background" i][style*="#4c1d95" i]
+   [style*="background" i][style*="#4c1d95" i],
+   [class~="bg-gradient-to-br"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1a1a1a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="from-black"],
+   [class~="bg-gradient-to-r"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-r"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="to-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="to-black"]
 ),
 html body :is(
   .jj-cta-dark,
