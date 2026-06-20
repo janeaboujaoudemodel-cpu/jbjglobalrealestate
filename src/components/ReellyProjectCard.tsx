@@ -143,57 +143,14 @@ const ReellyProjectCard = ({
  
        <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
          {/* Image with Carousel */}
-          <div className="aspect-[16/10] overflow-hidden relative">
-             <VerifiedMedia
-               src={primaryImageUrl}
-               alt={images[currentImageIndex]?.alt_text || project.name}
-               className="object-cover group-hover:scale-105 transition-transform duration-300"
-               placeholderLabel=""
-             />
-           
-           {/* Navigation Arrows */}
-           {images.length > 1 && (
-             <>
-               <button
-                 onClick={handlePrevImage}
-                 className={
-                   "absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                   "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-                   "border border-[#B89555]/70 text-[#1A1A1A] " +
-                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                   "hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]"
-                 }
-               >
-                 <ChevronLeft className="w-4 h-4" />
-               </button>
-               <button
-                 onClick={handleNextImage}
-                 className={
-                   "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                   "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-                   "border border-[#B89555]/70 text-[#1A1A1A] " +
-                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                   "hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]"
-                 }
-               >
-                 <ChevronRight className="w-4 h-4" />
-               </button>
-               
-               {/* Image Dots Indicator */}
-               <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex gap-1 z-10">
-                 {images.slice(0, 5).map((_, idx) => (
-                   <span
-                     key={idx}
-                     className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                       idx === currentImageIndex
-                         ? 'bg-[#EFE6D6] shadow-[0_0_10px_hsl(var(--gold)/0.55)]'
-                         : 'bg-[#EFE6D6]/35'
-                     }`}
-                   />
-                 ))}
-               </div>
-             </>
-           )}
+          <div className="aspect-[16/10] overflow-hidden relative bg-[#EFE6D6]">
+              <VerifiedMedia
+                src={primaryImageUrl}
+                alt={images[currentImageIndex]?.alt_text || project.name}
+                className="object-cover w-full h-full"
+                placeholderLabel=""
+              />
+            
            
              {/* Top-Left: Sale Status Badge */}
               {(() => {

@@ -1,80 +1,72 @@
-# Brochure Readability + Real-Source Lock + AI Presentation Generator
+# Filter Bar Polish + Black-on-Black Cleanup + Mobile/Tablet Fixes
 
-## 1. Fix wordmark clipping on brochure card
+Six concrete bugs from your screenshot + voice notes. Tight, surgical fixes.
 
-Problem (your screenshot): the brand pill on the brochure mockup shows only "JBJ GLO" because the wordmark at 14px + 0.2em tracking + 40px monogram + pill padding overflows the 380px card.
+## 1. Filter pill hover crops the top border
 
-Changes in `src/components/project-detail/PremiumBrochureCard.tsx`:
-- Shrink the monogram tile from 40×40 → 32×32 inside the pill.
-- Drop wordmark letter-spacing 0.18em → 0.10em (gold "JBJ") and 0.20em → 0.12em ("Global Real Estate"); keep weights 800 / 600.
-- Reduce font-size to 12.5px so the pill fits the card with ~16px breathing room on the right.
-- Constrain pill: `max-width: calc(100% - 56px)` and `right: 16px` fallback so it can never clip behind the lock icon.
-- Bump scrim to `rgba(6,10,18,0.95)` + 1.5px gold hairline for crisper contrast.
-- Verify by re-rendering the project page and confirming full "JBJ GLOBAL REAL ESTATE" reads on a 380px card.
+**Cause:** `filterPillInactiveLight` in `src/components/filters/filterStyles.ts` uses `hover:-translate-y-0.5`. Because the pill's parent row uses `overflow: hidden` (filter scroller), the 2px lift clips the top.
 
-## 2. Lock brochure download to developer-uploaded files only
+**Fix:**
+- Remove `hover:-translate-y-0.5` from `filterPillInactiveLight`.
+- Replace the lift with a soft 3D feel that lives **inside** the pill: `hover:shadow-[0_4px_12px_rgba(184,149,85,0.18)] hover:bg-[#F7F2EA] hover:border-[#B89555]` + a subtle `transition-shadow`.
+- Same treatment for `togglePillOff` and `filterSecondaryButton`.
 
-Already partly in place — harden it:
-- Download handler accepts ONLY `projects.brochure_url` OR `projects.fact_sheet_url` set by owner/developer, or files persisted by `brochure-auto-fetch` with `source_kind ∈ ('developer_direct','fact_sheet','provident')`.
-- If neither exists → button label flips to **"Request official brochure"** and opens the existing lead-capture modal. No generated/AI PDF is ever offered as a brochure.
-- Label is dynamic: "Download Brochure" when `brochure_url` exists, "Download Fact Sheet" when only `fact_sheet_url` exists, "Download Brochure + Fact Sheet" when both (two buttons stacked).
-- Add a tiny ink caption under the button: *"Official document from {developerName}"* when present.
+## 2. "Dropdown looks overrided — full black" + unreadable titles next to Reset
 
-## 3. Project Presentation Generator (Reelly-style, per-project)
+**Cause:** Filter popovers (Price, Payments, Handover, etc.) render inside the global black-CTA repaint zone, which is flipping their internal section headers/labels to white-on-light. And the section title strip next to the Reset button in `AdvancedFilterPanel` inherits ink-on-ink from the same guard.
 
-Visible on `/project/:slug` ONLY for **broker | owner | developer** modes (hidden for investor + anonymous, enforced via `useUserMode` + `ActionGate`).
+**Fix in `AdvancedFilterPanel.tsx` + each popover content wrapper:**
+- Add `data-no-contrast-guard` to the popover `<PopoverContent>` root so the global guard doesn't repaint inner text/icons.
+- Force the panel surface explicitly: `bg-[#FDFBF7] text-[#1A1A1A]` on the outer wrapper.
+- Section headers ("Price", "Payment plan", "Bedrooms", etc.) get `text-[#1A1A1A] font-semibold` (no /XX fade).
+- Reset button uses `filterSecondaryButton` token (already champagne+ink+gold).
+- Audit `index.css` PASS guards: scope the dark-CTA repaint to `button:not([data-no-contrast-guard] button)` so popover internals never get touched.
 
-### Entry point
-A new "Generate Presentation" card next to the brochure card — gold-hairline champagne panel, ink title, gold "Generate" CTA.
+## 3. Search input "behavior" cleanup
 
-### Wizard (`PresentationBuilderDialog`) — 4 steps
+**Fix in `FilterShortcutBar.tsx` search pill:**
+- Make placeholder text full ink at /60 (currently /70 reads as faded on champagne hairline). Tested still passes AA on `#FDFBF7`.
+- Trim the AED suffix from the min/max price inputs on mobile (<480px) — it overlaps the number.
+- Enter key on search now triggers query (currently only debounce).
 
-**Step 1 — Units**
-- Multi-select up to 5 units from `project_units` (bedrooms, size, price, floor).
-- "Skip / use whole project" option for a generic project deck.
+## 4. iPad sidebar cropped at bottom
 
-**Step 2 — Presenter card** (all fields optional; empty fields are silently omitted from the deck)
-- Photo upload (cropped circle, stored in `presentation-assets` bucket).
-- Name, Title, Phone, Email, WhatsApp, Company logo override.
-- "Save as my default presenter profile" toggle → persists to `user_presenter_profiles` so next time it's pre-filled.
+**Cause:** The 88px L-shaped sidebar uses `h-[calc(100vh-88px)]` but on iPad Safari, `100vh` includes the browser chrome that disappears on scroll. Bottom icons get cut off.
 
-**Step 3 — Sections** (all on by default; toggle off to skip)
-- Cover, Project overview & USPs, Location & connectivity, Master plan, Amenities, Gallery, Unit cards (one per selected unit with floor plan), Payment plan, Handover, Developer profile, Presenter contact, Brochure & Fact Sheet appendix link.
+**Fix in `src/components/layout/AppSidebar.tsx`:**
+- Replace `100vh` with `100dvh` (dynamic viewport height) — safari-stable.
+- Add `overflow-y-auto` + `scrollbar-width: none` to the sidebar's icon column so any overflow scrolls invisibly instead of clipping.
+- Tablet breakpoint (768-1024px): collapse the sidebar to a 56px rail (icons only, no labels) so it never runs out of room.
 
-**Step 4 — Preview & Export**
-- Live HTML preview at 1920×1080 with brand palette (champagne/gold/ink, AI purple banned from this output).
-- Export: PDF (print pipeline), PPTX (via `pptxgenjs`), Share link (signed URL to PDF in storage, 30-day expiry).
-- "Save to my presentations" → row in `user_presentations` for re-export later.
+## 5. Listing photos shifting / not loading
 
-### Data sources (all auto-pulled, no fabrication)
-- `projects` (name, USPs, status, handover, location, payment_plan)
-- `project_images` (gallery + cover)
-- `project_amenities`
-- `project_units` (selected ones) + their `floor_plan_url`
-- `developers` (profile, logo)
-- `projects.brochure_url` / `fact_sheet_url` → linked as appendix (not re-rendered)
-- Presenter inputs from Step 2
+**Cause:** `<ListingCard />` cover image uses `<img>` with no fixed aspect ratio while the loading skeleton has a different height → layout jumps when the image loads. Some `<img>` instances also lack `loading="lazy"` + `decoding="async"`.
 
-Empty/missing fields/sections are skipped entirely — never "N/A" or fake placeholders (per brand rule).
+**Fix in `src/components/properties/ListingCard.tsx` (and grid card variants):**
+- Wrap cover in `aspect-[4/3] overflow-hidden bg-[#EFE6D6]` so the slot is reserved before the image loads.
+- Add `loading="lazy" decoding="async"` to all listing covers.
+- On error, swap to `getHighResImageUrl` fallback (already in repo) — currently only handled in some cards.
+- Use `object-cover w-full h-full` so images never letterbox or shift.
 
-### Files
+## 6. Touch-up: hover-lift removed from any other clipped contexts
 
-**New**
-- `src/components/presentation-builder/GeneratePresentationCard.tsx` — entry card
-- `src/components/presentation-builder/PresentationBuilderDialog.tsx` — 4-step wizard
-- `src/components/presentation-builder/steps/{UnitPicker,PresenterDetails,SectionsToggle,PreviewExport}.tsx`
-- `src/components/presentation-builder/slides/*.tsx` — Cover, Overview, Amenities, Gallery, Unit, PaymentPlan, Developer, Contact, Appendix
-- `src/components/presentation-builder/buildProjectDeck.ts` — assembles slide list from project + selections
-- `src/components/presentation-builder/exportDeck.ts` — PDF (print) + PPTX (pptxgenjs)
-- Migration: `presentation-assets` bucket (private, owner-read), `user_presenter_profiles` table, `user_presentations` table
+Audit and remove `hover:-translate-y-*` from elements inside any horizontally-scrolling row (filter bar, segmented controls, tab strip). Replace with shadow-only hover.
 
-**Edited**
-- `src/components/project-detail/PremiumBrochureCard.tsx` — wordmark fix + source lock
-- `src/components/project-detail/ProjectDetailLayout.tsx` — mount `<GeneratePresentationCard />` next to brochure (gated by user mode)
+---
 
-### Out of scope (v1)
-- Inline slide editing (deck is read-only preview; v2)
-- Emailing the deck from inside the wizard (Share-link covers this)
-- Investor mode access
+## Files to edit
 
-Reply **Approve** to build, or tell me what to change.
+- `src/components/filters/filterStyles.ts` — remove translate, add shadow hover
+- `src/components/filters/AdvancedFilterPanel.tsx` — `data-no-contrast-guard`, explicit ink titles
+- `src/components/filters/FilterShortcutBar.tsx` — search polish, AED suffix
+- `src/index.css` — scope dark-CTA guard to skip `[data-no-contrast-guard] *`
+- `src/components/layout/AppSidebar.tsx` — dvh + auto-scroll + tablet rail
+- `src/components/properties/ListingCard.tsx` — aspect ratio + lazy + fallback
+- (Audit pass) `rg "hover:-translate-y" src/components` — strip from any pill inside scrollers
+
+## Out of scope (separate ticket if you want)
+
+- Major sidebar redesign for mobile (hamburger drawer)
+- Image CDN swap
+
+Reply **Approve** to build.

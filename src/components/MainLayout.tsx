@@ -269,7 +269,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <div data-chrome="header" className="sm:hidden">
             <GlobalHeader forceSolid={needsHeaderSpacing} />
           </div>
-          <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
+          <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-[100dvh] z-[9997]">
             <GlobalVerticalNav />
           </div>
           <div data-chrome="utility-bar" className="hidden sm:block">
