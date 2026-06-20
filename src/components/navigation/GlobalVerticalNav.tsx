@@ -1056,16 +1056,17 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     if (hasMega) handleNavClick(item.megaMenu, e);
                     else handleNavClick(undefined);
                   }}
+                  data-sidebar-highlight
                   data-no-contrast-guard
-                  style={{ color: '#B89555' }}
-                    className={`group flex items-center gap-2 px-2.5 py-[7px] text-[12px] font-semibold transition-all duration-200 !text-[#B89555] ${getItemStyle(item)}`}
+                  style={{ color: '#1A1A1A' }}
+                    className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] font-semibold transition-all duration-200 rounded-lg ${getItemStyle(item)}`}
                 >
-                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#0A0A0A]/10 group-hover:border-[#0A0A0A]/70">
-                    <Icon className="w-3 h-3 text-[#B89555] group-hover:text-[#0A0A0A] transition-colors" />
+                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0">
+                    <Icon className="w-3 h-3 transition-colors" />
                   </span>
-                  <span data-no-contrast-guard className={`flex-1 text-left relative inline-block !text-[#B89555] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}>{item.label}</span>
+                  <span data-sidebar-highlight-label data-no-contrast-guard className="flex-1 text-left relative inline-block transition-colors duration-200" style={{ color: '#1A1A1A' }}>{item.label}</span>
                   {hasMega && (
-                    <ChevronRight data-no-contrast-guard style={{ color: '#B89555' }} className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90" : "opacity-60"}`} />
+                    <ChevronRight data-no-contrast-guard className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90" : "opacity-60"}`} />
                   )}
                 </Link>
               );
@@ -1087,9 +1088,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <button
                     onClick={(e) => toggleSection(sectionKey, e)}
                     data-sidebar-section
+                    data-active={sectionHighlighted ? 'true' : undefined}
                     data-no-contrast-guard
                     style={{ color: '#B89555' }}
-                    className="w-full flex items-center gap-2 px-2.5 py-[7px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group"
+                    className="w-full flex items-center gap-2 px-2.5 h-[34px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group"
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#0A0A0A]/10 group-hover:border-[#0A0A0A]/70'}`}>
                       <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
