@@ -45,8 +45,8 @@ export default function ProjectPicker({ value, onChange }: Props) {
         {value.developer?.logo_url ? (
           <img src={value.developer.logo_url} alt="" className="w-12 h-12 rounded-lg object-contain bg-white/90 p-1" />
         ) : (
-          <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.08)" }}>
-            <Building2 className="w-6 h-6" style={{ color: "#C084FC" }} />
+          <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ background: "#F7F2EA" }}>
+            <Building2 className="w-6 h-6" style={{ color: "#B89555" }} />
           </div>
         )}
         <div className="flex-1 min-w-0">
@@ -75,7 +75,7 @@ export default function ProjectPicker({ value, onChange }: Props) {
         className="flex items-center gap-3 px-4 py-3 rounded-2xl"
         style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(12px)" }}
       >
-        <Search className="w-5 h-5" style={{ color: "#C084FC" }} />
+        <Search className="w-5 h-5" style={{ color: "#B89555" }} />
         <input
           value={q}
           onChange={(e) => { setQ(e.target.value); setOpen(true); }}

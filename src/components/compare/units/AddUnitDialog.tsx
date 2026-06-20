@@ -26,7 +26,7 @@ const fld: React.CSSProperties = {
   border: "1px solid rgba(255,255,255,0.28)",
   color: "#FFFFFF",
   WebkitTextFillColor: "#FFFFFF",
-  caretColor: "#C084FC",
+  caretColor: "#B89555",
 };
 
 const emptyUnit = (): UnitDraft => ({
@@ -63,7 +63,7 @@ export default function AddUnitDialog({ open, onOpenChange, onAdd, onSave, initi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg" style={{ background: "#0F1020", border: "1px solid rgba(192,132,252,0.42)", color: "#FFFFFF" }}>
+      <DialogContent className="max-w-lg" style={{ background: "#0F1020", border: "1px solid rgba(184,149,85,0.55)", color: "#FFFFFF" }}>
         <DialogHeader>
           <DialogTitle className="text-white">{initialUnit ? "Edit unit" : "Add a unit"}</DialogTitle>
         </DialogHeader>
@@ -100,7 +100,7 @@ export default function AddUnitDialog({ open, onOpenChange, onAdd, onSave, initi
             onClick={submit}
             data-no-contrast-guard data-allow-dark-cta
             className="px-4 py-2 rounded-lg font-semibold text-white"
-            style={{ background: "linear-gradient(135deg, #3B82F6, #7C3AED, #EC4899)" }}
+            style={{ background: "#0A0A0A" }}
           >
             {initialUnit ? "Save unit" : "Add unit"}
           </button>

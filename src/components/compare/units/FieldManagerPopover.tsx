@@ -24,7 +24,7 @@ export default function FieldManagerPopover({ visible, onChange }: Props) {
         <button
           data-no-contrast-guard data-allow-dark-cta
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white"
-          style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}
+          style={{ background: "#F7F2EA", border: "1px solid rgba(255,255,255,0.18)" }}
         >
           <Settings2 className="w-4 h-4" /> Manage fields
         </button>
@@ -52,7 +52,7 @@ export default function FieldManagerPopover({ visible, onChange }: Props) {
                       <span
                         className="w-4 h-4 rounded flex items-center justify-center"
                         style={{
-                          background: on ? "linear-gradient(135deg,#7C3AED,#EC4899)" : "rgba(255,255,255,0.08)",
+                          background: on ? "#0A0A0A" : "#F7F2EA",
                           border: "1px solid rgba(255,255,255,0.2)",
                         }}
                       >

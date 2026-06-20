@@ -16,7 +16,7 @@ const RULE_PRESETS: { label: string; build: () => PlanRule }[] = [
 ];
 
 const inputBase: React.CSSProperties = {
-  background: "rgba(255,255,255,0.08)",
+  background: "#F7F2EA",
   border: "1px solid rgba(255,255,255,0.18)",
   color: "#FFFFFF",
 };
@@ -42,7 +42,7 @@ export default function PaymentPlanEditor({ rules, onChange, compact }: Props) {
             className="flex flex-wrap items-center gap-2 px-3 py-2 rounded-xl"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}
           >
-            <span className="text-[10px] uppercase tracking-wider px-2 py-1 rounded font-semibold" style={{ background: "rgba(124,58,237,0.25)", color: "#E9D5FF" }}>
+            <span className="text-[10px] uppercase tracking-wider px-2 py-1 rounded font-semibold" style={{ background: "rgba(184,149,85,0.18)", color: "#1A1A1A" }}>
               {labelForKind(r.kind)}
             </span>
 

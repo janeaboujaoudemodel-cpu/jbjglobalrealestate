@@ -563,8 +563,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           {/* Back */}
           <button
             onClick={() => navigate(-1)}
-            data-no-contrast-guard
-            className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-10"
+            className="inline-flex items-center gap-2 transition-colors mb-10"
+            style={{ color: "rgba(26,26,26,0.7)" }}
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back</span>
@@ -575,26 +575,36 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               <CompareModeToggle mode="projects" onChange={onModeChange} />
             </div>
 
-            {/* Eyebrow */}
+            {/* Eyebrow — champagne + gold */}
             <div className="flex justify-center mb-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+              <div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
                 style={{
-                  background: "rgba(124,58,237,0.18)",
-                  border: "1px solid rgba(192,132,252,0.45)",
+                  background: "#F7F2EA",
+                  border: "1px solid rgba(184,149,85,0.55)",
                 }}
               >
-                <Brain className="w-4 h-4" style={{ color: "#C084FC" }} />
-                <span className="text-[11px] uppercase tracking-[0.2em] font-semibold" style={{ color: "#E9D5FF" }}>
+                <Brain className="w-4 h-4" style={{ color: "#B89555" }} />
+                <span
+                  className="text-[11px] uppercase tracking-[0.2em] font-semibold"
+                  style={{ color: "#1A1A1A" }}
+                >
                   AI Property Intelligence
                 </span>
               </div>
             </div>
 
             {/* Headline */}
-            <h1 className="text-white text-center text-4xl md:text-6xl font-bold leading-[1.05] mb-5">
+            <h1
+              className="text-center text-4xl md:text-6xl font-bold leading-[1.05] mb-5"
+              style={{ color: "#1A1A1A" }}
+            >
               Compare. <GradientText>Decide.</GradientText> Win.
             </h1>
-            <p className="text-white/70 text-center text-lg max-w-2xl mx-auto mb-12">
+            <p
+              className="text-center text-lg max-w-2xl mx-auto mb-12"
+              style={{ color: "rgba(26,26,26,0.7)" }}
+            >
               Drop in any 2–5 Dubai projects. Our AI engine ranks them by yield,
               risk, developer tier and market context — and tells you which one to buy.
             </p>
@@ -612,14 +622,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             {/* CTAs */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
               <Link to="/properties">
-                <CompareCTA variant="gradient" icon={<Building className="w-4 h-4" style={{ color: "#FFFFFF" }} />}>
+                <CompareCTA variant="gradient" icon={<Building className="w-4 h-4" />}>
                   Browse properties
                 </CompareCTA>
               </Link>
               <CompareCTA
                 variant="glass"
                 onClick={() => setAiAddOpen(true)}
-                icon={<Sparkles className="w-4 h-4" style={{ color: "#C084FC" }} />}
+                icon={<Sparkles className="w-4 h-4" style={{ color: "#B89555" }} />}
               >
                 Add via link / PDF (AI fill)
               </CompareCTA>
@@ -628,7 +638,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               </Link>
             </div>
 
-            <p className="text-white/55 text-sm text-center">
+            <p
+              className="text-sm text-center"
+              style={{ color: "rgba(26,26,26,0.6)" }}
+            >
               Need help? Our team is available 24/7.
             </p>
           </div>
@@ -955,7 +968,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               {Array.isArray((aiAnalysis as any).negotiationLeverage) && (aiAnalysis as any).negotiationLeverage.length > 0 && (
                 <div>
                   <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-[#7C3AED]" />
+                    <Zap className="w-5 h-5 text-[#B89555]" />
                     Negotiation Leverage
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -979,7 +992,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                         <ul className="space-y-2">
                           {(n.talkingPoints || []).map((t: string, ti: number) => (
                             <li key={ti} className="text-sm text-white/85 leading-relaxed flex gap-2">
-                              <span className="text-[#7C3AED] font-semibold">{ti + 1}.</span>
+                              <span className="text-[#B89555] font-semibold">{ti + 1}.</span>
                               <span>{t}</span>
                             </li>
                           ))}

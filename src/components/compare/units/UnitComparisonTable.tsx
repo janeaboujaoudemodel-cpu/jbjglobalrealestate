@@ -100,7 +100,7 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
     >
       <table className="w-full text-sm" style={{ color: "#FFFFFF" }}>
         <thead>
-          <tr style={{ background: "rgba(124,58,237,0.18)" }}>
+          <tr style={{ background: "rgba(184,149,85,0.18)" }}>
             <th className="text-left px-4 py-3 text-white/80 text-xs uppercase tracking-wider font-semibold sticky left-0 z-10" style={{ background: "rgba(15,16,32,0.92)" }}>Field</th>
             {computed.map(({ u }) => (
               <th key={u.id} className="text-left px-4 py-3 text-white font-semibold min-w-[180px]">
@@ -115,7 +115,7 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
                       onClick={() => onEditUnit(u)}
                       data-no-contrast-guard
                       className="px-2 py-1 rounded text-[11px] font-semibold text-white hover:text-white"
-                      style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.16)" }}
+                      style={{ background: "#F7F2EA", border: "1px solid rgba(255,255,255,0.16)" }}
                     >
                       Edit
                     </button>
@@ -132,8 +132,8 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
             return (
               <React.Fragment key={`g-${g}`}>
                 <tr>
-                  <td colSpan={computed.length + 1} className="px-4 pt-5 pb-2" style={{ background: "rgba(124,58,237,0.08)" }}>
-                    <span className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#C084FC" }}>{g}</span>
+                  <td colSpan={computed.length + 1} className="px-4 pt-5 pb-2" style={{ background: "#F7F2EA" }}>
+                    <span className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#B89555" }}>{g}</span>
                   </td>
                 </tr>
                 {fields.map((f) => (
