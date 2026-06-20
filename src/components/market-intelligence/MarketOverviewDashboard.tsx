@@ -149,7 +149,7 @@ export const MarketOverviewDashboard = () => {
           </div>
 
           {/* Charts Section */}
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
               <Card className="h-full rounded-xl jj-card-inner transition-all">
