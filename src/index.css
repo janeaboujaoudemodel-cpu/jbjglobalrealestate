@@ -6739,3 +6739,141 @@ html body [data-chrome="sidebar"] [data-sidebar-section] {
   color: var(--emerald-ink) !important;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   PASS 11 — HERO SEARCH + STAY IN THE LOOP + EMERALD CTA LOCK
+   ════════════════════════════════════════════════════════════════ */
+html body .jj-hero-search-bar,
+html body .jj-hero-search-bar *:not([data-allow-ink]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-hero-search-bar input,
+html body .jj-hero-search-bar input:focus,
+html body .jj-hero-search-bar input:hover {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+html body .jj-hero-search-bar input::placeholder {
+  color: rgba(255,255,255,0.78) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+}
+html body .jj-hero-search-bar :is(svg, [class*="lucide"]),
+html body .jj-hero-search-bar :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+@keyframes jbj-hero-typewriter {
+  0%, 14%   { content: "Find me a property in Downtown"; }
+  16%, 30%  { content: "I want to sell my property"; }
+  32%, 46%  { content: "I want to compare my property"; }
+  48%, 62%  { content: "How much is my property valued for?"; }
+  64%, 78%  { content: "How much is rent in Marina?"; }
+  80%, 98%  { content: "I'm looking for Golden Visa or mortgage"; }
+}
+html body .jj-hero-typewriter::before {
+  content: "Search projects, developers, areas, tools…";
+  animation: jbj-hero-typewriter 22s steps(1, end) infinite;
+}
+
+html body .jj-newsletter-emerald,
+html body .jj-newsletter-emerald * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-newsletter-emerald input,
+html body .jj-newsletter-emerald input:focus,
+html body .jj-newsletter-emerald input:hover {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+}
+html body .jj-newsletter-emerald input::placeholder,
+html body .jj-newsletter-emerald .jj-newsletter-placeholder,
+html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-newsletter-emerald :is(svg, [class*="lucide"]),
+html body .jj-newsletter-emerald :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body .jj-loop-block,
+html body .jj-loop-block * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background-image: none;
+}
+html body .jj-loop-block .jj-loop-divider {
+  background-color: rgba(255,255,255,0.35) !important;
+}
+
+.jj-emerald-card {
+  background-image: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(52,211,153,0.45) !important;
+  box-shadow:
+    0 0 0 1px rgba(52,211,153,0.18),
+    0 0 28px rgba(52,211,153,0.22),
+    0 18px 38px rgba(0,0,0,0.30),
+    inset 0 1px 0 rgba(255,255,255,0.10) !important;
+}
+html body .jj-emerald-card,
+html body .jj-emerald-card * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-emerald-card :is(svg, [class*="lucide"]),
+html body .jj-emerald-card :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Sidebar — section header rows: emerald-ombre fill, white text/icon */
+html body [data-chrome="sidebar"] [data-sidebar-section] {
+  background-image: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(52,211,153,0.40) !important;
+  border-radius: 10px !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section] [data-sidebar-section-label],
+html body [data-chrome="sidebar"] [data-sidebar-section] [data-sidebar-section-icon],
+html body [data-chrome="sidebar"] [data-sidebar-section] svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Sidebar — subitem rows: white surface, ink label, emerald icon */
+html body [data-chrome="sidebar"] [data-sidebar-subitem] {
+  background-color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+  border-radius: 8px !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] {
+  color: var(--emerald-ink) !important;
+  stroke: var(--emerald-ink) !important;
+}
+
+/* Support launcher — emerald glow (not gold) */
+html body [aria-label="Talk to JBJ support"],
+html body [aria-label="Contact us"] {
+  border-color: rgba(52,211,153,0.65) !important;
+  box-shadow:
+    -10px 0 28px rgba(0,0,0,0.34),
+    0 0 0 1px rgba(52,211,153,0.30),
+    0 0 24px rgba(52,211,153,0.30) !important;
+}
+
+

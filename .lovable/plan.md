@@ -1,53 +1,70 @@
-I will implement this in controlled batches and verify each batch in the browser before moving on.
+I verified the current preview and code. The homepage hero search is still a mixed white + emerald + gold-bordered pill, the hero overlay is too dark, newsletter/CTA contrast is being overridden by global guards, and the sidebar/contact surfaces still contain gold/light-green styles. I will fix this in strict batches and validate each batch before moving on.
 
-Batch 1 — Billing & Subscriptions fully wired
-- Create/upgrade the Billing & Subscriptions page into a real account page with SEO metadata.
-- Keep `/account/billing` behind login and keep `/billing` redirecting to it.
-- Fix the vertical sidebar MY ACCOUNT behavior so Billing & Subscriptions and Brand Update stay visible when MY ACCOUNT is expanded.
-- Remove the current rule that collapses MY ACCOUNT immediately after clicking one of its entries.
-- Add Billing & Subscriptions to sitemap and SEO config.
-- Validate by opening the expanded vertical sidebar and clicking Billing & Subscriptions.
+Plan:
 
-Batch 2 — Remove white page gutters and restore full edge-to-edge layers
-- Fix the main layout wrapper so public pages no longer sit inside the extra white/champagne gutter container.
-- Make the page layer stretch from the vertical sidebar line to the right edge.
-- Keep individual cards at their existing widths; only the background layer/strap expands.
-- Apply this to homepage and shared public-page shell without breaking standalone dashboards/portals.
-- Validate hero, developer marquee, services, handpicked cards, continue searching, overseas investors, guides/reports, and footer at desktop.
+1. Hero video visibility + unified hero search bar
+   - Reduce the two dark overlay layers in `src/pages/Index.tsx` so the video is visibly brighter while keeping white headline contrast.
+   - Replace the mixed hero search treatment in `src/components/home/HomeHeroSearch.tsx` with one continuous emerald/black ombre search section:
+     - no green outline border around the whole pill
+     - no gold divider
+     - emerald glow border only
+     - input area visually belongs to the same search section
+     - search button keeps white text/icon
+     - Free Consultation segment uses emerald glow border, not gold
+   - Add animated type/delete helper text examples:
+     - “Find me a property in Downtown”
+     - “I want to sell my property”
+     - “I want to compare my property”
+     - “How much is my property valued for?”
+     - “How much is rent in Marina?”
+     - “I’m looking for Golden Visa or mortgage”
+   - Keep the input fully typable: animation only appears when the user has not typed.
+   - Validate with desktop screenshot of the hero.
 
-Batch 3 — Homepage straps and portal color separation
-- Keep Get Verified in its current dark/black style.
-- Make the Mode Portal strip a distinct lighter emerald ombre, not the same tone as Get Verified and not flat green.
-- Ensure these strap sections are edge-to-edge: Continue Searching, Invest in Dubai from Anywhere, Explore Our Guides & Reports.
-- Preserve normal cards as padded cards.
-- Validate with screenshots on homepage mid-scroll.
+2. Responsive Contact Us launcher
+   - Update `src/components/support/SupportLauncher.tsx`:
+     - desktop/tablet landscape may keep compact vertical treatment
+     - phone and portrait iPad/tablet should show only a call/support icon, not the large vertical “Contact us” label
+     - replace gold border/glow with emerald ombre/glow
+   - Validate at desktop, iPad portrait, and phone viewport screenshots.
 
-Batch 4 — Approved emerald lock, no random green
-- Add a single approved emerald/black ombre token/class system in global CSS.
-- Replace flat green title/icon/button styling with the same approved emerald ombre used by Contact Us / Explore Areas CTAs.
-- Lock sidebar section accents, footer titles, titles/icons, pills, and relevant CTAs to this approved emerald style.
-- Avoid changing semantic red/blue/amber data colors where they are required.
+3. Stay in the Loop and newsletter white-on-emerald lock
+   - Fix `src/components/CombinedContactNewsletter.tsx` and `src/components/marketing/NewsletterBrevo.tsx` so:
+     - “Stay in the Loop” text is white when on emerald
+     - “Enter Your Email”/animated placeholder is white
+     - submit button is emerald ombre with white icon/text
+     - glow/border matches the same emerald ombre system, not light-green or gold
+   - Add a scoped global lock in `src/index.css` so newsletter emerald fields/buttons cannot be forced back to ink/black by contrast guards.
+   - Validate with screenshot at the Ready/Get in Touch section.
 
-Batch 5 — Hero search contrast and CSS winner rule
-- Inspect and override the rule currently fading the hero search/filter bar.
-- Force visible input text, placeholders, labels, icons, and search button states.
-- Keep the search bar premium and readable on the dark hero.
-- Validate normal, hover, focus, and typed text states.
+4. Global emerald CTA/text contrast rule for “Explore” buttons
+   - Find the winning CSS rule currently forcing black text on emerald buttons.
+   - Add a scoped hard lock for approved emerald CTA primitives (`.jj-emerald-fill`, `.jj-pill-emerald`, and relevant emerald data attributes) so all text/icons remain white on emerald at idle, hover, focus, active, disabled.
+   - Apply to visible “Explore” / top area CTA cases without converting champagne-only buttons unnecessarily.
+   - Validate by scrolling to the affected area and screenshotting the buttons.
 
-Batch 6 — Handpicked project contact buttons
-- Fix Email / Call / Chat buttons on project cards so they are emerald ombre with white text and white icons on normal load.
-- Keep hover/focus readable with the same white text/icons, not faded or inverted.
-- Add a stronger winning selector if current CSS guard overrides them.
-- Validate on the Handpicked For You cards.
+5. Vertical sidebar emerald rules
+   - Update `src/components/navigation/GlobalVerticalNav.tsx` and final CSS locks in `src/index.css`:
+     - section headers like “MY ACCOUNT” use emerald/black ombre fill with white icons/text
+     - section icon boxes use emerald border/glow, no gold
+     - subcategory rows like “My Dashboard”, “Billing & Subscriptions”, “Brand Update” stay on white/champagne surfaces
+     - subcategory icons use emerald ombre/accent with white icon-tile borders as requested
+     - remove remaining gold borders from sidebar contact/support/collapse controls except where project memory strictly requires collapse gold; if conflict appears, I will scope the emerald rule to the requested sidebar menu/category surfaces first.
+   - Validate expanded sidebar screenshot showing MY ACCOUNT + Billing & Subscriptions.
 
-Batch 7 — Stay in the Loop newsletter upgrade
-- Upgrade the compact newsletter input to an emerald filled bar with white text.
-- Add animated type/delete placeholder behavior for “Enter Your Email”.
-- Add emerald neon/glow border and matching glowing submit button.
-- Keep submit icon white with a subtle 3D/glow effect.
-- Validate the footer/Ready section newsletter at desktop and mobile.
+6. Contact cards / Ready to Get Started / Get in Touch icons
+   - Update `src/components/CombinedContactNewsletter.tsx`, `src/components/ProjectCard.tsx`, and shared emerald CTA CSS so WhatsApp, Call Us, Email, Ready to Get Started, and Get in Touch use the full approved emerald/black ombre with white icons/text.
+   - Remove light-green fills and gold borders from those emerald contact controls.
+   - Validate with screenshots of project cards and the Ready/Get in Touch section.
 
-Batch 8 — Final E2E screenshot proof
-- Test and screenshot four viewports: desktop, laptop/tablet, mobile tall, mobile small.
-- Proof points: sidebar billing visible, Billing page route works, hero search contrast, edge-to-edge layers, portal color separation, project-card contact buttons, newsletter glow, footer/sidebar emerald accents.
-- Report only verified results and screenshots; no claims without browser proof.
+7. Final verification pass
+   - Manually navigate as a user through:
+     - homepage hero
+     - sidebar expanded and collapsed
+     - contact launcher on desktop/iPad/phone
+     - Ready/Get in Touch section
+     - Top Areas/Explore buttons
+   - Capture proof screenshots for each completed area.
+   - Check console for runtime errors after the visual changes.
+
+Implementation will be limited to frontend presentation files and global CSS locks needed to stop the current winning contrast rules from undoing the emerald/white styling.

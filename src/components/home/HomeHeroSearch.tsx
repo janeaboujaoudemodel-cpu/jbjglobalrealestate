@@ -103,31 +103,23 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         transition={{ delay: 0.4, duration: 0.6 }}
         className="w-full max-w-4xl mx-auto"
       >
-        {/* Single continuous pill: white search field, then dark action segments */}
+        {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
+            the same emerald/black gradient surface with an emerald-only glow ring.
+            NO gold dividers, NO light-green outline rings — only the approved emerald system. */}
         <div
           data-surface="dark"
-          data-ink-emerald-opt-out
-          className="jj-hero-search-lock group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl
-            overflow-hidden bg-[#FFFFFF] border border-[#34D399]/70
-            focus-within:border-[#34D399] hover:border-[#34D399]
-            transition-all duration-300"
+          data-ink-emerald
+          data-no-contrast-guard
+          className="jj-hero-search-bar group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl overflow-hidden transition-all duration-300"
           style={{
+            backgroundImage: "var(--jj-emerald-ombre)",
+            border: "1px solid rgba(52,211,153,0.55)",
             boxShadow:
-              "0 0 0 1px rgba(255,255,255,0.38), 0 0 30px rgba(52,211,153,0.22), 0 18px 42px rgba(0,0,0,0.34)",
+              "0 0 0 1px rgba(52,211,153,0.18), 0 0 32px rgba(52,211,153,0.30), 0 18px 42px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.10)",
           }}
         >
-
-
-          {/* LEFT: input — full white, edge-to-edge until the Search button.
-              NOTE: Intentionally NOT wrapped in a <form>. A global rule in
-              src/styles/theme-tokens.css forces a 2px blue border on every
-              input that lives inside any <form>. Using a div + Enter handler
-              keeps the pill clean. */}
-          <div
-            role="search"
-            data-surface="light"
-            className="surface-light flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 bg-white"
-          >
+          {/* INPUT segment — transparent on emerald, white text + animated placeholder */}
+          <div role="search" className="relative flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0">
             <input
               type="text"
               value={draft}
@@ -138,103 +130,76 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
                   onSubmit(e as unknown as React.FormEvent);
                 }
               }}
-              placeholder="Search projects, developers, areas, tools…"
               aria-label="Search the JBJ website"
-              data-surface="light"
-              className="flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
+              data-no-contrast-guard
+              className="jj-hero-search-input flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
               style={{
-                color: "#1A1A1A",
-                WebkitTextFillColor: "#1A1A1A",
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                caretColor: "#FFFFFF",
                 border: "none",
                 outline: "none",
                 boxShadow: "none",
                 background: "transparent",
               }}
             />
-          </div>
-
-          {/* Classic divider between input and Search button — desktop only, full-height gold */}
-          <div
-            aria-hidden="true"
-            className="hidden lg:flex flex-shrink-0 self-stretch w-px"
-            style={{ backgroundColor: "#B89555" }}
-          />
-
-          {/* Search — white segment merged with input field */}
-          <div className="relative flex flex-shrink-0 group/search">
-            <button
-              type="button"
-              onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
-              data-surface="light"
-              aria-label="Search properties now"
-              disabled={searching}
-              className="jj-emerald-fill relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8
-                text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0
-                disabled:cursor-wait transition-colors duration-200"
-              style={{
-                color: "#FFFFFF",
-              }}
-            >
+            {/* Animated typewriter placeholder — only when empty, no interaction blocking */}
+            {!draft && (
               <span
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                className="relative inline-block"
-              >
-                {searching ? "Searching…" : "Search"}
-              </span>
-              {searching && (
-                <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
-              )}
-            </button>
-            <span
-              role="tooltip"
-              className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1.5 rounded-md
-                surface-dark bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
-                border border-[#B89555]/55 shadow-lg opacity-0 group-hover/search:opacity-100 z-50"
-            >
-              Search properties now
-            </span>
+                aria-hidden="true"
+                className="jj-hero-typewriter pointer-events-none absolute left-5 sm:left-6 lg:left-7 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden"
+                style={{
+                  color: "rgba(255,255,255,0.78)",
+                  WebkitTextFillColor: "rgba(255,255,255,0.78)",
+                  maxWidth: "calc(100% - 16px)",
+                }}
+              />
+            )}
           </div>
 
-          {/* Free Consultation — fiberglass translucent surface with WHITE title. */}
-          <div className="relative hidden md:flex flex-shrink-0 group/book">
-            <button
-              type="button"
-              onClick={openBooking}
-              data-surface="dark"
-              data-no-contrast-guard
-              data-allow-dark-cta
-              data-hero-consultation-lock
-              aria-label="Book your free consultation now"
-              className="allow-white surface-dark flex items-center justify-center self-stretch h-full px-5 lg:px-6
-                text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] text-white
-                border-l border-[#B89555]/45
-                transition-[background-color,box-shadow] duration-200"
-              style={{
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                background: "linear-gradient(180deg, rgba(10,10,10,0.46) 0%, rgba(10,10,10,0.30) 100%)",
-                backdropFilter: "blur(16px) saturate(145%)",
-                WebkitBackdropFilter: "blur(16px) saturate(145%)",
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18)",
-                opacity: 1,
-              }}
-            >
-              <span
-                className="allow-white whitespace-nowrap text-white"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}
-              >
-                Free Consultation
-              </span>
-            </button>
-            <span
-              role="tooltip"
-              className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-1.5 rounded-md
-                surface-dark bg-[#1A1A1A] text-white text-[11.5px] font-medium tracking-[-0.005em] whitespace-nowrap
-                border border-[#B89555]/55 shadow-lg opacity-0 group-hover/book:opacity-100 z-50"
-            >
-              Book your free consultation now
+          {/* SEARCH button — slightly brighter emerald with white text */}
+          <button
+            type="button"
+            onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
+            aria-label="Search properties now"
+            disabled={searching}
+            data-no-contrast-guard
+            className="relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-110"
+            style={{
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              backgroundImage: "var(--jj-emerald-light-ombre)",
+              borderLeft: "1px solid rgba(52,211,153,0.45)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18)",
+            }}
+          >
+            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+              {searching ? "Searching…" : "Search"}
             </span>
-          </div>
+            {searching && (
+              <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
+            )}
+          </button>
+
+          {/* FREE CONSULTATION — same emerald system, emerald hairline (no gold) */}
+          <button
+            type="button"
+            onClick={openBooking}
+            aria-label="Book your free consultation now"
+            data-no-contrast-guard
+            className="hidden md:flex items-center justify-center self-stretch h-full px-5 lg:px-6 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
+            style={{
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              backgroundImage: "var(--jj-emerald-ombre)",
+              borderLeft: "1px solid rgba(52,211,153,0.45)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
+            }}
+          >
+            <span className="whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+              Free Consultation
+            </span>
+          </button>
 
         </div>
 
