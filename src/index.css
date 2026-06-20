@@ -7121,3 +7121,31 @@ html body footer p:last-child {
   color: var(--emerald-ink, #064E3B) !important;
   -webkit-text-fill-color: var(--emerald-ink, #064E3B) !important;
 }
+
+/* Active service/tool tab — metallic emerald shimmer that sweeps slowly. */
+@keyframes jj-tab-metallic-sweep {
+  0%   { background-position: -150% 0; }
+  100% { background-position: 250% 0; }
+}
+.jj-tab-active-metallic {
+  position: relative;
+  overflow: hidden;
+}
+.jj-tab-active-metallic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    100deg,
+    rgba(255,255,255,0) 30%,
+    rgba(52,211,153,0.45) 48%,
+    rgba(255,255,255,0.75) 52%,
+    rgba(52,211,153,0.45) 56%,
+    rgba(255,255,255,0) 74%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: jj-tab-metallic-sweep 3.4s linear infinite;
+}
