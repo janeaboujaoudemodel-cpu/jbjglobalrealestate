@@ -19,8 +19,10 @@ import {
 } from "@/components/market-intelligence/MarketIntelligenceTypography";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import VideoBackground from "@/components/VideoBackground";
+import { IconTile } from "@/components/ui/icon-tile";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
 import marketIntelligenceVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -213,9 +215,9 @@ const MarketIntelligence = () => {
       <section className="surface-light py-12 bg-muted" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl p-8 text-center bg-card border-2 border-[#0A0A0A]/40">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-[#0A0A0A]" data-no-contrast-guard>
-                <Info className="w-6 h-6 text-white allow-white" />
+            <div className="rounded-2xl p-8 text-center bg-card border border-[#B89555]/40">
+              <div className="mx-auto mb-4 flex justify-center">
+                <IconTile icon={Info} tone="gold" size="lg" />
               </div>
               <h3 className={`${MI_CARD_TITLE} mb-4`}>
                 Compliance & Transparency
@@ -227,6 +229,7 @@ const MarketIntelligence = () => {
           </div>
         </div>
       </section>
+
 
       {/* Pre-Footer White Section with CTA */}
       <PreFooterSeparator 

@@ -3442,18 +3442,10 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
   opacity: 1 !important;
 }
 
-.jj-hero-fullscreen .mi-hero-cta,
-.jj-hero-fullscreen .mi-hero-cta :where(span, svg, [class*="lucide"]),
-.jj-hero-fullscreen .button-custom-cta,
-.jj-hero-fullscreen .button-ghost-green,
-.jj-hero-fullscreen .button-gray-dark {
-  background: #F7F2EA !important;
-  border: 1px solid rgba(184, 149, 85, 0.65) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  text-shadow: none !important;
-}
+/* Legacy `.mi-hero-cta` champagne repaint removed.
+   Market Intelligence hero CTAs are glass-on-dark (white text/icons),
+   styled directly in the component. The surface contract owns the rest. */
+
 
 /* =====================================================================
    DESTRUCTIVE / RED ACTION READABILITY (Sign Out, Submit Ticket, etc.)
@@ -6472,69 +6464,47 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 }
 
 /* =====================================================================
-   ABSOLUTE FINAL CHAMPAGNE-CTA INK LOCK (site-wide, highest specificity)
-   Any CTA element (link, button, anchor, motion.*) carrying
-   .mi-hero-cta OR .jj-cta-champagne OR .jj-cta-outline OR .jj-pill-active
-   ALWAYS renders ink (#1A1A1A) text + icons + stroke at every state,
-   INCLUDING inside dark heroes ([data-hero-dark], .jj-hero-fullscreen,
-   [data-surface="dark"], .surface-dark/navy/ink).
-   Text-shadow is removed so the ink does not muddy into white-looking blur.
-   No opt-outs: there is no legitimate reason for a champagne CTA to
-   render white-on-champagne anywhere on this site.
+   FINAL SURFACE CONTRACT — own-background wins, no global CTA force.
+   The previous "ABSOLUTE FINAL CHAMPAGNE-CTA INK LOCK" was removed:
+   it forced ink on every `.mi-hero-cta` / `.jj-cta-champagne` /
+   `.jj-cta-outline` / `.jj-pill-active` even when the component
+   actually sat on a dark/glass surface. Contrast is now owned by:
+     1. surface tokens ([data-surface], .surface-*) in the rest of this file
+     2. CTA primitives (.jj-cta-dark / -champagne / -outline / .jj-pill-active)
+        styling their OWN backgrounds + matching foregrounds
+     3. opt-outs `[data-no-contrast-guard]`, `[data-on-dark]`,
+        `.allow-white` for dark/glass exceptions
+   No global !important repaint runs after components mount.
    ===================================================================== */
-a.mi-hero-cta,
-button.mi-hero-cta,
-.mi-hero-cta,
-a.jj-cta-champagne,
-button.jj-cta-champagne,
-.jj-cta-champagne,
-a.jj-cta-outline,
-button.jj-cta-outline,
-.jj-cta-outline,
-a.jj-pill-active,
-button.jj-pill-active,
-.jj-pill-active,
-.mi-hero-cta :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-cta-outline :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-pill-active :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-[data-hero-dark] .mi-hero-cta,
-[data-hero-dark] .jj-cta-champagne,
-[data-hero-dark] .jj-cta-outline,
-[data-hero-dark] .jj-pill-active,
-[data-hero-dark] .mi-hero-cta :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-[data-hero-dark] .jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-[data-hero-dark] .jj-cta-outline :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-[data-hero-dark] .jj-pill-active :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-hero-fullscreen .mi-hero-cta,
-.jj-hero-fullscreen .jj-cta-champagne,
-.jj-hero-fullscreen .jj-cta-outline,
-.jj-hero-fullscreen .jj-pill-active,
-.jj-hero-fullscreen .mi-hero-cta :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-hero-fullscreen .jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-hero-fullscreen .jj-cta-outline :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-hero-fullscreen .jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  text-shadow: none !important;
-  opacity: 1 !important;
+
+/* Champagne CTA primitives (own background = champagne/cream) — ink wins. */
+.jj-cta-champagne:not([data-on-dark]):not(.allow-white),
+.jj-pill-active:not([data-on-dark]):not(.allow-white),
+.jj-cta-champagne:not([data-on-dark]):not(.allow-white) :is(span, svg, p, b, strong, em, i, [class*="lucide"]),
+.jj-pill-active:not([data-on-dark]):not(.allow-white) :is(span, svg, p, b, strong, em, i, [class*="lucide"]) {
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
+  stroke: #1A1A1A;
+  text-shadow: none;
 }
 
-a.mi-hero-cta:hover,
-button.mi-hero-cta:hover,
-.mi-hero-cta:hover,
-a.jj-cta-champagne:hover,
-button.jj-cta-champagne:hover,
-.jj-cta-champagne:hover,
-a.jj-cta-outline:hover,
-button.jj-cta-outline:hover,
-.jj-cta-outline:hover,
-.mi-hero-cta:hover :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-cta-champagne:hover :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
-.jj-cta-outline:hover :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  text-shadow: none !important;
+/* Outline CTA on light surfaces = ink. On dark heroes the component opts in
+   via `data-on-dark` / `allow-white`. */
+.jj-cta-outline:not([data-on-dark]):not(.allow-white):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]),
+.jj-cta-outline:not([data-on-dark]):not(.allow-white):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) :is(span, svg, p, b, strong, em, i, [class*="lucide"]) {
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
+  stroke: #1A1A1A;
+  text-shadow: none;
 }
+
+/* Dark CTA primitives (own background = #0A0A0A/#1A1A1A) — white wins. */
+.jj-cta-dark,
+.jj-cta-dark :is(span, svg, p, b, strong, em, i, [class*="lucide"]),
+[data-on-dark],
+[data-on-dark] :is(span, svg, p, b, strong, em, i, [class*="lucide"]) {
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+  stroke: #FFFFFF;
+}
+
