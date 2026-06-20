@@ -6673,3 +6673,60 @@ html body .jj-pill-emerald:focus :is(svg, [class*="lucide"]) * {
   box-shadow: 0 4px 12px -6px rgba(4, 120, 87, 0.30);
 }
 
+/* FINAL LOCK — approved emerald/black ombre primitives. */
+html body .jj-emerald-fill,
+html body .jj-emerald-fill * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-emerald-fill {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border-color: rgba(52, 211, 153, 0.58) !important;
+}
+html body .jj-emerald-fill:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+}
+html body .jj-emerald-fill :is(svg, [class*="lucide"]),
+html body .jj-emerald-fill :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body .jj-hero-search-lock,
+html body .jj-hero-search-lock * {
+  opacity: 1 !important;
+}
+html body .jj-hero-search-lock input,
+html body .jj-hero-search-lock input:focus {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  caret-color: #064E3B !important;
+}
+html body .jj-hero-search-lock input::placeholder {
+  color: rgba(26,26,26,0.78) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.78) !important;
+}
+
+@keyframes jbj-placeholder-type {
+  0%, 12% { content: ""; }
+  18% { content: "E"; }
+  24% { content: "En"; }
+  30% { content: "Ent"; }
+  36% { content: "Enter"; }
+  44% { content: "Enter Your"; }
+  52%, 76% { content: "Enter Your Email"; }
+  82% { content: "Enter Your"; }
+  88% { content: "Enter"; }
+  94%, 100% { content: ""; }
+}
+
+html body .jj-newsletter-emerald input::placeholder {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
+  content: "Enter Your Email";
+  animation: jbj-placeholder-type 4.8s steps(1, end) infinite;
+}
+
