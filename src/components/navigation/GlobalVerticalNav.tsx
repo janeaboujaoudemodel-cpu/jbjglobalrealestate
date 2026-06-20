@@ -405,7 +405,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'AML / KYC', icon: Shield, href: '/aml-kyc' },
   ],
   'ai-tools': [
-    { label: 'AI Home Finder', icon: Home, href: '/quiz' },
+    { label: 'AI Home Finder', icon: Home, href: '/ai-home-finder' },
     { label: 'Property Comparison', icon: GitCompare, href: '/compare' },
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
@@ -414,7 +414,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent&mode=manual' },
   ],
   creative: [
-    { label: 'AI Home Finder', icon: Home, href: '/quiz' },
+    { label: 'AI Home Finder', icon: Home, href: '/ai-home-finder' },
     { label: 'Property Comparison', icon: GitCompare, href: '/compare' },
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
@@ -785,7 +785,7 @@ export default function GlobalVerticalNav() {
     // — premium GOLD label to match the main section headers.
     if (
       item.href === '/join' ||
-      item.href === '/quiz' ||
+      item.href === '/ai-home-finder' ||
       (item.href === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
@@ -812,7 +812,7 @@ export default function GlobalVerticalNav() {
   // On those rows, icon glyphs go white for contrast and the tile uses translucent white.
   const isSaturatedColorRow = (item: NavItem) =>
     item.href === '/join' ||
-    item.href === '/quiz' ||
+    item.href === '/ai-home-finder' ||
     (item.href === '/list-property' && (item as any).highlight) ||
     item.href === '/resale-properties';
 
