@@ -32,7 +32,7 @@ export default function CompareModeToggle({ mode, onChange }: Props) {
             ? "0 6px 18px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.08)"
             : "inset 0 1px 0 rgba(255,255,255,0.6)",
         }}
-        {...(active ? { "data-allow-dark-cta": true } : {})}
+        {...(active ? { "data-allow-dark-cta": true, "data-cta": "dark" } : {})}
       >
         <Icon className="w-4 h-4" style={{ color: active ? "#FFFFFF" : "#B89555" }} />
         {label}
