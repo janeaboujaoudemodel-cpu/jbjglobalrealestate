@@ -4806,7 +4806,6 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 .jj-cta-dark,
 .jj-navy-cta,
 [data-cta="dark"],
-[data-allow-dark-cta],
 [data-icon-tile][data-surface="ink"],
 [data-icon-tile][data-surface="navy"],
 .surface-navy,
@@ -4824,8 +4823,6 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 .jj-cta-dark :where(span, svg, [class*="lucide"]),
 .jj-navy-cta :where(span, svg, [class*="lucide"]),
 [data-cta="dark"] :where(span, svg, [class*="lucide"]),
-
-[data-allow-dark-cta] :where(span, svg, [class*="lucide"]),
 [data-icon-tile][data-surface="ink"] :where(svg, [class*="lucide"]),
 [data-icon-tile][data-surface="navy"] :where(svg, [class*="lucide"]),
 .surface-navy :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
@@ -4836,6 +4833,16 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 [data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
 [data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+  opacity: 1;
+}
+
+/* `data-allow-dark-cta` is only permission, not a paint rule. It may keep
+   white foregrounds only when the same element is an actual dark own-surface. */
+[data-allow-dark-cta]:is(.jj-cta-dark, .jj-navy-cta, [data-cta="dark"], [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, [class*="bg-[#0A0A0A]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]),
+[data-allow-dark-cta]:is(.jj-cta-dark, .jj-navy-cta, [data-cta="dark"], [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, [class*="bg-[#0A0A0A]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]) :where(span, svg, [class*="lucide"]) {
   color: hsl(var(--jj-on-dark)) !important;
   -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
   stroke: hsl(var(--jj-on-dark)) !important;
@@ -6587,7 +6594,7 @@ html body :is(
   [data-surface="champagne"], [data-surface="cream"],
   [data-surface="raised"], [data-surface="gold"],
   .jj-card-inner, .jj-layer-2
-):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"]),
+):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"]),
 html body :is(
   .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
   [data-cta="champagne"], [data-cta="outline"],
@@ -6605,8 +6612,98 @@ html body :is(
   [data-surface="champagne"], [data-surface="cream"],
   [data-surface="raised"], [data-surface="gold"],
   .jj-card-inner, .jj-layer-2
-):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not([data-hero-dark]):not([data-hero-dark] *):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#0A0A0A]"] *):not([class*="bg-[#1A1A1A]"]):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-black"]):not([class*="bg-black"] *) {
+):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not([data-hero-dark]):not([data-hero-dark] *):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#0A0A0A]"] *):not([class*="bg-[#1A1A1A]"]):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-black"]):not([class*="bg-black"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* =====================================================================
+   STABLE SURFACE CONTRACT — final source of truth.
+   A paint permission flag can never decide contrast. The element's OWN
+   rendered surface decides: dark own-surface → white, light own-surface → ink.
+   This also catches inline React `style={{ background... }}` surfaces that
+   class-only guards cannot see. Nested opposite surfaces are excluded.
+   ===================================================================== */
+html body :is(
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"],
+  [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  .surface-dark, .surface-ink, .surface-navy,
+  .bg-black, [class*="bg-black"], [class*="bg-[#0A0A0A]"], [class*="bg-[#1A1A1A]"],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="background" i][style*="#0b0b0b" i],
+  [style*="background" i][style*="#0b1b33" i],
+  [style*="background" i][style*="#1f1f1f" i],
+  [style*="background" i][style*="#2e1065" i],
+  [style*="background" i][style*="#4c1d95" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#064e3b" i]
+),
+html body :is(
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"],
+  [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  .surface-dark, .surface-ink, .surface-navy,
+  .bg-black, [class*="bg-black"], [class*="bg-[#0A0A0A]"], [class*="bg-[#1A1A1A]"],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="background" i][style*="#0b0b0b" i],
+  [style*="background" i][style*="#0b1b33" i],
+  [style*="background" i][style*="#1f1f1f" i],
+  [style*="background" i][style*="#2e1065" i],
+  [style*="background" i][style*="#4c1d95" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#064e3b" i]
+) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div, button, svg, [class*="lucide"]):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-outline):not(.jj-cta-outline *):not(.jj-pill-active):not(.jj-pill-active *):not([data-cta="champagne"]):not([data-cta="champagne"] *):not([data-cta="outline"]):not([data-cta="outline"] *):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not([data-surface="raised"]):not([data-surface="raised"] *):not([data-surface="gold"]):not([data-surface="gold"] *):not(.surface-page):not(.surface-page *):not(.surface-light):not(.surface-light *):not(.surface-champagne):not(.surface-champagne *):not(.surface-cream):not(.surface-cream *):not(.surface-raised):not(.surface-raised *):not(.surface-gold):not(.surface-gold *):not(.jj-card-inner):not(.jj-card-inner *):not(.jj-layer-2):not(.jj-layer-2 *):not([style*="background" i][style*="#ffffff" i]):not([style*="background" i][style*="#ffffff" i] *):not([style*="background" i][style*="#fdfbf7" i]):not([style*="background" i][style*="#fdfbf7" i] *):not([style*="background" i][style*="#f7f2ea" i]):not([style*="background" i][style*="#f7f2ea" i] *):not([style*="background" i][style*="#efe6d6" i]):not([style*="background" i][style*="#efe6d6" i] *):not([style*="background" i][style*="#f2ebff" i]):not([style*="background" i][style*="#f2ebff" i] *):not([style*="background" i][style*="#e8f3ec" i]):not([style*="background" i][style*="#e8f3ec" i] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is(
+  .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
+  [data-cta="champagne"], [data-cta="outline"],
+  .bg-white, [class*="bg-white"], .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
+  [class*="bg-[#FFFFFF]"], [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#B89555]"],
+  [class*="bg-champagne"], [class*="bg-cream"], [class*="bg-pearl"], [class*="bg-beige"], [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .jj-card-inner, .jj-layer-2,
+  [style*="background" i][style*="#ffffff" i],
+  [style*="background" i][style*="#fdfbf7" i],
+  [style*="background" i][style*="#f7f2ea" i],
+  [style*="background" i][style*="#efe6d6" i],
+  [style*="background" i][style*="#f2ebff" i],
+  [style*="background" i][style*="#e5d6ff" i],
+  [style*="background" i][style*="#e8f3ec" i],
+  [style*="background" i][style*="#d4e9db" i],
+  [style*="background" i][style*="255, 255, 255" i],
+  [style*="background" i][style*="255,255,255" i]
+),
+html body :is(
+  .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
+  [data-cta="champagne"], [data-cta="outline"],
+  .bg-white, [class*="bg-white"], .bg-background, .bg-card, .bg-popover, .bg-secondary, .bg-accent, .bg-muted,
+  [class*="bg-[#FFFFFF]"], [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#B89555]"],
+  [class*="bg-champagne"], [class*="bg-cream"], [class*="bg-pearl"], [class*="bg-beige"], [class*="bg-ivory"], [class*="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .jj-card-inner, .jj-layer-2,
+  [style*="background" i][style*="#ffffff" i],
+  [style*="background" i][style*="#fdfbf7" i],
+  [style*="background" i][style*="#f7f2ea" i],
+  [style*="background" i][style*="#efe6d6" i],
+  [style*="background" i][style*="#f2ebff" i],
+  [style*="background" i][style*="#e5d6ff" i],
+  [style*="background" i][style*="#e8f3ec" i],
+  [style*="background" i][style*="#d4e9db" i],
+  [style*="background" i][style*="255, 255, 255" i],
+  [style*="background" i][style*="255,255,255" i]
+) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#0A0A0A]"] *):not([class*="bg-[#1A1A1A]"]):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-black"]):not([class*="bg-black"] *):not([style*="background" i][style*="#0a0a0a" i]):not([style*="background" i][style*="#0a0a0a" i] *):not([style*="background" i][style*="#1a1a1a" i]):not([style*="background" i][style*="#1a1a1a" i] *):not([style*="background" i][style*="#0b0b0b" i]):not([style*="background" i][style*="#0b0b0b" i] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
