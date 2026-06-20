@@ -100,7 +100,7 @@ export default function ModePortalBanner() {
           {/* CTA — deep emerald-to-black pill, white label, gold hairline. */}
           <Link
             to={cfg.href}
-            className="group relative flex-shrink-0 h-11 min-w-[220px] px-6 text-sm font-semibold tracking-wide rounded-md hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap border border-[#B89555]/60"
+            className="group relative flex-shrink-0 h-11 min-w-[220px] px-6 text-sm font-semibold tracking-wide rounded-md hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.99] transition-transform duration-300 ease-out overflow-hidden inline-flex items-center justify-center gap-2 whitespace-nowrap border border-[#34D399]/55"
             data-cta="dark"
             data-allow-dark-cta
             data-no-contrast-guard
