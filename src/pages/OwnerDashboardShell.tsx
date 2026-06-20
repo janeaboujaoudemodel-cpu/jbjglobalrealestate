@@ -108,8 +108,18 @@ const OwnerDashboardShell = () => {
     </>
   );
 
+  // Expose content-area offsets so the global BrandedLoader centers in the
+  // visible main area (right of sidebar, below the top bar) rather than over
+  // the whole viewport.
+  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "64px" : "256px";
+  const contentTop = "var(--shell-header-h)";
+
   return (
-    <div data-surface="champagne" className="owner-dashboard-shell owner-shell-surface min-h-screen bg-[#F7F2EA] flex">
+    <div
+      data-surface="champagne"
+      className="owner-dashboard-shell owner-shell-surface min-h-screen bg-[#F7F2EA] flex"
+      style={{ ["--app-content-left" as never]: contentLeft, ["--app-content-top" as never]: contentTop }}
+    >
       {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
       <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
         <OwnerTasksPopupAlert />
