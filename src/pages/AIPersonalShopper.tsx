@@ -241,7 +241,7 @@ const AIPersonalShopper = () => {
               <span className="text-emerald-300 text-sm font-medium">AI Travel & Property Concierge</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-              Your Personal <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">UAE Concierge</span>
+              Your Personal <span className="text-[#B89555]">UAE Concierge</span>
             </h1>
             <p className="text-white/70 max-w-2xl mx-auto text-sm md:text-base">
               Tell me about your trip to UAE and I'll create a complete personalized itinerary — 
@@ -441,8 +441,8 @@ const AIPersonalShopper = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       className="space-y-4"
                     >
-                      <div className="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center">
-                        <Plane className="w-10 h-10 text-white" />
+                      <div className="w-20 h-20 mx-auto bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl flex items-center justify-center">
+                        <Plane className="w-10 h-10 text-[#B89555]" />
                       </div>
                       <h3 className="text-xl font-semibold text-white">Welcome to Your Personal Concierge</h3>
                       <p className="text-white/70 max-w-md">
