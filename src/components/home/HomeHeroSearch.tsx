@@ -18,6 +18,16 @@ import { CalendarCheck, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useTypewriter } from "@/hooks/useTypewriter";
+
+const HERO_TYPEWRITER_PHRASES = [
+  "Find me a property in Downtown",
+  "I want to sell my property",
+  "I want to compare my property",
+  "How much is my property valued for?",
+  "How much is rent in Marina?",
+  "I'm looking for Golden Visa or mortgage",
+];
 import { saveRecentSearch } from "@/lib/searchHistory";
 
 interface HomeHeroSearchProps {
