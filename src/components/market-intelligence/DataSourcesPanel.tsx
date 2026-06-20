@@ -24,10 +24,10 @@ const fadeInUp = {
 
 /* Data-viz semantic palette for cadence (kept as Tailwind utilities, not inline hex). */
 const frequencyClasses: Record<string, string> = {
-  daily: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+  daily: 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45',
   weekly: 'bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35',
-  monthly: 'bg-amber-100 text-amber-800 border-amber-300',
-  quarterly: 'bg-violet-100 text-violet-800 border-violet-300',
+  monthly: 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45',
+  quarterly: 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/45',
 };
 
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
@@ -94,8 +94,8 @@ export const DataSourcesPanel = () => {
                         ))}
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs font-semibold leading-none text-emerald-700">
-                        <Shield className="w-4 h-4" />
+                      <div className="flex items-center gap-2 text-xs font-semibold leading-none text-[#1A1A1A]">
+                        <Shield className="w-4 h-4 text-[#B89555]" />
                         Official Government Source
                       </div>
 
@@ -132,7 +132,7 @@ export const DataSourcesPanel = () => {
                 key={item.text}
                 className={`${MI_BODY} flex items-center gap-2`}
               >
-                <item.icon className="w-5 h-5 text-emerald-700" />
+                <item.icon className="w-5 h-5 text-[#B89555]" />
                 <span>{item.text}</span>
               </div>
             ))}
