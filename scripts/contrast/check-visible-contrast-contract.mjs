@@ -44,10 +44,26 @@ for (const route of routes) {
     const luminance = eval(`(${luminanceSource})`);
     const contrastRatio = eval(`(${contrastRatioSource})`);
 
+    const backgroundImageColor = (backgroundImage) => {
+      if (!backgroundImage || backgroundImage === 'none') return null;
+      const lower = backgroundImage.toLowerCase();
+      if (lower.includes('url(')) return { color: backgroundImage, parsed: null, image: true };
+      if (/(#0a0a0a|#1a1a1a|#0b0b0b|#0b1b33|#1f1f1f|#2e1065|#4c1d95|#022c22|#064e3b|rgb\(\s*(?:0|4|6|10|11|31|46|76)\b)/.test(lower)) {
+        return { color: backgroundImage, parsed: { r: 10, g: 10, b: 10, a: 1 }, image: true };
+      }
+      if (/(#ffffff|#fdfbf7|#f7f2ea|#efe6d6|#f2ebff|#e8f3ec|rgb\(\s*25[0-5]\s*,\s*25[0-5]\s*,\s*25[0-5])/.test(lower)) {
+        return { color: backgroundImage, parsed: { r: 253, g: 251, b: 247, a: 1 }, image: true };
+      }
+      return { color: backgroundImage, parsed: null, image: true };
+    };
+
     const effectiveBackground = (element) => {
       let node = element;
       while (node && node.nodeType === 1) {
-        const color = getComputedStyle(node).backgroundColor;
+        const styles = getComputedStyle(node);
+        const imageColor = backgroundImageColor(styles.backgroundImage);
+        if (imageColor) return { ...imageColor, tag: node.tagName, className: node.getAttribute('class') || '' };
+        const color = styles.backgroundColor;
         const parsed = rgb(color);
         if (parsed && parsed.a > 0.2) return { color, parsed, tag: node.tagName, className: node.getAttribute('class') || '' };
         node = node.parentElement;
