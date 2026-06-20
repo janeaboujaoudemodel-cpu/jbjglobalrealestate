@@ -14,7 +14,7 @@ interface Props {
   rootMargin?: string;
 }
 
-export default function LazyVisible({ children, minHeight = 200, rootMargin = "600px" }: Props) {
+export default function LazyVisible({ children, minHeight = 120, rootMargin = "1200px" }: Props) {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 

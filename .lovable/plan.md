@@ -1,44 +1,47 @@
-Implement the remaining fixes exactly where they are currently failing:
+I verified the live preview with screenshots/navigation. The current failures are real: the sidebar account entry is hidden by section behavior/scrolling, services/tool headers look merged, homepage full-bleed wrappers are creating wrong layers and huge blank lazy placeholders, the mortgage CTA route is fragile, footer/sidebar emerald accents are incomplete, and the hero search/filter contrast needs correction.
 
-1. Vertical sidebar: Billing & Subscriptions
-- `accountShortcuts.ts` already contains Billing, but `GlobalVerticalNav.tsx` still has a separate hard-coded MY ACCOUNT group that stops before Billing.
-- Add `Billing & Subscriptions` directly into the hard-coded MY ACCOUNT nav order so it appears in the expanded vertical sidebar.
-- Keep it in the canonical account shortcut list too; do not remove any account items.
+Plan:
 
-2. My Account dashboard: Brand Update subcategory/card
-- Add a visible `Brand Update` shortcut/card directly under the top dashboard heading area and before the main dashboard grid.
-- Link it to the existing Brand Palette route (`/brand-palette`) unless a more specific existing route is found during implementation.
-- Add `#brand-update` to the dashboard hash mapping so sidebar/header account subcategory navigation can land on it.
-- Do not remove existing Profile, Badges, Account Settings, Tasks, Notifications, Quick Actions, Activity, Favorites, Shortlist, Explore & Learn, or AI Tools blocks.
+1. Vertical sidebar: make Billing & Subscriptions actually visible
+- Keep the canonical account shortcut list.
+- In `GlobalVerticalNav.tsx`, change the MY ACCOUNT behavior so clicking it expands normally and does not immediately collapse on account navigation state.
+- Ensure `Billing & Subscriptions` and `Brand Update` render inside the visible MY ACCOUNT section, not only in the flyout/hidden list.
+- Improve MY ACCOUNT/sidebar title accents to emerald where requested, while keeping readable ink labels on champagne.
 
-3. Emerald + white contrast for services and AI tools
-- In `ExploreServicesExpander.tsx` and `ToolkitShowcaseCard.tsx`, change the segmented tab strip from black to the emerald gradient.
-- Keep all inactive tab labels/icons white on emerald.
-- Active tab can remain champagne/ink only if it is the selected pill; all emerald segments must have white text/icons at rest and hover.
-- Change the photo CTA (`Explore Now` and AI tool CTA buttons) from black/frosted black to emerald gradient with white text/icons at rest and hover.
-- Add `allow-white` / `data-no-contrast-guard` where needed so global contrast guards cannot flip these labels back to black.
+2. Services and AI tools tabs: premium emerald, not split/merged
+- Update `ExploreServicesExpander.tsx` and `ToolkitShowcaseCard.tsx` so the top header and horizontal tab strip are visually separated by a soft light divider/gap.
+- Remove the active-tab underline effect.
+- Make active tabs a refined lighter ombre pill with distinct emerald/champagne tones, not half-black/half-green.
+- Keep inactive labels/icons white on emerald.
+- Remove any “Buy Property” underline behavior and give it the requested ombre active background.
 
-4. Header service tabs in Explore Our Services
-- Specifically fix `Sell Your Property`, `Rent a Property`, `List Your Property for Rent`, etc. so their tab backgrounds are emerald, not black.
-- Preserve the scrollable tab behavior and active tab behavior.
+3. Homepage band/card system: one full-width layer behind padded cards
+- Adjust `PremiumSectionCard`/homepage usage so only the background layer/band is edge-to-edge from the sidebar line to the right edge.
+- Keep actual cards padded left/right inside the layer.
+- Apply full-width behavior only to hero and named bands/straps: partners developer marquee, Get Verified/User Portal, Continue Searching, Overseas Investors, Guides/Reports, and similar full strips.
+- Keep cards like Mortgage Calculator, JLT/Hub cards, Handpicked/Featured Listings, Explore Our Services, and tools inside padded content, with one background layer only.
+- Remove extra visible stacked layers behind cards.
 
-5. Restore full-width bands after the sidebar line
-- Keep the global main gutter for normal cards/KPIs so content does not touch the sidebar.
-- Restore homepage/full-band sections to stretch from the vertical sidebar boundary to the right edge, not sit inside a large side gap.
-- Apply this by making `PremiumSectionCard width="full"` break out of the gutter to the inner viewport edges while its child card/content keeps its own internal padding.
-- Do not allow sections to go underneath the fixed vertical sidebar or horizontal header.
+4. Get Verified / User Portal / Ready section
+- Change the Investor/Broker/Developer portal strip away from champagne to a lighter emerald ombre, distinct from the dark emerald CTA.
+- Make the “Ready to Get Started?” section smaller and more premium on desktop and mobile.
+- Match newsletter titles/line accents to emerald styling.
 
-6. Verification pass after implementation
-- Check homepage at desktop size: hero-adjacent sections, Explore Our Services, Developer/market/join-style bands, Featured Listings, Royal Tools, Top Areas stretch correctly from sidebar boundary to right edge.
-- Check expanded vertical sidebar: MY ACCOUNT contains Billing & Subscriptions.
-- Check My Dashboard: Brand Update card appears above the dashboard content.
-- Check services/tools cards: service names, AI tool names, and CTA labels remain white on emerald at rest and hover.
-- Check at multiple viewports requested previously: desktop wide, laptop, tablet, mobile.
+5. Mortgage calculator CTA and loading/blank-section issue
+- Fix “Try Our AI Mortgage Calculator” to route reliably to `/mortgage-calculator` and not feel broken.
+- Reduce the huge blank placeholders from lazy sections so the page no longer appears stuck with massive empty beige areas before footer.
+- Keep lazy loading but use realistic reserved heights/root margins for homepage sections.
 
-Files expected to change:
-- `src/components/navigation/GlobalVerticalNav.tsx`
-- `src/pages/MyDashboard.tsx`
-- `src/components/home/ExploreServicesExpander.tsx`
-- `src/components/home/ToolkitShowcaseCard.tsx`
-- `src/components/ui/premium-section-card.tsx`
-- possibly `src/index.css` only for a narrow full-width gutter/emerald contrast helper if component classes alone are insufficient.
+6. Footer and sidebar emerald promotion
+- Keep footer background champagne as requested.
+- Change footer link/title accents to emerald.
+- Apply matching emerald title accents in the vertical sidebar without making labels low contrast.
+
+7. Hero homepage filter/search contrast
+- Improve contrast inside the hero search/filter bar so text/buttons are readable and premium.
+- Preserve the full-bleed hero stopping at the vertical sidebar line.
+
+8. Verification pass after implementation
+- Use browser screenshots after changes at desktop and mobile.
+- Check expanded sidebar MY ACCOUNT, homepage services/tools tabs, mortgage CTA navigation, footer styling, and the blank-gap issue.
+- Report exactly what was verified, without claiming anything not checked.
