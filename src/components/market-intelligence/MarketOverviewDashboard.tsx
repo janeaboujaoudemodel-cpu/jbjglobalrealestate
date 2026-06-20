@@ -162,24 +162,18 @@ export const MarketOverviewDashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {QUARTERLY_TRENDS.map((quarter, idx) => {
-                      const qBars = [
-                        'bg-gradient-to-r from-emerald-500 to-emerald-400',
-                        'bg-[#B89555]',
-                        'bg-gradient-to-r from-amber-500 to-amber-400',
-                        'bg-[#1A1A1A]',
-                      ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
                           <span className="text-sm font-semibold leading-none w-20 text-foreground">{quarter.quarter}</span>
-                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-[#EFE6D6]">
+                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-[#EFE6D6] border border-[#B89555]/30">
                             <motion.div
-                              className={`h-full ${qBars[idx % qBars.length]}`}
+                              className="h-full bg-[#1A1A1A]"
                               initial={{ width: 0 }}
                               whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.8, delay: idx * 0.1 }}
                             />
-                            <span className={`absolute right-3 top-1/2 -translate-y-1/2 ${MI_CHIP} text-foreground`}>
+                            <span className={`absolute right-2 top-1/2 -translate-y-1/2 ${MI_CHIP} rounded border border-[#B89555]/35 bg-[#FDFBF7] px-2 py-1 text-foreground shadow-sm`}>
                               {quarter.transactions.toLocaleString()}
                             </span>
                           </div>
