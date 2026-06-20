@@ -257,7 +257,7 @@ const ComparisonBar = () => {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link to="/compare" className="flex-1" onClick={() => setIsOpen(false)}>
                   <Button 
-                    className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white h-12 text-base font-semibold"
+                    className="jj-cta-dark w-full h-12 text-base font-semibold"
                     disabled={shortlist.length < 2}
                   >
                     <Sparkles className="w-5 h-5 mr-2" />
