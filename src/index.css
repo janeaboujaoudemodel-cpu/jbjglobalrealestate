@@ -6594,7 +6594,7 @@ html body :is(
   [data-surface="champagne"], [data-surface="cream"],
   [data-surface="raised"], [data-surface="gold"],
   .jj-card-inner, .jj-layer-2
-):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"]),
+):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"]),
 html body :is(
   .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
   [data-cta="champagne"], [data-cta="outline"],
@@ -6612,8 +6612,8 @@ html body :is(
   [data-surface="champagne"], [data-surface="cream"],
   [data-surface="raised"], [data-surface="gold"],
   .jj-card-inner, .jj-layer-2
-):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not([data-hero-dark]):not([data-hero-dark] *):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#0A0A0A]"] *):not([class*="bg-[#1A1A1A]"]):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-black"]):not([class*="bg-black"] *) {
+):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not([data-hero-dark]):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#1A1A1A]"]):not([class*="bg-black"])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, div, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not([data-hero-dark]):not([data-hero-dark] *):not([class*="bg-[#0A0A0A]"]):not([class*="bg-[#0A0A0A]"] *):not([class*="bg-[#1A1A1A]"]):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-black"]):not([class*="bg-black"] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
