@@ -83,21 +83,17 @@ const CombinedContactNewsletter = ({
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
                 data-no-contrast-guard
-                className="group flex flex-row sm:flex-col items-center gap-2 sm:gap-2 p-2.5 sm:p-3 rounded-xl transition-all duration-300 hover:brightness-110"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.22)",
-                  color: "#FFFFFF",
-                }}
+                className="jj-emerald-metallic group flex flex-row sm:flex-col items-center gap-2 sm:gap-2 p-2.5 sm:p-3 rounded-xl"
               >
                 <div
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0"
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.12)",
-                    border: "1px solid rgba(255,255,255,0.30)",
+                    backgroundColor: "rgba(255,255,255,0.14)",
+                    border: "1.5px solid rgba(255,255,255,0.85)",
+                    boxShadow: "0 0 12px rgba(52,211,153,0.45), inset 0 1px 0 rgba(255,255,255,0.30)",
                   }}
                 >
-                  <card.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <card.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
                 </div>
                 <div className="text-left sm:text-center">
                   <p className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{ color: "#FFFFFF" }}>{card.label}</p>
