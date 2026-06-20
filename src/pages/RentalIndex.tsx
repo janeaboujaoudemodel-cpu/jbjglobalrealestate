@@ -492,7 +492,7 @@ const RentalIndex = () => {
         <div className="ri-disclaimer-wrap ri-card-soft p-5 md:p-6">
           <div className="flex items-start gap-3 mb-4">
             <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0 border border-white/45 bg-white/10">
-              <Shield className="w-5 h-5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+              <Shield className="w-5 h-5 allow-white ri-white-icon" data-no-contrast-guard style={BRAND_ICON_STYLE} />
             </span>
             <div>
               <p className="text-sm font-semibold mb-1">AI Tool Disclaimer</p>
@@ -515,7 +515,7 @@ const RentalIndex = () => {
                 data-no-contrast-guard
                 className="allow-white inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors border border-white/45 bg-white/10 hover:bg-white/15"
               >
-                <MessageCircle className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+                <MessageCircle className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={BRAND_ICON_STYLE} />
                 WhatsApp Us
               </a>
               <a
@@ -523,7 +523,7 @@ const RentalIndex = () => {
                 data-no-contrast-guard
                 className="allow-white inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors border border-white/45 bg-white/10 hover:bg-white/15"
               >
-                <Phone className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={WHITE_ICON_STYLE} />
+                <Phone className="w-3.5 h-3.5 allow-white ri-white-icon" data-no-contrast-guard style={BRAND_ICON_STYLE} />
                 {CONTACT_INFO.phone}
               </a>
             </div>
