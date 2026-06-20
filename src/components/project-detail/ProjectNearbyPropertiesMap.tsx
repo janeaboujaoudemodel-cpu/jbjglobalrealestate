@@ -299,7 +299,7 @@ export default function ProjectNearbyPropertiesMap({
         .leaflet-popup-content { margin: 0; }
       `}</style>
       <MapContainer
-        center={center}
+        center={resolvedCenter}
         zoom={13}
         scrollWheelZoom={false}
         touchZoom={true}
