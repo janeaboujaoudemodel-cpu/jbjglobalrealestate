@@ -138,6 +138,7 @@ const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const MyDashboard = lazy(() => import("@/pages/MyDashboard"));
 const MyDashboardProgress = lazy(() => import("@/pages/MyDashboardProgress"));
 const MyDashboardActivity = lazy(() => import("@/pages/MyDashboardActivity"));
+const AccountBilling = lazy(() => import("@/pages/AccountBilling"));
 const InvestorDashboard = lazy(() => import("@/pages/InvestorDashboard"));
 const PortfolioViews = lazy(() => import("@/pages/investor/PortfolioViews"));
 const ReportAccess = lazy(() => import("@/pages/investor/ReportAccess"));
