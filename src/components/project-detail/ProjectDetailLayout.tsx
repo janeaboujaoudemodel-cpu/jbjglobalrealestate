@@ -1315,27 +1315,29 @@ export default function ProjectDetailLayout({
                 longitude={project.longitude ?? null}
                />
 
-              {/* Nearby Properties Map (other developers in this area) */}
-              {((typeof project.latitude === 'number' && typeof project.longitude === 'number') || !!project.area_name) && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Other projects in this area</h3>
-                  <ProjectNearbyPropertiesMap
-                    currentProjectId={project.id}
-                    currentProjectName={project.name}
-                    currentProjectSlug={project.slug ?? null}
-                    currentDeveloperId={project.developer?.id ?? (project as any).developer_id ?? null}
-                    currentDeveloperName={project.developer?.name ?? null}
-                    latitude={typeof project.latitude === 'number' ? project.latitude : null}
-                    longitude={typeof project.longitude === 'number' ? project.longitude : null}
-                    areaName={project.area_name}
-                  />
-                  <p className="mt-2 text-xs text-[#1A1A1A]/70">
-                    {typeof project.latitude === 'number' && typeof project.longitude === 'number'
-                      ? 'Red pin = this project · Champagne pins = other developers nearby. Click a pin to open that project — you can always return here using the chip at the top.'
-                      : `Champagne pins = other developers in ${project.area_name}. Click a pin to open that project — you can always return here using the chip at the top.`}
-                  </p>
-                </div>
-              )}
+              {/* Nearby Properties Map — ALWAYS rendered so visitors can see
+                  other developer projects in the same area, regardless of
+                  whether this project has coords or an area_name. */}
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-foreground mb-3">
+                  Other projects in {project.area_name || project.emirate || 'this area'}
+                </h3>
+                <ProjectNearbyPropertiesMap
+                  currentProjectId={project.id}
+                  currentProjectName={project.name}
+                  currentProjectSlug={project.slug ?? null}
+                  currentDeveloperId={project.developer?.id ?? (project as any).developer_id ?? null}
+                  currentDeveloperName={project.developer?.name ?? null}
+                  latitude={typeof project.latitude === 'number' ? project.latitude : null}
+                  longitude={typeof project.longitude === 'number' ? project.longitude : null}
+                  areaName={project.area_name || project.emirate || null}
+                />
+                <p className="mt-2 text-xs text-[#1A1A1A]/70">
+                  {typeof project.latitude === 'number' && typeof project.longitude === 'number'
+                    ? 'Red pin = this project · Champagne pins = other developers nearby. Click a pin to open that project — you can always return here using the chip at the top.'
+                    : `Champagne pins = other developers in ${project.area_name || project.emirate || 'this area'}. Click a pin to open that project — you can always return here using the chip at the top.`}
+                </p>
+              </div>
 
 
               {/* Nearby Points of Interest - Below Map */}
