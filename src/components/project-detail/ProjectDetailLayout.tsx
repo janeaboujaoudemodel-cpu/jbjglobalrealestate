@@ -1573,6 +1573,22 @@ export default function ProjectDetailLayout({
              <SectionDividerGoldFullBleed />
            </div>
 
+           {/* BUYER NATIONALITY INSIGHTS — project + area */}
+           <BuyerNationalityInsights
+             projectName={project.name}
+             areaName={project.area_name || project.location || null}
+           />
+
+           {/* MORE FROM THIS DEVELOPER — moved to bottom so it doesn't replace the area map */}
+           <MoreFromDeveloperStrip
+             currentProjectId={project.id}
+             developerId={project.developer?.id ?? (project as any).developer_id ?? null}
+             developerName={project.developer?.name ?? (project as any).developer_name ?? null}
+             developerSlug={project.developer?.slug ?? null}
+           />
+
+
+
 
            {/* INVESTMENT METRICS SECTION */}
            {(project.roi_estimate || project.rental_yield_estimate) && (
