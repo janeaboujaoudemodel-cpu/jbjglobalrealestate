@@ -109,46 +109,52 @@ for (const route of routes) {
       return matched.slice(-5);
     };
 
-    const selectors = 'button,a,[role="button"],input,textarea,select,h1,h2,h3,p,span,label,svg';
+    const selectors = 'button,a,[role="button"],input,textarea,select,h1,h2,h3,p,span,label,svg,[class*="lucide"]';
     return Array.from(document.querySelectorAll(selectors)).flatMap((element) => {
       const rect = element.getBoundingClientRect();
       if (rect.width < 4 || rect.height < 4 || rect.bottom < 0 || rect.top > innerHeight || rect.right < 0 || rect.left > innerWidth) return [];
       if (isVisiblyHidden(element)) return [];
+      const visibleLabel = (element.textContent || element.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ');
+      if (!visibleLabel && !(element instanceof SVGElement) && !element.matches('button,a,[role="button"],input,textarea,select')) return [];
 
       const computed = getComputedStyle(element);
-      const foreground = rgb(computed.color);
+      const stroke = rgb(computed.stroke);
+      const textFill = rgb(computed.webkitTextFillColor);
+      const foreground = element instanceof SVGElement && stroke && computed.stroke !== 'none'
+        ? stroke
+        : textFill || rgb(computed.color);
       const background = effectiveBackground(element);
       if (!foreground || !background.parsed) return [];
 
       const ratio = contrastRatio(foreground, background.parsed);
       const bgLum = luminance(background.parsed);
       const fgLum = luminance(foreground);
-      const blueDarkBg = background.parsed.b > background.parsed.r + 20 && bgLum < 0.25;
-      const champagneLightBg = bgLum > 0.72 && background.parsed.r > 220 && background.parsed.g > 200;
-      const blackOnBlue = blueDarkBg && fgLum < 0.18;
+      const darkBg = bgLum < 0.25;
+      const lightBg = bgLum > 0.72 && background.parsed.r > 220 && background.parsed.g > 200;
+      const blackOnDark = darkBg && fgLum < 0.18;
       const insideDarkHero = Boolean(element.closest('[data-hero-dark]'));
-      const whiteOnChampagne = champagneLightBg && fgLum > 0.72 && !insideDarkHero;
+      const whiteOnLight = lightBg && fgLum > 0.72 && !insideDarkHero;
 
-      if (ratio >= 4.5 && !blackOnBlue && !whiteOnChampagne) return [];
+      if (ratio >= 4.5 && !blackOnDark && !whiteOnLight) return [];
       return [{
-        text: (element.textContent || element.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').slice(0, 80),
+        text: visibleLabel.slice(0, 80),
         tag: element.tagName,
         className: element.getAttribute('class') || '',
         color: computed.color,
         background: background.color,
         backgroundOwner: `${background.tag}.${background.className}`.slice(0, 120),
         ratio: Number(ratio.toFixed(2)),
-        blackOnBlue,
-        whiteOnChampagne,
+        blackOnDark,
+        whiteOnLight,
         matchingRules: matchingRules(element),
       }];
     }).slice(0, 40);
   }, { rgbSource: rgb.toString(), luminanceSource: luminance.toString(), contrastRatioSource: contrastRatio.toString() });
 
-  const polarityFailures = routeFailures.filter((item) => item.blackOnBlue || item.whiteOnChampagne);
+  const polarityFailures = routeFailures.filter((item) => item.blackOnDark || item.whiteOnLight);
   if (polarityFailures.length) failures.push({ route, failures: polarityFailures });
   console.log(
-    `${polarityFailures.length ? '✗' : '✓'} ${route} — ${polarityFailures.length} black-on-blue/white-on-champagne issue(s), ${routeFailures.length} low-contrast warning(s)`,
+    `${polarityFailures.length ? '✗' : '✓'} ${route} — ${polarityFailures.length} black-on-dark/white-on-light issue(s), ${routeFailures.length} low-contrast warning(s)`,
   );
   await page.close();
 }
