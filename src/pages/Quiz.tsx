@@ -899,37 +899,35 @@ const Quiz = () => {
 
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div
-            data-allow-dark-cta
-            data-no-contrast-guard
-            className="allow-white w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
+            className="w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
             style={{
-              background: "#0A0A0A",
+              background: "#F7F2EA",
               border: "1px solid rgba(184,149,85,0.45)",
-              boxShadow: "0 0 0 1px rgba(184,149,85,0.25), 0 24px 60px rgba(10,10,10,0.35), inset 0 0 32px rgba(184,149,85,0.10)",
+              boxShadow: "0 24px 60px rgba(10,10,10,0.06)",
             }}
           >
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7"
               style={{
-                background: "rgba(184,149,85,0.18)",
-                border: "1px solid rgba(184,149,85,0.50)",
-                color: "#FFFFFF",
+                background: "rgba(184,149,85,0.12)",
+                border: "1px solid rgba(184,149,85,0.45)",
               }}
             >
-              <Gift className="w-4 h-4 allow-white" style={{ color: "#B89555" }} />
-              <span className="text-sm font-medium allow-white" style={{ color: "#FFFFFF" }}>Completely Free</span>
+              <Gift className="w-4 h-4" style={{ color: "#B89555" }} />
+              <span className="text-sm font-medium" style={{ color: "#1A1A1A" }}>Completely Free</span>
             </div>
 
             <div
               className="w-20 h-20 rounded-full mx-auto mb-7 flex items-center justify-center"
               style={{
-                background: "#0A0A0A",
-                border: "1px solid rgba(184,149,85,0.55)",
-                boxShadow: "0 0 28px rgba(184,149,85,0.45)",
+                background: "#FDFBF7",
+                border: "1px solid rgba(184,149,85,0.65)",
+                boxShadow: "0 0 28px rgba(184,149,85,0.20)",
               }}
             >
-              <Wand2 className="w-10 h-10 allow-white" style={{ color: "#FFFFFF" }} />
+              <Wand2 className="w-10 h-10" style={{ color: "#B89555" }} />
             </div>
+
 
             <h1 className="allow-white text-4xl md:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#FFFFFF" }}>
               AI Property Finder
