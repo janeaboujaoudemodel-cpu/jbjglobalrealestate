@@ -1774,16 +1774,35 @@ All colors MUST be HSL.
    * ============================================================ */
   
   /* --- Page & Section Spacing --- */
-  /* Page top/bottom: 96px | Section-to-section: 96px */
+  /* .jj-page = global page shell: centered max-width + safe horizontal
+     gutters that also clear the fixed right Contact-Us rail on lg+. */
   .jj-page {
-    padding-top: 6rem;    /* 96px */
-    padding-bottom: 6rem; /* 96px */
+    width: 100%;
+    max-width: var(--page-max-w);
+    margin-inline: auto;
+    padding-top: clamp(24px, 4vw, 48px);
+    padding-bottom: clamp(40px, 6vw, 96px);
+    padding-left: var(--page-px-mobile);
+    padding-right: var(--page-px-mobile);
+  }
+  @media (min-width: 768px) {
+    .jj-page {
+      padding-left: var(--page-px-tablet);
+      padding-right: var(--page-px-tablet);
+    }
+  }
+  @media (min-width: 1024px) {
+    .jj-page {
+      padding-left: var(--page-px-desktop);
+      padding-right: calc(var(--page-px-desktop) + var(--rail-safe-right));
+    }
   }
 
   .jj-section {
-    padding-top: 6rem;    /* 96px - Section-to-section */
-    padding-bottom: 6rem;
+    padding-top: var(--section-gap-y);
+    padding-bottom: var(--section-gap-y);
   }
+
 
   /* Section internal padding: Desktop 64px, Tablet 48px, Mobile 32px */
   .jj-section-inner {
