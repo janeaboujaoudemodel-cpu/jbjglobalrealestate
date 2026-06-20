@@ -1083,11 +1083,13 @@ All colors MUST be HSL.
 /* Bands inside the gutter wrapper break out to the inner viewport edges
    (post-sidebar), never beyond. */
 [data-content-gutter="1"] > .jj-band,
-[data-content-gutter="1"] .jj-band {
+[data-content-gutter="1"] .jj-band,
+[data-content-gutter="1"] .jj-fullbleed-band {
   margin-left: calc(-1 * var(--jj-content-gutter));
   margin-right: calc(-1 * var(--jj-content-gutter));
   width: auto;
 }
+
 
 .jj-band {
   width: 100%;

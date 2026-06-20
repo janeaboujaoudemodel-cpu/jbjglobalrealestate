@@ -126,10 +126,11 @@ const ExploreServicesExpander = () => {
       {/* Unified segmented header — rectangular pill band, dividers between categories */}
       <div
         ref={tabsRef}
-        data-surface="dark"
+        data-ink-emerald
         data-on-dark
         data-no-contrast-guard
-        className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#047857]/45 bg-[#0A0A0A] divide-x divide-white/30"
+        className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#047857]/45 divide-x divide-white/30"
+        style={{ backgroundImage: "var(--gradient-ink)" }}
         role="tablist"
         aria-label="Services"
       >
@@ -140,25 +141,25 @@ const ExploreServicesExpander = () => {
             <button
               key={s.id}
               data-tab-id={s.id}
-              data-surface={isActive ? "champagne" : "dark"}
               data-cta={isActive ? "champagne" : "dark"}
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
               style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}
               data-no-contrast-guard
-              className={`shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-[background-color] ${
+              className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap rounded-none transition-[background-color] ${
                 isActive
                   ? `bg-[#EFE6D6] hover:bg-[#EFE6D6] text-[#1A1A1A] hover:text-[#1A1A1A]`
-                  : `text-white hover:bg-[#1F1F1F]`
+                  : `text-white hover:bg-white/10`
               } ${s.available === false ? "opacity-80" : ""}`}
             >
               <Icon className={`w-4 h-4 ${isActive ? "" : "allow-white"}`} style={isActive ? { color: "#1A1A1A", stroke: "#1A1A1A" } : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}>{s.title}</span>
+              <span className={isActive ? "" : "allow-white"} style={isActive ? { color: "#1A1A1A" } : { color: "#FFFFFF" }}>{s.title}</span>
             </button>
           );
         })}
       </div>
+
 
 
 
@@ -194,15 +195,17 @@ const ExploreServicesExpander = () => {
             ) : (
               <Link
                 to={active.href}
-                data-surface="dark"
+                data-ink-emerald
+                data-on-dark
                 data-no-contrast-guard
                 data-allow-dark-cta
-                className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1A1A1A]/55 hover:bg-[#1A1A1A]/75 backdrop-blur-md text-white font-semibold text-sm border border-white/60 transition-[background-color] shadow-[0_8px_24px_rgba(0,0,0,0.35)]"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}
+                className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white font-semibold text-sm border border-white/40 transition-[background-color,box-shadow] shadow-[0_8px_24px_rgba(4,120,87,0.45)] hover:shadow-[0_10px_28px_rgba(4,120,87,0.55)]"
+                style={{ backgroundImage: "var(--gradient-ink)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
               >
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore Now</span>
                 <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </Link>
+
             )}
           </div>
         </div>

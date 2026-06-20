@@ -1,78 +1,44 @@
-# Global Layout Gutter + Anti-Underflow Fix
+Implement the remaining fixes exactly where they are currently failing:
 
-## Problem (from screenshots)
+1. Vertical sidebar: Billing & Subscriptions
+- `accountShortcuts.ts` already contains Billing, but `GlobalVerticalNav.tsx` still has a separate hard-coded MY ACCOUNT group that stops before Billing.
+- Add `Billing & Subscriptions` directly into the hard-coded MY ACCOUNT nav order so it appears in the expanded vertical sidebar.
+- Keep it in the canonical account shortcut list too; do not remove any account items.
 
-1. **Project page** — KPI cards (Starting Price / Handover / Bedrooms / Size), property-type tile, and chip sub-nav (Price / Payments / Handover / Property Type / Bedrooms / Status) sit flush against the vertical sidebar's right edge. No breathing room.
-2. **Dubai Market Intelligence** — KPI grid (`AED 145.5B`, `+24…`, `TRANSACTIONS 48,980`, etc.) is clipped on the **left** by the sidebar and on the **right** by the viewport. The section is rendering wider than the post-sidebar viewport and sliding underneath the fixed chrome.
-3. Same pattern repeats on every page that uses `.jj-band` full-bleed sections or wide grids.
+2. My Account dashboard: Brand Update subcategory/card
+- Add a visible `Brand Update` shortcut/card directly under the top dashboard heading area and before the main dashboard grid.
+- Link it to the existing Brand Palette route (`/brand-palette`) unless a more specific existing route is found during implementation.
+- Add `#brand-update` to the dashboard hash mapping so sidebar/header account subcategory navigation can land on it.
+- Do not remove existing Profile, Badges, Account Settings, Tasks, Notifications, Quick Actions, Activity, Favorites, Shortlist, Explore & Learn, or AI Tools blocks.
 
-## Root cause
+3. Emerald + white contrast for services and AI tools
+- In `ExploreServicesExpander.tsx` and `ToolkitShowcaseCard.tsx`, change the segmented tab strip from black to the emerald gradient.
+- Keep all inactive tab labels/icons white on emerald.
+- Active tab can remain champagne/ink only if it is the selected pill; all emerald segments must have white text/icons at rest and hover.
+- Change the photo CTA (`Explore Now` and AI tool CTA buttons) from black/frosted black to emerald gradient with white text/icons at rest and hover.
+- Add `allow-white` / `data-no-contrast-guard` where needed so global contrast guards cannot flip these labels back to black.
 
-`src/components/MainLayout.tsx` line 289 — `<main>` reserves left padding equal to the sidebar width (`sm:pl-[200px]` / `sm:pl-[48px]`) but never adds an **inner horizontal gutter**. Pages and `.jj-band` sections then render edge-to-edge inside `<main>`, so:
+4. Header service tabs in Explore Our Services
+- Specifically fix `Sell Your Property`, `Rent a Property`, `List Your Property for Rent`, etc. so their tab backgrounds are emerald, not black.
+- Preserve the scrollable tab behavior and active tab behavior.
 
-- Cards touch the 0px right edge of the sidebar (no `px-*` on the page wrappers).
-- `.jj-band` full-bleed sections (defined in `src/index.css`) use `margin-left: calc(50% - 50vw)` style tricks that compute against the **viewport**, not against the post-sidebar inner box — so they extend *under* the fixed sidebar.
+5. Restore full-width bands after the sidebar line
+- Keep the global main gutter for normal cards/KPIs so content does not touch the sidebar.
+- Restore homepage/full-band sections to stretch from the vertical sidebar boundary to the right edge, not sit inside a large side gap.
+- Apply this by making `PremiumSectionCard width="full"` break out of the gutter to the inner viewport edges while its child card/content keeps its own internal padding.
+- Do not allow sections to go underneath the fixed vertical sidebar or horizontal header.
 
-## Fix — 3 layers
+6. Verification pass after implementation
+- Check homepage at desktop size: hero-adjacent sections, Explore Our Services, Developer/market/join-style bands, Featured Listings, Royal Tools, Top Areas stretch correctly from sidebar boundary to right edge.
+- Check expanded vertical sidebar: MY ACCOUNT contains Billing & Subscriptions.
+- Check My Dashboard: Brand Update card appears above the dashboard content.
+- Check services/tools cards: service names, AI tool names, and CTA labels remain white on emerald at rest and hover.
+- Check at multiple viewports requested previously: desktop wide, laptop, tablet, mobile.
 
-### 1. Global inner gutter on `<main>` (the primary fix)
-
-`src/components/MainLayout.tsx`, line 289 — add responsive horizontal padding to the `<main>` element so EVERY page automatically gets breathing room from both the sidebar and the right viewport edge:
-
-```
-px-4 sm:px-6 lg:px-8
-```
-
-Skip the gutter only when `usesStandalonePortalChrome` (back-office / broker portal already manages its own chrome).
-
-Add CSS variable `--jj-content-gutter: clamp(16px, 2vw, 32px)` to `:root` in `src/index.css` so bands/sections can reference the same value.
-
-### 2. Clamp `.jj-band` full-bleed to the post-sidebar viewport
-
-`src/index.css` — `.jj-band` (and `.jj-band-page`, `.jj-band-surface`, `.jj-band-raised`) currently extend to `100vw`. Replace the full-bleed math so it spans the **inner viewport** (viewport width minus active sidebar width) instead of true viewport width:
-
-```css
-.jj-band {
-  /* old: margin-left: calc(50% - 50vw); width: 100vw; */
-  margin-left: calc(-1 * var(--jj-content-gutter));
-  margin-right: calc(-1 * var(--jj-content-gutter));
-  width: auto;
-}
-```
-
-This makes bands break out of the page gutter but stay inside `<main>`, which is already offset by the sidebar. No more underflow.
-
-Add a body-level fallback for legacy `margin-left: calc(50% - 50vw)` usages: 
-
-```css
-body.jj-vertical-nav-active main [style*="50vw"],
-body.jj-vertical-nav-active main .full-bleed {
-  max-width: 100% !important;
-}
-```
-
-### 3. Horizontal scrollers stay inside the gutter
-
-The project-detail chip sub-nav and Market Intel KPI grid use `overflow-x-auto` rows. They're fine — once the parent `<main>` has `px-4 sm:px-6 lg:px-8`, the scroll track starts inside the gutter automatically. No per-component changes required.
-
-For the KPI grid specifically (Dubai Market Intel) — verify in `src/pages/owner/OwnerMarketIntel.tsx` that the grid is not wrapped in a `<div className="-mx-*">` negative-margin bleed. If it is, remove it.
-
-## Out of scope
-
-- No changes to sidebar width, header height, or `.jj-cta-*` primitives.
-- No changes to mobile (`<sm`) — the sidebar isn't fixed there.
-- No new design tokens beyond `--jj-content-gutter`.
-- No content/layout edits inside individual pages; the gutter must come from the shell.
-
-## Verification (after build)
-
-1. Project page `/project/vindera` at 1920×1080 — KPI cards must show ≥16px gap from the sidebar's right edge and the right viewport edge.
-2. `/owner/market-intel` — first KPI card's left edge must be ≥16px from the sidebar; `+24%` must be fully visible on the right.
-3. Home page bands (Royal Tools, Top Areas, Continue Searching) — band background still spans full inner width but no card touches the sidebar.
-4. Mobile 390×844 — no regression; layout unchanged.
-5. Sidebar collapsed state (`body.jj-vertical-nav-collapsed`) — gutter unchanged, content still has breathing room.
-
-## Memory update
-
-Add to `mem://ui-ux/navigation/header-sidebar-alignment-standard-v11-locked`:
-> Global content gutter is `px-4 sm:px-6 lg:px-8` on `<main>` (variable `--jj-content-gutter`). Full-bleed `.jj-band` clamps to inner viewport via negative gutter margins — never `100vw`. No section may extend under the fixed sidebar.
+Files expected to change:
+- `src/components/navigation/GlobalVerticalNav.tsx`
+- `src/pages/MyDashboard.tsx`
+- `src/components/home/ExploreServicesExpander.tsx`
+- `src/components/home/ToolkitShowcaseCard.tsx`
+- `src/components/ui/premium-section-card.tsx`
+- possibly `src/index.css` only for a narrow full-width gutter/emerald contrast helper if component classes alone are insufficient.

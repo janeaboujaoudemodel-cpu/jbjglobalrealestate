@@ -5,7 +5,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, BookOpen, ChevronRight, ListChecks, Sparkles } from "lucide-react";
+import { Loader2, BookOpen, ChevronRight, ListChecks, Sparkles, Palette } from "lucide-react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,6 +66,7 @@ const SECTION_IDS: Record<string, string> = {
   '#activity': 'activity-section',
   '#badges': 'badges-section',
   '#ai-tools': 'ai-tools-section',
+  '#brand-update': 'brand-update-section',
 };
 
 /** Useful Links card for dashboard */
@@ -317,6 +318,32 @@ const MyDashboard = () => {
                   : "Welcome back! Here's an overview of your activity and saved items."
               }
             </p>
+
+            {/* Brand Update — quick access to brand palette / brand identity */}
+            <div id="brand-update-section" className={cn("mb-6", sectionClass('brand-update-section'))}>
+              <Card className="border border-[#B89555]/40 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
+                <CardContent className="py-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/40 border border-[#B89555]/40 flex items-center justify-center shrink-0">
+                        <Palette className="w-5 h-5 text-[#B89555]" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Brand Update</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">Manage your brand palette, logo and identity assets</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" asChild className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/20 hover:text-[#1A1A1A] shrink-0">
+                      <Link to="/brand-palette">
+                        Update Brand
+                        <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
 
             {/* Main Grid Layout — 2 columns */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
