@@ -35,7 +35,11 @@ export const NewsletterBrevo = ({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
-  const animatedPlaceholder = useTypewriter(NEWSLETTER_TYPEWRITER_PHRASES);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  // Pause typewriter when the user focuses the field or has typed something.
+  const animatedPlaceholder = useTypewriter(NEWSLETTER_TYPEWRITER_PHRASES, {
+    paused: isEmailFocused || email.length > 0,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,20 +142,10 @@ export const NewsletterBrevo = ({
             className="jj-emerald-pill jj-emerald-glow-wrap jj-newsletter-emerald relative flex items-stretch h-12 rounded-xl overflow-hidden"
             style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
           >
-            <div className="relative flex-1 min-w-0">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-label="Email address"
-                required
-                disabled={isSubmitting}
-                className="w-full h-full px-4 text-sm font-semibold tracking-wide bg-transparent"
-                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-              />
-              {!email && (
+            <div className="relative flex-1 min-w-0 cursor-text">
+              {!email && !isEmailFocused && (
                 <span
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap"
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap z-[1]"
                   aria-hidden="true"
                   style={{ color: 'rgba(255,255,255,0.78)', WebkitTextFillColor: 'rgba(255,255,255,0.78)' }}
                 >
@@ -159,6 +153,18 @@ export const NewsletterBrevo = ({
                   <span className="jj-type-caret" aria-hidden="true">|</span>
                 </span>
               )}
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setIsEmailFocused(true)}
+                onBlur={() => setIsEmailFocused(false)}
+                aria-label="Email address"
+                required
+                disabled={isSubmitting}
+                className="relative z-10 w-full h-full px-4 text-sm font-semibold tracking-wide bg-transparent cursor-text"
+                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', pointerEvents: 'auto' }}
+              />
             </div>
             <button
               type="submit"

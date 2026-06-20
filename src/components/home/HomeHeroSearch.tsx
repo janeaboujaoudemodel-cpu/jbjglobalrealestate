@@ -38,7 +38,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
   const navigate = useNavigate();
   const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
-  const animatedPlaceholder = useTypewriter(HERO_TYPEWRITER_PHRASES);
+  const [isFocused, setIsFocused] = useState(false);
+  // Pause typewriter whenever user is focused on the field OR has typed anything.
+  // Resumes automatically once the field loses focus AND is empty again.
+  const animatedPlaceholder = useTypewriter(HERO_TYPEWRITER_PHRASES, {
+    paused: isFocused || draft.length > 0,
+  });
+
 
   const runSearch = useCallback(async () => {
     if (searching) return;
@@ -131,35 +137,14 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           }}
         >
           {/* INPUT segment — transparent on emerald, white text + animated placeholder */}
-          <div role="search" className="relative flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0">
-            <input
-              type="text"
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  onSubmit(e as unknown as React.FormEvent);
-                }
-              }}
-              aria-label="Search the JBJ website"
-              data-no-contrast-guard
-              className="jj-hero-search-input flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal"
-              style={{
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                caretColor: "#FFFFFF",
-                border: "none",
-                outline: "none",
-                boxShadow: "none",
-                background: "transparent",
-              }}
-            />
-            {/* Animated letter-by-letter typewriter placeholder — only when empty */}
-            {!draft && (
+          <div role="search" className="relative flex flex-1 items-center pl-5 sm:pl-6 lg:pl-7 pr-3 min-w-0 cursor-text">
+            {/* Animated letter-by-letter typewriter placeholder — only when empty AND unfocused.
+                Rendered BEFORE the input so the input sits above it in stacking order, and
+                `pointer-events-none` ensures clicks fall through to the input regardless. */}
+            {!draft && !isFocused && (
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-5 sm:left-6 lg:left-7 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden"
+                className="pointer-events-none absolute left-5 sm:left-6 lg:left-7 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden z-[1]"
                 style={{
                   color: "rgba(255,255,255,0.78)",
                   WebkitTextFillColor: "rgba(255,255,255,0.78)",
@@ -170,6 +155,33 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
                 <span className="jj-type-caret" aria-hidden="true">|</span>
               </span>
             )}
+            <input
+              type="text"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onSubmit(e as unknown as React.FormEvent);
+                }
+              }}
+              aria-label="Search the JBJ website"
+              data-no-contrast-guard
+              tabIndex={0}
+              className="jj-hero-search-input relative z-10 flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal cursor-text"
+              style={{
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                caretColor: "#FFFFFF",
+                border: "none",
+                outline: "none",
+                boxShadow: "none",
+                background: "transparent",
+                pointerEvents: "auto",
+              }}
+            />
           </div>
 
           {/* SEARCH button — IDENTICAL emerald fill to Free Consultation, white text. */}
