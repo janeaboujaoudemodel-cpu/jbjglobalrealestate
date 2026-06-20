@@ -1051,15 +1051,37 @@ All colors MUST be HSL.
 
 /* New, explicit band primitives with tone alternation.
    The tone step between adjacent bands IS the divider — no lines, no gray. */
+/* Global page-shell tokens.
+   Used by .jj-page, .jj-band, GlobalFilterBar, and any wrapper that
+   needs to respect the fixed left nav AND the right Contact-Us rail. */
+:root {
+  --page-px-mobile: 16px;
+  --page-px-tablet: 24px;
+  --page-px-desktop: 32px;
+  --page-max-w: 1440px;
+  --rail-safe-right: 56px;        /* clearance for fixed right Contact-Us rail */
+  --section-gap-y: clamp(32px, 5vw, 64px);
+}
+
 .jj-band {
   width: 100%;
-  padding-block: clamp(2.5rem, 5vw, 4.5rem);
-  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  padding-inline: var(--page-px-mobile);
+}
+@media (min-width: 768px) {
+  .jj-band { padding-inline: var(--page-px-tablet); }
+}
+@media (min-width: 1024px) {
+  .jj-band {
+    padding-left: var(--page-px-desktop);
+    padding-right: calc(var(--page-px-desktop) + var(--rail-safe-right));
+  }
 }
 .jj-band > * {
-  max-width: 1280px;
+  max-width: var(--page-max-w);
   margin-inline: auto;
 }
+
 .jj-band--page    { background: #FDFBF7; }
 .jj-band--surface { background: #F7F2EA; }
 .jj-band--raised  { background: #EFE6D6; }
