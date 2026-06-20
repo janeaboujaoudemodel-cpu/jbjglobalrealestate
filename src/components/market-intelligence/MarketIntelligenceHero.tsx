@@ -60,8 +60,8 @@ export const MarketIntelligenceHero = ({
         ) : null}
       </div>
 
-      {/* Legibility overlay — dark enough for white copy, without the washed/faded hero look */}
-      <div className="absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.66)_0%,rgba(0,0,0,0.58)_48%,rgba(0,0,0,0.72)_100%)] pointer-events-none" />
+      {/* Legibility overlay — light touch so the video/image stays visible, never washed out */}
+      <div className="absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.36)_0%,rgba(0,0,0,0.24)_48%,rgba(0,0,0,0.46)_100%)] pointer-events-none" />
 
       <motion.div 
         className="relative z-10 w-full py-20 md:py-24"
