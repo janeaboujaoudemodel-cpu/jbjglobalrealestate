@@ -4955,12 +4955,14 @@ html body :is(
   [data-surface="gold"],
   .jj-card-inner,
   .jj-layer-2,
-  [style*="background" i][style*="#ffffff" i],
-  [style*="background" i][style*="#fdfbf7" i],
-  [style*="background" i][style*="#f7f2ea" i],
-  [style*="background" i][style*="#efe6d6" i],
-  [style*="background" i][style*="255, 255, 255" i],
-  [style*="background" i][style*="255,255,255" i]
+  [style*="background-color: #ffffff" i],
+  [style*="background-color:#ffffff" i],
+  [style*="background-color: #fdfbf7" i],
+  [style*="background-color:#fdfbf7" i],
+  [style*="background-color: #f7f2ea" i],
+  [style*="background-color:#f7f2ea" i],
+  [style*="background-color: #efe6d6" i],
+  [style*="background-color:#efe6d6" i]
 ):not([data-neon-page]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]),
 html body :is(
   .jj-cta-champagne,
