@@ -4917,31 +4917,28 @@ html body :is(
   [data-cta="champagne"],
   [data-cta="outline"],
   .bg-white,
-  [class*="bg-white"],
-  .bg-background,
-  .bg-card,
-  .bg-popover,
-  .bg-secondary,
-  .bg-accent,
-  .bg-muted,
-  [class*="bg-[#FFFFFF]"],
-  [class*="bg-[#FFF]"],
-  [class*="bg-[#FDFBF7]"],
-  [class*="bg-[#FAF5EC]"],
-  [class*="bg-[#F7F2EA]"],
-  [class*="bg-[#F5F0E6]"],
-  [class*="bg-[#F2EADB]"],
-  [class*="bg-[#EFE6D6]"],
-  [class*="bg-[#EADFC8]"],
-  [class*="bg-[#E8DCC4]"],
-  [class*="bg-[#E5D9BE]"],
-  [class*="bg-[#B89555]"],
-  [class*="bg-champagne"],
-  [class*="bg-cream"],
-  [class*="bg-pearl"],
-  [class*="bg-beige"],
-  [class*="bg-ivory"],
-  [class*="bg-sand"],
+  [class~="bg-white"],
+  [class~="bg-[#FFFFFF]"],
+  [class~="bg-[#FFF]"],
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#FAF5EC]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#F5F0E6]"],
+  [class~="bg-[#F2EADB]"],
+  [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#EADFC8]"],
+  [class~="bg-[#E8DCC4]"],
+  [class~="bg-[#E5D9BE]"],
+  [class~="bg-[#B89555]"],
+  [class~="from-[#FDFBF7]"],
+  [class~="via-[#F7F2EA]"],
+  [class~="to-[#EFE6D6]"],
+  [class~="bg-champagne"],
+  [class~="bg-cream"],
+  [class~="bg-pearl"],
+  [class~="bg-beige"],
+  [class~="bg-ivory"],
+  [class~="bg-sand"],
   .surface-page,
   .surface-light,
   .surface-pearl,
@@ -4964,7 +4961,7 @@ html body :is(
   [style*="background" i][style*="#efe6d6" i],
   [style*="background" i][style*="255, 255, 255" i],
   [style*="background" i][style*="255,255,255" i]
-):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class*="bg-[#0A0A0A]/"]):not([class*="bg-[#1A1A1A]/"]):not([class*="bg-black/"]),
+):not([data-neon-page]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]),
 html body :is(
   .jj-cta-champagne,
   .jj-cta-outline,
@@ -4972,31 +4969,28 @@ html body :is(
   [data-cta="champagne"],
   [data-cta="outline"],
   .bg-white,
-  [class*="bg-white"],
-  .bg-background,
-  .bg-card,
-  .bg-popover,
-  .bg-secondary,
-  .bg-accent,
-  .bg-muted,
-  [class*="bg-[#FFFFFF]"],
-  [class*="bg-[#FFF]"],
-  [class*="bg-[#FDFBF7]"],
-  [class*="bg-[#FAF5EC]"],
-  [class*="bg-[#F7F2EA]"],
-  [class*="bg-[#F5F0E6]"],
-  [class*="bg-[#F2EADB]"],
-  [class*="bg-[#EFE6D6]"],
-  [class*="bg-[#EADFC8]"],
-  [class*="bg-[#E8DCC4]"],
-  [class*="bg-[#E5D9BE]"],
-  [class*="bg-[#B89555]"],
-  [class*="bg-champagne"],
-  [class*="bg-cream"],
-  [class*="bg-pearl"],
-  [class*="bg-beige"],
-  [class*="bg-ivory"],
-  [class*="bg-sand"],
+  [class~="bg-white"],
+  [class~="bg-[#FFFFFF]"],
+  [class~="bg-[#FFF]"],
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#FAF5EC]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#F5F0E6]"],
+  [class~="bg-[#F2EADB]"],
+  [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#EADFC8]"],
+  [class~="bg-[#E8DCC4]"],
+  [class~="bg-[#E5D9BE]"],
+  [class~="bg-[#B89555]"],
+  [class~="from-[#FDFBF7]"],
+  [class~="via-[#F7F2EA]"],
+  [class~="to-[#EFE6D6]"],
+  [class~="bg-champagne"],
+  [class~="bg-cream"],
+  [class~="bg-pearl"],
+  [class~="bg-beige"],
+  [class~="bg-ivory"],
+  [class~="bg-sand"],
   .surface-page,
   .surface-light,
   .surface-pearl,
@@ -5019,8 +5013,8 @@ html body :is(
   [style*="background" i][style*="#efe6d6" i],
   [style*="background" i][style*="255, 255, 255" i],
   [style*="background" i][style*="255,255,255" i]
-):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class*="bg-[#0A0A0A]/"]):not([class*="bg-[#1A1A1A]/"]):not([class*="bg-black/"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.jj-side-tile.is-active):not(.jj-side-tile.is-active *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([class*="bg-[#0A0A0A]/"]):not([class*="bg-[#0A0A0A]/"] *):not([class*="bg-[#1A1A1A]/"]):not([class*="bg-[#1A1A1A]/"] *):not([class*="bg-black/"]):not([class*="bg-black/"] *) {
+):not([data-neon-page]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.jj-side-tile.is-active):not(.jj-side-tile.is-active *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"] *):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"] *):not([class^="bg-black/"]):not([class*=" bg-black/"]):not([class^="bg-black/"]):not([class*=" bg-black/"] *) {
   color: var(--jj-contrast-on-light) !important;
   -webkit-text-fill-color: var(--jj-contrast-on-light) !important;
   stroke: var(--jj-contrast-on-light) !important;
@@ -5043,9 +5037,12 @@ html body :is(
   [class~="bg-black"],
   [class~="bg-[#0A0A0A]"],
   [class~="bg-[#1A1A1A]"],
-  [class*="bg-[#0A0A0A]/"],
-  [class*="bg-[#1A1A1A]/"],
-  [class*="bg-black/"],
+  [class^="bg-[#0A0A0A]/"], [class*=" bg-[#0A0A0A]/"],
+  [class^="bg-[#1A1A1A]/"], [class*=" bg-[#1A1A1A]/"],
+  [class^="bg-black/"], [class*=" bg-black/"],
+  .jj-listing-pill[style*="linear-gradient"],
+  [style*="linear-gradient" i][style*="#0a0a0a" i],
+  [style*="linear-gradient" i][style*="#0b1b33" i],
   .jj-side-tile.is-active,
   [style*="background" i][style*="#0a0a0a" i],
   [style*="background" i][style*="#1a1a1a" i],
@@ -5070,9 +5067,12 @@ html body :is(
   [class~="bg-black"],
   [class~="bg-[#0A0A0A]"],
   [class~="bg-[#1A1A1A]"],
-  [class*="bg-[#0A0A0A]/"],
-  [class*="bg-[#1A1A1A]/"],
-  [class*="bg-black/"],
+  [class^="bg-[#0A0A0A]/"], [class*=" bg-[#0A0A0A]/"],
+  [class^="bg-[#1A1A1A]/"], [class*=" bg-[#1A1A1A]/"],
+  [class^="bg-black/"], [class*=" bg-black/"],
+  .jj-listing-pill[style*="linear-gradient"],
+  [style*="linear-gradient" i][style*="#0a0a0a" i],
+  [style*="linear-gradient" i][style*="#0b1b33" i],
   .jj-side-tile.is-active,
   [style*="background" i][style*="#0a0a0a" i],
   [style*="background" i][style*="#1a1a1a" i],
@@ -5082,7 +5082,7 @@ html body :is(
   [style*="background" i][style*="#064e3b" i],
   [style*="background" i][style*="#2e1065" i],
   [style*="background" i][style*="#4c1d95" i]
-) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-outline):not(.jj-cta-outline *):not(.jj-pill-active):not(.jj-pill-active *):not([data-cta="champagne"]):not([data-cta="champagne"] *):not([data-cta="outline"]):not([data-cta="outline"] *):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not([data-surface="raised"]):not([data-surface="raised"] *):not([data-surface="gold"]):not([data-surface="gold"] *):not(.surface-page):not(.surface-page *):not(.surface-light):not(.surface-light *):not(.surface-champagne):not(.surface-champagne *):not(.surface-cream):not(.surface-cream *):not(.surface-raised):not(.surface-raised *):not(.surface-gold):not(.surface-gold *):not(.jj-card-inner):not(.jj-card-inner *):not(.jj-layer-2):not(.jj-layer-2 *):not(.bg-white):not(.bg-white *):not([class*="bg-white"]):not([class*="bg-white"] *):not([class*="bg-[#FFFFFF]"]):not([class*="bg-[#FFFFFF]"] *):not([class*="bg-[#FDFBF7]"]):not([class*="bg-[#FDFBF7]"] *):not([class*="bg-[#F7F2EA]"]):not([class*="bg-[#F7F2EA]"] *):not([class*="bg-[#EFE6D6]"]):not([class*="bg-[#EFE6D6]"] *) {
+) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-outline):not(.jj-cta-outline *):not(.jj-pill-active):not(.jj-pill-active *):not([data-cta="champagne"]):not([data-cta="champagne"] *):not([data-cta="outline"]):not([data-cta="outline"] *):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not([data-surface="raised"]):not([data-surface="raised"] *):not([data-surface="gold"]):not([data-surface="gold"] *):not(.surface-page):not(.surface-page *):not(.surface-light):not(.surface-light *):not(.surface-champagne):not(.surface-champagne *):not(.surface-cream):not(.surface-cream *):not(.surface-raised):not(.surface-raised *):not(.surface-gold):not(.surface-gold *):not(.jj-card-inner):not(.jj-card-inner *):not(.jj-layer-2):not(.jj-layer-2 *):not(.bg-white):not(.bg-white *):not([class~="bg-white"]):not([class~="bg-white"] *):not([class~="bg-[#FFFFFF]"]):not([class~="bg-[#FFFFFF]"] *):not([class~="bg-[#FDFBF7]"]):not([class~="bg-[#FDFBF7]"] *):not([class~="bg-[#F7F2EA]"]):not([class~="bg-[#F7F2EA]"] *):not([class~="bg-[#EFE6D6]"]):not([class~="bg-[#EFE6D6]"] *) {
   color: var(--jj-contrast-on-dark) !important;
   -webkit-text-fill-color: var(--jj-contrast-on-dark) !important;
   stroke: var(--jj-contrast-on-dark) !important;
@@ -5092,12 +5092,15 @@ html body :is(
 /* Light SVG children must not keep hard-coded white strokes. */
 html body :is(
   .bg-white,
-  [class*="bg-white"],
-  [class*="bg-[#FFFFFF]"],
-  [class*="bg-[#FDFBF7]"],
-  [class*="bg-[#F7F2EA]"],
-  [class*="bg-[#EFE6D6]"],
-  [class*="bg-[#B89555]"],
+  [class~="bg-white"],
+  [class~="bg-[#FFFFFF]"],
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#B89555]"],
+  [class~="from-[#FDFBF7]"],
+  [class~="via-[#F7F2EA]"],
+  [class~="to-[#EFE6D6]"],
   .surface-page,
   .surface-light,
   .surface-champagne,
@@ -5869,11 +5872,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-neon-page] .jj-band--page,
 [data-neon-page] .jj-band--surface,
 [data-neon-page] .jj-band--raised,
-[data-neon-page] [class*="bg-[#FDFBF7]"],
-[data-neon-page] [class*="bg-[#F7F2EA]"],
-[data-neon-page] [class*="bg-[#EFE6D6]"],
-[data-neon-page] [class*="bg-champagne"],
-[data-neon-page] [class*="bg-cream"] {
+[data-neon-page] [class~="bg-[#FDFBF7]"],
+[data-neon-page] [class~="bg-[#F7F2EA]"],
+[data-neon-page] [class~="bg-[#EFE6D6]"],
+[data-neon-page] [class~="bg-champagne"],
+[data-neon-page] [class~="bg-cream"] {
   background: transparent !important;
 }
 
@@ -6024,6 +6027,17 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   color: rgba(246,251,248,0.85) !important;
 }
 
+/* Neon pages are own-dark shells even when legacy champagne classes remain. */
+[data-neon-page] :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, button):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *) {
+  color: #F6FBF8 !important;
+  -webkit-text-fill-color: #F6FBF8 !important;
+}
+[data-neon-page] :where(svg, [class*="lucide"]):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *) {
+  color: #F6FBF8 !important;
+  stroke: #F6FBF8 !important;
+  -webkit-text-fill-color: #F6FBF8 !important;
+}
+
 /* Listing purpose/mode segmented pills — force inner icon+label to inherit pill color */
 .jj-listing-pill .jj-listing-pill-lbl,
 .jj-listing-pill .jj-listing-pill-ico,
@@ -6033,6 +6047,15 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   -webkit-text-fill-color: var(--jj-pill-fg, currentColor) !important;
   stroke: var(--jj-pill-fg, currentColor) !important;
   opacity: 1 !important;
+}
+
+/* Dark gradient listing pills are own-dark controls; keep text/icons white. */
+.jj-listing-pill[style*="linear-gradient"],
+.jj-listing-pill[style*="linear-gradient"] :where(span, svg, [class*="lucide"]) {
+  --jj-pill-fg: #FFFFFF !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 
 /* Mortgage calculator — native controlled range for reliable live recalculation */

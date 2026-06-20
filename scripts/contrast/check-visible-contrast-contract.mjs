@@ -119,7 +119,10 @@ for (const route of routes) {
 
       const computed = getComputedStyle(element);
       const stroke = rgb(computed.stroke);
-      const foreground = element instanceof SVGElement && stroke && computed.stroke !== 'none' ? stroke : rgb(computed.color);
+      const textFill = rgb(computed.webkitTextFillColor);
+      const foreground = element instanceof SVGElement && stroke && computed.stroke !== 'none'
+        ? stroke
+        : textFill || rgb(computed.color);
       const background = effectiveBackground(element);
       if (!foreground || !background.parsed) return [];
 
