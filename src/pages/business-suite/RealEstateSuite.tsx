@@ -178,7 +178,7 @@ const RealEstateSuite = () => {
         description="Complete AI-powered toolkit for property analysis, valuation, market intelligence, and real estate productivity."
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div className="min-h-screen bg-[#FDFBF7]">
         {/* Header */}
         <ToolSuiteHeader
           title="Real Estate "
