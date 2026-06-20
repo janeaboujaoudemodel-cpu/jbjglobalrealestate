@@ -31,7 +31,7 @@ const MortgageCalculatorPage = () => {
   const { t } = useLanguage();
 
   return (
-    <ToolAnimatedFrame theme={toolThemes.brand}>
+    <ToolAnimatedFrame theme={toolThemes.navy}>
       <SEOHead {...pagesSEO.mortgageCalculator} />
 
       <section
