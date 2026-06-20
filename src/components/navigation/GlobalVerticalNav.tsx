@@ -241,6 +241,8 @@ const NAV_ITEMS: NavItem[] = [
 
   // ── Account ──
   { label: "My Dashboard", href: "/my-dashboard", icon: LayoutDashboard, section: "MY ACCOUNT", megaMenu: 'account' },
+  { label: "Billing & Subscriptions", href: "/account/billing", icon: CreditCard },
+  { label: "Brand Update", href: "/my-dashboard#brand-update", icon: Palette },
   { label: "My Tasks", href: "/my-dashboard#tasks", icon: ListChecks },
   { label: "Notifications", href: "/my-dashboard#notifications", icon: Bell },
   { label: "Inbox", href: "/my-dashboard#inbox", icon: Inbox },
@@ -249,8 +251,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Shortlisted", href: "/favorites?tab=shortlist", icon: Star },
   { label: "Saved Filters", href: "/favorites?tab=saved-filters", icon: Sparkles },
   { label: "Settings", href: "/profile?tab=settings", icon: Settings },
-  { label: "Billing & Subscriptions", href: "/account/billing", icon: CreditCard },
-  { label: "Brand Update", href: "/my-dashboard#brand-update", icon: Palette },
   { label: "My Tickets", href: "/my-tickets", icon: Ticket },
 
 
