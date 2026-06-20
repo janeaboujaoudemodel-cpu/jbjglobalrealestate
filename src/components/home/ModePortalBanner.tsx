@@ -60,7 +60,7 @@ export default function ModePortalBanner() {
       data-on-dark
       data-no-contrast-guard
       className="allow-white relative overflow-hidden"
-      style={{ backgroundImage: "linear-gradient(135deg, #0F8B6A 0%, #047857 60%, #065F46 100%)" }}
+      style={{ backgroundImage: "var(--jj-emerald-light-ombre)" }}
     >
       {/* Top + bottom champagne hairlines */}
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
