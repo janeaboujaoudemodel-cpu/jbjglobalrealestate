@@ -481,7 +481,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                           }}
                           className={`px-3 py-1.5 text-xs rounded-full border transition-all ${
                             property.views.includes(view)
-                              ? 'bg-[#1A1A1A] border-amber-500 text-[#1A1A1A] font-medium'
+                              ? "bg-[#1A1A1A] border-[#1A1A1A] text-white font-medium"
                               : 'border-[#B89555]/45 text-[#1A1A1A]/70 hover:border-[#B89555]/60 hover:text-[#B89555]'
                           }`}
                         >
@@ -652,7 +652,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     className="grid md:grid-cols-2 gap-4"
                   >
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'stock' ? 'border-amber-500 bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
+                      property.hasModifications === 'stock' ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
                     }`}>
                       <RadioGroupItem value="stock" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
@@ -669,7 +669,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </label>
 
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'modified' ? 'border-amber-500 bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
+                      property.hasModifications === 'modified' ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
                     }`}>
                       <RadioGroupItem value="modified" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
@@ -723,7 +723,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                               key={type.value}
                               onClick={() => updateProperty('modificationType', type.value)}
                               className={`p-3 rounded-lg border text-left transition-all ${
-                                property.modificationType === type.value ? 'border-amber-500 bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
+                                property.modificationType === type.value ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
                               }`}
                             >
                               <type.icon className={`w-5 h-5 mb-2 ${property.modificationType === type.value ? 'text-[#B89555]' : 'text-[#1A1A1A]/70'}`} />
@@ -832,7 +832,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
             <div className="flex justify-center gap-4 mt-8">
               <Button onClick={() => setActiveTab('modifications')} variant="outline" className="border-[#B89555]/45">← Back</Button>
-              <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-[#1A1A1A] font-medium px-8">
+              <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white font-medium px-8">
                 {isEvaluating ? (
                   <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Evaluating Property...</>
                 ) : (
@@ -962,13 +962,13 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
                 {/* Actions */}
                 <div className="flex justify-center gap-4">
-                  <Button onClick={generatePDFReport} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-[#1A1A1A] font-medium">
+                  <Button onClick={generatePDFReport} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white font-medium">
                     <Download className="w-4 h-4 mr-2" />
                     Download Report
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-amber-500 text-[#B89555] hover:bg-[#1A1A1A]/10"
+                    className="border-[#B89555] text-[#B89555] hover:bg-[#1A1A1A]/10"
                     onClick={() => {
                       const shareText = `Property Valuation: ${property.buildingName} - AED ${evaluation.estimatedValue.low.toLocaleString()} to ${evaluation.estimatedValue.high.toLocaleString()}`;
                       window.location.href = `https://wa.me/971547167107?text=${encodeURIComponent(shareText)}`;
