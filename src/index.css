@@ -6471,9 +6471,68 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   color: #3a2a08 !important;
 }
 
-/* Market Intelligence hero CTA final contrast lock — old button classes must not render white/green on champagne. */
-[data-hero-dark] :where(.button-custom-cta, .button-ghost-green, .button-gray-dark, .mi-hero-cta),
-[data-hero-dark] :where(.button-custom-cta, .button-ghost-green, .button-gray-dark, .mi-hero-cta) :where(span, svg, img) {
+/* =====================================================================
+   ABSOLUTE FINAL CHAMPAGNE-CTA INK LOCK (site-wide, highest specificity)
+   Any CTA element (link, button, anchor, motion.*) carrying
+   .mi-hero-cta OR .jj-cta-champagne OR .jj-cta-outline OR .jj-pill-active
+   ALWAYS renders ink (#1A1A1A) text + icons + stroke at every state,
+   INCLUDING inside dark heroes ([data-hero-dark], .jj-hero-fullscreen,
+   [data-surface="dark"], .surface-dark/navy/ink).
+   Text-shadow is removed so the ink does not muddy into white-looking blur.
+   No opt-outs: there is no legitimate reason for a champagne CTA to
+   render white-on-champagne anywhere on this site.
+   ===================================================================== */
+a.mi-hero-cta,
+button.mi-hero-cta,
+.mi-hero-cta,
+a.jj-cta-champagne,
+button.jj-cta-champagne,
+.jj-cta-champagne,
+a.jj-cta-outline,
+button.jj-cta-outline,
+.jj-cta-outline,
+a.jj-pill-active,
+button.jj-pill-active,
+.jj-pill-active,
+.mi-hero-cta :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-cta-outline :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-pill-active :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+[data-hero-dark] .mi-hero-cta,
+[data-hero-dark] .jj-cta-champagne,
+[data-hero-dark] .jj-cta-outline,
+[data-hero-dark] .jj-pill-active,
+[data-hero-dark] .mi-hero-cta :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+[data-hero-dark] .jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+[data-hero-dark] .jj-cta-outline :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+[data-hero-dark] .jj-pill-active :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-hero-fullscreen .mi-hero-cta,
+.jj-hero-fullscreen .jj-cta-champagne,
+.jj-hero-fullscreen .jj-cta-outline,
+.jj-hero-fullscreen .jj-pill-active,
+.jj-hero-fullscreen .mi-hero-cta :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-hero-fullscreen .jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-hero-fullscreen .jj-cta-outline :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-hero-fullscreen .jj-cta-champagne :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+a.mi-hero-cta:hover,
+button.mi-hero-cta:hover,
+.mi-hero-cta:hover,
+a.jj-cta-champagne:hover,
+button.jj-cta-champagne:hover,
+.jj-cta-champagne:hover,
+a.jj-cta-outline:hover,
+button.jj-cta-outline:hover,
+.jj-cta-outline:hover,
+.mi-hero-cta:hover :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-cta-champagne:hover :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]),
+.jj-cta-outline:hover :is(span, svg, img, p, b, strong, em, i, [class*="lucide"]) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
