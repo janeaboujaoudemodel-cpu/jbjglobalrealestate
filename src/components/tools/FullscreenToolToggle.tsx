@@ -3,10 +3,9 @@ import { Maximize2, Minimize2 } from "lucide-react";
 
 /**
  * App-level fullscreen toggle used by every tool page.
+ * Icon-only by default; expands to reveal a label on hover/focus.
  * Adds `data-tool-fullscreen="true"` on <html>; global CSS in index.css
  * hides the header/sidebar and pins the active tool shell edge-to-edge.
- *
- * Clicking X exits fullscreen (does NOT navigate away).
  */
 const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) => {
   const [on, setOn] = useState<boolean>(defaultOn);
@@ -41,6 +40,8 @@ const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) =>
     }
   };
 
+  const label = on ? "Exit fullscreen" : "Fullscreen";
+
   return (
     <button
       type="button"
@@ -48,20 +49,27 @@ const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) =>
       data-fullscreen-tool-toggle
       data-allow-dark-cta
       data-no-contrast-guard
-      aria-label={on ? "Exit fullscreen" : "Enter fullscreen"}
-      title={on ? "Exit fullscreen" : "Enter fullscreen"}
-      className="allow-white fixed z-[10000] top-24 right-4 md:top-28 md:right-6 inline-flex h-10 items-center justify-center gap-2 px-3 rounded-full backdrop-blur-md transition-all hover:scale-[1.03] text-xs font-semibold"
+      aria-label={label}
+      title={label}
+      className="group allow-white fixed z-[10000] top-24 right-4 md:top-28 md:right-6 inline-flex h-10 items-center justify-center rounded-full backdrop-blur-md transition-[width,padding,background] duration-200 ease-out hover:scale-[1.03] text-xs font-semibold w-10 hover:w-auto focus-visible:w-auto px-0 hover:px-3 focus-visible:px-3 gap-0 hover:gap-2 focus-visible:gap-2 overflow-hidden"
       style={{
-        background: "rgba(15,15,22,0.85)",
-        border: "1px solid rgba(255,255,255,0.32)",
+        background: "#0A0A0A",
+        border: "1px solid rgba(184,149,85,0.55)",
         color: "#FFFFFF",
         WebkitTextFillColor: "#FFFFFF",
         boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
       }}
     >
-      {on ? <Minimize2 className="w-4 h-4 allow-white" /> : <Maximize2 className="w-4 h-4 allow-white" />}
-      <span className="allow-white hidden sm:inline" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-        {on ? "Exit fullscreen" : "Fullscreen"}
+      {on ? (
+        <Minimize2 className="w-4 h-4 shrink-0 allow-white" />
+      ) : (
+        <Maximize2 className="w-4 h-4 shrink-0 allow-white" />
+      )}
+      <span
+        className="allow-white whitespace-nowrap max-w-0 group-hover:max-w-[160px] group-focus-visible:max-w-[160px] opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-[max-width,opacity] duration-200 ease-out"
+        style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+      >
+        {label}
       </span>
     </button>
   );
