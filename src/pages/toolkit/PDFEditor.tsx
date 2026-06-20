@@ -37,7 +37,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-[#EFE6D6] border border-[#B89555]/40">
             <FileText className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">PDF Editor</h1>

@@ -849,7 +849,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                       size="sm"
                       onClick={handleSmartCrop}
                       disabled={smartCropLoading}
-                      className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium text-xs h-9 shadow-md"
+                      className="jj-cta-dark w-full font-medium text-xs h-9"
                     >
                       {smartCropLoading ? (
                         <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Analyzing with AI Pro...</>

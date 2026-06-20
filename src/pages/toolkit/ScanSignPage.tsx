@@ -458,11 +458,11 @@ export default function ScanSignPage() {
     <div className="min-h-screen bg-[#FDFBF7]">
 
       {/* ── Header — Emerald Green ── */}
-      <div className="border-b border-emerald-100 bg-gradient-to-b from-emerald-50/60 to-white">
+      <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/20">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-[#EFE6D6] border border-[#B89555]/40">
                 <ScanLine className="w-6 h-6 text-white" />
               </div>
               <div>
