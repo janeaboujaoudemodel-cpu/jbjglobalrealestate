@@ -31,18 +31,38 @@ if (/installContrastGuard|new\s+MutationObserver|addEventListener\(['"](?:mouseo
   violations.push('src/index.css must not reintroduce runtime-style contrast repainting hooks.');
 }
 
-const stableContractIndex = stylesheet.indexOf('STABLE SURFACE CONTRACT');
-const stableContract = stableContractIndex >= 0 ? stylesheet.slice(stableContractIndex) : '';
-const unsafeStableRules = stableContract
+const finalContractLabels = [
+  'SINGLE FINAL SURFACE CONTRAST CONTRACT',
+  'STABLE SURFACE CONTRACT',
+  'TRUE FINAL LIGHT-OWN-BACKGROUND LOCK',
+  'ABSOLUTE OWN-LIGHT-SURFACE CONTRAST LOCK',
+  'GLOBAL CONTRAST ENGINE — PASS 7',
+  'PASS 8 — FINAL INHERITED-FILL RESET',
+  'FINAL SURFACE CONTRACT — own-background wins',
+];
+const presentFinalContracts = finalContractLabels.filter((label) => stylesheet.includes(label));
+if (presentFinalContracts.length !== 1 || presentFinalContracts[0] !== 'SINGLE FINAL SURFACE CONTRAST CONTRACT') {
+  violations.push(`src/index.css must contain exactly one final contrast contract: SINGLE FINAL SURFACE CONTRAST CONTRACT. Found: ${presentFinalContracts.join(', ') || 'none'}.`);
+}
+
+const finalContractIndex = stylesheet.indexOf('SINGLE FINAL SURFACE CONTRAST CONTRACT');
+const finalContractEnd = stylesheet.indexOf('/* FINAL SIDEBAR LOCK', finalContractIndex);
+const finalContract = finalContractIndex >= 0
+  ? stylesheet.slice(finalContractIndex, finalContractEnd >= 0 ? finalContractEnd : undefined)
+  : '';
+if (/\[data-on-dark\][^{]*\{[^}]*color:\s*#fff(?:fff)?\s*!important/i.test(finalContract)) {
+  violations.push('[data-on-dark] must not be a broad final paint rule; own dark surfaces decide white foregrounds.');
+}
+
+const unsafeFinalRules = finalContract
   .split('}')
   .map((rule) => {
     const [selector = '', body = ''] = rule.split('{');
     return { selector, body };
   })
-  .filter(({ selector, body }) => /color:[^;]*!important/.test(body) && /\b(button|span|div|nav)\b|\[role/.test(selector));
-const unsafeUnscoped = unsafeStableRules.filter(({ selector }) => !/jj-cta|jj-badge|surface-|data-surface|image-overlay-dark|glass-dark|glass-light|data-overlay/.test(selector));
-if (unsafeUnscoped.length) {
-  violations.push('The stable surface contract contains unscoped generic foreground overrides. Scope them to surface/CTA primitives.');
+  .filter(({ selector, body }) => /color:\s*(?:#fff(?:fff)?|#1a1a1a|var\(--jj-contrast-on-(?:light|dark)\))\s*!important/i.test(body) && /\bdiv\b|\[role/.test(selector));
+if (unsafeFinalRules.length) {
+  violations.push('The final contrast contract must not target generic div/[role] descendants; use text/icon/control tags only.');
 }
 
 if (violations.length) {

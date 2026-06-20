@@ -1,32 +1,31 @@
-I found the root cause: there are still competing global CSS contrast locks plus a runtime `ChampagneCtaInkGuard` mounted in `App.tsx`. Those rules force colors after components render, which is why buttons/icons keep flipping between black/white incorrectly.
+## Plan to fix the global contrast system
 
-Plan:
-1. Remove the runtime contrast repaint
-   - Delete the `ChampagneCtaInkGuard` mount from `App.tsx`.
-   - Remove the `ChampagneCtaInkGuard` import.
-   - Leave contrast controlled by static CSS only.
+1. **Remove the conflicting late CSS layers**
+   - Clean the duplicate/fighting rules at the end of `src/index.css`:
+     - `TRUE FINAL LIGHT-OWN-BACKGROUND LOCK`
+     - `STABLE SURFACE CONTRACT`
+     - broad `[data-on-dark]` / `.allow-white` repaint behavior where it can win on light surfaces.
+   - Keep contrast decisions based on the rendered/declared surface, not permission flags.
 
-2. Clean the conflicting global CSS winners
-   - Remove the old final `ABSOLUTE FINAL CHAMPAGNE-CTA INK LOCK` that hard-forces `.mi-hero-cta`, `.jj-cta-champagne`, `.jj-cta-outline`, and `.jj-pill-active` to ink everywhere.
-   - Remove the earlier hero-scoped `.mi-hero-cta` champagne repaint block.
-   - Replace them with a smaller surface contract:
-     - light/champagne/gold own-background buttons/icons = ink
-     - dark/black/hero glass own-background buttons/icons = white
-     - explicit `data-on-dark` / `allow-white` is respected only on dark/glass surfaces, not champagne fills
+2. **Replace them with one final contract**
+   - Add one final static CSS block with this strict polarity:
+     - Light own surface: champagne / cream / white / gold / muted / card / popover / secondary / accent → ink text/icons.
+     - Dark own surface: black / ink / dark / navy / dark CTA → white text/icons.
+     - Nested surfaces override their parent, so a light card inside a dark section stays ink, and a dark button inside a light card stays white.
+   - Include SVG/icon stroke/fill handling so the i-icon and Lucide icons follow the same contrast rule.
+   - Remove broad `div`/generic descendant repaint where it causes black-on-black or white-on-light leaks.
 
-3. Fix the selected Market Intelligence info icon
-   - Replace the hand-coded black tile + white icon in `MarketIntelligence.tsx` with the global `<IconTile />` primitive using a valid tone.
-   - This prevents a tiny low-contrast icon from being overridden by unrelated CSS.
+3. **Strengthen automated detection**
+   - Update the contrast architecture script so it fails if future CSS reintroduces multiple final contrast contracts, broad `data-on-dark` repaint rules, or generic unscoped `color: #FFFFFF !important` / `color: #1A1A1A !important` sweeps.
+   - Update the visible contrast scanner to flag:
+     - white/light foreground on champagne/white/gold/light gradients,
+     - black/dark foreground on black/dark/navy/green/purple surfaces,
+     - SVG stroke contrast, not just text color.
 
-4. Normalize the Market Intelligence hero CTAs
-   - Keep them as glass/fiberglass buttons with white text/icons on the dark video hero.
-   - Remove inline color hacks where possible after the global rules are corrected.
+4. **Visual validation only after the CSS change**
+   - Use the browser preview and rendered scans across key front/back-office routes: `/`, `/properties`, `/developers`, `/market-intelligence`, `/market-report`, `/guides`, `/faq`, `/list-property`, `/owner`, `/owner/crm`, `/admin`.
+   - Check desktop and mobile viewport sizes.
+   - Do not mark complete unless the visible screenshots/scanner show no white-on-light or black-on-dark failures on the tested routes.
 
-5. Strengthen future protection
-   - Update the contrast architecture check so it fails if `ChampagneCtaInkGuard` or any new `MutationObserver`-based contrast repaint is mounted.
-   - Add Market Intelligence routes to the rendered contrast sweep so `/market-intelligence` and its key subpages are tested, not skipped.
-
-6. Validate before marking complete
-   - Run the existing contrast guard scripts for architecture, white-on-light, black-on-dark, same-tone, low-opacity, faded-gold, interactive, and rendered contrast.
-   - Inspect `/market-intelligence` in the browser after changes, including the hero CTAs and the Compliance & Transparency icon.
-   - Check at least desktop and mobile viewport sizes for the affected page.
+5. **Report honestly**
+   - If any route requires login or cannot be fully validated from the preview session, state that clearly instead of claiming full E2E coverage.
