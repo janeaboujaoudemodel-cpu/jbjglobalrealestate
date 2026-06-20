@@ -4955,12 +4955,14 @@ html body :is(
   [data-surface="gold"],
   .jj-card-inner,
   .jj-layer-2,
-  [style*="background" i][style*="#ffffff" i],
-  [style*="background" i][style*="#fdfbf7" i],
-  [style*="background" i][style*="#f7f2ea" i],
-  [style*="background" i][style*="#efe6d6" i],
-  [style*="background" i][style*="255, 255, 255" i],
-  [style*="background" i][style*="255,255,255" i]
+  [style*="background-color: #ffffff" i],
+  [style*="background-color:#ffffff" i],
+  [style*="background-color: #fdfbf7" i],
+  [style*="background-color:#fdfbf7" i],
+  [style*="background-color: #f7f2ea" i],
+  [style*="background-color:#f7f2ea" i],
+  [style*="background-color: #efe6d6" i],
+  [style*="background-color:#efe6d6" i]
 ):not([data-neon-page]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]),
 html body :is(
   .jj-cta-champagne,
@@ -5007,19 +5009,49 @@ html body :is(
   [data-surface="gold"],
   .jj-card-inner,
   .jj-layer-2,
-  [style*="background" i][style*="#ffffff" i],
-  [style*="background" i][style*="#fdfbf7" i],
-  [style*="background" i][style*="#f7f2ea" i],
-  [style*="background" i][style*="#efe6d6" i],
-  [style*="background" i][style*="255, 255, 255" i],
-  [style*="background" i][style*="255,255,255" i]
+   [style*="background-color: #ffffff" i],
+   [style*="background-color:#ffffff" i],
+   [style*="background-color: #fdfbf7" i],
+   [style*="background-color:#fdfbf7" i],
+   [style*="background-color: #f7f2ea" i],
+   [style*="background-color:#f7f2ea" i],
+   [style*="background-color: #efe6d6" i],
+   [style*="background-color:#efe6d6" i]
+):not([data-neon-page]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]) {
+  color: var(--jj-contrast-on-light) !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* Descendant text/icons of light own-surface get the full webkit fill + stroke ink, but only when no opt-out is present. */
+html body :is(
+  .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
+  [data-cta="champagne"], [data-cta="outline"],
+  .bg-white, [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#FAF5EC]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F5F0E6]"],
+  [class~="bg-[#F2EADB]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#EADFC8]"], [class~="bg-[#E8DCC4]"],
+  [class~="bg-[#E5D9BE]"], [class~="bg-[#B89555]"],
+  [class~="from-[#FDFBF7]"], [class~="via-[#F7F2EA]"], [class~="to-[#EFE6D6]"],
+  [class~="bg-champagne"], [class~="bg-cream"], [class~="bg-pearl"], [class~="bg-beige"], [class~="bg-ivory"], [class~="bg-sand"],
+  .surface-page, .surface-light, .surface-pearl, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
+  [data-surface="page"], [data-surface="light"], [data-surface="pearl"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
+  .jj-card-inner, .jj-layer-2,
+  [style*="background-color: #ffffff" i], [style*="background-color:#ffffff" i],
+  [style*="background-color: #fdfbf7" i], [style*="background-color:#fdfbf7" i],
+  [style*="background-color: #f7f2ea" i], [style*="background-color:#f7f2ea" i],
+  [style*="background-color: #efe6d6" i], [style*="background-color:#efe6d6" i]
 ):not([data-neon-page]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.jj-side-tile.is-active):not(.jj-side-tile.is-active *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"] *):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"] *):not([class^="bg-black/"]):not([class*=" bg-black/"]):not([class^="bg-black/"]):not([class*=" bg-black/"] *) {
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-on-dark]):not([data-on-dark] *):not([data-neon-page] *):not(.jj-neon-ticker *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.jj-side-tile.is-active):not(.jj-side-tile.is-active *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"] *):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"] *):not([class^="bg-black/"]):not([class*=" bg-black/"]):not([class^="bg-black/"]):not([class*=" bg-black/"] *) {
   color: var(--jj-contrast-on-light) !important;
   -webkit-text-fill-color: var(--jj-contrast-on-light) !important;
   stroke: var(--jj-contrast-on-light) !important;
   text-shadow: none !important;
   opacity: 1 !important;
+}
+
+/* Reset -webkit-text-fill-color on allow-white / on-dark / no-contrast-guard scopes so inherited ink doesn't leak through. */
+html body :is(.allow-white, [data-on-dark], [data-no-contrast-guard], [data-neon-page] *, .jj-cta-dark *, .jj-navy-cta *, [data-cta="dark"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *, .surface-dark *, .surface-ink *, .surface-navy *) {
+  -webkit-text-fill-color: currentColor !important;
 }
 
 /* Dark own-surfaces: black/ink/navy/dark CTA. */
@@ -5051,7 +5083,19 @@ html body :is(
   [style*="background" i][style*="#022c22" i],
   [style*="background" i][style*="#064e3b" i],
   [style*="background" i][style*="#2e1065" i],
-  [style*="background" i][style*="#4c1d95" i]
+   [style*="background" i][style*="#4c1d95" i],
+   [class~="bg-gradient-to-br"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1a1a1a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="from-black"],
+   [class~="bg-gradient-to-r"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-r"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="to-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="to-black"]
 ),
 html body :is(
   .jj-cta-dark,
@@ -5081,7 +5125,19 @@ html body :is(
   [style*="background" i][style*="#022c22" i],
   [style*="background" i][style*="#064e3b" i],
   [style*="background" i][style*="#2e1065" i],
-  [style*="background" i][style*="#4c1d95" i]
+   [style*="background" i][style*="#4c1d95" i],
+   [class~="bg-gradient-to-br"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1a1a1a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="from-black"],
+   [class~="bg-gradient-to-r"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-r"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="to-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="to-black"]
 ) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-outline):not(.jj-cta-outline *):not(.jj-pill-active):not(.jj-pill-active *):not([data-cta="champagne"]):not([data-cta="champagne"] *):not([data-cta="outline"]):not([data-cta="outline"] *):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not([data-surface="raised"]):not([data-surface="raised"] *):not([data-surface="gold"]):not([data-surface="gold"] *):not(.surface-page):not(.surface-page *):not(.surface-light):not(.surface-light *):not(.surface-champagne):not(.surface-champagne *):not(.surface-cream):not(.surface-cream *):not(.surface-raised):not(.surface-raised *):not(.surface-gold):not(.surface-gold *):not(.jj-card-inner):not(.jj-card-inner *):not(.jj-layer-2):not(.jj-layer-2 *):not(.bg-white):not(.bg-white *):not([class~="bg-white"]):not([class~="bg-white"] *):not([class~="bg-[#FFFFFF]"]):not([class~="bg-[#FFFFFF]"] *):not([class~="bg-[#FDFBF7]"]):not([class~="bg-[#FDFBF7]"] *):not([class~="bg-[#F7F2EA]"]):not([class~="bg-[#F7F2EA]"] *):not([class~="bg-[#EFE6D6]"]):not([class~="bg-[#EFE6D6]"] *) {
   color: var(--jj-contrast-on-dark) !important;
   -webkit-text-fill-color: var(--jj-contrast-on-dark) !important;
@@ -5889,6 +5945,8 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-neon-page] [class*="text-gray-9"],
 [data-neon-page] [class*="text-neutral-9"] {
   color: #F6FBF8 !important;
+  -webkit-text-fill-color: #F6FBF8 !important;
+  stroke: #F6FBF8 !important;
 }
 [data-neon-page] [class*="text-[#1A1A1A]/70"],
 [data-neon-page] [class*="text-muted-foreground"],
@@ -5896,6 +5954,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-neon-page] [class*="text-slate-6"],
 [data-neon-page] [class*="text-gray-6"] {
   color: rgba(246,251,248,0.72) !important;
+  -webkit-text-fill-color: rgba(246,251,248,0.72) !important;
 }
 
 /* Gold accents become cyan in neon scope (but keep gold-specific UI like
@@ -6028,11 +6087,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 }
 
 /* Neon pages are own-dark shells even when legacy champagne classes remain. */
-[data-neon-page] :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, button):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *) {
+[data-neon-page] :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, button):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-outline):not(.jj-cta-outline *):not(.jj-pill-active):not(.jj-pill-active *):not(.bg-white):not(.bg-white *):not([class~="bg-white"]):not([class~="bg-white"] *):not([class~="bg-[#FFFFFF]"]):not([class~="bg-[#FFFFFF]"] *):not([class~="bg-[#FDFBF7]"]):not([class~="bg-[#FDFBF7]"] *):not([class~="bg-[#F7F2EA]"]):not([class~="bg-[#F7F2EA]"] *):not([class~="bg-[#EFE6D6]"]):not([class~="bg-[#EFE6D6]"] *):not([class~="from-[#FDFBF7]"]):not([class~="from-[#FDFBF7]"] *):not([class~="from-[#F7F2EA]"]):not([class~="from-[#F7F2EA]"] *) {
   color: #F6FBF8 !important;
   -webkit-text-fill-color: #F6FBF8 !important;
 }
-[data-neon-page] :where(svg, [class*="lucide"]):not(.jj-cta-champagne *):not(.jj-cta-outline *):not(.jj-pill-active *) {
+[data-neon-page] :where(svg, [class*="lucide"]):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-outline):not(.jj-cta-outline *):not(.jj-pill-active):not(.jj-pill-active *):not(.bg-white):not(.bg-white *):not([class~="bg-white"]):not([class~="bg-white"] *):not([class~="bg-[#FDFBF7]"] *):not([class~="bg-[#F7F2EA]"] *):not([class~="bg-[#EFE6D6]"] *):not([class~="from-[#FDFBF7]"] *) {
   color: #F6FBF8 !important;
   stroke: #F6FBF8 !important;
   -webkit-text-fill-color: #F6FBF8 !important;
