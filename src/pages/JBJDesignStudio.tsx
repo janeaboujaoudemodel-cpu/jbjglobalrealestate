@@ -57,22 +57,22 @@ import { ColorPaletteManager, DesignProjectManager, AIDesignAssistant } from '@/
 
 // Template categories with icons
 const TEMPLATE_CATEGORIES = [
-  { id: 'instagram', label: 'Instagram', icon: Instagram, color: 'from-pink-500 to-purple-600' },
-  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: 'from-blue-600 to-blue-800' },
-  { id: 'youtube', label: 'YouTube', icon: Youtube, color: 'from-red-500 to-red-700' },
-  { id: 'facebook', label: 'Facebook', icon: Facebook, color: 'from-blue-500 to-blue-700' },
-  { id: 'whatsapp', label: 'WhatsApp', icon: Phone, color: 'from-green-500 to-green-700' },
+  { id: 'instagram', label: 'Instagram', icon: Instagram, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'youtube', label: 'YouTube', icon: Youtube, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'facebook', label: 'Facebook', icon: Facebook, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'whatsapp', label: 'WhatsApp', icon: Phone, color: 'from-[#B89555] to-[#8a6f3f]' },
   { id: 'email-signature', label: 'Email Signatures', icon: Mail, color: 'from-gold to-gold-dark' },
   { id: 'business-card', label: 'Business Cards', icon: BusinessCard, color: 'from-zinc-700 to-black' },
-  { id: 'brochure', label: 'Brochures & Flyers', icon: FileText, color: 'from-indigo-500 to-indigo-700' },
-  { id: 'presentation', label: 'Presentations', icon: Presentation, color: 'from-orange-500 to-orange-700' },
-  { id: 'logo', label: 'Logos & Branding', icon: Crown, color: 'from-amber-500 to-amber-700' },
-  { id: 'property', label: 'Property Marketing', icon: Building2, color: 'from-emerald-500 to-emerald-700' },
-  { id: 'events', label: 'Events & Campaigns', icon: Megaphone, color: 'from-rose-500 to-rose-700' },
-  { id: 'video', label: 'Video Thumbnails', icon: Video, color: 'from-cyan-500 to-cyan-700' },
+  { id: 'brochure', label: 'Brochures & Flyers', icon: FileText, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'presentation', label: 'Presentations', icon: Presentation, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'logo', label: 'Logos & Branding', icon: Crown, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'property', label: 'Property Marketing', icon: Building2, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'events', label: 'Events & Campaigns', icon: Megaphone, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'video', label: 'Video Thumbnails', icon: Video, color: 'from-[#B89555] to-[#8a6f3f]' },
   { id: 'print', label: 'Print Materials', icon: Newspaper, color: 'from-slate-500 to-slate-700' },
-  { id: 'portfolio', label: 'Portfolios', icon: GraduationCap, color: 'from-violet-500 to-violet-700' },
-  { id: 'books', label: 'Books & Reports', icon: Book, color: 'from-amber-600 to-amber-800' },
+  { id: 'portfolio', label: 'Portfolios', icon: GraduationCap, color: 'from-[#B89555] to-[#8a6f3f]' },
+  { id: 'books', label: 'Books & Reports', icon: Book, color: 'from-[#B89555] to-[#8a6f3f]' },
 ];
 
 // Pre-built templates with real sizes
