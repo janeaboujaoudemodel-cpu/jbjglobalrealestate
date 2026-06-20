@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   MARKET_OVERVIEW_STATS,
   QUARTERLY_TRENDS,
-  PROPERTY_TYPE_TRENDS,
 } from "@/config/open-data-config";
 import {
   MI_EYEBROW,
