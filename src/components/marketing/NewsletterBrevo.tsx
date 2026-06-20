@@ -6,6 +6,14 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import SubscriptionSuccessModal from '@/components/marketing/SubscriptionSuccessModal';
 import NewsletterDetailModal from '@/components/marketing/NewsletterDetailModal';
+import { useTypewriter } from '@/hooks/useTypewriter';
+
+const NEWSLETTER_TYPEWRITER_PHRASES = [
+  'Enter Your Email',
+  'Get listings first',
+  'Free weekly insights',
+];
+
 
 interface NewsletterBrevoProps {
   className?: string;
