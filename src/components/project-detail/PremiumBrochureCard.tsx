@@ -184,25 +184,27 @@ const PremiumBrochureCard = ({
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Brand mark — refined monogram + wordmark with strong scrim panel for guaranteed legibility */}
+            {/* Top: Brand mark — compact monogram + wordmark sized to fit 380px card without clipping */}
             <div
               data-no-contrast-guard
               data-on-dark
-              className="absolute top-4 left-7 flex items-center gap-3 pr-4 py-2 rounded-md allow-white"
+              className="absolute top-4 left-6 flex items-center gap-2 pr-3 py-1.5 rounded-md allow-white"
               style={{
-                background: "rgba(8,12,20,0.92)",
-                paddingLeft: 7,
-                border: "1px solid rgba(184,149,85,0.55)",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                background: "rgba(6,10,18,0.95)",
+                paddingLeft: 6,
+                right: 64, // never overlap lock icon (top-4 right-4 + 44px)
+                maxWidth: "calc(100% - 88px)",
+                border: "1px solid rgba(184,149,85,0.7)",
+                boxShadow: "0 6px 18px rgba(0,0,0,0.4)",
               }}
             >
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden shrink-0"
                 style={{
                   background: "radial-gradient(circle at 30% 30%, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)",
                   border: "1px solid rgba(184,149,85,0.65)",
                   boxShadow:
-                    "0 6px 14px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.18)",
+                    "0 4px 10px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.18)",
                 }}
               >
                 <img
@@ -214,11 +216,11 @@ const PremiumBrochureCard = ({
               </div>
               <p
                 data-no-contrast-guard
-                className="text-[14px] uppercase leading-none whitespace-nowrap allow-white"
-                style={{ color: "#FFFFFF", letterSpacing: "0.18em", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
+                className="text-[12.5px] uppercase leading-none whitespace-nowrap allow-white truncate"
+                style={{ color: "#FFFFFF", letterSpacing: "0.10em", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
               >
                 <span style={{ color: "#F3D98A", fontWeight: 800 }}>JBJ</span>{" "}
-                <span style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.2em" }}>Global Real Estate</span>
+                <span style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.12em" }}>Global Real Estate</span>
               </p>
             </div>
 
