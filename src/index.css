@@ -6322,14 +6322,15 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
     --tw-gradient-to: #EFE6D6 !important;
   }
 
-  /* SOLID BACKGROUNDS — neutralize bg-{family}-{shade} to champagne raised */
+  /* SOLID BACKGROUNDS — neutralize bg-{family}-{shade} to champagne raised.
+     Skips when inside a dark surface so dark cards keep their own bg. */
   html body :is(
     [class*="bg-blue-"], [class*="bg-indigo-"], [class*="bg-violet-"],
     [class*="bg-purple-"], [class*="bg-fuchsia-"], [class*="bg-pink-"],
     [class*="bg-rose-"], [class*="bg-orange-"],
     [class*="bg-yellow-"], [class*="bg-lime-"],
     [class*="bg-teal-"], [class*="bg-cyan-"], [class*="bg-sky-"]
-  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart]):not([data-chart] *):not(.recharts-wrapper):not(.recharts-wrapper *):not([data-kpi]):not([data-status-pill]):not([role="alert"]):not([role="status"]):not(.sonner-toast):not([data-sonner-toaster] *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *) {
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart]):not([data-chart] *):not(.recharts-wrapper):not(.recharts-wrapper *):not([data-kpi]):not([data-status-pill]):not([role="alert"]):not([role="status"]):not(.sonner-toast):not([data-sonner-toaster] *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"] *) {
     background-color: #EFE6D6 !important;
     background-image: none !important;
   }
