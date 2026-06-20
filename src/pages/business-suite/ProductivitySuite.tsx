@@ -12,8 +12,8 @@ const corporateTools = [
     href: "/toolkit/stamp-generator",
     colorClass: "text-[#1A1A1A]",
     borderColorClass: "border-[#B89555]/40",
-    gradientFrom: "from-amber-700",
-    gradientTo: "to-yellow-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: BusinessCard,
@@ -23,7 +23,7 @@ const corporateTools = [
     colorClass: "text-[#1A1A1A]",
     borderColorClass: "border-[#B89555]/40",
     gradientFrom: "from-gold",
-    gradientTo: "to-amber-600",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Palette,
@@ -32,8 +32,8 @@ const corporateTools = [
     href: "/toolkit/corporate-suite/logo",
     colorClass: "text-purple-600",
     borderColorClass: "border-purple-400/40",
-    gradientFrom: "from-purple-600",
-    gradientTo: "to-indigo-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: FileText,
@@ -42,8 +42,8 @@ const corporateTools = [
     href: "/cv-builder",
     colorClass: "text-emerald-700",
     borderColorClass: "border-emerald-400/40",
-    gradientFrom: "from-emerald-600",
-    gradientTo: "to-teal-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Pen,
@@ -52,8 +52,8 @@ const corporateTools = [
     href: "/toolkit/corporate-suite/cover-letter",
     colorClass: "text-sky-700",
     borderColorClass: "border-sky-400/40",
-    gradientFrom: "from-sky-600",
-    gradientTo: "to-blue-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Award,
@@ -62,8 +62,8 @@ const corporateTools = [
     href: "/toolkit/corporate-suite/company-profile",
     colorClass: "text-rose-700",
     borderColorClass: "border-rose-400/40",
-    gradientFrom: "from-rose-600",
-    gradientTo: "to-pink-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Pen,
@@ -72,8 +72,8 @@ const corporateTools = [
     href: "/toolkit/corporate-suite/signature",
     colorClass: "text-indigo-700",
     borderColorClass: "border-indigo-400/40",
-    gradientFrom: "from-indigo-600",
-    gradientTo: "to-violet-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Globe,
@@ -82,8 +82,8 @@ const corporateTools = [
     href: "/e-signature",
     colorClass: "text-cyan-700",
     borderColorClass: "border-cyan-400/40",
-    gradientFrom: "from-cyan-600",
-    gradientTo: "to-blue-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Image,
@@ -92,8 +92,8 @@ const corporateTools = [
     href: "/toolkit/scan-sign",
     colorClass: "text-orange-700",
     borderColorClass: "border-orange-400/40",
-    gradientFrom: "from-orange-600",
-    gradientTo: "to-red-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
 ];
 
@@ -106,7 +106,7 @@ const productivityTools = [
     colorClass: "text-[#1A1A1A]",
     borderColorClass: "border-[#B89555]/40",
     gradientFrom: "from-gold",
-    gradientTo: "to-amber-600",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Video,
@@ -115,8 +115,8 @@ const productivityTools = [
     href: "/video-meeting",
     colorClass: "text-cyan-700",
     borderColorClass: "border-cyan-400/40",
-    gradientFrom: "from-cyan-600",
-    gradientTo: "to-blue-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Calculator,
@@ -126,7 +126,7 @@ const productivityTools = [
     colorClass: "text-[#1A1A1A]",
     borderColorClass: "border-[#B89555]/40",
     gradientFrom: "from-gold",
-    gradientTo: "to-amber-600",
+    gradientTo: "to-[#8a6f3f]",
   },
 ];
 

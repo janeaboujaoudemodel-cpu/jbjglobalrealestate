@@ -9,8 +9,8 @@ const tools = [
     href: "/ai-document-generator",
     colorClass: "text-lime-700",
     borderColorClass: "border-lime-500/40",
-    gradientFrom: "from-lime-600",
-    gradientTo: "to-green-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Languages,
@@ -19,8 +19,8 @@ const tools = [
     href: "/ai-translation-hub",
     colorClass: "text-amber-700",
     borderColorClass: "border-amber-500/40",
-    gradientFrom: "from-amber-600",
-    gradientTo: "to-orange-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Video,
@@ -29,8 +29,8 @@ const tools = [
     href: "/toolkit/video-suite",
     colorClass: "text-pink-700",
     borderColorClass: "border-pink-500/40",
-    gradientFrom: "from-pink-600",
-    gradientTo: "to-rose-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Wand2,
@@ -39,8 +39,8 @@ const tools = [
     href: "/toolkit/background-ai",
     colorClass: "text-rose-700",
     borderColorClass: "border-rose-500/40",
-    gradientFrom: "from-rose-600",
-    gradientTo: "to-pink-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
 ];
 
@@ -52,8 +52,8 @@ const creativeTools = [
     href: "/presentation",
     colorClass: "text-blue-700",
     borderColorClass: "border-blue-500/40",
-    gradientFrom: "from-blue-600",
-    gradientTo: "to-indigo-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: CreditCard,
@@ -62,8 +62,8 @@ const creativeTools = [
     href: "/toolkit/corporate-suite/business-card",
     colorClass: "text-emerald-700",
     borderColorClass: "border-emerald-500/40",
-    gradientFrom: "from-emerald-600",
-    gradientTo: "to-teal-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Palette,
@@ -72,8 +72,8 @@ const creativeTools = [
     href: "/toolkit/corporate-suite/logo",
     colorClass: "text-violet-700",
     borderColorClass: "border-violet-500/40",
-    gradientFrom: "from-violet-600",
-    gradientTo: "to-purple-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: UserRound,
@@ -82,8 +82,8 @@ const creativeTools = [
     href: "/cv-builder",
     colorClass: "text-cyan-700",
     borderColorClass: "border-cyan-500/40",
-    gradientFrom: "from-cyan-600",
-    gradientTo: "to-sky-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Mail,
@@ -92,8 +92,8 @@ const creativeTools = [
     href: "/toolkit/corporate-suite/cover-letter",
     colorClass: "text-orange-700",
     borderColorClass: "border-orange-500/40",
-    gradientFrom: "from-orange-600",
-    gradientTo: "to-amber-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
   {
     icon: Building2,
@@ -102,8 +102,8 @@ const creativeTools = [
     href: "/toolkit/corporate-suite/company-profile",
     colorClass: "text-teal-700",
     borderColorClass: "border-teal-500/40",
-    gradientFrom: "from-teal-600",
-    gradientTo: "to-emerald-600",
+    gradientFrom: "from-[#B89555]",
+    gradientTo: "to-[#8a6f3f]",
   },
 ];
 

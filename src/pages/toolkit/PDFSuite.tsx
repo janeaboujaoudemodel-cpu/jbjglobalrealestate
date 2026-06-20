@@ -23,10 +23,10 @@ const LoadingSpinner = () => (
 );
 
 const tabs = [
-  { value: "editor", label: "PDF Editor", shortLabel: "Editor", icon: FileText, color: "text-blue-600" },
-  { value: "photo-pdf", label: "Photo → PDF", shortLabel: "Photo→PDF", icon: ImageIcon, color: "text-violet-600" },
-  { value: "scan-sign", label: "Scan & Sign", shortLabel: "Sign", icon: Camera, color: "text-emerald-600" },
-  { value: "brochure", label: "Document Creator", shortLabel: "Creator", icon: BookOpen, color: "text-indigo-600" },
+  { value: "editor", label: "PDF Editor", shortLabel: "Editor", icon: FileText, color: "text-[#B89555]" },
+  { value: "photo-pdf", label: "Photo → PDF", shortLabel: "Photo→PDF", icon: ImageIcon, color: "text-[#B89555]" },
+  { value: "scan-sign", label: "Scan & Sign", shortLabel: "Sign", icon: Camera, color: "text-[#B89555]" },
+  { value: "brochure", label: "Document Creator", shortLabel: "Creator", icon: BookOpen, color: "text-[#B89555]" },
 ];
 
 export default function PDFSuite() {
@@ -39,7 +39,7 @@ export default function PDFSuite() {
 
       <div className="min-h-screen bg-[#FDFBF7]">
         {/* ── Suite Header ── */}
-        <div className="border-b border-[#B89555]/30 bg-gradient-to-b from-slate-50 to-white">
+        <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Back link */}
             <Link to="/toolkit"
@@ -50,12 +50,12 @@ export default function PDFSuite() {
 
             {/* Title row */}
             <div className="flex items-center gap-4 mb-5">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
-                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0 bg-[#EFE6D6] border border-[#B89555]/40">
+                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-[#B89555]" />
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-tight">
-                  PDF & Documents <span className="text-blue-600">Suite</span>
+                  PDF & Documents <span className="text-[#B89555]">Suite</span>
                 </h1>
                 <p className="text-xs sm:text-sm mt-0.5 hidden sm:block text-[#1A1A1A]/70">
                   Edit · Scan · Sign · Generate professional documents
@@ -74,9 +74,9 @@ export default function PDFSuite() {
                 {tabs.map(({ value, label, shortLabel, icon: Icon, color }) => (
                   <TabsTrigger key={value} value={value}
                     className={`relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
-                      data-[state=inactive]:text-[#1A1A1A]/70 data-[state=active]:text-blue-600
+                      data-[state=inactive]:text-[#1A1A1A]/70 data-[state=active]:text-[#B89555]
                       after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
-                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-blue-600`}
+                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B89555]`}
                   >
                     <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                     <span className="sm:hidden">{shortLabel}</span>
