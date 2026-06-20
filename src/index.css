@@ -3443,7 +3443,12 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
 }
 
 .jj-hero-fullscreen .mi-hero-cta,
-.jj-hero-fullscreen .mi-hero-cta :where(span, svg, [class*="lucide"]) {
+.jj-hero-fullscreen .mi-hero-cta :where(span, svg, [class*="lucide"]),
+.jj-hero-fullscreen .button-custom-cta,
+.jj-hero-fullscreen .button-ghost-green,
+.jj-hero-fullscreen .button-gray-dark {
+  background: #F7F2EA !important;
+  border: 1px solid rgba(184, 149, 85, 0.65) !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
