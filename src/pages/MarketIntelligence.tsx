@@ -123,14 +123,15 @@ const MarketIntelligence = () => {
         canonicalPath="/market-intelligence"
       />
 
-      {/* Hero — clean champagne, no logo / no badges / no keyword strip / no founder card */}
-      <section data-surface="light" className="surface-light relative flex min-h-[420px] w-full items-center overflow-hidden bg-[#FDFBF7] py-16 md:min-h-[480px] md:py-20">
+      {/* Hero — full-screen video, no logo / no badges / no keyword strip / no founder card */}
+      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen relative flex w-full items-center overflow-hidden bg-[#0A0A0A]">
         <VideoBackground
           src={marketIntelligenceVideo}
           poster={marketIntelligenceHero}
+          eager
+          opacity={1}
         />
-        {/* Strong champagne wash — no faded translucent look */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(253,251,247,0.98)_0%,rgba(253,251,247,0.94)_55%,rgba(253,251,247,0.78)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.46)_0%,rgba(0,0,0,0.22)_54%,rgba(0,0,0,0.12)_100%)]" />
 
         <motion.div
           className="relative z-10 container mx-auto px-4"
@@ -139,14 +140,18 @@ const MarketIntelligence = () => {
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
           <motion.h1
-            className="max-w-4xl text-left text-5xl font-bold leading-[0.95] text-[#1A1A1A] md:text-7xl lg:text-8xl"
+            data-no-contrast-guard
+            className="allow-white max-w-4xl text-left text-5xl font-bold leading-[0.95] !text-white md:text-7xl lg:text-8xl"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
             Market Intelligence
           </motion.h1>
 
           <motion.p
-            className="mt-6 max-w-2xl text-left text-lg leading-relaxed text-[#1A1A1A]/80 md:text-xl"
+            data-no-contrast-guard
+            className="allow-white mt-6 max-w-2xl text-left text-lg leading-relaxed !text-white md:text-xl"
+            style={{ color: "rgba(255,255,255,0.96)", WebkitTextFillColor: "rgba(255,255,255,0.96)" }}
             variants={fadeInUp}
           >
             Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review.
