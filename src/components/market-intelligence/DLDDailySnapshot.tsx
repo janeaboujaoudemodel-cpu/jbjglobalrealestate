@@ -182,7 +182,7 @@ export const DLDDailySnapshot = () => {
                 </div>
                 <div
                   className="relative h-3 w-full overflow-hidden rounded-full"
-                  style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+                  style={{ backgroundColor: "#EFE6D6", border: `1px solid rgba(184,149,85,0.35)` }}
                 >
                   <motion.div
                     className="absolute inset-y-0 left-0 rounded-full"
@@ -208,7 +208,7 @@ export const DLDDailySnapshot = () => {
                 </div>
                 <div
                   className="relative h-3 w-full overflow-hidden rounded-full"
-                  style={{ backgroundColor: "rgba(255,255,255,0.08)", border: `1px solid ${GOLD}` }}
+                  style={{ backgroundColor: "#EFE6D6", border: `1px solid ${GOLD}` }}
                 >
                   <motion.div
                     className="absolute inset-y-0 left-0 rounded-full"
@@ -249,7 +249,7 @@ export const DLDDailySnapshot = () => {
                     </span>
                     <div
                       className="relative h-2.5 overflow-hidden rounded-full"
-                      style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+                      style={{ backgroundColor: "#EFE6D6", border: `1px solid rgba(184,149,85,0.35)` }}
                     >
                       <motion.div
                         className="absolute inset-y-0 left-0 h-full rounded-full"

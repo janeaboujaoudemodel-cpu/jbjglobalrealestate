@@ -25,7 +25,7 @@ const MarketAreaDetail = () => {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-white text-2xl font-bold mb-4">Area Not Found</h1>
+          <h1 className="text-[#1A1A1A] text-2xl font-bold mb-4">Area Not Found</h1>
           <Link to="/market-intelligence/areas">
             <Button variant="outline" className="border-[#B89555] text-[#1A1A1A]">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -40,7 +40,7 @@ const MarketAreaDetail = () => {
   const getTrendBadge = (trend: string) => {
     switch (trend) {
       case 'bullish':
-        return <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 text-lg px-4 py-1">Bullish</Badge>;
+        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45 text-lg px-4 py-1">Bullish</Badge>;
       case 'bearish':
         return <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
       default:
@@ -82,9 +82,9 @@ const MarketAreaDetail = () => {
       />
 
       {/* Hero */}
-      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
+      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.16),transparent_62%)]" />
         
         <motion.div 
           className="relative z-10 container mx-auto px-4 py-24"
@@ -93,15 +93,15 @@ const MarketAreaDetail = () => {
           variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
         >
           <motion.div variants={fadeInUp}>
-            <Link to="/market-intelligence/areas" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
+            <Link to="/market-intelligence/areas" className="allow-white inline-flex items-center gap-2 text-[#F7F2EA] hover:text-white mb-6">
               <ArrowLeft className="w-4 h-4" />
               Back to All Areas
             </Link>
           </motion.div>
 
           <motion.div className="flex items-center gap-3 mb-4" variants={fadeInUp}>
-            <MapPin className="w-8 h-8 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">Area Intelligence</span>
+            <MapPin className="allow-white w-8 h-8 text-[#F7F2EA]" />
+            <span className="allow-white text-[#F7F2EA] text-sm uppercase tracking-[0.3em]">Area Intelligence</span>
           </motion.div>
 
           <motion.h1 
@@ -115,11 +115,11 @@ const MarketAreaDetail = () => {
             {getTrendBadge(area.trend)}
             <div className="flex items-center gap-2">
               {area.yoyChange > 0 ? (
-                <TrendingUp className="w-5 h-5 text-emerald-400" />
+                <TrendingUp className="w-5 h-5 text-[#B89555]" />
               ) : (
                 <TrendingDown className="w-5 h-5 text-red-400" />
               )}
-              <span className={`text-lg font-semibold ${area.yoyChange > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              <span className={`text-lg font-semibold ${area.yoyChange > 0 ? 'text-[#F7F2EA]' : 'text-red-300'}`}>
                 {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}% YoY
               </span>
             </div>
@@ -136,7 +136,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <BarChart3 className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Price Index</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Price Index</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.priceIndex}</p>
               </CardContent>
             </Card>
@@ -145,7 +145,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Home className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Rental Index</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Rental Index</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.rentalIndex}</p>
               </CardContent>
             </Card>
@@ -154,7 +154,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Users className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Demand Score</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Demand Score</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.demandScore}%</p>
               </CardContent>
             </Card>
@@ -163,7 +163,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Supply Score</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Supply Score</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.supplyScore}%</p>
               </CardContent>
             </Card>

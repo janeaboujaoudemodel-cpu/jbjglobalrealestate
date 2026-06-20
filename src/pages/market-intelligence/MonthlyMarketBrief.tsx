@@ -70,7 +70,7 @@ const MonthlyMarketBrief = () => {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
+          <h1 className="text-2xl font-bold text-[#1A1A1A] mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">
             Return to Reports
           </Link>
@@ -80,15 +80,15 @@ const MonthlyMarketBrief = () => {
   }
 
   const getTrendIcon = (change: number) => {
-    if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-600" />;
-    if (change < 0) return <TrendingDown className="w-4 h-4 text-red-600" />;
+    if (change > 0) return <TrendingUp className="w-4 h-4 text-[#B89555]" />;
+    if (change < 0) return <TrendingDown className="w-4 h-4 text-red-700" />;
     return <Activity className="w-4 h-4 text-[#1A1A1A]/70" />;
   };
 
   const getMomentumColor = (momentum: "high" | "medium" | "low") => {
     switch (momentum) {
-      case "high": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
-      case "medium": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
+      case "high": return "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45";
+      case "medium": return "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/45";
       default: return "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30";
     }
   };
@@ -200,8 +200,8 @@ const MonthlyMarketBrief = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-2">
-                  {data.rentTrend.direction === "up" && <TrendingUp className="w-5 h-5 text-emerald-600" />}
-                  {data.rentTrend.direction === "down" && <TrendingDown className="w-5 h-5 text-red-600" />}
+                  {data.rentTrend.direction === "up" && <TrendingUp className="w-5 h-5 text-[#B89555]" />}
+                  {data.rentTrend.direction === "down" && <TrendingDown className="w-5 h-5 text-red-700" />}
                   {data.rentTrend.direction === "stable" && <Activity className="w-5 h-5 text-[#1A1A1A]/70" />}
                   <span className="text-lg font-semibold text-[#1A1A1A] capitalize">
                     {data.rentTrend.direction}

@@ -104,7 +104,7 @@ const MarketReportsPage = () => {
       case 'quarterly':
         return <Badge className="bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 font-medium">Quarterly</Badge>;
       case 'annual':
-        return <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 font-medium">Annual</Badge>;
+        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40 font-medium">Annual</Badge>;
       default:
         return null;
     }

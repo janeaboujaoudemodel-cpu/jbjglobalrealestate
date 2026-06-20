@@ -35,9 +35,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
 );
 
 const TONE_BY_ACCENT: Record<string, string> = {
-  "text-emerald-700": "emerald",
   "text-[#1A1A1A]": "gold",
-  "text-amber-700": "amber",
   "text-foreground": "magenta",
 };
 
@@ -70,8 +68,8 @@ const StatCard = ({
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
-            <div className={`flex items-center gap-1 ${MI_CHIP} px-2 py-0.5 rounded-full ${isPositive ? 'text-emerald-700 bg-emerald-50' : 'text-red-700 bg-red-50'}`}>
-              {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+            <div className={`flex items-center gap-1 ${MI_CHIP} rounded-full border px-2 py-0.5 ${isPositive ? 'border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]' : 'border-red-700/30 bg-red-50 text-red-800'}`}>
+              {isPositive ? <TrendingUp className="w-4 h-4 text-[#B89555]" /> : <TrendingDown className="w-4 h-4" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </div>
           </div>
@@ -120,7 +118,7 @@ export const MarketOverviewDashboard = () => {
               value={MARKET_OVERVIEW_STATS.totalTransactions}
               change={MARKET_OVERVIEW_STATS.totalTransactionsChange}
               icon={Building2}
-              accentColor="text-emerald-700"
+              accentColor="text-[#1A1A1A]"
             />
             <StatCard
               title="Avg. Price/Sqft"
@@ -136,7 +134,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.yieldChange}
               icon={Percent}
               suffix="%"
-              accentColor="text-amber-700"
+              accentColor="text-[#1A1A1A]"
             />
             <StatCard
               title="Days on Market"
@@ -162,24 +160,18 @@ export const MarketOverviewDashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {QUARTERLY_TRENDS.map((quarter, idx) => {
-                      const qBars = [
-                        'bg-gradient-to-r from-emerald-500 to-emerald-400',
-                        'bg-[#B89555]',
-                        'bg-gradient-to-r from-amber-500 to-amber-400',
-                        'bg-[#1A1A1A]',
-                      ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
                           <span className="text-sm font-semibold leading-none w-20 text-foreground">{quarter.quarter}</span>
-                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-[#EFE6D6]">
+                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-[#EFE6D6] border border-[#B89555]/30">
                             <motion.div
-                              className={`h-full ${qBars[idx % qBars.length]}`}
+                              className="h-full bg-[#1A1A1A]"
                               initial={{ width: 0 }}
                               whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.8, delay: idx * 0.1 }}
                             />
-                            <span className={`absolute right-3 top-1/2 -translate-y-1/2 ${MI_CHIP} text-foreground`}>
+                            <span className={`absolute right-2 top-1/2 -translate-y-1/2 ${MI_CHIP} rounded border border-[#B89555]/35 bg-[#FDFBF7] px-2 py-1 text-foreground shadow-sm`}>
                               {quarter.transactions.toLocaleString()}
                             </span>
                           </div>

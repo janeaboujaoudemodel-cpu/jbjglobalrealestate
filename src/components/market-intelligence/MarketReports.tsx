@@ -171,15 +171,15 @@ export const MarketReports = () => {
 
                     <div className="space-y-2 mb-6 flex-1">
                       <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
-                        <CheckCircle className="w-4 h-4 text-emerald-700" />
+                        <CheckCircle className="w-4 h-4 text-[#B89555]" />
                         Powered by official government sources
                       </div>
                       <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
-                        <CheckCircle className="w-4 h-4 text-emerald-700" />
+                        <CheckCircle className="w-4 h-4 text-[#B89555]" />
                         AI-generated insights included
                       </div>
                       <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
-                        <CheckCircle className="w-4 h-4 text-emerald-700" />
+                        <CheckCircle className="w-4 h-4 text-[#B89555]" />
                         Source attribution & timestamps
                       </div>
                     </div>
