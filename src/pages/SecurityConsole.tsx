@@ -45,8 +45,8 @@ const SecurityConsole: React.FC = () => {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
-                <Shield className="h-5 w-5 text-white" />
+              <div className="h-10 w-10 rounded-full bg-[#0A0A0A] border border-[#B89555]/40 flex items-center justify-center">
+                <Shield className="h-5 w-5 text-[#B89555]" />
               </div>
               <div>
                 <h1 className="font-bold">Security Console</h1>

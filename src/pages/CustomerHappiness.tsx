@@ -811,12 +811,12 @@ const IdeaBoxForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Prize Banner - Premium Readable */}
-      <div className="bg-gradient-to-r from-purple-900/80 to-gold/30 border-2 border-[#B89555]/50 rounded-xl p-5 mb-6 shadow-lg">
+      <div className="bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 mb-6 shadow-sm">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/20 flex items-center justify-center">
-            <Trophy className="w-6 h-6 text-[#1A1A1A]" />
+          <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+            <Trophy className="w-6 h-6 text-[#B89555]" />
           </div>
-          <h3 className="text-white text-lg font-bold">Double Reward Opportunity!</h3>
+          <h3 className="text-[#1A1A1A] text-lg font-bold">Double Reward Opportunity!</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex items-start gap-3">

@@ -169,7 +169,7 @@ const BrokerPartnerDashboard = () => {
 
           {/* Quick Search */}
           <motion.div variants={fadeInUp} className="mb-8">
-            <Card className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/30">
+            <Card className="bg-[#F7F2EA] border border-[#B89555]/30">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Quick Property Search</h3>
                 <form onSubmit={handleSearch} className="flex gap-4">
@@ -390,9 +390,9 @@ const BrokerPartnerDashboard = () => {
 
               {/* Partnership Info */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-gradient-to-br from-purple-500/10 to-blue-500/5 border-purple-500/30">
+                <Card className="bg-[#F7F2EA] border border-[#B89555]/30">
                   <CardContent className="p-6 text-center">
-                    <Briefcase className="w-10 h-10 text-purple-400 mx-auto mb-3" />
+                    <Briefcase className="w-10 h-10 text-[#B89555] mx-auto mb-3" />
                     <h3 className="font-semibold mb-2">Partner with JBJ</h3>
                     <p className="text-sm text-white/70 mb-4">
                       Interested in deeper collaboration? Contact our partnership team.
