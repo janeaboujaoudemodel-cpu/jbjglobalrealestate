@@ -34,7 +34,7 @@ const aiTools = [
   { title: 'Property Analyzer', desc: 'AI-powered property evaluation', icon: Search, href: '/ai-property-analyzer' },
   { title: 'ROI Calculator', desc: 'Calculate return on investment', icon: TrendingUp, href: '/ai-roi-calculator' },
   { title: 'Mortgage Calculator', desc: 'Plan your financing', icon: Calculator, href: '/mortgage-calculator' },
-  { title: 'Home Finder', desc: 'AI quiz to find your match', icon: Home, href: '/quiz' },
+  { title: 'Home Finder', desc: 'AI quiz to find your match', icon: Home, href: '/ai-home-finder' },
   { title: 'Price Predictor', desc: 'Forecast market trends', icon: PieChart, href: '/ai-price-predictor' },
   { title: 'Neighborhood Insights', desc: 'Area intelligence', icon: MapPin, href: '/ai-neighborhood-insights' },
 ];

@@ -469,7 +469,7 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
   },
   {
     name: 'AI Home Finder (Quiz)',
-    route: '/quiz',
+    route: '/ai-home-finder',
     navPath: 'Header, AI Hub, Footer',
     visibility: 'Public',
     status: 'working',

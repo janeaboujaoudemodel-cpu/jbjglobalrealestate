@@ -27,7 +27,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/terms': 'Terms of Service',
   '/cookies': 'Cookie Policy',
   '/customer-happiness': 'Customer Happiness',
-  '/quiz': 'AI Home Finder',
+  '/ai-home-finder': 'AI Home Finder',
   '/investor-hub': 'Investor Hub',
   '/market-intelligence': 'Market Intelligence',
   
