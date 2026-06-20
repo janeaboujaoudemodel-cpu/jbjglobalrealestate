@@ -70,7 +70,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   
-  { label: "AI Home Finder", href: "/quiz", icon: Home, highlight: true },
+  { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, highlight: true },
   { label: "List Your Property", href: "/list-property", icon: ClipboardCheck, highlight: true },
   { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
@@ -311,7 +311,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
-  { label: "AI Home Finder", href: "/quiz", icon: Home, section: "TOOLS" },
+  { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, section: "TOOLS" },
   { label: "Property Comparison", href: "/compare", icon: GitCompare },
   { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
   { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },

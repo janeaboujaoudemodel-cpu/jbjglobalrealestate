@@ -32,7 +32,7 @@ const QUICK_SHORTCUTS = [
 // Role-aware shortcuts surfaced when no query is typed
 const MODE_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
   investor: [
-    { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
+    { label: "AI Home Finder", route: "/ai-home-finder", icon: Sparkles },
     { label: "Off-Plan", route: "/properties?status=off-plan", icon: Building2 },
     { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
     { label: "Concierge", route: "/concierge", icon: Sparkles },
@@ -67,7 +67,7 @@ const POPULAR_PAGES = [
   { label: "FAQ", route: "/faq", icon: HelpCircle },
   { label: "About Us", route: "/about", icon: Building2 },
   { label: "News", route: "/news", icon: Newspaper },
-  { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
+  { label: "AI Home Finder", route: "/ai-home-finder", icon: Sparkles },
 ];
 
 // Recent searches & pinned shortcuts now live in src/lib/searchHistory.ts (7-day TTL)

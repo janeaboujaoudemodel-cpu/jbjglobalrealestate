@@ -574,7 +574,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/partners/company-setup", label: "Company Setup", icon: Building2 },
     { href: "/partners/visa-services", label: "Visa Services", icon: Award },
     { href: "/referral-partner", label: "Referral Partner", icon: Users },
-    { href: "/quiz", label: "AI Home Finder", icon: Sparkles },
+    { href: "/ai-home-finder", label: "AI Home Finder", icon: Sparkles },
     { href: "/map", label: "Property Map", icon: MapPin },
     { href: "/compare", label: "Compare Properties", icon: ClipboardCheck },
     { href: "/landlord-portal", label: "Landlord Portal", icon: Building2 },
@@ -583,7 +583,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Mobile menu - only approved public tools
   const mobileToolkitLinks = [
-    { href: "/quiz", label: "AI Home Finder", icon: Sparkles },
+    { href: "/ai-home-finder", label: "AI Home Finder", icon: Sparkles },
     { href: "/compare", label: "Property Comparison", icon: ClipboardCheck },
     { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: Calculator },
     { href: "/rental-index", label: "Rental Index", icon: TrendingUp },
@@ -920,7 +920,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <CalendarClock className="w-4 h-4 text-[#1A1A1A]/70" />AI Calendar
                     </Link>
-                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/ai-home-finder" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <Sparkles className="w-4 h-4 text-[#1A1A1A]/70" />AI Home Finder
                     </Link>
                     <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">

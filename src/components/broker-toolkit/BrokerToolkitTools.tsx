@@ -31,7 +31,7 @@ type BrokerTool = {
 // backend visibility table (ai_tool_visibility) controlled from the Owner
 // AI Tools Control Panel — no toggle is exposed on this public page.
 const BROKER_TOOLS: BrokerTool[] = [
-  { id: "ai-home-finder", name: "AI Home Finder", description: "Match clients to listings with AI-powered filters.", icon: Home, href: "/quiz" },
+  { id: "ai-home-finder", name: "AI Home Finder", description: "Match clients to listings with AI-powered filters.", icon: Home, href: "/ai-home-finder" },
   { id: "property-comparison", name: "Property Comparison", description: "Compare up to 3 properties side-by-side.", icon: GitCompare, href: "/compare" },
   { id: "mortgage-calculator", name: "Mortgage Calculator", description: "Calculate payments and affordability instantly.", icon: Calculator, href: "/mortgage-calculator" },
   { id: "property-evaluator", name: "Property Evaluator", description: "AI-driven valuation based on market data.", icon: BarChart3, href: "/property-evaluator" },

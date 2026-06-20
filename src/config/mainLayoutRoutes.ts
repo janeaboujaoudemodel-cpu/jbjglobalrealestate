@@ -2,7 +2,7 @@ export const TRANSPARENT_HEADER_ROUTES = new Set<string>([
   "/",
   "/index",
   "/properties",
-  "/quiz",
+  "/ai-home-finder",
   "/about",
   "/team",
   "/founder",

@@ -373,7 +373,7 @@ const Favorites = () => {
                         Explore Properties <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
-                    <Link to="/quiz">
+                    <Link to="/ai-home-finder">
                       <Button variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                         <Sparkles className="w-4 h-4 mr-2" /> AI Home Finder
                       </Button>

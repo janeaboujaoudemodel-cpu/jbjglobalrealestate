@@ -256,7 +256,7 @@ const QuizResults = () => {
 
   const startNewMatch = () => {
     clearMatchmakerSession();
-    navigate("/quiz");
+    navigate("/ai-home-finder");
   };
 
 
@@ -2139,7 +2139,7 @@ const QuizResults = () => {
         onOpenChange={setShowVipModal}
         onSuccess={() => {
           setShowVipModal(false);
-          navigate("/quiz");
+          navigate("/ai-home-finder");
         }}
         userInfo={{
           fullName: user?.email?.split("@")[0] || "",

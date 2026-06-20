@@ -29,7 +29,7 @@ export function buildMarketReportHtml(data: MarketReportTemplateData): string {
 
   const downloadDate = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
   const websiteUrl = "https://JBJ.AE";
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/ai-home-finder")}`;
   const villaImages = [luxuryVilla1, luxuryVilla1, luxuryVilla1, luxuryVilla1, luxuryVilla1];
 
   return `<!DOCTYPE html>
