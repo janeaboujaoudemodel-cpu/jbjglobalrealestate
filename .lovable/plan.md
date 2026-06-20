@@ -1,43 +1,74 @@
-## What's wrong
+## 1. Brochure wordmark legibility (PremiumBrochureCard)
 
-1. **Dark navy frame on every tool.** `ToolAnimatedFrame` (in `src/components/tools/PremiumToolShell.tsx`) ignores its `theme` and hardcodes `#050912 → #07101F → #04070D` plus `rgba(7,16,31,0.92)` as the page + inner background. That's the navy/teal/tiffany cast the user sees in AI Home Finder, Compare, Interior Design AI, Mortgage Calculator, Business Card Scanner.
-2. **Quiz pages double down on dark.** `Quiz.tsx` wraps both intro and question screens in `ToolAnimatedFrame theme={toolThemes.teal}` and renders headings as `text-white`, so the champagne flatten isn't visible.
-3. **Fullscreen button** shows the full word "Fullscreen" beside the icon at rest. Should be icon-only, expanding to label on hover.
-4. **Back/Next buttons** in `Quiz.tsx` use `px-8 py-6 text-lg` / `px-10 py-6 text-lg` — huge box, tiny label+arrow. Needs right-sized padding so the content fills the box.
+- Increase wordmark size from 12px → 14px, tighten letter-spacing to 0.18em.
+- Strengthen the scrim panel (solid `rgba(8,12,20,0.92)` band, no fade) so "JBJ Global Real Estate" never sits on raw photo.
+- Add 1px gold hairline around the panel for brand consistency.
+- Keep gold "JBJ" + white "Global Real Estate"; bump weight to 800/600.
 
-## Fix
+## 2. Brochure download — developer-only source lock
 
-### 1 — Flatten `ToolAnimatedFrame` to champagne (`src/components/tools/PremiumToolShell.tsx`, lines 211–279)
-- Outer wrapper bg → `radial-gradient(1200px 700px at 50% -10%, rgba(184,149,85,0.12), transparent 60%), #FDFBF7` (champagne, gold wash).
-- Drop `data-tool-darkbody="true"` — frame is now light.
-- Inner panel bg → `#F7F2EA` (surface champagne), inset shadow uses `rgba(184,149,85,0.45)` gold hairline.
-- Keep the spinning border but driven from `theme.borderConic` (already gold via `toolThemes.ts`).
+Already mostly enforced via `brochure-auto-fetch` (developer-direct + Provident). Lock it further:
+- Download button accepts ONLY `projects.brochure_url` or `projects.fact_sheet_url` set by the developer/owner, or a result from `brochure-auto-fetch` flagged `source_kind in ('developer_direct','fact_sheet','provident')`.
+- Never fall back to a generated PDF. If none exists → opens lead-capture modal (current behavior) with copy "Request official brochure from developer".
+- Label dynamically: "Download Brochure" or "Download Fact Sheet" based on which file is present.
 
-### 2 — Quiz pages adopt champagne (`src/pages/Quiz.tsx`)
-- Intro section (lines 871–877): drop `data-on-dark`, set bg `#FDFBF7`. Header bar (line 880) → `bg-[#F7F2EA] border-[#B89555]/25`, Exit button + clock text → `#1A1A1A`.
-- Question section (line 1164): same — header `bg-[#F7F2EA]`, Back/Question-count text → ink `#1A1A1A` (not white).
-- Question heading (line 1198) and option label (line 1257): `text-[#1A1A1A]` not `text-white`.
-- Preferences sidebar heading (line 1291) and body: ink `#1A1A1A`.
-- Leave `toolThemes.teal` wrapper in place — it already maps to brand champagne after the brand lock in `toolThemes.ts`.
+## 3. New Project Presentation Generator (replaces ad-hoc PDF export)
 
-### 3 — Fullscreen button: icon-only + hover-expand (`src/components/tools/FullscreenToolToggle.tsx`)
-- Default: square 40×40 rounded-full, just the `Maximize2` / `Minimize2` icon.
-- On `hover` (or `focus-visible`): width animates to auto and the label slides in (`group` + `max-w` transition, or pure CSS `:hover` on the button revealing the span).
-- Same clean black `#0A0A0A` fill + 1px gold `#B89555` hairline + white icon (passes black-CTA lock and `data-no-contrast-guard`).
-- `title="Fullscreen"` stays for native tooltip on touch.
+### Visibility
+- New `<GeneratePresentationCard />` rendered on `/project/:slug` ONLY when `userMode ∈ {broker, owner, developer}`. Hidden for investor + anonymous.
 
-### 4 — Right-size Back/Next (`src/pages/Quiz.tsx` lines 1265–1285)
-- Replace `px-8 py-6 text-lg` / `px-10 py-6 text-lg` with `h-11 px-5 text-sm` (Back) and `h-11 px-6 text-sm` (Next) — pill height matches the icon+label, no oversized empty box.
-- Keep gold-hairline outline on Back and clean-black fill on Next.
+### Flow (Reelly-style)
+1. Click "Generate Presentation" → opens `<PresentationBuilderDialog />`.
+2. Step 1 — Unit selection: searchable list of `project_units` (unit no, type, BR, size, price, floor plan thumb). Multi-select up to 5.
+3. Step 2 — Presenter details (all optional, omitted if blank):
+   - Photo upload (square crop, stored in `presentation-assets` bucket)
+   - Full name
+   - Title / role
+   - Phone, email, WhatsApp
+   - Company logo override (defaults to JBJ monogram)
+4. Step 3 — Sections toggle (all on by default): Cover, Project highlights, Location & map, Amenities, Gallery, Selected units (floor plans + price + payment plan), Payment plan, Developer profile, Sales offer / CTA, Presenter contact.
+5. Step 4 — Preview (scaled slide deck) → Export PDF / PPTX / Share link.
 
-## Files touched
-- `src/components/tools/PremiumToolShell.tsx`
-- `src/components/tools/FullscreenToolToggle.tsx`
-- `src/pages/Quiz.tsx`
+### Data sources (auto-pulled, never fabricated)
+- `projects` (name, location, handover, price_from, description)
+- `project_images` (gallery + cover)
+- `project_amenities`
+- `project_units` (selected ones → floor plans, sizes, prices, payment plans)
+- `developers` (logo, name, bio)
+- `projects.brochure_url` / `fact_sheet_url` (linked as appendix, not re-rendered)
+- Presenter inputs from Step 2
 
-## Out of scope (won't touch this turn)
-- PDF download palette — already on champagne+gold+ink (`buildPdf` in `QuizResults.tsx` uses brand tokens; the variable named `tiffany` actually holds gold `#B89555`). No visible navy/teal in the export.
-- Other tool pages (Compare, Mortgage, Interior Design, Business Card Scanner) — they share `ToolAnimatedFrame`, so step 1 flattens them automatically. No per-page edits needed.
+### Rendering
+- Reuse the existing slide framework already in `src/pages/owner/` (presentation engine) — render at 1920×1080, scale, export via existing PDF pipeline (`jspdf` + html2canvas already in deps).
+- Champagne/gold/ink palette only — no navy/teal.
+- Conditional rendering: any empty field/section is skipped entirely (no "N/A" placeholders).
+
+### Files
+
+**New**
+- `src/components/project-detail/GeneratePresentationCard.tsx` — entry card (gated by mode).
+- `src/components/presentation-builder/PresentationBuilderDialog.tsx` — 4-step wizard.
+- `src/components/presentation-builder/steps/UnitPickerStep.tsx`
+- `src/components/presentation-builder/steps/PresenterDetailsStep.tsx`
+- `src/components/presentation-builder/steps/SectionsStep.tsx`
+- `src/components/presentation-builder/steps/PreviewExportStep.tsx`
+- `src/components/presentation-builder/slides/*` (Cover, Highlights, Location, Amenities, Gallery, Units, PaymentPlan, Developer, Offer, Contact)
+- `src/lib/presentation/buildProjectDeck.ts` — assembles slide model from DB rows + presenter inputs (skips empties).
+- `src/lib/presentation/exportDeck.ts` — PDF + PPTX export.
+- `supabase/migrations/<ts>_presentation_assets_bucket.sql` — creates `presentation-assets` storage bucket + owner-write RLS.
+
+**Edited**
+- `src/components/project-detail/PremiumBrochureCard.tsx` — wordmark restyle + developer-source-only label logic.
+- `src/components/project-detail/ProjectDetailLayout.tsx` — mount `<GeneratePresentationCard />` under brochure section, gated by `useUserMode()`.
+- `supabase/functions/brochure-auto-fetch/index.ts` — return `source_kind`; reject anything not in allowed set.
+
+### Out of scope
+- Editing slide text inline (v2 — current export is read-only WYSIWYG).
+- Email-send of generated deck (handled by existing Communication Hub if user asks later).
+- Investor mode access (intentionally excluded per request).
 
 ## Verification
-Browser screenshots at `/ai-home-finder` and `/quiz` (intro + question 1 of 10) on desktop, plus a hover state on the Fullscreen button.
+- Screenshot brochure card: wordmark fully readable on dark and bright project photos.
+- Open `/project/:slug` as broker → "Generate Presentation" card visible; as investor → hidden.
+- Generate deck with 2 units, no presenter photo, no phone → those sections/fields silently omitted.
+- Export PDF and confirm champagne/gold palette, no placeholder strings.
