@@ -1270,19 +1270,19 @@ const Quiz = () => {
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
                 data-no-contrast-guard
-                className="aihf-cta px-8 py-6 text-lg font-semibold"
+                className="aihf-cta h-11 px-5 text-sm font-semibold"
               >
-                <ChevronLeft className="w-5 h-5 mr-2" />
+                <ChevronLeft className="w-4 h-4 mr-2" />
                 Back
               </Button>
               <Button
                 onClick={handleNext}
                 disabled={!isAnswered()}
                 data-no-contrast-guard
-                className="aihf-cta font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="aihf-cta h-11 px-6 text-sm font-semibold hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
-                <ChevronRight className="w-5 h-5 ml-2" />
+                <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
           </div>
