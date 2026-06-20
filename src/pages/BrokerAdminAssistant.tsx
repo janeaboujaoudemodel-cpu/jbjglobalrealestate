@@ -102,8 +102,8 @@ export default function BrokerAdminAssistant() {
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-400/40 to-emerald-600/10 blur-md animate-pulse" />
-                  <div className="relative w-16 h-16 rounded-full border-2 border-emerald-500/50 overflow-hidden bg-gradient-to-br from-emerald-500/20 to-emerald-600/5">
+                  <div className="absolute inset-0 rounded-full bg-[#B89555]/20 blur-md animate-pulse" />
+                  <div className="relative w-16 h-16 rounded-full border-2 border-[#B89555]/50 overflow-hidden bg-[#EFE6D6]">
                     <img 
                       src={sarahThompsonPortrait} 
                       alt="Sarah Thompson" 

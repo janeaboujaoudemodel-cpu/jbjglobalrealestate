@@ -430,7 +430,7 @@ const BusinessCardScanner = () => {
               <span className="text-rose-100 text-sm font-medium allow-white">AI-Powered OCR</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 allow-white">
-              AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-300">Scanner</span>
+              AI Business Card <span className="text-[#B89555]">Scanner</span>
             </h1>
             <p className="text-white/90 max-w-2xl mx-auto allow-white">
               Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
