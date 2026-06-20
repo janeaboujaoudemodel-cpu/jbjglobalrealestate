@@ -51,7 +51,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
             onSave={ed.saveProject}
             onClear={ed.clearProject}
             canSave={ed.pages.length > 0}
-            accentColor="#2563EB"
+            accentColor="#B89555"
             accentBorder="rgba(37,99,235,0.2)"
             toolId="pdf-editor"
           />

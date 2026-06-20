@@ -57,8 +57,8 @@ const brandTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
   id,
   label,
   accent: BRAND_GOLD,
-  // Hero band: clean ink black with a subtle gold radial — matches /compare hero
-  heroGradient: `radial-gradient(1200px 600px at 50% -10%, rgba(184,149,85,0.18), transparent 60%), ${BRAND_INK}`,
+  // Hero band: champagne with a subtle gold radial — matches /compare hero
+  heroGradient: `radial-gradient(1200px 600px at 50% -10%, rgba(184,149,85,0.14), transparent 60%), ${BRAND_CHAMPAGNE}`,
   accentSoft: `rgba(184,149,85,0.10)`,
   accentBorder: `rgba(184,149,85,0.45)`,
   // Primary CTA: clean ink black with gold hairline — matches .jj-cta-dark

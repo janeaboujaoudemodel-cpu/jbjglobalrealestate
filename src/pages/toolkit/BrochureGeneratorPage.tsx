@@ -124,7 +124,7 @@ const DEFAULT_PROFILE: ProfileData = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const accent = '#2563EB';
+const accent = '#B89555';
 
 const Panel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div className={`rounded-2xl p-4 bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm ${className}`}>
@@ -559,7 +559,7 @@ export default function BrochureGeneratorPage() {
                 onSave={saveProject}
                 onClear={clearProject}
                 canSave={!!propertyData.title || !!profileData.name}
-                accentColor="#2563EB"
+                accentColor="#B89555"
                 accentBorder="rgba(37,99,235,0.2)"
                 toolId="document-creator"
               />
@@ -968,7 +968,7 @@ export default function BrochureGeneratorPage() {
         open={stampModalOpen}
         onClose={() => setStampModalOpen(false)}
         onStampReady={(dataUrl) => { setStampUrl(dataUrl); setStampModalOpen(false); }}
-        accentColor="#2563EB"
+        accentColor="#B89555"
       />
 
       <input ref={photoInputRef} type="file" accept="image/*" className="hidden" onChange={handleProfilePhotoUpload} />

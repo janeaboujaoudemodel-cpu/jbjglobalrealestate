@@ -116,13 +116,11 @@ export const PremiumToolShell = ({
             {showBack && (
               <button
                 onClick={() => navigate(-1)}
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="allow-white absolute top-4 left-4 md:top-5 md:left-6 z-20 inline-flex items-center gap-1.5 text-xs md:text-sm font-medium transition-transform group"
-                style={{ color: "#FFFFFF" }}
+                className="absolute top-4 left-4 md:top-5 md:left-6 z-20 inline-flex items-center gap-1.5 text-xs md:text-sm font-medium transition-transform group"
+                style={{ color: TOOL_INK }}
               >
-                <ArrowLeft className="w-4 h-4 text-white group-hover:-translate-x-0.5 transition-transform" />
-                <span className="text-white">Back</span>
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" style={{ color: TOOL_INK }} />
+                <span style={{ color: TOOL_INK }}>Back</span>
               </button>
             )}
 
@@ -134,50 +132,46 @@ export const PremiumToolShell = ({
             >
               <div className="flex justify-center mb-5">
                 <span
-                  data-allow-dark-cta
                   className="inline-flex items-center justify-center w-14 h-14 rounded-2xl"
                   style={{
-                    background: "rgba(255,255,255,0.08)",
+                    background: "#EFE6D6",
                     border: `1px solid ${theme.accent}`,
-                    boxShadow: `0 0 30px ${theme.accent}55`,
+                    boxShadow: `0 8px 24px -10px ${theme.accent}55`,
                   }}
                 >
                   <EyebrowIcon
-                    className="w-6 h-6 allow-white"
-                    style={{ color: "#FFFFFF" }}
+                    className="w-6 h-6"
+                    style={{ color: theme.accent }}
                   />
                 </span>
               </div>
 
               <div
-                data-allow-dark-cta
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
                 style={{
-                  background: "rgba(255,255,255,0.08)",
-                  border: `1px solid rgba(255,255,255,0.25)`,
+                  background: "#EFE6D6",
+                  border: `1px solid ${theme.accent}55`,
                 }}
               >
                 <span
-                  className="text-[10px] font-semibold uppercase tracking-[0.22em] allow-white"
-                  style={{ color: "#FFFFFF" }}
+                  className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                  style={{ color: TOOL_INK }}
                 >
                   {eyebrow}
                 </span>
               </div>
 
               <h1
-                data-allow-dark-cta
-                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.1] mb-4 allow-white"
-                style={{ color: "#FFFFFF" }}
+                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.1] mb-4"
+                style={{ color: TOOL_INK }}
               >
                 {title}
               </h1>
 
               {subtitle && (
                 <p
-                  data-allow-dark-cta
-                  className="text-sm md:text-base allow-white max-w-2xl mx-auto"
-                  style={{ color: "rgba(255,255,255,0.82)" }}
+                  className="text-sm md:text-base max-w-2xl mx-auto"
+                  style={{ color: `${TOOL_INK}B3` }}
                 >
                   {subtitle}
                 </p>

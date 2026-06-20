@@ -10,10 +10,12 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 
-// JBJ champagne+gold+ink palette
-const NAVY = "#0A0A0A";        // clean black
-const NAVY_GLOW = "#B89555";   // gold hairline
-const NAVY_DARK = "#0A0A0A";   // black
+// JBJ brand palette
+const PAGE = "#FDFBF7";       // champagne page
+const SURFACE = "#F7F2EA";    // surface
+const RAISED = "#EFE6D6";     // raised
+const GOLD = "#B89555";       // gold hairline accent
+const INK = "#1A1A1A";        // ink text
 
 const advisorBenefits = [
   { icon: Shield,      title: "Expert Guidance",       body: "Our mortgage advisors work with all major UAE banks to find you the best rates." },
@@ -33,40 +35,19 @@ const MortgageCalculatorPage = () => {
       <SEOHead {...pagesSEO.mortgageCalculator} />
 
       <section
-        data-neon-page
-        data-allow-dark-cta
-        data-no-contrast-guard
-        data-on-dark
-        className="allow-white relative w-full min-h-screen overflow-hidden"
-        style={{ background: "#05060F" }}
+        className="relative w-full min-h-screen overflow-hidden"
+        style={{ background: PAGE }}
       >
-        {/* Extra accent orb (page shell already provides cyan+magenta) */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute bottom-0 left-1/3 w-[460px] h-[460px] rounded-full blur-3xl opacity-30"
-               style={{ background: "radial-gradient(circle, #B89555 0%, transparent 70%)", animation: "jjNeonPageOrb 26s ease-in-out infinite" }} />
-        </div>
-
-
         {/* Hero */}
         <div className="relative py-16 md:py-24 overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(135deg, rgba(6,182,212,0.18) 0%, rgba(5,6,15,0.85) 55%, #000000 100%)`,
-            }}
-          />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(34,211,238,0.22),transparent_55%)]" />
-
-
           <div className="container mx-auto px-4 relative z-10">
             <Link
               to="/"
-              data-no-contrast-guard
-              className="allow-white inline-flex items-center gap-2 text-white/85 hover:text-white text-sm mb-8 transition-colors group"
-              style={{ color: "#FFFFFF" }}
+              className="inline-flex items-center gap-2 text-sm mb-8 transition-colors group"
+              style={{ color: INK }}
             >
-              <ArrowLeft className="w-4 h-4 text-white group-hover:-translate-x-1 transition-transform allow-white" />
-              <span className="text-white allow-white">Back to Home</span>
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" style={{ color: INK }} />
+              <span>Back to Home</span>
             </Link>
 
             <motion.div
@@ -76,34 +57,25 @@ const MortgageCalculatorPage = () => {
               transition={{ duration: 0.5 }}
             >
               <span
-                className="allow-white inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium"
+                className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium"
                 style={{
-                  background: "rgba(184,149,85,0.18)",
-                  border: "1px solid rgba(184,149,85,0.45)",
-                  color: "#DBEAFE",
+                  background: RAISED,
+                  border: `1px solid ${GOLD}55`,
+                  color: INK,
                 }}
               >
-                <Calculator className="w-4 h-4 mr-2" style={{ color: NAVY_GLOW }} />
+                <Calculator className="w-4 h-4 mr-2" style={{ color: GOLD }} />
                 FREE AI Tool
               </span>
 
               <h1
-                className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-                style={{ color: "#FFFFFF" }}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+                style={{ color: INK }}
               >
-                Mortgage{" "}
-                <span
-                  className="text-transparent bg-clip-text"
-                  style={{
-                    backgroundImage: `linear-gradient(135deg, #93C5FD, #60A5FA, #2563EB)`,
-                    WebkitBackgroundClip: "text",
-                  }}
-                >
-                  Calculator
-                </span>
+                Mortgage <span style={{ color: GOLD }}>Calculator</span>
               </h1>
 
-              <p className="allow-white text-lg md:text-xl max-w-2xl mx-auto mb-8" style={{ color: "rgba(255,255,255,0.85)" }}>
+              <p className="text-lg md:text-xl max-w-2xl mx-auto mb-8" style={{ color: `${INK}B3` }}>
                 {t('mortgage.subtitle')}. Get accurate estimates for monthly payments, total interest and find the right financing option for your UAE property purchase.
               </p>
 
@@ -115,17 +87,15 @@ const MortgageCalculatorPage = () => {
                 ].map(({ Icon, title, body }) => (
                   <div
                     key={title}
-                    data-allow-dark-cta
-                    data-no-contrast-guard
-                    className="allow-white rounded-xl p-4 text-left"
+                    className="rounded-xl p-4 text-left"
                     style={{
-                      background: `linear-gradient(135deg, #0A0A0A 0%, #0A1830 55%, #000 100%)`,
-                      border: `1px solid rgba(184,149,85,0.32)`,
+                      background: SURFACE,
+                      border: `1px solid ${GOLD}40`,
                     }}
                   >
-                    <Icon className="w-7 h-7 mb-2" style={{ color: NAVY_GLOW }} />
-                    <p className="font-medium" style={{ color: "rgba(255,255,255,0.94)" }}>{title}</p>
-                    <p className="text-sm" style={{ color: "rgba(255,255,255,0.72)" }}>{body}</p>
+                    <Icon className="w-7 h-7 mb-2" style={{ color: GOLD }} />
+                    <p className="font-medium" style={{ color: INK }}>{title}</p>
+                    <p className="text-sm" style={{ color: `${INK}B3` }}>{body}</p>
                   </div>
                 ))}
               </div>
@@ -133,35 +103,30 @@ const MortgageCalculatorPage = () => {
           </div>
         </div>
 
-        {/* Calculator body — dark glowing card */}
+        {/* Calculator body — champagne raised card */}
         <div className="container mx-auto px-4 pt-8 md:pt-12 pb-16">
           <div className="max-w-5xl mx-auto">
             <div
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white rounded-2xl overflow-hidden"
+              className="rounded-2xl overflow-hidden"
               style={{
-                background: "linear-gradient(135deg, #0B2244 0%, #08152B 45%, #000 100%)",
-                border: "1px solid rgba(184,149,85,0.35)",
-                boxShadow:
-                  "0 0 0 1px rgba(184,149,85,0.25), 0 18px 50px rgba(30,78,140,0.35), inset 0 0 28px rgba(184,149,85,0.10)",
+                background: SURFACE,
+                border: `1px solid ${GOLD}55`,
+                boxShadow: `0 18px 50px -20px ${GOLD}33`,
               }}
             >
-              <div className="px-4 md:px-8 py-8 md:py-10" data-mortgage-dark>
-                <MortgageCalculator compact showHeading={false} showAssistant themeVariant="navy" />
+              <div className="px-4 md:px-8 py-8 md:py-10">
+                <MortgageCalculator compact showHeading={false} showAssistant />
               </div>
             </div>
           </div>
 
-          {/* Advisor benefits and bank partners — dark glowing tiles */}
+          {/* Advisor benefits and bank partners — champagne tiles */}
           <div className="max-w-5xl mx-auto mt-12">
             <div className="text-center mb-8">
-              <h2 className="allow-white text-2xl md:text-3xl font-bold" style={{ color: "#FFFFFF" }}>
-                Prefer a{" "}
-                <span style={{ color: NAVY_GLOW }}>Mortgage Advisor</span>{" "}
-                Through Our Licensed Partners?
+              <h2 className="text-2xl md:text-3xl font-bold" style={{ color: INK }}>
+                Prefer a <span style={{ color: GOLD }}>Mortgage Advisor</span> Through Our Licensed Partners?
               </h2>
-              <p className="allow-white mt-3 max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.75)" }}>
+              <p className="mt-3 max-w-2xl mx-auto" style={{ color: `${INK}B3` }}>
                 Our calculator gives you instant estimates. For personalized guidance through our licensed partners, we connect you with dedicated mortgage advisors.
               </p>
             </div>
@@ -169,60 +134,53 @@ const MortgageCalculatorPage = () => {
               {advisorBenefits.map((b) => (
                 <div
                   key={b.title}
-                  data-allow-dark-cta
-                  data-no-contrast-guard
-                  className="allow-white rounded-xl p-5"
+                  className="rounded-xl p-5"
                   style={{
-                    background: "linear-gradient(135deg, #0A0A0A 0%, #08152B 60%, #000 100%)",
-                    border: "1px solid rgba(184,149,85,0.30)",
+                    background: SURFACE,
+                    border: `1px solid ${GOLD}40`,
                   }}
                 >
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center mb-3"
                     style={{
-                      background: "rgba(184,149,85,0.16)",
-                      border: "1px solid rgba(184,149,85,0.45)",
+                      background: RAISED,
+                      border: `1px solid ${GOLD}55`,
                     }}
                   >
-                    <b.icon className="w-5 h-5 allow-white" style={{ color: NAVY_GLOW }} />
+                    <b.icon className="w-5 h-5" style={{ color: GOLD }} />
                   </div>
-                  <h3 className="font-semibold mb-1 allow-white" style={{ color: "#FFFFFF" }}>{b.title}</h3>
-                  <p className="text-sm allow-white" style={{ color: "rgba(255,255,255,0.72)" }}>{b.body}</p>
+                  <h3 className="font-semibold mb-1" style={{ color: INK }}>{b.title}</h3>
+                  <p className="text-sm" style={{ color: `${INK}B3` }}>{b.body}</p>
                 </div>
               ))}
             </div>
 
             <div
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white mt-8 rounded-2xl p-5 md:p-6"
+              className="mt-8 rounded-2xl p-5 md:p-6"
               style={{
-                background: "linear-gradient(135deg, #123968 0%, #08152B 55%, #000 100%)",
-                border: "1px solid rgba(184,149,85,0.35)",
-                boxShadow: "inset 0 0 28px rgba(184,149,85,0.10)",
+                background: SURFACE,
+                border: `1px solid ${GOLD}55`,
               }}
             >
               <div className="flex flex-col md:flex-row md:items-center gap-5">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "rgba(184,149,85,0.16)", border: "1px solid rgba(147,197,253,0.45)" }}>
-                    <Landmark className="w-6 h-6 allow-white" style={{ color: NAVY_GLOW }} />
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: RAISED, border: `1px solid ${GOLD}55` }}>
+                    <Landmark className="w-6 h-6" style={{ color: GOLD }} />
                   </div>
                   <div>
-                    <h3 className="allow-white font-bold text-lg" style={{ color: "#FFFFFF" }}>Bank Partner Network</h3>
-                    <p className="allow-white text-sm" style={{ color: "rgba(255,255,255,0.68)" }}>Introductions through licensed mortgage partners connected with leading UAE banks.</p>
+                    <h3 className="font-bold text-lg" style={{ color: INK }}>Bank Partner Network</h3>
+                    <p className="text-sm" style={{ color: `${INK}B3` }}>Introductions through licensed mortgage partners connected with leading UAE banks.</p>
                   </div>
                 </div>
                 <div className="flex-1 flex flex-wrap gap-2 md:justify-end">
                   {bankPartners.map((bank) => (
                     <span
                       key={bank}
-                      className="allow-white rounded-full px-3 py-1.5 text-xs font-semibold"
+                      className="rounded-full px-3 py-1.5 text-xs font-semibold"
                       style={{
-                        color: "#FFFFFF",
-                        background: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)",
-                        border: "1px solid rgba(191,219,254,0.78)",
-                        boxShadow: "0 0 0 1px rgba(147,197,253,0.25), 0 8px 22px rgba(184,149,85,0.24), inset 0 1px 0 rgba(255,255,255,0.55)",
-                        textShadow: "0 2px 12px rgba(0,0,0,0.65)",
+                        color: INK,
+                        background: RAISED,
+                        border: `1px solid ${GOLD}55`,
                       }}
                     >
                       {bank}
@@ -235,22 +193,14 @@ const MortgageCalculatorPage = () => {
             <div className="text-center mt-10">
               <button
                 onClick={() => setIsInquiryOpen(true)}
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="allow-white inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all hover:scale-[1.02]"
-                style={{
-                  background: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)",
-                  border: "1px solid rgba(191,219,254,0.78)",
-                  color: "#FFFFFF",
-                  boxShadow: "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(184,149,85,0.42), inset 0 1px 0 rgba(255,255,255,0.55)",
-                  textShadow: "0 2px 14px rgba(0,0,0,0.65)",
-                }}
+                data-cta="dark"
+                className="jj-cta-dark inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all hover:scale-[1.02]"
               >
                 Request Mortgage Partner Introduction
-                <ArrowUpRight className="w-5 h-5 allow-white" />
+                <ArrowUpRight className="w-5 h-5" />
               </button>
 
-              <p className="mt-6 text-xs allow-white max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
+              <p className="mt-6 text-xs max-w-2xl mx-auto" style={{ color: `${INK}99` }}>
                 <strong>Disclaimer:</strong> This calculator provides estimates for informational purposes only and does not constitute financial advice.
               </p>
             </div>
@@ -264,23 +214,6 @@ const MortgageCalculatorPage = () => {
         source="mortgage-advisory"
       />
       <ActiveLeadBanner showAddToShortlist={false} />
-
-      {/* Force Mortgage Calculator inputs to render dark/navy inside this shell */}
-      <style>{`
-        [data-mortgage-dark] .bg-\\[\\#F7F2EA\\] {
-          background: linear-gradient(135deg, #0F2849 0%, #08172E 100%) !important;
-          border-color: rgba(184,149,85,0.30) !important;
-        }
-        [data-mortgage-dark] .text-\\[\\#1A1A1A\\],
-        [data-mortgage-dark] .text-\\[\\#1A1A1A\\]\\/70,
-        [data-mortgage-dark] .text-\\[\\#1A1A1A\\]\\/60 {
-          color: #FFFFFF !important;
-        }
-        [data-mortgage-dark] .text-\\[\\#0A0A0A\\] { color: #93C5FD !important; }
-        [data-mortgage-dark] .border-\\[\\#B89555\\]\\/30 { border-color: rgba(184,149,85,0.30) !important; }
-        [data-mortgage-dark] .bg-\\[\\#EFE6D6\\] { background: rgba(184,149,85,0.18) !important; }
-        [data-mortgage-dark] .bg-\\[\\#B89555\\] { background: #60A5FA !important; }
-      `}</style>
     </ToolAnimatedFrame>
   );
 };

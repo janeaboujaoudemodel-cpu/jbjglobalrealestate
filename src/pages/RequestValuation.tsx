@@ -14,9 +14,9 @@ import { toast } from 'sonner';
 import { ToolHero } from '@/components/tools/ToolHero';
 import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from '@/components/tools/toolThemes';
 
-/* ── Navy palette tokens (matches PropertyEvaluator) ── */
+/* ── Brand ink tokens (clean black, no blue tint) ── */
 const NAVY = '#0A0A0A';
-const NAVY_DEEP = '#0A1830';
+const NAVY_DEEP = '#1F1F1F';
 const NAVY_BORDER = 'rgba(10,10,10,0.45)';
 
 /* ── Section header (blue band with white content) ── */
