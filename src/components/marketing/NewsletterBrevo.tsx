@@ -129,53 +129,54 @@ export const NewsletterBrevo = ({
   if (variant === 'compact') {
     return (
       <>
-        <form onSubmit={handleSubmit} className={`flex gap-2 ${className}`}>
-          <div className="jj-newsletter-emerald jj-emerald-glow-wrap relative flex-1">
-            <Input
-              type="email"
-              placeholder=" "
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              data-no-contrast-guard
-              className="h-12 w-full rounded-xl border-0 px-4 pr-4 font-semibold tracking-wide focus-visible:ring-0"
-              style={{
-                backgroundImage: 'var(--jj-emerald-ombre)',
-                color: '#FFFFFF',
-                WebkitTextFillColor: '#FFFFFF',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
-              }}
-              required
-              disabled={isSubmitting}
-            />
-            {!email && (
-              <span
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap"
-                aria-hidden="true"
-                style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}
-              >
-                {animatedPlaceholder}
-                <span className="jj-type-caret" aria-hidden="true">|</span>
-              </span>
-            )}
-          </div>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
+        <form onSubmit={handleSubmit} className={className}>
+          {/* ONE unified emerald pill — input + button share the SAME surface,
+              wrapped by a single 1px emerald hairline (no triple borders,
+              no halo, no overflowing placeholder). */}
+          <div
             data-no-contrast-guard
-            className="jj-newsletter-emerald jj-emerald-glow-wrap relative h-12 overflow-hidden rounded-xl px-5 font-semibold transition-all duration-300 hover:brightness-110"
-            style={{
-              backgroundImage: 'var(--jj-emerald-ombre)',
-              border: '0',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
-              color: '#FFFFFF',
-            }}
+            className="jj-emerald-pill jj-emerald-glow-wrap jj-newsletter-emerald relative flex items-stretch h-12 rounded-xl overflow-hidden"
+            style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
           >
-            {isSubmitting ? (
-              <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#FFFFFF' }} />
-            ) : (
-              <Send className="w-4 h-4" style={{ color: '#FFFFFF' }} />
-            )}
-          </Button>
+            <div className="relative flex-1 min-w-0">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-label="Email address"
+                required
+                disabled={isSubmitting}
+                className="w-full h-full px-4 text-sm font-semibold tracking-wide bg-transparent"
+                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+              />
+              {!email && (
+                <span
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap"
+                  aria-hidden="true"
+                  style={{ color: 'rgba(255,255,255,0.78)', WebkitTextFillColor: 'rgba(255,255,255,0.78)' }}
+                >
+                  {animatedPlaceholder}
+                  <span className="jj-type-caret" aria-hidden="true">|</span>
+                </span>
+              )}
+            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              aria-label="Subscribe"
+              className="flex items-center justify-center px-5 transition-all duration-200 hover:brightness-110"
+              style={{
+                color: '#FFFFFF',
+                borderLeft: '1px solid rgba(255,255,255,0.14)',
+              }}
+            >
+              {isSubmitting ? (
+                <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#FFFFFF' }} />
+              ) : (
+                <Send className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+              )}
+            </button>
+          </div>
         </form>
         <NewsletterDetailModal
           isOpen={showDetailModal}
