@@ -57,7 +57,7 @@ const AreasWeCover = () => {
               <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("areas.topLabel", "Top Areas")}</span>
             </span>
 
-            <h2 className="text-2xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight uppercase tracking-[0.08em]">
+            <h2 className="jj-title-emerald text-2xl md:text-4xl font-bold tracking-tight uppercase tracking-[0.08em]">
               {t("areas.topTitle", "Top Areas in Dubai")}
             </h2>
             <div className="mx-auto mt-3 mb-3 flex items-center justify-center gap-3">
@@ -124,7 +124,7 @@ const AreasWeCover = () => {
               <div className="absolute bottom-0 left-0 right-0 bg-[#FDFBF7]/95 backdrop-blur-md border-t border-[#B89555]/40 px-4 py-3">
                 <div className="flex items-end justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="text-[#1A1A1A] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
+                    <h3 className="jj-title-emerald font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
                       {area.name}
                     </h3>
                     <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1A1A1A]/70">
@@ -133,7 +133,7 @@ const AreasWeCover = () => {
                   </div>
 
                   <span
-                    className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#1A1A1A] bg-[#EFE6D6] border border-[#B89555]/60 transition-all group-hover:translate-y-[-1px] group-hover:bg-[#F7F2EA]"
+                    className="jj-pill-emerald shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
                   >
                     Explore
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />

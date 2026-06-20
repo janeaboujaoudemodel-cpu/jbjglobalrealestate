@@ -59,7 +59,7 @@ const CombinedContactNewsletter = ({
             >
               <span className="allow-white" style={{ color: "#FFFFFF" }}>Get in touch</span>
             </span>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.14em] text-[#1A1A1A]">
+            <h2 className="jj-title-emerald text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.14em]">
               {title}
             </h2>
             <div className="mx-auto mt-2 mb-3 flex items-center justify-center gap-3">
@@ -80,13 +80,13 @@ const CombinedContactNewsletter = ({
                 href={card.href}
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-                className="group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white hover:bg-[#FDFBF7] transition-all duration-300"
+                className="group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white hover:bg-[#F7FAF8] transition-all duration-300"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#FDFBF7] flex items-center justify-center flex-shrink-0">
-                  <card.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#0A0A0A]" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#E8F2EC] border border-[#064E3B]/30 flex items-center justify-center flex-shrink-0">
+                  <card.icon className="w-5 h-5 sm:w-6 sm:h-6 jj-icon-emerald" />
                 </div>
                 <div className="text-left sm:text-center">
-                  <p className="text-xs uppercase tracking-wider text-[#0A0A0A]/70 font-medium mb-0.5">{card.label}</p>
+                  <p className="jj-text-emerald text-xs uppercase tracking-wider font-semibold mb-0.5">{card.label}</p>
                   <p className="text-sm font-semibold text-[#0A0A0A]">{card.value}</p>
                 </div>
               </a>

@@ -14,11 +14,11 @@ export default function HomepageBookMarquee() {
       <div className="px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-[#1A1A1A]/70" />
+            <div className="w-10 h-10 rounded-full bg-[#E8F2EC] border border-[#064E3B]/30 flex items-center justify-center">
+              <BookOpen className="w-5 h-5 jj-icon-emerald" />
             </div>
             <div>
-              <h2 className="text-[#1A1A1A] text-lg md:text-xl font-bold">
+              <h2 className="jj-title-emerald text-lg md:text-xl font-bold">
                 Explore Our Guides & Reports
               </h2>
               <p className="text-[#1A1A1A]/70 text-xs">Free educational resources for investors</p>
