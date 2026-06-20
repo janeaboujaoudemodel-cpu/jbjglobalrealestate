@@ -161,45 +161,11 @@ const MarketIntelligence = () => {
             className="mt-8 flex flex-wrap gap-3"
             variants={fadeInUp}
           >
-            <a
-              href="#overview"
-              data-no-contrast-guard
-              className={heroCtaClass}
-              ref={(el) => {
-                if (el) {
-                  el.style.setProperty("color", "#1A1A1A", "important");
-                  el.style.setProperty("-webkit-text-fill-color", "#1A1A1A", "important");
-                  el.style.setProperty("text-shadow", "none", "important");
-                  el.querySelectorAll("span, svg").forEach((child) => {
-                    (child as HTMLElement).style.setProperty("color", "#1A1A1A", "important");
-                    (child as HTMLElement).style.setProperty("-webkit-text-fill-color", "#1A1A1A", "important");
-                    (child as HTMLElement).style.setProperty("stroke", "#1A1A1A", "important");
-                    (child as HTMLElement).style.setProperty("text-shadow", "none", "important");
-                  });
-                }
-              }}
-            >
+            <a href="#overview" data-no-contrast-guard className={heroCtaClass}>
               <span>Explore Market Dashboard</span>
               <ArrowUpRight className="w-5 h-5" />
             </a>
-            <Link
-              to="/market-report"
-              data-no-contrast-guard
-              className={heroCtaClass}
-              ref={(el: HTMLAnchorElement | null) => {
-                if (el) {
-                  el.style.setProperty("color", "#1A1A1A", "important");
-                  el.style.setProperty("-webkit-text-fill-color", "#1A1A1A", "important");
-                  el.style.setProperty("text-shadow", "none", "important");
-                  el.querySelectorAll("span, svg").forEach((child) => {
-                    (child as HTMLElement).style.setProperty("color", "#1A1A1A", "important");
-                    (child as HTMLElement).style.setProperty("-webkit-text-fill-color", "#1A1A1A", "important");
-                    (child as HTMLElement).style.setProperty("stroke", "#1A1A1A", "important");
-                    (child as HTMLElement).style.setProperty("text-shadow", "none", "important");
-                  });
-                }
-              }}
-            >
+            <Link to="/market-report" data-no-contrast-guard className={heroCtaClass}>
               <span>View Daily Reports</span>
               <ArrowUpRight className="w-5 h-5" />
             </Link>
