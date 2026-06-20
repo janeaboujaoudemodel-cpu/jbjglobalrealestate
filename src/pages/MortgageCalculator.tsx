@@ -43,7 +43,7 @@ const MortgageCalculatorPage = () => {
         {/* Extra accent orb (page shell already provides cyan+magenta) */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute bottom-0 left-1/3 w-[460px] h-[460px] rounded-full blur-3xl opacity-30"
-               style={{ background: "radial-gradient(circle, #A78BFA 0%, transparent 70%)", animation: "jjNeonPageOrb 26s ease-in-out infinite" }} />
+               style={{ background: "radial-gradient(circle, #B89555 0%, transparent 70%)", animation: "jjNeonPageOrb 26s ease-in-out infinite" }} />
         </div>
 
 
@@ -78,8 +78,8 @@ const MortgageCalculatorPage = () => {
               <span
                 className="allow-white inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium"
                 style={{
-                  background: "rgba(96,165,250,0.18)",
-                  border: "1px solid rgba(96,165,250,0.45)",
+                  background: "rgba(184,149,85,0.18)",
+                  border: "1px solid rgba(184,149,85,0.45)",
                   color: "#DBEAFE",
                 }}
               >
@@ -120,7 +120,7 @@ const MortgageCalculatorPage = () => {
                     className="allow-white rounded-xl p-4 text-left"
                     style={{
                       background: `linear-gradient(135deg, #0A0A0A 0%, #0A1830 55%, #000 100%)`,
-                      border: `1px solid rgba(96,165,250,0.32)`,
+                      border: `1px solid rgba(184,149,85,0.32)`,
                     }}
                   >
                     <Icon className="w-7 h-7 mb-2" style={{ color: NAVY_GLOW }} />
@@ -142,9 +142,9 @@ const MortgageCalculatorPage = () => {
               className="allow-white rounded-2xl overflow-hidden"
               style={{
                 background: "linear-gradient(135deg, #0B2244 0%, #08152B 45%, #000 100%)",
-                border: "1px solid rgba(96,165,250,0.35)",
+                border: "1px solid rgba(184,149,85,0.35)",
                 boxShadow:
-                  "0 0 0 1px rgba(96,165,250,0.25), 0 18px 50px rgba(30,78,140,0.35), inset 0 0 28px rgba(96,165,250,0.10)",
+                  "0 0 0 1px rgba(184,149,85,0.25), 0 18px 50px rgba(30,78,140,0.35), inset 0 0 28px rgba(184,149,85,0.10)",
               }}
             >
               <div className="px-4 md:px-8 py-8 md:py-10" data-mortgage-dark>
@@ -174,14 +174,14 @@ const MortgageCalculatorPage = () => {
                   className="allow-white rounded-xl p-5"
                   style={{
                     background: "linear-gradient(135deg, #0A0A0A 0%, #08152B 60%, #000 100%)",
-                    border: "1px solid rgba(96,165,250,0.30)",
+                    border: "1px solid rgba(184,149,85,0.30)",
                   }}
                 >
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center mb-3"
                     style={{
-                      background: "rgba(96,165,250,0.16)",
-                      border: "1px solid rgba(96,165,250,0.45)",
+                      background: "rgba(184,149,85,0.16)",
+                      border: "1px solid rgba(184,149,85,0.45)",
                     }}
                   >
                     <b.icon className="w-5 h-5 allow-white" style={{ color: NAVY_GLOW }} />
@@ -198,13 +198,13 @@ const MortgageCalculatorPage = () => {
               className="allow-white mt-8 rounded-2xl p-5 md:p-6"
               style={{
                 background: "linear-gradient(135deg, #123968 0%, #08152B 55%, #000 100%)",
-                border: "1px solid rgba(96,165,250,0.35)",
-                boxShadow: "inset 0 0 28px rgba(96,165,250,0.10)",
+                border: "1px solid rgba(184,149,85,0.35)",
+                boxShadow: "inset 0 0 28px rgba(184,149,85,0.10)",
               }}
             >
               <div className="flex flex-col md:flex-row md:items-center gap-5">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "rgba(96,165,250,0.16)", border: "1px solid rgba(147,197,253,0.45)" }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "rgba(184,149,85,0.16)", border: "1px solid rgba(147,197,253,0.45)" }}>
                     <Landmark className="w-6 h-6 allow-white" style={{ color: NAVY_GLOW }} />
                   </div>
                   <div>
@@ -221,7 +221,7 @@ const MortgageCalculatorPage = () => {
                         color: "#FFFFFF",
                         background: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)",
                         border: "1px solid rgba(191,219,254,0.78)",
-                        boxShadow: "0 0 0 1px rgba(147,197,253,0.25), 0 8px 22px rgba(96,165,250,0.24), inset 0 1px 0 rgba(255,255,255,0.55)",
+                        boxShadow: "0 0 0 1px rgba(147,197,253,0.25), 0 8px 22px rgba(184,149,85,0.24), inset 0 1px 0 rgba(255,255,255,0.55)",
                         textShadow: "0 2px 12px rgba(0,0,0,0.65)",
                       }}
                     >
@@ -242,7 +242,7 @@ const MortgageCalculatorPage = () => {
                   background: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)",
                   border: "1px solid rgba(191,219,254,0.78)",
                   color: "#FFFFFF",
-                  boxShadow: "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(96,165,250,0.42), inset 0 1px 0 rgba(255,255,255,0.55)",
+                  boxShadow: "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(184,149,85,0.42), inset 0 1px 0 rgba(255,255,255,0.55)",
                   textShadow: "0 2px 14px rgba(0,0,0,0.65)",
                 }}
               >
@@ -269,7 +269,7 @@ const MortgageCalculatorPage = () => {
       <style>{`
         [data-mortgage-dark] .bg-\\[\\#F7F2EA\\] {
           background: linear-gradient(135deg, #0F2849 0%, #08172E 100%) !important;
-          border-color: rgba(96,165,250,0.30) !important;
+          border-color: rgba(184,149,85,0.30) !important;
         }
         [data-mortgage-dark] .text-\\[\\#1A1A1A\\],
         [data-mortgage-dark] .text-\\[\\#1A1A1A\\]\\/70,
@@ -277,8 +277,8 @@ const MortgageCalculatorPage = () => {
           color: #FFFFFF !important;
         }
         [data-mortgage-dark] .text-\\[\\#0A0A0A\\] { color: #93C5FD !important; }
-        [data-mortgage-dark] .border-\\[\\#B89555\\]\\/30 { border-color: rgba(96,165,250,0.30) !important; }
-        [data-mortgage-dark] .bg-\\[\\#EFE6D6\\] { background: rgba(96,165,250,0.18) !important; }
+        [data-mortgage-dark] .border-\\[\\#B89555\\]\\/30 { border-color: rgba(184,149,85,0.30) !important; }
+        [data-mortgage-dark] .bg-\\[\\#EFE6D6\\] { background: rgba(184,149,85,0.18) !important; }
         [data-mortgage-dark] .bg-\\[\\#B89555\\] { background: #60A5FA !important; }
       `}</style>
     </ToolAnimatedFrame>

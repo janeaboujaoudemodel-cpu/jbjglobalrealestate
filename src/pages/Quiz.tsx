@@ -877,7 +877,7 @@ const Quiz = () => {
       >
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[rgba(94,234,212,0.25)] backdrop-blur-sm" style={{ background: "rgba(4,22,28,0.6)" }}>
+        <div className="border-b border-[rgba(184,149,85,0.25)] backdrop-blur-sm" style={{ background: "rgba(10,10,10,0.6)" }}>
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -904,28 +904,28 @@ const Quiz = () => {
             className="allow-white w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
             style={{
               background: "#0A0A0A",
-              border: "1px solid rgba(94,234,212,0.45)",
-              boxShadow: "0 0 0 1px rgba(94,234,212,0.25), 0 24px 60px rgba(14,116,144,0.35), inset 0 0 32px rgba(94,234,212,0.10)",
+              border: "1px solid rgba(184,149,85,0.45)",
+              boxShadow: "0 0 0 1px rgba(184,149,85,0.25), 0 24px 60px rgba(10,10,10,0.35), inset 0 0 32px rgba(184,149,85,0.10)",
             }}
           >
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7"
               style={{
-                background: "rgba(94,234,212,0.18)",
-                border: "1px solid rgba(94,234,212,0.50)",
-                color: "#A7F3D0",
+                background: "rgba(184,149,85,0.18)",
+                border: "1px solid rgba(184,149,85,0.50)",
+                color: "#FFFFFF",
               }}
             >
               <Gift className="w-4 h-4 allow-white" style={{ color: "#B89555" }} />
-              <span className="text-sm font-medium allow-white" style={{ color: "#A7F3D0" }}>Completely Free</span>
+              <span className="text-sm font-medium allow-white" style={{ color: "#FFFFFF" }}>Completely Free</span>
             </div>
 
             <div
               className="w-20 h-20 rounded-full mx-auto mb-7 flex items-center justify-center"
               style={{
                 background: "#0A0A0A",
-                border: "1px solid rgba(94,234,212,0.55)",
-                boxShadow: "0 0 28px rgba(94,234,212,0.45)",
+                border: "1px solid rgba(184,149,85,0.55)",
+                boxShadow: "0 0 28px rgba(184,149,85,0.45)",
               }}
             >
               <Wand2 className="w-10 h-10 allow-white" style={{ color: "#FFFFFF" }} />
@@ -944,8 +944,8 @@ const Quiz = () => {
               <div
                 className="rounded-2xl p-5 text-left"
                 style={{
-                  background: "linear-gradient(135deg, rgba(14,116,144,0.35) 0%, rgba(0,0,0,0.5) 100%)",
-                  border: "1px solid rgba(94,234,212,0.40)",
+                  background: "linear-gradient(135deg, rgba(10,10,10,0.35) 0%, rgba(0,0,0,0.5) 100%)",
+                  border: "1px solid rgba(184,149,85,0.40)",
                 }}
               >
                 <div className="flex items-center gap-2 mb-3">
@@ -975,7 +975,7 @@ const Quiz = () => {
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-2 allow-white">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(94,234,212,0.22)" }}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(184,149,85,0.22)" }}>
                     <Icon className="w-3 h-3 allow-white" style={{ color: "#B89555" }} />
                   </div>
                   <span className="allow-white">{label}</span>
@@ -990,9 +990,9 @@ const Quiz = () => {
               className="allow-white font-semibold px-10 py-6 text-lg"
               style={{
                 background: "#0A0A0A",
-                border: "1px solid rgba(94,234,212,0.55)",
+                border: "1px solid rgba(184,149,85,0.55)",
                 color: "#FFFFFF",
-                boxShadow: "0 0 28px rgba(94,234,212,0.45)",
+                boxShadow: "0 0 28px rgba(184,149,85,0.45)",
               }}
             >
               Find My Property

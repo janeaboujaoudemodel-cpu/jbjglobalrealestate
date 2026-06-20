@@ -112,7 +112,7 @@ const CreativeSuite = () => {
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #EDE0C8 40%, #DDD0B8 100%)' }}>
       {/* Hero Section - Champagne premium */}
       <div className="relative py-14 px-4 overflow-hidden">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(236,72,153,0.06) 0%, transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(184,149,85,0.06) 0%, transparent 60%)' }} />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-32 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center top, rgba(200,167,102,0.15) 0%, transparent 70%)' }} />
         
         <div className="relative max-w-6xl mx-auto text-center">
@@ -122,7 +122,7 @@ const CreativeSuite = () => {
           </div>
           
           <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
-            Creative & <span style={{ background: 'linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communication</span> Suite
+            Creative & <span style={{ background: 'linear-gradient(135deg, #B89555 0%, #F43F5E 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communication</span> Suite
           </h1>
           
           <p className="text-base md:text-lg text-[#1A1A1A]/70 max-w-2xl mx-auto mb-8">
