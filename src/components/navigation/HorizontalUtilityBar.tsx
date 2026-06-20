@@ -96,8 +96,10 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent after:opacity-70"
+        data-jj-utility-bar
+        className="fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7 bg-gradient-to-r from-[#FFFFFF] via-[#FBFCFB] to-[#F5F9F6] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#047857]/45 after:to-transparent"
       >
+
 
         {/* ── LEFT: Search only ── */}
         <div className="flex items-center gap-3 shrink-0">
