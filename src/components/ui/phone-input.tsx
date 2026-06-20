@@ -517,8 +517,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const isCareersPhoneInput = className?.includes("careers-phone-input");
     const buttonStyles = isCareersPhoneInput
       ? "jbj-form-trigger-filled hover:bg-[#0A0A0A] hover:text-white hover:border-[#0A0A0A] focus:border-[#0A0A0A] rounded-lg"
-      : isLight 
-      ? "bg-[#FDFBF7] border-[1.5px] border-[rgba(184,149,85,0.55)] hover:border-[#B89555] text-[#1A1A1A] rounded-lg shadow-sm"
+      : isLight
+      ? "jj-cta-gold-metallic"
       : "bg-[#1A1A1A] border border-[#B89555]/50 text-white hover:bg-[#0A0A0A] hover:text-white hover:border-[#B89555] focus:border-[#B89555]";
     const inputStyles = isCareersPhoneInput
       ? "jbj-form-field rounded-lg"
@@ -579,9 +579,13 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 aria-haspopup="dialog"
                 disabled={disabled}
                 data-phone-code-trigger
-                className={cn("w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors allow-white", buttonStyles)}
+                className={cn(
+                  "w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors",
+                  isLight ? "" : "allow-white",
+                  buttonStyles,
+                )}
                 data-no-contrast-guard
-                data-allow-dark-cta
+                {...(isLight ? {} : { "data-allow-dark-cta": true })}
                 style={isCareersPhoneInput
                   ? { backgroundColor: "#0A0A0A", border: "2px solid #0A0A0A", color: "#FFFFFF", boxShadow: "none" }
                   : isLight ? undefined : { backgroundColor: "#1A1A1A", color: "#FFFFFF" }}
