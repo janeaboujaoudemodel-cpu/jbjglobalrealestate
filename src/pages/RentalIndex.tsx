@@ -445,7 +445,7 @@ const RentalIndex = () => {
                     border: `1px solid ${theme.accent}`,
                   }}
                 >
-                  <FileText className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                  <FileText className="w-4 h-4" style={{ color: "#1A1A1A" }} />
                   Consult an Expert
                 </button>
               </Link>
@@ -478,7 +478,7 @@ const RentalIndex = () => {
                     border: "1px solid rgba(242,165,174,0.55)",
                   }}
                 >
-                  <c.icon className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+                  <c.icon className="w-5 h-5" style={{ color: "#1A1A1A" }} />
                 </span>
                 <div>
                   <h3 className="font-semibold mb-1">{c.title}</h3>
