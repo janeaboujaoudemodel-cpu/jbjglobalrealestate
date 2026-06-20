@@ -606,8 +606,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </button>
                   </div>
                   {property.propertyPhotos.length === 0 && (
-                    <div className="mt-4 p-3 bg-amber-900/25 border border-[#B89555]/45 rounded-lg">
-                      <p className="text-sm text-amber-200 flex items-center gap-2">
+                    <div className="mt-4 p-3 bg-[#EFE6D6] border border-[#B89555]/45 rounded-lg">
+                      <p className="text-sm text-[#1A1A1A]/85 flex items-center gap-2">
                         <Info className="w-4 h-4" />
                         No photos uploaded - report will include building exterior images
                       </p>
@@ -618,7 +618,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
             </div>
 
             <div className="flex justify-center mt-8">
-              <Button onClick={() => setActiveTab('modifications')} className="bg-[#1A1A1A] hover:bg-amber-600 text-[#1A1A1A] font-medium px-8">
+              <Button onClick={() => setActiveTab('modifications')} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white font-medium px-8">
                 Next: Property Condition & Modifications
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
@@ -773,8 +773,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                         </div>
                       </div>
 
-                      <div className="p-4 bg-amber-900/25 border border-[#B89555]/45 rounded-lg">
-                        <p className="text-sm text-amber-200 flex items-start gap-2">
+                      <div className="p-4 bg-[#EFE6D6] border border-[#B89555]/45 rounded-lg">
+                        <p className="text-sm text-[#1A1A1A]/85 flex items-start gap-2">
                           <Star className="w-4 h-4 mt-0.5 shrink-0" />
                           <span>
                             <strong>Value Add:</strong> Documented modifications typically add 5-15% to your property's market value. Premium finishes from recognized brands and smart home features command the highest premiums.
@@ -789,7 +789,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
             <div className="flex justify-center gap-4 mt-8">
               <Button onClick={() => setActiveTab('property')} variant="outline" className="border-[#B89555]/45">← Back</Button>
-              <Button onClick={() => setActiveTab('owner')} className="bg-[#1A1A1A] hover:bg-amber-600 text-[#1A1A1A] font-medium px-8">
+              <Button onClick={() => setActiveTab('owner')} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white font-medium px-8">
                 Next: Owner Information <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -818,7 +818,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   <Label className="text-[#1A1A1A]/70">Phone <span className="text-[#B89555]">*</span></Label>
                   <Input value={property.ownerPhone} onChange={(e) => updateProperty('ownerPhone', e.target.value)} placeholder="+971 50 123 4567" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                 </div>
-                <div className="p-4 bg-amber-900/25 border border-[#B89555]/45 rounded-lg mt-6">
+                <div className="p-4 bg-[#EFE6D6] border border-[#B89555]/45 rounded-lg mt-6">
                   <div className="flex items-start gap-3">
                     <Shield className="w-5 h-5 text-[#B89555] mt-0.5" />
                     <div>
@@ -847,7 +847,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
             {evaluation && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
                 {/* Main Valuation Card */}
-                <Card className={`bg-gradient-to-br from-amber-900/40 to-orange-900/40 border-[#B89555]/45 max-w-3xl mx-auto ${blueCard}`}>
+                <Card className={`bg-[#F7F2EA] border-[#B89555]/45 max-w-3xl mx-auto ${blueCard}`}>
                   <CardContent className="pt-8 text-center">
                     <p className="text-[#B89555] text-sm uppercase tracking-wider mb-2">Estimated Market Value</p>
                     <div className="flex items-center justify-center gap-3 mb-2">
