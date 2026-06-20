@@ -234,7 +234,7 @@ const AIFinancialAdvisor = () => {
               <span className="text-emerald-300 text-sm font-medium">AI-Powered Budget Planning</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              AI Budget <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Planner</span>
+              AI Budget <span className="text-[#B89555]">Planner</span>
             </h1>
             <p className="text-white/70 max-w-2xl mx-auto">
               Budget analysis and property affordability insights based on your financial profile. Informational only.
@@ -391,7 +391,7 @@ const AIFinancialAdvisor = () => {
             <Button 
               onClick={runAnalysis} 
               disabled={isAnalyzing}
-              className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700"
+              data-cta="dark" className="jj-cta-dark w-full"
             >
               {isAnalyzing ? (
                 <>

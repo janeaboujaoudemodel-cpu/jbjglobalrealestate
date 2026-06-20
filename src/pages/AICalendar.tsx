@@ -392,7 +392,7 @@ const AICalendar = () => {
               <span className="text-cyan-300 text-sm font-medium">AI-Powered Productivity</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              AI Notes & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Calendar</span>
+              AI Notes & <span className="text-[#B89555]">Calendar</span>
             </h1>
             <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
               Manage your meetings, notes, and schedules. Automatic email and phone reminders for all your events.
