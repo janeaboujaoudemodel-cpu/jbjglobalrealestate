@@ -7385,3 +7385,120 @@ html body footer p:last-child {
 [data-sidebar-emerald] [aria-hidden="true"][style*="rgba(184,149,85"] {
   background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.35) 50%, transparent 100%) !important;
 }
+
+/* ============================================================
+   PASS 15 — Final emerald lock (overrides PASS 12 high-specificity)
+   ============================================================ */
+
+/* Sidebar subitem icon tiles — FILLED emerald-ombre with WHITE glyph at
+   all states. Outranks PASS 12's `html body [data-chrome="sidebar"] …`. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover > span:first-child {
+  background-color: transparent !important;
+  background-image: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow:
+    0 1px 2px rgba(4, 120, 87, 0.35),
+    inset 0 0 0 1px rgba(16, 185, 129, 0.25) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-icon] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-icon] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover > span:first-child {
+  transform: translateY(-1px) !important;
+  box-shadow:
+    0 4px 10px -2px rgba(4, 120, 87, 0.55),
+    0 0 0 2px rgba(16, 185, 129, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4) !important;
+}
+/* Subitem labels — ink at rest, readable on champagne row */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem] [data-sidebar-subitem-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]:hover [data-sidebar-subitem-label] {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+}
+
+/* Sidebar logo header strip — mother-of-pearl white with emerald hairline */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #FBFCFB 60%, #F5F9F6 100%) !important;
+}
+
+/* Sidebar footer bottom block (Contact/Support/Sign Out) — mother-of-pearl */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto > div[class*="bg-gradient-to-t"] {
+  background-image: linear-gradient(180deg, #FBFCFB 0%, #F5F9F6 100%) !important;
+}
+
+/* Sidebar Contact / Support pinned buttons — emerald accents (no gold) */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] {
+  color: #047857 !important;
+  border-color: rgba(4, 120, 87, 0.5) !important;
+  background-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] svg,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] svg {
+  color: #047857 !important;
+  stroke: #047857 !important;
+}
+
+/* Horizontal utility bar — mother-of-pearl. The Tailwind classes already set
+   this, but force it here to outrank any cached rule. */
+html body [data-jj-utility-bar] {
+  background-image: linear-gradient(90deg, #FFFFFF 0%, #FBFCFB 50%, #F5F9F6 100%) !important;
+}
+
+/* Horizontal utility-bar icons / buttons — emerald replaces gold accents */
+html body [data-jj-utility-bar] button[style*="#B89555"],
+html body [data-jj-utility-bar] svg[style*="#B89555"] {
+  color: #047857 !important;
+  stroke: #047857 !important;
+}
+
+/* Filter bar shell — mother-of-pearl + emerald hairline */
+html body [data-jj-filter-bar] {
+  background-image: linear-gradient(90deg, #FFFFFF 0%, #FBFCFB 50%, #F5F9F6 100%) !important;
+  border-bottom-color: rgba(4, 120, 87, 0.25) !important;
+}
+
+/* Minimal footer copyright + nav — emerald lock */
+html body footer[data-jj-minimal-footer] p:last-child,
+html body footer[data-jj-minimal-footer] a,
+html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+}
+
+/* Compare Two Bank Rates slider — match interest-rate gold active style */
+html body input[type="range"][data-mortgage-slider="Compare rate"] {
+  background-image: linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%) !important;
+}
+
+/* Page-nav arrow (triple chevron) — guarantee white glyph on emerald,
+   regardless of which contrast guard runs. */
+html body button[data-jj-page-nav-arrow],
+html body button[data-jj-page-nav-arrow] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Contact card tiles inside the "Ready to Get Started" block — force white
+   text + white icon on emerald metallic at all states. Kills any guard
+   that would flip these to ink. */
+html body .jj-emerald-metallic,
+html body .jj-emerald-metallic *,
+html body .jj-emerald-metallic :is(p, span, a, svg, [class*="lucide"]),
+html body .jj-emerald-metallic :is(p, span, a, svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
