@@ -6505,3 +6505,47 @@ html body :is([data-ink-emerald], [data-hero-dark]) :where(svg, [class*="lucide"
 /* 3) Accent helpers for icons / pills sitting on the ink-emerald surface. */
 .ink-emerald-accent { color: var(--ink-emerald-accent) !important; }
 .ink-emerald-ring   { border-color: var(--ink-emerald-ring) !important; }
+
+/* ============================================================
+   FINAL-PASS EMERALD ACCENT LOCK
+   ----------------------------------------------------------------
+   Wins over the contrast guard (PASS 7) so opt-in titles, area
+   names, contact labels, and trio icons stay emerald on champagne
+   instead of being forced back to ink #1A1A1A.
+   ============================================================ */
+html body .jj-title-emerald,
+html body .jj-title-emerald *,
+html body .jj-text-emerald,
+html body .jj-text-emerald * {
+  color: var(--emerald-ink) !important;
+  -webkit-text-fill-color: var(--emerald-ink) !important;
+}
+html body .jj-icon-emerald,
+html body .jj-icon-emerald *,
+html body .jj-icon-emerald svg,
+html body .jj-icon-emerald svg * {
+  color: var(--emerald-ink) !important;
+  -webkit-text-fill-color: var(--emerald-ink) !important;
+  stroke: var(--emerald-ink) !important;
+}
+html body .jj-pill-emerald,
+html body .jj-pill-emerald * {
+  color: var(--emerald-ink) !important;
+  -webkit-text-fill-color: var(--emerald-ink) !important;
+}
+html body .jj-pill-emerald svg,
+html body .jj-pill-emerald svg * {
+  stroke: var(--emerald-ink) !important;
+  color: var(--emerald-ink) !important;
+}
+html body .jj-pill-emerald:hover,
+html body .jj-pill-emerald:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-pill-emerald:hover svg,
+html body .jj-pill-emerald:hover svg * {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
