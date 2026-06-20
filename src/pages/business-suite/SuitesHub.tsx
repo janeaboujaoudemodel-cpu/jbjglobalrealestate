@@ -102,14 +102,13 @@ const SuitesHub = () => {
         description="Access organized suites of AI-powered tools for real estate, brokerage, investment, creative, and corporate needs."
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div className="min-h-screen bg-[#FDFBF7]">
         {/* Hero */}
         <div className="relative pt-28 pb-16 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(200,167,102,0.1),transparent_60%)]" />
           <div className="relative max-w-6xl mx-auto px-4 text-center">
             <Link
               to="/toolkit"
-              className="inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors mb-8 text-sm"
+              className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors mb-8 text-sm"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
               Back to Toolkit
@@ -119,15 +118,15 @@ const SuitesHub = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6] border border-[#B89555]/40 rounded-full mb-6">
                 <Layers className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-wider">Tool Suites</span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                All <span className="bg-gradient-to-r from-gold via-amber-400 to-gold bg-clip-text text-transparent">Suites</span>
+              <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
+                All Suites
               </h1>
-              <p className="text-white/70 text-lg max-w-2xl mx-auto">
+              <p className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto">
                 Organized collections of AI tools grouped by function. Each suite brings together everything you need in one place.
               </p>
             </motion.div>
