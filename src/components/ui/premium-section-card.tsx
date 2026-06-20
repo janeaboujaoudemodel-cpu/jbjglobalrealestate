@@ -35,6 +35,9 @@ const PADDING: Record<NonNullable<Props["padding"]>, string> = {
   lg: "p-6 md:p-10",
 };
 
+// NOTE: tone classes are only applied when explicitly passed. Default is
+// transparent so PremiumSectionCard never paints a square champagne "pearl
+// back layer" behind a child that already renders its own rounded card.
 const TONE: Record<NonNullable<Props["tone"]>, string> = {
   page: "bg-[#FDFBF7]",
   surface: "bg-[#F7F2EA]",
@@ -42,19 +45,15 @@ const TONE: Record<NonNullable<Props["tone"]>, string> = {
 };
 
 export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
-  ({ padding = "md", tone = "page", wrapperClassName = "", className = "", width = "contained", children, ...rest }, ref) => {
+  ({ padding = "md", tone, wrapperClassName = "", className = "", width = "contained", children, ...rest }, ref) => {
     const inner =
       width === "contained"
         ? "w-full max-w-[1760px] mx-auto px-3 sm:px-5 lg:px-8"
         : "w-full";
 
-    // Global fix: removed the wrapper gold border + rounded shell so sections
-    // that already render their OWN bordered card (Explore Our Services,
-    // Royal Tools Hub, AI Comparison, Mortgage block, etc.) don't show as a
-    // double-bordered card. PremiumSectionCard is now a transparent layout
-    // wrapper — only padding/tone classes are applied when explicitly set.
-    const radius = "";
-    const border = "";
+    // Transparent wrapper: NEVER paints a background unless tone is explicit.
+    // Kills the "white-pearl back layer" that was leaking past rounded child cards.
+    const toneClass = tone ? TONE[tone] : "";
 
     return (
       <section
@@ -64,7 +63,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
       >
         <div className={inner}>
           <div
-            className={`${radius} ${border} ${TONE[tone]} overflow-hidden shadow-none ${PADDING[padding]} ${className}`}
+            className={`${toneClass} ${PADDING[padding]} ${className}`}
           >
             {children}
           </div>

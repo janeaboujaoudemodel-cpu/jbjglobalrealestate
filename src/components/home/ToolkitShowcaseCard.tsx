@@ -72,38 +72,42 @@ export function ToolkitShowcaseCard() {
   const active = tools.find((t) => t.id === activeId) ?? tools[0];
 
   return (
-    <section className="bg-[#FDFBF7] py-10 md:py-14">
+    <section className="py-10 md:py-14">
       <div className="w-full">
 
-        <div data-surface="champagne" className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
-          {/* Header */}
-          <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4 flex items-start justify-between gap-4">
+        <div
+          data-emerald-card
+          data-ink-emerald-opt-out
+          className="rounded-2xl border border-[#047857]/35 bg-[#FDFBF7] overflow-hidden shadow-[0_10px_36px_-18px_rgba(4,120,87,0.30)]"
+        >
+          {/* Header — emerald band, white text, NO gold */}
+          <div
+            data-ink-emerald
+            data-no-contrast-guard
+            className="px-5 md:px-7 pt-5 md:pt-6 pb-5 flex items-start justify-between gap-4 bg-[#064E3B]"
+            style={{ backgroundImage: "var(--gradient-ink)" }}
+          >
             <div className="min-w-0">
               <div
-                data-surface="dark"
-                data-on-dark
                 data-no-contrast-guard
-                data-allow-dark-cta
-                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/50 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3 transition-colors"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/25 text-[10px] font-semibold uppercase tracking-[0.2em] mb-3"
                 style={{ color: "#FFFFFF" }}
               >
                 <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Free Professional Tools</span>
               </div>
-              <h2 data-no-contrast-guard className="jj-title-emerald text-xl md:text-2xl font-bold tracking-tight cursor-default">
+              <h2 data-no-contrast-guard className="text-xl md:text-2xl font-bold tracking-tight cursor-default allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                 JBJ Royal Tools Hub
               </h2>
-              <p className="mt-1 text-sm text-[#1A1A1A]/70">
+              <p className="mt-1 text-sm allow-white" style={{ color: "rgba(255,255,255,0.85)" }}>
                 Powerful real estate tools — valuation, comparison, mortgage and AI utilities, all free.
               </p>
             </div>
             <Link
               to="/ai-hub"
-              data-surface="dark"
-              data-on-dark
               data-no-contrast-guard
               data-allow-dark-cta
-              className="allow-white shrink-0 self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/55 text-white text-xs md:text-sm font-bold tracking-wide transition-colors shadow-[0_10px_30px_-12px_rgba(10,10,10,0.55)]"
+              className="jj-cta-float allow-white shrink-0 self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/40 text-white text-xs md:text-sm font-bold tracking-wide transition-all duration-200"
               style={{ color: "#FFFFFF" }}
             >
               <Crown className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
@@ -119,7 +123,7 @@ export function ToolkitShowcaseCard() {
             data-surface="dark"
             data-on-dark
             data-no-contrast-guard
-            className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#B89555]/55 bg-[#0A0A0A] divide-x divide-white/30"
+            className="allow-white flex items-stretch overflow-x-auto no-scrollbar border-y border-[#047857]/45 bg-[#0A0A0A] divide-x divide-white/30"
             role="tablist"
             aria-label="Royal tools"
           >
