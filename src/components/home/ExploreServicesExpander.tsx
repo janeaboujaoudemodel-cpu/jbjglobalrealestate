@@ -96,7 +96,7 @@ const ExploreServicesExpander = () => {
             <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             <span className="allow-white" style={{ color: "#FFFFFF" }}>Premium Real Estate Services</span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-[#0A0A0A] hover:text-[#B89555] tracking-tight transition-colors cursor-default">
+          <h2 className="jj-title-emerald text-xl md:text-2xl font-bold tracking-tight cursor-default">
             Explore Our Services
           </h2>
           <p className="mt-1 text-sm text-[#1A1A1A]/70">
