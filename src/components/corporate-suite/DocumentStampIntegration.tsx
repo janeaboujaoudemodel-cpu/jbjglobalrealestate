@@ -129,7 +129,7 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
         </div>
 
         <div className="flex gap-2">
-          <Button size="sm" onClick={generateSignature} disabled={generating} className="h-7 text-[10px] gap-1 bg-gradient-to-r from-violet-600 to-purple-700 text-white">
+          <Button size="sm" onClick={generateSignature} disabled={generating} className="jj-cta-dark h-7 text-[10px] gap-1">
             {generating ? <Loader2 size={10} className="animate-spin" /> : <PenTool size={10} />}
             Generate
           </Button>
