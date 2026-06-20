@@ -154,14 +154,14 @@ export function ToolkitShowcaseCard() {
 
           {/* Active tool hero panel — image fills card; soft bottom fade
               only; frosted-glass CTA so the image shows through. */}
-          <div key={active.id} data-surface="dark" data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
+          <div key={active.id} data-ink-emerald-opt-out data-photo-copy-lock className="relative h-[420px] md:h-[520px] overflow-hidden">
             <div
               className="absolute inset-0 bg-cover bg-center animate-fade-in"
               style={{ backgroundImage: `url(${active.image})` }}
             />
             <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
 
-            <div data-surface="dark" className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
+            <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
               <h3
                 className="text-white text-2xl md:text-3xl font-extrabold leading-tight"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)" }}
