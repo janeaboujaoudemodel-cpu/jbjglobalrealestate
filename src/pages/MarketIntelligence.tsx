@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, BarChart3, Database, Shield, Info, RefreshCw } from "lucide-react";
+import { ArrowUpRight, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
@@ -21,16 +21,11 @@ import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import VideoBackground from "@/components/VideoBackground";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
 import marketIntelligenceVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
-import jbjLogoDark from "@/assets/jbj-fulllogo-dark.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
-
-const heroKeywords = ["DLD", "RERA", "DXB", "TRANSACTIONS", "RENTAL INDEX", "AREA DEMAND", "SUPPLY PIPELINE", "DAILY REFRESH"];
-
-const sourceBadges = ["DLD", "RERA", "DXB Interact", "Dubai Statistics", "JBJ Intelligence"];
 
 const heroCtaClass =
   "jj-cta-champagne group inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-colors md:px-8 md:py-4 md:text-base";
