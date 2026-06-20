@@ -5913,6 +5913,8 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-neon-page] [class*="text-gray-9"],
 [data-neon-page] [class*="text-neutral-9"] {
   color: #F6FBF8 !important;
+  -webkit-text-fill-color: #F6FBF8 !important;
+  stroke: #F6FBF8 !important;
 }
 [data-neon-page] [class*="text-[#1A1A1A]/70"],
 [data-neon-page] [class*="text-muted-foreground"],
@@ -5920,6 +5922,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-neon-page] [class*="text-slate-6"],
 [data-neon-page] [class*="text-gray-6"] {
   color: rgba(246,251,248,0.72) !important;
+  -webkit-text-fill-color: rgba(246,251,248,0.72) !important;
 }
 
 /* Gold accents become cyan in neon scope (but keep gold-specific UI like
