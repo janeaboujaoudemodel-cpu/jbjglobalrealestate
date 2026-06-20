@@ -1,89 +1,78 @@
-## Goal
+# Brand Repaint Finalization + Compare Units Fix + Loader Centering
 
-Three connected fixes so every tool on the site looks, reads, and is named the same way as Compare Projects/Units — only with the contrast bug actually solved.
+## 1. Finish global brand repaint (champagne / gold / ink only)
 
----
+Sweep every remaining surface still rendering neon, gradient, blue, purple-on-page, teal, or transitional colors and force them onto the locked palette (`#FDFBF7` page, `#F7F2EA` surface, `#EFE6D6` raised, `#B89555` 1px hairline gold, `#1A1A1A` ink, AI purple ONLY inside small `IconTile`s).
 
-## 1. Fix the Compare Projects pill contrast bug (winning-rule hunt)
+Scope (audited list — anything found off-brand gets repainted, never deleted):
+- Owner dashboard inner pages (Communication Hub, Marketing Hub, AI Tools Control Panel, Meeting Summarizer, Note Center, Founders Activity, Audit, Inbox, CRM sub-tabs).
+- Broker portal, Developer portal, Investor hub inner panels.
+- Toolkit: Photo, Video, Voice, PDF, Brochure, Stamp, Scan&Sign, Virtual Staging, Background AI, Beauty Filters, Image Resize, Captions, Property Suite, Corporate Suite, Creative Suite, AI Video Studio shell + preview canvases.
+- Document Studio editor chrome, AI Presentation Engine, Brand Palette Hub, Market Intelligence subpages, Guides/FAQ shells (keep neon ONLY where `data-neon-page` rule already allows).
+- All exported artifacts: PDF reports (CRM, DLD, Brochure, Market Report, Company Profile), Excel exports' branded header, email templates, presentation decks — strip blue/purple gradients from cover pages, headers, footers, and section dividers; replace with champagne band + gold hairline + ink.
+- Any remaining `bg-gradient-to-*` / `from-*-500` / hardcoded neon hex caught by the PASS 8 guard gets fixed at source (so the guard is belt-and-suspenders, not the sole defense).
 
-Symptom in your screenshot: the active "Compare Projects" pill renders as black-on-near-black — the label is almost invisible. The previous pass set the pill text white via inline style, but a later CSS rule is still winning.
+For each file: replace off-brand classes/hexes with brand tokens, keep all features/content intact (No-Removal policy), verify dark CTAs stay clean black with `data-cta="dark"` / `data-allow-dark-cta`, verify text contrast passes the white-on-light + same-tone guards.
 
-Investigation + fix:
+## 2. Remove `/quiz` entirely — one canonical URL per tool
 
-- Grep every selector targeting `[data-cta]`, `.jj-pill-active`, `[role="tablist"] button[aria-selected]`, and the universal light-surface/contrast guards in `src/index.css` and `scripts/contrast/*`.
-- Identify which rule is still flipping the active pill's color to ink (almost certainly the PASS 6/PASS 7 "white-on-light" guard matching `bg-[#0A0A0A]` as "light" because of an alpha-overlay parent, or the dark-surface descendant chain matching the pill's wrapper).
-- Patch one of two ways (whichever is the true winner): (a) tighten the guard's selector to exclude `[data-cta="dark"]` / `.jj-pill-active`, or (b) move the Compare mode toggle onto the locked `.jj-pill-active` primitive so it's covered by the existing opt-out chain.
-- Add a regression line to `scripts/contrast/check-visible-contrast-contract.mjs` asserting the active Compare pill renders white-on-black.
-- Re-run the contrast scanner on `/compare` and `/compare?mode=units` and confirm 0 polarity failures before declaring done.
+- Delete the `/quiz` and `/quiz-results` routes from `src/routes/PublicRoutes.tsx` (no redirect — fully removed per user request).
+- Move the page component to `src/pages/AIHomeFinder.tsx` (rename from `Quiz.tsx`) and results to `AIHomeFinderResults.tsx`. Update all imports.
+- Grep every reference to `/quiz`, `Quiz`, "AI Property Finder", "Property Quiz" across:
+  - `src/routes/*`, `src/config/*` (royalToolsRegistry, globalSearchIndex, publicToolAccess, mainLayoutRoutes, allToolsSuiteConfig, shortcutsConfig, accountShortcuts),
+  - `src/components/header/*`, `MegaMenu*`, `GlobalVerticalNav`, `Footer`, `Sitemap.tsx`,
+  - `public/sitemap.xml`, `public/robots.txt`, `scripts/generate-sitemap.ts`, `src/seo/*`,
+  - `src/translations/*` (15 locales),
+  - email templates, presentation links, CRM tool cards.
+- Canonical name everywhere: **AI Home Finder** at `/ai-home-finder`.
+- Update memory file `mem://constraints/tool-name-canonicality` to reflect "no redirect — `/quiz` removed".
 
-I will report back the exact selector/file that was winning so you can see the root cause, not just the patch.
+## 3. Fix Compare Units (`/compare?mode=units`)
 
----
+Currently broken: clicking the Units tab renders empty / search inert / manual add inert.
 
-## 2. Repaint every tool in the champagne/gold/ink palette
+Investigation + fix plan:
+- Read `src/pages/Compare.tsx`, `src/components/compare/CompareModeToggle.tsx`, `src/components/compare/units/UnitCompareShell.tsx`, `ProjectPicker.tsx`, `AddUnitDialog.tsx`, `PaymentPlanEditor.tsx`, `UnitComparisonTable.tsx`, `CompareAccessGate.tsx`.
+- Confirm role gate (broker + owner only) is firing correctly and not silently blanking the page for the current user. Show a clear "Brokers/Owners only" gate card instead of empty render.
+- Repair `ProjectPicker` search: ensure the Supabase query (likely `projects` table with `is_published=true`) actually fires, returns results, debounces input, and surfaces no-results state.
+- Repair `AddUnitDialog` manual flow: validate required fields (project, unit type, bedrooms, size, price), wire submit handler to push into local state + `UnitComparisonTable`. Make sure dialog actually closes and the row appears.
+- Verify the smart Payment Plan engine (down/milestone/monthly-till-handover/on-handover/post-handover) generates the schedule when a unit is added.
 
-Same treatment we just did on `/compare`, applied to:
+## 4. Fix Compare Projects "Add manually" + "Add by link"
 
-- `/quiz` (AI Home Finder) — `src/pages/Quiz.tsx`, `src/pages/QuizResults.tsx`, `src/components/matchmaker/*`
-- `/mortgage-calculator` — `src/pages/MortgageCalculator.tsx`
-- `/property-evaluator` + `/request-valuation` — `src/pages/PropertyEvaluator.tsx`, `src/pages/RequestValuation.tsx`
-- Royal Tools Hub + every page in `src/pages/toolkit/*` (Photo, Video, Voice, PDF, Brochure, Stamp, Scan&Sign, Virtual Staging, Background AI, Beauty Filters, Image Resize, Captions, Property Suite, Corporate Suite, AI Video Studio)
-- Tool-card surfaces in `BrokerToolkit.tsx`, `AIHub.tsx`, `PropertySuite.tsx`, `RealEstateSuite.tsx`
+`AddProjectDialog.tsx` already has the three tabs (Link / Upload / Manual). Reported broken end-to-end.
 
-Rules applied uniformly (no exceptions, no per-tool variants):
+Plan:
+- Manual: confirm `onAdd` is wired into `Compare.tsx`'s state setter, the new project row renders in `UnitComparisonTable`/projects table, and the dialog dismisses.
+- Link: verify `compare-extract` edge function exists, is deployed, has correct CORS, and uses Lovable AI gateway. Fix any 404/400; surface real error text in the toast.
+- File upload: same edge function path; confirm base64 + mimeType branch works for PDF + image; add a 30s timeout + retry hint.
 
-- Page bg `#FDFBF7`, surface `#F7F2EA`, raised `#EFE6D6`, gold hairline `#B89555` (1px only — never a fill), ink `#1A1A1A`.
-- Strip every blue/purple/pink/teal/cyan/neon gradient, glow, blob, glass card, vignette, animated colored line, and `text-white` on a light surface.
-- Active tabs/pills → locked `.jj-pill-active` primitive (white text on clean black `#0A0A0A` + 1px gold hairline). Inactive → ink on champagne with 1px gold border.
-- Primary CTAs → `.jj-cta-dark`; secondary → `.jj-cta-champagne`; ghost → `.jj-cta-outline`.
-- AI-specific affordances keep the existing purple `IconTile` tone (per AI Premium Purple standard) — but ONLY the small icon tile, never page backgrounds, never CTA fills.
-- Typography: Inter only, same heading/body sizes used on `/compare`. Buttons share the locked CTA height/radius/padding.
+Improvements (small, scoped — no scope creep):
+- Add a 4th tab "From JBJ catalog" — quick picker of already-published JBJ projects so brokers can compare existing listings without re-entering data.
+- Show pre-fill preview before commit (so AI extraction errors are correctable).
+- Persist comparison set to `sessionStorage` so a page refresh doesn't wipe the table.
 
-Verification: run the contrast + a11y scripts against every route above; screenshot 3–4 representative tools (Mortgage, Quiz, Property Evaluator, a Toolkit page) and visually confirm parity with `/compare`.
+## 5. Loader centering — center inside the content area, not the full viewport
 
----
+Today the page-load logo overlay covers the full screen and centers against the viewport, so on Owner shell pages it appears off-center (shifted left of the visible content area because the 64-px / 256-px sidebar is on the left).
 
-## 3. Unify each tool's name across URL, sitemap, SEO, UI, menus
+Plan:
+- Find the loader component (`PageLoader` / `LoadingScreen` / equivalent — likely under `src/components/loader/` or used by `OwnerDashboardShell`/`MainLayout`).
+- Change positioning from `fixed inset-0` to `absolute inset-0` and mount it INSIDE the `<main>` content area (after the sidebar/header), so its centering math respects the L-shaped frame (88px header + sidebar offset).
+- Keep z-index above page content but below header/sidebar so the brand chrome stays visible during load.
+- Two variants:
+  - Owner shell: loader fills the area to the right of the sidebar and below the 88px header.
+  - Public site: loader fills the area below the 88px global header.
 
-Today the matchmaker tool is called "AI Home Finder" in the sitemap/menu/SEO but "AI Property Finder" inside the tool — and similar drift exists on other tools. One canonical name per tool, used everywhere.
+## Technical notes
 
-Canonical names I'll standardise on (chosen for clarity + search intent, kept short for menus):
-
-| Tool | Canonical name | URL | Old aliases redirected |
-|---|---|---|---|
-| Matchmaker quiz | **AI Home Finder** | `/ai-home-finder` (primary) | `/quiz` → 301 to `/ai-home-finder` |
-| Project comparator | **Compare Projects** | `/compare` | — |
-| Unit comparator | **Compare Units** | `/compare?mode=units` | — |
-| Mortgage tool | **Mortgage Calculator** | `/mortgage-calculator` | — |
-| Valuation tool | **Property Evaluator** | `/property-evaluator` | `/request-valuation` kept as the lead-capture sub-step |
-
-Why "AI Home Finder" wins over "AI Property Finder": shorter, warmer, matches buyer search intent ("find a home"), already the URL slug + sitemap entry — fewer external changes to land consistency.
-
-Touch list for each rename pass:
-
-- Route file (`AIToolRoutes.tsx`, `OwnerRoutes.tsx`) — make canonical URL primary, old URL `Navigate replace`.
-- `src/pages/Sitemap.tsx` + `public/sitemap.xml` + `index.html` canonical/OG.
-- Per-page `<title>` / meta description / OG / Twitter / JSON-LD.
-- In-tool hero headline, breadcrumbs (`SEOBreadcrumbs.tsx`), tab labels.
-- Global menus: `GlobalHeader.tsx`, `MegaMenuMore.tsx`, `MegaMenuSearch.tsx`, `Footer.tsx`, `GlobalVerticalNav.tsx`, `OwnerSidebarNav.tsx`.
-- Search/registries: `globalSearchIndex.ts`, `royalToolsRegistry.ts`, `allToolsSuiteConfig.ts`, `publicToolAccess.ts`, `shortcutsConfig.ts`, `page-guides.ts`, `ai-tools-verified-inventory.ts`.
-- Translations: replace string in `src/translations/*.ts` (15 locales).
-- Owner pages: `AIHomeFinderSubmissionsPage.tsx`, `AIToolsControlPanel.tsx`, `AdminLeads.tsx`.
-
-Verification: grep for each old name post-edit and confirm zero hits outside redirect declarations.
-
----
-
-## Memory updates
-
-After landing:
-
-- New constraint memory: **Tool palette parity** — every tool (compare, quiz, mortgage, evaluator, toolkit/*) must use the same champagne/gold/ink tokens, locked CTA primitives, and `.jj-pill-active` toggles as `/compare`. No neon, no glass, no per-tool palette variants.
-- New constraint memory: **Tool name canonicality** — name table above is the single source of truth across URL, sitemap, SEO meta, in-tool headline, menus, registries, and translations. Renames require updating all surfaces in one pass.
-
----
+- All edits respect: No-Removal policy, No-Gray-Surfaces, No-Gold-Fills, CTA primitive system, locked signature/divider primitives, gold-hairline-scope-rule, contrast guards (PASS 5/6/7/8).
+- After repaint, run `scripts/contrast/check-white-on-light.mjs`, `check-same-tone.mjs`, `check-faded-gold.mjs`, `scripts/theme/champagne-sweep.mjs` to catch regressions.
+- Update `mem://constraints/tool-name-canonicality` (remove `/quiz` redirect clause) and add `mem://features/compare/units-and-manual-add-fix` documenting the repaired flows.
+- Verify visually with browser--view_preview on: `/compare`, `/compare?mode=units`, `/ai-home-finder`, `/mortgage-calculator`, `/property-evaluator`, `/owner` shell loading state, and two toolkit pages.
 
 ## Out of scope
 
-- No business-logic, calculation, or data-flow changes inside any tool — visual + naming only.
-- No new tools, no removed features.
+- Backend schema changes.
+- New tool creation.
+- Pricing / payment-plan logic changes beyond wiring fixes.
