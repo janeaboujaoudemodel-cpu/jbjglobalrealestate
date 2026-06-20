@@ -23,10 +23,10 @@ const LoadingSpinner = () => (
 );
 
 const tabs = [
-  { value: "editor", label: "PDF Editor", shortLabel: "Editor", icon: FileText, color: "text-blue-600" },
-  { value: "photo-pdf", label: "Photo → PDF", shortLabel: "Photo→PDF", icon: ImageIcon, color: "text-violet-600" },
-  { value: "scan-sign", label: "Scan & Sign", shortLabel: "Sign", icon: Camera, color: "text-emerald-600" },
-  { value: "brochure", label: "Document Creator", shortLabel: "Creator", icon: BookOpen, color: "text-indigo-600" },
+  { value: "editor", label: "PDF Editor", shortLabel: "Editor", icon: FileText, color: "text-[#B89555]" },
+  { value: "photo-pdf", label: "Photo → PDF", shortLabel: "Photo→PDF", icon: ImageIcon, color: "text-[#B89555]" },
+  { value: "scan-sign", label: "Scan & Sign", shortLabel: "Sign", icon: Camera, color: "text-[#B89555]" },
+  { value: "brochure", label: "Document Creator", shortLabel: "Creator", icon: BookOpen, color: "text-[#B89555]" },
 ];
 
 export default function PDFSuite() {
