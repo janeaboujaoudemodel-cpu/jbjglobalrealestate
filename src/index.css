@@ -1068,6 +1068,25 @@ All colors MUST be HSL.
   --page-max-w: 1440px;
   --rail-safe-right: 56px;        /* clearance for fixed right Contact-Us rail */
   --section-gap-y: clamp(32px, 5vw, 64px);
+  /* Global content gutter — must mirror MainLayout <main>'s wrapper px-4 sm:px-6 lg:px-8.
+     Full-bleed bands escape this gutter via negative margins so they stay edge-to-edge
+     INSIDE <main> (post-sidebar) but never extend under the fixed vertical sidebar. */
+  --jj-content-gutter: 16px;
+}
+@media (min-width: 640px) {
+  :root { --jj-content-gutter: 24px; }
+}
+@media (min-width: 1024px) {
+  :root { --jj-content-gutter: 32px; }
+}
+
+/* Bands inside the gutter wrapper break out to the inner viewport edges
+   (post-sidebar), never beyond. */
+[data-content-gutter="1"] > .jj-band,
+[data-content-gutter="1"] .jj-band {
+  margin-left: calc(-1 * var(--jj-content-gutter));
+  margin-right: calc(-1 * var(--jj-content-gutter));
+  width: auto;
 }
 
 .jj-band {
