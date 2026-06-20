@@ -1,72 +1,71 @@
-# Filter Bar Polish + Black-on-Black Cleanup + Mobile/Tablet Fixes
+# Premium Gold Polish: Consultation Form + Global Checkbox + Eyebrow Pills
 
-Six concrete bugs from your screenshot + voice notes. Tight, surgical fixes.
+Targeted polish to make CTAs feel premium/metallic, fix the missing checkmark, and align the terms row with the submit button. Reuses the existing `jj-cta-gold-shimmer` keyframes already in `index.css` — no new animations.
 
-## 1. Filter pill hover crops the top border
+## 1. Soft-gold borders on every input/select in the consultation form
 
-**Cause:** `filterPillInactiveLight` in `src/components/filters/filterStyles.ts` uses `hover:-translate-y-0.5`. Because the pill's parent row uses `overflow: hidden` (filter scroller), the 2px lift clips the top.
+`src/components/ConsultationRequestForm.tsx`
 
-**Fix:**
-- Remove `hover:-translate-y-0.5` from `filterPillInactiveLight`.
-- Replace the lift with a soft 3D feel that lives **inside** the pill: `hover:shadow-[0_4px_12px_rgba(184,149,85,0.18)] hover:bg-[#F7F2EA] hover:border-[#B89555]` + a subtle `transition-shadow`.
-- Same treatment for `togglePillOff` and `filterSecondaryButton`.
+- Replace every input/select trigger ring (currently dark `#1A1A1A` outlines after contrast-guard repaint) with **1px `rgba(184,149,85,0.55)` hairline + champagne `#FDFBF7` fill + ink label**.
+- Hover/focus → gold `#B89555` border + soft gold glow `0 0 0 3px rgba(184,149,85,0.15)`.
+- Apply to: Full Name, Email, Phone Number text input, Service Needed, Timeline, Nationality, Preferred Language, Preferred Time, Contact Method, Budget Range, Additional details.
+- `data-no-contrast-guard` on each `<SelectTrigger />` so the global black-CTA guard never re-fills them to ink.
 
-## 2. "Dropdown looks overrided — full black" + unreadable titles next to Reset
+## 2. Animated metallic-gold treatment for premium controls
 
-**Cause:** Filter popovers (Price, Payments, Handover, etc.) render inside the global black-CTA repaint zone, which is flipping their internal section headers/labels to white-on-light. And the section title strip next to the Reset button in `AdvancedFilterPanel` inherits ink-on-ink from the same guard.
+Reuse the existing `.jj-pill-active` / `jj-cta-gold-shimmer` recipe. Introduce **one** new utility class `.jj-gold-metallic` in `src/index.css`:
 
-**Fix in `AdvancedFilterPanel.tsx` + each popover content wrapper:**
-- Add `data-no-contrast-guard` to the popover `<PopoverContent>` root so the global guard doesn't repaint inner text/icons.
-- Force the panel surface explicitly: `bg-[#FDFBF7] text-[#1A1A1A]` on the outer wrapper.
-- Section headers ("Price", "Payment plan", "Bedrooms", etc.) get `text-[#1A1A1A] font-semibold` (no /XX fade).
-- Reset button uses `filterSecondaryButton` token (already champagne+ink+gold).
-- Audit `index.css` PASS guards: scope the dark-CTA repaint to `button:not([data-no-contrast-guard] button)` so popover internals never get touched.
+```css
+.jj-gold-metallic {
+  background: linear-gradient(135deg,#F7EFDC 0%,#E9D9B2 30%,#D7BE7E 55%,#E9D9B2 80%,#F7EFDC 100%);
+  background-size: 220% 220%;
+  border: 1px solid rgba(184,149,85,0.65);
+  color: #1A1A1A;
+  box-shadow: 0 6px 18px -8px rgba(184,149,85,0.55), inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(184,149,85,0.35);
+  animation: jj-cta-gold-shimmer 4.5s ease-in-out infinite;
+}
+.jj-gold-metallic:hover { filter: brightness(1.04); }
+```
 
-## 3. Search input "behavior" cleanup
+Apply it to:
+- The **+971 country-code button** (currently rendered as a black pill — the obvious place per the user's screenshot).
+- The **Request Consultation submit button** (with ink text + a Send icon already on the right).
+- The **GET EXPERT GUIDANCE eyebrow pill** and any equivalent eyebrow-pill primitive used across other pages (search for the same component / class — e.g. `EXPERT CONSULTATION` chip, `EXCLUSIVE`, `PREMIUM ACCESS` eyebrows). One global swap.
 
-**Fix in `FilterShortcutBar.tsx` search pill:**
-- Make placeholder text full ink at /60 (currently /70 reads as faded on champagne hairline). Tested still passes AA on `#FDFBF7`.
-- Trim the AED suffix from the min/max price inputs on mobile (<480px) — it overlaps the number.
-- Enter key on search now triggers query (currently only debounce).
+## 3. Checkbox: visible 3D gold tick (global)
 
-## 4. iPad sidebar cropped at bottom
+`src/components/ui/checkbox.tsx`
 
-**Cause:** The 88px L-shaped sidebar uses `h-[calc(100vh-88px)]` but on iPad Safari, `100vh` includes the browser chrome that disappears on scroll. Bottom icons get cut off.
+Today the box is 16×16, champagne fill, gold stroked check — the check is barely visible and gets clipped by the small box. Replace with:
 
-**Fix in `src/components/layout/AppSidebar.tsx`:**
-- Replace `100vh` with `100dvh` (dynamic viewport height) — safari-stable.
-- Add `overflow-y-auto` + `scrollbar-width: none` to the sidebar's icon column so any overflow scrolls invisibly instead of clipping.
-- Tablet breakpoint (768-1024px): collapse the sidebar to a 56px rail (icons only, no labels) so it never runs out of room.
+- **20×20** rounded box, 1.5px gold border, champagne fill at rest.
+- On `data-[state=checked]`: fill with the `.jj-gold-metallic` gradient (no animation here — static gold to feel like a stamp), inset shadow `inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 6px rgba(184,149,85,0.35)` for the 3D pop.
+- Tick: white `Check` icon, `strokeWidth={4}`, drop-shadow `drop-shadow(0 1px 0 rgba(0,0,0,0.25))`.
+- Keep `data-no-contrast-guard` so the global guard cannot strip the tick colour.
 
-## 5. Listing photos shifting / not loading
+Result: every checkbox site-wide (forms, T&Cs, filter toggles using `<Checkbox />`) gets the premium 3D gold-tick.
 
-**Cause:** `<ListingCard />` cover image uses `<img>` with no fixed aspect ratio while the loading skeleton has a different height → layout jumps when the image loads. Some `<img>` instances also lack `loading="lazy"` + `decoding="async"`.
+## 4. Align "I agree to terms" inline with the submit button
 
-**Fix in `src/components/properties/ListingCard.tsx` (and grid card variants):**
-- Wrap cover in `aspect-[4/3] overflow-hidden bg-[#EFE6D6]` so the slot is reserved before the image loads.
-- Add `loading="lazy" decoding="async"` to all listing covers.
-- On error, swap to `getHighResImageUrl` fallback (already in repo) — currently only handled in some cards.
-- Use `object-cover w-full h-full` so images never letterbox or shift.
+`src/components/ConsultationRequestForm.tsx` — currently the terms row sits as a separate `FormItem` above the button. Restructure the footer:
 
-## 6. Touch-up: hover-lift removed from any other clipped contexts
+```text
+[ ✓ ] I agree to the Terms and Privacy Policy *      [  Request Consultation →  ]
+```
 
-Audit and remove `hover:-translate-y-*` from elements inside any horizontally-scrolling row (filter bar, segmented controls, tab strip). Replace with shadow-only hover.
+- Wrap the terms `FormItem` + submit `<Button>` in a single `flex flex-wrap items-center justify-between gap-4` row.
+- On mobile (< 640px) the terms wrap above the button (`flex-col sm:flex-row`).
+- `FormMessage` for the checkbox still renders directly under the terms text.
 
----
+## 5. Files
 
-## Files to edit
+- `src/index.css` — add `.jj-gold-metallic` utility once.
+- `src/components/ui/checkbox.tsx` — bigger box, gold fill when checked, white tick + drop-shadow.
+- `src/components/ConsultationRequestForm.tsx` — gold borders, `.jj-gold-metallic` on +971 button + submit, terms aligned next to submit.
+- `src/components/PageEyebrow.tsx` (or whichever component renders "GET EXPERT GUIDANCE" / "EXPERT CONSULTATION" — I will locate during build) — swap base style to `.jj-gold-metallic`.
 
-- `src/components/filters/filterStyles.ts` — remove translate, add shadow hover
-- `src/components/filters/AdvancedFilterPanel.tsx` — `data-no-contrast-guard`, explicit ink titles
-- `src/components/filters/FilterShortcutBar.tsx` — search polish, AED suffix
-- `src/index.css` — scope dark-CTA guard to skip `[data-no-contrast-guard] *`
-- `src/components/layout/AppSidebar.tsx` — dvh + auto-scroll + tablet rail
-- `src/components/properties/ListingCard.tsx` — aspect ratio + lazy + fallback
-- (Audit pass) `rg "hover:-translate-y" src/components` — strip from any pill inside scrollers
+## Out of scope
 
-## Out of scope (separate ticket if you want)
-
-- Major sidebar redesign for mobile (hamburger drawer)
-- Image CDN swap
+- Mass-converting every CTA across all 200+ pages to metallic gold. We apply it on the consultation form + the eyebrow pill primitive used globally; other primary CTAs (`.jj-cta-dark`) stay black per the locked CTA system unless you call them out.
 
 Reply **Approve** to build.
