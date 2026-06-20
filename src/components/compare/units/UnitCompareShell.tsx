@@ -104,7 +104,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
         <button
           onClick={() => navigate(-1)}
           data-no-contrast-guard
-          className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-6"
+          className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-6"
         >
           <ArrowLeft className="w-5 h-5" /> Back
         </button>
@@ -113,10 +113,10 @@ export default function UnitCompareShell({ onModeChange }: Props) {
           <CompareModeToggle mode="units" onChange={onModeChange} />
         </div>
 
-        <h1 className="text-white text-center text-3xl md:text-5xl font-bold leading-[1.05] mb-4">
+        <h1 className="text-[#1A1A1A] text-center text-3xl md:text-5xl font-bold leading-[1.05] mb-4">
           Compare units inside <GradientText>one project.</GradientText>
         </h1>
-        <p className="text-white/70 text-center max-w-2xl mx-auto mb-10">
+        <p className="text-[#1A1A1A]/70 text-center max-w-2xl mx-auto mb-10">
           1 BR vs 2 BR vs 3 BR — price, view, payment plan side by side. The plan engine builds the
           full installment schedule automatically using each unit's own price.
         </p>
@@ -125,16 +125,16 @@ export default function UnitCompareShell({ onModeChange }: Props) {
         <div
           className="rounded-2xl p-5 md:p-8"
           style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(192,132,252,0.35)",
-            boxShadow: "0 10px 40px rgba(124,58,237,0.18)",
+            background: "#FDFBF7",
+            border: "1px solid rgba(184,149,85,0.55)",
+            boxShadow: "0 10px 40px rgba(184,149,85,0.18)",
           }}
         >
           {/* Step 1 — project */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
-              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(192,132,252,0.2)", color: "#E9D5FF" }}>1</span>
-              <h3 className="text-white font-semibold">Pick the project & developer</h3>
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(184,149,85,0.18)", color: "#1A1A1A" }}>1</span>
+              <h3 className="text-[#1A1A1A] font-semibold">Pick the project & developer</h3>
             </div>
             <ProjectPicker value={project} onChange={(p) => { setProject(p); setUnits([]); setEditingUnit(null); }} />
           </div>
@@ -145,34 +145,34 @@ export default function UnitCompareShell({ onModeChange }: Props) {
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(192,132,252,0.2)", color: "#E9D5FF" }}>2</span>
-                    <h3 className="text-white font-semibold">Add the units to compare</h3>
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(184,149,85,0.18)", color: "#1A1A1A" }}>2</span>
+                    <h3 className="text-[#1A1A1A] font-semibold">Add the units to compare</h3>
                   </div>
-                  <span className="text-xs text-white/55">Up to 4 units · 1BR · 2BR · 3BR · etc.</span>
+                  <span className="text-xs text-[#1A1A1A]/55">Up to 4 units · 1BR · 2BR · 3BR · etc.</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {units.map((u) => (
                     <div
                       key={u.id}
                       className="p-4 rounded-2xl"
-                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)" }}
+                      style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.35)" }}
                     >
-                      <div className="text-xs text-white/60">{u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`} · {u.sizeSqft} sqft</div>
-                      <div className="text-white font-semibold mt-1 truncate">{u.label || "(no label)"}</div>
-                      <div className="text-white/80 text-sm mt-1">AED {u.priceAED.toLocaleString()}</div>
-                      {u.view && <div className="text-white/50 text-xs mt-1">{u.view}</div>}
+                      <div className="text-xs text-[#1A1A1A]/60">{u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`} · {u.sizeSqft} sqft</div>
+                      <div className="text-[#1A1A1A] font-semibold mt-1 truncate">{u.label || "(no label)"}</div>
+                      <div className="text-[#1A1A1A]/80 text-sm mt-1">AED {u.priceAED.toLocaleString()}</div>
+                      {u.view && <div className="text-[#1A1A1A]/55 text-xs mt-1">{u.view}</div>}
                       <div className="flex gap-3 mt-2">
                         <button
                           onClick={() => { setEditingUnit(u); setAddOpen(true); }}
                           data-no-contrast-guard
-                          className="text-xs text-white/70 hover:text-white"
+                          className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => setUnits(units.filter((x) => x.id !== u.id))}
                           data-no-contrast-guard
-                          className="text-xs text-white/50 hover:text-white"
+                          className="text-xs text-[#1A1A1A]/55 hover:text-[#1A1A1A]"
                         >
                           Remove
                         </button>
@@ -183,17 +183,17 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                     <button
                       onClick={() => { setEditingUnit(null); setAddOpen(true); }}
                       data-no-contrast-guard
-                      className="p-4 rounded-2xl flex flex-col items-center justify-center min-h-[140px] text-white/70 hover:text-white"
-                      style={{ background: "rgba(255,255,255,0.03)", border: "1px dashed rgba(192,132,252,0.5)" }}
+                      className="p-4 rounded-2xl flex flex-col items-center justify-center min-h-[140px] text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                      style={{ background: "#FDFBF7", border: "1px dashed rgba(184,149,85,0.55)" }}
                     >
                       <Plus className="w-6 h-6 mb-1" />
                       <span className="text-sm font-medium">Add unit</span>
-                      <span className="text-[10px] text-white/45 mt-0.5">Manual · editable table</span>
+                      <span className="text-[10px] text-[#1A1A1A]/55 mt-0.5">Manual · editable table</span>
                     </button>
                   )}
                 </div>
                 {isPreviewTable && (
-                  <p className="text-xs text-white/55 mt-3">
+                  <p className="text-xs text-[#1A1A1A]/55 mt-3">
                     A Studio, 1 BR and 2 BR preview is already live below; edit any column or add real units to replace it.
                   </p>
                 )}
@@ -202,29 +202,29 @@ export default function UnitCompareShell({ onModeChange }: Props) {
               {/* Step 3 — shared plan */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(192,132,252,0.2)", color: "#E9D5FF" }}>3</span>
-                  <h3 className="text-white font-semibold">Payment plan</h3>
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(184,149,85,0.18)", color: "#1A1A1A" }}>3</span>
+                  <h3 className="text-[#1A1A1A] font-semibold">Payment plan</h3>
                 </div>
                 <div
                   className="p-5 rounded-2xl"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" }}
+                  style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
                   <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4" style={{ color: "#C084FC" }} />
-                      <span className="text-white text-sm font-medium">Shared payment plan</span>
+                      <Sparkles className="w-4 h-4" style={{ color: "#B89555" }} />
+                      <span className="text-[#1A1A1A] text-sm font-medium">Shared payment plan</span>
                     </div>
-                    <label className="inline-flex items-center gap-2 text-xs text-white/70 cursor-pointer">
+                    <label className="inline-flex items-center gap-2 text-xs text-[#1A1A1A]/70 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={sharedOn}
                         onChange={(e) => setSharedOn(e.target.checked)}
-                        className="accent-purple-500"
+                        className="accent-[#B89555]"
                       />
                       Apply to every unit
                     </label>
                   </div>
-                  <p className="text-white/55 text-xs mb-3">
+                  <p className="text-[#1A1A1A]/55 text-xs mb-3">
                     Define the plan once — the engine builds the full month-by-month schedule for every
                     unit using that unit's own price and the project's handover date.
                   </p>
@@ -235,14 +235,14 @@ export default function UnitCompareShell({ onModeChange }: Props) {
               {/* Recipient & sender — feeds the branded PDF */}
               <div
                 className="mb-6 p-5 rounded-2xl"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" }}
+                style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.35)" }}
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <FileText className="w-4 h-4" style={{ color: "#C084FC" }} />
-                  <span className="text-white text-sm font-medium">
+                  <FileText className="w-4 h-4" style={{ color: "#B89555" }} />
+                  <span className="text-[#1A1A1A] text-sm font-medium">
                     PDF cover — recipient & sender
                   </span>
-                  <span className="text-[10px] text-white/45 ml-auto">
+                  <span className="text-[10px] text-[#1A1A1A]/55 ml-auto">
                     {isOwner ? "Locked to JBJ branding" : "Your brokerage details"}
                   </span>
                 </div>
@@ -252,14 +252,14 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                     onChange={(e) => setClientName(e.target.value)}
                     placeholder="Client name"
                     data-no-contrast-guard
-                    className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                    className="px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 text-sm outline-none focus:border-[#B89555]"
                   />
                   <input
                     value={clientEmail}
                     onChange={(e) => setClientEmail(e.target.value)}
                     placeholder="Client email"
                     data-no-contrast-guard
-                    className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                    className="px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 text-sm outline-none focus:border-[#B89555]"
                   />
                   {!isOwner && (
                     <>
@@ -268,28 +268,28 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                         onChange={(e) => setBrokerName(e.target.value)}
                         placeholder="Your name"
                         data-no-contrast-guard
-                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                        className="px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 text-sm outline-none focus:border-[#B89555]"
                       />
                       <input
                         value={brokerage}
                         onChange={(e) => setBrokerage(e.target.value)}
                         placeholder="Brokerage name"
                         data-no-contrast-guard
-                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                        className="px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 text-sm outline-none focus:border-[#B89555]"
                       />
                       <input
                         value={brokerPhone}
                         onChange={(e) => setBrokerPhone(e.target.value)}
                         placeholder="Phone"
                         data-no-contrast-guard
-                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                        className="px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 text-sm outline-none focus:border-[#B89555]"
                       />
                       <input
                         value={brokerEmail}
                         onChange={(e) => setBrokerEmail(e.target.value)}
                         placeholder="Email"
                         data-no-contrast-guard
-                        className="px-3 py-2 rounded-lg bg-white/5 border border-white/15 text-white placeholder:text-white/40 text-sm outline-none focus:border-purple-400"
+                        className="px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 text-sm outline-none focus:border-[#B89555]"
                       />
                     </>
                   )}
@@ -300,8 +300,8 @@ export default function UnitCompareShell({ onModeChange }: Props) {
               <div ref={tableRef}>
                 <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(192,132,252,0.2)", color: "#E9D5FF" }}>4</span>
-                    <h3 className="text-white font-semibold">Live comparison</h3>
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(184,149,85,0.18)", color: "#1A1A1A" }}>4</span>
+                    <h3 className="text-[#1A1A1A] font-semibold">Live comparison</h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <FieldManagerPopover visible={visible} onChange={setVisible} />
@@ -309,8 +309,8 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                       data-no-contrast-guard data-allow-dark-cta
                       onClick={exportPdf}
                       disabled={tableUnits.length < 1}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-50"
-                      style={{ background: "linear-gradient(135deg, #3B82F6, #7C3AED, #EC4899)" }}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-[#1A1A1A] disabled:opacity-50"
+                      style={{ background: "#0A0A0A" }}
                     >
                       <FileText className="w-4 h-4" /> Export PDF
                     </button>
@@ -318,8 +318,8 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                       data-no-contrast-guard data-allow-dark-cta
                       onClick={() => saveComparison.mutate()}
                       disabled={saveComparison.isPending || tableUnits.length < 1}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white disabled:opacity-50"
-                      style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#1A1A1A] disabled:opacity-50"
+                      style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.55)" }}
                     >
                       <Download className="w-4 h-4" /> Save
                     </button>
@@ -329,8 +329,8 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                         navigator.clipboard.writeText(window.location.href);
                         toast.success("Link copied");
                       }}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white"
-                      style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#1A1A1A]"
+                      style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.55)" }}
                     >
                       <Share2 className="w-4 h-4" /> Share
                     </button>
