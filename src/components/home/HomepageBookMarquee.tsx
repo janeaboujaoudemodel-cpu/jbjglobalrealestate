@@ -18,7 +18,7 @@ export default function HomepageBookMarquee() {
               <BookOpen className="w-5 h-5 jj-icon-emerald" />
             </div>
             <div>
-              <h2 className="jj-title-emerald text-lg md:text-xl font-bold">
+              <h2 data-no-contrast-guard className="jj-title-emerald text-lg md:text-xl font-bold">
                 Explore Our Guides & Reports
               </h2>
               <p className="text-[#1A1A1A]/70 text-xs">Free educational resources for investors</p>

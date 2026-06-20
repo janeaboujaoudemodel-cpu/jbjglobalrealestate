@@ -59,7 +59,7 @@ const CombinedContactNewsletter = ({
             >
               <span className="allow-white" style={{ color: "#FFFFFF" }}>Get in touch</span>
             </span>
-            <h2 className="jj-title-emerald text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.14em]">
+            <h2 data-no-contrast-guard className="jj-title-emerald text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.14em]">
               {title}
             </h2>
             <div className="mx-auto mt-2 mb-3 flex items-center justify-center gap-3">
@@ -86,7 +86,7 @@ const CombinedContactNewsletter = ({
                   <card.icon className="w-5 h-5 sm:w-6 sm:h-6 jj-icon-emerald" />
                 </div>
                 <div className="text-left sm:text-center">
-                  <p className="jj-text-emerald text-xs uppercase tracking-wider font-semibold mb-0.5">{card.label}</p>
+                  <p data-no-contrast-guard className="jj-text-emerald text-xs uppercase tracking-wider font-semibold mb-0.5">{card.label}</p>
                   <p className="text-sm font-semibold text-[#0A0A0A]">{card.value}</p>
                 </div>
               </a>
