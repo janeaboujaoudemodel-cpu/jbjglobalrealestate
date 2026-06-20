@@ -27,8 +27,10 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
+// Glass / fiberglass hero CTA — clear backdrop-blur surface, white text+icons,
+// matches the other dark hero sections. NO champagne fill, NO ink-guard classes.
 const heroCtaClass =
-  "mi-hero-cta jj-cta-champagne group inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-colors shadow-[0_10px_28px_rgba(0,0,0,0.22)] md:px-8 md:py-4 md:text-base";
+  "allow-white group inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/20 md:px-8 md:py-4 md:text-base";
 
 // Organization schema for main Market Intelligence page
 const organizationSchema = {
