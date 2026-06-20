@@ -998,7 +998,7 @@ const Quiz = () => {
               <ArrowUpRight className="w-5 h-5 ml-2 allow-white" />
             </Button>
 
-            <p className="allow-white text-xs mt-6" style={{ color: "rgba(255,255,255,0.65)" }}>
+            <p className="text-xs mt-6" style={{ color: "rgba(26,26,26,0.65)" }}>
               Save money by choosing the right property the first time.
             </p>
           </div>
