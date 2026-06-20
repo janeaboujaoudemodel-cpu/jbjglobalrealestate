@@ -145,7 +145,7 @@ const QuarterlyMarketReview = () => {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
+          <h1 className="text-2xl font-bold text-[#1A1A1A] mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">
             Return to Reports
           </Link>
@@ -155,16 +155,16 @@ const QuarterlyMarketReview = () => {
   }
 
   const getChangeIndicator = (change: number) => {
-    if (change > 0) return <span className="text-emerald-600">+{change}%</span>;
-    if (change < 0) return <span className="text-red-600">{change}%</span>;
+    if (change > 0) return <span className="text-[#1A1A1A] font-semibold">+{change}%</span>;
+    if (change < 0) return <span className="text-red-700 font-semibold">{change}%</span>;
     return <span className="text-[#1A1A1A]/70">0%</span>;
   };
 
   const getSupplyDemandColor = (status: string) => {
     switch (status) {
-      case "balanced": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
-      case "supply_pressure": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
-      case "demand_pressure": return "bg-blue-500/20 text-blue-600 border-blue-500/30";
+      case "balanced": return "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45";
+      case "supply_pressure": return "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/45";
+      case "demand_pressure": return "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/45";
       default: return "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30";
     }
   };
@@ -197,7 +197,7 @@ const QuarterlyMarketReview = () => {
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <Badge className="mb-3 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
+                <Badge className="mb-3 bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40">
                   QUARTERLY MARKET REVIEW
                 </Badge>
                 <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
