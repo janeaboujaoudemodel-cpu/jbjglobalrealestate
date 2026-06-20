@@ -1051,7 +1051,7 @@ const Quiz = () => {
             <div className="bg-[#F7F2EA] border border-[#B89555]/55 rounded-2xl p-6 md:p-8">
               <div className="space-y-5">
                 <div>
-                  <Label className="text-white mb-2 block">Full Name *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Full Name *</Label>
                   <Input
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -1060,7 +1060,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Email Address *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Email Address *</Label>
                   <Input
                     type="email"
                     value={formData.email}
@@ -1070,7 +1070,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Phone Number *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Phone Number *</Label>
                   <Input
                     type="tel"
                     value={formData.phone}
@@ -1080,7 +1080,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Nationality *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Nationality *</Label>
                   <SearchableSelect
                     value={formData.nationality}
                     onChange={(value) => setFormData({ ...formData, nationality: value })}
@@ -1093,7 +1093,7 @@ const Quiz = () => {
                   />
                 </div>
                 <div>
-                  <Label className="text-white mb-2 block">Preferred Language *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Language *</Label>
                   <SearchableSelect
                     value={formData.preferredLanguage}
                     onChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
@@ -1146,8 +1146,8 @@ const Quiz = () => {
                 </p>
               )}
 
-              <p className="text-white/70 text-xs text-center mt-6 leading-relaxed">
-                Powered by <span className="text-white font-semibold">JBJ Global Real Estate</span>
+              <p className="text-[#1A1A1A]/70 text-xs text-center mt-6 leading-relaxed">
+                Powered by <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
