@@ -46,13 +46,14 @@ const Methodology = () => {
         description="Full transparency on data sources, update frequency, and aggregation methodology for Dubai real estate market intelligence."
       />
 
-      {/* Premium Hero with Image */}
+      {/* Premium Hero with Video */}
       <MarketIntelligenceHero
         badge="Market Intelligence"
         badgeIcon={Database}
         title="Methodology & Sources"
         description="Full transparency on how market data is selected, verified, and presented across all Market Intelligence pages."
-        backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
+        videoSrc="/__l5e/assets-v1/58fda281-ccab-4b7a-a90f-405368ba5cce/mi-methodology.mp4"
+        videoPoster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
       />
 
       {/* Main Content with TOC Sidebar - Active Champagne Layer */}
