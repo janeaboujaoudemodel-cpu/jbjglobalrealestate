@@ -1,50 +1,45 @@
-Implement the next correction batch in this order:
 
-1. Vertical sidebar emerald lock
-- Replace the remaining white/champagne subcategory icon tiles and row surfaces with filled emerald ombre tiles.
-- Force subcategory icons to white at rest and hover.
-- Keep subcategory labels readable, with emerald-ombre text/hover treatment and no gold.
-- Update the sidebar logo/header/footer chrome from champagne/gold to mother-of-pearl white with emerald hairlines.
+# Pass 16 — Sidebar, Category Pills, Hero Search Typing
 
-2. Horizontal utility/filter bar shell
-- Change the horizontal top bar/filter chrome from champagne/gold to mother-of-pearl white.
-- Replace gold borders/dividers with subtle emerald hairlines.
-- Keep filter chip outlines tight to the actual fields, with no oversized green/black boxes.
+## 1. Vertical sidebar — premium white + emerald
+**File:** `src/components/navigation/GlobalVerticalNav.tsx` + `src/index.css`
 
-3. Explore Our Services tabs
-- Remove the strong/thick divider between the emerald title band and horizontal tab header.
-- Increase the tab header height slightly for a more premium feel.
-- Make the active tab a darker full emerald ombre fill matching the “Explore Now” CTA treatment.
-- Remove internal thick borders/dividers between tabs.
+- Replace champagne/gold sidebar shell with clean mother-of-pearl white (`#FFFFFF` → `#F7FAF8` subtle vertical wash), 1px emerald hairline divider on the right edge only (`rgba(6,78,59,0.12)`).
+- Remove all gold borders, dividers and gold accents inside the sidebar (logo block, profile block, group separators, footer).
+- All static text → ink `#1A1A1A`; secondary text → `#1A1A1A`/70.
+- Emerald reserved for: active pill, icon tiles, micro-hairlines.
 
-4. JBJ Royal Tools Hub tabs
-- Apply the exact same tab/header treatment as Explore Our Services.
-- Remove the thick divider and make the active tool tab darker emerald ombre.
+## 2. Main category rows — active-only emerald pill, no gold hover
+Current bug: every main category (Tools & Workspace, My Account…) renders an emerald box; hover state uses gold.
 
-5. Contact/support contrast
-- Fix the unreadable Email / Call / Chat / Contact buttons by locking emerald/dark surfaces to white text and icons.
-- Audit the visible support launcher panel/card buttons so no white-on-light or dark-on-dark failures remain.
+Fix:
+- **Idle state** for ALL main categories (AI Home Finder, List Your Property, Careers, Resale Properties, Tools & Workspace, My Account): match the AI Home Finder reference — transparent background, ink label, emerald-tile icon, no border, no fill.
+- **Active state ONLY** (the currently-open/selected category): emerald-ombre filled pill (`var(--gradient-ink)` on `#064E3B`), white label, white icon, 1px inner highlight — the same chip currently used for "Tools & Workspace"/"My Account".
+- **Hover state**: subtle emerald wash `rgba(6,78,59,0.06)` background + ink text. NO gold, NO champagne, NO `#B89555` anywhere on hover.
+- Enforce a single uniform pill height across all category rows (44px) and identical horizontal padding so the active chip never looks larger than the others.
 
-6. Mortgage section styling
-- Keep the main mortgage sliders gold where requested, including “Compare Two Bank Rates” active range.
-- Convert “Try Our Mortgage Calculator” card/border styling from gold/champagne border to emerald/mother-of-pearl treatment.
-- Preserve existing calculator behavior.
+## 3. Hero search bar — clickable + pause typewriter on focus
+**Files:** `src/components/home/HomeHeroSearch.tsx`, `src/hooks/useTypewriter.ts` (or wherever the placeholder typewriter lives)
 
-7. Footer and floating arrows
-- Make footer copyright text fully emerald, including “© 2026 JBJ GLOBAL REAL ESTATE. All rights reserved.”
-- Change footer chrome/hairline to mother-of-pearl + emerald.
-- Replace the plain up/down arrow with a premium triple-chevron directional arrow motif.
-- Ensure both top-state/down and scrolled-state/up versions use emerald glow styling with white arrow strokes, no black-only state.
+Bug A — search not clickable: an overlay (likely the typewriter span or a decorative div) is sitting above the `<input>` capturing pointer events. Fix by adding `pointer-events-none` to the typewriter overlay and ensuring the `<input>` has `relative z-10` and a positive tab index.
 
-8. Homepage hero vertical position
-- Move the hero headline and search bar lower together.
-- Target a noticeable desktop drop equivalent to roughly 7–8 cm visually, with responsive/mobile-safe spacing.
-- Keep the hero search bar functional and the typewriter unchanged.
+Bug B — typewriter must pause while user types:
+- Add `paused` state to the typewriter hook, controlled by input `onFocus` (pause) / `onBlur` (resume only if value is empty).
+- Also pause on any `onInput` while value length > 0; resume automatically when value becomes empty again.
+- Apply the same behaviour to the Newsletter "Stay in the Loop" email input (same hook, same pattern).
+- When paused, the placeholder shows the static base text (no caret animation) so the user's typed value is never overwritten.
 
-Validation plan after implementation:
-- Take screenshot proof for the homepage top/hero/search area.
-- Take screenshot proof for the expanded vertical sidebar with subcategories visible.
-- Take screenshot proof for Explore Our Services tabs.
-- Take screenshot proof for JBJ Royal Tools Hub tabs.
-- Take screenshot proof for the contact/support buttons and footer/floating arrow states.
-- Re-check the mortgage section visually, including the Compare Two Bank Rates slider and Try Our Mortgage Calculator CTA/card.
+## 4. Validation
+Screenshot proof after build:
+- Sidebar collapsed + expanded (white shell, emerald hairlines, no gold).
+- Sidebar with one category active — confirm only that one row shows the emerald pill; others are flat.
+- Hover state on an inactive category — confirm emerald wash, no gold.
+- Hero: click search, type "marina" — typewriter stops, text accepted. Clear field → typewriter resumes.
+- Newsletter: click email field, type — typewriter stops. Clear → resumes.
+
+## Files to edit
+- `src/components/navigation/GlobalVerticalNav.tsx`
+- `src/index.css` (sidebar shell + active/hover rules, kill gold hover overrides)
+- `src/components/home/HomeHeroSearch.tsx`
+- `src/components/marketing/NewsletterBrevo.tsx`
+- `src/hooks/useTypewriter.ts` (add pause API)
