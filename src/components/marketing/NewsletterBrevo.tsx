@@ -35,6 +35,7 @@ export const NewsletterBrevo = ({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
+  const animatedPlaceholder = useTypewriter(NEWSLETTER_TYPEWRITER_PHRASES);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
