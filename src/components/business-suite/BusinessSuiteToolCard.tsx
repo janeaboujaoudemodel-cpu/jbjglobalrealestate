@@ -1,16 +1,18 @@
 import { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { IconTile } from "@/components/ui/icon-tile";
 
 interface BusinessSuiteToolCardProps {
   icon: LucideIcon;
   title: string;
   description: string;
   href: string;
-  colorClass: string;
-  borderColorClass: string;
-  gradientFrom: string;
-  gradientTo: string;
+  // Legacy props kept for backwards compatibility but ignored.
+  colorClass?: string;
+  borderColorClass?: string;
+  gradientFrom?: string;
+  gradientTo?: string;
 }
 
 const BusinessSuiteToolCard = ({
@@ -18,10 +20,6 @@ const BusinessSuiteToolCard = ({
   title,
   description,
   href,
-  colorClass,
-  borderColorClass,
-  gradientFrom,
-  gradientTo,
 }: BusinessSuiteToolCardProps) => {
   return (
     <motion.div
@@ -31,12 +29,10 @@ const BusinessSuiteToolCard = ({
     >
       <Link
         to={href}
-        className={`flex flex-col h-full p-5 rounded-2xl bg-[#FDFBF7]/70 backdrop-blur-sm border-2 ${borderColorClass} hover:border-[#B89555]/60 hover:shadow-[0_8px_32px_rgba(200,167,102,0.25)] transition-all duration-300 group`}
+        className="flex flex-col h-full p-5 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/70 hover:shadow-[0_8px_32px_rgba(184,149,85,0.18)] transition-all duration-300 group"
       >
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md flex-shrink-0`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-        <h3 className={`text-base font-bold text-[#1A1A1A] group-hover:text-[#1A1A1A] mb-2 transition-colors`}>
+        <IconTile icon={Icon} tone="gold" size="lg" className="mb-4" />
+        <h3 className="text-base font-bold text-[#1A1A1A] mb-2">
           {title}
         </h3>
         <p className="text-sm text-[#1A1A1A]/70 leading-relaxed flex-grow min-h-[60px]">
@@ -51,4 +47,3 @@ const BusinessSuiteToolCard = ({
 };
 
 export default BusinessSuiteToolCard;
-
