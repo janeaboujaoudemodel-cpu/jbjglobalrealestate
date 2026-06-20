@@ -37,7 +37,7 @@ const AreasWeCover = () => {
   }
 
   return (
-    <section className="bg-[#FDFBF7] py-12 md:py-20">
+    <section className="py-12 md:py-20">
       <div className="w-full">
         {/* Premium champagne frame */}
         <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12 border border-[#B89555]/45 shadow-[0_24px_70px_-32px_rgba(184,149,85,0.45)]">

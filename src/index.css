@@ -6549,3 +6549,88 @@ html body .jj-pill-emerald:hover svg * {
   color: #FFFFFF !important;
 }
 
+/* ============================================================
+   PASS 10 — WHITE-ON-EMERALD HARD LOCK + PREMIUM FLOAT CTA
+   ----------------------------------------------------------------
+   Non-negotiable: ANY element whose OWN background is emerald
+   (gradient ink, .jj-cta-dark, [data-cta=dark], [data-ink-emerald],
+   [data-hero-dark], [data-emerald-header]) renders ALL text, icons,
+   and SVG strokes WHITE at idle/hover/focus/active/disabled.
+   No opt-outs. Replaces any prior rule that forced ink on dark.
+   ============================================================ */
+html body :is(
+  [data-ink-emerald],
+  [data-hero-dark],
+  [data-emerald-header],
+  .jj-cta-dark,
+  .jj-navy-cta,
+  [data-cta="dark"]
+),
+html body :is(
+  [data-ink-emerald],
+  [data-hero-dark],
+  [data-emerald-header],
+  .jj-cta-dark,
+  .jj-navy-cta,
+  [data-cta="dark"]
+) *:not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is(
+  [data-ink-emerald],
+  [data-hero-dark],
+  [data-emerald-header],
+  .jj-cta-dark,
+  .jj-navy-cta,
+  [data-cta="dark"]
+) :is(svg, [class*="lucide"]),
+html body :is(
+  [data-ink-emerald],
+  [data-hero-dark],
+  [data-emerald-header],
+  .jj-cta-dark,
+  .jj-navy-cta,
+  [data-cta="dark"]
+) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Hover lock for .jj-pill-emerald — white text+icons on emerald fill */
+html body .jj-pill-emerald:hover,
+html body .jj-pill-emerald:hover *,
+html body .jj-pill-emerald:focus,
+html body .jj-pill-emerald:focus *,
+html body .jj-pill-emerald:active,
+html body .jj-pill-emerald:active * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-pill-emerald:hover :is(svg, [class*="lucide"]),
+html body .jj-pill-emerald:hover :is(svg, [class*="lucide"]) *,
+html body .jj-pill-emerald:focus :is(svg, [class*="lucide"]),
+html body .jj-pill-emerald:focus :is(svg, [class*="lucide"]) * {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+/* Premium 3D float hover for primary emerald CTAs */
+.jj-cta-float {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 220ms ease;
+  box-shadow: 0 6px 18px -8px rgba(4, 120, 87, 0.35),
+              0 2px 6px rgba(0, 0, 0, 0.10);
+  will-change: transform, box-shadow;
+}
+.jj-cta-float:hover {
+  transform: translateY(-2px) scale(1.012);
+  box-shadow: 0 16px 36px -10px rgba(4, 120, 87, 0.50),
+              0 6px 14px rgba(0, 0, 0, 0.18);
+}
+.jj-cta-float:active {
+  transform: translateY(0) scale(1);
+  box-shadow: 0 4px 12px -6px rgba(4, 120, 87, 0.30);
+}
+

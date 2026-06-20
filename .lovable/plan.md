@@ -1,85 +1,77 @@
-## Goal
-Elevate the Ink Emerald (`var(--gradient-ink)` / emerald #0B3B2E family) from "dark-CTA repaint" into a **deliberate brand accent system** used consistently across titles, icons, key CTAs, and signature surfaces — so the site feels cohesive, premium, and unmistakably JBJ. No black/champagne removed; emerald becomes the *hero accent* alongside gold.
+# Emerald System Hardening + Global Consistency Pass
 
----
+## 1. Lock the rule (CSS, non-negotiable)
+Add a permanent CSS guard in `src/index.css` (PASS 10):
+- ANY element whose own background is emerald (`#047857`, `#064E3B`, `#0F8B6A`, `var(--emerald-ink)`, `var(--emerald-ink-soft)`, `var(--gradient-ink)`, `var(--gradient-ink-hover)`, `.jj-cta-dark`, `[data-cta="dark"]`, `[data-ink-emerald]`, `.jj-pill-emerald:hover`) MUST render text + icons + SVG strokes WHITE at idle, hover, focus, active, disabled. No exceptions, no opt-outs.
+- Remove the regression from last turn that flipped Services / Tool / Hero white labels to black. Restore white on dark.
+- Save this as `mem://constraints/white-on-emerald-lock` and add to Core.
 
-## 1. Bug fix — Continue Searching cards show no project image
-**File:** `src/components/home/ContinueSearchingRail.tsx` (and/or the card primitive it renders)
+## 2. Hover contrast — Email / Call / Chat pills
+`src/components/ProjectCard.tsx` + `.jj-pill-emerald` in `index.css`:
+- Idle: champagne fill, emerald border, emerald icon + label.
+- Hover: emerald gradient fill, WHITE icon + WHITE label (locked via PASS 10).
 
-Symptom (screenshot 1): every card is a solid emerald gradient with only the developer logo tile + title — the actual project cover photo never paints. Root cause is the same PASS 9 emerald repaint bleeding into the card's image surface (the card root or its image wrapper carries `data-surface="dark"` / `bg-[#0A0A0A]` for the fallback color, so the gradient overrides the `<img>`'s background).
+## 3. JBJ Royal Tools Hub + Explore Our Services headers
+`src/components/tools/RoyalToolsHub.tsx`, `src/pages/JBJDesignStudio.tsx`, `src/components/home/ExploreServicesExpander.tsx`, `src/components/home/ToolkitShowcaseCard.tsx`:
+- Title + subtitle (Property Evaluator, Mortgage Calculator, tool names + subtitles) render WHITE on the dark/emerald panel.
+- Remove ALL gold borders/hairlines on these two section headers only. Replace gold divider with emerald hairline `rgba(4,120,87,.55)`.
+- Scope is strictly these two sections — gold hairline standard preserved elsewhere.
 
-**Fix:** add `data-ink-emerald-opt-out` to the card image wrapper (the `<div>` that holds the `<img>` / background-image), and ensure the image element itself uses `object-cover` over a neutral champagne fallback. Verify by reading the component first.
+## 4. Premium 3D hover for primary CTAs
+New utility `.jj-cta-float` in `index.css`:
+- Idle: emerald gradient, white text, soft emerald shadow.
+- Hover: `translateY(-2px) scale(1.01)`, deeper layered shadow (`0 14px 32px -10px rgba(4,120,87,.45), 0 4px 12px rgba(0,0,0,.15)`), brighter gradient.
+- Apply to: `View All Projects`, `Mortgage Calculator` CTA, `Explore Now`, `Get Evaluation`, `Open Investor Portal`, `Get Verified`, footer primary buttons.
 
----
+## 5. Emerald promotion (consistent, restrained)
+- Footer (`src/components/Footer.tsx`): section titles emerald, icons emerald, primary links hover emerald. No gold accent on footer divider — emerald hairline.
+- Contact cards (WhatsApp / Call Us / Email in `CombinedContactNewsletter.tsx`): stronger emerald — filled emerald icon tile + emerald label, hover floats with shadow.
+- Mode picker (`src/components/auth/ModePickerDialog.tsx` or equivalent): emerald accents on selected pill, emerald primary CTA.
+- Contact Us screen / `/contact`: emerald headline, emerald CTAs, emerald icon tiles.
+- Vertical sidebar (`src/components/layout/VerticalSidebar.tsx`): section group titles in emerald (AI Home Finder / Tools & Workspace / Properties / etc.). Item labels stay ink; active item = emerald hairline + emerald icon.
 
-## 2. JBJ Royal Tools Hub — make the active tool panel show its full image
-**File:** `src/pages/JBJDesignStudio.tsx` or `src/components/tools/RoyalToolsHub.tsx` (whichever renders the Property Evaluator / Comparison / AI Home Finder / Mortgage / Rental Index / List-for-Sale tabbed panel from screenshot 2)
+## 6. Sidebar: add Billing & Subscriptions
+- New sidebar entry under MY ACCOUNT → "Billing & Subscriptions" linking to `/account/billing` (new route, reuses existing billing components if present; otherwise stub page with sections: Current Plan, Payment Method, Invoices, Usage). Owner/broker/developer/investor all see it.
 
-Currently the left half is a solid emerald wall and the photo only shows on the right. Same root cause. **Fix:** add `data-ink-emerald-opt-out` to the panel's image container so the full magnifier-on-blueprints photo shows edge-to-edge. The `Get Evaluation` button stays emerald (already correct — that's the target CTA style).
+## 7. My Account → Brand Update card (above dashboard)
+`src/pages/MyAccount.tsx` (or owner/broker/developer dashboards):
+- New `<BrandPresentationCard />` above dashboard for `owner`, `broker`, `developer` modes ONLY (hidden for `investor`).
+- Lets user upload/update: agent photo OR company/agency logo, display name, title, phone, email used in generated presentations.
+- Saves to existing profile/company table; presentation generator reads from there.
 
----
+## 8. Mobile Contact Us launcher
+`src/components/support/ContactUsLauncher.tsx` (right-edge tab):
+- On `< md` breakpoint: render icon-only (phone icon), 44×44 circular emerald pill, no "Contact Us" vertical label.
+- Desktop/tablet unchanged.
 
-## 3. Explore Our Services — match `Explore Now` button to Get Evaluation
-**File:** `src/components/home/ExploreServicesExpander.tsx`
+## 9. Kill white-pearl back layers globally
+Identify the duplicated outer wrapper (likely `PremiumSectionCard` rendering both an outer band + inner card, or `.jj-band` + nested card).
+- Rule: a section is EITHER a full-bleed band OR a single rounded card — never both stacked.
+- Fix JBJ Royal Tools Hub, Top Areas in Dubai, AI Property Comparison, and any other section showing a squared pearl strip behind a rounded card.
+- Pattern to keep: Mortgage Calculator (one rounded champagne card, inner sub-cards). Pattern to remove: outer square pearl + inner rounded card.
+- Audit `src/components/home/*` and `src/pages/Index.tsx` for `PremiumSectionCard` + nested `Card` duplication.
 
-The card image opt-out is already in place. Now upgrade the **`Explore Now`** button to the same emerald-gradient pill used by `Get Evaluation` (apply `.jj-cta-dark` or `data-cta="dark"` class so PASS 9 paints it with `var(--gradient-ink)` + gold hairline + white text). Same hover behavior.
+## 10. Responsive + E2E QA
+For each change, verify via browser at 4 viewports: 1920 desktop, 1024 tablet, 768 iPad, 390 mobile.
+Capture screenshots as proof for:
+- Homepage hero / Explore Services / Royal Tools Hub header
+- Featured Listings card hover (Email/Call/Chat)
+- View All Projects button hover
+- Footer
+- Contact Us screen + mobile launcher
+- Mode picker
+- Sidebar with new Billing entry
+- My Account with Brand card (per role)
+- Sections after pearl-layer removal
 
----
+Reply with screenshot proof per item before moving to next.
 
-## 4. Handpicked For You — emerald-tint the Email / Call / Chat trio
-**File:** `src/components/properties/PropertyCard.tsx` (or the action-row sub-component)
-
-Currently the three pill buttons are champagne with ink text (screenshot 3). Promote them to **emerald-outline pills**: 1px emerald hairline border + emerald icon + emerald label on champagne fill; on hover, fill emerald with white text/icon. This applies **everywhere these three actions appear** (project detail page, search results, favorites, broker views) — single-source change in the card component.
-
----
-
-## 5. Section title + icon emerald promotion
-Promote signature section titles & their icon tiles to emerald (instead of black ink) so the brand color leads the eye:
-
-- **Top Areas in Dubai** (screenshot 5) — title in emerald, `<IconTile tone="emerald">` for the `📍 TOP AREAS` chip, **Area names** ("Dubai Islands", "Business Bay", "Dubai South") in emerald.
-- **Explore Our Guides & Reports** — title + icon in emerald.
-- **Ready to Get Started** (screenshot 4) — `GET IN TOUCH` chip already emerald (good); upgrade the three contact cards (WhatsApp / Call Us / Email): icon tile in emerald, label "WHATSAPP/CALL US/EMAIL" in emerald, value in ink.
-- **Featured Properties → Handpicked For You** (screenshot 3) — `🏠 FEATURED PROPERTIES` chip stays emerald (already good).
-- **Recently Viewed → Continue Searching** — clock-history icon chip in emerald.
-
-**Implementation:** introduce a new design token + utility class:
-
-```css
-/* index.css */
-:root { --emerald-ink: #0B3B2E; --emerald-ink-soft: #134E3A; }
-.jj-title-emerald { color: var(--emerald-ink); }
-[data-icon-tile-tone="emerald-strong"] { background: var(--gradient-ink); color: #fff; }
-```
-
-Then update `<IconTile />` to accept `tone="emerald"` (already exists per memory) and ensure it maps to the new strong emerald, and add `<SectionHeader emerald />` prop (or just apply `.jj-title-emerald` to specific section h2s).
-
----
-
-## 6. Scroll-to-top / scroll arrows → emerald & restyled
-**File:** `src/components/ui/ScrollToTop.tsx` (and any inline up/down chevrons in `src/pages/Index.tsx`)
-
-Replace the plain ↑/↓ arrow buttons with a **circular emerald pill** (44px, `var(--gradient-ink)` fill, white chevron, gold hairline ring, soft emerald shadow). Use a different icon variant — `ArrowUpToLine` / `ArrowDownToLine` from lucide — for a more distinctive shape than the current basic arrow.
-
----
-
-## 7. Memory updates
-Update `mem://style/color-palette/ink-emerald-gradient-standard` to record the **promotion**:
-
-- Emerald is now a **brand accent**, not just a CTA repaint
-- Approved emerald uses: signature CTAs, section titles (curated list), icon tiles on key chips, area/zone names, scroll-to-top control, contact card icons + labels
-- Forbidden: emerald on body text, on photo overlays (must opt-out), on every button (keep ink CTAs for tertiary actions), on input fields
-
-Also add a new short rule to `mem://index.md` Core section:
-> Emerald promotion: titles in Top Areas / Guides / Reports / Ready-to-Get-Started, contact-card icons+labels, area names, scroll-to-top, and primary CTAs (`Explore Now`, `Get Evaluation`, `View All Projects`, Email/Call/Chat trio) use `var(--gradient-ink)` family. Body text + photo overlays always opt-out.
-
----
-
-## Verification
-1. Browser screenshot homepage at desktop width — verify: Continue Searching cards show real photos; Royal Tools Hub photo edge-to-edge; Explore Now matches Get Evaluation; Email/Call/Chat are emerald-outlined; Top Areas title + area names are emerald; Ready-to-Get-Started cards have emerald icons + labels; scroll-to-top is an emerald pill.
-2. Spot-check the project detail page to confirm Email/Call/Chat upgrade carries through.
-3. Confirm no regression: hero search bar, Explore Our Services photo, Buy Property card image still show photos (opt-outs intact).
+## 11. Memory updates
+- New: `mem://constraints/white-on-emerald-lock` (Core).
+- Update: `mem://style/color-palette/ink-emerald-gradient-standard` — add hover-white rule, gold-removal scope for tool/service headers, `.jj-cta-float` premium hover.
+- New: `mem://ui-ux/visual-standards/no-double-wrapper-rule` — sections are band OR card, never both.
 
 ## Out of scope
-- No backend / data / RLS changes.
-- No new pages or routes.
-- Existing black CTAs not listed above stay as-is.
+- No backend schema changes beyond a single `brand_presentation` profile columns set (photo_url, company_logo_url, display_title) if not already present.
+- No new tools, no copy rewrites, no route renames.
+- Existing gold hairline standard preserved everywhere except the two named section headers.
