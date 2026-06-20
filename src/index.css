@@ -3442,6 +3442,14 @@ a      .lucide:not([class*="text-"]):not(.allow-white):not([data-no-contrast-gua
   opacity: 1 !important;
 }
 
+.jj-hero-fullscreen .mi-hero-cta,
+.jj-hero-fullscreen .mi-hero-cta :where(span, svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+}
+
 /* =====================================================================
    DESTRUCTIVE / RED ACTION READABILITY (Sign Out, Submit Ticket, etc.)
    Guarantees red CTAs and "Submit Ticket" buttons remain readable in
