@@ -5093,7 +5093,19 @@ html body :is(
   [style*="background" i][style*="#022c22" i],
   [style*="background" i][style*="#064e3b" i],
   [style*="background" i][style*="#2e1065" i],
-  [style*="background" i][style*="#4c1d95" i]
+   [style*="background" i][style*="#4c1d95" i],
+   [class~="bg-gradient-to-br"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-br"][class~="from-[#1a1a1a]"],
+   [class~="bg-gradient-to-br"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="from-black"],
+   [class~="bg-gradient-to-r"][class~="from-[#0A0A0A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0a0a0a]"],
+   [class~="bg-gradient-to-r"][class~="from-[#1A1A1A]"],
+   [class~="bg-gradient-to-r"][class~="from-[#0b1b33]"],
+   [class~="bg-gradient-to-br"][class~="to-[#0A0A0A]"],
+   [class~="bg-gradient-to-br"][class~="to-black"]
 ) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-outline):not(.jj-cta-outline *):not(.jj-pill-active):not(.jj-pill-active *):not([data-cta="champagne"]):not([data-cta="champagne"] *):not([data-cta="outline"]):not([data-cta="outline"] *):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not([data-surface="raised"]):not([data-surface="raised"] *):not([data-surface="gold"]):not([data-surface="gold"] *):not(.surface-page):not(.surface-page *):not(.surface-light):not(.surface-light *):not(.surface-champagne):not(.surface-champagne *):not(.surface-cream):not(.surface-cream *):not(.surface-raised):not(.surface-raised *):not(.surface-gold):not(.surface-gold *):not(.jj-card-inner):not(.jj-card-inner *):not(.jj-layer-2):not(.jj-layer-2 *):not(.bg-white):not(.bg-white *):not([class~="bg-white"]):not([class~="bg-white"] *):not([class~="bg-[#FFFFFF]"]):not([class~="bg-[#FFFFFF]"] *):not([class~="bg-[#FDFBF7]"]):not([class~="bg-[#FDFBF7]"] *):not([class~="bg-[#F7F2EA]"]):not([class~="bg-[#F7F2EA]"] *):not([class~="bg-[#EFE6D6]"]):not([class~="bg-[#EFE6D6]"] *) {
   color: var(--jj-contrast-on-dark) !important;
   -webkit-text-fill-color: var(--jj-contrast-on-dark) !important;
