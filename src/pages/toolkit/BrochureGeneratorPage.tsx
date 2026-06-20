@@ -531,11 +531,11 @@ export default function BrochureGeneratorPage() {
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
       {/* Header */}
-      <div className="border-b border-blue-100 bg-gradient-to-b from-blue-50/60 to-white">
+      <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg shadow-blue-600/20">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-[#EFE6D6] border border-[#B89555]/40">
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -887,7 +887,7 @@ export default function BrochureGeneratorPage() {
             <button
               onClick={handleGenerate}
               disabled={processing}
-              className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-bold text-white text-sm transition-all disabled:opacity-50 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30"
+              className="jj-cta-dark w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-bold text-sm transition-all disabled:opacity-50"
             >
               {processing ? (
                 <><Loader2 className="w-5 h-5 animate-spin" /> Generating…</>

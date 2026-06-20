@@ -384,7 +384,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
 
       {/* ── Hero (standalone only) ── */}
       {!embedded && (
-        <section className="relative py-16 md:py-20 overflow-hidden bg-gradient-to-b from-violet-50/60 to-white">
+        <section className="relative py-16 md:py-20 overflow-hidden bg-[#F7F2EA]">
           <div className="container mx-auto px-4 relative z-10 text-center">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-5 border bg-violet-50 text-violet-700 border-violet-200">
               <Sparkles className="h-3 w-3" /> Free Tool
