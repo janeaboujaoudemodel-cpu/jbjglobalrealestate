@@ -83,21 +83,21 @@ export function BrokerToolkitSupport() {
       <section id="section-support" className="py-8 md:py-10 bg-[#1A1A1A]">
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Pink Layer */}
-          <div className="bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90 border border-pink-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
+          <div className="bg-[#0A0A0A] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <Badge className="bg-pink-500/30 text-pink-200 border-pink-400/50 mb-4">
+              <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40 mb-4">
                 <Users className="w-3 h-3 mr-1" />
                 Dedicated Team
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Your Personal <span className="text-pink-300">Success Team</span>
+                Your Personal <span className="text-[#B89555]">Success Team</span>
               </h2>
-              <p className="text-pink-200/70 max-w-2xl mx-auto">
+              <p className="text-white/70 max-w-2xl mx-auto">
                 A dedicated team supporting your journey from onboarding to deal closing.
               </p>
             </motion.div>
@@ -112,18 +112,18 @@ export function BrokerToolkitSupport() {
                   viewport={{ once: true }}
                 >
                   <Link to={member.link}>
-                    <Card className="bg-pink-900/80 border-2 border-pink-500/50 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(184,149,85,0.3)] h-full group cursor-pointer transition-all duration-300">
+                    <Card className="bg-[#0A0A0A] border-2 border-[#B89555]/40 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(184,149,85,0.3)] h-full group cursor-pointer transition-all duration-300">
                       <CardContent className="p-5">
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-pink-500/30 border border-pink-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                            <member.icon className="w-6 h-6 text-pink-300" />
+                          <div className="w-12 h-12 bg-[#EFE6D6] border border-[#B89555]/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <member.icon className="w-6 h-6 text-[#B89555]" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-pink-300 text-xs font-medium mb-1">{member.role}</p>
+                            <p className="text-[#B89555] text-xs font-medium mb-1">{member.role}</p>
                             <h3 className="font-semibold text-white truncate">{member.name}</h3>
                             <p className="text-white/70 text-sm mt-1">{member.description}</p>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-pink-300 opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0" />
+                          <ArrowRight className="w-5 h-5 text-[#B89555] opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0" />
                         </div>
                       </CardContent>
                     </Card>
@@ -139,21 +139,21 @@ export function BrokerToolkitSupport() {
       <section className="py-8 md:py-10 bg-[#1A1A1A]">
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Teal Layer */}
-          <div className="bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90 border border-teal-500/30 rounded-2xl p-6 md:p-8 shadow-lg">
+          <div className="bg-[#0A0A0A] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <Badge className="bg-teal-500/30 text-teal-200 border-teal-400/50 mb-4">
+              <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40 mb-4">
                 <Camera className="w-3 h-3 mr-1" />
                 Creative Team
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Media & <span className="text-teal-300">Marketing Team</span>
+                Media & <span className="text-[#B89555]">Marketing Team</span>
               </h2>
-              <p className="text-teal-200/70 max-w-2xl mx-auto">
+              <p className="text-white/70 max-w-2xl mx-auto">
                 Professional creative support for your listings and personal brand.
               </p>
             </motion.div>
@@ -168,18 +168,18 @@ export function BrokerToolkitSupport() {
                   viewport={{ once: true }}
                 >
                   <Link to={member.link}>
-                    <Card className="bg-teal-900/80 border-2 border-teal-500/50 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(20,184,166,0.3)] h-full group cursor-pointer transition-all duration-300">
+                    <Card className="bg-[#0A0A0A] border-2 border-[#B89555]/40 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] shadow-[0_0_20px_rgba(184,149,85,0.3)] h-full group cursor-pointer transition-all duration-300">
                       <CardContent className="p-5">
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-teal-500/30 border border-teal-400/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                            <member.icon className="w-6 h-6 text-teal-300" />
+                          <div className="w-12 h-12 bg-[#EFE6D6] border border-[#B89555]/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <member.icon className="w-6 h-6 text-[#B89555]" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-teal-300 text-xs font-medium mb-1">{member.role}</p>
+                            <p className="text-[#B89555] text-xs font-medium mb-1">{member.role}</p>
                             <h3 className="font-semibold text-white truncate">{member.name}</h3>
                             <p className="text-white/70 text-sm mt-1">{member.description}</p>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-teal-300 opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0" />
+                          <ArrowRight className="w-5 h-5 text-[#B89555] opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0" />
                         </div>
                       </CardContent>
                     </Card>
