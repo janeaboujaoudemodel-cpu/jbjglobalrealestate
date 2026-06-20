@@ -707,19 +707,6 @@ export default function GlobalVerticalNav() {
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
-  // Close mega menu and auto-expand active section on route change
-  useEffect(() => {
-    closeMegaMenu();
-    setMobileOpen(false);
-     // Auto-expand the section containing the active route
-     for (const [section, items] of Object.entries(sectionGroups)) {
-       if (items.some(item => isRouteActive(item.href))) {
-         setOpenSection(section as SectionKey);
-         break;
-       }
-     }
-  }, [location.pathname, closeMegaMenu, sectionGroups]);
-
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
     if (href === "/properties") return location.pathname === "/properties" || location.pathname.startsWith("/properties/");
@@ -753,6 +740,18 @@ export default function GlobalVerticalNav() {
     sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS.filter(it => shouldShowItem(it, "TOOLS & WORKSPACE"));
     return { highlightItems: highlights, sectionGroups: sections };
   }, [shouldShowItem]);
+
+  // Close mega menu and auto-expand active section on route change.
+  useEffect(() => {
+    closeMegaMenu();
+    setMobileOpen(false);
+    for (const [section, items] of Object.entries(sectionGroups)) {
+      if (items.some(item => isRouteActive(item.href))) {
+        setOpenSection(section as SectionKey);
+        break;
+      }
+    }
+  }, [location.pathname, closeMegaMenu, sectionGroups]);
 
   // Auto-open is now handled by the route-change effect above
 
