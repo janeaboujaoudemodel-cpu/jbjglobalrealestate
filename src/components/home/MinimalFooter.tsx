@@ -15,8 +15,8 @@ const MinimalFooter = () => {
   return (
     <footer
       className={[
-        "w-full bg-gradient-to-r from-[#FFFFFF] via-[#FBFCFB] to-[#F5F9F6]",
-        "border-t border-[#047857]/25",
+        "w-full bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC]",
+        "border-t border-[#B89555]/35",
       ].join(" ")}
       data-surface="champagne"
       data-jj-minimal-footer
