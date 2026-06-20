@@ -233,6 +233,13 @@ All colors MUST be HSL.
      * Used by OwnerDashboardShell (and any future dashboard shell). */
     --shell-header-h: 64px;
 
+    /* Default content-area offsets used by BrandedLoader so the JBJ logo
+     * centers within the visible content area (below header / right of any
+     * sidebar). Shells (OwnerDashboardShell, BrokerPortalLayout) override
+     * these via inline style on their root container. */
+    --app-content-top: 88px;
+    --app-content-left: 0px;
+
     /* ============================================================
      * CHAMPAGNE / GOLD GLOBAL THEME (replaces white-monochrome)
      * Page #FDFBF7 · surface #F7F2EA · raised #EFE6D6 · gold #B89555
