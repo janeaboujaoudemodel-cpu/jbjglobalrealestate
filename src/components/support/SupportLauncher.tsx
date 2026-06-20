@@ -226,28 +226,23 @@ export default function SupportLauncher() {
         <motion.button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          aria-label="Talk to JBJ support"
+          aria-label={open ? "Close support" : "Contact us"}
           data-surface="dark"
           data-allow-dark-cta
           data-no-contrast-guard
-          whileTap={{ scale: 0.96 }}
-          className="allow-white inline-flex items-center gap-1.5 h-9 px-3 rounded-full
-            bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70
-            text-[11px] font-semibold uppercase tracking-[0.22em] text-white
+          whileTap={{ scale: 0.94 }}
+          className="allow-white relative inline-flex items-center justify-center h-11 w-11 rounded-full
+            bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 text-white
             shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_1px_rgba(184,149,85,0.24)]
             transition-colors"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           {open ? (
-            <>
-              <X className="h-3.5 w-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Close</span>
-            </>
+            <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           ) : (
             <>
-              <Sparkles className="h-3.5 w-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact us</span>
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0A0A0A] animate-pulse" />
             </>
           )}
         </motion.button>
