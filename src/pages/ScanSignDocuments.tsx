@@ -18,7 +18,7 @@ const ScanSignDocuments = () => {
   const h = useScanSignDocuments();
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
+    <section data-ink-emerald data-hero-dark className="min-h-screen" style={{ backgroundImage: "var(--gradient-ink)" }}>
       {/* Header */}
       <div className="bg-gradient-to-r from-green-900/30 via-green-800/20 to-green-900/30 border-b border-green-500/20">
         <div className="container mx-auto px-4 py-12">
