@@ -71,6 +71,28 @@ function extractTypicalUnits(raw: any): any[] | null {
   }));
 }
 
+function extractBedrooms(raw: any): { min: number | null; max: number | null; types: number[] } {
+  const units = raw?.typical_units;
+  if (!Array.isArray(units) || units.length === 0) return { min: null, max: null, types: [] };
+  const nums = new Set<number>();
+  for (const u of units) {
+    const b = u?.bedrooms;
+    if (typeof b === "number" && Number.isFinite(b)) {
+      nums.add(b);
+    } else if (typeof b === "string") {
+      const s = b.trim().toLowerCase();
+      if (s === "studio" || s === "0") nums.add(0);
+      else {
+        const m = s.match(/(\d+)/);
+        if (m) nums.add(parseInt(m[1], 10));
+      }
+    }
+  }
+  if (nums.size === 0) return { min: null, max: null, types: [] };
+  const arr = Array.from(nums).sort((a, b) => a - b);
+  return { min: arr[0], max: arr[arr.length - 1], types: arr };
+}
+
 function extractFloorPlanTypes(raw: any): any[] | null {
   const fps = raw?.floor_plans;
   if (!Array.isArray(fps) || fps.length === 0) return null;
