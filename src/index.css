@@ -8052,3 +8052,28 @@ html body :is(
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+   DLD Daily Snapshot — bar fills (locked from global guards)
+   ============================================================ */
+.dld-bar-fill-ink {
+  background-color: #0A0A0A !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+.dld-bar-fill-gold {
+  background-color: #B89555 !important;
+  background-image: none !important;
+}
+.dld-bar-fill-leader {
+  background-color: #0A0A0A !important;
+  background-image: none !important;
+}
+.dld-bar-fill-podium {
+  background-color: #B89555 !important;
+  background-image: none !important;
+}
+.dld-bar-fill-rest {
+  background-color: rgba(184, 149, 85, 0.55) !important;
+  background-image: none !important;
+}
