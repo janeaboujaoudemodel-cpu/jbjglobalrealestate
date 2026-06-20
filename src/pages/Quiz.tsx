@@ -272,8 +272,7 @@ const AIHF_STYLE = `
     box-shadow: none !important;
   }
   .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
-    min-width: 12rem;
-    min-height: 4rem;
+    min-width: 7rem;
     background: #0A0A0A !important;
     border: 1px solid rgba(184,149,85,0.65) !important;
     box-shadow: none !important;
