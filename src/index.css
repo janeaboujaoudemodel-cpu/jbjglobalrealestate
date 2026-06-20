@@ -6551,6 +6551,14 @@ html body .jj-text-emerald * {
   color: var(--emerald-ink) !important;
   -webkit-text-fill-color: var(--emerald-ink) !important;
 }
+html body .jj-title-emerald,
+html body .jj-title-emerald * {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
 html body .jj-icon-emerald,
 html body .jj-icon-emerald *,
 html body .jj-icon-emerald svg,
@@ -6561,13 +6569,13 @@ html body .jj-icon-emerald svg * {
 }
 html body .jj-pill-emerald,
 html body .jj-pill-emerald * {
-  color: var(--emerald-ink) !important;
-  -webkit-text-fill-color: var(--emerald-ink) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 html body .jj-pill-emerald svg,
 html body .jj-pill-emerald svg * {
-  stroke: var(--emerald-ink) !important;
-  color: var(--emerald-ink) !important;
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
 }
 html body .jj-pill-emerald:hover,
 html body .jj-pill-emerald:hover * {
