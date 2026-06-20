@@ -181,21 +181,24 @@ export const DLDDailySnapshot = () => {
                   </span>
                 </div>
                 <div
-                  className="relative h-3 w-full overflow-hidden rounded-full"
-                  style={{ backgroundColor: "#EFE6D6", border: `1px solid rgba(184,149,85,0.35)` }}
+                  data-no-contrast-guard
+                  className="dld-bar-track"
+                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
                   <motion.div
-                    className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: INK, transformOrigin: "left center" }}
+                    data-no-contrast-guard
+                    data-allow-dark-cta
+                    className="dld-bar-fill-ink"
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.9, ease: "easeOut" }}
-                  >
-                    <div className="h-full w-full" />
-                  </motion.div>
+                  />
                 </div>
-                <p className="mt-1 text-[11px] tabular-nums text-[#1A1A1A]/70">{cashShare}% of all transactions</p>
+                <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#0A0A0A]" /> Cash · {cashShare}% of all transactions
+                </p>
               </div>
 
               {/* MORTGAGE */}
@@ -207,21 +210,23 @@ export const DLDDailySnapshot = () => {
                   </span>
                 </div>
                 <div
-                  className="relative h-3 w-full overflow-hidden rounded-full"
-                  style={{ backgroundColor: "#EFE6D6", border: `1px solid ${GOLD}` }}
+                  data-no-contrast-guard
+                  className="dld-bar-track"
+                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: `1px solid ${GOLD}` }}
                 >
                   <motion.div
-                    className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: GOLD, transformOrigin: "left center" }}
+                    data-no-contrast-guard
+                    className="dld-bar-fill-gold"
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${mortgageShare / 100})` }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}
-                  >
-                    <div className="h-full w-full" />
-                  </motion.div>
+                  />
                 </div>
-                <p className="mt-1 text-[11px] tabular-nums text-[#1A1A1A]/70">{mortgageShare}% of all transactions</p>
+                <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} /> Mortgage · {mortgageShare}% of all transactions
+                </p>
               </div>
             </div>
 
@@ -241,26 +246,52 @@ export const DLDDailySnapshot = () => {
             <div className="mt-5 space-y-3">
               {top.map((row, i) => {
                 const pct = max > 0 ? row.count / max : 0;
+                const rank = i + 1;
+                const isLeader = rank === 1;
+                const isPodium = rank === 2 || rank === 3;
+                const barColor = isLeader ? "#0A0A0A" : isPodium ? GOLD : "rgba(184,149,85,0.55)";
                 return (
-                  <div key={`${row.area}-${i}`} className="grid grid-cols-[140px_1fr_auto] items-center gap-3">
-                    <span className="truncate text-sm font-semibold text-[#1A1A1A]">
-                      <span className="mr-1.5 text-[#B89555]">{String(i + 1).padStart(2, "0")}</span>
-                      {row.area}
+                  <div
+                    key={`${row.area}-${i}`}
+                    className={`grid grid-cols-[150px_1fr_auto] items-center gap-3 rounded-lg ${isLeader ? "px-2 py-1.5 ring-1 ring-[#0A0A0A]/15" : ""}`}
+                    style={isLeader ? { backgroundColor: "rgba(184,149,85,0.10)" } : undefined}
+                  >
+                    <span className="flex items-center gap-2 truncate text-sm font-semibold text-[#1A1A1A]">
+                      <span
+                        data-no-contrast-guard
+                        data-allow-dark-cta
+                        className={`inline-flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-[10px] font-bold tabular-nums ${
+                          isLeader
+                            ? "bg-[#0A0A0A] text-white"
+                            : isPodium
+                              ? "border border-[#B89555] text-[#1A1A1A]"
+                              : "text-[#1A1A1A]/55"
+                        }`}
+                        style={isPodium ? { backgroundColor: "rgba(184,149,85,0.18)" } : undefined}
+                      >
+                        {String(rank).padStart(2, "0")}
+                      </span>
+                      <span className="truncate">{row.area}</span>
                     </span>
                     <div
+                      data-no-contrast-guard
                       className="relative h-2.5 overflow-hidden rounded-full"
                       style={{ backgroundColor: "#EFE6D6", border: `1px solid rgba(184,149,85,0.35)` }}
                     >
                       <motion.div
-                        className="absolute inset-y-0 left-0 h-full rounded-full"
-                        style={{ backgroundColor: GOLD, transformOrigin: "left center", width: "100%" }}
+                        data-no-contrast-guard
+                        data-allow-dark-cta
+                        className={`absolute inset-y-0 left-0 h-full rounded-full ${
+                          isLeader ? "dld-bar-fill-leader" : isPodium ? "dld-bar-fill-podium" : "dld-bar-fill-rest"
+                        }`}
+                        style={{ transformOrigin: "left center", width: "100%" }}
                         initial={{ transform: "scaleX(0)" }}
                         whileInView={{ transform: `scaleX(${pct})` }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7, ease: "easeOut", delay: i * 0.03 }}
                       />
                     </div>
-                    <span className="text-xs tabular-nums text-[#1A1A1A]">{row.count}</span>
+                    <span className={`text-xs tabular-nums ${isLeader ? "font-bold text-[#0A0A0A]" : "text-[#1A1A1A]"}`}>{row.count}</span>
                   </div>
                 );
               })}
