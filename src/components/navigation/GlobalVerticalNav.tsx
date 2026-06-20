@@ -711,10 +711,6 @@ export default function GlobalVerticalNav() {
   useEffect(() => {
     closeMegaMenu();
     setMobileOpen(false);
-    // Auto-close My Account section on any navigation to prevent stuck state
-    if (openSection === 'MY ACCOUNT') {
-      setOpenSection(null);
-    }
      // Auto-expand the section containing the active route
      for (const [section, items] of Object.entries(sectionGroups)) {
        if (items.some(item => isRouteActive(item.href))) {
@@ -722,7 +718,7 @@ export default function GlobalVerticalNav() {
          break;
        }
      }
-   }, [location.pathname, closeMegaMenu]);
+  }, [location.pathname, closeMegaMenu, sectionGroups]);
 
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
@@ -1147,7 +1143,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               // an expanded section — just navigate.
                               collapseAfterNavigation();
                               if (sectionKey === 'MY ACCOUNT') {
-                                setOpenSection(null);
+                                setOpenSection('MY ACCOUNT');
                               }
                             }}
                             data-sidebar-subitem
