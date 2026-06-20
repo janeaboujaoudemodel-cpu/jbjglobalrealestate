@@ -35,7 +35,7 @@ export function SaveProjectBar({
   onCreateNew,
   onLoadDraft,
   canSave = true,
-  accentColor = "#2563EB",
+  accentColor = "#B89555",
   accentBorder = "rgba(37,99,235,0.2)",
   toolId = "generic",
 }: SaveProjectBarProps) {
@@ -169,7 +169,7 @@ export function SaveProjectBar({
 /** Outer border wrapper to hold all tool content together */
 export function ToolContentWrapper({
   children,
-  accentColor = "#2563EB",
+  accentColor = "#B89555",
 }: {
   children: React.ReactNode;
   accentColor?: string;
