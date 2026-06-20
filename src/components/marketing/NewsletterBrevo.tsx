@@ -121,24 +121,42 @@ export const NewsletterBrevo = ({
     return (
       <>
         <form onSubmit={handleSubmit} className={`flex gap-2 ${className}`}>
-          <Input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 bg-card border-2 border-[#B89555]/50 text-foreground placeholder:text-muted-foreground focus:border-[#B89555] focus:ring-gold/30 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] focus:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-shadow"
-            required
-            disabled={isSubmitting}
-          />
+          <div className="jj-newsletter-emerald relative flex-1">
+            <Input
+              type="email"
+              placeholder=" "
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              data-no-contrast-guard
+              className="h-12 w-full rounded-xl border px-4 pr-4 font-semibold tracking-wide text-white placeholder:text-transparent focus-visible:ring-0"
+              style={{
+                backgroundImage: 'var(--jj-emerald-ombre)',
+                borderColor: 'rgba(52,211,153,0.78)',
+                color: '#FFFFFF',
+                WebkitTextFillColor: '#FFFFFF',
+                boxShadow: '0 0 0 1px rgba(52,211,153,0.25), 0 0 24px rgba(52,211,153,0.28), inset 0 1px 0 rgba(255,255,255,0.18)',
+              }}
+              required
+              disabled={isSubmitting}
+            />
+            {!email && (
+              <span
+                className="jj-newsletter-placeholder pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide text-white/90"
+                aria-hidden="true"
+              />
+            )}
+          </div>
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="relative overflow-hidden px-5 text-primary-foreground font-semibold bg-[#EFE6D6] hover:bg-[#EFE6D6]-light transition-all duration-300"
+            data-no-contrast-guard
+            className="jj-emerald-fill relative h-12 overflow-hidden rounded-xl px-5 font-semibold transition-all duration-300"
+            style={{ boxShadow: '0 0 0 1px rgba(52,211,153,0.34), 0 0 26px rgba(52,211,153,0.34), 0 12px 24px -14px rgba(0,0,0,0.85)' }}
           >
             {isSubmitting ? (
-              <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" />
+              <Loader2 className="w-4 h-4 animate-spin text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
             ) : (
-              <Send className="w-4 h-4 text-primary-foreground" />
+              <Send className="w-4 h-4 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
             )}
           </Button>
         </form>
