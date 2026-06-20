@@ -16,6 +16,10 @@ const app = fs.existsSync(appTsx) ? fs.readFileSync(appTsx, 'utf8') : '';
 if (/installContrastGuard\s*\(/.test(app) || /contrastGuard/.test(app)) {
   violations.push('src/App.tsx must not import/call contrastGuard; contrast is static CSS only.');
 }
+if (/ChampagneCtaInkGuard/.test(app)) {
+  violations.push('src/App.tsx must not mount ChampagneCtaInkGuard; contrast is static CSS only.');
+}
+
 
 const guard = fs.existsSync(contrastGuard) ? fs.readFileSync(contrastGuard, 'utf8') : '';
 if (/new\s+MutationObserver|addEventListener\(['"](?:mouseover|focusin|pointerdown|visibilitychange|scroll)/.test(guard)) {
