@@ -124,25 +124,28 @@ async function processAllProjects(jobId: string, supabaseUrl: string, supabaseKe
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   try {
-    // Get all candidates
+    // Candidate pool: any published project we can enrich from an approved source
+    // (Reelly partner API). We re-process projects whose detail_fetched_at is
+    // missing OR older than 30 days so new fields (e.g. bedrooms) keep filling in.
+    const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const { data: allProjects } = await supabase
       .from("projects")
-      .select("id, name, slug, reelly_id, amenities, amenity_images, usp_bullets, location_distances, description, cover_image_url, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate, reelly_raw_data")
+      .select("id, name, slug, reelly_id, amenities, amenity_images, usp_bullets, location_distances, description, cover_image_url, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate, reelly_raw_data, bedrooms_min, bedrooms_max, bedroom_types, detail_fetched_at")
       .eq("is_published", true)
       .not("reelly_id", "is", null)
-      .order("created_at", { ascending: true })
+      .or(`detail_fetched_at.is.null,detail_fetched_at.lt.${cutoff}`)
+      .order("detail_fetched_at", { ascending: true, nullsFirst: true })
       .limit(2000);
 
     if (!allProjects?.length) {
       await supabase.from("enrichment_jobs").update({
         status: "completed", completed_at: new Date().toISOString(),
-        log: [{ time: new Date().toISOString(), msg: "No projects found" }],
+        log: [{ time: new Date().toISOString(), msg: "No projects need enrichment right now" }],
       }).eq("id", jobId);
       return;
     }
 
-    // Filter to those without raw data
-    const candidates = allProjects.filter((p: any) => !p.reelly_raw_data);
+    const candidates = allProjects;
     const total = candidates.length;
 
     await supabase.from("enrichment_jobs").update({
@@ -192,6 +195,7 @@ async function processAllProjects(jobId: string, supabaseUrl: string, supabaseKe
         const poi = extractLocationDistances(reellyData);
         const vids = extractVideoUrls(reellyData);
         const units = extractTypicalUnits(reellyData);
+        const beds = extractBedrooms(reellyData);
         const fps = extractFloorPlanTypes(reellyData);
         const sc = extractServiceCharge(reellyData);
 
@@ -241,6 +245,12 @@ async function processAllProjects(jobId: string, supabaseUrl: string, supabaseKe
         if (units) updates.unit_types = units;
         if (fps) updates.floor_plan_types = fps;
         if (sc && !project.service_charge) updates.service_charge = sc;
+        // Bedrooms — only fill when missing (never overwrite owner edits)
+        if (beds.min != null && project.bedrooms_min == null) updates.bedrooms_min = beds.min;
+        if (beds.max != null && project.bedrooms_max == null) updates.bedrooms_max = beds.max;
+        if (beds.types.length > 0 && !(project.bedroom_types as any[])?.length) {
+          updates.bedroom_types = beds.types;
+        }
         if (!project.description && reellyData?.overview) updates.description = reellyData.overview;
         if (!project.description && reellyData?.short_description) updates.description = reellyData.short_description;
         if (reellyData?.highlights?.length > 0 && !(project.highlights as any[])?.length) {
