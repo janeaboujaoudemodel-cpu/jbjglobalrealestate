@@ -31,11 +31,11 @@ const AreaIntelligence = () => {
   const getTrendBadge = (trend: string) => {
     switch (trend) {
       case 'bullish':
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Bullish</Badge>;
+        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45">Bullish</Badge>;
       case 'bearish':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Bearish</Badge>;
+        return <Badge className="bg-red-50 text-red-800 border-red-700/30">Bearish</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30">Neutral</Badge>;
+        return <Badge className="bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35">Neutral</Badge>;
     }
   };
 
@@ -423,11 +423,11 @@ const AreaIntelligence = () => {
                                   <div className="text-right">
                                     <div className="flex items-center gap-1">
                                       {area.yoyChange > 0 ? (
-                                        <TrendingUp className="w-4 h-4 text-emerald-500" />
+                                        <TrendingUp className="w-4 h-4 text-[#B89555]" />
                                       ) : (
                                         <TrendingDown className="w-4 h-4 text-red-500" />
                                       )}
-                                      <span className={area.yoyChange > 0 ? 'text-emerald-600 font-medium' : 'text-red-600 font-medium'}>
+                                      <span className={area.yoyChange > 0 ? 'text-[#1A1A1A] font-medium' : 'text-red-700 font-medium'}>
                                         {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
                                       </span>
                                     </div>
@@ -448,7 +448,7 @@ const AreaIntelligence = () => {
                                     <p className="text-[#1A1A1A]/70 text-xs">Demand</p>
                                     <div className="w-full bg-[#1A1A1A]/10 rounded-full h-1.5 mt-1">
                                       <div 
-                                        className="bg-emerald-500 h-1.5 rounded-full" 
+                                        className="bg-[#1A1A1A] h-1.5 rounded-full" 
                                         style={{ width: `${area.demandScore}%` }}
                                       />
                                     </div>
