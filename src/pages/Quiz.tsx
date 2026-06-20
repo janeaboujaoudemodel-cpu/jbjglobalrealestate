@@ -871,31 +871,31 @@ const Quiz = () => {
       <section
         data-allow-dark-cta
         data-no-contrast-guard
-        data-on-dark
-        className="aihf-root allow-white min-h-screen flex flex-col"
-        style={{ background: "#F7F2EA" }}
+        className="aihf-root min-h-screen flex flex-col"
+        style={{ background: "#FDFBF7" }}
       >
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[rgba(184,149,85,0.25)] backdrop-blur-sm" style={{ background: "rgba(10,10,10,0.6)" }}>
+        <div className="border-b border-[#B89555]/25" style={{ background: "#F7F2EA" }}>
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => navigate(-1)}
                 data-no-contrast-guard
-                className="allow-white transition-colors flex items-center gap-2"
-                style={{ color: "rgba(255,255,255,0.85)" }}
+                className="transition-colors flex items-center gap-2"
+                style={{ color: "#1A1A1A" }}
               >
-                <ChevronLeft className="w-5 h-5 allow-white" />
-                <span className="allow-white">Exit</span>
+                <ChevronLeft className="w-5 h-5" />
+                <span>Exit</span>
               </button>
-              <div className="flex items-center gap-3" style={{ color: "rgba(255,255,255,0.75)" }}>
-                <Clock className="w-4 h-4 allow-white" />
-                <span className="text-sm allow-white">~{estimatedTime} seconds</span>
+              <div className="flex items-center gap-3" style={{ color: "#1A1A1A" }}>
+                <Clock className="w-4 h-4" />
+                <span className="text-sm">~{estimatedTime} seconds</span>
               </div>
             </div>
           </div>
         </div>
+
 
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div
