@@ -108,7 +108,7 @@ const App = () => {
                   <CanonicalAndHreflang />
                   {/* Owner-only + analytics extras — lazy, idle-mounted */}
                   <DeferredAppExtras />
-                  <ChampagneCtaInkGuard />
+                  {/* ChampagneCtaInkGuard removed — see import comment */}
 
                    
             {/* BrandIntroSplash disabled until further notice */}
