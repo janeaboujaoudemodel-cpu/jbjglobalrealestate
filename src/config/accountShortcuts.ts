@@ -36,6 +36,8 @@ export interface AccountShortcut {
 }
 
 export const ACCOUNT_SHORTCUTS: AccountShortcut[] = [
+  { href: "/account/billing",             label: "Billing & Subscriptions", icon: CreditCard, description: "Plan, payment method, invoices, usage", inHeader: true, inSidebar: true },
+  { href: "/my-dashboard#brand-update",   label: "Brand Update",      icon: Palette,          description: "Brand palette, logo and identity assets", inHeader: true, inSidebar: true },
   { href: "/my-dashboard",                label: "My Dashboard",      icon: LayoutDashboard, description: "Your personalized dashboard",   inHeader: true, inSidebar: true },
   { href: "/my-dashboard#notifications",  label: "Notifications",     icon: Bell,             description: "Ticket & system alerts",        badgeKey: "notifications", inHeader: true, inSidebar: true },
   { href: "/my-dashboard#inbox",          label: "Inbox",             icon: Inbox,            description: "Messages from JBJ",             inHeader: true, inSidebar: true },
@@ -46,8 +48,6 @@ export const ACCOUNT_SHORTCUTS: AccountShortcut[] = [
   { href: "/favorites?tab=saved-filters", label: "Saved Filters",     icon: Sparkles,         inSidebar: true },
   { href: "/toolkit",                     label: "AI Tools",          icon: Sparkles,         description: "Professional AI-powered tools", inHeader: true, inSidebar: true },
   { href: "/profile?tab=settings",        label: "Settings",          icon: Settings,         inSidebar: true },
-  { href: "/account/billing",             label: "Billing & Subscriptions", icon: CreditCard, description: "Plan, payment method, invoices, usage", inHeader: true, inSidebar: true },
-  { href: "/my-dashboard#brand-update",   label: "Brand Update",      icon: Palette,          description: "Brand palette, logo and identity assets", inHeader: true, inSidebar: true },
   { href: "/my-tickets",                  label: "My Tickets",        icon: Ticket,           inSidebar: true },
 ];
 
