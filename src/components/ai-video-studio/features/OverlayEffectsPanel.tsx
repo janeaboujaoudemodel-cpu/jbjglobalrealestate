@@ -66,22 +66,22 @@ export function OverlayEffectsPanel({
   }, [lockedEffect, onPreviewEffect, onHoverEffect]);
 
   return (
-    <div className="h-full flex flex-col bg-[#1A1A1A] text-white">
+    <div className="h-full flex flex-col bg-[#0A0A0A] text-white" data-allow-dark-cta data-no-contrast-guard>
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-4">
           {/* Header hint */}
-          <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <Eye className="w-3.5 h-3.5 text-[#1A1A1A] shrink-0" />
-            <p className="text-xs text-amber-300">
-              <span className="font-semibold">Hover</span> for a live burst preview ·{' '}
-              <span className="font-semibold">Click</span> to lock on canvas ·{' '}
-              <span className="font-semibold">Add</span> to bake into timeline
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-[#B89555]/10 border border-[#B89555]/30">
+            <Eye className="w-3.5 h-3.5 text-[#B89555] shrink-0" />
+            <p className="text-xs text-white/80">
+              <span className="font-semibold text-white">Hover</span> for a live burst preview ·{' '}
+              <span className="font-semibold text-white">Click</span> to lock on canvas ·{' '}
+              <span className="font-semibold text-white">Add</span> to bake into timeline
             </p>
           </div>
 
           {categories.map(cat => (
             <div key={cat}>
-              <p className="text-[10px] text-[#1A1A1A]/70 font-semibold uppercase tracking-widest mb-2">{cat}</p>
+              <p className="text-[10px] text-white/60 font-semibold uppercase tracking-widest mb-2">{cat}</p>
               <div className="grid grid-cols-3 gap-1.5">
                 {OVERLAY_EFFECTS.filter(e => e.category === cat).map(effect => {
                   const isLocked = lockedEffect === effect.id;
@@ -93,8 +93,8 @@ export function OverlayEffectsPanel({
                       onMouseLeave={() => handleMouseLeave(effect.id)}
                       className={`rounded-md border cursor-pointer transition-all select-none overflow-hidden ${
                         isLocked
-                          ? 'border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.3)]'
-                          : 'border-[#1A1A1A] hover:border-amber-500/60 hover:shadow-[0_0_6px_rgba(251,191,36,0.15)]'
+                          ? 'border-[#B89555] shadow-[0_0_10px_rgba(184,149,85,0.35)]'
+                          : 'border-white/10 hover:border-[#B89555]/60'
                       }`}
                     >
                       {/* Live particle thumbnail */}
@@ -107,7 +107,7 @@ export function OverlayEffectsPanel({
 
                         {/* Lock badge */}
                         {isLocked && (
-                          <div className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[7px] font-bold text-[#1A1A1A] bg-[#1A1A1A]/70 px-1 py-0.5 rounded-full animate-pulse">
+                          <div className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[7px] font-bold text-white bg-black/70 px-1 py-0.5 rounded-full animate-pulse">
                             <Lock className="w-1.5 h-1.5" />
                             ON
                           </div>
@@ -115,8 +115,8 @@ export function OverlayEffectsPanel({
                       </div>
 
                       {/* Label row */}
-                      <div className={`px-1.5 py-1 ${isLocked ? 'bg-amber-400/10' : 'bg-[#1A1A1A]'}`}>
-                        <div className="text-[10px] font-semibold text-[#1A1A1A] leading-tight truncate">
+                      <div className={`px-1.5 py-1 ${isLocked ? 'bg-[#B89555]/15' : 'bg-white/5'}`}>
+                        <div className="text-[10px] font-semibold text-white leading-tight truncate">
                           {effect.label}
                         </div>
 
@@ -129,7 +129,7 @@ export function OverlayEffectsPanel({
                               toast.success(`${effect.label} added to timeline!`)
                             );
                           }}
-                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-[#1A1A1A] hover:bg-amber-500 hover:text-[#1A1A1A] text-[#1A1A1A]/70 border border-[#B89555]/30 hover:border-amber-500 transition-all"
+                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-white/10 hover:bg-[#B89555] hover:text-[#0A0A0A] text-white border border-[#B89555]/30 hover:border-[#B89555] transition-all"
                         >
                           <Plus className="w-2.5 h-2.5" />
                           Add
