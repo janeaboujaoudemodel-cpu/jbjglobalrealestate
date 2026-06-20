@@ -6411,7 +6411,41 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --ink-emerald-accent: #6EE7B7;
   --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
+  /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons). */
+  --emerald-ink: #064E3B;
+  --emerald-ink-soft: #0B5A45;
 }
+
+/* Title + accent utilities — opt-in only, never global. */
+.jj-title-emerald,
+.jj-title-emerald * {
+  color: var(--emerald-ink) !important;
+  -webkit-text-fill-color: var(--emerald-ink) !important;
+}
+.jj-text-emerald {
+  color: var(--emerald-ink) !important;
+}
+.jj-icon-emerald,
+.jj-icon-emerald svg {
+  color: var(--emerald-ink) !important;
+  stroke: var(--emerald-ink) !important;
+}
+/* Emerald-outline pill (Email/Call/Chat trio) — champagne fill, emerald hairline,
+   emerald icon+label; on hover fill emerald with white text. */
+.jj-pill-emerald {
+  background-color: #FDFBF7;
+  border: 1px solid rgba(6, 78, 59, 0.45);
+  color: var(--emerald-ink);
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.jj-pill-emerald svg { color: var(--emerald-ink); stroke: var(--emerald-ink); }
+.jj-pill-emerald:hover {
+  background-image: var(--gradient-ink);
+  background-color: transparent;
+  border-color: rgba(184, 149, 85, 0.65);
+  color: #FFFFFF;
+}
+.jj-pill-emerald:hover svg { color: #FFFFFF; stroke: #FFFFFF; }
 
 /* 1) Repaint the locked CTA primitives + all global dark-box surfaces
       with the emerald ink gradient so the brand is consistent. Problem
