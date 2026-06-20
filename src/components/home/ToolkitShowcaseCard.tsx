@@ -145,7 +145,7 @@ export function ToolkitShowcaseCard() {
                   style={{
                     color: "#FFFFFF",
                     WebkitTextFillColor: "#FFFFFF",
-                    ...(isActive ? { backgroundImage: "linear-gradient(180deg, #10b981 0%, #047857 100%)" } : {}),
+                    ...(isActive ? { backgroundImage: "var(--jj-emerald-light-ombre)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.22), 0 0 18px rgba(52,211,153,0.20)" } : {}),
                   }}
                   data-no-contrast-guard
                   className={`allow-white shrink-0 inline-flex items-center gap-2 px-4 md:px-5 py-3 text-[13px] font-semibold whitespace-nowrap rounded-none transition-colors duration-200 ${
