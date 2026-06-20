@@ -236,6 +236,8 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
             initial={{ scale: 0.96, y: 12, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 8, opacity: 0 }}
+            data-surface="light"
+            data-jbj-guided-tour-card
             className="relative w-full max-w-md my-auto bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl overflow-hidden"
           >
             <button
