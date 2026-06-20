@@ -376,9 +376,14 @@ const PropertyMeasurement = () => {
         }
       `}</style>
 
-      {/* Hero Section */}
-      <div className="relative py-20 md:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/40 via-black to-teal-900/30" />
+      {/* Hero Section — ink-emerald gradient (global brand dark surface) */}
+      <div
+        data-ink-emerald
+        data-hero-dark
+        className="relative py-20 md:py-28 overflow-hidden"
+        style={{ backgroundImage: "var(--gradient-ink)" }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/40 via-transparent to-teal-900/30" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(16,185,129,0.18),transparent_55%)]" />
 
         <div className="container mx-auto px-4 relative z-10">

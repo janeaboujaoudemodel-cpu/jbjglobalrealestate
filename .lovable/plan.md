@@ -1,78 +1,117 @@
-# Brand Repaint Finalization + Compare Units Fix + Loader Centering
+## Goal
 
-## 1. Finish global brand repaint (champagne / gold / ink only)
+Replace every dark-surface "black" (`#0A0A0A` / `#1A1A1A` / `#000`) used on **CTAs, cards, hero bands, dropdowns, dark sections** with the new brand ink gradient:
 
-Sweep every remaining surface still rendering neon, gradient, blue, purple-on-page, teal, or transitional colors and force them onto the locked palette (`#FDFBF7` page, `#F7F2EA` surface, `#EFE6D6` raised, `#B89555` 1px hairline gold, `#1A1A1A` ink, AI purple ONLY inside small `IconTile`s).
+```text
+linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000 100%)
+border: 1px solid rgba(16,185,129,0.32)
+accent icons: #6EE7B7
+gold hairline #B89555 stays on top as today
+```
 
-Scope (audited list — anything found off-brand gets repainted, never deleted):
-- Owner dashboard inner pages (Communication Hub, Marketing Hub, AI Tools Control Panel, Meeting Summarizer, Note Center, Founders Activity, Audit, Inbox, CRM sub-tabs).
-- Broker portal, Developer portal, Investor hub inner panels.
-- Toolkit: Photo, Video, Voice, PDF, Brochure, Stamp, Scan&Sign, Virtual Staging, Background AI, Beauty Filters, Image Resize, Captions, Property Suite, Corporate Suite, Creative Suite, AI Video Studio shell + preview canvases.
-- Document Studio editor chrome, AI Presentation Engine, Brand Palette Hub, Market Intelligence subpages, Guides/FAQ shells (keep neon ONLY where `data-neon-page` rule already allows).
-- All exported artifacts: PDF reports (CRM, DLD, Brochure, Market Report, Company Profile), Excel exports' branded header, email templates, presentation decks — strip blue/purple gradients from cover pages, headers, footers, and section dividers; replace with champagne band + gold hairline + ink.
-- Any remaining `bg-gradient-to-*` / `from-*-500` / hardcoded neon hex caught by the PASS 8 guard gets fixed at source (so the guard is belt-and-suspenders, not the sole defense).
+Body text ink (`#1A1A1A`), the 88px header/sidebar L-frame, and the footer obsidian band **stay as today** (per your answer: dark surfaces + CTAs only).
 
-For each file: replace off-brand classes/hexes with brand tokens, keep all features/content intact (No-Removal policy), verify dark CTAs stay clean black with `data-cta="dark"` / `data-allow-dark-cta`, verify text contrast passes the white-on-light + same-tone guards.
+---
 
-## 2. Remove `/quiz` entirely — one canonical URL per tool
+## 1. Add canonical tokens (single source of truth)
 
-- Delete the `/quiz` and `/quiz-results` routes from `src/routes/PublicRoutes.tsx` (no redirect — fully removed per user request).
-- Move the page component to `src/pages/AIHomeFinder.tsx` (rename from `Quiz.tsx`) and results to `AIHomeFinderResults.tsx`. Update all imports.
-- Grep every reference to `/quiz`, `Quiz`, "AI Property Finder", "Property Quiz" across:
-  - `src/routes/*`, `src/config/*` (royalToolsRegistry, globalSearchIndex, publicToolAccess, mainLayoutRoutes, allToolsSuiteConfig, shortcutsConfig, accountShortcuts),
-  - `src/components/header/*`, `MegaMenu*`, `GlobalVerticalNav`, `Footer`, `Sitemap.tsx`,
-  - `public/sitemap.xml`, `public/robots.txt`, `scripts/generate-sitemap.ts`, `src/seo/*`,
-  - `src/translations/*` (15 locales),
-  - email templates, presentation links, CRM tool cards.
-- Canonical name everywhere: **AI Home Finder** at `/ai-home-finder`.
-- Update memory file `mem://constraints/tool-name-canonicality` to reflect "no redirect — `/quiz` removed".
+`src/index.css` — add to `:root`:
 
-## 3. Fix Compare Units (`/compare?mode=units`)
+```css
+--ink-emerald-1: #064E3B;
+--ink-emerald-2: #042c1c;
+--ink-emerald-3: #000000;
+--ink-emerald-ring: rgba(16,185,129,0.32);
+--ink-emerald-accent: #6EE7B7;
+--gradient-ink: linear-gradient(135deg, var(--ink-emerald-1) 0%, var(--ink-emerald-2) 55%, var(--ink-emerald-3) 100%);
+--gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
+```
 
-Currently broken: clicking the Units tab renders empty / search inert / manual add inert.
+`src/lib/brand-tokens.ts` — append `BRAND.inkEmerald = { from, mid, to, ring, accent, gradient }` so JS/canvas/jsPDF can use it too.
 
-Investigation + fix plan:
-- Read `src/pages/Compare.tsx`, `src/components/compare/CompareModeToggle.tsx`, `src/components/compare/units/UnitCompareShell.tsx`, `ProjectPicker.tsx`, `AddUnitDialog.tsx`, `PaymentPlanEditor.tsx`, `UnitComparisonTable.tsx`, `CompareAccessGate.tsx`.
-- Confirm role gate (broker + owner only) is firing correctly and not silently blanking the page for the current user. Show a clear "Brokers/Owners only" gate card instead of empty render.
-- Repair `ProjectPicker` search: ensure the Supabase query (likely `projects` table with `is_published=true`) actually fires, returns results, debounces input, and surfaces no-results state.
-- Repair `AddUnitDialog` manual flow: validate required fields (project, unit type, bedrooms, size, price), wire submit handler to push into local state + `UnitComparisonTable`. Make sure dialog actually closes and the row appears.
-- Verify the smart Payment Plan engine (down/milestone/monthly-till-handover/on-handover/post-handover) generates the schedule when a unit is added.
+---
 
-## 4. Fix Compare Projects "Add manually" + "Add by link"
+## 2. Rewrite the CTA primitives in place
 
-`AddProjectDialog.tsx` already has the three tabs (Link / Upload / Manual). Reported broken end-to-end.
+`src/index.css` — repaint the locked classes without renaming them, so all `data-cta="dark"` buttons site-wide flip automatically:
 
-Plan:
-- Manual: confirm `onAdd` is wired into `Compare.tsx`'s state setter, the new project row renders in `UnitComparisonTable`/projects table, and the dialog dismisses.
-- Link: verify `compare-extract` edge function exists, is deployed, has correct CORS, and uses Lovable AI gateway. Fix any 404/400; surface real error text in the toast.
-- File upload: same edge function path; confirm base64 + mimeType branch works for PDF + image; add a 30s timeout + retry hint.
+- `.jj-cta-dark` background → `var(--gradient-ink)`; hover → `var(--gradient-ink-hover)`; keep white text, keep 1px gold hairline (`border: 1px solid rgba(184,149,85,.55)`).
+- Global black-CTA repaint guard (currently forces `#0A0A0A` / `#1F1F1F`) → forces `var(--gradient-ink)` / `var(--gradient-ink-hover)`. Same opt-outs (`data-allow-dark-cta`, `data-on-dark`, `.allow-white`, `data-no-contrast-guard`) keep working.
+- Black Box Lock (`bg-[#0A0A0A]`, `bg-[#1F1F1F]`, `bg-[#1A1A1A]`, `bg-black`) → background becomes the gradient; white text/icons rule unchanged.
 
-Improvements (small, scoped — no scope creep):
-- Add a 4th tab "From JBJ catalog" — quick picker of already-published JBJ projects so brokers can compare existing listings without re-entering data.
-- Show pre-fill preview before commit (so AI extraction errors are correctable).
-- Persist comparison set to `sessionStorage` so a page refresh doesn't wipe the table.
+This single edit cascades to every page that already uses the locked primitives — no per-file sweep needed for buttons, dark cards, dropdowns, modals.
 
-## 5. Loader centering — center inside the content area, not the full viewport
+---
 
-Today the page-load logo overlay covers the full screen and centers against the viewport, so on Owner shell pages it appears off-center (shifted left of the visible content area because the 64-px / 256-px sidebar is on the left).
+## 3. Fix Property Measurement hero (selected element)
 
-Plan:
-- Find the loader component (`PageLoader` / `LoadingScreen` / equivalent — likely under `src/components/loader/` or used by `OwnerDashboardShell`/`MainLayout`).
-- Change positioning from `fixed inset-0` to `absolute inset-0` and mount it INSIDE the `<main>` content area (after the sidebar/header), so its centering math respects the L-shaped frame (88px header + sidebar offset).
-- Keep z-index above page content but below header/sidebar so the brand chrome stays visible during load.
-- Two variants:
-  - Owner shell: loader fills the area to the right of the sidebar and below the 88px header.
-  - Public site: loader fills the area below the 88px global header.
+`src/pages/PropertyMeasurement.tsx`:
 
-## Technical notes
+- Hero outer wrapper currently champagne → repaint with `var(--gradient-ink)` + `1px solid var(--ink-emerald-ring)`.
+- "Property Measurement" headline already white → now legible on the new emerald hero.
+- Subtitle, "FREE AI Tool" pill, Fullscreen button get the same on-dark treatment (white + gold hairline).
+- The 3 selected cards stay as-is — they already use the exact gradient.
 
-- All edits respect: No-Removal policy, No-Gray-Surfaces, No-Gold-Fills, CTA primitive system, locked signature/divider primitives, gold-hairline-scope-rule, contrast guards (PASS 5/6/7/8).
-- After repaint, run `scripts/contrast/check-white-on-light.mjs`, `check-same-tone.mjs`, `check-faded-gold.mjs`, `scripts/theme/champagne-sweep.mjs` to catch regressions.
-- Update `mem://constraints/tool-name-canonicality` (remove `/quiz` redirect clause) and add `mem://features/compare/units-and-manual-add-fix` documenting the repaired flows.
-- Verify visually with browser--view_preview on: `/compare`, `/compare?mode=units`, `/ai-home-finder`, `/mortgage-calculator`, `/property-evaluator`, `/owner` shell loading state, and two toolkit pages.
+---
 
-## Out of scope
+## 4. Audit + repaint the other tool/hero pages with the same white-on-light bug
 
-- Backend schema changes.
-- New tool creation.
-- Pricing / payment-plan logic changes beyond wiring fixes.
+Pages flagged for the same dark-hero treatment (titles currently fight the white-on-light guard):
+
+- `src/pages/VideoMeeting.tsx`
+- `src/pages/ScanSignDocuments.tsx`
+- `src/pages/JBJDesignStudio.tsx`
+- `src/pages/PdfFromPhotos.tsx`
+- `src/pages/BusinessCardScanner.tsx`
+- `src/pages/AICalendar.tsx`, `AIFinancialAdvisor.tsx`, `AIPersonalShopper.tsx` (already touched in prior batches — re-verify)
+
+Each hero section gets the same emerald gradient wrapper + `data-hero-dark` so the white headline is intentional and the contrast guard skips it.
+
+---
+
+## 5. Update CSS guards
+
+`src/index.css` — the dominant "white-on-light" guard (PASS 6/7) currently flips any white text on light bg to ink. Add an exception: when the ancestor carries `[data-ink-emerald]` OR `[data-hero-dark]`, the guard skips — because the gradient is dark enough for white text.
+
+The dark-CTA guard's hex allowlist gets the new tokens added so it doesn't accidentally repaint emerald back to black.
+
+---
+
+## 6. Save the new brand token to memory
+
+Two memory writes:
+
+- `mem://style/color-palette/ink-emerald-gradient-standard` — the canonical recipe (hexes, gradient string, ring, accent, where it applies, what it does NOT replace).
+- `mem://index.md` — update the Core "Theme" line: dark surfaces use `--gradient-ink` (emerald) instead of solid `#0A0A0A`. Update the Black-CTA Global + Black Box Lock entries to point at the new gradient.
+
+---
+
+## What is explicitly NOT changing
+
+- Body text ink (`#1A1A1A`) stays — kept per your scope answer.
+- Champagne page background (`#FDFBF7`), surface (`#F7F2EA`), raised (`#EFE6D6`) — untouched.
+- Gold `#B89555` hairline/accent — preserved everywhere; no replacement.
+- 88px header / sidebar L-frame — untouched.
+- Footer obsidian — untouched (per "dark surfaces + CTAs only" scope).
+- Listing card layout, sale-status badges, price pill, developer link — untouched.
+- AI purple theme — untouched (AI tools keep their vivid purple identity).
+- Semantic data viz (Emerald/Red/Blue/Amber) — untouched.
+
+---
+
+## Technical surfaces touched
+
+```text
+src/index.css                              # tokens + repaint .jj-cta-dark + guards
+src/lib/brand-tokens.ts                    # BRAND.inkEmerald
+src/pages/PropertyMeasurement.tsx          # hero band
+src/pages/VideoMeeting.tsx                 # hero band
+src/pages/ScanSignDocuments.tsx            # hero band
+src/pages/JBJDesignStudio.tsx              # hero band
+src/pages/PdfFromPhotos.tsx                # hero band
+src/pages/BusinessCardScanner.tsx          # hero band
+mem://style/color-palette/ink-emerald-gradient-standard   # new
+mem://index.md                             # Core + black-CTA + black-box-lock lines updated
+```
+
+Because the CTA primitives + black-box-lock are central, this single pass cascades to ~hundreds of components without touching them individually. Per-page work is limited to the 6 hero bands above.

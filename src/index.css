@@ -6392,3 +6392,74 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
     color: #1A1A1A !important;
   }
 }
+
+/* ============================================================
+   INK-EMERALD GRADIENT — global ink replacement (PASS 9)
+   ============================================================
+   Replaces flat #0A0A0A / #1A1A1A / #1F1F1F / #000 on
+   dark-CTA primitives, dark cards, dark boxes, dropdowns,
+   and any opt-in [data-ink-emerald] / [data-hero-dark] wrapper
+   with the brand emerald gradient. Body text ink, header,
+   sidebar, and footer obsidian are NOT touched.
+   ============================================================ */
+
+:root {
+  --ink-emerald-1: #064E3B;
+  --ink-emerald-2: #042c1c;
+  --ink-emerald-3: #000000;
+  --ink-emerald-ring: rgba(16, 185, 129, 0.32);
+  --ink-emerald-accent: #6EE7B7;
+  --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
+  --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
+}
+
+/* 1) Repaint the locked CTA primitives + global dark-box surfaces.
+      background-image wins over the existing background-color rules
+      without renaming any class. White text + gold hairline preserved. */
+html body :is(
+  .jj-cta-dark,
+  .jj-navy-cta,
+  [data-cta="dark"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  .surface-dark,
+  .surface-ink,
+  .surface-navy,
+  [data-ink-emerald],
+  [data-hero-dark],
+  [class~="bg-[#0A0A0A]"],
+  [class~="bg-[#1A1A1A]"],
+  [class~="bg-[#1F1F1F]"],
+  [class~="bg-black"]
+):not([data-ink-emerald-opt-out]):not(header):not(header *):not(footer):not(footer *):not(aside):not(aside *):not([data-app-chrome]):not([data-app-chrome] *) {
+  background-image: var(--gradient-ink) !important;
+  background-color: transparent !important;
+  border-color: rgba(184, 149, 85, 0.55) !important;
+}
+
+html body :is(
+  .jj-cta-dark,
+  .jj-navy-cta,
+  [data-cta="dark"]
+):not([data-ink-emerald-opt-out]):hover {
+  background-image: var(--gradient-ink-hover) !important;
+}
+
+/* 2) White-on-light contrast guard exception: any descendant of an
+      [data-ink-emerald] or [data-hero-dark] surface keeps white text
+      because the emerald gradient is dark enough for AA contrast. */
+html body :is([data-ink-emerald], [data-hero-dark]) :where(
+  h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em,
+  small, time, dt, dd, th, td, figcaption, blockquote, button,
+  svg, [class*="lucide"]
+) {
+  color: #FFFFFF !important;
+}
+html body :is([data-ink-emerald], [data-hero-dark]) :where(svg, [class*="lucide"]) {
+  stroke: currentColor !important;
+}
+
+/* 3) Accent helpers for icons / pills sitting on the ink-emerald surface. */
+.ink-emerald-accent { color: var(--ink-emerald-accent) !important; }
+.ink-emerald-ring   { border-color: var(--ink-emerald-ring) !important; }
