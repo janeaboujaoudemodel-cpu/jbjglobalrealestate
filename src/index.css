@@ -6411,9 +6411,10 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --ink-emerald-accent: #6EE7B7;
   --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
-  /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons). */
-  --emerald-ink: #064E3B;
-  --emerald-ink-soft: #0B5A45;
+  /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
+     Slightly brighter than --ink-emerald-1 so it reads as emerald on champagne. */
+  --emerald-ink: #047857;
+  --emerald-ink-soft: #0F8B6A;
 }
 
 /* Title + accent utilities — opt-in only, never global. */
