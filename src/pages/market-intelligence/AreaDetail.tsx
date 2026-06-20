@@ -25,7 +25,7 @@ const MarketAreaDetail = () => {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-white text-2xl font-bold mb-4">Area Not Found</h1>
+          <h1 className="text-[#1A1A1A] text-2xl font-bold mb-4">Area Not Found</h1>
           <Link to="/market-intelligence/areas">
             <Button variant="outline" className="border-[#B89555] text-[#1A1A1A]">
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -40,7 +40,7 @@ const MarketAreaDetail = () => {
   const getTrendBadge = (trend: string) => {
     switch (trend) {
       case 'bullish':
-        return <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 text-lg px-4 py-1">Bullish</Badge>;
+        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45 text-lg px-4 py-1">Bullish</Badge>;
       case 'bearish':
         return <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
       default:
@@ -136,7 +136,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <BarChart3 className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Price Index</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Price Index</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.priceIndex}</p>
               </CardContent>
             </Card>
@@ -145,7 +145,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Home className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Rental Index</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Rental Index</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.rentalIndex}</p>
               </CardContent>
             </Card>
@@ -154,7 +154,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Users className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Demand Score</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Demand Score</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.demandScore}%</p>
               </CardContent>
             </Card>
@@ -163,7 +163,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <p className="text-white/90 text-sm mb-1">Supply Score</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-1">Supply Score</p>
                 <p className="text-[#1A1A1A] text-3xl font-bold">{area.supplyScore}%</p>
               </CardContent>
             </Card>
