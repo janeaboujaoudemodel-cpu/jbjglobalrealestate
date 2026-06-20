@@ -117,7 +117,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
             the SAME emerald/black gradient surface — NO color split between segments.
             NO gold dividers, NO gold borders. Animated emerald glow border wraps the bar. */}
-        <div className="jj-emerald-glow-wrap relative">
+        <div className="jj-emerald-glow-wrap jj-emerald-pill relative rounded-2xl">
         <div
           data-surface="dark"
           data-ink-emerald
@@ -125,9 +125,9 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           className="jj-hero-search-bar group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl overflow-hidden"
           style={{
             backgroundImage: "var(--jj-emerald-ombre)",
-            border: "1px solid rgba(255,255,255,0.10)",
+            border: "0",
             boxShadow:
-              "0 18px 42px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.10)",
+              "0 14px 30px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.10)",
           }}
         >
           {/* INPUT segment — transparent on emerald, white text + animated placeholder */}
