@@ -1161,21 +1161,21 @@ const Quiz = () => {
   // Quiz Questions Screen
   return (
     <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
       {/* Header */}
-      <div className="border-b border-[#B89555]/30 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[#B89555]/25 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
               data-no-contrast-guard
-              className="allow-white text-white hover:text-white transition-colors flex items-center gap-2"
+              className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
             </button>
-            <div className="text-white/70 text-sm">
+            <div className="text-[#1A1A1A]/70 text-sm">
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
@@ -1188,6 +1188,7 @@ const Quiz = () => {
           </div>
         </div>
       </div>
+
 
       {/* Question Content with optional Preferences Sidebar */}
       <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
