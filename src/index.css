@@ -1082,6 +1082,16 @@ All colors MUST be HSL.
   margin-inline: auto;
 }
 
+/* ------------------------------------------------------------------
+   Global right-rail safe-area utility.
+   Apply via class `.jj-rail-safe` to any page wrapper that doesn't
+   already use .jj-page / .jj-band to guarantee the fixed Contact-Us
+   rail never crops the last column / chip / button on lg+ screens.
+   ------------------------------------------------------------------ */
+@media (min-width: 1024px) {
+  .jj-rail-safe { padding-right: var(--rail-safe-right); }
+}
+
 .jj-band--page    { background: #FDFBF7; }
 .jj-band--surface { background: #F7F2EA; }
 .jj-band--raised  { background: #EFE6D6; }
