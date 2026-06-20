@@ -35,9 +35,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
 );
 
 const TONE_BY_ACCENT: Record<string, string> = {
-  "text-emerald-700": "emerald",
   "text-[#1A1A1A]": "gold",
-  "text-amber-700": "amber",
   "text-foreground": "magenta",
 };
 
