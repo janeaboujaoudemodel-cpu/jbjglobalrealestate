@@ -4806,7 +4806,6 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 .jj-cta-dark,
 .jj-navy-cta,
 [data-cta="dark"],
-[data-allow-dark-cta],
 [data-icon-tile][data-surface="ink"],
 [data-icon-tile][data-surface="navy"],
 .surface-navy,
@@ -4824,8 +4823,6 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 .jj-cta-dark :where(span, svg, [class*="lucide"]),
 .jj-navy-cta :where(span, svg, [class*="lucide"]),
 [data-cta="dark"] :where(span, svg, [class*="lucide"]),
-
-[data-allow-dark-cta] :where(span, svg, [class*="lucide"]),
 [data-icon-tile][data-surface="ink"] :where(svg, [class*="lucide"]),
 [data-icon-tile][data-surface="navy"] :where(svg, [class*="lucide"]),
 .surface-navy :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
@@ -4836,6 +4833,16 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 [data-surface="dark"] :where(span, svg, [class*="lucide"]):not(.jj-card-inner *):not(.jj-layer-2 *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *),
 [data-hero-consultation-lock] :where(span, svg, [class*="lucide"]),
 [data-photo-copy-lock] :where(span, svg, [class*="lucide"]) {
+  color: hsl(var(--jj-on-dark)) !important;
+  -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
+  stroke: hsl(var(--jj-on-dark)) !important;
+  opacity: 1;
+}
+
+/* `data-allow-dark-cta` is only permission, not a paint rule. It may keep
+   white foregrounds only when the same element is an actual dark own-surface. */
+[data-allow-dark-cta]:is(.jj-cta-dark, .jj-navy-cta, [data-cta="dark"], [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, [class*="bg-[#0A0A0A]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]),
+[data-allow-dark-cta]:is(.jj-cta-dark, .jj-navy-cta, [data-cta="dark"], [data-surface="navy"], [data-surface="ink"], [data-surface="dark"], .surface-navy, .surface-ink, .surface-dark, [class*="bg-[#0A0A0A]"], [class*="bg-[#1A1A1A]"], [class*="bg-black"]) :where(span, svg, [class*="lucide"]) {
   color: hsl(var(--jj-on-dark)) !important;
   -webkit-text-fill-color: hsl(var(--jj-on-dark)) !important;
   stroke: hsl(var(--jj-on-dark)) !important;
