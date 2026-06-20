@@ -286,7 +286,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "pl-0" : "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]"} ${usesStandalonePortalChrome ? "" : "px-4 sm:px-6 lg:px-8"} ${needsHeaderSpacing && !isHomePage ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden bg-[#FDFBF7] min-h-screen transition-[padding-left,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "pl-0" : "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]"} ${needsHeaderSpacing && !isHomePage ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+          <div data-content-gutter={usesStandalonePortalChrome ? undefined : "1"} className={usesStandalonePortalChrome ? "" : "px-4 sm:px-6 lg:px-8"}>
 
 
           {layoutGuardTriggered && isServiceRoute && (
@@ -297,6 +298,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             </div>
           )}
           {children}
+          </div>
         </main>
       </GlobalContactGating>
       {/* Footer: full-bleed navy. NO left padding here so the navy background
