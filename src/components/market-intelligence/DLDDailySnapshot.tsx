@@ -210,19 +210,19 @@ export const DLDDailySnapshot = () => {
                   </span>
                 </div>
                 <div
-                  className="relative h-3 w-full overflow-hidden rounded-full"
-                  style={{ backgroundColor: "#EFE6D6", border: `1px solid ${GOLD}` }}
+                  data-no-contrast-guard
+                  className="dld-bar-track"
+                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: `1px solid ${GOLD}` }}
                 >
                   <motion.div
-                    className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: GOLD, transformOrigin: "left center" }}
+                    data-no-contrast-guard
+                    className="dld-bar-fill-gold"
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${mortgageShare / 100})` }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}
-                  >
-                    <div className="h-full w-full" />
-                  </motion.div>
+                  />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
                   <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} /> Mortgage · {mortgageShare}% of all transactions
