@@ -281,8 +281,10 @@ export const DLDDailySnapshot = () => {
                       <motion.div
                         data-no-contrast-guard
                         data-allow-dark-cta
-                        className="absolute inset-y-0 left-0 h-full rounded-full"
-                        style={{ backgroundColor: barColor, transformOrigin: "left center", width: "100%" }}
+                        className={`absolute inset-y-0 left-0 h-full rounded-full ${
+                          isLeader ? "dld-bar-fill-leader" : isPodium ? "dld-bar-fill-podium" : "dld-bar-fill-rest"
+                        }`}
+                        style={{ transformOrigin: "left center", width: "100%" }}
                         initial={{ transform: "scaleX(0)" }}
                         whileInView={{ transform: `scaleX(${pct})` }}
                         viewport={{ once: true }}
