@@ -1616,7 +1616,7 @@ const QuizResults = () => {
   };
 
   const handleConsultantWhatsApp = () => {
-    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Property Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
+    const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Home Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
     openLinkSync(`https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
     generatePdfInBackground();
     toast.success("Opening WhatsApp to JBJ — attach the downloaded PDF");

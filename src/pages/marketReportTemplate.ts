@@ -750,7 +750,7 @@ function getPage18AIMatchmaker(qrUrl: string, websiteUrl: string): string {
         <h3 style="margin-top: 0; margin-bottom: 10px;">Try Our AI Property Matchmaker</h3>
         <p>Scan this QR code or visit our website to access the complimentary AI assessment tool — created by the founder to help you find the perfect property fit.</p>
         <p style="color: #A8925A; font-weight: 600; margin-bottom: 14px;"><a href="${websiteUrl}/quiz" style="color: #A8925A; text-decoration: none;">${websiteUrl}/quiz</a></p>
-        <a href="${websiteUrl}/quiz" target="_blank" style="display: inline-block; background: linear-gradient(90deg, #A8925A, #C4AA6A); color: #1A1814; font-weight: 700; font-size: 13px; padding: 11px 24px; border-radius: 8px; text-decoration: none; letter-spacing: 0.03em;">Start AI Property Finder →</a>
+        <a href="${websiteUrl}/quiz" target="_blank" style="display: inline-block; background: linear-gradient(90deg, #A8925A, #C4AA6A); color: #1A1814; font-weight: 700; font-size: 13px; padding: 11px 24px; border-radius: 8px; text-decoration: none; letter-spacing: 0.03em;">Start AI Home Finder →</a>
       </div>
     </div>
     <div style="background: #FFFFFF; border: 1px solid rgba(168,146,90,0.25); border-radius: 14px; padding: 18px 22px; margin: 18px 0;">
