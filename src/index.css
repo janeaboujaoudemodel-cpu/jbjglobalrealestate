@@ -6350,14 +6350,15 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   }
 
   /* TEXT COLORS — neutralize off-brand text to ink (#1A1A1A).
-     Skips semantic data-viz, status pills, alerts, AI purple icon tiles. */
+     Excludes semantic families (amber/yellow/green/emerald/red/orange) which are
+     used on dark cards (KPIs, free badges, etc).  Also opt-out when ancestor is
+     a dark surface so legitimately dark cards keep light text. */
   html body :is(
     [class*="text-blue-"], [class*="text-indigo-"], [class*="text-violet-"],
     [class*="text-purple-"], [class*="text-fuchsia-"], [class*="text-pink-"],
-    [class*="text-rose-"], [class*="text-orange-"], [class*="text-yellow-"],
-    [class*="text-lime-"], [class*="text-teal-"], [class*="text-cyan-"],
-    [class*="text-sky-"]
-  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart] *):not(.recharts-wrapper *):not([data-kpi]):not([data-status-pill]):not([role="alert"]):not([role="status"]):not(.sonner-toast):not([data-sonner-toaster] *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *):not(.text-price-orange):not(.text-\[var\(--price-orange\)\]) {
+    [class*="text-rose-"], [class*="text-lime-"], [class*="text-teal-"],
+    [class*="text-cyan-"], [class*="text-sky-"]
+  ):not([data-allow-color]):not([data-no-contrast-guard]):not([data-chart] *):not(.recharts-wrapper *):not([data-kpi]):not([data-status-pill]):not([role="alert"]):not([role="status"]):not(.sonner-toast):not([data-sonner-toaster] *):not(.jj-ai-purple):not(.jj-ai-purple *):not(.ai-icon-tile):not(.ai-icon-tile *):not(.allow-color):not(.allow-color *):not(.text-price-orange):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"] *):not([data-on-dark] *):not([data-allow-dark-cta] *):not(.jj-cta-dark *) {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
     stroke: #1A1A1A !important;
