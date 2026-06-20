@@ -420,6 +420,7 @@ function SegmentedPill({
           ? {
               background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
               color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
               ["--jj-pill-fg" as any]: "#FFFFFF",
               border: `1px solid ${theme.primaryDeep}`,
               boxShadow: `0 10px 24px -12px ${theme.primary}99`,
@@ -427,6 +428,7 @@ function SegmentedPill({
           : {
               backgroundColor: "#FFFFFF",
               color: inactiveFg,
+              WebkitTextFillColor: inactiveFg,
               ["--jj-pill-fg" as any]: inactiveFg,
               border: `2px solid ${inactiveFg}`,
             }
