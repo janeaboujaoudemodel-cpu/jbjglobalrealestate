@@ -121,19 +121,19 @@ const AdminTrainingGuide = () => {
                 </p>
                 <ul className="space-y-2 ml-4">
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Add new property listings from developers</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Categorize properties correctly (Off-Plan, Ready, Secondary, Commercial, Rental, Land)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Upload brochures, floor plans, and images</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Verify and approve client-submitted listings</span>
                   </li>
                 </ul>
@@ -284,7 +284,7 @@ const AdminTrainingGuide = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Off-Plan */}
-                  <div className="p-4 bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <Calendar className="w-5 h-5 text-[#1A1A1A]" />
                       <h4 className="text-white font-semibold">Off-Plan</h4>
@@ -300,9 +300,9 @@ const AdminTrainingGuide = () => {
                   </div>
 
                   {/* Ready */}
-                  <div className="p-4 bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/30 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A]" />
                       <h4 className="text-white font-semibold">Ready to Move</h4>
                     </div>
                     <p className="text-white/70 text-sm mb-2">
@@ -316,9 +316,9 @@ const AdminTrainingGuide = () => {
                   </div>
 
                   {/* Secondary/Resale */}
-                  <div className="p-4 bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/30 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Home className="w-5 h-5 text-blue-500" />
+                      <Home className="w-5 h-5 text-[#1A1A1A]" />
                       <h4 className="text-white font-semibold">Secondary / Resale</h4>
                     </div>
                     <p className="text-white/70 text-sm mb-2">
@@ -332,9 +332,9 @@ const AdminTrainingGuide = () => {
                   </div>
 
                   {/* Commercial */}
-                  <div className="p-4 bg-gradient-to-br from-purple-500/20 to-purple-500/5 border border-purple-500/30 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Building2 className="w-5 h-5 text-purple-500" />
+                      <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                       <h4 className="text-white font-semibold">Commercial</h4>
                     </div>
                     <p className="text-white/70 text-sm mb-2">
@@ -348,9 +348,9 @@ const AdminTrainingGuide = () => {
                   </div>
 
                   {/* Rental */}
-                  <div className="p-4 bg-gradient-to-br from-orange-500/20 to-orange-500/5 border border-orange-500/30 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <DollarSign className="w-5 h-5 text-orange-500" />
+                      <DollarSign className="w-5 h-5 text-[#1A1A1A]" />
                       <h4 className="text-white font-semibold">Rental</h4>
                     </div>
                     <p className="text-white/70 text-sm mb-2">
@@ -364,9 +364,9 @@ const AdminTrainingGuide = () => {
                   </div>
 
                   {/* Land/Plot */}
-                  <div className="p-4 bg-gradient-to-br from-amber-500/20 to-amber-500/5 border border-amber-500/30 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <MapPin className="w-5 h-5 text-amber-500" />
+                      <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                       <h4 className="text-white font-semibold">Land / Plot</h4>
                     </div>
                     <p className="text-white/70 text-sm mb-2">
@@ -469,21 +469,21 @@ const AdminTrainingGuide = () => {
               <CardContent className="space-y-4">
                 <ul className="text-white/85 space-y-3">
                   <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Use high-quality images</span>
                       <p className="text-white/90 text-sm">Minimum 1920x1080 pixels, well-lit and clear</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Include exterior and interior shots</span>
                       <p className="text-white/90 text-sm">Building facade, lobby, amenities, and unit interiors</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">First image is primary</span>
                       <p className="text-white/90 text-sm">Upload the best exterior/hero image first - it will be the thumbnail</p>
@@ -598,7 +598,7 @@ const AdminTrainingGuide = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-gold/20 to-gold/5 border-[#B89555]/30">
+            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-[#EFE6D6] rounded-full flex items-center justify-center flex-shrink-0">
