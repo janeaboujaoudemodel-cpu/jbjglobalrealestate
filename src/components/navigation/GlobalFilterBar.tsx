@@ -128,7 +128,9 @@ export default function GlobalFilterBar() {
     <div
       className="fixed top-[48px] right-0 z-[9996] hidden md:block transition-[left] duration-100 ease-out bg-[#FDFBF7] border-b border-[#B89555]/30 shadow-sm [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
     >
-      <div className="px-3 py-1">
+      {/* pr clears the fixed right Contact-Us rail so the last chip
+          ("Construction…") never gets cropped on narrow desktops. */}
+      <div className="pl-3 pr-3 lg:pr-[64px] py-1">
         <FilterShortcutBar
           variant="light"
           filters={filters}
@@ -139,3 +141,4 @@ export default function GlobalFilterBar() {
     </div>
   );
 }
+
