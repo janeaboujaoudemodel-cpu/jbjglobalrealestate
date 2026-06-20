@@ -968,7 +968,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               {Array.isArray((aiAnalysis as any).negotiationLeverage) && (aiAnalysis as any).negotiationLeverage.length > 0 && (
                 <div>
                   <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-[#7C3AED]" />
+                    <Zap className="w-5 h-5 text-[#B89555]" />
                     Negotiation Leverage
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -992,7 +992,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                         <ul className="space-y-2">
                           {(n.talkingPoints || []).map((t: string, ti: number) => (
                             <li key={ti} className="text-sm text-white/85 leading-relaxed flex gap-2">
-                              <span className="text-[#7C3AED] font-semibold">{ti + 1}.</span>
+                              <span className="text-[#B89555] font-semibold">{ti + 1}.</span>
                               <span>{t}</span>
                             </li>
                           ))}
