@@ -330,7 +330,7 @@ const Quiz = () => {
     if (prev.step === "results" && prev.resultSlugs?.length) {
       // Already finished — jump straight to results
       navigate(
-        `/quiz-results?projects=${prev.resultSlugs.join(",")}&session=${prev.sessionId}&free=true`,
+        `/ai-home-finder-results?projects=${prev.resultSlugs.join(",")}&session=${prev.sessionId}&free=true`,
         { replace: true }
       );
       return;
@@ -818,7 +818,7 @@ const Quiz = () => {
 
       const slugs = top.map((p) => p.slug).join(",");
 
-      // Persist completed session so refresh on /quiz-results restores everything
+      // Persist completed session so refresh on /ai-home-finder-results restores everything
       writeMatchmakerSession({
         sessionId,
         step: "results",
@@ -837,7 +837,7 @@ const Quiz = () => {
         { duration: 4000, position: "bottom-center" }
       );
       navigate(
-        `/quiz-results?projects=${slugs}&session=${sessionId}&tier=${tier}&free=true`
+        `/ai-home-finder-results?projects=${slugs}&session=${sessionId}&tier=${tier}&free=true`
       );
     } catch (error) {
       console.error("Error saving quiz:", error);
@@ -852,7 +852,7 @@ const Quiz = () => {
         resultTiers: Array(Math.min(3, recommendations.length)).fill(tier) as any,
       });
       toast.success("Your AI-selected properties are ready!", { duration: 4000, position: "bottom-center" });
-      navigate(`/quiz-results?projects=${slugs}&tier=${tier}&free=true`);
+      navigate(`/ai-home-finder-results?projects=${slugs}&tier=${tier}&free=true`);
     } finally {
       setIsSubmitting(false);
     }
