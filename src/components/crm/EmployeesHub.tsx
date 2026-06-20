@@ -794,7 +794,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                                   {employee.email && (
                                     <Button 
                                       size="sm"
-                                      className="h-9 px-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+                                      className="h-9 px-3 jj-cta-dark font-medium shadow-md transition-all duration-200 hover:scale-105"
                                       onClick={(e) => { e.stopPropagation(); handleEmail(employee); }}
                                     >
                                       <Mail className="h-4 w-4 mr-1.5" />
@@ -803,7 +803,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                                   )}
                                   <Button 
                                     size="sm"
-                                    className="h-9 px-3 bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white font-medium shadow-md transition-all duration-200 hover:scale-105"
+                                    className="h-9 px-3 jj-cta-dark font-medium shadow-md transition-all duration-200 hover:scale-105"
                                     onClick={(e) => { e.stopPropagation(); handleVideoMeeting(employee); }}
                                   >
                                     <Video className="h-4 w-4 mr-1.5" />

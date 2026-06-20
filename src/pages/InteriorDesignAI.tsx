@@ -267,11 +267,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   ];
 
   const body = (
-    <section className="relative w-full min-h-screen" style={{ background: "#0D0820" }}>
+    <section className="relative w-full min-h-screen" style={{ background: "#FDFBF7" }}>
       {/* Hero — suppressed when embedded inside a Suite tab */}
       {!embedded && (
         <div className="relative py-12 md:py-16 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#0A0A0A] to-[#0A0A0A]" />
+          <div className="absolute inset-0 bg-[#FDFBF7]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(184,149,85,0.22),transparent_55%),radial-gradient(circle_at_75%_60%,rgba(184,149,85,0.18),transparent_55%)]" />
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
@@ -280,17 +280,17 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Badge className="mb-4 bg-gradient-to-r from-[#EFE6D6] via-[#F7F2EA] to-[#EFE6D6] text-white border border-[#B89555]/40 px-4 py-2">
+              <Badge className="mb-4 bg-gradient-to-r from-[#EFE6D6] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 px-4 py-2">
                 <Palette className="w-4 h-4 mr-2" />
                 AI-Powered Design
               </Badge>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-3">
                 AI Interior{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B89555] via-[#B89555] to-[#B89555]">
                   Design Studio
                 </span>
               </h1>
-              <p className="text-white text-sm md:text-base max-w-xl mx-auto" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.95 }}>
+              <p className="text-[#1A1A1A]/80 text-sm md:text-base max-w-xl mx-auto">
                 Upload a photo or describe your space. Our AI generates stunning designs instantly.
               </p>
             </motion.div>
@@ -307,7 +307,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             placeholder="Project name (optional)"
-            className="bg-[#FDFBF7]/60 border-[#B89555]/30 text-white placeholder:text-[#1A1A1A]/70 max-w-xs focus:border-[#B89555]/50"
+            className="bg-[#FDFBF7]/60 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 max-w-xs focus:border-[#B89555]/50"
           />
           <div className="flex gap-2">
             {modeConfig.map(m => {
@@ -320,7 +320,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                     active
                       ? 'bg-[#EFE6D6]/15 border-[#B89555]/50 text-[#1A1A1A]'
-                      : 'bg-[#FDFBF7]/60 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+                      : 'bg-[#FDFBF7]/60 border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#1A1A1A] hover:text-[#1A1A1A]/85'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -353,7 +353,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <Button
                       onClick={() => { setGeneratedImage(null); setGeneratedNotes(''); }}
                       variant="outline"
-                      className="border-[#1A1A1A] text-white/70 hover:bg-[#1A1A1A]"
+                      className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
                     >
                       New Design
                     </Button>
@@ -364,7 +364,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   <img src={uploadedPhoto} alt="Uploaded" className="w-full h-auto max-h-[500px] object-contain" />
                   <button
                     onClick={() => { setUploadedPhoto(null); setUploadedFile(null); }}
-                    className="absolute top-3 right-3 p-2 bg-red-500/80 rounded-full text-white hover:bg-red-600"
+                    className="absolute top-3 right-3 p-2 bg-red-500/80 rounded-full text-[#1A1A1A] hover:bg-red-600"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -391,10 +391,10 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#EFE6D6]/15 flex items-center justify-center">
                       <Upload className="w-8 h-8 text-[#1A1A1A]" />
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">
+                    <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                       Upload a Photo
                     </h3>
-                    <p className="text-white/70 text-sm mb-4">
+                    <p className="text-[#1A1A1A]/70 text-sm mb-4">
                       Drag & drop or click to upload a room photo
                     </p>
                     <div className="flex gap-3 justify-center">
@@ -418,7 +418,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   </div>
                   {/* Or generate from description */}
                   <div className="mt-6 text-center">
-                    <p className="text-white/90 text-xs mb-3">— or generate from description only —</p>
+                    <p className="text-[#1A1A1A]/90 text-xs mb-3">— or generate from description only —</p>
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing || !designStyle}
@@ -436,11 +436,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             {isProcessing && (
               <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-6 text-center">
                 <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#B89555] to-[#B89555] flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-white animate-pulse" />
+                  <Sparkles className="w-6 h-6 text-[#1A1A1A] animate-pulse" />
                 </div>
-                <p className="text-white font-medium mb-3">Creating Your Design...</p>
+                <p className="text-[#1A1A1A] font-medium mb-3">Creating Your Design...</p>
                 <Progress value={progress} className="h-2 max-w-xs mx-auto" />
-                <p className="text-xs text-white/90 mt-2">{progress}%</p>
+                <p className="text-xs text-[#1A1A1A]/90 mt-2">{progress}%</p>
               </div>
             )}
 
@@ -463,14 +463,14 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-[#1A1A1A]/30 transition-colors">
                   <div className="flex items-center gap-2">
                     <Wand2 className="w-4 h-4 text-[#1A1A1A]" />
-                    <span className="text-sm font-semibold text-white">Design Style</span>
+                    <span className="text-sm font-semibold text-[#1A1A1A]">Design Style</span>
                     {designStyle && (
                       <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 text-xs">
                         {designStyles.find(s => s.id === designStyle)?.label}
                       </Badge>
                     )}
                   </div>
-                  {styleOpen ? <ChevronUp className="w-4 h-4 text-white/90" /> : <ChevronDown className="w-4 h-4 text-white/90" />}
+                  {styleOpen ? <ChevronUp className="w-4 h-4 text-[#1A1A1A]/90" /> : <ChevronDown className="w-4 h-4 text-[#1A1A1A]/90" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="px-4 pb-4 grid grid-cols-2 gap-2">
@@ -480,8 +480,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         onClick={() => setDesignStyle(style.id)}
                         className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
                           designStyle === style.id
-                            ? 'bg-[#EFE6D6]/15 border-[#B89555]/50 text-white'
-                            : 'bg-[#F7F2EA]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]'
+                            ? 'bg-[#EFE6D6]/15 border-[#B89555]/50 text-[#1A1A1A]'
+                            : 'bg-[#F7F2EA]/50 border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#1A1A1A]'
                         }`}
                       >
                         <span className="mr-1.5">{style.emoji}</span>
@@ -499,14 +499,14 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-[#1A1A1A]/30 transition-colors">
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-gradient-to-r from-[#B89555] via-[#B89555] to-[#B89555]" />
-                    <span className="text-sm font-semibold text-white">Color Palette</span>
+                    <span className="text-sm font-semibold text-[#1A1A1A]">Color Palette</span>
                     {colorPalette && (
                       <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 text-xs">
                         {colorPalettes.find(p => p.id === colorPalette)?.name}
                       </Badge>
                     )}
                   </div>
-                  {paletteOpen ? <ChevronUp className="w-4 h-4 text-white/90" /> : <ChevronDown className="w-4 h-4 text-white/90" />}
+                  {paletteOpen ? <ChevronUp className="w-4 h-4 text-[#1A1A1A]/90" /> : <ChevronDown className="w-4 h-4 text-[#1A1A1A]/90" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="px-4 pb-4 grid grid-cols-2 gap-2">
@@ -525,7 +525,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                             <div key={i} className="w-5 h-5 rounded-full border border-[#1A1A1A]" style={{ backgroundColor: c }} />
                           ))}
                         </div>
-                        <span className="text-[10px] text-white/85">{palette.name}</span>
+                        <span className="text-[10px] text-[#1A1A1A]/85">{palette.name}</span>
                       </button>
                     ))}
                   </div>
@@ -541,8 +541,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   <Bot className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-sm">Design Assistant</h3>
-                  <p className="text-[10px] text-white/90">Describe edits or new ideas</p>
+                  <h3 className="font-semibold text-[#1A1A1A] text-sm">Design Assistant</h3>
+                  <p className="text-[10px] text-[#1A1A1A]/90">Describe edits or new ideas</p>
                 </div>
               </div>
 
@@ -556,7 +556,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       {msg.role === 'user' ? <User className="w-3 h-3 text-[#1A1A1A]" /> : <Bot className="w-3 h-3 text-[#1A1A1A]" />}
                     </div>
                     <div className={`max-w-[85%] rounded-xl p-3 ${
-                      msg.role === 'user' ? 'bg-[#EFE6D6]/15 text-white' : 'bg-[#F7F2EA]/80 text-gray-200'
+                      msg.role === 'user' ? 'bg-[#EFE6D6]/15 text-[#1A1A1A]' : 'bg-[#F7F2EA]/80 text-gray-200'
                     }`}>
                       {msg.image && (
                         <img src={msg.image} alt="Design" className="rounded-lg mb-2 max-h-[200px] w-auto" />
@@ -576,7 +576,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Describe changes: 'make the sofa white' or 'add gold accents'..."
-                    className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-[#B89555]/50"
+                    className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-[#B89555]/50"
                     disabled={isProcessing}
                   />
                   <Button
@@ -597,12 +597,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
             {/* Additional Notes */}
             <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-4">
-              <label className="text-xs font-medium text-white/70 mb-2 block">Additional Notes (Optional)</label>
+              <label className="text-xs font-medium text-[#1A1A1A]/70 mb-2 block">Additional Notes (Optional)</label>
               <Textarea
                 value={customNotes}
                 onChange={(e) => setCustomNotes(e.target.value)}
                 placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[60px] text-xs focus:border-[#B89555]/50"
+                className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 min-h-[60px] text-xs focus:border-[#B89555]/50"
                 maxLength={500}
               />
             </div>
