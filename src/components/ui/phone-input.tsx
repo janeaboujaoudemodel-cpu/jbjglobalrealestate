@@ -579,9 +579,13 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 aria-haspopup="dialog"
                 disabled={disabled}
                 data-phone-code-trigger
-                className={cn("w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors allow-white", buttonStyles)}
+                className={cn(
+                  "w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors",
+                  isLight ? "" : "allow-white",
+                  buttonStyles,
+                )}
                 data-no-contrast-guard
-                data-allow-dark-cta
+                {...(isLight ? {} : { "data-allow-dark-cta": true })}
                 style={isCareersPhoneInput
                   ? { backgroundColor: "#0A0A0A", border: "2px solid #0A0A0A", color: "#FFFFFF", boxShadow: "none" }
                   : isLight ? undefined : { backgroundColor: "#1A1A1A", color: "#FFFFFF" }}
