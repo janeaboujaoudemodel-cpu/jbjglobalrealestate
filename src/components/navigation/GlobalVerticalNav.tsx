@@ -1142,6 +1142,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
                         const isMenuOpen = activeMegaMenu === item.megaMenu;
+                        const subitemActive = activeMegaMenu ? isMenuOpen : isRouteActive(item.href);
                         const Icon = item.icon;
                         return (
                           <Link
@@ -1158,6 +1159,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               }
                             }}
                             data-sidebar-subitem
+                            data-active={subitemActive ? 'true' : undefined}
+                            aria-current={subitemActive ? 'page' : undefined}
                             data-no-contrast-guard
                             className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150"
                             style={{ color: '#1A1A1A' }}
