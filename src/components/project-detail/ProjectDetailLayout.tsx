@@ -251,6 +251,7 @@ export default function ProjectDetailLayout({
   const { formatSize, convertSize, unitLabel } = useAreaUnit();
   const [activeTab, setActiveTab] = useState("details");
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
+  const [brandedDeckBusy, setBrandedDeckBusy] = useState(false);
   const [captureDocType, setCaptureDocType] = useState<"brochure" | "floor_plan" | "payment_plan" | "images">("brochure");
   const [captureDocUrl, setCaptureDocUrl] = useState<string | undefined>();
   const [showStickyNav, setShowStickyNav] = useState(false);
@@ -818,42 +819,56 @@ export default function ProjectDetailLayout({
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <button
                 type="button"
+                disabled={brandedDeckBusy}
                 onClick={async () => {
-                  const { generateBrandedProjectDeck } = await import("@/utils/generateBrandedProjectDeck");
-                  const { data: brokerRow } = await supabase
-                    .from("crm_brokers")
-                    .select("full_name, personal_email, personal_phone, phone_e164, logo_url, headshot_url, current_company")
-                    .eq("user_id", user?.id || "")
-                    .maybeSingle();
-                  await generateBrandedProjectDeck({
-                    projectName: project.name,
-                    developerName: project.developer?.name || null,
-                    location: project.location || null,
-                    priceFrom: project.price_from ?? null,
-                    bedroomsText: bedroomsText || null,
-                    sizeText: sizeText || null,
-                    handoverText: getProjectStatus(project).label,
-                    description: project.description || null,
-                    heroImageUrl: heroImage?.url || null,
-                    broker: brokerRow
-                      ? {
-                          fullName: (brokerRow as any).full_name,
-                          email: (brokerRow as any).personal_email,
-                          phone: (brokerRow as any).personal_phone || (brokerRow as any).phone_e164,
-                          logoUrl: (brokerRow as any).logo_url,
-                          headshotUrl: (brokerRow as any).headshot_url,
-                          agencyName: (brokerRow as any).current_company,
-                        }
-                      : null,
-                  });
+                  if (brandedDeckBusy) return;
+                  setBrandedDeckBusy(true);
+                  const { toast } = await import("sonner");
+                  const tId = toast.loading("Generating your branded presentation…");
+                  try {
+                    const { generateBrandedProjectDeck } = await import("@/utils/generateBrandedProjectDeck");
+                    const { data: brokerRow } = await supabase
+                      .from("crm_brokers")
+                      .select("full_name, personal_email, personal_phone, phone_e164, logo_url, headshot_url, current_company")
+                      .eq("user_id", user?.id || "")
+                      .maybeSingle();
+                    await generateBrandedProjectDeck({
+                      projectName: project.name,
+                      developerName: project.developer?.name || null,
+                      location: project.location || null,
+                      priceFrom: project.price_from ?? null,
+                      bedroomsText: bedroomsText || null,
+                      sizeText: sizeText || null,
+                      handoverText: getProjectStatus(project).label,
+                      description: project.description || null,
+                      heroImageUrl: heroImage?.url || null,
+                      broker: brokerRow
+                        ? {
+                            fullName: (brokerRow as any).full_name,
+                            email: (brokerRow as any).personal_email,
+                            phone: (brokerRow as any).personal_phone || (brokerRow as any).phone_e164,
+                            logoUrl: (brokerRow as any).logo_url,
+                            headshotUrl: (brokerRow as any).headshot_url,
+                            agencyName: (brokerRow as any).current_company,
+                          }
+                        : null,
+                    });
+                    toast.success("Presentation downloaded", { id: tId });
+                  } catch (err: any) {
+                    console.error("[branded-deck] failed", err);
+                    toast.error(err?.message || "Could not generate presentation", { id: tId });
+                  } finally {
+                    setBrandedDeckBusy(false);
+                  }
                 }}
-                className="jj-pill-emerald inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                className="jj-pill-emerald inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-70 disabled:cursor-wait"
                 data-allow-dark-cta
                 title="Download a JBJ-branded presentation for this project"
               >
                 <Download className="w-4 h-4" />
-                <span>Download branded presentation</span>
+                <span>{brandedDeckBusy ? "Generating…" : "Download branded presentation"}</span>
               </button>
+
               {!brokerHasBrand && (
                 <Link
                   to="/broker/brand"

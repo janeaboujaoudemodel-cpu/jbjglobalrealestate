@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
@@ -99,7 +100,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const { pathname } = useLocation();
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
-  const primaryImageUrl = images[0]?.image_url || project.cover_image_url || null;
+  const rawPrimary =
+    images[0]?.image_url ||
+    project.cover_image_url ||
+    (project as any).card_image_url ||
+    (project as any).hero_image_url ||
+    images.find((i: any) => !!i?.image_url)?.image_url ||
+    null;
+  const primaryImageUrl = rawPrimary ? getHighResImageUrl(rawPrimary) : null;
   const rawDeveloperName = project.developer?.name || project.developer_name || null;
   const developerName = isPropertyTypeOnlyLabel(rawDeveloperName) ? null : rawDeveloperName;
   const developerSlug = project.developer?.slug || null;
