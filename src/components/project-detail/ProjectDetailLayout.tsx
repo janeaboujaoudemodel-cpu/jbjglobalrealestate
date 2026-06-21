@@ -844,7 +844,7 @@ export default function ProjectDetailLayout({
                       : null,
                   });
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white text-sm font-semibold border border-[#B89555]/40 shadow-sm transition-colors"
+                className="jj-pill-emerald inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
                 data-allow-dark-cta
                 title="Download a JBJ-branded presentation for this project"
               >
