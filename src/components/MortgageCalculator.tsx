@@ -71,9 +71,9 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
   const progress = getRangePercent(value, min, max);
   const lastEmittedValueRef = useRef(value);
   const fill = isNavy
-    ? "linear-gradient(90deg, #1E4E8C 0%, #3B82F6 55%, #93C5FD 100%)"
-    : "linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%)";
-  const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
+    ? "linear-gradient(90deg, #064E3B 0%, #047857 55%, #10B981 100%)"
+    : "linear-gradient(90deg, #D7EAE0 0%, #34D399 45%, #047857 100%)";
+  const track = isNavy ? "rgba(255,255,255,0.12)" : "#E8F2EC";
 
   useEffect(() => {
     lastEmittedValueRef.current = value;
