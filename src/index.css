@@ -8950,8 +8950,7 @@ html body p.jj-force-white-copy {
 }
 
 /* (a) Property-card action pills: animated metallic emerald shimmer */
-html body :is(a,button,span).jj-pill-emerald,
-html body .jj-emerald-chip {
+html body :is(a,button,span).jj-pill-emerald {
   position: relative;
   isolation: isolate;
   background-image:
@@ -8976,14 +8975,12 @@ html body .jj-emerald-chip {
   animation: jj-pill-emerald-sweep 4.5s ease-in-out infinite !important;
   transition: transform .25s ease, box-shadow .25s ease, filter .25s ease !important;
 }
-html body :is(a,button,span).jj-pill-emerald :is(svg, [class*="lucide"]),
-html body .jj-emerald-chip :is(svg, [class*="lucide"]) {
+html body :is(a,button,span).jj-pill-emerald :is(svg, [class*="lucide"]) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
 }
-html body :is(a,button,span).jj-pill-emerald:hover,
-html body .jj-emerald-chip:hover {
+html body :is(a,button,span).jj-pill-emerald:hover {
   transform: translateY(-2px) scale(1.015);
   filter: brightness(1.06);
   box-shadow:
@@ -9017,6 +9014,11 @@ html body .jj-emerald-chip :is(svg, [class*="lucide"]),
 html body .jj-emerald-chip :is(svg, [class*="lucide"]) * {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
+}
+html body .jj-emerald-chip:hover {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: 0 8px 18px -14px rgba(26,26,26,0.45) !important;
 }
 
 /* (b) Mortgage Compare-Bank-Rates slider — single emerald track, no stripe */
