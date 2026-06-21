@@ -1200,7 +1200,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
+              data-on-dark
+              data-allow-dark-cta
+              className="allow-white flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
               style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.22)', background: 'var(--jj-emerald-ombre)' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
@@ -1217,13 +1219,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-              <span style={{ color: 'inherit' }}>Contact</span>
+              <Headphones className="allow-white w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
+              data-on-dark
+              data-allow-dark-cta
+              className="allow-white flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
               style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.22)', background: 'var(--jj-emerald-ombre)' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
@@ -1240,8 +1244,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-              <span style={{ color: 'inherit' }}>Support</span>
+              <Ticket className="allow-white w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Support</span>
             </Link>
           </div>
           {session ? (
@@ -1273,9 +1277,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           <button
             data-no-contrast-guard
             data-sidebar-collapse-control
+            data-on-dark
+            data-allow-dark-cta
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="jbj-sidebar-collapse-control group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
+            className="allow-white jbj-sidebar-collapse-control group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
             style={{
               color: '#FFFFFF',
               background: 'var(--jj-emerald-ombre)',
@@ -1297,8 +1303,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               e.currentTarget.style.transform = 'none';
             }}
           >
-            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-            <span data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
+            <PanelLeftClose className="allow-white w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <span className="allow-white" data-no-contrast-guard data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
           </button>
 
         </div>
