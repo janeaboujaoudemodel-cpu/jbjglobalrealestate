@@ -6164,7 +6164,10 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   stroke: #FFFFFF !important;
 }
 
-/* Mortgage calculator — native controlled range for reliable live recalculation */
+/* Mortgage calculator — native controlled range for reliable live recalculation.
+   PASS 37 — stronger emerald track + emerald thumb, same shape across all
+   mortgage sliders (Property Price, Down Payment, Interest Rate, Loan Term,
+   Compare to Bank Rates) so they look identical. */
 .mortgage-range-input {
   appearance: none;
   -webkit-appearance: none;
@@ -6172,11 +6175,13 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-radius: 9999px;
   cursor: pointer;
   outline: none;
+  background-color: rgba(6,78,59,0.18);
 }
 .mortgage-range-input::-webkit-slider-runnable-track {
   height: 8px;
   border-radius: 9999px;
   background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(6,78,59,0.18);
 }
 .mortgage-range-input::-webkit-slider-thumb {
   appearance: none;
@@ -6186,21 +6191,22 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   margin-top: -8px;
   border: 0;
   border-radius: 9999px;
-  background: var(--mortgage-range-thumb, #FFFFFF);
-  box-shadow: var(--mortgage-range-thumb-shadow, 0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset);
+  background: var(--mortgage-range-thumb, radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%));
+  box-shadow: var(--mortgage-range-thumb-shadow, 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50));
 }
 .mortgage-range-input::-moz-range-track {
   height: 8px;
   border-radius: 9999px;
   background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(6,78,59,0.18);
 }
 .mortgage-range-input::-moz-range-thumb {
   width: 24px;
   height: 24px;
   border: 0;
   border-radius: 9999px;
-  background: var(--mortgage-range-thumb, #FFFFFF);
-  box-shadow: var(--mortgage-range-thumb-shadow, 0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset);
+  background: var(--mortgage-range-thumb, radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%));
+  box-shadow: var(--mortgage-range-thumb-shadow, 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50));
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
