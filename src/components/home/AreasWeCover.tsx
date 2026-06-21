@@ -49,13 +49,14 @@ const AreasWeCover = () => {
 
           <div className="relative text-center mb-8 md:mb-10">
             <span
-              data-allow-dark-cta data-no-contrast-guard
-              className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-4 bg-[#0A0A0A] text-white shadow-sm border border-[#B89555]/60"
+              data-allow-dark-cta data-no-contrast-guard data-on-dark
+              className="jj-emerald-chip allow-white mb-4"
               style={{ color: "#FFFFFF" }}
             >
               <MapPin className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
               <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("areas.topLabel", "Top Areas")}</span>
             </span>
+
 
             <h2 data-no-contrast-guard className="jj-title-emerald text-2xl md:text-4xl font-bold tracking-tight uppercase tracking-[0.08em]">
               {t("areas.topTitle", "Top Areas in Dubai")}
