@@ -32,6 +32,8 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
+import SidebarModePortalBlock from "@/components/navigation/SidebarModePortalBlock";
+
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { useGatedToolAccess } from "@/hooks/useGatedToolAccess";
