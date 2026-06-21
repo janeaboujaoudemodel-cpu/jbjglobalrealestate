@@ -8597,3 +8597,29 @@ html body [data-photo-copy-lock] :is(svg, [class*="lucide"]) {
   stroke: #FFFFFF !important;
 }
 
+
+/* PASS 30.1 — brute-force emerald color for HomepageBookMarquee + AreasWeCover. */
+html body a[href="/guides"],
+html body a[href="/guides"] *,
+html body h2.jj-title-emerald,
+html body h2.jj-title-emerald *,
+html body h3.jj-title-emerald,
+html body h3.jj-title-emerald *,
+html body .jj-title-emerald,
+html body .jj-title-emerald * {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+}
+html body a[href="/guides"] svg,
+html body a[href="/guides"] svg *,
+html body .jj-icon-emerald,
+html body .jj-icon-emerald * {
+  color: #047857 !important;
+  stroke: #047857 !important;
+  fill: none !important;
+}
+
