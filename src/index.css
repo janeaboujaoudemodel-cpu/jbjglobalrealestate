@@ -7476,9 +7476,17 @@ html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
   -webkit-text-fill-color: #047857 !important;
 }
 
-/* Compare Two Bank Rates slider — match interest-rate gold active style */
+/* Compare Two Bank Rates slider — emerald metallic to match brand theme */
 html body input[type="range"][data-mortgage-slider="Compare rate"] {
-  background-image: linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%) !important;
+  background-image: linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) !important;
+}
+html body input[type="range"][data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
+  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%) !important;
+  border: 1px solid #047857 !important;
+}
+html body input[type="range"][data-mortgage-slider="Compare rate"]::-moz-range-thumb {
+  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%) !important;
+  border: 1px solid #047857 !important;
 }
 
 /* Page-nav arrow (triple chevron) — guarantee white glyph on emerald,
