@@ -259,7 +259,7 @@ export default function SupportLauncher() {
           data-surface="dark"
           data-allow-dark-cta
           data-no-contrast-guard
-          className={`allow-white group fixed right-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-l-xl
+          className={`allow-white jj-emerald-metallic group fixed right-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-l-xl
             border border-r-0 text-white transform-gpu
             transition-opacity duration-300
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]
@@ -272,7 +272,6 @@ export default function SupportLauncher() {
             transform: "translateY(-50%)",
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
-            backgroundImage: "var(--jj-emerald-ombre)",
             borderColor: "rgba(52,211,153,0.55)",
           }}
 
