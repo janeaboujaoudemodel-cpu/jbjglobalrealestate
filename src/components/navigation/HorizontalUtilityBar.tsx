@@ -168,15 +168,19 @@ export default function HorizontalUtilityBar() {
           {/* Sq ft / Sq m — emerald pill to match Search/Filter/Heart */}
           <div
             data-no-contrast-guard
+            data-on-dark
+            data-allow-dark-cta
             data-jj-utility-pill
-            className="hidden sm:inline-flex items-center h-9 rounded-full overflow-hidden relative shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+            className="allow-white hidden sm:inline-flex items-center h-9 rounded-full overflow-hidden relative shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
             style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.18)" }}
           >
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
               data-active={areaUnit === 'sqft'}
-              className="jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
+              data-on-dark
+              data-allow-dark-cta
+              className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
               aria-label="Square feet"
             >sq ft</button>
@@ -185,7 +189,9 @@ export default function HorizontalUtilityBar() {
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
               data-active={areaUnit === 'sqm'}
-              className="jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
+              data-on-dark
+              data-allow-dark-cta
+              className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
               aria-label="Square meters"
             >sq m</button>
