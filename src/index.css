@@ -9147,10 +9147,11 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:hover,
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:focus-visible {
   background-image:
-    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 34%, rgba(255,255,255,.70) 48%, rgba(52,211,153,.40) 54%, rgba(255,255,255,0) 68%, rgba(255,255,255,0) 100%),
+    radial-gradient(circle at 22% 12%, rgba(255,255,255,.60) 0%, rgba(255,255,255,.22) 17%, rgba(255,255,255,0) 34%),
+    linear-gradient(112deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 29%, rgba(255,255,255,.88) 47%, rgba(52,211,153,.42) 54%, rgba(255,255,255,0) 70%, rgba(255,255,255,0) 100%),
     linear-gradient(135deg, #0A6B53 0%, #064E3B 45%, #042c1c 75%, #000000 100%) !important;
   background-color: #064E3B !important;
-  background-size: 240% 100%, 100% 100% !important;
+  background-size: 100% 100%, 160% 100%, 100% 100% !important;
   background-repeat: no-repeat !important;
   background-blend-mode: screen, normal !important;
   color: #FFFFFF !important;
@@ -9202,9 +9203,9 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
   100% { background-position:  220% 0; opacity: .85; }
 }
 @keyframes jj-sqtoggle-bg-sheen {
-  0%   { background-position: 140% 0, 0 0; }
-  55%  { background-position: -70% 0, 0 0; }
-  100% { background-position: -70% 0, 0 0; }
+  0%   { background-position: 0 0, 120% 0, 0 0; }
+  55%  { background-position: 0 0, -60% 0, 0 0; }
+  100% { background-position: 0 0, -60% 0, 0 0; }
 }
 
 
