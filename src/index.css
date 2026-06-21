@@ -6479,31 +6479,26 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 }
 .jj-pill-emerald:hover svg { color: #FFFFFF; stroke: #FFFFFF; }
 
-/* 1) Repaint the locked CTA primitives + all global dark-box surfaces
-      with the emerald ink gradient so the brand is consistent. Problem
-      wrappers (photo overlays, white-inner pills) opt out explicitly via
-      [data-ink-emerald-opt-out] — see ExploreServicesExpander hero panel
-      and HomeHeroSearch pill. */
+/* 1) Repaint ONLY actual CTA / button / dark-box surfaces with the emerald
+      ink gradient. We intentionally DO NOT include [data-surface="dark"] /
+      .surface-dark / [data-surface="ink"|"navy"] here, because those are
+      content overlays (e.g. project hero text container sitting over a
+      photo) — painting them emerald would hide the underlying image.
+      Borders on every emerald CTA are WHITE, never gold. */
 html body :is(
   .jj-cta-dark,
   .jj-navy-cta,
   [data-cta="dark"],
-  [data-surface="dark"],
-  [data-surface="ink"],
-  [data-surface="navy"],
-  .surface-dark,
-  .surface-ink,
-  .surface-navy,
   [data-ink-emerald],
   [data-hero-dark],
   [class~="bg-[#0A0A0A]"],
   [class~="bg-[#1A1A1A]"],
   [class~="bg-[#1F1F1F]"],
   [class~="bg-black"]
-):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *):not(header):not(header *):not(footer):not(footer *):not(aside):not(aside *):not([data-app-chrome]):not([data-app-chrome] *) {
+):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *):not(header):not(header *):not(footer):not(footer *):not(aside):not(aside *):not([data-app-chrome]):not([data-app-chrome] *):not(img):not(video):not(picture):not(section.jj-hero-fullscreen) {
   background-image: var(--gradient-ink) !important;
   background-color: transparent !important;
-  border-color: rgba(184, 149, 85, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.55) !important;
 }
 
 html body :is(
@@ -6515,6 +6510,7 @@ html body :is(
   [class~="bg-black"]
 ):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *):hover {
   background-image: var(--gradient-ink-hover) !important;
+  border-color: #FFFFFF !important;
 }
 
 
