@@ -435,7 +435,7 @@ const Index = () => {
                 leadingIcon={<Users strokeWidth={2.2} />}
                 trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
               >
-                <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
+                <span className="whitespace-nowrap">{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
               </PearlButton>
             </div>
           </div>

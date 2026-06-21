@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { History, X, Building2, MapPin, Home, ChevronLeft, ChevronRight, Search, Clock } from "lucide-react";
 import { useRecentSearches, type RecentItemType, type RecentItem } from "@/hooks/useRecentSearches";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -83,6 +83,7 @@ const ContinueSearching = ({
   const navigate = useNavigate();
   const [historyOpen, setHistoryOpen] = useState(false);
   const [recentQueries, setRecentQueries] = useState<string[]>([]);
+  const validItems = useMemo(() => items.filter((i) => i && i.type && i.slug), [items]);
   useEffect(() => {
     if (historyOpen) setRecentQueries(getRecentSearches());
   }, [historyOpen]);
@@ -90,8 +91,9 @@ const ContinueSearching = ({
 
   // Fetch popular projects from DB when user has no browsing history
   useEffect(() => {
-    const validCount = items.filter((i) => i && i.type && i.slug).length;
-    if (validCount > 0) return; // User has history, skip
+    if (validItems.length > 0 || popularProjects.length > 0) return; // User has history or fallback is already loaded
+
+    let cancelled = false;
 
     supabase
       .from("projects")
@@ -103,6 +105,7 @@ const ContinueSearching = ({
       .order("created_at", { ascending: false })
       .limit(6)
       .then(({ data }) => {
+        if (cancelled) return;
         if (!data?.length) return;
         const mapped: RecentItem[] = data.map((p: any) => ({
           id: p.id,
@@ -115,9 +118,10 @@ const ContinueSearching = ({
         }));
         setPopularProjects(mapped);
       });
-  }, [items]);
-
-  const validItems = items.filter((i) => i && i.type && i.slug);
+    return () => {
+      cancelled = true;
+    };
+  }, [popularProjects.length, validItems.length]);
 
   // Deduplicate properties by both slug AND id — each property appears only once
   const seenSlugs = new Set<string>();

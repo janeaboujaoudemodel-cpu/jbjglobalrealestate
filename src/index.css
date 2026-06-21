@@ -8950,8 +8950,7 @@ html body p.jj-force-white-copy {
 }
 
 /* (a) Property-card action pills: animated metallic emerald shimmer */
-html body :is(a,button,span).jj-pill-emerald,
-html body .jj-emerald-chip {
+html body :is(a,button,span).jj-pill-emerald {
   position: relative;
   isolation: isolate;
   background-image:
@@ -8976,14 +8975,12 @@ html body .jj-emerald-chip {
   animation: jj-pill-emerald-sweep 4.5s ease-in-out infinite !important;
   transition: transform .25s ease, box-shadow .25s ease, filter .25s ease !important;
 }
-html body :is(a,button,span).jj-pill-emerald :is(svg, [class*="lucide"]),
-html body .jj-emerald-chip :is(svg, [class*="lucide"]) {
+html body :is(a,button,span).jj-pill-emerald :is(svg, [class*="lucide"]) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
 }
-html body :is(a,button,span).jj-pill-emerald:hover,
-html body .jj-emerald-chip:hover {
+html body :is(a,button,span).jj-pill-emerald:hover {
   transform: translateY(-2px) scale(1.015);
   filter: brightness(1.06);
   box-shadow:
@@ -8993,8 +8990,8 @@ html body .jj-emerald-chip:hover {
     0 0 28px rgba(52,211,153,0.36) !important;
 }
 
-/* Emerald chip primitive (Top Areas badges) */
-.jj-emerald-chip {
+/* Champagne chip primitive (Top Areas badges) */
+html body .jj-emerald-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
@@ -9004,6 +9001,24 @@ html body .jj-emerald-chip:hover {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  background: rgba(253,251,247,0.94) !important;
+  background-image: none !important;
+  border: 0 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: 0 8px 18px -14px rgba(26,26,26,0.45) !important;
+  animation: none !important;
+  transition: none !important;
+}
+html body .jj-emerald-chip :is(svg, [class*="lucide"]),
+html body .jj-emerald-chip :is(svg, [class*="lucide"]) * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body .jj-emerald-chip:hover {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: 0 8px 18px -14px rgba(26,26,26,0.45) !important;
 }
 
 /* (b) Mortgage Compare-Bank-Rates slider — single emerald track, no stripe */
@@ -9012,7 +9027,8 @@ html body input.mortgage-range-input[data-mortgage-slider="Compare rate"] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 36px;
+  height: 28px;
+  padding: 0 !important;
   background: #EFE6D6 !important;
   background-image:
     linear-gradient(110deg, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0.00) 100%),
@@ -9023,7 +9039,7 @@ html body input.mortgage-range-input[data-mortgage-slider="Compare rate"] {
   border-radius: 9999px !important;
   cursor: pointer !important;
   pointer-events: auto !important;
-  touch-action: none !important;
+  touch-action: pan-y !important;
   animation: jj-pill-emerald-sweep 5s ease-in-out infinite !important;
   border: 1px solid rgba(52,211,153,0.55) !important;
   outline: none !important;
@@ -9031,15 +9047,16 @@ html body input.mortgage-range-input[data-mortgage-slider="Compare rate"] {
 html body input[data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 26px; height: 26px;
+  width: 28px; height: 28px;
   border-radius: 9999px;
   background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%);
   border: 2px solid #064E3B;
   box-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 0 3px rgba(52,211,153,0.35);
   cursor: grab;
+  margin-top: 0;
 }
 html body input[data-mortgage-slider="Compare rate"]::-moz-range-thumb {
-  width: 26px; height: 26px;
+  width: 28px; height: 28px;
   border-radius: 9999px;
   background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%);
   border: 2px solid #064E3B;
@@ -9048,11 +9065,13 @@ html body input[data-mortgage-slider="Compare rate"]::-moz-range-thumb {
 }
 html body input[data-mortgage-slider="Compare rate"]::-webkit-slider-runnable-track {
   background: transparent !important;
-  height: 36px;
+  height: 28px;
+  border-radius: 9999px;
 }
 html body input[data-mortgage-slider="Compare rate"]::-moz-range-track {
   background: transparent !important;
-  height: 36px;
+  height: 28px;
+  border-radius: 9999px;
 }
 
 /* (c) Collapsed sidebar — collapse/expand chevron tile locked to emerald */
@@ -9196,8 +9215,10 @@ html body .mortgage-compare-card {
   min-height: 100% !important;
   box-shadow: 0 0 0 1px rgba(52,211,153,.20), 0 12px 34px -24px rgba(6,78,59,.55) !important;
 }
-html body input.mortgage-range-input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"] {
-  height: 36px !important;
+html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  height: 28px !important;
   padding: 0 !important;
   background-image:
     linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.44) 50%, rgba(255,255,255,0) 100%),
@@ -9206,22 +9227,30 @@ html body input.mortgage-range-input.mortgage-compare-rate-input[data-mortgage-s
   border: 1px solid rgba(4,120,87,.95) !important;
   border-radius: 9999px !important;
   pointer-events: auto !important;
-  touch-action: none !important;
+  touch-action: pan-y !important;
 }
-html body input.mortgage-range-input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
-  width: 24px !important;
-  height: 24px !important;
+html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 28px !important;
+  height: 28px !important;
   margin-top: 0 !important;
   border: 2px solid #064E3B !important;
   background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 46%, #047857 100%) !important;
   box-shadow: 0 0 0 2px rgba(255,255,255,.70), 0 0 18px rgba(4,120,87,.72), 0 4px 12px rgba(0,0,0,.28) !important;
 }
-html body input.mortgage-range-input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-moz-range-thumb {
-  width: 24px !important;
-  height: 24px !important;
+html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-moz-range-thumb {
+  width: 28px !important;
+  height: 28px !important;
   border: 2px solid #064E3B !important;
   background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 46%, #047857 100%) !important;
   box-shadow: 0 0 0 2px rgba(255,255,255,.70), 0 0 18px rgba(4,120,87,.72), 0 4px 12px rgba(0,0,0,.28) !important;
+}
+html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-webkit-slider-runnable-track,
+html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-moz-range-track {
+  height: 28px !important;
+  background: transparent !important;
+  border-radius: 9999px !important;
 }
 
 html body footer[data-footer="corporate"] :is(h4, a, p, span, bdi),
