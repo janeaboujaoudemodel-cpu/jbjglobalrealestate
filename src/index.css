@@ -8685,4 +8685,7 @@ html body .jj-tab-active-metallic::after {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+html body .jj-tab-active-metallic::after {
+  display: block !important;
+}
 
