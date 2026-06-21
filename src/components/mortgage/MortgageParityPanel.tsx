@@ -224,27 +224,35 @@ export default function MortgageParityPanel({
           </div>
         </div>
         <div className="mt-3 py-1">
-          <input
-            type="range"
-            data-mortgage-slider="Compare rate"
-            data-no-contrast-guard
-            min={2}
-            max={10}
-            step={0.05}
-            value={compareRate}
-            aria-label="Compare rate"
-            onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
-            onChange={(e) => setCompareRate(Number(e.target.value))}
-            className="mortgage-range-input w-full"
-            style={{
-              background:
-                "linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) 0 / 100% 100% no-repeat, #EFE6D6",
-              ["--mortgage-range-thumb" as any]:
-                "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%)",
-              ["--mortgage-range-thumb-shadow" as any]:
-                "0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(4,120,87,0.65), 0 4px 14px rgba(4,44,28,0.45)",
-            }}
-          />
+          {(() => {
+            const minR = 2;
+            const maxR = 10;
+            const progress = Math.min(100, Math.max(0, ((compareRate - minR) / (maxR - minR)) * 100));
+            const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
+            const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.14)";
+            return (
+              <input
+                type="range"
+                data-mortgage-slider="Compare rate"
+                data-no-contrast-guard
+                min={minR}
+                max={maxR}
+                step={0.05}
+                value={compareRate}
+                aria-label="Compare rate"
+                onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
+                onChange={(e) => setCompareRate(Number(e.target.value))}
+                className="mortgage-range-input w-full"
+                style={{
+                  background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
+                  ["--mortgage-range-thumb" as any]:
+                    "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%)",
+                  ["--mortgage-range-thumb-shadow" as any]:
+                    "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
+                }}
+              />
+            );
+          })()}
         </div>
 
         <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>

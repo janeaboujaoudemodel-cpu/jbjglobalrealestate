@@ -9,9 +9,10 @@ import NewsletterDetailModal from '@/components/marketing/NewsletterDetailModal'
 import { useTypewriter } from '@/hooks/useTypewriter';
 
 const NEWSLETTER_TYPEWRITER_PHRASES = [
-  'Enter Your Email',
-  'Get listings first',
-  'Free weekly insights',
+  'Enter your email address',
+  'Get new listings first',
+  'Market moves & insider insights',
+  'Free weekly intel — no spam',
 ];
 
 
