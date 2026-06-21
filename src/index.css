@@ -8689,3 +8689,16 @@ html body .jj-tab-active-metallic::after {
   display: block !important;
 }
 
+/* PASS 31.1 — utility sq ft / sq m labels: the header is a light chrome
+   parent, so final guard must explicitly keep both segmented labels white. */
+html body [data-jj-utility-bar] [data-jj-utility-pill],
+html body [data-jj-utility-bar] [data-jj-utility-pill] button,
+html body [data-jj-utility-bar] [data-jj-utility-pill] button[data-active="true"],
+html body [data-jj-utility-bar] [data-jj-utility-pill] button[data-active="false"],
+html body [data-jj-utility-bar] button[aria-label="Square feet"],
+html body [data-jj-utility-bar] button[aria-label="Square meters"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.38) !important;
+}
+
