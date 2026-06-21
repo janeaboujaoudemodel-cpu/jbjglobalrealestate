@@ -1154,32 +1154,37 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         const isMenuOpen = activeMegaMenu === item.megaMenu;
                         const subitemActive = activeMegaMenu ? isMenuOpen : isRouteActive(item.href);
                         const Icon = item.icon;
+                        const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
                         return (
-                          <Link
-                            key={item.href + item.label + i}
-                            to={item.href}
-                            onMouseEnter={() => prefetchAITool(item.href)}
-                            onFocus={() => prefetchAITool(item.href)}
-                            onClick={(e) => {
-                              // Never open the full-screen mega drop-down overlay from inside
-                              // an expanded section — just navigate.
-                              collapseAfterNavigation();
-                              if (sectionKey === 'MY ACCOUNT') {
-                                setOpenSection('MY ACCOUNT');
-                              }
-                            }}
-                            data-sidebar-subitem
-                            data-active={subitemActive ? 'true' : undefined}
-                            aria-current={subitemActive ? 'page' : undefined}
-                            data-no-contrast-guard
-                            className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150"
-                            style={{ color: '#1A1A1A' }}
-                          >
-                            <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                              <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
-                            </span>
-                            <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: '#1A1A1A' }}>{item.label}</span>
-                          </Link>
+                          <React.Fragment key={item.href + item.label + i}>
+                            <Link
+                              to={item.href}
+                              onMouseEnter={() => prefetchAITool(item.href)}
+                              onFocus={() => prefetchAITool(item.href)}
+                              onClick={(e) => {
+                                // Never open the full-screen mega drop-down overlay from inside
+                                // an expanded section — just navigate.
+                                collapseAfterNavigation();
+                                if (sectionKey === 'MY ACCOUNT') {
+                                  setOpenSection('MY ACCOUNT');
+                                }
+                              }}
+                              data-sidebar-subitem
+                              data-active={subitemActive ? 'true' : undefined}
+                              aria-current={subitemActive ? 'page' : undefined}
+                              data-no-contrast-guard
+                              className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150"
+                              style={{ color: '#1A1A1A' }}
+                            >
+                              <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
+                                <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
+                              </span>
+                              <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: '#1A1A1A' }}>{item.label}</span>
+                            </Link>
+                            {needsAccountDivider && (
+                              <div className="my-1 mx-2 h-px bg-gradient-to-r from-transparent via-[#047857]/45 to-transparent" aria-hidden="true" />
+                            )}
+                          </React.Fragment>
                         );
                       })}
                     </div>
