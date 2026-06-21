@@ -175,18 +175,21 @@ export default function HorizontalUtilityBar() {
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
-              className="relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200"
-              style={{ color: '#FFFFFF', backgroundColor: areaUnit === 'sqft' ? 'rgba(255,255,255,0.20)' : 'transparent', opacity: areaUnit === 'sqft' ? 1 : 0.65 }}
+              data-active={areaUnit === 'sqft'}
+              className="jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
               aria-label="Square feet"
             >sq ft</button>
             <span aria-hidden className="w-px h-4 bg-white/25" />
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
-              className="relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200"
-              style={{ color: '#FFFFFF', backgroundColor: areaUnit === 'sqm' ? 'rgba(255,255,255,0.20)' : 'transparent', opacity: areaUnit === 'sqm' ? 1 : 0.65 }}
+              data-active={areaUnit === 'sqm'}
+              className="jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
               aria-label="Square meters"
             >sq m</button>
+
           </div>
 
 

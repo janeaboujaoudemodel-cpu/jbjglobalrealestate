@@ -8372,3 +8372,168 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
 }
 
 
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 29 — Universal white-on-emerald lock + animated metallic
+   emerald shimmer + missing emerald-card utility classes.
+   Any element painted with the emerald-ombre gradient (data attr,
+   inline style, utility class, or known surface class) renders
+   white text + white icons in every state — overriding the
+   light-surface contrast guard for these specific surfaces.
+   ──────────────────────────────────────────────────────────────── */
+
+@keyframes jj-metallic-sweep {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes jj-emerald-pulse {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 0 rgba(52,211,153,0.0); }
+  50%      { box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 16px 2px rgba(52,211,153,0.35); }
+}
+
+/* Animated metallic emerald shimmer overlay for active pills/tabs. */
+.jj-tab-active-metallic,
+.jj-sqtoggle[data-active="true"],
+.jj-emerald-metallic,
+[data-emerald-shimmer] {
+  background-image:
+    linear-gradient(110deg,
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.22) 18%,
+      rgba(255,255,255,0.05) 36%,
+      rgba(255,255,255,0.18) 58%,
+      rgba(255,255,255,0.00) 100%
+    ),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-size: 250% 100%, 100% 100% !important;
+  background-position: -50% 0, 0 0 !important;
+  background-blend-mode: overlay, normal !important;
+  animation: jj-metallic-sweep 4.5s ease-in-out infinite, jj-emerald-pulse 3.2s ease-in-out infinite !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jj-sqtoggle[data-active="false"] {
+  background: transparent !important;
+  opacity: 1 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jj-sqtoggle:hover {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Define the missing .jj-emerald-card / .jj-loop-block surface so the
+   homepage "Ready to Get Started?" + email/chat/call block actually
+   renders as emerald ombre, not as a transparent panel sitting on a
+   champagne band (which was the source of black-on-green confusion). */
+.jj-emerald-card,
+.jj-loop-block {
+  background-image:
+    radial-gradient(120% 80% at 0% 0%, rgba(52,211,153,0.18) 0%, transparent 60%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 18px 48px -20px rgba(4,120,87,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+.jj-emerald-card *,
+.jj-loop-block * {
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+}
+.jj-loop-divider {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+}
+
+/* Universal lock: any element painted with emerald-ombre via inline
+   style, gradient class, or surface attribute MUST render its own
+   text + descendant icons as solid white, in all interaction states. */
+html body :is(
+  [style*="--jj-emerald-ombre"],
+  [style*="emerald-ombre"],
+  [style*="064E3B"],
+  [style*="047857"],
+  [data-emerald="true"],
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-loop-block,
+  .jj-tab-active-metallic
+),
+html body :is(
+  [style*="--jj-emerald-ombre"],
+  [style*="emerald-ombre"],
+  [data-emerald="true"],
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-loop-block,
+  .jj-tab-active-metallic
+) :is(span, p, h1, h2, h3, h4, h5, h6, label, small, strong, em, a, button) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is(
+  [style*="--jj-emerald-ombre"],
+  [style*="emerald-ombre"],
+  [data-emerald="true"],
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-loop-block,
+  .jj-tab-active-metallic
+) :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Collapsed vertical sidebar — every icon tile + section trigger
+   should render as emerald-ombre with white icons (not flat green). */
+body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section],
+body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section] > div:first-child,
+body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-subitem] > span:first-child,
+body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight] > span:first-child {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+}
+body.jj-vertical-nav-collapsed [data-chrome="sidebar"] [data-sidebar-section] :is(svg, [class*="lucide"]),
+body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-subitem] :is(svg, [class*="lucide"]),
+body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight] :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+
+/* PASS 29.1 — sq ft/m toggle final: brighter metallic active, both
+   labels remain fully readable white, animated emerald shimmer. */
+.jj-sqtoggle[data-active="true"] {
+  background-image:
+    linear-gradient(110deg,
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.40) 20%,
+      rgba(255,255,255,0.08) 38%,
+      rgba(255,255,255,0.32) 60%,
+      rgba(255,255,255,0.00) 100%
+    ),
+    linear-gradient(135deg, #0A6B53 0%, #064E3B 55%, #032419 100%) !important;
+  background-size: 250% 100%, 100% 100% !important;
+  background-position: -50% 0, 0 0 !important;
+  background-blend-mode: screen, normal !important;
+  animation: jj-metallic-sweep 3.2s ease-in-out infinite !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),
+              inset 0 -1px 0 rgba(0,0,0,0.25),
+              0 0 14px rgba(52,211,153,0.30) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
