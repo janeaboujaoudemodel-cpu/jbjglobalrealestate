@@ -8077,3 +8077,128 @@ html body :is(
   background-color: rgba(184, 149, 85, 0.55) !important;
   background-image: none !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 23 — Utility bar emerald parity
+   Match Currency / Mode / Avatar / Sign-in to the Search·Filter·Heart
+   emerald pill treatment so the whole horizontal header is one family.
+   ──────────────────────────────────────────────────────────────── */
+html body [data-jj-utility-bar] .ml-auto > :is(button, a, span, div) > button,
+html body [data-jj-utility-bar] .ml-auto > :is(button, a) {
+  /* leave already-emerald controls (Search/Filter/Heart and our pill) alone */
+}
+
+/* Currency switcher (flag variant) — emerald pill, white text */
+html body [data-jj-utility-bar] button[aria-label="Currency"],
+html body [data-jj-utility-bar] button[aria-label="Currency"]:hover,
+html body [data-jj-utility-bar] button[aria-label="Currency"]:focus {
+  height: 36px !important;
+  border-radius: 9999px !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Currency"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Currency"] svg,
+html body [data-jj-utility-bar] button[aria-label="Currency"] svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Mode switcher chip + sign-in — emerald pill, white text/icons */
+html body [data-jj-utility-bar] button[data-mode-trigger="header"],
+html body [data-jj-utility-bar] button[data-mode-trigger="header"]:hover,
+html body [data-jj-utility-bar] a[href="/auth"],
+html body [data-jj-utility-bar] a[href="/auth"]:hover {
+  height: 36px !important;
+  border-radius: 9999px !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+html body [data-jj-utility-bar] button[data-mode-trigger="header"] *,
+html body [data-jj-utility-bar] a[href="/auth"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.30) !important;
+}
+html body [data-jj-utility-bar] a[href="/auth"] span.bg-\[\#1A1A1A\]\/60 {
+  background-color: #FFFFFF !important;
+}
+
+/* User avatar trigger button — emerald ring + white initials */
+html body [data-jj-utility-bar] button[aria-label="Account menu"],
+html body [data-jj-utility-bar] button[aria-label="Account menu"]:hover {
+  border: 1.5px solid rgba(255,255,255,0.45) !important;
+  box-shadow: 0 0 0 1px rgba(4,120,87,0.55), 0 8px 18px -12px rgba(6,78,59,0.85) !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child > span.relative {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25) !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 24 — Sidebar active section: SOLID white title + icon
+   The emerald text-gradient (background-clip:text + transparent fill)
+   was eating the white when a section row is active/green. Re-assert
+   true white with the highest cascade.
+   ──────────────────────────────────────────────────────────────── */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] [data-sidebar-section-label],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover [data-sidebar-section-label] {
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-weight: 800 !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child svg,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] > div:first-child svg *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"] svg.lucide-chevron-down {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Active subitem (current route inside an open section) → solid white pill */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem].is-active {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] [data-sidebar-subitem-label],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem].is-active [data-sidebar-subitem-label] {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
