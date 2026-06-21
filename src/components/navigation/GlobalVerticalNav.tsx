@@ -1201,42 +1201,46 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/contact"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#B89555', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.22)', background: 'var(--jj-emerald-ombre)' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#B89555';
-                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
+                e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
+                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#B89555';
+                e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#B89555', borderColor: '#B89555', backgroundColor: '#F7F2EA' }}
+              style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.22)', background: 'var(--jj-emerald-ombre)' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#FDFBF7';
-                e.currentTarget.style.borderColor = '#B89555';
-                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(212,184,150,0.55), 0 0 0 1px rgba(226,201,160,0.50)';
+                e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
+                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42)';
                 e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#F7F2EA';
-                e.currentTarget.style.borderColor = '#B89555';
+                e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
                 e.currentTarget.style.boxShadow = 'none';
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
@@ -1273,26 +1277,28 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             aria-label="Collapse navigation"
             className="jbj-sidebar-collapse-control group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
             style={{
-              color: '#B89555',
-              background: 'transparent',
-              border: '1px solid rgba(184,149,85,0.35)',
+              color: '#FFFFFF',
+              background: 'var(--jj-emerald-ombre)',
+              border: '1px solid rgba(255,255,255,0.22)',
               boxShadow: 'none',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'linear-gradient(135deg, rgba(247,242,234,0.9), rgba(239,230,214,0.9))';
-              e.currentTarget.style.borderColor = '#B89555';
-              e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(184,149,85,0.7), 0 0 0 1px rgba(184,149,85,0.55), 0 0 12px rgba(184,149,85,0.35)';
+              e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
+              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
+              e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), 0 0 12px rgba(52,211,153,0.30)';
               e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-2px) scale(1.02)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.borderColor = 'rgba(184,149,85,0.35)';
+              e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
+              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
               e.currentTarget.style.boxShadow = 'none';
               e.currentTarget.style.transform = 'none';
             }}
           >
-            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#B89555' }} />
-            <span data-no-contrast-guard style={{ color: '#B89555' }}>Collapse</span>
+            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <span data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
           </button>
 
         </div>
