@@ -315,7 +315,7 @@ const Favorites = () => {
 
           <TabsContent value="favorites">
             {isLoading || loadingFavProjects ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="aspect-[4/3] bg-[#FDFBF7]/40 rounded-lg animate-pulse" />
                 ))}
@@ -336,7 +336,7 @@ const Favorites = () => {
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
                   {favoriteProjects.map((project) => (
                     <div key={project.id} className="relative">
                       <div className="absolute top-2 left-2 z-20">
@@ -404,7 +404,7 @@ const Favorites = () => {
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6 mb-8">
                   {shortlistedProjects.map((project) => {
                     const badge = getProjectBadge(project.id);
                     return (
