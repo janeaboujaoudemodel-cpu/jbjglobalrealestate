@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, BarChart3, Inbox, ClipboardList, StickyNote, Bell,
   Heart, SlidersHorizontal, Settings, LogOut, ChevronRight, User, Palette,
+  Star, PenTool,
 } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
@@ -206,7 +207,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           </span>
           <div className="min-w-0 flex-1">
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{displayName}</div>
-            <div className="text-[11px] text-[#1A1A1A]/55 truncate">{user.email}</div>
+            <div className="text-[11px] text-[#1A1A1A]/55 truncate">JBJ account</div>
             {roleLabel && (
               <span className="inline-flex items-center mt-1 px-1.5 py-[1px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] text-[#1A1A1A] bg-[#EFE6D6] border border-[#B89555]/40">
                 {roleLabel}
@@ -227,6 +228,12 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
+        <DropdownMenuSeparator className="bg-gradient-to-r from-transparent via-[#047857]/40 to-transparent my-1" />
+        <Row to="/favorites" icon={Heart} label="Favorites" />
+        <DropdownMenuSeparator className="bg-gradient-to-r from-transparent via-[#047857]/40 to-transparent my-1" />
+        <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
+        <DropdownMenuSeparator className="bg-gradient-to-r from-transparent via-[#047857]/40 to-transparent my-1" />
+        <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
 
 
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
