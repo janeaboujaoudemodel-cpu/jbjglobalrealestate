@@ -1317,19 +1317,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
 
-          {/* Section icons — unified gold tile, blue on hover */}
+          {/* Section icons — emerald-ombre tiles with white icons */}
           <style>{`
             .jj-side-tile {
-              background: linear-gradient(135deg, #047857 0%, #065f46 50%, #0a3d2e 100%) !important;
-              border: 1px solid rgba(255,255,255,0.85) !important;
+              background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+              border: 1px solid rgba(255,255,255,0.22) !important;
               color: #FFFFFF !important;
-              box-shadow: 0 1px 2px rgba(4,120,87,0.35), inset 0 0 0 1px rgba(16,185,129,0.25) !important;
+              box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
               transition: transform 180ms ease, box-shadow 180ms ease !important;
             }
             .jj-side-tile svg,
             .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; transition: color 180ms ease, stroke 180ms ease !important; }
-            .jj-side-tile:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 10px -2px rgba(4,120,87,0.55), 0 0 0 2px rgba(16,185,129,0.35), inset 0 0 0 1px rgba(255,255,255,0.4) !important; }
-            .jj-side-tile.is-active { box-shadow: 0 0 0 2px rgba(16,185,129,0.55), 0 2px 8px rgba(4,120,87,0.45) !important; }
+            .jj-side-tile:hover { background: var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%)) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
+            .jj-side-tile.is-active { box-shadow: 0 0 0 2px rgba(16,185,129,0.55), 0 2px 8px rgba(4,120,87,0.45), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
