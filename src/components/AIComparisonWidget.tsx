@@ -42,7 +42,7 @@ const AIComparisonWidget = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4" style={{ background: '#ede9fe', border: '1px solid #c4b5fd', color: '#6d28d9' }}>
               <Sparkles className="w-4 h-4" style={{ color: '#7c3aed' }} />
-              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: '#6d28d9' }}>AI Powered</span>
+              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: '#047857' }}>AI Powered</span>
             </div>
             <h3 
               className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-2"

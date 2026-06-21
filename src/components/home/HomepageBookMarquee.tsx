@@ -18,7 +18,11 @@ export default function HomepageBookMarquee() {
               <BookOpen className="w-5 h-5 jj-icon-emerald" />
             </div>
             <div>
-              <h2 data-no-contrast-guard className="jj-title-emerald text-lg md:text-xl font-bold">
+              <h2
+                data-no-contrast-guard
+                className="text-lg md:text-xl font-bold"
+                style={{ color: '#047857', WebkitTextFillColor: '#047857' } as React.CSSProperties}
+              >
                 Explore Our Guides & Reports
               </h2>
               <p className="text-[#1A1A1A]/70 text-xs">Free educational resources for investors</p>
@@ -26,10 +30,12 @@ export default function HomepageBookMarquee() {
           </div>
           <Link
             to="/guides"
-            className="hidden sm:flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium hover:text-[#1A1A1A] transition-colors"
+            data-no-contrast-guard
+            className="hidden sm:flex items-center gap-1.5 text-sm font-semibold transition-colors"
+            style={{ color: '#047857', WebkitTextFillColor: '#047857' } as React.CSSProperties}
           >
-            View Library
-            <ArrowRight className="w-4 h-4" />
+            <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>View Library</span>
+            <ArrowRight className="w-4 h-4" style={{ color: '#047857', stroke: '#047857' }} />
           </Link>
         </div>
       </div>
@@ -42,10 +48,11 @@ export default function HomepageBookMarquee() {
         <div className="mt-4 sm:hidden text-center">
           <Link
             to="/guides"
-            className="inline-flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium hover:text-[#1A1A1A] transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors"
+            style={{ color: '#047857' }}
           >
             View Full Library
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4" style={{ color: '#047857', stroke: '#047857' }} />
           </Link>
         </div>
       </div>
