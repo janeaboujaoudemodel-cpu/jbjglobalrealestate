@@ -178,6 +178,9 @@ export const GlobalVisitorTracking = () => {
         } as any);
 
       if (insertError) {
+        if (insertError.code !== '23505' && import.meta.env.DEV) {
+          console.warn('Legacy visitor tracking unavailable:', insertError.message);
+        }
         await supabase.from('visitor_sessions')
           .update({ last_activity_at: new Date().toISOString(), user_id: user?.id || null })
           .eq('session_id', sessionId);
