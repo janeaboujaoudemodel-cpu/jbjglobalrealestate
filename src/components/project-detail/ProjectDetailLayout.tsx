@@ -871,7 +871,7 @@ export default function ProjectDetailLayout({
 
       {previousProject && (
         <div className="sticky top-[88px] z-30 w-full bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/30">
-          <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-2 flex items-center justify-between gap-3">
+          <div className="max-w-[1240px] mx-auto px-4 md:px-8 py-2 flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={handleReturnToPrevious}
@@ -1656,7 +1656,7 @@ export default function ProjectDetailLayout({
         className="scroll-mt-32 jj-band jj-band--surface"
         data-section="register-interest"
       >
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
+        <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
           <ConsultationRequestForm
             title={`Register Interest in ${project.name}`}
             subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
@@ -1678,7 +1678,7 @@ export default function ProjectDetailLayout({
       {/* READY TO GET STARTED — full-bleed CTA band */}
       <SectionDividerGoldFullBleed />
       <div className="bg-[#FDFBF7]">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12">
+        <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12">
           <CallToActionSection projectName={project.name} projectId={project.id} />
         </div>
       </div>
