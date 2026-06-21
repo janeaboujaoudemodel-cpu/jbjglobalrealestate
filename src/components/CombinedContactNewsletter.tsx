@@ -84,7 +84,7 @@ const CombinedContactNewsletter = ({
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
                 data-no-contrast-guard
-                className="jj-pill-emerald allow-white group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
+                className="jj-emerald-rect-pill allow-white group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
               >
                 <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
                 <div className="min-w-0 text-left">
