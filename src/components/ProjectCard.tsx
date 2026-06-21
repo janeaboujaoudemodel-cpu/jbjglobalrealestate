@@ -422,7 +422,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </Link>
 
-      {/* CTA Buttons — Email, Call, WhatsApp. Champagne tile + ink icons/labels. */}
+      {/* CTA Buttons — Email, Call, WhatsApp. Premium rectangular emerald tiles. */}
       <div className="px-4 pb-4">
         <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/40 pt-3">
           <a
@@ -430,7 +430,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             onClick={(e) => e.stopPropagation()}
             aria-label={`Email about ${project.name}`}
             data-no-contrast-guard
-            className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+            className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
           >
             <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Email</span>
@@ -440,7 +440,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             onClick={(e) => e.stopPropagation()}
             aria-label={`Call about ${project.name}`}
             data-no-contrast-guard
-            className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+            className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
           >
             <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Call</span>
@@ -450,7 +450,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             onClick={(e) => e.stopPropagation()}
             aria-label={`WhatsApp about ${project.name}`}
             data-no-contrast-guard
-            className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+            className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
           >
             <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Chat</span>
