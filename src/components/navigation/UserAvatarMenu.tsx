@@ -147,18 +147,20 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuTrigger asChild>
         <button
           aria-label="Account menu"
-          className="relative h-9 w-9 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] transition-transform hover:scale-[1.04]"
+          data-no-contrast-guard
+          data-allow-dark-cta
+          data-on-dark
+          className="allow-white relative h-9 w-9 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-transform hover:scale-[1.04]"
           style={{
-            border: "1.5px solid hsl(var(--gold))",
+            border: "1.5px solid rgba(255,255,255,0.45)",
             boxShadow:
-              "0 0 0 1px rgba(184,149,85,0.35), 0 4px 14px -4px rgba(184,149,85,0.55)",
+              "0 0 0 1px rgba(4,120,87,0.55), 0 8px 18px -12px rgba(6,78,59,0.85)",
           }}
         >
           <span
             className="absolute inset-0 rounded-full flex items-center justify-center overflow-hidden"
             style={{
-              background:
-                "radial-gradient(120% 120% at 30% 25%, #FFFDF8 0%, #F5ECDC 38%, #E8D8B8 70%, #D9C291 100%)",
+              background: "var(--jj-emerald-ombre)",
             }}
           >
             <span
@@ -166,14 +168,14 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0.35), rgba(255,255,255,0) 25%, rgba(184,149,85,0.18) 55%, rgba(255,255,255,0.3) 80%, rgba(255,255,255,0) 100%)",
-                opacity: 0.5,
+                  "conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0.28), rgba(255,255,255,0) 25%, rgba(52,211,153,0.18) 55%, rgba(255,255,255,0.22) 80%, rgba(255,255,255,0) 100%)",
+                opacity: 0.62,
                 mixBlendMode: "soft-light",
               }}
             />
             <span
-              className="relative text-[12px] font-bold text-[#1A1A1A] tracking-[-0.01em]"
-              style={{ textShadow: "0 1px 0 rgba(255,255,255,0.5)" }}
+              className="relative text-[12px] font-bold tracking-[-0.01em]"
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: "0 1px 0 rgba(0,0,0,0.25)" }}
             >
               {initials}
             </span>

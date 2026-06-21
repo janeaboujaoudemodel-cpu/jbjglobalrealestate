@@ -86,12 +86,16 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
           </button>
         ) : isFlag ? (
           <button
-            className="h-8 inline-flex items-center gap-1.5 px-2.5 rounded-lg border border-[#B89555]/55 hover:border-[#B89555] hover:bg-[#B89555]/[0.06] transition-colors"
+            data-no-contrast-guard
+            data-allow-dark-cta
+            data-on-dark
+            className="allow-white h-9 inline-flex items-center gap-1.5 px-3 rounded-full border transition-colors shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:brightness-110"
+            style={{ backgroundImage: 'var(--jj-emerald-ombre)', borderColor: 'rgba(255,255,255,0.18)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             aria-label="Currency"
           >
-            <span className="text-sm leading-none">{currentCurrency.flag}</span>
-            <span className="text-[12px] font-semibold text-[#B89555] tracking-wide">{currentCurrency.code}</span>
-            <ChevronDown data-no-contrast-guard className="w-3 h-3" style={{ color: '#B89555', stroke: '#B89555' }} strokeWidth={2.25} />
+            <span className="text-sm leading-none" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.flag}</span>
+            <span className="text-[12px] font-semibold tracking-wide" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.code}</span>
+            <ChevronDown data-no-contrast-guard className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.25} />
           </button>
         ) : (
           <button className="h-10 px-3 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#B89555]/20 hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/10 flex items-center gap-2">

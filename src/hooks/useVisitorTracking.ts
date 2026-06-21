@@ -79,9 +79,7 @@ export const useVisitorTracking = () => {
     const connectionInfo = (navigator as NavigatorWithConnection).connection;
     
     try {
-      const { error } = await supabase
-        .from('visitor_sessions')
-        .upsert({
+      const sessionPayload = {
           session_id: sessionId,
           device_type: getDeviceType(),
           browser: getBrowserInfo(),
@@ -94,12 +92,14 @@ export const useVisitorTracking = () => {
           viewport_size: `${window.innerWidth}x${window.innerHeight}`,
           language: navigator.language || null,
           network_type: connectionInfo?.effectiveType || null,
-        } as never, {
-          onConflict: 'session_id',
-        });
+        } as never;
+
+      const { error } = await supabase
+        .from('visitor_sessions')
+        .upsert(sessionPayload, { onConflict: 'session_id' });
 
       if (error) {
-        console.error('Error creating session:', error);
+        if (import.meta.env.DEV) console.warn('Visitor tracking unavailable:', error.message);
         trackingUnavailable.current = true;
       }
     } catch (error) {

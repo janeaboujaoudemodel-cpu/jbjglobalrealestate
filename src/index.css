@@ -8237,4 +8237,138 @@ html body [data-surface="navy"]:hover {
   background-image: linear-gradient(180deg, #075B45 0%, #064E3B 60%, #032419 100%) !important;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   PASS 27 — Verified emerald header + sidebar active locks
+   Every horizontal utility control must be emerald/white, including
+   nested spans/icons that global light-surface guards previously flipped
+   back to ink. Active sidebar rows/subrows use the same white-on-emerald.
+   ════════════════════════════════════════════════════════════════ */
+html body [data-jj-utility-bar] :is(
+  button[aria-label="Search"],
+  button[aria-label="Filter"],
+  a[aria-label="Favorites"],
+  [data-jj-utility-pill],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"],
+  a[href="/auth"]
+),
+html body [data-jj-utility-bar] :is(
+  button[aria-label="Search"],
+  button[aria-label="Filter"],
+  a[aria-label="Favorites"],
+  [data-jj-utility-pill],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"],
+  a[href="/auth"]
+):hover,
+html body [data-jj-utility-bar] :is(
+  button[aria-label="Search"],
+  button[aria-label="Filter"],
+  a[aria-label="Favorites"],
+  [data-jj-utility-pill],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"],
+  a[href="/auth"]
+):focus-visible {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+html body [data-jj-utility-bar] :is(
+  button[aria-label="Search"],
+  button[aria-label="Filter"],
+  a[aria-label="Favorites"],
+  [data-jj-utility-pill],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"],
+  a[href="/auth"]
+) :is(span, small, strong, em, svg, [class*="lucide"]),
+html body [data-jj-utility-bar] :is(
+  button[aria-label="Search"],
+  button[aria-label="Filter"],
+  a[aria-label="Favorites"],
+  [data-jj-utility-pill],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"],
+  a[href="/auth"]
+) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-jj-utility-bar] [data-jj-utility-pill] button {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+}
+html body [data-jj-utility-bar] button[aria-label="Account menu"] > span:first-child > span.relative {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight][data-active="true"] > span:first-child {
+  background: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.40) !important;
+}
+
+/* PASS 28 — final expanded-sidebar active section contrast lock. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] [data-sidebar-section-label] {
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] > div:first-child {
+  background: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.40) !important;
+}
+
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] :is([data-on-dark], .allow-white, .allow-white *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 
