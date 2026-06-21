@@ -8340,4 +8340,29 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highligh
   border: 1px solid rgba(255,255,255,0.40) !important;
 }
 
+/* PASS 28 — final expanded-sidebar active section contrast lock. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"]:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] [data-sidebar-section-label] {
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] > div:first-child {
+  background: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.40) !important;
+}
+
 
