@@ -8994,7 +8994,7 @@ html body .jj-emerald-chip:hover {
 }
 
 /* Champagne chip primitive (Top Areas badges) */
-.jj-emerald-chip {
+html body .jj-emerald-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
@@ -9011,6 +9011,7 @@ html body .jj-emerald-chip:hover {
   -webkit-text-fill-color: #1A1A1A !important;
   box-shadow: 0 8px 18px -14px rgba(26,26,26,0.45) !important;
   animation: none !important;
+  transition: none !important;
 }
 html body .jj-emerald-chip :is(svg, [class*="lucide"]),
 html body .jj-emerald-chip :is(svg, [class*="lucide"]) * {
