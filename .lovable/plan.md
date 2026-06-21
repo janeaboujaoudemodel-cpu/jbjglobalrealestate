@@ -1,29 +1,24 @@
-# Emerald Pill Unification + Newsletter Polish
+1. Mortgage compare slider
+   - Change the Compare to Bank Rates range input to use the same emerald slider variables/track/thumb treatment as the existing long-term mortgage sliders.
+   - Ensure the filled scroller paint and the circular thumb are both emerald, not gold/light/gray.
+   - Keep its calculation logic unchanged.
 
-Align three pill clusters to the same emerald "AED" header pill (deep emerald gradient + subtle metallic sheen, white text + white icons, per Emerald Surface → White FG global rule), and upgrade the newsletter input.
+2. Horizontal header sq ft/sq m active state
+   - Replace the current white-line shimmer with a true emerald metallic animated shine using emerald-only highlights and depth.
+   - Lighten the active emerald surface enough that the white “sq ft” label stays readable.
+   - Keep inactive sq m visually different and darker.
 
-## 1. ProjectCard — Email / Call / Chat (`src/components/ProjectCard.tsx` ~L427–455)
-- Swap the three anchor pills to use `.jj-pill-emerald` (same primitive as header AED chip).
-- Add `data-no-contrast-guard` so icons + label stay white at all states.
-- Keep 3-up row, equal width, icon-left, h-9.
+3. Global emerald contrast lock
+   - Add a final scoped global CSS lock so every emerald surface/class/attribute renders white text and white icons at rest, hover, focus, and active.
+   - This includes `.jj-emerald-chip`, `.jj-pill-emerald`, `.jj-emerald-metallic`, `.jj-emerald-rect-pill`, `[data-emerald]`, and `[data-emerald="true"]`.
 
-## 2. Mortgage "Compare to bank rates" toggle (`src/components/mortgage/MortgageParityPanel.tsx`)
-- Rebuild segmented control so its **width matches the sibling sliders** (Loan Term / Down Payment / Interest Rate / Property Price) — full container width, same height.
-- Active segment = `.jj-pill-emerald` with the existing `jj-sqtoggle-sheen` metallic sheen animation; the inner thumb/circle indicator also becomes emerald (not gold).
-- Inactive segment = transparent, ink label.
+4. Top Areas section
+   - Fix Top Areas / Trending / High Demand chips so they are emerald with white text/icons, not black text on emerald.
+   - Make the small Explore buttons on each area card match the emerald CTA style used in Handpicked For You, with white label and arrow.
 
-## 3. "Ready to Get Started" contact pills (`src/components/CombinedContactNewsletter.tsx` ~L43–119)
-- Convert WhatsApp / Call Us / Email from rounded pills → **premium rectangular tiles** (`rounded-xl`).
-- Apply emerald metallic surface + 1px gold hairline frame + white icon/label/value, `data-no-contrast-guard`.
-- 3-col grid desktop, stack on mobile.
-
-## 4. Newsletter input + headline (`src/components/CombinedContactNewsletter.tsx`, `src/components/marketing/NewsletterBrevo.tsx`)
-- Upgrade "Stay in the Loop" headline to a premium attention-grabbing title (e.g. "Get the Edge — New Listings, Market Moves & Insider Insights") with a short ink sub-line.
-- Restore prior dark input styling: dark emerald/ink field, white typed text, white-ish placeholder: *"Enter your email — new listings, market updates & insider insights"*.
-- Submit button stays emerald metallic to match the new pill family.
-
-## Notes
-- Uses existing `.jj-pill-emerald` + `jj-sqtoggle-sheen` primitives in `src/index.css` — no new tokens.
-- `data-no-contrast-guard` on all emerald surfaces keeps white fg (PASS 10).
-- No href/onClick or business-logic changes.
-- Verify visually at 1144px and 390px.
+5. Visual validation only
+   - Open the live preview and capture screenshots showing:
+     - header sq ft active state,
+     - mortgage Compare to Bank Rates slider track + thumb,
+     - Top Areas chips and Explore buttons.
+   - Verify visually at the current desktop viewport and zoom/close-up where needed before reporting back.
