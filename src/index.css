@@ -8928,3 +8928,11 @@ html body [data-photo-copy-lock] :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+html body .jj-force-white-copy,
+html body .jj-force-white-copy *,
+html body h3.jj-force-white-copy,
+html body p.jj-force-white-copy {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9) !important;
+}
