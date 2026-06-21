@@ -9167,43 +9167,9 @@ html body .mortgage-compare-card {
   min-height: 100% !important;
   box-shadow: 0 0 0 1px rgba(52,211,153,.20), 0 12px 34px -24px rgba(6,78,59,.55) !important;
 }
-html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"] {
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  height: 28px !important;
-  padding: 0 !important;
-  background-image:
-    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.44) 50%, rgba(255,255,255,0) 100%),
-    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(4,120,87,.95) !important;
-  border-radius: 9999px !important;
-  pointer-events: auto !important;
-  touch-action: pan-y !important;
-}
-html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  width: 28px !important;
-  height: 28px !important;
-  margin-top: 0 !important;
-  border: 2px solid #064E3B !important;
-  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 46%, #047857 100%) !important;
-  box-shadow: 0 0 0 2px rgba(255,255,255,.70), 0 0 18px rgba(4,120,87,.72), 0 4px 12px rgba(0,0,0,.28) !important;
-}
-html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-moz-range-thumb {
-  width: 28px !important;
-  height: 28px !important;
-  border: 2px solid #064E3B !important;
-  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 46%, #047857 100%) !important;
-  box-shadow: 0 0 0 2px rgba(255,255,255,.70), 0 0 18px rgba(4,120,87,.72), 0 4px 12px rgba(0,0,0,.28) !important;
-}
-html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-webkit-slider-runnable-track,
-html body input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-moz-range-track {
-  height: 28px !important;
-  background: transparent !important;
-  border-radius: 9999px !important;
-}
+/* mortgage-compare-rate-input legacy override removed — slider now uses
+   .mortgage-range-input shape (44px frame, 8px track, 24px thumb) so it
+   matches Loan Term / Down Payment / Interest Rate / Property Price. */
 
 html body footer[data-footer="corporate"] :is(h4, a, p, span, bdi),
 html body footer[data-footer="corporate"] :is(h4, a, p, span, bdi):hover {
