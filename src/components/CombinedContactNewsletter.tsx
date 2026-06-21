@@ -75,7 +75,7 @@ const CombinedContactNewsletter = ({
             </p>
           </div>
 
-          {/* Contact cards — translucent white tiles on emerald, white icons/text */}
+          {/* Contact pills — one unified emerald surface, white icons/text */}
           <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 max-w-2xl mx-auto mb-5">
             {contactCards.map((card) => (
               <a
@@ -84,19 +84,10 @@ const CombinedContactNewsletter = ({
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
                 data-no-contrast-guard
-                className="jj-emerald-metallic group flex flex-row sm:flex-col items-center gap-2 sm:gap-2 p-2.5 sm:p-3 rounded-xl"
+                className="jj-pill-emerald allow-white group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-full"
               >
-                <div
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.14)",
-                    border: "1.5px solid rgba(255,255,255,0.85)",
-                    boxShadow: "0 0 12px rgba(52,211,153,0.45), inset 0 1px 0 rgba(255,255,255,0.30)",
-                  }}
-                >
-                  <card.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
-                </div>
-                <div className="text-left sm:text-center">
+                <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
+                <div className="min-w-0 text-left">
                   <p className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{ color: "#FFFFFF" }}>{card.label}</p>
                   <p className="text-xs sm:text-sm font-semibold" style={{ color: "#FFFFFF" }}>{card.value}</p>
                 </div>
