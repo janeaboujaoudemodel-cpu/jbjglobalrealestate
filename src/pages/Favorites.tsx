@@ -369,12 +369,12 @@ const Favorites = () => {
                   <p className="text-[#1A1A1A]/30 text-sm mb-8">Tip: Add properties to your favorites, then move your top picks to your shortlist for final evaluation.</p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link to="/properties">
-                      <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
+                      <Button data-no-contrast-guard className="jj-pill-emerald allow-white">
                         Explore Properties <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
                     <Link to="/ai-home-finder">
-                      <Button variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                      <Button data-no-contrast-guard variant="outline" className="jj-pill-emerald allow-white">
                         <Sparkles className="w-4 h-4 mr-2" /> AI Home Finder
                       </Button>
                     </Link>
@@ -474,7 +474,7 @@ const Favorites = () => {
                     </div>
                     <p className="text-[#1A1A1A]/50 text-sm mb-4">Request a personalized evaluation from our property consultants with detailed market insights.</p>
                     <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-                      <Button className="w-full bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
+                      <Button data-no-contrast-guard className="jj-pill-emerald allow-white w-full">
                         Request Evaluation <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </a>
@@ -492,7 +492,7 @@ const Favorites = () => {
                   <p className="text-[#1A1A1A]/30 text-sm mb-8">Tip: Your shortlist can be shared with our team for professional brokerage support.</p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link to="/properties">
-                      <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
+                      <Button data-no-contrast-guard className="jj-pill-emerald allow-white">
                         Explore Properties <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
