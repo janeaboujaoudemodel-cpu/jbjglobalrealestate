@@ -702,7 +702,7 @@ export default function ProjectDetailLayout({
         )}
 
         {/* Hero content - Bottom aligned */}
-        <div data-surface="dark" className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
+        <div data-surface="dark" data-ink-emerald-opt-out className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
