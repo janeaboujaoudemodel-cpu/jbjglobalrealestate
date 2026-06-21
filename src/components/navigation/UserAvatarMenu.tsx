@@ -228,11 +228,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
-        <DropdownMenuSeparator className="bg-gradient-to-r from-transparent via-[#047857]/40 to-transparent my-1" />
+        <div className="h-px mx-2 my-1 bg-[#047857]/45" aria-hidden="true" />
         <Row to="/favorites" icon={Heart} label="Favorites" />
-        <DropdownMenuSeparator className="bg-gradient-to-r from-transparent via-[#047857]/40 to-transparent my-1" />
+        <div className="h-px mx-2 my-1 bg-[#047857]/45" aria-hidden="true" />
         <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
-        <DropdownMenuSeparator className="bg-gradient-to-r from-transparent via-[#047857]/40 to-transparent my-1" />
+        <div className="h-px mx-2 my-1 bg-[#047857]/45" aria-hidden="true" />
         <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
 
 
