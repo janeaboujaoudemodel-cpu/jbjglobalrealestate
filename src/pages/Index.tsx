@@ -314,15 +314,14 @@ const Index = () => {
         <Suspense fallback={null}>
           <VerificationBanner />
         </Suspense>
-        {/* zero-gap join — portal banner sits flush directly under Get Verified */}
-        <div className="-mt-px">
-          <Suspense fallback={null}>
-            <ModePortalBanner />
-          </Suspense>
-        </div>
+        {/* ModePortalBanner removed here — now lives as a green block in the
+            vertical sidebar (above AI Home Finder). When the user completes
+            verification, VerificationBanner's CTA flips from "Get Verified"
+            to "Open Portal" — no duplicate portal CTA is rendered. */}
         <Suspense fallback={null}>
           <PartnerVerifyHeroCTA />
         </Suspense>
+
       </PremiumSectionCard>
 
 
