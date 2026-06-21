@@ -6835,7 +6835,7 @@ html body .jj-emerald-card :is(svg, [class*="lucide"]) * {
 html body [data-chrome="sidebar"] [data-sidebar-section] {
   background-image: var(--jj-emerald-ombre) !important;
   border: 1px solid rgba(52,211,153,0.40) !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
