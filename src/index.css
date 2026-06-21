@@ -9373,3 +9373,44 @@ html body:not(.jj-home-root) [data-project-shell] {
     padding-right: 2.5rem;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * PASS 21 — Emerald pill metallic sheen
+ * Adds a slow diagonal white sheen overlay to every .jj-pill-emerald so the
+ * Email/Call/Chat trio, the "Ready to Get Started" contact tiles and the
+ * header AED chip all share one premium animated identity.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+html body :is(a, button, span, div).jj-pill-emerald {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+html body :is(a, button, span, div).jj-pill-emerald::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0) 38%,
+    rgba(255,255,255,0.22) 50%,
+    rgba(255,255,255,0) 62%,
+    rgba(255,255,255,0) 100%);
+  background-size: 220% 100%;
+  background-position: 120% 0;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  animation: jj-pill-emerald-sheen 3.6s ease-in-out infinite;
+}
+html body :is(a, button, span, div).jj-pill-emerald > * {
+  position: relative;
+  z-index: 1;
+}
+@keyframes jj-pill-emerald-sheen {
+  0%   { background-position: 120% 0; }
+  55%  { background-position: -40% 0; }
+  100% { background-position: -40% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body :is(a, button, span, div).jj-pill-emerald::before { animation: none; }
+}
