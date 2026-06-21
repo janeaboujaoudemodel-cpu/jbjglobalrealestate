@@ -30,10 +30,11 @@ export default function HomepageBookMarquee() {
           </div>
           <Link
             to="/guides"
+            data-no-contrast-guard
             className="hidden sm:flex items-center gap-1.5 text-sm font-semibold transition-colors"
-            style={{ color: '#047857' }}
+            style={{ color: '#047857', WebkitTextFillColor: '#047857' } as React.CSSProperties}
           >
-            View Library
+            <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>View Library</span>
             <ArrowRight className="w-4 h-4" style={{ color: '#047857', stroke: '#047857' }} />
           </Link>
         </div>
