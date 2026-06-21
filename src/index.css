@@ -9194,3 +9194,145 @@ html body .from-gray-300\/10 {
   --tw-gradient-to: rgba(239,230,214,0) var(--tw-gradient-to-position) !important;
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * PASS 10 — EMERALD SURFACE → WHITE FOREGROUND (universal)
+ *
+ * Anywhere we use the emerald fill (chip, pill, button, badge, tile, box,
+ * card, header pill, sidebar nav, segmented control), text + icons MUST
+ * be solid white at idle/hover/focus/active. NEVER gold, NEVER ink.
+ *
+ * Triggers (class / data attr / hex tailwind):
+ *   .jj-pill-emerald, .jj-emerald-chip, .jj-emerald-metallic,
+ *   .jj-emerald-card, .jj-tab-active-metallic, .jj-bg-emerald,
+ *   [data-emerald], [data-jj-emerald],
+ *   .bg-emerald-500/600/700/800/900, .bg-[#064E3B], .bg-[#047857], .bg-[#042c1c]
+ *
+ * Opt-out: [data-no-contrast-guard]
+ * ═══════════════════════════════════════════════════════════════════════════ */
+html body :is(
+  .jj-pill-emerald,
+  .jj-emerald-chip,
+  .jj-emerald-metallic,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-bg-emerald,
+  .bg-emerald-500,
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .bg-\[\#064E3B\],
+  .bg-\[\#047857\],
+  .bg-\[\#042c1c\],
+  [data-emerald],
+  [data-emerald="true"],
+  [data-jj-emerald]
+):not([data-no-contrast-guard]),
+html body :is(
+  .jj-pill-emerald,
+  .jj-emerald-chip,
+  .jj-emerald-metallic,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-bg-emerald,
+  .bg-emerald-500,
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .bg-\[\#064E3B\],
+  .bg-\[\#047857\],
+  .bg-\[\#042c1c\],
+  [data-emerald],
+  [data-emerald="true"],
+  [data-jj-emerald]
+):not([data-no-contrast-guard]) :is(span, p, a, h1, h2, h3, h4, h5, h6, strong, small, label, button, li, dt, dd, time, bdi) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-decoration-color: rgba(255,255,255,0.55) !important;
+}
+html body :is(
+  .jj-pill-emerald,
+  .jj-emerald-chip,
+  .jj-emerald-metallic,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-bg-emerald,
+  .bg-emerald-500,
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .bg-\[\#064E3B\],
+  .bg-\[\#047857\],
+  .bg-\[\#042c1c\],
+  [data-emerald],
+  [data-emerald="true"],
+  [data-jj-emerald]
+):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]),
+html body :is(
+  .jj-pill-emerald,
+  .jj-emerald-chip,
+  .jj-emerald-metallic,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-bg-emerald,
+  .bg-emerald-500,
+  .bg-emerald-600,
+  .bg-emerald-700,
+  .bg-emerald-800,
+  .bg-emerald-900,
+  .bg-\[\#064E3B\],
+  .bg-\[\#047857\],
+  .bg-\[\#042c1c\],
+  [data-emerald],
+  [data-emerald="true"],
+  [data-jj-emerald]
+):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+/* Hover + focus + active locked too */
+html body :is(
+  .jj-pill-emerald,
+  .jj-emerald-chip,
+  .jj-emerald-metallic,
+  .jj-emerald-card,
+  .jj-bg-emerald,
+  [data-emerald],
+  [data-jj-emerald]
+):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active),
+html body :is(
+  .jj-pill-emerald,
+  .jj-emerald-chip,
+  .jj-emerald-metallic,
+  .jj-emerald-card,
+  .jj-bg-emerald,
+  [data-emerald],
+  [data-jj-emerald]
+):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * PASS 10b — Below-hero page shell (non-home pages)
+ * Force 1240px max-width + 24/40px page padding so cards stop running
+ * edge-to-edge. Homepage opts out via body.jj-home-root (added in Index.tsx).
+ * ═══════════════════════════════════════════════════════════════════════════ */
+html body:not(.jj-home-root) [data-project-shell] {
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+@media (min-width: 1024px) {
+  html body:not(.jj-home-root) [data-project-shell] {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
