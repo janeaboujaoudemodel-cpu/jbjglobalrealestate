@@ -9088,3 +9088,166 @@ html body footer a:focus-visible {
   color: #34D399 !important;
 }
 
+/* =========================================================================
+   PASS 36 — Locked emerald infrastructure repair.
+   Scoped, deterministic rules only: emerald surfaces are deep emerald pills
+   with white copy/icons at rest + hover; footer/account/mortgage use the
+   same approved emerald language without gray dividers or split-green CTAs.
+   ========================================================================= */
+
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon),
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon):is(:hover,:focus,:focus-visible,:active) {
+  --jj-locked-emerald: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj-locked-emerald-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
+  background-image: var(--jj-locked-emerald-sheen), var(--jj-locked-emerald) !important;
+  background-color: #064E3B !important;
+  background-size: 220% 100%, 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-blend-mode: screen, normal !important;
+  border-color: rgba(4,120,87,.95) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.34), 0 10px 24px -12px rgba(6,78,59,.95), 0 0 20px rgba(4,120,87,.28) !important;
+}
+
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon) :is(span,p,strong,small,em,b,a,button),
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon):is(:hover,:focus,:focus-visible,:active) :is(span,p,strong,small,em,b,a,button) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon) :is(svg, [class*="lucide"]),
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon) :is(svg, [class*="lucide"]) *,
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon):is(:hover,:focus,:focus-visible,:active) :is(svg, [class*="lucide"]),
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-emerald="true"], .jj-history-emerald-icon):is(:hover,:focus,:focus-visible,:active) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+html body :is(a,button).jj-pill-emerald,
+html body :is(a,button).jj-pill-emerald:hover {
+  border-radius: 9999px !important;
+  transform: translateY(0) !important;
+  filter: none !important;
+}
+
+html body .jj-history-emerald-icon {
+  animation: jj-pill-emerald-sweep 4.8s ease-in-out infinite !important;
+  border: 1px solid rgba(4,120,87,.95) !important;
+}
+
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:hover {
+  background-image:
+    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.44) 50%, rgba(255,255,255,0) 100%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  background-size: 220% 100%, 100% 100% !important;
+  background-blend-mode: screen, normal !important;
+  animation: jj-pill-emerald-sweep 4.6s ease-in-out infinite !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.32), inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.40), 0 0 16px rgba(52,211,153,.42) !important;
+}
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
+  background: rgba(0,0,0,.24) !important;
+  color: rgba(255,255,255,.76) !important;
+  -webkit-text-fill-color: rgba(255,255,255,.76) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus-visible {
+  background-image:
+    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 50%, rgba(255,255,255,0) 100%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  background-size: 220% 100%, 100% 100% !important;
+  background-blend-mode: screen, normal !important;
+  border: 1px solid rgba(4,120,87,.95) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 22px -14px rgba(6,78,59,.90) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body .jj-favorites-tab[data-state="active"] {
+  background-image:
+    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.44) 50%, rgba(255,255,255,0) 100%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(4,120,87,.95) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-favorites-tab[data-state="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body .mortgage-compare-card {
+  min-height: 100% !important;
+  box-shadow: 0 0 0 1px rgba(52,211,153,.20), 0 12px 34px -24px rgba(6,78,59,.55) !important;
+}
+html body input.mortgage-range-input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"] {
+  height: 36px !important;
+  padding: 0 !important;
+  background-image:
+    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.44) 50%, rgba(255,255,255,0) 100%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(4,120,87,.95) !important;
+  border-radius: 9999px !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+html body input.mortgage-range-input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
+  width: 24px !important;
+  height: 24px !important;
+  margin-top: 0 !important;
+  border: 2px solid #064E3B !important;
+  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 46%, #047857 100%) !important;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.70), 0 0 18px rgba(4,120,87,.72), 0 4px 12px rgba(0,0,0,.28) !important;
+}
+html body input.mortgage-range-input.mortgage-compare-rate-input[data-mortgage-slider="Compare rate"]::-moz-range-thumb {
+  width: 24px !important;
+  height: 24px !important;
+  border: 2px solid #064E3B !important;
+  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 46%, #047857 100%) !important;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.70), 0 0 18px rgba(4,120,87,.72), 0 4px 12px rgba(0,0,0,.28) !important;
+}
+
+html body footer[data-footer="corporate"] :is(h4, a, p, span, bdi),
+html body footer[data-footer="corporate"] :is(h4, a, p, span, bdi):hover {
+  color: #D1FAE5 !important;
+  -webkit-text-fill-color: #D1FAE5 !important;
+}
+html body footer[data-footer="corporate"] :is(h4, a:hover, a:focus-visible, bdi, svg, [class*="lucide"]) {
+  color: #34D399 !important;
+  -webkit-text-fill-color: #34D399 !important;
+  stroke: #34D399 !important;
+}
+html body footer[data-footer="corporate"] .inline-flex.rounded-full {
+  border-color: rgba(4,120,87,.65) !important;
+  background: rgba(4,120,87,.12) !important;
+}
+
+html body .bg-gradient-to-r.from-gray-300\/15,
+html body .hover\:from-gray-300\/15:hover,
+html body .from-gray-300\/20,
+html body .from-gray-300\/10 {
+  --tw-gradient-from: rgba(239,230,214,.45) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(239,230,214,0) var(--tw-gradient-to-position) !important;
+}
+

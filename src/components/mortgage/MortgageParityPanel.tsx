@@ -86,14 +86,14 @@ export default function MortgageParityPanel({
   }, [interestRate, loanTermYears, loanAmount, monthlyPayment]);
 
   const cardBg = isNavy
-    ? "linear-gradient(135deg, #0B2244 0%, #08152B 55%, #000 100%)"
+    ? "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)"
     : "#F7F2EA";
-  const cardBorder = isNavy ? "1px solid rgba(184,149,85,0.30)" : "1px solid rgba(184,149,85,0.30)";
+  const cardBorder = isNavy ? "1px solid rgba(52,211,153,0.48)" : "1px solid rgba(184,149,85,0.30)";
   const inkClass = isNavy ? "text-white" : "text-[#1A1A1A]";
   const subClass = isNavy ? "text-white/70" : "text-[#1A1A1A]/70";
 
-  const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div className="rounded-xl p-4 md:p-5" style={{ background: cardBg, border: cardBorder }}>
+  const Card = ({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) => (
+    <div className={`mortgage-parity-card rounded-xl p-4 md:p-5 ${className}`} style={{ background: cardBg, border: cardBorder }}>
       <p className={`text-[11px] uppercase tracking-[0.16em] font-semibold mb-3 ${subClass}`}>{title}</p>
       {children}
     </div>
@@ -210,7 +210,7 @@ export default function MortgageParityPanel({
       </Card>
 
       {/* Comparison */}
-      <Card title="Compare Two Bank Rates">
+      <Card title="Compare Two Bank Rates" className="mortgage-compare-card">
         <div className={`grid grid-cols-2 gap-3 text-sm ${inkClass}`}>
           <div>
             <p className={`text-xs ${subClass}`}>Bank A — {interestRate}%</p>
@@ -235,7 +235,7 @@ export default function MortgageParityPanel({
             aria-label="Compare rate"
             onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
             onChange={(e) => setCompareRate(Number(e.target.value))}
-            className="mortgage-range-input w-full"
+            className="mortgage-range-input mortgage-compare-rate-input w-full"
           />
         </div>
 
