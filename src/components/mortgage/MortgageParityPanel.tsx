@@ -238,8 +238,7 @@ export default function MortgageParityPanel({
             className="mortgage-range-input w-full"
             style={{
               background:
-                "linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) 0 / 100% 8px no-repeat",
-              backgroundPosition: "0 center",
+                "linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) 0 / 100% 100% no-repeat, #EFE6D6",
               ["--mortgage-range-thumb" as any]:
                 "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%)",
               ["--mortgage-range-thumb-shadow" as any]:
