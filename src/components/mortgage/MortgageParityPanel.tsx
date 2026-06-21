@@ -235,7 +235,15 @@ export default function MortgageParityPanel({
             aria-label="Compare rate"
             onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
             onChange={(e) => setCompareRate(Number(e.target.value))}
-            className="mortgage-compare-rate-input w-full"
+            className="mortgage-range-input w-full"
+            style={{
+              background:
+                "linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) 0 / 100% 100% no-repeat, #EFE6D6",
+              ["--mortgage-range-thumb" as any]:
+                "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%)",
+              ["--mortgage-range-thumb-shadow" as any]:
+                "0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(4,120,87,0.65), 0 4px 14px rgba(4,44,28,0.45)",
+            }}
           />
         </div>
 

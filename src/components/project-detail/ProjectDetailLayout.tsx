@@ -770,44 +770,47 @@ export default function ProjectDetailLayout({
           </div>
 
           {/* Hero CTAs - Download Brochure + Register Interest */}
-          <div className="flex flex-wrap gap-4 [&_button]:!text-white [&_button_*]:!text-white">
+          <div className="flex flex-wrap gap-4">
             {brochurePrimary ? (
-              <Button 
-                variant="hero" 
-                size="lg"
-                style={{ color: '#ffffff' }}
+              <button
+                type="button"
                 onClick={() => handleDocumentDownload("brochure", brochurePrimary.url)}
+                className="jj-pill-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-transform hover:-translate-y-0.5"
+                data-allow-dark-cta
+                data-no-contrast-guard
               >
-                <Download className="w-5 h-5" style={{ color: '#ffffff' }} />
-                <span style={{ color: '#ffffff' }}>Download Brochure</span>
-              </Button>
+                <Download className="w-5 h-5" />
+                <span>Download Brochure</span>
+              </button>
             ) : (
-              <Button 
-                variant="hero" 
-                size="lg"
-                style={{ color: '#ffffff' }}
+              <button
+                type="button"
                 onClick={() => {
                   setCaptureDocType("brochure");
                   setCaptureDocUrl(undefined);
                   setLeadCaptureOpen(true);
                 }}
+                className="jj-pill-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-transform hover:-translate-y-0.5"
+                data-allow-dark-cta
+                data-no-contrast-guard
               >
-                <FileText className="w-5 h-5" style={{ color: '#ffffff' }} />
-                <span style={{ color: '#ffffff' }}>Request Brochure</span>
-              </Button>
+                <FileText className="w-5 h-5" />
+                <span>Request Brochure</span>
+              </button>
             )}
-            <Button 
-              variant="hero" 
-              size="lg"
-              style={{ color: '#ffffff' }}
+            <button
+              type="button"
               onClick={() => {
                 setCaptureDocType("brochure");
                 setCaptureDocUrl(undefined);
                 setLeadCaptureOpen(true);
               }}
+              className="jj-pill-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-transform hover:-translate-y-0.5"
+              data-allow-dark-cta
+              data-no-contrast-guard
             >
-              <span style={{ color: '#ffffff' }}>Register Interest</span>
-            </Button>
+              <span>Register Interest</span>
+            </button>
           </div>
 
           {/* Broker-only: one-click branded presentation download (no editor, no navigation) */}
