@@ -8915,3 +8915,16 @@ html body :is(a, button).jj-pill-emerald:is(:hover,:focus,:active,:focus-visible
   stroke: #FFFFFF !important;
   fill: none !important;
 }
+html body [data-photo-copy-lock] :is(h1,h2,h3,h4,h5,h6,p,span,a,button,small,strong),
+html body [data-photo-copy-lock] :is(h1,h2,h3,h4,h5,h6,p,span,a,button,small,strong) *,
+html body [data-service-photo-copy],
+html body [data-service-photo-copy] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9) !important;
+}
+html body [data-photo-copy-lock] :is(svg, [class*="lucide"]),
+html body [data-photo-copy-lock] :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
