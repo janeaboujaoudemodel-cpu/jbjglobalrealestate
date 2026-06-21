@@ -223,7 +223,7 @@ export default function MortgageParityPanel({
             <p className={`text-[11px] ${subClass}`}>per month</p>
           </div>
         </div>
-        <div className="mt-3">
+        <div className="mt-3 py-1">
           <input
             type="range"
             data-mortgage-slider="Compare rate"
@@ -235,7 +235,7 @@ export default function MortgageParityPanel({
             aria-label="Compare rate"
             onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
             onChange={(e) => setCompareRate(Number(e.target.value))}
-            className="mortgage-range-input mortgage-compare-rate-input w-full"
+            className="mortgage-compare-rate-input w-full"
           />
         </div>
 

@@ -49,12 +49,11 @@ const AreasWeCover = () => {
 
           <div className="relative text-center mb-8 md:mb-10">
             <span
-              data-allow-dark-cta data-no-contrast-guard data-on-dark
-              className="jj-emerald-chip allow-white mb-4"
-              style={{ color: "#FFFFFF" }}
+              data-no-contrast-guard
+              className="jj-emerald-chip mb-4"
             >
-              <MapPin className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("areas.topLabel", "Top Areas")}</span>
+              <MapPin className="w-3 h-3" />
+              <span>{t("areas.topLabel", "Top Areas")}</span>
             </span>
 
 
@@ -108,13 +107,13 @@ const AreasWeCover = () => {
               {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
                 {area.isTrending && (
-                  <span data-no-contrast-guard data-on-dark className="jj-emerald-chip allow-white">
+                  <span data-no-contrast-guard className="jj-emerald-chip">
                     <TrendingUp className="w-2.5 h-2.5" />
                     Trending
                   </span>
                 )}
                 {area.isHighDemand && (
-                  <span data-no-contrast-guard data-on-dark className="jj-emerald-chip allow-white">
+                  <span data-no-contrast-guard className="jj-emerald-chip">
                     <Flame className="w-2.5 h-2.5" />
                     High Demand
                   </span>
