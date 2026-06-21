@@ -96,21 +96,7 @@ export const useVisitorTracking = () => {
 
       const { error } = await supabase
         .from('visitor_sessions')
-        .insert(sessionPayload);
-
-      if (error && error.code === '23505') {
-        const { error: updateError } = await supabase
-          .from('visitor_sessions')
-          .update({
-            last_activity_at: new Date().toISOString(),
-            user_id: user?.id || null,
-            viewport_size: `${window.innerWidth}x${window.innerHeight}`,
-          } as never)
-          .eq('session_id', sessionId);
-
-        if (updateError) throw updateError;
-        return;
-      }
+        .upsert(sessionPayload, { onConflict: 'session_id' });
 
       if (error) {
         if (import.meta.env.DEV) console.warn('Visitor tracking unavailable:', error.message);

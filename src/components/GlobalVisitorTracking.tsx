@@ -163,9 +163,9 @@ export const GlobalVisitorTracking = () => {
 
     const sessionId = getSessionId();
     try {
-      const { error: insertError } = await supabase
+      const { error: upsertError } = await supabase
         .from('visitor_sessions')
-        .insert({
+        .upsert({
           session_id: sessionId,
           device_type: getDeviceType(),
           browser: getBrowserInfo(),
@@ -175,15 +175,10 @@ export const GlobalVisitorTracking = () => {
           pages_visited: 1,
           user_id: user?.id || null,
           user_agent: navigator.userAgent,
-        } as any);
+        } as any, { onConflict: 'session_id' });
 
-      if (insertError) {
-        if (insertError.code !== '23505' && import.meta.env.DEV) {
-          console.warn('Legacy visitor tracking unavailable:', insertError.message);
-        }
-        await supabase.from('visitor_sessions')
-          .update({ last_activity_at: new Date().toISOString(), user_id: user?.id || null })
-          .eq('session_id', sessionId);
+      if (upsertError && import.meta.env.DEV) {
+        console.warn('Legacy visitor tracking unavailable:', upsertError.message);
       }
     } catch { /* silent */ }
   }, [location.pathname, user]);
