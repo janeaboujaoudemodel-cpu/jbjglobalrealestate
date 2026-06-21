@@ -210,7 +210,7 @@ export default function MortgageParityPanel({
       </Card>
 
       {/* Comparison */}
-      <Card title="Compare Two Bank Rates" className="mortgage-compare-card">
+      <Card title="Compare to Bank Rates" className="mortgage-compare-card">
         <div className={`grid grid-cols-2 gap-3 text-sm ${inkClass}`}>
           <div>
             <p className={`text-xs ${subClass}`}>Bank A — {interestRate}%</p>
