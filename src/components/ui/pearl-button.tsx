@@ -48,7 +48,7 @@ const sizeMap: Record<PearlButtonSize, string> = {
 };
 
 const baseLayout =
-  "group relative inline-flex items-center justify-center font-bold tracking-tight " +
+  "group relative inline-flex items-center justify-center whitespace-nowrap font-bold tracking-tight " +
   "transition-all duration-300 will-change-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] " +
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 " +
   "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0";
