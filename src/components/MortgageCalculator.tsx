@@ -135,24 +135,24 @@ const MortgageCalculator = ({
   const [selectedProject, setSelectedProject] = useState<MortgageProject | null>(null);
   const isNavy = themeVariant === "navy";
 
-  // Navy slider wrapper style — also injects CSS vars so the gold slider
-  // primitive automatically picks up the matching blue neon glow used by
+  // Dark slider wrapper style — injects emerald CSS vars so every slider
+  // primitive picks up the matching emerald glow used by
   // the Monthly card. CSS custom properties inherit through the DOM and
   // are resolved by the inline `style="background: var(--slider-range-bg, …)"`
   // on the Slider Range/Thumb.
   const navySliderWrapperStyle = {
     background:
-      "linear-gradient(135deg, #123968 0%, #081A33 70%, #020814 100%)",
-    border: "1px solid rgba(147,197,253,0.42)",
-    boxShadow: "inset 0 0 22px rgba(184,149,85,0.10)",
+      "linear-gradient(135deg, #064E3B 0%, #042c1c 62%, #000000 100%)",
+    border: "1px solid rgba(52,211,153,0.42)",
+    boxShadow: "inset 0 0 22px rgba(52,211,153,0.14)",
     // Slider theme overrides (cascade into <Slider />)
     ["--slider-track-bg" as any]: "rgba(255,255,255,0.10)",
     ["--slider-range-bg" as any]:
-      "linear-gradient(90deg, #1E4E8C 0%, #3B82F6 55%, #93C5FD 100%)",
+      "linear-gradient(90deg, #064E3B 0%, #10B981 55%, #6EE7B7 100%)",
     ["--slider-thumb-bg" as any]:
-      "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)",
+      "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%)",
     ["--slider-thumb-shadow" as any]:
-      "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(184,149,85,0.85), 0 4px 14px rgba(30,64,175,0.55)",
+      "0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(52,211,153,0.85), 0 4px 14px rgba(4,120,87,0.55)",
   } as CSSProperties;
 
   useEffect(() => {
@@ -372,7 +372,7 @@ const MortgageCalculator = ({
         {showHeading && (
         <div className="text-center mb-6 md:mb-8">
           <h3 className="text-[#0A0A0A] text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
-            Mortgage <span className={isNavy ? "text-transparent bg-clip-text" : ""} style={isNavy ? { backgroundImage: "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 45%, #2563EB 100%)", WebkitBackgroundClip: "text" } : undefined}>Calculator</span>
+            Mortgage <span className={isNavy ? "text-transparent bg-clip-text" : ""} style={isNavy ? { backgroundImage: "linear-gradient(135deg, #FFFFFF 0%, #6EE7B7 45%, #10B981 100%)", WebkitBackgroundClip: "text" } : undefined}>Calculator</span>
           </h3>
           <p className="text-[#1A1A1A]/70 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
             Estimate your monthly payments and explore financing options.
@@ -456,11 +456,11 @@ const MortgageCalculator = ({
             className="rounded-xl p-3 md:p-4 text-center flex flex-col justify-center md:scale-[1.03]"
             style={{
               background: isNavy
-                ? "linear-gradient(135deg, #FFFFFF 0%, #93C5FD 18%, #1E4E8C 58%, #06101E 100%)"
+                ? "linear-gradient(135deg, #FFFFFF 0%, #D1FAE5 18%, #047857 58%, #031B12 100%)"
                 : "linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 50%, #ECE2D2 100%)",
-              border: isNavy ? "1px solid rgba(191,219,254,0.78)" : "1px solid rgba(184,149,85,0.55)",
+              border: isNavy ? "1px solid rgba(52,211,153,0.78)" : "1px solid rgba(184,149,85,0.55)",
               boxShadow: isNavy
-                ? "0 0 0 1px rgba(147,197,253,0.35), 0 12px 36px rgba(184,149,85,0.42), inset 0 1px 0 rgba(255,255,255,0.55)"
+                ? "0 0 0 1px rgba(52,211,153,0.35), 0 12px 36px rgba(4,120,87,0.42), inset 0 1px 0 rgba(255,255,255,0.55)"
                 : "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
             }}
           >
