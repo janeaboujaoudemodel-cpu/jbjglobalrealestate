@@ -1,71 +1,72 @@
-# Premium Gold Polish: Consultation Form + Global Checkbox + Eyebrow Pills
 
-Targeted polish to make CTAs feel premium/metallic, fix the missing checkmark, and align the terms row with the submit button. Reuses the existing `jj-cta-gold-shimmer` keyframes already in `index.css` — no new animations.
+# Emerald Polish — Final Pass
 
-## 1. Soft-gold borders on every input/select in the consultation form
+Apply the existing `jj-emerald-metallic` animated ombre (deep emerald #064E3B → #042c1c with sweep animation, white text/icons) consistently to every surface called out below. Restore the Contact us tag. Validate each with a screenshot.
 
-`src/components/ConsultationRequestForm.tsx`
+## 1. Header sq ft / sq m toggle (HorizontalUtilityBar)
+- Active segment must use `jj-emerald-metallic` shimmer (same ombre + sweep keyframes as the gold version had), not flat dark green. Inactive segment stays transparent on champagne pill with ink text.
 
-- Replace every input/select trigger ring (currently dark `#1A1A1A` outlines after contrast-guard repaint) with **1px `rgba(184,149,85,0.55)` hairline + champagne `#FDFBF7` fill + ink label**.
-- Hover/focus → gold `#B89555` border + soft gold glow `0 0 0 3px rgba(184,149,85,0.15)`.
-- Apply to: Full Name, Email, Phone Number text input, Service Needed, Timeline, Nationality, Preferred Language, Preferred Time, Contact Method, Budget Range, Additional details.
-- `data-no-contrast-guard` on each `<SelectTrigger />` so the global black-CTA guard never re-fills them to ink.
+## 2. Property card Email / Call / Chat pills (ProjectCard + ReellyProjectCard)
+- Replace per-button styling with a single locked class `jj-pill-emerald-metallic` that:
+  - applies the animated emerald ombre fill
+  - forces white text + white icon at idle/hover/focus/active via `data-allow-dark-cta` + `data-on-dark` + `allow-white`
+  - keeps current rounded pill shape
+- Add a PASS 35 CSS block in `index.css` that wins against every contrast guard for `.jj-pill-emerald-metallic` (and `[data-emerald-pill]`).
 
-## 2. Animated metallic-gold treatment for premium controls
+## 3. Top Areas in Dubai (AreasWeCover)
+- "TOP AREAS" eyebrow, "TRENDING" + "HIGH DEMAND" chips, and per-card "EXPLORE →" CTA all use `jj-emerald-metallic` with white text + white arrow.
+- Explore button must be one single pill (icon + label + arrow inside one element, no split background).
 
-Reuse the existing `.jj-pill-active` / `jj-cta-gold-shimmer` recipe. Introduce **one** new utility class `.jj-gold-metallic` in `src/index.css`:
+## 4. Mortgage Calculator (MortgageCalculator.tsx)
+- All section cards (Residency & LTV, Affordability, One-time Fees, Compare Two Bank Rates, Amortization) re-skinned: champagne raised surface with 1px gold hairline + emerald metallic headers/labels for KPI rows.
+- Compare Two Bank Rates: the comparison slider becomes the emerald metallic track + emerald thumb; fix the broken drag interaction (ensure the `<input type="range">` is not covered by an overlay and `pointer-events: auto` + `touch-action: none` on track).
+- Equalize card heights via grid `auto-rows-fr` so cards align (the screenshot shows a stretched One-time Fees card).
+- Bottom CTAs ("Try Our AI Mortgage Calculator", "Connect With Mortgage Partners") → emerald metallic with white labels/icons.
 
-```css
-.jj-gold-metallic {
-  background: linear-gradient(135deg,#F7EFDC 0%,#E9D9B2 30%,#D7BE7E 55%,#E9D9B2 80%,#F7EFDC 100%);
-  background-size: 220% 220%;
-  border: 1px solid rgba(184,149,85,0.65);
-  color: #1A1A1A;
-  box-shadow: 0 6px 18px -8px rgba(184,149,85,0.55), inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(184,149,85,0.35);
-  animation: jj-cta-gold-shimmer 4.5s ease-in-out infinite;
-}
-.jj-gold-metallic:hover { filter: brightness(1.04); }
-```
+## 5. Get In Touch / Ready to get started card (CTABand or footer CTA)
+- Reduce overall padding (py-12 → py-8, max-w shrunk) and tighten the three WhatsApp/Call/Email tiles.
+- "GET IN TOUCH" eyebrow + the three contact tiles use `jj-emerald-metallic` (already close — re-lock to the canonical class).
+- Stay In The Loop email input: add the same rotating placeholder typing animation used by the hero search bar (reuse the hook/component from HomeHeroSearch).
 
-Apply it to:
-- The **+971 country-code button** (currently rendered as a black pill — the obvious place per the user's screenshot).
-- The **Request Consultation submit button** (with ink text + a Send icon already on the right).
-- The **GET EXPERT GUIDANCE eyebrow pill** and any equivalent eyebrow-pill primitive used across other pages (search for the same component / class — e.g. `EXPERT CONSULTATION` chip, `EXCLUSIVE`, `PREMIUM ACCESS` eyebrows). One global swap.
+## 6. Footer
+- Replace any flat green (`bg-emerald-700`, etc.) with `jj-emerald-metallic` for the contact tiles, send button, and the Privacy/Cookies/Sitemap link row hover.
 
-## 3. Checkbox: visible 3D gold tick (global)
+## 7. Filter sheet (NewOffPlanProjects modal)
+- Restyle inputs, selects, sliders, toggles, heart, "Clear all", search icon to the emerald system:
+  - Selects + search input: champagne surface, 1px gold hairline, ink text, emerald focus ring.
+  - Slider track: emerald metallic fill, emerald thumb.
+  - "Post handover plans only" toggle: emerald metallic when on.
+  - Heart icon: emerald outline → emerald metallic fill when active.
+  - "Show 813 projects" CTA: already dark — re-lock to `jj-emerald-metallic`.
+  - "Clear all": outline ghost with emerald hover.
 
-`src/components/ui/checkbox.tsx`
+## 8. Collapsed vertical sidebar — collapse/expand button
+- When `.jj-vertical-nav-collapsed` is active, the chevron tile must render emerald metallic with white icon at idle AND hover (no gold/champagne flip, no white-on-light). Override the legacy gold rule from previous passes and the `:hover` contrast guard.
 
-Today the box is 16×16, champagne fill, gold stroked check — the check is barely visible and gets clipped by the small box. Replace with:
+## 9. Restore Contact us vertical tag (SupportLauncher)
+- The "Contact us" rotated tag was removed. Re-mount the right-edge vertical pill (the phone button stays separate). Use `jj-emerald-metallic` ombre.
 
-- **20×20** rounded box, 1.5px gold border, champagne fill at rest.
-- On `data-[state=checked]`: fill with the `.jj-gold-metallic` gradient (no animation here — static gold to feel like a stamp), inset shadow `inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 6px rgba(184,149,85,0.35)` for the 3D pop.
-- Tick: white `Check` icon, `strokeWidth={4}`, drop-shadow `drop-shadow(0 1px 0 rgba(0,0,0,0.25))`.
-- Keep `data-no-contrast-guard` so the global guard cannot strip the tick colour.
+## Implementation files
+- `src/index.css` — add PASS 35 block: `.jj-pill-emerald-metallic`, locked sidebar collapse rule, filter-sheet field overrides, footer green→emerald remap, white-text/icon enforcement for all `[data-emerald-pill]`.
+- `src/components/navigation/HorizontalUtilityBar.tsx` — sq ft / sq m active class.
+- `src/components/ProjectCard.tsx` + `src/components/ReellyProjectCard.tsx` — swap Email/Call/Chat classes.
+- `src/components/home/AreasWeCover.tsx` — chips + Explore pill unification.
+- `src/components/MortgageCalculator.tsx` — card grid, slider fix, CTA classes, comparison slider rebuild.
+- `src/components/home/CTABand.tsx` (Ready to get started + Stay in the Loop) — compact sizing + animated placeholder + emerald lock.
+- `src/components/home/HomepageBookMarquee.tsx` or footer component — green→emerald.
+- Filter modal component (find via `New Off Plan Projects` string).
+- `src/components/support/SupportLauncher.tsx` — restore Contact us tag.
+- Sidebar collapse component (GlobalVerticalNav or SidebarModePortalBlock).
 
-Result: every checkbox site-wide (forms, T&Cs, filter toggles using `<Checkbox />`) gets the premium 3D gold-tick.
+## Validation
+After each group of edits, use browser--view_preview + screenshot:
+1. Header toggle (top-right)
+2. Property card row
+3. Top Areas section
+4. Mortgage Calculator (full page incl. Compare Bank Rates + slider drag)
+5. Footer CTA
+6. Filter modal (open it)
+7. Sidebar collapsed + hovered
+8. Contact us tag visible on right edge
 
-## 4. Align "I agree to terms" inline with the submit button
-
-`src/components/ConsultationRequestForm.tsx` — currently the terms row sits as a separate `FormItem` above the button. Restructure the footer:
-
-```text
-[ ✓ ] I agree to the Terms and Privacy Policy *      [  Request Consultation →  ]
-```
-
-- Wrap the terms `FormItem` + submit `<Button>` in a single `flex flex-wrap items-center justify-between gap-4` row.
-- On mobile (< 640px) the terms wrap above the button (`flex-col sm:flex-row`).
-- `FormMessage` for the checkbox still renders directly under the terms text.
-
-## 5. Files
-
-- `src/index.css` — add `.jj-gold-metallic` utility once.
-- `src/components/ui/checkbox.tsx` — bigger box, gold fill when checked, white tick + drop-shadow.
-- `src/components/ConsultationRequestForm.tsx` — gold borders, `.jj-gold-metallic` on +971 button + submit, terms aligned next to submit.
-- `src/components/PageEyebrow.tsx` (or whichever component renders "GET EXPERT GUIDANCE" / "EXPERT CONSULTATION" — I will locate during build) — swap base style to `.jj-gold-metallic`.
-
-## Out of scope
-
-- Mass-converting every CTA across all 200+ pages to metallic gold. We apply it on the consultation form + the eyebrow pill primitive used globally; other primary CTAs (`.jj-cta-dark`) stay black per the locked CTA system unless you call them out.
-
-Reply **Approve** to build.
+Reject and re-fix any group whose screenshot does not show emerald metallic + white text/icons + the requested layout change.
