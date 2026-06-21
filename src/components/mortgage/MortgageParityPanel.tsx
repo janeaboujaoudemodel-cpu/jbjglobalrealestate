@@ -236,11 +236,9 @@ export default function MortgageParityPanel({
             onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
             onChange={(e) => setCompareRate(Number(e.target.value))}
             className="mortgage-range-input w-full"
-            style={{
-              background: `linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) 0 / ${((compareRate - 2) / (10 - 2)) * 100}% 100% no-repeat, ${isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6"}`,
-            } as React.CSSProperties}
           />
         </div>
+
         <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
           <Scale className="w-3.5 h-3.5" />
           <span>Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(monthlyPayment - compareMonthly))}</span> ({(monthlyPayment > compareMonthly ? "save" : "extra")} on Bank B)</span>
