@@ -41,13 +41,14 @@ const CombinedContactNewsletter = ({
   ];
 
   return (
-    <section id="ready-to-get-started" className={`py-6 sm:py-8 md:py-10 bg-[#FDFBF7] ${className}`}>
+    <section id="ready-to-get-started" className={`py-4 sm:py-5 md:py-6 bg-[#FDFBF7] ${className}`}>
       <div className="w-full px-4 md:px-6">
         <div
           data-ink-emerald
           data-no-contrast-guard
-          className="jj-emerald-card jj-loop-block relative rounded-2xl p-5 md:p-7 max-w-4xl mx-auto"
+          className="jj-emerald-card jj-loop-block relative rounded-2xl p-4 md:p-5 max-w-3xl mx-auto"
         >
+
           {/* Header */}
           <div className="relative text-center mb-5">
             <span
