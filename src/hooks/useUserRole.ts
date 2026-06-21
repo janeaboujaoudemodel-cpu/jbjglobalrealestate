@@ -114,6 +114,7 @@ export const useUserRole = () => {
 
   const clearRole = () => {
     localStorage.removeItem(ROLE_SELECTION_KEY);
+    if (user?.id && roleCache?.userId === user.id) roleCache = null;
     setRole(null);
   };
 
@@ -123,6 +124,7 @@ export const useUserRole = () => {
     // Optimistic update
     setRole(newRole);
     localStorage.setItem(ROLE_SELECTION_KEY, newRole);
+    if (user?.id) roleCache = { userId: user.id, role: newRole };
 
     // Persist to database if logged in
     if (user?.id) {
