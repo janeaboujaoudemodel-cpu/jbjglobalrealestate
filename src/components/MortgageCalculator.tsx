@@ -104,11 +104,11 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
         {
           background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
           ["--mortgage-range-thumb" as any]: isNavy
-            ? "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #DBEAFE 45%, #93C5FD 100%)"
+            ? "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%)"
             : "#FFFFFF",
           ["--mortgage-range-thumb-shadow" as any]: isNavy
-            ? "0 0 0 2px #3B82F6 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(184,149,85,0.85), 0 4px 14px rgba(30,64,175,0.55)"
-            : "0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset",
+            ? "0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(52,211,153,0.85), 0 4px 14px rgba(4,120,87,0.55)"
+            : "0 2px 8px rgba(4,120,87,0.45), 0 0 0 2px #047857 inset",
         } as CSSProperties
       }
     />
