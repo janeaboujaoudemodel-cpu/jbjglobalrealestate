@@ -89,8 +89,14 @@ export function CareersFAQ() {
                         data-no-contrast-guard
                       />
                     ) : (
-                      <ChevronDown className="h-4 w-4 text-[#0A0A0A]" />
+                      <ChevronDown
+                        className="h-4 w-4"
+                        data-no-contrast-guard
+                        style={{ color: "#0A0A0A", stroke: "#0A0A0A", opacity: 1 }}
+                        strokeWidth={2.5}
+                      />
                     )}
+
                   </span>
                 </button>
                 <div

@@ -32,6 +32,8 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
+import SidebarModePortalBlock from "@/components/navigation/SidebarModePortalBlock";
+
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { useGatedToolAccess } from "@/hooks/useGatedToolAccess";
@@ -1038,10 +1040,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
         <div className="px-2.5 pt-1.5 pb-3 flex-1 flex flex-col">
+          {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
+          {!collapsed && <SidebarModePortalBlock />}
           {/* All categories (highlights + sections) share one flex-column with justify-between
               so spacing between AI Home Finder → MY ACCOUNT is visually balanced. */}
           <div className="flex-1 flex flex-col justify-between gap-1">
           {/* Highlight hubs (gold labels) */}
+
           {highlightItems.map((item, i) => {
               const hasMega = !!item.megaMenu;
               const isMenuOpen = activeMegaMenu === item.megaMenu;

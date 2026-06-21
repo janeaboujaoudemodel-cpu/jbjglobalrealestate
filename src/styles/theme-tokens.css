@@ -649,13 +649,13 @@ label[data-required]::after {
   background-color: #34d399 !important;
 }
 
-/* ---- Open Positions card: navy surface + animated linear sheen on hover ---- */
+/* ---- Open Positions card: EMERALD surface (was navy) + sheen on hover ---- */
 [data-careers-page] .careers-card-navy {
   position: relative;
-  background: linear-gradient(180deg, #143052 0%, #0A0A0A 100%) !important;
+  background: linear-gradient(180deg, #064E3B 0%, #042c1c 60%, #000000 100%) !important;
   border: 1px solid #B89555 !important;
   box-shadow:
-    0 28px 60px -34px rgba(7, 27, 51, 0.65),
+    0 28px 60px -34px rgba(4, 120, 87, 0.55),
     0 0 0 1px rgba(184, 149, 85, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
   color: #FFFFFF;
@@ -674,7 +674,7 @@ label[data-required]::after {
     115deg,
     transparent 0%,
     transparent 35%,
-    rgba(255, 255, 255, 0.14) 50%,
+    rgba(52, 211, 153, 0.18) 50%,
     transparent 65%,
     transparent 100%
   );
@@ -686,15 +686,16 @@ label[data-required]::after {
 [data-careers-page] .careers-card-navy:hover {
   border-color: #d4b87a !important;
   box-shadow:
-    0 32px 70px -34px rgba(7, 27, 51, 0.75),
+    0 32px 70px -34px rgba(4, 120, 87, 0.65),
     0 0 0 1px rgba(184, 149, 85, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
-  background: linear-gradient(180deg, #1F1F1F 0%, #143052 100%) !important;
+  background: linear-gradient(180deg, #075B45 0%, #064E3B 60%, #032419 100%) !important;
 }
 [data-careers-page] .careers-card-navy:hover::before {
   transform: translateX(110%);
   transition: transform 1.2s ease;
 }
+
 /* Navy section chrome: header copy is handled by explicit text-white on
    the elements themselves in JoinApplication.tsx. No broad descendant
    repaint here — it leaks white into nested champagne job cards. */
