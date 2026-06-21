@@ -8365,4 +8365,10 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
   border-color: rgba(255,255,255,0.40) !important;
 }
 
+html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-section][data-active="true"] :is([data-on-dark], .allow-white, .allow-white *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 
