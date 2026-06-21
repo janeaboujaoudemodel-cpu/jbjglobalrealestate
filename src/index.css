@@ -8701,4 +8701,9 @@ html body [data-jj-utility-bar] button[aria-label="Square meters"] {
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 1px 3px rgba(0,0,0,0.38) !important;
 }
+html body [data-jj-utility-bar] [data-jj-utility-pill] button::first-letter,
+html body [data-jj-utility-bar] [data-jj-utility-pill] button * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
 
