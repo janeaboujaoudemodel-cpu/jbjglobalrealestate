@@ -8202,3 +8202,39 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]
   font-weight: 700 !important;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   PASS 25 — Global accordion chevron visibility + Tab dividers
+   ──────────────────────────────────────────────────────────────── */
+html body button[aria-expanded] svg.lucide-chevron-down,
+html body [data-careers-page] button[aria-expanded] svg.lucide-chevron-down {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+html body button[aria-expanded="true"] svg.lucide-chevron-down {
+  transform: rotate(180deg);
+}
+
+/* Home strip dividers — vertical hairline between tabs matching the hero
+   filter-bar segmentation (Explore Our Services + JBJ Royal Tools). */
+html body [role="tablist"][aria-label="Services"] > button + button,
+html body [role="tablist"][aria-label="Royal tools"] > button + button {
+  border-left: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 26 — Global blue → emerald purge. Any leftover navy/blue surface
+   on careers/hero panels is remapped to emerald-ombre; hover stays
+   emerald, never gray.
+   ──────────────────────────────────────────────────────────────── */
+html body [data-careers-page] .careers-card-navy,
+html body [data-surface="navy"] {
+  background-image: linear-gradient(180deg, #064E3B 0%, #042c1c 60%, #000000 100%) !important;
+}
+html body [data-careers-page] .careers-card-navy:hover,
+html body [data-surface="navy"]:hover {
+  background-image: linear-gradient(180deg, #075B45 0%, #064E3B 60%, #032419 100%) !important;
+}
+
+
