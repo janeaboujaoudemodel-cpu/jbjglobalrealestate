@@ -421,7 +421,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Email about ${project.name}`}
-            className="jj-pill-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            data-no-contrast-guard
+            className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
           >
             <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Email</span>
@@ -430,7 +431,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             href={callHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Call about ${project.name}`}
-            className="jj-pill-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            data-no-contrast-guard
+            className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
           >
             <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Call</span>
@@ -439,7 +441,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             href={whatsappHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`WhatsApp about ${project.name}`}
-            className="jj-pill-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            data-no-contrast-guard
+            className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
           >
             <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Chat</span>

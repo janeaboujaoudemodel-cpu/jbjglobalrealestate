@@ -1,6 +1,6 @@
 /**
  * ChannelCard — shared premium card for the 4 support channels.
- * Champagne surface, ink text, gold hairline (brand standard).
+ * Emerald metallic surface with white text/icons.
  */
 import { Link } from "react-router-dom";
 import { LucideIcon } from "lucide-react";
@@ -28,27 +28,27 @@ export default function ChannelCard({
 }) {
   const Inner = (
     <div
-      data-premium
+      data-emerald="true"
       data-no-contrast-guard
       className={`group/channel flex ${compact ? "flex-row items-center gap-3" : "flex-col items-start gap-1"}
         px-3 py-2.5 rounded-xl text-left w-full
-        border border-gold bg-[#F7F2EA] text-[#B89555]
-        transform-gpu transition-[background-color,color,border-color,box-shadow,transform] duration-200
-        hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555] hover:-translate-y-0.5
-        hover:shadow-[0_14px_28px_rgba(26,26,26,0.18),0_0_22px_rgba(184,149,85,0.35)]`}
+        jj-emerald-metallic border-white/20 text-white allow-white
+        transform-gpu transition-[filter,border-color,box-shadow,transform] duration-200
+        hover:-translate-y-0.5 hover:brightness-110
+        hover:shadow-[0_16px_34px_-14px_rgba(6,78,59,0.95),0_0_22px_rgba(52,211,153,0.28),inset_0_1px_0_rgba(255,255,255,0.28)]`}
     >
       <div className="flex items-center gap-2">
-        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-gold bg-[#FDFBF7] text-[#B89555] transition-colors group-hover/channel:bg-[#FDFBF7] group-hover/channel:text-[#1A1A1A] group-hover/channel:border-[#1A1A1A]">
-          <channel.Icon className="h-3.5 w-3.5" />
+        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/35 bg-white/12 text-white allow-white transition-colors group-hover/channel:bg-white/16 group-hover/channel:border-white/60">
+          <channel.Icon className="h-3.5 w-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
         </span>
-        <span className="text-[13px] font-semibold text-[#B89555] group-hover/channel:text-[#1A1A1A] transition-colors">{channel.label}</span>
+        <span className="text-[13px] font-semibold text-white allow-white transition-colors">{channel.label}</span>
       </div>
-      <span className={`text-[11.5px] leading-tight text-[#B89555]/85 group-hover/channel:text-[#1A1A1A]/80 transition-colors ${compact ? "ml-auto" : ""}`}>
+      <span className={`text-[11.5px] leading-tight text-white/85 allow-white transition-colors ${compact ? "ml-auto" : ""}`}>
         {channel.description}
       </span>
       {!compact && channel.responseTime && (
-        <span className="inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.14em] font-semibold text-[#B89555]/80 group-hover/channel:text-[#1A1A1A]/85 transition-colors">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> {channel.responseTime}
+        <span className="inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.14em] font-semibold text-white/80 allow-white transition-colors">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" /> {channel.responseTime}
         </span>
       )}
     </div>

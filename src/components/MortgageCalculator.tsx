@@ -70,10 +70,8 @@ interface MortgageRangeProps {
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
   const lastEmittedValueRef = useRef(value);
-  const fill = isNavy
-    ? "linear-gradient(90deg, #064E3B 0%, #047857 55%, #10B981 100%)"
-    : "linear-gradient(90deg, #D7EAE0 0%, #34D399 45%, #047857 100%)";
-  const track = isNavy ? "rgba(255,255,255,0.12)" : "#E8F2EC";
+  const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
+  const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.14)";
 
   useEffect(() => {
     lastEmittedValueRef.current = value;
@@ -103,12 +101,8 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       style={
         {
           background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-          ["--mortgage-range-thumb" as any]: isNavy
-            ? "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%)"
-            : "#FFFFFF",
-          ["--mortgage-range-thumb-shadow" as any]: isNavy
-            ? "0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(52,211,153,0.85), 0 4px 14px rgba(4,120,87,0.55)"
-            : "0 2px 8px rgba(4,120,87,0.45), 0 0 0 2px #047857 inset",
+          ["--mortgage-range-thumb" as any]: "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%)",
+          ["--mortgage-range-thumb-shadow" as any]: "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
         } as CSSProperties
       }
     />
