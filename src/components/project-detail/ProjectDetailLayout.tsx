@@ -702,7 +702,7 @@ export default function ProjectDetailLayout({
         )}
 
         {/* Hero content - Bottom aligned */}
-        <div data-surface="dark" className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
+        <div data-surface="dark" data-ink-emerald-opt-out className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
@@ -844,7 +844,7 @@ export default function ProjectDetailLayout({
                       : null,
                   });
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white text-sm font-semibold border border-[#B89555]/40 shadow-sm transition-colors"
+                className="jj-pill-emerald inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
                 data-allow-dark-cta
                 title="Download a JBJ-branded presentation for this project"
               >
@@ -871,7 +871,7 @@ export default function ProjectDetailLayout({
 
       {previousProject && (
         <div className="sticky top-[88px] z-30 w-full bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/30">
-          <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-2 flex items-center justify-between gap-3">
+          <div className="max-w-[1240px] mx-auto px-4 md:px-8 py-2 flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={handleReturnToPrevious}
@@ -943,7 +943,8 @@ export default function ProjectDetailLayout({
 
       {/* MAIN CONTENT */}
       <section className="jj-section-champagne" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
+        <div className="max-w-[1240px] mx-auto px-5 sm:px-8 lg:px-12 py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
+
           {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
@@ -1655,7 +1656,7 @@ export default function ProjectDetailLayout({
         className="scroll-mt-32 jj-band jj-band--surface"
         data-section="register-interest"
       >
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
+        <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
           <ConsultationRequestForm
             title={`Register Interest in ${project.name}`}
             subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
@@ -1677,7 +1678,7 @@ export default function ProjectDetailLayout({
       {/* READY TO GET STARTED — full-bleed CTA band */}
       <SectionDividerGoldFullBleed />
       <div className="bg-[#FDFBF7]">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12">
+        <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12">
           <CallToActionSection projectName={project.name} projectId={project.id} />
         </div>
       </div>
