@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
  * PearlButton — global premium CTA.
  *
  * Replaces the legacy dark / black CTA buttons site-wide.
- * Mother-of-pearl champagne gradient, gold hairline border, soft 3D depth,
- * floating lift + champagne-gold glow on hover. Ink #1A1A1A text only.
+ * Mother-of-pearl champagne gradient, emerald hairline border, soft 3D depth,
+ * floating lift + emerald glow on hover. Ink #1A1A1A text only.
  *
  * Use everywhere you previously had a heavy black "Start Exploring" /
  * "View All Projects" / "Try Our Mortgage Calculator" style CTA.
@@ -19,14 +19,14 @@ type CommonProps = {
   size?: PearlButtonSize;
   /**
    * Visual variant.
-   * - "primary" (default): mother-of-pearl champagne + ink text + gold icons.
+   * - "primary" (default): mother-of-pearl champagne + ink text + emerald icons.
    * - "secondary": approved navy `#0A0A0A` + white text/icons, slate-gray hover for contrast.
    *   Use as the secondary action when paired with a primary PearlButton.
    */
   variant?: PearlButtonVariant;
   className?: string;
   children: React.ReactNode;
-  /** Leading icon (gold for primary, white for secondary). */
+  /** Leading icon (emerald for primary, white for secondary). */
   leadingIcon?: React.ReactNode;
   /** Trailing icon (gold/white, translates on hover). */
   trailingIcon?: React.ReactNode;
@@ -56,13 +56,13 @@ const baseLayout =
   "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0";
 
 const primaryClass =
-  "text-[#1A1A1A] " +
+   "text-[#1A1A1A] " +
   "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] " +
   "hover:from-[#FDFBF7] hover:via-[#F4ECDC] hover:to-[#E8D9BC] " +
-  "border border-[#B89555]/55 hover:border-[#B89555] " +
-  "shadow-[inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(184,149,85,0.18),0_10px_28px_-12px_rgba(184,149,85,0.40),0_2px_6px_-2px_rgba(26,26,26,0.18)] " +
-  "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_0_-1px_0_rgba(184,149,85,0.28),0_0_0_1px_rgba(184,149,85,0.55),0_18px_44px_-10px_rgba(184,149,85,0.55),0_6px_14px_-4px_rgba(26,26,26,0.22)] " +
-  "focus-visible:ring-[#B89555]/70 focus-visible:ring-offset-[#FDFBF7]";
+  "border border-[#047857]/55 hover:border-[#047857] " +
+  "shadow-[inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(4,120,87,0.18),0_10px_28px_-12px_rgba(4,120,87,0.40),0_2px_6px_-2px_rgba(26,26,26,0.18)] " +
+  "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_0_-1px_0_rgba(4,120,87,0.28),0_0_0_1px_rgba(4,120,87,0.55),0_18px_44px_-10px_rgba(4,120,87,0.55),0_6px_14px_-4px_rgba(26,26,26,0.22)] " +
+  "focus-visible:ring-[#047857]/70 focus-visible:ring-offset-[#FDFBF7]";
 
 // Approved navy + white text/icons; approved navy hover only.
 const secondaryClass =
@@ -78,7 +78,7 @@ function InnerContent({
   children,
   variant,
 }: Pick<CommonProps, "leadingIcon" | "trailingIcon" | "children"> & { variant: PearlButtonVariant }) {
-  const iconColor = variant === "secondary" ? "text-white allow-white" : "text-[#B89555]";
+  const iconColor = variant === "secondary" ? "text-white allow-white" : "text-[#047857]";
   const labelColor = variant === "secondary" ? "text-white allow-white" : "text-[#1A1A1A]";
   return (
     <>
