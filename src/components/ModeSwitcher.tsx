@@ -135,21 +135,21 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   const triggerShortLabel = isUnselected ? '?' : currentConfig.shortLabel;
 
   // ─────────────────────────────────────────────────────────────────
-  // Closed-trigger styling: a saturated mode-color chip with **ink black**
-  // label/icon (never white). Hover does NOT change colour — only floats
-  // upward + adds a soft glow ring. Unselected state uses a neutral
-  // champagne chip with a gold hairline so it reads as a CTA.
+  // Closed header trigger: emerald-ombre with white text/icons to match
+  // the search/filter/favorite utility controls.
   // ─────────────────────────────────────────────────────────────────
   // Closed-trigger: uniform champagne chip with a gold hairline + thin
   // accent rail on the leading edge in the active mode's tone. Same look
   // whether selected or not — classy, consistent, no rainbow.
   const triggerStyle: CSSProperties = {
     backgroundColor: 'transparent',
-    borderColor: '#B89555',
+    backgroundImage: 'var(--jj-emerald-ombre)',
+    borderColor: 'rgba(255,255,255,0.18)',
     borderWidth: 1,
     borderStyle: 'solid',
-    color: '#1A1A1A',
-    boxShadow: 'inset 0 0 0 1px rgba(184,149,85,0.35)',
+    color: '#FFFFFF',
+    WebkitTextFillColor: '#FFFFFF',
+    boxShadow: '0 8px 18px -12px rgba(6,78,59,0.85)',
   };
 
 
@@ -193,27 +193,29 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             disabled={isLoading}
             style={triggerStyle}
             data-no-contrast-guard
+            data-allow-dark-cta
+            data-on-dark
             data-mode-trigger="header"
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap shrink-0",
+              "allow-white flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
               isOpen && "ring-2",
               className
             )}
           >
             {isLoading && (
-              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#B89555' }} />
+              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             )}
             <span
               className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block tracking-wide"
-              style={{ color: '#B89555' }}
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
               {triggerLabel}
             </span>
             <ChevronDown
               data-no-contrast-guard
               className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
-              style={{ color: '#B89555', stroke: '#B89555' }}
+              style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
             />
           </button>
         </DropdownMenuTrigger>
