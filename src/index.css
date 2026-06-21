@@ -8706,4 +8706,14 @@ html body [data-jj-utility-bar] [data-jj-utility-pill] button * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+html body .jj-pill-emerald.allow-white,
+html body .jj-pill-emerald .allow-white,
+html body span.jj-pill-emerald,
+html body span.jj-pill-emerald span,
+html body span.jj-pill-emerald svg,
+html body span.jj-pill-emerald svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
 
