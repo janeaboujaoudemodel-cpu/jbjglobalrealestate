@@ -108,18 +108,19 @@ const AreasWeCover = () => {
               {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
                 {area.isTrending && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-[10px] font-bold uppercase tracking-wider border border-[#B89555]/60 shadow-sm">
+                  <span data-no-contrast-guard data-on-dark className="jj-emerald-chip allow-white">
                     <TrendingUp className="w-2.5 h-2.5" />
                     Trending
                   </span>
                 )}
                 {area.isHighDemand && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-[10px] font-bold uppercase tracking-wider border border-[#B89555]/60 shadow-sm">
+                  <span data-no-contrast-guard data-on-dark className="jj-emerald-chip allow-white">
                     <Flame className="w-2.5 h-2.5" />
                     High Demand
                   </span>
                 )}
               </div>
+
 
               {/* Champagne caption bar — ink text, gold hairline (no dark fills) */}
               <div className="absolute bottom-0 left-0 right-0 bg-[#FDFBF7]/95 backdrop-blur-md border-t border-[#B89555]/40 px-4 py-3">
