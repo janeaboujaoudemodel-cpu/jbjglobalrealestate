@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 
 export type RecentItemType = "property" | "developer" | "area";
 
@@ -168,7 +168,10 @@ export function useRecentSearches(filterType?: RecentItemType) {
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
-  const filtered = filterType ? items.filter((i) => i.type === filterType) : items;
+  const filtered = useMemo(
+    () => (filterType ? items.filter((i) => i.type === filterType) : items),
+    [filterType, items]
+  );
 
   return { items: filtered, trackView, patchItem, clearAll };
 }
