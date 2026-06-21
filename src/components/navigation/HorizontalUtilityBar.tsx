@@ -165,42 +165,30 @@ export default function HorizontalUtilityBar() {
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Favorites</TooltipContent>
           </Tooltip>
 
-          {/* Sq ft / Sq m — restored metallic animated active state */}
+          {/* Sq ft / Sq m — emerald pill to match Search/Filter/Heart */}
           <div
             data-no-contrast-guard
-            data-surface="light"
-            className="hidden sm:inline-flex items-center h-7 rounded-lg border border-[#B89555]/60 overflow-hidden bg-transparent relative"
+            data-jj-utility-pill
+            className="hidden sm:inline-flex items-center h-9 rounded-full overflow-hidden relative shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+            style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.18)" }}
           >
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
-              className={`relative px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-all duration-300 overflow-hidden ${areaUnit === 'sqft' ? 'jj-metallic-active' : 'bg-transparent text-[#B89555]/70 hover:text-[#B89555]'}`}
-              style={areaUnit === 'sqft' ? { color: '#3a2a08' } : undefined}
+              className="relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200"
+              style={{ color: '#FFFFFF', backgroundColor: areaUnit === 'sqft' ? 'rgba(255,255,255,0.20)' : 'transparent', opacity: areaUnit === 'sqft' ? 1 : 0.65 }}
               aria-label="Square feet"
             >sq ft</button>
+            <span aria-hidden className="w-px h-4 bg-white/25" />
             <button
               data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
-              className={`relative px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-all duration-300 border-l border-[#B89555]/40 overflow-hidden ${areaUnit === 'sqm' ? 'jj-metallic-active' : 'bg-transparent text-[#B89555]/70 hover:text-[#B89555]'}`}
-              style={areaUnit === 'sqm' ? { color: '#3a2a08' } : undefined}
+              className="relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200"
+              style={{ color: '#FFFFFF', backgroundColor: areaUnit === 'sqm' ? 'rgba(255,255,255,0.20)' : 'transparent', opacity: areaUnit === 'sqm' ? 1 : 0.65 }}
               aria-label="Square meters"
             >sq m</button>
           </div>
 
-          {/* Inline metallic keyframes for the active pill */}
-          <style>{`
-            @keyframes jj-metal-sheen {
-              0%   { background-position: 0% 50%; }
-              50%  { background-position: 100% 50%; }
-              100% { background-position: 0% 50%; }
-            }
-            .jj-metallic-active {
-              background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%);
-              background-size: 220% 220%;
-              animation: jj-metal-sheen 4.5s ease-in-out infinite;
-              box-shadow: inset 0 0 0 1px rgba(255,244,210,.45), inset 0 -1px 2px rgba(0,0,0,.18);
-            }
-          `}</style>
 
 
 
