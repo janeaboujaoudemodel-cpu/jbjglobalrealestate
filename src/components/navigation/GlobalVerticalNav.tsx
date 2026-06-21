@@ -1095,19 +1095,27 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-sidebar-section
                     data-active={sectionHighlighted ? 'true' : undefined}
                     data-no-contrast-guard
-                    style={{ color: '#B89555' }}
+                      style={{
+                        color: sectionHighlighted ? '#FFFFFF' : '#064E3B',
+                        WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#064E3B',
+                      }}
                     className="w-full flex items-center gap-2 px-2.5 h-[34px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group"
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#0A0A0A]/10 group-hover:border-[#0A0A0A]/70'}`}>
-                      <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
+                        <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: sectionHighlighted ? '#FFFFFF' : '#064E3B', stroke: sectionHighlighted ? '#FFFFFF' : '#064E3B' }} />
                     </div>
                     <span
                       data-sidebar-section-label
                       data-no-contrast-guard
-                      style={{ color: '#B89555' }}
-                      className={`flex-1 text-left relative inline-block !text-[#B89555] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
+                        style={{
+                          color: sectionHighlighted ? '#FFFFFF' : '#064E3B',
+                          WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#064E3B',
+                          background: 'none',
+                          backgroundImage: 'none',
+                        }}
+                        className={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${sectionHighlighted ? '' : navHoverUnderline}`}
                     >{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#B89555' }} />
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#064E3B', stroke: sectionHighlighted ? '#FFFFFF' : '#064E3B' }} />
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
                     )}
