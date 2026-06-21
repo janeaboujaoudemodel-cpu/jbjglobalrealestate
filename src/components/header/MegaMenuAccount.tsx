@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2, Home, BarChart3, ShieldAlert, UserCog, CalendarDays, Code2 } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2, Home, BarChart3, ShieldAlert, UserCog, CalendarDays, Code2, PenTool, Star } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage, SUPPORTED_LANGUAGES } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -239,7 +239,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     { href: '/my-dashboard#inbox', label: t('account.inbox', 'Inbox'), icon: Headphones, description: t('account.inboxDesc', 'Messages from JBJ'), badge: 0 },
     { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: ListChecks, description: t('account.myTasksDesc', 'View and manage your tasks'), badge: alertCounts?.pendingTasks || 0 },
     { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile'), badge: 0 },
-    { href: '/favorites', label: t('nav.favorites', 'Favorites') + ' / ' + t('nav.shortlist', 'Shortlist'), icon: Heart, description: t('account.favoritesDesc', 'Your saved & shortlisted properties'), badge: 0 },
+    { href: '/favorites', label: t('nav.favorites', 'Favorites'), icon: Heart, description: t('account.favoritesDesc', 'Your saved properties'), badge: 0, dividerAfter: true },
+    { href: '/favorites?tab=shortlist', label: t('nav.shortlist', 'Shortlist'), icon: Star, description: 'Your shortlisted properties', badge: 0, dividerAfter: true },
+    { href: '/favorites?tab=designs', label: 'My Design', icon: PenTool, description: 'Your saved design work', badge: 0, dividerAfter: true },
     { href: '#recommended', label: t('account.recommended', 'Recommended for You'), icon: Sparkles, description: t('account.recommendedDesc', 'Based on your latest search'), badge: 0, action: 'open-recommendations' as const },
     { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools'), badge: 0 },
   ];
@@ -416,31 +418,38 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         </div>
                       </>
                     );
-                    if (isAction) {
-                      return (
-                        <button
-                          key={link.href}
-                          type="button"
-                          onClick={() => {
-                            window.dispatchEvent(new Event('jbj:open-recommendations'));
-                            onClose();
-                          }}
-                          className="w-full text-left flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
-                        >
-                          {commonInner}
-                        </button>
-                      );
-                    }
-                    return (
+                    const row = isAction ? (
+                      <button
+                        key={link.href}
+                        type="button"
+                        onClick={() => {
+                          window.dispatchEvent(new Event('jbj:open-recommendations'));
+                          onClose();
+                        }}
+                        className="w-full text-left flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-[#F7F2EA] group"
+                      >
+                        {commonInner}
+                      </button>
+                    ) : (
                       <Link
                         key={link.href}
                         to={link.href}
                         onClick={onClose}
-                        className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
+                        className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-[#F7F2EA] group"
                       >
                         {commonInner}
                       </Link>
                     );
+
+                    if ((link as any).dividerAfter) {
+                      return (
+                        <React.Fragment key={`${link.href}-divider`}>
+                          {row}
+                          <div className="h-px bg-gradient-to-r from-transparent via-[#047857]/45 to-transparent mx-2 my-1" aria-hidden="true" />
+                        </React.Fragment>
+                      );
+                    }
+                    return row;
                   })}
 
                 </div>
