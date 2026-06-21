@@ -8717,3 +8717,26 @@ html body span.jj-pill-emerald svg * {
   stroke: #FFFFFF !important;
 }
 
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PASS 32 — Sidebar Contact/Support emerald pill lock
+   Forces white text+icon at idle and hover, regardless of any
+   contrast-guard / light-surface lock / same-tone repaint.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+html body aside a[data-allow-dark-cta][data-on-dark],
+html body aside a[data-allow-dark-cta][data-on-dark]:hover,
+html body aside a[data-allow-dark-cta][data-on-dark]:focus,
+html body aside a[data-allow-dark-cta][data-on-dark]:active,
+html body aside a[data-allow-dark-cta][data-on-dark] *,
+html body aside a[data-allow-dark-cta][data-on-dark]:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body aside a[data-allow-dark-cta][data-on-dark] svg,
+html body aside a[data-allow-dark-cta][data-on-dark] svg *,
+html body aside a[data-allow-dark-cta][data-on-dark]:hover svg,
+html body aside a[data-allow-dark-cta][data-on-dark]:hover svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
