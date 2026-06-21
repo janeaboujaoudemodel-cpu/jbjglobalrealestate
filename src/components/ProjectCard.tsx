@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
