@@ -75,7 +75,7 @@ const CombinedContactNewsletter = ({
             </p>
           </div>
 
-          {/* Contact pills — one unified emerald surface, white icons/text */}
+          {/* Contact tiles — premium rectangular emerald, white icons/text */}
           <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 max-w-2xl mx-auto mb-5">
             {contactCards.map((card) => (
               <a
@@ -84,7 +84,7 @@ const CombinedContactNewsletter = ({
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
                 data-no-contrast-guard
-                className="jj-pill-emerald allow-white group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-full"
+                className="jj-pill-emerald allow-white group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
               >
                 <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
                 <div className="min-w-0 text-left">
@@ -104,11 +104,11 @@ const CombinedContactNewsletter = ({
 
           {/* Newsletter */}
           <div className="relative max-w-md mx-auto text-center">
-            <h3 className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.12em]" style={{ color: "#FFFFFF" }}>
-              Stay in the Loop
+            <h3 className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
+              Get the Edge — Listings Before the Market
             </h3>
             <p className="text-xs md:text-sm mb-4" style={{ color: "rgba(255,255,255,0.88)" }}>
-              Be the first to access new listings, market updates, and personalized guidance.
+              New launches, off-market deals, market moves &amp; insider insights — straight to your inbox.
             </p>
             <NewsletterBrevo variant="compact" source="combined_cta" />
           </div>
