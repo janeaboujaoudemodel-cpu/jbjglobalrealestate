@@ -6,7 +6,6 @@
  import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
  import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
-import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover } from "@/utils/handoverDerivation";
@@ -260,28 +259,36 @@ const ReellyProjectCard = ({
        {!compact && (
          <div className="px-4 pb-4 pt-0">
            <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/20 pt-3">
-             <Button asChild variant="secondary" size="sm" className="w-full">
-               <a
-                 href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
-                 onClick={(e) => e.stopPropagation()}
-                 aria-label={`Email about ${project.name}`}
-               >
-                 <Mail className="w-4 h-4" />
-                 <span>Email</span>
-               </a>
-             </Button>
-             <Button asChild variant="secondary" size="sm" className="w-full">
-               <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`}>
-                 <Phone className="w-4 h-4" />
-                 <span>Call</span>
-               </a>
-             </Button>
-             <Button asChild variant="secondary" size="sm" className="w-full">
-               <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`}>
-                 <MessageCircle className="w-4 h-4" />
-                 <span>WhatsApp</span>
-               </a>
-             </Button>
+              <a
+                href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
+                onClick={(e) => e.stopPropagation()}
+                aria-label={`Email about ${project.name}`}
+                data-no-contrast-guard
+                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Email</span>
+              </a>
+              <a
+                href={callHref}
+                onClick={(e) => e.stopPropagation()}
+                aria-label={`Call about ${project.name}`}
+                data-no-contrast-guard
+                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Call</span>
+              </a>
+              <a
+                href={whatsappHref}
+                onClick={(e) => e.stopPropagation()}
+                aria-label={`WhatsApp about ${project.name}`}
+                data-no-contrast-guard
+                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Chat</span>
+              </a>
            </div>
          </div>
        )}

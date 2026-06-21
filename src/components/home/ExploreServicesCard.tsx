@@ -257,9 +257,10 @@ const ExploreServicesCard = () => {
         ))}
 
         {/* Content overlay — always visible, updates instantly */}
-        <div className="absolute inset-0 z-10 flex flex-col justify-end p-5 sm:p-6 md:p-10">
+        <div data-photo-copy-lock className="absolute inset-0 z-10 flex flex-col justify-end p-5 sm:p-6 md:p-10">
           <h4 
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 transition-all duration-300" 
+            data-service-photo-copy
+            className="allow-white text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 transition-all duration-300" 
             style={{ 
               color: '#FFFFFF',
               WebkitTextFillColor: '#FFFFFF',
@@ -270,7 +271,8 @@ const ExploreServicesCard = () => {
           </h4>
 
           <p
-            className="max-w-xl text-sm sm:text-base md:text-lg font-medium leading-relaxed mb-5"
+            data-service-photo-copy
+            className="allow-white max-w-xl text-sm sm:text-base md:text-lg font-medium leading-relaxed mb-5"
             style={{
               color: 'rgba(255,255,255,0.92)',
               WebkitTextFillColor: 'rgba(255,255,255,0.92)',
