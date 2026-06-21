@@ -8514,3 +8514,26 @@ body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight]
   stroke: #FFFFFF !important;
 }
 
+
+/* PASS 29.1 — sq ft/m toggle final: brighter metallic active, both
+   labels remain fully readable white, animated emerald shimmer. */
+.jj-sqtoggle[data-active="true"] {
+  background-image:
+    linear-gradient(110deg,
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.40) 20%,
+      rgba(255,255,255,0.08) 38%,
+      rgba(255,255,255,0.32) 60%,
+      rgba(255,255,255,0.00) 100%
+    ),
+    linear-gradient(135deg, #0A6B53 0%, #064E3B 55%, #032419 100%) !important;
+  background-size: 250% 100%, 100% 100% !important;
+  background-position: -50% 0, 0 0 !important;
+  background-blend-mode: screen, normal !important;
+  animation: jj-metallic-sweep 3.2s ease-in-out infinite !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),
+              inset 0 -1px 0 rgba(0,0,0,0.25),
+              0 0 14px rgba(52,211,153,0.30) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
