@@ -290,7 +290,7 @@ const Favorites = () => {
           <TabsList className="bg-[#FDFBF7]/60 border border-[#B89555]/20 p-1 mb-8 gap-1">
             <TabsTrigger
               value="favorites"
-              className="data-[state=active]:jj-pill-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-[#047857] text-[#1A1A1A]/70"
+              className="jj-favorites-tab text-[#1A1A1A]/70"
             >
               <Heart className="w-4 h-4 mr-2" />
               Favorites ({favCount})
@@ -298,7 +298,7 @@ const Favorites = () => {
             <span className="h-6 w-px bg-[#047857]/45" aria-hidden="true" />
             <TabsTrigger
               value="shortlist"
-              className="data-[state=active]:jj-pill-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-[#047857] text-[#1A1A1A]/70"
+              className="jj-favorites-tab text-[#1A1A1A]/70"
             >
               <ListPlus className="w-4 h-4 mr-2" />
               Shortlist ({shortlistCount})
@@ -306,7 +306,7 @@ const Favorites = () => {
             <span className="h-6 w-px bg-[#047857]/45" aria-hidden="true" />
             <TabsTrigger
               value="designs"
-              className="data-[state=active]:jj-pill-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-[#047857] text-[#1A1A1A]/70"
+              className="jj-favorites-tab text-[#1A1A1A]/70"
             >
               <PenTool className="w-4 h-4 mr-2" />
               My Designs ({designFavCount + designShortCount})
