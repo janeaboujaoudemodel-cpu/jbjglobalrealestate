@@ -8631,3 +8631,58 @@ html body .jj-icon-emerald * {
   fill: none !important;
 }
 
+/* PASS 31 — final emerald override for the exact reported regressions.
+   Wins after PASS 21 black/gold sidebar controls and after generic light
+   surface guards. Emerald surfaces = white text/icons only. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control]:hover {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body section#ready-to-get-started .jj-emerald-card,
+html body section#ready-to-get-started .jj-emerald-card *,
+html body section#ready-to-get-started .jj-emerald-metallic,
+html body section#ready-to-get-started .jj-emerald-metallic *,
+html body section#ready-to-get-started .jj-emerald-metallic :is(svg, [class*="lucide"]),
+html body section#ready-to-get-started .jj-emerald-metallic :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body input.mortgage-range-input {
+  --mortgage-range-thumb: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%) !important;
+  --mortgage-range-thumb-shadow: 0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(52,211,153,0.75), 0 4px 14px rgba(4,120,87,0.45) !important;
+}
+
+html body [role="tablist"] button[role="tab"][aria-selected="true"],
+html body .jj-tab-active-metallic,
+html body .jj-tab-active-metallic::after {
+  background-image:
+    linear-gradient(110deg, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.34) 20%, rgba(255,255,255,0.07) 40%, rgba(255,255,255,0.26) 62%, rgba(255,255,255,0.00) 100%),
+    var(--jj-emerald-ombre) !important;
+  background-size: 250% 100%, 100% 100% !important;
+  animation: jj-metallic-sweep 3.4s ease-in-out infinite !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
