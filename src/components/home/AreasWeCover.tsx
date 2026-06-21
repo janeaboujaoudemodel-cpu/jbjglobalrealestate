@@ -134,9 +134,11 @@ const AreasWeCover = () => {
 
                   <span
                     className="jj-pill-emerald shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
+                    data-on-dark
+                    data-no-contrast-guard
                   >
-                    Explore
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                    <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Explore</span>
+                    <ArrowRight className="allow-white w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </span>
                 </div>
               </div>
