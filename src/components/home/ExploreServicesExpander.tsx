@@ -187,14 +187,14 @@ const ExploreServicesExpander = () => {
         <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
           <h3
             data-service-photo-copy
-            className="text-white text-2xl md:text-3xl font-extrabold leading-tight"
+            className="jj-force-white-copy allow-white text-white text-2xl md:text-3xl font-extrabold leading-tight"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)" }}
           >
             {active.title}
           </h3>
           <p
             data-service-photo-copy
-            className="mt-2 text-sm md:text-base leading-relaxed max-w-md font-medium"
+            className="jj-force-white-copy allow-white mt-2 text-sm md:text-base leading-relaxed max-w-md font-medium"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 10px rgba(0,0,0,0.95)" }}
           >
             {active.description}
