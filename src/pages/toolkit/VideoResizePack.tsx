@@ -607,8 +607,8 @@ const VideoResizePack = () => {
                     {!uploadedVideo ? (
                       <div
                         className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all cursor-pointer ${
-                          dragActive ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#B89555]/30 hover:border-[#B89555]/50"
-                        }`}
+ dragActive ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#B89555]/30 hover:border-[#B89555]/50"
+ }`}
                         onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                         onDragLeave={() => setDragActive(false)}
                         onDrop={handleDrop}
@@ -676,10 +676,10 @@ const VideoResizePack = () => {
                             </div>
                             <Badge 
                               className={`${
-                                uploadedVideo.orientation === "vertical" ? "bg-purple-500/20 text-purple-400 border-purple-500/30" :
-                                uploadedVideo.orientation === "landscape" ? "bg-blue-500/20 text-blue-400 border-blue-500/30" :
-                                "bg-green-500/20 text-green-400 border-green-500/30"
-                              }`}
+ uploadedVideo.orientation === "vertical" ? "bg-purple-500/20 text-purple-400 border-purple-500/30" :
+ uploadedVideo.orientation === "landscape" ? "bg-blue-500/20 text-blue-400 border-blue-500/30" :
+ "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30"
+ }`}
                             >
                               {uploadedVideo.aspectRatio} {uploadedVideo.orientation}
                             </Badge>
@@ -732,10 +732,10 @@ const VideoResizePack = () => {
                                 key={option.value}
                                 htmlFor={option.value}
                                 className={`relative flex flex-col items-center p-4 rounded-xl cursor-pointer border-2 transition-all ${
-                                  targetOutput === option.value 
-                                    ? "border-[#B89555] bg-[#EFE6D6]/10" 
-                                    : "border-white/10 hover:border-[#B89555]/30"
-                                }`}
+ targetOutput === option.value 
+ ? "border-[#B89555] bg-[#EFE6D6]/10" 
+ : "border-white/10 hover:border-[#B89555]/30"
+ }`}
                               >
                                 <RadioGroupItem value={option.value} id={option.value} className="sr-only" />
                                 <div className={`mb-2 ${targetOutput === option.value ? "text-[#1A1A1A]" : "text-white/90"}`}>
@@ -811,10 +811,10 @@ const VideoResizePack = () => {
                                 <div
                                   key={format.id}
                                   className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                                    isSelected 
-                                      ? "border-[#B89555] bg-[#EFE6D6]/10" 
-                                      : "border-white/10 hover:border-[#B89555]/30"
-                                  }`}
+ isSelected 
+ ? "border-[#B89555] bg-[#EFE6D6]/10" 
+ : "border-white/10 hover:border-[#B89555]/30"
+ }`}
                                   onClick={() => toggleFormat(format.id)}
                                 >
                                   <div className="flex items-center justify-between mb-3">
@@ -993,8 +993,8 @@ const VideoResizePack = () => {
                     {!uploadedVideo ? (
                       <div
                         className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all cursor-pointer ${
-                          dragActive ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#B89555]/30 hover:border-[#B89555]/50"
-                        }`}
+ dragActive ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#B89555]/30 hover:border-[#B89555]/50"
+ }`}
                         onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                         onDragLeave={() => setDragActive(false)}
                         onDrop={handleDrop}
@@ -1081,8 +1081,8 @@ const VideoResizePack = () => {
                                 {/* Crop Frame */}
                                 <div 
                                   className={`absolute border-2 transition-all ${
-                                    isManualMode ? "border-[#B89555] cursor-move" : "border-[#B89555]/70"
-                                  }`}
+ isManualMode ? "border-[#B89555] cursor-move" : "border-[#B89555]/70"
+ }`}
                                   style={getCropPreviewStyle()}
                                   onMouseDown={handleCropMouseDown}
                                 >
@@ -1094,7 +1094,7 @@ const VideoResizePack = () => {
                                            style={{ top: '10%', left: '10%', right: '10%', bottom: '10%' }} 
                                       />
                                       {/* Action safe (5% from edges) */}
-                                      <div className="absolute border border-dashed border-green-400/40" 
+                                      <div className="absolute border border-dashed border-[color:var(--emerald-1)]/30/40" 
                                            style={{ top: '5%', left: '5%', right: '5%', bottom: '5%' }} 
                                       />
                                     </div>
@@ -1138,10 +1138,10 @@ const VideoResizePack = () => {
                                     key={shot.id}
                                     onClick={() => selectShot(shot)}
                                     className={`flex-shrink-0 p-2 rounded-lg border-2 transition-all ${
-                                      selectedShotId === shot.id 
-                                        ? "border-[#B89555] bg-[#EFE6D6]/20" 
-                                        : "border-white/10 hover:border-[#B89555]/30"
-                                    }`}
+ selectedShotId === shot.id 
+ ? "border-[#B89555] bg-[#EFE6D6]/20" 
+ : "border-white/10 hover:border-[#B89555]/30"
+ }`}
                                   >
                                     <div className="w-16 h-10 bg-[#FDFBF7]/10 rounded flex items-center justify-center text-xs text-white/70">
                                       Shot {idx + 1}
@@ -1246,10 +1246,10 @@ const VideoResizePack = () => {
                                     setDetectedShots([]);
                                   }}
                                   className={`p-4 rounded-xl border-2 transition-all ${
-                                    reframeSettings.targetRatio === ratio.value 
-                                      ? "border-[#B89555] bg-[#EFE6D6]/10" 
-                                      : "border-white/10 hover:border-[#B89555]/30"
-                                  }`}
+ reframeSettings.targetRatio === ratio.value 
+ ? "border-[#B89555] bg-[#EFE6D6]/10" 
+ : "border-white/10 hover:border-[#B89555]/30"
+ }`}
                                 >
                                   <div className={`mb-2 ${reframeSettings.targetRatio === ratio.value ? "text-[#1A1A1A]" : "text-white/90"}`}>
                                     {ratio.icon}

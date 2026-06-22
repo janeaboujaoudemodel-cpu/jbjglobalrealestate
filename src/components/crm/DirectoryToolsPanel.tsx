@@ -134,7 +134,7 @@ export const DirectoryToolsPanel = ({
             </Badge>
           )}
           {!anyActive && allDoneWithChanges && (
-            <Badge className="bg-emerald-50 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1">
+            <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30 inline-flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3" /> Up to date · new data
             </Badge>
           )}
@@ -206,18 +206,18 @@ export const DirectoryToolsPanel = ({
                   <div
                     key={kind}
                     className={`rounded-lg border px-3 py-2 text-xs flex items-start gap-2 ${
-                      isDoneWithNew
-                        ? "border-emerald-300 bg-emerald-50"
-                        : isDoneNoNew
-                          ? "border-[#B89555]/40 bg-[#EFE6D6]"
-                          : isFailed
-                            ? "border-red-300 bg-red-50"
-                            : "border-[#B89555]/30 bg-white"
-                    }`}
+ isDoneWithNew
+ ? "border-[color:var(--emerald-1)]/30 jj-emerald-soft"
+ : isDoneNoNew
+ ? "border-[#B89555]/40 bg-[#EFE6D6]"
+ : isFailed
+ ? "border-red-300 bg-red-50"
+ : "border-[#B89555]/30 bg-white"
+ }`}
                   >
                     <div className="mt-0.5">
                       {isDoneWithNew ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                        <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)]" />
                       ) : isDoneNoNew ? (
                         <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]/60" />
                       ) : isFailed ? (
@@ -271,7 +271,7 @@ export const DirectoryToolsPanel = ({
                   >
                     <div className="mt-0.5">
                       {j.status === "completed" ? (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[color:var(--emerald-1)]" />
                       ) : j.status === "failed" ? (
                         <AlertCircle className="w-3.5 h-3.5 text-red-700" />
                       ) : (

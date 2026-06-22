@@ -157,7 +157,7 @@ export function GoldenIDCard() {
               <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                 {isCombinedMode ? (
                   <>
-                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-500/50 text-xs">
+                    <Badge className="jj-emerald-solid/30 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/50 text-xs">
                       {investorTierName}
                     </Badge>
                     <Badge className="bg-blue-500/30 text-blue-200 border-blue-500/50 text-xs">

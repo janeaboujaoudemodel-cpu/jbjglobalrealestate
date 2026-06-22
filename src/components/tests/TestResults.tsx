@@ -33,7 +33,7 @@ export function TestResults({
       <CardHeader className="text-center pb-4">
         <div className={cn(
           "w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center",
-          passed ? "bg-emerald-500/20" : "bg-red-500/20"
+          passed ? "jj-emerald-solid/20" : "bg-red-500/20"
         )}>
           {passed ? (
             <CheckCircle className="w-10 h-10 text-emerald-400" />
@@ -59,7 +59,7 @@ export function TestResults({
         {/* Score Card */}
         <div className={cn(
           "rounded-xl p-6 text-center",
-          passed ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-red-500/10 border border-red-500/30"
+          passed ? "jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30" : "bg-red-500/10 border border-red-500/30"
         )}>
           <div className={cn(
             "text-5xl font-bold mb-2",
@@ -68,7 +68,7 @@ export function TestResults({
             {Math.round(score)}%
           </div>
           <Badge className={passed 
-            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+            ? "jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30"
             : "bg-red-500/20 text-red-300 border-red-500/30"
           }>
             {passed ? "PASSED" : "FAILED"}
@@ -100,7 +100,7 @@ export function TestResults({
                   
                   {item.showCorrect && (
                     <div className="mt-2 pt-2 border-t border-white/10">
-                      <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                      <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
                         Correct: {item.question.options[item.correctAnswer]}
                       </Badge>
                       {item.question.explanation && (

@@ -49,8 +49,8 @@ const stageBadges: Record<string, { label: string; color: string; icon: React.Re
   cv_collection: { label: 'CV Collection', color: 'bg-amber-500', icon: <FileText className="w-3 h-3" /> },
   qualification: { label: 'Qualification', color: 'bg-purple-500', icon: <CheckCircle className="w-3 h-3" /> },
   interview: { label: 'Interview', color: 'bg-[#EFE6D6]', icon: <Bot className="w-3 h-3" /> },
-  assessment: { label: 'Assessment', color: 'bg-emerald-500', icon: <CheckCircle className="w-3 h-3" /> },
-  completed: { label: 'Completed', color: 'bg-green-600', icon: <CheckCircle className="w-3 h-3" /> }
+  assessment: { label: 'Assessment', color: 'jj-emerald-solid', icon: <CheckCircle className="w-3 h-3" /> },
+  completed: { label: 'Completed', color: 'jj-emerald-solid', icon: <CheckCircle className="w-3 h-3" /> }
 };
 
 export default function HRAgentChat() {
@@ -426,18 +426,18 @@ export default function HRAgentChat() {
                   className={`flex gap-3 group ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    message.role === 'user' 
-                      ? 'bg-[#EFE6D6] text-[#1A1A1A]' 
-                      : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/20'
-                  }`}>
+ message.role === 'user' 
+ ? 'bg-[#EFE6D6] text-[#1A1A1A]' 
+ : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/20'
+ }`}>
                     {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-[#1A1A1A]" />}
                   </div>
                   <div className="flex flex-col max-w-[80%]">
                     <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
-                      message.role === 'user'
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-none'
-                        : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-none'
-                    }`}>
+ message.role === 'user'
+ ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-none'
+ : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-none'
+ }`}>
                       <div className="prose prose-sm max-w-none whitespace-pre-wrap text-[#1A1A1A] select-text">
                         {message.content}
                       </div>
@@ -572,8 +572,8 @@ export default function HRAgentChat() {
                     {applicationStep === 3 && (
                       <div className="space-y-2">
                         {cvFile ? (
-                          <div className="flex items-center gap-2 rounded-md border border-emerald-600/40 bg-emerald-50 px-3 py-2 text-sm text-[#1A1A1A]">
-                            <FileText className="w-4 h-4 text-emerald-700" /><span className="truncate flex-1">{cvFile.name}</span>
+                          <div className="flex items-center gap-2 rounded-md border border-[color:var(--emerald-1)]/30/40 jj-emerald-soft px-3 py-2 text-sm text-[#1A1A1A]">
+                            <FileText className="w-4 h-4 text-[color:var(--emerald-1)]" /><span className="truncate flex-1">{cvFile.name}</span>
                             <button type="button" onClick={() => setCvFile(null)} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]" aria-label="Remove CV"><X className="w-4 h-4" /></button>
                           </div>
                         ) : (
@@ -637,8 +637,8 @@ export default function HRAgentChat() {
         )}
 
         {stage === 'completed' && mode !== 'owner' && (
-          <div className="border-t border-[#B89555]/20 p-4 bg-emerald-50">
-            <div className="flex items-center justify-center gap-2 text-emerald-600">
+          <div className="border-t border-[#B89555]/20 p-4 jj-emerald-soft">
+            <div className="flex items-center justify-center gap-2 text-[color:var(--emerald-1)]">
               <CheckCircle className="w-5 h-5" />
               <span className="font-medium">Interview Complete - Assessment Generated</span>
             </div>

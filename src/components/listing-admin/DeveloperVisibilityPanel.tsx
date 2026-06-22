@@ -148,7 +148,7 @@ export function DeveloperVisibilityPanel() {
                   size="sm"
                   onClick={bulkShow}
                   disabled={bulkMutation.isPending}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="jj-emerald-solid hover:jj-emerald-solid text-white"
                 >
                   <EyeIcon className="w-4 h-4 mr-1" />
                   Show ({selectedIds.size})
@@ -180,8 +180,8 @@ export function DeveloperVisibilityPanel() {
             <div
               key={dev.id}
               className={`flex items-center justify-between p-3 rounded-lg border bg-[#FDFBF7]/50 transition-colors cursor-pointer ${
-                selectedIds.has(dev.id) ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20"
-              }`}
+ selectedIds.has(dev.id) ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20"
+ }`}
               onClick={() => toggleSelect(dev.id)}
             >
               <div className="flex items-center gap-2 min-w-0">
@@ -195,7 +195,7 @@ export function DeveloperVisibilityPanel() {
                 {dev.is_hidden ? (
                   <EyeOff className="w-4 h-4 text-muted-foreground shrink-0" />
                 ) : (
-                  <Eye className="w-4 h-4 text-green-600 shrink-0" />
+                  <Eye className="w-4 h-4 text-[color:var(--emerald-1)] shrink-0" />
                 )}
                 <span className="text-sm font-medium truncate">{dev.name}</span>
                 {(dev as any).updated_at && (

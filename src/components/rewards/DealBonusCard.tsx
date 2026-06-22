@@ -81,7 +81,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                 <div className="flex items-center gap-3">
                   <div className={cn(
                     "w-12 h-12 rounded-lg flex items-center justify-center",
-                    eligibility.claimed ? "bg-emerald-500/20" : "bg-[#EFE6D6]/20"
+                    eligibility.claimed ? "jj-emerald-solid/20" : "bg-[#EFE6D6]/20"
                   )}>
                     <IconComponent className={cn(
                       "w-6 h-6",
@@ -96,7 +96,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                           variant="outline" 
                           className={cn(
                             "text-xs",
-                            eligibility.claimStatus === 'paid' && "border-emerald-500 text-emerald-400",
+                            eligibility.claimStatus === 'paid' && "border-[color:var(--emerald-1)]/30 text-emerald-400",
                             eligibility.claimStatus === 'approved' && "border-blue-500 text-blue-400",
                             eligibility.claimStatus === 'pending' && "border-amber-500 text-[#1A1A1A]",
                             eligibility.claimStatus === 'rejected' && "border-red-500 text-red-400"

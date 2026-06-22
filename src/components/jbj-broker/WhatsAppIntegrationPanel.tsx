@@ -174,7 +174,7 @@ export function WhatsAppIntegrationPanel({
   const getStatusBadge = (status: string | null) => {
     switch (status) {
       case "approved":
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Approved</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">Approved</Badge>;
       case "pending":
         return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Pending</Badge>;
       default:
@@ -188,7 +188,7 @@ export function WhatsAppIntegrationPanel({
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-emerald-500/20">
+              <div className="p-2 rounded-lg jj-emerald-solid/20">
                 <MessageCircle className="h-5 w-5 text-emerald-400" />
               </div>
               <div>
@@ -208,7 +208,7 @@ export function WhatsAppIntegrationPanel({
           <Button
             onClick={() => setSendDialogOpen(true)}
             disabled={!leadPhone}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12"
+            className="w-full jj-emerald-solid hover:jj-emerald-solid text-white h-12"
           >
             <MessageCircle className="h-5 w-5 mr-2" />
             Send WhatsApp Message
@@ -244,12 +244,12 @@ export function WhatsAppIntegrationPanel({
                   <div
                     key={msg.id}
                     className={`p-2 rounded-lg text-sm ${
-                      msg.direction === "outbound"
-                        ? "bg-emerald-500/10 border border-emerald-500/20 ml-4"
-                        : "bg-[#1A1A1A] border border-[#1A1A1A] mr-4"
-                    }`}
+ msg.direction === "outbound"
+ ? "jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20 ml-4"
+ : "bg-[#1A1A1A] border border-[#1A1A1A] mr-4"
+ }`}
                   >
-                    <p className={msg.direction === "outbound" ? "text-emerald-300" : "text-white"}>
+                    <p className={msg.direction === "outbound" ? "text-[color:var(--emerald-on)]" : "text-white"}>
                       {msg.content.substring(0, 80)}...
                     </p>
                     <div className="flex items-center gap-2 mt-1">
@@ -337,7 +337,7 @@ export function WhatsAppIntegrationPanel({
             <Button
               onClick={sendMessage}
               disabled={sending || !customMessage.trim()}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="jj-emerald-solid hover:jj-emerald-solid text-white"
             >
               {sending ? (
                 <>

@@ -19,11 +19,11 @@ interface AIToolPremiumLayoutProps {
 
 const colorClasses: Record<string, { bg: string; border: string; text: string; glow: string; gradient: string }> = {
   emerald: {
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/30",
+    bg: "jj-emerald-solid/10",
+    border: "border-[color:var(--emerald-1)]/30/30",
     text: "text-emerald-400",
     glow: "shadow-emerald-500/20",
-    gradient: "from-emerald-400 to-green-400",
+    gradient: " ",
   },
   purple: {
     bg: "bg-purple-500/10",
@@ -40,11 +40,11 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; g
     gradient: "from-blue-400 to-cyan-400",
   },
   teal: {
-    bg: "bg-teal-500/10",
-    border: "border-teal-500/30",
+    bg: "jj-emerald-solid/10",
+    border: "border-[color:var(--emerald-1)]/30/30",
     text: "text-teal-400",
     glow: "shadow-teal-500/20",
-    gradient: "from-teal-400 to-cyan-400",
+    gradient: " to-cyan-400",
   },
   orange: {
     bg: "bg-orange-500/10",
@@ -107,7 +107,7 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; g
     border: "border-lime-500/30",
     text: "text-lime-400",
     glow: "shadow-lime-500/20",
-    gradient: "from-lime-400 to-green-400",
+    gradient: "from-lime-400 ",
   },
   sky: {
     bg: "bg-sky-500/10",

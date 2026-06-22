@@ -26,7 +26,7 @@ import { useAuth } from '@/contexts/AuthContext';
 // Department hierarchy configuration
 const departmentHierarchy = {
   'Executive': { order: 1, color: 'border-[#B89555]/40', bgColor: 'bg-[#EFE6D6]/5' },
-  'Sales': { order: 2, color: 'border-green-500/30', bgColor: 'bg-green-500/5' },
+  'Sales': { order: 2, color: 'border-[color:var(--emerald-1)]/30/30', bgColor: 'jj-emerald-solid/5' },
   'Marketing': { order: 3, color: 'border-pink-500/30', bgColor: 'bg-pink-500/5' },
   'Human Resources': { order: 4, color: 'border-purple-500/30', bgColor: 'bg-purple-500/5' },
   'Finance': { order: 5, color: 'border-amber-500/30', bgColor: 'bg-amber-500/5' },
@@ -34,7 +34,7 @@ const departmentHierarchy = {
   'Design': { order: 7, color: 'border-cyan-500/30', bgColor: 'bg-cyan-500/5' },
   'Media': { order: 8, color: 'border-red-500/30', bgColor: 'bg-red-500/5' },
   'Operations': { order: 9, color: 'border-[#B89555]/30', bgColor: 'bg-[#B89555]/5' },
-  'Customer Happiness': { order: 10, color: 'border-emerald-500/30', bgColor: 'bg-emerald-500/5' },
+  'Customer Happiness': { order: 10, color: 'border-[color:var(--emerald-1)]/30/30', bgColor: 'jj-emerald-solid/5' },
   'Client Relations': { order: 11, color: 'border-indigo-500/30', bgColor: 'bg-indigo-500/5' },
   'Legal': { order: 12, color: 'border-[#B89555]/30', bgColor: 'bg-[#1A1A1A]/5' },
 };

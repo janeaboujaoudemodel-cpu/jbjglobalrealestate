@@ -31,7 +31,7 @@ export default function InboxBulkActionsBar({ selectedCount, onClear, onMarkRead
         <Button size="sm" variant="outline" className="h-7 text-[11px] border-orange-300 text-orange-700" disabled={disabled} onClick={() => onSetStatus("follow_up_due")}>
           <Clock className="h-3 w-3 mr-1" /> Follow-up
         </Button>
-        <Button size="sm" variant="outline" className="h-7 text-[11px] border-green-300 text-green-700" disabled={disabled} onClick={() => onSetStatus("closed")}>
+        <Button size="sm" variant="outline" className="h-7 text-[11px] border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]" disabled={disabled} onClick={() => onSetStatus("closed")}>
           <CheckCircle className="h-3 w-3 mr-1" /> Close
         </Button>
         <Button size="sm" variant="ghost" className="h-7 text-[11px] text-[#1A1A1A]/60" onClick={onClear}>

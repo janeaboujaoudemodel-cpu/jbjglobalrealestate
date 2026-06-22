@@ -26,7 +26,7 @@ const getServices = (t: (key: string, fallback?: string) => string): ServiceCard
     description: t('services.card.buyDesc', 'Find the right home with shortlists that match your budget and lifestyle.'),
     icon: Home,
     href: "/buyer-guide",
-    color: "from-emerald-500 to-emerald-600",
+    color: " ",
   },
   {
     id: "rent",
@@ -66,7 +66,7 @@ const getServices = (t: (key: string, fallback?: string) => string): ServiceCard
     description: t('services.card.propertiesDesc', 'Explore premium off-plan projects across Dubai and the UAE.'),
     icon: Home,
     href: "/properties",
-    color: "from-teal-500 to-teal-600",
+    color: " ",
   },
 ];
 

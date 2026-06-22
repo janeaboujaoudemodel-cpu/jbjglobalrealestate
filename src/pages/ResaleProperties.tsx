@@ -585,7 +585,7 @@ const ResaleProperties = () => {
                   Get instant alerts when our investors list new resale properties. Be the first to know.
                 </p>
                 {subscribed ? (
-                  <div className="flex items-center gap-2 justify-center text-emerald-600 font-semibold">
+                  <div className="flex items-center gap-2 justify-center text-[color:var(--emerald-1)] font-semibold">
                     <Mail className="w-5 h-5" />
                     You're subscribed! We'll notify you of new listings.
                   </div>

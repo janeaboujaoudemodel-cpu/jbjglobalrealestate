@@ -117,7 +117,7 @@ const InlineEditCell = ({
         />
         <button
           onClick={handleSave}
-          className="p-0.5 hover:bg-green-500/20 rounded text-green-500"
+          className="p-0.5 hover:jj-emerald-solid/20 rounded text-green-500"
           disabled={saving}
         >
           <Check className="h-3 w-3" />

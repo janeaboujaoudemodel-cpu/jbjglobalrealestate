@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { Users, Briefcase, Building2, User, TrendingUp } from "lucide-react";
 
 const modeConfig: Record<string, { label: string; icon: typeof User; color: string }> = {
-  investor: { label: "Investor", icon: User, color: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
+  investor: { label: "Investor", icon: User, color: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30" },
   broker: { label: "Broker", icon: Briefcase, color: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
   developer: { label: "Developer", icon: Building2, color: "bg-amber-500/10 text-amber-700 border-amber-500/30" },
   investor_broker: { label: "Investor & Broker", icon: Users, color: "bg-purple-500/10 text-purple-700 border-purple-500/30" },

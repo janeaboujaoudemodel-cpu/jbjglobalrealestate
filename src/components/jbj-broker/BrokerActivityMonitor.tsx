@@ -147,7 +147,7 @@ export function BrokerActivityMonitor() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-emerald-500/20">
+            <div className="p-2 rounded-lg jj-emerald-solid/20">
               <Activity className="h-5 w-5 text-emerald-400" />
             </div>
             <div>
@@ -221,7 +221,7 @@ export function BrokerActivityMonitor() {
                   <div>
                     <p className="text-white font-medium">{stat.brokerName}</p>
                     <div className="flex items-center gap-2">
-                      <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
+                      <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">
                         Active
                       </Badge>
                       {stat.missedLeads > 0 && (

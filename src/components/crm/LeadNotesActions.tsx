@@ -111,7 +111,7 @@ const LeadNotesActions = ({
               Next Follow-up
             </span>
             {reminderSet && (
-              <Badge className="bg-green-500/20 text-green-400">
+              <Badge className="jj-emerald-solid/20 text-green-400">
                 <Bell className="w-3 h-3 mr-1" />
                 Reminder Set
               </Badge>
@@ -156,7 +156,7 @@ const LeadNotesActions = ({
                     rows={2}
                   />
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={saveEditNote} className="bg-green-500/20 text-green-400">
+                    <Button size="sm" onClick={saveEditNote} className="jj-emerald-solid/20 text-green-400">
                       <Save className="w-3 h-3 mr-1" />
                       Save
                     </Button>

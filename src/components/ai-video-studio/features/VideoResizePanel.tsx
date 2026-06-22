@@ -116,10 +116,10 @@ export function VideoResizePanel() {
                 key={format.id}
                 onClick={() => !isLoading && toggleFormat(format.id)}
                 className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all border ${
-                  selectedFormats.includes(format.id)
-                    ? 'bg-amber-500/10 border-amber-500/40'
-                    : 'bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#B89555]/30'
-                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+ selectedFormats.includes(format.id)
+ ? 'bg-amber-500/10 border-amber-500/40'
+ : 'bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#B89555]/30'
+ } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <Checkbox
                   checked={selectedFormats.includes(format.id)}
@@ -202,10 +202,10 @@ export function VideoResizePanel() {
               <div
                 key={job.id}
                 className={`p-2.5 rounded-lg border ${
-                  job.status === 'completed' ? 'bg-green-500/10 border-green-500/30'
-                  : job.status === 'failed'  ? 'bg-red-500/10 border-red-500/30'
-                  : 'bg-[#1A1A1A] border-[#1A1A1A]'
-                }`}
+ job.status === 'completed' ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30'
+ : job.status === 'failed' ? 'bg-red-500/10 border-red-500/30'
+ : 'bg-[#1A1A1A] border-[#1A1A1A]'
+ }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -253,7 +253,7 @@ export function VideoResizePanel() {
           </Button>
           {hasCompletedJobs && (
             <Button
-              className="w-full bg-green-600 text-white hover:bg-green-700 text-xs h-9"
+              className="w-full jj-emerald-solid text-white hover:jj-emerald-solid text-xs h-9"
               onClick={downloadAll}
             >
               <Download className="w-3.5 h-3.5 mr-2" />

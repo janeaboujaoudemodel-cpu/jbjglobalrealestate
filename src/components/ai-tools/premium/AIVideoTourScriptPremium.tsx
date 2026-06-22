@@ -179,10 +179,10 @@ ${response.script}
                       key={audience.value}
                       onClick={() => handleChange("targetAudience", audience.value)}
                       className={`p-2 rounded-lg border text-center transition-all ${
-                        formData.targetAudience === audience.value
-                          ? "bg-pink-500/20 border-pink-500/50 text-white"
-                          : "bg-[#1A1A1A] border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]"
-                      }`}
+ formData.targetAudience === audience.value
+ ? "bg-pink-500/20 border-pink-500/50 text-white"
+ : "bg-[#1A1A1A] border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]"
+ }`}
                     >
                       <span className="text-xs font-medium">{audience.label}</span>
                     </button>
@@ -322,7 +322,7 @@ ${response.script}
 
                 {/* Call to Action */}
                 {response.callToAction && (
-                  <Card className="bg-emerald-500/10 border-emerald-500/30">
+                  <Card className="jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-2 mb-2">
                         <Play className="h-4 w-4 text-emerald-400" />

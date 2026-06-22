@@ -171,7 +171,7 @@ const ListingPortalMyListings = () => {
 
   const statusIcon = (status: string) => {
     switch (status) {
-      case 'approved': return <CheckCircle className="w-4 h-4 text-emerald-600" />;
+      case 'approved': return <CheckCircle className="w-4 h-4 text-[color:var(--emerald-1)]" />;
       case 'rejected': return <XCircle className="w-4 h-4 text-red-500" />;
       default: return <Clock className="w-4 h-4 text-[#B89555]" />;
     }
@@ -179,7 +179,7 @@ const ListingPortalMyListings = () => {
 
   const statusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
+      case 'approved': return 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30';
       case 'rejected': return 'bg-red-100 text-red-800 border-red-300';
       default: return 'bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30';
     }
@@ -344,7 +344,7 @@ const ListingPortalMyListings = () => {
                               <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-[10px]">For Rent</Badge>
                             )}
                             {listing.listing_type === 'sale' && (
-                              <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300 text-[10px]">For Sale</Badge>
+                              <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[10px]">For Sale</Badge>
                             )}
                           </div>
                           <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/70">

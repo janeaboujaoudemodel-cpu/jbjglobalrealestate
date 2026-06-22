@@ -226,7 +226,7 @@ export default function FoundersAssistant() {
 
   const statCards = [
     { label: 'Active', count: stats.activeTasks, colorClass: 'bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30', filter: 'in_progress' },
-    { label: 'Done', count: stats.completedTasks, colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200', filter: 'completed' },
+    { label: 'Done', count: stats.completedTasks, colorClass: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30', filter: 'completed' },
     { label: 'Pending', count: stats.pendingTasks, colorClass: 'bg-amber-50 text-amber-700 border-amber-200', filter: 'pending' },
     { label: 'Escalations', count: unreadCount, colorClass: 'bg-red-50 text-red-700 border-red-200', filter: 'escalations' },
   ];
@@ -247,7 +247,7 @@ export default function FoundersAssistant() {
               >
                 <div className="relative w-10 h-10 rounded-full border-2 border-[#B89555]/50 overflow-hidden">
                   <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 jj-emerald-solid border-2 border-white rounded-full" />
                 </div>
                 <div className="hidden sm:block">
                   <h1 className="text-sm font-bold text-foreground leading-tight">Amanda Clarke</h1>

@@ -35,7 +35,7 @@ const RiskBadge = ({ risk }: { risk: string }) => {
     critical: "bg-red-500/20 text-red-400 border-red-500/30",
     high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
     medium: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30",
-    low: "bg-green-500/20 text-green-400 border-green-500/30",
+    low: "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30",
   };
   return (
     <Badge variant="outline" className={colors[risk] || colors.low}>
@@ -144,7 +144,7 @@ const ZeroTrustAuditPanel = () => {
               {criticalDenied.length} critical denied
             </Badge>
           ) : (
-            <Badge variant="outline" className="border-green-500/50 text-green-400 flex items-center gap-1">
+            <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-green-400 flex items-center gap-1">
               <ShieldCheck className="w-3 h-3" />
               No critical denials
             </Badge>
@@ -311,7 +311,7 @@ const ZeroTrustAuditPanel = () => {
                         <TableCell className="text-sm font-mono">{event.email || "—"}</TableCell>
                         <TableCell>
                           <Badge variant="outline" className={
-                            event.event_type === "success" ? "border-green-500/50 text-green-400" :
+                            event.event_type === "success" ? "border-[color:var(--emerald-1)]/30/50 text-green-400" :
                             event.event_type === "suspicious" ? "border-red-500/50 text-red-400" :
                             "border-amber-500/50 text-[#1A1A1A]"
                           }>
@@ -546,7 +546,7 @@ const ZeroTrustAuditPanel = () => {
                   </TableBody>
                 </Table>
               )}
-              <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-sm">
+              <div className="mt-4 p-3 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20 rounded-lg text-sm">
                 <div className="flex items-center gap-2 text-green-400 font-medium">
                   <Lock className="w-4 h-4" />
                   Privilege Escalation Prevention Active

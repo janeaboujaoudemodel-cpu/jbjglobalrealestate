@@ -105,13 +105,13 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
+    if (score >= 80) return 'text-[color:var(--emerald-1)]';
     if (score >= 60) return 'text-amber-600';
     return 'text-red-600';
   };
 
   const getScoreBarColor = (score: number) => {
-    if (score >= 80) return 'bg-green-500';
+    if (score >= 80) return 'jj-emerald-solid';
     if (score >= 60) return 'bg-amber-500';
     return 'bg-red-500';
   };
@@ -146,12 +146,12 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-green-500/40">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[color:var(--emerald-1)]/30/40">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-[#1A1A1A]/70">High Performers</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-[color:var(--emerald-1)]">
                   {summaries.filter(s => s.avg_activity_score >= 80).length}
                 </p>
               </div>
@@ -216,10 +216,10 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                       setViewMode('detail');
                     }}
                     className={`w-full text-left p-4 rounded-lg border transition-all ${
-                      selectedEmployee === emp.user_id 
-                        ? 'bg-[#EFE6D6]/20 border-[#B89555]' 
-                        : 'bg-[#FDFBF7]/50 border-[#B89555]/20 hover:border-[#B89555]/40'
-                    }`}
+ selectedEmployee === emp.user_id 
+ ? 'bg-[#EFE6D6]/20 border-[#B89555]' 
+ : 'bg-[#FDFBF7]/50 border-[#B89555]/20 hover:border-[#B89555]/40'
+ }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div>
@@ -296,7 +296,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                     </div>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-[#1A1A1A]/70">Response Time</span>
-                      <span className="font-medium text-green-600">Fast</span>
+                      <span className="font-medium text-[color:var(--emerald-1)]">Fast</span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-[#1A1A1A]/70">Lead Conversion</span>

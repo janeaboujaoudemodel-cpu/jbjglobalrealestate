@@ -100,7 +100,7 @@ export default function AIEmailGeneratorPage() {
       subtitle="Generate professional real estate emails instantly with AI"
       icon={<Mail className="w-8 h-8" />}
       accentColor="teal"
-      gradientFrom="from-teal-500"
+      gradientFrom=""
     >
       <AIToolGuide
         description="Create polished, professional emails for any real estate communication need."
@@ -122,7 +122,7 @@ export default function AIEmailGeneratorPage() {
 
       <div className="space-y-8">
         {/* Input Form */}
-        <Card className="bg-[#FDFBF7]/90 border-teal-500/30">
+        <Card className="bg-[#FDFBF7]/90 border-[color:var(--emerald-1)]/30/30">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Mail className="w-5 h-5 text-teal-400" />
@@ -134,7 +134,7 @@ export default function AIEmailGeneratorPage() {
               <div>
                 <Label className="text-white/85">Email Type</Label>
                 <Select value={emailType} onValueChange={setEmailType}>
-                  <SelectTrigger className="bg-[#F7F2EA] border-teal-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-[color:var(--emerald-1)]/30/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -147,7 +147,7 @@ export default function AIEmailGeneratorPage() {
               <div>
                 <Label className="text-white/85">Tone</Label>
                 <Select value={tone} onValueChange={setTone}>
-                  <SelectTrigger className="bg-[#F7F2EA] border-teal-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-[color:var(--emerald-1)]/30/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -167,7 +167,7 @@ export default function AIEmailGeneratorPage() {
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
                 placeholder="John Smith"
-                className="bg-[#F7F2EA] border-teal-500/30 text-white"
+                className="bg-[#F7F2EA] border-[color:var(--emerald-1)]/30/30 text-white"
               />
             </div>
 
@@ -177,7 +177,7 @@ export default function AIEmailGeneratorPage() {
                 value={propertyDetails}
                 onChange={(e) => setPropertyDetails(e.target.value)}
                 placeholder="2BR apartment in Dubai Marina, 1,200 sqft, sea view, AED 2.5M..."
-                className="bg-[#F7F2EA] border-teal-500/30 text-white"
+                className="bg-[#F7F2EA] border-[color:var(--emerald-1)]/30/30 text-white"
               />
             </div>
 
@@ -187,7 +187,7 @@ export default function AIEmailGeneratorPage() {
                 value={purpose}
                 onChange={(e) => setPurpose(e.target.value)}
                 placeholder="Schedule a viewing, follow up on inquiry..."
-                className="bg-[#F7F2EA] border-teal-500/30 text-white"
+                className="bg-[#F7F2EA] border-[color:var(--emerald-1)]/30/30 text-white"
               />
             </div>
 
@@ -197,14 +197,14 @@ export default function AIEmailGeneratorPage() {
                 value={additionalContext}
                 onChange={(e) => setAdditionalContext(e.target.value)}
                 placeholder="Any specific details or requirements..."
-                className="bg-[#F7F2EA] border-teal-500/30 text-white"
+                className="bg-[#F7F2EA] border-[color:var(--emerald-1)]/30/30 text-white"
               />
             </div>
 
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-[#1A1A1A] font-semibold"
+              className="w-full jj-emerald-solid hover:jj-emerald-solid text-[#1A1A1A] font-semibold"
             >
               {loading ? (
                 <>
@@ -223,7 +223,7 @@ export default function AIEmailGeneratorPage() {
 
         {/* Results */}
         {result && (
-          <Card className="bg-[#FDFBF7]/90 border-teal-500/30">
+          <Card className="bg-[#FDFBF7]/90 border-[color:var(--emerald-1)]/30/30">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-white flex items-center gap-2">
                 <Mail className="w-5 h-5 text-teal-400" />
@@ -233,23 +233,23 @@ export default function AIEmailGeneratorPage() {
                 variant="outline"
                 size="sm"
                 onClick={copyToClipboard}
-                className="border-teal-500/30 text-teal-400 hover:bg-teal-500/20"
+                className="border-[color:var(--emerald-1)]/30/30 text-teal-400 hover:jj-emerald-solid/20"
               >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
               {result.subject && (
-                <div className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-teal-500/20">
+                <div className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-[color:var(--emerald-1)]/30/20">
                   <Label className="text-teal-400 text-xs uppercase">Subject</Label>
                   <p className="text-white font-medium">{result.subject}</p>
                 </div>
               )}
 
-              <div className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-teal-500/20 space-y-3">
+              <div className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-[color:var(--emerald-1)]/30/20 space-y-3">
                 {result.greeting && <p className="text-white/85">{result.greeting}</p>}
                 {result.body && <p className="text-white/85 whitespace-pre-wrap">{result.body}</p>}
-                {result.callToAction && <p className="text-teal-300 font-medium">{result.callToAction}</p>}
+                {result.callToAction && <p className="text-[color:var(--emerald-on)] font-medium">{result.callToAction}</p>}
                 {result.closing && <p className="text-white/85">{result.closing}</p>}
                 {result.signature && <p className="text-white/70 text-sm whitespace-pre-line">{result.signature}</p>}
               </div>
@@ -259,7 +259,7 @@ export default function AIEmailGeneratorPage() {
                   <Label className="text-white/70 text-sm">Alternative Subject Lines</Label>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {result.alternativeSubjects.map((subj, i) => (
-                      <span key={i} className="text-xs px-3 py-1 bg-[#F7F2EA] rounded-full text-white/85 border border-teal-500/20">
+                      <span key={i} className="text-xs px-3 py-1 bg-[#F7F2EA] rounded-full text-white/85 border border-[color:var(--emerald-1)]/30/20">
                         {subj}
                       </span>
                     ))}
@@ -268,7 +268,7 @@ export default function AIEmailGeneratorPage() {
               )}
 
               {result.tips && result.tips.length > 0 && (
-                <div className="bg-teal-500/10 rounded-lg p-4 border border-teal-500/20">
+                <div className="jj-emerald-solid/10 rounded-lg p-4 border border-[color:var(--emerald-1)]/30/20">
                   <Label className="text-teal-400 text-sm">Personalization Tips</Label>
                   <ul className="mt-2 space-y-1">
                     {result.tips.map((tip, i) => (
@@ -286,7 +286,7 @@ export default function AIEmailGeneratorPage() {
 
         {/* Placeholder */}
         {!result && !loading && (
-          <div className="bg-[#FDFBF7]/50 border border-teal-500/20 rounded-xl py-12 text-center">
+          <div className="bg-[#FDFBF7]/50 border border-[color:var(--emerald-1)]/30/20 rounded-xl py-12 text-center">
             <Mail className="w-12 h-12 text-teal-400/50 mx-auto mb-4" />
             <p className="text-white/70">Configure your email above to generate professional content</p>
           </div>

@@ -231,12 +231,12 @@ ${response.report}
                 {/* Market Outlook Badge */}
                 {response.outlook && (
                   <Card className={`p-4 ${
-                    response.outlook === "bullish" 
-                      ? "bg-emerald-500/10 border-emerald-500/30" 
-                      : response.outlook === "bearish"
-                      ? "bg-red-500/10 border-red-500/30"
-                      : "bg-amber-500/10 border-amber-500/30"
-                  }`}>
+ response.outlook === "bullish" 
+ ? "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30" 
+ : response.outlook === "bearish"
+ ? "bg-red-500/10 border-red-500/30"
+ : "bg-amber-500/10 border-amber-500/30"
+ }`}>
                     <div className="flex items-center gap-3">
                       {response.outlook === "bullish" ? (
                         <TrendingUp className="h-6 w-6 text-emerald-400" />
@@ -248,9 +248,9 @@ ${response.report}
                       <div>
                         <p className="text-xs text-white/70">Market Outlook</p>
                         <p className={`text-lg font-bold capitalize ${
-                          response.outlook === "bullish" ? "text-emerald-400" :
-                          response.outlook === "bearish" ? "text-red-400" : "text-[#1A1A1A]"
-                        }`}>
+ response.outlook === "bullish" ? "text-emerald-400" :
+ response.outlook === "bearish" ? "text-red-400" : "text-[#1A1A1A]"
+ }`}>
                           {response.outlook}
                         </p>
                       </div>

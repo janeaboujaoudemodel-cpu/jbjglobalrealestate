@@ -57,7 +57,7 @@ const departmentIcons: Record<string, React.ReactNode> = {
 
 const departmentColors: Record<string, string> = {
   hr: 'bg-purple-50 border-purple-200 text-purple-700',
-  sales: 'bg-green-50 border-green-200 text-green-700',
+  sales: 'jj-emerald-soft border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]',
   marketing: 'bg-pink-50 border-pink-200 text-pink-700',
   finance: 'bg-amber-50 border-amber-200 text-amber-700',
   admin: 'bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70',
@@ -318,8 +318,8 @@ export default function FoundersCollaborationPanel() {
                           <p className="text-lg font-bold text-[#B89555]">{deptStats.activeTasks}</p>
                           <p className="text-xs text-[#1A1A1A]/70">Active</p>
                         </div>
-                        <div className="text-center p-2 bg-green-50 rounded-lg border border-green-200">
-                          <p className="text-lg font-bold text-green-700">{deptStats.completedToday}</p>
+                        <div className="text-center p-2 jj-emerald-soft rounded-lg border border-[color:var(--emerald-1)]/30">
+                          <p className="text-lg font-bold text-[color:var(--emerald-1)]">{deptStats.completedToday}</p>
                           <p className="text-xs text-[#1A1A1A]/70">Completed</p>
                         </div>
                         <div className="text-center p-2 bg-amber-50 rounded-lg border border-amber-200">
@@ -441,7 +441,7 @@ export default function FoundersCollaborationPanel() {
                     </div>
                     <div className="flex items-center justify-between pt-2">
                       <p className="text-xs text-[#1A1A1A]/70">Reports to: <span className="text-[#B89555]">Amanda Clarke</span></p>
-                      <div className="flex items-center gap-1 text-green-600 text-xs">
+                      <div className="flex items-center gap-1 text-[color:var(--emerald-1)] text-xs">
                         <CheckCircle2 className="h-3 w-3" /> Active
                       </div>
                     </div>
@@ -473,13 +473,13 @@ export default function FoundersCollaborationPanel() {
                         className="flex items-start gap-3 p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30"
                       >
                         <div className={`p-2 rounded-full ${
-                          log.type === 'task_routed' ? 'bg-green-50 border border-green-200' :
-                          log.type === 'escalation' ? 'bg-red-50 border border-red-200' :
-                          log.type === 'ai_communication' ? 'bg-blue-50 border border-blue-200' :
-                          log.type === 'report_generated' ? 'bg-purple-50 border border-purple-200' :
-                          'bg-[#B89555]/10 border border-[#B89555]/20'
-                        }`}>
-                          {log.type === 'task_routed' ? <ArrowRight className="h-4 w-4 text-green-600" /> :
+ log.type === 'task_routed' ? 'jj-emerald-soft border border-[color:var(--emerald-1)]/30' :
+ log.type === 'escalation' ? 'bg-red-50 border border-red-200' :
+ log.type === 'ai_communication' ? 'bg-blue-50 border border-blue-200' :
+ log.type === 'report_generated' ? 'bg-purple-50 border border-purple-200' :
+ 'bg-[#B89555]/10 border border-[#B89555]/20'
+ }`}>
+                          {log.type === 'task_routed' ? <ArrowRight className="h-4 w-4 text-[color:var(--emerald-1)]" /> :
                            log.type === 'escalation' ? <AlertCircle className="h-4 w-4 text-red-600" /> :
                            log.type === 'ai_communication' ? <MessageSquare className="h-4 w-4 text-blue-600" /> :
                            log.type === 'report_generated' ? <BarChart3 className="h-4 w-4 text-purple-600" /> :

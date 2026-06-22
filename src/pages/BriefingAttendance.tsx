@@ -296,7 +296,7 @@ const BriefingAttendance = () => {
                 </div>
               </div>
               <div className="mt-3">
-                <Badge className={briefing.status === 'approved' ? 'bg-emerald-500/20 text-emerald-700' : 'bg-amber-500/20 text-amber-700'}>
+                <Badge className={briefing.status === 'approved' ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' : 'bg-amber-500/20 text-amber-700'}>
                   {briefing.status}
                 </Badge>
               </div>
@@ -305,13 +305,13 @@ const BriefingAttendance = () => {
 
           {/* Confirmed Badge */}
           {isConfirmed && (
-            <Card className="border-2 border-emerald-500/30 bg-emerald-50/50 mb-6">
+            <Card className="border-2 border-[color:var(--emerald-1)]/30/30 jj-emerald-soft/50 mb-6">
               <CardContent className="py-6 text-center">
                 <CheckCircle className="w-16 h-16 mx-auto text-emerald-500 mb-3" />
-                <h3 className="text-xl font-bold text-emerald-800">Attendance Confirmed!</h3>
-                <p className="text-sm text-emerald-600 mt-1">+{attendance?.points_earned || 10} points earned</p>
+                <h3 className="text-xl font-bold text-[color:var(--emerald-1)]">Attendance Confirmed!</h3>
+                <p className="text-sm text-[color:var(--emerald-1)] mt-1">+{attendance?.points_earned || 10} points earned</p>
                 {attendance?.selfie_url && (
-                  <img src={attendance.selfie_url} alt="Attendance selfie" className="w-32 h-32 object-cover rounded-xl mx-auto mt-4 border-2 border-emerald-300" />
+                  <img src={attendance.selfie_url} alt="Attendance selfie" className="w-32 h-32 object-cover rounded-xl mx-auto mt-4 border-2 border-[color:var(--emerald-1)]/30" />
                 )}
               </CardContent>
             </Card>
@@ -330,7 +330,7 @@ const BriefingAttendance = () => {
                   <div className="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:border-[#B89555]/40">
                     <RadioGroupItem value="attending" id="rsvp-attending" />
                     <label htmlFor="rsvp-attending" className="cursor-pointer flex-1">
-                      <span className="font-semibold text-emerald-700">✓ Attending</span>
+                      <span className="font-semibold text-[color:var(--emerald-1)]">✓ Attending</span>
                       <p className="text-xs text-muted-foreground">I will be there on time</p>
                     </label>
                   </div>

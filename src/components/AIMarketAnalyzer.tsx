@@ -180,22 +180,22 @@ export const AIMarketAnalyzer = ({
   }, [chatMessages]);
 
   const getDemandColor = (score: number) => {
-    if (score >= 8) return 'text-green-600';
+    if (score >= 8) return 'text-[color:var(--emerald-1)]';
     if (score >= 6) return 'text-emerald-500';
     if (score >= 4) return 'text-yellow-600';
     return 'text-red-500';
   };
 
   const getPriceComparisonColor = (percent: number) => {
-    if (percent < -10) return 'text-green-600';
+    if (percent < -10) return 'text-[color:var(--emerald-1)]';
     if (percent < 5) return 'text-emerald-500';
     if (percent < 15) return 'text-yellow-600';
     return 'text-orange-500';
   };
 
   const getRatingColor = (rating: string) => {
-    if (rating.includes('Strong')) return 'bg-green-100 text-green-800 border-green-300';
-    if (rating.includes('Worth')) return 'bg-emerald-100 text-emerald-800 border-emerald-300';
+    if (rating.includes('Strong')) return 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30';
+    if (rating.includes('Worth')) return 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30';
     if (rating === 'Neutral') return 'bg-yellow-100 text-yellow-800 border-yellow-300';
     return 'bg-orange-100 text-orange-800 border-orange-300';
   };
@@ -327,7 +327,7 @@ export const AIMarketAnalyzer = ({
             </div>
             <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20 text-center">
               {insights.priceComparisonPercent < 0 ? (
-                <TrendingDown className="w-6 h-6 mx-auto mb-2 text-green-600" />
+                <TrendingDown className="w-6 h-6 mx-auto mb-2 text-[color:var(--emerald-1)]" />
               ) : (
                 <TrendingUp className="w-6 h-6 mx-auto mb-2 text-orange-500" />
               )}
@@ -349,14 +349,14 @@ export const AIMarketAnalyzer = ({
 
           {/* Insights & Risks */}
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 bg-green-50/50 rounded-xl border border-green-200">
-              <h4 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+            <div className="p-4 jj-emerald-soft/50 rounded-xl border border-[color:var(--emerald-1)]/30">
+              <h4 className="font-semibold text-[color:var(--emerald-1)] mb-3 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
                 Key Insights
               </h4>
               <ul className="space-y-2">
                 {insights.keyInsights.map((insight, i) => (
-                  <li key={i} className="text-sm text-green-700 flex items-start gap-2">
+                  <li key={i} className="text-sm text-[color:var(--emerald-1)] flex items-start gap-2">
                     <span className="text-green-500 mt-1">•</span>
                     {insight}
                   </li>
@@ -412,10 +412,10 @@ export const AIMarketAnalyzer = ({
                 {chatMessages.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
-                      msg.role === 'user' 
-                        ? 'bg-purple-600 text-white' 
-                        : 'bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70'
-                    }`}>
+ msg.role === 'user' 
+ ? 'bg-purple-600 text-white' 
+ : 'bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70'
+ }`}>
                       {msg.content}
                     </div>
                   </div>

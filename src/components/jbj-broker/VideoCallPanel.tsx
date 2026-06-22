@@ -117,7 +117,7 @@ export function VideoCallPanel({
             </div>
             <Badge 
               className={isCallActive 
-                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" 
+                ? "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30" 
                 : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30"
               }
             >
@@ -131,7 +131,7 @@ export function VideoCallPanel({
             <Button
               onClick={startCall}
               disabled={isCallActive || !leadPhone}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white h-12"
+              className="jj-emerald-solid hover:jj-emerald-solid text-white h-12"
             >
               <Phone className="h-4 w-4 mr-2" />
               Start Call
@@ -185,7 +185,7 @@ export function VideoCallPanel({
         <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="w-3 h-3 rounded-full jj-emerald-solid animate-pulse" />
               Call in Progress
             </DialogTitle>
           </DialogHeader>
@@ -235,10 +235,10 @@ export function VideoCallPanel({
                 size="icon"
                 onClick={toggleAudio}
                 className={`h-14 w-14 rounded-full ${
-                  isAudioEnabled 
-                    ? "bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#1A1A1A]" 
-                    : "bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
-                }`}
+ isAudioEnabled 
+ ? "bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#1A1A1A]" 
+ : "bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
+ }`}
               >
                 {isAudioEnabled ? <Mic className="h-6 w-6" /> : <MicOff className="h-6 w-6" />}
               </Button>
@@ -248,10 +248,10 @@ export function VideoCallPanel({
                 size="icon"
                 onClick={toggleVideo}
                 className={`h-14 w-14 rounded-full ${
-                  isVideoEnabled 
-                    ? "bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#1A1A1A]" 
-                    : "bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
-                }`}
+ isVideoEnabled 
+ ? "bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#1A1A1A]" 
+ : "bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
+ }`}
               >
                 {isVideoEnabled ? <Video className="h-6 w-6" /> : <VideoOff className="h-6 w-6" />}
               </Button>
@@ -261,10 +261,10 @@ export function VideoCallPanel({
                 size="icon"
                 onClick={toggleScreenShare}
                 className={`h-14 w-14 rounded-full ${
-                  isScreenSharing 
-                    ? "bg-blue-500/20 border-blue-500/30 text-blue-400" 
-                    : "bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
-                }`}
+ isScreenSharing 
+ ? "bg-blue-500/20 border-blue-500/30 text-blue-400" 
+ : "bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
+ }`}
               >
                 <MonitorUp className="h-6 w-6" />
               </Button>

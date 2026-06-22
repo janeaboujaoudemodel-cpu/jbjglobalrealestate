@@ -214,7 +214,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             </Select>
 
             {thread.lead ? (
-              <Badge variant="outline" className="text-green-600 border-green-300 text-xs">
+              <Badge variant="outline" className="text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-xs">
                 <LinkIcon className="h-3 w-3 mr-1" />
                 {thread.lead.full_name}
               </Badge>
@@ -270,10 +270,10 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                     className={`flex ${message.direction === 'outbound' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-                      message.direction === 'outbound'
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] rounded-tr-sm'
-                        : 'bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A] rounded-tl-sm'
-                    }`}>
+ message.direction === 'outbound'
+ ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] rounded-tr-sm'
+ : 'bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A] rounded-tl-sm'
+ }`}>
                       {message.voice_url && (
                         <div className="flex items-center gap-2 mb-2">
                           <Button

@@ -95,7 +95,7 @@ const ActiveLeadBanner = ({
             size="sm"
             variant="outline"
             onClick={handleWhatsApp}
-            className="text-emerald-800 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 h-8"
+            className="text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40 jj-emerald-solid/10 hover:jj-emerald-solid/20 h-8"
           >
             <Phone className="h-3 w-3 mr-1" />
             WhatsApp

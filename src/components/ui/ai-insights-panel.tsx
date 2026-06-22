@@ -82,7 +82,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       case 'recommendation':
         return 'text-blue-600 bg-blue-50 border-blue-200';
       case 'achievement':
-        return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+        return 'text-[color:var(--emerald-1)] jj-emerald-soft border-[color:var(--emerald-1)]/30';
     }
   };
 
@@ -152,7 +152,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       {/* Summary Stats - Champagne cards with gold borders */}
       <div className="grid grid-cols-3 gap-2 p-4 border-b-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {[
-          { label: 'Score', value: '0%', icon: <Target className="w-3 h-3" />, color: 'text-emerald-600' },
+          { label: 'Score', value: '0%', icon: <Target className="w-3 h-3" />, color: 'text-[color:var(--emerald-1)]' },
           { label: 'Tasks', value: '0', icon: <Clock className="w-3 h-3" />, color: 'text-[#1A1A1A]' },
           { label: 'Leads', value: '0', icon: <Users className="w-3 h-3" />, color: 'text-blue-600' },
         ].map((stat, i) => (

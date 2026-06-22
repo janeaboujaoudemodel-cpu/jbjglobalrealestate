@@ -270,7 +270,7 @@ export default function BrokerDashboard() {
                       {isInternalBroker ? 'JBJ Internal Broker' : 'JBJ Partner Broker'}
                     </Badge>
                     <Badge className={isActive
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-600/40 hover:bg-emerald-50'
+                      ? 'jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30/40 hover:jj-emerald-soft'
                       : 'bg-amber-50 text-amber-700 border border-amber-600/40 hover:bg-amber-50'}>
                       {isActive ? 'Active' : 'Pending'}
                     </Badge>

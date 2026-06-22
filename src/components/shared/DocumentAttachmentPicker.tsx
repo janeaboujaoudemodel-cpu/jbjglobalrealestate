@@ -204,10 +204,10 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
               </div>
               <button
                 onClick={() => { onClose(); navigate('/e-signature/create'); }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition-all text-left"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:jj-emerald-soft border border-transparent hover:border-[color:var(--emerald-1)]/30 transition-all text-left"
               >
-                <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
-                  <PenTool className="w-4 h-4 text-emerald-600" />
+                <div className="w-9 h-9 rounded-lg jj-emerald-soft flex items-center justify-center shrink-0">
+                  <PenTool className="w-4 h-4 text-[color:var(--emerald-1)]" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-[#1A1A1A]">Send for E-Signature</p>
@@ -228,7 +228,7 @@ const TYPE_STYLES: Record<string, { border: string; bg: string; badge: string; b
   signature: { border: 'border-indigo-300/50', bg: 'bg-indigo-50/50', badge: 'bg-indigo-100 text-indigo-700', badgeLabel: 'Signature', icon: <Signature className="w-4 h-4 text-indigo-500" /> },
   letterhead: { border: 'border-[#B89555]/50', bg: 'bg-[#FDFBF7]/50', badge: 'bg-[#F7F2EA] text-[#1A1A1A]/80', badgeLabel: 'Letterhead', icon: <FileText className="w-4 h-4 text-[#1A1A1A]/70" /> },
   business_card: { border: 'border-amber-300/50', bg: 'bg-amber-50/50', badge: 'bg-amber-100 text-amber-700', badgeLabel: 'Business Card', icon: <CreditCard className="w-4 h-4 text-amber-600" /> },
-  logo: { border: 'border-emerald-300/50', bg: 'bg-emerald-50/50', badge: 'bg-emerald-100 text-emerald-700', badgeLabel: 'Logo', icon: <Image className="w-4 h-4 text-emerald-500" /> },
+  logo: { border: 'border-[color:var(--emerald-1)]/30/50', bg: 'jj-emerald-soft/50', badge: 'jj-emerald-soft text-[color:var(--emerald-1)]', badgeLabel: 'Logo', icon: <Image className="w-4 h-4 text-emerald-500" /> },
   email_signature: { border: 'border-blue-300/50', bg: 'bg-blue-50/50', badge: 'bg-blue-100 text-blue-700', badgeLabel: 'Email Signature', icon: <Mail className="w-4 h-4 text-blue-500" /> },
 };
 
@@ -341,10 +341,10 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
   // Logo: centered with brand badge
   if (attachment.type === 'logo' && attachment.content) {
     return (
-      <div className="mt-2 rounded-xl overflow-hidden border border-emerald-200 bg-[#FDFBF7] p-3 max-w-[180px] flex flex-col items-center">
+      <div className="mt-2 rounded-xl overflow-hidden border border-[color:var(--emerald-1)]/30 bg-[#FDFBF7] p-3 max-w-[180px] flex flex-col items-center">
         <div className="flex items-center gap-1.5 mb-2 self-start">
           <Image className="w-3 h-3 text-emerald-500" />
-          <span className="text-[9px] font-semibold text-emerald-600 uppercase tracking-wider">Logo</span>
+          <span className="text-[9px] font-semibold text-[color:var(--emerald-1)] uppercase tracking-wider">Logo</span>
         </div>
         <img src={attachment.content} alt={attachment.name} className="max-h-[100px] object-contain" />
         <p className="text-[10px] text-muted-foreground mt-2 truncate self-start">{attachment.name}</p>

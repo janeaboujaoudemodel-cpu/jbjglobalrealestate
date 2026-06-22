@@ -61,13 +61,13 @@ export function FoundersEmotionAnalyticsPanel() {
   }, [emotionStats]);
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
-    if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-600" />;
+    if (trend === 'up') return <TrendingUp className="h-4 w-4 text-[color:var(--emerald-1)]" />;
     if (trend === 'down') return <TrendingDown className="h-4 w-4 text-red-500" />;
     return <Minus className="h-4 w-4 text-[#1A1A1A]/70" />;
   };
 
   const getSentimentIcon = (sentiment: number) => {
-    if (sentiment >= 0.6) return <Smile className="h-5 w-5 text-green-600" />;
+    if (sentiment >= 0.6) return <Smile className="h-5 w-5 text-[color:var(--emerald-1)]" />;
     if (sentiment >= 0.4) return <Meh className="h-5 w-5 text-amber-600" />;
     return <Frown className="h-5 w-5 text-red-500" />;
   };
@@ -104,13 +104,13 @@ export function FoundersEmotionAnalyticsPanel() {
 
       {/* Overview Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-green-500/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-[#1A1A1A]/70">Positive</p><p className="text-2xl font-bold text-green-600">{overallSentiment.positive}%</p></div>
-              <div className="h-12 w-12 rounded-full bg-green-500/10 flex items-center justify-center"><Smile className="h-6 w-6 text-green-600" /></div>
+              <div><p className="text-xs text-[#1A1A1A]/70">Positive</p><p className="text-2xl font-bold text-[color:var(--emerald-1)]">{overallSentiment.positive}%</p></div>
+              <div className="h-12 w-12 rounded-full jj-emerald-solid/10 flex items-center justify-center"><Smile className="h-6 w-6 text-[color:var(--emerald-1)]" /></div>
             </div>
-            <div className="mt-2 flex items-center gap-1 text-xs text-green-600"><TrendingUp className="h-3 w-3" /><span>+5% from last week</span></div>
+            <div className="mt-2 flex items-center gap-1 text-xs text-[color:var(--emerald-1)]"><TrendingUp className="h-3 w-3" /><span>+5% from last week</span></div>
           </CardContent>
         </Card>
         <Card className="bg-[#FDFBF7] border-2 border-red-500/30">
@@ -119,7 +119,7 @@ export function FoundersEmotionAnalyticsPanel() {
               <div><p className="text-xs text-[#1A1A1A]/70">Negative</p><p className="text-2xl font-bold text-red-500">{overallSentiment.negative}%</p></div>
               <div className="h-12 w-12 rounded-full bg-red-500/10 flex items-center justify-center"><Frown className="h-6 w-6 text-red-500" /></div>
             </div>
-            <div className="mt-2 flex items-center gap-1 text-xs text-green-600"><TrendingDown className="h-3 w-3" /><span>-3% from last week</span></div>
+            <div className="mt-2 flex items-center gap-1 text-xs text-[color:var(--emerald-1)]"><TrendingDown className="h-3 w-3" /><span>-3% from last week</span></div>
           </CardContent>
         </Card>
         <Card className="bg-[#FDFBF7] border-2 border-amber-500/30">
@@ -193,7 +193,7 @@ export function FoundersEmotionAnalyticsPanel() {
                   <div key={ch.channel} className="p-4 rounded-lg bg-[#F7F2EA] border border-[#B89555]/10">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        {ch.channel === 'WhatsApp' && <MessageSquare className="h-5 w-5 text-green-600" />}
+                        {ch.channel === 'WhatsApp' && <MessageSquare className="h-5 w-5 text-[color:var(--emerald-1)]" />}
                         {ch.channel === 'Email' && <Mail className="h-5 w-5 text-blue-600" />}
                         {ch.channel === 'Chat' && <MessageSquare className="h-5 w-5 text-purple-600" />}
                         {ch.channel === 'Phone' && <Phone className="h-5 w-5 text-amber-600" />}
@@ -202,7 +202,7 @@ export function FoundersEmotionAnalyticsPanel() {
                       <Badge variant="outline" className="text-[#1A1A1A]/70 border-[#B89555]/30">{ch.total} total</Badge>
                     </div>
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2"><span className="text-xs text-[#1A1A1A]/70 w-16">Positive</span><Progress value={(ch.positive / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-green-600 w-8">{Math.round((ch.positive / ch.total) * 100)}%</span></div>
+                      <div className="flex items-center gap-2"><span className="text-xs text-[#1A1A1A]/70 w-16">Positive</span><Progress value={(ch.positive / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-[color:var(--emerald-1)] w-8">{Math.round((ch.positive / ch.total) * 100)}%</span></div>
                       <div className="flex items-center gap-2"><span className="text-xs text-[#1A1A1A]/70 w-16">Neutral</span><Progress value={(ch.neutral / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-[#1A1A1A]/70 w-8">{Math.round((ch.neutral / ch.total) * 100)}%</span></div>
                       <div className="flex items-center gap-2"><span className="text-xs text-[#1A1A1A]/70 w-16">Negative</span><Progress value={(ch.negative / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-red-500 w-8">{Math.round((ch.negative / ch.total) * 100)}%</span></div>
                     </div>

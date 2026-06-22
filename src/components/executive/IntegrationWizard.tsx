@@ -54,7 +54,7 @@ const integrationConfigs = {
     title: 'Phone Integration',
     icon: Phone,
     color: 'text-green-500',
-    bgColor: 'bg-green-500/10',
+    bgColor: 'jj-emerald-solid/10',
     steps: [
       {
         title: 'VAPI.ai Setup',
@@ -74,7 +74,7 @@ const integrationConfigs = {
     title: 'WhatsApp Integration',
     icon: MessageSquare,
     color: 'text-emerald-500',
-    bgColor: 'bg-emerald-500/10',
+    bgColor: 'jj-emerald-solid/10',
     steps: [
       {
         title: 'Meta Business Account',
@@ -231,10 +231,10 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                 <div
                   key={index}
                   className={`flex-1 h-1 rounded-full transition-all ${
-                    index <= currentStep 
-                      ? 'bg-[#EFE6D6]' 
-                      : 'bg-[#1A1A1A]'
-                  }`}
+ index <= currentStep 
+ ? 'bg-[#EFE6D6]' 
+ : 'bg-[#1A1A1A]'
+ }`}
                 />
               ))}
             </div>
@@ -248,7 +248,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8"
               >
-                <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-full jj-emerald-solid/20 flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-500" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Connected Successfully!</h3>
@@ -271,10 +271,10 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         key={option}
                         onClick={() => setSelectedProvider(option)}
                         className={`w-full p-4 rounded-xl border transition-all flex items-center justify-between ${
-                          selectedProvider === option
-                            ? 'border-[#B89555] bg-[#EFE6D6]/10 text-white'
-                            : 'border-[#1A1A1A] hover:border-[#1A1A1A] text-[#1A1A1A]/70'
-                        }`}
+ selectedProvider === option
+ ? 'border-[#B89555] bg-[#EFE6D6]/10 text-white'
+ : 'border-[#1A1A1A] hover:border-[#1A1A1A] text-[#1A1A1A]/70'
+ }`}
                       >
                         <span>{option}</span>
                         {selectedProvider === option && <Check className="w-5 h-5 text-[#1A1A1A]" />}

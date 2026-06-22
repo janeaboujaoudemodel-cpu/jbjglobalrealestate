@@ -537,7 +537,7 @@ export const SecurityDashboardSummary = () => {
             PDF
           </Button>
           <Badge 
-            className={`gap-1.5 cursor-pointer ${isLive ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/40' : 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30'}`}
+            className={`gap-1.5 cursor-pointer ${isLive ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40' : 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30'}`}
             onClick={() => setIsLive(!isLive)}
           >
             <Radio className={`w-3 h-3 ${isLive ? "animate-pulse" : ""}`} />
@@ -580,7 +580,7 @@ export const SecurityDashboardSummary = () => {
           <p className="text-[#1A1A1A] text-2xl font-bold">{rateLimitViolations}</p>
         </Card>
         
-        <Card className="bg-[#FDFBF7] border-2 border-emerald-500/40 p-4 hover:shadow-lg hover:shadow-emerald-500/10 transition-all">
+        <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30/40 p-4 hover:shadow-lg hover:shadow-emerald-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
             <Activity className="w-4 h-4 text-emerald-500" />
             <span className="text-[#1A1A1A]/70 text-xs">Total Requests</span>

@@ -105,7 +105,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
         <div className="flex items-center gap-3 mb-3">
           <Building2 className="w-5 h-5 text-[#B89555]" />
           <h3 className="font-semibold text-foreground">Company Email (jbj.ae)</h3>
-          <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300 text-[10px]">
+          <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[10px]">
             <CheckCircle2 className="w-3 h-3 mr-1" /> Connected
           </Badge>
         </div>
@@ -130,7 +130,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
           ) : (
             <Badge className={
               personalKeyConnected
-                ? "bg-emerald-100 text-emerald-700 border-emerald-300 text-[10px]"
+                ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[10px]"
                 : personalKeyStatus === "invalid"
                   ? "bg-red-100 text-red-700 border-red-300 text-[10px]"
                   : "bg-amber-100 text-amber-700 border-amber-300 text-[10px]"
@@ -187,7 +187,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
 
         {personalKeyConnected && (
           <div className="space-y-3">
-            <div className="flex items-center gap-2 bg-[#FDFBF7]/70 rounded-lg border border-emerald-200 px-3 py-2">
+            <div className="flex items-center gap-2 bg-[#FDFBF7]/70 rounded-lg border border-[color:var(--emerald-1)]/30 px-3 py-2">
               <Shield className="w-4 h-4 text-emerald-500" />
               <span className="text-xs text-muted-foreground">
                 API key securely stored · Full delivery tracking enabled

@@ -122,7 +122,7 @@ const OwnerDashboard = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Active</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">Active</Badge>;
       case 'pending':
         return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Pending Review</Badge>;
       case 'sold':
@@ -201,7 +201,7 @@ const OwnerDashboard = () => {
             <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg jj-emerald-solid/20 flex items-center justify-center">
                     <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
@@ -312,7 +312,7 @@ const OwnerDashboard = () => {
                     <div className="space-y-4">
                       <div className="flex gap-4">
                         <div className="flex flex-col items-center">
-                          <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
                           <div className="w-0.5 h-12 bg-[#EFE6D6]" />
@@ -326,7 +326,7 @@ const OwnerDashboard = () => {
                       
                       <div className="flex gap-4">
                         <div className="flex flex-col items-center">
-                          <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
                           <div className="w-0.5 h-12 bg-[#EFE6D6]" />
@@ -340,7 +340,7 @@ const OwnerDashboard = () => {
                       
                       <div className="flex gap-4">
                         <div className="flex flex-col items-center">
-                          <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
                         </div>
@@ -373,8 +373,8 @@ const OwnerDashboard = () => {
                         <div 
                           key={message.id}
                           className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                            message.unread ? 'bg-[#EFE6D6]/10 border border-[#B89555]/20' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'
-                          }`}
+ message.unread ? 'bg-[#EFE6D6]/10 border border-[#B89555]/20' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'
+ }`}
                         >
                           <div className="flex items-center justify-between mb-1">
                             <p className="font-medium text-sm">{message.from}</p>

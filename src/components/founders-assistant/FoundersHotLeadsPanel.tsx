@@ -128,14 +128,14 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
     critical: 'bg-red-500/10 border-red-500/40',
     high: 'bg-orange-500/10 border-orange-500/40',
     medium: 'bg-yellow-500/10 border-yellow-500/40',
-    low: 'bg-green-500/10 border-green-500/40',
+    low: 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/40',
   };
 
   const urgencyBadgeStyles = {
     critical: 'bg-red-500/20 text-red-400 border-red-500/30',
     high: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
     medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    low: 'bg-green-500/20 text-green-400 border-green-500/30',
+    low: 'jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30',
   };
 
   const handleContact = (lead: HotLead, method: 'call' | 'email' | 'whatsapp') => {
@@ -212,10 +212,10 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
             <p className="text-xs text-[#1A1A1A]/70">High Priority</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
           <CardContent className="p-4 text-center">
-            <User className="w-6 h-6 text-green-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-green-600">{activeLeads}</p>
+            <User className="w-6 h-6 text-[color:var(--emerald-1)] mx-auto mb-2" />
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{activeLeads}</p>
             <p className="text-xs text-[#1A1A1A]/70">Active</p>
           </CardContent>
         </Card>
@@ -295,28 +295,28 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                   >
                     <Card 
                       className={`bg-[#FDFBF7] border-2 transition-all cursor-pointer hover:scale-[1.01] hover:shadow-[0_4px_20px_rgba(200,167,102,0.15)] ${
-                        urgency.level === 'critical' ? 'border-red-300' :
-                        urgency.level === 'high' ? 'border-orange-300' :
-                        urgency.level === 'medium' ? 'border-amber-300' :
-                        'border-green-300'
-                      }`}
+ urgency.level === 'critical' ? 'border-red-300' :
+ urgency.level === 'high' ? 'border-orange-300' :
+ urgency.level === 'medium' ? 'border-amber-300' :
+ 'border-[color:var(--emerald-1)]/30'
+ }`}
                       onClick={() => onLeadClick?.(lead.id)}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-start gap-4 flex-1">
                             <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                              urgency.level === 'critical' ? 'bg-red-50' :
-                              urgency.level === 'high' ? 'bg-orange-50' :
-                              urgency.level === 'medium' ? 'bg-amber-50' :
-                              'bg-green-50'
-                            }`}>
+ urgency.level === 'critical' ? 'bg-red-50' :
+ urgency.level === 'high' ? 'bg-orange-50' :
+ urgency.level === 'medium' ? 'bg-amber-50' :
+ 'jj-emerald-soft'
+ }`}>
                               <User className={`w-6 h-6 ${
-                                urgency.level === 'critical' ? 'text-red-600' :
-                                urgency.level === 'high' ? 'text-orange-600' :
-                                urgency.level === 'medium' ? 'text-amber-600' :
-                                'text-green-600'
-                              }`} />
+ urgency.level === 'critical' ? 'text-red-600' :
+ urgency.level === 'high' ? 'text-orange-600' :
+ urgency.level === 'medium' ? 'text-amber-600' :
+ 'text-[color:var(--emerald-1)]'
+ }`} />
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
@@ -325,11 +325,11 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                                   <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">⭐ VIP</Badge>
                                 )}
                                 <Badge className={`border ${
-                                  urgency.level === 'critical' ? 'bg-red-50 text-red-600 border-red-200' :
-                                  urgency.level === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
-                                  urgency.level === 'medium' ? 'bg-amber-50 text-amber-600 border-amber-200' :
-                                  'bg-green-50 text-green-600 border-green-200'
-                                }`}>
+ urgency.level === 'critical' ? 'bg-red-50 text-red-600 border-red-200' :
+ urgency.level === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
+ urgency.level === 'medium' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+ 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30'
+ }`}>
                                   {urgency.level.toUpperCase()}
                                 </Badge>
                               </div>
@@ -366,10 +366,10 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             <Progress 
                               value={progressValue} 
                               className={`h-1.5 ${
-                                urgency.level === 'critical' ? 'bg-red-100' :
-                                urgency.level === 'high' ? 'bg-orange-100' :
-                                'bg-amber-100'
-                              }`}
+ urgency.level === 'critical' ? 'bg-red-100' :
+ urgency.level === 'high' ? 'bg-orange-100' :
+ 'bg-amber-100'
+ }`}
                             />
                           </div>
                         )}
@@ -380,7 +380,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             <Button
                               size="sm"
                               onClick={(e) => { e.stopPropagation(); handleContact(lead, 'call'); }}
-                              className="bg-green-50 text-green-600 hover:bg-green-100 border border-green-200"
+                              className="jj-emerald-soft text-[color:var(--emerald-1)] hover:jj-emerald-soft border border-[color:var(--emerald-1)]/30"
                             >
                               <Phone className="w-4 h-4 mr-1" />
                               Call
@@ -400,7 +400,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             <Button
                               size="sm"
                               onClick={(e) => { e.stopPropagation(); handleContact(lead, 'whatsapp'); }}
-                              className="bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200"
+                              className="jj-emerald-soft text-[color:var(--emerald-1)] hover:jj-emerald-soft border border-[color:var(--emerald-1)]/30"
                             >
                               <MessageSquare className="w-4 h-4 mr-1" />
                               WhatsApp

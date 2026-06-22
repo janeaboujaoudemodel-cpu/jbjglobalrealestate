@@ -408,7 +408,7 @@ const SellWithUs = () => {
                   </div>
                 ) : (
                   <div className="text-center py-8 space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto">
+                    <div className="w-16 h-16 rounded-full jj-emerald-solid/20 flex items-center justify-center mx-auto">
                       <CheckCircle className="w-8 h-8 text-emerald-400" />
                     </div>
                     <h3 className="text-2xl font-bold text-white">Request Submitted</h3>

@@ -30,7 +30,7 @@ const LEAD_SOURCES = [
   { value: "all", label: "All Sources", icon: Database, color: "text-[#1A1A1A]/70", group: "core" },
   { value: "manual", label: "Manual Entry", icon: UserPlus, color: "text-cyan-600", group: "core" },
   { value: "imported", label: "Database (DLD)", icon: Upload, color: "text-blue-600", group: "core" },
-  { value: "website", label: "Website Form", icon: Globe, color: "text-emerald-600", group: "core" },
+  { value: "website", label: "Website Form", icon: Globe, color: "text-[color:var(--emerald-1)]", group: "core" },
   { value: "whatsapp", label: "WhatsApp", icon: MessageCircle, color: "text-emerald-500", group: "direct" },
   { value: "phone", label: "Phone Call", icon: Phone, color: "text-blue-500", group: "direct" },
   { value: "walkin", label: "Walk-in", icon: MapPin, color: "text-amber-600", group: "direct" },
@@ -45,7 +45,7 @@ const LEAD_SOURCES = [
   { value: "linkedin", label: "LinkedIn", icon: Linkedin, color: "text-sky-700", group: "social" },
   { value: "campaign", label: "Email Campaign", icon: Mail, color: "text-pink-500", group: "campaign" },
   { value: "event", label: "Event", icon: Calendar, color: "text-violet-600", group: "campaign" },
-  { value: "partner", label: "Partner", icon: Handshake, color: "text-teal-600", group: "campaign" },
+  { value: "partner", label: "Partner", icon: Handshake, color: "text-[color:var(--emerald-1)]", group: "campaign" },
   { value: "third_party", label: "Third-party Platform", icon: Link2, color: "text-orange-600", group: "campaign" },
   { value: "other", label: "Other", icon: MoreHorizontal, color: "text-[#1A1A1A]/60", group: "campaign" },
 ] as const;

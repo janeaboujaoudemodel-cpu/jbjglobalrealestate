@@ -183,7 +183,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+      case 'completed': return 'jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30';
       case 'in_progress': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       case 'draft': return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30';
       default: return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30';
@@ -233,10 +233,10 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                selectedCategory === cat.id
-                  ? 'bg-[#EFE6D6] text-[#1A1A1A]'
-                  : 'bg-[#1A1A1A] text-white/70 hover:bg-[#1A1A1A]'
-              }`}
+ selectedCategory === cat.id
+ ? 'bg-[#EFE6D6] text-[#1A1A1A]'
+ : 'bg-[#1A1A1A] text-white/70 hover:bg-[#1A1A1A]'
+ }`}
             >
               {cat.label}
             </button>
@@ -273,10 +273,10 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: index * 0.05 }}
                   className={`group rounded-lg border-2 transition-all cursor-pointer ${
-                    selectedProjectId === project.id
-                      ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                      : 'border-[#1A1A1A] bg-[#1A1A1A]/50 hover:border-[#1A1A1A]'
-                  } ${viewMode === 'grid' ? 'p-3' : 'p-4'}`}
+ selectedProjectId === project.id
+ ? 'border-[#B89555] bg-[#EFE6D6]/10'
+ : 'border-[#1A1A1A] bg-[#1A1A1A]/50 hover:border-[#1A1A1A]'
+ } ${viewMode === 'grid' ? 'p-3' : 'p-4'}`}
                   onClick={() => onSelectProject(project)}
                 >
                   {viewMode === 'grid' ? (

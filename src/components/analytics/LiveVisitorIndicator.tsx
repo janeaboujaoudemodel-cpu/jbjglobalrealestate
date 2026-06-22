@@ -24,8 +24,8 @@ export function LiveVisitorIndicator({ className, showDetails = false }: LiveVis
           <Users className="w-5 h-5 text-primary" />
           {isConnected && (
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full jj-emerald-solid opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 jj-emerald-solid" />
             </span>
           )}
         </div>
@@ -34,7 +34,7 @@ export function LiveVisitorIndicator({ className, showDetails = false }: LiveVis
             <span className="text-lg font-bold text-foreground">{liveVisitors}</span>
             <Badge variant="outline" className={cn(
               'text-xs',
-              isConnected ? 'border-green-500 text-green-500' : 'border-muted text-muted-foreground'
+              isConnected ? 'border-[color:var(--emerald-1)]/30 text-green-500' : 'border-muted text-muted-foreground'
             )}>
               {isConnected ? (
                 <>

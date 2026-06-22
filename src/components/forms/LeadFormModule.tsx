@@ -233,8 +233,8 @@ const LeadFormModule = ({
         animate={{ opacity: 1, scale: 1 }}
         className="text-center py-8"
       >
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="w-8 h-8 text-green-600" />
+        <div className="w-16 h-16 rounded-full jj-emerald-soft flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-[color:var(--emerald-1)]" />
         </div>
         <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           {t('form.thankYou', 'Thank You!')}

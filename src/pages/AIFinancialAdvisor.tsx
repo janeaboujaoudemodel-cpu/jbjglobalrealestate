@@ -229,9 +229,9 @@ const AIFinancialAdvisor = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
               <Calculator className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-300 text-sm font-medium">AI-Powered Budget Planning</span>
+              <span className="text-[color:var(--emerald-on)] text-sm font-medium">AI-Powered Budget Planning</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               AI Budget <span className="text-[#B89555]">Planner</span>
@@ -282,7 +282,7 @@ const AIFinancialAdvisor = () => {
                     className="bg-[#F7F2EA] border-[#1A1A1A]"
                   />
                 </div>
-                <Button onClick={createProject} className="w-full bg-emerald-600">
+                <Button onClick={createProject} className="w-full jj-emerald-solid">
                   Create Project
                 </Button>
               </div>
@@ -411,7 +411,7 @@ const AIFinancialAdvisor = () => {
               <>
                 {/* Key Metrics */}
                 <div className="grid md:grid-cols-3 gap-4">
-                  <Card className="bg-gradient-to-br from-emerald-900/30 to-black border-emerald-500/30">
+                  <Card className="bg-gradient-to-br /30 to-black border-[color:var(--emerald-1)]/30/30">
                     <CardContent className="p-4 text-center">
                       <PiggyBank className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{formatCurrency(analysis.netAffordability)}</p>
@@ -495,7 +495,7 @@ const AIFinancialAdvisor = () => {
                     <ul className="space-y-3">
                       {analysis.recommendations.map((rec, index) => (
                         <li key={index} className="flex items-start gap-3">
-                          <div className="w-6 h-6 bg-emerald-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-6 h-6 jj-emerald-solid/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                             <span className="text-emerald-400 text-xs">{index + 1}</span>
                           </div>
                           <p className="text-white/85 text-sm">{rec}</p>

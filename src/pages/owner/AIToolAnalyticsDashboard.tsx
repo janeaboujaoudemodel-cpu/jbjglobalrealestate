@@ -71,7 +71,7 @@ function calcHealthScore(stats: { completionRate: number; failureRate: number; a
 }
 
 function HealthBadge({ score }: { score: number }) {
-  if (score >= 80) return <Badge className="bg-green-600 text-white">{score}</Badge>;
+  if (score >= 80) return <Badge className="jj-emerald-solid text-white">{score}</Badge>;
   if (score >= 50) return <Badge className="bg-amber-500 text-white">{score}</Badge>;
   return <Badge variant="destructive">{score}</Badge>;
 }
@@ -361,7 +361,7 @@ export default function AIToolAnalyticsDashboard() {
                           <TableCell className="font-mono text-xs">{u.userId.slice(0, 12)}…</TableCell>
                           <TableCell><Badge variant="secondary" className="text-[10px]">{u.userRole}</Badge></TableCell>
                           <TableCell className="text-right">{u.totalUses}</TableCell>
-                          <TableCell className="text-right text-green-600">{u.successCount}</TableCell>
+                          <TableCell className="text-right text-[color:var(--emerald-1)]">{u.successCount}</TableCell>
                           <TableCell className="text-right text-red-500">{u.failureCount}</TableCell>
                           <TableCell className="text-right text-xs text-muted-foreground">{format(new Date(u.lastUsed), "MMM d, HH:mm")}</TableCell>
                         </TableRow>
@@ -382,7 +382,7 @@ export default function AIToolAnalyticsDashboard() {
             <CardHeader><CardTitle className="text-sm flex items-center gap-2"><ShieldAlert className="h-4 w-4" />Security & Audit Flags</CardTitle></CardHeader>
             <CardContent>
               {auditFlags.length === 0 ? (
-                <div className="flex items-center gap-2 text-green-600 text-sm"><CheckCircle2 className="h-4 w-4" />No issues detected — all tools operating normally</div>
+                <div className="flex items-center gap-2 text-[color:var(--emerald-1)] text-sm"><CheckCircle2 className="h-4 w-4" />No issues detected — all tools operating normally</div>
               ) : (
                 <div className="space-y-2">
                   {auditFlags.map((f, i) => (
@@ -459,14 +459,14 @@ export default function AIToolAnalyticsDashboard() {
                           <TableCell className="text-right">{last7.length}</TableCell>
                           <TableCell className="text-right">{prior7.length}</TableCell>
                           <TableCell className="text-right">
-                            <span className={usageDelta > 0 ? "text-green-600" : usageDelta < 0 ? "text-red-500" : "text-muted-foreground"}>
+                            <span className={usageDelta > 0 ? "text-[color:var(--emerald-1)]" : usageDelta < 0 ? "text-red-500" : "text-muted-foreground"}>
                               {usageDelta > 0 ? "+" : ""}{usageDelta}
                             </span>
                           </TableCell>
                           <TableCell className="text-right">{last7Fail.toFixed(1)}%</TableCell>
                           <TableCell className="text-right">{prior7Fail.toFixed(1)}%</TableCell>
                           <TableCell className="text-right">
-                            <span className={failDelta < 0 ? "text-green-600" : failDelta > 0 ? "text-red-500" : "text-muted-foreground"}>
+                            <span className={failDelta < 0 ? "text-[color:var(--emerald-1)]" : failDelta > 0 ? "text-red-500" : "text-muted-foreground"}>
                               {failDelta > 0 ? "+" : ""}{failDelta.toFixed(1)}%
                             </span>
                           </TableCell>

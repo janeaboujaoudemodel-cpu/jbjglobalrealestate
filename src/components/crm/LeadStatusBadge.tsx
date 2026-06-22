@@ -16,7 +16,7 @@ export const STATUS_GROUPS = {
   positive: {
     label: 'POSITIVE',
     color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/20',
+    bgColor: 'jj-emerald-solid/20',
     dotColor: '#22C55E', // Green
   },
   neutral: {
@@ -41,13 +41,13 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   // VIP — yellow/amber (premium tier)
   { value: "vip", label: "VIP", color: "bg-amber-400", bgColor: "bg-amber-400/25", textColor: "text-amber-800", dotColor: "#F59E0B", category: "positive" },
   // POSITIVE (green) - Deal progression
-  { value: "interested", label: "Interested", color: "bg-emerald-500", bgColor: "bg-emerald-500/15", textColor: "text-emerald-700", dotColor: "#10B981", category: "positive" },
-  { value: "qualified", label: "Qualified", color: "bg-emerald-500", bgColor: "bg-emerald-500/15", textColor: "text-emerald-700", dotColor: "#10B981", category: "positive" },
-  { value: "viewing", label: "Viewing Scheduled", color: "bg-emerald-600", bgColor: "bg-emerald-600/15", textColor: "text-emerald-800", dotColor: "#059669", category: "positive" },
-  { value: "viewing_done", label: "Viewing Done", color: "bg-emerald-600", bgColor: "bg-emerald-600/15", textColor: "text-emerald-800", dotColor: "#059669", category: "positive" },
-  { value: "negotiation", label: "Negotiation", color: "bg-emerald-500", bgColor: "bg-emerald-500/15", textColor: "text-emerald-700", dotColor: "#10B981", category: "positive" },
-  { value: "offer_sent", label: "Offer Sent", color: "bg-emerald-500", bgColor: "bg-emerald-500/15", textColor: "text-emerald-700", dotColor: "#10B981", category: "positive" },
-  { value: "closed_won", label: "Closed Won", color: "bg-emerald-700", bgColor: "bg-emerald-700/20", textColor: "text-emerald-800", dotColor: "#047857", category: "positive" },
+  { value: "interested", label: "Interested", color: "jj-emerald-solid", bgColor: "jj-emerald-solid/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
+  { value: "qualified", label: "Qualified", color: "jj-emerald-solid", bgColor: "jj-emerald-solid/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
+  { value: "viewing", label: "Viewing Scheduled", color: "jj-emerald-solid", bgColor: "jj-emerald-solid/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#059669", category: "positive" },
+  { value: "viewing_done", label: "Viewing Done", color: "jj-emerald-solid", bgColor: "jj-emerald-solid/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#059669", category: "positive" },
+  { value: "negotiation", label: "Negotiation", color: "jj-emerald-solid", bgColor: "jj-emerald-solid/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
+  { value: "offer_sent", label: "Offer Sent", color: "jj-emerald-solid", bgColor: "jj-emerald-solid/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
+  { value: "closed_won", label: "Closed Won", color: "jj-emerald-solid", bgColor: "jj-emerald-solid/20", textColor: "text-[color:var(--emerald-1)]", dotColor: "#047857", category: "positive" },
   // ALREADY BOUGHT — blue
   { value: "already_bought", label: "Already Bought", color: "bg-blue-500", bgColor: "bg-blue-500/15", textColor: "text-blue-700", dotColor: "#2563EB", category: "neutral" },
 

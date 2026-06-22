@@ -575,22 +575,22 @@ export default function CreateEnvelope() {
             <div key={step.id} className="flex items-center flex-1">
               <div 
                 className={`flex items-center gap-2 ${
-                  currentStep >= step.id ? "text-[#1A1A1A]" : "text-muted-foreground"
-                }`}
+ currentStep >= step.id ? "text-[#1A1A1A]" : "text-muted-foreground"
+ }`}
               >
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  currentStep >= step.id 
-                    ? "bg-[#EFE6D6] text-white" 
-                    : "bg-muted text-muted-foreground"
-                }`}>
+ currentStep >= step.id 
+ ? "bg-[#EFE6D6] text-white" 
+ : "bg-muted text-muted-foreground"
+ }`}>
                   <step.icon className="w-5 h-5" />
                 </div>
                 <span className="hidden sm:inline font-medium">{step.title}</span>
               </div>
               {index < steps.length - 1 && (
                 <div className={`flex-1 h-0.5 mx-4 ${
-                  currentStep > step.id ? "bg-[#EFE6D6]" : "bg-muted"
-                }`} />
+ currentStep > step.id ? "bg-[#EFE6D6]" : "bg-muted"
+ }`} />
               )}
             </div>
           ))}
@@ -636,10 +636,10 @@ export default function CreateEnvelope() {
                       onDrop={handleDrop}
                       onClick={() => document.getElementById("esign-file-input")?.click()}
                       className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer transition-all ${
-                        isDragOver
-                          ? "border-[#B89555] bg-[#EFE6D6]/10 scale-[1.01]"
-                          : "border-muted-foreground/25 hover:border-[#B89555]/50"
-                      }`}
+ isDragOver
+ ? "border-[#B89555] bg-[#EFE6D6]/10 scale-[1.01]"
+ : "border-muted-foreground/25 hover:border-[#B89555]/50"
+ }`}
                     >
                       <input
                         id="esign-file-input"
@@ -904,7 +904,7 @@ export default function CreateEnvelope() {
                         checked={channels.whatsapp}
                         onCheckedChange={(v) => setChannels(c => ({ ...c, whatsapp: v === true }))}
                       />
-                      <MessageCircle className="w-4 h-4 text-emerald-600" />
+                      <MessageCircle className="w-4 h-4 text-[color:var(--emerald-1)]" />
                       <span className="text-sm font-medium">WhatsApp</span>
                       <span className="text-xs text-muted-foreground">(requires phone)</span>
                     </label>

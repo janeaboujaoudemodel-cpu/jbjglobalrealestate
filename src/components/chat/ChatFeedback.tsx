@@ -45,7 +45,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
   if (step === 'submitted') {
     return (
       <div className="flex-1 p-4 flex flex-col items-center justify-center text-center">
-        <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-full jj-emerald-solid/20 flex items-center justify-center mb-4">
           <CheckCircle className="w-8 h-8 text-green-500" />
         </div>
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
@@ -81,12 +81,12 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <div className="flex gap-4 mb-6">
           <button
             onClick={() => handleSelectType('positive')}
-            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-green-200 hover:border-green-500 hover:bg-green-50 transition-all"
+            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-[color:var(--emerald-1)]/30 hover:border-[color:var(--emerald-1)]/30 hover:jj-emerald-soft transition-all"
           >
-            <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-              <ThumbsUp className="w-6 h-6 text-green-600" />
+            <div className="w-12 h-12 rounded-full jj-emerald-soft flex items-center justify-center">
+              <ThumbsUp className="w-6 h-6 text-[color:var(--emerald-1)]" />
             </div>
-            <span className="text-sm font-medium text-green-700"><T>Positive</T></span>
+            <span className="text-sm font-medium text-[color:var(--emerald-1)]"><T>Positive</T></span>
           </button>
 
           <button
@@ -144,10 +144,10 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
           >
             <Star
               className={`w-8 h-8 ${
-                star <= (hoveredRating || rating)
-                  ? 'text-[#1A1A1A] fill-gold'
-                  : 'text-[#1A1A1A]/70'
-              }`}
+ star <= (hoveredRating || rating)
+ ? 'text-[#1A1A1A] fill-gold'
+ : 'text-[#1A1A1A]/70'
+ }`}
             />
           </button>
         ))}

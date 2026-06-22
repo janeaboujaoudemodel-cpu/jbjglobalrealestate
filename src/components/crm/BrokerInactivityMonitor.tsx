@@ -261,10 +261,10 @@ const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProp
                   <div
                     key={broker.userId}
                     className={`p-3 rounded-lg border transition-colors ${
-                      broker.status === 'suspended'
-                        ? 'bg-red-500/10 border-red-500/30'
-                        : 'bg-amber-500/10 border-amber-500/30'
-                    }`}
+ broker.status === 'suspended'
+ ? 'bg-red-500/10 border-red-500/30'
+ : 'bg-amber-500/10 border-amber-500/30'
+ }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProp
                         variant="ghost"
                         size="sm"
                         onClick={() => handleSendAlert(broker, 'whatsapp')}
-                        className="h-7 text-xs text-green-400 hover:text-green-300 hover:bg-green-500/20"
+                        className="h-7 text-xs text-green-400 hover:text-[color:var(--emerald-on)] hover:jj-emerald-solid/20"
                       >
                         WhatsApp
                       </Button>

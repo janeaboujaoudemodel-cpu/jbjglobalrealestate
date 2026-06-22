@@ -603,8 +603,8 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
                 <Badge variant="secondary" className="text-[6px] px-1 py-0 h-3 bg-blue-50 text-blue-600 border-blue-200 flex-shrink-0">Draft</Badge>
                 {showArchived ? (
                   <button onClick={() => handleRestoreProject(proj.id)}
-                    className="w-5 h-5 rounded flex items-center justify-center hover:bg-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity" title="Restore">
-                    <RotateCw size={9} className="text-emerald-600" />
+                    className="w-5 h-5 rounded flex items-center justify-center hover:jj-emerald-soft opacity-0 group-hover:opacity-100 transition-opacity" title="Restore">
+                    <RotateCw size={9} className="text-[color:var(--emerald-1)]" />
                   </button>
                 ) : (
                   <button onClick={() => handleArchiveProject(proj.id)}
@@ -695,7 +695,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
                   <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{asset.name}</p>
                   <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{formatDate(asset.created_at)}</p>
                 </div>
-                <Badge variant="secondary" className="text-[6px] px-1 py-0 h-3 bg-emerald-50 text-emerald-600 border-emerald-200 flex-shrink-0">Asset</Badge>
+                <Badge variant="secondary" className="text-[6px] px-1 py-0 h-3 jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 flex-shrink-0">Asset</Badge>
               </div>
             ))}
           </div>
@@ -751,12 +751,12 @@ function HistoryList(props: {
     const src = v.source || '';
     if (src === 'restored') return { label: 'Restored', color: 'bg-blue-100 text-blue-700 border-blue-200' };
     if (src === 'generated' || src === 'ai') return { label: 'Generated', color: 'bg-purple-100 text-purple-700 border-purple-200' };
-    if (src === 'manual') return { label: 'Manual', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+    if (src === 'manual') return { label: 'Manual', color: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' };
     // Heuristic fallback for rows without source column
     const tk = v.template_key || '';
     if (tk.includes('restored')) return { label: 'Restored', color: 'bg-blue-100 text-blue-700 border-blue-200' };
     if (tk.includes('generated') || tk.includes('ai-')) return { label: 'Generated', color: 'bg-purple-100 text-purple-700 border-purple-200' };
-    return { label: 'Manual', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+    return { label: 'Manual', color: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' };
   }
 
   async function handleToggleFavorite(v: any) {
@@ -966,12 +966,12 @@ function ConceptCard({
         </div>
         {/* Status badge — bottom-left (moved from top-left to avoid overlap with heart) */}
         <Badge className={`absolute bottom-1 left-1 z-10 text-[6px] px-1 py-0 border ${
-          isSelected
-            ? 'bg-blue-100 text-blue-700 border-blue-200'
-            : cardStyle === 'favorite'
-            ? 'bg-rose-100 text-rose-700 border-rose-200'
-            : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))]'
-        }`}>
+ isSelected
+ ? 'bg-blue-100 text-blue-700 border-blue-200'
+ : cardStyle === 'favorite'
+ ? 'bg-rose-100 text-rose-700 border-rose-200'
+ : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))]'
+ }`}>
           {isSelected ? 'Applied' : cardStyle === 'favorite' ? 'Favorite' : 'Generated'}
         </Badge>
         <StampSVGRenderer

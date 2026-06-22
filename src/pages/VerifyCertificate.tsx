@@ -170,10 +170,10 @@ export default function VerifyCertificate() {
         {certificate && (
           <>
             {/* Status Card */}
-            <Card className={`mb-6 ${!certificate.is_revoked ? 'border-green-500/50 bg-green-500/5' : 'border-red-500/50 bg-red-500/5'}`}>
+            <Card className={`mb-6 ${!certificate.is_revoked ? 'border-[color:var(--emerald-1)]/30/50 jj-emerald-solid/5' : 'border-red-500/50 bg-red-500/5'}`}>
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
-                  <div className={`w-16 h-16 rounded-full flex items-center justify-center ${!certificate.is_revoked ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center ${!certificate.is_revoked ? 'jj-emerald-solid/20' : 'bg-red-500/20'}`}>
                     {!certificate.is_revoked ? (
                       <Shield className="h-8 w-8 text-green-500" />
                     ) : (
@@ -181,7 +181,7 @@ export default function VerifyCertificate() {
                     )}
                   </div>
                   <div>
-                    <Badge className={!certificate.is_revoked ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}>
+                    <Badge className={!certificate.is_revoked ? 'jj-emerald-solid text-white' : 'bg-red-500 text-white'}>
                       {!certificate.is_revoked ? (
                         <><CheckCircle className="h-3 w-3 mr-1" /> VERIFIED &amp; ACTIVE</>
                       ) : (

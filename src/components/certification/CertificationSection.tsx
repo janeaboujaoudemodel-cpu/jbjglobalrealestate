@@ -60,10 +60,10 @@ export function CertificationSection({ className, isLocked = false }: Certificat
               <div className="flex items-center gap-4">
                 <div className={cn(
                   "w-14 h-14 rounded-xl flex items-center justify-center",
-                  certified ? "bg-emerald-500/20 border border-emerald-500/30" : "jj-icon-box-active"
+                  certified ? "jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30" : "jj-icon-box-active"
                 )}>
                   {certified ? (
-                    <CheckCircle className="w-7 h-7 text-emerald-600" />
+                    <CheckCircle className="w-7 h-7 text-[color:var(--emerald-1)]" />
                   ) : (
                     <Award className="w-7 h-7 text-[#1A1A1A]" />
                   )}

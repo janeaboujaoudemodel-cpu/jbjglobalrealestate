@@ -547,14 +547,14 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
         {/* Voice Recording Card */}
         <Card 
           className={`bg-[#FDFBF7] border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer group ${
-            isRecording ? 'border-red-300 bg-red-50' : ''
-          }`}
+ isRecording ? 'border-red-300 bg-red-50' : ''
+ }`}
           onClick={isRecording ? stopRecording : startRecording}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${
-              isRecording ? 'bg-red-500 animate-pulse' : 'bg-[#B89555]/10'
-            }`}>
+ isRecording ? 'bg-red-500 animate-pulse' : 'bg-[#B89555]/10'
+ }`}>
               {isRecording ? (
                 <Square className="w-6 h-6 text-white fill-white" />
               ) : (
@@ -610,8 +610,8 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           onClick={() => setShowProjectDialog(true)}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-              <FolderOpen className="w-6 h-6 text-green-600" />
+            <div className="w-12 h-12 rounded-full jj-emerald-soft flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <FolderOpen className="w-6 h-6 text-[color:var(--emerald-1)]" />
             </div>
             <h3 className="text-[#1A1A1A] font-semibold">New Project</h3>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">Organize notes</p>
@@ -696,7 +696,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                       </p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <Button size="sm" variant="outline" className="text-xs border-green-300 text-green-700 hover:bg-green-50" onClick={() => restoreNote(note.id)}>
+                      <Button size="sm" variant="outline" className="text-xs border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft" onClick={() => restoreNote(note.id)}>
                         <RefreshCw className="w-3 h-3 mr-1" /> Restore
                       </Button>
                       <Button size="sm" variant="outline" className="text-xs border-red-300 text-red-700 hover:bg-red-50" onClick={() => permanentlyDeleteNote(note.id)}>
@@ -725,7 +725,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                   {note.source_type === 'voice' && <Mic className="w-4 h-4 text-red-500" />}
                   {note.source_type === 'pdf_extract' && <FileText className="w-4 h-4 text-blue-600" />}
                   {note.source_type === 'manual' && <Edit3 className="w-4 h-4 text-purple-600" />}
-                  {note.source_type === 'meeting' && <MessageSquare className="w-4 h-4 text-green-600" />}
+                  {note.source_type === 'meeting' && <MessageSquare className="w-4 h-4 text-[color:var(--emerald-1)]" />}
                   <h3 className="text-[#1A1A1A] font-medium truncate">{note.title}</h3>
                 </div>
                 <Badge variant="outline" className="text-xs border-[#B89555]/30 text-[#B89555]">
@@ -829,7 +829,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                     <div className="space-y-2">
                       {activeNote.ai_action_items.map((item: any, i: number) => (
                         <div key={i} className="flex items-start gap-3 p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
-                          <CheckCircle className={`w-5 h-5 mt-0.5 ${item.completed ? 'text-green-600' : 'text-[#1A1A1A]/70'}`} />
+                          <CheckCircle className={`w-5 h-5 mt-0.5 ${item.completed ? 'text-[color:var(--emerald-1)]' : 'text-[#1A1A1A]/70'}`} />
                           <span className={`text-[#1A1A1A]/70 ${item.completed ? 'line-through opacity-50' : ''}`}>
                             {item.text}
                           </span>

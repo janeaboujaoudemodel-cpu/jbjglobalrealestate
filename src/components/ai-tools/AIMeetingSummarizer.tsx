@@ -139,7 +139,7 @@ const AIMeetingSummarizer = ({ onResponse }: AIMeetingSummarizerProps) => {
             )}
 
             {response.keyDecisions && response.keyDecisions.length > 0 && (
-              <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-lg">
+              <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20 p-4 rounded-lg">
                 <div className="flex items-center gap-2 mb-3">
                   <Users className="h-5 w-5 text-green-500" />
                   <h4 className="font-semibold">Key Decisions</h4>

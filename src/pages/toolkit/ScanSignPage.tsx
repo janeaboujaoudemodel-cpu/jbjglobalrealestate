@@ -468,9 +468,9 @@ export default function ScanSignPage() {
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
                   <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
-                    Scan <span className="text-emerald-600">&</span> Sign
+                    Scan <span className="text-[color:var(--emerald-1)]">&</span> Sign
                   </h1>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-700">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold jj-emerald-soft border border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]">
                     <Sparkles className="w-3 h-3" /> AI
                   </span>
                 </div>
@@ -483,14 +483,14 @@ export default function ScanSignPage() {
             {/* Undo/Redo + Save */}
             <div className="sm:ml-auto flex items-center gap-2">
               <button onClick={undo} disabled={historyIdx <= 0}
-                className="p-2 rounded-lg border border-emerald-200 text-emerald-700 disabled:opacity-30 hover:bg-emerald-50 transition-all" title="Undo">
+                className="p-2 rounded-lg border border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] disabled:opacity-30 hover:jj-emerald-soft transition-all" title="Undo">
                 <Undo className="w-4 h-4" />
               </button>
               <button onClick={redo} disabled={historyIdx >= history.length - 1}
-                className="p-2 rounded-lg border border-emerald-200 text-emerald-700 disabled:opacity-30 hover:bg-emerald-50 transition-all" title="Redo">
+                className="p-2 rounded-lg border border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] disabled:opacity-30 hover:jj-emerald-soft transition-all" title="Redo">
                 <Redo className="w-4 h-4" />
               </button>
-              <div className="w-px h-6 bg-emerald-200 mx-1" />
+              <div className="w-px h-6 jj-emerald-soft mx-1" />
               <SaveProjectBar
                 projectName={projectName}
                 onNameChange={setProjectName}
@@ -517,10 +517,10 @@ export default function ScanSignPage() {
               <PanelTitle icon={Camera}>Scan Document</PanelTitle>
               {isCapturing ? (
                 <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden border border-emerald-200">
+                  <div className="relative rounded-xl overflow-hidden border border-[color:var(--emerald-1)]/30">
                     <video ref={videoRef} autoPlay playsInline muted className="w-full rounded-xl" style={{ display: 'block', minHeight: 140, background: '#000' }} />
                     {['top-1 left-1', 'top-1 right-1', 'bottom-1 left-1', 'bottom-1 right-1'].map((pos, i) => (
-                      <div key={i} className={`absolute ${pos} w-4 h-4 border-2 border-emerald-400 rounded-sm opacity-80`} />
+                      <div key={i} className={`absolute ${pos} w-4 h-4 border-2 border-[color:var(--emerald-1)]/30 rounded-sm opacity-80`} />
                     ))}
                     {autoScanCountdown > 0 && (
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -539,9 +539,9 @@ export default function ScanSignPage() {
               ) : (
                 <div className="space-y-3" onDrop={handleDropUpload} onDragOver={e => e.preventDefault()}>
                   <PrimaryBtn onClick={startCamera} className="w-full"><Camera className="w-4 h-4" /> Open Camera</PrimaryBtn>
-                  <div className="w-full rounded-xl p-4 text-center cursor-pointer transition-all border-2 border-dashed border-emerald-200 bg-emerald-50/30 hover:border-emerald-400"
+                  <div className="w-full rounded-xl p-4 text-center cursor-pointer transition-all border-2 border-dashed border-[color:var(--emerald-1)]/30 jj-emerald-soft/30 hover:border-[color:var(--emerald-1)]/30"
                     onClick={() => fileInputRef.current?.click()}>
-                    <Upload className="w-6 h-6 mx-auto mb-1.5 text-emerald-600" />
+                    <Upload className="w-6 h-6 mx-auto mb-1.5 text-[color:var(--emerald-1)]" />
                     <p className="text-xs font-medium text-[#1A1A1A]">Upload Images / PDF</p>
                     <p className="text-[10px] mt-0.5 text-[#1A1A1A]/70">Drag & drop · JPG, PNG, PDF</p>
                   </div>
@@ -569,7 +569,7 @@ export default function ScanSignPage() {
                       setStampModalOpen(true);
                     }
                   }}
-                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-emerald-200 bg-emerald-50/30 text-emerald-700 hover:bg-emerald-100/50">
+                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-[color:var(--emerald-1)]/30 jj-emerald-soft/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft/50">
                   <Stamp className="w-4 h-4" /> Stamp
                 </button>
                 <button
@@ -584,7 +584,7 @@ export default function ScanSignPage() {
                       toast.success('Business card imported');
                     } catch { toast.error('Failed to import card'); }
                   }}
-                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-emerald-200 bg-emerald-50/30 text-emerald-700 hover:bg-emerald-100/50">
+                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-[color:var(--emerald-1)]/30 jj-emerald-soft/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft/50">
                   <FileText className="w-4 h-4" /> Card
                 </button>
                 <button
@@ -599,13 +599,13 @@ export default function ScanSignPage() {
                       toast.success('QR code imported');
                     } catch { toast.error('Failed to import QR'); }
                   }}
-                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-emerald-200 bg-emerald-50/30 text-emerald-700 hover:bg-emerald-100/50">
+                  className="flex flex-col items-center gap-1 p-2.5 rounded-lg text-[10px] font-medium transition-all hover:scale-105 border border-[color:var(--emerald-1)]/30 jj-emerald-soft/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft/50">
                   <ScanLine className="w-4 h-4" /> QR
                 </button>
               </div>
               <button
                 onClick={() => setStampModalOpen(true)}
-                className="w-full mt-2 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium text-emerald-700 border border-dashed border-emerald-300 bg-emerald-50/20 hover:bg-emerald-100/30 transition-all"
+                className="w-full mt-2 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium text-[color:var(--emerald-1)] border border-dashed border-[color:var(--emerald-1)]/30 jj-emerald-soft/20 hover:jj-emerald-soft/30 transition-all"
               >
                 <Plus className="w-3 h-3" /> Create New Stamp
               </button>
@@ -618,8 +618,8 @@ export default function ScanSignPage() {
                 {pages.map((page, index) => (
                   <div key={page.id} onClick={() => setSelectedPageIndex(index)}
                     className={`relative cursor-pointer rounded-xl overflow-hidden transition-all border-2 ${
-                      selectedPageIndex === index ? 'border-emerald-500 shadow-sm shadow-emerald-500/20' : 'border-[#B89555]/30 hover:border-emerald-300'
-                    }`}>
+ selectedPageIndex === index ? 'border-[color:var(--emerald-1)]/30 shadow-sm shadow-emerald-500/20' : 'border-[#B89555]/30 hover:border-[color:var(--emerald-1)]/30'
+ }`}>
                     <img src={page.imageData} alt={`Page ${index + 1}`} className="w-full h-14 object-cover"
                       style={{ transform: `rotate(${page.rotation}deg)`, filter: `brightness(${page.brightness}%) contrast(${page.contrast}%)` }} />
                     <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 flex items-center justify-between bg-[#1A1A1A]/60">
@@ -627,7 +627,7 @@ export default function ScanSignPage() {
                       {signatures.some(s => s.pageIndex === index) && <Pen className="w-2.5 h-2.5 text-emerald-400" />}
                     </div>
                     {selectedPageIndex === index && (
-                      <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center bg-emerald-500">
+                      <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center jj-emerald-solid">
                         <CheckCircle2 className="w-2.5 h-2.5 text-white" />
                       </div>
                     )}
@@ -648,13 +648,13 @@ export default function ScanSignPage() {
             <Panel>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
-                  <span className="text-emerald-600">Preview</span>
+                  <span className="text-[color:var(--emerald-1)]">Preview</span>
                   {selectedPage && <span className="text-[#1A1A1A]/70 text-xs font-normal">Page {selectedPageIndex + 1}/{pages.length}</span>}
                 </h3>
                 {selectedPage && (
                   <div className="flex gap-1.5">
                     <button onClick={() => rotatePage(selectedPage.id)} title="Rotate 90°"
-                      className="p-1.5 rounded-lg transition-all text-[#1A1A1A]/70 bg-[#F7F2EA] hover:bg-emerald-100 hover:text-emerald-700 border border-[#B89555]/30">
+                      className="p-1.5 rounded-lg transition-all text-[#1A1A1A]/70 bg-[#F7F2EA] hover:jj-emerald-soft hover:text-[color:var(--emerald-1)] border border-[#B89555]/30">
                       <RotateCw className="w-3.5 h-3.5" />
                     </button>
                     <button onClick={() => deletePage(selectedPage.id)} title="Delete page"
@@ -672,7 +672,7 @@ export default function ScanSignPage() {
                     <img src={selectedPage.imageData} alt="Preview" className="max-w-full max-h-[380px] object-contain"
                       style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }} />
                     {selectedPage.rotation > 0 && (
-                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-600 text-white">
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-semibold jj-emerald-solid text-white">
                         {selectedPage.rotation}°
                       </div>
                     )}
@@ -680,7 +680,7 @@ export default function ScanSignPage() {
 
                   {/* AI Auto-Enhance */}
                   <button onClick={aiAutoEnhance} disabled={isEnhancing}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all disabled:opacity-50 bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100">
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all disabled:opacity-50 jj-emerald-soft border border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                     {isEnhancing ? <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing…</> : <><Wand2 className="w-4 h-4" /> AI Auto-Enhance</>}
                   </button>
 
@@ -688,14 +688,14 @@ export default function ScanSignPage() {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                       <Label className="text-[10px] text-[#1A1A1A]/70">
-                        Brightness <span className="text-emerald-600 font-semibold">{selectedPage.brightness}%</span>
+                        Brightness <span className="text-[color:var(--emerald-1)] font-semibold">{selectedPage.brightness}%</span>
                       </Label>
                       <Slider value={[selectedPage.brightness]} min={50} max={160} step={5}
                         onValueChange={([val]) => updatePageAdjustments(selectedPage.id, val, selectedPage.contrast)} />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-[10px] text-[#1A1A1A]/70">
-                        Contrast <span className="text-emerald-600 font-semibold">{selectedPage.contrast}%</span>
+                        Contrast <span className="text-[color:var(--emerald-1)] font-semibold">{selectedPage.contrast}%</span>
                       </Label>
                       <Slider value={[selectedPage.contrast]} min={50} max={160} step={5}
                         onValueChange={([val]) => updatePageAdjustments(selectedPage.id, selectedPage.brightness, val)} />
@@ -719,7 +719,7 @@ export default function ScanSignPage() {
               <PanelTitle icon={Pen}>Signature</PanelTitle>
               {isDrawingSignature ? (
                 <div className="space-y-3">
-                  <div className="rounded-xl overflow-hidden bg-[#FDFBF7] border-2 border-emerald-200">
+                  <div className="rounded-xl overflow-hidden bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30">
                     <canvas ref={signatureCanvasRef} width={560} height={150} className="w-full cursor-crosshair touch-none" style={{ display: "block" }} />
                   </div>
                   <p className="text-[10px] text-center text-[#1A1A1A]/70">Draw your signature using mouse or finger</p>
@@ -732,10 +732,10 @@ export default function ScanSignPage() {
               ) : (
                 <div
                   className={`w-full rounded-xl p-5 text-center transition-all border-2 border-dashed ${
-                    pages.length > 0
-                      ? 'border-emerald-200 bg-emerald-50/20 cursor-pointer hover:border-emerald-400'
-                      : 'border-[#B89555]/30 bg-[#F7F2EA]/50'
-                  }`}
+ pages.length > 0
+ ? 'border-[color:var(--emerald-1)]/30 jj-emerald-soft/20 cursor-pointer hover:border-[color:var(--emerald-1)]/30'
+ : 'border-[#B89555]/30 bg-[#F7F2EA]/50'
+ }`}
                   onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
                   <Pen className={`w-7 h-7 mx-auto mb-2 ${pages.length > 0 ? 'text-emerald-500' : 'text-[#1A1A1A]/70'}`} />
                   <p className={`text-xs font-semibold ${pages.length > 0 ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`}>
@@ -744,7 +744,7 @@ export default function ScanSignPage() {
                 </div>
               )}
               {signatures.length > 0 && (
-                <p className="text-xs mt-3 text-center text-emerald-600 font-medium">
+                <p className="text-xs mt-3 text-center text-[color:var(--emerald-1)] font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5 inline mr-1" />
                   {signatures.length} signature{signatures.length > 1 ? 's' : ''} added
                 </p>
@@ -752,7 +752,7 @@ export default function ScanSignPage() {
             </Panel>
 
             {/* Export */}
-            <div className="rounded-2xl p-4 space-y-3 bg-emerald-50/50 border border-emerald-100">
+            <div className="rounded-2xl p-4 space-y-3 jj-emerald-soft/50 border border-emerald-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1A1A1A]/70">Export & Actions</p>
               <PrimaryBtn onClick={exportToPDF} disabled={pages.length === 0 || processing} className="w-full py-3.5">
                 {processing ? <><Loader2 className="w-5 h-5 animate-spin" /> Generating…</> : <><Download className="w-5 h-5" /> Export PDF ({pages.length})</>}

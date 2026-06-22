@@ -1,73 +1,96 @@
+
+# PASS XX-A — Global Emerald Token Unification
+
+Scope: track 1 only (you picked it as priority). News pipeline, routing/wiring audit, sidebar/fullscreen rules, and backend-card restyle are deferred to PASS XX-B/C/D — I will not touch them in this pass.
+
 ## Goal
 
-One clean refactor of the global styling system. Delete the 40+ legacy `PASS` blocks in `src/index.css` and the conflicting inline overrides in components. Replace them with a single, small, authoritative design-system layer that enforces the contrast contract:
+One — and only one — official Emerald gradient system, applied through shared primitives. Zero stray `bg-green-*`, `bg-emerald-*`, `from-green-*`, dark/black/faded greens. Zero unintentional opacity-50/60/70 on enabled UI.
 
-- **Emerald or dark surface** → white text + white icons
-- **Champagne / gold / beige / ivory / white surface** → ink text (`#1A1A1A`) + ink icons
-- No `!important` stacking wars, no per-page patches, no MutationObservers repainting on the fly.
+## Root cause (from audit)
 
-## Scope of the audit (read-only first)
+- 636 files use raw `bg-green-* / bg-emerald-* / text-emerald-* / border-emerald-*` Tailwind utilities directly — every one of them is its own shade of green.
+- Two emerald gradient tokens already exist in `index.css` (`--jj-emerald-ombre`, `--jj-emerald-light-ombre`) plus primitives `.jj-pill-emerald`, `.jj-pill-emerald-metallic`, `.jj-cta-emerald`, but they are not enforced — components keep inlining their own greens.
+- "Faded" look comes from `opacity-50/60/70` and `text-muted-foreground/60` applied to enabled cards (Pending Tasks, stats, empty states).
 
-1. `src/index.css` — currently 10,355 lines with **~48 PASS blocks** plus "LEGACY … NEUTRALIZED" comment graveyards. Inventory every PASS, every `!important`, every selector targeting:
-   - `[data-chrome="sidebar"]`, `[data-active]`, `[data-state="active"]`
-   - `[role="tab"]`, `.jj-segmented-*`, `.jj-cta-*`, `.jj-pill-*`
-   - emerald / champagne / gold surface rules
-2. `src/components/ui/tabs.tsx` — remove the MutationObserver + inline-style paint loop and the `stripActiveInkUtilities` filter.
-3. `src/components/navigation/GlobalVerticalNav.tsx` — remove inline `style={{ color: ... }}` active-state forcing (lines ~1140–1149) and any per-row sweep/shimmer classes.
-4. `src/components/ui/button.tsx` and `src/components/ui/icon-tile.tsx` — confirm they already route through tokens; do not change behaviour, only verify no inline color forcing remains needed once CSS is clean.
-5. Component-side classes that hardcode `text-[#1A1A1A]` / `text-white` on active states (`data-[state=active]:text-…`) across tabs, sidebar items, and segmented controls. These will be deleted in favour of CSS-driven contrast.
+## Approach — three locked layers
 
-Output of the audit: a short delete-list (file + line ranges) that I'll apply in one pass.
+### 1. Single source of truth (tokens)
 
-## The new single source of truth
+In `src/index.css` (token block only, no new PASS overrides):
 
-Replace the body of `src/index.css` between the existing token block and the Tailwind layers with **one** new section: `/* === DESIGN SYSTEM — CONTRAST CONTRACT (v1, single source) === */`. It contains only these rule groups, in this order, with no `!important` except where Tailwind utility specificity genuinely requires it:
+```
+--emerald-1: #064E3B   /* primary */
+--emerald-2: #047857   /* hover/light */
+--emerald-3: #022C22   /* deep */
+--emerald-ink: #064E3B
+--emerald-on: #FFFFFF  /* foreground on any emerald surface */
+--gradient-emerald: linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%)
+--gradient-emerald-hover: linear-gradient(135deg,#0A6B53 0%,#064E3B 52%,#031B12 100%)
+```
 
-1. **Surface tokens** (already exist; keep): `[data-surface="champagne|gold|ink|emerald|dark|page"]` sets `--surface-bg`, `--surface-fg`, `--surface-border`.
-2. **Contrast contract** (new, replaces PASS 7/10/22/29/40/42/44/45/47/48):
-   - `[data-surface="champagne"], [data-surface="gold"], [data-surface="page"], [data-surface="raised"] { color: #1A1A1A; }` plus `svg { color: inherit; stroke: currentColor; }`
-   - `[data-surface="ink"], [data-surface="dark"], [data-surface="emerald"], .jj-emerald-fill { color: #FFFFFF; }` plus the same svg rule
-   - One opt-out: `[data-no-contrast-guard]` short-circuits both.
-3. **Sidebar** (replaces PASS 12/14/15/16/24/27/28/47):
-   - Inactive row: transparent bg, `color: #1A1A1A`, gold icon tone via `IconTile`.
-   - Hover: `background: #EFE6D6` (champagne raised), ink stays.
-   - Active row (`[data-chrome="sidebar"] [data-active="true"]`): `background: linear-gradient(135deg,#064E3B,#0A6B4E); color:#FFFFFF;` — no `::before`/`::after`, no animation, no shimmer.
-4. **Tabs / segmented controls** (replaces PASS 25/29.1/48 + the JS observer in `tabs.tsx`):
-   - `[role="tab"]` inactive: champagne bg, ink text.
-   - `[role="tab"][data-state="active"]`: emerald bg, white text, no animation. SVG inherits via `currentColor`.
-5. **Buttons / CTAs** (keep the existing `.jj-cta-champagne` / `.jj-cta-dark` / `.jj-cta-outline` primitives; delete every PASS that re-styles them). One rule per primitive, hover state included inline.
-6. **Emerald metallic primitive** (one definition): `.jj-pill-emerald-metallic` — gradient + white FG + no per-page overrides.
-7. **Sliders** (collapse PASS 37 / 44b into one block).
+All existing emerald variables alias to these. Delete duplicate `--ai-emerald: 262 50% 55%` (that's purple, mislabeled).
 
-Everything else in `index.css` from line ~3430 to the end (the entire PASS graveyard) is **deleted**, not commented out. The "LEGACY … NEUTRALIZED" stubs are also deleted.
+### 2. Shared primitives (the ONLY way to render emerald)
 
-## Component cleanup
+Create / consolidate in `src/components/ui/`:
 
-- `src/components/ui/tabs.tsx`: drop `useEffect` + `MutationObserver` + `stripActiveInkUtilities`. `TabsTrigger` becomes a thin wrapper around `TabsPrimitive.Trigger` with `data-surface="champagne"` and one className that relies on the CSS contract for active-state colors.
-- `src/components/navigation/GlobalVerticalNav.tsx`: remove inline `style` color forcing on subitems. Active state is driven purely by `data-active="true"` + CSS.
-- `src/components/ui/icon-tile.tsx`: keep as-is (already token-correct). Remove only the inline `style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}` once CSS `currentColor` rules cover it.
-- No new files, no new PASS, no new `!important`.
+- `<EmeraldBadge variant="solid|soft|outline" size="sm|md">` — replaces every `bg-green-*` / `bg-emerald-*` badge. White text + white svg locked.
+- `<EmeraldPill>` — for "Starter", "Broker Workspace", "Live Roles", "21 Open", AI chips, online indicator, notification dot, chatbot badge.
+- `<EmeraldButton>` — wraps shadcn Button with metallic emerald variant for "Apply", "Meet Jessica", all primary CTAs.
+- `<EmeraldDot>` — single online/active dot (replaces ad-hoc `bg-green-500` indicators).
 
-## Validation (before claiming done)
+All four use `--gradient-emerald` + `--emerald-on` and inherit the Universal Contrast Guard. Each carries `data-ink-emerald` so the global guard keeps text/icons white at hover.
 
-Playwright at 1280×1800 and 414×900, screenshots saved to `/mnt/documents/refactor-proof/`:
+### 3. Codemod sweep (kill stray greens)
 
-1. Sidebar: Broker, Developer, Owner, Investor — active item white-on-emerald, inactive ink-on-champagne, no sweep.
-2. Tabs: `/owner` Overview, All Leads, Flagged, VIP Leads, Audit Logs, Leads Management — emerald active, white FG, no animation.
-3. Light-surface pages (Guides, Reports, AI Tools, Careers, one book inner page): zero white-on-champagne, zero ink-on-emerald.
-4. Backend pages (CRM, Calendar, Notes/Tasks, Inbox/Messages) — same contract.
-5. `grep -n "PASS " src/index.css` returns **0 matches**.
-6. `grep -nE "!important" src/index.css | wc -l` drops by ≥90%.
+A Node script (`scripts/emerald-codemod.ts`, run once via `bun`) that walks `src/**/*.{ts,tsx}` and:
 
-## Risks & guardrails
+- Replaces well-known patterns:
+  - `bg-green-500 text-white` / `bg-emerald-600 ...` on a `<Badge>` → `<EmeraldBadge>`
+  - `bg-green-500` on a span dot → `<EmeraldDot>`
+  - `from-green-* to-emerald-*` gradient buttons → `<EmeraldButton>`
+- For ambiguous matches, replaces the raw class with `data-emerald-needs-review` + console-logs the file/line so I can hand-review the remainder (target: <20 manual touch-ups).
 
-- Removing PASS blocks may briefly expose places where component code depended on a now-deleted override. Mitigation: the audit pass enumerates those before deletion; fix each at the component level (one token-correct class), not by re-adding CSS.
-- Strict "No Removal" policy: only CSS rules and inline color forcing are removed. No features, no content, no routes touched.
-- This is a multi-step refactor and the diff will be large (~7,000 lines removed from `index.css`). I'll do it in one focused build session and validate before reporting.
+Files I already know need hand edits: `pages/News.tsx`, `pages/Onboarding.tsx`, `OwnerDashboardOverview.tsx`, `OwnerTemplates.tsx`, `ListingAdmin.tsx`, `LandlordRentalPortal.tsx`, `AdvancedBrokerToolkit.tsx`, `crm/ApplicantStatusPill.tsx`, `crm/StatusPillSelect.tsx`, `HandoverPill.tsx`.
 
-## Deliverables
+### 4. De-fade pass
 
-- `src/index.css` shrunk to a single design-system core (~3,000 lines target, down from 10,355).
-- `src/components/ui/tabs.tsx`, `src/components/navigation/GlobalVerticalNav.tsx` cleaned of inline color-forcing.
-- Screenshot folder proving the contrast contract holds on every listed surface.
-- No new memory entries; existing standards already cover the contract.
+Audit script flags `opacity-50|60|70` and `/(50|60|70)"` on `<Card>`, `<Badge>`, stat tiles, empty states under `pages/owner` + `components/owner`. Remove unless the element has `disabled` / `aria-disabled="true"`. Pending Tasks popup specifically: remove blanket `opacity-60` wrapper.
+
+### 5. Tailwind guard (prevent regression)
+
+Add ESLint rule via `eslint-plugin-tailwindcss` `no-custom-classname` override forbidding `^(bg|text|from|to|via|border)-(green|emerald)-\d+$` outside `src/components/ui/emerald/*`. Lint warning, not error, so existing CI keeps passing while remaining offenders are visible.
+
+## Files touched (estimate)
+
+- New: `src/components/ui/emerald/{EmeraldBadge,EmeraldPill,EmeraldButton,EmeraldDot,index}.tsx`, `scripts/emerald-codemod.ts`, `.eslintrc` rule
+- Edit: `src/index.css` (token block + delete `--ai-emerald` purple)
+- Codemod-edit: ~120-180 files (subset of the 636; many are constants/utilities that don't render UI and get skipped)
+- Hand-edit: ~10 files listed above
+
+No files deleted. No routing, no data, no edge functions touched.
+
+## Verification (you picked: walk every sidebar route, all 4 portals)
+
+After implementation, Playwright (headless, viewport 1280×1800) script that:
+
+1. Restores Supabase session from sandbox env, navigates to each portal entry:
+   - Owner: `/owner` + every item in `GlobalVerticalNav` owner section
+   - Broker: `/broker` + each broker sidebar route
+   - Developer: `/developer-portal` + each route
+   - Investor: `/investor` + each route
+2. For every route: screenshot to `/tmp/browser/passXX/{portal}/{slug}.png`, then run an in-page assertion:
+   ```js
+   document.querySelectorAll('[class*="bg-green-"],[class*="bg-emerald-"]:not([data-emerald-ok])').length === 0
+   ```
+3. Failures are listed by route + selector. I iterate until the list is empty.
+4. I'll report back with the screenshot grid and the assertion summary — not before.
+
+## Out of scope (next passes, on your call)
+
+- B: News engine filter to Dubai RE topics + repaint News page
+- C: Routing/wiring/404 audit + sidebar↔header sync + portal page parity
+- D: Sidebar-always-visible / fullscreen-on-click + backend card restyle (Starter/Workspace/Activity/empty states)
+
+Approve and I'll execute A end-to-end, including the full portal walkthrough, before reporting.

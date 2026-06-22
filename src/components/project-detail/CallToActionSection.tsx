@@ -138,8 +138,8 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/60 rounded-xl p-6 md:p-8 shadow-lg">
             {isSuccess ? (
               <div className="text-center py-8">
-                <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                <div className="w-16 h-16 rounded-full jj-emerald-solid/20 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="w-8 h-8 text-[color:var(--emerald-1)]" />
                 </div>
                 <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">Thank You!</h3>
                 <p className="text-[#1A1A1A]/70">We'll call you back shortly.</p>

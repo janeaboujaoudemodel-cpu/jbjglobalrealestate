@@ -16,8 +16,8 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 const STATUS_STYLE: Record<string, string> = {
-  sent: "bg-emerald-100 text-emerald-900 border-emerald-300",
-  delivered: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  sent: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
+  delivered: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   pending: "bg-amber-100 text-amber-900 border-amber-300",
   failed: "bg-red-100 text-red-900 border-red-300",
   dlq: "bg-red-100 text-red-900 border-red-300",
@@ -198,16 +198,16 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOve
               type="button"
               onClick={() => setTab(k)}
               className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border font-semibold transition ${
-                active
-                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
-              }`}
+ active
+ ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+ : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
+ }`}
             >
               <Icon className="w-3.5 h-3.5" />
               <span>{label}</span>
               <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                active ? "bg-white/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
-              }`}>{count}</span>
+ active ? "bg-white/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
+ }`}>{count}</span>
             </button>
           );
         })}
@@ -301,7 +301,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOve
                             </span>
                           )}
                           {d.outreach_count > 1 && (
-                            <span className="text-xs text-emerald-700 font-semibold">×{d.outreach_count} sends</span>
+                            <span className="text-xs text-[color:var(--emerald-1)] font-semibold">×{d.outreach_count} sends</span>
                           )}
                         </div>
                         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-[#1A1A1A]/70">

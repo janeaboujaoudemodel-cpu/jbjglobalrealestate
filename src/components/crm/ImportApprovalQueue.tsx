@@ -31,7 +31,7 @@ const CONTACT_TYPE_ICONS: Record<string, React.ReactNode> = {
   client: <Users className="h-4 w-4 text-blue-600" />,
   broker: <Briefcase className="h-4 w-4 text-purple-600" />,
   developer: <Building className="h-4 w-4 text-orange-600" />,
-  investor: <TrendingUp className="h-4 w-4 text-emerald-600" />,
+  investor: <TrendingUp className="h-4 w-4 text-[color:var(--emerald-1)]" />,
 };
 
 const ImportApprovalQueue = ({ open, onClose, onApproved, userId }: ImportApprovalQueueProps) => {

@@ -260,7 +260,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
           <div>
             <h3 className="text-white font-semibold text-sm">{employee.name}</h3>
             <div className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="w-2 h-2 jj-emerald-solid rounded-full animate-pulse" />
               <span className="text-white/90 text-xs">Online</span>
             </div>
           </div>
@@ -306,24 +306,24 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
               >
                 <div 
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                    message.role === 'user' 
-                      ? 'bg-[#EFE6D6] text-[#1A1A1A] rounded-br-sm' 
-                      : 'bg-[#1A1A1A] text-white rounded-bl-sm'
-                  }`}
+ message.role === 'user' 
+ ? 'bg-[#EFE6D6] text-[#1A1A1A] rounded-br-sm' 
+ : 'bg-[#1A1A1A] text-white rounded-bl-sm'
+ }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   <div className={`flex items-center gap-1 mt-1 ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  }`}>
+ message.role === 'user' ? 'justify-end' : 'justify-start'
+ }`}>
                     <span className={`text-xs ${
-                      message.role === 'user' ? 'text-[#1A1A1A]/60' : 'text-white/90'
-                    }`}>
+ message.role === 'user' ? 'text-[#1A1A1A]/60' : 'text-white/90'
+ }`}>
                       {formatTime(message.timestamp)}
                     </span>
                     {message.role === 'user' && (
                       <CheckCheck className={`h-3 w-3 ${
-                        message.status === 'read' ? 'text-blue-500' : 'text-[#1A1A1A]/40'
-                      }`} />
+ message.status === 'read' ? 'text-blue-500' : 'text-[#1A1A1A]/40'
+ }`} />
                     )}
                   </div>
                 </div>

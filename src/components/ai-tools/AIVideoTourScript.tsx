@@ -184,7 +184,7 @@ const AIVideoTourScript = ({ onResponse }: AIVideoTourScriptProps) => {
             </div>
 
             {response.callToAction && (
-              <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-lg">
+              <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20 p-4 rounded-lg">
                 <h4 className="font-semibold mb-2">Call to Action</h4>
                 <p className="text-sm">"{response.callToAction}"</p>
               </div>

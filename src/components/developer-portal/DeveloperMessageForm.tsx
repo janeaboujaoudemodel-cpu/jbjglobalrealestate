@@ -97,7 +97,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
         <p className="text-sm text-muted-foreground">
           Share new project information, updates, or launch details with JBJ.
           {autoApprove && (
-            <span className="ml-1 text-emerald-600 font-semibold">Auto-approve enabled</span>
+            <span className="ml-1 text-[color:var(--emerald-1)] font-semibold">Auto-approve enabled</span>
           )}
         </p>
       </CardHeader>

@@ -122,7 +122,7 @@ export function SalespersonContact({ developerId, developerName }: SalespersonCo
         <CardDescription className="flex items-center gap-2">
           <Building2 className="h-4 w-4" />
           {developerName}
-          <Badge className="bg-green-500/20 text-green-400 border-green-500/30 ml-2">
+          <Badge className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30 ml-2">
             Approved
           </Badge>
         </CardDescription>

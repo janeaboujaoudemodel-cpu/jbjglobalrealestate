@@ -30,7 +30,7 @@ const approvalBadge = (s: string | null) => {
   if (!s) return null;
   const map: Record<string, string> = {
     pending: "bg-amber-100 text-amber-800 border-amber-300",
-    approved: "bg-green-100 text-green-800 border-green-300",
+    approved: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
     rejected: "bg-red-100 text-red-800 border-red-300",
   };
   return map[s] || "";
@@ -293,7 +293,7 @@ const AlertCard: React.FC<{ alert: SuspiciousAlert; onAcknowledge?: () => void; 
         <CheckCircle2 className="w-3.5 h-3.5 mr-1" />Acknowledge
       </Button>
     )}
-    {alert.acknowledged && <span className="text-xs text-green-600">✓ Acknowledged {alert.acknowledged_at ? fmtDate(alert.acknowledged_at) : ""}</span>}
+    {alert.acknowledged && <span className="text-xs text-[color:var(--emerald-1)]">✓ Acknowledged {alert.acknowledged_at ? fmtDate(alert.acknowledged_at) : ""}</span>}
   </div>
 );
 

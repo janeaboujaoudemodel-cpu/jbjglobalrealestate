@@ -322,7 +322,7 @@ export function StampTextEditor({ svgSource, onSvgChange, onSaveVersion, onAiAct
                           autoFocus
                           className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-[#FDFBF7] text-[#1A1A1A] font-mono"
                         />
-                        <button onClick={() => commitEdit(el.index)} className="p-1 rounded hover:bg-green-50 text-green-600"><Check size={11}/></button>
+                        <button onClick={() => commitEdit(el.index)} className="p-1 rounded hover:jj-emerald-soft text-[color:var(--emerald-1)]"><Check size={11}/></button>
                         <button onClick={() => setEditingIndex(null)} className="p-1 rounded hover:bg-[hsl(var(--muted))]"><X size={11}/></button>
                       </div>
                     ) : mode === 'characters' && isArc ? (

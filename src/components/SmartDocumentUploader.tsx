@@ -109,7 +109,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
   const getConfidenceColor = (confidence: "high" | "medium" | "low") => {
     switch (confidence) {
       case "high":
-        return "text-green-600";
+        return "text-[color:var(--emerald-1)]";
       case "medium":
         return "text-yellow-600";
       case "low":
@@ -192,7 +192,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
             <div className="p-4 bg-[#FDFBF7] rounded-lg border-2 border-[#B89555]/20">
               <div className="flex items-center gap-2 mb-2">
                 {matchResult.confidence === "high" ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
+                  <CheckCircle2 className="w-5 h-5 text-[color:var(--emerald-1)]" />
                 ) : matchResult.confidence === "medium" ? (
                   <AlertTriangle className="w-5 h-5 text-yellow-600" />
                 ) : (

@@ -103,7 +103,7 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
-      case 'low': return <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">Low Risk</Badge>;
+      case 'low': return <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Low Risk</Badge>;
       case 'medium': return <Badge className="bg-amber-50 text-amber-700 border-amber-200">Medium Risk</Badge>;
       case 'high': return <Badge className="bg-red-50 text-red-700 border-red-200">High Risk</Badge>;
       default: return null;

@@ -309,9 +309,9 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           </div>
 
           {/* Usage Rights & Benefits */}
-          <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 flex gap-3">
-            <Handshake className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-            <div className="text-xs text-emerald-800">
+          <div className="jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30 rounded-xl p-4 flex gap-3">
+            <Handshake className="w-5 h-5 text-[color:var(--emerald-1)] shrink-0 mt-0.5" />
+            <div className="text-xs text-[color:var(--emerald-1)]">
               <p className="font-bold mb-1">Usage Rights & Benefits — {COMPANY_FULL_NAME}</p>
               <p className="whitespace-pre-line">{USAGE_RIGHTS_TEXT}</p>
             </div>

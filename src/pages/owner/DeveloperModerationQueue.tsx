@@ -109,7 +109,7 @@ const DeveloperModerationQueue = () => {
       file_rejected: 'bg-red-500/20 text-red-400',
       protected_field_attempt: 'bg-red-500/20 text-red-400',
       session_end: 'bg-muted text-muted-foreground',
-      approval: 'bg-emerald-500/20 text-emerald-400',
+      approval: 'jj-emerald-solid/20 text-emerald-400',
     };
     return map[type] || 'bg-muted text-muted-foreground';
   };

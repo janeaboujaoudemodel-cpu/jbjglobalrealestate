@@ -14,7 +14,7 @@ import {
 import { DELIVERY_REQUIREMENTS, type DeliveryStatus, type DeliveryScope } from '@/config/delivery-checklist';
 
 const STATUS_CONFIG: Record<DeliveryStatus, { label: string; icon: typeof Check; color: string; badgeClass: string }> = {
-  done: { label: 'Done', icon: Check, color: 'text-green-600', badgeClass: 'bg-green-100 text-green-700 border-green-200' },
+  done: { label: 'Done', icon: Check, color: 'text-[color:var(--emerald-1)]', badgeClass: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' },
   partial: { label: 'Partial', icon: AlertTriangle, color: 'text-amber-600', badgeClass: 'bg-amber-100 text-amber-700 border-amber-200' },
   missing: { label: 'Missing', icon: X, color: 'text-red-600', badgeClass: 'bg-red-100 text-red-700 border-red-200' },
   needs_verification: { label: 'Needs Verification', icon: Eye, color: 'text-blue-600', badgeClass: 'bg-blue-100 text-blue-700 border-blue-200' },
@@ -52,9 +52,9 @@ export default function DeliveryChecklistTab() {
             <div className="text-xs text-[#1A1A1A]/70">Total Items</div>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7]/70 border-green-200">
+        <Card className="bg-[#FDFBF7]/70 border-[color:var(--emerald-1)]/30">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600">{stats.done}</div>
+            <div className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.done}</div>
             <div className="text-xs text-[#1A1A1A]/70">Done</div>
           </CardContent>
         </Card>
@@ -86,7 +86,7 @@ export default function DeliveryChecklistTab() {
         </div>
         <div className="w-full h-3 bg-[#B89555]/10 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-green-500 to-[#B89555] rounded-full transition-all"
+            className="h-full bg-gradient-to-r to-[#B89555] rounded-full transition-all"
             style={{ width: `${(stats.done / stats.total) * 100}%` }}
           />
         </div>

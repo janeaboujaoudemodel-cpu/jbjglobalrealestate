@@ -272,7 +272,7 @@ export default function OnboardingModule() {
                             Your answer: {answers[q.id] || "(no answer)"}
                           </p>
                           {!isCorrect && (
-                            <p className="text-sm text-green-600 mt-1">
+                            <p className="text-sm text-[color:var(--emerald-1)] mt-1">
                               Correct answer: {q.correct_answer}
                             </p>
                           )}
@@ -422,12 +422,12 @@ export default function OnboardingModule() {
                 key={q.id}
                 onClick={() => setCurrentQuestionIndex(index)}
                 className={`w-8 h-8 rounded-full text-sm font-medium transition-colors ${
-                  currentQuestionIndex === index
-                    ? 'bg-[#EFE6D6] text-[#1A1A1A]'
-                    : answers[q.id]
-                    ? 'bg-green-500/20 text-green-500 border border-green-500'
-                    : 'bg-muted text-muted-foreground'
-                }`}
+ currentQuestionIndex === index
+ ? 'bg-[#EFE6D6] text-[#1A1A1A]'
+ : answers[q.id]
+ ? 'jj-emerald-solid/20 text-green-500 border border-[color:var(--emerald-1)]/30'
+ : 'bg-muted text-muted-foreground'
+ }`}
               >
                 {index + 1}
               </button>

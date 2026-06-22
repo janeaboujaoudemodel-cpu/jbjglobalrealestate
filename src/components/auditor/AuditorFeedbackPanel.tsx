@@ -183,10 +183,10 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 py-3 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors ${
-                activeTab === tab.key
-                  ? "text-[#1A1A1A] border-b-2 border-[#B89555] bg-[#EFE6D6]/5"
-                  : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
-              }`}
+ activeTab === tab.key
+ ? "text-[#1A1A1A] border-b-2 border-[#B89555] bg-[#EFE6D6]/5"
+ : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
+ }`}
             >
               <tab.icon className="w-3.5 h-3.5" />
               {tab.label}
@@ -289,7 +289,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
               {isRecording ? "Stop Recording" : "Record Voice"}
             </Button>
             {voiceBlob && !isRecording && (
-              <span className="text-xs text-emerald-600 font-medium">✓ Voice recorded</span>
+              <span className="text-xs text-[color:var(--emerald-1)] font-medium">✓ Voice recorded</span>
             )}
           </div>
 

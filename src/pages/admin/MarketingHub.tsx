@@ -136,7 +136,7 @@ const MarketingHub: React.FC = () => {
       case 'draft': return 'bg-[#EFE6D6] text-[#1A1A1A]/70';
       case 'scheduled': return 'bg-blue-100 text-blue-700';
       case 'sending': return 'bg-amber-100 text-amber-700';
-      case 'sent': return 'bg-green-100 text-green-700';
+      case 'sent': return 'jj-emerald-soft text-[color:var(--emerald-1)]';
       case 'paused': return 'bg-orange-100 text-orange-700';
       case 'archived': return 'bg-[#EFE6D6] text-[#1A1A1A]/70';
       default: return 'bg-[#EFE6D6] text-[#1A1A1A]/70';

@@ -118,10 +118,10 @@ const ChatMessages = React.memo(({
               <div className="flex flex-col max-w-[80%]">
                 <div
                   className={`p-3.5 rounded-2xl shadow-md select-text cursor-text ${
-                    message.role === 'user'
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 rounded-tr-sm'
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 rounded-tl-sm'
-                  }`}
+ message.role === 'user'
+ ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 rounded-tr-sm'
+ : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 rounded-tl-sm'
+ }`}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium select-text">{message.content}</p>
                   <p className="text-[10px] mt-1.5 text-[#1A1A1A]/60 select-none">
@@ -134,8 +134,8 @@ const ChatMessages = React.memo(({
                     toast.success(t('chat.messageCopied') || 'Message copied');
                   }}
                   className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
-                    message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
-                  }`}
+ message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
+ }`}
                 >
                   <Copy className="w-3 h-3" />
                   <span>{t('chat.copy') || 'Copy'}</span>
@@ -218,7 +218,7 @@ const ChatMessages = React.memo(({
               href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
+              className="flex-1 flex items-center justify-center gap-2 jj-emerald-solid hover:jj-emerald-solid text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
             >
               <MessageCircle className="w-4 h-4" />
               <T>WhatsApp</T>
@@ -262,10 +262,7 @@ const ChatMessages = React.memo(({
                 disabled={isLoading}
                 data-no-contrast-guard
                 title={q.prompt}
-                className="shrink-0 inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11.5px] font-medium text-[#1A1A1A]
-                  border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.85)_100%)]
-                  hover:border-[#B89555] hover:bg-[#FDFBF7] hover:shadow-[0_2px_10px_rgba(184,149,85,0.22)]
-                  disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="shrink-0 inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11.5px] font-medium text-[#1A1A1A] border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.85)_100%)] hover:border-[#B89555] hover:bg-[#FDFBF7] hover:shadow-[0_2px_10px_rgba(184,149,85,0.22)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 <Sparkles className="h-3 w-3 text-[#B89555]" />
                 {q.label}

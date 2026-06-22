@@ -67,7 +67,7 @@ interface BrokerSubscription {
 }
 
 const STATUS_COLORS: { [key: string]: string } = {
-  active: "bg-green-500/20 text-green-400 border-green-500/30",
+  active: "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30",
   trial: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   pending: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
@@ -353,7 +353,7 @@ export default function BrokerSubscriptionsDashboard() {
         </Card>
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-5 h-5 text-green-600" />
+            <Shield className="w-5 h-5 text-[color:var(--emerald-1)]" />
             <span className="text-[#1A1A1A]/70 text-sm">Active</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{activeSubscriptions}</p>

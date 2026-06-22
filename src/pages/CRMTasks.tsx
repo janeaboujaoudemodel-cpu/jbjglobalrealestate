@@ -44,7 +44,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   general:     "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",
   integration: "bg-purple-500/15 text-purple-800 border-purple-500/30",
   security:    "bg-red-500/15 text-red-800 border-red-500/30",
-  marketing:   "bg-emerald-500/15 text-emerald-800 border-emerald-500/30",
+  marketing:   "jj-emerald-solid/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
   development: "bg-blue-500/15 text-blue-800 border-blue-500/30",
   other:       "bg-amber-500/15 text-amber-800 border-amber-500/30",
 };
@@ -224,28 +224,28 @@ const CRMTasks = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={`bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-4 hover:shadow-md hover:border-[#B89555]/50 transition-all duration-200 ${
-        task.status === 'done' ? 'opacity-60' : ''
-      }`}
+ task.status === 'done' ? 'opacity-60' : ''
+ }`}
     >
       <div className="flex items-start gap-4">
         <button
           onClick={() => toggleTaskStatus(task.id, task.status)}
           className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full border flex items-center justify-center transition-all ${
-            task.status === 'done'
-              ? 'bg-emerald-500/15 border-emerald-500/40'
-              : 'border-[#B89555]/50 hover:border-[#B89555] hover:bg-[#EFE6D6]'
-          }`}
+ task.status === 'done'
+ ? 'jj-emerald-solid/15 border-[color:var(--emerald-1)]/30/40'
+ : 'border-[#B89555]/50 hover:border-[#B89555] hover:bg-[#EFE6D6]'
+ }`}
         >
           {task.status === 'done' && (
-            <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+            <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)]" />
           )}
         </button>
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className={`font-medium text-[#1A1A1A] ${
-              task.status === 'done' ? 'line-through text-[#1A1A1A]/70' : ''
-            }`}>
+ task.status === 'done' ? 'line-through text-[#1A1A1A]/70' : ''
+ }`}>
               {task.title}
             </span>
           </div>
@@ -457,9 +457,9 @@ const CRMTasks = () => {
             {doneTasks.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                  <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)]" />
                   <h2 className="text-lg font-semibold text-[#1A1A1A]">Done</h2>
-                  <Badge className="bg-emerald-500/15 text-emerald-800 border border-emerald-500/30">{doneTasks.length}</Badge>
+                  <Badge className="jj-emerald-solid/15 text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30/30">{doneTasks.length}</Badge>
                 </div>
                 <div className="space-y-3">
                   {doneTasks.map(task => (

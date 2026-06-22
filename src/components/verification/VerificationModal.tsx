@@ -459,8 +459,8 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                 <div
                   key={s}
                   className={`h-1 flex-1 rounded-full transition-colors ${
-                    i <= currentIdx ? "bg-[#B89555]" : "bg-[#EFE6D6]"
-                  }`}
+ i <= currentIdx ? "bg-[#B89555]" : "bg-[#EFE6D6]"
+ }`}
                 />
               ))}
               <span className="ml-2 text-[11px] font-semibold text-[#1A1A1A]/60 tabular-nums">
@@ -528,10 +528,10 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                       type="button"
                       onClick={() => setDocType(d.value)}
                       className={`px-4 py-3 rounded-xl border text-sm font-medium text-left transition-all ${
-                        docType === d.value
-                          ? "border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A]"
-                          : "border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A]/80 hover:border-[#B89555]/60"
-                      }`}
+ docType === d.value
+ ? "border-[#B89555] bg-[#EFE6D6] text-[#1A1A1A]"
+ : "border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A]/80 hover:border-[#B89555]/60"
+ }`}
                     >
                       {d.label}
                     </button>
@@ -711,12 +711,12 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                         <div
                           key={c.id}
                           className={`w-2 h-2 rounded-full ${
-                            i < livenessFrames.length
-                              ? "bg-emerald-500"
-                              : i === livenessIdx
-                              ? "bg-[#B89555] animate-pulse"
-                              : "bg-white/30"
-                          }`}
+ i < livenessFrames.length
+ ? "jj-emerald-solid"
+ : i === livenessIdx
+ ? "bg-[#B89555] animate-pulse"
+ : "bg-white/30"
+ }`}
                         />
                       ))}
                     </div>
@@ -799,8 +799,8 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* SUCCESS */}
           {step === "success" && (
             <div className="flex flex-col items-center text-center py-6 gap-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center">
-                <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+              <div className="w-16 h-16 rounded-full jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
+                <CheckCircle2 className="w-8 h-8 text-[color:var(--emerald-1)]" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-[#1A1A1A]">Submission received</h3>

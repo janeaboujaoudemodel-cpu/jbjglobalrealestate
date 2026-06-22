@@ -198,7 +198,7 @@ export function VideoScriptPanel() {
             </div>
 
             {response.callToAction && (
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded p-2">
+              <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded p-2">
                 <span className="text-[10px] text-emerald-400 uppercase font-bold">CTA</span>
                 <p className="text-[#1A1A1A]/70 text-xs">"{response.callToAction}"</p>
               </div>

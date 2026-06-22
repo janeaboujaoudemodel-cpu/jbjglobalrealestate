@@ -57,7 +57,7 @@ interface ChatEntry {
 
 const SOURCE_COLORS: Record<string, string> = {
   'ai_designer': 'bg-purple-100 text-purple-700',
-  'mortgage_calculator': 'bg-green-100 text-green-700',
+  'mortgage_calculator': 'jj-emerald-soft text-[color:var(--emerald-1)]',
   'property_comparison': 'bg-blue-100 text-blue-700',
   'live_chat': 'bg-amber-100 text-amber-700',
   'executive_assistant': 'bg-[#EFE6D6]/20 text-[#1A1A1A]',
@@ -191,10 +191,10 @@ export function ChatHistoryAdmin() {
             <p className="text-2xl font-bold text-blue-600">{sessions.size}</p>
           </CardContent>
         </Card>
-        <Card className="jj-card-inner border-green-200">
+        <Card className="jj-card-inner border-[color:var(--emerald-1)]/30">
           <CardContent className="p-4">
             <p className="text-xs text-[#1A1A1A]/60">Sources</p>
-            <p className="text-2xl font-bold text-green-600">{uniqueSources.length}</p>
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{uniqueSources.length}</p>
           </CardContent>
         </Card>
       </div>
@@ -259,8 +259,8 @@ export function ChatHistoryAdmin() {
                 <Card 
                   key={sessionId} 
                   className={`jj-card-inner hover:border-[#B89555] transition-all cursor-pointer ${
-                    hasFlagged ? 'border-red-300' : ''
-                  }`}
+ hasFlagged ? 'border-red-300' : ''
+ }`}
                 >
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
@@ -299,10 +299,10 @@ export function ChatHistoryAdmin() {
                         <div 
                           key={chat.id}
                           className={`p-2 rounded-lg ${
-                            chat.role === 'user' 
-                              ? 'bg-blue-50 border-l-2 border-blue-500' 
-                              : 'bg-green-50 border-l-2 border-green-500'
-                          }`}
+ chat.role === 'user' 
+ ? 'bg-blue-50 border-l-2 border-blue-500' 
+ : 'jj-emerald-soft border-l-2 border-[color:var(--emerald-1)]/30'
+ }`}
                         >
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-xs text-[#1A1A1A]/50">{chat.role}</span>

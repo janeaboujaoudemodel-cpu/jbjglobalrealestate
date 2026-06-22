@@ -156,7 +156,7 @@ export function VisitHistory({ refreshTrigger }: VisitHistoryProps) {
 
                         <div className="flex items-center gap-2">
                           {visit.points_awarded && visit.points_awarded > 0 && (
-                            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                            <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">
                               +{visit.points_awarded} pts
                             </Badge>
                           )}

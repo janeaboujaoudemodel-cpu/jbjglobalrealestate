@@ -490,10 +490,10 @@ const BrandPaletteHub = () => {
                       key={preset.name}
                       onClick={() => applyPreset(preset.palette)}
                       className={`p-3 rounded-xl border-2 text-left transition-all ${
-                        isActive
-                          ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                          : 'border-[#B89555]/20 hover:border-[#B89555]/40 bg-card/50'
-                      }`}
+ isActive
+ ? 'border-[#B89555] bg-[#EFE6D6]/10'
+ : 'border-[#B89555]/20 hover:border-[#B89555]/40 bg-card/50'
+ }`}
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs font-bold text-foreground">{preset.name}</span>
@@ -526,7 +526,7 @@ const BrandPaletteHub = () => {
                 <Eye className="w-4 h-4 text-[#1A1A1A]" />
                 Preview
                 {isPreviewing && (
-                  <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold animate-pulse">LIVE</span>
+                  <span className="text-[10px] jj-emerald-soft text-[color:var(--emerald-1)] px-2 py-0.5 rounded-full font-semibold animate-pulse">LIVE</span>
                 )}
               </h3>
 
@@ -677,8 +677,8 @@ const BrandPaletteHub = () => {
                       <div
                         key={sp.id}
                         className={`p-3 rounded-xl border transition-all ${
-                          sp.is_active ? 'border-[#B89555] bg-[#EFE6D6]/10' : 'border-[#B89555]/20 hover:border-[#B89555]/30'
-                        }`}
+ sp.is_active ? 'border-[#B89555] bg-[#EFE6D6]/10' : 'border-[#B89555]/20 hover:border-[#B89555]/30'
+ }`}
                       >
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -709,7 +709,7 @@ const BrandPaletteHub = () => {
                               <>
                                 <span className="text-xs font-semibold text-foreground truncate">{sp.name}</span>
                                 {sp.is_active && (
-                                  <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full flex-shrink-0">Active</span>
+                                  <span className="text-[9px] jj-emerald-soft text-[color:var(--emerald-1)] px-1.5 py-0.5 rounded-full flex-shrink-0">Active</span>
                                 )}
                               </>
                             )}

@@ -345,7 +345,7 @@ END:VCARD`;
             {isSuccess ? (
               /* Success State */
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(200,167,102,0.35)]">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
@@ -452,7 +452,7 @@ END:VCARD`;
                                       href={whatsappUrl}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="flex-shrink-0 h-12 px-3 bg-green-600 hover:bg-green-500 text-white rounded-md flex items-center justify-center transition-colors"
+                                      className="flex-shrink-0 h-12 px-3 jj-emerald-solid hover:jj-emerald-solid text-white rounded-md flex items-center justify-center transition-colors"
                                       title="Chat on WhatsApp"
                                     >
                                       <MessageCircle className="w-5 h-5 text-white" />
@@ -861,7 +861,7 @@ END:VCARD`;
             </Button>
             <Button 
               onClick={() => handlePhoneAction('whatsapp')}
-              className="w-full h-12 bg-green-600 hover:bg-green-700 text-white justify-start gap-3"
+              className="w-full h-12 jj-emerald-solid hover:jj-emerald-solid text-white justify-start gap-3"
             >
               <MessageCircle className="w-5 h-5" />
               WhatsApp

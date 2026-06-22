@@ -256,8 +256,8 @@ export function ChangeRequestsQueue() {
                         <p className="text-[10px] text-red-500 font-medium mb-1">Before</p>
                         <p className="text-foreground line-clamp-3">{val.before || <span className="italic text-muted-foreground">Empty</span>}</p>
                       </div>
-                      <div className="p-2 bg-emerald-50 border border-emerald-200 rounded text-sm">
-                        <p className="text-[10px] text-emerald-600 font-medium mb-1">After</p>
+                      <div className="p-2 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded text-sm">
+                        <p className="text-[10px] text-[color:var(--emerald-1)] font-medium mb-1">After</p>
                         <p className="text-foreground line-clamp-3">{val.after || <span className="italic text-muted-foreground">Empty</span>}</p>
                       </div>
                     </div>
@@ -287,7 +287,7 @@ export function ChangeRequestsQueue() {
                   <X className="h-4 w-4 mr-2" />
                   Reject
                 </Button>
-                <Button onClick={handleApprove} disabled={isProcessing} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Button onClick={handleApprove} disabled={isProcessing} className="jj-emerald-solid hover:jj-emerald-solid text-white">
                   <Check className="h-4 w-4 mr-2" />
                   Approve & Apply
                 </Button>

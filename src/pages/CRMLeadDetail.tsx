@@ -388,9 +388,9 @@ const CRMLeadDetail = () => {
               {lead.phone_e164 && (
                 <div className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg">
                   <Phone className="h-4 w-4 text-green-500 shrink-0" />
-                  <a href={`tel:${lead.phone_e164}`} className="text-sm font-medium hover:text-green-400 truncate flex-1">{lead.phone_e164}</a>
+                  <a href={`tel:${lead.phone_e164}`} className="text-sm font-medium truncate flex-1">{lead.phone_e164}</a>
                   <div className="flex gap-1 shrink-0">
-                    <Button size="sm" variant="ghost" className="h-7 px-2 text-green-500 hover:bg-green-500/10" onClick={handleWhatsAppClick}>
+                    <Button size="sm" variant="ghost" className="h-7 px-2 text-green-500 hover:jj-emerald-solid/10" onClick={handleWhatsAppClick}>
                       <MessageSquare className="h-3.5 w-3.5" />
                     </Button>
                     <Button size="sm" variant="ghost" className="h-7 px-2 text-blue-500 hover:bg-blue-500/10" onClick={() => window.open(`tel:${lead.phone_e164}`, "_self")}>
@@ -436,7 +436,7 @@ const CRMLeadDetail = () => {
               <CardTitle className="text-base">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 gap-2">
-              <Button className="w-full justify-start bg-green-600 hover:bg-green-500 text-white text-sm h-9" onClick={() => setActiveTab("whatsapp")} disabled={!lead.phone_e164}>
+              <Button className="w-full justify-start jj-emerald-solid hover:jj-emerald-solid text-white text-sm h-9" onClick={() => setActiveTab("whatsapp")} disabled={!lead.phone_e164}>
                 <MessageSquare className="h-4 w-4 mr-2 shrink-0" /> AI WhatsApp
               </Button>
               <Button className="w-full justify-start bg-purple-600 hover:bg-purple-500 text-white text-sm h-9" onClick={() => setActiveTab("email")} disabled={!lead.email_lower}>

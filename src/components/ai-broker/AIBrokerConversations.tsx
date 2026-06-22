@@ -78,7 +78,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
   const getChannelColor = (channel: string) => {
     switch (channel) {
       case "whatsapp":
-        return "border-emerald-500/30 text-emerald-400";
+        return "border-[color:var(--emerald-1)]/30/30 text-emerald-400";
       case "email":
         return "border-blue-500/30 text-blue-400";
       case "phone":
@@ -137,8 +137,8 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
                   key={conv.id}
                   onClick={() => setSelectedConversation(conv.id)}
                   className={`w-full p-4 text-left border-b border-[#1A1A1A] hover:bg-[#1A1A1A]/50 transition-colors ${
-                    selectedConversation === conv.id ? "bg-[#1A1A1A]" : ""
-                  }`}
+ selectedConversation === conv.id ? "bg-[#1A1A1A]" : ""
+ }`}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -233,21 +233,21 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
               <div
                 key={msg.id}
                 className={`flex ${
-                  msg.direction === "outbound" ? "justify-end" : "justify-start"
-                }`}
+ msg.direction === "outbound" ? "justify-end" : "justify-start"
+ }`}
               >
                 <div
                   className={`max-w-[70%] rounded-lg p-3 ${
-                    msg.direction === "outbound"
-                      ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                      : "bg-[#1A1A1A] text-white"
-                  }`}
+ msg.direction === "outbound"
+ ? "bg-[#EFE6D6] text-[#1A1A1A]"
+ : "bg-[#1A1A1A] text-white"
+ }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   <p
                     className={`text-xs mt-1 ${
-                      msg.direction === "outbound" ? "text-[#1A1A1A]/60" : "text-[#1A1A1A]/70"
-                    }`}
+ msg.direction === "outbound" ? "text-[#1A1A1A]/60" : "text-[#1A1A1A]/70"
+ }`}
                   >
                     {new Date(msg.created_at).toLocaleTimeString()}
                   </p>

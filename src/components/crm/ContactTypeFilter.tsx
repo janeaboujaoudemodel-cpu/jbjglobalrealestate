@@ -13,7 +13,7 @@ const CONTACT_TYPES: { value: ContactType; label: string; icon: React.ReactNode;
   { value: 'client', label: 'Clients', icon: <Users className="h-4 w-4" />, color: 'text-blue-600' },
   { value: 'broker', label: 'Brokers', icon: <Briefcase className="h-4 w-4" />, color: 'text-purple-600' },
   { value: 'developer', label: 'Developers', icon: <Building className="h-4 w-4" />, color: 'text-orange-600' },
-  { value: 'investor', label: 'Investors', icon: <TrendingUp className="h-4 w-4" />, color: 'text-emerald-600' },
+  { value: 'investor', label: 'Investors', icon: <TrendingUp className="h-4 w-4" />, color: 'text-[color:var(--emerald-1)]' },
   { value: 'vendor', label: 'Vendors', icon: <Package className="h-4 w-4" />, color: 'text-amber-600' },
   { value: 'other', label: 'Other', icon: <HelpCircle className="h-4 w-4" />, color: 'text-[#1A1A1A]/70' },
 ];

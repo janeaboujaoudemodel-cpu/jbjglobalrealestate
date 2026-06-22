@@ -80,7 +80,7 @@ export function BusinessCardHeader({
               {isSaving ? "Saving…" : "Save Card"}
             </Button>
             {cardLicenseCode && (
-              <span className="text-[9px] font-mono font-bold text-green-700 bg-green-50 border border-green-200 rounded px-1.5 py-0.5">
+              <span className="text-[9px] font-mono font-bold text-[color:var(--emerald-1)] jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded px-1.5 py-0.5">
                 {cardLicenseCode}
               </span>
             )}
@@ -122,7 +122,7 @@ export function BusinessCardHeader({
             onClick={onExportToResizer}
             disabled={isExportingToResizer}
             variant="outline"
-            className="gap-1.5 h-8 text-xs font-semibold border-teal-500/40 text-teal-700 hover:bg-teal-500/10"
+            className="gap-1.5 h-8 text-xs font-semibold border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] hover:jj-emerald-solid/10"
             title="Send card to Image Resizer for social media sizes"
           >
             {isExportingToResizer ? <RefreshCw size={12} className="animate-spin" /> : <Maximize size={12} />}

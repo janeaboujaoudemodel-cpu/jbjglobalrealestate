@@ -405,10 +405,10 @@ export function EnhancedAssignModal({
                             }
                             disabled={isAtCapacity}
                             className={`w-full p-3 rounded-lg border flex items-center gap-3 transition-all text-left ${
-                              isAtCapacity
-                                ? "bg-[#1A1A1A]/50 border-[#1A1A1A] opacity-50 cursor-not-allowed"
-                                : "bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#B89555]/50"
-                            }`}
+ isAtCapacity
+ ? "bg-[#1A1A1A]/50 border-[#1A1A1A] opacity-50 cursor-not-allowed"
+ : "bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#B89555]/50"
+ }`}
                           >
                             <Avatar className="h-10 w-10 border border-[#B89555]/30">
                               {broker.avatar_url ? (
@@ -467,16 +467,16 @@ export function EnhancedAssignModal({
                             }
                             disabled={isAtCapacity}
                             className={`w-full p-3 rounded-lg border flex items-center gap-3 transition-all text-left ${
-                              isAtCapacity
-                                ? "bg-[#1A1A1A]/50 border-[#1A1A1A] opacity-50 cursor-not-allowed"
-                                : "bg-[#1A1A1A] border-[#1A1A1A] hover:border-emerald-500/50"
-                            }`}
+ isAtCapacity
+ ? "bg-[#1A1A1A]/50 border-[#1A1A1A] opacity-50 cursor-not-allowed"
+ : "bg-[#1A1A1A] border-[#1A1A1A] hover:border-[color:var(--emerald-1)]/30/50"
+ }`}
                           >
-                            <Avatar className="h-10 w-10 border border-emerald-500/30">
+                            <Avatar className="h-10 w-10 border border-[color:var(--emerald-1)]/30/30">
                               {broker.avatar_url ? (
                                 <AvatarImage src={broker.avatar_url} />
                               ) : (
-                                <AvatarFallback className="bg-emerald-500/20 text-emerald-400">
+                                <AvatarFallback className="jj-emerald-solid/20 text-emerald-400">
                                   <Bot className="h-5 w-5" />
                                 </AvatarFallback>
                               )}

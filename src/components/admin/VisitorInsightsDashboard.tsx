@@ -237,7 +237,7 @@ const VisitorInsightsDashboard = () => {
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
       case 'page_view': return <Eye className="h-3 w-3 text-blue-600" />;
-      case 'click': return <MousePointer className="h-3 w-3 text-green-600" />;
+      case 'click': return <MousePointer className="h-3 w-3 text-[color:var(--emerald-1)]" />;
       case 'download': return <Download className="h-3 w-3 text-purple-600" />;
       case 'upload': return <Upload className="h-3 w-3 text-orange-600" />;
       case 'form_submit': return <FileText className="h-3 w-3 text-[#1A1A1A]" />;
@@ -361,8 +361,8 @@ const VisitorInsightsDashboard = () => {
                           onClick={() => openVisitorDetail(visitor)}>
                           <td className="p-4">
                             <div className="flex items-center gap-3">
-                              <div className={`w-9 h-9 rounded-full flex items-center justify-center ${visitor.isConverted ? 'bg-green-100' : 'bg-[#EFE6D6]/20'}`}>
-                                <Users className={`h-4 w-4 ${visitor.isConverted ? 'text-green-600' : 'text-[#1A1A1A]'}`} />
+                              <div className={`w-9 h-9 rounded-full flex items-center justify-center ${visitor.isConverted ? 'jj-emerald-soft' : 'bg-[#EFE6D6]/20'}`}>
+                                <Users className={`h-4 w-4 ${visitor.isConverted ? 'text-[color:var(--emerald-1)]' : 'text-[#1A1A1A]'}`} />
                               </div>
                               <div>
                                 <p className="text-[#1A1A1A] font-medium text-sm">{visitor.displayName}</p>
@@ -473,7 +473,7 @@ const VisitorInsightsDashboard = () => {
               <Users className="h-5 w-5 text-[#1A1A1A]" />
               {selectedVisitor?.displayName}
               {selectedVisitor?.isConverted && (
-                <Badge className="bg-green-100 text-green-700 border-green-300 ml-2">Converted</Badge>
+                <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 ml-2">Converted</Badge>
               )}
             </DialogTitle>
           </DialogHeader>
@@ -512,10 +512,10 @@ const VisitorInsightsDashboard = () => {
                     <div key={session.id}
                       onClick={() => loadSessionDetails(session.session_id)}
                       className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                        selectedSessionId === session.session_id
-                          ? 'bg-[#EFE6D6]/10 border-[#B89555]/40'
-                          : 'bg-[#FDFBF7]/30 border-[#B89555]/10 hover:border-[#B89555]/30'
-                      }`}>
+ selectedSessionId === session.session_id
+ ? 'bg-[#EFE6D6]/10 border-[#B89555]/40'
+ : 'bg-[#FDFBF7]/30 border-[#B89555]/10 hover:border-[#B89555]/30'
+ }`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           {getDeviceIcon(session.device_type || 'desktop')}
@@ -530,7 +530,7 @@ const VisitorInsightsDashboard = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           {session.is_converted && (
-                            <Badge variant="outline" className="text-xs border-green-500 text-green-600 bg-green-50">Converted</Badge>
+                            <Badge variant="outline" className="text-xs border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] jj-emerald-soft">Converted</Badge>
                           )}
                           <ChevronRight className="h-4 w-4 text-[#1A1A1A]/30" />
                         </div>

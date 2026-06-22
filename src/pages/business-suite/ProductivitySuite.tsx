@@ -40,8 +40,8 @@ const corporateTools = [
     title: "Resume Builder",
     description: "Build professional CVs with 12 international templates and AI-powered summary generation.",
     href: "/cv-builder",
-    colorClass: "text-emerald-700",
-    borderColorClass: "border-emerald-400/40",
+    colorClass: "text-[color:var(--emerald-1)]",
+    borderColorClass: "border-[color:var(--emerald-1)]/30/40",
     gradientFrom: "from-[#B89555]",
     gradientTo: "to-[#8a6f3f]",
   },
@@ -193,7 +193,7 @@ const ProductivitySuite = () => {
             </span>
             <span className="text-[#1A1A1A]/70">|</span>
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full" />
+              <span className="w-2 h-2 jj-emerald-solid rounded-full" />
               Free Access
             </span>
           </div>

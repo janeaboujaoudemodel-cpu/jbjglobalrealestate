@@ -265,7 +265,7 @@ const CompanyCommunicationHub = () => {
   const activeDMUser = activeDM ? getTeamMemberById(activeDM) : null;
 
   const statusColors = {
-    online: 'bg-green-500',
+    online: 'jj-emerald-solid',
     away: 'bg-yellow-500',
     offline: 'bg-[#B89555]',
   };
@@ -363,10 +363,10 @@ const CompanyCommunicationHub = () => {
               <button
                 key={channel.id}
                 className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-sm transition-colors ${
-                  activeChannel === channel.id && !activeDM
-                    ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' 
-                    : 'text-white/70 hover:bg-[#1A1A1A] hover:text-white'
-                }`}
+ activeChannel === channel.id && !activeDM
+ ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' 
+ : 'text-white/70 hover:bg-[#1A1A1A] hover:text-white'
+ }`}
                 onClick={() => handleChannelSwitch(channel.id)}
               >
                 <span className="flex items-center gap-2">
@@ -398,10 +398,10 @@ const CompanyCommunicationHub = () => {
               <button
                 key={member.id}
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm transition-colors ${
-                  activeDM === member.id
-                    ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                    : 'text-white/70 hover:bg-[#1A1A1A] hover:text-white'
-                }`}
+ activeDM === member.id
+ ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
+ : 'text-white/70 hover:bg-[#1A1A1A] hover:text-white'
+ }`}
                 onClick={() => handleDMSwitch(member.id)}
               >
                 <div className="relative flex-shrink-0">
@@ -531,10 +531,10 @@ const CompanyCommunicationHub = () => {
                             <button
                               key={i}
                               className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-sm transition-colors ${
-                                reaction.userIds.includes(currentUser.id)
-                                  ? 'bg-[#EFE6D6]/20 border border-[#B89555]/50'
-                                  : 'bg-[#1A1A1A] hover:bg-[#1A1A1A]'
-                              }`}
+ reaction.userIds.includes(currentUser.id)
+ ? 'bg-[#EFE6D6]/20 border border-[#B89555]/50'
+ : 'bg-[#1A1A1A] hover:bg-[#1A1A1A]'
+ }`}
                               onClick={() => addReaction(message.id, reaction.emoji)}
                             >
                               <span>{reaction.emoji}</span>

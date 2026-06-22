@@ -143,7 +143,7 @@ export default function IncidentReadinessPanel() {
       </div>
 
       {/* ===== CURRENT STABLE BASELINE CARD ===== */}
-      <Card className="border-2 border-emerald-500/40 bg-emerald-500/5">
+      <Card className="border-2 border-[color:var(--emerald-1)]/30/40 jj-emerald-solid/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Star className="w-5 h-5 text-emerald-500" />
@@ -287,7 +287,7 @@ export default function IncidentReadinessPanel() {
               size="sm"
               onClick={() => runGate.mutate()}
               disabled={runGate.isPending}
-              className={lastGateRun?.gate_status === "pass" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-destructive text-destructive-foreground"}
+              className={lastGateRun?.gate_status === "pass" ? "jj-emerald-solid hover:jj-emerald-solid text-white" : "bg-destructive text-destructive-foreground"}
             >
               <Shield className="w-4 h-4 mr-1" />
               {runGate.isPending ? "Running Gate…" : "Run Pre-Publish Gate"}
@@ -297,7 +297,7 @@ export default function IncidentReadinessPanel() {
         <CardContent>
           {/* Latest gate result */}
           {runGate.data && (
-            <div className={`mb-4 p-4 rounded-lg border-2 ${runGate.data.gate_status === "pass" ? "border-emerald-500/50 bg-emerald-500/5" : "border-destructive/50 bg-destructive/5"}`}>
+            <div className={`mb-4 p-4 rounded-lg border-2 ${runGate.data.gate_status === "pass" ? "border-[color:var(--emerald-1)]/30/50 jj-emerald-solid/5" : "border-destructive/50 bg-destructive/5"}`}>
               <div className="flex items-center gap-2 mb-3">
                 {runGate.data.gate_status === "pass"
                   ? <CheckCircle2 className="w-5 h-5 text-emerald-500" />

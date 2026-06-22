@@ -32,7 +32,7 @@ type ImageRole = "card" | "hero" | "gallery";
 const ROLE_CONFIG: Record<ImageRole, { label: string; icon: typeof Star; color: string; field: string }> = {
   card: { label: "Card", icon: CreditCard, color: "bg-blue-500", field: "card_image_url" },
   hero: { label: "Hero / Cover", icon: Star, color: "bg-[#EFE6D6]", field: "cover_image_url" },
-  gallery: { label: "Gallery Start", icon: Layers, color: "bg-emerald-500", field: "gallery_start_image_url" },
+  gallery: { label: "Gallery Start", icon: Layers, color: "jj-emerald-solid", field: "gallery_start_image_url" },
 };
 
 export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerProps) {
@@ -242,7 +242,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
                   {currentUrl ? "Set ✓" : "Not set — click an image below"}
                 </p>
               </div>
-              <div className={cn("w-2 h-2 rounded-full flex-shrink-0", currentUrl ? "bg-emerald-500" : "bg-[#E5D9C4]")} />
+              <div className={cn("w-2 h-2 rounded-full flex-shrink-0", currentUrl ? "jj-emerald-solid" : "bg-[#E5D9C4]")} />
             </div>
           );
         })}

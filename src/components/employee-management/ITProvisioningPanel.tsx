@@ -238,12 +238,12 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-green-500/40">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[color:var(--emerald-1)]/30/40">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-[#1A1A1A]/70">Completed Today</p>
-                <p className="text-2xl font-bold text-green-600">0</p>
+                <p className="text-2xl font-bold text-[color:var(--emerald-1)]">0</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-500/50" />
             </div>
@@ -305,10 +305,10 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                     </div>
                     <div className="flex items-center gap-3">
                       <Badge className={`${
-                        app.status === 'hr_approved' 
-                          ? 'bg-blue-500/20 text-blue-700 border-blue-500/30' 
-                          : 'bg-purple-500/20 text-purple-700 border-purple-500/30'
-                      } border`}>
+ app.status === 'hr_approved' 
+ ? 'bg-blue-500/20 text-blue-700 border-blue-500/30' 
+ : 'bg-purple-500/20 text-purple-700 border-purple-500/30'
+ } border`}>
                         {app.status === 'hr_approved' ? 'Ready' : 'In Progress'}
                       </Badge>
                       <Button 

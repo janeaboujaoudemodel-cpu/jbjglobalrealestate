@@ -297,20 +297,20 @@ const AIPricePredictorPremium = () => {
                 )}
                 {response.comparison && (
                   <div className={`rounded-xl p-4 ${
-                    response.comparison === 'overpriced' 
-                      ? 'bg-red-500/10 border border-red-500/20' 
-                      : response.comparison === 'underpriced'
-                      ? 'bg-emerald-500/10 border border-emerald-500/20'
-                      : 'bg-amber-500/10 border border-amber-500/20'
-                  }`}>
+ response.comparison === 'overpriced' 
+ ? 'bg-red-500/10 border border-red-500/20' 
+ : response.comparison === 'underpriced'
+ ? 'jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20'
+ : 'bg-amber-500/10 border border-amber-500/20'
+ }`}>
                     {response.comparison === 'overpriced' && <AlertTriangle className="h-5 w-5 mb-2 text-red-400" />}
                     {response.comparison === 'underpriced' && <CheckCircle className="h-5 w-5 mb-2 text-emerald-400" />}
                     {response.comparison === 'fairly-priced' && <Target className="h-5 w-5 mb-2 text-[#1A1A1A]" />}
                     <p className="text-xs uppercase tracking-wider mb-1 text-white/70">Valuation</p>
                     <p className={`text-lg font-bold capitalize ${
-                      response.comparison === 'overpriced' ? 'text-red-400' :
-                      response.comparison === 'underpriced' ? 'text-emerald-400' : 'text-[#1A1A1A]'
-                    }`}>{response.comparison}</p>
+ response.comparison === 'overpriced' ? 'text-red-400' :
+ response.comparison === 'underpriced' ? 'text-emerald-400' : 'text-[#1A1A1A]'
+ }`}>{response.comparison}</p>
                   </div>
                 )}
               </div>

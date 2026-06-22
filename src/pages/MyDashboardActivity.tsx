@@ -36,12 +36,12 @@ const EVENT_LABELS: Record<string, string> = {
 const EVENT_COLORS: Record<string, string> = {
   page_view: "text-blue-600",
   click: "text-[#1A1A1A]/70",
-  login: "text-emerald-600",
+  login: "text-[color:var(--emerald-1)]",
   search: "text-purple-600",
   listing_view: "text-[#1A1A1A]",
   property_view: "text-[#1A1A1A]",
   favorite: "text-red-500",
-  lead_submit: "text-emerald-700",
+  lead_submit: "text-[color:var(--emerald-1)]",
   ai_tool_used: "text-purple-700",
 };
 
@@ -126,7 +126,7 @@ const MyDashboardActivity = () => {
               {[
                 { icon: Calendar, label: 'Days Active (30d)', value: stats.daysActive30d, color: 'from-blue-500/15 to-blue-600/5' },
                 { icon: Flame, label: 'Day Streak', value: stats.currentStreak, color: 'from-orange-500/15 to-red-500/5' },
-                { icon: TrendingUp, label: 'Points This Week', value: stats.pointsThisWeek, color: 'from-emerald-500/15 to-emerald-600/5' },
+                { icon: TrendingUp, label: 'Points This Week', value: stats.pointsThisWeek, color: '/15 /5' },
                 { icon: Activity, label: 'Activities (30d)', value: stats.totalActivities30d, color: 'from-gold/20 to-gold/5' },
               ].map((stat, i) => (
                 <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
@@ -187,7 +187,7 @@ const MyDashboardActivity = () => {
                       {[
                         { label: 'Intent', value: stats.intentScore, icon: Target, color: 'from-purple-500 to-purple-600' },
                         { label: 'Engagement', value: stats.engagementScore, icon: Shield, color: 'from-blue-500 to-blue-600' },
-                        { label: 'Confidence', value: stats.confidenceScore, icon: Zap, color: 'from-emerald-500 to-emerald-600' },
+                        { label: 'Confidence', value: stats.confidenceScore, icon: Zap, color: ' ' },
                       ].map(score => (
                         <div key={score.label} className="text-center">
                           <div className="flex items-center justify-center gap-1 mb-1">
@@ -320,7 +320,7 @@ const MyDashboardActivity = () => {
                               </p>
                             </div>
                             {event.points_awarded > 0 && (
-                              <Badge variant="outline" className="text-emerald-700 border-emerald-500/30 bg-emerald-50 text-xs shrink-0">
+                              <Badge variant="outline" className="text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 jj-emerald-soft text-xs shrink-0">
                                 +{event.points_awarded} pts
                               </Badge>
                             )}

@@ -394,7 +394,7 @@ export default function MissingLogosQueue() {
             data-surface="champagne"
             className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-10 text-center"
           >
-            <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-3" />
+            <CheckCircle2 className="w-10 h-10 text-[color:var(--emerald-1)] mx-auto mb-3" />
             <p className="text-[#1A1A1A] font-medium">
               Nothing in this queue. Nice work.
             </p>

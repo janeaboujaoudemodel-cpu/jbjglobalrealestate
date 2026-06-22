@@ -139,8 +139,8 @@ interface Recommendation {
 
 // ─── Status badge helper ─────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
-  published: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
-  live: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
+  published: { label: "Live", className: "jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/40" },
+  live: { label: "Live", className: "jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/40" },
   draft: { label: "Draft", className: "bg-[#B89555]/20 text-white/85 border-[#B89555]/40" },
   applied: { label: "Applied – Pending Test", className: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   tested: { label: "Tested – Pending Publish", className: "bg-blue-500/20 text-blue-300 border-blue-500/40" },
@@ -447,7 +447,7 @@ export default function AIToolsControlPanel() {
           <span className="text-[10px] uppercase tracking-wide text-white/60">Bulk:</span>
           <Button size="sm" variant="outline" disabled={selected.size === 0}
             onClick={() => bulkSetVisibility("public")}
-            className="h-7 text-xs border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/10 gap-1">
+            className="h-7 text-xs border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-on)] hover:jj-emerald-solid/10 gap-1">
             <Globe className="w-3 h-3" /> Public
           </Button>
           <Button size="sm" variant="outline" disabled={selected.size === 0}
@@ -508,7 +508,7 @@ export default function AIToolsControlPanel() {
                             {(["public", "owner_only", "hidden"] as const).map((v) => {
                               const active = vis === v;
                               const meta = v === "public"
-                                ? { Icon: Globe, label: "Public", active: "bg-emerald-500/20 text-emerald-300" }
+                                ? { Icon: Globe, label: "Public", active: "jj-emerald-solid/20 text-[color:var(--emerald-on)]" }
                                 : v === "owner_only"
                                 ? { Icon: Lock, label: "Owner", active: "bg-amber-500/20 text-amber-300" }
                                 : { Icon: EyeOff, label: "Hidden", active: "bg-red-500/20 text-red-300" };
@@ -519,8 +519,8 @@ export default function AIToolsControlPanel() {
                                   type="button"
                                   onClick={() => setVisibility(tool.id, v)}
                                   className={`px-2 py-1 text-[10px] font-semibold uppercase tracking-wide inline-flex items-center gap-1 transition-colors ${
-                                    active ? meta.active : "text-white/60 hover:text-white/90"
-                                  }`}
+ active ? meta.active : "text-white/60 hover:text-white/90"
+ }`}
                                   title={meta.label}
                                   aria-pressed={active}
                                 >
@@ -588,7 +588,7 @@ export default function AIToolsControlPanel() {
                                 </Button>
                               )}
                               {status === "tested" && (
-                                <Button size="sm" onClick={() => publishVersion(tool.id)} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1">
+                                <Button size="sm" onClick={() => publishVersion(tool.id)} className="jj-emerald-solid hover:jj-emerald-solid text-white gap-1">
                                   <Rocket className="w-3 h-3" /> Save & Publish
                                 </Button>
                               )}
@@ -640,7 +640,7 @@ export default function AIToolsControlPanel() {
                                         </div>
                                       )}
                                       {v.after_snapshot && (
-                                        <div className="bg-emerald-900/10 border border-emerald-900/30 rounded p-2">
+                                        <div className="jj-emerald-solid/10 border border-emerald-900/30 rounded p-2">
                                           <span className="text-[10px] text-emerald-400 font-semibold">AFTER</span>
                                           <pre className="text-[10px] text-white/70 mt-1 whitespace-pre-wrap">{JSON.stringify(v.after_snapshot, null, 2).slice(0, 200)}</pre>
                                         </div>
@@ -733,7 +733,7 @@ function FixCard({
             </Button>
           )}
           {(isApplied || isTested) && (
-            <Button size="sm" onClick={onPublish} className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white gap-1">
+            <Button size="sm" onClick={onPublish} className="h-7 text-xs jj-emerald-solid hover:jj-emerald-solid text-white gap-1">
               <Save className="w-3 h-3" /> Save & Publish
             </Button>
           )}
@@ -752,7 +752,7 @@ function FixCard({
             </div>
           )}
           {rec.after_preview && (
-            <div className="bg-emerald-900/10 border border-emerald-900/30 rounded p-2">
+            <div className="jj-emerald-solid/10 border border-emerald-900/30 rounded p-2">
               <span className="text-[10px] text-emerald-400 font-semibold uppercase">After</span>
               <p className="text-[10px] text-white/70 mt-1 whitespace-pre-wrap">{rec.after_preview}</p>
             </div>

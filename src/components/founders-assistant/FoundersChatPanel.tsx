@@ -410,7 +410,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             <>
               <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/50 shadow-md">
                 <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+                <span className="absolute bottom-0 right-0 w-3 h-3 jj-emerald-solid border-2 border-white rounded-full" />
               </div>
               <div>
                 <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
@@ -479,10 +479,10 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                 </div>
               )}
               <div className={`max-w-[80%] ${
-                message.role === 'user' 
-                  ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white' 
-                  : 'bg-[#FDFBF7] text-[#1A1A1A] border border-[hsl(var(--gold))]/30 shadow-sm'
-              } rounded-2xl px-4 py-3`}>
+ message.role === 'user' 
+ ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white' 
+ : 'bg-[#FDFBF7] text-[#1A1A1A] border border-[hsl(var(--gold))]/30 shadow-sm'
+ } rounded-2xl px-4 py-3`}>
                 {message.isTyping ? (
                   <div className="flex gap-1.5 py-1 px-2">
                     <span className="w-2 h-2 bg-[hsl(var(--gold))] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -522,7 +522,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                     {message.taskStatus && (
                       <div className="flex items-center gap-1 mt-2 text-xs">
                         {message.taskStatus === 'completed' && (
-                          <span className="text-green-600 flex items-center gap-1">Task completed</span>
+                          <span className="text-[color:var(--emerald-1)] flex items-center gap-1">Task completed</span>
                         )}
                         {message.taskStatus === 'failed' && (
                           <span className="text-red-600 flex items-center gap-1">Connection issue</span>
@@ -649,8 +649,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             className="w-10 h-10 rounded-full bg-[#FDFBF7]/80 text-[hsl(var(--gold))] hover:bg-[#FDFBF7] border border-[hsl(var(--gold))]/30" />
           <button onClick={handleFileUpload} disabled={isUploadingFiles}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-              isUploadingFiles ? 'bg-[hsl(var(--gold))]/30 text-[hsl(var(--gold))] animate-pulse' : 'bg-[#FDFBF7]/80 text-[hsl(var(--gold))] hover:bg-[#FDFBF7] border border-[hsl(var(--gold))]/30'
-            }`} title="Attach file">
+ isUploadingFiles ? 'bg-[hsl(var(--gold))]/30 text-[hsl(var(--gold))] animate-pulse' : 'bg-[#FDFBF7]/80 text-[hsl(var(--gold))] hover:bg-[#FDFBF7] border border-[hsl(var(--gold))]/30'
+ }`} title="Attach file">
             {isUploadingFiles ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
           </button>
           <div className="relative flex-1">
@@ -721,10 +721,10 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   <div
                     key={session.id}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all ${
-                      activeSessionId === session.id
-                        ? 'bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] border-2 border-[hsl(var(--gold))]/40'
-                        : 'bg-[#FDFBF7]/60 border border-[hsl(var(--gold))]/20 hover:border-[hsl(var(--gold))]/40 hover:bg-[#FDFBF7]'
-                    }`}
+ activeSessionId === session.id
+ ? 'bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] border-2 border-[hsl(var(--gold))]/40'
+ : 'bg-[#FDFBF7]/60 border border-[hsl(var(--gold))]/20 hover:border-[hsl(var(--gold))]/40 hover:bg-[#FDFBF7]'
+ }`}
                     onClick={() => {
                       if (selectMode) {
                         toggleSelectForDelete(session.id);
@@ -736,8 +736,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   >
                     {selectMode && (
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                        selectedForDelete.has(session.id) ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))]' : 'border-[#B89555]/30'
-                      }`}>
+ selectedForDelete.has(session.id) ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))]' : 'border-[#B89555]/30'
+ }`}>
                         {selectedForDelete.has(session.id) && (
                           <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -746,8 +746,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                       </div>
                     )}
                     <MessageSquare className={`w-4 h-4 flex-shrink-0 ${
-                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-[#1A1A1A]/70'
-                    }`} />
+ activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-[#1A1A1A]/70'
+ }`} />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-[#1A1A1A] truncate">{session.title}</p>
                       <p className="text-[10px] text-[#1A1A1A]/70 flex items-center gap-1 mt-0.5">

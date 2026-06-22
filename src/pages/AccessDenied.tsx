@@ -93,9 +93,9 @@ const AccessDenied = () => {
 
         {/* Retry Result Feedback */}
         {retryResult === "success" && (
-          <div className="bg-green-500/10 border border-green-500/40 rounded-xl p-4 mb-6 flex items-center gap-3">
+          <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/40 rounded-xl p-4 mb-6 flex items-center gap-3">
             <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-            <p className="text-green-300 text-sm">Verification successful! Redirecting…</p>
+            <p className="text-[color:var(--emerald-on)] text-sm">Verification successful! Redirecting…</p>
           </div>
         )}
 

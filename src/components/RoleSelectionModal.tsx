@@ -76,7 +76,7 @@ const ROLES: RoleOption[] = [
     subtitle: 'Looking to buy or invest in property',
     icon: TrendingUp,
     color: 'text-emerald-500',
-    bgGradient: 'from-emerald-500/20 to-emerald-600/10',
+    bgGradient: '/20 /10',
     benefits: [
       'Premium Property Search',
       'Favorites & Comparison Tools',
@@ -327,10 +327,10 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                         key={role.id}
                         onClick={() => handleRoleSelect(role.id)}
                         className={`relative p-5 rounded-xl border-2 text-left transition-all duration-300 ${
-                          isSelected 
-                            ? 'border-[#B89555] bg-gradient-to-br from-gold/10 to-amber-500/5 shadow-lg shadow-gold/20' 
-                            : 'border-[#B89555]/30 hover:border-[#B89555]/30 hover:bg-[#F7F2EA]'
-                        }`}
+ isSelected 
+ ? 'border-[#B89555] bg-gradient-to-br from-gold/10 to-amber-500/5 shadow-lg shadow-gold/20' 
+ : 'border-[#B89555]/30 hover:border-[#B89555]/30 hover:bg-[#F7F2EA]'
+ }`}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -423,8 +423,8 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     </li>
                   </ul>
 
-                  <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                    <p className="text-emerald-800 text-sm font-medium">
+                  <div className="mt-4 p-3 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
+                    <p className="text-[color:var(--emerald-1)] text-sm font-medium">
                       ✓ All benefits are completely free for JBJ Broker Circle members.
                     </p>
                   </div>
@@ -511,15 +511,15 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     {selectedRole === 'investor' && (
                       <>
                         <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">1</div>
+                          <div className="w-6 h-6 rounded-full jj-emerald-solid/20 flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">1</div>
                           <span>Browse <strong>Off-Plan Properties</strong> in Properties</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">2</div>
+                          <div className="w-6 h-6 rounded-full jj-emerald-solid/20 flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">2</div>
                           <span>Use <strong>Compare</strong> to shortlist your favorites</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">3</div>
+                          <div className="w-6 h-6 rounded-full jj-emerald-solid/20 flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">3</div>
                           <span>Book a <strong>Free Consultation</strong> with our experts</span>
                         </div>
                       </>
@@ -610,8 +610,8 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl mb-6">
-                  <p className="text-emerald-800 text-sm font-medium">
+                <div className="p-4 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-xl mb-6">
+                  <p className="text-[color:var(--emerald-1)] text-sm font-medium">
                     ✓ Your account is ready. You can access your CRM anytime from the menu.
                   </p>
                 </div>

@@ -166,12 +166,12 @@ const PhotoRedesignForm = ({
                 type="button"
                 onClick={() => onDesignStyleChange(style.id)}
                 className={`
-                  p-4 rounded-xl border text-center transition-all
-                  ${isSelected
-                    ? 'bg-blue-500/20 border-blue-500/50 text-white'
-                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
-                  }
-                `}
+ p-4 rounded-xl border text-center transition-all
+ ${isSelected
+ ? 'bg-blue-500/20 border-blue-500/50 text-white'
+ : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+ }
+ `}
               >
                 <span className="text-2xl mb-2 block">{style.emoji}</span>
                 <span className="text-xs font-medium">{style.label}</span>
@@ -184,7 +184,7 @@ const PhotoRedesignForm = ({
       {/* Color Palette */}
       <div className="bg-[#FDFBF7]/60 border border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500" />
+          <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 via-cyan-500" />
           <h3 className="text-lg font-semibold text-white">Color Palette</h3>
         </div>
         
@@ -197,12 +197,12 @@ const PhotoRedesignForm = ({
                 type="button"
                 onClick={() => onColorPaletteChange(palette.id)}
                 className={`
-                  p-4 rounded-xl border transition-all
-                  ${isSelected
-                    ? 'bg-blue-500/20 border-blue-500/50'
-                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
-                  }
-                `}
+ p-4 rounded-xl border transition-all
+ ${isSelected
+ ? 'bg-blue-500/20 border-blue-500/50'
+ : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
+ }
+ `}
               >
                 <div className="flex gap-1 mb-3 justify-center">
                   {palette.colors.map((color, i) => (

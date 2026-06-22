@@ -61,8 +61,8 @@ const CATEGORIES: Array<{ id: InboxCategory; label: string; tone: Tone; icon: ty
 const STATUS_CHIP: Record<string, { label: string; cls: string }> = {
   awaiting_you:   { label: "Awaiting you",   cls: "bg-amber-100 text-amber-900 border-amber-300" },
   awaiting_them:  { label: "Awaiting them",  cls: "bg-blue-100 text-blue-900 border-blue-300" },
-  signed:         { label: "Signed",         cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
-  registered:     { label: "Registered",     cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+  signed:         { label: "Signed",         cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" },
+  registered:     { label: "Registered",     cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" },
   needs_review:   { label: "Needs review",   cls: "bg-rose-100 text-rose-900 border-rose-300" },
   needs_document: { label: "Needs document", cls: "bg-rose-100 text-rose-900 border-rose-300" },
   info_only:      { label: "Info",           cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },

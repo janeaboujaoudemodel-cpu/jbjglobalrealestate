@@ -672,12 +672,12 @@ Requirements:
                   onClick={() => step.number < currentStep && setCurrentStep(step.number)}
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
-                    currentStep === step.number 
-                      ? 'border-white text-white shadow-lg [&_svg]:!text-white' 
-                      : currentStep > step.number 
-                        ? 'border-white/80 text-white [&_svg]:!text-white'
-                        : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
-                  }`}
+ currentStep === step.number 
+ ? 'border-white text-white shadow-lg [&_svg]:!text-white' 
+ : currentStep > step.number 
+ ? 'border-white/80 text-white [&_svg]:!text-white'
+ : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
+ }`}
                   style={currentStep === step.number
                     ? { background: 'linear-gradient(135deg, #10B981 0%, #0F5132 100%)' }
                     : currentStep > step.number
@@ -1297,8 +1297,8 @@ Requirements:
                           )}
                         </Label>
                         <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-[#F7F2EA] ${
-                          titleDeedFile ? 'border-green-500' : 'border-[#B89555]/30 hover:border-[#B89555]'
-                        }`}>
+ titleDeedFile ? 'border-[color:var(--emerald-1)]/30' : 'border-[#B89555]/30 hover:border-[#B89555]'
+ }`}>
                           <input
                             type="file"
                             accept="application/pdf,image/*"
@@ -1312,7 +1312,7 @@ Requirements:
                           </label>
                         </div>
                         {titleDeedFile && (
-                          <p className="text-green-600 text-sm mt-2 flex items-center gap-2">
+                          <p className="text-[color:var(--emerald-1)] text-sm mt-2 flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4" />
                             {titleDeedFile.name}
                           </p>
@@ -1336,7 +1336,7 @@ Requirements:
                           </label>
                         </div>
                         {passportFile && (
-                          <p className="text-green-600 text-sm mt-2 flex items-center gap-2">
+                          <p className="text-[color:var(--emerald-1)] text-sm mt-2 flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4" />
                             {passportFile.name}
                           </p>
@@ -1355,8 +1355,8 @@ Requirements:
                             )}
                           </Label>
                           <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-[#F7F2EA] ${
-                            poaFile ? 'border-green-500' : 'border-[#B89555]/30 hover:border-[#B89555]'
-                          }`}>
+ poaFile ? 'border-[color:var(--emerald-1)]/30' : 'border-[#B89555]/30 hover:border-[#B89555]'
+ }`}>
                             <input
                               type="file"
                               accept="application/pdf,image/*"
@@ -1370,7 +1370,7 @@ Requirements:
                             </label>
                           </div>
                           {poaFile && (
-                            <p className="text-green-600 text-sm mt-2 flex items-center gap-2">
+                            <p className="text-[color:var(--emerald-1)] text-sm mt-2 flex items-center gap-2">
                               <CheckCircle2 className="w-4 h-4" />
                               {poaFile.name}
                             </p>
@@ -1485,13 +1485,13 @@ Requirements:
                         <div className="text-sm space-y-1">
                           <p className="text-[#1A1A1A]/70">{photoFiles.length} photos uploaded</p>
                           <p className="text-[#1A1A1A]/70">{videoFiles.length} videos uploaded</p>
-                          <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-green-600' : 'text-red-500'}`}>
+                          <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-[color:var(--emerald-1)]' : 'text-red-500'}`}>
                             {titleDeedFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                             Title Deed {titleDeedFile ? '✓' : '(Required)'}
                           </p>
                           <p className="text-[#1A1A1A]/70">{passportFile ? "✓" : "✗"} ID Document</p>
                           {form.getValues("seller_type") === 'poa' && (
-                            <p className={`flex items-center gap-1 ${poaFile ? 'text-green-600' : 'text-red-500'}`}>
+                            <p className={`flex items-center gap-1 ${poaFile ? 'text-[color:var(--emerald-1)]' : 'text-red-500'}`}>
                               {poaFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                               POA Document {poaFile ? '✓' : '(Required)'}
                             </p>

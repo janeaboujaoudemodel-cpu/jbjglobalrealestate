@@ -39,7 +39,7 @@ const ROLES: RoleOption[] = [
     subtitle: 'Looking to buy or invest in property',
     icon: TrendingUp,
     color: 'text-emerald-500',
-    bgGradient: 'from-emerald-500/20 to-emerald-600/10',
+    bgGradient: '/20 /10',
     benefits: [
       'Saved Properties & Portfolio',
       'Market Reports Access',
@@ -194,10 +194,10 @@ const StandardUserDashboard = () => {
                   key={role.id}
                   onClick={() => !isSubmitting && handleRoleSelect(role.id)}
                   className={`bg-[#FDFBF7]/50 border-2 transition-all duration-300 cursor-pointer group ${
-                    isSelected 
-                      ? 'border-[#B89555] bg-[#EFE6D6]/5 shadow-lg shadow-gold/20' 
-                      : 'border-[#1A1A1A] hover:border-[#1A1A1A]'
-                  } ${isSubmitting && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
+ isSelected 
+ ? 'border-[#B89555] bg-[#EFE6D6]/5 shadow-lg shadow-gold/20' 
+ : 'border-[#1A1A1A] hover:border-[#1A1A1A]'
+ } ${isSubmitting && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between">

@@ -797,7 +797,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                       window.location.href = whatsappUrl;
                     }}
-                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-green-600 hover:bg-green-500 text-white group"
+                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 jj-emerald-solid hover:jj-emerald-solid text-white group"
                   >
                     <Send className="w-5 h-5" />
                     Share via WhatsApp
@@ -852,16 +852,16 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                             <div className="flex items-center justify-between gap-2">
                               {badge && (
                                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
-                                  badge === 'top1' ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' :
-                                  badge === 'top2' ? 'bg-[#EFE6D6]/15 text-[#1A1A1A]' :
-                                  'bg-[#EFE6D6]/10 text-[#1A1A1A]/70'
-                                }`}>
+ badge === 'top1' ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' :
+ badge === 'top2' ? 'bg-[#EFE6D6]/15 text-[#1A1A1A]' :
+ 'bg-[#EFE6D6]/10 text-[#1A1A1A]/70'
+ }`}>
                                   {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                                 </span>
                               )}
                               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
-                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-[#F7F2EA] text-white/90'
-                              }`}>
+ isFav ? 'bg-red-500/15 text-red-400' : 'bg-[#F7F2EA] text-white/90'
+ }`}>
                                 <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
                                 {isFav ? 'In Favorites' : 'Not Saved'}
                               </span>
@@ -1149,7 +1149,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 <Sparkles className="w-5 h-5 mr-2" />
                 Generate AI Analysis
                 {!hasActiveMembership && !hasUsedFreeCompare && (
-                  <Badge className="ml-2 bg-green-500 text-white text-xs">FREE</Badge>
+                  <Badge className="ml-2 jj-emerald-solid text-white text-xs">FREE</Badge>
                 )}
               </Button>
               {projects.length < 2 && (

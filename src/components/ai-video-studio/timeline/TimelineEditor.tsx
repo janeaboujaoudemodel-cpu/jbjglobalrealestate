@@ -196,7 +196,7 @@ export function TimelineEditor({
   const getTrackColor = (type: Track['type']) => {
     switch (type) {
       case 'video': return 'bg-blue-500/80';
-      case 'audio': return 'bg-green-500/80';
+      case 'audio': return 'jj-emerald-solid/80';
       case 'voiceover': return 'bg-purple-500/80';
       case 'text': return 'bg-amber-500/80';
       case 'effects': return 'bg-pink-500/80';
@@ -490,16 +490,16 @@ export function TimelineEditor({
                         <ContextMenuTrigger asChild>
                           <div
                             className={`absolute top-1 bottom-1 rounded cursor-pointer border-2 transition-colors ${
-                              isTransition
-                                ? 'bg-purple-600/80 border-purple-400 flex items-center justify-center'
-                                : getTrackColor(track.type)
-                            } ${
-                              selectedClipIds.includes(clip.id)
-                                ? 'border-[#B89555] ring-2 ring-gold/30'
-                                : isTransition
-                                ? 'border-purple-400 hover:border-purple-200'
-                                : 'border-transparent hover:border-white/30'
-                            }`}
+ isTransition
+ ? 'bg-purple-600/80 border-purple-400 flex items-center justify-center'
+ : getTrackColor(track.type)
+ } ${
+ selectedClipIds.includes(clip.id)
+ ? 'border-[#B89555] ring-2 ring-gold/30'
+ : isTransition
+ ? 'border-purple-400 hover:border-purple-200'
+ : 'border-transparent hover:border-white/30'
+ }`}
                             style={{
                               left: clip.startTime * pixelsPerSecond,
                               width: Math.max(clip.duration * pixelsPerSecond, 24),
@@ -620,8 +620,8 @@ export function TimelineEditor({
                         <div
                           key={gapKey}
                           className={`absolute top-0 h-full z-20 rounded transition-all ${
-                            isHovered ? 'bg-purple-500/30 border border-purple-400' : 'bg-transparent border border-dashed border-transparent hover:border-purple-500/50'
-                          }`}
+ isHovered ? 'bg-purple-500/30 border border-purple-400' : 'bg-transparent border border-dashed border-transparent hover:border-purple-500/50'
+ }`}
                           style={{
                             left: gapStart * pixelsPerSecond,
                             width: Math.max(gapWidth * pixelsPerSecond, 8),

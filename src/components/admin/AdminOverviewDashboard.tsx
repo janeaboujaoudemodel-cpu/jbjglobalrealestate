@@ -250,7 +250,7 @@ export const AdminOverviewDashboard = () => {
 
   const getHealthBg = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-      case "healthy": return "bg-emerald-500/10";
+      case "healthy": return "jj-emerald-solid/10";
       case "degraded": return "bg-amber-500/10";
       case "down": return "bg-red-500/10";
     }
@@ -268,7 +268,7 @@ export const AdminOverviewDashboard = () => {
 
   const getSeverityColor = (severity?: RecentActivity["severity"]) => {
     switch (severity) {
-      case "success": return "text-emerald-500 bg-emerald-500/10";
+      case "success": return "text-emerald-500 jj-emerald-solid/10";
       case "warning": return "text-amber-500 bg-amber-500/10";
       case "error": return "text-red-500 bg-red-500/10";
       default: return "text-blue-500 bg-blue-500/10";
@@ -332,9 +332,9 @@ export const AdminOverviewDashboard = () => {
                     <p className="text-[#1A1A1A] font-medium text-sm">{service.name}</p>
                     <div className="flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${
-                        service.status === "healthy" ? "bg-emerald-500" :
-                        service.status === "degraded" ? "bg-amber-500" : "bg-red-500"
-                      } animate-pulse`} />
+ service.status === "healthy" ? "jj-emerald-solid" :
+ service.status === "degraded" ? "bg-amber-500" : "bg-red-500"
+ } animate-pulse`} />
                       <span className={`text-xs capitalize ${getHealthColor(service.status)}`}>
                         {service.status}
                       </span>
@@ -367,9 +367,9 @@ export const AdminOverviewDashboard = () => {
                   </div>
                   {stat.trend && stat.change && (
                     <div className={`flex items-center gap-1 text-xs font-medium ${
-                      stat.trend === "up" ? "text-emerald-600" : 
-                      stat.trend === "down" ? "text-red-600" : "text-[#1A1A1A]/70"
-                    }`}>
+ stat.trend === "up" ? "text-[color:var(--emerald-1)]" : 
+ stat.trend === "down" ? "text-red-600" : "text-[#1A1A1A]/70"
+ }`}>
                       {stat.trend === "up" && <ArrowUpRight className="w-3 h-3" />}
                       {stat.trend === "down" && <ArrowDownRight className="w-3 h-3" />}
                       {stat.change}%

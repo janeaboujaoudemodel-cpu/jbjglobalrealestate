@@ -43,7 +43,7 @@ function getEnrichmentStatus(project: UnifiedProject) {
 
 function getProjectStatus(project: UnifiedProject) {
   const enrichment = getEnrichmentStatus(project);
-  if (project.is_published && enrichment.status === "enriched") return { label: "Published & Enriched", color: "bg-emerald-100 text-emerald-800 border-emerald-300" };
+  if (project.is_published && enrichment.status === "enriched") return { label: "Published & Enriched", color: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" };
   if (project.is_published && enrichment.status === "needs-data") return { label: "Needs Work", color: "bg-red-100 text-red-800 border-red-300" };
   if (project.is_published) return { label: "Published", color: "bg-blue-100 text-blue-800 border-blue-300" };
   if ((project as any).status === "pending") return { label: "Pending", color: "bg-amber-100 text-amber-800 border-amber-300" };
@@ -194,7 +194,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
               </div>
               <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all ${enrichment.status === "enriched" ? "bg-emerald-500" : enrichment.status === "partial" ? "bg-amber-500" : "bg-red-400"}`}
+                  className={`h-full rounded-full transition-all ${enrichment.status === "enriched" ? "jj-emerald-solid" : enrichment.status === "partial" ? "bg-amber-500" : "bg-red-400"}`}
                   style={{ width: `${(enrichment.filled / enrichment.total) * 100}%` }}
                 />
               </div>

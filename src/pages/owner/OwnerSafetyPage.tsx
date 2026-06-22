@@ -106,8 +106,8 @@ const OwnerSafetyPage = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                    masterKillSwitch ? 'bg-red-100 border-red-300' : 'bg-[#B89555]/10 border-[#B89555]/20'
-                  } border`}>
+ masterKillSwitch ? 'bg-red-100 border-red-300' : 'bg-[#B89555]/10 border-[#B89555]/20'
+ } border`}>
                     <Power className={`w-7 h-7 ${masterKillSwitch ? 'text-red-600' : 'text-[#B89555]'}`} />
                   </div>
                   <div>
@@ -137,7 +137,7 @@ const OwnerSafetyPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <Card className="bg-[#FDFBF7]/70 border-[#B89555]/20">
               <CardHeader>
-                <CardTitle className="text-green-700 flex items-center gap-2">
+                <CardTitle className="text-[color:var(--emerald-1)] flex items-center gap-2">
                   <Check className="w-5 h-5" />
                   What AI CAN Do
                 </CardTitle>
@@ -145,7 +145,7 @@ const OwnerSafetyPage = () => {
               <CardContent className="space-y-3">
                 {['Read and categorize incoming messages', 'Draft text and voice reply suggestions', 'Score and prioritize leads', 'Create task and follow-up suggestions', 'Log interactions to CRM (with approval)'].map(text => (
                   <div key={text} className="flex items-start gap-3 text-sm">
-                    <Check className="w-4 h-4 text-green-600 mt-0.5" />
+                    <Check className="w-4 h-4 text-[color:var(--emerald-1)] mt-0.5" />
                     <span className="text-[#1A1A1A]/70">{text}</span>
                   </div>
                 ))}
@@ -243,7 +243,7 @@ const OwnerSafetyPage = () => {
                 <div className="text-[#1A1A1A]/70">Require Approval</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/10">
-                <div className={`text-2xl font-bold ${masterKillSwitch ? 'text-red-600' : 'text-green-600'}`}>
+                <div className={`text-2xl font-bold ${masterKillSwitch ? 'text-red-600' : 'text-[color:var(--emerald-1)]'}`}>
                   {masterKillSwitch ? 'ACTIVE' : 'OFF'}
                 </div>
                 <div className="text-[#1A1A1A]/70">Kill Switch</div>

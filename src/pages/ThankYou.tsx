@@ -150,7 +150,7 @@ const ThankYou = () => {
                 variants={fadeInUp}
                 className="mb-8"
               >
-                <div className="w-20 h-20 bg-green-500/10 border-2 border-green-500/30 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 jj-emerald-solid/10 border-2 border-[color:var(--emerald-1)]/30/30 rounded-full flex items-center justify-center mx-auto">
                   <CheckCircle className="w-10 h-10 text-green-500" />
                 </div>
               </motion.div>
@@ -220,7 +220,7 @@ const ThankYou = () => {
                   href={getWhatsAppUrl("Hello, I just submitted a request and have a question.")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors"
+                  className="inline-flex items-center gap-2 text-green-400 hover:text-[color:var(--emerald-on)] transition-colors"
                 >
                   <MessageCircle className="w-5 h-5" />
                   <span>Need immediate assistance? WhatsApp us</span>

@@ -278,10 +278,10 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               ]).map(m => (
                 <button key={m.key} onClick={() => props.onSetLanguageMode!(m.key)}
                   className={`flex-1 py-1.5 rounded-lg border-2 text-[9px] font-semibold transition-all ${
-                    props.languageMode === m.key
-                      ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
-                      : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'
-                  }`}>
+ props.languageMode === m.key
+ ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
+ : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'
+ }`}>
                   {m.label}
                 </button>
               ))}
@@ -591,7 +591,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
                 <span className="text-[10px]">🇦🇪</span>
-                <Type size={12} className="text-emerald-600" />
+                <Type size={12} className="text-[color:var(--emerald-1)]" />
                 Arabic Typography
               </span>
             </AccordionTrigger>
@@ -604,7 +604,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     const fontName = f.label.split(' (')[0];
                     return (
                       <button key={f.value} onClick={() => props.onSetArabicFont(f.value)}
-                        className={`w-full text-left p-2 rounded-lg border-2 transition-all ${props.arabicFont === f.value ? 'border-emerald-500 bg-emerald-50' : 'border-[hsl(var(--border))] hover:border-emerald-200'}`}>
+                        className={`w-full text-left p-2 rounded-lg border-2 transition-all ${props.arabicFont === f.value ? 'border-[color:var(--emerald-1)]/30 jj-emerald-soft' : 'border-[hsl(var(--border))] hover:border-[color:var(--emerald-1)]/30'}`}>
                         <p className="text-[12px] font-medium text-[hsl(var(--foreground))] leading-tight" style={{ fontFamily: f.value }} dir="rtl">شركة — {fontName}</p>
                         {fontDesc && <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5">{fontDesc}</p>}
                       </button>
@@ -616,7 +616,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Font Size</p>
                   <button onClick={() => props.onSetArabicFontSize?.(null)}
-                    className={`text-[8px] px-1 py-0.5 rounded border transition-all ${props.arabicFontSize === null || props.arabicFontSize === undefined ? 'border-emerald-500 text-emerald-700' : 'border-[hsl(var(--border))]'}`}>Auto</button>
+                    className={`text-[8px] px-1 py-0.5 rounded border transition-all ${props.arabicFontSize === null || props.arabicFontSize === undefined ? 'border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]' : 'border-[hsl(var(--border))]'}`}>Auto</button>
                 </div>
                 <Slider min={6} max={24} step={0.5} value={[props.arabicFontSize ?? 10]}
                   onValueChange={([v]) => props.onSetArabicFontSize?.(v)} />
@@ -625,12 +625,12 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               <div className="flex gap-1.5">
                 {(['normal', 'bold'] as const).map(w => (
                   <button key={w} onClick={() => props.onSetArabicFontWeight(w)}
-                    className={`flex-1 py-1.5 rounded-lg border-2 text-[10px] capitalize transition-all ${props.arabicFontWeight === w ? 'border-emerald-500 bg-emerald-50 font-bold' : 'border-[hsl(var(--border))]'}`}>
+                    className={`flex-1 py-1.5 rounded-lg border-2 text-[10px] capitalize transition-all ${props.arabicFontWeight === w ? 'border-[color:var(--emerald-1)]/30 jj-emerald-soft font-bold' : 'border-[hsl(var(--border))]'}`}>
                     {w}
                   </button>
                 ))}
                 <button onClick={() => props.onSetArabicFontItalic?.(!props.arabicFontItalic)}
-                  className={`flex-1 py-1.5 rounded-lg border-2 text-[10px] italic transition-all ${props.arabicFontItalic ? 'border-emerald-500 bg-emerald-50' : 'border-[hsl(var(--border))]'}`}>I</button>
+                  className={`flex-1 py-1.5 rounded-lg border-2 text-[10px] italic transition-all ${props.arabicFontItalic ? 'border-[color:var(--emerald-1)]/30 jj-emerald-soft' : 'border-[hsl(var(--border))]'}`}>I</button>
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
@@ -742,7 +742,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                         if (props.onSetArabicFontSize && props.manualFontSize !== undefined) props.onSetArabicFontSize(props.manualFontSize);
                         toast.success('Arabic matched to English');
                       }}
-                      className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg border border-emerald-300 text-emerald-700 text-[9px] font-semibold hover:bg-emerald-50 transition-all"
+                      className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] text-[9px] font-semibold hover:jj-emerald-soft transition-all"
                     >
                       AR ← Match EN
                     </button>

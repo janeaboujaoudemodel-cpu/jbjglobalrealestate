@@ -185,7 +185,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
         {isSuccess ? (
           /* Success State */
           <div className="text-center py-8">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">Meeting Request Submitted</h3>

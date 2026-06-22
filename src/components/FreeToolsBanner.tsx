@@ -132,10 +132,10 @@ export default function FreeToolsBanner() {
                 onClick={handleDismiss}
                 disabled={!canClose}
                 className={`absolute top-4 right-4 z-10 p-1 rounded-full transition-all duration-300 ${
-                  canClose 
-                    ? "text-[#1A1A1A]/70 hover:text-white hover:bg-[#FDFBF7]/10 cursor-pointer" 
-                    : "text-[#1A1A1A]/70 cursor-not-allowed opacity-50"
-                }`}
+ canClose 
+ ? "text-[#1A1A1A]/70 hover:text-white hover:bg-[#FDFBF7]/10 cursor-pointer" 
+ : "text-[#1A1A1A]/70 cursor-not-allowed opacity-50"
+ }`}
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -170,7 +170,7 @@ export default function FreeToolsBanner() {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/50 rounded-full mb-4"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/50 rounded-full mb-4"
                 >
                   <span className="text-emerald-400 text-xs font-bold tracking-wide uppercase">Limited Time Offer</span>
                 </motion.div>

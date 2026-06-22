@@ -286,8 +286,8 @@ export default function CompanyProfileBuilder() {
     { id: "contact",  label: "Contact"  },
   ] as const;
 
-  const scoreColor = score >= 80 ? "text-green-600" : score >= 50 ? "text-amber-600" : "text-red-500";
-  const progressColor = score >= 80 ? "bg-green-500" : score >= 50 ? "bg-amber-500" : "bg-red-400";
+  const scoreColor = score >= 80 ? "text-[color:var(--emerald-1)]" : score >= 50 ? "text-amber-600" : "text-red-500";
+  const progressColor = score >= 80 ? "jj-emerald-solid" : score >= 50 ? "bg-amber-500" : "bg-red-400";
   const cfg = TEMPLATES.find(t => t.id === template)!;
 
   return (

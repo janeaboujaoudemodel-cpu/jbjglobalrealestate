@@ -247,8 +247,8 @@ export function MessageFiltersPanel() {
           <Card
             key={filter.id}
             className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 ${
-              !filter.is_active ? "opacity-60" : ""
-            }`}
+ !filter.is_active ? "opacity-60" : ""
+ }`}
           >
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
@@ -287,7 +287,7 @@ export function MessageFiltersPanel() {
                     onCheckedChange={(checked) =>
                       handleToggleActive(filter.id, checked)
                     }
-                    className="data-[state=checked]:bg-emerald-500"
+                    className="data-[state=checked]:jj-emerald-solid"
                   />
                   <Button
                     variant="ghost"

@@ -514,7 +514,7 @@ export default function AdminOnboarding() {
       case "pending":
         return <Badge variant="outline" className="border-yellow-500 text-yellow-500"><Clock className="w-3 h-3 mr-1" /> Pending</Badge>;
       case "approved":
-        return <Badge variant="outline" className="border-green-500 text-green-500"><CheckCircle className="w-3 h-3 mr-1" /> Approved</Badge>;
+        return <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 text-green-500"><CheckCircle className="w-3 h-3 mr-1" /> Approved</Badge>;
       case "rejected":
         return <Badge variant="outline" className="border-red-500 text-red-500"><XCircle className="w-3 h-3 mr-1" /> Rejected</Badge>;
       default:
@@ -796,7 +796,7 @@ export default function AdminOnboarding() {
                             </span>
                           </div>
                           <p className="text-foreground">{question.question}</p>
-                          <p className="text-sm text-green-600 mt-1">Answer: {question.correct_answer}</p>
+                          <p className="text-sm text-[color:var(--emerald-1)] mt-1">Answer: {question.correct_answer}</p>
                         </div>
                         <div className="flex gap-2">
                           <Button variant="ghost" size="sm" onClick={() => openQuestionEdit(question)}>
@@ -956,7 +956,7 @@ export default function AdminOnboarding() {
                     <Button
                       onClick={() => handleApprove(selectedApplication)}
                       disabled={processing}
-                      className="bg-green-600 hover:bg-green-700 text-white"
+                      className="jj-emerald-solid hover:jj-emerald-solid text-white"
                     >
                       {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle className="h-4 w-4 mr-2" />}
                       Approve

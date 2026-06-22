@@ -131,7 +131,7 @@ export default function Pricing() {
                     Yearly
                   </span>
                   {billingPeriod === "yearly" && (
-                    <Badge variant="default" className="bg-green-500 text-white">
+                    <Badge variant="default" className="jj-emerald-solid text-white">
                       2 Months Free
                     </Badge>
                   )}
@@ -168,10 +168,10 @@ export default function Pricing() {
                   >
                     <Card
                       className={`relative h-full overflow-hidden transition-all duration-300 hover:shadow-xl ${
-                        tier.is_popular
-                          ? "border-primary shadow-lg scale-105 z-10"
-                          : "border-border hover:border-primary/50"
-                      }`}
+ tier.is_popular
+ ? "border-primary shadow-lg scale-105 z-10"
+ : "border-border hover:border-primary/50"
+ }`}
                     >
                       {tier.is_popular && (
                         <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground text-center py-1 text-sm font-medium">
@@ -204,7 +204,7 @@ export default function Pricing() {
                           {billingPeriod === "yearly" && (
                             <p className="text-sm text-muted-foreground mt-1">
                               Billed {formatSubscriptionPrice(getPrice(tier), currency, "yearly")}
-                            <Badge variant="outline" className="ml-2 text-emerald-600 border-emerald-600">
+                            <Badge variant="outline" className="ml-2 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">
                                 Save {savings.percentage}%
                               </Badge>
                             </p>

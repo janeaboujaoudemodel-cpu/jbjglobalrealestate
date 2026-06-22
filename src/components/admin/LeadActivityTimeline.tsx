@@ -68,7 +68,7 @@ const EVENT_CONFIG: Record<
   inquiry: {
     icon: FileText,
     color: "text-emerald-400",
-    bg: "bg-emerald-500/10 border-emerald-500/30",
+    bg: "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30",
     label: "Submitted inquiry",
   },
   property_view: {
@@ -80,7 +80,7 @@ const EVENT_CONFIG: Record<
   community_view: {
     icon: MapPin,
     color: "text-teal-400",
-    bg: "bg-teal-500/10 border-teal-500/30",
+    bg: "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30",
     label: "Viewed community",
   },
   click: {
@@ -92,7 +92,7 @@ const EVENT_CONFIG: Record<
   form_submission: {
     icon: FileText,
     color: "text-emerald-400",
-    bg: "bg-emerald-500/10 border-emerald-500/30",
+    bg: "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30",
     label: "Form submitted",
   },
   role_selection: {
@@ -222,7 +222,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
           { label: "Page Views", value: summary.pageViews, sub: `${uniquePages} unique`, color: "border-blue-500/40 text-blue-400" },
           { label: "Downloads", value: summary.downloads, sub: "Book", color: "border-amber-500/40 text-[#1A1A1A]" },
           { label: "AI Tools", value: summary.aiTools, sub: "Used", color: "border-purple-500/40 text-purple-400" },
-          { label: "Inquiries", value: summary.inquiries, sub: "Submitted", color: "border-emerald-500/40 text-emerald-400" },
+          { label: "Inquiries", value: summary.inquiries, sub: "Submitted", color: "border-[color:var(--emerald-1)]/30/40 text-emerald-400" },
         ].map((stat) => (
           <div
             key={stat.label}
@@ -285,8 +285,8 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
                     {/* Content */}
                     <div
                       className={`flex-1 bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-lg px-3 py-2 ${
-                        isLast ? "" : "mb-0"
-                      }`}
+ isLast ? "" : "mb-0"
+ }`}
                     >
                       <div className="flex items-start justify-between gap-2 flex-wrap">
                         <div className="flex items-center gap-2 flex-wrap">

@@ -33,7 +33,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   'Market Update': { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
   'Analysis': { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200' },
   'Policy': { bg: 'bg-sky-50', text: 'text-sky-800', border: 'border-sky-200' },
-  'Economic': { bg: 'bg-emerald-50', text: 'text-emerald-800', border: 'border-emerald-200' },
+  'Economic': { bg: 'jj-emerald-soft', text: 'text-[color:var(--emerald-1)]', border: 'border-[color:var(--emerald-1)]/30' },
   'Monthly Report': { bg: 'bg-purple-50', text: 'text-purple-800', border: 'border-purple-200' },
   'Market Outlook': { bg: 'bg-indigo-50', text: 'text-indigo-800', border: 'border-indigo-200' },
   'Developer News': { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200' },
@@ -172,7 +172,7 @@ const News = () => {
               <span className="text-sm text-[#1A1A1A]/70">Off-plan</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${offPlan}` : `~${offPlan.toLocaleString()}`}</span>
-                <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{offPlanPct}%</span>
+                <span className="text-xs text-[color:var(--emerald-1)] font-medium jj-emerald-soft px-1.5 py-0.5 rounded">{offPlanPct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
@@ -203,11 +203,11 @@ const News = () => {
               <span className="text-sm text-[#1A1A1A]/70">Cash</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${cash}` : `~${cash.toLocaleString()}`}</span>
-                <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{cashPct}%</span>
+                <span className="text-xs text-[color:var(--emerald-1)] font-medium jj-emerald-soft px-1.5 py-0.5 rounded">{cashPct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
-              <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${cashPct}%` }} />
+              <div className="jj-emerald-solid rounded-full h-2" style={{ width: `${cashPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-[#1A1A1A]/70">Mortgage</span>
@@ -258,7 +258,7 @@ const News = () => {
               <td className="py-3 px-2 text-[#1A1A1A] font-medium">{area.area}</td>
               <td className="py-3 px-2 text-right text-[#1A1A1A] font-bold">{area.transactions.toLocaleString()}</td>
               <td className="py-3 px-2 text-right">
-                <span className="text-emerald-600 font-medium text-xs bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="text-[color:var(--emerald-1)] font-medium text-xs jj-emerald-soft px-2 py-0.5 rounded-full">
                   {area.change}
                 </span>
               </td>
@@ -325,10 +325,10 @@ const News = () => {
                     onClick={() => setSelectedCategory(category === "All" ? null : category)}
                     data-no-contrast-guard
                     className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium allow-white ${
-                      isActive
-                        ? "jj-neon-chip"
-                        : "bg-white/[0.04] text-white/75 border border-white/15 hover:border-[rgba(34,211,238,0.5)] hover:text-[#67E8F9]"
-                    }`}
+ isActive
+ ? "jj-neon-chip"
+ : "bg-white/[0.04] text-white/75 border border-white/15 hover:border-[rgba(34,211,238,0.5)] hover:text-[#67E8F9]"
+ }`}
                     style={isActive ? { letterSpacing: "0.04em", textTransform: "none", fontSize: "0.875rem" } : undefined}
                   >
                     {category}
@@ -530,7 +530,7 @@ const News = () => {
                       <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
                     </div>
                   </div>
-                  <Badge className="bg-emerald-500 text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
+                  <Badge className="jj-emerald-solid text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
                     LIVE · 2026 YTD
                   </Badge>
                 </div>

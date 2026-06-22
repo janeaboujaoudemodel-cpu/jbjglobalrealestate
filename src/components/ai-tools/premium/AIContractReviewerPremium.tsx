@@ -66,7 +66,7 @@ const AIContractReviewerPremium = () => {
     switch (level) {
       case "high": return { bg: "bg-red-500/10", border: "border-red-500/30", text: "text-red-400", icon: AlertOctagon };
       case "medium": return { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-[#1A1A1A]", icon: AlertTriangle };
-      default: return { bg: "bg-emerald-500/10", border: "border-emerald-500/30", text: "text-emerald-400", icon: CheckCircle };
+      default: return { bg: "jj-emerald-solid/10", border: "border-[color:var(--emerald-1)]/30/30", text: "text-emerald-400", icon: CheckCircle };
     }
   };
 

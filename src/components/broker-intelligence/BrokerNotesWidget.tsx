@@ -92,7 +92,7 @@ export function BrokerNotesWidget() {
   const getCategoryBadge = (category: QuickNote["category"]) => {
     switch (category) {
       case "lead":
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs"><User className="w-3 h-3 mr-1" />Lead</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs"><User className="w-3 h-3 mr-1" />Lead</Badge>;
       case "property":
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs"><Building2 className="w-3 h-3 mr-1" />Property</Badge>;
       case "meeting":

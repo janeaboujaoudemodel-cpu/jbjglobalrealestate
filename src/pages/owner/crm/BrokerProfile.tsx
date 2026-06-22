@@ -51,11 +51,11 @@ type ActivityRow = {
 };
 
 const ACTION_LABELS: Record<string, { label: string; tone: string }> = {
-  lead_create:    { label: "Created lead",   tone: "bg-emerald-100 text-emerald-800" },
+  lead_create:    { label: "Created lead",   tone: "jj-emerald-soft text-[color:var(--emerald-1)]" },
   lead_edit:      { label: "Edited lead",    tone: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40" },
   status_change:  { label: "Status change",  tone: "bg-amber-100 text-amber-800" },
   call:           { label: "Call",           tone: "bg-cyan-100 text-cyan-800" },
-  whatsapp:       { label: "WhatsApp",       tone: "bg-emerald-100 text-emerald-800" },
+  whatsapp:       { label: "WhatsApp",       tone: "jj-emerald-soft text-[color:var(--emerald-1)]" },
   email:          { label: "Email",          tone: "bg-violet-100 text-violet-800" },
   file_open:      { label: "Opened file",    tone: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40" },
   export:         { label: "Export",         tone: "bg-rose-100 text-rose-800" },

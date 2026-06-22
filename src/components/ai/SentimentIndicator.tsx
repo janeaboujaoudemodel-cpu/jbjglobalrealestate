@@ -117,14 +117,14 @@ export function SentimentBadge({ emotion, confidence, compact = false }: Sentime
     angry: 'bg-red-100 text-red-800 border-red-200',
     frustrated: 'bg-orange-100 text-orange-800 border-orange-200',
     urgent: 'bg-amber-100 text-amber-800 border-amber-200',
-    positive: 'bg-green-100 text-green-800 border-green-200',
-    excited: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    positive: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
+    excited: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
     sad: 'bg-blue-100 text-blue-800 border-blue-200',
     disappointed: 'bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/30',
     confused: 'bg-purple-100 text-purple-800 border-purple-200',
     neutral: 'bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/30',
-    happy: 'bg-green-100 text-green-800 border-green-200',
-    satisfied: 'bg-teal-100 text-teal-800 border-teal-200',
+    happy: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
+    satisfied: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
   };
   
   const emotionLabels: Record<EmotionType, string> = {
@@ -170,7 +170,7 @@ export function UrgencyIndicator({ urgency, deadline, showCountdown = false }: U
   const urgencyStyles: Record<UrgencyLevel, string> = {
     critical: 'bg-red-500 text-white animate-pulse',
     high: 'bg-orange-500 text-white',
-    normal: 'bg-green-500 text-white',
+    normal: 'jj-emerald-solid text-white',
     low: 'bg-[#B89555] text-white',
   };
   

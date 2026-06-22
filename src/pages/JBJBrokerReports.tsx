@@ -374,12 +374,12 @@ export default function JBJBrokerReports() {
             <div className="jj-card-inner">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-emerald-500/20">
-                    <MessageSquare className="h-5 w-5 text-emerald-600" />
+                  <div className="p-2 rounded-lg jj-emerald-solid/20">
+                    <MessageSquare className="h-5 w-5 text-[color:var(--emerald-1)]" />
                   </div>
                   <span className="font-medium text-[#1A1A1A]">WhatsApp Messages</span>
                 </div>
-                <Badge className="bg-emerald-500/20 text-emerald-700 border-emerald-500/30">Active</Badge>
+                <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">Active</Badge>
               </div>
               <p className="text-4xl font-bold text-[#1A1A1A]">{metrics.messagesSent}</p>
               <p className="text-sm text-[#1A1A1A]/60 mt-1">

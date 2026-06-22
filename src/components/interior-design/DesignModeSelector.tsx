@@ -33,7 +33,7 @@ const modes = [
     title: 'Staging',
     icon: Sofa,
     color: 'emerald',
-    activeClasses: 'data-[state=active]:bg-emerald-500/20 data-[state=active]:text-emerald-300 data-[state=active]:border-emerald-500/50',
+    activeClasses: 'data-[state=active]:jj-emerald-solid/20 data-[state=active]:text-[color:var(--emerald-on)] data-[state=active]:border-[color:var(--emerald-1)]/30/50',
   },
   {
     id: 'chat' as DesignMode,
@@ -56,12 +56,12 @@ const DesignModeSelector = ({ selectedMode, onSelectMode }: DesignModeSelectorPr
                 key={mode.id}
                 value={mode.id}
                 className={`
-                  flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg
-                  text-white/70 border border-transparent
-                  hover:text-white hover:bg-[#1A1A1A]/50
-                  transition-all duration-200
-                  ${mode.activeClasses}
-                `}
+ flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg
+ text-white/70 border border-transparent
+ hover:text-white hover:bg-[#1A1A1A]/50
+ transition-all duration-200
+ ${mode.activeClasses}
+ `}
               >
                 <Icon className="w-4 h-4" />
                 <span className="font-medium text-sm">{mode.title}</span>

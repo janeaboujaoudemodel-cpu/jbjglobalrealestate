@@ -759,8 +759,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <X className="w-5 h-5" />
           </button>
           <AlertDialogHeader>
-            <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center">
-              <UserCheck className="h-7 w-7 text-emerald-600" />
+            <div className="mx-auto mb-4 w-16 h-16 rounded-full jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30 flex items-center justify-center">
+              <UserCheck className="h-7 w-7 text-[color:var(--emerald-1)]" />
             </div>
             <AlertDialogTitle className="text-center text-xl text-foreground">
               {isReactivationPreview ? "We Found Your Account (Preview)" : "We Found Your Account"}
@@ -770,15 +770,15 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 <p>
                   We identified an existing account associated with <strong className="text-foreground">{reactivationEmail}</strong> that was previously deactivated or scheduled for deletion.
                 </p>
-                <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-emerald-200 text-left space-y-2">
+                <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[color:var(--emerald-1)]/30 text-left space-y-2">
                   <p className="font-semibold text-foreground text-sm">Your options:</p>
                    <ul className="space-y-1.5 text-xs">
                     <li className="flex items-start gap-2">
-                      <Shield className="h-3.5 w-3.5 mt-0.5 text-emerald-600 shrink-0" />
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-[color:var(--emerald-1)] shrink-0" />
                       <span><strong>Reactivate</strong> — Restore your account, profile, and data instantly</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Shield className="h-3.5 w-3.5 mt-0.5 text-emerald-600 shrink-0" />
+                      <Shield className="h-3.5 w-3.5 mt-0.5 text-[color:var(--emerald-1)] shrink-0" />
                       <span><strong>Create New</strong> — Start fresh with a new account using a different email</span>
                     </li>
                   </ul>
@@ -790,7 +790,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <AlertDialogAction
               onClick={handleReactivateAccount}
               disabled={reactivating}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-[#1A1A1A] font-semibold whitespace-nowrap px-6 h-12 rounded-xl"
+              className="w-full jj-emerald-solid hover:jj-emerald-solid text-[#1A1A1A] font-semibold whitespace-nowrap px-6 h-12 rounded-xl"
             >
               {reactivating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <UserCheck className="h-4 w-4 mr-2" />}
               Reactivate My Account

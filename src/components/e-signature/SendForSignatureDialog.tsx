@@ -323,10 +323,10 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
                     key={c.key}
                     onClick={() => setChannels((p) => ({ ...p, [c.key]: !p[c.key] }))}
                     className={`px-3 py-1.5 rounded-lg border flex items-center gap-2 text-sm transition ${
-                      active
-                        ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
-                        : "bg-white border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]"
-                    }`}
+ active
+ ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+ : "bg-white border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]"
+ }`}
                   >{c.icon}{c.label}</button>
                 );
               })}
@@ -395,7 +395,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
                 <div className="text-[11px] text-[#1A1A1A]/70 mt-0.5">
                   Send a test copy to <strong>infoo.jane@gmail.com</strong> first — same template, same signature, no client impact.
                 </div>
-                {lockedAt && <div className="text-[11px] text-emerald-800 mt-1 inline-flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Template locked as your default</div>}
+                {lockedAt && <div className="text-[11px] text-[color:var(--emerald-1)] mt-1 inline-flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Template locked as your default</div>}
                 {lastTestId && !lockedAt && <div className="text-[11px] text-[#1A1A1A]/80 mt-1">Test sent — check your inbox, then click <strong>Approve & Lock</strong> below.</div>}
               </div>
               <div className="flex flex-col gap-1.5 shrink-0">
@@ -403,7 +403,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
                   {testing ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <FlaskConical className="w-3.5 h-3.5 mr-1.5" />}
                   Send Test to Me
                 </Button>
-                <Button size="sm" variant="outline" onClick={handleApproveLock} disabled={sending || testing || approving || !lastTestId} className="border-emerald-700/50 text-emerald-800 bg-white" title={!lastTestId ? "Send a test first" : "Lock as default"}>
+                <Button size="sm" variant="outline" onClick={handleApproveLock} disabled={sending || testing || approving || !lastTestId} className="border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-1)] bg-white" title={!lastTestId ? "Send a test first" : "Lock as default"}>
                   {approving ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Lock className="w-3.5 h-3.5 mr-1.5" />}
                   Approve & Lock
                 </Button>
@@ -454,7 +454,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
                   </div>
                 )}
                 {developerId && (
-                  <p className="text-[10px] text-emerald-700 mt-1">Linked to canonical developer</p>
+                  <p className="text-[10px] text-[color:var(--emerald-1)] mt-1">Linked to canonical developer</p>
                 )}
               </div>
               <div>
@@ -570,7 +570,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
         <DialogFooter className="flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-[11px] text-[#1A1A1A]/70">
             {lockedAt ? (
-              <span className="inline-flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-700" /> Locked default · approved {new Date(lockedAt).toLocaleDateString()}</span>
+              <span className="inline-flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-[color:var(--emerald-1)]" /> Locked default · approved {new Date(lockedAt).toLocaleDateString()}</span>
             ) : lastTestId ? (
               <span className="inline-flex items-center gap-1"><FlaskConical className="w-3.5 h-3.5" /> Test sent — review your inbox, then Approve & Lock</span>
             ) : (
@@ -583,7 +583,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
               {testing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FlaskConical className="w-4 h-4 mr-2" />}
               Send Test to Me
             </Button>
-            <Button variant="outline" onClick={handleApproveLock} disabled={sending || testing || approving || !lastTestId} className="border-emerald-600/50 text-emerald-800" title={!lastTestId ? "Send a test first" : "Lock this template as your default"}>
+            <Button variant="outline" onClick={handleApproveLock} disabled={sending || testing || approving || !lastTestId} className="border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-1)]" title={!lastTestId ? "Send a test first" : "Lock this template as your default"}>
               {approving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Lock className="w-4 h-4 mr-2" />}
               Approve & Lock
             </Button>

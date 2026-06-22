@@ -20,12 +20,12 @@ const ScanSignDocuments = () => {
   return (
     <section data-ink-emerald data-hero-dark className="min-h-screen" style={{ backgroundImage: "var(--gradient-ink)" }}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-900/30 via-green-800/20 to-green-900/30 border-b border-green-500/20">
+      <div className="bg-gradient-to-r /30 /20 /30 border-b border-[color:var(--emerald-1)]/30/20">
         <div className="container mx-auto px-4 py-12">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-            <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
               <FileText className="w-4 h-4 text-green-400" />
-              <span className="text-green-300 text-sm font-medium">Document Assistant</span>
+              <span className="text-[color:var(--emerald-on)] text-sm font-medium">Document Assistant</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Scan & Sign <span className="text-[#B89555]">Documents</span>
@@ -51,7 +51,7 @@ const ScanSignDocuments = () => {
               <DialogHeader><DialogTitle className="text-white">Create New Project</DialogTitle></DialogHeader>
               <div className="space-y-4">
                 <div><Label className="text-white/70">Project Name</Label><Input value={h.newProjectName} onChange={(e) => h.setNewProjectName(e.target.value)} placeholder="My Contract Documents" className="bg-[#F7F2EA] border-[#1A1A1A]" /></div>
-                <Button onClick={h.createProject} className="w-full bg-emerald-600">Create Project</Button>
+                <Button onClick={h.createProject} className="w-full jj-emerald-solid">Create Project</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -69,7 +69,7 @@ const ScanSignDocuments = () => {
           {/* Left Panel */}
           <div className="space-y-6">
             {/* Signature Panel */}
-            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] border-2 border-green-500/30">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] border-2 border-[color:var(--emerald-1)]/30/30">
               <CardHeader><CardTitle className="text-white flex items-center gap-2"><PenTool className="w-5 h-5 text-green-400" />Step 1: Design / Upload Signature</CardTitle></CardHeader>
               <CardContent>
                 <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg mb-4">
@@ -88,22 +88,22 @@ const ScanSignDocuments = () => {
                     <canvas ref={h.signatureCanvasRef} width={250} height={80} className="w-full bg-[#FDFBF7] rounded-lg cursor-crosshair" onMouseDown={h.startDrawing} onMouseMove={h.draw} onMouseUp={h.stopDrawing} onMouseLeave={h.stopDrawing} />
                     <div className="flex gap-2 mt-2">
                       <Button size="sm" variant="outline" onClick={h.clearSignature} className="flex-1 text-xs"><Trash2 className="w-3 h-3 mr-1" /> Clear</Button>
-                      <Button size="sm" onClick={h.saveDrawnSignature} className="flex-1 bg-emerald-600 text-xs"><Save className="w-3 h-3 mr-1" /> Save</Button>
+                      <Button size="sm" onClick={h.saveDrawnSignature} className="flex-1 jj-emerald-solid text-xs"><Save className="w-3 h-3 mr-1" /> Save</Button>
                     </div>
                   </TabsContent>
                   <TabsContent value="type" className="mt-4">
                     <Input placeholder="Type your name..." value={h.typedSignature} onChange={(e) => h.setTypedSignature(e.target.value)} className="bg-[#FDFBF7] text-[#1A1A1A] font-signature text-2xl italic text-center h-16" style={{ fontFamily: '"Brush Script MT", cursive' }} />
-                    <Button size="sm" onClick={h.saveTypedSignature} className="w-full mt-2 bg-emerald-600 text-xs">Create Signature</Button>
+                    <Button size="sm" onClick={h.saveTypedSignature} className="w-full mt-2 jj-emerald-solid text-xs">Create Signature</Button>
                   </TabsContent>
                   <TabsContent value="upload" className="mt-4">
                     <input type="file" accept="image/png,image/jpeg" className="hidden" id="sig-upload" onChange={h.handleSignatureUpload} />
-                    <label htmlFor="sig-upload" className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-[#1A1A1A] rounded-lg cursor-pointer hover:border-emerald-500 transition-colors">
+                    <label htmlFor="sig-upload" className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-[#1A1A1A] rounded-lg cursor-pointer hover:border-[color:var(--emerald-1)]/30 transition-colors">
                       <Image className="w-6 h-6 text-white/90 mb-1" /><span className="text-xs text-white/90">Upload PNG signature</span>
                     </label>
                   </TabsContent>
                 </Tabs>
                 {h.savedSignature && (
-                  <div className="mt-4 p-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+                  <div className="mt-4 p-3 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                     <p className="text-xs text-emerald-400 mb-2">✓ Saved Signature:</p>
                     <img src={h.savedSignature} alt="Signature" className="h-12 object-contain bg-[#FDFBF7] rounded p-1" />
                   </div>
@@ -138,7 +138,7 @@ const ScanSignDocuments = () => {
               <CardHeader><CardTitle className="text-white flex items-center gap-2"><Upload className="w-5 h-5 text-emerald-400" />Step 3: Scan Document</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <input ref={h.cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={h.handleCameraCapture} />
-                <Button onClick={() => h.cameraInputRef.current?.click()} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"><Camera className="w-4 h-4 mr-2" />Capture with Camera</Button>
+                <Button onClick={() => h.cameraInputRef.current?.click()} className="w-full jj-emerald-solid hover:jj-emerald-solid text-white"><Camera className="w-4 h-4 mr-2" />Capture with Camera</Button>
                 <p className="text-xs text-white/90 text-center">Auto-straightens & enhances like a scanner</p>
                 <input ref={h.fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={h.handleFileUpload} />
                 <Button onClick={() => h.fileInputRef.current?.click()} variant="outline" className="w-full border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"><Upload className="w-4 h-4 mr-2" />Upload PDF/Image</Button>
@@ -151,7 +151,7 @@ const ScanSignDocuments = () => {
                 <CardHeader><CardTitle className="text-white text-sm">My Documents ({h.scannedDocs.length})</CardTitle></CardHeader>
                 <CardContent className="space-y-2 max-h-48 overflow-y-auto">
                   {h.scannedDocs.map(doc => (
-                    <div key={doc.id} onClick={() => h.setCurrentDoc(doc)} className={`p-3 rounded-lg cursor-pointer transition-all ${h.currentDoc?.id === doc.id ? 'bg-emerald-600/20 border border-emerald-500/50' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'}`}>
+                    <div key={doc.id} onClick={() => h.setCurrentDoc(doc)} className={`p-3 rounded-lg cursor-pointer transition-all ${h.currentDoc?.id === doc.id ? 'jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/50' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'}`}>
                       <div className="flex items-center justify-between">
                         <p className="text-sm text-white truncate flex-1">{doc.name}</p>
                         <span className={`text-xs px-2 py-0.5 rounded ${doc.isColor ? 'bg-blue-500/20 text-blue-400' : 'bg-[#1A1A1A]/20 text-white/70'}`}>{doc.isColor ? 'Color' : 'B&W'}</span>
@@ -192,14 +192,14 @@ const ScanSignDocuments = () => {
                     <Button size="sm" variant="outline" onClick={h.rotateDocument} className="text-xs"><RotateCw className="w-3 h-3 mr-1" /> Rotate</Button>
                     <Button size="sm" variant="outline" onClick={h.autoDetectFields} className="text-xs border-purple-500/50 text-purple-400 hover:bg-purple-500/20"><Crop className="w-3 h-3 mr-1" /> Detect Fields</Button>
                     <Button size="sm" variant="outline" onClick={h.autoFillFields} className="text-xs">Auto-Fill</Button>
-                    <Button size="sm" onClick={h.downloadDocument} className="text-xs bg-emerald-600"><Download className="w-3 h-3 mr-1" /> Download</Button>
+                    <Button size="sm" onClick={h.downloadDocument} className="text-xs jj-emerald-solid"><Download className="w-3 h-3 mr-1" /> Download</Button>
                     <Button size="sm" onClick={h.saveToPhone} variant="outline" className="text-xs"><Smartphone className="w-3 h-3 mr-1" /> Save</Button>
                     <Dialog open={h.showShareModal} onOpenChange={h.setShowShareModal}>
                       <DialogTrigger asChild><Button size="sm" variant="outline" className="text-xs"><Share2 className="w-3 h-3 mr-1" /> Share</Button></DialogTrigger>
                       <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                         <DialogHeader><DialogTitle className="text-white">Share Document</DialogTitle></DialogHeader>
                         <div className="grid grid-cols-2 gap-4">
-                          <Button onClick={() => h.shareDocument('whatsapp')} className="bg-green-600 hover:bg-green-700"><Share2 className="w-4 h-4 mr-2" /> WhatsApp</Button>
+                          <Button onClick={() => h.shareDocument('whatsapp')} className="jj-emerald-solid hover:jj-emerald-solid"><Share2 className="w-4 h-4 mr-2" /> WhatsApp</Button>
                           <Button onClick={() => h.shareDocument('email')} variant="outline"><Mail className="w-4 h-4 mr-2" /> Email</Button>
                         </div>
                       </DialogContent>
@@ -212,7 +212,7 @@ const ScanSignDocuments = () => {
                   <div className="relative bg-[#F7F2EA] rounded-lg overflow-hidden min-h-[600px]">
                     <img src={h.currentDoc.imageUrl} alt={h.currentDoc.name} className="w-full h-auto" style={{ transform: `rotate(${h.rotation}deg)` }} />
                     {h.signatureFields.map(field => (
-                      <div key={field.id} className="absolute border-2 border-dashed border-emerald-500/50 rounded cursor-move group" style={{ left: field.x, top: field.y, width: field.width, height: field.height }}>
+                      <div key={field.id} className="absolute border-2 border-dashed border-[color:var(--emerald-1)]/30/50 rounded cursor-move group" style={{ left: field.x, top: field.y, width: field.width, height: field.height }}>
                         {field.type === 'signature' && h.savedSignature ? (
                           <img src={h.savedSignature} alt="Signature" className="w-full h-full object-contain" />
                         ) : field.type === 'checkbox' ? (
@@ -228,13 +228,13 @@ const ScanSignDocuments = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center min-h-[600px] text-center">
-                    <div className="w-24 h-24 rounded-2xl bg-emerald-500/10 border-2 border-dashed border-emerald-500/30 flex items-center justify-center mb-4">
+                    <div className="w-24 h-24 rounded-2xl jj-emerald-solid/10 border-2 border-dashed border-[color:var(--emerald-1)]/30/30 flex items-center justify-center mb-4">
                       <FileText className="w-10 h-10 text-emerald-400/50" />
                     </div>
                     <h3 className="text-white font-semibold mb-2">No Document Selected</h3>
                     <p className="text-white/90 text-sm mb-4">Scan or upload a document to get started</p>
                     <div className="flex gap-3">
-                      <Button onClick={() => h.cameraInputRef.current?.click()} className="bg-emerald-600"><Camera className="w-4 h-4 mr-2" />Scan</Button>
+                      <Button onClick={() => h.cameraInputRef.current?.click()} className="jj-emerald-solid"><Camera className="w-4 h-4 mr-2" />Scan</Button>
                       <Button onClick={() => h.fileInputRef.current?.click()} variant="outline"><Upload className="w-4 h-4 mr-2" />Upload</Button>
                     </div>
                   </div>

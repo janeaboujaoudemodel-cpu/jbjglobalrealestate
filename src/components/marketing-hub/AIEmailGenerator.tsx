@@ -184,10 +184,10 @@ ${generatedEmail.signature}`;
                   key={type.id}
                   onClick={() => setEmailType(type.id)}
                   className={`p-3 rounded-lg border-2 text-left transition-all ${
-                    emailType === type.id
-                      ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                      : 'border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50'
-                  }`}
+ emailType === type.id
+ ? 'border-[#B89555] bg-[#EFE6D6]/10'
+ : 'border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50'
+ }`}
                 >
                   <p className="text-[#1A1A1A] text-sm font-medium">{type.name}</p>
                   <p className="text-xs text-[#1A1A1A]/70">{type.description}</p>
@@ -359,7 +359,7 @@ ${generatedEmail.signature}`;
               {onEmailGenerated && (
                 <Button
                   onClick={handleUseEmail}
-                  className="w-full mt-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold"
+                  className="w-full mt-4 bg-gradient-to-r hover: hover: text-white font-semibold"
                 >
                   <Send className="w-4 h-4 mr-2" />
                   Use This Email

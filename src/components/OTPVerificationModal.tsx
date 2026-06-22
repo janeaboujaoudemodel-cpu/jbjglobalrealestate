@@ -200,7 +200,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
         {isVerified ? (
           <div className="py-8 text-center">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br flex items-center justify-center mx-auto mb-6 shadow-2xl">
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">Verified!</h3>
@@ -241,8 +241,8 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     className={`w-12 h-14 text-center text-2xl font-bold bg-[#1A1A1A] border-[#1A1A1A] text-white focus:border-[#B89555] rounded-lg ${
-                      error ? 'border-red-500' : ''
-                    }`}
+ error ? 'border-red-500' : ''
+ }`}
                     autoFocus={index === 0}
                   />
                 ))}

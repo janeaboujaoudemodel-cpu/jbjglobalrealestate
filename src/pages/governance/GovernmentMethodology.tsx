@@ -82,13 +82,13 @@ const GovernmentMethodology: React.FC = () => {
               </blockquote>
               <div className="mt-6 grid md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="text-sm font-semibold text-green-600 mb-3 flex items-center gap-2">
+                  <h4 className="text-sm font-semibold text-[color:var(--emerald-1)] mb-3 flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4" />
                     Our Approach (Key Terms)
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {GOVERNMENT_POSTURE.APPROVED_TERMS.map((term, i) => (
-                      <Badge key={i} variant="outline" className="bg-green-500/10 text-green-700 border-green-500/30">
+                      <Badge key={i} variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
                         {term}
                       </Badge>
                     ))}
@@ -205,7 +205,7 @@ const GovernmentMethodology: React.FC = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-semibold mb-3 text-green-600">Data May Appear In:</h3>
+                    <h3 className="font-semibold mb-3 text-[color:var(--emerald-1)]">Data May Appear In:</h3>
                     <ul className="space-y-1">
                       {DATA_USAGE_RULES.ALLOWED_LOCATIONS.map((location, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm">
@@ -274,7 +274,7 @@ const GovernmentMethodology: React.FC = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-semibold mb-3 text-green-600">AI Is Used To:</h3>
+                    <h3 className="font-semibold mb-3 text-[color:var(--emerald-1)]">AI Is Used To:</h3>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2 text-sm">
                         <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -410,7 +410,7 @@ const GovernmentMethodology: React.FC = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-semibold mb-3 text-green-600">We Are:</h3>
+                    <h3 className="font-semibold mb-3 text-[color:var(--emerald-1)]">We Are:</h3>
                     <ul className="space-y-2">
                       {COMPLIANCE_STATUS.READY_FOR.map((item, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm">

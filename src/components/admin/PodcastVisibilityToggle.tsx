@@ -94,7 +94,7 @@ export const PodcastVisibilityToggle = () => {
           <div className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7]/50 border border-[#B89555]/20">
             <div className="flex items-center gap-3">
               {isPodcastVisible ? (
-                <Eye className="w-5 h-5 text-green-600" />
+                <Eye className="w-5 h-5 text-[color:var(--emerald-1)]" />
               ) : (
                 <EyeOff className="w-5 h-5 text-amber-600" />
               )}
@@ -122,10 +122,10 @@ export const PodcastVisibilityToggle = () => {
             <Button
               variant="outline"
               className={`flex-1 border-2 ${
-                isPodcastVisible 
-                  ? "border-amber-500 text-amber-700 hover:bg-amber-50" 
-                  : "border-green-500 text-green-700 hover:bg-green-50"
-              }`}
+ isPodcastVisible 
+ ? "border-amber-500 text-amber-700 hover:bg-amber-50" 
+ : "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
+ }`}
               onClick={() => handleToggleRequest(!isPodcastVisible)}
               disabled={isUpdating}
             >
@@ -162,7 +162,7 @@ export const PodcastVisibilityToggle = () => {
             <AlertDialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               {pendingValue ? (
                 <>
-                  <Eye className="w-5 h-5 text-green-600" />
+                  <Eye className="w-5 h-5 text-[color:var(--emerald-1)]" />
                   Make Podcast Public?
                 </>
               ) : (
@@ -201,7 +201,7 @@ export const PodcastVisibilityToggle = () => {
             <AlertDialogAction
               onClick={handleConfirm}
               className={pendingValue 
-                ? "bg-green-600 hover:bg-green-700 text-white" 
+                ? "jj-emerald-solid hover:jj-emerald-solid text-white" 
                 : "bg-amber-600 hover:bg-amber-700 text-white"
               }
             >

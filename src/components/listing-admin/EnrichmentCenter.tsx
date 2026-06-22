@@ -151,8 +151,8 @@ const ReellyEnrichmentPanel = () => {
     <div className="space-y-4">
       {/* Background mode banner */}
       {isActive && (
-        <div className="bg-emerald-500/10 border-2 border-emerald-500/30 rounded-lg p-4 flex items-center gap-3">
-          <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
+        <div className="jj-emerald-solid/10 border-2 border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 flex items-center gap-3">
+          <div className="w-3 h-3 jj-emerald-solid rounded-full animate-pulse" />
           <div className="flex-1">
             <p className="text-foreground font-semibold text-sm">Enrichment running in background</p>
             <p className="text-muted-foreground text-xs">Safe to navigate away — processing continues on the server.</p>
@@ -174,9 +174,9 @@ const ReellyEnrichmentPanel = () => {
         </Card>
         <Card className="bg-card border border-[#B89555]/20">
           <CardContent className="p-4 text-center">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
+            <CheckCircle2 className="w-5 h-5 text-[color:var(--emerald-1)] mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Enriched</p>
-            <p className="text-2xl font-bold text-emerald-600">{stats?.enriched?.toLocaleString() ?? "—"}</p>
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats?.enriched?.toLocaleString() ?? "—"}</p>
           </CardContent>
         </Card>
         <Card className="bg-card border border-[#B89555]/20">
@@ -240,7 +240,7 @@ const ReellyEnrichmentPanel = () => {
         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
             {isActive && <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />}
-            {job.status === "completed" && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+            {job.status === "completed" && <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)]" />}
             {job.status === "stopped" && <CloudOff className="w-4 h-4 text-amber-600" />}
             <span className="text-foreground font-semibold text-sm">
               {job.status === "running" ? "Processing..." : job.status === "completed" ? "Completed" : "Stopped"}
@@ -254,7 +254,7 @@ const ReellyEnrichmentPanel = () => {
             <div><p className="text-xs text-muted-foreground">Processed</p><p className="text-lg font-bold text-foreground">{job.processed}</p></div>
             <div><p className="text-xs text-muted-foreground">Images Added</p><p className="text-lg font-bold text-blue-600">+{job.images_added}</p></div>
             <div><p className="text-xs text-muted-foreground">Docs Added</p><p className="text-lg font-bold text-purple-600">+{job.docs_added}</p></div>
-            <div><p className="text-xs text-muted-foreground">Fields Updated</p><p className="text-lg font-bold text-emerald-600">+{job.fields_updated}</p></div>
+            <div><p className="text-xs text-muted-foreground">Fields Updated</p><p className="text-lg font-bold text-[color:var(--emerald-1)]">+{job.fields_updated}</p></div>
             <div><p className="text-xs text-muted-foreground">Errors</p><p className={`text-lg font-bold ${job.errors > 0 ? 'text-red-600' : 'text-muted-foreground'}`}>{job.errors}</p></div>
           </div>
         </div>
@@ -273,12 +273,12 @@ const ReellyEnrichmentPanel = () => {
             <div className="max-h-72 overflow-y-auto p-4 font-mono text-xs space-y-0.5">
               {job.log.map((entry, i) => (
                 <div key={i} className={`${
-                  entry.msg.includes("[ERROR]") ? "text-red-400" :
-                  entry.msg.includes("[OK]") ? "text-emerald-400" :
-                  entry.msg.includes("[COMPLETE]") ? "text-yellow-300" :
-                  entry.msg.includes("[WARN]") ? "text-[#1A1A1A]" :
-                  "text-[#1A1A1A]/70"
-                }`}>
+ entry.msg.includes("[ERROR]") ? "text-red-400" :
+ entry.msg.includes("[OK]") ? "text-emerald-400" :
+ entry.msg.includes("[COMPLETE]") ? "text-yellow-300" :
+ entry.msg.includes("[WARN]") ? "text-[#1A1A1A]" :
+ "text-[#1A1A1A]/70"
+ }`}>
                   <span className="text-[#1A1A1A]/70">[{new Date(entry.time).toLocaleTimeString()}]</span> {entry.msg}
                 </div>
               ))}
@@ -434,13 +434,13 @@ const ProvidentEnrichmentPanel = () => {
           </CardContent>
         </Card>
         <Card
-          className="bg-card border border-[#B89555]/20 cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all"
+          className="bg-card border border-[#B89555]/20 cursor-pointer hover:border-[color:var(--emerald-1)]/30 hover:shadow-md transition-all"
           onClick={() => navigate('/owner/listing-admin?view=projects&statusFilter=enriched')}
         >
           <CardContent className="p-4 text-center">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
+            <CheckCircle2 className="w-5 h-5 text-[color:var(--emerald-1)] mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Complete</p>
-            <p className="text-2xl font-bold text-emerald-600">{gapStats ? (gapStats.total - gapStats.gaps).toLocaleString() : "—"}</p>
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{gapStats ? (gapStats.total - gapStats.gaps).toLocaleString() : "—"}</p>
             <p className="text-[10px] text-emerald-500 mt-1">Click to view →</p>
           </CardContent>
         </Card>
@@ -489,10 +489,10 @@ const ProvidentEnrichmentPanel = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-center">
             <div><p className="text-xs text-muted-foreground">Processed</p><p className="text-lg font-bold text-foreground">{totalProcessed}</p></div>
-            <div><p className="text-xs text-muted-foreground">Matched</p><p className="text-lg font-bold text-emerald-600">{totalMatched}</p></div>
+            <div><p className="text-xs text-muted-foreground">Matched</p><p className="text-lg font-bold text-[color:var(--emerald-1)]">{totalMatched}</p></div>
             <div><p className="text-xs text-muted-foreground">Images</p><p className="text-lg font-bold text-blue-600">+{totalImagesAdded}</p></div>
             <div><p className="text-xs text-muted-foreground">Docs</p><p className="text-lg font-bold text-purple-600">+{totalDocsAdded}</p></div>
-            <div><p className="text-xs text-muted-foreground">Fields</p><p className="text-lg font-bold text-emerald-600">+{totalFieldsUpdated}</p></div>
+            <div><p className="text-xs text-muted-foreground">Fields</p><p className="text-lg font-bold text-[color:var(--emerald-1)]">+{totalFieldsUpdated}</p></div>
           </div>
         </div>
       )}
@@ -509,13 +509,13 @@ const ProvidentEnrichmentPanel = () => {
             <div className="max-h-72 overflow-y-auto p-4 font-mono text-xs space-y-0.5">
               {log.map((line, i) => (
                 <div key={i} className={`${
-                  line.includes("[ERROR]") ? "text-red-400" :
-                  line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
-                  line.includes("[START]") ? "text-yellow-300" :
-                  line.includes("[WARN]") ? "text-[#1A1A1A]" :
-                  line.includes("[BATCH]") ? "text-blue-400" :
-                  "text-[#1A1A1A]/70"
-                }`}>{line}</div>
+ line.includes("[ERROR]") ? "text-red-400" :
+ line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
+ line.includes("[START]") ? "text-yellow-300" :
+ line.includes("[WARN]") ? "text-[#1A1A1A]" :
+ line.includes("[BATCH]") ? "text-blue-400" :
+ "text-[#1A1A1A]/70"
+ }`}>{line}</div>
               ))}
               <div ref={logEndRef} />
             </div>

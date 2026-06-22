@@ -72,9 +72,9 @@ const StatusBadge = ({ status }: { status: SubmissionStatus }) => {
   const cfg: Record<SubmissionStatus, { label: string; cls: string; Icon: any }> = {
     none:              { label: "Not requested",  cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",      Icon: ClipboardCheck },
     pending:           { label: "Pending review", cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",      Icon: Loader2 },
-    approved:          { label: "Approved — take quiz", cls: "bg-emerald-50 text-emerald-900 border-emerald-200", Icon: CheckCircle2 },
+    approved:          { label: "Approved — take quiz", cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30", Icon: CheckCircle2 },
     quiz_in_progress:  { label: "Quiz in progress", cls: "bg-amber-50 text-amber-900 border-amber-200",         Icon: BrainCircuit },
-    quiz_passed:       { label: "Certified",      cls: "bg-emerald-50 text-emerald-900 border-emerald-200",    Icon: ShieldCheck },
+    quiz_passed:       { label: "Certified",      cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",    Icon: ShieldCheck },
     quiz_failed:       { label: "Quiz failed",    cls: "bg-red-50 text-red-900 border-red-200",                Icon: XCircle },
     rejected:          { label: "Rejected",       cls: "bg-red-50 text-red-900 border-red-200",                Icon: XCircle },
     locked:            { label: "Locked",         cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]",             Icon: AlertTriangle },
@@ -406,10 +406,10 @@ export default function BrokerCertificationGate() {
                           type="button"
                           onClick={() => selectAnswer(qi, ai)}
                           className={`text-left text-sm px-3 py-2 rounded-md border transition ${
-                            selected
-                              ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
-                              : "bg-white border-[#B89555]/25 text-[#1A1A1A]/85 hover:border-[#B89555]/60"
-                          }`}
+ selected
+ ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+ : "bg-white border-[#B89555]/25 text-[#1A1A1A]/85 hover:border-[#B89555]/60"
+ }`}
                         >
                           <span className="font-semibold mr-2">{String.fromCharCode(65 + ai)}.</span>{opt}
                         </button>
@@ -428,10 +428,10 @@ export default function BrokerCertificationGate() {
         {/* === Result === */}
         {grade && (
           <div className={`rounded-lg border p-4 ${
-            grade.passed
-              ? "bg-emerald-50 border-emerald-200 text-emerald-900"
-              : "bg-red-50 border-red-200 text-red-900"
-          }`}>
+ grade.passed
+ ? "jj-emerald-soft border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]"
+ : "bg-red-50 border-red-200 text-red-900"
+ }`}>
             <div className="flex items-center gap-2 font-semibold">
               {grade.passed ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
               {grade.passed ? "Certified" : "Did not pass"}
@@ -448,7 +448,7 @@ export default function BrokerCertificationGate() {
 
         {/* === Already certified === */}
         {status === "quiz_passed" && !quiz && (
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-900 text-sm flex items-center gap-2">
+          <div className="rounded-lg border border-[color:var(--emerald-1)]/30 jj-emerald-soft p-4 text-[color:var(--emerald-1)] text-sm flex items-center gap-2">
             <ShieldCheck className="h-5 w-5" />
             You are JBJ Academy certified.
           </div>

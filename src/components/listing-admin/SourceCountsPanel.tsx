@@ -37,10 +37,10 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         {/* Source Portal (Primary — left side) */}
         <Card
           className={`cursor-pointer transition-all border-2 ${
-            selectedSource === "provident"
-              ? "border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
-              : "border-border hover:border-[#B89555]/40 bg-card"
-          }`}
+ selectedSource === "provident"
+ ? "border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
+ : "border-border hover:border-[#B89555]/40 bg-card"
+ }`}
           onClick={() => handleSourceSelect(selectedSource === "provident" ? "none" : "provident")}
         >
           <CardHeader className="pb-2">
@@ -73,10 +73,10 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                 className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
                 onClick={(e) => { e.stopPropagation(); handleViewProjects('approved', 'provident'); }}
               >
-                <p className="text-[10px] text-emerald-600 font-medium flex items-center justify-center gap-0.5">
+                <p className="text-[10px] text-[color:var(--emerald-1)] font-medium flex items-center justify-center gap-0.5">
                   <CheckCircle className="w-2.5 h-2.5" /> Approved
                 </p>
-                <p className="text-base font-bold text-emerald-700">0</p>
+                <p className="text-base font-bold text-[color:var(--emerald-1)]">0</p>
               </div>
             </div>
           </CardContent>
@@ -85,10 +85,10 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         {/* Realporter API (right side — minimized/disabled) */}
         <Card
           className={`cursor-pointer transition-all border-2 ${
-            selectedSource === "reelly"
-              ? "border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
-              : "border-border hover:border-[#B89555]/40 bg-card opacity-75"
-          }`}
+ selectedSource === "reelly"
+ ? "border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
+ : "border-border hover:border-[#B89555]/40 bg-card opacity-75"
+ }`}
           onClick={() => handleSourceSelect(selectedSource === "reelly" ? "none" : "reelly")}
         >
           <CardHeader className="pb-2">
@@ -124,10 +124,10 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
                 className="text-center p-2 bg-background/60 rounded border border-border cursor-pointer hover:bg-accent/50 transition-colors"
                 onClick={(e) => { e.stopPropagation(); handleViewProjects('approved', 'reelly'); }}
               >
-                <p className="text-[10px] text-emerald-600 font-medium flex items-center justify-center gap-0.5">
+                <p className="text-[10px] text-[color:var(--emerald-1)] font-medium flex items-center justify-center gap-0.5">
                   <CheckCircle className="w-2.5 h-2.5" /> Approved
                 </p>
-                <p className="text-base font-bold text-emerald-700">
+                <p className="text-base font-bold text-[color:var(--emerald-1)]">
                   {liveCounts?.reelly_approved?.toLocaleString() || "0"}
                 </p>
               </div>

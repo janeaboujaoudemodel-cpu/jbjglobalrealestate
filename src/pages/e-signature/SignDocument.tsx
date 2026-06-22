@@ -218,7 +218,7 @@ export default function SignDocument() {
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
         <Card className="w-full max-w-lg bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-8 text-center">
-            <CheckCircle2 className="w-20 h-20 text-emerald-600 mx-auto mb-4" />
+            <CheckCircle2 className="w-20 h-20 text-[color:var(--emerald-1)] mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">
               {acked ? "Thank you" : "Document Signed!"}
             </h2>
@@ -271,7 +271,7 @@ export default function SignDocument() {
         <Card className="bg-white border-[#B89555]/60 shadow-sm">
           <CardContent className="p-5">
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold tracking-wide uppercase border border-emerald-200">
+              <span className="px-2 py-0.5 rounded-full jj-emerald-soft text-[color:var(--emerald-1)] text-[10px] font-semibold tracking-wide uppercase border border-[color:var(--emerald-1)]/30">
                 Recommended
               </span>
               <h2 className="font-semibold text-[#1A1A1A]">Sign instantly here</h2>

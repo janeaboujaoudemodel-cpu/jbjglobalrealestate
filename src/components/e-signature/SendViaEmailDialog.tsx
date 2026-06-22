@@ -912,7 +912,7 @@ export function SendViaEmailDialog({
                       className={
                         "inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border text-[9px] tracking-wider uppercase " +
                         (attachmentSyncStatus === "latest"
-                          ? "border-emerald-500/40 text-emerald-700 bg-emerald-50"
+                          ? "border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] jj-emerald-soft"
                           : attachmentSyncStatus === "syncing"
                           ? "border-[#B89555]/50 text-[#B89555] bg-[#FDF8EE]"
                           : attachmentSyncStatus === "failed"

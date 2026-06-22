@@ -355,7 +355,7 @@ export function CertificateGenerator({
               <h3 className="font-semibold text-foreground">Certificate Earned!</h3>
               <p className="text-sm text-muted-foreground">{certificate.certificate_number}</p>
             </div>
-            <Badge className="ml-auto bg-green-500/20 text-green-500 border-green-500">
+            <Badge className="ml-auto jj-emerald-solid/20 text-green-500 border-[color:var(--emerald-1)]/30">
               <CheckCircle className="h-3 w-3 mr-1" />
               Verified
             </Badge>

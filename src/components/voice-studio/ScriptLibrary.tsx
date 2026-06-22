@@ -363,7 +363,7 @@ export function ScriptLibrary({
                       className="p-1.5 rounded-lg hover:bg-[#EFE6D6]/10 text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
                       title="Copy script"
                     >
-                      {copiedId === s.id ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
+                      {copiedId === s.id ? <Check className="h-3.5 w-3.5 text-[color:var(--emerald-1)]" /> : <Copy className="h-3.5 w-3.5" />}
                     </button>
                     <button
                       onClick={() => openEditDialog(s)}

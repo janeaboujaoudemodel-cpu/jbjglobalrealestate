@@ -383,7 +383,7 @@ const PropertyMeasurement = () => {
         className="relative py-20 md:py-28 overflow-hidden"
         style={{ backgroundImage: "var(--gradient-ink)" }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/40 via-transparent to-teal-900/30" />
+        <div className="absolute inset-0 bg-gradient-to-br /40 via-transparent /30" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(16,185,129,0.18),transparent_55%)]" />
 
         <div className="container mx-auto px-4 relative z-10">
@@ -393,7 +393,7 @@ const PropertyMeasurement = () => {
             animate="visible"
             variants={fadeInUp}
           >
-            <span className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 select-none">
+            <span className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium jj-emerald-solid/20 text-[color:var(--emerald-on)] border border-[color:var(--emerald-1)]/30/30 select-none">
               <Ruler className="w-4 h-4 mr-2" />
               FREE AI Tool
             </span>
@@ -445,14 +445,14 @@ const PropertyMeasurement = () => {
             {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
-                  step >= s 
-                    ? "bg-emerald-500 text-white shadow-[0_0_16px_rgba(16,185,129,0.55)]" 
-                    : "bg-white/10 text-white/70 border border-white/15"
-                }`}>
+ step >= s 
+ ? "jj-emerald-solid text-white shadow-[0_0_16px_rgba(16,185,129,0.55)]" 
+ : "bg-white/10 text-white/70 border border-white/15"
+ }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
                 {s < 5 && (
-                  <div className={`w-8 md:w-12 h-1 rounded-full ${step > s ? "bg-emerald-500" : "bg-white/10"}`} />
+                  <div className={`w-8 md:w-12 h-1 rounded-full ${step > s ? "jj-emerald-solid" : "bg-white/10"}`} />
                 )}
               </div>
             ))}
@@ -626,25 +626,25 @@ const PropertyMeasurement = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-6">
-                  <h3 className="text-teal-300 font-semibold text-lg mb-4">📱 Room-by-Room Guide</h3>
+                <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6">
+                  <h3 className="text-[color:var(--emerald-on)] font-semibold text-lg mb-4">📱 Room-by-Room Guide</h3>
                   <div className="space-y-4 text-white/85">
                     <div className="flex items-start gap-3">
-                      <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">1</span>
+                      <span className="w-8 h-8 jj-emerald-solid/30 rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">1</span>
                       <div>
                         <p className="font-medium text-white">Select your rooms</p>
                         <p className="text-sm text-white/70">We'll suggest rooms based on your property type. Add custom rooms if needed.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">2</span>
+                      <span className="w-8 h-8 jj-emerald-solid/30 rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">2</span>
                       <div>
                         <p className="font-medium text-white">Upload for each room</p>
                         <p className="text-sm text-white/70">Choose to upload <strong>photos</strong> (2-3 per room) OR a <strong>video walkthrough</strong> of each specific room.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">3</span>
+                      <span className="w-8 h-8 jj-emerald-solid/30 rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">3</span>
                       <div>
                         <p className="font-medium text-white">Get accurate measurements</p>
                         <p className="text-sm text-white/70">AI analyzes each room separately for precise individual and total area calculations.</p>
@@ -676,7 +676,7 @@ const PropertyMeasurement = () => {
                   </Button>
                   <Button 
                     onClick={initializeRooms}
-                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-6"
+                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white py-6"
                   >
                     Start Adding Rooms
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -763,7 +763,7 @@ const PropertyMeasurement = () => {
                   <Button 
                     onClick={() => setStep(4)}
                     disabled={roomUploads.length === 0}
-                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-6"
+                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white py-6"
                   >
                     Continue to Upload Media
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -793,7 +793,7 @@ const PropertyMeasurement = () => {
                     <Upload className="w-5 h-5 text-teal-400" />
                     Step 4: Upload Media for Each Room
                   </CardTitle>
-                  <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30">
+                  <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
                     {completedRoomsCount}/{roomUploads.length} Complete
                   </Badge>
                 </div>
@@ -825,8 +825,8 @@ const PropertyMeasurement = () => {
                             data-no-contrast-guard
                             onClick={() => setRoomMediaType(room.id, "photo")}
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
-                              room.mediaType === "photo" ? "pm-card-active" : "pm-card"
-                            }`}
+ room.mediaType === "photo" ? "pm-card-active" : "pm-card"
+ }`}
                           >
                             <Camera className="w-3 h-3 inline mr-1" />
                             Photos
@@ -836,8 +836,8 @@ const PropertyMeasurement = () => {
                             data-no-contrast-guard
                             onClick={() => setRoomMediaType(room.id, "video")}
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
-                              room.mediaType === "video" ? "pm-card-active" : "pm-card"
-                            }`}
+ room.mediaType === "video" ? "pm-card-active" : "pm-card"
+ }`}
                           >
                             <Video className="w-3 h-3 inline mr-1" />
                             Video
@@ -916,10 +916,10 @@ const PropertyMeasurement = () => {
 
                 {/* Processing Indicator */}
                 {isProcessing && (
-                  <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-6">
+                  <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Sparkles className="w-6 h-6 text-teal-400 animate-pulse" />
-                      <p className="text-teal-300 font-medium">AI is analyzing each room...</p>
+                      <p className="text-[color:var(--emerald-on)] font-medium">AI is analyzing each room...</p>
                     </div>
                     <Progress value={progress} className="h-2" />
                     <p className="text-white/90 text-sm mt-2">{progress}% complete</p>
@@ -938,7 +938,7 @@ const PropertyMeasurement = () => {
                   <Button 
                     onClick={processWithAI}
                     disabled={completedRoomsCount < 1 || isProcessing}
-                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-6"
+                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white py-6"
                   >
                     {isProcessing ? "Analyzing..." : `Analyze ${completedRoomsCount} Room(s) with AI`}
                     <Sparkles className="w-4 h-4 ml-2" />
@@ -982,7 +982,7 @@ const PropertyMeasurement = () => {
                 <div
                   data-allow-dark-cta
                   data-no-contrast-guard
-                  className="allow-white bg-emerald-600 border border-emerald-300/40 rounded-xl p-6 text-center shadow-[0_0_24px_rgba(16,185,129,0.35)]"
+                  className="allow-white jj-emerald-solid border border-[color:var(--emerald-1)]/30/40 rounded-xl p-6 text-center shadow-[0_0_24px_rgba(16,185,129,0.35)]"
                 >
                   <p className="text-white/90 mb-2 allow-white">Total Property Area</p>
                   <p className="text-4xl md:text-5xl font-bold text-white allow-white">
@@ -998,7 +998,7 @@ const PropertyMeasurement = () => {
                   <div
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="allow-white bg-emerald-800/80 border border-emerald-400/30 rounded-xl p-4"
+                    className="allow-white jj-emerald-solid/80 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-4"
                   >
                     <div className="flex items-start gap-3">
                       <Info className="w-5 h-5 text-white mt-0.5 flex-shrink-0 allow-white" />
@@ -1019,7 +1019,7 @@ const PropertyMeasurement = () => {
                         key={i}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="allow-white bg-emerald-800/70 border border-emerald-400/30 rounded-lg p-4"
+                        className="allow-white jj-emerald-solid/70 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4"
                       >
                         <div className="flex justify-between items-center">
                           <span className="text-white allow-white">{room.name}</span>
@@ -1059,7 +1059,7 @@ const PropertyMeasurement = () => {
                   <Button 
                     onClick={downloadReport}
                     variant="outline"
-                    className="flex-1 border-teal-500/50 text-teal-300 hover:bg-teal-500/20"
+                    className="flex-1 border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-on)] hover:jj-emerald-solid/20"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download Report

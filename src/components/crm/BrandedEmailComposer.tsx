@@ -547,7 +547,7 @@ export function BrandedEmailComposer() {
                     const isOk = ["sent", "delivered"].includes((h.status || "").toLowerCase());
                     const isPending = ["pending", "queued"].includes((h.status || "").toLowerCase());
                     const Icon = isOk ? CheckCircle2 : isPending ? Clock : AlertCircle;
-                    const tone = isOk ? "text-emerald-700" : isPending ? "text-amber-700" : "text-red-700";
+                    const tone = isOk ? "text-[color:var(--emerald-1)]" : isPending ? "text-amber-700" : "text-red-700";
                     return (
                       <div key={h.id} className="flex items-center gap-2 text-[11px] px-2 py-1.5 rounded bg-[#FDFBF7] border border-[#B89555]/15">
                         <Icon className={`w-3.5 h-3.5 shrink-0 ${tone}`} />

@@ -162,7 +162,7 @@ export const AdminAIAssistant = () => {
     switch (type) {
       case "suggestion": return "bg-blue-50 border-blue-200 text-blue-800";
       case "alert": return "bg-amber-50 border-amber-200 text-amber-800";
-      case "metric": return "bg-emerald-50 border-emerald-200 text-emerald-800";
+      case "metric": return "jj-emerald-soft border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]";
       case "action": return "bg-purple-50 border-purple-200 text-purple-800";
     }
   };

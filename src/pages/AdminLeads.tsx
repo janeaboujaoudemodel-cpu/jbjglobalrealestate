@@ -510,7 +510,7 @@ const AdminLeads = () => {
       </PopoverTrigger>
       <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[10001]" align="start">
         <div className="space-y-1 max-h-72 overflow-y-auto">
-          <p className="text-xs font-semibold text-emerald-700 px-2 py-1">Positive</p>
+          <p className="text-xs font-semibold text-[color:var(--emerald-1)] px-2 py-1">Positive</p>
           {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
             <button key={status.value} onClick={() => onUpdate(status.value)}
               className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
@@ -604,9 +604,9 @@ const AdminLeads = () => {
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{stats.vipCount}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-green-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-green-500/20 transition-all">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[color:var(--emerald-1)]/30/40 rounded-xl p-5 hover:shadow-lg hover:shadow-green-500/20 transition-all">
             <div className="flex items-center gap-3 mb-2">
-              <UserCheck className="w-5 h-5 text-green-600" />
+              <UserCheck className="w-5 h-5 text-[color:var(--emerald-1)]" />
               <span className="text-[#1A1A1A]/60 text-sm">Qualified</span>
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{stats.qualified}</p>
@@ -663,7 +663,7 @@ const AdminLeads = () => {
                 </PopoverTrigger>
                 <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[10001]" align="start">
                   <div className="space-y-1 max-h-72 overflow-y-auto">
-                    <p className="text-xs font-semibold text-emerald-700 px-2 py-1">Positive</p>
+                    <p className="text-xs font-semibold text-[color:var(--emerald-1)] px-2 py-1">Positive</p>
                     {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
                       <button key={status.value} onClick={() => bulkUpdateStatus(status.value)}
                         className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
@@ -701,7 +701,7 @@ const AdminLeads = () => {
               {aiBrokers.length > 0 && (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold" disabled={bulkActionLoading}>
+                    <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white font-semibold" disabled={bulkActionLoading}>
                       <UserPlus className="w-3 h-3 mr-1" /> Assign Broker
                       <ChevronDown className="w-3 h-3 ml-1" />
                     </Button>
@@ -711,7 +711,7 @@ const AdminLeads = () => {
                       {aiBrokers.map(broker => (
                         <button key={broker.id} onClick={() => toast.success(`Assigned ${selectedLeadIds.size} leads to ${broker.name}`)}
                           className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
-                          <Bot className="w-3 h-3 text-emerald-600" />
+                          <Bot className="w-3 h-3 text-[color:var(--emerald-1)]" />
                           <span className="text-sm text-[#1A1A1A]">{broker.name}</span>
                           <Badge variant="outline" className="ml-auto text-[9px] border-[#B89555]/40 text-[#1A1A1A]/60">{broker.status}</Badge>
                         </button>
@@ -784,7 +784,7 @@ const AdminLeads = () => {
                 </SelectTrigger>
                 <SelectContent className="max-h-80 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                   <SelectItem value="all" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">All Statuses</SelectItem>
-                  <div className="px-2 py-1 text-xs font-semibold text-emerald-700 uppercase">Positive</div>
+                  <div className="px-2 py-1 text-xs font-semibold text-[color:var(--emerald-1)] uppercase">Positive</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
                     <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">
                       <div className="flex items-center gap-2">
@@ -824,7 +824,7 @@ const AdminLeads = () => {
                     <SelectItem value="all" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Filter className="w-3 h-3 text-[#B89555]" />All Sources</span></SelectItem>
                     <div className="px-2 py-1.5 text-xs font-bold text-[#B89555] uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Main Categories</div>
                     <SelectItem value="chat" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><MessageSquare className="w-3 h-3 text-purple-600" />Chat Leads</span></SelectItem>
-                    <SelectItem value="website" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Globe className="w-3 h-3 text-emerald-600" />Website Leads</span></SelectItem>
+                    <SelectItem value="website" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Globe className="w-3 h-3 text-[color:var(--emerald-1)]" />Website Leads</span></SelectItem>
                     <SelectItem value="database" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Upload className="w-3 h-3 text-blue-600" />Database / Import</span></SelectItem>
                     <SelectItem value="vip" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Star className="w-3 h-3 text-yellow-500" />VIP Only</span></SelectItem>
                     <SelectItem value="needs_action" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><AlertTriangle className="w-3 h-3 text-amber-500" />Needs Action</span></SelectItem>
@@ -849,13 +849,13 @@ const AdminLeads = () => {
                         </SelectItem>
                       );
                     })}
-                    <div className="px-2 py-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Website Sources</div>
+                    <div className="px-2 py-1.5 text-xs font-bold text-[color:var(--emerald-1)] uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Website Sources</div>
                     {['landing_page', 'popup', 'popup_main', 'contact_form', 'register_interest', 'inquiry_form', 'newsletter', 'property_inquiry', 'property_recommendation', 'ai_matchmaker', 'matchmaker', 'ai_phone', 'ai_tool', 'ai_hub', 'market_report', 'book', 'video', 'quiz', 'signup', 'login', 'lead_capture', 'website'].map(s => {
                       const exists = uniqueSources.includes(s);
                       return (
                         <SelectItem key={s} value={s} className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">
                           <span className={`flex items-center gap-2 ${!exists ? 'opacity-50' : ''}`}>
-                            <Globe className="w-3 h-3 text-emerald-600" />
+                            <Globe className="w-3 h-3 text-[color:var(--emerald-1)]" />
                             {getSourceDisplayName(s)}
                             {!exists && <span className="text-[10px] text-[#1A1A1A]/40 ml-1">(0)</span>}
                           </span>
@@ -906,7 +906,7 @@ const AdminLeads = () => {
                         </TableCell>
                         <TableCell className="text-right">
                           <Button size="sm" onClick={() => restoreLead(lead.id)}
-                            className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold">
+                            className="jj-emerald-solid hover:jj-emerald-solid text-white font-semibold">
                             <RefreshCw className="w-3 h-3 mr-1" /> Restore
                           </Button>
                         </TableCell>
@@ -1033,7 +1033,7 @@ const AdminLeads = () => {
                                   <TooltipTrigger asChild>
                                     <a href={`https://wa.me/${lead.phone_e164?.replace(/[^0-9]/g, '')}`}
                                       target="_blank" rel="noopener noreferrer"
-                                      className={`p-1.5 rounded-lg transition-all ${lead.phone_e164 ? 'text-green-600 hover:bg-green-100 cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
+                                      className={`p-1.5 rounded-lg transition-all ${lead.phone_e164 ? 'text-[color:var(--emerald-1)] hover:jj-emerald-soft cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
                                       onClick={(e) => !lead.phone_e164 && e.preventDefault()}>
                                       <MessageCircle className="w-4 h-4" />
                                     </a>
@@ -1141,7 +1141,7 @@ const AdminLeads = () => {
                                 <TooltipTrigger asChild>
                                   <a href={`https://wa.me/${chat.user_phone?.replace(/[^0-9]/g, '')}`}
                                     target="_blank" rel="noopener noreferrer"
-                                    className={`p-1.5 rounded-lg transition-all ${chat.user_phone ? 'text-green-600 hover:bg-green-100 cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
+                                    className={`p-1.5 rounded-lg transition-all ${chat.user_phone ? 'text-[color:var(--emerald-1)] hover:jj-emerald-soft cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
                                     onClick={(e) => !chat.user_phone && e.preventDefault()}>
                                     <MessageCircle className="w-4 h-4" />
                                   </a>
@@ -1233,7 +1233,7 @@ const AdminLeads = () => {
                     {/* Contact Quick Actions */}
                     <div className="flex flex-wrap gap-2 p-4 bg-[#EFE6D6] rounded-xl border border-[#B89555]/30">
                       <a href={`https://wa.me/${selectedLead.phone_e164?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 font-semibold ${selectedLead.phone_e164 ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-[#1A1A1A]/5 text-[#1A1A1A]/30 cursor-not-allowed'}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 font-semibold ${selectedLead.phone_e164 ? 'jj-emerald-solid hover:jj-emerald-solid text-white' : 'bg-[#1A1A1A]/5 text-[#1A1A1A]/30 cursor-not-allowed'}`}
                         onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}>
                         <MessageCircle className="w-4 h-4" /> WhatsApp
                       </a>

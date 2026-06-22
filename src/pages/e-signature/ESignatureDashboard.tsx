@@ -79,7 +79,7 @@ const statusConfig: Record<string, { label: string; color: string; icon: React.R
   sent: { label: "Pending Signature", color: "bg-blue-50 text-blue-700 border-blue-200", icon: <Send className="w-3 h-3" /> },
   viewed: { label: "Pending Signature · Viewed", color: "bg-yellow-50 text-yellow-700 border-yellow-200", icon: <Eye className="w-3 h-3" /> },
   partially_signed: { label: "Pending Signature · Partial", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
-  completed: { label: "Signed", color: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: <CheckCircle2 className="w-3 h-3" /> },
+  completed: { label: "Signed", color: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30", icon: <CheckCircle2 className="w-3 h-3" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border-red-200", icon: <XCircle className="w-3 h-3" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30", icon: <Clock className="w-3 h-3" /> },
   voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30", icon: <XCircle className="w-3 h-3" /> },
@@ -367,10 +367,10 @@ export default function ESignatureDashboard() {
                       setSelected(new Set());
                     }}
                     className={`px-3 py-1.5 text-xs rounded-md transition ${
-                      active
-                        ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] font-medium"
-                        : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
-                    }`}
+ active
+ ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] font-medium"
+ : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+ }`}
                   >
                     {t.label}
                   </button>
@@ -462,10 +462,10 @@ export default function ESignatureDashboard() {
                   key={c.key}
                   onClick={() => setStatusFilter(c.key)}
                   className={`px-3 py-1.5 rounded-full text-xs border transition ${
-                    active
-                      ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] font-medium"
-                      : "bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A]/80 hover:border-[#B89555]"
-                  }`}
+ active
+ ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] font-medium"
+ : "bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A]/80 hover:border-[#B89555]"
+ }`}
                 >
                   {c.label}
                 </button>

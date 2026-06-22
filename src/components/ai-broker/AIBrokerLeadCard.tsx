@@ -147,7 +147,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
               size="sm"
               onClick={handleWhatsAppClick}
               disabled={!lead.phone}
-              className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
             >
               <MessageSquare className="h-4 w-4 mr-1" />
               WhatsApp

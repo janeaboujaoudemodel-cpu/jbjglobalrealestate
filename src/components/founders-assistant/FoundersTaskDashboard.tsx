@@ -84,13 +84,13 @@ const statusConfig: Record<string, { icon: React.ReactNode; color: string; bgCol
   },
   completed: { 
     icon: <CheckCircle2 className="w-4 h-4" />, 
-    color: 'text-green-600',
-    bgColor: 'bg-green-50 border-green-200'
+    color: 'text-[color:var(--emerald-1)]',
+    bgColor: 'jj-emerald-soft border-[color:var(--emerald-1)]/30'
   },
   done: { 
     icon: <CheckCircle2 className="w-4 h-4" />, 
-    color: 'text-green-600',
-    bgColor: 'bg-green-50 border-green-200'
+    color: 'text-[color:var(--emerald-1)]',
+    bgColor: 'jj-emerald-soft border-[color:var(--emerald-1)]/30'
   },
   awaiting_approval: { 
     icon: <AlertCircle className="w-4 h-4" />, 
@@ -276,9 +276,9 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
             </button>
             <button 
               onClick={() => handleCardClick('completed')}
-              className="text-center p-3 rounded-lg bg-green-50 border-2 border-green-200 hover:border-green-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all cursor-pointer"
+              className="text-center p-3 rounded-lg jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30 hover:border-[color:var(--emerald-1)]/30 hover:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all cursor-pointer"
             >
-              <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+              <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.completed}</p>
               <p className="text-xs text-[#1A1A1A]/70">✅ Finished</p>
             </button>
             <button 
@@ -354,8 +354,8 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                   transition={{ delay: index * 0.05 }}
                 >
                   <Card className={`bg-[#FDFBF7] border-2 transition-all ${config.bgColor} ${
-                    isExpanded ? 'ring-2 ring-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.2)]' : 'hover:border-[#B89555]/40'
-                  }`}>
+ isExpanded ? 'ring-2 ring-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.2)]' : 'hover:border-[#B89555]/40'
+ }`}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-3 flex-1">
@@ -434,7 +434,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             <Button
                               size="sm"
                               onClick={() => updateTaskStatus(task.id, isCrmTask ? 'done' : 'completed', isCrmTask)}
-                              className="bg-[#FDFBF7] text-green-600 border-2 border-green-200 hover:border-green-400 hover:bg-green-50"
+                              className="bg-[#FDFBF7] text-[color:var(--emerald-1)] border-2 border-[color:var(--emerald-1)]/30 hover:border-[color:var(--emerald-1)]/30 hover:jj-emerald-soft"
                             >
                               <CheckCircle2 className="w-4 h-4 mr-1" />
                               Complete
@@ -475,7 +475,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             {task.completed_at && (
                               <div>
                                 <p className="text-[#1A1A1A]/70">Completed</p>
-                                <p className="text-green-600">{format(new Date(task.completed_at), 'MMM d, yyyy h:mm a')}</p>
+                                <p className="text-[color:var(--emerald-1)]">{format(new Date(task.completed_at), 'MMM d, yyyy h:mm a')}</p>
                               </div>
                             )}
                           </div>

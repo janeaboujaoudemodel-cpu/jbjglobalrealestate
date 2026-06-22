@@ -97,8 +97,8 @@ const PROFESSIONAL_SUPPORT = [
     icon: Target,
     color: 'text-green-400',
     glowColor: 'shadow-green-500/30',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'border-green-500/30',
+    bgColor: 'jj-emerald-solid/10',
+    borderColor: 'border-[color:var(--emerald-1)]/30/30',
   },
   {
     role: 'HR Assistant',
@@ -200,7 +200,7 @@ const TRAINING_DEVELOPMENT = [
     icon: Handshake,
     color: 'text-green-400',
     glowColor: 'shadow-green-500/30',
-    bgColor: 'bg-green-500/10',
+    bgColor: 'jj-emerald-solid/10',
   },
   {
     name: 'Negotiation Skills',
@@ -262,7 +262,7 @@ const TOOLS_OPERATIONS = [
     link: '/property-evaluation',
     color: 'text-green-400',
     glowColor: 'shadow-green-500/30',
-    bgColor: 'bg-green-500/10',
+    bgColor: 'jj-emerald-solid/10',
   },
   {
     name: 'JBJ Mortgage Calculator',
@@ -289,7 +289,7 @@ const TOOLS_OPERATIONS = [
     link: '/ai-hub',
     color: 'text-emerald-400',
     glowColor: 'shadow-emerald-500/30',
-    bgColor: 'bg-emerald-500/10',
+    bgColor: 'jj-emerald-solid/10',
   },
   {
     name: 'JBJ CRM',
@@ -437,7 +437,7 @@ const AdvancedBrokerToolkit = () => {
             </TabsTrigger>
             <TabsTrigger 
               value="training" 
-              className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400 data-[state=active]:border-green-500/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
+              className="data-[state=active]:jj-emerald-solid/20 data-[state=active]:text-green-400 data-[state=active]:border-[color:var(--emerald-1)]/30/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
             >
               <GraduationCap className="h-4 w-4 mr-2" />
               Training

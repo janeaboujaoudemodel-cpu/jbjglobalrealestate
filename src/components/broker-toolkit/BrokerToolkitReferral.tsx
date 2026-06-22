@@ -75,7 +75,7 @@ export function BrokerToolkitReferral() {
                   <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-[#B89555]/40 flex items-center justify-center mb-4">
                     <Award className="w-7 h-7 text-[#1A1A1A]" />
                   </div>
-                  <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3 w-fit">
+                  <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 mb-3 w-fit">
                     <Globe className="w-3 h-3 mr-1" /> Open to Everyone Worldwide
                   </Badge>
                   <h3 className="text-[#1A1A1A] text-xl font-bold mb-2">JBJ Referral Program</h3>
@@ -133,7 +133,7 @@ export function BrokerToolkitReferral() {
                     <p className="text-[#1A1A1A]/70 text-sm">Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name.</p>
                   </div>
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6">
-                    <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">Active Referral — 5%</Badge>
+                    <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 mb-3">Active Referral — 5%</Badge>
                     <h4 className="text-[#1A1A1A] font-bold text-lg mb-2">Facilitate the Introduction</h4>
                     <p className="text-[#1A1A1A]/70 text-sm">Introduce your contact directly to us. Help convince them to invest — earn double!</p>
                   </div>

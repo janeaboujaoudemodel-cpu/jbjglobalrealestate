@@ -291,7 +291,7 @@ ${COMPANY_INFO.website}`;
                 size="sm"
                 onClick={sendViaWhatsApp}
                 disabled={!activeLead.phone}
-                className="text-green-400 border-green-500/50 hover:bg-green-500/20"
+                className="text-green-400 border-[color:var(--emerald-1)]/30/50 hover:jj-emerald-solid/20"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 WhatsApp

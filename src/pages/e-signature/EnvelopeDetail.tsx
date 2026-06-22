@@ -40,7 +40,7 @@ const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon:
   sent: { label: "Pending Signature", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
   viewed: { label: "Pending Signature · Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
   partially_signed: { label: "Pending Signature · Partial", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
-  completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
+  completed: { label: "Completed", color: "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
   voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <XCircle className="w-4 h-4" /> },
@@ -51,7 +51,7 @@ const recipientStatusConfig: Record<RecipientStatus, { label: string; color: str
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   delivered: { label: "Delivered", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200" },
-  signed: { label: "Signed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+  signed: { label: "Signed", color: "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30" },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200" },
 };
 
@@ -865,23 +865,23 @@ export default function EnvelopeDetail() {
 
         {/* Signed banner */}
         {envelope.status === "completed" && signedDoc && (
-          <div className="rounded-xl border border-emerald-300 bg-emerald-50/80 p-4 flex items-center gap-3 flex-wrap">
-            <CheckCircle2 className="w-6 h-6 text-emerald-700 shrink-0" />
+          <div className="rounded-xl border border-[color:var(--emerald-1)]/30 jj-emerald-soft/80 p-4 flex items-center gap-3 flex-wrap">
+            <CheckCircle2 className="w-6 h-6 text-[color:var(--emerald-1)] shrink-0" />
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold text-emerald-900">
+              <div className="text-sm font-semibold text-[color:var(--emerald-1)]">
                 Signed — agreement fully executed
               </div>
-              <div className="text-xs text-emerald-800/80">
+              <div className="text-xs text-[color:var(--emerald-1)]/80">
                 {clientRec?.signed_at ? `Signed by ${clientRec.name} on ${format(new Date(clientRec.signed_at), "MMM d, yyyy 'at' h:mm a")}` : "All recipients have signed"}
               </div>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white"
                 onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                 <Download className="w-3.5 h-3.5 mr-1.5" /> Signed PDF
               </Button>
               {signedDoc.certificate_url && (
-                <Button size="sm" variant="outline" className="border-emerald-300 text-emerald-800"
+                <Button size="sm" variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]"
                   onClick={() => handleDownload(signedDoc.certificate_url, `audit_${envelope.id}.pdf`)}>
                   <Shield className="w-3.5 h-3.5 mr-1.5" /> Audit cert
                 </Button>
@@ -939,7 +939,7 @@ export default function EnvelopeDetail() {
               )}
               {isDraft && (
                 isLocked ? (
-                  <Button variant="outline" onClick={handleUnlock} className="border-emerald-300 text-emerald-700">
+                  <Button variant="outline" onClick={handleUnlock} className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]">
                     <Lock className="w-4 h-4 mr-2" /> Locked — click to unlock
                   </Button>
                 ) : (
@@ -999,7 +999,7 @@ export default function EnvelopeDetail() {
                             </div>
                           )}
                           {recipient.signed_at && (
-                            <div className="text-xs text-emerald-700 mt-1">✓ Signed {format(new Date(recipient.signed_at), "MMM d, h:mm a")}</div>
+                            <div className="text-xs text-[color:var(--emerald-1)] mt-1">✓ Signed {format(new Date(recipient.signed_at), "MMM d, h:mm a")}</div>
                           )}
                         </div>
                         <Badge className={rConfig?.color}>{rConfig?.label}</Badge>
@@ -1098,16 +1098,16 @@ export default function EnvelopeDetail() {
 
           {/* Signed doc OR Activity Log preview */}
           {signedDoc ? (
-            <Card className="bg-[#F7F2EA] border-emerald-300/50">
+            <Card className="bg-[#F7F2EA] border-[color:var(--emerald-1)]/30/50">
               <button onClick={() => setOpenSigned(v => !v)} className="w-full flex items-center justify-between px-4 py-2.5 text-left">
                 <span className="text-sm font-semibold flex items-center gap-2 text-[#1A1A1A]">
-                  <Shield className="w-4 h-4 text-emerald-600" /> Signed Document
+                  <Shield className="w-4 h-4 text-[color:var(--emerald-1)]" /> Signed Document
                 </span>
                 {openSigned ? <ChevronUp className="w-4 h-4 text-[#1A1A1A]/60" /> : <ChevronDown className="w-4 h-4 text-[#1A1A1A]/60" />}
               </button>
               {openSigned && (
                 <CardContent className="space-y-2 pt-0">
-                  <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  <Button size="sm" className="w-full jj-emerald-solid hover:jj-emerald-solid text-white"
                     onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                     <Download className="w-4 h-4 mr-2" /> Download Signed PDF
                   </Button>
@@ -1200,12 +1200,12 @@ export default function EnvelopeDetail() {
                 </div>
               )}
               {recentlyRestoredFields.length > 0 && (
-                <div className="flex items-start gap-2 p-2 rounded border border-emerald-300 bg-emerald-50/70">
-                  <span className="text-xs text-emerald-900">
+                <div className="flex items-start gap-2 p-2 rounded border border-[color:var(--emerald-1)]/30 jj-emerald-soft/70">
+                  <span className="text-xs text-[color:var(--emerald-1)]">
                     <strong>{recentlyRestoredFields.length}</strong> field{recentlyRestoredFields.length === 1 ? "" : "s"} restored:&nbsp;
                     {recentlyRestoredFields.map((k) => k.replace(/_/g, " ")).join(", ")}
                   </span>
-                  <Button size="sm" variant="ghost" className="ml-auto h-6 text-[11px] text-emerald-900" onClick={() => setRecentlyRestoredFields([])}>
+                  <Button size="sm" variant="ghost" className="ml-auto h-6 text-[11px] text-[color:var(--emerald-1)]" onClick={() => setRecentlyRestoredFields([])}>
                     Dismiss
                   </Button>
                 </div>

@@ -105,7 +105,7 @@ const SOURCE_LABELS: Record<string, string> = {
 };
 
 const SOURCE_STYLES: Record<string, string> = {
-  master_catalog: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  master_catalog: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   perplexity: "bg-blue-50 text-blue-800 border-blue-200",
   firecrawl: "bg-indigo-50 text-indigo-800 border-indigo-200",
   ai_inference: "bg-amber-50 text-amber-900 border-amber-200",
@@ -320,7 +320,7 @@ const RegistryDebugBanner = ({ registryRows, isLoading }: { registryRows: number
 const STATUS_BROKERAGE = [
   { v: "prospect", label: "Prospect", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
   { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-[#1A1A1A]" },
-  { v: "active_partner", label: "Active Partner", cls: "bg-emerald-200 text-[#1A1A1A]" },
+  { v: "active_partner", label: "Active Partner", cls: "jj-emerald-soft text-[#1A1A1A]" },
   { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-200 text-[#1A1A1A]" },
   { v: "dormant", label: "Dormant", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
   { v: "blacklisted", label: "Blacklisted", cls: "bg-red-200 text-[#1A1A1A]" },
@@ -330,7 +330,7 @@ const STATUS_CLIENT = [
   { v: "qualified", label: "Qualified", cls: "bg-blue-200 text-[#1A1A1A]" },
   { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-[#1A1A1A]" },
   { v: "vip", label: "VIP", cls: "bg-purple-200 text-[#1A1A1A]" },
-  { v: "closed_won", label: "Closed Won", cls: "bg-emerald-200 text-[#1A1A1A]" },
+  { v: "closed_won", label: "Closed Won", cls: "jj-emerald-soft text-[#1A1A1A]" },
   { v: "closed_lost", label: "Closed Lost", cls: "bg-red-200 text-[#1A1A1A]" },
   { v: "dormant", label: "Dormant", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
 ];
@@ -339,7 +339,7 @@ const STATUS_DEV = [
   { v: "pending_application", label: "Pending Application", cls: "bg-amber-200 text-[#1A1A1A]" },
   { v: "documents_required", label: "Documents Required", cls: "bg-orange-200 text-[#1A1A1A]" },
   { v: "under_review", label: "Under Review", cls: "bg-blue-200 text-[#1A1A1A]" },
-  { v: "registered", label: "Registered", cls: "bg-emerald-200 text-[#1A1A1A]" },
+  { v: "registered", label: "Registered", cls: "jj-emerald-soft text-[#1A1A1A]" },
   { v: "rejected", label: "Rejected", cls: "bg-red-200 text-[#1A1A1A]" },
   { v: "expired", label: "Expired", cls: "bg-[#E5D9C4] text-[#1A1A1A]" },
 ];
@@ -552,10 +552,10 @@ const BrokeragesTab = () => {
             key={t.v}
             onClick={() => setInnerTab(t.v)}
             className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors border ${
-              innerTab === t.v
-                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-sm"
-                : "text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60"
-            }`}
+ innerTab === t.v
+ ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-sm"
+ : "text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60"
+ }`}
           >
             {t.label}
           </button>
@@ -1030,10 +1030,10 @@ const BrokeragesAgenciesView = () => {
               key={t.v}
               onClick={() => setSourceTab(t.v as any)}
               className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
-                sourceTab === t.v
-                  ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-sm"
-                  : "text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60"
-              }`}
+ sourceTab === t.v
+ ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-sm"
+ : "text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60"
+ }`}
             >
               {t.label}
             </button>
@@ -1469,8 +1469,8 @@ const BrokeragesAgenciesView = () => {
             const isExistingMatch = r.entry_source === "owner" && r.is_existing_match;
             return (
             <Card key={r.id} className={`bg-[#FDFBF7] text-[#1A1A1A] border hover:shadow-lg transition rounded-2xl ${
-              isDirectory ? "border-l-4 border-l-[#B89555] border-y-[#1A1A1A]/10 border-r-[#1A1A1A]/10" : "border-[#1A1A1A]/10 hover:border-[#1A1A1A]/20"
-            }`}>
+ isDirectory ? "border-l-4 border-l-[#B89555] border-y-[#1A1A1A]/10 border-r-[#1A1A1A]/10" : "border-[#1A1A1A]/10 hover:border-[#1A1A1A]/20"
+ }`}>
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <Checkbox
@@ -1509,7 +1509,7 @@ const BrokeragesAgenciesView = () => {
                       <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
                       {r.attended_briefing && (
                         <span
-                          className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1"
+                          className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30 inline-flex items-center gap-1"
                           title={r.briefing_notes || "Attended breakfast briefing"}
                         >
                           <CheckCircle2 className="w-3 h-3" />
@@ -2562,10 +2562,10 @@ const DeveloperRegistryTab = () => {
           type="button"
           onClick={() => setSubTab(subTab === "queue" ? null : "queue")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
-            subTab === "queue"
-              ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
-              : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
-          }`}
+ subTab === "queue"
+ ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
+ : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
+ }`}
         >
           Outreach Queue ({queuePool.length})
         </button>
@@ -2573,10 +2573,10 @@ const DeveloperRegistryTab = () => {
           type="button"
           onClick={() => setSubTab(subTab === "history" ? null : "history")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
-            subTab === "history"
-              ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
-              : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
-          }`}
+ subTab === "history"
+ ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
+ : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
+ }`}
         >
           Sent History ({historyPool.length})
         </button>
@@ -2908,11 +2908,11 @@ const DeveloperRegistryTab = () => {
                           </span>
                         )}
                         {sentDays !== null && r.status !== "registered" && (
-                          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1">
+                          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30 flex items-center gap-1">
                             <Mail className="w-3 h-3" />Email sent {sentDays === 0 ? "today" : `${sentDays}d ago`}
                           </span>
                         )}
-                        {r.outreach_count > 1 && <span className="text-xs text-emerald-700">×{r.outreach_count}</span>}
+                        {r.outreach_count > 1 && <span className="text-xs text-[color:var(--emerald-1)]">×{r.outreach_count}</span>}
                       </div>
                       <div className="grid sm:grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-[#1A1A1A]">
                         <div className="flex items-center gap-1.5 min-w-0">

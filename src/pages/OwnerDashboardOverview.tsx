@@ -77,7 +77,7 @@ function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) 
           </div>
         </div>
         {trend && (
-          <p className="text-xs text-emerald-600 mt-3 flex items-center gap-1 font-medium">
+          <p className="text-xs text-[color:var(--emerald-1)] mt-3 flex items-center gap-1 font-medium">
             <TrendingUp className="h-3 w-3" /> {trend}
           </p>
         )}
@@ -180,10 +180,10 @@ function ConversationRow({ conversation }: ConversationRowProps) {
         <Badge 
           variant="secondary" 
           className={`text-xs ${
-            conversation.status === 'active' 
-              ? 'bg-emerald-100 text-emerald-700' 
-              : 'bg-[#F7F2EA] text-[#1A1A1A]/70'
-          }`}
+ conversation.status === 'active' 
+ ? 'jj-emerald-soft text-[color:var(--emerald-1)]' 
+ : 'bg-[#F7F2EA] text-[#1A1A1A]/70'
+ }`}
         >
           {conversation.status}
         </Badge>
@@ -220,10 +220,10 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
           <button
             onClick={(e) => { e.stopPropagation(); onComplete(item.id); }}
             className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
-              item.status === 'completed' 
-                ? 'bg-[#B89555] border-[#B89555]' 
-                : 'border-[#B89555]/40 hover:border-[#B89555]'
-            }`}
+ item.status === 'completed' 
+ ? 'bg-[#B89555] border-[#B89555]' 
+ : 'border-[#B89555]/40 hover:border-[#B89555]'
+ }`}
           >
             {item.status === 'completed' && <CheckSquare className="h-3 w-3 text-white" />}
           </button>
@@ -487,7 +487,7 @@ export default function OwnerDashboardOverview() {
         <KPICard
           title="New This Week"
           value={newLeadsThisWeek ?? '—'}
-          icon={<UserPlus className="h-6 w-6 text-emerald-600" />}
+          icon={<UserPlus className="h-6 w-6 text-[color:var(--emerald-1)]" />}
           loading={loadingNewLeads}
           onClick={() => setActiveTab('leads')}
         />

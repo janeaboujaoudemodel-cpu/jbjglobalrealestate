@@ -40,8 +40,8 @@ const statusMeta: Record<
   approved: {
     label: "Verified",
     icon: CheckCircle2,
-    tone: "text-emerald-700",
-    bg: "bg-emerald-50 border-emerald-200",
+    tone: "text-[color:var(--emerald-1)]",
+    bg: "jj-emerald-soft border-[color:var(--emerald-1)]/30",
   },
   rejected: {
     label: "Action required",

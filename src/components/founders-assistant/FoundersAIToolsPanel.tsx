@@ -79,7 +79,7 @@ const ALL_TOOLS = [...MY_TOOLS, ...PROFESSIONAL_TOOLS];
 const ALL_CATEGORIES = ['All', 'Communication', 'Lead & Sales', 'Property Intelligence', 'Analytics', 'Documents', 'Productivity', 'Media', 'Development', 'Integration', 'Administration'];
 
 const statusConfig = {
-  connected: { label: 'Connected', color: 'bg-green-50 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
+  connected: { label: 'Connected', color: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30', icon: <CheckCircle className="w-3 h-3" /> },
   available: { label: 'Available', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
   coming_soon: { label: 'Coming Soon', color: 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30', icon: <AlertCircle className="w-3 h-3" /> },
 };
@@ -226,14 +226,14 @@ const FoundersAIToolsPanel: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-green-300">
+        <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-green-50 border border-green-200">
-                <Zap className="w-6 h-6 text-green-600" />
+              <div className="p-3 rounded-lg jj-emerald-soft border border-[color:var(--emerald-1)]/30">
+                <Zap className="w-6 h-6 text-[color:var(--emerald-1)]" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-green-600">{usageStats.totalExecutions}</p>
+                <p className="text-3xl font-bold text-[color:var(--emerald-1)]">{usageStats.totalExecutions}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Total Executions</p>
               </div>
             </div>
@@ -268,10 +268,10 @@ const FoundersAIToolsPanel: React.FC = () => {
               onClick={() => handleUseTool(tool)}
               disabled={executingTool === tool.id}
               className={`flex items-center gap-2 transition-all ${
-                executingTool === tool.id 
-                  ? 'bg-[#B89555]/20 border-2 border-[#B89555] text-[#B89555]' 
-                  : 'bg-[#FDFBF7] text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]'
-              }`}
+ executingTool === tool.id 
+ ? 'bg-[#B89555]/20 border-2 border-[#B89555] text-[#B89555]' 
+ : 'bg-[#FDFBF7] text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]'
+ }`}
             >
               {executingTool === tool.id ? (
                 <div className="w-4 h-4 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />

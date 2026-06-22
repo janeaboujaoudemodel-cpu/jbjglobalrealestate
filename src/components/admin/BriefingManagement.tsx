@@ -238,7 +238,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+      case 'approved': return 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30';
       case 'rejected': return 'bg-red-100 text-red-700 border-red-200';
       default: return 'bg-amber-100 text-amber-700 border-amber-200';
     }
@@ -249,7 +249,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
   const responsiveRating = (hours: number | null) => {
     if (hours === null) return { label: 'No Data', color: 'text-muted-foreground' };
-    if (hours <= 1) return { label: 'Excellent', color: 'text-emerald-600' };
+    if (hours <= 1) return { label: 'Excellent', color: 'text-[color:var(--emerald-1)]' };
     if (hours <= 4) return { label: 'Good', color: 'text-blue-600' };
     return { label: 'Slow', color: 'text-red-600' };
   };
@@ -274,7 +274,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
         {[
           { label: 'Total Briefings', value: briefings.length, color: 'text-[#1A1A1A]' },
           { label: 'Pending', value: briefings.filter(b => b.status === 'pending').length, color: 'text-amber-600' },
-          { label: 'Approved', value: briefings.filter(b => b.status === 'approved').length, color: 'text-emerald-600' },
+          { label: 'Approved', value: briefings.filter(b => b.status === 'approved').length, color: 'text-[color:var(--emerald-1)]' },
           { label: 'Broker Lists', value: brokerLists.length, color: 'text-blue-600' },
           { label: 'Active Reps', value: reps.length, color: 'text-purple-600' },
         ].map((s, i) => (
@@ -321,7 +321,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
             </div>
             <div className="flex gap-2">
               <Badge className="bg-amber-100 text-amber-700">● Pending</Badge>
-              <Badge className="bg-emerald-100 text-emerald-700">● Approved</Badge>
+              <Badge className="jj-emerald-soft text-[color:var(--emerald-1)]">● Approved</Badge>
               <Badge className="bg-red-100 text-red-700">● Rejected</Badge>
             </div>
           </div>
@@ -354,7 +354,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                       <div className="flex items-center gap-2">
                         {b.status === 'pending' && (
                           <>
-                            <Button size="sm" onClick={() => handleApprove(b)} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                            <Button size="sm" onClick={() => handleApprove(b)} className="jj-emerald-solid hover:jj-emerald-solid text-white">
                               <CheckCircle className="w-4 h-4 mr-1" /> Approve
                             </Button>
                             <Button size="sm" variant="destructive" onClick={() => handleReject(b)}>
@@ -370,7 +370,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                     {getBriefingAttendance(b.id).length > 0 && (
                       <div className="mt-3 pt-3 border-t border-[#B89555]/20 flex items-center gap-3 text-xs">
                         <span className="text-muted-foreground">Attendance:</span>
-                        <Badge className="bg-emerald-100 text-emerald-700">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'attending').length} Attending</Badge>
+                        <Badge className="jj-emerald-soft text-[color:var(--emerald-1)]">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'attending').length} Attending</Badge>
                         <Badge className="bg-amber-100 text-amber-700">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'late').length} Late</Badge>
                         <Badge className="bg-blue-100 text-blue-700">{getBriefingAttendance(b.id).filter(a => a.confirmed_attended).length} Confirmed</Badge>
                       </div>
@@ -398,7 +398,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                         <div>
                           <p className="text-foreground font-medium">{briefing?.project_name || 'Unknown'}</p>
                           <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                            <Badge className={a.rsvp_status === 'attending' ? 'bg-emerald-100 text-emerald-700' : a.rsvp_status === 'late' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}>
+                            <Badge className={a.rsvp_status === 'attending' ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : a.rsvp_status === 'late' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}>
                               {a.rsvp_status}
                             </Badge>
                             {a.confirmed_attended && <Badge className="bg-blue-100 text-blue-700">✓ Confirmed</Badge>}
@@ -520,7 +520,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
           <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/20">
             <CardHeader>
               <CardTitle className="text-foreground flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-emerald-600" />
+                <MessageCircle className="w-5 h-5 text-[color:var(--emerald-1)]" />
                 WhatsApp Activity Log (Manual Entry)
               </CardTitle>
             </CardHeader>
@@ -596,7 +596,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                     {getBriefingAttendance(selectedBriefing.id).map(a => (
                       <div key={a.id} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 rounded-lg border border-[#B89555]/15">
                         <div className="flex items-center gap-3">
-                          <Badge className={a.confirmed_attended ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'}>
+                          <Badge className={a.confirmed_attended ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : 'bg-muted text-muted-foreground'}>
                             {a.confirmed_attended ? '✓' : '○'}
                           </Badge>
                           <span className="text-sm">{a.rsvp_status}</span>
@@ -713,7 +713,7 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
         <Label>Description</Label>
         <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-[#FDFBF7] border-[#B89555]/20" />
       </div>
-      <Button onClick={handleLog} disabled={submitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+      <Button onClick={handleLog} disabled={submitting} className="jj-emerald-solid hover:jj-emerald-solid text-white">
         {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <MessageCircle className="w-4 h-4 mr-2" />}
         Log Activity
       </Button>

@@ -150,10 +150,9 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
       <div className="flex items-center justify-center">
         <span
           data-no-contrast-guard
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold
-            border border-[#B89555]/55 bg-[#F7F2EA] text-[#1A1A1A]"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border border-[#B89555]/55 bg-[#F7F2EA] text-[#1A1A1A]"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
           Call our agent now · Free
         </span>
       </div>
@@ -223,8 +222,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
                 <button
                   type="button"
                   data-no-contrast-guard
-                  className="flex h-12 w-full items-center justify-between rounded-lg border border-[#B89555]/45 bg-[#FDFBF7] px-3 text-[13.5px] text-[#1A1A1A]
-                    outline-none transition hover:border-[#B89555] hover:bg-[#F7F2EA] focus:border-[#B89555] focus:bg-[#FDFBF7]"
+                  className="flex h-12 w-full items-center justify-between rounded-lg border border-[#B89555]/45 bg-[#FDFBF7] px-3 text-[13.5px] text-[#1A1A1A] outline-none transition hover:border-[#B89555] hover:bg-[#F7F2EA] focus:border-[#B89555] focus:bg-[#FDFBF7]"
                 >
                   <span className="flex items-center gap-3">
                     <span className="text-[18px] leading-none">{flagEmoji(selectedCountry.id)}</span>
@@ -260,8 +258,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
                         setCountryCode(country.code);
                         setCountryOpen(false);
                       }}
-                      className="flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-[13px] text-[#1A1A1A]
-                        transition hover:bg-[#F7F2EA] hover:text-[#1A1A1A] focus:bg-[#F7F2EA] focus:text-[#1A1A1A] focus:outline-none"
+                      className="flex h-10 w-full items-center justify-between rounded-lg px-3 text-left text-[13px] text-[#1A1A1A] transition hover:bg-[#F7F2EA] hover:text-[#1A1A1A] focus:bg-[#F7F2EA] focus:text-[#1A1A1A] focus:outline-none"
                     >
                       <span className="flex min-w-0 items-center gap-3">
                         <span className="text-[17px] leading-none">{flagEmoji(country.id)}</span>
@@ -294,9 +291,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="mt-2 w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
-              disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
-              hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
+            className="mt-2 w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A] disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2 hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
             {submitting ? "Sending code…" : "Send verification code"}
@@ -322,9 +317,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             onClick={verifyOtp}
             disabled={submitting || otp.length !== 6}
             data-no-contrast-guard
-            className="mt-2 w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A]
-              disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2
-              hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
+            className="mt-2 w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A] disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2 hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
             {submitting ? "Verifying…" : "Verify & start chat"}

@@ -211,14 +211,14 @@ const ITDepartment: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-[#FDFBF7] border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+          <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#1A1A1A]/70 text-sm">Completed Today</p>
-                  <p className="text-3xl font-bold text-green-600">{stats.completedToday}</p>
+                  <p className="text-3xl font-bold text-[color:var(--emerald-1)]">{stats.completedToday}</p>
                 </div>
-                <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 jj-emerald-solid/10 rounded-xl flex items-center justify-center">
                   <CheckCircle className="w-6 h-6 text-green-500" />
                 </div>
               </div>

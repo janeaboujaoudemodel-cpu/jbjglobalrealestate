@@ -672,7 +672,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 className={cn(
                   "h-12 text-base pr-10 w-full pl-3",
                   inputStyles,
-                  localNumber && validation.isValid && "border-green-500/50",
+                  localNumber && validation.isValid && "border-[color:var(--emerald-1)]/30/50",
                   localNumber && !validation.isValid && "border-amber-500/50"
                 )}
                 placeholder={placeholder || "Phone number"}

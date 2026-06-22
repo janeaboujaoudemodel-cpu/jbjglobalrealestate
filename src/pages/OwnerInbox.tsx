@@ -74,7 +74,7 @@ const statusConfig: Record<ThreadStatus, { label: string; color: string; icon: R
   needs_reply: { label: "Needs Reply", color: "bg-red-500/10 text-red-500 border-red-500/30", icon: <AlertTriangle className="h-3 w-3" /> },
   waiting: { label: "Waiting", color: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30", icon: <Clock className="h-3 w-3" /> },
   follow_up_due: { label: "Follow-up Due", color: "bg-orange-500/10 text-orange-500 border-orange-500/30", icon: <Bell className="h-3 w-3" /> },
-  closed: { label: "Closed", color: "bg-green-500/10 text-green-500 border-green-500/30", icon: <CheckCircle className="h-3 w-3" /> },
+  closed: { label: "Closed", color: "jj-emerald-solid/10 text-green-500 border-[color:var(--emerald-1)]/30/30", icon: <CheckCircle className="h-3 w-3" /> },
 };
 
 type ActiveStatFilter = 'none' | 'unread' | 'needs_reply' | 'new' | 'follow_up_due';
@@ -343,17 +343,17 @@ export default function OwnerInbox() {
                   key={`${tab.value}-${tabChannelId ?? 'all'}`}
                   onClick={() => handleChannelTabClick(tab.value, tabChannelId ?? 'all')}
                   className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg flex-shrink-0 ${
-                    isActive
-                      ? 'border-[#B89555] bg-[#EFE6D6]/40 text-[#1A1A1A] font-bold shadow-sm'
-                      : 'border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20'
-                  }`}
+ isActive
+ ? 'border-[#B89555] bg-[#EFE6D6]/40 text-[#1A1A1A] font-bold shadow-sm'
+ : 'border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20'
+ }`}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
                   {unreadCount > 0 && (
                     <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
-                      isActive ? 'bg-[#1A1A1A] text-[#FDFBF7]' : 'bg-[#EFE6D6] text-[#1A1A1A]'
-                    }`}>
+ isActive ? 'bg-[#1A1A1A] text-[#FDFBF7]' : 'bg-[#EFE6D6] text-[#1A1A1A]'
+ }`}>
                       {unreadCount}
                     </span>
                   )}
@@ -385,20 +385,20 @@ export default function OwnerInbox() {
             <button
               onClick={() => setCategoryFilter('all')}
               className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
-                categoryFilter === 'all'
-                  ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]'
-                  : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
-              }`}
+ categoryFilter === 'all'
+ ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]'
+ : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+ }`}
             >All categories</button>
             {Object.entries(CATEGORY_META).map(([key, meta]) => (
               <button
                 key={key}
                 onClick={() => setCategoryFilter(key)}
                 className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
-                  categoryFilter === key
-                    ? meta.color + ' border-current'
-                    : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
-                }`}
+ categoryFilter === key
+ ? meta.color + ' border-current'
+ : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+ }`}
               >{meta.label}</button>
             ))}
           </div>
@@ -561,8 +561,8 @@ function StatsCard({
   return (
     <Card 
       className={`${isActive ? activeVariants[variant] : baseVariants[variant]} border-2 transition-all duration-300 ${
-        isClickable ? 'cursor-pointer hover:scale-[1.02]' : ''
-      }`}
+ isClickable ? 'cursor-pointer hover:scale-[1.02]' : ''
+ }`}
       onClick={isClickable ? onClick : undefined}
     >
       <CardContent className="p-3">
@@ -601,8 +601,8 @@ function ThreadListItem({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className={`p-3 cursor-pointer transition-all hover:bg-[#EFE6D6]/5 ${
-        isSelected ? 'bg-[#EFE6D6]/10 border-l-4 border-l-gold' : ''
-      } ${isChecked ? 'bg-[#EFE6D6]/30' : ''}`}
+ isSelected ? 'bg-[#EFE6D6]/10 border-l-4 border-l-gold' : ''
+ } ${isChecked ? 'bg-[#EFE6D6]/30' : ''}`}
       onClick={onClick}
     >
       <div className="flex items-start gap-3">
@@ -663,7 +663,7 @@ function ThreadListItem({
           </div>
 
           {thread.lead && (
-            <div className="flex items-center gap-1 mt-1.5 text-[10px] text-green-600">
+            <div className="flex items-center gap-1 mt-1.5 text-[10px] text-[color:var(--emerald-1)]">
               <LinkIcon className="h-3 w-3" />
               <span className="truncate">{thread.lead.full_name}</span>
             </div>

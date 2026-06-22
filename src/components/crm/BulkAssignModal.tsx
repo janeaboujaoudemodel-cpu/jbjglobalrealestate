@@ -232,12 +232,12 @@ const BulkAssignModal = ({
 
           {/* Preview */}
           {selectedBroker && (
-            <div className="bg-emerald-600/20 border border-emerald-500/30 rounded-lg p-3">
+            <div className="jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3">
               <div className="flex items-center gap-2 text-emerald-400">
                 <Check className="h-4 w-4" />
                 <span className="font-semibold">Ready to assign</span>
               </div>
-              <p className="text-sm text-emerald-300 mt-1">
+              <p className="text-sm text-[color:var(--emerald-on)] mt-1">
                 {selectedLeadIds.length || assignCount} leads will be assigned to <strong>{brokerName}</strong>
               </p>
             </div>

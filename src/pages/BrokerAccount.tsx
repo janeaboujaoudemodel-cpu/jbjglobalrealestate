@@ -273,7 +273,7 @@ const BrokerAccount = () => {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-full bg-green-500/20">
+                  <div className="p-2 rounded-full jj-emerald-solid/20">
                     <MessageCircle className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
@@ -466,7 +466,7 @@ const BrokerAccount = () => {
                       return (
                         <div 
                           key={module.id} 
-                          className={`flex items-center justify-between p-4 rounded-lg border ${isComplete ? 'bg-green-500/5 border-green-500/20' : 'bg-muted/30'}`}
+                          className={`flex items-center justify-between p-4 rounded-lg border ${isComplete ? 'jj-emerald-solid/5 border-[color:var(--emerald-1)]/30/20' : 'bg-muted/30'}`}
                         >
                           <div className="flex items-center gap-3">
                             {isComplete ? (
@@ -518,7 +518,7 @@ const BrokerAccount = () => {
                         {callLogs.map((call) => (
                           <div key={call.id} className="flex items-center justify-between p-3 border rounded-lg">
                             <div className="flex items-center gap-3">
-                              <div className={`p-2 rounded-full ${call.call_type === 'inbound' ? 'bg-green-500/20' : 'bg-blue-500/20'}`}>
+                              <div className={`p-2 rounded-full ${call.call_type === 'inbound' ? 'jj-emerald-solid/20' : 'bg-blue-500/20'}`}>
                                 <Phone className={`h-4 w-4 ${call.call_type === 'inbound' ? 'text-green-500' : 'text-blue-500'}`} />
                               </div>
                               <div>
@@ -567,7 +567,7 @@ const BrokerAccount = () => {
                         {chatLogs.map((chat) => (
                           <div key={chat.id} className="flex items-center justify-between p-3 border rounded-lg">
                             <div className="flex items-center gap-3">
-                              <div className="p-2 rounded-full bg-green-500/20">
+                              <div className="p-2 rounded-full jj-emerald-solid/20">
                                 <MessageCircle className="h-4 w-4 text-green-500" />
                               </div>
                               <div>

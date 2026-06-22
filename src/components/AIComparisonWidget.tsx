@@ -102,7 +102,7 @@ const AIComparisonWidget = () => {
             <div key={i} className="grid grid-cols-3 gap-2 py-2 border-t border-[#B89555]/30 text-sm">
               <span className="text-[#1A1A1A] font-medium">{item.name}</span>
               <span className="text-center text-[#1A1A1A]/70">{item.price}</span>
-              <span className="text-right text-green-600 font-medium">{item.roi}</span>
+              <span className="text-right text-[color:var(--emerald-1)] font-medium">{item.roi}</span>
             </div>
           ))}
         </div>

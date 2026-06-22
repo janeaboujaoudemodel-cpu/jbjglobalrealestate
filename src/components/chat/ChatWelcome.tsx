@@ -61,7 +61,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
               <MessageCircle className="w-6 h-6 text-green-500" />
             </div>
             <div className="text-left">
-              <h5 className="text-green-600 text-base font-bold mb-0.5">📱 {t('chat.talkDirectly', 'Talk Directly with Our Team')}</h5>
+              <h5 className="text-[color:var(--emerald-1)] text-base font-bold mb-0.5">📱 {t('chat.talkDirectly', 'Talk Directly with Our Team')}</h5>
               <p className="text-[#1A1A1A] text-sm font-medium">⚡ {t('chat.instantResponse', 'Instant response • WhatsApp')}</p>
             </div>
           </div>

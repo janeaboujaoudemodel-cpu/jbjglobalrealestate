@@ -200,12 +200,12 @@ export function BrokerToolkitEducation() {
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 mb-4">
+              <Badge className="jj-emerald-solid/30 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/50 mb-4">
                 <Download className="w-3 h-3 mr-1" />
                 Free PDF Books
               </Badge>
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                4 Free Books <span className="text-emerald-300">to Download</span>
+                4 Free Books <span className="text-[color:var(--emerald-on)]">to Download</span>
               </h3>
               <p className="text-white/70">
                 Exclusive guides written for UAE real estate professionals.
@@ -221,14 +221,14 @@ export function BrokerToolkitEducation() {
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="bg-emerald-900/60 border border-emerald-500/30 hover:border-emerald-400 hover:scale-105 transition-all cursor-pointer h-full shadow-lg shadow-emerald-500/10">
+                  <Card className="jj-emerald-solid/60 border border-[color:var(--emerald-1)]/30/30 hover:border-[color:var(--emerald-1)]/30 hover:scale-105 transition-all cursor-pointer h-full shadow-lg shadow-emerald-500/10">
                     <CardContent className="p-5 text-center">
-                      <div className="w-16 h-20 bg-emerald-500/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                        <BookOpen className="w-8 h-8 text-emerald-200" />
+                      <div className="w-16 h-20 jj-emerald-solid/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                        <BookOpen className="w-8 h-8 text-[color:var(--emerald-on)]" />
                       </div>
                       <h4 className="text-white font-semibold mb-1">{book.title}</h4>
-                      <p className="text-emerald-300/70 text-xs mb-2">{book.pages} pages</p>
-                      <p className="text-emerald-200/60 text-xs">{book.description}</p>
+                      <p className="text-[color:var(--emerald-on)]/70 text-xs mb-2">{book.pages} pages</p>
+                      <p className="text-[color:var(--emerald-on)]/60 text-xs">{book.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>

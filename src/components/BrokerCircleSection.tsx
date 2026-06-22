@@ -70,7 +70,7 @@ const SUPPORT_TEAM = [
     description: 'Dedicated mentor for deal closing and performance improvement.',
     icon: Target,
     color: 'text-green-400',
-    bgColor: 'bg-green-500/10',
+    bgColor: 'jj-emerald-solid/10',
   },
   {
     role: 'Photographer',

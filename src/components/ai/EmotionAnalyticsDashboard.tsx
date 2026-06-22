@@ -149,10 +149,10 @@ export function EmotionAnalyticsDashboard({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Positive</p>
-                <p className="text-2xl font-bold text-green-600">{sentimentBreakdown.positive}%</p>
+                <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{sentimentBreakdown.positive}%</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                <Smile className="h-6 w-6 text-green-600" />
+              <div className="h-12 w-12 rounded-full jj-emerald-soft flex items-center justify-center">
+                <Smile className="h-6 w-6 text-[color:var(--emerald-1)]" />
               </div>
             </div>
           </CardContent>

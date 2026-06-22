@@ -104,10 +104,10 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
                 <FileText className="w-3 h-3 text-[#B89555] flex-shrink-0" />
                 <span className="text-xs text-[#1A1A1A] truncate">{t.name}</span>
                 {t.isActive && (
-                  <Badge className="bg-green-100 text-green-700 border-green-300 text-[8px] px-1 h-3.5">Active</Badge>
+                  <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[8px] px-1 h-3.5">Active</Badge>
                 )}
               </div>
-              <Switch checked={t.isActive} onCheckedChange={() => toggleTemplate(t.id)} className="h-4 w-7 data-[state=checked]:bg-green-500" />
+              <Switch checked={t.isActive} onCheckedChange={() => toggleTemplate(t.id)} className="h-4 w-7 data-[state=checked]:jj-emerald-solid" />
             </div>
           ))}
         </div>
@@ -140,10 +140,10 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-5 w-5 p-0 hover:bg-green-100"
+                    className="h-5 w-5 p-0 hover:jj-emerald-soft"
                     onClick={(e) => { e.stopPropagation(); completeReminder(f.id); }}
                   >
-                    <CheckCircle2 className="w-3 h-3 text-green-600" />
+                    <CheckCircle2 className="w-3 h-3 text-[color:var(--emerald-1)]" />
                   </Button>
                 </div>
               ))}

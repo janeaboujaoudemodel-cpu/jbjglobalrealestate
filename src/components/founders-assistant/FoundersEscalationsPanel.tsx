@@ -146,7 +146,7 @@ export function FoundersEscalationsPanel() {
       case 'acknowledged':
         return <Badge className="bg-amber-100 text-amber-700 border border-amber-200 whitespace-nowrap">Acknowledged</Badge>;
       case 'resolved':
-        return <Badge className="bg-green-100 text-green-700 border border-green-200 whitespace-nowrap">Resolved</Badge>;
+        return <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30 whitespace-nowrap">Resolved</Badge>;
       default:
         return <Badge variant="outline" className="whitespace-nowrap">{status}</Badge>;
     }
@@ -156,7 +156,7 @@ export function FoundersEscalationsPanel() {
     switch (urgency) {
       case 'critical': return <Badge className="bg-red-100 text-red-700 border border-red-200 whitespace-nowrap">Critical</Badge>;
       case 'high': return <Badge className="bg-orange-100 text-orange-700 border border-orange-200 whitespace-nowrap">High</Badge>;
-      case 'normal': return <Badge className="bg-green-100 text-green-700 border border-green-200 whitespace-nowrap">Normal</Badge>;
+      case 'normal': return <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30 whitespace-nowrap">Normal</Badge>;
       case 'low': return <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30 whitespace-nowrap">Low</Badge>;
       default: return null;
     }
@@ -199,13 +199,13 @@ export function FoundersEscalationsPanel() {
             <p className="text-2xl font-bold text-blue-600">{stats.acknowledged}</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-green-300">
+        <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30">
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <CheckCircle className="h-3 w-3 text-green-500" />
               <p className="text-xs text-[#1A1A1A]/70">Resolved</p>
             </div>
-            <p className="text-2xl font-bold text-green-600">{stats.resolved}</p>
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.resolved}</p>
           </CardContent>
         </Card>
       </div>
@@ -288,22 +288,22 @@ export function FoundersEscalationsPanel() {
                 >
                   <Card
                     className={`bg-[#FDFBF7] transition-all border-2 ${
-                      event.status === 'pending'
-                        ? event.emotionAnalysis.urgency === 'critical'
-                          ? 'border-red-300 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
-                          : 'border-amber-300'
-                        : event.status === 'resolved'
-                        ? 'border-green-200'
-                        : 'border-[#B89555]/20'
-                    }`}
+ event.status === 'pending'
+ ? event.emotionAnalysis.urgency === 'critical'
+ ? 'border-red-300 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
+ : 'border-amber-300'
+ : event.status === 'resolved'
+ ? 'border-[color:var(--emerald-1)]/30'
+ : 'border-[#B89555]/20'
+ }`}
                   >
                     <CardContent className="p-4">
                       {/* Header Row */}
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-lg ${
-                            event.emotionAnalysis.urgency === 'critical' ? 'bg-red-50 animate-pulse' : 'bg-[#F7F2EA]'
-                          }`}>
+ event.emotionAnalysis.urgency === 'critical' ? 'bg-red-50 animate-pulse' : 'bg-[#F7F2EA]'
+ }`}>
                             {getEmotionLucideIcon(event.emotionAnalysis.emotion)}
                           </div>
 
@@ -405,9 +405,9 @@ export function FoundersEscalationsPanel() {
                             )}
 
                             {event.status === 'resolved' && event.resolutionNotes && (
-                              <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                              <div className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg p-3 mb-4">
                                 <p className="text-xs text-[#1A1A1A]/70 mb-1">Resolution:</p>
-                                <p className="text-sm text-green-700">{event.resolutionNotes}</p>
+                                <p className="text-sm text-[color:var(--emerald-1)]">{event.resolutionNotes}</p>
                                 <p className="text-xs text-[#1A1A1A]/70 mt-2">
                                   Resolved by {event.resolvedBy} {event.resolvedAt && formatDistanceToNow(event.resolvedAt, { addSuffix: true })}
                                 </p>
@@ -440,7 +440,7 @@ export function FoundersEscalationsPanel() {
                                     setSelectedEscalation(event);
                                     setResolveDialogOpen(true);
                                   }}
-                                  className="bg-green-600 hover:bg-green-700 text-white"
+                                  className="jj-emerald-solid hover:jj-emerald-solid text-white"
                                 >
                                   <CheckCircle className="h-4 w-4 mr-1" />
                                   Resolve
@@ -481,9 +481,9 @@ export function FoundersEscalationsPanel() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-green-50 rounded-lg p-4 border border-green-200 text-center">
-              <Smile className="h-6 w-6 text-green-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-green-700">
+            <div className="jj-emerald-soft rounded-lg p-4 border border-[color:var(--emerald-1)]/30 text-center">
+              <Smile className="h-6 w-6 text-[color:var(--emerald-1)] mx-auto mb-2" />
+              <p className="text-2xl font-bold text-[color:var(--emerald-1)]">
                 {allEscalations.filter(e => e.emotionAnalysis.sentiment > 0).length}
               </p>
               <p className="text-xs text-[#1A1A1A]/70">Positive</p>
@@ -546,7 +546,7 @@ export function FoundersEscalationsPanel() {
             <Button variant="outline" onClick={() => setResolveDialogOpen(false)} className="border-[#B89555]/20 text-[#1A1A1A]">
               Cancel
             </Button>
-            <Button onClick={handleResolve} className="bg-green-600 hover:bg-green-700 text-white">
+            <Button onClick={handleResolve} className="jj-emerald-solid hover:jj-emerald-solid text-white">
               <CheckCircle className="h-4 w-4 mr-1" />
               Resolve Escalation
             </Button>

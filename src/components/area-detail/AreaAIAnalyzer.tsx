@@ -52,8 +52,8 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
           <h3 className="font-bold text-[#0A0A0A] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
-          isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'
-        }`}>
+ isPositive ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : 'bg-red-50 text-red-600'
+ }`}>
           {isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
           {(Math.abs(growth) * 100).toFixed(1)}% YoY
         </div>
@@ -235,7 +235,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
   const lastPoint = chartData[chartData.length - 1];
   const ratio = lastPoint ? lastPoint.demand / lastPoint.supply : 1;
   const marketStatus = ratio > 0.9 ? 'High Demand' : ratio > 0.7 ? 'Balanced' : 'Oversupplied';
-  const statusColor = ratio > 0.9 ? 'text-emerald-600' : ratio > 0.7 ? 'text-[#1A1A1A]' : 'text-red-500';
+  const statusColor = ratio > 0.9 ? 'text-[color:var(--emerald-1)]' : ratio > 0.7 ? 'text-[#1A1A1A]' : 'text-red-500';
   const StatusIcon = ratio >= 0.9 ? ArrowUpRight : ratio > 0.7 ? TrendingUp : ArrowDownRight;
 
   return (
@@ -246,8 +246,8 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
           <h3 className="font-bold text-[#0A0A0A] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
-          ratio > 0.9 ? 'bg-emerald-50 text-emerald-700' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'
-        }`}>
+ ratio > 0.9 ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'
+ }`}>
           <StatusIcon className="w-3.5 h-3.5" />
           {marketStatus}
         </div>
@@ -287,7 +287,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
           <span className="text-[#1A1A1A]/70">Supply (New Units)</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-emerald-500" />
+          <div className="w-3 h-3 rounded-full jj-emerald-solid" />
           <span className="text-[#1A1A1A]/70">Demand (Absorption)</span>
         </div>
       </div>
@@ -592,10 +592,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
                           <div key={status} className="flex items-center gap-1.5">
                             <div className={`w-2 h-2 rounded-full ${
-                              status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'bg-emerald-500' : 
-                              status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
-                              status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-[#B89555]'
-                            }`} />
+ status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'jj-emerald-solid' : 
+ status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
+ status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-[#B89555]'
+ }`} />
                             <span className="text-xs text-[#1A1A1A]/70">{status} <span className="font-semibold text-[#1A1A1A]">({count as number})</span></span>
                           </div>
                         ))}
@@ -651,10 +651,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   
                   {/* Rating quality label */}
                   <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 border ${
-                    ratingScore >= 8 ? 'bg-[#B89555]/20 text-[#B89555] border-[#B89555]/50' :
-                    ratingScore >= 6 ? 'bg-white/10 text-white border-white/25' :
-                    'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                  }`}>
+ ratingScore >= 8 ? 'bg-[#B89555]/20 text-[#B89555] border-[#B89555]/50' :
+ ratingScore >= 6 ? 'bg-white/10 text-white border-white/25' :
+ 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+ }`}>
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
                 </div>

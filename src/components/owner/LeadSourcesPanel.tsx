@@ -106,7 +106,7 @@ export default function LeadSourcesPanel() {
           <TrendingUp className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
           Lead Sources
           <span className="ml-auto inline-flex items-center gap-1.5 text-[10px] font-medium text-[#1A1A1A]/60 uppercase tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full jj-emerald-solid animate-pulse" />
             Live
           </span>
         </CardTitle>

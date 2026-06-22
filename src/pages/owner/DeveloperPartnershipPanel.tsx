@@ -473,7 +473,7 @@ const DeveloperPartnershipPanel = () => {
                           <Badge
                             className={
                               rep.status === "active" || rep.status === "approved"
-                                ? "bg-emerald-100 text-emerald-900 border border-emerald-300"
+                                ? "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30"
                                 : rep.status === "suspended"
                                 ? "bg-amber-100 text-amber-900 border border-amber-300"
                                 : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40"

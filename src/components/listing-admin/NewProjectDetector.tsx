@@ -138,7 +138,7 @@ export function NewProjectDetector() {
           <CardTitle className="flex items-center gap-2 text-base">
             <Sparkles className="h-5 w-5 text-blue-600" />
             <span className="text-blue-900">New Projects Ready to Publish</span>
-            <Badge className="bg-emerald-600 text-white border-0 ml-1">
+            <Badge className="jj-emerald-solid text-white border-0 ml-1">
               {totalCount} NEW
             </Badge>
           </CardTitle>
@@ -147,7 +147,7 @@ export function NewProjectDetector() {
               <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Refresh
             </Button>
             {projects.length > 1 && (
-              <Button size="sm" onClick={handleImportAll} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+              <Button size="sm" onClick={handleImportAll} className="jj-emerald-solid hover:jj-emerald-solid text-white">
                 <Download className="w-3.5 h-3.5 mr-1.5" /> Publish All
               </Button>
             )}
@@ -206,7 +206,7 @@ export function NewProjectDetector() {
                   )}
                 </div>
                 {project.price_from && (
-                  <div className="flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                  <div className="flex items-center gap-1 text-[11px] text-[color:var(--emerald-1)] font-medium">
                     <DollarSign className="w-3 h-3 flex-shrink-0" />
                     From {formatPrice(project.price_from)}
                   </div>
@@ -219,7 +219,7 @@ export function NewProjectDetector() {
                   size="sm"
                   onClick={() => handleImportProject(project)}
                   disabled={importing.has(project.id)}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8"
+                  className="w-full jj-emerald-solid hover:jj-emerald-solid text-white text-xs h-8"
                 >
                   {importing.has(project.id) ? (
                     <><RefreshCw className="w-3 h-3 mr-1.5 animate-spin" />Extracting & Publishing...</>

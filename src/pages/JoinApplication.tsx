@@ -649,8 +649,8 @@ export default function JoinApplication() {
           <div className="w-full max-w-3xl mx-auto">
             <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 shadow-2xl p-8 md:p-12 rounded-2xl">
               <CardHeader className="text-center pb-6">
-                <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border-2 border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/10">
-                  <CheckCircle className="h-12 w-12 text-emerald-600" />
+                <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br /20 /10 border-2 border-[color:var(--emerald-1)]/30/40 flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                  <CheckCircle className="h-12 w-12 text-[color:var(--emerald-1)]" />
                 </div>
                 <CardTitle className="text-3xl md:text-4xl text-[#1A1A1A] mb-4">Welcome Back</CardTitle>
                 <CardDescription className="text-lg text-[#1A1A1A]/70">
@@ -750,8 +750,8 @@ export default function JoinApplication() {
         aria-required="true"
         {...invalidProps(k)}
         className={`bg-[#FDFBF7] border-2 border-[#0A0A0A] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 h-11 text-base ${
-          fieldErr(k) ? "is-invalid" : ""
-        }`}
+ fieldErr(k) ? "is-invalid" : ""
+ }`}
       />
       <FieldError id={`${k}-err`} message={fieldErr(k)} />
     </div>
@@ -823,7 +823,7 @@ export default function JoinApplication() {
                     data-no-contrast-guard
                     className="careers-open-badge inline-flex items-center gap-1.5 px-3 py-1.5 self-start sm:self-end"
                   >
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
                     <span>{filteredPositions.length} open</span>
                   </Badge>
                 </div>

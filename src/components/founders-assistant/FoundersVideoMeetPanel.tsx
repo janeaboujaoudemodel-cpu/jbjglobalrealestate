@@ -132,10 +132,10 @@ const FoundersVideoMeetPanel: React.FC = () => {
               </div>
 
               {generatedLink && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-4 rounded-lg bg-green-50 border-2 border-green-500/30">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-4 rounded-lg jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30/30">
                   <div className="flex items-center gap-2 mb-3">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span className="text-green-700 font-medium">Meeting Created Successfully!</span>
+                    <CheckCircle className="w-5 h-5 text-[color:var(--emerald-1)]" />
+                    <span className="text-[color:var(--emerald-1)] font-medium">Meeting Created Successfully!</span>
                   </div>
                   <div className="flex items-center gap-2 mb-3">
                     <Input value={generatedLink} readOnly className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] flex-1" />
@@ -144,7 +144,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Button size="sm" onClick={() => navigate(`/video-meeting/${generatedLink.split('/').pop()}`)} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white"><Video className="w-4 h-4 mr-2" />Join Now</Button>
                     <Button size="sm" variant="outline" onClick={() => handleSendInvite('email')} className="border-blue-500/30 text-blue-600 hover:bg-blue-500/10"><Mail className="w-4 h-4 mr-2" />Email</Button>
-                    <Button size="sm" variant="outline" onClick={() => handleSendInvite('whatsapp')} className="border-green-500/30 text-green-600 hover:bg-green-500/10"><MessageSquare className="w-4 h-4 mr-2" />WhatsApp</Button>
+                    <Button size="sm" variant="outline" onClick={() => handleSendInvite('whatsapp')} className="border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] hover:jj-emerald-solid/10"><MessageSquare className="w-4 h-4 mr-2" />WhatsApp</Button>
                   </div>
                 </motion.div>
               )}

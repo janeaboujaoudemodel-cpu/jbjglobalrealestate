@@ -64,7 +64,7 @@ const DiffViewer = ({ before, after }: { before: Record<string, any> | null; aft
           <div key={key} className="rounded-lg border border-border p-2.5 bg-muted/30">
             <div className="flex items-center gap-2 mb-1">
               <span className="font-medium text-foreground capitalize">{key.replace(/_/g, " ")}</span>
-              {isNew && <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200">Added</Badge>}
+              {isNew && <Badge variant="outline" className="text-[10px] jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Added</Badge>}
               {isRemoved && <Badge variant="outline" className="text-[10px] bg-red-50 text-red-700 border-red-200">Removed</Badge>}
               {!isNew && !isRemoved && <Badge variant="outline" className="text-[10px] bg-amber-50 text-amber-700 border-amber-200">Changed</Badge>}
             </div>
@@ -75,7 +75,7 @@ const DiffViewer = ({ before, after }: { before: Record<string, any> | null; aft
                   {isArray ? `${Array.isArray(bVal) ? bVal.length : 0} items` : String(bVal ?? "—")}
                 </div>
               </div>
-              <div className="bg-green-50/50 rounded p-1.5 text-xs">
+              <div className="jj-emerald-soft/50 rounded p-1.5 text-xs">
                 <span className="text-muted-foreground">After:</span>
                 <div className="text-foreground mt-0.5 break-all">
                   {isArray ? `${Array.isArray(aVal) ? aVal.length : 0} items` : String(aVal ?? "—")}
@@ -119,7 +119,7 @@ const SuggestionCard = ({ item, onApprove, onReject }: { item: EnrichmentSuggest
         </div>
         {item.status === "pending" && (
           <div className="flex gap-1.5" onClick={e => e.stopPropagation()}>
-            <Button size="sm" variant="outline" className="h-7 text-xs border-green-300 text-green-700 hover:bg-green-50" onClick={() => onApprove(item.id)}>
+            <Button size="sm" variant="outline" className="h-7 text-xs border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft" onClick={() => onApprove(item.id)}>
               <CheckCircle2 className="w-3 h-3 mr-1" /> Approve
             </Button>
             <Button size="sm" variant="outline" className="h-7 text-xs border-red-300 text-red-700 hover:bg-red-50" onClick={() => onReject(item.id)}>
@@ -127,7 +127,7 @@ const SuggestionCard = ({ item, onApprove, onReject }: { item: EnrichmentSuggest
             </Button>
           </div>
         )}
-        {item.status === "approved" && <Badge className="bg-green-100 text-green-800 border-green-300">Approved</Badge>}
+        {item.status === "approved" && <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Approved</Badge>}
         {item.status === "rejected" && <Badge className="bg-red-100 text-red-800 border-red-300">Rejected</Badge>}
         {expanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
       </div>
@@ -253,7 +253,7 @@ export const EnrichmentAuditPanel = () => {
                 <div key={j.id} className="flex items-center gap-3 text-xs p-2 rounded-lg bg-muted/30 border border-border">
                   <Badge variant="outline" className={cn(
                     "text-[10px]",
-                    j.status === "completed" && "bg-green-50 text-green-700",
+                    j.status === "completed" && "jj-emerald-soft text-[color:var(--emerald-1)]",
                     j.status === "running" && "bg-blue-50 text-blue-700",
                     j.status === "failed" && "bg-red-50 text-red-700",
                   )}>

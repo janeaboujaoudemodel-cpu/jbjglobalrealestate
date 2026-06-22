@@ -214,7 +214,7 @@ export default function CoverLetterGenerator() {
             </div>
             {letter && (
               <Button variant="outline" size="sm" onClick={copyLetter} className="gap-1.5 h-8 text-xs border-[hsl(var(--border))]">
-                {copied ? <Check size={13} className="text-green-600" /> : <Copy size={13} />}
+                {copied ? <Check size={13} className="text-[color:var(--emerald-1)]" /> : <Copy size={13} />}
                 {copied ? "Copied!" : "Copy"}
               </Button>
             )}
@@ -267,10 +267,10 @@ export default function CoverLetterGenerator() {
                   key={dt.id}
                   onClick={() => setDocType(dt.id)}
                   className={`px-2.5 py-1.5 rounded-lg border text-[10px] font-medium transition-all ${
-                    docType === dt.id
-                      ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--foreground))]"
-                      : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                  }`}
+ docType === dt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--foreground))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                 >
                   {dt.label}
                 </button>
@@ -326,10 +326,10 @@ export default function CoverLetterGenerator() {
                   key={d.id}
                   onClick={() => setDividerStyle(d.id)}
                   className={`px-2.5 py-1 rounded-md border text-[10px] transition-all ${
-                    dividerStyle === d.id
-                      ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
-                      : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
-                  }`}
+ dividerStyle === d.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
+ : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                 >
                   {d.label}
                 </button>
@@ -359,10 +359,10 @@ export default function CoverLetterGenerator() {
                   key={t.id}
                   onClick={() => switchTemplate(t.id)}
                   className={`relative rounded-lg border-2 p-2 text-left transition-all ${
-                    templateId === t.id
-                      ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]"
-                      : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]"
-                  }`}
+ templateId === t.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]"
+ : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]"
+ }`}
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: t.accentColor }} />
@@ -387,10 +387,10 @@ export default function CoverLetterGenerator() {
                   key={t.id}
                   onClick={() => setTone(t.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg border text-left transition-all ${
-                    tone === t.id
-                      ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]"
-                      : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]"
-                  }`}
+ tone === t.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]"
+ : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]"
+ }`}
                 >
                   <div>
                     <p className="text-xs font-semibold text-[hsl(var(--foreground))]">{t.label}</p>
@@ -484,10 +484,10 @@ export default function CoverLetterGenerator() {
                 <button
                   onClick={() => setEditing(e => !e)}
                   className={`flex items-center gap-1.5 text-[10px] px-2.5 py-1 rounded-lg border transition-all ${
-                    editing
-                      ? "border-violet-400 bg-violet-50 text-violet-700"
-                      : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-violet-300"
-                  }`}
+ editing
+ ? "border-violet-400 bg-violet-50 text-violet-700"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-violet-300"
+ }`}
                 >
                   <Pencil size={10} />
                   {editing ? "Done" : "Edit Text"}
@@ -557,8 +557,8 @@ export default function CoverLetterGenerator() {
                     key={t.id}
                     onClick={() => switchTemplate(t.id)}
                     className={`rounded-lg border-2 overflow-hidden transition-all ${
-                      templateId === t.id ? "border-[hsl(var(--gold))]" : "border-transparent hover:border-[hsl(var(--border))]"
-                    }`}
+ templateId === t.id ? "border-[hsl(var(--gold))]" : "border-transparent hover:border-[hsl(var(--border))]"
+ }`}
                   >
                     <LetterPreview
                       form={form}

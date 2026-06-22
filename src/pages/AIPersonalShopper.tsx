@@ -229,16 +229,16 @@ const AIPersonalShopper = () => {
   return (
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-900/30 via-teal-800/20 to-emerald-900/30 border-b border-emerald-500/20">
+      <div className="bg-gradient-to-r /30 /20 /30 border-b border-[color:var(--emerald-1)]/30/20">
         <div className="container mx-auto px-4 py-8 md:py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
               <Plane className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-300 text-sm font-medium">AI Travel & Property Concierge</span>
+              <span className="text-[color:var(--emerald-on)] text-sm font-medium">AI Travel & Property Concierge</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
               Your Personal <span className="text-[#B89555]">UAE Concierge</span>
@@ -261,7 +261,7 @@ const AIPersonalShopper = () => {
               {currentPlan ? currentPlan.name : "New Trip Plan"}
             </span>
             {currentPlan?.status === 'submitted' && (
-              <Badge className="bg-emerald-600 text-xs">Submitted</Badge>
+              <Badge className="jj-emerald-solid text-xs">Submitted</Badge>
             )}
           </div>
           <div className="flex-1" />
@@ -386,7 +386,7 @@ const AIPersonalShopper = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => useQuickPrompt(prompt.prompt)}
-                    className="w-full p-3 text-left bg-[#F7F2EA]/50 hover:bg-[#1A1A1A] border border-[#1A1A1A] hover:border-emerald-500/50 rounded-lg transition-all group"
+                    className="w-full p-3 text-left bg-[#F7F2EA]/50 hover:bg-[#1A1A1A] border border-[#1A1A1A] hover:border-[color:var(--emerald-1)]/30/50 rounded-lg transition-all group"
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <prompt.icon className="w-4 h-4 text-emerald-400" />
@@ -450,16 +450,16 @@ const AIPersonalShopper = () => {
                         relocating family, or luxury traveler — I'll create a complete personalized itinerary for you.
                       </p>
                       <div className="flex flex-wrap justify-center gap-2 mt-4">
-                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
                           <Clock className="w-3 h-3 mr-1" /> Full Schedules
                         </Badge>
-                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
                           <Hotel className="w-3 h-3 mr-1" /> Hotels
                         </Badge>
-                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
                           <Building2 className="w-3 h-3 mr-1" /> Properties
                         </Badge>
-                        <Badge variant="outline" className="border-emerald-500/50 text-emerald-400">
+                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
                           <Star className="w-3 h-3 mr-1" /> Experiences
                         </Badge>
                       </div>
@@ -478,10 +478,10 @@ const AIPersonalShopper = () => {
                         >
                           <div
                             className={`max-w-[85%] p-4 rounded-2xl ${
-                              message.role === 'user'
-                                ? 'bg-emerald-600 text-white'
-                                : 'bg-[#F7F2EA] text-gray-100 border border-[#1A1A1A]'
-                            }`}
+ message.role === 'user'
+ ? 'jj-emerald-solid text-white'
+ : 'bg-[#F7F2EA] text-gray-100 border border-[#1A1A1A]'
+ }`}
                           >
                             {message.role === 'assistant' && (
                               <div className="flex items-center gap-2 mb-2 text-emerald-400 text-xs font-medium">
@@ -535,7 +535,7 @@ const AIPersonalShopper = () => {
                   <Button
                     onClick={() => sendMessage(inputMessage)}
                     disabled={!inputMessage.trim() || isLoading}
-                    className="bg-emerald-600 hover:bg-emerald-700 self-end"
+                    className="jj-emerald-solid hover:jj-emerald-solid self-end"
                   >
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />

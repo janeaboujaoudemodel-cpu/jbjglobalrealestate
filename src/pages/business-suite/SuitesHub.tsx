@@ -81,7 +81,7 @@ const glowMap: Record<string, string> = {
 const borderMap: Record<string, string> = {
   sky: 'border-sky-500/30 hover:border-sky-400/60',
   fuchsia: 'border-fuchsia-500/30 hover:border-fuchsia-400/60',
-  emerald: 'border-emerald-500/30 hover:border-emerald-400/60',
+  emerald: 'border-[color:var(--emerald-1)]/30/30 hover:border-[color:var(--emerald-1)]/30/60',
   pink: 'border-pink-500/30 hover:border-pink-400/60',
   amber: 'border-amber-500/30 hover:border-amber-400/60',
 };

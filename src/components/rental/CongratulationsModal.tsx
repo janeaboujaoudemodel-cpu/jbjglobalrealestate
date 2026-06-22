@@ -66,7 +66,7 @@ export function CongratulationsModal({
               className={cn(
                 'absolute w-2 h-2 rounded-full',
                 i % 4 === 0 ? 'bg-[#EFE6D6]' :
-                i % 4 === 1 ? 'bg-green-500' :
+                i % 4 === 1 ? 'jj-emerald-solid' :
                 i % 4 === 2 ? 'bg-champagne' :
                 'bg-amber-400'
               )}
@@ -111,17 +111,17 @@ export function CongratulationsModal({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-xl p-4 mb-6"
+            className="jj-emerald-soft dark:bg-green-950/20 border border-[color:var(--emerald-1)]/30 dark:border-green-800 rounded-xl p-4 mb-6"
           >
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center flex-shrink-0">
                 <Check className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h3 className="font-semibold text-green-700 dark:text-green-400 mb-1">
+                <h3 className="font-semibold text-[color:var(--emerald-1)] dark:text-green-400 mb-1">
                   Your Listing Application Has Been Approved!
                 </h3>
-                <p className="text-sm text-green-600 dark:text-green-500">
+                <p className="text-sm text-[color:var(--emerald-1)] dark:text-green-500">
                   <strong>"{listingTitle}"</strong> has been approved by our team and is now visible to potential tenants across the UAE.
                 </p>
               </div>
@@ -145,13 +145,13 @@ export function CongratulationsModal({
               ].map((item, index) => (
                 <div key={item.step} className="flex items-center">
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-sm">
+                    <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center text-white text-sm">
                       {item.icon}
                     </div>
                     <span className="text-xs mt-1 text-muted-foreground">{item.step}</span>
                   </div>
                   {index < 3 && (
-                    <div className="w-8 h-0.5 bg-green-500 mx-1" />
+                    <div className="w-8 h-0.5 jj-emerald-solid mx-1" />
                   )}
                 </div>
               ))}

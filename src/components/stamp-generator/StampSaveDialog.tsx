@@ -24,7 +24,7 @@ interface StampSaveDialogProps {
 
 const SAVE_TYPE_CONFIG: Record<SaveType, { label: string; badgeClass: string }> = {
   draft: { label: 'Draft Saved', badgeClass: 'bg-blue-50 text-blue-700 border-blue-200' },
-  design: { label: 'Design Saved', badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+  design: { label: 'Design Saved', badgeClass: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' },
   preset: { label: 'Preset Saved', badgeClass: 'bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.3)]' },
 };
 
@@ -38,8 +38,8 @@ export function StampSaveDialog({
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="mx-auto w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-2">
-            <Check size={24} className="text-emerald-600" />
+          <div className="mx-auto w-12 h-12 rounded-full jj-emerald-soft flex items-center justify-center mb-2">
+            <Check size={24} className="text-[color:var(--emerald-1)]" />
           </div>
           <DialogTitle className="text-center">Project Saved</DialogTitle>
           <DialogDescription className="text-center">
@@ -66,8 +66,8 @@ export function StampSaveDialog({
             <span className="ml-auto text-[10px] text-[hsl(var(--muted-foreground))]">Side panel</span>
           </Button>
           {onSaveAsAsset && saveType === 'design' && (
-            <Button variant="outline" className="w-full justify-start gap-3 h-11 text-sm border-emerald-200 hover:bg-emerald-50" onClick={() => { onSaveAsAsset(); onClose(); }}>
-              <Package size={16} className="text-emerald-600" />
+            <Button variant="outline" className="w-full justify-start gap-3 h-11 text-sm border-[color:var(--emerald-1)]/30 hover:jj-emerald-soft" onClick={() => { onSaveAsAsset(); onClose(); }}>
+              <Package size={16} className="text-[color:var(--emerald-1)]" />
               Save as Brand Asset
               <span className="ml-auto text-[10px] text-[hsl(var(--muted-foreground))]">Reuse in other tools</span>
             </Button>

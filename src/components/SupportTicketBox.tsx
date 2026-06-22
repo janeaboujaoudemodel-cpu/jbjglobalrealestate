@@ -533,7 +533,7 @@ const SupportTicketBox = () => {
                                 <motion.div
                                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
                                   transition={{ duration: 2, repeat: Infinity }}
-                                  className="absolute inset-0 bg-green-400/30 rounded-full"
+                                  className="absolute inset-0 jj-emerald-solid/30 rounded-full"
                                 />
                                 <div className="relative w-full h-full bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center shadow-lg">
                                   <motion.div
@@ -617,10 +617,10 @@ const SupportTicketBox = () => {
                                    <div className="flex justify-between">
                                      <span className="text-[#1A1A1A]/70">Priority</span>
                                      <span className={`font-medium ${
-                                       formData.priority === 'critical' ? 'text-red-500' :
-                                       formData.priority === 'high' ? 'text-orange-500' :
-                                       formData.priority === 'normal' ? 'text-blue-500' : 'text-green-500'
-                                     }`}>
+ formData.priority === 'critical' ? 'text-red-500' :
+ formData.priority === 'high' ? 'text-orange-500' :
+ formData.priority === 'normal' ? 'text-blue-500' : 'text-green-500'
+ }`}>
                                        {formData.priority.charAt(0).toUpperCase() + formData.priority.slice(1)}
                                      </span>
                                    </div>
@@ -1055,12 +1055,12 @@ const SupportTicketBox = () => {
                                       <div
                                         key={index}
                                         className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
-                                          uploadStatuses[index] === 'error' 
-                                            ? 'bg-red-50 border border-red-200' 
-                                            : uploadStatuses[index] === 'done'
-                                            ? 'bg-green-50 border border-green-200'
-                                            : 'bg-[#F7F2EA]'
-                                        }`}
+ uploadStatuses[index] === 'error' 
+ ? 'bg-red-50 border border-red-200' 
+ : uploadStatuses[index] === 'done'
+ ? 'jj-emerald-soft border border-[color:var(--emerald-1)]/30'
+ : 'bg-[#F7F2EA]'
+ }`}
                                       >
                                         <div className="flex items-center gap-2 min-w-0">
                                           {/* Thumbnail preview for images */}
@@ -1139,8 +1139,8 @@ const SupportTicketBox = () => {
                             </div>
 
                             {/* Security Notice */}
-                            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                              <p className="text-xs text-green-700 flex items-center gap-2">
+                            <div className="p-3 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
+                              <p className="text-xs text-[color:var(--emerald-1)] flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4" />
                                 Your information is encrypted and securely stored. Only authorized support staff can access your ticket.
                               </p>

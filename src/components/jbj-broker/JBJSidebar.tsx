@@ -72,10 +72,10 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
               <Badge
                 variant="outline"
                 className={`mt-1 text-xs ${
-                  brokerProfile.status === "active"
-                    ? "border-emerald-500 text-emerald-700 bg-emerald-50"
-                    : "border-amber-500 text-amber-700 bg-amber-50"
-                }`}
+ brokerProfile.status === "active"
+ ? "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] jj-emerald-soft"
+ : "border-amber-500 text-amber-700 bg-amber-50"
+ }`}
               >
                 {brokerProfile.status}
               </Badge>
@@ -111,10 +111,10 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
             variant="ghost"
             onClick={() => navigate(item.path)}
             className={`w-full justify-start gap-3 ${
-              activePage === item.id
-                ? "bg-[#EFE6D6]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"
-                : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
-            }`}
+ activePage === item.id
+ ? "bg-[#EFE6D6]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"
+ : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
+ }`}
           >
             <item.icon className="h-5 w-5" />
             {item.label}

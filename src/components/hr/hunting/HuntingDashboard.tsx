@@ -75,7 +75,7 @@ export function HuntingDashboard() {
                     <p className="text-sm text-muted-foreground">Campaigns</p>
                     <p className="text-2xl font-bold text-foreground">{stats.totalCampaigns}</p>
                   </div>
-                  <Badge variant="outline" className="text-emerald-600 border-emerald-500/30 bg-emerald-500/10">
+                  <Badge variant="outline" className="text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/10">
                     {stats.activeCampaigns} active
                   </Badge>
                 </div>

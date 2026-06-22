@@ -65,8 +65,8 @@ const COURSE_MODULES = [
       { id: "oh-6", title: "Trust Building Techniques", duration: "30 min", free: false },
     ],
     tier: "starter",
-    color: "from-green-500/20 to-green-500/5",
-    borderColor: "border-green-500/30",
+    color: "/20 /5",
+    borderColor: "border-[color:var(--emerald-1)]/30/30",
     iconColor: "text-green-400",
   },
   {
@@ -261,10 +261,10 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                         <div
                           key={lesson.id}
                           className={`flex items-center justify-between p-3 rounded-lg ${
-                            lessonAccess 
-                              ? "bg-[#FDFBF7]/50 hover:bg-[#1A1A1A] cursor-pointer" 
-                              : "bg-[#FDFBF7]/20 opacity-60"
-                          }`}
+ lessonAccess 
+ ? "bg-[#FDFBF7]/50 hover:bg-[#1A1A1A] cursor-pointer" 
+ : "bg-[#FDFBF7]/20 opacity-60"
+ }`}
                         >
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center text-sm text-white/70">
@@ -278,7 +278,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                           
                           <div className="flex items-center gap-2">
                             {lesson.free && (
-                              <Badge className="bg-green-500/20 text-green-400 text-xs">
+                              <Badge className="jj-emerald-solid/20 text-green-400 text-xs">
                                 Free
                               </Badge>
                             )}

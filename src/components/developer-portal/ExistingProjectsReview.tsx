@@ -65,7 +65,7 @@ export default function ExistingProjectsReview({ developerName }: Props) {
                   <p className="text-sm font-medium truncate">{p.name}</p>
                   <div className="flex items-center gap-2 mt-0.5">
                     {p.is_published ? (
-                      <Badge variant="secondary" className="text-[10px] bg-emerald-100 text-emerald-700">
+                      <Badge variant="secondary" className="text-[10px] jj-emerald-soft text-[color:var(--emerald-1)]">
                         <CheckCircle className="w-3 h-3 mr-0.5" /> Published
                       </Badge>
                     ) : (

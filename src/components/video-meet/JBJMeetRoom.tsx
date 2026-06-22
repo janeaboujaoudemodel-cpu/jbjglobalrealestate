@@ -242,10 +242,10 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                 transition={{ delay: index * 0.1 }}
               >
                 <div className={`relative w-20 h-20 rounded-full border-3 ${
-                  participant.isSpeaking 
-                    ? 'border-green-400 shadow-lg shadow-green-400/50' 
-                    : 'border-[#B89555]/50'
-                } bg-[#1A1A1A] overflow-hidden`}>
+ participant.isSpeaking 
+ ? 'border-[color:var(--emerald-1)]/30 shadow-lg shadow-green-400/50' 
+ : 'border-[#B89555]/50'
+ } bg-[#1A1A1A] overflow-hidden`}>
                   {participant.photo ? (
                     <img 
                       src={participant.photo} 
@@ -289,19 +289,19 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
   // Render video call grid view
   const renderVideoCallView = () => (
     <div className={`w-full h-full grid gap-2 p-4 ${
-      participants.length <= 2 ? 'grid-cols-1 md:grid-cols-2' :
-      participants.length <= 4 ? 'grid-cols-2' :
-      participants.length <= 9 ? 'grid-cols-3' :
-      'grid-cols-4'
-    }`}>
+ participants.length <= 2 ? 'grid-cols-1 md:grid-cols-2' :
+ participants.length <= 4 ? 'grid-cols-2' :
+ participants.length <= 9 ? 'grid-cols-3' :
+ 'grid-cols-4'
+ }`}>
       {participants.map((participant) => (
         <div
           key={participant.id}
           className={`relative rounded-xl overflow-hidden bg-[#FDFBF7] border ${
-            participant.isSpeaking 
-              ? 'border-green-400 shadow-lg shadow-green-400/30' 
-              : 'border-[#1A1A1A]'
-          }`}
+ participant.isSpeaking 
+ ? 'border-[color:var(--emerald-1)]/30 shadow-lg shadow-green-400/30' 
+ : 'border-[#1A1A1A]'
+ }`}
         >
           {!participant.isVideoOff ? (
             <video
@@ -478,7 +478,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                   </div>
 
                   {currentOutfit && (
-                    <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <div className="p-3 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                       <div className="flex items-center gap-2 text-green-400 text-sm">
                         <Check className="w-4 h-4" />
                         <span>Current outfit: {currentOutfit}</span>
@@ -541,7 +541,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant="outline"
           onClick={handleShareScreen}
-          className={`rounded-full w-14 h-14 ${isScreenSharing ? 'bg-green-500 hover:bg-green-600 border-none' : 'bg-[#1A1A1A] hover:bg-[#1A1A1A] border-none'}`}
+          className={`rounded-full w-14 h-14 ${isScreenSharing ? 'jj-emerald-solid hover:jj-emerald-solid border-none' : 'bg-[#1A1A1A] hover:bg-[#1A1A1A] border-none'}`}
         >
           <Monitor className="w-6 h-6" />
         </Button>
@@ -710,7 +710,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             <div>
               <Label className="text-white mb-2 block">Microphone Enhancement</Label>
               <p className="text-xs text-white/70 mb-2">Professional studio-quality audio</p>
-              <Badge className="bg-green-500/20 text-green-400">
+              <Badge className="jj-emerald-solid/20 text-green-400">
                 <Volume2 className="w-3 h-3 mr-1" />
                 Active - Studio Quality
               </Badge>

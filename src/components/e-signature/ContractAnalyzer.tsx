@@ -56,7 +56,7 @@ const LANGUAGES = [
 const riskColors = {
   high: { bg: "bg-red-50", text: "text-red-700", border: "border-red-200", badge: "bg-red-100 text-red-800" },
   medium: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200", badge: "bg-amber-100 text-amber-800" },
-  low: { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", badge: "bg-emerald-100 text-emerald-800" },
+  low: { bg: "jj-emerald-soft", text: "text-[color:var(--emerald-1)]", border: "border-[color:var(--emerald-1)]/30", badge: "jj-emerald-soft text-[color:var(--emerald-1)]" },
 };
 
 interface ContractAnalyzerProps {

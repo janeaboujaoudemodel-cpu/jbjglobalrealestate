@@ -26,14 +26,14 @@ const fadeInUp = {
 };
 
 const TrendIcon = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
-  if (trend === 'bullish') return <TrendingUp className="w-3.5 h-3.5 text-emerald-700" />;
+  if (trend === 'bullish') return <TrendingUp className="w-3.5 h-3.5 text-[color:var(--emerald-1)]" />;
   if (trend === 'bearish') return <TrendingDown className="w-3.5 h-3.5 text-red-700" />;
   return <Minus className="w-3.5 h-3.5 text-amber-700" />;
 };
 
 const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
   const colors = {
-    bullish: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+    bullish: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
     bearish: 'bg-red-100 text-red-800 border-red-300',
     neutral: 'bg-amber-100 text-amber-800 border-amber-300',
   };
@@ -101,12 +101,12 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <div className="space-y-3 mb-4">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-emerald-700">Demand Score</span>
-                <span className="font-bold text-emerald-700">{area.demandScore}/100</span>
+                <span className="font-semibold text-[color:var(--emerald-1)]">Demand Score</span>
+                <span className="font-bold text-[color:var(--emerald-1)]">{area.demandScore}/100</span>
               </div>
-              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-emerald-100">
+              <div className="h-2.5 rounded-full overflow-hidden shadow-inner jj-emerald-soft">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400"
+                  className="h-full rounded-full bg-gradient-to-r"
                   style={{ width: `${area.demandScore}%` }}
                 />
               </div>
@@ -128,7 +128,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* YoY Change */}
           <div className="flex items-center justify-between py-3 border-t border-border/60">
             <span className={MI_BODY}>Year-over-Year</span>
-            <span className={`text-sm font-bold leading-none tracking-tight ${area.yoyChange >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+            <span className={`text-sm font-bold leading-none tracking-tight ${area.yoyChange >= 0 ? 'text-[color:var(--emerald-1)]' : 'text-red-700'}`}>
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
           </div>

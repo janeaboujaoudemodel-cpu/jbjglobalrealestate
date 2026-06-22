@@ -38,7 +38,7 @@ const INTEGRATIONS: IntegrationCard[] = [
 ];
 
 const STATUS_STYLES: Record<IntegrationStatus, string> = {
-  connected: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  connected: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   not_connected: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30",
   error: "bg-red-50 text-red-700 border-red-200",
 };

@@ -227,8 +227,8 @@ export default function StampHistoryDashboard() {
             <button key={f}
               onClick={() => setFilterExported(f)}
               className={`px-3 py-1.5 capitalize transition-colors ${filterExported === f
-                ? 'bg-[hsl(var(--gold))] text-white font-medium'
-                : 'bg-[#FDFBF7] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+ ? 'bg-[hsl(var(--gold))] text-white font-medium'
+ : 'bg-[#FDFBF7] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
               {f}
             </button>
           ))}
@@ -238,8 +238,8 @@ export default function StampHistoryDashboard() {
         <button
           onClick={() => setFilterFav(v => !v)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs transition-colors ${filterFav
-            ? 'bg-amber-50 border-amber-300 text-amber-700'
-            : 'bg-[#FDFBF7] border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+ ? 'bg-amber-50 border-amber-300 text-amber-700'
+ : 'bg-[#FDFBF7] border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
           <Star size={12} className={filterFav ? 'fill-amber-500 text-amber-500' : ''}/>
           Favorites
         </button>
@@ -346,7 +346,7 @@ function GridView({ rows, getTint, navigate }: {
                   <span className="bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">★ FAV</span>
                 )}
                 {row.exported_at && (
-                  <span className="bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                  <span className="jj-emerald-solid text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
                     <Download size={8}/> EXPORTED
                   </span>
                 )}
@@ -373,7 +373,7 @@ function GridView({ rows, getTint, navigate }: {
                   <Calendar size={9}/> {fmtDate(row.design_created_at)}
                 </div>
                 {row.exported_at && (
-                  <div className="flex items-center gap-1 text-emerald-600">
+                  <div className="flex items-center gap-1 text-[color:var(--emerald-1)]">
                     <Download size={9}/> {fmtDate(row.exported_at)}
                   </div>
                 )}
@@ -438,7 +438,7 @@ function ListView({ rows, getTint, navigate }: {
                 </Badge>
                 <span className="flex items-center gap-1"><Calendar size={9}/> {fmtDate(row.design_created_at)} {fmtTime(row.design_created_at)}</span>
                 {row.exported_at ? (
-                  <span className="flex items-center gap-1 text-emerald-600">
+                  <span className="flex items-center gap-1 text-[color:var(--emerald-1)]">
                     <CheckCircle2 size={9}/> Exported {fmtDate(row.exported_at)}
                   </span>
                 ) : (

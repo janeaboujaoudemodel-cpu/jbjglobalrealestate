@@ -29,7 +29,7 @@ const StatusBadge = ({ status }: { status: string }) => {
   const config = {
     pending: { color: 'bg-amber-500/20 text-amber-600 border-amber-500/30', icon: Clock },
     approved: { color: 'bg-blue-500/20 text-blue-600 border-blue-500/30', icon: CheckCircle },
-    paid: { color: 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30', icon: CheckCircle },
+    paid: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle },
     cancelled: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle },
   }[status] || { color: 'bg-[#EFE6D6] text-[#1A1A1A]/70', icon: Clock };
   const Icon = config.icon;
@@ -84,8 +84,8 @@ export function EmployeeSalaryCommissionPanel() {
                   <p className="text-2xl font-bold text-[#1A1A1A]">{formatCurrency(totalSalaries)}</p>
                   <p className="text-[10px] text-[#1A1A1A]/50 mt-1">View salaries →</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <Wallet className="h-6 w-6 text-emerald-600" />
+                <div className="w-12 h-12 rounded-xl jj-emerald-soft flex items-center justify-center">
+                  <Wallet className="h-6 w-6 text-[color:var(--emerald-1)]" />
                 </div>
               </div>
             </CardContent>
@@ -115,11 +115,11 @@ export function EmployeeSalaryCommissionPanel() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#1A1A1A]/70 text-sm">Commissions Paid</p>
-                  <p className="text-2xl font-bold text-emerald-600">{formatCurrency(totalPaid)}</p>
+                  <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{formatCurrency(totalPaid)}</p>
                   <p className="text-[10px] text-[#1A1A1A]/50 mt-1">View paid →</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <TrendingUp className="h-6 w-6 text-emerald-600" />
+                <div className="w-12 h-12 rounded-xl jj-emerald-soft flex items-center justify-center">
+                  <TrendingUp className="h-6 w-6 text-[color:var(--emerald-1)]" />
                 </div>
               </div>
             </CardContent>
@@ -181,12 +181,12 @@ export function EmployeeSalaryCommissionPanel() {
                     <TableRow key={c.id} className="border-[#B89555]/30 hover:bg-[#F7F2EA]">
                       <TableCell className="font-medium text-[#1A1A1A]">{c.employee_name}</TableCell>
                       <TableCell className="text-[#1A1A1A]/70">{c.deal_reference || '-'}</TableCell>
-                      <TableCell className="text-right font-bold text-emerald-600">{formatCurrency(c.commission_amount || 0, c.currency || 'AED')}</TableCell>
+                      <TableCell className="text-right font-bold text-[color:var(--emerald-1)]">{formatCurrency(c.commission_amount || 0, c.currency || 'AED')}</TableCell>
                       <TableCell className="text-[#1A1A1A]/70">{c.deal_closed_date ? format(new Date(c.deal_closed_date), 'MMM dd, yyyy') : '-'}</TableCell>
                       <TableCell><StatusBadge status={c.status || 'pending'} /></TableCell>
                       <TableCell>
                         {c.status === 'pending' && <Button size="sm" variant="outline" onClick={() => approveCommission(c.id)} className="text-blue-600 border-blue-200">Approve</Button>}
-                        {c.status === 'approved' && <Button size="sm" variant="outline" onClick={() => markCommissionPaid(c.id)} className="text-emerald-600 border-emerald-200">Mark Paid</Button>}
+                        {c.status === 'approved' && <Button size="sm" variant="outline" onClick={() => markCommissionPaid(c.id)} className="text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Mark Paid</Button>}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -281,7 +281,7 @@ export function EmployeeSalaryCommissionPanel() {
                       <TableCell className="font-medium text-[#1A1A1A]">{s.employee_name}</TableCell>
                       <TableCell><Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]/70">{s.department}</Badge></TableCell>
                       <TableCell className="text-right text-[#1A1A1A]">{formatCurrency(s.total_salary || 0, s.currency || 'AED')}</TableCell>
-                      <TableCell className="text-right text-emerald-600">{formatCurrency(s.total_commission || 0, s.currency || 'AED')}</TableCell>
+                      <TableCell className="text-right text-[color:var(--emerald-1)]">{formatCurrency(s.total_commission || 0, s.currency || 'AED')}</TableCell>
                       <TableCell className="text-right text-blue-600">{formatCurrency(s.total_bonus || 0, s.currency || 'AED')}</TableCell>
                       <TableCell className="text-right font-bold text-[#1A1A1A]">{formatCurrency(s.net_earnings || 0, s.currency || 'AED')}</TableCell>
                     </TableRow>

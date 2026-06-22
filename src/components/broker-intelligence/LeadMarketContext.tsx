@@ -112,7 +112,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
       case "medium":
         return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Moderate</Badge>;
       default:
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Relaxed</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">Relaxed</Badge>;
     }
   };
 
@@ -161,7 +161,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
             <p className="text-white/90 text-xs mb-1">Demand</p>
             <div className="w-full bg-[#1A1A1A] rounded-full h-1.5 mt-1">
               <div 
-                className="bg-emerald-500 h-1.5 rounded-full" 
+                className="jj-emerald-solid h-1.5 rounded-full" 
                 style={{ width: `${areaData.demandScore}%` }}
               />
             </div>

@@ -201,7 +201,7 @@ export default function ReferralAdmin() {
     switch (status) {
       case 'active':
       case 'converted':
-        return <Badge className="bg-green-500/20 text-green-600 border-green-500/30"><CheckCircle className="w-3 h-3 mr-1" />Active</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30"><CheckCircle className="w-3 h-3 mr-1" />Active</Badge>;
       case 'pending':
         return <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
       case 'expired':

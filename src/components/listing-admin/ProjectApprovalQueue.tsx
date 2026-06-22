@@ -1096,7 +1096,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     size="sm"
                     onClick={showApproveSelectedConfirmation}
                     disabled={isBulkProcessing || isLoading}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                    className="jj-emerald-solid hover:jj-emerald-solid text-white"
                   >
                     <CheckSquare className="h-4 w-4 mr-2" />
                     Approve Selected ({selectedIds.size})
@@ -1108,7 +1108,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                      size="sm"
                      onClick={showApproveAllConfirmation}
                      disabled={isBulkProcessing || isLoading}
-                     className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                     className="jj-emerald-solid hover:jj-emerald-solid text-white"
                    >
                      <Check className="h-4 w-4 mr-2" />
                      Approve ALL ({(totalCount ?? 0).toLocaleString()})
@@ -1240,10 +1240,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <button
               onClick={() => setStatusFilter("all")}
               className={`rounded-lg border p-3 text-center transition-all hover:scale-105 cursor-pointer ${
-                statusFilter === "all" 
-                  ? "border-primary bg-primary/10 ring-2 ring-primary/30" 
-                  : "border-border bg-muted/50 hover:bg-muted"
-              }`}
+ statusFilter === "all" 
+ ? "border-primary bg-primary/10 ring-2 ring-primary/30" 
+ : "border-border bg-muted/50 hover:bg-muted"
+ }`}
             >
               <div className="text-2xl font-bold text-foreground">{totalCount ?? "…"}</div>
               <div className="text-xs text-muted-foreground">In Queue</div>
@@ -1251,33 +1251,33 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             <button
               onClick={() => setStatusFilter("complete")}
               className={`rounded-lg border p-3 text-center transition-all hover:scale-105 cursor-pointer ${
-                statusFilter === "complete" 
-                  ? "border-emerald-500 bg-emerald-100 ring-2 ring-emerald-300" 
-                  : "border-emerald-200 bg-emerald-50 hover:bg-emerald-100"
-              }`}
+ statusFilter === "complete" 
+ ? "border-[color:var(--emerald-1)]/30 jj-emerald-soft ring-2 ring-emerald-300" 
+ : "border-[color:var(--emerald-1)]/30 jj-emerald-soft hover:jj-emerald-soft"
+ }`}
             >
-              <div className="text-2xl font-bold text-emerald-700">{totalCompleteCount ?? completeCount}</div>
-              <div className="text-xs text-emerald-600">Complete</div>
+              <div className="text-2xl font-bold text-[color:var(--emerald-1)]">{totalCompleteCount ?? completeCount}</div>
+              <div className="text-xs text-[color:var(--emerald-1)]">Complete</div>
             </button>
             {/* Needs Work card - hide for Reelly (API data is complete) */}
             {sourceFilter !== "reelly" ? (
             <button
               onClick={() => setStatusFilter("needs_work")}
               className={`rounded-lg border p-3 text-center transition-all hover:scale-105 cursor-pointer ${
-                statusFilter === "needs_work" 
-                  ? "border-amber-500 bg-amber-100 ring-2 ring-amber-300" 
-                  : "border-amber-200 bg-amber-50 hover:bg-amber-100"
-              }`}
+ statusFilter === "needs_work" 
+ ? "border-amber-500 bg-amber-100 ring-2 ring-amber-300" 
+ : "border-amber-200 bg-amber-50 hover:bg-amber-100"
+ }`}
             >
               <div className="text-2xl font-bold text-amber-700">{totalNeedsWorkCount ?? needsWorkCount}</div>
               <div className="text-xs text-amber-600">Needs Work</div>
             </button>
             ) : (
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-center">
-              <div className="text-2xl font-bold text-emerald-700">
+            <div className="rounded-lg border border-[color:var(--emerald-1)]/30 jj-emerald-soft p-3 text-center">
+              <div className="text-2xl font-bold text-[color:var(--emerald-1)]">
                 <Check className="h-6 w-6 mx-auto" />
               </div>
-              <div className="text-xs text-emerald-600">API Ready</div>
+              <div className="text-xs text-[color:var(--emerald-1)]">API Ready</div>
             </div>
             )}
             <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-center">
@@ -1421,7 +1421,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   {selectedImport.is_new_project ? (
-                    <Badge className="bg-emerald-500">New Project</Badge>
+                    <Badge className="jj-emerald-solid">New Project</Badge>
                   ) : (
                     <Badge className="bg-blue-500">Update Existing</Badge>
                   )}
@@ -1476,8 +1476,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                           <span
                             key={idx}
                             className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                              idx === safeIndex ? 'bg-overlay' : 'bg-overlay/50'
-                            }`}
+ idx === safeIndex ? 'bg-overlay' : 'bg-overlay/50'
+ }`}
                           />
                         ))}
                       </div>
@@ -1493,8 +1493,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                           key={idx}
                           onClick={() => setCurrentImageIndex(idx)}
                           className={`flex-shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                            idx === safeIndex ? 'border-[#B89555]' : 'border-transparent'
-                          }`}
+ idx === safeIndex ? 'border-[#B89555]' : 'border-transparent'
+ }`}
                         >
                           <img
                             src={img.url}
@@ -1680,7 +1680,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   <Button
                     onClick={() => handleApprove(selectedImport)}
                     disabled={processingId === selectedImport.id}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                    className="jj-emerald-solid hover:jj-emerald-solid text-white"
                   >
                     <Check className="h-4 w-4 mr-2" />
                     {selectedImport.is_new_project ? 'Approve & Create' : 'Approve as New'}

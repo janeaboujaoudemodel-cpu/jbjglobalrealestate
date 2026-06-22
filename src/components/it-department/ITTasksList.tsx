@@ -40,7 +40,7 @@ const TASK_TYPE_CONFIG = {
   new_joiner_account: { label: 'New Joiner Account', color: 'bg-blue-500' },
   password_reset: { label: 'Password Reset', color: 'bg-orange-500' },
   access_request: { label: 'Access Request', color: 'bg-purple-500' },
-  equipment_setup: { label: 'Equipment Setup', color: 'bg-green-500' },
+  equipment_setup: { label: 'Equipment Setup', color: 'jj-emerald-solid' },
   system_update: { label: 'System Update', color: 'bg-cyan-500' },
   security_audit: { label: 'Security Audit', color: 'bg-red-500' },
   other: { label: 'Other', color: 'bg-[#B89555]' }
@@ -50,7 +50,7 @@ const STATUS_CONFIG = {
   open: { label: 'Open', color: 'bg-orange-500', icon: AlertCircle },
   in_progress: { label: 'In Progress', color: 'bg-blue-500', icon: Play },
   pending_review: { label: 'Pending Review', color: 'bg-purple-500', icon: Clock },
-  completed: { label: 'Completed', color: 'bg-green-500', icon: CheckCircle },
+  completed: { label: 'Completed', color: 'jj-emerald-solid', icon: CheckCircle },
   cancelled: { label: 'Cancelled', color: 'bg-[#B89555]', icon: X }
 };
 
@@ -249,7 +249,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                                     <Clock className="w-4 h-4 mr-2" /> Send for Review
                                   </DropdownMenuItem>
                                   <DropdownMenuItem 
-                                    className="text-green-600 hover:bg-[#EFE6D6]/10"
+                                    className="text-[color:var(--emerald-1)] hover:bg-[#EFE6D6]/10"
                                     onClick={() => handleStatusChange(task.id, 'completed')}
                                   >
                                     <Check className="w-4 h-4 mr-2" /> Mark Complete
@@ -258,7 +258,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                               )}
                               {task.status === 'pending_review' && (
                                 <DropdownMenuItem 
-                                  className="text-green-600 hover:bg-[#EFE6D6]/10"
+                                  className="text-[color:var(--emerald-1)] hover:bg-[#EFE6D6]/10"
                                   onClick={() => handleStatusChange(task.id, 'completed')}
                                 >
                                   <Check className="w-4 h-4 mr-2" /> Approve & Complete

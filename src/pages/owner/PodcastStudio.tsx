@@ -300,7 +300,7 @@ const PodcastStudio = () => {
               {pendingEpisodes.length > 0 && <><span>•</span><span className="text-amber-600">{pendingEpisodes.length} generating</span></>}
             </div>
             <Badge className={apiStatus === "connected"
-              ? "bg-green-50 text-green-700 border border-green-200"
+              ? "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30"
               : apiStatus === "error"
                 ? "bg-red-50 text-red-700 border border-red-200"
                 : "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30"}>
@@ -516,10 +516,10 @@ const PodcastStudio = () => {
                 <Card
                   key={voice.id}
                   className={`border-2 cursor-pointer transition-all hover:shadow-lg ${
-                    selectedVoice === voice.id
-                      ? "border-[#B89555] bg-[#B89555]/5 shadow-lg shadow-[#B89555]/10"
-                      : "border-[#B89555]/20 bg-[#FDFBF7]/80 hover:border-[#B89555]/40"
-                  }`}
+ selectedVoice === voice.id
+ ? "border-[#B89555] bg-[#B89555]/5 shadow-lg shadow-[#B89555]/10"
+ : "border-[#B89555]/20 bg-[#FDFBF7]/80 hover:border-[#B89555]/40"
+ }`}
                   onClick={() => { setSelectedVoice(voice.id); toast.success(`Voice set to ${voice.name}`); }}
                 >
                   <CardContent className="p-4">
@@ -574,7 +574,7 @@ const PodcastStudio = () => {
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/5 border border-[#B89555]/30 flex items-center justify-center">
                             {ep.status === "generating" ? <Loader2 className="w-5 h-5 text-[#B89555] animate-spin" />
-                              : ep.status === "ready" ? <CheckCircle2 className="w-5 h-5 text-green-600" />
+                              : ep.status === "ready" ? <CheckCircle2 className="w-5 h-5 text-[color:var(--emerald-1)]" />
                               : ep.status === "error" ? <AlertCircle className="w-5 h-5 text-red-500" />
                               : <FileAudio className="w-5 h-5 text-[#B89555]" />}
                           </div>
@@ -599,7 +599,7 @@ const PodcastStudio = () => {
                             </>
                           )}
                           <Badge className={
-                            ep.status === "ready" ? "bg-green-50 text-green-700 border border-green-200" :
+                            ep.status === "ready" ? "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30" :
                             ep.status === "generating" ? "bg-amber-50 text-amber-700 border border-amber-200" :
                             ep.status === "error" ? "bg-red-50 text-red-700 border border-red-200" :
                             "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30"

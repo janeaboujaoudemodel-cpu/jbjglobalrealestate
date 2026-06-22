@@ -65,8 +65,8 @@ const CVDetailModal = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-green-600';
-      case 'shortlisted': return 'bg-emerald-600';
+      case 'approved': return 'jj-emerald-solid';
+      case 'shortlisted': return 'jj-emerald-solid';
       case 'interview_scheduled': return 'bg-blue-600';
       case 'interviewed': return 'bg-indigo-600';
       case 'analyzed': return 'bg-purple-600';
@@ -185,7 +185,7 @@ const CVDetailModal = ({
                 <>
                   <Button
                     onClick={() => onUpdateStatus(candidate.id, 'approved')}
-                    className="bg-green-600 hover:bg-green-700"
+                    className="jj-emerald-solid hover:jj-emerald-solid"
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Approve
@@ -295,7 +295,7 @@ const CVDetailModal = ({
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
                         {candidate.aiAnalysis.certifications.map((cert, idx) => (
-                          <Badge key={idx} className="bg-green-600/20 text-green-400 border-green-500/30">
+                          <Badge key={idx} className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30">
                             {cert}
                           </Badge>
                         ))}

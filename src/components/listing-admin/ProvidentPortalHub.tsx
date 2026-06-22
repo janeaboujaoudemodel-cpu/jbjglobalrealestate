@@ -273,8 +273,8 @@ export function ProvidentPortalHub() {
         </Card>
         <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
-            <CheckCircle className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-emerald-700">{stats.published}</p>
+            <CheckCircle className="w-5 h-5 text-[color:var(--emerald-1)] mx-auto mb-1" />
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.published}</p>
             <p className="text-[11px] text-muted-foreground">Published</p>
           </CardContent>
         </Card>
@@ -319,9 +319,9 @@ export function ProvidentPortalHub() {
           </div>
           <Progress value={enrichPercent} className="h-3" />
           <div className="grid grid-cols-3 gap-3 text-center text-sm">
-            <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
-              <p className="text-lg font-bold text-emerald-700">{enrichmentStats.fullyEnriched}</p>
-              <p className="text-[11px] text-emerald-600">Fully Enriched</p>
+            <div className="jj-emerald-soft rounded-lg p-3 border border-[color:var(--emerald-1)]/30">
+              <p className="text-lg font-bold text-[color:var(--emerald-1)]">{enrichmentStats.fullyEnriched}</p>
+              <p className="text-[11px] text-[color:var(--emerald-1)]">Fully Enriched</p>
             </div>
             <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
               <p className="text-lg font-bold text-amber-700">{enrichmentStats.partiallyEnriched}</p>
@@ -384,7 +384,7 @@ export function ProvidentPortalHub() {
             <Button
               onClick={handleAutoPublish}
               disabled={isAutoPublishing || (autoPublishCount ?? 0) === 0}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="jj-emerald-solid hover:jj-emerald-solid text-white"
             >
               {isAutoPublishing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
               Auto-Publish Complete ({autoPublishCount ?? '…'})
@@ -401,12 +401,12 @@ export function ProvidentPortalHub() {
           </div>
           {integrityResult && (
             <div className="grid grid-cols-2 gap-3">
-              <div className={`rounded-lg p-3 text-center border ${integrityResult.ghosts > 0 ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
-                <p className={`text-xl font-bold ${integrityResult.ghosts > 0 ? 'text-red-700' : 'text-emerald-700'}`}>{integrityResult.ghosts}</p>
+              <div className={`rounded-lg p-3 text-center border ${integrityResult.ghosts > 0 ? 'bg-red-50 border-red-200' : 'jj-emerald-soft border-[color:var(--emerald-1)]/30'}`}>
+                <p className={`text-xl font-bold ${integrityResult.ghosts > 0 ? 'text-red-700' : 'text-[color:var(--emerald-1)]'}`}>{integrityResult.ghosts}</p>
                 <p className="text-xs text-muted-foreground">Ghost Entries (no description)</p>
               </div>
-              <div className={`rounded-lg p-3 text-center border ${integrityResult.duplicates > 0 ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'}`}>
-                <p className={`text-xl font-bold ${integrityResult.duplicates > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>{integrityResult.duplicates}</p>
+              <div className={`rounded-lg p-3 text-center border ${integrityResult.duplicates > 0 ? 'bg-amber-50 border-amber-200' : 'jj-emerald-soft border-[color:var(--emerald-1)]/30'}`}>
+                <p className={`text-xl font-bold ${integrityResult.duplicates > 0 ? 'text-amber-700' : 'text-[color:var(--emerald-1)]'}`}>{integrityResult.duplicates}</p>
                 <p className="text-xs text-muted-foreground">Duplicate Slugs</p>
               </div>
             </div>
@@ -464,7 +464,7 @@ export function ProvidentPortalHub() {
               <div className="grid grid-cols-4 gap-3 mt-3">
                 <div className="text-center"><p className="text-xl font-bold text-foreground">{fullProvidentProgress.processed}</p><p className="text-xs text-muted-foreground">Processed</p></div>
                 <div className="text-center"><p className="text-xl font-bold text-blue-600">{fullProvidentProgress.docs}</p><p className="text-xs text-muted-foreground">Docs</p></div>
-                <div className="text-center"><p className="text-xl font-bold text-emerald-600">{fullProvidentProgress.images}</p><p className="text-xs text-muted-foreground">Images</p></div>
+                <div className="text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{fullProvidentProgress.images}</p><p className="text-xs text-muted-foreground">Images</p></div>
                 <div className="text-center"><p className="text-xl font-bold text-destructive">{fullProvidentProgress.errors}</p><p className="text-xs text-muted-foreground">Errors</p></div>
               </div>
             </div>
@@ -473,9 +473,9 @@ export function ProvidentPortalHub() {
           {providentResult && !isFullProvidentRunning && (
             <div className="bg-muted/30 rounded-xl p-4 border border-[#B89555]/20">
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.processed || 0}</p><p className="text-xs text-muted-foreground">Processed</p></div>
+                <div className="jj-emerald-soft rounded-lg p-3 text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{providentResult.processed || 0}</p><p className="text-xs text-muted-foreground">Processed</p></div>
                 <div className="bg-blue-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-blue-700">{providentResult.total_pdfs_found || 0}</p><p className="text-xs text-muted-foreground">PDFs Found</p></div>
-                <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.total_images_found || providentResult.total_images_inserted || 0}</p><p className="text-xs text-muted-foreground">Images</p></div>
+                <div className="jj-emerald-soft rounded-lg p-3 text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{providentResult.total_images_found || providentResult.total_images_inserted || 0}</p><p className="text-xs text-muted-foreground">Images</p></div>
                 <div className="bg-cyan-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-cyan-700">{providentResult.total_docs_inserted || 0}</p><p className="text-xs text-muted-foreground">Docs Inserted</p></div>
                 <div className={`rounded-lg p-3 text-center ${(providentResult.errors || 0) > 0 ? 'bg-red-50' : 'bg-muted/50'}`}><p className={`text-xl font-bold ${(providentResult.errors || 0) > 0 ? 'text-destructive' : 'text-muted-foreground'}`}>{providentResult.errors || 0}</p><p className="text-xs text-muted-foreground">Errors</p></div>
               </div>

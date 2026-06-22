@@ -129,7 +129,7 @@ export const HandoverBackfillCard = () => {
                 {progress.batches === 1 ? "" : "es"}
               </span>
               <span>
-                <span className="font-semibold text-emerald-700">{progress.updated}</span> updated
+                <span className="font-semibold text-[color:var(--emerald-1)]">{progress.updated}</span> updated
                 {" · "}
                 <span className="font-semibold text-red-600">{progress.failed}</span> failed
               </span>

@@ -235,7 +235,7 @@ function ratioBadge(r: number) {
   const passAA = r >= 4.5;
   const passAAA = r >= 7;
   const tone = passAAA
-    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+    ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
     : passAA
     ? "bg-blue-50 text-blue-700 border-blue-200"
     : "bg-red-50 text-red-700 border-red-200";
@@ -279,7 +279,7 @@ export default function ContrastReview() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[color:var(--emerald-1)]/30 jj-emerald-soft px-3 py-1 text-xs font-semibold text-[color:var(--emerald-1)]">
               <CheckCircle2 className="h-3.5 w-3.5" />
               {summary.afterPass}/{summary.total} pass AA after
             </span>
@@ -331,10 +331,10 @@ export default function ContrastReview() {
                 key={r.path}
                 onClick={() => setActive(r)}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                  r.path === active.path
-                    ? "border-[#B89555]/30 bg-[#FDFBF7] text-white"
-                    : "border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
-                }`}
+ r.path === active.path
+ ? "border-[#B89555]/30 bg-[#FDFBF7] text-white"
+ : "border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
+ }`}
               >
                 {r.label}
               </button>
@@ -419,7 +419,7 @@ export default function ContrastReview() {
                     {/* After */}
                     <div className="p-5">
                       <div className="mb-3 flex items-center justify-between">
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-emerald-600">
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[color:var(--emerald-1)]">
                           After
                         </span>
                         <span
@@ -439,7 +439,7 @@ export default function ContrastReview() {
                           Sample text
                         </span>
                       </div>
-                      <code className="block break-all rounded-md bg-emerald-50 px-2 py-1.5 text-[11px] text-emerald-900">
+                      <code className="block break-all rounded-md jj-emerald-soft px-2 py-1.5 text-[11px] text-[color:var(--emerald-1)]">
                         {p.after.className}
                       </code>
                       <p className="mt-2 text-xs leading-relaxed text-[#1A1A1A]/70">

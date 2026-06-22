@@ -209,8 +209,8 @@ export default function BrokerTraining({ embedded = true }: Props) {
               >
                 <Card
                   className={`bg-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/55 transition-all cursor-pointer ${
-                    selectedModule?.id === module.id ? "border-[#B89555]/60 shadow-sm" : ""
-                  }`}
+ selectedModule?.id === module.id ? "border-[#B89555]/60 shadow-sm" : ""
+ }`}
                   onClick={() => setSelectedModule(module)}
                   data-gold-hairline
                 >
@@ -233,7 +233,7 @@ export default function BrokerTraining({ embedded = true }: Props) {
                         </div>
                       </div>
                       {module.completed ? (
-                        <CheckCircle className="w-6 h-6 text-emerald-600" />
+                        <CheckCircle className="w-6 h-6 text-[color:var(--emerald-1)]" />
                       ) : (
                         <ChevronRight className="w-6 h-6 text-[#1A1A1A]/40" />
                       )}
@@ -318,7 +318,7 @@ export default function BrokerTraining({ embedded = true }: Props) {
                 <ul className="space-y-2">
                   {approvedPhrases.map((phrase, i) => (
                     <li key={i} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm">
-                      <span className="text-emerald-700 font-bold">✓</span>
+                      <span className="text-[color:var(--emerald-1)] font-bold">✓</span>
                       "{phrase}"
                     </li>
                   ))}

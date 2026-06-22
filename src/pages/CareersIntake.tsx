@@ -225,7 +225,7 @@ export default function CareersIntake() {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center px-6">
         <div className="max-w-md text-center">
-          <CheckCircle2 className="h-12 w-12 text-emerald-600 mx-auto" />
+          <CheckCircle2 className="h-12 w-12 text-[color:var(--emerald-1)] mx-auto" />
           <h1 className="mt-4 text-2xl font-semibold text-[#1A1A1A]">Documents received</h1>
           <p className="mt-3 text-[#1A1A1A]/70">
             Thank you, {fullName.split(" ")[0]}. Our HR team will review your submission and send your formal job

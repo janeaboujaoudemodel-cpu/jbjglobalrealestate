@@ -71,7 +71,7 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
 
   const statusColors: Record<string, string> = {
     new: "bg-blue-100 text-blue-800 border-blue-200",
-    qualified: "bg-green-100 text-green-800 border-green-200",
+    qualified: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
     contacted: "bg-amber-100 text-amber-800 border-amber-200",
     negotiating: "bg-purple-100 text-purple-800 border-purple-200",
     closed: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/30",
@@ -169,7 +169,7 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
         <Button
           onClick={handleCompanyWhatsApp}
           disabled={isContacting}
-          className="w-full bg-green-600 hover:bg-green-700 text-white"
+          className="w-full jj-emerald-solid hover:jj-emerald-solid text-white"
         >
           <MessageCircle className="w-4 h-4 mr-2" />
           Contact via Company WhatsApp

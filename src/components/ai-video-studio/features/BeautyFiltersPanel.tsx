@@ -300,10 +300,10 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   onClick={onToggleComparison}
                   title={comparisonMode ? 'Exit comparison mode' : 'Before / After split view'}
                   className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all border ${
-                    comparisonMode
-                      ? 'bg-violet-500/25 text-violet-300 border-violet-500/50 shadow-sm'
-                      : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-[#1A1A1A] border-transparent'
-                  }`}
+ comparisonMode
+ ? 'bg-violet-500/25 text-violet-300 border-violet-500/50 shadow-sm'
+ : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-[#1A1A1A] border-transparent'
+ }`}
                 >
                   <SplitSquareHorizontal className="w-3 h-3" />
                   {comparisonMode ? 'Comparing' : 'Compare'}
@@ -347,10 +347,10 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   onClick={() => applyLUT(lut)}
                   title={lut.description}
                   className={`relative rounded-lg overflow-hidden text-left transition-all duration-200 group ${
-                    isActive
-                      ? 'ring-2 ring-violet-400 shadow-lg shadow-violet-500/20 scale-[1.02]'
-                      : 'ring-1 ring-slate-700 hover:ring-slate-500 hover:scale-[1.01]'
-                  }`}
+ isActive
+ ? 'ring-2 ring-violet-400 shadow-lg shadow-violet-500/20 scale-[1.02]'
+ : 'ring-1 ring-slate-700 hover:ring-slate-500 hover:scale-[1.01]'
+ }`}
                 >
                   {/* Gradient swatch */}
                   <div
@@ -390,10 +390,10 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 key={preset.id}
                 onClick={() => applyPreset(preset.id)}
                 className={`px-2 py-1 rounded text-xs transition-all ${
-                  selectedPreset === preset.id && !activeLUT
-                    ? 'bg-amber-500 text-[#1A1A1A] font-medium'
-                    : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]'
-                }`}
+ selectedPreset === preset.id && !activeLUT
+ ? 'bg-amber-500 text-[#1A1A1A] font-medium'
+ : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]'
+ }`}
               >
                 {preset.name}
               </button>
@@ -436,7 +436,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 <span className="text-xs font-semibold text-[#1A1A1A]">Bake into Export</span>
               </div>
               {exportFilterActive && (
-                <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 rounded-full">
+                <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400 jj-emerald-solid/15 border border-[color:var(--emerald-1)]/30/30 px-1.5 py-0.5 rounded-full">
                   <CheckCircle2 className="w-2.5 h-2.5" />
                   APPLIED
                 </span>
@@ -457,10 +457,10 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                     );
                   }}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-bold transition-all border ${
-                    exportFilterActive
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/40'
-                      : 'bg-amber-500 text-[#1A1A1A] border-amber-500 hover:bg-amber-400'
-                  }`}
+ exportFilterActive
+ ? 'jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/40 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/40'
+ : 'bg-amber-500 text-[#1A1A1A] border-amber-500 hover:bg-amber-400'
+ }`}
                 >
                   {exportFilterActive ? (
                     <>

@@ -96,9 +96,9 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
   if (passwordChanged) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-        <Card className="w-full max-w-md bg-[#1A1A1A]/80 border-emerald-500/30 backdrop-blur-xl">
+        <Card className="w-full max-w-md bg-[#1A1A1A]/80 border-[color:var(--emerald-1)]/30/30 backdrop-blur-xl">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center">
+            <div className="mx-auto w-16 h-16 bg-gradient-to-br rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-8 h-8 text-white" />
             </div>
             <CardTitle className="text-2xl font-bold text-white">
@@ -110,8 +110,8 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
           </CardHeader>
 
           <CardContent className="space-y-4">
-            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
-              <p className="text-emerald-300 text-sm">
+            <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
+              <p className="text-[color:var(--emerald-on)] text-sm">
                 For security, you'll be signed out and redirected to the login page.
               </p>
             </div>

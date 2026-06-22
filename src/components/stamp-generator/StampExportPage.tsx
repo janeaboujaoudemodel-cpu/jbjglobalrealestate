@@ -260,10 +260,10 @@ function ToggleChip({ label, active, onClick }: { label: string; active: boolean
   return (
     <button type="button" onClick={onClick}
       className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
-        active
-          ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
-          : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'
-      }`}
+ active
+ ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
+ : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'
+ }`}
     >{label}</button>
   );
 }
@@ -855,8 +855,8 @@ export default function StampExportPage() {
                 {stopLabels.map(stop => (
                   <button key={stop.key} onClick={() => setActiveStop(stop.key)}
                     className={`flex-1 flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
-                      activeStop === stop.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
-                    }`}>
+ activeStop === stop.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+ }`}>
                     <div className="w-8 h-8 rounded-full border-2 border-white shadow-md" style={{ backgroundColor: stop.color }}/>
                     <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">{stop.label}</span>
                   </button>
@@ -970,8 +970,8 @@ export default function StampExportPage() {
                   ]).map(bg => (
                     <button key={bg.value} onClick={() => setBgMode(bg.value)}
                       className={`flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
-                        bgMode === bg.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
-                      }`}>
+ bgMode === bg.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+ }`}>
                       <div className="w-8 h-8 rounded-lg" style={bg.style}/>
                       <span className="text-[9px] font-medium text-[hsl(var(--foreground))]">{bg.label}</span>
                     </button>
@@ -997,8 +997,8 @@ export default function StampExportPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button onClick={() => setRubberStampMode(v => !v)}
                   className={`p-3 rounded-xl border-2 text-left transition-all ${
-                    rubberStampMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
-                  }`}>
+ rubberStampMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+ }`}>
                   <div className="flex items-center gap-2 mb-1">
                     <Stamp size={14} className={rubberStampMode ? 'text-[hsl(var(--gold))]' : 'text-[hsl(var(--muted-foreground))]'}/>
                     <span className="text-xs font-semibold text-[hsl(var(--foreground))]">Rubber Stamp</span>
@@ -1009,8 +1009,8 @@ export default function StampExportPage() {
                 </button>
                 <button onClick={() => setEmbossMode(v => !v)}
                   className={`p-3 rounded-xl border-2 text-left transition-all ${
-                    embossMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
-                  }`}>
+ embossMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+ }`}>
                   <div className="flex items-center gap-2 mb-1">
                     <CircleDot size={14} className={embossMode ? 'text-[hsl(var(--gold))]' : 'text-[hsl(var(--muted-foreground))]'}/>
                     <span className="text-xs font-semibold text-[hsl(var(--foreground))]">Emboss / Engrave</span>
@@ -1032,7 +1032,7 @@ export default function StampExportPage() {
               <div className="bg-[hsl(var(--pearl-1))] rounded-xl p-3 space-y-1">
                 {Object.entries(fileStatuses).map(([key, status]) => (
                   <div key={key} className="flex items-center gap-2 text-xs">
-                    <span className={status === 'ok' ? 'text-green-600' : 'text-destructive'}>
+                    <span className={status === 'ok' ? 'text-[color:var(--emerald-1)]' : 'text-destructive'}>
                       {status === 'ok' ? '✓' : '✗'}
                     </span>
                     <span className="text-[hsl(var(--foreground))] font-mono">{key}</span>

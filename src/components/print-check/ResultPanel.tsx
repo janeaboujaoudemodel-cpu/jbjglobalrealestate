@@ -55,7 +55,7 @@ export default function ResultPanel({ filename, result }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className={`rounded-lg border p-4 flex items-center justify-between ${result.pass ? "border-emerald-300 bg-muted/30" : "border-destructive/40 bg-destructive/5"}`}>
+      <div className={`rounded-lg border p-4 flex items-center justify-between ${result.pass ? "border-[color:var(--emerald-1)]/30 bg-muted/30" : "border-destructive/40 bg-destructive/5"}`}>
         <div className="flex items-center gap-3">
           {result.pass
             ? <CheckCircle2 className="h-6 w-6 text-foreground" />

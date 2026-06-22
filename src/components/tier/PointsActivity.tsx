@@ -27,7 +27,7 @@ const EVENT_ICONS: Record<string, typeof Award> = {
 };
 
 const CATEGORY_BADGES: Record<string, { label: string; className: string }> = {
-  'deal': { label: 'Deal', className: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+  'deal': { label: 'Deal', className: 'jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30' },
   'training': { label: 'Training', className: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
   'check_in': { label: 'Check-in', className: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
   'referral': { label: 'Referral', className: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
@@ -91,7 +91,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
                   >
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
-                      isPositive ? "bg-emerald-500/20" : "bg-red-500/20"
+                      isPositive ? "jj-emerald-solid/20" : "bg-red-500/20"
                     )}>
                       <Icon className={cn(
                         "w-4 h-4",

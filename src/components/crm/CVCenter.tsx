@@ -700,13 +700,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   };
 
   const getScoreColor = (score: number) => 
-    score >= 7 ? 'text-emerald-600 bg-emerald-50 border-emerald-200' :
+    score >= 7 ? 'text-[color:var(--emerald-1)] jj-emerald-soft border-[color:var(--emerald-1)]/30' :
     score >= 4 ? 'text-amber-600 bg-amber-50 border-amber-200' :
     'text-[#1A1A1A]/70 bg-[#F7F2EA] border-[#B89555]/30';
 
   const getRecommendationColor = (rec: string) =>
-    rec === 'Strongly Recommend' ? 'text-emerald-600 border-emerald-300 bg-emerald-50' :
-    rec === 'Recommend' ? 'text-green-600 border-green-300 bg-green-50' :
+    rec === 'Strongly Recommend' ? 'text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 jj-emerald-soft' :
+    rec === 'Recommend' ? 'text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 jj-emerald-soft' :
     rec === 'Consider' ? 'text-amber-600 border-amber-300 bg-amber-50' :
     'text-red-600 border-red-300 bg-red-50';
 
@@ -962,8 +962,8 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   key={cat.id}
                   variant={activeDeptCategory === cat.id ? 'default' : 'outline'}
                   className={`cursor-pointer px-3 py-2 ${
-                    activeDeptCategory === cat.id ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]' : 'hover:bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/80'
-                  }`}
+ activeDeptCategory === cat.id ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]' : 'hover:bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/80'
+ }`}
                   onClick={() => setActiveDeptCategory(cat.id)}
                 >
                   <IconComponent className={`h-3 w-3 mr-2 ${cat.color}`} />
@@ -1292,7 +1292,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                       </div>
                                       <div className="bg-[#EFE6D6] rounded-full h-2 mb-1">
                                         <div
-                                          className={`h-2 rounded-full ${item.value >= item.max * 0.7 ? 'bg-emerald-500' : item.value >= item.max * 0.4 ? 'bg-amber-500' : 'bg-red-400'}`}
+                                          className={`h-2 rounded-full ${item.value >= item.max * 0.7 ? 'jj-emerald-solid' : item.value >= item.max * 0.4 ? 'bg-amber-500' : 'bg-red-400'}`}
                                           style={{ width: `${(item.value / item.max) * 100}%` }}
                                         />
                                       </div>
@@ -1321,7 +1321,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                       <Button
                                         size="sm"
                                         variant="outline"
-                                        className="h-7 gap-1.5 text-xs border-green-500/30 text-green-400 hover:bg-green-500/10"
+                                        className="h-7 gap-1.5 text-xs border-[color:var(--emerald-1)]/30/30 text-green-400 hover:jj-emerald-solid/10"
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           const clean = cv.phone_e164!.replace(/[^0-9]/g, '');
@@ -1504,7 +1504,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 <Button
                   variant="outline"
                   disabled={!selectedCV.phone_e164}
-                  className="border-green-500/40 text-green-700 hover:bg-green-50"
+                  className="border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
                   onClick={() => {
                     if (!selectedCV.phone_e164) return;
                     const clean = selectedCV.phone_e164.replace(/[^0-9]/g, '');
@@ -1628,7 +1628,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                       <div className="flex items-center gap-2 p-2 rounded-md bg-amber-50 border border-amber-200">
                         <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0" />
                         <span className="text-xs text-amber-700 flex-1">Review the task above before sending. Approve?</span>
-                        <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white h-7 px-3 text-xs" onClick={() => setApproveTaskForUser(false)}>
+                        <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white h-7 px-3 text-xs" onClick={() => setApproveTaskForUser(false)}>
                           <CheckCircle className="h-3 w-3 mr-1" /> Approve Task
                         </Button>
                         <Button size="sm" variant="outline" className="h-7 px-3 text-xs border-red-300 text-red-600 hover:bg-red-50" onClick={() => { setCreateTaskForUser(false); setApproveTaskForUser(false); }}>

@@ -23,9 +23,9 @@ interface DepartmentInfoSectionProps {
 const statusConfig = {
   Active: {
     icon: Rocket,
-    bgColor: 'bg-emerald-500/10',
+    bgColor: 'jj-emerald-solid/10',
     textColor: 'text-emerald-400',
-    borderColor: 'border-emerald-500/30',
+    borderColor: 'border-[color:var(--emerald-1)]/30/30',
   },
   Planned: {
     icon: Clock,

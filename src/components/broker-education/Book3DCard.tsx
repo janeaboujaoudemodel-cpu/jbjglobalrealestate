@@ -36,7 +36,7 @@ export function Book3DCard({
     if (!progress || effectivelyLocked) return null;
     if (progress.status === "completed") {
       return (
-        <Badge className="bg-emerald-600 text-white border-0 shadow-sm">
+        <Badge className="jj-emerald-solid text-white border-0 shadow-sm">
           <CheckCircle className="w-3 h-3 mr-1" /> Completed
         </Badge>
       );

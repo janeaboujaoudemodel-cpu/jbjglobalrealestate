@@ -164,7 +164,7 @@ export function SmartFillDropzone({ schemaHint, onExtracted, className }: Props)
               <span className="truncate flex-1">{f.name}</span>
               {f.state === "extracting" && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#1A1A1A]/60" />}
               {f.state === "done" && (
-                <span className="flex items-center gap-1 text-emerald-700">
+                <span className="flex items-center gap-1 text-[color:var(--emerald-1)]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   {f.message || "extracted"}
                 </span>

@@ -205,10 +205,10 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
                     <div
                       key={note.id}
                       className={`p-3 rounded-lg text-sm ${
-                        note.type === 'task' 
-                          ? 'bg-blue-50 border border-blue-100 text-blue-800' 
-                          : 'bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A]/70'
-                      }`}
+ note.type === 'task' 
+ ? 'bg-blue-50 border border-blue-100 text-blue-800' 
+ : 'bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A]/70'
+ }`}
                     >
                       <p>{note.content}</p>
                       <p className="text-xs opacity-60 mt-1">
@@ -258,7 +258,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               <NotebookPen className="w-4 h-4 text-[#1A1A1A]" />
               <span>Notes: {notes.length}</span>
             </div>
-            <Badge className="bg-green-100 text-green-700 border-0 text-xs">
+            <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-0 text-xs">
               Active
             </Badge>
           </div>

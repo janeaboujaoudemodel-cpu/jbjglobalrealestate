@@ -31,19 +31,19 @@ export default function InvestmentMetricsSection({
   return (
     <div className="jj-card-inner bg-gradient-to-br from-card via-card to-emerald-50/30 border-2 border-[#1A1A1A]/10">
       <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-        <TrendingUp className="w-5 h-5 text-emerald-600" />
+        <TrendingUp className="w-5 h-5 text-[color:var(--emerald-1)]" />
         Investment Potential
       </h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* ROI Estimate */}
         {roiEstimate && (
-          <div className="rounded-xl border-2 border-emerald-300 bg-gradient-to-br from-card via-card to-emerald-50 shadow-md hover:shadow-lg hover:shadow-black/10 transition-all p-5 text-center">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-emerald-200">
+          <div className="rounded-xl border-2 border-[color:var(--emerald-1)]/30 bg-gradient-to-br from-card via-card to-emerald-50 shadow-md hover:shadow-lg hover:shadow-black/10 transition-all p-5 text-center">
+            <div className="w-12 h-12 rounded-full jj-emerald-solid/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-emerald-200">
               <TrendingUp className="w-6 h-6 text-emerald-500" />
             </div>
             <p className="text-xs text-[#1A1A1A] font-medium uppercase tracking-wider mb-1">Estimated ROI</p>
-            <p className="text-2xl font-bold text-emerald-600">{roiEstimate}%</p>
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{roiEstimate}%</p>
             <p className="text-xs text-[#1A1A1A]/80 font-medium mt-1">Capital appreciation</p>
           </div>
         )}

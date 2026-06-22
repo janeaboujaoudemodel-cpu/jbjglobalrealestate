@@ -48,7 +48,7 @@ export const ListingDetailCTA = ({
         {/* WhatsApp - Primary */}
         <Button
           onClick={handleWhatsAppClick}
-          className="w-full h-12 !bg-green-600 hover:!bg-green-700 !text-white font-semibold !border-green-600"
+          className="w-full h-12 !jj-emerald-solid hover:!jj-emerald-solid !text-white font-semibold !border-[color:var(--emerald-1)]/30"
         >
           <MessageCircle className="w-5 h-5 mr-2" />
           WhatsApp Us

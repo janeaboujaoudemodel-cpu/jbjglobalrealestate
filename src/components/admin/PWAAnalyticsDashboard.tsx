@@ -105,7 +105,7 @@ const PWAAnalyticsDashboard = () => {
 
   const getEventIcon = (eventType: string) => {
     if (eventType === 'button_click') return <Download className="w-5 h-5 text-blue-600" />;
-    if (eventType === 'install_accepted') return <TrendingUp className="w-5 h-5 text-green-600" />;
+    if (eventType === 'install_accepted') return <TrendingUp className="w-5 h-5 text-[color:var(--emerald-1)]" />;
     if (eventType === 'install_dismissed') return <TrendingDown className="w-5 h-5 text-red-500" />;
     if (eventType === 'app_opened') return <Smartphone className="w-5 h-5 text-[#1A1A1A]" />;
     return <Users className="w-5 h-5 text-[#1A1A1A]/60" />;
@@ -173,12 +173,12 @@ const PWAAnalyticsDashboard = () => {
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-[#1A1A1A]/60 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-green-600" />
+              <TrendingUp className="w-4 h-4 text-[color:var(--emerald-1)]" />
               Successful Installs
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-600">{totalInstalls}</div>
+            <div className="text-3xl font-bold text-[color:var(--emerald-1)]">{totalInstalls}</div>
           </CardContent>
         </Card>
         

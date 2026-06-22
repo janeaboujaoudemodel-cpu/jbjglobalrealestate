@@ -373,7 +373,7 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
 
         {stage === "done" && (
           <div className="py-10 text-center text-sm text-[#1A1A1A] flex flex-col items-center gap-3">
-            <CheckCircle2 className="h-7 w-7 text-emerald-600" />
+            <CheckCircle2 className="h-7 w-7 text-[color:var(--emerald-1)]" />
             Done
           </div>
         )}

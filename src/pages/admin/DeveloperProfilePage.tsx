@@ -333,7 +333,7 @@ export default function DeveloperProfilePage() {
           </div>
           <div className="flex items-center gap-2">
             {confirmed ? (
-              <Badge className="bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30">
                 <CheckCircle2 className="w-3 h-3 mr-1" /> Confirmed {format(new Date(developer.last_confirmed_at!), "MMM d, yyyy")}
               </Badge>
             ) : (
@@ -518,16 +518,16 @@ export default function DeveloperProfilePage() {
                       <label
                         htmlFor="confirm-check"
                         className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          confirmChecked
-                            ? "border-emerald-500 bg-emerald-50/60"
-                            : "border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555]/70"
-                        }`}
+ confirmChecked
+ ? "border-[color:var(--emerald-1)]/30 jj-emerald-soft/60"
+ : "border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555]/70"
+ }`}
                       >
                         <Checkbox
                           id="confirm-check"
                           checked={confirmChecked}
                           onCheckedChange={(v) => setConfirmChecked(v === true)}
-                          className="mt-0.5 h-5 w-5 border-[#1A1A1A]/40 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white"
+                          className="mt-0.5 h-5 w-5 border-[#1A1A1A]/40 data-[state=checked]:jj-emerald-solid data-[state=checked]:border-[color:var(--emerald-1)]/30 data-[state=checked]:text-white"
                         />
                         <span className="text-sm text-[#1A1A1A] flex-1 leading-relaxed">
                           I confirm that the description, website, logo and headquarters above match the developer's official website,
@@ -538,7 +538,7 @@ export default function DeveloperProfilePage() {
                         <Button
                           disabled={!confirmChecked || confirmMutation.isPending}
                           onClick={() => confirmMutation.mutate()}
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-40"
+                          className="jj-emerald-solid hover:jj-emerald-solid text-white disabled:opacity-40"
                         >
                           {confirmMutation.isPending ? "Submitting…" : "I agree & confirm"}
                         </Button>
@@ -553,7 +553,7 @@ export default function DeveloperProfilePage() {
             <Dialog open={thanksOpen} onOpenChange={setThanksOpen}>
               <DialogContent className="max-w-md bg-[#FDFBF7] border-2 border-[#B89555]/40 p-0 overflow-hidden">
                 <div className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] px-8 pt-10 pb-8 text-center">
-                  <div className="w-16 h-16 mx-auto rounded-full bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/20 mb-5">
+                  <div className="w-16 h-16 mx-auto rounded-full jj-emerald-solid flex items-center justify-center shadow-lg shadow-emerald-600/20 mb-5">
                     <CheckCircle2 className="w-9 h-9 text-white" strokeWidth={2.5} />
                   </div>
                   <h2 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">Thank you</h2>
@@ -666,7 +666,7 @@ export default function DeveloperProfilePage() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-[#1A1A1A]">{r.full_name}</span>
                         {r.role && <Badge variant="outline" className="text-xs">{r.role}</Badge>}
-                        {r.status && <Badge className={`text-xs ${r.status === 'active' || r.status === 'approved' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-900 border-amber-200'}`}>{r.status}</Badge>}
+                        {r.status && <Badge className={`text-xs ${r.status === 'active' || r.status === 'approved' ? 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' : 'bg-amber-50 text-amber-900 border-amber-200'}`}>{r.status}</Badge>}
                       </div>
                       <div className="text-xs text-[#1A1A1A]/60 flex items-center gap-3 flex-wrap mt-0.5">
                         {r.position && <span>{r.position}</span>}

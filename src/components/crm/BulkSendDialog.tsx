@@ -53,12 +53,12 @@ const STATUS_PILL: Record<string, string> = {
   pending_application: "bg-amber-100 text-amber-900 border-amber-300",
   documents_required: "bg-orange-100 text-orange-900 border-orange-300",
   under_review: "bg-blue-100 text-blue-900 border-blue-300",
-  registered: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  registered: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   rejected: "bg-red-100 text-red-900 border-red-300",
   expired: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
   prospect: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
   introduced: "bg-blue-100 text-blue-900 border-blue-300",
-  active: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  active: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   paused: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
 };
 
@@ -537,8 +537,8 @@ export const BulkSendDialog = ({
                   onClick={() => setVariant(v)}
                   disabled={running}
                   className={`text-xs px-3 py-2 rounded-lg border-2 text-left transition ${
-                    variant === v ? "bg-[#1A1A1A] text-white border-[#1A1A1A]" : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/10 hover:border-[#1A1A1A]/30"
-                  }`}
+ variant === v ? "bg-[#1A1A1A] text-white border-[#1A1A1A]" : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/10 hover:border-[#1A1A1A]/30"
+ }`}
                 >
                   {VARIANT_LABELS[v]}
                 </button>
@@ -597,7 +597,7 @@ export const BulkSendDialog = ({
             </div>
             <div className="flex items-center justify-between text-sm pt-2 border-t border-[#1A1A1A]/10">
               <span className="text-[#1A1A1A] font-semibold">Will send to</span>
-              <span className="font-bold text-emerald-700">{targets.length}</span>
+              <span className="font-bold text-[color:var(--emerald-1)]">{targets.length}</span>
             </div>
           </div>
 
@@ -745,7 +745,7 @@ export const BulkSendDialog = ({
                   <span className="text-[10px] text-[#1A1A1A]/70">— include / exclude before sending</span>
                 </div>
                 <div className="flex items-center gap-2 text-[11px]">
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold">
+                  <span className="px-2 py-0.5 rounded-full jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30 font-bold">
                     {refinedTargets.length} included
                   </span>
                   {excludedIds.size > 0 && (
@@ -819,10 +819,10 @@ export const BulkSendDialog = ({
                             })
                           }
                           className={`text-[10px] uppercase tracking-wider font-bold flex items-center gap-1 px-2 py-0.5 rounded-full border ${
-                            excluded
-                              ? "bg-red-50 text-red-700 border-red-200"
-                              : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                          }`}
+ excluded
+ ? "bg-red-50 text-red-700 border-red-200"
+ : "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
+ }`}
                         >
                           {excluded ? <><UserPlus className="w-3 h-3" />Include</> : <><UserMinus className="w-3 h-3" />Exclude</>}
                         </button>
@@ -839,12 +839,12 @@ export const BulkSendDialog = ({
             <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7] overflow-hidden">
               <div className="flex items-center justify-between px-3 py-2 border-b border-[#1A1A1A]/10 bg-[#FAF5EA]">
                 <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
-                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                  <ShieldCheck className="w-4 h-4 text-[color:var(--emerald-1)]" />
                   <strong>Pre-flight CRM registration check</strong>
                 </div>
                 {checksReady && Object.keys(checks).length > 0 && (
                   <div className="flex items-center gap-2 text-[11px]">
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold">
+                    <span className="px-2 py-0.5 rounded-full jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30 font-bold">
                       {checkBreakdown.ok} ready
                     </span>
                     {checkBreakdown.warn > 0 && (
@@ -881,7 +881,7 @@ export const BulkSendDialog = ({
                       r.status === "ok" ? ShieldCheck :
                       r.status === "warn" ? ShieldAlert : ShieldX;
                     const tone =
-                      r.status === "ok" ? "text-emerald-700" :
+                      r.status === "ok" ? "text-[color:var(--emerald-1)]" :
                       r.status === "warn" ? "text-amber-700" : "text-red-700";
                     return (
                       <div key={t.id} className="px-3 py-2 text-xs">
@@ -910,7 +910,7 @@ export const BulkSendDialog = ({
                             </span>
                           )}
                           {r.status === "ok" && (
-                            <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-700 shrink-0">
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--emerald-1)] shrink-0">
                               OK to send
                             </span>
                           )}
@@ -1012,7 +1012,7 @@ export const BulkSendDialog = ({
                   const s = statuses[t.id]?.status || "queued";
                   const err = statuses[t.id]?.error;
                   const icon =
-                    s === "ok" ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> :
+                    s === "ok" ? <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)]" /> :
                     s === "fail" ? <XCircle className="w-4 h-4 text-red-600" /> :
                     s === "sending" ? <Clock className="w-4 h-4 text-amber-600 animate-pulse" /> :
                     <Clock className="w-4 h-4 text-[#1A1A1A]/70" />;
@@ -1024,10 +1024,10 @@ export const BulkSendDialog = ({
                         <span className="text-[#1A1A1A]/70 truncate">{getEmail(t, entityType)}</span>
                       </div>
                       <span className={`uppercase tracking-wider font-bold ${
-                        s === "ok" ? "text-emerald-700" :
-                        s === "fail" ? "text-red-700" :
-                        s === "sending" ? "text-amber-700" : "text-[#1A1A1A]/70"
-                      }`}>
+ s === "ok" ? "text-[color:var(--emerald-1)]" :
+ s === "fail" ? "text-red-700" :
+ s === "sending" ? "text-amber-700" : "text-[#1A1A1A]/70"
+ }`}>
                         {s === "ok" ? "sent" : s === "fail" ? (err || "failed") : s}
                       </span>
                     </div>
@@ -1046,7 +1046,7 @@ export const BulkSendDialog = ({
               <div className="flex-1">
                 <div className="font-bold mb-1">Confirm bulk send</div>
                 <div className="text-xs leading-relaxed">
-                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{effectiveTargets.length}</strong> {entityType === "brokerage" ? "brokerage" : "developer"}{effectiveTargets.length === 1 ? "" : "s"}
+                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-[color:var(--emerald-1)]">{effectiveTargets.length}</strong> {entityType === "brokerage" ? "brokerage" : "developer"}{effectiveTargets.length === 1 ? "" : "s"}
                   {excludedIds.size > 0 && (
                     <span> · <strong className="text-red-700">{excludedIds.size} excluded</strong> by you</span>
                   )}.

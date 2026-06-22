@@ -81,7 +81,7 @@ export function ApprovalWorkflowTimeline({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-500 border-green-500';
+        return 'jj-emerald-solid border-[color:var(--emerald-1)]/30';
       case 'current':
         return 'bg-amber-500 border-amber-500';
       case 'rejected':
@@ -102,7 +102,7 @@ export function ApprovalWorkflowTimeline({
           </p>
         </div>
         {isLive && (
-          <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+          <Badge className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/20">
             Live
           </Badge>
         )}
@@ -125,7 +125,7 @@ export function ApprovalWorkflowTimeline({
                 <div
                   className={cn(
                     'absolute left-6 top-14 w-0.5 h-16',
-                    status === 'completed' ? 'bg-green-500' : 'bg-muted-foreground/20'
+                    status === 'completed' ? 'jj-emerald-solid' : 'bg-muted-foreground/20'
                   )}
                 />
               )}
@@ -154,7 +154,7 @@ export function ApprovalWorkflowTimeline({
                 <Card className={cn(
                   'flex-1 transition-all duration-200',
                   status === 'current' && 'ring-2 ring-amber-500/50 shadow-lg',
-                  status === 'completed' && 'bg-green-50/50 dark:bg-green-950/10'
+                  status === 'completed' && 'jj-emerald-soft/50 dark:bg-green-950/10'
                 )}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -162,7 +162,7 @@ export function ApprovalWorkflowTimeline({
                         <div className="flex items-center gap-2 mb-2">
                           <span className="font-semibold">{step.name}</span>
                           {status === 'completed' && (
-                            <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
+                            <Badge variant="secondary" className="text-xs jj-emerald-soft text-[color:var(--emerald-1)]">
                               Approved
                             </Badge>
                           )}
@@ -259,16 +259,16 @@ export function ApprovalWorkflowTimeline({
             animate={{ opacity: 1, scale: 1 }}
             className="flex items-start gap-4"
           >
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 border-2 border-green-400 flex-shrink-0 z-10">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br border-2 border-[color:var(--emerald-1)]/30 flex-shrink-0 z-10">
               <Check className="h-5 w-5 text-white" />
             </div>
-            <Card className="flex-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200">
+            <Card className="flex-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-[color:var(--emerald-1)]/30">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
-                  <Check className="w-6 h-6 text-green-600" />
+                  <Check className="w-6 h-6 text-[color:var(--emerald-1)]" />
                   <div>
-                    <h4 className="font-semibold text-green-700 dark:text-green-400">Your Listing is Live!</h4>
-                    <p className="text-sm text-green-600 dark:text-green-500">
+                    <h4 className="font-semibold text-[color:var(--emerald-1)] dark:text-green-400">Your Listing is Live!</h4>
+                    <p className="text-sm text-[color:var(--emerald-1)] dark:text-green-500">
                       Congratulations! Your property is now visible to potential tenants.
                     </p>
                   </div>

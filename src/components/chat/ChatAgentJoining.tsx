@@ -101,8 +101,8 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           {/* Agent Photo */}
           <div className="relative">
             <div className={`w-24 h-24 rounded-full overflow-hidden border-4 ${
-              stage === 'connecting' ? 'border-[#B89555]/30' : 'border-[#B89555]'
-            } transition-colors duration-500 shadow-xl`}>
+ stage === 'connecting' ? 'border-[#B89555]/30' : 'border-[#B89555]'
+ } transition-colors duration-500 shadow-xl`}>
               <img 
                 src={agent.photo} 
                 alt={agent.name}
@@ -112,8 +112,8 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             
             {/* Status Indicator */}
             <div className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center ${
-              stage === 'connecting' ? 'bg-[#EFE6D6]/20' : 'bg-emerald-500'
-            } transition-colors duration-500 border-2 border-[#B89555]/40`}>
+ stage === 'connecting' ? 'bg-[#EFE6D6]/20' : 'jj-emerald-solid'
+ } transition-colors duration-500 border-2 border-[#B89555]/40`}>
               {stage === 'connecting' ? (
                 <Loader2 className="w-4 h-4 text-[#1A1A1A]/60 animate-spin" />
               ) : (

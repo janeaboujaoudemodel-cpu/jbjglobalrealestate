@@ -166,7 +166,7 @@ const AIROICalculator = ({ onResponse }: AIROICalculatorProps) => {
             {(response.roi || response.netYield || response.appreciation) && (
               <div className="grid grid-cols-3 gap-3">
                 {response.roi && (
-                  <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-lg text-center">
+                  <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20 p-4 rounded-lg text-center">
                     <TrendingUp className="h-5 w-5 mx-auto mb-1 text-green-500" />
                     <p className="text-xs text-muted-foreground">Total ROI</p>
                     <p className="text-xl font-bold text-green-500">{response.roi}%</p>

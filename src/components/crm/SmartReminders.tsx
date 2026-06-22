@@ -246,7 +246,7 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
                   size="sm"
                   variant="ghost"
                   onClick={() => completeReminder(reminder)}
-                  className="shrink-0 text-[#1A1A1A] hover:text-emerald-600 hover:bg-emerald-50"
+                  className="shrink-0 text-[#1A1A1A] hover:text-[color:var(--emerald-1)] hover:jj-emerald-soft"
                 >
                   <CheckCircle className="h-4 w-4" />
                 </Button>

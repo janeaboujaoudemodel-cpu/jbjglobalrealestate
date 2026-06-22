@@ -60,8 +60,8 @@ const services = [
   {
     title: "Architecture Partners",
     description: "Introductions to independent architectural design partners.",
-    gradient: "from-emerald-500/20 via-green-500/10 to-emerald-600/20",
-    iconGradient: "from-emerald-400 to-green-400",
+    gradient: "/20 /10 /20",
+    iconGradient: " ",
   },
   {
     title: "Interior Design Partners",

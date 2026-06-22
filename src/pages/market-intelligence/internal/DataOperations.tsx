@@ -27,7 +27,7 @@ const DataOperations = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'success':
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Success</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">Success</Badge>;
       case 'warning':
         return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Warning</Badge>;
       case 'error':

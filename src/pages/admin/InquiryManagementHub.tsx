@@ -49,8 +49,8 @@ interface Inquiry {
 const STATUS_CONFIG: Record<InquiryStatus, { label: string; color: string; icon: React.ReactNode }> = {
   pending: { label: 'Inquiry Received', color: 'bg-amber-100 text-amber-800 border-amber-200', icon: <Clock className="w-3.5 h-3.5" /> },
   under_review: { label: 'Under Review', color: 'bg-blue-100 text-blue-800 border-blue-200', icon: <Eye className="w-3.5 h-3.5" /> },
-  response_sent: { label: 'Response Sent', color: 'bg-emerald-100 text-emerald-800 border-emerald-200', icon: <Send className="w-3.5 h-3.5" /> },
-  completed: { label: 'Completed', color: 'bg-green-100 text-green-800 border-green-200', icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
+  response_sent: { label: 'Response Sent', color: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30', icon: <Send className="w-3.5 h-3.5" /> },
+  completed: { label: 'Completed', color: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30', icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
   unable_to_fulfill: { label: 'Unable to Fulfill', color: 'bg-red-100 text-red-800 border-red-200', icon: <AlertTriangle className="w-3.5 h-3.5" /> },
 };
 
@@ -215,10 +215,10 @@ const InquiryManagementHub: React.FC = () => {
                   key={stage}
                   onClick={() => setActiveTab(stage)}
                   className={`p-4 rounded-2xl border-2 transition-all text-left ${
-                    activeTab === stage
-                      ? 'border-[#B89555] bg-[#EFE6D6]/10 shadow-lg shadow-gold/10'
-                      : 'border-[#B89555]/15 bg-[#FDFBF7] hover:border-[#B89555]/30'
-                  }`}
+ activeTab === stage
+ ? 'border-[#B89555] bg-[#EFE6D6]/10 shadow-lg shadow-gold/10'
+ : 'border-[#B89555]/15 bg-[#FDFBF7] hover:border-[#B89555]/30'
+ }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     {cfg.icon}
@@ -350,7 +350,7 @@ const InquiryManagementHub: React.FC = () => {
                                   <Button
                                     size="sm"
                                     variant="ghost"
-                                    className="text-green-600 hover:bg-green-50"
+                                    className="text-[color:var(--emerald-1)] hover:jj-emerald-soft"
                                     onClick={() => handleWhatsAppClick(inq)}
                                     title="WhatsApp"
                                   >
@@ -442,7 +442,7 @@ const InquiryManagementHub: React.FC = () => {
                     {selectedInquiry.phone && (
                       <Button
                         onClick={() => handleWhatsAppClick(selectedInquiry)}
-                        className="bg-green-600 hover:bg-green-700 text-white gap-2"
+                        className="jj-emerald-solid hover:jj-emerald-solid text-white gap-2"
                       >
                         <MessageCircle className="w-4 h-4" /> WhatsApp
                       </Button>

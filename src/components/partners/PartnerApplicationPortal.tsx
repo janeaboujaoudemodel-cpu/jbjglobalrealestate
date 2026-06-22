@@ -165,7 +165,7 @@ export function PartnerApplicationPortal() {
                     </div>
                   )}
                   {app.stage === "approved" && (
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-600 text-xs font-semibold">
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full jj-emerald-soft border border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] text-xs font-semibold">
                       <CheckCircle className="w-3.5 h-3.5" /> Partner
                     </div>
                   )}
@@ -188,10 +188,10 @@ export function PartnerApplicationPortal() {
                         <div key={stage.key} className="flex items-center flex-shrink-0">
                           <div className={`flex flex-col items-center gap-1 px-2 ${isCurrent ? "scale-110" : ""} transition-transform`}>
                             <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                              isCompleted
-                                ? "bg-gradient-to-br from-gold to-amber-500 border-[#B89555] text-[#1A1A1A]"
-                                : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/70"
-                            }`}>
+ isCompleted
+ ? "bg-gradient-to-br from-gold to-amber-500 border-[#B89555] text-[#1A1A1A]"
+ : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/70"
+ }`}>
                               <StageIcon className="w-4 h-4" />
                             </div>
                             <span className={`text-[10px] md:text-xs text-center leading-tight max-w-[70px] ${isCompleted ? "text-[#1A1A1A] font-semibold" : "text-[#1A1A1A]/70"}`}>
@@ -208,10 +208,10 @@ export function PartnerApplicationPortal() {
                 )}
 
                 {app.stage === "approved" && (
-                  <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                  <div className="mt-4 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg p-4 text-center">
                     <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                    <p className="text-green-700 font-bold text-lg">Welcome Onboard</p>
-                    <p className="text-green-600 text-sm">You are officially a JBJ Global Real Estate Partner.</p>
+                    <p className="text-[color:var(--emerald-1)] font-bold text-lg">Welcome Onboard</p>
+                    <p className="text-[color:var(--emerald-1)] text-sm">You are officially a JBJ Global Real Estate Partner.</p>
                   </div>
                 )}
               </motion.div>

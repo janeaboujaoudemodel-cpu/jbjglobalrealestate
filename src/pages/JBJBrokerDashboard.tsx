@@ -226,7 +226,7 @@ export default function JBJBrokerDashboard() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <CheckCircle className="h-5 w-5 text-[color:var(--emerald-1)]" />
                 </div>
                 <div>
                   <p className="text-[#1A1A1A]/70 text-xs">Contacted Today</p>

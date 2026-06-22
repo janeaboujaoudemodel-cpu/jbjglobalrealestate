@@ -785,10 +785,10 @@ const VideoMeeting = () => {
                       key={bg.id}
                       onClick={() => setSelectedBackground(bg.id)}
                       className={`p-2 rounded-lg text-xs text-center border transition-all ${
-                        selectedBackground === bg.id 
-                          ? 'border-red-500 bg-red-500/20' 
-                          : 'border-[#1A1A1A] hover:border-[#1A1A1A]'
-                      }`}
+ selectedBackground === bg.id 
+ ? 'border-red-500 bg-red-500/20' 
+ : 'border-[#1A1A1A] hover:border-[#1A1A1A]'
+ }`}
                       style={{ backgroundColor: bg.color !== 'transparent' && bg.color !== 'blur' ? bg.color + '30' : undefined }}
                     >
                       <span className="text-white">{bg.name}</span>
@@ -1240,7 +1240,7 @@ const VideoMeeting = () => {
             
             {participants.map((p) => (
               <div key={p.oderId} className="flex items-center gap-3 p-3 bg-[#F7F2EA] rounded-lg group">
-                <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full jj-emerald-solid flex items-center justify-center text-white font-bold">
                   {p.odername.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1">
@@ -1283,7 +1283,7 @@ const VideoMeeting = () => {
               <p className="text-white text-sm whitespace-pre-line">{generateInviteText()}</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <Button onClick={shareViaWhatsApp} className="bg-green-600 hover:bg-green-700">
+              <Button onClick={shareViaWhatsApp} className="jj-emerald-solid hover:jj-emerald-solid">
                 <Share2 className="w-4 h-4 mr-2" /> WhatsApp
               </Button>
               <Button onClick={shareViaEmail} variant="outline">
@@ -1398,10 +1398,10 @@ const VideoMeeting = () => {
                     key={bg.id}
                     onClick={() => setSelectedBackground(bg.id)}
                     className={`p-2 rounded-lg text-xs text-center border transition-all ${
-                      selectedBackground === bg.id 
-                        ? 'border-red-500 bg-red-500/20' 
-                        : 'border-[#1A1A1A] hover:border-[#1A1A1A]'
-                    }`}
+ selectedBackground === bg.id 
+ ? 'border-red-500 bg-red-500/20' 
+ : 'border-[#1A1A1A] hover:border-[#1A1A1A]'
+ }`}
                     style={{ backgroundColor: bg.color !== 'transparent' && bg.color !== 'blur' ? bg.color + '30' : undefined }}
                   >
                     <span className="text-white">{bg.name}</span>
@@ -1499,7 +1499,7 @@ const VideoMeeting = () => {
                     webrtcRef.current?.toggleAudio(true);
                     toast.success('Microphone enabled');
                   }}
-                  className={audioEnabled ? "bg-green-600 hover:bg-green-700" : "border-[#1A1A1A]"}
+                  className={audioEnabled ? "jj-emerald-solid hover:jj-emerald-solid" : "border-[#1A1A1A]"}
                 >
                   <Mic className="w-4 h-4 mr-2" />
                   {audioEnabled ? 'Mic On' : 'Enable Mic'}
@@ -1511,7 +1511,7 @@ const VideoMeeting = () => {
                     webrtcRef.current?.toggleVideo(true);
                     toast.success('Camera enabled');
                   }}
-                  className={videoEnabled ? "bg-green-600 hover:bg-green-700" : "border-[#1A1A1A]"}
+                  className={videoEnabled ? "jj-emerald-solid hover:jj-emerald-solid" : "border-[#1A1A1A]"}
                 >
                   <Video className="w-4 h-4 mr-2" />
                   {videoEnabled ? 'Camera On' : 'Enable Camera'}

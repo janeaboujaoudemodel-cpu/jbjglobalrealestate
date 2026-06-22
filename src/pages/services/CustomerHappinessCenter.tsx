@@ -225,7 +225,7 @@ const CustomerHappinessCenter = () => {
 
               {/* WhatsApp Contact */}
               <div className="flex items-center justify-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-xl bg-green-600 flex items-center justify-center">
+                <div className="w-14 h-14 rounded-xl jj-emerald-solid flex items-center justify-center">
                   <MessageCircle className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-left">
@@ -234,7 +234,7 @@ const CustomerHappinessCenter = () => {
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-green-600 font-semibold text-lg hover:underline"
+                    className="text-[color:var(--emerald-1)] font-semibold text-lg hover:underline"
                   >
                     Chat on WhatsApp
                   </a>

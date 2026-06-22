@@ -89,7 +89,7 @@ export default function CRMSecurityDashboard() {
       case "lead_share_revoke": return <UserX className="w-4 h-4 text-red-500" />;
       case "suspicious_access":
       case "unauthorized_attempt": return <AlertTriangle className="w-4 h-4 text-red-600" />;
-      case "reauth_success": return <Shield className="w-4 h-4 text-green-600" />;
+      case "reauth_success": return <Shield className="w-4 h-4 text-[color:var(--emerald-1)]" />;
       case "session_idle": return <Clock className="w-4 h-4 text-muted-foreground" />;
       default: return <ShieldAlert className="w-4 h-4 text-muted-foreground" />;
     }
@@ -132,7 +132,7 @@ export default function CRMSecurityDashboard() {
         </Card>
         <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
-            <p className="text-3xl font-bold text-green-600">{shares.length}</p>
+            <p className="text-3xl font-bold text-[color:var(--emerald-1)]">{shares.length}</p>
             <p className="text-xs text-muted-foreground">Active Shares</p>
           </CardContent>
         </Card>

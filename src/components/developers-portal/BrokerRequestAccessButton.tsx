@@ -77,7 +77,7 @@ export default function BrokerRequestAccessButton({ developerId, developerName }
 
   if (existing?.status === "approved") {
     return (
-      <Button variant="outline" disabled className="border-emerald-400 text-emerald-900 bg-emerald-50">
+      <Button variant="outline" disabled className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] jj-emerald-soft">
         <ShieldCheck className="w-4 h-4 mr-2" /> Access granted
       </Button>
     );

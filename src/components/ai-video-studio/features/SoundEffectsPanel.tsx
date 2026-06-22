@@ -415,8 +415,8 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
           className="flex-1 h-1.5 accent-amber-500 cursor-pointer"
         />
         <span className="text-xs text-[#1A1A1A]/70 w-8 text-right">{Math.round(volume * 100)}%</span>
-        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30">
+          <div className="w-1.5 h-1.5 rounded-full jj-emerald-solid" />
           <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">Zero Credits</span>
         </div>
       </div>
@@ -449,8 +449,8 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                         <div
                           key={preset.id}
                           className={`rounded-lg border transition-all overflow-hidden ${
-                            isPlaying ? 'border-amber-500/70 bg-amber-500/5' : 'border-[#1A1A1A] bg-[#1A1A1A] hover:border-amber-500/40'
-                          }`}
+ isPlaying ? 'border-amber-500/70 bg-amber-500/5' : 'border-[#1A1A1A] bg-[#1A1A1A] hover:border-amber-500/40'
+ }`}
                         >
                           {/* Play row */}
                           <button
@@ -458,8 +458,8 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                             className="w-full flex items-center gap-2 px-2.5 py-2 text-left group"
                           >
                             <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                              isPlaying ? 'bg-amber-500 text-[#1A1A1A]' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 group-hover:bg-amber-500/20 group-hover:text-[#1A1A1A]'
-                            }`}>
+ isPlaying ? 'bg-amber-500 text-[#1A1A1A]' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 group-hover:bg-amber-500/20 group-hover:text-[#1A1A1A]'
+ }`}>
                               {isPlaying
                                 ? <Square className="w-2.5 h-2.5 fill-current" />
                                 : <Play className="w-2.5 h-2.5 fill-current ml-0.5" />

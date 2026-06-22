@@ -249,7 +249,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
               size="sm"
               disabled={bulkBusy || selected.size === 0}
               onClick={() => bulkRestore(Array.from(selected))}
-              className="border-emerald-600/40 text-emerald-700 hover:bg-emerald-50"
+              className="border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
             >
               <RotateCcw className="h-3.5 w-3.5 mr-1" />
               Restore selected
@@ -260,7 +260,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                   variant="outline"
                   size="sm"
                   disabled={bulkBusy || filtered.length === 0}
-                  className="border-emerald-600/60 text-emerald-700 hover:bg-emerald-50"
+                  className="border-[color:var(--emerald-1)]/30/60 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
                 >
                   <CheckSquare className="h-3.5 w-3.5 mr-1" />
                   Restore all ({filtered.length})

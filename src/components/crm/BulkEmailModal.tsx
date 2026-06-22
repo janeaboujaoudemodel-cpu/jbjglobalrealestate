@@ -376,8 +376,8 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
 
           <TabsContent value="complete" className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                <Send className="h-8 w-8 text-green-600" />
+              <div className="h-16 w-16 rounded-full jj-emerald-soft flex items-center justify-center mx-auto mb-4">
+                <Send className="h-8 w-8 text-[color:var(--emerald-1)]" />
               </div>
               <h3 className="text-lg font-medium">Campaign Sent!</h3>
               <p className="text-sm text-muted-foreground mb-4">

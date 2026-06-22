@@ -502,10 +502,10 @@ export default function WebDevDock() {
                   type="button"
                   onClick={() => setPicking(true)}
                   className={`inline-flex items-center gap-1 h-8 px-2 rounded-md border text-xs ${
-                    picking
-                      ? "bg-[#B89555]/20 border-[#B89555] text-[#1A1A1A]"
-                      : "bg-white border-[#B89555]/40 hover:bg-[#EFE6D6] text-[#1A1A1A]"
-                  }`}
+ picking
+ ? "bg-[#B89555]/20 border-[#B89555] text-[#1A1A1A]"
+ : "bg-white border-[#B89555]/40 hover:bg-[#EFE6D6] text-[#1A1A1A]"
+ }`}
                   title="Pick an element to target"
                 >
                   <MousePointerClick className="w-3.5 h-3.5" />
@@ -516,12 +516,12 @@ export default function WebDevDock() {
                   onClick={recording ? stopRecording : startRecording}
                   disabled={transcribing}
                   className={`inline-flex items-center gap-1 h-8 px-2 rounded-md border text-xs ${
-                    recording
-                      ? "bg-red-600 border-red-700 text-white allow-white"
-                      : transcribing
-                      ? "bg-[#EFE6D6] border-[#B89555]/40 text-[#1A1A1A]/60"
-                      : "bg-white border-[#B89555]/40 hover:bg-[#EFE6D6] text-[#1A1A1A]"
-                  }`}
+ recording
+ ? "bg-red-600 border-red-700 text-white allow-white"
+ : transcribing
+ ? "bg-[#EFE6D6] border-[#B89555]/40 text-[#1A1A1A]/60"
+ : "bg-white border-[#B89555]/40 hover:bg-[#EFE6D6] text-[#1A1A1A]"
+ }`}
                   data-no-contrast-guard={recording ? "true" : undefined}
                   data-allow-dark-cta={recording ? "true" : undefined}
                   style={recording ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
@@ -569,14 +569,14 @@ export default function WebDevDock() {
                   <div className="flex items-center justify-between mb-1 gap-2">
                     <span
                       className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 ${
-                        cr.status === "approved"
-                          ? "bg-emerald-50 text-emerald-700"
-                          : cr.status === "rejected"
-                          ? "bg-red-50 text-red-700"
-                          : cr.status === "ready"
-                          ? "bg-amber-50 text-amber-700"
-                          : "bg-[#EFE6D6] text-[#1A1A1A]"
-                      }`}
+ cr.status === "approved"
+ ? "jj-emerald-soft text-[color:var(--emerald-1)]"
+ : cr.status === "rejected"
+ ? "bg-red-50 text-red-700"
+ : cr.status === "ready"
+ ? "bg-amber-50 text-amber-700"
+ : "bg-[#EFE6D6] text-[#1A1A1A]"
+ }`}
                     >
                       {cr.status === "ready" ? "preview" : cr.status}
                     </span>
@@ -600,7 +600,7 @@ export default function WebDevDock() {
                       <Button
                         size="sm"
                         onClick={() => decide(cr, "approved")}
-                        className="h-7 text-xs px-2 bg-emerald-600 hover:bg-emerald-700 text-white allow-white font-semibold"
+                        className="h-7 text-xs px-2 jj-emerald-solid hover:jj-emerald-solid text-white allow-white font-semibold"
                         data-no-contrast-guard
                         data-allow-dark-cta
                         style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}

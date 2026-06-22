@@ -449,7 +449,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
             <Button variant="outline" onClick={() => setEditingProject(null)}>
               Cancel
             </Button>
-            <Button onClick={submitChangeRequest} disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+            <Button onClick={submitChangeRequest} disabled={isSubmitting} className="jj-emerald-solid hover:jj-emerald-solid text-white gap-2">
               {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               Submit for Approval
             </Button>

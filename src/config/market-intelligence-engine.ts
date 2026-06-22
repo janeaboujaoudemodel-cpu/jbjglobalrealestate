@@ -394,7 +394,7 @@ export function getPriorityColor(priority: MarketAlertPriority): string {
 
 export function getSentimentLabel(score: number): { label: string; color: string; icon: string } {
   if (score >= SENTIMENT_THRESHOLDS.very_positive) {
-    return { label: 'Very Positive', color: 'text-green-600', icon: 'UP' };
+    return { label: 'Very Positive', color: 'text-[color:var(--emerald-1)]', icon: 'UP' };
   } else if (score >= SENTIMENT_THRESHOLDS.positive) {
     return { label: 'Positive', color: 'text-green-500', icon: 'UP' };
   } else if (score >= SENTIMENT_THRESHOLDS.neutral_lower) {

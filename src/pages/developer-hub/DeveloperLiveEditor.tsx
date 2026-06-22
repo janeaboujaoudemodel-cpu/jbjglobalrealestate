@@ -109,7 +109,7 @@ const DeveloperLiveEditor = () => {
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold text-[#1A1A1A]">{p.name}</h3>
                       {p.is_published ? (
-                        <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Live</Badge>
+                        <Badge variant="outline" className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Live</Badge>
                       ) : (
                         <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200">Unpublished</Badge>
                       )}

@@ -66,7 +66,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       label: 'WhatsApp',
       icon: FaWhatsapp,
       iconClassName: 'text-[#25D366]',
-      borderClassName: 'border-emerald-500/40 hover:border-emerald-500',
+      borderClassName: 'border-[color:var(--emerald-1)]/30/40 hover:border-[color:var(--emerald-1)]/30',
       external: true,
     },
     {

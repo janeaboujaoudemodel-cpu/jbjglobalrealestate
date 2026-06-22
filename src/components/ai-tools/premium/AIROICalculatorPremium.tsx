@@ -96,10 +96,10 @@ const AIROICalculatorPremium = () => {
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeInUp}
-        className="bg-gradient-to-br from-emerald-950/40 via-zinc-900/60 to-emerald-950/20 backdrop-blur-sm border border-emerald-500/30 rounded-3xl p-8 md:p-10 mb-8"
+        className="bg-gradient-to-br from-emerald-950/40 via-zinc-900/60 to-emerald-950/20 backdrop-blur-sm border border-[color:var(--emerald-1)]/30/30 rounded-3xl p-8 md:p-10 mb-8"
       >
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl jj-emerald-solid/15 border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
             <Building className="w-6 h-6 text-emerald-400" />
           </div>
           <div>
@@ -119,7 +119,7 @@ const AIROICalculatorPremium = () => {
               value={formData.propertyPrice}
               onChange={(e) => handleChange("propertyPrice", e.target.value)}
               placeholder="2,500,000"
-              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-[color:var(--emerald-1)]/30/30 text-white h-12 rounded-xl hover:border-[color:var(--emerald-1)]/30/50 focus:border-[color:var(--emerald-1)]/30 transition-colors"
             />
           </div>
 
@@ -133,7 +133,7 @@ const AIROICalculatorPremium = () => {
               value={formData.downPayment}
               onChange={(e) => handleChange("downPayment", e.target.value)}
               placeholder="500,000"
-              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-[color:var(--emerald-1)]/30/30 text-white h-12 rounded-xl hover:border-[color:var(--emerald-1)]/30/50 focus:border-[color:var(--emerald-1)]/30 transition-colors"
             />
           </div>
 
@@ -147,7 +147,7 @@ const AIROICalculatorPremium = () => {
               value={formData.expectedRent}
               onChange={(e) => handleChange("expectedRent", e.target.value)}
               placeholder="120,000"
-              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-[color:var(--emerald-1)]/30/30 text-white h-12 rounded-xl hover:border-[color:var(--emerald-1)]/30/50 focus:border-[color:var(--emerald-1)]/30 transition-colors"
             />
           </div>
 
@@ -161,7 +161,7 @@ const AIROICalculatorPremium = () => {
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
               placeholder="Dubai Marina"
-              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-[color:var(--emerald-1)]/30/30 text-white h-12 rounded-xl hover:border-[color:var(--emerald-1)]/30/50 focus:border-[color:var(--emerald-1)]/30 transition-colors"
             />
           </div>
 
@@ -172,10 +172,10 @@ const AIROICalculatorPremium = () => {
               Property Type
             </Label>
             <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
-              <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
+              <SelectTriggerDark className="h-12 rounded-xl border-[color:var(--emerald-1)]/30/30 hover:border-[color:var(--emerald-1)]/30/50">
                 <SelectValue />
               </SelectTriggerDark>
-              <SelectContentDark className="border-emerald-500/30">
+              <SelectContentDark className="border-[color:var(--emerald-1)]/30/30">
                 <SelectItemDark value="apartment">Apartment</SelectItemDark>
                 <SelectItemDark value="villa">Villa</SelectItemDark>
                 <SelectItemDark value="townhouse">Townhouse</SelectItemDark>
@@ -191,10 +191,10 @@ const AIROICalculatorPremium = () => {
               Holding Period
             </Label>
             <Select value={formData.holdingPeriod} onValueChange={(v) => handleChange("holdingPeriod", v)}>
-              <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
+              <SelectTriggerDark className="h-12 rounded-xl border-[color:var(--emerald-1)]/30/30 hover:border-[color:var(--emerald-1)]/30/50">
                 <SelectValue />
               </SelectTriggerDark>
-              <SelectContentDark className="border-emerald-500/30">
+              <SelectContentDark className="border-[color:var(--emerald-1)]/30/30">
                 <SelectItemDark value="1">1 Year</SelectItemDark>
                 <SelectItemDark value="3">3 Years</SelectItemDark>
                 <SelectItemDark value="5">5 Years</SelectItemDark>
@@ -214,7 +214,7 @@ const AIROICalculatorPremium = () => {
             value={formData.additionalCosts}
             onChange={(e) => handleChange("additionalCosts", e.target.value)}
             placeholder="Service charges, maintenance, etc."
-            className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+            className="bg-[#FDFBF7]/50 border-[color:var(--emerald-1)]/30/30 text-white h-12 rounded-xl hover:border-[color:var(--emerald-1)]/30/50 focus:border-[color:var(--emerald-1)]/30 transition-colors"
           />
         </div>
 
@@ -248,7 +248,7 @@ const AIROICalculatorPremium = () => {
             className="space-y-6"
           >
             {/* Main Result Card */}
-            <div className="bg-gradient-to-br from-emerald-500/15 to-emerald-600/10 border border-emerald-500/40 rounded-3xl p-8 md:p-10">
+            <div className="bg-gradient-to-br /15 /10 border border-[color:var(--emerald-1)]/30/40 rounded-3xl p-8 md:p-10">
               <div className="flex items-center gap-3 mb-6">
                 <TrendingUp className="w-8 h-8 text-emerald-400" />
                 <div>
@@ -260,21 +260,21 @@ const AIROICalculatorPremium = () => {
               {/* Key Metrics */}
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {response.roi && (
-                  <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
+                  <div className="bg-[#1A1A1A]/40 border border-[color:var(--emerald-1)]/30/20 rounded-2xl p-6 text-center">
                     <p className="text-white/70 text-sm mb-2">Total ROI</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.roi}%</p>
                     <p className="text-white/90 text-xs mt-1">over {formData.holdingPeriod} years</p>
                   </div>
                 )}
                 {response.netYield && (
-                  <div className="bg-emerald-500/20 border border-emerald-400/50 rounded-2xl p-6 text-center">
+                  <div className="jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/50 rounded-2xl p-6 text-center">
                     <p className="text-emerald-400 text-sm mb-2 font-medium">Net Yield</p>
                     <p className="text-white text-4xl font-bold">{response.netYield}%</p>
                     <p className="text-white/70 text-xs mt-1">annual return</p>
                   </div>
                 )}
                 {response.appreciation && (
-                  <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
+                  <div className="bg-[#1A1A1A]/40 border border-[color:var(--emerald-1)]/30/20 rounded-2xl p-6 text-center">
                     <p className="text-white/70 text-sm mb-2">Est. Appreciation</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.appreciation}%</p>
                     <p className="text-white/90 text-xs mt-1">projected growth</p>
@@ -284,7 +284,7 @@ const AIROICalculatorPremium = () => {
 
               {/* Confidence Score */}
               {response.confidenceScore && (
-                <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4 mb-6">
+                <div className="bg-[#FDFBF7]/60 border border-[color:var(--emerald-1)]/30/20 rounded-xl p-4 mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-emerald-400/70 text-xs uppercase tracking-wider">AI Confidence Score</p>
                     <p className={`text-lg font-semibold ${getConfidenceColor(response.confidenceScore)}`}>
@@ -298,17 +298,17 @@ const AIROICalculatorPremium = () => {
               {/* Risk Level */}
               {response.riskLevel && (
                 <div className={`rounded-xl p-4 mb-6 ${
-                  response.riskLevel === 'high' 
-                    ? 'bg-red-500/10 border border-red-500/20' 
-                    : response.riskLevel === 'medium'
-                    ? 'bg-amber-500/10 border border-amber-500/20'
-                    : 'bg-emerald-500/10 border border-emerald-500/20'
-                }`}>
+ response.riskLevel === 'high' 
+ ? 'bg-red-500/10 border border-red-500/20' 
+ : response.riskLevel === 'medium'
+ ? 'bg-amber-500/10 border border-amber-500/20'
+ : 'jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20'
+ }`}>
                   <div className="flex items-center gap-2">
                     <AlertTriangle className={`h-5 w-5 ${
-                      response.riskLevel === 'high' ? 'text-red-400' :
-                      response.riskLevel === 'medium' ? 'text-[#1A1A1A]' : 'text-emerald-400'
-                    }`} />
+ response.riskLevel === 'high' ? 'text-red-400' :
+ response.riskLevel === 'medium' ? 'text-[#1A1A1A]' : 'text-emerald-400'
+ }`} />
                     <span className="font-semibold text-white capitalize">{response.riskLevel} Risk</span>
                   </div>
                   {response.riskFactors && (
@@ -325,7 +325,7 @@ const AIROICalculatorPremium = () => {
               )}
 
               {/* AI Insights */}
-              <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-6">
+              <div className="bg-[#FDFBF7]/60 border border-[color:var(--emerald-1)]/30/20 rounded-xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="w-5 h-5 text-emerald-400" />
                   <h4 className="text-white font-semibold">AI Investment Insights</h4>

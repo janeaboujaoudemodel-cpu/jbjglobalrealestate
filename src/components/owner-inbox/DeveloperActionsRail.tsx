@@ -89,10 +89,10 @@ export default function DeveloperActionsRail() {
               key={f}
               onClick={() => setFilter(f)}
               className={`px-3 py-1 text-xs font-medium rounded-md transition ${
-                filter === f
-                  ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                  : "text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/10"
-              }`}
+ filter === f
+ ? "bg-[#EFE6D6] text-[#1A1A1A]"
+ : "text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/10"
+ }`}
             >
               {f === "open" ? `Open (${items.filter((i) => i.status === "pending" || i.status === "awaiting_owner").length})` : "All"}
             </button>
@@ -103,7 +103,7 @@ export default function DeveloperActionsRail() {
         {isLoading && <p className="text-xs text-[#1A1A1A]/60 px-2 py-4">Loading…</p>}
         {!isLoading && visible.length === 0 && (
           <div className="text-center py-8">
-            <CheckCircle2 className="h-8 w-8 text-emerald-600 mx-auto mb-2" />
+            <CheckCircle2 className="h-8 w-8 text-[color:var(--emerald-1)] mx-auto mb-2" />
             <p className="text-sm text-[#1A1A1A]/70">No pending requests.</p>
             <p className="text-xs text-[#1A1A1A]/50">Click "Sync inbox" to pull new mail.</p>
           </div>

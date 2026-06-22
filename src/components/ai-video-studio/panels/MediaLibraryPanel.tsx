@@ -432,7 +432,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
     switch (asset.type) {
       case 'video': return { icon: <Film className="w-8 h-8 text-blue-300" />, bg: 'bg-blue-900/70 border border-blue-700/50' };
       case 'audio': return { icon: <Music className="w-8 h-8 text-amber-300" />, bg: 'bg-amber-900/70 border border-amber-700/50' };
-      case 'image': return { icon: <Image className="w-8 h-8 text-emerald-300" />, bg: 'bg-emerald-900/70 border border-emerald-700/50' };
+      case 'image': return { icon: <Image className="w-8 h-8 text-[color:var(--emerald-on)]" />, bg: 'jj-emerald-solid/70 border border-[color:var(--emerald-1)]/30/50' };
       default:      return { icon: <Film className="w-8 h-8 text-[#1A1A1A]/70" />, bg: 'bg-[#1A1A1A] border border-[#B89555]/30' };
     }
   };

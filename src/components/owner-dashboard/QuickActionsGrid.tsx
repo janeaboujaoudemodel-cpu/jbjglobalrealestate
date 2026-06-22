@@ -32,7 +32,7 @@ interface QuickAction {
 }
 
 const QUICK_ACTIONS: QuickAction[] = [
-  { label: "Add Lead", description: "Create a new CRM lead", icon: UserPlus, path: "/owner/crm?action=new-lead", color: "text-emerald-600" },
+  { label: "Add Lead", description: "Create a new CRM lead", icon: UserPlus, path: "/owner/crm?action=new-lead", color: "text-[color:var(--emerald-1)]" },
   { label: "Calendar", description: "View appointments & schedule", icon: Calendar, path: "/owner/crm/calendar", color: "text-blue-600" },
   { label: "Property Map", description: "Interactive UAE property map", icon: Map, path: "/owner/map", color: "text-amber-600" },
   { label: "AI Assistant", description: "Founder AI assistant", icon: Bot, path: "/owner/founder-assistant", color: "text-purple-600" },
@@ -41,7 +41,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { label: "Analytics", description: "Business analytics dashboard", icon: BarChart3, path: "/owner/analytics", color: "text-cyan-600" },
   { label: "Marketing", description: "Marketing hub & campaigns", icon: Megaphone, path: "/owner/marketing-hub", color: "text-rose-600" },
   
-  { label: "Employee Hub", description: "Team & HR management", icon: Building2, path: "/employee-hub", color: "text-teal-600" },
+  { label: "Employee Hub", description: "Team & HR management", icon: Building2, path: "/employee-hub", color: "text-[color:var(--emerald-1)]" },
   { label: "Leads Inbox", description: "All CRM leads inbox", icon: FileText, path: "/owner/crm/leads", color: "text-orange-600" },
   { label: "CRM Chat", description: "Client communications", icon: MessageSquare, path: "/owner/crm", color: "text-violet-600" },
   { label: "Contract Vault", description: "Developer agreements & AI contract upload", icon: FileSignature, path: "/owner/contracts", color: "text-[#B89555]" },
