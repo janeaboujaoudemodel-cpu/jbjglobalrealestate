@@ -10129,3 +10129,66 @@ html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sideb
 html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sidebar-section][data-active="true"] {
   background-image: var(--jj-emerald-ombre) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 47 — Sidebar active-state final lock
+   - Active sidebar row: emerald background, WHITE text + WHITE icon
+   - Disable ANY sweep / metallic / shimmer animation on sidebar rows
+   - Subtle resting metallic sheen via static highlight only
+   - Swipe / sweep animations remain available ONLY for explicit
+     `.jj-swipe-hint` and tutorial primitives.
+   ──────────────────────────────────────────────────────────────── */
+html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"],
+html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"] {
+  background-image: linear-gradient(135deg, #064E3B 0%, #0A6B4E 100%) !important;
+  background-color: #064E3B !important;
+  animation: none !important;
+  background-size: 100% 100% !important;
+  background-position: 0 0 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 1px 0 rgba(0,0,0,0.18),
+    0 6px 14px -10px rgba(6,78,59,0.55) !important;
+}
+html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"]::before,
+html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"]::after,
+html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"]::before,
+html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"]::after,
+html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"]::before,
+html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"]::after {
+  content: none !important;
+  animation: none !important;
+  background: none !important;
+}
+html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"] *,
+html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"],
+html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"] *,
+html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"],
+html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  text-shadow: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+}
+/* Hover on active: keep white, no fill flicker */
+html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"]:hover,
+html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"]:hover,
+html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"]:hover {
+  background-image: linear-gradient(135deg, #075f48 0%, #0B7857 100%) !important;
+  animation: none !important;
+}
+
+/* Strip animated metallic sweep from any element living inside the
+   sidebar chrome — sidebar rows must NEVER pulse/sweep at rest. */
+html body [data-chrome="sidebar"] .jj-tab-active-metallic,
+html body [data-chrome="sidebar"] .jj-emerald-metallic,
+html body [data-chrome="sidebar"] [data-emerald-shimmer],
+html body [data-chrome="sidebar"] .jbj-shimmer-champagne,
+html body [data-chrome="sidebar"] .animate-shimmer {
+  animation: none !important;
+  background-position: 0 0 !important;
+}
