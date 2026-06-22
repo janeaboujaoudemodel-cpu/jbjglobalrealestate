@@ -10486,13 +10486,9 @@ h3.text-muted-foreground,
   opacity: 1 !important;
 }
 
-/* Opt-out hook for any element that legitimately must keep its
-   prior styling (e.g. brand-locked CTAs, dark-hero overlays). */
-[data-no-emerald],
-[data-no-emerald] *,
-.jj-cta-gold-metallic,
-.jj-metallic-active,
-[data-phone-code-trigger],
-.jj-cta-dark {
-  background-image: revert !important;
-}
+/* Opt-out hook: any element marked [data-no-emerald] keeps its
+   prior champagne/gold/dark styling untouched. The emerald rules
+   above are scoped by class (.jj-cta-champagne, .jj-badge-dark,
+   etc.) so .jj-cta-dark and .jj-cta-gold-metallic are already
+   unaffected by source-order. */
+
