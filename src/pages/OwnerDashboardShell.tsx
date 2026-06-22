@@ -26,20 +26,16 @@ const OwnerDashboardShell = () => {
   const { user, signOut } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [fullscreen, setFullscreen] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return window.localStorage.getItem("owner.fullscreen") === "1";
-  });
+  const [fullscreen, setFullscreen] = useState<boolean>(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
     try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+    // Clean up any legacy persisted fullscreen flag — sidebar must remain visible
+    // by default per the global PASS XX rule. Fullscreen is now click-only.
+    try { window.localStorage.removeItem("owner.fullscreen"); } catch {}
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem("owner.fullscreen", fullscreen ? "1" : "0");
-  }, [fullscreen]);
 
   const handleSignOut = async () => {
     try {

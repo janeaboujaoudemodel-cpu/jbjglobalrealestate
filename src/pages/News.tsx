@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, RefreshCw, Bot, Landmark, Building2, Home, Banknote, Gift, MapPin, Globe, Users } from "lucide-react";
+import { Newspaper, ChevronRight, ArrowLeft, Calendar, TrendingUp, Landmark, Building2, Banknote, Gift, MapPin, Globe } from "lucide-react";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
-import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 as topAreas2025Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
-import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
-
-const dubaiLandmarksVideo = new URL("@/assets/videos/dubai-landmarks-hero.mp4", import.meta.url).href;
+import { isRealEstateArticle } from "@/lib/news/realEstateFilter";
 
 interface MarketNews {
   id: string;
@@ -28,27 +24,12 @@ interface MarketNews {
   is_featured: boolean;
 }
 
-// Category-specific accent colors for premium editorial badges
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  'Market Update': { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
-  'Analysis': { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200' },
-  'Policy': { bg: 'bg-sky-50', text: 'text-sky-800', border: 'border-sky-200' },
-  'Economic': { bg: 'jj-emerald-soft', text: 'text-[color:var(--emerald-1)]', border: 'border-[color:var(--emerald-1)]/30' },
-  'Monthly Report': { bg: 'bg-purple-50', text: 'text-purple-800', border: 'border-purple-200' },
-  'Market Outlook': { bg: 'bg-indigo-50', text: 'text-indigo-800', border: 'border-indigo-200' },
-  'Developer News': { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200' },
-  'Government': { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-200' },
-  'Company News': { bg: 'bg-[hsl(43,45%,94%)]', text: 'text-[hsl(43,45%,30%)]', border: 'border-[hsl(43,45%,54%)]/30' },
-};
-
-const CategoryBadge = ({ category }: { category: string }) => {
-  const colors = CATEGORY_COLORS[category] || { bg: 'bg-[#F7F2EA]', text: 'text-[#1A1A1A]/70', border: 'border-[#B89555]/30' };
-  return (
-    <span className={`text-xs ${colors.text} ${colors.bg} px-3 py-1 rounded-full border ${colors.border} font-medium`}>
-      {category}
-    </span>
-  );
-};
+// Unified champagne badge — single visual language for every category.
+const CategoryBadge = ({ category }: { category: string }) => (
+  <span className="text-xs text-[#1A1A1A] bg-[#F7F2EA] px-3 py-1 rounded-full border border-[#B89555]/40 font-medium">
+    {category}
+  </span>
+);
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -56,11 +37,11 @@ const News = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     categoryParam === 'company' ? 'Company News' : categoryParam === 'market' ? 'Market Update' : null
   );
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const navigate = useNavigate();
 
+
   // Fetch news from database
-  const { data: dbNews, isLoading, refetch } = useQuery({
+  const { data: dbNews, isLoading } = useQuery({
     queryKey: ['market-news'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -74,49 +55,26 @@ const News = () => {
     },
   });
 
-  // Transform DB news to display format
-  const newsArticles = (dbNews || []).map(n => ({
-    id: n.id,
-    title: n.title,
-    excerpt: n.excerpt,
-    category: n.category,
-    date: n.published_date,
-    source: n.source,
-    image: n.image_url || null,
-    isAI: n.ai_generated,
-    sourceUrl: n.source_url,
-  }));
+  // Transform DB news to display format, dropping anything that isn't Dubai/UAE real estate
+  const newsArticles = (dbNews || [])
+    .filter(n => isRealEstateArticle({ title: n.title, excerpt: n.excerpt, content: n.content, category: n.category }))
+    .map(n => ({
+      id: n.id,
+      title: n.title,
+      excerpt: n.excerpt,
+      category: n.category,
+      date: n.published_date,
+      source: n.source,
+      image: n.image_url || null,
+      isAI: n.ai_generated,
+      sourceUrl: n.source_url,
+    }));
 
-  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Monthly Report", "Market Outlook", "Developer News", "Government", "Company News"];
+  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Developer News", "Government", "Company News"];
 
   const filteredNews = selectedCategory && selectedCategory !== "All"
     ? newsArticles.filter(n => n.category === selectedCategory)
     : newsArticles;
-
-  const handleRefreshNews = async () => {
-    setIsRefreshing(true);
-    try {
-      const { error } = await supabase.functions.invoke('ai-news-collector', {
-        body: { action: 'collect' }
-      });
-      
-      if (error) {
-        if (error.message?.includes('429')) {
-          toast.error("Rate limit exceeded. Please try again later.");
-          return;
-        }
-        throw error;
-      }
-      
-      await refetch();
-      toast.success("News updated successfully!");
-    } catch (err) {
-      console.error("Failed to refresh news:", err);
-      toast.error("Failed to refresh news. Please try again.");
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   // Dynamic date for DLD stats
   const dldDateLabel = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -272,64 +230,48 @@ const News = () => {
   return (
     <>
       <SEOHead {...pagesSEO.news} />
-      <section data-neon-page className="min-h-screen">
-      {/* Hero Section — Neon newsroom (dark) */}
-      <section className="jj-neon-hero relative py-20 md:py-28 overflow-hidden" data-surface="dark" data-no-contrast-guard>
-        <div className="max-w-[1200px] mx-auto px-6 relative z-10">
-          <Link to="/" className="allow-white inline-flex items-center gap-2 text-white/70 hover:text-[#67E8F9] mb-8 transition-colors group" data-no-contrast-guard>
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform allow-white" />
-            <span className="allow-white">Back to Home</span>
-          </Link>
+      <section className="min-h-screen bg-[#FDFBF7]">
+        {/* Champagne hero — JBJ identity, no neon, no ticker */}
+        <section className="relative overflow-hidden border-b border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+          <div className="max-w-[1200px] mx-auto px-6 py-16 md:py-20 relative z-10">
+            <Link to="/" className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-8 transition-colors group">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span>Back to Home</span>
+            </Link>
 
-          <div className="max-w-4xl mx-auto text-center">
-            <span className="jj-neon-chip mb-6 mx-auto" data-tone="violet">
-              <Landmark className="w-3.5 h-3.5" />
-              Government &amp; Market Sources
-            </span>
-
-            <h1
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mt-6 mb-6 leading-[1.05] mx-auto"
-              style={{ fontFamily: "Playfair Display, Georgia, serif" }}
-            >
-              News &amp; <span className="jj-neon-underline jj-neon-text-cyan">Insights</span>
-            </h1>
-            <p className="text-white/85 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed allow-white" data-no-contrast-guard>
-              Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities.
-              <span className="text-[#F0ABFC] font-medium"> Curated from official sources daily.</span>
-            </p>
+            <div className="max-w-3xl">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A] font-semibold mb-5">
+                <Landmark className="w-3.5 h-3.5" />
+                Dubai Real Estate — Official Sources
+              </span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] leading-[1.05] mb-5">
+                News &amp; Insights
+              </h1>
+              <p className="text-[#1A1A1A]/75 text-lg max-w-2xl leading-relaxed">
+                Curated Dubai &amp; UAE real-estate updates — DLD, RERA, developer launches, off-plan, mortgages, market reports and investor briefings.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Neon ticker */}
-      <div className="jj-neon-ticker" data-no-contrast-guard>
-        <div className="jj-neon-ticker-track">
-          {["LIVE · DLD", "RERA REGISTRY", "DXB INTERACT", "DAILY REFRESH", "JBJ INTELLIGENCE", "OFF-PLAN VOLUME", "RENTAL INDEX", "TOP AREAS", "AI INSIGHTS"]
-            .concat(["LIVE · DLD", "RERA REGISTRY", "DXB INTERACT", "DAILY REFRESH", "JBJ INTELLIGENCE", "OFF-PLAN VOLUME", "RENTAL INDEX", "TOP AREAS", "AI INSIGHTS"])
-            .map((w, i) => (
-              <span key={`${w}-${i}`} className="allow-white">{w}</span>
-            ))}
-        </div>
-      </div>
-
-      {/* Category Filter — neon chips on dark glass */}
-      <div className="sticky top-[40px] z-20 bg-[#050B18]/95 backdrop-blur-md border-b border-[rgba(34,211,238,0.18)]" data-surface="dark" data-no-contrast-guard>
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="py-3">
-            <div className="flex flex-nowrap gap-2 py-2 overflow-x-auto scrollbar-hide pr-4">
+        {/* Category filter — single champagne pill row, emerald active state via primitive */}
+        <div className="sticky top-0 z-20 bg-[#FDFBF7]/95 backdrop-blur-md border-b border-[#B89555]/30">
+          <div className="max-w-[1200px] mx-auto px-6 py-3">
+            <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pr-4">
               {categories.map((category) => {
                 const isActive = (category === "All" && !selectedCategory) || selectedCategory === category;
                 return (
                   <button
                     key={category}
+                    type="button"
                     onClick={() => setSelectedCategory(category === "All" ? null : category)}
-                    data-no-contrast-guard
-                    className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium allow-white ${
- isActive
- ? "jj-neon-chip"
- : "bg-white/[0.04] text-white/75 border border-white/15 hover:border-[rgba(34,211,238,0.5)] hover:text-[#67E8F9]"
- }`}
-                    style={isActive ? { letterSpacing: "0.04em", textTransform: "none", fontSize: "0.875rem" } : undefined}
+                    data-emerald={isActive ? "true" : undefined}
+                    className={`px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
+                      isActive
+                        ? "border-transparent shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                        : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
+                    }`}
+                    style={isActive ? { backgroundImage: "var(--jj-emerald-ombre, linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%))", color: "#FFFFFF" } : undefined}
                   >
                     {category}
                   </button>
@@ -338,7 +280,8 @@ const News = () => {
             </div>
           </div>
         </div>
-      </div>
+
+
 
 
       {/* Loading State */}
@@ -356,7 +299,7 @@ const News = () => {
             <div className="mb-12">
               <div className="py-6 px-4 md:px-6">
                 <article 
-                  className="jbj-neon-frame group relative bg-[#FDFBF7]/85 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-[0_24px_60px_-12px_rgba(167,139,250,0.45)]"
+                  className="group relative bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(184,149,85,0.35)]"
                   onClick={() => navigate(`/news/${filteredNews[0].id}`)}
                 >
                   <div className="grid md:grid-cols-2 gap-0">
