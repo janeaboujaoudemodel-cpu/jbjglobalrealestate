@@ -298,22 +298,22 @@ const EmployeeManagementHub: React.FC = () => {
             {/* Horizontally scrollable tab strip — never overflows when chat panel narrows the viewport */}
             <div className="min-w-0 flex-1 -mx-1 px-1 overflow-x-auto">
               <TabsList className="inline-flex w-max bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 p-1">
-                <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A] whitespace-nowrap">
                   <BarChart3 className="w-4 h-4 mr-2" />Overview
                 </TabsTrigger>
-                <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A] whitespace-nowrap">
                   <UserPlus className="w-4 h-4 mr-2" />Applications
                 </TabsTrigger>
-                <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A] whitespace-nowrap">
                   <Key className="w-4 h-4 mr-2" />IT Provisioning
                 </TabsTrigger>
-                <TabsTrigger value="assignments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                <TabsTrigger value="assignments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A] whitespace-nowrap">
                   <UserPlus className="w-4 h-4 mr-2" />Lead Assignments
                 </TabsTrigger>
-                <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A] whitespace-nowrap">
                   <Activity className="w-4 h-4 mr-2" />Employee Journey
                 </TabsTrigger>
-                <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] whitespace-nowrap">
+                <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A] whitespace-nowrap">
                   <Eye className="w-4 h-4 mr-2" />Activity Audit
                 </TabsTrigger>
               </TabsList>

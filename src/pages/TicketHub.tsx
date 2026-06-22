@@ -446,15 +446,15 @@ const TicketHub = () => {
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-3 bg-muted/60 border-2 border-[#B89555]/30 rounded-xl h-12 p-1 gap-1">
-                <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground data-[state=active]:shadow-md">
+                <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md">
                   <Plus className="w-4 h-4 mr-2" />
                   New Ticket
                 </TabsTrigger>
-                <TabsTrigger value="track" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground data-[state=active]:shadow-md">
+                <TabsTrigger value="track" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md">
                   <Search className="w-4 h-4 mr-2" />
                   My Tickets
                 </TabsTrigger>
-                <TabsTrigger value="inbox" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground data-[state=active]:shadow-md relative">
+                <TabsTrigger value="inbox" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md relative">
                   <Inbox className="w-4 h-4 mr-2" />
                   Inbox
                   {(inboxQuery.data?.length || 0) > 0 && (

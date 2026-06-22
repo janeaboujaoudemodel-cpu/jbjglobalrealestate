@@ -1026,19 +1026,19 @@ const CustomerHappiness = () => {
               <CardContent className="p-4 md:p-8">
                 <Tabs defaultValue="support">
                   <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 p-1.5 md:p-2 rounded-xl mb-8 h-auto">
-                    <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                    <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <TicketCheck className="w-4 h-4" />
                       <span className="hidden sm:inline">Support</span> Ticket
                     </TabsTrigger>
-                    <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                    <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <MessageSquareHeart className="w-4 h-4" />
                       <span className="hidden sm:inline">Write a</span> Review
                     </TabsTrigger>
-                    <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                    <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <AlertCircle className="w-4 h-4" />
                       Report <span className="hidden sm:inline">Issue</span>
                     </TabsTrigger>
-                    <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                    <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <Lightbulb className="w-4 h-4" />
                       Idea <span className="hidden sm:inline">Box</span>
                     </TabsTrigger>

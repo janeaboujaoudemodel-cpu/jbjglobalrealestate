@@ -95,19 +95,19 @@ export default function CRMSideRail() {
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1 rounded-full h-auto">
                 <TabsTrigger
                   value="calendar"
-                  className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]"
+                  className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555]"
                 >
                   <CalendarDays className="h-3.5 w-3.5 mr-1.5" /> Calendar
                 </TabsTrigger>
                 <TabsTrigger
                   value="notes"
-                  className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]"
+                  className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555]"
                 >
                   <NotebookPen className="h-3.5 w-3.5 mr-1.5" /> Notes
                 </TabsTrigger>
                 <TabsTrigger
                   value="tasks"
-                  className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]"
+                  className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555]"
                 >
                   <ListChecks className="h-3.5 w-3.5 mr-1.5" /> Tasks
                 </TabsTrigger>

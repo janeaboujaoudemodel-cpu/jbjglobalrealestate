@@ -106,7 +106,7 @@ const BrokerIntelligence = () => {
             <TabsList className="bg-[#FDFBF7] border border-[#1A1A1A] w-full flex flex-wrap justify-start gap-1 h-auto p-1">
               <TabsTrigger 
                 value="signals" 
-                className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6]/20 data-[state=active]:text-[#1A1A1A]"
+                className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6]/20"
               >
                 <Activity className="w-4 h-4" />
                 <span className="hidden sm:inline">Market Signals</span>
@@ -137,7 +137,7 @@ const BrokerIntelligence = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="notes" 
-                className="flex items-center gap-2 data-[state=active]:bg-amber-500/20 data-[state=active]:text-[#1A1A1A]"
+                className="flex items-center gap-2 data-[state=active]:bg-amber-500/20"
               >
                 <FileText className="w-4 h-4" />
                 Notes

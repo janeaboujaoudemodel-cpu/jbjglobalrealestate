@@ -522,15 +522,15 @@ const UserProfile = () => {
           {/* Tabs */}
           <Tabs defaultValue={defaultTab} className="space-y-6">
               <TabsList className={`grid w-full ${isBrokerMode ? 'grid-cols-4' : 'grid-cols-3'} h-auto p-0 bg-[#F7F2EA] border border-[#B89555]/40 rounded-md overflow-hidden divide-x divide-[#B89555]/40`} data-no-contrast-guard>
-              <TabsTrigger value="profile" className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60" data-no-contrast-guard>
+              <TabsTrigger value="profile" className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60" data-no-contrast-guard>
                 <User className="h-4 w-4 mr-2" />
                 Profile
               </TabsTrigger>
-              <TabsTrigger value="security" className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60" data-no-contrast-guard>
+              <TabsTrigger value="security" className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60" data-no-contrast-guard>
                 <Shield className="h-4 w-4 mr-2" />
                 Security
               </TabsTrigger>
-              <TabsTrigger value="settings" className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60" data-no-contrast-guard>
+              <TabsTrigger value="settings" className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60" data-no-contrast-guard>
                 <Settings className="h-4 w-4 mr-2" />
                 Settings
               </TabsTrigger>
@@ -538,7 +538,7 @@ const UserProfile = () => {
                 <TabsTrigger
                   value="brand"
                   onClick={(e) => { e.preventDefault(); navigate('/broker/brand'); }}
-                  className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60"
+                  className="rounded-none h-11 w-full text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:shadow-none hover:bg-[#EFE6D6]/60"
                   data-no-contrast-guard
                 >
                   <Palette className="h-4 w-4 mr-2" />

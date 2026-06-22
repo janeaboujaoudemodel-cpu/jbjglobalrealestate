@@ -423,7 +423,7 @@ const AdvancedBrokerToolkit = () => {
           <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-transparent h-auto mb-8">
             <TabsTrigger 
               value="support" 
-              className="data-[state=active]:bg-[#EFE6D6]/20 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
+              className="data-[state=active]:bg-[#EFE6D6]/20 data-[state=active]:border-[#B89555]/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
             >
               <Users className="h-4 w-4 mr-2" />
               Professional Support

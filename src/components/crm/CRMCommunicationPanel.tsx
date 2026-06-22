@@ -305,19 +305,19 @@ const CRMCommunicationPanel = () => {
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] grid grid-cols-4 rounded-none border-b border-[#B89555]/30">
-            <TabsTrigger value="chat" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
+            <TabsTrigger value="chat" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:bg-[#FDFBF7]">
               <Hash className="h-3 w-3 mr-1" />
               Channels
             </TabsTrigger>
-            <TabsTrigger value="team" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
+            <TabsTrigger value="team" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:bg-[#FDFBF7]">
               <Users className="h-3 w-3 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="meetings" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
+            <TabsTrigger value="meetings" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:bg-[#FDFBF7]">
               <Video className="h-3 w-3 mr-1" />
               Meetings
             </TabsTrigger>
-            <TabsTrigger value="files" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
+            <TabsTrigger value="files" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:bg-[#FDFBF7]">
               <FileText className="h-3 w-3 mr-1" />
               Files
             </TabsTrigger>

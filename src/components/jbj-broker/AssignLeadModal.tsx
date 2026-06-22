@@ -182,11 +182,11 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "existing" | "new")}>
           <TabsList className="grid w-full grid-cols-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-            <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6]">
               <Users className="h-4 w-4" />
               Existing Lead
             </TabsTrigger>
-            <TabsTrigger value="new" className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="new" className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6]">
               <PlusCircle className="h-4 w-4" />
               New Lead
             </TabsTrigger>

@@ -204,7 +204,7 @@ export const AIMarketInsights = () => {
                       <TabsTrigger
                         key={opt.id}
                         value={opt.id}
-                        className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A]"
+                        className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]"
                       >
                         <opt.icon className="w-4 h-4" />
                         <span className="hidden sm:inline">{opt.label}</span>

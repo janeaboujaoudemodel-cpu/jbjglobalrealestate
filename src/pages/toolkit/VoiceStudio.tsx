@@ -177,9 +177,9 @@ export default function VoiceStudio() {
               <CardContent>
                 <Tabs value={vs.voiceMode} onValueChange={(v) => vs.setVoiceMode(v as "library" | "enhance" | "clone")}>
                   <TabsList className="grid w-full grid-cols-3 bg-[#1A1A1A]/50">
-                    <TabsTrigger value="library" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">Voice Library</TabsTrigger>
-                    <TabsTrigger value="enhance" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">Enhance</TabsTrigger>
-                    <TabsTrigger value="clone" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">My Voice</TabsTrigger>
+                    <TabsTrigger value="library" className="data-[state=active]:bg-[#D4AF37]">Voice Library</TabsTrigger>
+                    <TabsTrigger value="enhance" className="data-[state=active]:bg-[#D4AF37]">Enhance</TabsTrigger>
+                    <TabsTrigger value="clone" className="data-[state=active]:bg-[#D4AF37]">My Voice</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="library" className="mt-4">

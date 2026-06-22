@@ -233,13 +233,13 @@ export default function GrantBrokerAccessDialog({
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30 p-1">
             <TabsTrigger
               value="existing"
-              className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555] text-[#1A1A1A]/70"
+              className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555] text-[#1A1A1A]/70"
             >
               <Search className="h-3.5 w-3.5 mr-1.5" /> Existing broker
             </TabsTrigger>
             <TabsTrigger
               value="new"
-              className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555] text-[#1A1A1A]/70"
+              className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555] text-[#1A1A1A]/70"
             >
               <UserPlus className="h-3.5 w-3.5 mr-1.5" /> New broker
             </TabsTrigger>

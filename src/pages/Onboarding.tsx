@@ -372,11 +372,11 @@ export default function Onboarding() {
         <div className="jj-layer-active rounded-2xl p-6 md:p-8">
           <Tabs defaultValue="company" className="space-y-6">
             <TabsList className="grid w-full max-w-md grid-cols-2 bg-champagne border border-[#B89555]/30">
-              <TabsTrigger value="company" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]">
+              <TabsTrigger value="company" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A]">
                 <Building2 className="h-4 w-4" />
                 Company Knowledge
               </TabsTrigger>
-              <TabsTrigger value="realestate" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]">
+              <TabsTrigger value="realestate" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A]">
                 <Briefcase className="h-4 w-4" />
                 Real Estate
               </TabsTrigger>

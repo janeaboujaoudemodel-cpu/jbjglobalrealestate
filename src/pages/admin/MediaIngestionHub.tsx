@@ -54,7 +54,7 @@ interface MediaIngestionHubProps {
 }
 
 const tabTriggerCls =
-  "data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] " +
+  "data-[state=active]:bg-[#EFE6D6] " +
   "data-[state=active]:font-semibold data-[state=active]:border-b-2 " +
   "data-[state=active]:border-[#B89555] text-[#1A1A1A]/70 hover:text-[#1A1A1A] " +
   "rounded-md px-3 py-1.5 transition-colors";

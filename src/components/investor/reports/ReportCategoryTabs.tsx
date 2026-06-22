@@ -33,22 +33,22 @@ export default function ReportCategoryTabs({
       {/* Primary Category Tabs */}
       <Tabs value={activeCategory} onValueChange={(v) => onCategoryChange(v as ReportCategory)}>
         <TabsList className="bg-muted/50 h-auto p-1 flex-wrap">
-          <TabsTrigger value="all" className="gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="all" className="gap-2 data-[state=active]:bg-[#EFE6D6]">
             All Reports
           </TabsTrigger>
-          <TabsTrigger value="market" className="gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="market" className="gap-2 data-[state=active]:bg-[#EFE6D6]">
             <BarChart3 className="w-4 h-4" />
             Market Reports
           </TabsTrigger>
-          <TabsTrigger value="area" className="gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="area" className="gap-2 data-[state=active]:bg-[#EFE6D6]">
             <MapPin className="w-4 h-4" />
             Area Intelligence
           </TabsTrigger>
-          <TabsTrigger value="asset" className="gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="asset" className="gap-2 data-[state=active]:bg-[#EFE6D6]">
             <Building2 className="w-4 h-4" />
             Asset-Specific
           </TabsTrigger>
-          <TabsTrigger value="advisory" className="gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="advisory" className="gap-2 data-[state=active]:bg-[#EFE6D6]">
             <FileText className="w-4 h-4" />
             Custom / Advisory
           </TabsTrigger>

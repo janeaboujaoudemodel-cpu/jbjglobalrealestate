@@ -3266,11 +3266,11 @@ const CRMRelationships = () => {
           >
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1.5 rounded-xl inline-flex w-auto gap-2">
-                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-6 py-2.5 font-semibold whitespace-nowrap transition-colors">
+                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-6 py-2.5 font-semibold whitespace-nowrap transition-colors">
                   <FileSignature className="w-4 h-4 mr-2" />Developers
                 </TabsTrigger>
                 <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
-                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-6 py-2.5 font-semibold whitespace-nowrap transition-colors">
+                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-6 py-2.5 font-semibold whitespace-nowrap transition-colors">
                   <Building2 className="w-4 h-4 mr-2" />Brokerage Agencies
                 </TabsTrigger>
               </TabsList>

@@ -494,19 +494,19 @@ ${COMPANY_CONTACTS.email}`;
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full bg-[#F7F2EA] border-2 border-[#B89555]/20 grid grid-cols-4">
-            <TabsTrigger value="assistant" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsTrigger value="assistant" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
               <Sparkles className="h-4 w-4 mr-1" />
               Assistant
             </TabsTrigger>
-            <TabsTrigger value="tasks" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsTrigger value="tasks" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
               <ListTodo className="h-4 w-4 mr-1" />
               Tasks ({tasks.filter(t => !t.completed).length})
             </TabsTrigger>
-            <TabsTrigger value="employees" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsTrigger value="employees" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
               <Users className="h-4 w-4 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="drafts" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsTrigger value="drafts" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
               <FileText className="h-4 w-4 mr-1" />
               Drafts ({drafts.length})
             </TabsTrigger>

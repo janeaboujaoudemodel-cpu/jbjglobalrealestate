@@ -187,56 +187,56 @@ export default function BrokerAdminAssistant() {
             <TabsList className="w-full bg-[#0E0E0E] border border-emerald-500/20 p-1 rounded-lg mb-6 flex flex-wrap gap-1">
               <TabsTrigger 
                 value="dashboard" 
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Dashboard
               </TabsTrigger>
               <TabsTrigger 
                 value="onboarding"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <UserPlus className="h-4 w-4 mr-2" />
                 Onboarding
               </TabsTrigger>
               <TabsTrigger 
                 value="compliance"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <Shield className="h-4 w-4 mr-2" />
                 Compliance
               </TabsTrigger>
               <TabsTrigger 
                 value="directory"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Broker Directory
               </TabsTrigger>
               <TabsTrigger 
                 value="training"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <GraduationCap className="h-4 w-4 mr-2" />
                 Training
               </TabsTrigger>
               <TabsTrigger 
                 value="communications"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Communications
               </TabsTrigger>
               <TabsTrigger 
                 value="documents"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Documents
               </TabsTrigger>
               <TabsTrigger 
                 value="schedule"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500 data-[state=active]:text-[#1A1A1A]"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
               >
                 <Calendar className="h-4 w-4 mr-2" />
                 Schedule

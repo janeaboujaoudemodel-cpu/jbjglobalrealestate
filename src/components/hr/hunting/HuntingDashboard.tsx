@@ -51,15 +51,15 @@ export function HuntingDashboard() {
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as HuntTargetType)}>
           <div className="flex justify-center mb-6">
             <TabsList className="grid grid-cols-3 w-full max-w-md bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,85%)] border-2 border-[#B89555]/30">
-              <TabsTrigger value="broker" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-[#B89555]/40">
+              <TabsTrigger value="broker" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:border data-[state=active]:border-[#B89555]/40">
                 <Building2 className="h-4 w-4" />
                 Brokers
               </TabsTrigger>
-              <TabsTrigger value="investor" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-[#B89555]/40">
+              <TabsTrigger value="investor" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:border data-[state=active]:border-[#B89555]/40">
                 <TrendingUp className="h-4 w-4" />
                 Investors
               </TabsTrigger>
-              <TabsTrigger value="employee" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-[#B89555]/40">
+              <TabsTrigger value="employee" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:border data-[state=active]:border-[#B89555]/40">
                 <Briefcase className="h-4 w-4" />
                 Employees
               </TabsTrigger>

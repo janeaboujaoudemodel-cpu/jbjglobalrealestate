@@ -150,7 +150,7 @@ export function ScopedExportMenu({
               <TabsTrigger
                 key={t.key}
                 value={t.key}
-                className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]"
+                className="data-[state=active]:bg-[#EFE6D6]"
               >
                 {t.label}
               </TabsTrigger>

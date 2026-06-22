@@ -7876,10 +7876,7 @@ html body [role="tablist"] button[role="tab"][aria-selected="false"]:hover {
   background: rgba(255,255,255,0.08) !important;
   background-image: none !important;
 }
-html body [role="tablist"] button[role="tab"][aria-selected="true"] {
-  background-image: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0.28) 100%) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(52,211,153,0.38) !important;
-}
+/* Removed legacy ARIA-tab ombre override — replaced by DESIGN SYSTEM v1. */
 html body .jj-tab-active-metallic::after {
   display: none !important;
   animation: none !important;
@@ -8036,7 +8033,7 @@ html body :is(
   [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
-):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not(.jj-side-tile):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]),
+):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not(.jj-side-tile):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([role="tab"][data-state="active"]):not([role="tab"][aria-selected="true"]):not([data-jj-segmented-trigger][data-state="active"]):not([data-chrome="sidebar"] [data-active="true"]),
 html body :is(
   [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
@@ -8045,7 +8042,7 @@ html body :is(
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
 ):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not(.jj-side-tile):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.allow-white):not(.allow-white *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-surface="black"]):not([data-surface="black"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.surface-black):not(.surface-black *):not([data-emerald]):not([data-emerald] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-jj-emerald]):not([data-jj-emerald] *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-emerald-chip):not(.jj-emerald-chip *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-card):not(.jj-emerald-card *):not(.jj-tab-active-metallic):not(.jj-tab-active-metallic *):not(.jj-emerald-fill):not(.jj-emerald-fill *):not(.jj-bg-emerald):not(.jj-bg-emerald *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *) {
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.allow-white):not(.allow-white *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-surface="black"]):not([data-surface="black"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.surface-black):not(.surface-black *):not([data-emerald]):not([data-emerald] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-jj-emerald]):not([data-jj-emerald] *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-emerald-chip):not(.jj-emerald-chip *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-card):not(.jj-emerald-card *):not(.jj-tab-active-metallic):not(.jj-tab-active-metallic *):not(.jj-emerald-fill):not(.jj-emerald-fill *):not(.jj-bg-emerald):not(.jj-bg-emerald *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([role="tab"][data-state="active"]):not([role="tab"][aria-selected="true"]):not([data-jj-segmented-trigger][data-state="active"]):not([data-chrome="sidebar"] [data-active="true"]):not([data-chrome="sidebar"] [data-active="true"] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
@@ -8678,20 +8675,9 @@ html body input.mortgage-range-input {
   --mortgage-range-thumb-shadow: 0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(52,211,153,0.75), 0 4px 14px rgba(4,120,87,0.45) !important;
 }
 
-html body [role="tablist"] button[role="tab"][aria-selected="true"],
-html body .jj-tab-active-metallic,
-html body .jj-tab-active-metallic::after {
-  background-image:
-    linear-gradient(110deg, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.34) 20%, rgba(255,255,255,0.07) 40%, rgba(255,255,255,0.26) 62%, rgba(255,255,255,0.00) 100%),
-    var(--jj-emerald-ombre) !important;
-  background-size: 250% 100%, 100% 100% !important;
-  animation: jj-metallic-sweep 3.4s ease-in-out infinite !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body .jj-tab-active-metallic::after {
-  display: block !important;
-}
+/* Legacy `[role="tablist"] button[role="tab"][aria-selected="true"]` sweep
+   removed — was forcing `jj-metallic-sweep` on every ARIA tab and
+   conflicting with the design-system contrast contract. */
 
 /* PASS 31.1 — utility sq ft / sq m labels: the header is a light chrome
    parent, so final guard must explicitly keep both segmented labels white. */
@@ -9796,28 +9782,9 @@ html body :is(
   stroke: #FFFFFF !important;
 }
 
-/* Owner CRM tabs — when the tab is active, paint emerald ombre and lock
-   the label + icon to solid white at all states. Selector is intentionally
-   stacked with repeated classes to outweigh the global champagne contrast
-   guard which forces ink color on .jj-pill-active surfaces. */
-html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"],
-html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"]:hover,
-html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"]:focus,
-html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"]:focus-visible {
-  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-color: #064E3B !important;
-  border: 1px solid rgba(52,211,153,0.55) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 22px -14px rgba(6,78,59,0.85) !important;
-}
-html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"] *,
-html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]),
-html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
+/* Legacy stacked `.tab-trigger-champagne...` active rule removed.
+   Active-tab contrast is owned by the DESIGN SYSTEM v1 block at the
+   bottom of this file (`[role="tablist"] [role="tab"][data-state="active"]`). */
 
 /* PASS 44 — FINAL GLOBAL OWN-SURFACE CONTRAST CONTRACT
    Emerald + dark own-surfaces always render white copy/icons.
@@ -9936,7 +9903,7 @@ html body :is(
   .jj-dual-cta-secondary, [data-cta="champagne"],
   [data-surface="gold"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="page"], [data-surface="light"],
   .surface-gold, .surface-champagne, .surface-cream, .surface-raised, .surface-page, .surface-light
-):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) *:not(.allow-white):not(.allow-white *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *) {
+):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) *:not(.allow-white):not(.allow-white *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *):not([role="tab"][data-state="active"]):not([role="tab"][aria-selected="true"]):not([data-jj-segmented-trigger][data-state="active"]):not([data-chrome="sidebar"] [data-active="true"]):not([data-chrome="sidebar"] [data-active="true"] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
@@ -10131,225 +10098,97 @@ html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sideb
 }
 
 /* ════════════════════════════════════════════════════════════════
-   PASS 47 — Sidebar active-state final lock
-   - Active sidebar row: emerald background, WHITE text + WHITE icon
-   - Disable ANY sweep / metallic / shimmer animation on sidebar rows
-   - Subtle resting metallic sheen via static highlight only
-   - Swipe / sweep animations remain available ONLY for explicit
-     `.jj-swipe-hint` and tutorial primitives.
+   DESIGN SYSTEM v1 — CONTRAST CONTRACT (single source of truth)
+
+   Replaces PASS 47 + PASS 48 + their absurd repeated-attribute
+   duplicates. ONE rule per concern. No animation on resting active
+   states. No MutationObserver paint loops.
+
+   Rule: Emerald / dark surface → WHITE fg.
+         Champagne / gold / light surface → INK #1A1A1A fg.
    ──────────────────────────────────────────────────────────────── */
-html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"],
-html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"] {
+
+/* —— Sidebar active row —————————————————————————————————————— */
+[data-chrome="sidebar"] [data-active="true"] {
   background-image: linear-gradient(135deg, #064E3B 0%, #0A6B4E 100%) !important;
   background-color: #064E3B !important;
+  color: #FFFFFF !important;
   animation: none !important;
-  background-size: 100% 100% !important;
-  background-position: 0 0 !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    0 1px 0 rgba(0,0,0,0.18),
-    0 6px 14px -10px rgba(6,78,59,0.55) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 1px 0 rgba(0, 0, 0, 0.18),
+    0 6px 14px -10px rgba(6, 78, 59, 0.55);
 }
-html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"]::before,
-html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"]::after,
-html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"]::before,
-html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"]::after,
-html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"]::before,
-html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"]::after {
-  content: none !important;
-  animation: none !important;
-  background: none !important;
-}
-html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"],
-html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"] *,
-html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"],
-html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"] *,
-html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"],
-html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  text-shadow: none !important;
-  background-clip: initial !important;
-  -webkit-background-clip: initial !important;
-}
-/* Hover on active: keep white, no fill flicker */
-html body [data-chrome="sidebar"] a[data-sidebar-subitem][data-active="true"]:hover,
-html body [data-chrome="sidebar"] a[data-sidebar-highlight][data-active="true"]:hover,
-html body [data-chrome="sidebar"] button[data-sidebar-section][data-active="true"]:hover {
+[data-chrome="sidebar"] [data-active="true"]:hover {
   background-image: linear-gradient(135deg, #075f48 0%, #0B7857 100%) !important;
-  animation: none !important;
 }
-
-/* Strip animated metallic sweep from any element living inside the
-   sidebar chrome — sidebar rows must NEVER pulse/sweep at rest. */
-html body [data-chrome="sidebar"] .jj-tab-active-metallic,
-html body [data-chrome="sidebar"] .jj-emerald-metallic,
-html body [data-chrome="sidebar"] [data-emerald-shimmer],
-html body [data-chrome="sidebar"] .jbj-shimmer-champagne,
-html body [data-chrome="sidebar"] .animate-shimmer {
-  animation: none !important;
-  background-position: 0 0 !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   PASS 48 — Shared Tabs / Segmented Control active-state lock
-   Applies once at the reusable TabsTrigger primitive level.
-   Active = approved emerald, white label/icon, no swipe/fill/sweep.
-   ──────────────────────────────────────────────────────────────── */
-html body [data-jj-segmented-trigger][data-state="active"],
-html body [data-jj-segmented-trigger][aria-selected="true"],
-html body [role="tablist"] [role="tab"][data-state="active"],
-html body [role="tablist"] [role="tab"][aria-selected="true"],
-html body .tab-trigger-champagne[data-state="active"],
-html body .jj-segmented-active {
-  background: #064E3B !important;
-  background-color: #064E3B !important;
-  background-image: none !important;
-  background-size: 100% 100% !important;
-  background-position: 0 0 !important;
-  border-color: rgba(255,255,255,0.28) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  animation: none !important;
-  transition-property: background-color, color, border-color, box-shadow !important;
-  transition-duration: 150ms !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 18px -14px rgba(6,78,59,0.85) !important;
-  overflow: hidden;
-}
-
-html body [data-jj-segmented-trigger][data-state="active"]::before,
-html body [data-jj-segmented-trigger][data-state="active"]::after,
-html body [data-jj-segmented-trigger][aria-selected="true"]::before,
-html body [data-jj-segmented-trigger][aria-selected="true"]::after,
-html body [role="tablist"] [role="tab"][data-state="active"]::before,
-html body [role="tablist"] [role="tab"][data-state="active"]::after,
-html body [role="tablist"] [role="tab"][aria-selected="true"]::before,
-html body [role="tablist"] [role="tab"][aria-selected="true"]::after,
-html body .tab-trigger-champagne[data-state="active"]::before,
-html body .tab-trigger-champagne[data-state="active"]::after,
-html body .jj-segmented-active::before,
-html body .jj-segmented-active::after {
+[data-chrome="sidebar"] [data-active="true"]::before,
+[data-chrome="sidebar"] [data-active="true"]::after {
   content: none !important;
-  display: none !important;
   animation: none !important;
   background: none !important;
 }
-
-html body [data-jj-segmented-trigger][data-state="active"],
-html body [data-jj-segmented-trigger][data-state="active"] *,
-html body [data-jj-segmented-trigger][aria-selected="true"],
-html body [data-jj-segmented-trigger][aria-selected="true"] *,
-html body [role="tablist"] [role="tab"][data-state="active"],
-html body [role="tablist"] [role="tab"][data-state="active"] *,
-html body [role="tablist"] [role="tab"][aria-selected="true"],
-html body [role="tablist"] [role="tab"][aria-selected="true"] *,
-html body .tab-trigger-champagne[data-state="active"],
-html body .tab-trigger-champagne[data-state="active"] *,
-html body .jj-segmented-active,
-html body .jj-segmented-active * {
+[data-chrome="sidebar"] [data-active="true"],
+[data-chrome="sidebar"] [data-active="true"] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-  text-shadow: none !important;
+}
+[data-chrome="sidebar"] .jj-tab-active-metallic,
+[data-chrome="sidebar"] .jj-emerald-metallic,
+[data-chrome="sidebar"] [data-emerald-shimmer],
+[data-chrome="sidebar"] .jbj-shimmer-champagne,
+[data-chrome="sidebar"] .animate-shimmer {
+  animation: none !important;
+  background-position: 0 0 !important;
 }
 
-html body [data-jj-segmented-trigger][data-state="active"]:hover,
-html body [data-jj-segmented-trigger][aria-selected="true"]:hover,
-html body [role="tablist"] [role="tab"][data-state="active"]:hover,
-html body [role="tablist"] [role="tab"][aria-selected="true"]:hover,
-html body .tab-trigger-champagne[data-state="active"]:hover,
-html body .jj-segmented-active:hover {
+/* —— Tabs / segmented controls active state ——————————————————
+   Must use !important because the global champagne-surface contrast
+   guard above (data-surface="champagne") repaints to ink !important.
+   These selectors are the single source of truth for active tabs. */
+[role="tablist"] [role="tab"][data-state="active"],
+[role="tablist"] [role="tab"][aria-selected="true"],
+[data-jj-segmented-trigger][data-state="active"],
+[data-jj-segmented-trigger][aria-selected="true"],
+.jj-segmented-active {
+  background: #064E3B !important;
+  background-image: none !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  animation: none !important;
+  transition: background-color 150ms, color 150ms, border-color 150ms, box-shadow 150ms !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 18px -14px rgba(6, 78, 59, 0.85) !important;
+}
+[role="tablist"] [role="tab"][data-state="active"]:hover,
+[role="tablist"] [role="tab"][aria-selected="true"]:hover,
+[data-jj-segmented-trigger][data-state="active"]:hover,
+[data-jj-segmented-trigger][aria-selected="true"]:hover,
+.jj-segmented-active:hover {
   background: #053F31 !important;
   background-color: #053F31 !important;
-  background-image: none !important;
   color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  animation: none !important;
 }
-
-/* Same lock with deliberately higher specificity than legacy repeated
-   tab-trigger overrides that used to paint the light-green sweep. */
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"],
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"] {
-  background: #064E3B !important;
-  background-color: #064E3B !important;
-  background-image: none !important;
-  background-size: 100% 100% !important;
-  background-position: 0 0 !important;
-  background-blend-mode: normal !important;
-  border-color: rgba(255,255,255,0.28) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  animation: none !important;
-  transition-property: background-color, color, border-color, box-shadow !important;
-  transition-duration: 150ms !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 18px -14px rgba(6,78,59,0.85) !important;
-}
-
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"] *,
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"] * {
+[role="tablist"] [role="tab"][data-state="active"] *,
+[role="tablist"] [role="tab"][aria-selected="true"] *,
+[data-jj-segmented-trigger][data-state="active"] *,
+[data-jj-segmented-trigger][aria-selected="true"] *,
+.jj-segmented-active * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
-  animation: none !important;
 }
-
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"]::before,
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"]::after,
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"]::before,
-html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"]::after {
+[role="tablist"] [role="tab"][data-state="active"]::before,
+[role="tablist"] [role="tab"][data-state="active"]::after,
+[role="tablist"] [role="tab"][aria-selected="true"]::before,
+[role="tablist"] [role="tab"][aria-selected="true"]::after,
+[data-jj-segmented-trigger][data-state="active"]::before,
+[data-jj-segmented-trigger][data-state="active"]::after {
   content: none !important;
-  display: none !important;
   background: none !important;
   animation: none !important;
-}
-
-html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"],
-html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"] {
-  background: #064E3B !important;
-  background-color: #064E3B !important;
-  background-image: none !important;
-  background-size: 100% 100% !important;
-  background-position: 0 0 !important;
-  background-blend-mode: normal !important;
-  border-color: rgba(255,255,255,0.28) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  animation: none !important;
-  transition-property: background-color, color, border-color, box-shadow !important;
-  transition-duration: 150ms !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 18px -14px rgba(6,78,59,0.85) !important;
-}
-
-html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"] *,
-html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  animation: none !important;
-}
-
-html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"]::before,
-html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"]::after,
-html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"]::before,
-html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"]::after {
-  content: none !important;
-  display: none !important;
-  background: none !important;
-  animation: none !important;
-}
-
-html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-\[\#1A1A1A\],
-html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-\[\#1A1A1A\] *,
-html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-\[\#1A1A1A\],
-html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-\[\#1A1A1A\] *,
-html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-black,
-html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-black *,
-html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-black,
-html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-black * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }

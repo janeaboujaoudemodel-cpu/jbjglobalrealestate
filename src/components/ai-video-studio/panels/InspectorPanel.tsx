@@ -278,43 +278,43 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
         <TabsList className="w-full justify-start rounded-none border-b border-[#1A1A1A] bg-transparent p-0 flex-wrap">
           <TabsTrigger 
             value="transform"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] px-2"
           >
             <Move className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="crop"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] px-2"
           >
             <Crop className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="speed"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] px-2"
           >
             <Timer className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="color"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] px-2"
           >
             <Palette className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="audio"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] px-2"
           >
             <Volume2 className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="captions"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] px-2"
           >
             <Subtitles className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="effects"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] px-2"
           >
             <Sparkles className="w-4 h-4" />
           </TabsTrigger>
