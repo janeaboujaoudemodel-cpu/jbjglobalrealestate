@@ -117,7 +117,7 @@ html[data-style-mode="before"] [class*="text-blue-"]:not([class*="text-blue-50"]
 html[data-style-mode="before"] [class*="text-red-"] {
   color: #52525b !important;
 }
-html[data-style-mode="before"] [class*="bg-emerald-50"],
+html[data-style-mode="before"] [data-before-emerald-wash],
 html[data-style-mode="before"] [class*="bg-red-50"],
 html[data-style-mode="before"] [class*="bg-blue-50"],
 html[data-style-mode="before"] [class*="bg-amber-50"] {

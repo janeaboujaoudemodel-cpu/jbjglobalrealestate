@@ -16,15 +16,15 @@ export const EmeraldPill = React.forwardRef<HTMLSpanElement, EmeraldPillProps>(
   ({ className, variant = "solid", ...props }, ref) => {
     const variantCls =
       variant === "solid"
-        ? "jj-emerald-solid"
+        ? "jj-surface-emerald"
         : variant === "soft"
-        ? "jj-emerald-soft"
-        : "jj-emerald-outline";
+        ? "jj-surface-emerald-soft"
+        : "jj-surface-emerald-outline";
     return (
       <span
         ref={ref}
         data-emerald-ok="pill"
-        data-ink-emerald={variant === "solid" ? "" : undefined}
+        data-surface={variant === "solid" ? "emerald" : "champagne"}
         className={cn(
           "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-colors",
           variantCls,

@@ -107,9 +107,13 @@ const buttonVariants = cva(
   },
 );
 
+type ButtonVariant = NonNullable<VariantProps<typeof buttonVariants>["variant"]>;
+type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
+
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   asChild?: boolean;
 }
 
@@ -134,6 +138,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-cta={cta}
         ref={ref}
         {...props}
+        style={{ color: isPrimaryCta ? "#FFFFFF" : undefined, ...(props.style ?? {}) }}
       />
     );
   },

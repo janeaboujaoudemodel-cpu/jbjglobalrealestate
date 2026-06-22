@@ -21,7 +21,7 @@ interface BookDetailModalProps {
 
 const LEARNING_PATH_COLORS: Record<string, { badge: string; accent: string }> = {
   'Foundations': { badge: 'bg-blue-500/20 text-blue-700 border-blue-500/30', accent: 'text-blue-600' },
-  'Buyer & Investor Advisory': { badge: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', accent: 'text-[color:var(--emerald-1)]' },
+  'Buyer & Investor Advisory': { badge: 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', accent: 'text-[color:var(--emerald-1)]' },
   'Seller & Landlord Advisory': { badge: 'bg-amber-500/20 text-amber-700 border-amber-500/30', accent: 'text-amber-600' },
   'Market Intelligence': { badge: 'bg-purple-500/20 text-purple-700 border-purple-500/30', accent: 'text-purple-600' },
   'Advanced (Restricted)': { badge: 'bg-red-500/20 text-red-700 border-red-500/30', accent: 'text-red-600' },
@@ -142,7 +142,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
  isLocked
  ? 'bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A]/70'
  : isCompleted
- ? 'jj-emerald-solid text-white'
+ ? 'jj-surface-emerald'
  : isCurrentModule
  ? 'bg-[#EFE6D6]/20 border-2 border-[#B89555] text-[#1A1A1A]'
  : 'bg-muted border border-border text-muted-foreground'
@@ -167,7 +167,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                               </Badge>
                             )}
                             {!isLocked && isCompleted && (
-                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] jj-emerald-soft">
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] jj-surface-emerald-soft">
                                 Completed
                               </Badge>
                             )}
@@ -214,8 +214,8 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                               }}
                               className={
                                 isCompleted
-                                  ? "border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
-                                  : "jj-emerald-solid hover:jj-emerald-solid text-white"
+                                  ? "border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-1)] hover:jj-surface-emerald-soft"
+                                  : "jj-surface-emerald jj-surface-emerald text-white"
                               }
                             >
                               {isCompleted ? (

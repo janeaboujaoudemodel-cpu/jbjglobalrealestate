@@ -204,7 +204,7 @@ export default function AIEmailGeneratorPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full jj-emerald-solid hover:jj-emerald-solid text-[#1A1A1A] font-semibold"
+              className="w-full jj-surface-emerald font-semibold"
             >
               {loading ? (
                 <>
@@ -233,7 +233,7 @@ export default function AIEmailGeneratorPage() {
                 variant="outline"
                 size="sm"
                 onClick={copyToClipboard}
-                className="border-[color:var(--emerald-1)]/30/30 text-teal-400 hover:jj-emerald-solid/20"
+                className="border-[color:var(--emerald-1)]/30/30 text-teal-400 jj-surface-emerald-soft"
               >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </Button>
@@ -268,7 +268,7 @@ export default function AIEmailGeneratorPage() {
               )}
 
               {result.tips && result.tips.length > 0 && (
-                <div className="jj-emerald-solid/10 rounded-lg p-4 border border-[color:var(--emerald-1)]/30/20">
+                <div className="jj-surface-emerald-soft rounded-lg p-4 border border-[color:var(--emerald-1)]/30/20">
                   <Label className="text-teal-400 text-sm">Personalization Tips</Label>
                   <ul className="mt-2 space-y-1">
                     {result.tips.map((tip, i) => (

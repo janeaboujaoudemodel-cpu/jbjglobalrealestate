@@ -19,15 +19,15 @@ export const EmeraldBadge = React.forwardRef<HTMLSpanElement, EmeraldBadgeProps>
       size === "md" ? "text-sm px-3 py-1" : "text-xs px-2.5 py-0.5";
     const variantCls =
       variant === "solid"
-        ? "jj-emerald-solid"
+        ? "jj-surface-emerald"
         : variant === "soft"
-        ? "jj-emerald-soft"
-        : "jj-emerald-outline";
+        ? "jj-surface-emerald-soft"
+        : "jj-surface-emerald-outline";
     return (
       <span
         ref={ref}
         data-emerald-ok="badge"
-        data-ink-emerald={variant === "solid" ? "" : undefined}
+        data-surface={variant === "solid" ? "emerald" : "champagne"}
         className={cn(
           "inline-flex items-center gap-1 rounded-md font-semibold whitespace-nowrap transition-colors",
           sizeCls,

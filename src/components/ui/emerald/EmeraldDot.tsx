@@ -17,7 +17,7 @@ export const EmeraldDot = React.forwardRef<HTMLSpanElement, EmeraldDotProps>(
         ref={ref}
         data-emerald-ok="dot"
         className={cn(
-          "inline-block rounded-full jj-emerald-dot",
+          "inline-block rounded-full jj-surface-emerald-dot",
           pulse && "animate-pulse",
           className
         )}

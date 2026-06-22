@@ -563,7 +563,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               )}
 
               <div className="flex gap-3 mb-4">
-                <Button type="button" onClick={() => handleSocialSignIn("google")} disabled={isSubmitting} className="flex-1 h-12 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl flex items-center justify-center gap-2 border border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 shadow-sm">
+                <Button type="button" variant="outline" onClick={() => handleSocialSignIn("google")} disabled={isSubmitting} className="flex-1 h-12 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl flex items-center justify-center gap-2 border border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 shadow-sm">
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -572,7 +572,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   </svg>
                   Google
                 </Button>
-                <Button type="button" onClick={() => handleSocialSignIn("apple")} disabled={isSubmitting} className="flex-1 h-12 bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl flex items-center justify-center gap-2 border border-[#B89555] transition-all duration-300 shadow-sm">
+                <Button type="button" variant="outline" onClick={() => handleSocialSignIn("apple")} disabled={isSubmitting} className="flex-1 h-12 bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl flex items-center justify-center gap-2 border border-[#B89555] transition-all duration-300 shadow-sm">
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                   </svg>
@@ -759,7 +759,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <X className="w-5 h-5" />
           </button>
           <AlertDialogHeader>
-            <div className="mx-auto mb-4 w-16 h-16 rounded-full jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30 flex items-center justify-center">
+            <div className="mx-auto mb-4 w-16 h-16 rounded-full jj-surface-emerald-soft border-2 border-[color:var(--emerald-1)]/30 flex items-center justify-center">
               <UserCheck className="h-7 w-7 text-[color:var(--emerald-1)]" />
             </div>
             <AlertDialogTitle className="text-center text-xl text-foreground">
@@ -790,7 +790,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <AlertDialogAction
               onClick={handleReactivateAccount}
               disabled={reactivating}
-              className="w-full jj-emerald-solid hover:jj-emerald-solid text-[#1A1A1A] font-semibold whitespace-nowrap px-6 h-12 rounded-xl"
+              className="w-full jj-surface-emerald font-semibold whitespace-nowrap px-6 h-12 rounded-xl"
             >
               {reactivating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <UserCheck className="h-4 w-4 mr-2" />}
               Reactivate My Account

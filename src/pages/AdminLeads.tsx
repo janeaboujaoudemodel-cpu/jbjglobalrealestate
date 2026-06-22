@@ -701,7 +701,7 @@ const AdminLeads = () => {
               {aiBrokers.length > 0 && (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white font-semibold" disabled={bulkActionLoading}>
+                    <Button size="sm" className="jj-surface-emerald jj-surface-emerald text-white font-semibold" disabled={bulkActionLoading}>
                       <UserPlus className="w-3 h-3 mr-1" /> Assign Broker
                       <ChevronDown className="w-3 h-3 ml-1" />
                     </Button>
@@ -906,7 +906,7 @@ const AdminLeads = () => {
                         </TableCell>
                         <TableCell className="text-right">
                           <Button size="sm" onClick={() => restoreLead(lead.id)}
-                            className="jj-emerald-solid hover:jj-emerald-solid text-white font-semibold">
+                            className="jj-surface-emerald jj-surface-emerald text-white font-semibold">
                             <RefreshCw className="w-3 h-3 mr-1" /> Restore
                           </Button>
                         </TableCell>
@@ -1033,7 +1033,7 @@ const AdminLeads = () => {
                                   <TooltipTrigger asChild>
                                     <a href={`https://wa.me/${lead.phone_e164?.replace(/[^0-9]/g, '')}`}
                                       target="_blank" rel="noopener noreferrer"
-                                      className={`p-1.5 rounded-lg transition-all ${lead.phone_e164 ? 'text-[color:var(--emerald-1)] hover:jj-emerald-soft cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
+                                      className={`p-1.5 rounded-lg transition-all ${lead.phone_e164 ? 'text-[color:var(--emerald-1)] hover:jj-surface-emerald-soft cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
                                       onClick={(e) => !lead.phone_e164 && e.preventDefault()}>
                                       <MessageCircle className="w-4 h-4" />
                                     </a>
@@ -1141,7 +1141,7 @@ const AdminLeads = () => {
                                 <TooltipTrigger asChild>
                                   <a href={`https://wa.me/${chat.user_phone?.replace(/[^0-9]/g, '')}`}
                                     target="_blank" rel="noopener noreferrer"
-                                    className={`p-1.5 rounded-lg transition-all ${chat.user_phone ? 'text-[color:var(--emerald-1)] hover:jj-emerald-soft cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
+                                    className={`p-1.5 rounded-lg transition-all ${chat.user_phone ? 'text-[color:var(--emerald-1)] hover:jj-surface-emerald-soft cursor-pointer' : 'text-[#1A1A1A]/20 cursor-not-allowed'}`}
                                     onClick={(e) => !chat.user_phone && e.preventDefault()}>
                                     <MessageCircle className="w-4 h-4" />
                                   </a>
@@ -1233,7 +1233,7 @@ const AdminLeads = () => {
                     {/* Contact Quick Actions */}
                     <div className="flex flex-wrap gap-2 p-4 bg-[#EFE6D6] rounded-xl border border-[#B89555]/30">
                       <a href={`https://wa.me/${selectedLead.phone_e164?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 font-semibold ${selectedLead.phone_e164 ? 'jj-emerald-solid hover:jj-emerald-solid text-white' : 'bg-[#1A1A1A]/5 text-[#1A1A1A]/30 cursor-not-allowed'}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 font-semibold ${selectedLead.phone_e164 ? 'jj-surface-emerald' : 'bg-[#1A1A1A]/5 text-muted-foreground opacity-50 cursor-not-allowed'}`}
                         onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}>
                         <MessageCircle className="w-4 h-4" /> WhatsApp
                       </a>

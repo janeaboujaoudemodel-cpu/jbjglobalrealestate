@@ -368,7 +368,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 <Button
                   onClick={handleConfirmRole}
                   disabled={!selectedRole}
-                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white font-semibold text-base shadow-xl rounded-xl group border border-[#B89555]/20 disabled:opacity-50"
+                  className="w-full py-6 font-semibold text-base shadow-xl rounded-xl group disabled:opacity-50"
                 >
                   Continue
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -423,7 +423,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     </li>
                   </ul>
 
-                  <div className="mt-4 p-3 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
+                  <div className="mt-4 p-3 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
                     <p className="text-[color:var(--emerald-1)] text-sm font-medium">
                       ✓ All benefits are completely free for JBJ Broker Circle members.
                     </p>
@@ -511,15 +511,15 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     {selectedRole === 'investor' && (
                       <>
                         <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full jj-emerald-solid/20 flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">1</div>
+                          <div className="w-6 h-6 rounded-full jj-surface-emerald-soft flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">1</div>
                           <span>Browse <strong>Off-Plan Properties</strong> in Properties</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full jj-emerald-solid/20 flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">2</div>
+                          <div className="w-6 h-6 rounded-full jj-surface-emerald-soft flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">2</div>
                           <span>Use <strong>Compare</strong> to shortlist your favorites</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full jj-emerald-solid/20 flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">3</div>
+                          <div className="w-6 h-6 rounded-full jj-surface-emerald-soft flex items-center justify-center text-xs font-bold text-[color:var(--emerald-1)]">3</div>
                           <span>Book a <strong>Free Consultation</strong> with our experts</span>
                         </div>
                       </>
@@ -610,7 +610,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <div className="p-4 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-xl mb-6">
+                <div className="p-4 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-xl mb-6">
                   <p className="text-[color:var(--emerald-1)] text-sm font-medium">
                     ✓ Your account is ready. You can access your CRM anytime from the menu.
                   </p>
