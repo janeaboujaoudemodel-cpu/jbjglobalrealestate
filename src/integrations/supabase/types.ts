@@ -39695,6 +39695,14 @@ export type Database = {
         Args: { _book_id: string; _module_id: string }
         Returns: undefined
       }
+      track_visitor_session_update: {
+        Args: { p_patch: Json; p_session_id: string }
+        Returns: undefined
+      }
+      track_visitor_session_upsert: {
+        Args: { p_payload: Json; p_session_id: string }
+        Returns: undefined
+      }
       trigger_emergency_lockdown: {
         Args: {
           p_departments?: string[]
