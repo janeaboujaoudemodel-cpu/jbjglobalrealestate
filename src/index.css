@@ -9734,3 +9734,86 @@ html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary::af
   content: none !important;
   display: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * PASS 42 — FINAL EMERALD SURFACE → WHITE FOREGROUND LOCK
+ * Any emerald-fill surface MUST render white text + white icons across
+ * idle / hover / focus / active / disabled. Wins over .jj-pill-active,
+ * .tab-trigger-champagne[data-state="active"], inline text-[#1A1A1A]
+ * utilities, and prior contrast guards. Opt-out: [data-no-contrast-guard].
+ * ═══════════════════════════════════════════════════════════════════════════ */
+html body :is(
+  .jj-pill-emerald,
+  .jj-emerald-chip,
+  .jj-emerald-metallic,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-\[\#064E3B\], .bg-\[\#047857\], .bg-\[\#042c1c\],
+  [data-emerald], [data-emerald="true"], [data-jj-emerald]
+):not([data-no-contrast-guard]),
+html body :is(
+  .jj-pill-emerald, .jj-emerald-chip, .jj-emerald-metallic, .jj-emerald-card,
+  .jj-tab-active-metallic, .jj-emerald-fill, .jj-bg-emerald,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-\[\#064E3B\], .bg-\[\#047857\], .bg-\[\#042c1c\],
+  [data-emerald], [data-emerald="true"], [data-jj-emerald]
+):not([data-no-contrast-guard]) *,
+html body :is(
+  .jj-pill-emerald, .jj-emerald-chip, .jj-emerald-metallic, .jj-emerald-card,
+  .jj-tab-active-metallic, .jj-emerald-fill, .jj-bg-emerald,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-\[\#064E3B\], .bg-\[\#047857\], .bg-\[\#042c1c\],
+  [data-emerald], [data-emerald="true"], [data-jj-emerald]
+):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled),
+html body :is(
+  .jj-pill-emerald, .jj-emerald-chip, .jj-emerald-metallic, .jj-emerald-card,
+  .jj-tab-active-metallic, .jj-emerald-fill, .jj-bg-emerald,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-\[\#064E3B\], .bg-\[\#047857\], .bg-\[\#042c1c\],
+  [data-emerald], [data-emerald="true"], [data-jj-emerald]
+):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is(
+  .jj-pill-emerald, .jj-emerald-chip, .jj-emerald-metallic, .jj-emerald-card,
+  .jj-tab-active-metallic, .jj-emerald-fill, .jj-bg-emerald,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-\[\#064E3B\], .bg-\[\#047857\], .bg-\[\#042c1c\],
+  [data-emerald], [data-emerald="true"], [data-jj-emerald]
+):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]),
+html body :is(
+  .jj-pill-emerald, .jj-emerald-chip, .jj-emerald-metallic, .jj-emerald-card,
+  .jj-tab-active-metallic, .jj-emerald-fill, .jj-bg-emerald,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-\[\#064E3B\], .bg-\[\#047857\], .bg-\[\#042c1c\],
+  [data-emerald], [data-emerald="true"], [data-jj-emerald]
+):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Owner CRM tabs — when the tab is active, paint emerald ombre and lock
+   the label + icon to solid white at all states, overriding the inline
+   text-[#1A1A1A] and the .tab-trigger-champagne champagne fill. */
+html body .tab-trigger-champagne[data-state="active"],
+html body .tab-trigger-champagne[data-state="active"]:hover,
+html body .tab-trigger-champagne[data-state="active"]:focus,
+html body .tab-trigger-champagne[data-state="active"]:focus-visible {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(52,211,153,0.55) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 22px -14px rgba(6,78,59,0.85) !important;
+}
+html body .tab-trigger-champagne[data-state="active"] *,
+html body .tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]),
+html body .tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
