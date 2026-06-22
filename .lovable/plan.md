@@ -1,86 +1,113 @@
 ## Goal
-Redesign the product language at the UI-system level so current and future screens inherit JBJ automatically: Champagne / White surfaces, locked Emerald as the primary brand accent, black typography, gold hairlines only where appropriate, and no grey/blue/random green default styling.
+Fix the actual shared UI primitives so current and future screens inherit the JBJ system automatically, instead of patching individual CRM sections.
 
-## What will change
+## Non-negotiable system contract
+- Emerald filled icon tile = white icon, always.
+- Primary CTA = locked Emerald gradient, white text, white icon.
+- Secondary CTA = shared Champagne/Emerald primitive only.
+- Labels, tabs, KPI cards, empty states, and stage cards must come from shared primitives, not local one-off classes.
+- No blue, random green, raw gray, or default browser styling in these primitives.
 
-### 1. Lock the brand token layer
-- Create one canonical Emerald gradient token and one hover gradient token.
-- Alias all legacy active/focus/primary/ring/sidebar/accent tokens to Emerald.
-- Add system tokens for:
-  - Emerald solid surface
-  - Emerald soft surface
-  - Emerald outline/accent
-  - Champagne card surface
-  - White surface
-  - Gold hairline only
-- Remove CSS paths where gold/grey/blue can still win active, focus, hover, icon, tab, badge, or status states.
+## Implementation plan
 
-### 2. Rebuild shared primitives as the source of truth
-Update the shared components so pages do not need to remember Emerald manually:
-- `Button`: primary = locked Emerald gradient + white text/icons; secondary = Champagne/White + Emerald text/icons.
-- `Badge`: all neutral/active/success/default badges inherit Emerald styling; destructive/error remains red only for true destructive states.
-- `IconTile`: default tone becomes Emerald; Champagne tiles render Emerald glyphs; active tiles render Emerald fill + white glyph.
-- `Tabs`: active tabs use Emerald; inactive tabs use Champagne/White with Emerald hover/focus.
-- `DropdownMenu`, `Select`, `Command`: items, checkmarks, highlighted rows, labels, separators, focus rings all inherit Emerald.
-- `Table`: headers, hover rows, selected rows, action cells, checkboxes, and empty rows inherit Emerald accents.
-- `Card`: add reusable visual rhythm variants instead of flat cards:
-  - Champagne card + Emerald content
-  - Emerald header + White content
-  - White surface + Emerald iconography
-  - Emerald feature card
+### Gate 1 — Global Icon primitive first
+I will fix only the icon primitive first, then validate and pause.
 
-### 3. Add global semantic primitives for product language
-Create or standardize primitives that pages can use without local styling:
-- `SectionHeader` / section label primitive: eyebrow, icon, active arrow, divider accent all Emerald by default.
-- `KpiCard`: Emerald icon tile, strong black metric, Emerald arrow/accent, premium hover inversion.
-- `EmptyState`: Emerald icon, Emerald accent mark, premium illustration motif, stronger hierarchy, better spacing, and CTA slot.
-- `StatusIndicator`: online/success/active/focus states use Emerald automatically.
-- `FeatureCard` / `Panel`: handles visual rhythm so pages do not all look identical.
+What changes:
+- Refactor `IconTile` so Emerald is the default and its own surface metadata is always emitted.
+- Remove/neutralize icon color escape hatches that allow black/dark icons inside Emerald tiles.
+- Add a final global CSS lock for:
+  - `[data-icon-tile]`
+  - `.jj-icon-tile-emerald`
+  - `[data-icon-tile-tone="emerald"]`
+- Force all nested SVGs, paths, strokes, spans, and lucide icons inside Emerald icon tiles to white at rest, hover, focus, active, and inside dark/light parent surfaces.
+- Convert ad hoc CRM icon-tile markup to the shared primitive only where needed to prove inheritance.
 
-### 4. Remove local color bypasses instead of patching individual visuals
-Audit and replace raw color utilities that override the system, especially:
-- grey/slate/zinc/neutral icons and labels
-- blue active/focus/ring states
-- random green/emerald shades outside the locked token
-- hardcoded gold fills where Emerald should be the accent
-- page-local KPI, section header, empty state, table, badge, and nav styling
+Validation before continuing:
+- Screenshot `/broker/crm`.
+- Check KPI icons, empty-state icons, pipeline stage icons, CRM tab icons, and CTA icons.
+- Programmatically inspect rendered SVG color/stroke inside Emerald tiles.
+- Compare before/after screenshots.
+- Stop and ask you to approve the icon primitive before moving to labels.
 
-This includes backend/admin/CRM/broker surfaces, but the fix will be via shared primitives and global inheritance rules first, not one-off button edits.
+### Gate 2 — One global section label primitive
+After icon approval:
+- Create one reusable label/eyebrow primitive for labels like `LIVE ACTIVITY`, `JBJ INTELLIGENCE`, `DATA ACCESS`, `PIPELINE`, and `SCHEDULE`.
+- Standardize size, spacing, typography, padding, icon treatment, border, and visual weight.
+- Replace local label markup on broker/CRM proving surfaces with the primitive.
+- Add CSS inheritance for `[data-section-label]` so future labels match automatically.
 
-### 5. Apply the system to the current proving surfaces
-Use `/broker/portal` and `/broker/crm` as proof pages because they currently expose the failures:
-- “Data Access” and “Pipeline” inherit Emerald icon/label accents.
-- “Broker Workspace” gets an Emerald accent within the section label system.
-- “No activity yet”, “No databases”, and “No leads” render through the new premium EmptyState primitive.
-- KPI tiles use one system rhythm, not page-local grey/gold/blue styling.
-- Primary CTAs match the same locked Emerald gradient everywhere.
+Validation:
+- Screenshot CRM and broker portal labels.
+- Confirm all labels share identical computed sizing, spacing, typography, and Emerald treatment.
+- Pause for approval.
 
-### 6. Add enforcement and visual proof
-- Add CSS guardrails for foreground contrast:
-  - Emerald background = white text/icons/borders at rest and hover.
-  - Champagne/White background = black typography + Emerald icon/accent.
-- Run a rendered audit across key routes at desktop and mobile sizes.
-- Verify computed styles for CTAs, active nav/tabs, badges, icon tiles, dropdown selected states, tables, empty states, and section labels.
-- Only report completion after visual verification shows the same system across screens.
+### Gate 3 — Premium EmptyState primitive
+After label approval:
+- Promote `BrokerEmptyState` into a global empty-state primitive.
+- Enforce Emerald icon tile + white glyph through `IconTile`.
+- Standardize hierarchy: strong title, refined description, tighter visual rhythm, gold hairline, premium surface, and consistent CTA slot.
+- Replace CRM empty states such as:
+  - `There are no leads yet`
+  - `No databases shared with you yet`
+  - `No leads in your scope yet`
+  - `No activity yet`
+- Ensure empty-state CTAs use shared `Button` variants only.
 
-## Technical scope
-Primary files to update:
+Validation:
+- Screenshot all CRM empty-state tabs.
+- Verify icon contrast, CTA contrast, hierarchy, spacing, and typography.
+- Pause for approval.
+
+### Gate 4 — One global CRM/navigation tabs primitive
+After empty-state approval:
+- Standardize tab navigation through the shared `Tabs` / segmented navigation primitive.
+- Active state: Emerald background with white text and white icon.
+- Inactive state: same height, spacing, type, icon size, hover, and focus treatment everywhere.
+- Replace custom CRM tab buttons with the global primitive.
+
+Validation:
+- Screenshot active and inactive states across CRM tabs.
+- Inspect hover/focus behavior.
+- Pause for approval.
+
+### Gate 5 — KPI and pipeline card primitives
+After tabs approval:
+- Create/reuse a global KPI card primitive using `IconTile`.
+- Stronger number hierarchy, premium hover lift, shadow, and Emerald glow.
+- Create/reuse a pipeline stage card primitive using the same icon and hover rules.
+- Replace local CRM KPI and stage-card markup.
+
+Validation:
+- Screenshot KPI cards and pipeline stage cards at rest and hover.
+- Confirm all icons are white inside Emerald tiles.
+- Pause for approval.
+
+### Gate 6 — CTA primitive enforcement
+After KPI/stage approval:
+- Tighten `Button` so primary/legacy primary aliases always render Emerald + white text/icon.
+- Ensure links styled as buttons either use `Button asChild` or the exact CTA primitive classes.
+- Replace local CTA class bypasses in CRM proving surfaces.
+
+Validation:
+- Screenshot and inspect:
+  - Add first lead
+  - Upload database
+  - Open assistant
+  - Request database
+  - Log a call
+- Confirm primary/secondary contrast and hover states.
+- Pause for approval.
+
+## Technical files likely involved
 - `src/index.css`
-- `src/components/ui/button.tsx`
-- `src/components/ui/badge.tsx`
 - `src/components/ui/icon-tile.tsx`
+- `src/components/ui/button.tsx`
 - `src/components/ui/tabs.tsx`
-- `src/components/ui/dropdown-menu.tsx`
-- `src/components/ui/select.tsx`
-- `src/components/ui/command.tsx`
-- `src/components/ui/table.tsx`
 - `src/components/ui/card.tsx`
 - `src/components/ui/premium-backend-layout.tsx`
+- `src/components/broker-portal/BrokerEmptyState.tsx` or replacement global primitive
+- CRM proving surfaces, only to remove local bypasses and consume shared primitives
 
-New or consolidated primitives:
-- Global section header / label component
-- Global KPI card component
-- Global premium empty state component
-- Global panel/card rhythm variants
-
-Page files will only be touched to remove local styling bypasses and use the shared primitives where local components currently block inheritance.
+## Definition of done
+The work is not done when colors change. It is done only when the shared primitives own the JBJ visual language and the CRM screens prove the inheritance automatically: Emerald icon tiles always have white icons, labels match globally, tabs match globally, empty states feel premium, KPI/stage cards use the same rhythm, and CTAs use the locked Button system.

@@ -60,15 +60,27 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
     const t = TONE[tone];
     const s = SIZE[size];
     const isDark = tone === "ink" || tone === "navy" || tone === "emerald";
-    // Champagne tones (default "gold") should render their glyph in Emerald,
-    // not black — see TONE.gold above.
     const isChampagne = tone === "gold";
+
+    // Force the glyph color with !important via inline style so it beats the
+    // long :not() descendant repaint sweeps in index.css. This is the only way
+    // to guarantee "Emerald tile = white icon" across every nested ancestor.
+    const glyphColor = isDark ? "#FFFFFF" : isChampagne ? "var(--emerald-1)" : undefined;
+    const setGlyphStyle = React.useCallback(
+      (el: SVGSVGElement | null) => {
+        if (!el || !glyphColor) return;
+        el.style.setProperty("color", glyphColor, "important");
+        el.style.setProperty("stroke", glyphColor, "important");
+      },
+      [glyphColor],
+    );
+
     return (
       <div
         ref={ref}
         data-icon-tile=""
         data-icon-tile-tone={tone}
-        data-surface={isDark ? tone : "raised"}
+        data-surface={tone === "emerald" ? "emerald" : isDark ? tone : "raised"}
         data-no-contrast-guard={isDark ? "" : undefined}
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0",
@@ -80,8 +92,8 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         {...rest}
       >
         <Icon
+          ref={setGlyphStyle as unknown as React.Ref<SVGSVGElement>}
           className={cn(s.icon, t.icon, isDark && "allow-white", iconClassName)}
-          {...(isDark ? { style: { color: "#FFFFFF", stroke: "#FFFFFF" } } : {})}
         />
       </div>
     );
@@ -89,4 +101,6 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
 );
 IconTile.displayName = "IconTile";
 
+
 export default IconTile;
+
