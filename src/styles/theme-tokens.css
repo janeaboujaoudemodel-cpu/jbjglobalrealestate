@@ -312,23 +312,23 @@ label[data-required]::after {
 [data-careers-page] .careers-navy-cta:hover,
 [data-careers-page] .careers-navy-cta:focus,
 [data-careers-page] .careers-navy-cta:focus-visible {
-  background: var(--t-careers-navy) !important;
-  border-color: var(--t-careers-border-strong) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: rgba(4,120,87,0.88) !important;
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
   box-shadow:
-    0 16px 28px -14px rgba(7, 27, 51, 0.72),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+    0 16px 28px -14px rgba(6, 78, 59, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
 [data-careers-page] .careers-navy-cta:hover {
-  background: var(--t-careers-navy-hover) !important;
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #031B12 100%) !important;
 }
 
 [data-careers-page] .careers-navy-cta:disabled,
 [data-careers-page] .careers-navy-cta[disabled] {
-  background: rgba(7, 27, 51, 0.36) !important;
-  border-color: rgba(191, 164, 106, 0.55) !important;
+  background: linear-gradient(135deg, rgba(6,78,59,0.56) 0%, rgba(4,44,28,0.56) 100%) !important;
+  border-color: rgba(4,120,87,0.36) !important;
   color: rgba(255, 255, 255, 0.88);
   -webkit-text-fill-color: rgba(255, 255, 255, 0.88);
   box-shadow: none !important;
@@ -336,23 +336,24 @@ label[data-required]::after {
 
 [data-careers-page] .careers-pill-inactive {
   background: var(--t-careers-cream) !important;
-  border-color: var(--t-careers-border-strong) !important;
+  border-color: rgba(4,120,87,0.38) !important;
   color: var(--t-ink);
   -webkit-text-fill-color: var(--t-ink);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.72),
-    0 8px 22px -18px rgba(7, 27, 51, 0.32) !important;
+    0 8px 22px -18px rgba(6, 78, 59, 0.18) !important;
 }
 
 [data-careers-page] .careers-pill-active {
-  background: var(--t-careers-navy) !important;
-  border-color: var(--t-careers-navy) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: rgba(4,120,87,0.88) !important;
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
   box-shadow:
-    0 14px 24px -12px rgba(7, 27, 51, 0.7),
+    0 14px 24px -12px rgba(6, 78, 59, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
+
 
 [data-careers-page] .careers-pill-complete {
   background: linear-gradient(180deg, #F3E8D6 0%, var(--t-careers-complete) 100%) !important;
@@ -366,22 +367,20 @@ label[data-required]::after {
 
 [data-careers-page] .careers-card-strong {
   background: linear-gradient(180deg, var(--t-careers-card-top) 0%, var(--t-careers-card-bottom) 100%) !important;
-  border-color: rgba(191, 164, 106, 0.75) !important;
+  border-color: rgba(4, 120, 87, 0.24) !important;
   box-shadow:
-    0 24px 54px -34px rgba(7, 27, 51, 0.46),
+    0 24px 54px -34px rgba(6, 78, 59, 0.20),
     0 1px 0 rgba(255, 255, 255, 0.8) inset !important;
 }
 
 [data-careers-page] .careers-card-strong:hover {
-  border-color: rgba(191, 164, 106, 0.95) !important;
+  border-color: rgba(4, 120, 87, 0.42) !important;
   box-shadow:
-    0 28px 60px -34px rgba(7, 27, 51, 0.52),
-    0 0 0 1px rgba(191, 164, 106, 0.28),
+    0 28px 60px -34px rgba(6, 78, 59, 0.24),
+    0 0 0 1px rgba(4, 120, 87, 0.12),
     0 1px 0 rgba(255, 255, 255, 0.82) inset !important;
 }
 
-/* Job cards sit on champagne/cream surfaces: set the card inheritance only.
-   Do not repaint every descendant; CTA primitives and local labels own contrast. */
 [data-careers-page] .careers-card-navy .careers-card-strong {
   color: var(--t-ink);
   -webkit-text-fill-color: var(--t-ink);
@@ -395,11 +394,11 @@ label[data-required]::after {
   stroke: #FFFFFF;
 }
 
-/* ---- Premium luxury form fields (BLUE 2px border, navy on focus) ---- */
+/* ---- Premium luxury form fields (emerald focus and borders) ---- */
 [data-careers-page] .careers-blue-field,
 [data-careers-page] input.careers-blue-field {
   background-color: #FDFBF7 !important;
-  border: 2px solid var(--t-form-blue) !important;
+  border: 2px solid rgba(4,120,87,0.30) !important;
   border-radius: 0.625rem !important;
   box-shadow: 0 1px 2px rgba(10,10,10,0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
   color: #1A1A1A;
@@ -410,8 +409,8 @@ label[data-required]::after {
 [data-careers-page] .careers-blue-field:hover,
 [data-careers-page] input.careers-blue-field:hover,
 [data-careers-page] button[role="combobox"].careers-blue-field:hover {
-  border-color: #1F1F1F !important;
-  box-shadow: 0 4px 14px -8px rgba(10,10,10,0.28) !important;
+  border-color: rgba(4,120,87,0.48) !important;
+  box-shadow: 0 4px 14px -8px rgba(6,78,59,0.22) !important;
   background-color: #FDFBF7 !important;
 }
 
@@ -421,14 +420,15 @@ label[data-required]::after {
 [data-careers-page] input.careers-blue-field:focus-visible,
 [data-careers-page] button[role="combobox"].careers-blue-field:focus,
 [data-careers-page] button[role="combobox"].careers-blue-field:focus-visible {
-  border-color: var(--t-form-blue) !important;
+  border-color: rgba(4,120,87,0.72) !important;
   background-color: #FDFBF7 !important;
   box-shadow:
-    0 0 0 3px var(--t-form-blue-ring),
-    0 8px 24px -16px rgba(10,10,10,0.35) !important;
+    0 0 0 3px rgba(4,120,87,0.18),
+    0 8px 24px -16px rgba(6,78,59,0.28) !important;
   transform: translateY(-1px) !important;
   outline: none !important;
 }
+
 
 [data-careers-page] .careers-blue-field:disabled,
 [data-careers-page] .careers-blue-field[disabled],
@@ -528,7 +528,7 @@ label[data-required]::after {
 /* Country-code pill on careers forms — champagne, no black. */
 [data-careers-page] .careers-phone-input [data-phone-code-trigger] {
   background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
-  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  border: 1px solid rgba(4,120,87,0.40) !important;
   border-radius: 0.625rem !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
 }
@@ -536,7 +536,7 @@ label[data-required]::after {
 [data-careers-page] .careers-phone-input input,
 [data-careers-page] .careers-phone-input input[type="tel"] {
   background-color: #FDFBF7 !important;
-  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  border: 1px solid rgba(4,120,87,0.40) !important;
   border-radius: 0.625rem !important;
   color: #1A1A1A;
   -webkit-text-fill-color: #1A1A1A;
@@ -546,9 +546,9 @@ label[data-required]::after {
 }
 
 [data-careers-page] .careers-phone-input input:focus {
-  border-color: #B89555 !important;
+  border-color: rgba(4,120,87,0.72) !important;
   background-color: #FDFBF7 !important;
-  box-shadow: 0 0 0 3px rgba(184, 149, 85, 0.28) !important;
+  box-shadow: 0 0 0 3px rgba(4,120,87,0.18) !important;
   outline: none !important;
 }
 
@@ -563,6 +563,7 @@ label[data-required]::after {
   -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
 
 
 

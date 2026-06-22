@@ -56,20 +56,21 @@ export function CareersWhyJBJ() {
               <article
                 key={b.title}
                 data-surface="champagne"
-                className="surface-champagne group relative overflow-hidden rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-6 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_rgba(184,149,85,0.4)] hover:border-[#B89555]"
+                className="surface-champagne group relative overflow-hidden rounded-2xl border border-[#047857]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-6 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_rgba(6,78,59,0.22)] hover:border-[#047857]/40"
               >
-                <div className="pointer-events-none absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[#B89555]/8 blur-3xl group-hover:bg-[#B89555]/15 transition" />
+                <div className="pointer-events-none absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[#047857]/[0.07] blur-3xl group-hover:bg-[#047857]/[0.12] transition" />
 
                 <div className="relative">
-                  <div className="grid h-14 w-14 place-items-center rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]">
-                    <Icon className="h-7 w-7 text-[#0A0A0A]" strokeWidth={2} />
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl border border-[#047857]/35 bg-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_10px_22px_-18px_rgba(6,78,59,0.35)]">
+                    <Icon className="h-7 w-7 text-[#047857]" strokeWidth={2} />
                   </div>
                   <h3 className="mt-4 text-xl font-bold text-[#1A1A1A] leading-snug">{b.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{b.description}</p>
                 </div>
 
-                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#047857]/30 to-transparent" />
               </article>
+
             );
           })}
         </div>

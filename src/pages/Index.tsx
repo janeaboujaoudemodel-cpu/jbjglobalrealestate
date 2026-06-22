@@ -268,7 +268,10 @@ const Index = () => {
             {/* Headline — exact copy from reference photo */}
             <motion.h1
               variants={fadeInUp}
-              className="font-display font-semibold tracking-tight leading-[1.05] text-balance w-full mx-auto"
+              data-no-contrast-guard
+              data-on-dark
+              data-allow-dark-cta
+              className="font-display font-semibold tracking-tight leading-[1.05] text-balance w-full mx-auto allow-white"
               style={{
                 fontSize: "clamp(1.85rem, 5vw + 0.5rem, 4.25rem)",
                 letterSpacing: "-0.02em",
@@ -281,6 +284,7 @@ const Index = () => {
             >
               Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
+
 
             {/* Hero global search — long-stretch bar with inline Book + Concierge CTAs */}
             <motion.div variants={fadeInUp} className="w-full">
@@ -431,13 +435,13 @@ const Index = () => {
               <PearlButton
                 to="/partners/mortgage"
                 size="md"
-                variant="secondary"
                 leadingIcon={<Users strokeWidth={2.2} />}
                 trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
               >
                 <span className="whitespace-nowrap">{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
               </PearlButton>
             </div>
+
           </div>
         </LazyVisible>
       </PremiumSectionCard>

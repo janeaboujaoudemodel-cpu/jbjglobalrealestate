@@ -57,7 +57,7 @@ export function CareersFAQ() {
                   "overflow-hidden rounded-2xl border bg-[linear-gradient(180deg,rgba(255,253,249,0.98),rgba(243,235,221,0.96))] backdrop-blur-sm transition-all duration-300",
                   open
                     ? "careers-faq-open"
-                    : "careers-faq-closed hover:border-[#BFA46A] hover:shadow-[0_18px_36px_-24px_rgba(7,27,51,0.24)]"
+                    : "careers-faq-closed hover:border-[#047857]/35 hover:shadow-[0_18px_36px_-24px_rgba(6,78,59,0.20)]"
                 )}
               >
                 <button
@@ -65,21 +65,20 @@ export function CareersFAQ() {
                   onClick={() => setOpenIdx(open ? null : i)}
                   className={cn(
                     "flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors",
-                    open ? "bg-[#F3E8D6]" : "bg-transparent"
+                    open ? "bg-[#EEF7F1]" : "bg-transparent"
                   )}
                   aria-expanded={open}
                 >
-                  <span className={cn("text-base font-semibold leading-snug", open ? "text-[#071B33]" : "text-[#1A1A1A]")}>{f.q}</span>
+                  <span className={cn("text-base font-semibold leading-snug", open ? "text-[#1A1A1A]" : "text-[#1A1A1A]")}>{f.q}</span>
                   <span
                     data-allow-dark-cta
                     data-no-contrast-guard
                     className={cn(
                       "allow-white grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
                       open
-                        ? "border-[#B89555] bg-[#0A0A0A] shadow-[0_12px_22px_-12px_rgba(184,149,85,0.55)]"
-                        : "border-[#B89555]/55 bg-[#F7F2EA]"
+                        ? "border-[#047857] bg-[image:var(--jj-emerald-ombre)] shadow-[0_12px_22px_-12px_rgba(6,78,59,0.45)]"
+                        : "border-[#047857]/40 bg-[#F7F2EA]"
                     )}
-                    style={open ? { backgroundColor: "#0A0A0A" } : undefined}
                   >
                     {open ? (
                       <CircleDot
@@ -92,10 +91,11 @@ export function CareersFAQ() {
                       <ChevronDown
                         className="h-4 w-4"
                         data-no-contrast-guard
-                        style={{ color: "#0A0A0A", stroke: "#0A0A0A", opacity: 1 }}
+                        style={{ color: "#047857", stroke: "#047857", opacity: 1 }}
                         strokeWidth={2.5}
                       />
                     )}
+
 
                   </span>
                 </button>

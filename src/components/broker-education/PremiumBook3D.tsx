@@ -168,15 +168,16 @@ export function PremiumBook3D({
             <div
               className="text-center leading-[1.18]"
               style={{
-                color: palette.ink,
+                color: compact ? '#FFFFFF' : palette.ink,
                 fontSize: compact ? "clamp(10px, 1.55vw, 14px)" : "clamp(11px, 1.8vw, 16px)",
                 fontWeight: 500,
                 letterSpacing: "0.06em",
                 fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
-                textShadow: "0 1px 0 rgba(0,0,0,.45)",
+                textShadow: compact ? "0 1px 0 rgba(0,0,0,.78), 0 0 12px rgba(0,0,0,.42)" : "0 1px 0 rgba(0,0,0,.45)",
               }}
             >
               {title}
+
             </div>
           </div>
 
