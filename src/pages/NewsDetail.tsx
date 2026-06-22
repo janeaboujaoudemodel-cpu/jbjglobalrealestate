@@ -131,7 +131,7 @@ const NewsDetail = () => {
 
   if (isLoading) {
     return (
-      <div data-neon-page className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <BrandedLoader text="Loading article..." />
       </div>
     );
@@ -139,10 +139,10 @@ const NewsDetail = () => {
 
   if (error || !article) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div className="min-h-screen bg-[#FDFBF7]">
         <div className="container mx-auto px-4 py-20 text-center">
-          <Newspaper className="w-16 h-16 text-[#1A1A1A]/70 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white mb-2">Article Not Found</h1>
+          <Newspaper className="w-16 h-16 text-[#1A1A1A]/40 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-[#1A1A1A] mb-2">Article Not Found</h1>
           <p className="text-[#1A1A1A]/70 mb-6">This article may have been removed or doesn't exist.</p>
           <Link to="/news">
             <Button variant="primary">Back to News</Button>
@@ -174,7 +174,7 @@ const NewsDetail = () => {
         title={`${article.title} | JBJ Global Real Estate News`}
         description={article.excerpt}
       />
-      <article className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <article className="min-h-screen bg-[#FDFBF7]">
         {/* Full-Screen Hero Image */}
         <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
           <img
@@ -215,7 +215,7 @@ const NewsDetail = () => {
           </div>
         </div>
 
-        <div className="h-8 md:h-12 bg-[#1A1A1A]" />
+        <div className="h-8 md:h-12 bg-[#FDFBF7]" />
 
         {/* Article Body */}
         <div className="jj-layer-2 !bg-transparent relative z-10">
