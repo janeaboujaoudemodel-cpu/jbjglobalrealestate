@@ -3,6 +3,20 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/lib/utils";
 
+const stripActiveInkUtilities = (className?: string) =>
+  className
+    ?.split(/\s+/)
+    .filter((token) => {
+      const activeText = token.startsWith("data-[state=active]:text-");
+      return !(
+        activeText &&
+        (token.includes("[#1A1A1A]") ||
+          token.includes("black") ||
+          token.includes("foreground"))
+      );
+    })
+    .join(" ");
+
 const Tabs = TabsPrimitive.Root;
 
 const TabsList = React.forwardRef<
@@ -31,8 +45,9 @@ const TabsTrigger = React.forwardRef<
     data-surface="champagne"
     data-jj-segmented-trigger=""
     className={cn(
-      "surface-champagne inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-colors duration-150 data-[state=active]:jj-segmented-active data-[state=active]:shadow-sm hover:bg-[#EFE6D6] hover:text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
-      className,
+      "surface-champagne inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-colors duration-150 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
+      stripActiveInkUtilities(className),
+      "data-[state=active]:jj-segmented-active data-[state=active]:!bg-[#064E3B] data-[state=active]:!bg-none data-[state=active]:!text-white data-[state=active]:!shadow-sm data-[state=active]:!animate-none data-[state=active]:[background-image:none!important] [&[data-state=active]_*]:!text-white [&[data-state=active]_svg]:!text-white [&[data-state=active]_svg]:!stroke-white",
     )}
     {...props}
   />
