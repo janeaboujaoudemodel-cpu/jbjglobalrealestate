@@ -9837,7 +9837,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]),
 html body :is(
   .jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card,
@@ -9852,7 +9852,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -9870,7 +9870,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]) :is(span,p,a,h1,h2,h3,h4,h5,h6,strong,small,label,button,li,dt,dd,time,bdi,em),
 html body :is(
   .jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card,
@@ -9885,7 +9885,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled) :is(span,p,a,h1,h2,h3,h4,h5,h6,strong,small,label,button,li,dt,dd,time,bdi,em) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -9904,7 +9904,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]),
 html body :is(
   .jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card,
@@ -9919,7 +9919,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -9930,13 +9930,13 @@ html body :is(
   .jj-dual-cta-secondary, [data-cta="champagne"],
   [data-surface="gold"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="page"], [data-surface="light"],
   .surface-gold, .surface-champagne, .surface-cream, .surface-raised, .surface-page, .surface-light
-):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]),
+):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.allow-white),
 html body :is(
   [class~="bg-[#B89555]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#FDFBF7]"],
   .jj-dual-cta-secondary, [data-cta="champagne"],
   [data-surface="gold"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="page"], [data-surface="light"],
   .surface-gold, .surface-champagne, .surface-cream, .surface-raised, .surface-page, .surface-light
-):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) * {
+):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) *:not(.allow-white):not(.allow-white *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;

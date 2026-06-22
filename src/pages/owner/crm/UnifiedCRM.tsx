@@ -466,11 +466,12 @@ export default function UnifiedCRM() {
             <button
               type="button"
               onClick={() => setAddLeadOpen(true)}
-                data-emerald="true"
-                className="jj-emerald-metallic shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors"
+              data-emerald="true"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              className="jj-emerald-metallic allow-white shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors text-white"
             >
-              <Plus className="h-3.5 w-3.5" />
-              Add Lead
+              <Plus className="allow-white h-3.5 w-3.5 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Add Lead</span>
             </button>
             <button
               type="button"
