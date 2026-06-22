@@ -11410,3 +11410,73 @@ html body .jj-card-emerald-label.jj-card-emerald-label {
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: 0 6px 18px -8px rgba(4,46,29,0.58) !important;
 }
+
+/* ============================================================
+   FINAL APPROVED-EMERALD LOCK (matches Collapse button exactly)
+   Idle == Hover. No lighter green. No borders on icon pills.
+   ============================================================ */
+html body :is(
+  .jj-emerald-rect-pill,
+  .jj-card-emerald-action,
+  .jj-favorite-trigger,
+  .jj-history-emerald-icon,
+  .jj-card-emerald-label,
+  .jj-pill-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  [data-emerald="true"],
+  [data-surface="emerald"]
+),
+html body :is(
+  .jj-emerald-rect-pill,
+  .jj-card-emerald-action,
+  .jj-favorite-trigger,
+  .jj-history-emerald-icon,
+  .jj-card-emerald-label,
+  .jj-pill-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  [data-emerald="true"],
+  [data-surface="emerald"]
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: linear-gradient(135deg, #064E3B 0%, #065F46 45%, #042c1c 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #065F46 45%, #042c1c 100%) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  outline: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 6px 18px -8px rgba(4,46,29,0.55), inset 0 1px 0 rgba(255,255,255,0.15) !important;
+  opacity: 1 !important;
+}
+
+html body :is(
+  .jj-emerald-rect-pill,
+  .jj-card-emerald-action,
+  .jj-favorite-trigger,
+  .jj-history-emerald-icon,
+  .jj-card-emerald-label,
+  [data-emerald="true"],
+  [data-surface="emerald"]
+) :is(svg, [class*="lucide"], span, strong, b, em, small, p, a) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Kill any remaining lighter-emerald gradients used by older rules. */
+html body [style*="#10b981"],
+html body [style*="#10B981"],
+html body [style*="linear-gradient(135deg, #047857"],
+html body [style*="linear-gradient(135deg,#047857"],
+html body [style*="linear-gradient(90deg, #047857"],
+html body [style*="linear-gradient(90deg,#047857"] {
+  background: linear-gradient(135deg, #064E3B 0%, #065F46 45%, #042c1c 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #065F46 45%, #042c1c 100%) !important;
+}
