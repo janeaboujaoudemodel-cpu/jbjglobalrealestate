@@ -11002,3 +11002,126 @@ html body :is(
   opacity: 1 !important;
   mix-blend-mode: normal !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   GATE-1 GLOBAL EMERALD LOCK (FINAL, NUCLEAR)
+   Any element with an emerald-family background (token classes,
+   Tailwind utility, brand hex, or data-attribute) MUST render its
+   text, svg icons, and border in pure white. Opt-out: [data-no-contrast-guard].
+   This is appended LAST so it wins over every prior rule.
+   ════════════════════════════════════════════════════════════════ */
+html body :where(
+  /* Brand tokens & primitives */
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-badge-emerald,
+  .jj-sidebar-item-active,
+  .jj-side-tile.is-active,
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-ink-emerald],
+  [data-emerald-ok="button"],
+  /* Tailwind utility families (raw bypasses) */
+  [class*="bg-emerald-"],
+  [class*="bg-green-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-emerald-tone="outline"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
+html body :where(
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-badge-emerald,
+  .jj-sidebar-item-active,
+  .jj-side-tile.is-active,
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-ink-emerald],
+  [data-emerald-ok="button"],
+  [class*="bg-emerald-"],
+  [class*="bg-green-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-emerald-tone="outline"]) :where(
+  h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time,
+  dt, dd, th, td, figcaption, blockquote, button, div
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :where(
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-badge-emerald,
+  .jj-sidebar-item-active,
+  .jj-side-tile.is-active,
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-ink-emerald],
+  [data-emerald-ok="button"],
+  [class*="bg-emerald-"],
+  [class*="bg-green-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-emerald-tone="outline"]) :where(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+/* Hover/active states must never flip foregrounds back to dark on emerald. */
+html body :where(
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-badge-emerald,
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [class*="bg-emerald-"],
+  [class*="bg-green-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-emerald-tone="outline"]):hover,
+html body :where(
+  .jj-surface-emerald, .jj-emerald-solid, .jj-cta-primary, .jj-cta-emerald,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald,
+  .jj-card-emerald, .jj-badge-emerald, [data-surface="emerald"],
+  [data-cta="primary"], [data-emerald-filled], [data-emerald-ok="button"],
+  [class*="bg-emerald-"], [class*="bg-green-"], [class*="bg-teal-"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-emerald-tone="outline"]):hover :where(
+  h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,button,div,svg,[class*="lucide"]
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
