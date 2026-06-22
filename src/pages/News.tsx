@@ -266,14 +266,16 @@ const News = () => {
                     type="button"
                     onClick={() => setSelectedCategory(category === "All" ? null : category)}
                     data-emerald={isActive ? "true" : undefined}
-                    className={`px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
+                    data-surface={isActive ? "emerald" : undefined}
+                    data-no-contrast-guard={isActive ? "" : undefined}
+                    className={`allow-white px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
                       isActive
-                        ? "border-transparent shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                        ? "jj-cta-primary border-transparent text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                         : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
                     }`}
-                    style={isActive ? { backgroundImage: "var(--jj-emerald-ombre, linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%))", color: "#FFFFFF" } : undefined}
+                    style={isActive ? { backgroundImage: "var(--jj-emerald-ombre, linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%))", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                   >
-                    {category}
+                    <span style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{category}</span>
                   </button>
                 );
               })}
@@ -473,18 +475,18 @@ const News = () => {
                       <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
                     </div>
                   </div>
-                  <Badge className="jj-emerald-solid text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
-                    LIVE · 2026 YTD
+                  <Badge data-no-contrast-guard data-surface="emerald" className="jj-emerald-solid allow-white text-white border-0 px-3 py-1 text-xs font-bold animate-pulse" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>LIVE · 2026 YTD</span>
                   </Badge>
                 </div>
 
                 <Tabs defaultValue="ytd" className="w-full">
                   <TabsList className="mb-6 bg-champagne-light/50 border border-[#B89555]/20">
-                    <TabsTrigger value="ytd" className="data-[state=active]:bg-[#EFE6D6] text-xs font-semibold">
-                      YTD 2026
+                    <TabsTrigger value="ytd" data-no-contrast-guard className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] text-xs font-semibold">
+                      <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>YTD 2026</span>
                     </TabsTrigger>
-                    <TabsTrigger value="daily" className="data-[state=active]:bg-[#EFE6D6] text-xs font-semibold">
-                      Today's Average
+                    <TabsTrigger value="daily" data-no-contrast-guard className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] text-xs font-semibold">
+                      <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Today's Average</span>
                     </TabsTrigger>
                   </TabsList>
 
