@@ -214,22 +214,22 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "jbj-form-option relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm text-[#0A0A0A] outline-none transition-all duration-200",
+      "jbj-form-option relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[#0A0A0A]/5 hover:text-[#0A0A0A]",
-      "focus:bg-[#0A0A0A]/5 focus:text-[#0A0A0A]",
-      "data-[highlighted]:bg-[#0A0A0A]/5 data-[highlighted]:text-[#0A0A0A]",
+      "hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)]",
+      "focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)]",
+      "data-[highlighted]:bg-[color:var(--emerald-soft-bg)] data-[highlighted]:text-[color:var(--emerald-1)]",
+      "data-[state=checked]:text-[color:var(--emerald-1)] data-[state=checked]:font-semibold",
       className,
     )}
     {...props}
   >
-    <span className="absolute left-2 flex h-4 w-4 items-center justify-center rounded border-2 border-[#B89555]/30 transition-colors [&:has([data-state=checked])]:bg-[#1A1A1A] [&:has([data-state=checked])]:border-[#1A1A1A]">
+    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    <span className="absolute right-2 flex h-4 w-4 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="h-3 w-3 text-white" />
+        <Check className="h-4 w-4 text-[color:var(--emerald-1)]" strokeWidth={3} />
       </SelectPrimitive.ItemIndicator>
     </span>
-
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
