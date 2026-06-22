@@ -789,7 +789,7 @@ export default function BrokerCRM() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  className=""
                   onClick={() => {
                     if (confirm(`Move all ${callLogs.data!.length} calls to Recently deleted?`)) {
                       deleteAllCalls.mutate();
@@ -804,7 +804,7 @@ export default function BrokerCRM() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  className=""
                   onClick={() => setCallDialogOpen(true)}
                 >
                   <Phone className="w-3.5 h-3.5 mr-1.5" /> Log a call
@@ -849,7 +849,7 @@ export default function BrokerCRM() {
                         {callsView === "active" ? (
                           <Button
                             variant="outline" size="sm"
-                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                            className=""
                             onClick={() => {
                               if (confirm(`Move ${selectedArr.length} call(s) to Recently deleted?`)) bulkSoftDelete.mutate(selectedArr);
                             }}
@@ -861,7 +861,7 @@ export default function BrokerCRM() {
                           <>
                             <Button
                               variant="outline" size="sm"
-                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              className=""
                               onClick={() => bulkRestore.mutate(selectedArr)}
                               disabled={bulkRestore.isPending}
                             >
@@ -869,7 +869,7 @@ export default function BrokerCRM() {
                             </Button>
                             <Button
                               variant="outline" size="sm"
-                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              className=""
                               onClick={() => {
                                 if (confirm(`Permanently delete ${selectedArr.length} call(s)? This cannot be undone.`)) bulkHardDelete.mutate(selectedArr);
                               }}
@@ -882,7 +882,7 @@ export default function BrokerCRM() {
                         <button
                           type="button"
                           onClick={() => setSelectedCallIds(new Set())}
-                          className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                          className="text-[11px] px-2 py-1 rounded border "
                         >
                           Clear
                         </button>
@@ -951,7 +951,7 @@ export default function BrokerCRM() {
                                   e.stopPropagation();
                                   if (confirm("Move this call to Recently deleted?")) softDeleteCall.mutate(log.id);
                                 }}
-                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                className="text-[11px] px-2 py-1 rounded border "
                                 disabled={softDeleteCall.isPending}
                               >
                                 Delete
@@ -961,7 +961,7 @@ export default function BrokerCRM() {
                                 <button
                                   type="button"
                                   onClick={(e) => { e.stopPropagation(); restoreCall.mutate(log.id); }}
-                                  className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                  className="text-[11px] px-2 py-1 rounded border "
                                   disabled={restoreCall.isPending}
                                 >
                                   Restore
