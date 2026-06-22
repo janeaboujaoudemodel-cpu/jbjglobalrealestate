@@ -50,20 +50,21 @@ function Kpi({
     <button
       type="button"
       onClick={onClick}
-      className="group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-4 py-4 hover:border-[color:var(--emerald-1)]/55 hover:bg-[color:var(--emerald-soft-bg)] transition-colors w-full focus:outline-none focus:ring-2 focus:ring-[color:var(--emerald-1)]/40"
+      className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-5 py-5 w-full focus:outline-none"
     >
       <div className="flex items-center justify-between">
-        <div className="h-8 w-8 grid place-items-center rounded-md jj-icon-tile-emerald">
-          <Icon className="h-4 w-4 text-white" />
+        <div className="h-10 w-10 grid place-items-center rounded-xl jj-icon-tile-emerald" data-icon-tile="">
+          <Icon className="h-5 w-5 text-white" />
         </div>
-        <ArrowRight className="h-3.5 w-3.5 text-[color:var(--emerald-1)]/70 group-hover:text-[color:var(--emerald-1)] transition-colors" />
+        <ArrowRight className="h-4 w-4 text-[color:var(--emerald-1)]/70 group-hover:text-white transition-colors" />
       </div>
-      <div className="mt-3 text-2xl md:text-3xl font-semibold tabular-nums text-[#1A1A1A]">{value}</div>
-      <div className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 mt-1">{label}</div>
+      <div className="mt-4 text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none">{value}</div>
+      <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold">{label}</div>
       {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
     </button>
   );
 }
+
 
 const STAGE_GROUPS: Array<{ key: string; label: string; match: string[] }> = [
   { key: "new",         label: "New",            match: ["new", "untouched"] },
