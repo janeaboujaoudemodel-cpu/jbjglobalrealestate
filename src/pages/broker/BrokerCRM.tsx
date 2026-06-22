@@ -425,7 +425,7 @@ export default function BrokerCRM() {
       </div>
 
       {/* Tabs */}
-      <nav className="flex flex-wrap gap-1 border-b border-[#B89555]/25">
+      <nav className="flex flex-wrap gap-1.5 p-1.5 rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/22 shadow-[0_6px_18px_-16px_rgba(6,78,59,0.35)]">
         {([
           { id: "pipeline", label: "Pipeline", icon: BarChart3 },
           { id: "databases", label: "My Databases", icon: Database },
@@ -444,13 +444,10 @@ export default function BrokerCRM() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-                  data-jj-segmented-trigger=""
-                  data-state={active ? "active" : undefined}
-                  className={`px-4 py-2.5 text-sm flex items-center gap-2 rounded-t-md border-b-2 -mb-px transition-colors ${
-                active
-                      ? "border-[color:var(--emerald-1)] font-semibold"
-                      : "border-transparent text-[#1A1A1A]/65 hover:text-[color:var(--emerald-1)]"
-              }`}
+              data-jj-segmented-trigger=""
+              data-state={active ? "active" : undefined}
+              data-active={active ? "true" : undefined}
+              className="jj-tab-pill"
             >
               <Icon className="h-4 w-4" /> {t.label}
             </button>
@@ -463,7 +460,7 @@ export default function BrokerCRM() {
         <div className="space-y-4">
           <PremiumCard>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-[#1A1A1A]">Pipeline by stage</h2>
+              <h2 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-[0.14em]">Pipeline by stage</h2>
               <span className="text-xs text-[#1A1A1A]/55">{totalLeads} total leads</span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -472,14 +469,21 @@ export default function BrokerCRM() {
                   key={s.key}
                   type="button"
                   onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
-                  className="text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-4 py-4 focus:outline-none"
                 >
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">{s.label}</div>
+                  <div className="flex items-center justify-between">
+                    <div className="h-8 w-8 grid place-items-center rounded-lg jj-icon-tile-emerald" data-icon-tile="">
+                      <BarChart3 className="h-4 w-4 text-white" />
+                    </div>
+                    <ArrowRight className="h-3.5 w-3.5 text-[color:var(--emerald-1)]/60 group-hover:text-white transition-colors" />
+                  </div>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 mt-3 font-semibold">{s.label}</div>
                   <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
                 </button>
               ))}
             </div>
           </PremiumCard>
+
 
           {/* Leads table — always visible on Pipeline tab so the empty state guides the broker */}
           <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
