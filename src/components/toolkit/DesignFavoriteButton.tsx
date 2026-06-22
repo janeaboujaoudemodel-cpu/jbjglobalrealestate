@@ -33,7 +33,7 @@ const DesignFavoriteButton = ({
     backgroundColor: "#064E3B",
     color: "#FFFFFF",
     WebkitTextFillColor: "#FFFFFF",
-    borderColor: "rgba(255,255,255,0.35)",
+    border: "none",
     opacity: 1,
   };
   const whiteIconStyle: React.CSSProperties = {
@@ -81,7 +81,7 @@ const DesignFavoriteButton = ({
             data-surface="emerald"
             data-emerald="true"
             data-card-action="favorite"
-            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
+            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 shadow-md`}
             style={emeraldButtonStyle}
           >
             <Heart
@@ -107,7 +107,7 @@ const DesignFavoriteButton = ({
               data-surface="emerald"
               data-emerald="true"
               data-card-action="shortlist"
-              className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
+              className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 shadow-md`}
               style={emeraldButtonStyle}
             >
               {isShortlisted ? (
