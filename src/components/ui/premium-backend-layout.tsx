@@ -119,7 +119,7 @@ interface PremiumStatCardProps {
   icon?: LucideIcon;
   trend?: 'up' | 'down' | 'neutral';
   trendValue?: string;
-  accentColor?: 'gold' | 'green' | 'blue' | 'purple' | 'orange' | 'red';
+  accentColor?: 'gold' | 'emerald' | 'blue' | 'purple' | 'orange' | 'red';
   onClick?: () => void;
   className?: string;
 }
@@ -132,12 +132,12 @@ const accentColors = {
     text: 'text-[#1A1A1A]',
     iconBg: 'bg-[#EFE6D6]/10',
   },
-  green: {
-    bg: 'bg-gradient-to-br /15 /5',
-    border: 'border-[color:var(--emerald-1)]/30/30',
+  emerald: {
+    bg: 'bg-[color:var(--emerald-soft-bg)]',
+    border: 'border-[color:var(--emerald-1)]/30',
     icon: 'text-[color:var(--emerald-1)]',
     text: 'text-[color:var(--emerald-1)]',
-    iconBg: 'jj-emerald-solid/10',
+    iconBg: 'jj-icon-tile-emerald',
   },
   blue: {
     bg: 'bg-gradient-to-br from-blue-500/15 to-blue-500/5',

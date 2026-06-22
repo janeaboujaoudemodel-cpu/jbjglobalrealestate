@@ -89,7 +89,7 @@ export default function HRDashboard() {
               subtitle="Last 30 days"
               icon={UserCheck}
               trend={stats?.newHires ? "up" : undefined}
-              accentColor="green"
+              accentColor="emerald"
               onClick={() => setActiveTab('performance')}
             />
             <PremiumStatCard

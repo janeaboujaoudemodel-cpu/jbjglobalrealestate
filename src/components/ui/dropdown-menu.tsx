@@ -89,7 +89,7 @@ const DropdownMenuItem = React.forwardRef<
     className={cn(
       "relative flex cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       !unstyled &&
-        "rounded-lg px-2 py-1.5 text-sm text-[#1A1A1A] transition-all duration-200 hover:bg-[#EFE6D6]/15 hover:text-[#1A1A1A] hover:shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:-translate-y-0.5 focus:bg-[#EFE6D6]/15 focus:text-[#1A1A1A] focus:shadow-[0_4px_15px_rgba(200,167,102,0.2)] focus:-translate-y-0.5",
+        "rounded-lg px-2 py-1.5 text-sm text-[#1A1A1A] transition-colors duration-150 hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)]",
       inset && "pl-8",
       className,
     )}
@@ -105,17 +105,16 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm text-[#1A1A1A] outline-none transition-all duration-200 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[#EFE6D6]/15 hover:text-[#1A1A1A] hover:shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:-translate-y-0.5",
-      "focus:bg-[#EFE6D6]/15 focus:text-[#1A1A1A] focus:shadow-[0_4px_15px_rgba(200,167,102,0.2)] focus:-translate-y-0.5",
+      "relative flex cursor-default select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm text-[#1A1A1A] outline-none transition-colors duration-150 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)]",
       className,
     )}
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex h-4 w-4 items-center justify-center rounded border border-[color:var(--emerald-1)]/45 bg-[#FDFBF7] data-[state=checked]:bg-[color:var(--emerald-1)]">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className="h-4 w-4 text-[#1A1A1A]" />
+        <Check className="h-3 w-3 text-[color:var(--emerald-1)]" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}

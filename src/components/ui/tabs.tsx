@@ -27,7 +27,7 @@ const TabsList = React.forwardRef<
     data-surface="champagne"
     data-jj-segmented-list=""
     className={cn(
-      "surface-champagne inline-flex h-10 items-center justify-center rounded-md bg-[#F7F2EA] p-1 text-[#1A1A1A] border border-[#B89555]/30",
+      "surface-champagne inline-flex h-10 items-center justify-center rounded-md bg-[color:var(--surface,#F7F2EA)] p-1 text-[#1A1A1A] border border-[color:var(--emerald-1)]/25",
       className,
     )}
     {...props}
@@ -43,7 +43,7 @@ const TabsTrigger = React.forwardRef<
     ref={ref}
     data-jj-segmented-trigger=""
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-colors duration-150 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-colors duration-150 hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
       className,
     )}
     {...props}

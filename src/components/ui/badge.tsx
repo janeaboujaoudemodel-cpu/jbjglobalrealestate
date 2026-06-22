@@ -24,11 +24,12 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, Varian
 
 const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   ({ className, variant, ...props }, ref) => {
-    const surface = variant === "default" || variant === "destructive" ? "navy" : "champagne";
+    const surface = variant === "default" || variant === "destructive" ? "emerald" : "champagne";
     return (
       <div
         ref={ref}
         data-surface={surface}
+        data-jj-badge={variant ?? "default"}
         className={cn(badgeVariants({ variant }), className)}
         {...props}
       />

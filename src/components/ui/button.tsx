@@ -13,10 +13,10 @@ import { cn } from "@/lib/utils";
  * ============================================================
  */
 
-// PRIMARY: champagne mother-of-pearl with gold hairline — premium default CTA.
+// PRIMARY: locked JBJ Emerald gradient with white foreground.
 // Contrast is locked globally by .jj-cta-* primitives in index.css.
 const BRAND_PRIMARY =
-  "jj-cta-champagne shadow-[0_4px_14px_-4px_rgba(184,149,85,0.35),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_10px_28px_-8px_rgba(184,149,85,0.5),inset_0_1px_0_rgba(255,255,255,0.95)] hover:-translate-y-0.5 active:translate-y-0";
+  "jj-cta-primary jj-cta-champagne shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)] hover:-translate-y-0.5 active:translate-y-0";
 
 // SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
@@ -40,8 +40,8 @@ const BRAND_MEDIA = BRAND_HERO;
 const BRAND_DARK =
   "jj-cta-dark hover:-translate-y-0.5 active:translate-y-0";
 
-// AI Tool button variants — keep AI premium purple identity
-const AI_MONO = "bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white border border-[#B89555]/40 shadow-sm";
+// AI Tool button variants — same locked CTA identity as primary actions.
+const AI_MONO = BRAND_PRIMARY;
 
 // Dark theme variants (for use on dark sections)
 const DARK_GHOST = "bg-transparent text-white border-2 border-[#B89555]/40 hover:bg-[#FDFBF7]/10 hover:border-[#B89555] transition-all";
@@ -117,13 +117,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const effectiveVariant = variant ?? "primary";
-    const surface = DARK_SURFACE_VARIANTS.has(effectiveVariant) ? "dark" : "champagne";
+    const isPrimaryCta = effectiveVariant === "primary" || effectiveVariant === "default" || effectiveVariant === "destructive" || effectiveVariant.startsWith("ai-");
+    const surface = DARK_SURFACE_VARIANTS.has(effectiveVariant) ? "dark" : isPrimaryCta ? "emerald" : "champagne";
     const cta = DARK_SURFACE_VARIANTS.has(effectiveVariant)
       ? "dark"
       : LIGHT_CTA_VARIANTS.has(effectiveVariant)
         ? effectiveVariant === "outline" || effectiveVariant === "ghost" || effectiveVariant === "link" || effectiveVariant === "secondary" || effectiveVariant === "tertiary"
           ? "outline"
-          : "champagne"
+          : "primary"
         : undefined;
 
     return (
