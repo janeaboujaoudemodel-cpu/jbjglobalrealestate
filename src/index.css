@@ -10249,3 +10249,246 @@ html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sideb
   background-image: var(--gradient-emerald) !important;
   box-shadow: 0 0 0 2px rgba(6,78,59,0.18), 0 0 10px rgba(16,185,129,0.55);
 }
+
+/* ============================================================
+   PASS XX-C — GLOBAL EMERALD BRAND ACCENT LAYER (LAST WORD)
+   This layer is appended LAST so it wins by source order over
+   every prior champagne / gold / ink primitive. It repaints
+   the shared interactive surfaces (primary buttons, default
+   badges, active tabs, active sidebar items, focus rings,
+   KPI accents, table accents, AI/notification dots) with the
+   approved Emerald gradient — without rewriting any page.
+   Champagne remains the dominant surface; Emerald is the
+   single brand ACCENT.
+   ============================================================ */
+
+:root {
+  /* Re-point legacy aliases so any consumer using --primary /
+     --ring / --accent / --sidebar-* automatically receives the
+     approved Emerald. HSL approximation of #064E3B. */
+  --primary: 158 86% 16%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 158 86% 16%;
+  --sidebar-primary: 158 86% 16%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-ring: 158 86% 16%;
+
+  /* Single brand-accent token consumers can read directly. */
+  --brand-accent: #064E3B;
+  --brand-accent-on: #FFFFFF;
+  --brand-accent-soft: #ECFDF5;
+}
+
+/* --- Primary CTA: champagne primitive → emerald gradient + white --- */
+.jj-cta-champagne,
+[data-cta="champagne"],
+button[data-surface="champagne"][data-cta="champagne"],
+.btn-primary,
+button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data-no-emerald]):not(.jj-cta-dark):not(.jj-cta-outline):not(.jj-cta-gold-metallic) {
+  background-image: var(--gradient-emerald) !important;
+  background-color: transparent !important;
+  color: var(--emerald-on) !important;
+  border: 1px solid rgba(6,78,59,0.55) !important;
+  box-shadow: 0 4px 14px -4px rgba(6,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+.jj-cta-champagne:hover,
+[data-cta="champagne"]:hover,
+button[data-surface="champagne"][data-cta="champagne"]:hover,
+.btn-primary:hover,
+button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data-no-emerald]):not(.jj-cta-dark):not(.jj-cta-outline):not(.jj-cta-gold-metallic):hover {
+  background-image: var(--gradient-emerald-hover) !important;
+  color: var(--emerald-on) !important;
+  box-shadow: 0 10px 28px -8px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.22) !important;
+}
+.jj-cta-champagne svg,
+[data-cta="champagne"] svg,
+.btn-primary svg {
+  color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+}
+
+/* --- Secondary / Outline CTA: champagne fill + emerald ink + emerald hairline --- */
+.jj-cta-outline,
+[data-cta="outline"] {
+  background-color: #FDFBF7 !important;
+  color: var(--emerald-1) !important;
+  border: 1px solid rgba(6,78,59,0.45) !important;
+}
+.jj-cta-outline:hover,
+[data-cta="outline"]:hover {
+  background-color: var(--emerald-soft-bg) !important;
+  color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+}
+.jj-cta-outline svg,
+[data-cta="outline"] svg {
+  color: var(--emerald-1) !important;
+  stroke: var(--emerald-1) !important;
+}
+
+/* --- Default Badge (.jj-badge-dark): emerald gradient + white --- */
+.jj-badge-dark {
+  background-image: var(--gradient-emerald) !important;
+  background-color: transparent !important;
+  color: var(--emerald-on) !important;
+  border-color: rgba(6,78,59,0.55) !important;
+}
+.jj-badge-dark svg { color: var(--emerald-on) !important; stroke: var(--emerald-on) !important; }
+
+/* Secondary badge (.jj-badge-champagne): champagne + emerald text */
+.jj-badge-champagne {
+  color: var(--emerald-1) !important;
+  border-color: rgba(6,78,59,0.30) !important;
+}
+.jj-badge-outline {
+  color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+}
+
+/* --- Active Tab / Segmented control: emerald gradient pill --- */
+[role="tab"][data-state="active"],
+[data-jj-segmented-trigger][data-state="active"],
+[data-state="active"][role="tab"] {
+  background-image: var(--gradient-emerald) !important;
+  color: var(--emerald-on) !important;
+  border-color: rgba(6,78,59,0.55) !important;
+  box-shadow: 0 4px 14px -4px rgba(6,78,59,0.45) !important;
+}
+[role="tab"][data-state="active"] svg,
+[data-jj-segmented-trigger][data-state="active"] svg {
+  color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+}
+
+/* --- Sidebar active item parity (frontend + backend) --- */
+[data-sidebar="menu-button"][data-active="true"],
+[data-sidebar-item][data-active="true"],
+aside [role="link"][aria-current="page"],
+aside a[aria-current="page"],
+nav[data-app-sidebar] a[aria-current="page"],
+.jj-sidebar-item-active {
+  background-image: var(--gradient-emerald) !important;
+  color: var(--emerald-on) !important;
+  border-color: rgba(6,78,59,0.55) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 6px 16px -8px rgba(6,78,59,0.55) !important;
+}
+[data-sidebar="menu-button"][data-active="true"] svg,
+[data-sidebar-item][data-active="true"] svg,
+aside a[aria-current="page"] svg,
+nav[data-app-sidebar] a[aria-current="page"] svg,
+.jj-sidebar-item-active svg {
+  color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+}
+
+/* --- Focus ring: emerald --- */
+.focus-visible\:ring-ring:focus-visible,
+.focus-visible\:ring-2:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[data-radix-select-trigger]:focus-visible,
+[data-radix-popover-trigger]:focus-visible {
+  --tw-ring-color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+  box-shadow: 0 0 0 3px var(--emerald-ring) !important;
+}
+
+/* --- Checkbox / Radio: emerald when checked --- */
+[role="checkbox"][data-state="checked"],
+[role="radio"][data-state="checked"],
+input[type="checkbox"]:checked + *,
+button[role="checkbox"][aria-checked="true"] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+  color: var(--emerald-on) !important;
+}
+button[role="checkbox"][aria-checked="true"] svg,
+[role="checkbox"][data-state="checked"] svg,
+[role="radio"][data-state="checked"] svg {
+  color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+}
+
+/* --- KPI / stat numbers: ink, not muted --- */
+[data-kpi-value],
+[data-stat-value],
+.kpi-value,
+.stat-value {
+  color: #1A1A1A !important;
+}
+[data-kpi-accent],
+[data-stat-accent] {
+  color: var(--emerald-1) !important;
+}
+
+/* --- Notification / online / AI dot: emerald glow --- */
+.online-dot,
+[data-presence="online"],
+[data-notification-dot],
+.notification-badge,
+[data-ai-dot] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  color: var(--emerald-on) !important;
+  box-shadow: 0 0 0 2px rgba(6,78,59,0.18), 0 0 10px rgba(16,185,129,0.55) !important;
+}
+
+/* --- Switch (Radix): emerald when on --- */
+button[role="switch"][data-state="checked"],
+[data-state="checked"][role="switch"] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+}
+
+/* --- Table row hover + selected: emerald wash --- */
+tbody tr:hover {
+  background-color: rgba(236, 253, 245, 0.55) !important;
+}
+tbody tr[data-state="selected"],
+tbody tr[aria-selected="true"] {
+  background-color: var(--emerald-soft-bg) !important;
+}
+
+/* --- IconTile gold-fill auto-flips to emerald in interactive contexts --- */
+a:hover [data-icon-tile][data-tone="gold"],
+button:hover [data-icon-tile][data-tone="gold"],
+[data-active="true"] [data-icon-tile][data-tone="gold"],
+[aria-current="page"] [data-icon-tile][data-tone="gold"] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+  color: var(--emerald-on) !important;
+}
+a:hover [data-icon-tile][data-tone="gold"] svg,
+button:hover [data-icon-tile][data-tone="gold"] svg,
+[data-active="true"] [data-icon-tile][data-tone="gold"] svg,
+[aria-current="page"] [data-icon-tile][data-tone="gold"] svg {
+  color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+}
+
+/* --- Single-select dropdown: hide any leftover indicator box --- */
+[role="option"]:not([data-multi="true"]) > span:first-child:empty,
+[role="menuitem"]:not([data-multi="true"]) > span:first-child:empty {
+  display: none !important;
+}
+
+/* --- Defade: kill global text-muted-foreground on titles & KPI labels --- */
+h1.text-muted-foreground,
+h2.text-muted-foreground,
+h3.text-muted-foreground,
+[data-kpi-label].text-muted-foreground,
+[data-card-title].text-muted-foreground {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Opt-out hook: any element marked [data-no-emerald] keeps its
+   prior champagne/gold/dark styling untouched. The emerald rules
+   above are scoped by class (.jj-cta-champagne, .jj-badge-dark,
+   etc.) so .jj-cta-dark and .jj-cta-gold-metallic are already
+   unaffected by source-order. */
+

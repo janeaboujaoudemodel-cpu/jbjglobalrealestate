@@ -1,172 +1,83 @@
-## PASS XX — Complete remaining implementation
+# PASS XX-C — Global Emerald Identity + Dropdown Fix
 
-### Pending requirements extracted
+One pass, applied at the **token + primitive layer** so every page inherits it. No per-page patches.
 
-1. **One locked Emerald system everywhere**
-   - Finish replacing badges, labels, status pills, notification badges, active tabs, active sidebar items, CTA buttons, AI badges, online dots, “Starter”, “Workspace”, “Live Roles”, “21 Open”, “Apply”, and “Meet Jessica” with the official Emerald gradient primitives.
-   - Add a regression guard so raw random green / dark green / faded green / browser default styles cannot reappear.
+## 1. Lock the Emerald gradient as the ONE brand accent
 
-2. **Remove the faded / disabled look**
-   - Remove unintended `opacity-50/60/70`, `text-muted-foreground/60`, low-alpha card text, and faded empty-state styling from enabled UI.
-   - Keep opacity only on true disabled states.
-   - First targets: Pending Tasks popup, task cards, statistics, empty states, placeholder cards, backend cards.
+Source of truth: the gradient already on the active vertical sidebar item.
 
-3. **Rebuild News page to JBJ identity**
-   - Remove `data-neon-page`, neon hero, ticker, blue/purple/cyan/fuchsia styling, and unnecessary labels like “DXB Interact” / “Daily Refresh”.
-   - Rebuild `/news` and `/news/:id` using Champagne surfaces, Emerald active states, gold hairlines, premium cards, reliable image fallbacks, and real-estate-only editorial structure.
-   - Keep only useful filters.
+In `src/index.css` `:root`:
+- Re-point `--emerald-1/2/3`, `--gradient-emerald`, `--gradient-emerald-hover`, `--emerald-ring`, `--emerald-soft-bg`, `--emerald-soft-fg`, `--emerald-on` to that exact sidebar-active gradient + ink token.
+- Re-point legacy aliases used across the app to the same tokens (no parallel palettes):
+  - `--primary`, `--ring`, `--accent`, `--sidebar-primary`, `--sidebar-ring`, `--sidebar-accent`
+  - `--ai-emerald`, `--ink-emerald-1/2/3`
+- Add `--brand-accent` = emerald and `--brand-accent-on` = white. All primitives below read from this.
 
-4. **Tighten News content pipeline**
-   - Update the existing backend news collector to accept only Dubai/UAE real-estate topics: DLD, RERA, developers, launches, off-plan, investment, mortgages, visas, market reports, luxury, commercial, and economic updates affecting property.
-   - Block unrelated articles such as traffic fines, general lifestyle, transport, generic government updates, unrelated business news.
-   - Remove / block forbidden competitor sources already disallowed by project policy.
-   - Add content validation before insert and before display so old unrelated articles do not surface.
+## 2. Repaint shared primitives (one edit each — cascades site-wide)
 
-5. **Fix broken cards and missing media states**
-   - Replace blank thumbnails with a premium JBJ fallback tile.
-   - Prevent empty titles/excerpts from rendering as broken cards.
-   - Remove loading screenshots from final proof; loading states stay polished but final screenshots must be settled.
+- `src/components/ui/button.tsx` — `primary`/`default`/`destructive` → emerald gradient + white fg + emerald ring. `secondary`/`outline`/`ghost` → champagne fill + emerald fg + emerald hairline. Keep `dark`/`hero` for dark surfaces.
+- `src/components/ui/badge.tsx` — `default` → emerald solid, `secondary` → champagne + emerald fg, `outline` → emerald hairline.
+- `src/components/ui/tabs.tsx` — active trigger → emerald underline + emerald fg (champagne tab strip). Same primitive used by horizontal tabs everywhere.
+- `src/components/ui/card.tsx` — champagne surface + emerald hairline on hover; add `data-tone="emerald"` variant = emerald gradient surface + white content (for KPI/feature cards).
+- `src/components/ui/input.tsx`, `select.tsx`, `textarea.tsx` — focus ring → emerald.
+- `src/components/ui/table.tsx` — header divider + row hover → emerald wash; selected row → emerald soft.
+- `src/components/ui/sidebar.tsx` — active item already emerald; mirror the EXACT styles into `premium-backend-layout.tsx` so frontend + backend sidebars are byte-identical.
+- `src/components/ui/icon-tile.tsx` — default tone switches from gold to **emerald** for active/interactive contexts; gold reserved for hairline accents only.
+- Charts: update `src/lib/dataColors.ts` primary series to emerald scale.
 
-6. **Hero stability**
-   - Ensure critical hero sections never disappear into blank/loading-only layouts.
-   - Add stable fallback hero content for News and key portal dashboards.
+## 3. Dropdown checkbox fix (global)
 
-7. **404 / dead-link audit**
-   - Walk links from sitemap, sidebars, menus, and portal navigation.
-   - Any linked route must either resolve to a real page or be removed/redirected.
-   - Fix routes that currently point to placeholders or wrong portal surfaces where a real page exists.
+The square boxes come from `CommandItem` / `SelectItem` rendering a check indicator slot even in single-select menus.
 
-8. **Fullscreen behavior**
-   - Remove persisted / automatic fullscreen behavior.
-   - Owner/backend sidebars must remain visible by default.
-   - Keep fullscreen as an explicit icon-only action only; no page should auto-hide vertical navigation.
+- `src/components/ui/select.tsx` — `SelectItem` removes the leading square frame. Checkmark only on `data-state="checked"`, rendered as a 14px emerald check glyph (no box).
+- `src/components/ui/dropdown-menu.tsx` — same: plain rows for `DropdownMenuItem`. `DropdownMenuCheckboxItem` keeps a real 16px checkbox (emerald when checked, champagne hairline when not), aligned with 10px gap, never overlapping label.
+- `src/components/ui/command.tsx` — `CommandItem` renders plain row; only show a check when explicitly `data-selected` AND parent has `data-multi="true"`.
+- `src/components/ui/popover.tsx` content — keep champagne `#FDFBF7` + gold hairline (already locked).
+- Audit `MultiSelect`/filter components to opt-in via `data-multi="true"`; everything else inherits plain rows automatically.
 
-9. **Portal wiring parity**
-   - Owner Panel, Broker Portal, Developer Portal, and Investor Portal must each open their own pages correctly.
-   - Fix pages that only work in broker mode but are linked from Owner.
-   - Add a proper vertical Developer Portal shell; current developer portal uses a horizontal top nav and violates the sidebar requirement.
-   - Investor routes need a portal-style shell or canonical route set before screenshot verification.
+## 4. Sidebar parity (frontend ↔ backend)
 
-10. **Navigation/header active-state sync**
-   - Fix mismatches where sidebar item says one section but the rendered page header says another.
-   - Derive page titles from the same route registry used by the sidebar where possible.
+- Extract sidebar item styles into a single class `.jj-sidebar-item` + `.jj-sidebar-item-active` (emerald gradient pill, white icon + label, emerald ring) in `index.css`.
+- Rewrite the active-state CSS in both `Sidebar` (frontend) and `premium-backend-layout.tsx` (backend) to use those classes. Icon tiles inside both use `<IconTile tone="emerald-active" />` when active.
 
-11. **Backend card restyle**
-   - Restyle shared backend card primitives and empty states: No Database, No Activity, statistics, icons, Starter labels, Workspace badges, activity cards.
-   - Make backend cards inherit the same Premium JBJ Champagne + Emerald system automatically.
+## 5. Global de-fade
 
-12. **Global visual verification**
-   - Validate desktop and mobile.
-   - Walk every sidebar route across all 4 portals.
-   - Screenshot only after pages are functional, wired, settled, and visually compliant.
+In `index.css` add a scoped rule (NOT on disabled): replace `text-muted-foreground` usage on KPI numbers, card titles, empty-state titles by giving them `--ink: #1A1A1A`. Leave true secondary copy at 70% ink, never below.
 
----
+## 6. Verification (Playwright, 1280x1800 + 390x844)
 
-## Implementation plan
+Walk these routes, screenshot each, assert: (a) sidebar active item uses emerald gradient, (b) at least one emerald CTA visible, (c) no `bg-black` primary CTA, (d) open one select on each page and confirm no square box on single-select items.
 
-### Phase 1 — Lock shared UI primitives
+Routes: `/`, `/news`, `/careers`, `/guides`, `/ai-tools`, `/owner`, `/owner/crm`, `/owner/inbox`, `/owner/calendar`, `/owner/tasks`, `/owner/reports`, `/broker`, `/developer-hub`, `/investor`, `/404`.
 
-- Update shared primitives:
-  - `src/components/ui/button.tsx`
-  - `src/components/ui/badge.tsx`
-  - `src/components/ui/tabs.tsx`
-  - `src/components/ui/card.tsx`
-  - `src/components/ui/premium-backend-layout.tsx`
-  - `src/components/ui/emerald/*`
-  - `src/index.css`
-- Make active tabs and primary CTAs use the official Emerald gradient with white foreground.
-- Make secondary CTAs Champagne with Emerald foreground.
-- Make badges default to Emerald solid/soft/outline variants instead of black/template styling.
-- Add CSS-level normalization for common backend status chips and card labels so pages inherit the system automatically.
-- Remove broad faded text/card styling except for `[disabled]`, `[aria-disabled="true"]`, and explicit disabled classes.
+Screenshots saved to `/mnt/documents/passxx-c/` and surfaced inline.
 
-### Phase 2 — News visual + content rebuild
+## Files touched (≈15, all primitives — no per-page edits)
 
-- Rebuild `src/pages/News.tsx`:
-  - remove neon wrapper and ticker;
-  - remove blue/purple category palettes;
-  - use a Champagne page shell, Emerald active filters, gold hairline borders, premium cards, and JBJ fallback image tiles;
-  - hide irrelevant/untrusted articles at render time;
-  - keep only real-estate filters.
-- Rebuild `src/pages/NewsDetail.tsx`:
-  - remove stock image fallbacks and dark/neon article shell;
-  - use same Champagne/Emerald editorial style as News;
-  - use safe fallback hero tile when image is missing/broken.
-- Update existing backend news functions:
-  - `supabase/functions/ai-news-collector/index.ts`
-  - `supabase/functions/news-extract-from-link/index.ts` if needed for manual imports
-  - `supabase/functions/import-provident-blog/index.ts`
-- Add strict topic scoring/keyword allowlist and unrelated-topic blocklist before insert/update.
-- Ensure old unrelated DB rows are filtered from the UI even before the next collection run.
+```
+src/index.css
+src/lib/dataColors.ts
+src/components/ui/button.tsx
+src/components/ui/badge.tsx
+src/components/ui/tabs.tsx
+src/components/ui/card.tsx
+src/components/ui/input.tsx
+src/components/ui/select.tsx
+src/components/ui/textarea.tsx
+src/components/ui/table.tsx
+src/components/ui/sidebar.tsx
+src/components/ui/dropdown-menu.tsx
+src/components/ui/command.tsx
+src/components/ui/icon-tile.tsx
+src/components/ui/premium-backend-layout.tsx
+```
 
-### Phase 3 — Portal shells, fullscreen, and navigation wiring
+Plus a Playwright verification script under `/tmp/browser/passxx-c/`.
 
-- Owner:
-  - `src/pages/OwnerDashboardShell.tsx`
-  - `src/components/owner-dashboard/OwnerSidebarNav.tsx`
-  - remove persisted auto-fullscreen from Owner shell;
-  - keep sidebar visible by default;
-  - align CRM query-based active states with page header/section.
-- Broker:
-  - `src/components/broker-portal/BrokerPortalLayout.tsx`
-  - `src/components/broker-portal/BrokerPortalSidebar.tsx`
-  - fix sidebar links that point outside the broker portal or cause mode/route mismatch.
-- Developer:
-  - `src/pages/developers-portal/PortalShell.tsx`
-  - convert horizontal developer nav into a vertical sidebar shell with the same L-frame pattern.
-  - replace placeholder-only pages with either real routed surfaces or remove/redirect their nav entries.
-- Investor:
-  - build or normalize canonical investor portal routes and shell around existing investor pages (`/investor-hub`, `/investor-dashboard`, reports/portfolio routes).
-  - remove dark purple/fuchsia investor hub styling and align with JBJ Champagne/Emerald.
-- Tool fullscreen:
-  - `src/components/tools/FullscreenToolToggle.tsx`
-  - `src/index.css`
-  - ensure fullscreen only activates after user click and never persists/auto-starts.
+## Out of scope (intentionally)
 
-### Phase 4 — Dead-link and 404 cleanup
+- No per-page rewrites. If a page still looks wrong after primitives ship, it's because it bypassed primitives — those get a follow-up surgical fix listed in the verification report, not in this pass.
+- No content/copy changes.
+- No backend/data changes.
 
-- Create a route/navigation audit script that extracts links from:
-  - owner sidebar
-  - broker sidebar
-  - developer portal nav
-  - investor portal nav
-  - sitemap/menu route registries
-- For every linked path:
-  - if the page exists: keep and verify;
-  - if moved: redirect to canonical route;
-  - if unfinished placeholder: remove from nav until real;
-  - if portal-specific: route inside that portal, not another portal.
-
-### Phase 5 — Backend card and empty-state sweep
-
-- Restyle shared cards/empty states through primitives first, then targeted fixes only where needed.
-- Replace template-looking labels/cards such as “No Database”, “No Activity”, “Starter”, “Workspace”, “Live Roles”, and count pills with Emerald/Champagne components.
-- Use `IconTile` for icons per project standard.
-- Remove raw blue/purple/gray/black template accents from backend dashboards.
-
-### Phase 6 — Visual validation and screenshot proof
-
-- Use Playwright against the live preview with restored auth session.
-- Viewport set to `1280x1800` for desktop and a mobile viewport pass.
-- Walk every sidebar route across:
-  - Owner Panel
-  - Broker Portal
-  - Developer Portal
-  - Investor Portal
-- For every route:
-  - wait for loading to settle;
-  - assert no visible 404;
-  - assert sidebar remains visible unless the user explicitly clicked fullscreen;
-  - assert active sidebar item matches visible page section;
-  - assert no raw random green/blue/purple/neon classes on visible core UI;
-  - take screenshot to `/tmp/browser/pass-xx/...`.
-- Report only final verified screenshots and a route-by-route pass/fail summary.
-
----
-
-## Technical notes
-
-- This will be implemented as a system pass, not isolated page patches.
-- Backend changes will use the existing Lovable Cloud functions and database connection.
-- No public emails/contact details will be exposed in screenshots or UI.
-- No existing features will be removed unless they are dead links/placeholders explicitly causing broken navigation; moved functionality will be redirected to canonical routes.
+Approve and I execute end-to-end, then post the Playwright screenshot grid as proof.
