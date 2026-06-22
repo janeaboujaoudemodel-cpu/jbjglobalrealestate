@@ -28,6 +28,20 @@ const DesignFavoriteButton = ({
 
   const sizeClasses = { sm: "w-8 h-8", md: "w-10 h-10" };
   const iconSizes = { sm: "w-4 h-4", md: "w-5 h-5" };
+  const emeraldButtonStyle: React.CSSProperties = {
+    backgroundImage: "var(--jj-emerald-ombre)",
+    backgroundColor: "#064E3B",
+    color: "#FFFFFF",
+    WebkitTextFillColor: "#FFFFFF",
+    borderColor: "rgba(255,255,255,0.35)",
+    opacity: 1,
+  };
+  const whiteIconStyle: React.CSSProperties = {
+    color: "#FFFFFF",
+    stroke: "#FFFFFF",
+    opacity: 1,
+    filter: "none",
+  };
 
   const handleFav = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -68,13 +82,14 @@ const DesignFavoriteButton = ({
             data-emerald="true"
             data-card-action="favorite"
             className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
+            style={emeraldButtonStyle}
           >
             <Heart
               className={`${iconSizes[size]} allow-white transition-all duration-200`}
               color="#FFFFFF"
               stroke="#FFFFFF"
               fill={isFavorite ? "#FFFFFF" : "none"}
-              style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+              style={whiteIconStyle}
             />
           </button>
         </TooltipTrigger>
@@ -93,11 +108,12 @@ const DesignFavoriteButton = ({
               data-emerald="true"
               data-card-action="shortlist"
               className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
+              style={emeraldButtonStyle}
             >
               {isShortlisted ? (
-                <Check className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <Check className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
               ) : (
-                <ListPlus className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <ListPlus className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
               )}
             </button>
           </TooltipTrigger>

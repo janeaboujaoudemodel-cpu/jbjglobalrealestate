@@ -162,8 +162,13 @@ const ContinueSearching = ({
         {/* Header */}
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
-            <div className="jj-history-emerald-icon allow-white w-10 h-10 rounded-full flex items-center justify-center shadow-sm" data-surface="emerald" data-emerald="true">
-              <History className="w-5 h-5 allow-white" color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <div
+              className="jj-history-emerald-icon allow-white w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+              data-surface="emerald"
+              data-emerald="true"
+              style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}
+            >
+              <History className="w-5 h-5 allow-white" color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1, filter: "none" }} />
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
