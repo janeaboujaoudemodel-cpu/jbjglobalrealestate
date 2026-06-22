@@ -9929,3 +9929,13 @@ html body input.mortgage-range-input::-moz-range-track {
 html body input[type="range"][data-mortgage-slider="Compare rate"] {
   background-image: none !important;
 }
+
+/* PASS 44c — last word: champagne parent locks can never turn emerald foreground ink. */
+html body :is(.jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card, .jj-pill-emerald, .jj-bg-emerald, .jj-tab-active-metallic, .jj-dual-cta-primary, [data-emerald], [data-emerald="true"], [data-jj-emerald], [data-sidebar-owner-item][data-emerald="true"]),
+html body :is(.jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card, .jj-pill-emerald, .jj-bg-emerald, .jj-tab-active-metallic, .jj-dual-cta-primary, [data-emerald], [data-emerald="true"], [data-jj-emerald], [data-sidebar-owner-item][data-emerald="true"]) *,
+html body :is(.jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card, .jj-pill-emerald, .jj-bg-emerald, .jj-tab-active-metallic, .jj-dual-cta-primary, [data-emerald], [data-emerald="true"], [data-jj-emerald], [data-sidebar-owner-item][data-emerald="true"]):is(:hover,:focus,:focus-visible,:active),
+html body :is(.jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card, .jj-pill-emerald, .jj-bg-emerald, .jj-tab-active-metallic, .jj-dual-cta-primary, [data-emerald], [data-emerald="true"], [data-jj-emerald], [data-sidebar-owner-item][data-emerald="true"]):is(:hover,:focus,:focus-visible,:active) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
