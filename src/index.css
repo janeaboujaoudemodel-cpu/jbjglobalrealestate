@@ -9607,14 +9607,13 @@ html body :is(a, button, span, div).jj-pill-emerald > * {
 }
 
 /* PASS 40 — FINAL VISUAL LOCK: wins after every global emerald/contrast pass.
-   Top Areas chips/buttons must be one solid emerald with white labels/icons.
-   Dual PearlButton CTAs must match AI Property Comparison: emerald primary +
-   champagne secondary, including hover. */
+   Top Areas chips/buttons must use the EXACT header emerald ombré token
+   (AED / Mode Broker / horizontal header), with white labels/icons. */
 html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .jj-area-explore-pill),
 html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .jj-area-explore-pill):is(:hover,:focus,:focus-visible,:active) {
-  background: #064E3B !important;
+  background: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
-  background-image: none !important;
+  background-image: var(--jj-emerald-ombre) !important;
   background-blend-mode: normal !important;
   border-color: rgba(255,255,255,.30) !important;
   color: #FFFFFF !important;
@@ -9623,6 +9622,12 @@ html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .j
   filter: none !important;
   animation: none !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 -1px 0 rgba(0,0,0,.24), 0 10px 24px -12px rgba(6,78,59,.90) !important;
+}
+
+html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .jj-area-explore-pill):is(:hover,:focus,:focus-visible,:active) {
+  background: var(--jj-emerald-ombre-hover) !important;
+  background-color: #064E3B !important;
+  background-image: var(--jj-emerald-ombre-hover) !important;
 }
 
 html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .jj-area-explore-pill),
@@ -9651,15 +9656,17 @@ html body section#top-areas-dubai :is(.jj-emerald-chip, .jj-area-status-chip, .j
 
 html body .jj-dual-cta-primary,
 html body .jj-dual-cta-primary:is(:hover,:focus-visible,:active) {
-  background: linear-gradient(90deg, #064E3B 0%, #053D2F 55%, #000000 100%) !important;
+  background: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
-  background-image: linear-gradient(90deg, #064E3B 0%, #053D2F 55%, #000000 100%) !important;
+  background-image: var(--jj-emerald-ombre) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: 0 8px 24px rgba(10,10,10,0.50) !important;
 }
 
 html body .jj-dual-cta-primary:is(:hover,:focus-visible) {
+  background: var(--jj-emerald-ombre-hover) !important;
+  background-image: var(--jj-emerald-ombre-hover) !important;
   transform: translateY(-2px) !important;
 }
 
