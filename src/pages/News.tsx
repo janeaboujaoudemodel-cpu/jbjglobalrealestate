@@ -41,7 +41,7 @@ const News = () => {
 
 
   // Fetch news from database
-  const { data: dbNews, isLoading, refetch } = useQuery({
+  const { data: dbNews, isLoading } = useQuery({
     queryKey: ['market-news'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -299,7 +299,7 @@ const News = () => {
             <div className="mb-12">
               <div className="py-6 px-4 md:px-6">
                 <article 
-                  className="jbj-neon-frame group relative bg-[#FDFBF7]/85 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-[0_24px_60px_-12px_rgba(167,139,250,0.45)]"
+                  className="group relative bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(184,149,85,0.35)]"
                   onClick={() => navigate(`/news/${filteredNews[0].id}`)}
                 >
                   <div className="grid md:grid-cols-2 gap-0">
