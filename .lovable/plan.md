@@ -1,65 +1,80 @@
+## Goal
 
-# Global Sidebar + Backend Styling Cleanup
+Fix the backend Overview UI: kill the swipe-fill animation on active sidebar items, force white text/icons on emerald, and restyle the Owner Command Center cards/tabs/quick-actions to the champagne + emerald premium standard. No route or functionality changes.
 
-Scope: styling only. No layout, content, route, or logic changes. Every step ends with a Playwright screenshot before moving on.
+## 1. Sidebar active state (`src/components/navigation/GlobalVerticalNav.tsx` + `src/index.css`)
 
-## 1. Front-end vertical sidebar (`GlobalVerticalNav.tsx` + `SidebarModePortalBlock.tsx`)
+Symptom in screenshot: active "Overview" row paints a dark emerald pill, but the label/icon read as near-black because a late `shimmerSweep` / `jbj-champagne-shimmer` / `metallicSweep` animation runs across the pill and a leftover champagne fill bleeds into the foreground.
 
-- Widen sidebar from current ~200px to **236px** (collapsed stays 72px), bump container `border-radius` on the portal pill so "BROKER PORTAL" label fits on one line without truncation.
-- Remove the emerald-filled background from **AI Home Finder, List Your Property, Careers, Resale Properties** nav rows. They must render as plain rows: emerald icon-tile + ink (#1A1A1A) label on champagne. Only the *currently active* route gets the dark emerald fill (same treatment as "My Account").
-- Active row: keep the dark emerald gradient pill, force `color:#FFFFFF` on label + chevron + icon glyph (via existing emerald-surface white-fg guard; add the row selector if missing).
-- All sidebar icons globally wrapped in the emerald `IconTile` with a white glyph. Add a CSS guard scoped to `[data-sidebar-root] .jj-icon-tile svg { color:#FFFFFF !important; stroke:#FFFFFF !important; }`.
+- Remove sweep classes from the active sidebar row (`jbj-shimmer-champagne`, `animate-shimmer`, `jj-metallic-active` if applied to nav rows). Keep emerald gradient background only.
+- Add a scoped CSS lock in `index.css` (new PASS 47 block):
+  - `[data-sidebar-root] [data-active="true"]` → `background: linear-gradient(135deg,#064E3B,#0A6B4E)`, `color:#FFFFFF !important`, `animation:none !important`, `box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 1px 0 rgba(0,0,0,.15)`.
+  - All descendant `svg`, `span`, `[data-label]` → `color:#FFFFFF !important; stroke:#FFFFFF !important`.
+  - Kill any `::before`/`::after` sweep on `[data-sidebar-root] [data-active="true"]` (`content:none !important`).
+- Replace sweep with a **very subtle** metallic sheen: a single `inset 0 1px 0 rgba(255,255,255,.10)` highlight + 0.5px white top edge. No keyframe animation on resting active.
+- Hover on active = no foreground flip (white stays white).
 
-## 2. Contact / Support / Collapse footer buttons
+Swipe/fill animations remain available **only** for explicit swipe tutorial primitives (e.g., `.jj-swipe-hint`); guard via class selector.
 
-- "Contact Us" and "Support": outlined variant — `bg:transparent`, `border:1px solid #064E3B`, emerald text + emerald icon at rest. Hover → fill `var(--jj-emerald-ombre)`, text + icon flip to white.
-- "Collapse": same outlined-emerald rest + emerald-fill hover; if a solid variant is required, keep emerald fill with white label + chevron.
+## 2. Owner Command Center cards (`src/pages/OwnerDashboardOverview.tsx`)
 
-## 3. Backend sidebars (Broker / Developer / Owner / Investor / Admin)
+Stat tiles (Total Leads / New This Week / Pending Tasks / Active Chats) and Quick Actions currently use plain champagne with ink icons — keep champagne but:
 
-Files: `BrokerPortalSidebar.tsx`, `OwnerDashboardSidebar` (and its developer/investor/admin equivalents), `JBJSidebar.tsx`.
+- Icon = emerald `IconTile` (tone="emerald" white glyph) per global IconTile standard.
+- Card surface stays champagne `#F7F2EA` with 1px `#B89555/40` hairline; rounded-2xl; consistent `p-5`.
+- Title text ink `#1A1A1A`, value `#1A1A1A` 28px semibold, subtitle ink/70.
+- Quick Action grid: uniform `aspect-[5/4]`, center-aligned emerald IconTile (44px), 13px label, no truncation. Same grid on mobile = 2 cols, tablet = 3, desktop = 6.
 
-- Replace ad-hoc styling with the same primitives used by the front-end vertical sidebar:
-  - Champagne surface `#F7F2EA`, gold hairline border, identical row radius/padding/spacing.
-  - Every row icon wrapped in emerald `IconTile` with white glyph.
-  - Active row = dark emerald pill with WHITE label + chevron + icon.
-  - Footer buttons (Return to Site / Sign Out / Collapse / Back to JBJ Owner) follow the outlined-emerald → emerald-fill-on-hover rule.
+## 3. Tab bar (Overview / All Leads / Flagged / VIP Leads / Leads Management / Employees Hub / Audit Logs)
 
-## 4. Backend page surfaces
+- Active tab: emerald gradient pill, WHITE label + WHITE icon, NO sweep animation (same PASS 47 lock applies via `[role="tab"][data-state="active"]` selector scoped to `[data-owner-overview]`).
+- Inactive tab: transparent, emerald icon, ink label, hover = champagne raised `#EFE6D6`.
 
-Global CSS additions only (no per-page rewrites):
+## 4. Metric cards row (Calls Made / WhatsApp / Follow-ups / Total Leads / Hot/Warm/Cold/Stale / Conversion / Response)
 
-- Enforce champagne page background (`#FDFBF7`) on all backend route shells already using `data-surface="champagne"`.
-- Small emerald accent cards/badges/tabs/section titles: any element with `data-emerald-fill` or `.jj-cta-emerald` / `.jj-badge-emerald` → text + svg locked to `#FFFFFF` at rest and hover (extend the existing emerald-white-fg guard with the few missing selectors).
-- Form field borders, tab underlines, small internal cards: emerald accent `#064E3B` at 1px.
+- Champagne card, emerald IconTile top-right, gold hairline, value 26px ink, caption ink/65.
+- Sentinel attribute `data-metric-card` so the CSS lock can guarantee no black-on-emerald inside child badges.
 
-## 5. Guides/Reports, AI Tools, Careers, Book inner pages
+## 5. Global emerald-box contrast guard (additive in `index.css`)
 
-- Apply the champagne shell wrapper + emerald accent tokens (no layout change).
-- Book covers untouched. Inner book page: ensure the body content renders (existing data source) and the page chrome (header, breadcrumbs, CTA pill) uses the same champagne + emerald system.
+Extend the existing emerald-white-fg rule with explicit selectors for backend surfaces missed today:
 
-## 6. Validation (mandatory before reply)
+```
+[data-sidebar-root] [data-active="true"],
+[data-owner-overview] [data-state="active"],
+.jj-pill-emerald-metallic,
+.jj-cta-emerald {
+  color:#FFFFFF !important;
+  animation:none !important;
+}
+[data-sidebar-root] [data-active="true"] *,
+[data-owner-overview] [data-state="active"] * {
+  color:#FFFFFF !important;
+  stroke:#FFFFFF !important;
+  fill:none;
+}
+```
 
-Drive Playwright headless on localhost:8080 and capture screenshots for:
-- `/` front-end sidebar (expanded + collapsed)
-- `/broker/portal` sidebar
-- `/developers-portal` sidebar
-- `/owner` sidebar
-- `/investor-dashboard` sidebar
-- `/guides` (or `/reports`) listing page
-- `/tools`
-- `/careers`
-- One opened book inner page
+## 6. Other backend pages (CRM, Calendar, Notes, Tasks, Inbox, Messages, Team Chat, Marketing, Employee Hub, Brokers Registry)
 
-Each screenshot reviewed; any remaining black-on-emerald, missing icon tile, or truncated "Broker Portal" label is patched and re-shot before declaring done.
+Pure CSS-level inheritance via the same selectors above + `data-owner-overview` (rename root attr to `data-backend-shell` and add it to each page's top wrapper). No layout/structure edits — only ensure each page root has `data-backend-shell` so the contrast + no-sweep rules apply globally.
 
-## Files expected to change
+## 7. Validation (Playwright, headless)
 
-- `src/components/navigation/GlobalVerticalNav.tsx`
-- `src/components/navigation/SidebarModePortalBlock.tsx`
-- `src/components/broker-portal/BrokerPortalSidebar.tsx` (+ layout file if widths change)
-- `src/components/owner-dashboard/...Sidebar.tsx` (Owner + Developer + Investor + Admin variants)
-- `src/components/jbj-broker/JBJSidebar.tsx`
-- `src/index.css` (additive guard block; no removals)
+Capture screenshots at 1280x1800 and 414x900:
+- `/owner` Overview (sidebar active state close-up + full page)
+- `/owner` Quick Actions grid
+- `/owner` tab row Active=Overview, then click All Leads
+- `/broker/portal`, `/broker/crm`, `/broker/calendar`, `/broker/tasks`, `/broker/messages`
+- Mobile: `/owner` at 414x900
 
-No route, schema, content, or business-logic edits.
+Save under `/tmp/browser/backend-overview/screenshots/` and inspect each before claiming done. If any black-on-emerald or sweep animation remains, iterate.
+
+## Files
+
+- `src/index.css` — additive PASS 47 lock block; no removals.
+- `src/components/navigation/GlobalVerticalNav.tsx` — strip sweep class from active row, ensure inline `data-active`.
+- `src/pages/OwnerDashboardOverview.tsx` — IconTile swap, uniform Quick Action grid, `data-backend-shell` root.
+- Backend page roots (CRM, Calendar, Tasks, Notes, Inbox, Messages, Marketing, Employee Hub, Brokers Registry) — add `data-backend-shell` attribute only.
+
+No route, schema, or functional changes.
