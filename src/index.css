@@ -10676,4 +10676,122 @@ html body [data-surface="emerald"][data-cta="primary"] :is(span, svg, [class*="l
   stroke: var(--emerald-on) !important;
 }
 
+/* ============================================================
+   PASS XX-E — GLOBAL JBJ SYSTEM INHERITANCE LAYER
+   Pages should never need to remember "make this Emerald".
+   Section labels, KPI tiles, empty states, status dots,
+   chevrons, and active arrows inherit the system here.
+   ============================================================ */
+
+/* 1. Gold IconTile is the system's CHAMPAGNE tile — its glyph must
+      always render in Emerald, never black. (Anywhere, any page.) */
+html body [data-icon-tile][data-icon-tile-tone="gold"] {
+  background-color: var(--emerald-soft-bg) !important;
+  background-image: none !important;
+  border-color: rgba(6, 78, 59, 0.25) !important;
+  box-shadow: inset 0 0 0 1px rgba(6, 78, 59, 0.10) !important;
+}
+html body [data-icon-tile][data-icon-tile-tone="gold"] :is(svg, [class*="lucide"]),
+html body [data-icon-tile][data-icon-tile-tone="gold"] :is(svg, [class*="lucide"]) * {
+  color: var(--emerald-1) !important;
+  stroke: var(--emerald-1) !important;
+  fill: none !important;
+}
+
+/* 2. Eyebrow / section-label plaques — small uppercase chips with the
+      gold hairline pattern get an Emerald inner badge + Emerald label
+      accent automatically. The pages don't have to set this. */
+html body :is(
+  .jj-section-eyebrow,
+  [data-section-label],
+  [data-eyebrow]
+) {
+  border-color: rgba(6, 78, 59, 0.35) !important;
+}
+html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) :is(svg, [class*="lucide"]) {
+  color: var(--emerald-1) !important;
+  stroke: var(--emerald-1) !important;
+}
+html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) > span:first-child {
+  background-color: var(--emerald-soft-bg) !important;
+  border-color: rgba(6, 78, 59, 0.30) !important;
+}
+
+/* 3. Section headers / "All updates >" / "→" arrows used as nav cues
+      inherit Emerald, not muted ink. Scoped to elements that opt in
+      via [data-section-arrow] or to ArrowRight icons living inside
+      a [data-section-header] container. */
+html body :is([data-section-arrow], [data-section-header] a > svg.lucide-arrow-right,
+              [data-section-header] button > svg.lucide-arrow-right) {
+  color: var(--emerald-1) !important;
+  stroke: var(--emerald-1) !important;
+}
+
+/* 4. KPI tiles — anything tagged [data-kpi] gets an Emerald icon tile
+      and Emerald hover arrow automatically. KPI metric stays ink for
+      readability (already locked above). */
+html body [data-kpi] [data-icon-tile],
+html body [data-kpi] .jj-icon-box {
+  background-color: var(--emerald-1) !important;
+  background-image: var(--gradient-emerald) !important;
+  border-color: var(--emerald-1) !important;
+}
+html body [data-kpi] [data-icon-tile] :is(svg, [class*="lucide"]),
+html body [data-kpi] .jj-icon-box :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 5. Empty states — global premium contract. Any container marked
+      [data-empty-state] (the BrokerEmptyState primitive does this)
+      forces the icon tile to Emerald + white glyph and centers
+      hierarchy regardless of page. */
+html body [data-empty-state] {
+  background-color: #FDFBF7 !important;
+  border-color: rgba(6, 78, 59, 0.18) !important;
+}
+html body [data-empty-state] [data-empty-state-icon],
+html body [data-empty-state] [data-icon-tile] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+}
+html body [data-empty-state] [data-empty-state-icon] :is(svg, [class*="lucide"]),
+html body [data-empty-state] [data-icon-tile] :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 6. Generic "no data" / "no results" fallback wrappers that legacy
+      pages use without the primitive — auto-emerald their lucide icon
+      as long as they sit on a champagne/white surface. */
+html body :is(.empty-state, .no-results, .no-data) :is(svg, [class*="lucide"]):not([data-no-contrast-guard] *) {
+  color: var(--emerald-1) !important;
+  stroke: var(--emerald-1) !important;
+}
+
+/* 7. Online / active / status dots — always Emerald, never default
+      green / gray. Already covered for .online-dot above; extend to
+      common Tailwind dot patterns that older pages still use. */
+html body :is(
+  .bg-green-400, .bg-green-500, .bg-green-600,
+  .bg-emerald-400, .bg-emerald-500, .bg-emerald-600
+).rounded-full {
+  background-color: var(--emerald-1) !important;
+  background-image: var(--gradient-emerald) !important;
+}
+
+/* 8. Active filter chips / pill triggers (sort, segmented, filter bar)
+      — when consumers tag with [data-active="true"] the system paints
+      the active state Emerald with white text/icons. */
+html body :is([data-filter-chip], [data-pill])[data-active="true"] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  color: #FFFFFF !important;
+  border-color: var(--emerald-1) !important;
+}
+html body :is([data-filter-chip], [data-pill])[data-active="true"] :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
 
