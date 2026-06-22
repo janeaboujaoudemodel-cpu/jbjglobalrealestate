@@ -163,25 +163,25 @@ export const GlobalVisitorTracking = () => {
 
     const sessionId = getSessionId();
     try {
-      const { error: upsertError } = await supabase
-        .from('visitor_sessions')
-        .upsert({
-          session_id: sessionId,
+      const { error: upsertError } = await supabase.rpc('track_visitor_session_upsert', {
+        p_session_id: sessionId,
+        p_payload: {
           device_type: getDeviceType(),
           browser: getBrowserInfo(),
           os: getOS(),
           referrer: document.referrer || null,
           landing_page: location.pathname,
           pages_visited: 1,
-          user_id: user?.id || null,
           user_agent: navigator.userAgent,
-        } as any, { onConflict: 'session_id' });
+        } as never,
+      });
 
       if (upsertError && import.meta.env.DEV) {
         console.warn('Legacy visitor tracking unavailable:', upsertError.message);
       }
     } catch { /* silent */ }
-  }, [location.pathname, user]);
+  }, [location.pathname]);
+
 
   // ── Track page view ──
   const trackPageView = useCallback(async () => {
@@ -218,10 +218,12 @@ export const GlobalVisitorTracking = () => {
       const pagesVisited = parseInt(sessionStorage.getItem('pages_visited') || '0') + 1;
       sessionStorage.setItem('pages_visited', pagesVisited.toString());
 
-      // Single combined update instead of two separate calls
-      void supabase.from('visitor_sessions')
-        .update({ pages_visited: pagesVisited, last_activity_at: new Date().toISOString() })
-        .eq('session_id', sessionId);
+      // Single combined update via secure RPC
+      void supabase.rpc('track_visitor_session_update', {
+        p_session_id: sessionId,
+        p_patch: { pages_visited: pagesVisited } as never,
+      });
+
 
       void supabase.from('user_sessions')
         .update({ pages_visited: pagesVisited } as any)
@@ -288,10 +290,10 @@ export const GlobalVisitorTracking = () => {
         });
       } catch { /* silent */ }
 
-      // Legacy update
+      // Legacy update — secure RPC, keepalive
       try {
-        fetch(`${supabaseUrl}/rest/v1/visitor_sessions?session_id=eq.${encodeURIComponent(sessionId)}`, {
-          method: 'PATCH',
+        fetch(`${supabaseUrl}/rest/v1/rpc/track_visitor_session_update`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': supabaseKey,
@@ -299,13 +301,16 @@ export const GlobalVisitorTracking = () => {
             'Prefer': 'return=minimal',
           },
           body: JSON.stringify({
-            total_time_spent: totalTimeSpent,
-            last_activity_at: new Date().toISOString(),
-            scroll_depth_max: scrollDepth.current,
+            p_session_id: sessionId,
+            p_patch: {
+              total_time_spent: totalTimeSpent,
+              scroll_depth_max: scrollDepth.current,
+            },
           }),
           keepalive: true,
         });
       } catch { /* silent */ }
+
     }
   }, []);
 
@@ -334,9 +339,11 @@ export const GlobalVisitorTracking = () => {
     void supabase.from('user_sessions')
       .update({ user_id: user.id, is_authenticated: true } as any)
       .eq('session_id', sessionId);
-    void supabase.from('visitor_sessions')
-      .update({ user_id: user.id })
-      .eq('session_id', sessionId);
+    void supabase.rpc('track_visitor_session_update', {
+      p_session_id: sessionId,
+      p_patch: {} as never,
+    });
+
     queueUserEvent('login', { method: 'session_restore' });
   }, [user?.id, queueUserEvent]);
 

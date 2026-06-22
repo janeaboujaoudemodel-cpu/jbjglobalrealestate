@@ -80,29 +80,29 @@ export const useVisitorTracking = () => {
     
     try {
       const sessionPayload = {
-          session_id: sessionId,
-          device_type: getDeviceType(),
-          browser: getBrowserInfo(),
-          os: getOS(),
-          referrer: document.referrer || null,
-          landing_page: location.pathname,
-          pages_visited: 1,
-          user_id: user?.id || null,
-          screen_resolution: `${screen.width}x${screen.height}`,
-          viewport_size: `${window.innerWidth}x${window.innerHeight}`,
-          language: navigator.language || null,
-          network_type: connectionInfo?.effectiveType || null,
-        } as never;
+        device_type: getDeviceType(),
+        browser: getBrowserInfo(),
+        os: getOS(),
+        referrer: document.referrer || null,
+        landing_page: location.pathname,
+        pages_visited: 1,
+        screen_resolution: `${screen.width}x${screen.height}`,
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        language: navigator.language || null,
+        network_type: connectionInfo?.effectiveType || null,
+      };
 
-      const { error } = await supabase
-        .from('visitor_sessions')
-        .upsert(sessionPayload, { onConflict: 'session_id' });
+      const { error } = await supabase.rpc('track_visitor_session_upsert', {
+        p_session_id: sessionId,
+        p_payload: sessionPayload as never,
+      });
 
       if (error) {
         if (import.meta.env.DEV) console.warn('Visitor tracking unavailable:', error.message);
         trackingUnavailable.current = true;
       }
     } catch (error) {
+
       console.error('Error initializing session:', error);
       trackingUnavailable.current = true;
     }
@@ -129,13 +129,11 @@ export const useVisitorTracking = () => {
       });
 
       // Update session with pages visited count
-      await supabase
-        .from('visitor_sessions')
-        .update({
-          pages_visited: pagesVisitedCount.current,
-          last_activity_at: new Date().toISOString(),
-        })
-        .eq('session_id', sessionId);
+      await supabase.rpc('track_visitor_session_update', {
+        p_session_id: sessionId,
+        p_patch: { pages_visited: pagesVisitedCount.current } as never,
+      });
+
 
     } catch (error) {
       console.error('Error tracking page view:', error);
@@ -239,13 +237,11 @@ export const useVisitorTracking = () => {
     const timeSpent = Math.floor((Date.now() - sessionStartTime.current) / 1000);
 
     try {
-      await supabase
-        .from('visitor_sessions')
-        .update({
-          total_time_spent: timeSpent,
-          last_activity_at: new Date().toISOString(),
-        })
-        .eq('session_id', sessionId);
+      await supabase.rpc('track_visitor_session_update', {
+        p_session_id: sessionId,
+        p_patch: { total_time_spent: timeSpent } as never,
+      });
+
     } catch (error) {
       console.error('Error updating time spent:', error);
       trackingUnavailable.current = true;
