@@ -107,13 +107,13 @@ const AreasWeCover = () => {
               {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
                 {area.isTrending && (
-                  <span data-no-contrast-guard className="jj-emerald-chip">
+                  <span data-no-contrast-guard className="jj-emerald-chip jj-area-status-chip">
                     <TrendingUp className="w-2.5 h-2.5" />
                     Trending
                   </span>
                 )}
                 {area.isHighDemand && (
-                  <span data-no-contrast-guard className="jj-emerald-chip">
+                  <span data-no-contrast-guard className="jj-emerald-chip jj-area-status-chip">
                     <Flame className="w-2.5 h-2.5" />
                     High Demand
                   </span>
@@ -134,7 +134,7 @@ const AreasWeCover = () => {
                   </div>
 
                   <span
-                    className="jj-pill-emerald shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
+                    className="jj-pill-emerald jj-area-explore-pill shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
                     data-on-dark
                     data-no-contrast-guard
                   >
