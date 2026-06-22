@@ -39,20 +39,59 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, style, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    data-surface="champagne"
-    data-jj-segmented-trigger=""
-    style={style}
-    className={cn(
-      "surface-champagne inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-colors duration-150 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
-      stripActiveInkUtilities(className),
-      "data-[state=active]:jj-segmented-active data-[state=active]:!bg-[#064E3B] data-[state=active]:!bg-none data-[state=active]:!text-white data-[state=active]:!shadow-sm data-[state=active]:!animate-none data-[state=active]:[background-image:none!important] [&[data-state=active]_*]:!text-white [&[data-state=active]_svg]:!text-white [&[data-state=active]_svg]:!stroke-white",
-    )}
-    {...props}
-  />
-));
+>(({ className, style, ...props }, ref) => {
+  const localRef = React.useRef<HTMLButtonElement | null>(null);
+  React.useImperativeHandle(ref, () => localRef.current as HTMLButtonElement);
+
+  React.useEffect(() => {
+    const node = localRef.current;
+    if (!node) return;
+
+    const paint = () => {
+      const active = node.dataset.state === "active" || node.getAttribute("aria-selected") === "true";
+      if (!active) {
+        node.style.removeProperty("background");
+        node.style.removeProperty("background-color");
+        node.style.removeProperty("background-image");
+        node.style.removeProperty("color");
+        node.style.removeProperty("-webkit-text-fill-color");
+        node.style.removeProperty("animation");
+        return;
+      }
+      node.style.setProperty("background", "#064E3B", "important");
+      node.style.setProperty("background-color", "#064E3B", "important");
+      node.style.setProperty("background-image", "none", "important");
+      node.style.setProperty("color", "#FFFFFF", "important");
+      node.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+      node.style.setProperty("animation", "none", "important");
+      node.querySelectorAll<HTMLElement>("svg, span, [class*='lucide']").forEach((child) => {
+        child.style.setProperty("color", "#FFFFFF", "important");
+        child.style.setProperty("stroke", "#FFFFFF", "important");
+        child.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+      });
+    };
+
+    paint();
+    const observer = new MutationObserver(paint);
+    observer.observe(node, { attributes: true, attributeFilter: ["data-state", "aria-selected", "class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <TabsPrimitive.Trigger
+      ref={localRef}
+      data-surface="champagne"
+      data-jj-segmented-trigger=""
+      style={style}
+      className={cn(
+        "surface-champagne inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-colors duration-150 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/50 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
+        stripActiveInkUtilities(className),
+        "data-[state=active]:jj-segmented-active data-[state=active]:!bg-[#064E3B] data-[state=active]:!bg-none data-[state=active]:!text-white data-[state=active]:!shadow-sm data-[state=active]:!animate-none data-[state=active]:[background-image:none!important] [&[data-state=active]_*]:!text-white [&[data-state=active]_svg]:!text-white [&[data-state=active]_svg]:!stroke-white",
+      )}
+      {...props}
+    />
+  );
+});
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
 const TabsContent = React.forwardRef<
