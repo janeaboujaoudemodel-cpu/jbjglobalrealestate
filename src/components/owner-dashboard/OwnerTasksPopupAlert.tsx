@@ -140,8 +140,15 @@ export function OwnerTasksPopupAlert() {
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div data-no-contrast-guard className="w-12 h-12 rounded-xl bg-[#1A1A1A] border border-[#B89555]/60 flex items-center justify-center shadow-sm">
-            <AlertTriangle className="w-6 h-6" data-no-contrast-guard strokeWidth={2.5} style={{ color: "#B89555", stroke: "#B89555", opacity: 1 }} />
+          <div
+            data-no-contrast-guard
+            className="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm"
+            style={{
+              backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+              border: "1px solid rgba(52,211,153,0.55)",
+            }}
+          >
+            <AlertTriangle className="w-6 h-6" data-no-contrast-guard strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }} />
           </div>
           <div>
             <h3 id="pending-tasks-title" style={{ color: "#1A1A1A" }} className="font-bold text-lg leading-tight">
@@ -156,7 +163,7 @@ export function OwnerTasksPopupAlert() {
         <div className="bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-4 mb-5">
           <p style={{ color: "#1A1A1A" }} className="text-sm">
             You have{" "}
-            <span className="font-extrabold text-lg" style={{ color: "#1A1A1A" }}>{pendingCount}</span> pending item
+            <span className="font-extrabold text-lg" data-no-contrast-guard style={{ color: "#064E3B" }}>{pendingCount}</span> pending item
             {pendingCount !== 1 ? "s" : ""} that need your review today.
           </p>
         </div>
@@ -166,8 +173,13 @@ export function OwnerTasksPopupAlert() {
             type="button"
             onClick={handleViewTasks}
             data-no-contrast-guard
-            style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF", borderColor: "#1A1A1A" }}
-            className="flex-1 inline-flex items-center justify-center gap-2 h-10 px-6 rounded-xl border-2 text-sm font-semibold hover:!bg-[#2A2A2A] hover:!border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+            style={{
+              backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+              backgroundColor: "#064E3B",
+              color: "#FFFFFF",
+              borderColor: "rgba(52,211,153,0.55)",
+            }}
+            className="flex-1 inline-flex items-center justify-center gap-2 h-10 px-6 rounded-xl border-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
           >
             <span data-no-contrast-guard style={{ color: "#FFFFFF" }}>View Tasks</span>
             <ArrowRight

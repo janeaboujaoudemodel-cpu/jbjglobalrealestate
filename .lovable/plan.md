@@ -1,24 +1,16 @@
-1. Mortgage compare slider
-   - Change the Compare to Bank Rates range input to use the same emerald slider variables/track/thumb treatment as the existing long-term mortgage sliders.
-   - Ensure the filled scroller paint and the circular thumb are both emerald, not gold/light/gray.
-   - Keep its calculation logic unchanged.
+1. Update the final global emerald CSS lock so any emerald-fill surface forces white text, white icons, and white SVG strokes across idle, hover, focus, active, disabled, and descendant states.
 
-2. Horizontal header sq ft/sq m active state
-   - Replace the current white-line shimmer with a true emerald metallic animated shine using emerald-only highlights and depth.
-   - Lighten the active emerald surface enough that the white “sq ft” label stays readable.
-   - Keep inactive sq m visually different and darker.
+2. Remove/override winning black-text rules on emerald active tabs, specifically the Owner dashboard active `Overview` tab and any `jj-pill-active`/`tab-trigger-champagne` emerald state that still paints text or icons black.
 
-3. Global emerald contrast lock
-   - Add a final scoped global CSS lock so every emerald surface/class/attribute renders white text and white icons at rest, hover, focus, and active.
-   - This includes `.jj-emerald-chip`, `.jj-pill-emerald`, `.jj-emerald-metallic`, `.jj-emerald-rect-pill`, `[data-emerald]`, and `[data-emerald="true"]`.
+3. Fix the Owner Pending Tasks popup:
+   - Change the black primary `View Tasks` button to the approved emerald ombré fill.
+   - Keep its text and arrow icon white.
+   - Change the warning icon tile from black/gold to emerald with white icon.
+   - Change the inline pending count number to emerald while keeping surrounding sentence readable ink.
+   - Keep `Later` as the secondary champagne button.
 
-4. Top Areas section
-   - Fix Top Areas / Trending / High Demand chips so they are emerald with white text/icons, not black text on emerald.
-   - Make the small Explore buttons on each area card match the emerald CTA style used in Handpicked For You, with white label and arrow.
-
-5. Visual validation only
-   - Open the live preview and capture screenshots showing:
-     - header sq ft active state,
-     - mortgage Compare to Bank Rates slider track + thumb,
-     - Top Areas chips and Explore buttons.
-   - Verify visually at the current desktop viewport and zoom/close-up where needed before reporting back.
+4. Visually validate only in the live preview:
+   - Open `/owner` with the restored session.
+   - Capture screenshot proof of the Pending Tasks modal showing emerald button/tile and emerald count.
+   - Dismiss modal if needed and capture screenshot proof of the active Owner `Overview` tab showing emerald fill with white label/icon.
+   - Inspect computed colors for the highlighted elements to confirm no black text/icon is winning on emerald.
