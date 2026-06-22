@@ -11420,12 +11420,13 @@ html body .jj-card-emerald-label.jj-card-emerald-label {
 :root {
   --jj-emerald-primitive: var(--jj-emerald-ombre);
   --jj-emerald-primitive-hover: var(--jj-emerald-ombre-hover);
-  --jj-emerald-primitive-border: 1px solid rgba(255,255,255,0.22);
+  --jj-emerald-primitive-border: 0;
   --jj-emerald-primitive-shadow: 0 6px 18px -8px rgba(4,46,29,0.58);
-  --jj-emerald-primitive-shadow-hover: 0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), 0 0 12px rgba(52,211,153,0.30);
+  --jj-emerald-primitive-shadow-hover: 0 10px 26px -10px rgba(4,46,29,0.72);
 }
 
-/* 1) The primitive itself + every legacy alias + every raw green utility. */
+/* 1) Primitive + every legacy alias + every raw green utility.
+      NO border, NO ring, NO bright glow. Dark emerald → black only. */
 html body :is(
   .jj-emerald,
   [data-emerald="true"],
@@ -11440,6 +11441,12 @@ html body :is(
   .jj-emerald-rect-pill,
   .jj-card-emerald-label,
   .jj-history-emerald-icon,
+  .jj-icon-tile-emerald,
+  [data-surface="emerald"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"],
   [class*="bg-green-"],
   [class*="bg-emerald-"],
   [class*="from-green-"],
@@ -11448,18 +11455,20 @@ html body :is(
   [class*="from-emerald-"],
   [class*="via-emerald-"],
   [class*="to-emerald-"]
-) {
+):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="outline"]):not([data-emerald-tone="soft"]) {
   background: var(--jj-emerald-primitive) !important;
   background-image: var(--jj-emerald-primitive) !important;
   background-color: #064E3B !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  border: var(--jj-emerald-primitive-border) !important;
-  border-color: rgba(255,255,255,0.22) !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  outline: 0 !important;
   box-shadow: var(--jj-emerald-primitive-shadow) !important;
+  opacity: 1 !important;
 }
 
-/* 2) White text + white icons for every descendant. */
+/* 2) White text + white icons on every descendant of an emerald surface. */
 html body :is(
   .jj-emerald,
   [data-emerald="true"],
@@ -11468,28 +11477,26 @@ html body :is(
   .jj-card-emerald-action, .jj-favorite-trigger,
   .jj-surface-emerald, .jj-emerald-solid,
   .jj-emerald-rect-pill, .jj-card-emerald-label,
-  .jj-history-emerald-icon,
+  .jj-history-emerald-icon, .jj-icon-tile-emerald,
+  [data-surface="emerald"], [data-emerald-filled],
+  [data-emerald-ok="button"], [data-emerald-ok="pill"], [data-emerald-ok="badge"],
   [class*="bg-green-"], [class*="bg-emerald-"]
-) :is(*, svg, [class*="lucide"]) {
+):not(.jj-emerald-soft):not(.jj-emerald-outline) :is(
+  *, span, p, a, strong, em, small, b, label, button, h1, h2, h3, h4, h5, h6,
+  svg, path, circle, rect, line, polyline, polygon, ellipse, g, use,
+  [class*="lucide"]
+) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-}
-html body :is(
-  .jj-emerald,
-  [data-emerald="true"],
-  .jj-cta-emerald, .jj-cta-emerald-metallic,
-  .jj-pill-emerald, .jj-pill-emerald-metallic,
-  .jj-card-emerald-action, .jj-favorite-trigger,
-  .jj-surface-emerald, .jj-emerald-solid,
-  .jj-emerald-rect-pill, .jj-card-emerald-label,
-  .jj-history-emerald-icon,
-  [class*="bg-green-"], [class*="bg-emerald-"]
-) :is(svg, [class*="lucide"]) {
   stroke: #FFFFFF !important;
-  fill: currentColor;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
 }
 
-/* 3) Hover state — matches Collapse exactly. */
+/* 3) Hover — slightly lighter dark emerald. NEVER bright neon green glow. */
 html body :is(
   .jj-emerald,
   [data-emerald="true"],
@@ -11498,17 +11505,20 @@ html body :is(
   .jj-card-emerald-action, .jj-favorite-trigger,
   .jj-surface-emerald, .jj-emerald-solid,
   .jj-emerald-rect-pill,
+  [data-surface="emerald"], [data-emerald-filled],
   [class*="bg-green-"], [class*="bg-emerald-"]
-):is(:hover,:focus,:focus-visible,:active) {
+):not(.jj-emerald-soft):not(.jj-emerald-outline):is(:hover,:focus,:focus-visible,:active) {
   background: var(--jj-emerald-primitive-hover) !important;
   background-image: var(--jj-emerald-primitive-hover) !important;
   color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.32) !important;
+  border: 0 !important;
+  border-color: transparent !important;
   box-shadow: var(--jj-emerald-primitive-shadow-hover) !important;
 }
 
-/* 4) Kill any leftover light/neon emerald gradient token. */
+/* 4) Kill leftover light/neon emerald tokens by aliasing to the primitive. */
 :root {
   --jj-emerald-light-ombre: var(--jj-emerald-primitive);
   --gradient-emerald: var(--jj-emerald-primitive);
+  --jj-emerald-neon: #FFFFFF;
 }
