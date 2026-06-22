@@ -10192,3 +10192,164 @@ html body [data-chrome="sidebar"] .animate-shimmer {
   animation: none !important;
   background-position: 0 0 !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 48 — Shared Tabs / Segmented Control active-state lock
+   Applies once at the reusable TabsTrigger primitive level.
+   Active = approved emerald, white label/icon, no swipe/fill/sweep.
+   ──────────────────────────────────────────────────────────────── */
+html body [data-jj-segmented-trigger][data-state="active"],
+html body [data-jj-segmented-trigger][aria-selected="true"],
+html body [role="tablist"] [role="tab"][data-state="active"],
+html body [role="tablist"] [role="tab"][aria-selected="true"],
+html body .tab-trigger-champagne[data-state="active"],
+html body .jj-segmented-active {
+  background: #064E3B !important;
+  background-color: #064E3B !important;
+  background-image: none !important;
+  background-size: 100% 100% !important;
+  background-position: 0 0 !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  animation: none !important;
+  transition-property: background-color, color, border-color, box-shadow !important;
+  transition-duration: 150ms !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 18px -14px rgba(6,78,59,0.85) !important;
+  overflow: hidden;
+}
+
+html body [data-jj-segmented-trigger][data-state="active"]::before,
+html body [data-jj-segmented-trigger][data-state="active"]::after,
+html body [data-jj-segmented-trigger][aria-selected="true"]::before,
+html body [data-jj-segmented-trigger][aria-selected="true"]::after,
+html body [role="tablist"] [role="tab"][data-state="active"]::before,
+html body [role="tablist"] [role="tab"][data-state="active"]::after,
+html body [role="tablist"] [role="tab"][aria-selected="true"]::before,
+html body [role="tablist"] [role="tab"][aria-selected="true"]::after,
+html body .tab-trigger-champagne[data-state="active"]::before,
+html body .tab-trigger-champagne[data-state="active"]::after,
+html body .jj-segmented-active::before,
+html body .jj-segmented-active::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  background: none !important;
+}
+
+html body [data-jj-segmented-trigger][data-state="active"],
+html body [data-jj-segmented-trigger][data-state="active"] *,
+html body [data-jj-segmented-trigger][aria-selected="true"],
+html body [data-jj-segmented-trigger][aria-selected="true"] *,
+html body [role="tablist"] [role="tab"][data-state="active"],
+html body [role="tablist"] [role="tab"][data-state="active"] *,
+html body [role="tablist"] [role="tab"][aria-selected="true"],
+html body [role="tablist"] [role="tab"][aria-selected="true"] *,
+html body .tab-trigger-champagne[data-state="active"],
+html body .tab-trigger-champagne[data-state="active"] *,
+html body .jj-segmented-active,
+html body .jj-segmented-active * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+html body [data-jj-segmented-trigger][data-state="active"]:hover,
+html body [data-jj-segmented-trigger][aria-selected="true"]:hover,
+html body [role="tablist"] [role="tab"][data-state="active"]:hover,
+html body [role="tablist"] [role="tab"][aria-selected="true"]:hover,
+html body .tab-trigger-champagne[data-state="active"]:hover,
+html body .jj-segmented-active:hover {
+  background: #053F31 !important;
+  background-color: #053F31 !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  animation: none !important;
+}
+
+/* Same lock with deliberately higher specificity than legacy repeated
+   tab-trigger overrides that used to paint the light-green sweep. */
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"],
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"] {
+  background: #064E3B !important;
+  background-color: #064E3B !important;
+  background-image: none !important;
+  background-size: 100% 100% !important;
+  background-position: 0 0 !important;
+  background-blend-mode: normal !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  animation: none !important;
+  transition-property: background-color, color, border-color, box-shadow !important;
+  transition-duration: 150ms !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 18px -14px rgba(6,78,59,0.85) !important;
+}
+
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"] *,
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  animation: none !important;
+}
+
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"]::before,
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-state="active"]::after,
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"]::before,
+html body button[role="tab"][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][data-jj-segmented-trigger][aria-selected="true"]::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  animation: none !important;
+}
+
+html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"],
+html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"] {
+  background: #064E3B !important;
+  background-color: #064E3B !important;
+  background-image: none !important;
+  background-size: 100% 100% !important;
+  background-position: 0 0 !important;
+  background-blend-mode: normal !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  animation: none !important;
+  transition-property: background-color, color, border-color, box-shadow !important;
+  transition-duration: 150ms !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 18px -14px rgba(6,78,59,0.85) !important;
+}
+
+html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"] *,
+html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  animation: none !important;
+}
+
+html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"]::before,
+html body [role="tablist"] button[role="tab"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"][aria-selected="true"]::after,
+html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"]::before,
+html body [role="tablist"] button[role="tab"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"][data-state="active"]::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  animation: none !important;
+}
+
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-\[\#1A1A1A\],
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-\[\#1A1A1A\] *,
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-\[\#1A1A1A\],
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-\[\#1A1A1A\] *,
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-black,
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-black *,
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-black,
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-black * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
