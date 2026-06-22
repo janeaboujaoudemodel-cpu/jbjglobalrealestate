@@ -46,11 +46,11 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <span
-                    className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 ring-1 ring-[#B89555]/70"
-                    style={{ background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 50%, #B89555 100%)" }}
+                    className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(4,120,87,0.35)]"
+                    style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
                     aria-hidden="true"
                   >
-                    <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
+                    <Sparkles className="w-3 h-3" color="#FFFFFF" stroke="#FFFFFF" />
                   </span>
                   <span className="text-[#1A1A1A]/90">{item}</span>
                 </li>
