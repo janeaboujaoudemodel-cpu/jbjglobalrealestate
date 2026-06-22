@@ -11522,3 +11522,122 @@ html body :is(
   --gradient-emerald: var(--jj-emerald-primitive);
   --jj-emerald-neon: #FFFFFF;
 }
+
+/* ============================================================
+   GATE 1 — USER REFERENCE EMERALD LOCK
+   Reference = horizontal header Mode/AED chip.
+   No restricted light green at rest or hover. No component opt-out.
+   ============================================================ */
+:root {
+  --jj-emerald-primitive: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj-emerald-primitive-hover: var(--jj-emerald-primitive);
+  --jj-emerald-ombre: var(--jj-emerald-primitive);
+  --jj-emerald-ombre-hover: var(--jj-emerald-primitive);
+  --jj-emerald-light-ombre: var(--jj-emerald-primitive);
+  --gradient-emerald: var(--jj-emerald-primitive);
+  --gradient-emerald-hover: var(--jj-emerald-primitive);
+  --emerald-2: #064E3B;
+  --emerald-ink-soft: #064E3B;
+  --jj-emerald-neon: #FFFFFF;
+  --mortgage-range-thumb: var(--jj-emerald-primitive);
+  --mortgage-range-track: var(--jj-emerald-primitive);
+}
+
+html body :is(
+  button, a, [role="button"], [role="tab"], [role="switch"], [role="checkbox"],
+  .jj-emerald, .jj-emerald-solid, .jj-surface-emerald, .jj-cta-emerald,
+  .jj-cta-emerald-metallic, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jj-emerald-rect-pill, .jj-emerald-chip,
+  .jj-favorite-trigger, .jj-card-emerald-action, .jj-card-emerald-label,
+  .jj-history-emerald-icon, .jj-icon-tile-emerald, .jj-side-tile.is-active,
+  .jj-sqtoggle[data-active="true"], [data-jj-utility-pill], [data-mode-trigger],
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-filled],
+  [data-emerald-ok="button"], [data-emerald-ok="pill"], [data-emerald-ok="badge"],
+  [data-card-action], [data-cta="primary"], [data-sidebar-collapse-control],
+  [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child,
+  [data-sidebar-emerald] a[data-sidebar-subitem] > span:first-child,
+  [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
+  [data-sidebar-emerald] [data-sidebar-section][data-active="true"],
+  [class*="bg-green-"], [class*="bg-emerald-"], [class*="from-green-"],
+  [class*="via-green-"], [class*="to-green-"], [class*="from-emerald-"],
+  [class*="via-emerald-"], [class*="to-emerald-"],
+  [style*="#047857" i], [style*="#10b981" i], [style*="#13a078" i],
+  [style*="#0a6b53" i], [style*="52,211,153" i], [style*="16,185,129" i]
+):is(.jj-emerald, .jj-emerald-solid, .jj-surface-emerald, .jj-cta-emerald, .jj-cta-emerald-metallic, .jj-cta-primary, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-emerald-rect-pill, .jj-emerald-chip, .jj-favorite-trigger, .jj-card-emerald-action, .jj-card-emerald-label, .jj-history-emerald-icon, .jj-icon-tile-emerald, .jj-side-tile.is-active, .jj-sqtoggle, [data-jj-utility-pill], [data-mode-trigger], [data-surface="emerald"], [data-emerald="true"], [data-emerald-filled], [data-emerald-ok="button"], [data-emerald-ok="pill"], [data-emerald-ok="badge"], [data-card-action], [data-cta="primary"], [data-sidebar-collapse-control], [class*="bg-green-"], [class*="bg-emerald-"], [class*="from-green-"], [class*="via-green-"], [class*="to-green-"], [class*="from-emerald-"], [class*="via-emerald-"], [class*="to-emerald-"], [style*="#047857" i], [style*="#10b981" i], [style*="#13a078" i], [style*="#0a6b53" i], [style*="52,211,153" i], [style*="16,185,129" i]),
+html body :is([data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child, [data-sidebar-emerald] a[data-sidebar-subitem] > span:first-child, [data-sidebar-emerald] [data-sidebar-section] > div:first-child, [data-sidebar-emerald] [data-sidebar-section][data-active="true"]) {
+  background: var(--jj-emerald-primitive) !important;
+  background-image: var(--jj-emerald-primitive) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  outline: 0 !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+  filter: none !important;
+}
+
+html body :is(.jj-favorite-trigger, .jj-card-emerald-action, [data-card-action], .jj-emerald-rect-pill, .jj-card-emerald-label) {
+  border: 0 !important;
+  border-color: transparent !important;
+}
+
+html body :is(
+  .jj-emerald, .jj-emerald-solid, .jj-surface-emerald, .jj-cta-emerald,
+  .jj-cta-emerald-metallic, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jj-emerald-rect-pill, .jj-emerald-chip,
+  .jj-favorite-trigger, .jj-card-emerald-action, .jj-card-emerald-label,
+  .jj-history-emerald-icon, .jj-icon-tile-emerald, .jj-side-tile.is-active,
+  .jj-sqtoggle[data-active="true"], [data-jj-utility-pill], [data-mode-trigger],
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-filled],
+  [data-emerald-ok="button"], [data-emerald-ok="pill"], [data-emerald-ok="badge"],
+  [data-card-action], [data-cta="primary"], [data-sidebar-collapse-control],
+  [class*="bg-green-"], [class*="bg-emerald-"]
+):is(:hover,:focus,:focus-visible,:active,:disabled),
+html body :is([data-sidebar-emerald] a[data-sidebar-highlight]:hover > span:first-child, [data-sidebar-emerald] a[data-sidebar-subitem]:hover > span:first-child, [data-sidebar-emerald] [data-sidebar-section]:hover > div:first-child, [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover) {
+  background: var(--jj-emerald-primitive) !important;
+  background-image: var(--jj-emerald-primitive) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+  filter: none !important;
+}
+
+html body :is(.jj-favorite-trigger, .jj-card-emerald-action, [data-card-action], .jj-emerald-rect-pill, .jj-card-emerald-label):is(:hover,:focus,:focus-visible,:active,:disabled) {
+  border: 0 !important;
+  border-color: transparent !important;
+}
+
+html body :is(
+  .jj-emerald, .jj-emerald-solid, .jj-surface-emerald, .jj-cta-emerald,
+  .jj-cta-emerald-metallic, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jj-emerald-rect-pill, .jj-emerald-chip,
+  .jj-favorite-trigger, .jj-card-emerald-action, .jj-card-emerald-label,
+  .jj-history-emerald-icon, .jj-icon-tile-emerald, .jj-side-tile.is-active,
+  .jj-sqtoggle[data-active="true"], [data-jj-utility-pill], [data-mode-trigger],
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-filled],
+  [data-emerald-ok="button"], [data-emerald-ok="pill"], [data-emerald-ok="badge"],
+  [data-card-action], [data-cta="primary"], [data-sidebar-collapse-control],
+  [class*="bg-green-"], [class*="bg-emerald-"]
+) :is(*, span, p, strong, small, em, b, label, svg, path, circle, rect, line, polyline, polygon, use, g, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body :is(.mortgage-range-input, input[type="range"][data-mortgage-slider])::-webkit-slider-thumb {
+  background: var(--jj-emerald-primitive) !important;
+  border: 0 !important;
+  box-shadow: 0 8px 18px -8px rgba(6,78,59,0.85) !important;
+}
+
+html body :is(.mortgage-range-input, input[type="range"][data-mortgage-slider])::-moz-range-thumb {
+  background: var(--jj-emerald-primitive) !important;
+  border: 0 !important;
+  box-shadow: 0 8px 18px -8px rgba(6,78,59,0.85) !important;
+}

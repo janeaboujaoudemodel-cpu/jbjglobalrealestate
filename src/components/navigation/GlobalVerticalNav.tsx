@@ -791,7 +791,7 @@ export default function GlobalVerticalNav() {
       (item.href === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
-      return shouldHighlight ? "font-bold text-[#1A1A1A]" : "font-semibold text-[#1A1A1A]";
+      return shouldHighlight ? "font-bold text-white" : "font-semibold text-white";
     }
 
     return shouldHighlight
@@ -1027,16 +1027,17 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     if (hasMega) handleNavClick(item.megaMenu, e);
                     else handleNavClick(undefined);
                   }}
-                  data-no-contrast-guard
-                  className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] transition-all duration-200 rounded-lg hover:bg-[#EFE6D6]/45 ${getItemStyle(item)}`}
-                  style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                  data-sidebar-highlight
+                  data-surface="emerald"
+                  className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] transition-all duration-200 rounded-lg ${getItemStyle(item)}`}
+                  style={{ background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'rgba(255,255,255,0.18)' }}
                 >
                   <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
                     <Icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   </span>
-                  <span className="flex-1 text-left relative inline-block transition-colors duration-200" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
+                  <span className="flex-1 text-left relative inline-block transition-colors duration-200" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{item.label}</span>
                   {hasMega && (
-                    <ChevronRight data-no-contrast-guard className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-100"}`} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   )}
                 </Link>
 
@@ -1172,21 +1173,21 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           <div className="flex gap-1.5 mb-1">
             <Link
               to="/contact"
-              data-no-contrast-guard
+              data-surface="emerald"
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform hover:bg-[#064E3B]/[0.06]"
-              style={{ color: '#047857', borderColor: 'rgba(4,120,87,0.42)', background: 'transparent' }}
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'rgba(255,255,255,0.18)', background: 'var(--jj-emerald-ombre)' }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
-              <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>Contact</span>
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
-              data-no-contrast-guard
+              data-surface="emerald"
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform hover:bg-[#064E3B]/[0.06]"
-              style={{ color: '#047857', borderColor: 'rgba(4,120,87,0.42)', background: 'transparent' }}
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'rgba(255,255,255,0.18)', background: 'var(--jj-emerald-ombre)' }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
-              <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>Support</span>
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Support</span>
             </Link>
 
           </div>
@@ -1282,8 +1283,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             }
             .jj-side-tile svg,
             .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; transition: color 180ms ease, stroke 180ms ease !important; }
-            .jj-side-tile:hover { background: var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%)) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
-            .jj-side-tile.is-active { box-shadow: 0 0 0 2px rgba(16,185,129,0.55), 0 2px 8px rgba(4,120,87,0.45), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
+            .jj-side-tile:hover { background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important; transform: translateY(-1px) !important; box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important; }
+            .jj-side-tile.is-active { box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
