@@ -69,6 +69,7 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
+  const inputRef = useRef<HTMLInputElement>(null);
   const lastEmittedValueRef = useRef(value);
   const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.14)";
@@ -84,6 +85,17 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
     onChange(next);
   }, [max, min, onChange]);
 
+  const emitFromPointer = useCallback((clientX: number) => {
+    const el = inputRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const ratio = clampNumber((clientX - rect.left) / rect.width, 0, 1);
+    const raw = min + ratio * (max - min);
+    const decimals = step.toString().split(".")[1]?.length ?? 0;
+    const stepped = min + Math.round((raw - min) / step) * step;
+    emitValue(Number(clampNumber(stepped, min, max).toFixed(decimals)));
+  }, [emitValue, max, min, step]);
+
   return (
     <input
       type="range"
@@ -95,6 +107,15 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       value={value}
       aria-label={ariaLabel}
       aria-valuetext={`${value}`}
+      ref={inputRef}
+      onPointerDown={(event) => {
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        emitFromPointer(event.clientX);
+      }}
+      onPointerMove={(event) => {
+        if (event.buttons !== 1) return;
+        emitFromPointer(event.clientX);
+      }}
       onInput={(event) => emitValue(event.currentTarget.valueAsNumber)}
       onChange={(event) => emitValue(event.currentTarget.valueAsNumber)}
       className="mortgage-range-input w-full"
