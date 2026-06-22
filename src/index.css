@@ -9909,7 +9909,7 @@ html body input.mortgage-range-input {
   cursor: ew-resize !important;
   touch-action: pan-y !important;
   accent-color: #064E3B !important;
-  --mortgage-range-thumb: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 38%, #064E3B 100%) !important;
+  --mortgage-range-thumb: radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%) !important;
   --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50) !important;
 }
 html body input.mortgage-range-input::-webkit-slider-runnable-track {

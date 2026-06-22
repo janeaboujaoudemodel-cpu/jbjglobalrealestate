@@ -148,12 +148,12 @@ export default function MortgageParityPanel({
         <div
           className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
           style={{
-            background: ltvOk ? "rgba(16,185,129,0.10)" : "rgba(239,68,68,0.10)",
-            border: `1px solid ${ltvOk ? "rgba(16,185,129,0.35)" : "rgba(239,68,68,0.45)"}`,
+            background: ltvOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
+            border: `1px solid ${ltvOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
             color: isNavy ? "#FFFFFF" : "#1A1A1A",
           }}
         >
-          {ltvOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-500" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
+          {ltvOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#064E3B]" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
           <span>{ltvOk ? "Loan-to-value within UAE Central Bank limit." : `Exceeds ${cap}% cap — increase down payment by AED ${Math.ceil(((ltv - cap) / 100) * propertyPrice).toLocaleString()}.`}</span>
         </div>
       </Card>
@@ -181,12 +181,12 @@ export default function MortgageParityPanel({
         <div
           className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
           style={{
-            background: dbrOk ? "rgba(16,185,129,0.10)" : "rgba(239,68,68,0.10)",
-            border: `1px solid ${dbrOk ? "rgba(16,185,129,0.35)" : "rgba(239,68,68,0.45)"}`,
+            background: dbrOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
+            border: `1px solid ${dbrOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
             color: isNavy ? "#FFFFFF" : "#1A1A1A",
           }}
         >
-          {dbrOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-500" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
+          {dbrOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#064E3B]" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
           <span>{dbrOk ? "Within the UAE Central Bank 50% debt burden ratio." : "Above 50% DBR — banks may decline. Extend term or reduce loan."}</span>
         </div>
       </Card>
@@ -263,7 +263,7 @@ export default function MortgageParityPanel({
                 style={{
                   background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
                   ["--mortgage-range-thumb" as any]:
-                    "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%)",
+                    "radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%)",
                   ["--mortgage-range-thumb-shadow" as any]:
                     "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
                 }}
