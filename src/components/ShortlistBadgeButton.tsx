@@ -114,10 +114,13 @@ const ShortlistBadgeButton = ({
         <DropdownMenuTrigger asChild>
           <button
             onClick={(e) => e.stopPropagation()}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7]/90 transition-all cursor-pointer whitespace-nowrap ${className}`}
+            data-surface="emerald"
+            data-emerald="true"
+            data-card-action="badge-shortlist"
+            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center gap-1.5 rounded-full border border-white/25 transition-all cursor-pointer whitespace-nowrap shadow-lg ${className}`}
           >
-            <Award className={iconSizes[size]} />
-            <span className="hidden sm:inline">{currentBadge ? "Change" : "Add Badge"}</span>
+            <Award className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="hidden sm:inline allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{currentBadge ? "Change" : "Add Badge"}</span>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>
