@@ -1027,9 +1027,10 @@ export default function BrokerCRM() {
                       <span>{s.label}</span>
                       <span className="tabular-nums">{s.count} · {pct}%</span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-[#EFE6D6] overflow-hidden">
-                      <div className="h-full bg-[#B89555]/70" style={{ width: `${pct}%` }} />
+                    <div className="h-2 rounded-full bg-[color:var(--emerald-soft-bg)] overflow-hidden">
+                      <div className="h-full" style={{ width: `${pct}%`, background: "var(--gradient-emerald)" }} />
                     </div>
+
                   </div>
                 );
               })}
