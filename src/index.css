@@ -10609,3 +10609,71 @@ html body [data-surface="emerald"][data-cta="primary"] :is(span, svg, [class*="l
   stroke: #FFFFFF !important;
 }
 
+/* ============================================================
+   PASS XX-E — JBJ EMERALD INTERACTIVE PRIMITIVES
+   Champagne -> hover/active -> Emerald + white inversion
+   ============================================================ */
+.jj-hover-emerald {
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease, transform .2s ease;
+}
+.jj-hover-emerald:hover,
+.jj-hover-emerald:focus-visible,
+.jj-hover-emerald[data-active="true"] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+  color: var(--emerald-on) !important;
+  -webkit-text-fill-color: var(--emerald-on) !important;
+  box-shadow: 0 14px 30px -18px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  transform: translateY(-1px);
+}
+.jj-hover-emerald:hover :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
+.jj-hover-emerald:focus-visible :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
+.jj-hover-emerald[data-active="true"] :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]) {
+  color: var(--emerald-on) !important;
+  -webkit-text-fill-color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+  opacity: 1 !important;
+}
+.jj-hover-emerald:hover [data-icon-tile],
+.jj-hover-emerald:focus-visible [data-icon-tile],
+.jj-hover-emerald[data-active="true"] [data-icon-tile] {
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.14) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+
+/* Tab pill — active emerald, inactive champagne with emerald hover */
+.jj-tab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem 1rem;
+  border-radius: .625rem;
+  font-size: .875rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all .2s ease;
+  white-space: nowrap;
+}
+.jj-tab-pill:hover {
+  color: var(--emerald-1);
+  background-color: var(--emerald-soft-bg);
+}
+.jj-tab-pill[data-active="true"] {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  color: var(--emerald-on) !important;
+  -webkit-text-fill-color: var(--emerald-on) !important;
+  border-color: var(--emerald-1) !important;
+  box-shadow: 0 10px 24px -16px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+.jj-tab-pill[data-active="true"] svg,
+.jj-tab-pill[data-active="true"] [class*="lucide"] {
+  color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+}
+
+

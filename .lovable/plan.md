@@ -1,83 +1,107 @@
-# PASS XX-C — Global Emerald Identity + Dropdown Fix
+Execute a full design-system refactor, not isolated element patches.
 
-One pass, applied at the **token + primitive layer** so every page inherits it. No per-page patches.
+Scope
+- Lock one Emerald accent system across frontend/backend UI surfaces.
+- Apply it through shared primitives first, then remove local bypasses from CRM/Pipeline and other high-impact pages.
+- Enforce the contrast rule everywhere:
+  - Emerald background -> white text and white icons.
+  - Champagne/light background -> black typography with Emerald icons/accent.
 
-## 1. Lock the Emerald gradient as the ONE brand accent
+Implementation plan
 
-Source of truth: the gradient already on the active vertical sidebar item.
+1. Lock the global Emerald tokens
+- Consolidate the current token sprawl in `src/index.css` into one canonical set:
+  - `--jj-emerald`
+  - `--jj-emerald-deep`
+  - `--jj-emerald-on`
+  - `--jj-emerald-soft`
+  - `--jj-emerald-gradient`
+  - `--jj-emerald-gradient-hover`
+- Alias legacy `--primary`, `--accent`, `--ring`, sidebar, AI/tool, active-state, and current `--gradient-emerald` variables to that locked system.
+- Remove remaining alternate hover accents and default blue focus/selection styling from shared surfaces.
 
-In `src/index.css` `:root`:
-- Re-point `--emerald-1/2/3`, `--gradient-emerald`, `--gradient-emerald-hover`, `--emerald-ring`, `--emerald-soft-bg`, `--emerald-soft-fg`, `--emerald-on` to that exact sidebar-active gradient + ink token.
-- Re-point legacy aliases used across the app to the same tokens (no parallel palettes):
-  - `--primary`, `--ring`, `--accent`, `--sidebar-primary`, `--sidebar-ring`, `--sidebar-accent`
-  - `--ai-emerald`, `--ink-emerald-1/2/3`
-- Add `--brand-accent` = emerald and `--brand-accent-on` = white. All primitives below read from this.
+2. Rebuild the shared primitives as the only visual language
+- `Button`
+  - Primary/default/destructive/tool aliases use the locked Emerald gradient only.
+  - Secondary/outline/ghost/link use Champagne/light surface with Emerald text/icons.
+  - Remove conflicting `jj-cta-champagne` class from primary CTAs so primary is not both Emerald and Champagne.
+- `Tabs`
+  - Active trigger uses one active Emerald contract with white text/icons.
+  - Inactive triggers remain Champagne/light with Emerald hover/focus.
+  - Add premium underline/indicator behavior for navigation bars.
+- `Badge`
+  - Default/important badges use Emerald + white.
+  - Outline/secondary badges use Champagne + Emerald.
+  - Replace blue/status badge leakage where it is not semantic data visualization.
+- `IconTile`
+  - Default tile becomes the Emerald identity tile.
+  - Champagne/light tile option renders Emerald icons, never black icons.
+  - Restrict blue/red/amber only to explicitly semantic data states.
+- `Dropdown/Select/Command`
+  - Single-select: no square checkbox artifacts.
+  - Multi-select: aligned checkbox column, no text overlap, easy select/deselect.
+  - Hover/highlight/focus use the locked Emerald soft state.
+- `Table`
+  - Header, selected rows, hover rows, checkbox cells, and action cells use Emerald/Champagne rhythm.
+  - Remove default blue selection/focus behavior.
+- `Card`
+  - Add reusable premium variants for Champagne card, Emerald active card, selected card, KPI card, empty state, and pipeline stage card.
 
-## 2. Repaint shared primitives (one edit each — cascades site-wide)
+3. Refactor Broker CRM / Pipeline as the proving surface
+- Replace local `PremiumCard`, KPI, tab, stage-card, empty-state, table-row, and action-button styling with shared JBJ primitives/classes.
+- Make “Add database” and “Add lead” use the exact same primary CTA implementation as “Back to JBJ Owner”.
+- Improve KPI cards:
+  - large centered metric number
+  - secondary label
+  - Emerald icon tile
+  - hover inversion: Champagne card -> Emerald background + white content
+- Improve CRM tab/header nav:
+  - better spacing and alignment
+  - active Emerald underline/indicator
+  - active icon/text white when on Emerald
+  - inactive Champagne with Emerald icon/hover
+- Improve Pipeline by Stage:
+  - stage cards get Emerald icon/arrow accents
+  - active/hover state uses Emerald + white
+  - stronger hierarchy and rhythm instead of plain white boxes
+- Improve empty states:
+  - Emerald icon/illustration treatment
+  - primary CTA as locked Emerald
+  - secondary CTA as Champagne/Emerald
+  - no generic black icon treatment
 
-- `src/components/ui/button.tsx` — `primary`/`default`/`destructive` → emerald gradient + white fg + emerald ring. `secondary`/`outline`/`ghost` → champagne fill + emerald fg + emerald hairline. Keep `dark`/`hero` for dark surfaces.
-- `src/components/ui/badge.tsx` — `default` → emerald solid, `secondary` → champagne + emerald fg, `outline` → emerald hairline.
-- `src/components/ui/tabs.tsx` — active trigger → emerald underline + emerald fg (champagne tab strip). Same primitive used by horizontal tabs everywhere.
-- `src/components/ui/card.tsx` — champagne surface + emerald hairline on hover; add `data-tone="emerald"` variant = emerald gradient surface + white content (for KPI/feature cards).
-- `src/components/ui/input.tsx`, `select.tsx`, `textarea.tsx` — focus ring → emerald.
-- `src/components/ui/table.tsx` — header divider + row hover → emerald wash; selected row → emerald soft.
-- `src/components/ui/sidebar.tsx` — active item already emerald; mirror the EXACT styles into `premium-backend-layout.tsx` so frontend + backend sidebars are byte-identical.
-- `src/components/ui/icon-tile.tsx` — default tone switches from gold to **emerald** for active/interactive contexts; gold reserved for hairline accents only.
-- Charts: update `src/lib/dataColors.ts` primary series to emerald scale.
+4. Remove color bypasses globally
+- Audit and replace visible UI bypasses in `src/pages` and `src/components` for:
+  - `bg-[#...]`, `text-[#...]`, `border-[#...]` where used on CTAs, cards, tabs, badges, dropdowns, tables, icons, counters, empty states, pipeline/status UI.
+  - `bg-blue-*`, `text-blue-*`, `ring-blue-*`, `border-blue-*` outside approved semantic data visualization.
+  - hardcoded black icons on Champagne cards where Emerald icon/accent is required.
+  - hardcoded white/dark text conflicts on Emerald surfaces.
+- Keep existing Champagne, black typography, and gold hairlines where they are part of the locked JBJ system.
+- Do not remove features or content.
 
-## 3. Dropdown checkbox fix (global)
+5. Add global guardrails
+- Add high-specificity contrast guards only for the shared contracts, not broad page-wide hacks:
+  - `[data-surface="emerald"]`
+  - `[data-cta="primary"]`
+  - `[data-active-surface="emerald"]`
+  - `[data-icon-tile-tone="emerald"]`
+  - `[data-jj-badge="default"]`
+  - active tabs/sidebar items
+  - selected/active cards
+- Add hover rules:
+  - Champagne interactive card hover -> Emerald gradient + white content.
+  - Emerald interactive card hover -> locked hover gradient + stronger glow.
+- Add focus rules using the locked Emerald ring.
 
-The square boxes come from `CommandItem` / `SelectItem` rendering a check indicator slot even in single-select menus.
-
-- `src/components/ui/select.tsx` — `SelectItem` removes the leading square frame. Checkmark only on `data-state="checked"`, rendered as a 14px emerald check glyph (no box).
-- `src/components/ui/dropdown-menu.tsx` — same: plain rows for `DropdownMenuItem`. `DropdownMenuCheckboxItem` keeps a real 16px checkbox (emerald when checked, champagne hairline when not), aligned with 10px gap, never overlapping label.
-- `src/components/ui/command.tsx` — `CommandItem` renders plain row; only show a check when explicitly `data-selected` AND parent has `data-multi="true"`.
-- `src/components/ui/popover.tsx` content — keep champagne `#FDFBF7` + gold hairline (already locked).
-- Audit `MultiSelect`/filter components to opt-in via `data-multi="true"`; everything else inherits plain rows automatically.
-
-## 4. Sidebar parity (frontend ↔ backend)
-
-- Extract sidebar item styles into a single class `.jj-sidebar-item` + `.jj-sidebar-item-active` (emerald gradient pill, white icon + label, emerald ring) in `index.css`.
-- Rewrite the active-state CSS in both `Sidebar` (frontend) and `premium-backend-layout.tsx` (backend) to use those classes. Icon tiles inside both use `<IconTile tone="emerald-active" />` when active.
-
-## 5. Global de-fade
-
-In `index.css` add a scoped rule (NOT on disabled): replace `text-muted-foreground` usage on KPI numbers, card titles, empty-state titles by giving them `--ink: #1A1A1A`. Leave true secondary copy at 70% ink, never below.
-
-## 6. Verification (Playwright, 1280x1800 + 390x844)
-
-Walk these routes, screenshot each, assert: (a) sidebar active item uses emerald gradient, (b) at least one emerald CTA visible, (c) no `bg-black` primary CTA, (d) open one select on each page and confirm no square box on single-select items.
-
-Routes: `/`, `/news`, `/careers`, `/guides`, `/ai-tools`, `/owner`, `/owner/crm`, `/owner/inbox`, `/owner/calendar`, `/owner/tasks`, `/owner/reports`, `/broker`, `/developer-hub`, `/investor`, `/404`.
-
-Screenshots saved to `/mnt/documents/passxx-c/` and surfaced inline.
-
-## Files touched (≈15, all primitives — no per-page edits)
-
-```
-src/index.css
-src/lib/dataColors.ts
-src/components/ui/button.tsx
-src/components/ui/badge.tsx
-src/components/ui/tabs.tsx
-src/components/ui/card.tsx
-src/components/ui/input.tsx
-src/components/ui/select.tsx
-src/components/ui/textarea.tsx
-src/components/ui/table.tsx
-src/components/ui/sidebar.tsx
-src/components/ui/dropdown-menu.tsx
-src/components/ui/command.tsx
-src/components/ui/icon-tile.tsx
-src/components/ui/premium-backend-layout.tsx
-```
-
-Plus a Playwright verification script under `/tmp/browser/passxx-c/`.
-
-## Out of scope (intentionally)
-
-- No per-page rewrites. If a page still looks wrong after primitives ship, it's because it bypassed primitives — those get a follow-up surgical fix listed in the verification report, not in this pass.
-- No content/copy changes.
-- No backend/data changes.
-
-Approve and I execute end-to-end, then post the Playwright screenshot grid as proof.
+6. Verify visually before claiming completion
+- Use Playwright on desktop and mobile viewports.
+- Validate `/broker/crm` across Pipeline, My Databases, My Leads, Calls, Insights, Activity, Calendar.
+- Validate key owner/backend surfaces that share the same primitives.
+- Computed-style checks must confirm:
+  - primary CTA text/icons are white
+  - active tabs/icons are white on Emerald
+  - Champagne cards show Emerald icons/accent
+  - no blue/default browser focus colors on the audited CRM surfaces
+  - dropdown single-select has no stray square box
+  - multi-select checkbox alignment is correct
+- Capture proof screenshots only after these checks pass.

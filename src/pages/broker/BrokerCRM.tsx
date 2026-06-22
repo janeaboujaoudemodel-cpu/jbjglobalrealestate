@@ -50,20 +50,21 @@ function Kpi({
     <button
       type="button"
       onClick={onClick}
-      className="group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-4 py-4 hover:border-[color:var(--emerald-1)]/55 hover:bg-[color:var(--emerald-soft-bg)] transition-colors w-full focus:outline-none focus:ring-2 focus:ring-[color:var(--emerald-1)]/40"
+      className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-5 py-5 w-full focus:outline-none"
     >
       <div className="flex items-center justify-between">
-        <div className="h-8 w-8 grid place-items-center rounded-md jj-icon-tile-emerald">
-          <Icon className="h-4 w-4 text-white" />
+        <div className="h-10 w-10 grid place-items-center rounded-xl jj-icon-tile-emerald" data-icon-tile="">
+          <Icon className="h-5 w-5 text-white" />
         </div>
-        <ArrowRight className="h-3.5 w-3.5 text-[color:var(--emerald-1)]/70 group-hover:text-[color:var(--emerald-1)] transition-colors" />
+        <ArrowRight className="h-4 w-4 text-[color:var(--emerald-1)]/70 group-hover:text-white transition-colors" />
       </div>
-      <div className="mt-3 text-2xl md:text-3xl font-semibold tabular-nums text-[#1A1A1A]">{value}</div>
-      <div className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 mt-1">{label}</div>
+      <div className="mt-4 text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none">{value}</div>
+      <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold">{label}</div>
       {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
     </button>
   );
 }
+
 
 const STAGE_GROUPS: Array<{ key: string; label: string; match: string[] }> = [
   { key: "new",         label: "New",            match: ["new", "untouched"] },
@@ -396,32 +397,18 @@ export default function BrokerCRM() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button
-              onClick={() => setUploadOpen(true)}
-              variant="primary"
-            >
+            <Button onClick={() => setUploadOpen(true)} variant="primary">
               <Upload className="w-4 h-4 mr-1.5" /> Add database
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => setRequestOpen(true)}
-              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-            >
+            <Button variant="secondary" onClick={() => setRequestOpen(true)}>
               <Inbox className="w-4 h-4 mr-1.5" /> Request database
             </Button>
-            <Link
-              to="/broker/leads"
-              className="jj-cta-primary jj-cta-champagne inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-semibold transition-colors"
-              data-surface="emerald"
-              data-cta="primary"
-            >
-              <Plus className="h-4 w-4" /> <span>Add lead</span>
-            </Link>
-            <Button
-              variant="outline"
-              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              onClick={() => setCallDialogOpen(true)}
-            >
+            <Button asChild variant="primary">
+              <Link to="/broker/leads">
+                <Plus className="h-4 w-4 mr-1.5" /> Add lead
+              </Link>
+            </Button>
+            <Button variant="secondary" onClick={() => setCallDialogOpen(true)}>
               <Phone className="w-4 h-4 mr-1.5" /> Log a call
             </Button>
           </div>
@@ -438,7 +425,7 @@ export default function BrokerCRM() {
       </div>
 
       {/* Tabs */}
-      <nav className="flex flex-wrap gap-1 border-b border-[#B89555]/25">
+      <nav className="flex flex-wrap gap-1.5 p-1.5 rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/22 shadow-[0_6px_18px_-16px_rgba(6,78,59,0.35)]">
         {([
           { id: "pipeline", label: "Pipeline", icon: BarChart3 },
           { id: "databases", label: "My Databases", icon: Database },
@@ -457,13 +444,10 @@ export default function BrokerCRM() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-                  data-jj-segmented-trigger=""
-                  data-state={active ? "active" : undefined}
-                  className={`px-4 py-2.5 text-sm flex items-center gap-2 rounded-t-md border-b-2 -mb-px transition-colors ${
-                active
-                      ? "border-[color:var(--emerald-1)] font-semibold"
-                      : "border-transparent text-[#1A1A1A]/65 hover:text-[color:var(--emerald-1)]"
-              }`}
+              data-jj-segmented-trigger=""
+              data-state={active ? "active" : undefined}
+              data-active={active ? "true" : undefined}
+              className="jj-tab-pill"
             >
               <Icon className="h-4 w-4" /> {t.label}
             </button>
@@ -476,7 +460,7 @@ export default function BrokerCRM() {
         <div className="space-y-4">
           <PremiumCard>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-[#1A1A1A]">Pipeline by stage</h2>
+              <h2 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-[0.14em]">Pipeline by stage</h2>
               <span className="text-xs text-[#1A1A1A]/55">{totalLeads} total leads</span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -485,14 +469,21 @@ export default function BrokerCRM() {
                   key={s.key}
                   type="button"
                   onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
-                  className="text-left rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 px-4 py-3 hover:border-[#B89555]/55 hover:bg-[#F7F2EA] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-4 py-4 focus:outline-none"
                 >
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">{s.label}</div>
+                  <div className="flex items-center justify-between">
+                    <div className="h-8 w-8 grid place-items-center rounded-lg jj-icon-tile-emerald" data-icon-tile="">
+                      <BarChart3 className="h-4 w-4 text-white" />
+                    </div>
+                    <ArrowRight className="h-3.5 w-3.5 text-[color:var(--emerald-1)]/60 group-hover:text-white transition-colors" />
+                  </div>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 mt-3 font-semibold">{s.label}</div>
                   <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
                 </button>
               ))}
             </div>
           </PremiumCard>
+
 
           {/* Leads table — always visible on Pipeline tab so the empty state guides the broker */}
           <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
@@ -518,8 +509,11 @@ export default function BrokerCRM() {
                   <div className="text-right">Updated</div>
                 </div>
                 <div className="py-12 px-6 text-center">
-                  <Users className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
+                  <div className="mx-auto mb-4 h-14 w-14 grid place-items-center rounded-2xl jj-icon-tile-emerald shadow-[0_10px_24px_-14px_rgba(6,78,59,0.55)]" data-icon-tile="">
+                    <Users className="h-7 w-7 text-white" />
+                  </div>
                   <div className="text-sm font-semibold text-[#1A1A1A]">There are no leads yet</div>
+
                   <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
                     Start adding your first leads — your pipeline, stages, and conversion will fill in
                     automatically as you work.
@@ -596,8 +590,11 @@ export default function BrokerCRM() {
             <Loading />
           ) : (dbs.data?.length ?? 0) === 0 ? (
             <PremiumCard className="text-center py-10">
-              <Inbox className="h-7 w-7 mx-auto text-[#1A1A1A]/60 mb-3" />
+              <div className="mx-auto mb-4 h-14 w-14 grid place-items-center rounded-2xl jj-icon-tile-emerald shadow-[0_10px_24px_-14px_rgba(6,78,59,0.55)]" data-icon-tile="">
+                <Inbox className="h-7 w-7 text-white" />
+              </div>
               <div className="text-sm font-semibold text-[#1A1A1A]">No databases shared with you yet</div>
+
               <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
                 When your manager grants access to a CRM database — or you upload one yourself — it will appear here.
                 Click any database to open it as a separate sheet without merging into My Leads.
@@ -625,11 +622,11 @@ export default function BrokerCRM() {
                 key={d.grant_id}
                 type="button"
                 onClick={() => setOpenDbSheet({ id: d.database_id, name: d.database_name })}
-                className="block w-full text-left p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 hover:border-[#B89555]/55 transition-colors"
+                className="jj-hover-emerald group block w-full text-left p-4 rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/24"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center">
-                    <Database className="h-4 w-4 text-[#1A1A1A]" />
+                  <div className="h-10 w-10 rounded-xl jj-icon-tile-emerald grid place-items-center" data-icon-tile="">
+                    <Database className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-[#1A1A1A] truncate">{d.database_name}</div>
@@ -638,10 +635,11 @@ export default function BrokerCRM() {
                       {d.date_window_mode !== "all" && ` · window: ${d.date_window_mode}`}
                     </div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-[#1A1A1A]/50" />
+                  <ArrowRight className="h-4 w-4 text-[color:var(--emerald-1)]/70 group-hover:text-white" />
                 </div>
               </button>
             ))
+
           )}
         </section>
         )
@@ -673,10 +671,13 @@ export default function BrokerCRM() {
                   <div className="text-right">Updated</div>
                 </div>
                 <div className="py-12 px-6 text-center">
-                  <Users className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
+                  <div className="mx-auto mb-4 h-14 w-14 grid place-items-center rounded-2xl jj-icon-tile-emerald shadow-[0_10px_24px_-14px_rgba(6,78,59,0.55)]" data-icon-tile="">
+                    <Users className="h-7 w-7 text-white" />
+                  </div>
                   <div className="text-sm font-semibold text-[#1A1A1A]">
                     {search ? "No leads match your search" : "You don't have any leads yet"}
                   </div>
+
                   <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
                     {search
                       ? "Try a different name, email, phone or pipeline stage."
@@ -788,7 +789,7 @@ export default function BrokerCRM() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  className=""
                   onClick={() => {
                     if (confirm(`Move all ${callLogs.data!.length} calls to Recently deleted?`)) {
                       deleteAllCalls.mutate();
@@ -803,7 +804,7 @@ export default function BrokerCRM() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  className=""
                   onClick={() => setCallDialogOpen(true)}
                 >
                   <Phone className="w-3.5 h-3.5 mr-1.5" /> Log a call
@@ -848,7 +849,7 @@ export default function BrokerCRM() {
                         {callsView === "active" ? (
                           <Button
                             variant="outline" size="sm"
-                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                            className=""
                             onClick={() => {
                               if (confirm(`Move ${selectedArr.length} call(s) to Recently deleted?`)) bulkSoftDelete.mutate(selectedArr);
                             }}
@@ -860,7 +861,7 @@ export default function BrokerCRM() {
                           <>
                             <Button
                               variant="outline" size="sm"
-                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              className=""
                               onClick={() => bulkRestore.mutate(selectedArr)}
                               disabled={bulkRestore.isPending}
                             >
@@ -868,7 +869,7 @@ export default function BrokerCRM() {
                             </Button>
                             <Button
                               variant="outline" size="sm"
-                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                              className=""
                               onClick={() => {
                                 if (confirm(`Permanently delete ${selectedArr.length} call(s)? This cannot be undone.`)) bulkHardDelete.mutate(selectedArr);
                               }}
@@ -881,7 +882,7 @@ export default function BrokerCRM() {
                         <button
                           type="button"
                           onClick={() => setSelectedCallIds(new Set())}
-                          className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                          className="text-[11px] px-2 py-1 rounded border "
                         >
                           Clear
                         </button>
@@ -950,7 +951,7 @@ export default function BrokerCRM() {
                                   e.stopPropagation();
                                   if (confirm("Move this call to Recently deleted?")) softDeleteCall.mutate(log.id);
                                 }}
-                                className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                className="text-[11px] px-2 py-1 rounded border "
                                 disabled={softDeleteCall.isPending}
                               >
                                 Delete
@@ -960,7 +961,7 @@ export default function BrokerCRM() {
                                 <button
                                   type="button"
                                   onClick={(e) => { e.stopPropagation(); restoreCall.mutate(log.id); }}
-                                  className="text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                                  className="text-[11px] px-2 py-1 rounded border "
                                   disabled={restoreCall.isPending}
                                 >
                                   Restore
@@ -1026,9 +1027,10 @@ export default function BrokerCRM() {
                       <span>{s.label}</span>
                       <span className="tabular-nums">{s.count} · {pct}%</span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-[#EFE6D6] overflow-hidden">
-                      <div className="h-full bg-[#B89555]/70" style={{ width: `${pct}%` }} />
+                    <div className="h-2 rounded-full bg-[color:var(--emerald-soft-bg)] overflow-hidden">
+                      <div className="h-full" style={{ width: `${pct}%`, background: "var(--gradient-emerald)" }} />
                     </div>
+
                   </div>
                 );
               })}

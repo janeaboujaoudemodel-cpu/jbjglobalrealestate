@@ -361,12 +361,13 @@ export default function BrokerDashboardLanding() {
           <span className="flex-1 h-px bg-gradient-to-r from-[#B89555]/40 via-[#B89555]/15 to-transparent" />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-          <Kpi icon={Users}           tone="blue"    label="Total leads"          value={totalLeads}     to="/broker/leads"        loading={leads.isLoading} />
+          <Kpi icon={Users}           tone="emerald" label="Total leads"          value={totalLeads}     to="/broker/leads"        loading={leads.isLoading} />
           <Kpi icon={Handshake}       tone="emerald" label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
-          <Kpi icon={Calendar}        tone="amber"   label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
-          <Kpi icon={Sparkles}        tone="purple"  label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
-          <Kpi icon={BadgeDollarSign} tone="gold"    label="Commission pipeline"  value="—"              to="/broker/deals"        />
-          <Kpi icon={ListTodo}        tone="rose"    label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
+          <Kpi icon={Calendar}        tone="emerald" label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
+          <Kpi icon={Sparkles}        tone="emerald" label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
+          <Kpi icon={BadgeDollarSign} tone="emerald" label="Commission pipeline"  value="—"              to="/broker/deals"        />
+          <Kpi icon={ListTodo}        tone="emerald" label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
+
         </div>
       </div>
 
