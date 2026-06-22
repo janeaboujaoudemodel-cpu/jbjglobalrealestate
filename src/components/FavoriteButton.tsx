@@ -98,22 +98,19 @@ const FavoriteButton = ({
         <TooltipTrigger asChild>
           <button
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-            data-surface="champagne"
-            data-cta="champagne"
+            data-surface="emerald"
+            data-emerald="true"
+            data-card-action="favorite"
             onClick={handleFavoriteClick}
             disabled={toggleUserFavorite.isPending}
-            className={`${sizeClasses[size]} jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200 border ${
-              isFavorite 
-                ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/40 shadow-lg"
-                : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg hover:bg-[#EFE6D6]"
-            }`}
+            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
           >
             <Heart
-              className={`${iconSizes[size]} transition-all duration-200 ${
-                isFavorite 
-                  ? "fill-red-500 text-red-500" 
-                  : "text-[#1A1A1A] hover:text-red-500"
-              }`}
+              className={`${iconSizes[size]} allow-white transition-all duration-200`}
+              color="#FFFFFF"
+              stroke="#FFFFFF"
+              fill={isFavorite ? "#FFFFFF" : "none"}
+              style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
             />
           </button>
         </TooltipTrigger>
@@ -127,20 +124,17 @@ const FavoriteButton = ({
           <TooltipTrigger asChild>
             <button
               aria-label={isShortlisted ? "Remove from shortlist" : "Add to shortlist"}
-              data-surface="champagne"
-              data-cta="champagne"
+              data-surface="emerald"
+              data-emerald="true"
+              data-card-action="shortlist"
               onClick={handleShortlistClick}
               disabled={toggleUserShortlist.isPending}
-              className={`${sizeClasses[size]} jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200 border ${
-                isShortlisted
-                  ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555] shadow-lg"
-                  : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg hover:bg-[#EFE6D6]"
-              }`}
+              className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
             >
               {isShortlisted ? (
-                <Check className={`${iconSizes[size]} text-[#1A1A1A]`} />
+                <Check className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               ) : (
-                <ListPlus className={`${iconSizes[size]} text-[#1A1A1A]`} />
+                <ListPlus className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               )}
             </button>
           </TooltipTrigger>
