@@ -645,8 +645,7 @@ label[data-required]::after {
   -webkit-text-fill-color: #FFFFFF;
   stroke: #FFFFFF;
 }
-[data-careers-page] .careers-open-badge .bg-emerald-400,
-[data-careers-page] .careers-open-badge [class*="bg-emerald"] {
+[data-careers-page] .careers-open-badge [data-careers-open-dot] {
   background-color: #34d399 !important;
 }
 

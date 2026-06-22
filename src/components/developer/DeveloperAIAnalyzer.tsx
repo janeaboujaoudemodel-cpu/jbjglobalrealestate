@@ -80,7 +80,7 @@ function PricePerSqftChart({ text }: { text: string }) {
           <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
         </div>
-        <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${isPositive ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : 'bg-red-50 text-red-600'}`}>
+        <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${isPositive ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' : 'bg-red-50 text-red-600'}`}>
           {isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
           {(Math.abs(growth) * 100).toFixed(1)}% YoY
         </div>
@@ -149,7 +149,7 @@ function SupplyDemandChart({ text }: { text: string }) {
           <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
         </div>
-        <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${ratio > 0.9 ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'}`}>
+        <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${ratio > 0.9 ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'}`}>
           <StatusIcon className="w-3.5 h-3.5" />
           {marketStatus}
         </div>
@@ -178,7 +178,7 @@ function SupplyDemandChart({ text }: { text: string }) {
       </div>
       <div className="flex items-center gap-4 mb-4 text-xs">
         <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#B89555' }} /><span className="text-[#1A1A1A]/70">Supply (New Units)</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full jj-emerald-solid" /><span className="text-[#1A1A1A]/70">Demand (Absorption)</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full jj-surface-emerald" /><span className="text-[#1A1A1A]/70">Demand (Absorption)</span></div>
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
@@ -643,7 +643,7 @@ export const DeveloperAIAnalyzer = ({
                     </p>
                   )}
                   <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 ${
- ratingScore >= 8 ? 'jj-emerald-solid/20 text-emerald-400 border border-[color:var(--emerald-1)]/30/30' :
+ ratingScore >= 8 ? 'jj-surface-emerald-soft text-emerald-400 border border-[color:var(--emerald-1)]/30/30' :
  ratingScore >= 6 ? 'bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30' :
  'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/30'
  }`}>
@@ -668,7 +668,7 @@ export const DeveloperAIAnalyzer = ({
             {/* Row 4: Pros & Cons */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {sections?.pros && (
-                <div className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-sm">
+                <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
                     <ThumbsUp className="w-5 h-5 text-[color:var(--emerald-1)]" />
                     <h3 className="font-bold text-[color:var(--emerald-1)] text-lg">Pros</h3>

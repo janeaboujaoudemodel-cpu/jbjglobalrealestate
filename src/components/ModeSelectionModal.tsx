@@ -184,9 +184,7 @@ export const ModeSelectionModal = () => {
           <Button
             onClick={handleSelectMode}
             disabled={!selectedMode || isSubmitting}
-            data-cta="mode-continue"
-            data-no-contrast-guard
-            className="jj-cta-champagne w-full h-12 text-[#1A1A1A] font-bold rounded-xl shadow-lg disabled:opacity-50"
+            className="w-full h-12 font-bold rounded-xl shadow-lg disabled:opacity-50"
           >
             {isSubmitting ? (
               'Setting up…'

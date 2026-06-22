@@ -191,7 +191,7 @@ export default function AIInvestmentReportPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full jj-emerald-solid hover:jj-emerald-solid text-[#1A1A1A] font-semibold"
+              className="w-full jj-surface-emerald font-semibold"
             >
               {loading ? (
                 <>
@@ -302,7 +302,7 @@ export default function AIInvestmentReportPage() {
 
             {/* Recommendations */}
             {result.recommendations && result.recommendations.length > 0 && (
-              <Card className="jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30">
+              <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30">
                 <CardHeader>
                   <CardTitle className="text-white">Recommendations</CardTitle>
                 </CardHeader>
