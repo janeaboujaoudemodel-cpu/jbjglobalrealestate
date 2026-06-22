@@ -42,6 +42,7 @@ const EMERALD_SURFACE_SELECTOR = [
 
 const GLYPH_SELECTOR = "svg, [class*='lucide']";
 const FOREGROUND_SELECTOR = "span, p, strong, small, em, b, a, button, label, h1, h2, h3, h4, h5, h6, svg, [class*='lucide']";
+const IMAGE_GLYPH_SELECTOR = "img, canvas";
 const SVG_PART_SELECTOR = "path, circle, rect, line, polyline, polygon, ellipse, use, g";
 
 function paintText(el: SVGElement | HTMLElement) {
@@ -129,6 +130,12 @@ function paint(svg: SVGElement | HTMLElement) {
   });
 }
 
+function paintImageGlyph(el: HTMLElement) {
+  el.style.setProperty("filter", "brightness(0) invert(1)", "important");
+  el.style.setProperty("opacity", "1", "important");
+  el.style.setProperty("mix-blend-mode", "normal", "important");
+}
+
 function enforceWithin(root: ParentNode | Element) {
   const tiles =
     "querySelectorAll" in root
@@ -146,6 +153,9 @@ function enforceWithin(root: ParentNode | Element) {
     tile
       .querySelectorAll(GLYPH_SELECTOR)
       .forEach((g) => paint(g as SVGElement | HTMLElement));
+    tile
+      .querySelectorAll(IMAGE_GLYPH_SELECTOR)
+      .forEach((g) => paintImageGlyph(g as HTMLElement));
   });
   // Also handle the case where `root` itself is a tile.
   if (
@@ -164,6 +174,9 @@ function enforceWithin(root: ParentNode | Element) {
     (root as Element)
       .querySelectorAll(GLYPH_SELECTOR)
       .forEach((g) => paint(g as SVGElement | HTMLElement));
+    (root as Element)
+      .querySelectorAll(IMAGE_GLYPH_SELECTOR)
+      .forEach((g) => paintImageGlyph(g as HTMLElement));
   }
 }
 
@@ -202,6 +215,9 @@ export function installEmeraldIconEnforcer() {
           );
           el.querySelectorAll(GLYPH_SELECTOR).forEach((g) =>
             paint(g as SVGElement | HTMLElement),
+          );
+          el.querySelectorAll(IMAGE_GLYPH_SELECTOR).forEach((g) =>
+            paintImageGlyph(g as HTMLElement),
           );
         }
       }
