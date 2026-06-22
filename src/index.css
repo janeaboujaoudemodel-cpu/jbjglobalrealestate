@@ -9969,10 +9969,6 @@ html body input.mortgage-range-input::-moz-range-track {
   box-shadow: none !important;
   border: 0 !important;
 }
-html body input[type="range"][data-mortgage-slider="Compare rate"] {
-  background-image: none !important;
-}
-
 /* ============================================================
  * PASS 11 — Sidebar emerald tiles & emerald-band headings
  * Final override: force white icons/text inside any emerald-fill
