@@ -195,19 +195,20 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
         throw new Error(errorData.error || 'Submission failed');
       }
 
-      // Update visitor session with masked contact info (no PII in client-side storage)
-      await supabase
-        .from('visitor_sessions')
-        .update({
+      // Update visitor session with masked contact info via secure RPC
+      await supabase.rpc('track_visitor_session_update', {
+        p_session_id: sessionId,
+        p_patch: {
           contact_details: {
-            name: formData.fullName.split(' ')[0] + ' ***', // Partially masked
-            email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'), // Masked email
+            name: formData.fullName.split(' ')[0] + ' ***',
+            email: formData.email.replace(/(.{2})(.*)(@.*)/, '$1***$3'),
             hasPhone: true,
             nationality: formData.nationality,
           },
           is_converted: true,
-        })
-        .eq('session_id', sessionId);
+        } as never,
+      });
+
 
       // Mark as completed in localStorage (no full PII stored client-side)
       localStorage.setItem('contact_gating_completed', 'true');
