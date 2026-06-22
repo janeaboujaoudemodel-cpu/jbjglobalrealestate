@@ -357,7 +357,10 @@ All colors MUST be HSL.
     --ai-purple-dark: 263 70% 50%;
     --ai-fuchsia: 292 84% 61%;
     --ai-cyan: 262 60% 70%;
-    --ai-emerald: 262 50% 55%;
+    /* NOTE: --ai-emerald historically held a purple value (legacy bug).
+       Now correctly aliased to the brand emerald primary so any consumer
+       gets the locked Emerald gradient color, not stray purple. */
+    --ai-emerald: 158 86% 16%; /* #064E3B */
     --ai-amber: 262 40% 60%;
     --ai-rose: 280 60% 55%;
     --ai-glow: 0 0% 60%;
