@@ -9704,3 +9704,33 @@ html body .jj-dual-cta-secondary:is(:hover,:focus-visible,:active) * {
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+/* PASS 41 — Top Areas Read Area Guides must visually match the header AED/Mode emerald pill exactly. */
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary,
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary:is(:hover,:focus,:focus-visible,:active) {
+  background: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-blend-mode: normal !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85) !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary,
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary *,
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary:is(:hover,:focus,:focus-visible,:active),
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary:is(:hover,:focus,:focus-visible,:active) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary::before,
+html body section#top-areas-dubai a[href="/area-guides"].jj-dual-cta-primary::after {
+  content: none !important;
+  display: none !important;
+}
