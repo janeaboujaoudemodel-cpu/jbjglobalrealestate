@@ -75,6 +75,20 @@ const ShortlistBadgeButton = ({
     md: "w-4 h-4",
     lg: "w-5 h-5",
   };
+  const emeraldButtonStyle: React.CSSProperties = {
+    backgroundImage: "var(--jj-emerald-ombre)",
+    backgroundColor: "#064E3B",
+    color: "#FFFFFF",
+    WebkitTextFillColor: "#FFFFFF",
+    borderColor: "rgba(255,255,255,0.35)",
+    opacity: 1,
+  };
+  const whiteIconStyle: React.CSSProperties = {
+    color: "#FFFFFF",
+    stroke: "#FFFFFF",
+    opacity: 1,
+    filter: "none",
+  };
 
   const handleSetBadge = (badge: ShortlistBadge | null) => {
     // Auto-add to shortlist if not already shortlisted
@@ -114,10 +128,14 @@ const ShortlistBadgeButton = ({
         <DropdownMenuTrigger asChild>
           <button
             onClick={(e) => e.stopPropagation()}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7]/90 transition-all cursor-pointer whitespace-nowrap ${className}`}
+            data-surface="emerald"
+            data-emerald="true"
+            data-card-action="badge-shortlist"
+            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center gap-1.5 rounded-full border border-white/25 transition-all cursor-pointer whitespace-nowrap shadow-lg ${className}`}
+            style={emeraldButtonStyle}
           >
-            <Award className={iconSizes[size]} />
-            <span className="hidden sm:inline">{currentBadge ? "Change" : "Add Badge"}</span>
+            <Award className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
+            <span className="hidden sm:inline allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{currentBadge ? "Change" : "Add Badge"}</span>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>

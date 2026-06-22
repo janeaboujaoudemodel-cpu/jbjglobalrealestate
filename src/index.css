@@ -9157,6 +9157,30 @@ html body .jj-history-emerald-icon {
   border: 1px solid rgba(4,120,87,.95) !important;
 }
 
+/* Card favorite / shortlist / badge buttons: emerald own-surface, white glyph only. */
+html body :is(button, a).jj-favorite-trigger,
+html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body :is(button, a).jj-favorite-trigger *,
+html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body :is(button, a).jj-favorite-trigger :is(svg, [class*="lucide"]),
+html body :is(button, a).jj-favorite-trigger :is(svg, [class*="lucide"]) *,
+html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) :is(svg, [class*="lucide"]),
+html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* ─── ACTIVE sq ft / sq m — animated emerald metallic shine (sweep) ─── */
 html body [data-jj-utility-bar] .jj-sqtoggle {
   position: relative !important;

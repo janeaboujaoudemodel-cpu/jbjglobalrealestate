@@ -125,33 +125,23 @@ const AIHF_RESULTS_STYLE = `
     color: var(--price-orange) !important;
     -webkit-text-fill-color: var(--price-orange) !important;
   }
-  /* Favorite / shortlist buttons — champagne pill + gold hairline */
+  /* Favorite / shortlist buttons — locked emerald fill + white glyph */
   .aihf-results .jj-favorite-trigger,
-  .aihf-results button:has(> svg.lucide-award) {
-    background: #EFE6D6 !important;
-    border: 1px solid rgba(184,149,85,0.55) !important;
-    box-shadow: none !important;
-  }
-  .aihf-results .jj-favorite-trigger:hover,
-  .aihf-results button:has(> svg.lucide-award):hover {
-    border-color: rgba(184,149,85,0.95) !important;
-    box-shadow: none !important;
+  .aihf-results .jj-favorite-trigger:hover {
+    background-image: var(--jj-emerald-ombre) !important;
+    background-color: #064E3B !important;
+    border: 1px solid rgba(255,255,255,0.35) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 10px 24px -12px rgba(6,78,59,0.95) !important;
   }
   .aihf-results .jj-favorite-trigger svg,
-  .aihf-results button:has(> svg.lucide-award) svg {
-    stroke: #1A1A1A !important;
-    color: #1A1A1A !important;
+  .aihf-results .jj-favorite-trigger svg * {
+    stroke: #FFFFFF !important;
+    color: #FFFFFF !important;
     filter: none;
   }
   .aihf-results button:has(> svg.lucide-award) span {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
-  }
-  .aihf-results .jj-favorite-trigger svg.fill-red-500,
-  .aihf-results .jj-favorite-trigger svg[fill="currentColor"].text-red-500 {
-    fill: #B89555 !important;
-    stroke: #B89555 !important;
-    color: #B89555 !important;
   }
   /* Add Badge dropdown — champagne menu */
   [data-aihf-menu],

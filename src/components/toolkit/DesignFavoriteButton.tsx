@@ -28,6 +28,20 @@ const DesignFavoriteButton = ({
 
   const sizeClasses = { sm: "w-8 h-8", md: "w-10 h-10" };
   const iconSizes = { sm: "w-4 h-4", md: "w-5 h-5" };
+  const emeraldButtonStyle: React.CSSProperties = {
+    backgroundImage: "var(--jj-emerald-ombre)",
+    backgroundColor: "#064E3B",
+    color: "#FFFFFF",
+    WebkitTextFillColor: "#FFFFFF",
+    borderColor: "rgba(255,255,255,0.35)",
+    opacity: 1,
+  };
+  const whiteIconStyle: React.CSSProperties = {
+    color: "#FFFFFF",
+    stroke: "#FFFFFF",
+    opacity: 1,
+    filter: "none",
+  };
 
   const handleFav = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -64,16 +78,18 @@ const DesignFavoriteButton = ({
           <button
             onClick={handleFav}
             disabled={toggle.isPending}
-            className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
-              isFavorite
-                ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/40 shadow-lg"
-                : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg"
-            }`}
+            data-surface="emerald"
+            data-emerald="true"
+            data-card-action="favorite"
+            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
+            style={emeraldButtonStyle}
           >
             <Heart
-              className={`${iconSizes[size]} transition-all duration-200 ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-[#1A1A1A] hover:text-red-500"
-              }`}
+              className={`${iconSizes[size]} allow-white transition-all duration-200`}
+              color="#FFFFFF"
+              stroke="#FFFFFF"
+              fill={isFavorite ? "#FFFFFF" : "none"}
+              style={whiteIconStyle}
             />
           </button>
         </TooltipTrigger>
@@ -88,16 +104,16 @@ const DesignFavoriteButton = ({
             <button
               onClick={handleShortlist}
               disabled={toggle.isPending}
-              className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
-                isShortlisted
-                  ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555] shadow-lg"
-                  : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg"
-              }`}
+              data-surface="emerald"
+              data-emerald="true"
+              data-card-action="shortlist"
+              className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 border border-white/25 shadow-lg`}
+              style={emeraldButtonStyle}
             >
               {isShortlisted ? (
-                <Check className={`${iconSizes[size]} text-[#1A1A1A]`} />
+                <Check className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
               ) : (
-                <ListPlus className={`${iconSizes[size]} text-[#1A1A1A]`} />
+                <ListPlus className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
               )}
             </button>
           </TooltipTrigger>
