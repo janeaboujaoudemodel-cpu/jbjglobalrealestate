@@ -55,49 +55,26 @@ const News = () => {
     },
   });
 
-  // Transform DB news to display format
-  const newsArticles = (dbNews || []).map(n => ({
-    id: n.id,
-    title: n.title,
-    excerpt: n.excerpt,
-    category: n.category,
-    date: n.published_date,
-    source: n.source,
-    image: n.image_url || null,
-    isAI: n.ai_generated,
-    sourceUrl: n.source_url,
-  }));
+  // Transform DB news to display format, dropping anything that isn't Dubai/UAE real estate
+  const newsArticles = (dbNews || [])
+    .filter(n => isRealEstateArticle({ title: n.title, excerpt: n.excerpt, content: n.content, category: n.category }))
+    .map(n => ({
+      id: n.id,
+      title: n.title,
+      excerpt: n.excerpt,
+      category: n.category,
+      date: n.published_date,
+      source: n.source,
+      image: n.image_url || null,
+      isAI: n.ai_generated,
+      sourceUrl: n.source_url,
+    }));
 
-  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Monthly Report", "Market Outlook", "Developer News", "Government", "Company News"];
+  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Developer News", "Government", "Company News"];
 
   const filteredNews = selectedCategory && selectedCategory !== "All"
     ? newsArticles.filter(n => n.category === selectedCategory)
     : newsArticles;
-
-  const handleRefreshNews = async () => {
-    setIsRefreshing(true);
-    try {
-      const { error } = await supabase.functions.invoke('ai-news-collector', {
-        body: { action: 'collect' }
-      });
-      
-      if (error) {
-        if (error.message?.includes('429')) {
-          toast.error("Rate limit exceeded. Please try again later.");
-          return;
-        }
-        throw error;
-      }
-      
-      await refetch();
-      toast.success("News updated successfully!");
-    } catch (err) {
-      console.error("Failed to refresh news:", err);
-      toast.error("Failed to refresh news. Please try again.");
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   // Dynamic date for DLD stats
   const dldDateLabel = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
