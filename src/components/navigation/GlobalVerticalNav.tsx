@@ -785,66 +785,30 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    // Top highlighted hubs (AI Home Finder, List Your Property, Careers, Resale Properties)
-    // — premium GOLD label to match the main section headers.
     if (
       item.href === '/join' ||
       item.href === '/ai-home-finder' ||
       (item.href === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
-      return shouldHighlight
-        ? "font-bold"
-        : "font-semibold";
+      return shouldHighlight ? "font-bold text-[#1A1A1A]" : "font-semibold text-[#1A1A1A]";
     }
-    if (sectionKey === 'MY ACCOUNT') {
-      return shouldHighlight
-        ? "text-[#B89555] font-bold"
-        : "text-[#B89555] font-semibold";
-    }
-    if (item.highlight) {
-      return shouldHighlight
-        ? "text-[#B89555] font-bold"
-        : "text-[#B89555] font-semibold";
-    }
+
     return shouldHighlight
-      ? "text-[#B89555] font-bold"
-      : (sectionKey ? "text-[#0A0A0A] font-medium" : "text-[#B89555]");
+      ? "text-[#1A1A1A] font-bold"
+      : (sectionKey ? "text-[#1A1A1A] font-medium" : "text-[#1A1A1A]");
   };
 
-  // Saturated colored rows where the row background is a vivid fill (not champagne).
-  // On those rows, icon glyphs go white for contrast and the tile uses translucent white.
-  const isSaturatedColorRow = (item: NavItem) =>
-    item.href === '/join' ||
-    item.href === '/ai-home-finder' ||
-    (item.href === '/list-property' && (item as any).highlight) ||
-    item.href === '/resale-properties';
+  const getIconTileClass = (_item?: NavItem) =>
+    'bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.65),inset_0_1px_0_rgba(255,255,255,0.18)]';
 
-  const getIconStyle = (item: NavItem, sectionKey?: string) => {
-    const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
-    const routeActive = isRouteActive(item.href);
-    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    // (Highlighted hubs were previously saturated; now unified to gold — no white-on-color override.)
-    // Active on champagne row → deeper gold for stronger contrast.
-    if (shouldHighlight) return 'text-[hsl(var(--gold-dark))]';
-    // Resting state → premium gold.
-    return 'text-[hsl(var(--gold))]';
-  };
+
+  const getIconStyle = () => 'text-white';
 
   const navHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#0A0A0A]";
   const subNavHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#0A0A0A]";
 
-  // Premium gold-bordered icon tile shared across nav rows.
-  const getIconTileClass = (item: NavItem) => {
-    const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
-    const routeActive = isRouteActive(item.href);
-    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    // (Saturated-row override removed — all rows now share the gold tile.)
-    if (shouldHighlight) {
-      return 'bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/80 shadow-[0_0_0_1px_rgba(217,194,146,0.35)]';
-    }
-    return 'bg-[hsl(var(--gold))]/[0.06] border border-[hsl(var(--gold))]/45 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/70';
-  };
+
 
 
   /* ─── RENDER MEGA MENU ─── */
@@ -1063,21 +1027,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     if (hasMega) handleNavClick(item.megaMenu, e);
                     else handleNavClick(undefined);
                   }}
-                  data-sidebar-highlight
-                  data-emerald={highlightActive ? 'true' : undefined}
-                  data-on-dark={highlightActive ? 'true' : undefined}
                   data-no-contrast-guard
-                  style={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
-                    className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] font-semibold transition-all duration-200 rounded-lg ${getItemStyle(item)}`}
+                  className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] transition-all duration-200 rounded-lg hover:bg-[#EFE6D6]/45 ${getItemStyle(item)}`}
+                  style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                 >
-                  <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0">
-                    <Icon className="w-3 h-3 transition-colors" style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : { color: '#1A1A1A', stroke: '#1A1A1A' }} />
+                  <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
+                    <Icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   </span>
-                  <span data-sidebar-highlight-label data-no-contrast-guard className="flex-1 text-left relative inline-block transition-colors duration-200" style={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
+                  <span className="flex-1 text-left relative inline-block transition-colors duration-200" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
                   {hasMega && (
-                    <ChevronRight data-no-contrast-guard className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : { color: '#1A1A1A', stroke: '#1A1A1A' }} />
+                    <ChevronRight data-no-contrast-guard className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
                   )}
                 </Link>
+
               );
             })}
 
@@ -1099,29 +1061,28 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-sidebar-section
                     data-active={sectionHighlighted ? 'true' : undefined}
                     data-no-contrast-guard
-                      data-on-dark={sectionHighlighted ? 'true' : undefined}
-                      style={{
-                        color: sectionHighlighted ? '#FFFFFF' : '#064E3B',
-                        WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#064E3B',
-                      }}
-                      className={`w-full flex items-center gap-2 px-2.5 h-[34px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${sectionHighlighted ? 'allow-white !text-white' : ''}`}
+                    style={{
+                      color: '#1A1A1A',
+                      WebkitTextFillColor: '#1A1A1A',
+                    }}
+                    className="w-full flex items-center gap-2 px-2.5 h-[34px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
                   >
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[#0A0A0A]/10 group-hover:border-[#0A0A0A]/70'}`}>
-                        <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: sectionHighlighted ? '#FFFFFF' : '#064E3B', stroke: sectionHighlighted ? '#FFFFFF' : '#064E3B' }} />
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
+                      <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </div>
                     <span
                       data-sidebar-section-label
                       data-no-contrast-guard
-                        data-on-dark={sectionHighlighted ? 'true' : undefined}
-                        style={{
-                          color: sectionHighlighted ? '#FFFFFF' : '#064E3B',
-                          WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#064E3B',
-                          background: 'none',
-                          backgroundImage: 'none',
-                        }}
-                        className={`allow-white flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${sectionHighlighted ? '!text-white' : navHoverUnderline}`}
+                      style={{
+                        color: '#1A1A1A',
+                        WebkitTextFillColor: '#1A1A1A',
+                        background: 'none',
+                        backgroundImage: 'none',
+                      }}
+                      className={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     >{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#064E3B', stroke: sectionHighlighted ? '#FFFFFF' : '#064E3B' }} />
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
                     )}
@@ -1175,17 +1136,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               }}
                               data-sidebar-subitem
                               data-active={subitemActive ? 'true' : undefined}
-                              data-emerald={subitemActive ? 'true' : undefined}
-                              data-on-dark={subitemActive ? 'true' : undefined}
                               aria-current={subitemActive ? 'page' : undefined}
                               data-no-contrast-guard
-                              className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150"
-                              style={subitemActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                              className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] transition-all duration-150 hover:bg-[#EFE6D6]/40 ${subitemActive ? 'font-semibold' : 'font-medium'}`}
+                              style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                             >
                               <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                                <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={subitemActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : { color: '#B89555', stroke: '#B89555' }} />
+                                <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                               </span>
-                              <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={subitemActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
+                              <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
+
                             </Link>
                             {needsAccountDivider && (
                               <div className="my-1 mx-2 h-px bg-gradient-to-r from-transparent via-[#047857]/45 to-transparent" aria-hidden="true" />
@@ -1211,53 +1171,22 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/contact"
               data-no-contrast-guard
-              data-on-dark
-              data-allow-dark-cta
-              className="allow-white flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.22)', background: 'var(--jj-emerald-ombre)' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
-                e.currentTarget.style.color = '#FFFFFF';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
-                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42)';
-                e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
-                e.currentTarget.style.color = '#FFFFFF';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.transform = 'none';
-              }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform hover:bg-[#064E3B]/[0.06]"
+              style={{ color: '#047857', borderColor: 'rgba(4,120,87,0.42)', background: 'transparent' }}
             >
-              <Headphones className="allow-white w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-              <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Contact</span>
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
+              <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
-              data-on-dark
-              data-allow-dark-cta
-              className="allow-white flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
-              style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.22)', background: 'var(--jj-emerald-ombre)' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
-                e.currentTarget.style.color = '#FFFFFF';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
-                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42)';
-                e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
-                e.currentTarget.style.color = '#FFFFFF';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.transform = 'none';
-              }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform hover:bg-[#064E3B]/[0.06]"
+              style={{ color: '#047857', borderColor: 'rgba(4,120,87,0.42)', background: 'transparent' }}
             >
-              <Ticket className="allow-white w-3.5 h-3.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-              <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Support</span>
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
+              <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>Support</span>
             </Link>
+
           </div>
           {session ? (
             <button
@@ -1418,9 +1347,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
                   >
-                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} />
+                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1431,13 +1360,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
                   >
-                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} />
+                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
               </Tooltip>
+
               {session ? (
                 <Tooltip>
                   <TooltipTrigger asChild>

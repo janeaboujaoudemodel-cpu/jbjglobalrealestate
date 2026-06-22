@@ -237,8 +237,8 @@ export default function MortgageParityPanel({
             const minR = compareMinRate;
             const maxR = compareMaxRate;
             const progress = Math.min(100, Math.max(0, ((compareRate - minR) / (maxR - minR)) * 100));
-            const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
-            const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.14)";
+            const fill = "linear-gradient(90deg, #0A6B53 0%, #064E3B 55%, #042c1c 82%, #000000 100%)";
+            const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.16)";
             return (
               <input
                 type="range"
@@ -262,6 +262,7 @@ export default function MortgageParityPanel({
                 className="mortgage-range-input w-full"
                 style={{
                   background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
+                  boxShadow: isNavy ? 'inset 0 0 0 1px rgba(255,255,255,0.08)' : 'inset 0 0 0 1px rgba(6,78,59,0.14)',
                   ["--mortgage-range-thumb" as any]:
                     "radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%)",
                   ["--mortgage-range-thumb-shadow" as any]:
@@ -269,6 +270,7 @@ export default function MortgageParityPanel({
                 }}
               />
             );
+
           })()}
         </div>
 
