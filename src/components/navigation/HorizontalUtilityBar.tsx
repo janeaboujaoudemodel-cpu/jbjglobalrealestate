@@ -109,12 +109,12 @@ export default function HorizontalUtilityBar() {
                 data-no-contrast-guard
                 onClick={() => setSearchOpen(true)}
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                className="allow-white h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Search"
               >
                 <Search
                   data-no-contrast-guard
-                  className="w-[18px] h-[18px]"
+                  className="allow-white w-[18px] h-[18px]"
                   style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                 />
               </button>
@@ -132,12 +132,12 @@ export default function HorizontalUtilityBar() {
                 data-no-contrast-guard
                 onClick={() => setFilterOpen(true)}
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                className="allow-white h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Filter"
               >
                 <SlidersHorizontal
                   data-no-contrast-guard
-                  className="w-[18px] h-[18px]"
+                  className="allow-white w-[18px] h-[18px]"
                   style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                 />
               </button>
@@ -152,12 +152,12 @@ export default function HorizontalUtilityBar() {
                 to="/favorites"
                 data-no-contrast-guard
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                className="allow-white h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Favorites"
               >
                 <Heart
                   data-no-contrast-guard
-                  className="w-[18px] h-[18px]"
+                  className="allow-white w-[18px] h-[18px]"
                   style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }}
                 />
               </Link>
