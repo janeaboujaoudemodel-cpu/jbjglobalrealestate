@@ -396,32 +396,18 @@ export default function BrokerCRM() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button
-              onClick={() => setUploadOpen(true)}
-              variant="primary"
-            >
+            <Button onClick={() => setUploadOpen(true)} variant="primary">
               <Upload className="w-4 h-4 mr-1.5" /> Add database
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => setRequestOpen(true)}
-              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-            >
+            <Button variant="secondary" onClick={() => setRequestOpen(true)}>
               <Inbox className="w-4 h-4 mr-1.5" /> Request database
             </Button>
-            <Link
-              to="/broker/leads"
-              className="jj-cta-primary jj-cta-champagne inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-semibold transition-colors"
-              data-surface="emerald"
-              data-cta="primary"
-            >
-              <Plus className="h-4 w-4" /> <span>Add lead</span>
-            </Link>
-            <Button
-              variant="outline"
-              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              onClick={() => setCallDialogOpen(true)}
-            >
+            <Button asChild variant="primary">
+              <Link to="/broker/leads">
+                <Plus className="h-4 w-4 mr-1.5" /> Add lead
+              </Link>
+            </Button>
+            <Button variant="secondary" onClick={() => setCallDialogOpen(true)}>
               <Phone className="w-4 h-4 mr-1.5" /> Log a call
             </Button>
           </div>
