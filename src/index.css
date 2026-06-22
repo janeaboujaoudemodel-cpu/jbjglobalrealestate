@@ -10795,3 +10795,42 @@ html body :is([data-filter-chip], [data-pill])[data-active="true"] :is(svg, [cla
   stroke: #FFFFFF !important;
 }
 
+
+/* ============================================================
+   GATE 1 — GLOBAL EMERALD ICON CONTRACT (FINAL OVERRIDE)
+   Any element that is, or is descended from, an Emerald-filled
+   icon tile MUST render its glyph(s) in pure white at every
+   state, regardless of nesting depth or ancestor surface.
+   Specificity is intentionally inflated (`.x.x.x`) so this beats
+   the light-surface descendant repaint sweep earlier in the file
+   without needing per-element `allow-white` opt-ins.
+   ============================================================ */
+html body :is(
+  .jj-icon-tile-emerald.jj-icon-tile-emerald.jj-icon-tile-emerald,
+  [data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"],
+  [data-icon-tile][data-surface="emerald"][data-surface="emerald"]
+) {
+  background-image: var(--gradient-emerald) !important;
+  background-color: var(--emerald-1) !important;
+  border-color: var(--emerald-1) !important;
+  box-shadow: 0 10px 24px -16px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+html body :is(
+  .jj-icon-tile-emerald.jj-icon-tile-emerald.jj-icon-tile-emerald,
+  [data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"],
+  [data-icon-tile][data-surface="emerald"][data-surface="emerald"]
+) :is(svg, [class*="lucide"], path, circle, rect, polyline, line, polygon, ellipse, span) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+/* Allow filled-glyph icons (rare) to keep white fill instead of none */
+html body :is(
+  .jj-icon-tile-emerald.jj-icon-tile-emerald.jj-icon-tile-emerald,
+  [data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"],
+  [data-icon-tile][data-surface="emerald"][data-surface="emerald"]
+) :is(svg[data-filled], svg[data-filled] *) {
+  fill: #FFFFFF !important;
+}
