@@ -6473,11 +6473,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
    emerald icon+label; on hover fill emerald with white text. */
 .jj-pill-emerald {
   background-image: var(--jj-emerald-ombre) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(52, 211, 153, 0.58) !important;
+  background-color: #047857 !important;
+  border: none !important;
   color: #FFFFFF !important;
-  box-shadow: 0 10px 24px -14px rgba(6, 78, 59, 0.85), inset 0 1px 0 rgba(255,255,255,0.18) !important;
-  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, filter 200ms ease;
+  box-shadow: 0 8px 22px -12px rgba(4, 120, 87, 0.55) !important;
+  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
 }
 .jj-pill-emerald svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 .jj-pill-emerald:hover {
@@ -9122,8 +9122,8 @@ html body :is(a,button).jj-pill-emerald:hover {
 
 html body :is(a,button,div).jj-emerald-rect-pill,
 html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus,:focus-visible,:active) {
-  --jj-locked-emerald: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-locked-emerald-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
+  --jj-locked-emerald: linear-gradient(135deg, #047857 0%, #059669 100%);
+  --jj-locked-emerald-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.32) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
   position: relative !important;
   isolation: isolate !important;
   overflow: hidden !important;
