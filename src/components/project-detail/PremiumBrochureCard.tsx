@@ -304,48 +304,50 @@ const PremiumBrochureCard = ({
         />
       </motion.div>
 
-      {/* Download Button - Premium champagne style with visible hover */}
+      {/* Download Button - Emerald, white at rest AND hover */}
       <motion.button
         onClick={handleClick}
         className={cn(
           "flex items-center gap-3 px-10 py-4 rounded-lg font-semibold text-base transition-all duration-300",
-          // Premium champagne gradient background
-          "bg-gradient-to-r from-champagne via-champagne-light to-champagne",
-          "text-foreground border-2 border-foreground/70",
-          "shadow-[0_10px_30px_rgba(200,167,102,0.25),0_6px_15px_rgba(0,0,0,0.22)]",
-          "hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:border-[#B89555]/80",
-          "group"
+          "shadow-[0_10px_28px_rgba(4,78,59,0.35)] hover:shadow-[0_14px_36px_rgba(4,78,59,0.45)]",
+          "group border-0"
         )}
-        whileHover={{ 
-          y: -3, 
-          scale: 1.02,
+        style={{
+          backgroundImage: "var(--jj-emerald-ombre)",
+          backgroundColor: "#064E3B",
+          color: "#FFFFFF",
+          WebkitTextFillColor: "#FFFFFF",
         }}
+        data-surface="emerald"
+        data-emerald="true"
+        data-no-contrast-guard
+        whileHover={{ y: -3, scale: 1.02 }}
         whileTap={{ scale: 0.98, y: 0 }}
       >
         {isLocked ? (
           <>
-            <Lock className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-[#1A1A1A] transition-colors">Unlock Brochure</span>
+            <Lock className="w-5 h-5" color="#FFFFFF" stroke="#FFFFFF" />
+            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Unlock Brochure</span>
           </>
         ) : isFetching ? (
           <>
-            <Loader2 className="w-5 h-5 text-foreground animate-spin" />
-            <span>Fetching Brochure…</span>
+            <Loader2 className="w-5 h-5 animate-spin" color="#FFFFFF" stroke="#FFFFFF" />
+            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Fetching Brochure…</span>
           </>
         ) : isDownloading ? (
           <>
-            <Loader2 className="w-5 h-5 text-foreground animate-spin" />
-            <span>Downloading...</span>
+            <Loader2 className="w-5 h-5 animate-spin" color="#FFFFFF" stroke="#FFFFFF" />
+            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Downloading...</span>
           </>
         ) : !brochureUrl ? (
           <>
-            <FileText className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-[#1A1A1A] transition-colors">Request Brochure</span>
+            <FileText className="w-5 h-5" color="#FFFFFF" stroke="#FFFFFF" />
+            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Brochure</span>
           </>
         ) : (
           <>
-            <Download className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-[#1A1A1A] transition-colors">Download Brochure</span>
+            <Download className="w-5 h-5" color="#FFFFFF" stroke="#FFFFFF" />
+            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Download Brochure</span>
           </>
         )}
       </motion.button>
