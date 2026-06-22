@@ -6194,8 +6194,8 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   margin-top: -8px;
   border: 0;
   border-radius: 9999px;
-  background: var(--mortgage-range-thumb, radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%));
-  box-shadow: var(--mortgage-range-thumb-shadow, 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50));
+  background: var(--mortgage-range-thumb, var(--jj-emerald-ombre));
+  box-shadow: var(--mortgage-range-thumb-shadow, 0 8px 18px -8px rgba(4,46,29,0.75));
 }
 .mortgage-range-input::-moz-range-track {
   height: 8px;
@@ -6208,8 +6208,8 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   height: 24px;
   border: 0;
   border-radius: 9999px;
-  background: var(--mortgage-range-thumb, radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%));
-  box-shadow: var(--mortgage-range-thumb-shadow, 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50));
+  background: var(--mortgage-range-thumb, var(--jj-emerald-ombre));
+  box-shadow: var(--mortgage-range-thumb-shadow, 0 8px 18px -8px rgba(4,46,29,0.75));
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -11273,4 +11273,139 @@ html body :where(
 .jj-cta-emerald-metallic:hover,
 .jj-cta-emerald:hover {
   background-image: var(--jj-emerald-ombre-hover) !important;
+}
+
+/* ============================================================
+   FINAL APPROVED EMERALD LOCK — visual validation targets
+   Card hearts, shortlist, add-badge, EOI/handover labels,
+   Email/Call/Chat, Continue Searching, mortgage CTAs and
+   bank-rate pickers all use the same approved emerald with
+   pure white content and absolutely no visible border/ring.
+   ============================================================ */
+html body :is(
+  .jj-card-emerald-action,
+  .jj-favorite-trigger,
+  .jj-history-emerald-icon,
+  .jj-card-emerald-label,
+  .jj-emerald-rect-pill,
+  .jj-pill-emerald,
+  .jj-dual-cta-primary,
+  .jj-cta-primary,
+  .jj-cta-dark,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  [data-card-action],
+  [data-emerald="true"],
+  [data-surface="emerald"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  outline: 0 !important;
+  box-shadow: 0 6px 18px -8px rgba(4,46,29,0.58) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is(
+  .jj-card-emerald-action,
+  .jj-favorite-trigger,
+  .jj-history-emerald-icon,
+  .jj-card-emerald-label,
+  .jj-emerald-rect-pill,
+  .jj-pill-emerald,
+  .jj-dual-cta-primary,
+  .jj-cta-primary,
+  .jj-cta-dark,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  [data-card-action],
+  [data-emerald="true"],
+  [data-surface="emerald"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"]
+):is(:hover,:focus,:focus-visible,:active) {
+  background: var(--jj-emerald-ombre-hover) !important;
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  outline: 0 !important;
+  box-shadow: 0 10px 24px -10px rgba(4,46,29,0.68) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is(
+  .jj-card-emerald-action,
+  .jj-favorite-trigger,
+  .jj-history-emerald-icon,
+  .jj-card-emerald-label,
+  .jj-emerald-rect-pill,
+  .jj-pill-emerald,
+  .jj-dual-cta-primary,
+  .jj-cta-primary,
+  .jj-cta-dark,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  [data-card-action],
+  [data-emerald="true"],
+  [data-surface="emerald"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"]
+) :is(span,p,strong,small,em,b,a,button,label,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+}
+
+html body :is(
+  .jj-card-emerald-action,
+  .jj-favorite-trigger,
+  [data-card-action]
+) :is(svg, [class*="lucide"]) {
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body .mortgage-range-input::-webkit-slider-thumb {
+  background: var(--jj-emerald-ombre) !important;
+  border: 0 !important;
+  box-shadow: 0 8px 18px -8px rgba(4,46,29,0.75) !important;
+}
+html body .mortgage-range-input::-moz-range-thumb {
+  background: var(--jj-emerald-ombre) !important;
+  border: 0 !important;
+  box-shadow: 0 8px 18px -8px rgba(4,46,29,0.75) !important;
+}
+
+html body :is(a,button,div).jj-emerald-rect-pill.jj-emerald-rect-pill,
+html body :is(a,button,div).jj-emerald-rect-pill.jj-emerald-rect-pill:is(:hover,:focus,:focus-visible,:active),
+html body :is(button,div).jj-card-emerald-action.jj-card-emerald-action,
+html body :is(button,div).jj-card-emerald-action.jj-card-emerald-action:is(:hover,:focus,:focus-visible,:active),
+html body :is(button,a).jj-favorite-trigger.jj-favorite-trigger,
+html body :is(button,a).jj-favorite-trigger.jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled),
+html body .jj-history-emerald-icon.jj-history-emerald-icon,
+html body .jj-card-emerald-label.jj-card-emerald-label {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  outline: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 6px 18px -8px rgba(4,46,29,0.58) !important;
 }

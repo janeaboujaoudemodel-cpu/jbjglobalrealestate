@@ -163,10 +163,10 @@ const ContinueSearching = ({
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div
-              className="jj-history-emerald-icon allow-white w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+              className="jj-history-emerald-icon jj-card-emerald-action allow-white w-10 h-10 rounded-full flex items-center justify-center"
               data-surface="emerald"
               data-emerald="true"
-              style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}
+              style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", border: 0, outline: 0, opacity: 1 }}
             >
               <History className="w-5 h-5 allow-white" color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1, filter: "none" }} />
             </div>
@@ -184,11 +184,11 @@ const ContinueSearching = ({
               <button
                 onClick={() => setLeadCaptureOpen(true)}
                 data-emerald="true"
-                data-surface="dark"
+                data-surface="emerald"
                 data-on-dark
                 data-allow-dark-cta
-                className="surface-dark allow-white px-4 h-9 rounded-lg border border-white/20 text-white text-xs font-semibold tracking-wide transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(6,78,59,0.65)] hover:-translate-y-0.5"
-                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
+                className="jj-card-emerald-action allow-white px-4 h-9 rounded-lg text-white text-xs font-semibold tracking-wide transition-all duration-300 hover:-translate-y-0.5"
+                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", border: 0, outline: 0 }}
               >
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Register Your Interest</span>
               </button>
@@ -197,11 +197,11 @@ const ContinueSearching = ({
                   <button
                     aria-label="View search history"
                     data-emerald="true"
-                    data-surface="dark"
+                    data-surface="emerald"
                     data-on-dark
                     data-allow-dark-cta
-                    className="surface-dark allow-white px-3 h-9 rounded-lg border border-white/20 text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(6,78,59,0.65)] hover:-translate-y-0.5"
-                    style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
+                    className="jj-card-emerald-action allow-white px-3 h-9 rounded-lg text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 hover:-translate-y-0.5"
+                    style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", border: 0, outline: 0 }}
                   >
                     <Clock className="w-3.5 h-3.5 text-white allow-white" />
                     View Search History
