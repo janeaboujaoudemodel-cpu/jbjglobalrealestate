@@ -37,7 +37,7 @@ type Tab =
 
 function PremiumCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6 ${className}`}>
+    <div className={`rounded-2xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/24 p-5 md:p-6 shadow-[0_10px_30px_-24px_rgba(6,78,59,0.45)] ${className}`}>
       {children}
     </div>
   );
@@ -50,13 +50,13 @@ function Kpi({
     <button
       type="button"
       onClick={onClick}
-      className="group text-left rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 px-4 py-4 hover:border-[#B89555]/60 hover:bg-[#F2EADA] transition-colors w-full focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+      className="group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-4 py-4 hover:border-[color:var(--emerald-1)]/55 hover:bg-[color:var(--emerald-soft-bg)] transition-colors w-full focus:outline-none focus:ring-2 focus:ring-[color:var(--emerald-1)]/40"
     >
       <div className="flex items-center justify-between">
-        <div className="h-8 w-8 grid place-items-center rounded-md bg-[#EFE6D6] border border-[#B89555]/35">
-          <Icon className="h-4 w-4 text-[#1A1A1A]" />
+        <div className="h-8 w-8 grid place-items-center rounded-md jj-icon-tile-emerald">
+          <Icon className="h-4 w-4 text-white" />
         </div>
-        <ArrowRight className="h-3.5 w-3.5 text-[#1A1A1A]/40 group-hover:text-[#B89555] transition-colors" />
+        <ArrowRight className="h-3.5 w-3.5 text-[color:var(--emerald-1)]/70 group-hover:text-[color:var(--emerald-1)] transition-colors" />
       </div>
       <div className="mt-3 text-2xl md:text-3xl font-semibold tabular-nums text-[#1A1A1A]">{value}</div>
       <div className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 mt-1">{label}</div>
@@ -398,7 +398,7 @@ export default function BrokerCRM() {
           <div className="flex flex-wrap items-center gap-2">
             <Button
               onClick={() => setUploadOpen(true)}
-              className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45 hover:bg-[#E6DAC2]"
+              variant="primary"
             >
               <Upload className="w-4 h-4 mr-1.5" /> Add database
             </Button>
@@ -411,12 +411,11 @@ export default function BrokerCRM() {
             </Button>
             <Link
               to="/broker/leads"
-              className="jj-cta-dark allow-white inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-medium transition-colors"
-              data-surface="navy"
-              data-on-dark
-              data-allow-dark-cta
+              className="jj-cta-primary jj-cta-champagne inline-flex items-center gap-2 h-10 px-4 rounded-md text-sm font-semibold transition-colors"
+              data-surface="emerald"
+              data-cta="primary"
             >
-              <Plus className="h-4 w-4 allow-white" /> <span className="allow-white">Add lead</span>
+              <Plus className="h-4 w-4" /> <span>Add lead</span>
             </Link>
             <Button
               variant="outline"
@@ -458,10 +457,12 @@ export default function BrokerCRM() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`px-4 py-2.5 text-sm flex items-center gap-2 border-b-2 -mb-px transition-colors ${
+                  data-jj-segmented-trigger=""
+                  data-state={active ? "active" : undefined}
+                  className={`px-4 py-2.5 text-sm flex items-center gap-2 rounded-t-md border-b-2 -mb-px transition-colors ${
                 active
-                  ? "border-[#B89555] text-[#1A1A1A] font-semibold bg-[#EFE6D6]/40"
-                  : "border-transparent text-[#1A1A1A]/65 hover:text-[#1A1A1A]"
+                      ? "border-[color:var(--emerald-1)] font-semibold"
+                      : "border-transparent text-[#1A1A1A]/65 hover:text-[color:var(--emerald-1)]"
               }`}
             >
               <Icon className="h-4 w-4" /> {t.label}
@@ -526,19 +527,19 @@ export default function BrokerCRM() {
                   <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                     <Link
                       to="/broker/leads"
-                      className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1F1F1F] shadow-sm transition-colors"
-                      data-allow-dark-cta
-                      data-no-contrast-guard
+                      className="jj-cta-primary jj-cta-champagne inline-flex items-center gap-2 h-10 px-5 rounded-md text-sm font-semibold shadow-sm transition-colors"
+                      data-surface="emerald"
+                      data-cta="primary"
                     >
                       <Plus className="h-4 w-4" /> Add your first lead
                     </Link>
-                    <button
+                    <Button
                       type="button"
                       onClick={() => setUploadOpen(true)}
-                      className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/55 hover:bg-[#E6DAC2] transition-colors"
+                      variant="secondary"
                     >
                       <Upload className="h-4 w-4" /> Upload a database
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -602,22 +603,20 @@ export default function BrokerCRM() {
                 Click any database to open it as a separate sheet without merging into My Leads.
               </p>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-                <button
+                <Button
                   type="button"
                   onClick={() => setUploadOpen(true)}
-                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1F1F1F] shadow-sm transition-colors"
-                  data-allow-dark-cta
-                  data-no-contrast-guard
+                  variant="primary"
                 >
                   <Upload className="w-4 h-4" /> Add a database
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={() => setRequestOpen(true)}
-                  className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/55 hover:bg-[#E6DAC2] transition-colors"
+                  variant="secondary"
                 >
                   <Inbox className="w-4 h-4" /> Request a database
-                </button>
+                </Button>
               </div>
             </PremiumCard>
           ) : (
@@ -687,19 +686,19 @@ export default function BrokerCRM() {
                     <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                       <Link
                         to="/broker/leads"
-                        className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1F1F1F] shadow-sm transition-colors"
-                        data-allow-dark-cta
-                        data-no-contrast-guard
+                        className="jj-cta-primary jj-cta-champagne inline-flex items-center gap-2 h-10 px-5 rounded-md text-sm font-semibold shadow-sm transition-colors"
+                        data-surface="emerald"
+                        data-cta="primary"
                       >
                         <Plus className="h-4 w-4" /> Add your first lead
                       </Link>
-                      <button
+                      <Button
                         type="button"
                         onClick={() => setRequestOpen(true)}
-                        className="inline-flex items-center gap-2 h-10 px-5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/55 hover:bg-[#E6DAC2] transition-colors"
+                        variant="secondary"
                       >
                         <Upload className="h-4 w-4" /> Upload a database
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>
@@ -1006,8 +1005,9 @@ export default function BrokerCRM() {
             </ul>
             <Link
               to="/broker/ai"
-              className="mt-4 inline-flex items-center gap-2 h-9 px-3 rounded-md bg-[#0A0A0A] text-white text-xs font-medium hover:bg-[#1F1F1F]"
-              data-allow-dark-cta
+              className="jj-cta-primary jj-cta-champagne mt-4 inline-flex items-center gap-2 h-9 px-3 rounded-md text-xs font-semibold"
+              data-surface="emerald"
+              data-cta="primary"
             >
               <Sparkles className="h-3.5 w-3.5" /> Open AI sales assistant
             </Link>

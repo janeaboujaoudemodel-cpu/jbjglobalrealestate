@@ -12,16 +12,16 @@ interface TierBadgeProps {
 
 const TIER_CONFIGS: Record<string, { icon: typeof Crown; color: string; bgClass: string }> = {
   // Broker tiers
-  'Starter': { icon: Star, color: '#6B7280', bgClass: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30' },
-  'Rising': { icon: Zap, color: '#059669', bgClass: 'jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30' },
-  'Performer': { icon: Award, color: '#3B82F6', bgClass: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
-  'Elite': { icon: Crown, color: '#B89555', bgClass: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
-  'Legend': { icon: Trophy, color: '#D4AF37', bgClass: 'bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30' },
+  'Starter': { icon: Star, color: '#064E3B', bgClass: 'jj-emerald-soft' },
+  'Rising': { icon: Zap, color: '#064E3B', bgClass: 'jj-emerald-solid' },
+  'Performer': { icon: Award, color: '#064E3B', bgClass: 'jj-emerald-solid' },
+  'Elite': { icon: Crown, color: '#064E3B', bgClass: 'jj-emerald-solid' },
+  'Legend': { icon: Trophy, color: '#064E3B', bgClass: 'jj-emerald-solid' },
   // Client tiers
-  'Explorer': { icon: Star, color: '#6B7280', bgClass: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30' },
-  'Seeker': { icon: Zap, color: '#059669', bgClass: 'jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30' },
-  'Investor': { icon: Award, color: '#3B82F6', bgClass: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
-  'Premium': { icon: Crown, color: '#B89555', bgClass: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
+  'Explorer': { icon: Star, color: '#064E3B', bgClass: 'jj-emerald-soft' },
+  'Seeker': { icon: Zap, color: '#064E3B', bgClass: 'jj-emerald-solid' },
+  'Investor': { icon: Award, color: '#064E3B', bgClass: 'jj-emerald-solid' },
+  'Premium': { icon: Crown, color: '#064E3B', bgClass: 'jj-emerald-solid' },
 };
 
 export function TierBadge({ tierName, tierType = 'broker', size = 'md', showIcon = true, className }: TierBadgeProps) {

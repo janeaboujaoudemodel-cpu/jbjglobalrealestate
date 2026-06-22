@@ -695,7 +695,7 @@ export default function CRMLeadsTableV2({
                       <div className="flex items-center gap-2 pt-1">
                         <Button size="sm" variant="outline" onClick={() => fetchLeads()} className="border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]">Refresh</Button>
                         <Button size="sm" variant="outline" onClick={() => (window.location.href = "/owner/crm/import")} className="border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]">Import CSV</Button>
-                        <Button size="sm" onClick={() => (window.location.href = "/owner/crm/leads/new")} className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] hover:bg-[#EFE6D6]/80">Add lead</Button>
+                        <Button size="sm" variant="primary" onClick={() => (window.location.href = "/owner/crm/leads/new")}>Add lead</Button>
                       </div>
                     </div>
                   ) : (

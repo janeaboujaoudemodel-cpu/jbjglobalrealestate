@@ -19,9 +19,10 @@ const cardVariants = cva(
   {
     variants: {
       surface: {
-        default: "",
-        light: "surface-light bg-card text-card-foreground",
+        default: "jj-card bg-card text-card-foreground hover:border-[color:var(--emerald-1)]/35",
+        light: "jj-card surface-light bg-card text-card-foreground hover:border-[color:var(--emerald-1)]/35",
         dark: "surface-dark bg-card text-card-foreground",
+        emerald: "jj-card-emerald text-white border-transparent",
       },
     },
     defaultVariants: {
