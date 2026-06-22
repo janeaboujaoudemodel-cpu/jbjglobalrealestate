@@ -65,29 +65,28 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
 
   return (
     <div className="h-full flex flex-col min-h-0" data-no-contrast-guard>
-      {/* Logo row — centered company monogram. "Broker Portal" subtitle removed
-          per owner directive (the horizontal header already says "Broker Workspace"). */}
+      {/* Logo row — matches the front-end brand lockup: monogram left, wordmark on one line. */}
       <div
-        className="border-b border-[#B89555]/40 flex items-center justify-center px-3 flex-shrink-0 bg-[#F7F2EA]"
+        className="border-b border-[#B89555]/40 flex items-center px-3 flex-shrink-0 bg-[#F7F2EA]"
         style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
         <Link
           to="/broker/portal"
           onClick={onNavigate}
-          className="flex items-center gap-2 min-w-0"
+          className={cn("flex items-center min-w-0 w-full", collapsed ? "justify-center" : "justify-start gap-2.5")}
           aria-label="JBJ Global Real Estate"
         >
           <img
             src={jbjMonogramNobuffer}
             alt="JBJ"
-            width={collapsed ? 36 : 44}
-            height={collapsed ? 36 : 44}
+            width={collapsed ? 36 : 42}
+            height={collapsed ? 36 : 42}
             className="object-contain flex-shrink-0"
-            style={{ width: collapsed ? 36 : 44, height: collapsed ? 36 : 44 }}
+            style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
           />
           {!collapsed && (
-            <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/80 font-semibold whitespace-nowrap leading-tight text-center">
-              JBJ GLOBAL<br/>REAL ESTATE
+            <div className="min-w-0 flex-1 text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A] font-bold whitespace-nowrap leading-none text-center truncate">
+              JBJ GLOBAL REAL ESTATE
             </div>
           )}
         </Link>

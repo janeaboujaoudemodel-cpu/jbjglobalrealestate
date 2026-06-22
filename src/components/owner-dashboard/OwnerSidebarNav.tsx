@@ -248,7 +248,8 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
       <div key={item.path}>
         <button
           ref={setActiveRefCallback(item.path)}
-          data-no-contrast-guard
+          data-sidebar-owner-item
+          data-emerald={active ? "true" : undefined}
           onClick={() => {
             // Always navigate to the parent's own path. Expansion is automatic
             // (parent is active or a child is active), and the chevron handles
@@ -262,15 +263,16 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
           className={cn(
             "group w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
             active
-              ? "bg-transparent !text-[#B89555] border-l-[#B89555] border-y-transparent border-r-transparent font-semibold"
-              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-l-[#B89555]/60 hover:!text-[#B89555]",
+              ? "jj-emerald-metallic allow-white !text-white border-transparent font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
+              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-l-[#B89555]/60 hover:!text-[#064E3B] hover:bg-[#EFE6D6]/55",
           )}
           style={depth > 0 ? { paddingLeft: `${12 + depth * 14}px` } : undefined}
           title={collapsed ? item.label : undefined}
         >
           <item.icon
             className={cn(
-              "w-4 h-4 flex-shrink-0 transition-colors duration-200 text-[#B89555]",
+              "w-4 h-4 flex-shrink-0 transition-colors duration-200",
+              active ? "text-white" : "text-[#064E3B]",
               item.premium && !active && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]"
             )}
           />
@@ -280,7 +282,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                 className={cn(
                   "flex-1 text-left truncate transition-colors duration-200",
                   item.premium && "font-semibold",
-                  active ? "text-[#B89555]" : "text-[#1A1A1A] group-hover:text-[#B89555]"
+                  active ? "text-white" : "text-[#1A1A1A] group-hover:text-[#064E3B]"
                 )}
               >
                 {item.label}
@@ -288,14 +290,14 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
               {item.badge && (
                 <span className={cn(
                   "text-xs px-1.5 py-0.5 rounded-md font-semibold border",
-                  active ? "bg-transparent text-[#1A1A1A] border-[#B89555]" : "bg-transparent text-[#1A1A1A] border-[#B89555]/50"
+                  active ? "bg-white/10 text-white border-white/60" : "bg-transparent text-[#1A1A1A] border-[#B89555]/50"
                 )}>
                   {item.badge}
                 </span>
               )}
               {hasChildren && (
                 <ChevronRight
-                  className={cn("w-3.5 h-3.5 flex-shrink-0 transition-transform text-[#B89555]", expanded && "rotate-90")}
+                  className={cn("w-3.5 h-3.5 flex-shrink-0 transition-transform", active ? "text-white" : "text-[#064E3B]", expanded && "rotate-90")}
                   onClick={(e) => { e.stopPropagation(); toggleOpen(item.path); }}
                 />
               )}

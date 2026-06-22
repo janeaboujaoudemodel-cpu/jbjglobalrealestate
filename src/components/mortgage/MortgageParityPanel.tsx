@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Scale } from "lucide-react";
 
 interface Props {
@@ -85,6 +85,15 @@ export default function MortgageParityPanel({
     return rows;
   }, [interestRate, loanTermYears, loanAmount, monthlyPayment]);
 
+  const compareMinRate = 2;
+  const compareMaxRate = 10;
+  const setCompareRateFromPointer = useCallback((target: HTMLInputElement, clientX: number) => {
+    const rect = target.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    const raw = compareMinRate + ratio * (compareMaxRate - compareMinRate);
+    setCompareRate(Number((compareMinRate + Math.round((raw - compareMinRate) / 0.05) * 0.05).toFixed(2)));
+  }, []);
+
   const cardBg = isNavy
     ? "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)"
     : "#F7F2EA";
@@ -139,12 +148,12 @@ export default function MortgageParityPanel({
         <div
           className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
           style={{
-            background: ltvOk ? "rgba(16,185,129,0.10)" : "rgba(239,68,68,0.10)",
-            border: `1px solid ${ltvOk ? "rgba(16,185,129,0.35)" : "rgba(239,68,68,0.45)"}`,
+            background: ltvOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
+            border: `1px solid ${ltvOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
             color: isNavy ? "#FFFFFF" : "#1A1A1A",
           }}
         >
-          {ltvOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-500" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
+          {ltvOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#064E3B]" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
           <span>{ltvOk ? "Loan-to-value within UAE Central Bank limit." : `Exceeds ${cap}% cap — increase down payment by AED ${Math.ceil(((ltv - cap) / 100) * propertyPrice).toLocaleString()}.`}</span>
         </div>
       </Card>
@@ -172,12 +181,12 @@ export default function MortgageParityPanel({
         <div
           className="mt-3 flex items-start gap-2 rounded-lg p-2.5 text-xs"
           style={{
-            background: dbrOk ? "rgba(16,185,129,0.10)" : "rgba(239,68,68,0.10)",
-            border: `1px solid ${dbrOk ? "rgba(16,185,129,0.35)" : "rgba(239,68,68,0.45)"}`,
+            background: dbrOk ? "rgba(6,78,59,0.08)" : "rgba(239,68,68,0.10)",
+            border: `1px solid ${dbrOk ? "rgba(6,78,59,0.35)" : "rgba(239,68,68,0.45)"}`,
             color: isNavy ? "#FFFFFF" : "#1A1A1A",
           }}
         >
-          {dbrOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-500" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
+          {dbrOk ? <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#064E3B]" /> : <AlertTriangle className="w-4 h-4 mt-0.5 text-red-500" />}
           <span>{dbrOk ? "Within the UAE Central Bank 50% debt burden ratio." : "Above 50% DBR — banks may decline. Extend term or reduce loan."}</span>
         </div>
       </Card>
@@ -225,8 +234,8 @@ export default function MortgageParityPanel({
         </div>
         <div className="mt-3 py-1">
           {(() => {
-            const minR = 2;
-            const maxR = 10;
+            const minR = compareMinRate;
+            const maxR = compareMaxRate;
             const progress = Math.min(100, Math.max(0, ((compareRate - minR) / (maxR - minR)) * 100));
             const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
             const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.14)";
@@ -240,13 +249,21 @@ export default function MortgageParityPanel({
                 step={0.05}
                 value={compareRate}
                 aria-label="Compare rate"
+                onPointerDown={(e) => {
+                  e.currentTarget.setPointerCapture?.(e.pointerId);
+                  setCompareRateFromPointer(e.currentTarget, e.clientX);
+                }}
+                onPointerMove={(e) => {
+                  if (e.buttons !== 1) return;
+                  setCompareRateFromPointer(e.currentTarget, e.clientX);
+                }}
                 onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
                 onChange={(e) => setCompareRate(Number(e.target.value))}
                 className="mortgage-range-input w-full"
                 style={{
                   background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
                   ["--mortgage-range-thumb" as any]:
-                    "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%)",
+                    "radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%)",
                   ["--mortgage-range-thumb-shadow" as any]:
                     "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
                 }}

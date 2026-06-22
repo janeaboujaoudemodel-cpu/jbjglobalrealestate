@@ -466,7 +466,8 @@ export default function UnifiedCRM() {
             <button
               type="button"
               onClick={() => setAddLeadOpen(true)}
-              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] border border-[#1A1A1A] hover:bg-[#1A1A1A]/90 transition-colors"
+                data-emerald="true"
+                className="jj-emerald-metallic shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors"
             >
               <Plus className="h-3.5 w-3.5" />
               Add Lead
@@ -538,9 +539,10 @@ export default function UnifiedCRM() {
                   "shrink-0 inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
                   "border-b-2 -mb-px transition-colors",
                   active
-                    ? "border-[#B89555] text-[#1A1A1A] bg-[#EFE6D6]/60"
+                    ? "jj-emerald-metallic allow-white border-transparent text-white"
                     : "border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA]",
                 ].join(" ")}
+                data-emerald={active ? "true" : undefined}
               >
                 <Icon className="h-4 w-4" />
                 {it.label}
@@ -549,7 +551,7 @@ export default function UnifiedCRM() {
                     className={[
                       "ml-1 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-semibold tabular-nums",
                       active
-                        ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
+                        ? "bg-white/10 text-white border border-white/60"
                         : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
                     ].join(" ")}
                   >
@@ -592,9 +594,10 @@ export default function UnifiedCRM() {
                     className={[
                       "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border",
                       active
-                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                        ? "jj-emerald-metallic allow-white text-white border-transparent"
                         : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
                     ].join(" ")}
+                    data-emerald={active ? "true" : undefined}
                   >
                     {t.label}
                     {c !== null && c > 0 && (
@@ -602,7 +605,7 @@ export default function UnifiedCRM() {
                         className={[
                           "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-semibold tabular-nums",
                           active
-                            ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
+                            ? "bg-white/10 text-white border border-white/60"
                             : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
                         ].join(" ")}
                       >

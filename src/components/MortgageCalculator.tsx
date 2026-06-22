@@ -69,6 +69,7 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
+  const inputRef = useRef<HTMLInputElement>(null);
   const lastEmittedValueRef = useRef(value);
   const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.14)";
@@ -84,6 +85,17 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
     onChange(next);
   }, [max, min, onChange]);
 
+  const emitFromPointer = useCallback((clientX: number) => {
+    const el = inputRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const ratio = clampNumber((clientX - rect.left) / rect.width, 0, 1);
+    const raw = min + ratio * (max - min);
+    const decimals = step.toString().split(".")[1]?.length ?? 0;
+    const stepped = min + Math.round((raw - min) / step) * step;
+    emitValue(Number(clampNumber(stepped, min, max).toFixed(decimals)));
+  }, [emitValue, max, min, step]);
+
   return (
     <input
       type="range"
@@ -95,13 +107,22 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       value={value}
       aria-label={ariaLabel}
       aria-valuetext={`${value}`}
+      ref={inputRef}
+      onPointerDown={(event) => {
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        emitFromPointer(event.clientX);
+      }}
+      onPointerMove={(event) => {
+        if (event.buttons !== 1) return;
+        emitFromPointer(event.clientX);
+      }}
       onInput={(event) => emitValue(event.currentTarget.valueAsNumber)}
       onChange={(event) => emitValue(event.currentTarget.valueAsNumber)}
       className="mortgage-range-input w-full"
       style={
         {
           background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-          ["--mortgage-range-thumb" as any]: "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%)",
+          ["--mortgage-range-thumb" as any]: "radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%)",
           ["--mortgage-range-thumb-shadow" as any]: "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
         } as CSSProperties
       }

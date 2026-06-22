@@ -19,6 +19,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import OwnerSidebarNav from "@/components/owner-dashboard/OwnerSidebarNav";
 import { OwnerTasksPopupAlert } from "@/components/owner-dashboard/OwnerTasksPopupAlert";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 const OwnerDashboardShell = () => {
   const navigate = useNavigate();
@@ -54,14 +55,27 @@ const OwnerDashboardShell = () => {
     <>
       {/* Logo Area — height locked to --shell-header-h so sidebar divider aligns with main top-header bottom border */}
       <div
-        className="owner-shell-surface border-b border-[#B89555]/40 flex items-center justify-between px-4 flex-shrink-0 bg-[#F7F2EA]"
+        className="owner-shell-surface border-b border-[#B89555]/40 flex items-center justify-between gap-2 px-3 flex-shrink-0 bg-[#F7F2EA]"
         style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
-        {!collapsed && (
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B89555] via-[#A68444] to-[#B89555] font-bold text-lg tracking-wide">
-            JBJ Owner
-          </span>
-        )}
+        <button
+          type="button"
+          onClick={() => { navigate("/owner"); setMobileOpen(false); }}
+          className={cn("flex items-center min-w-0", collapsed ? "justify-center flex-1" : "justify-start gap-2.5 flex-1")}
+          aria-label="JBJ Global Real Estate owner dashboard"
+        >
+          <img
+            src={jbjMonogramNobuffer}
+            alt="JBJ"
+            className="object-contain flex-shrink-0"
+            style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
+          />
+          {!collapsed && (
+            <span className="min-w-0 flex-1 text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A] font-bold whitespace-nowrap leading-none text-center truncate">
+              JBJ GLOBAL REAL ESTATE
+            </span>
+          )}
+        </button>
         {!isMobile && (
           <Button
             variant="ghost"
