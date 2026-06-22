@@ -213,10 +213,13 @@ export default function HorizontalUtilityBar() {
           ) : (
             <Link
               to="/auth"
-              className="h-9 inline-flex items-center gap-1.5 px-3.5 rounded-full border border-[#1A1A1A]/20 hover:border-[#1A1A1A]/45 hover:bg-[#1A1A1A]/[0.04] transition-colors text-[12px] font-semibold tracking-wide text-[#1A1A1A] uppercase"
+              data-surface="emerald"
+              data-no-contrast-guard
+              className="allow-white h-9 inline-flex items-center gap-1.5 px-3.5 rounded-full border border-white/30 hover:border-white/55 transition-colors text-[12px] font-semibold tracking-wide text-white uppercase"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1A]/60" />
-              Sign in
+              <span className="w-1.5 h-1.5 rounded-full bg-white/85" />
+              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign in</span>
             </Link>
           )}
         </div>
