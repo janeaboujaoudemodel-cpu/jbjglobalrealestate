@@ -172,19 +172,18 @@ export function OwnerTasksPopupAlert() {
           <button
             type="button"
             onClick={handleViewTasks}
-            data-no-contrast-guard
+            data-emerald="true"
             style={{
               backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
               backgroundColor: "#064E3B",
               color: "#FFFFFF",
               borderColor: "rgba(52,211,153,0.55)",
             }}
-            className="flex-1 inline-flex items-center justify-center gap-2 h-10 px-6 rounded-xl border-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+            className="allow-white flex-1 inline-flex items-center justify-center gap-2 h-10 px-6 rounded-xl border-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
           >
-            <span data-no-contrast-guard style={{ color: "#FFFFFF" }}>View Tasks</span>
+            <span className="allow-white" style={{ color: "#FFFFFF" }}>View Tasks</span>
             <ArrowRight
-              className="w-4 h-4"
-              data-no-contrast-guard
+              className="allow-white w-4 h-4"
               strokeWidth={2.5}
               style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }}
             />
