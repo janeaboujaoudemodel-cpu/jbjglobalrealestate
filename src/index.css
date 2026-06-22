@@ -4991,7 +4991,7 @@ html body :is(
   [style*="background-color:#f7f2ea" i],
   [style*="background-color: #efe6d6" i],
   [style*="background-color:#efe6d6" i]
-):not([data-neon-page]):not(.tab-trigger-champagne):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]),
+):not([data-neon-page]):not(.tab-trigger-champagne):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile):not(.jj-side-tile.is-active):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]),
 html body :is(
   .jj-cta-champagne,
   .jj-cta-outline,
@@ -5045,7 +5045,7 @@ html body :is(
    [style*="background-color:#f7f2ea" i],
    [style*="background-color: #efe6d6" i],
    [style*="background-color:#efe6d6" i]
-):not([data-neon-page]):not([data-allow-dark-cta]):not(.tab-trigger-champagne):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]) {
+):not([data-neon-page]):not([data-allow-dark-cta]):not(.tab-trigger-champagne):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile):not(.jj-side-tile.is-active):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]) {
   color: var(--jj-contrast-on-light) !important;
   text-shadow: none !important;
   opacity: 1 !important;
@@ -5068,8 +5068,8 @@ html body :is(
   [style*="background-color: #fdfbf7" i], [style*="background-color:#fdfbf7" i],
   [style*="background-color: #f7f2ea" i], [style*="background-color:#f7f2ea" i],
   [style*="background-color: #efe6d6" i], [style*="background-color:#efe6d6" i]
-):not([data-neon-page]):not([data-allow-dark-cta]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile.is-active):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-on-dark]):not([data-on-dark] *):not([data-neon-page] *):not(.jj-neon-ticker *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.jj-side-tile.is-active):not(.jj-side-tile.is-active *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"] *):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"] *):not([class^="bg-black/"]):not([class*=" bg-black/"]):not([class^="bg-black/"]):not([class*=" bg-black/"] *) {
+):not([data-neon-page]):not([data-allow-dark-cta]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile):not(.jj-side-tile.is-active):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-on-dark]):not([data-on-dark] *):not([data-neon-page] *):not(.jj-neon-ticker *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.jj-side-tile):not(.jj-side-tile *):not(.jj-side-tile.is-active):not(.jj-side-tile.is-active *):not(.careers-card-navy):not(.careers-card-navy *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"] *):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"] *):not([class^="bg-black/"]):not([class*=" bg-black/"]):not([class^="bg-black/"]):not([class*=" bg-black/"] *) {
   color: var(--jj-contrast-on-light) !important;
   -webkit-text-fill-color: var(--jj-contrast-on-light) !important;
   stroke: var(--jj-contrast-on-light) !important;
@@ -8036,7 +8036,7 @@ html body :is(
   [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
-):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]),
+):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not(.jj-side-tile):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]),
 html body :is(
   [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
   .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
@@ -8044,8 +8044,8 @@ html body :is(
   [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
-):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.allow-white):not(.allow-white *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-surface="black"]):not([data-surface="black"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.surface-black):not(.surface-black *):not([data-emerald]):not([data-emerald] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-jj-emerald]):not([data-jj-emerald] *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-emerald-chip):not(.jj-emerald-chip *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-card):not(.jj-emerald-card *):not(.jj-tab-active-metallic):not(.jj-tab-active-metallic *):not(.jj-emerald-fill):not(.jj-emerald-fill *):not(.jj-bg-emerald):not(.jj-bg-emerald *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *) {
+):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not(.jj-side-tile):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.allow-white):not(.allow-white *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-surface="black"]):not([data-surface="black"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.surface-black):not(.surface-black *):not([data-emerald]):not([data-emerald] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-jj-emerald]):not([data-jj-emerald] *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-emerald-chip):not(.jj-emerald-chip *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-card):not(.jj-emerald-card *):not(.jj-tab-active-metallic):not(.jj-tab-active-metallic *):not(.jj-emerald-fill):not(.jj-emerald-fill *):not(.jj-bg-emerald):not(.jj-bg-emerald *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
@@ -8058,7 +8058,7 @@ html body :is(
   [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
-) :is(svg, [class*="lucide"]):not(.allow-white):not(.allow-white *):not([data-on-dark] *):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-cta="dark"] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not([data-surface="black"] *):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not(.surface-black *):not([data-emerald] *):not([data-emerald="true"] *):not([data-jj-emerald] *):not(.jj-pill-emerald *):not(.jj-emerald-chip *):not(.jj-emerald-metallic *):not(.jj-emerald-card *):not(.jj-tab-active-metallic *):not(.jj-emerald-fill *):not(.jj-bg-emerald *) {
+) :is(svg, [class*="lucide"]):not(.allow-white):not(.allow-white *):not([data-on-dark] *):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-cta="dark"] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not([data-surface="black"] *):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not(.surface-black *):not([data-emerald] *):not([data-emerald="true"] *):not([data-jj-emerald] *):not(.jj-pill-emerald *):not(.jj-emerald-chip *):not(.jj-emerald-metallic *):not(.jj-emerald-card *):not(.jj-tab-active-metallic *):not(.jj-emerald-fill *):not(.jj-bg-emerald *):not(.jj-side-tile *):not(.careers-card-navy *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -9930,13 +9930,13 @@ html body :is(
   .jj-dual-cta-secondary, [data-cta="champagne"],
   [data-surface="gold"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="page"], [data-surface="light"],
   .surface-gold, .surface-champagne, .surface-cream, .surface-raised, .surface-page, .surface-light
-):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.allow-white),
+):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.allow-white):not(.jj-side-tile):not(.careers-card-navy),
 html body :is(
   [class~="bg-[#B89555]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#FDFBF7]"],
   .jj-dual-cta-secondary, [data-cta="champagne"],
   [data-surface="gold"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="page"], [data-surface="light"],
   .surface-gold, .surface-champagne, .surface-cream, .surface-raised, .surface-page, .surface-light
-):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) *:not(.allow-white):not(.allow-white *) {
+):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) *:not(.allow-white):not(.allow-white *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
@@ -9971,4 +9971,47 @@ html body input.mortgage-range-input::-moz-range-track {
 }
 html body input[type="range"][data-mortgage-slider="Compare rate"] {
   background-image: none !important;
+}
+
+/* ============================================================
+ * PASS 11 — Sidebar emerald tiles & emerald-band headings
+ * Final override: force white icons/text inside any emerald-fill
+ * sidebar tile or emerald-band card. Wins over all prior rules.
+ * ============================================================ */
+html body .jj-side-tile,
+html body .jj-side-tile *,
+html body [data-sidebar-emerald] a.group > span.w-5.h-5 > svg,
+html body [data-sidebar-emerald] [data-sidebar-section] svg[data-sidebar-section-icon],
+html body [data-sidebar-emerald] a[data-sidebar-subitem] svg[data-sidebar-subitem-icon] {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-side-tile svg,
+html body .jj-side-tile svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+/* Emerald band ("Open Positions" / Live Roles section) — white text */
+html body [data-emerald-band],
+html body [data-emerald-band] :is(h1, h2, h3, h4, h5, h6, p, span, label, a, li, small, strong, em) {
+  color: #FFFFFF !important;
+}
+html body [data-emerald-band] svg,
+html body [data-emerald-band] svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* PASS 11b — Careers emerald cards always white FG */
+html body .careers-card-navy,
+html body .careers-card-navy :is(h1, h2, h3, h4, h5, h6, p, span, label, a, li, small, strong, em, b, time, div) {
+  color: #FFFFFF !important;
+}
+html body .careers-card-navy svg:not([class*="text-emerald"]):not([style*="color"]),
+html body .careers-card-navy svg:not([class*="text-emerald"]):not([style*="color"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
