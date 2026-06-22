@@ -776,10 +776,11 @@ export default function ProjectDetailLayout({
               <button
                 type="button"
                 onClick={() => handleDocumentDownload("brochure", brochurePrimary.url)}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/55 shadow-[0_6px_18px_rgba(184,149,85,0.18)] hover:shadow-[0_10px_24px_rgba(184,149,85,0.28)] hover:-translate-y-0.5 transition-all"
+                className="jj-pill-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-transform hover:-translate-y-0.5"
+                data-allow-dark-cta
                 data-no-contrast-guard
               >
-                <Download className="w-5 h-5 text-[#1A1A1A]" />
+                <Download className="w-5 h-5" />
                 <span>Download Brochure</span>
               </button>
             ) : (
@@ -790,10 +791,11 @@ export default function ProjectDetailLayout({
                   setCaptureDocUrl(undefined);
                   setLeadCaptureOpen(true);
                 }}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/55 shadow-[0_6px_18px_rgba(184,149,85,0.18)] hover:shadow-[0_10px_24px_rgba(184,149,85,0.28)] hover:-translate-y-0.5 transition-all"
+                className="jj-pill-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-transform hover:-translate-y-0.5"
+                data-allow-dark-cta
                 data-no-contrast-guard
               >
-                <FileText className="w-5 h-5 text-[#1A1A1A]" />
+                <FileText className="w-5 h-5" />
                 <span>Request Brochure</span>
               </button>
             )}
@@ -804,13 +806,13 @@ export default function ProjectDetailLayout({
                 setCaptureDocUrl(undefined);
                 setLeadCaptureOpen(true);
               }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/55 shadow-[0_6px_18px_rgba(184,149,85,0.18)] hover:shadow-[0_10px_24px_rgba(184,149,85,0.28)] hover:-translate-y-0.5 transition-all"
+              className="jj-pill-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold transition-transform hover:-translate-y-0.5"
+              data-allow-dark-cta
               data-no-contrast-guard
             >
               <span>Register Interest</span>
             </button>
           </div>
-
 
           {/* Broker-only: one-click branded presentation download (no editor, no navigation) */}
           {isBrokerMode && (
@@ -859,11 +861,11 @@ export default function ProjectDetailLayout({
                     setBrandedDeckBusy(false);
                   }
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/55 shadow-[0_4px_14px_rgba(184,149,85,0.18)] hover:shadow-[0_8px_20px_rgba(184,149,85,0.28)] transition-all disabled:opacity-70 disabled:cursor-wait"
-                data-no-contrast-guard
+                className="jj-pill-emerald inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-70 disabled:cursor-wait"
+                data-allow-dark-cta
                 title="Download a JBJ-branded presentation for this project"
               >
-                <Download className="w-4 h-4 text-[#1A1A1A]" />
+                <Download className="w-4 h-4" />
                 <span>{brandedDeckBusy ? "Generating…" : "Download branded presentation"}</span>
               </button>
 
@@ -1463,11 +1465,11 @@ export default function ProjectDetailLayout({
                     ].map((item) => (
                       <li key={item} className="flex items-center gap-3">
                         <span
-                          className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(4,120,87,0.35)]"
-                          style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
+                          className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 ring-1 ring-[#B89555]/70 shadow-[0_2px_4px_rgba(184,149,85,0.25),inset_0_1px_0_rgba(255,255,255,0.6)]"
+                          style={{ background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 50%, #B89555 100%)" }}
                           aria-hidden="true"
                         >
-                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="#1A1A1A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12.5l4.5 4.5L19 7.5" />
                           </svg>
                         </span>
