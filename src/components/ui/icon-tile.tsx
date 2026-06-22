@@ -71,8 +71,23 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         if (!el || !glyphColor) return;
         el.style.setProperty("color", glyphColor, "important");
         el.style.setProperty("stroke", glyphColor, "important");
+        el.style.setProperty("opacity", "1", "important");
+        el.style.setProperty("stroke-opacity", "1", "important");
+        el.style.setProperty("fill-opacity", "1", "important");
+        el.style.setProperty("mix-blend-mode", "normal", "important");
+        if (isDark) {
+          el.style.setProperty("filter", "brightness(0) invert(1)", "important");
+        }
+        el.querySelectorAll("path, circle, rect, line, polyline, polygon, ellipse, use, g").forEach((part) => {
+          const svgPart = part as SVGElement;
+          svgPart.style.setProperty("color", glyphColor, "important");
+          svgPart.style.setProperty("stroke", glyphColor, "important");
+          svgPart.style.setProperty("opacity", "1", "important");
+          svgPart.style.setProperty("stroke-opacity", "1", "important");
+          svgPart.style.setProperty("fill-opacity", "1", "important");
+        });
       },
-      [glyphColor],
+      [glyphColor, isDark],
     );
 
     return (

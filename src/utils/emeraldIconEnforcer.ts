@@ -18,14 +18,41 @@ const TILE_SELECTOR = [
 ].join(",");
 
 const GLYPH_SELECTOR = "svg, [class*='lucide']";
+const SVG_PART_SELECTOR = "path, circle, rect, line, polyline, polygon, ellipse, use, g";
 
 function paint(svg: SVGElement | HTMLElement) {
   svg.style.setProperty("color", "#FFFFFF", "important");
   svg.style.setProperty("stroke", "#FFFFFF", "important");
+  svg.style.setProperty("opacity", "1", "important");
+  svg.style.setProperty("stroke-opacity", "1", "important");
+  svg.style.setProperty("fill-opacity", "1", "important");
+  svg.style.setProperty("mix-blend-mode", "normal", "important");
+  // Visual guarantee: regardless of inherited SVG color, filters, or utility
+  // classes, all non-transparent rendered icon pixels become pure white.
+  svg.style.setProperty("filter", "brightness(0) invert(1)", "important");
   // Lucide icons use stroke; explicit `fill: none` keeps line icons crisp.
   if (!svg.hasAttribute("data-filled")) {
     svg.style.setProperty("fill", "none", "important");
+  } else {
+    svg.style.setProperty("fill", "#FFFFFF", "important");
   }
+
+  svg.querySelectorAll?.(SVG_PART_SELECTOR).forEach((part) => {
+    const el = part as SVGElement;
+    el.style.setProperty("color", "#FFFFFF", "important");
+    el.style.setProperty("stroke", "#FFFFFF", "important");
+    el.style.setProperty("opacity", "1", "important");
+    el.style.setProperty("stroke-opacity", "1", "important");
+    el.style.setProperty("fill-opacity", "1", "important");
+    el.style.setProperty("mix-blend-mode", "normal", "important");
+    el.style.setProperty("filter", "none", "important");
+    const fillAttr = el.getAttribute("fill");
+    if (svg.hasAttribute("data-filled") || (fillAttr && fillAttr !== "none")) {
+      el.style.setProperty("fill", "#FFFFFF", "important");
+    } else {
+      el.style.setProperty("fill", "none", "important");
+    }
+  });
 }
 
 function enforceWithin(root: ParentNode | Element) {
@@ -56,7 +83,10 @@ export function installEmeraldIconEnforcer() {
   if (installed || typeof window === "undefined") return;
   installed = true;
 
-  const run = () => enforceWithin(document.body);
+  const run = () => {
+    if (!document.body) return;
+    enforceWithin(document.body);
+  };
   // Initial pass once the DOM is ready.
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", run, { once: true });
@@ -83,10 +113,16 @@ export function installEmeraldIconEnforcer() {
     }
   });
 
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["class", "data-icon-tile-tone", "data-surface"],
-  });
+  const observe = () => {
+    if (!document.body) return;
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "style", "data-icon-tile-tone", "data-surface"],
+    });
+  };
+
+  if (document.body) observe();
+  else document.addEventListener("DOMContentLoaded", observe, { once: true });
 }

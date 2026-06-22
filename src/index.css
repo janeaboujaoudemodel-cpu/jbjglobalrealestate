@@ -10813,18 +10813,32 @@ html body :is(
   background-image: var(--gradient-emerald) !important;
   background-color: var(--emerald-1) !important;
   border-color: var(--emerald-1) !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
   box-shadow: 0 10px 24px -16px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 html body :is(
   .jj-icon-tile-emerald.jj-icon-tile-emerald.jj-icon-tile-emerald,
   [data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"],
   [data-icon-tile][data-surface="emerald"][data-surface="emerald"]
-) :is(svg, [class*="lucide"], path, circle, rect, polyline, line, polygon, ellipse, span) {
+) :is(svg, [class*="lucide"], path, circle, rect, polyline, line, polygon, ellipse, use, g, span) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
   opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+html body :is(
+  .jj-icon-tile-emerald.jj-icon-tile-emerald.jj-icon-tile-emerald,
+  [data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"],
+  [data-icon-tile][data-surface="emerald"][data-surface="emerald"]
+) :is(svg, svg.lucide, [class*="lucide"]) {
+  filter: brightness(0) invert(1) !important;
 }
 /* Allow filled-glyph icons (rare) to keep white fill instead of none */
 html body :is(
