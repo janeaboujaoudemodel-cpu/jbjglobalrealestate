@@ -3,6 +3,7 @@
  * 3-per-row featured photo cards with high-contrast captions, premium hover,
  * and two CTAs: "Read Area Guides" + "Explore All Areas".
  */
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, ArrowRight, TrendingUp, Flame, BookOpen, Compass } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -12,6 +13,13 @@ import { PearlButton } from "@/components/ui/pearl-button";
 const AreasWeCover = () => {
   const { t } = useLanguage();
   const { data: areas, isLoading } = useAreas({ limit: 12 });
+
+  useEffect(() => {
+    if (window.location.hash !== "#top-areas-dubai") return;
+    requestAnimationFrame(() => {
+      document.getElementById("top-areas-dubai")?.scrollIntoView({ block: "start" });
+    });
+  }, [isLoading]);
 
   const displayAreas = (areas ?? [])
     .slice()
