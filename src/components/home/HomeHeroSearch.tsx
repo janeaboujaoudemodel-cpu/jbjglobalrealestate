@@ -128,7 +128,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           data-surface="dark"
           data-ink-emerald
           data-no-contrast-guard
-          className="jj-hero-search-bar group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl overflow-hidden"
+          className="allow-white jj-hero-search-bar group relative flex items-stretch h-14 sm:h-[60px] lg:h-[68px] rounded-2xl overflow-hidden"
           style={{
             backgroundImage: "var(--jj-emerald-ombre)",
             border: "0",
@@ -144,7 +144,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             {!draft && !isFocused && (
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-5 sm:left-6 lg:left-7 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden z-[1]"
+                className="allow-white pointer-events-none absolute left-5 sm:left-6 lg:left-7 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] lg:text-base font-normal whitespace-nowrap overflow-hidden z-[1]"
                 style={{
                   color: "rgba(255,255,255,0.78)",
                   WebkitTextFillColor: "rgba(255,255,255,0.78)",
@@ -170,7 +170,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               aria-label="Search the JBJ website"
               data-no-contrast-guard
               tabIndex={0}
-              className="jj-hero-search-input relative z-10 flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal cursor-text"
+              className="allow-white jj-hero-search-input relative z-10 flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] lg:text-base tracking-[-0.005em] font-normal cursor-text"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
@@ -191,7 +191,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             aria-label="Search properties now"
             disabled={searching}
             data-no-contrast-guard
-            className="jj-hero-search-action relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-110"
+            className="allow-white jj-hero-search-action relative flex items-center justify-center gap-2 self-stretch h-full px-6 lg:px-8 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
@@ -214,7 +214,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             onClick={openBooking}
             aria-label="Book your free consultation now"
             data-no-contrast-guard
-            className="jj-hero-search-action hidden md:flex items-center justify-center self-stretch h-full px-5 lg:px-6 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
+            className="allow-white jj-hero-search-action hidden md:flex items-center justify-center self-stretch h-full px-5 lg:px-6 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
