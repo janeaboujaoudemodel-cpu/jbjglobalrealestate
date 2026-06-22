@@ -57,11 +57,13 @@ const AIComparisonWidget = () => {
             </p>
           </div>
           <div
+            data-emerald="true"
             data-surface="dark"
             data-on-dark
             data-no-contrast-guard
             data-allow-dark-cta
-            className="allow-white hidden md:flex w-16 h-16 bg-[#0A0A0A] rounded-2xl items-center justify-center shadow-lg border border-[#B89555]/55"
+            className="allow-white hidden md:flex w-16 h-16 rounded-2xl items-center justify-center shadow-lg border border-white/20"
+            style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
           >
             <BarChart3 className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </div>
