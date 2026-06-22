@@ -71,8 +71,8 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
   const progress = getRangePercent(value, min, max);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastEmittedValueRef = useRef(value);
-  const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
-  const track = isNavy ? "rgba(255,255,255,0.12)" : "rgba(6,78,59,0.14)";
+  const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
+  const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
 
   useEffect(() => {
     lastEmittedValueRef.current = value;
@@ -122,7 +122,7 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       style={
         {
           background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-          ["--mortgage-range-thumb" as any]: "radial-gradient(circle at 38% 32%, #FFFFFF 0%, #FFFFFF 48%, #064E3B 100%)",
+          ["--mortgage-range-thumb" as any]: "#FFFFFF",
           ["--mortgage-range-thumb-shadow" as any]: "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
         } as CSSProperties
       }
@@ -158,16 +158,16 @@ const MortgageCalculator = ({
   const navySliderWrapperStyle = {
     background:
       "linear-gradient(135deg, #064E3B 0%, #042c1c 62%, #000000 100%)",
-    border: "1px solid rgba(52,211,153,0.42)",
-    boxShadow: "inset 0 0 22px rgba(52,211,153,0.14)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    boxShadow: "inset 0 0 22px rgba(6,78,59,0.18)",
     // Slider theme overrides (cascade into <Slider />)
     ["--slider-track-bg" as any]: "rgba(255,255,255,0.10)",
     ["--slider-range-bg" as any]:
-      "linear-gradient(90deg, #064E3B 0%, #10B981 55%, #6EE7B7 100%)",
+      "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)",
     ["--slider-thumb-bg" as any]:
-      "radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%)",
+      "#FFFFFF",
     ["--slider-thumb-shadow" as any]:
-      "0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(52,211,153,0.85), 0 4px 14px rgba(4,120,87,0.55)",
+      "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
   } as CSSProperties;
 
   useEffect(() => {

@@ -426,6 +426,7 @@ const Index = () => {
               <PearlButton
                 to="/mortgage-calculator"
                 size="md"
+                variant="primary"
                 leadingIcon={<Sparkles strokeWidth={2.2} />}
                 trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
               >
@@ -435,6 +436,7 @@ const Index = () => {
               <PearlButton
                 to="/partners/mortgage"
                 size="md"
+                variant="secondary"
                 leadingIcon={<Users strokeWidth={2.2} />}
                 trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
               >
