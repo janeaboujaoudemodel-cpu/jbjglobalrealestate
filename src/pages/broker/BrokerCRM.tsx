@@ -509,8 +509,11 @@ export default function BrokerCRM() {
                   <div className="text-right">Updated</div>
                 </div>
                 <div className="py-12 px-6 text-center">
-                  <Users className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
+                  <div className="mx-auto mb-4 h-14 w-14 grid place-items-center rounded-2xl jj-icon-tile-emerald shadow-[0_10px_24px_-14px_rgba(6,78,59,0.55)]" data-icon-tile="">
+                    <Users className="h-7 w-7 text-white" />
+                  </div>
                   <div className="text-sm font-semibold text-[#1A1A1A]">There are no leads yet</div>
+
                   <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
                     Start adding your first leads — your pipeline, stages, and conversion will fill in
                     automatically as you work.
