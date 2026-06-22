@@ -590,8 +590,11 @@ export default function BrokerCRM() {
             <Loading />
           ) : (dbs.data?.length ?? 0) === 0 ? (
             <PremiumCard className="text-center py-10">
-              <Inbox className="h-7 w-7 mx-auto text-[#1A1A1A]/60 mb-3" />
+              <div className="mx-auto mb-4 h-14 w-14 grid place-items-center rounded-2xl jj-icon-tile-emerald shadow-[0_10px_24px_-14px_rgba(6,78,59,0.55)]" data-icon-tile="">
+                <Inbox className="h-7 w-7 text-white" />
+              </div>
               <div className="text-sm font-semibold text-[#1A1A1A]">No databases shared with you yet</div>
+
               <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
                 When your manager grants access to a CRM database — or you upload one yourself — it will appear here.
                 Click any database to open it as a separate sheet without merging into My Leads.
