@@ -9837,7 +9837,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]),
 html body :is(
   .jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card,
@@ -9852,7 +9852,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -9870,7 +9870,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]) :is(span,p,a,h1,h2,h3,h4,h5,h6,strong,small,label,button,li,dt,dd,time,bdi,em),
 html body :is(
   .jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card,
@@ -9885,7 +9885,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled) :is(span,p,a,h1,h2,h3,h4,h5,h6,strong,small,label,button,li,dt,dd,time,bdi,em) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -9904,7 +9904,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]),
 html body :is(
   .jj-emerald-metallic, .jj-emerald-fill, .jj-emerald-chip, .jj-emerald-card,
@@ -9919,7 +9919,7 @@ html body :is(
   .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
   [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="black"],
   .surface-dark, .surface-ink, .surface-navy, .surface-black,
-  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"]
+  .jj-cta-dark, .jj-navy-cta, [data-cta="dark"], .allow-white
 ):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
