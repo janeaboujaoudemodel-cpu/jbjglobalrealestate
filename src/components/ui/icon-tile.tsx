@@ -60,15 +60,13 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
     const t = TONE[tone];
     const s = SIZE[size];
     const isDark = tone === "ink" || tone === "navy" || tone === "emerald";
-    // Champagne tones (default "gold") should render their glyph in Emerald,
-    // not black — see TONE.gold above.
-    const isChampagne = tone === "gold";
+    // Champagne tones (default "gold") render their glyph in Emerald, not black.
     return (
       <div
         ref={ref}
         data-icon-tile=""
         data-icon-tile-tone={tone}
-        data-surface={isDark ? tone : "raised"}
+        data-surface={tone === "emerald" ? "emerald" : isDark ? tone : "raised"}
         data-no-contrast-guard={isDark ? "" : undefined}
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0",
@@ -90,3 +88,4 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
 IconTile.displayName = "IconTile";
 
 export default IconTile;
+
