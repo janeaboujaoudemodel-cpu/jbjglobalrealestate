@@ -67,7 +67,8 @@ const FavoriteButton = ({
     backgroundColor: "#064E3B",
     color: "#FFFFFF",
     WebkitTextFillColor: "#FFFFFF",
-    border: "none",
+    border: 0,
+    outline: 0,
     boxShadow: "0 6px 18px -8px rgba(4,46,29,0.55)",
     opacity: 1,
   };
@@ -121,7 +122,7 @@ const FavoriteButton = ({
             data-card-action="favorite"
             onClick={handleFavoriteClick}
             disabled={toggleUserFavorite.isPending}
-            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 shadow-lg`}
+            className={`${sizeClasses[size]} jj-favorite-trigger jj-card-emerald-action allow-white flex items-center justify-center rounded-full transition-all duration-200`}
             style={emeraldButtonStyle}
           >
             <Heart
@@ -148,7 +149,7 @@ const FavoriteButton = ({
               data-card-action="shortlist"
               onClick={handleShortlistClick}
               disabled={toggleUserShortlist.isPending}
-              className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center justify-center rounded-full transition-all duration-200 shadow-lg`}
+              className={`${sizeClasses[size]} jj-favorite-trigger jj-card-emerald-action allow-white flex items-center justify-center rounded-full transition-all duration-200`}
               style={emeraldButtonStyle}
             >
               {isShortlisted ? (
