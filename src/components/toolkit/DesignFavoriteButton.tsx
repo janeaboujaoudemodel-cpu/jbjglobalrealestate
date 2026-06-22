@@ -33,7 +33,7 @@ const DesignFavoriteButton = ({
     backgroundColor: "#064E3B",
     color: "#FFFFFF",
     WebkitTextFillColor: "#FFFFFF",
-    borderColor: "rgba(255,255,255,0.35)",
+    border: "none",
     opacity: 1,
   };
   const whiteIconStyle: React.CSSProperties = {
