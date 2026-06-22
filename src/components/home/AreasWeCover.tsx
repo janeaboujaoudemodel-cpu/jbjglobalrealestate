@@ -142,7 +142,7 @@ const AreasWeCover = () => {
                   </div>
 
                   <span
-                    className="jj-pill-emerald jj-area-explore-pill shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
+                    className="jj-area-explore-pill shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
                     data-on-dark
                     data-no-contrast-guard
                   >
