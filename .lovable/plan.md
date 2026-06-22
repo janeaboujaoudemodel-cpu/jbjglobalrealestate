@@ -1,96 +1,172 @@
+## PASS XX — Complete remaining implementation
 
-# PASS XX-A — Global Emerald Token Unification
+### Pending requirements extracted
 
-Scope: track 1 only (you picked it as priority). News pipeline, routing/wiring audit, sidebar/fullscreen rules, and backend-card restyle are deferred to PASS XX-B/C/D — I will not touch them in this pass.
+1. **One locked Emerald system everywhere**
+   - Finish replacing badges, labels, status pills, notification badges, active tabs, active sidebar items, CTA buttons, AI badges, online dots, “Starter”, “Workspace”, “Live Roles”, “21 Open”, “Apply”, and “Meet Jessica” with the official Emerald gradient primitives.
+   - Add a regression guard so raw random green / dark green / faded green / browser default styles cannot reappear.
 
-## Goal
+2. **Remove the faded / disabled look**
+   - Remove unintended `opacity-50/60/70`, `text-muted-foreground/60`, low-alpha card text, and faded empty-state styling from enabled UI.
+   - Keep opacity only on true disabled states.
+   - First targets: Pending Tasks popup, task cards, statistics, empty states, placeholder cards, backend cards.
 
-One — and only one — official Emerald gradient system, applied through shared primitives. Zero stray `bg-green-*`, `bg-emerald-*`, `from-green-*`, dark/black/faded greens. Zero unintentional opacity-50/60/70 on enabled UI.
+3. **Rebuild News page to JBJ identity**
+   - Remove `data-neon-page`, neon hero, ticker, blue/purple/cyan/fuchsia styling, and unnecessary labels like “DXB Interact” / “Daily Refresh”.
+   - Rebuild `/news` and `/news/:id` using Champagne surfaces, Emerald active states, gold hairlines, premium cards, reliable image fallbacks, and real-estate-only editorial structure.
+   - Keep only useful filters.
 
-## Root cause (from audit)
+4. **Tighten News content pipeline**
+   - Update the existing backend news collector to accept only Dubai/UAE real-estate topics: DLD, RERA, developers, launches, off-plan, investment, mortgages, visas, market reports, luxury, commercial, and economic updates affecting property.
+   - Block unrelated articles such as traffic fines, general lifestyle, transport, generic government updates, unrelated business news.
+   - Remove / block forbidden competitor sources already disallowed by project policy.
+   - Add content validation before insert and before display so old unrelated articles do not surface.
 
-- 636 files use raw `bg-green-* / bg-emerald-* / text-emerald-* / border-emerald-*` Tailwind utilities directly — every one of them is its own shade of green.
-- Two emerald gradient tokens already exist in `index.css` (`--jj-emerald-ombre`, `--jj-emerald-light-ombre`) plus primitives `.jj-pill-emerald`, `.jj-pill-emerald-metallic`, `.jj-cta-emerald`, but they are not enforced — components keep inlining their own greens.
-- "Faded" look comes from `opacity-50/60/70` and `text-muted-foreground/60` applied to enabled cards (Pending Tasks, stats, empty states).
+5. **Fix broken cards and missing media states**
+   - Replace blank thumbnails with a premium JBJ fallback tile.
+   - Prevent empty titles/excerpts from rendering as broken cards.
+   - Remove loading screenshots from final proof; loading states stay polished but final screenshots must be settled.
 
-## Approach — three locked layers
+6. **Hero stability**
+   - Ensure critical hero sections never disappear into blank/loading-only layouts.
+   - Add stable fallback hero content for News and key portal dashboards.
 
-### 1. Single source of truth (tokens)
+7. **404 / dead-link audit**
+   - Walk links from sitemap, sidebars, menus, and portal navigation.
+   - Any linked route must either resolve to a real page or be removed/redirected.
+   - Fix routes that currently point to placeholders or wrong portal surfaces where a real page exists.
 
-In `src/index.css` (token block only, no new PASS overrides):
+8. **Fullscreen behavior**
+   - Remove persisted / automatic fullscreen behavior.
+   - Owner/backend sidebars must remain visible by default.
+   - Keep fullscreen as an explicit icon-only action only; no page should auto-hide vertical navigation.
 
-```
---emerald-1: #064E3B   /* primary */
---emerald-2: #047857   /* hover/light */
---emerald-3: #022C22   /* deep */
---emerald-ink: #064E3B
---emerald-on: #FFFFFF  /* foreground on any emerald surface */
---gradient-emerald: linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%)
---gradient-emerald-hover: linear-gradient(135deg,#0A6B53 0%,#064E3B 52%,#031B12 100%)
-```
+9. **Portal wiring parity**
+   - Owner Panel, Broker Portal, Developer Portal, and Investor Portal must each open their own pages correctly.
+   - Fix pages that only work in broker mode but are linked from Owner.
+   - Add a proper vertical Developer Portal shell; current developer portal uses a horizontal top nav and violates the sidebar requirement.
+   - Investor routes need a portal-style shell or canonical route set before screenshot verification.
 
-All existing emerald variables alias to these. Delete duplicate `--ai-emerald: 262 50% 55%` (that's purple, mislabeled).
+10. **Navigation/header active-state sync**
+   - Fix mismatches where sidebar item says one section but the rendered page header says another.
+   - Derive page titles from the same route registry used by the sidebar where possible.
 
-### 2. Shared primitives (the ONLY way to render emerald)
+11. **Backend card restyle**
+   - Restyle shared backend card primitives and empty states: No Database, No Activity, statistics, icons, Starter labels, Workspace badges, activity cards.
+   - Make backend cards inherit the same Premium JBJ Champagne + Emerald system automatically.
 
-Create / consolidate in `src/components/ui/`:
+12. **Global visual verification**
+   - Validate desktop and mobile.
+   - Walk every sidebar route across all 4 portals.
+   - Screenshot only after pages are functional, wired, settled, and visually compliant.
 
-- `<EmeraldBadge variant="solid|soft|outline" size="sm|md">` — replaces every `bg-green-*` / `bg-emerald-*` badge. White text + white svg locked.
-- `<EmeraldPill>` — for "Starter", "Broker Workspace", "Live Roles", "21 Open", AI chips, online indicator, notification dot, chatbot badge.
-- `<EmeraldButton>` — wraps shadcn Button with metallic emerald variant for "Apply", "Meet Jessica", all primary CTAs.
-- `<EmeraldDot>` — single online/active dot (replaces ad-hoc `bg-green-500` indicators).
+---
 
-All four use `--gradient-emerald` + `--emerald-on` and inherit the Universal Contrast Guard. Each carries `data-ink-emerald` so the global guard keeps text/icons white at hover.
+## Implementation plan
 
-### 3. Codemod sweep (kill stray greens)
+### Phase 1 — Lock shared UI primitives
 
-A Node script (`scripts/emerald-codemod.ts`, run once via `bun`) that walks `src/**/*.{ts,tsx}` and:
+- Update shared primitives:
+  - `src/components/ui/button.tsx`
+  - `src/components/ui/badge.tsx`
+  - `src/components/ui/tabs.tsx`
+  - `src/components/ui/card.tsx`
+  - `src/components/ui/premium-backend-layout.tsx`
+  - `src/components/ui/emerald/*`
+  - `src/index.css`
+- Make active tabs and primary CTAs use the official Emerald gradient with white foreground.
+- Make secondary CTAs Champagne with Emerald foreground.
+- Make badges default to Emerald solid/soft/outline variants instead of black/template styling.
+- Add CSS-level normalization for common backend status chips and card labels so pages inherit the system automatically.
+- Remove broad faded text/card styling except for `[disabled]`, `[aria-disabled="true"]`, and explicit disabled classes.
 
-- Replaces well-known patterns:
-  - `bg-green-500 text-white` / `bg-emerald-600 ...` on a `<Badge>` → `<EmeraldBadge>`
-  - `bg-green-500` on a span dot → `<EmeraldDot>`
-  - `from-green-* to-emerald-*` gradient buttons → `<EmeraldButton>`
-- For ambiguous matches, replaces the raw class with `data-emerald-needs-review` + console-logs the file/line so I can hand-review the remainder (target: <20 manual touch-ups).
+### Phase 2 — News visual + content rebuild
 
-Files I already know need hand edits: `pages/News.tsx`, `pages/Onboarding.tsx`, `OwnerDashboardOverview.tsx`, `OwnerTemplates.tsx`, `ListingAdmin.tsx`, `LandlordRentalPortal.tsx`, `AdvancedBrokerToolkit.tsx`, `crm/ApplicantStatusPill.tsx`, `crm/StatusPillSelect.tsx`, `HandoverPill.tsx`.
+- Rebuild `src/pages/News.tsx`:
+  - remove neon wrapper and ticker;
+  - remove blue/purple category palettes;
+  - use a Champagne page shell, Emerald active filters, gold hairline borders, premium cards, and JBJ fallback image tiles;
+  - hide irrelevant/untrusted articles at render time;
+  - keep only real-estate filters.
+- Rebuild `src/pages/NewsDetail.tsx`:
+  - remove stock image fallbacks and dark/neon article shell;
+  - use same Champagne/Emerald editorial style as News;
+  - use safe fallback hero tile when image is missing/broken.
+- Update existing backend news functions:
+  - `supabase/functions/ai-news-collector/index.ts`
+  - `supabase/functions/news-extract-from-link/index.ts` if needed for manual imports
+  - `supabase/functions/import-provident-blog/index.ts`
+- Add strict topic scoring/keyword allowlist and unrelated-topic blocklist before insert/update.
+- Ensure old unrelated DB rows are filtered from the UI even before the next collection run.
 
-### 4. De-fade pass
+### Phase 3 — Portal shells, fullscreen, and navigation wiring
 
-Audit script flags `opacity-50|60|70` and `/(50|60|70)"` on `<Card>`, `<Badge>`, stat tiles, empty states under `pages/owner` + `components/owner`. Remove unless the element has `disabled` / `aria-disabled="true"`. Pending Tasks popup specifically: remove blanket `opacity-60` wrapper.
+- Owner:
+  - `src/pages/OwnerDashboardShell.tsx`
+  - `src/components/owner-dashboard/OwnerSidebarNav.tsx`
+  - remove persisted auto-fullscreen from Owner shell;
+  - keep sidebar visible by default;
+  - align CRM query-based active states with page header/section.
+- Broker:
+  - `src/components/broker-portal/BrokerPortalLayout.tsx`
+  - `src/components/broker-portal/BrokerPortalSidebar.tsx`
+  - fix sidebar links that point outside the broker portal or cause mode/route mismatch.
+- Developer:
+  - `src/pages/developers-portal/PortalShell.tsx`
+  - convert horizontal developer nav into a vertical sidebar shell with the same L-frame pattern.
+  - replace placeholder-only pages with either real routed surfaces or remove/redirect their nav entries.
+- Investor:
+  - build or normalize canonical investor portal routes and shell around existing investor pages (`/investor-hub`, `/investor-dashboard`, reports/portfolio routes).
+  - remove dark purple/fuchsia investor hub styling and align with JBJ Champagne/Emerald.
+- Tool fullscreen:
+  - `src/components/tools/FullscreenToolToggle.tsx`
+  - `src/index.css`
+  - ensure fullscreen only activates after user click and never persists/auto-starts.
 
-### 5. Tailwind guard (prevent regression)
+### Phase 4 — Dead-link and 404 cleanup
 
-Add ESLint rule via `eslint-plugin-tailwindcss` `no-custom-classname` override forbidding `^(bg|text|from|to|via|border)-(green|emerald)-\d+$` outside `src/components/ui/emerald/*`. Lint warning, not error, so existing CI keeps passing while remaining offenders are visible.
+- Create a route/navigation audit script that extracts links from:
+  - owner sidebar
+  - broker sidebar
+  - developer portal nav
+  - investor portal nav
+  - sitemap/menu route registries
+- For every linked path:
+  - if the page exists: keep and verify;
+  - if moved: redirect to canonical route;
+  - if unfinished placeholder: remove from nav until real;
+  - if portal-specific: route inside that portal, not another portal.
 
-## Files touched (estimate)
+### Phase 5 — Backend card and empty-state sweep
 
-- New: `src/components/ui/emerald/{EmeraldBadge,EmeraldPill,EmeraldButton,EmeraldDot,index}.tsx`, `scripts/emerald-codemod.ts`, `.eslintrc` rule
-- Edit: `src/index.css` (token block + delete `--ai-emerald` purple)
-- Codemod-edit: ~120-180 files (subset of the 636; many are constants/utilities that don't render UI and get skipped)
-- Hand-edit: ~10 files listed above
+- Restyle shared cards/empty states through primitives first, then targeted fixes only where needed.
+- Replace template-looking labels/cards such as “No Database”, “No Activity”, “Starter”, “Workspace”, “Live Roles”, and count pills with Emerald/Champagne components.
+- Use `IconTile` for icons per project standard.
+- Remove raw blue/purple/gray/black template accents from backend dashboards.
 
-No files deleted. No routing, no data, no edge functions touched.
+### Phase 6 — Visual validation and screenshot proof
 
-## Verification (you picked: walk every sidebar route, all 4 portals)
+- Use Playwright against the live preview with restored auth session.
+- Viewport set to `1280x1800` for desktop and a mobile viewport pass.
+- Walk every sidebar route across:
+  - Owner Panel
+  - Broker Portal
+  - Developer Portal
+  - Investor Portal
+- For every route:
+  - wait for loading to settle;
+  - assert no visible 404;
+  - assert sidebar remains visible unless the user explicitly clicked fullscreen;
+  - assert active sidebar item matches visible page section;
+  - assert no raw random green/blue/purple/neon classes on visible core UI;
+  - take screenshot to `/tmp/browser/pass-xx/...`.
+- Report only final verified screenshots and a route-by-route pass/fail summary.
 
-After implementation, Playwright (headless, viewport 1280×1800) script that:
+---
 
-1. Restores Supabase session from sandbox env, navigates to each portal entry:
-   - Owner: `/owner` + every item in `GlobalVerticalNav` owner section
-   - Broker: `/broker` + each broker sidebar route
-   - Developer: `/developer-portal` + each route
-   - Investor: `/investor` + each route
-2. For every route: screenshot to `/tmp/browser/passXX/{portal}/{slug}.png`, then run an in-page assertion:
-   ```js
-   document.querySelectorAll('[class*="bg-green-"],[class*="bg-emerald-"]:not([data-emerald-ok])').length === 0
-   ```
-3. Failures are listed by route + selector. I iterate until the list is empty.
-4. I'll report back with the screenshot grid and the assertion summary — not before.
+## Technical notes
 
-## Out of scope (next passes, on your call)
-
-- B: News engine filter to Dubai RE topics + repaint News page
-- C: Routing/wiring/404 audit + sidebar↔header sync + portal page parity
-- D: Sidebar-always-visible / fullscreen-on-click + backend card restyle (Starter/Workspace/Activity/empty states)
-
-Approve and I'll execute A end-to-end, including the full portal walkthrough, before reporting.
+- This will be implemented as a system pass, not isolated page patches.
+- Backend changes will use the existing Lovable Cloud functions and database connection.
+- No public emails/contact details will be exposed in screenshots or UI.
+- No existing features will be removed unless they are dead links/placeholders explicitly causing broken navigation; moved functionality will be redirected to canonical routes.
