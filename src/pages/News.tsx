@@ -37,8 +37,8 @@ const News = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     categoryParam === 'company' ? 'Company News' : categoryParam === 'market' ? 'Market Update' : null
   );
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const navigate = useNavigate();
+
 
   // Fetch news from database
   const { data: dbNews, isLoading, refetch } = useQuery({
