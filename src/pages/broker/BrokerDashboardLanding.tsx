@@ -330,11 +330,11 @@ export default function BrokerDashboardLanding() {
                 to="/broker/leads"
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="allow-white inline-flex items-center gap-2 h-11 pl-5 pr-3 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/65 text-white text-sm font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_28px_-12px_rgba(10,10,10,0.55)] hover:-translate-y-0.5 transition-all duration-300"
-                style={{ color: "#FFFFFF" }}
+                className="allow-white inline-flex items-center gap-2 h-11 pl-5 pr-3 rounded-xl border border-[rgba(255,255,255,0.18)] text-sm font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-12px_rgba(6,78,59,0.95),0_0_20px_rgba(52,211,153,0.25)] hover:brightness-110 transition-all duration-300"
+                style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
               >
                 <span style={{ color: "#FFFFFF" }}>Add lead</span>
-                <span className="inline-flex w-7 h-7 rounded-lg bg-[#1F1F1F] border border-[#B89555]/55 items-center justify-center">
+                <span className="inline-flex w-7 h-7 rounded-lg items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.32)" }}>
                   <Plus className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
                 </span>
               </Link>
@@ -440,8 +440,8 @@ export default function BrokerDashboardLanding() {
               to="/broker/ai"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/65 text-white text-xs font-semibold shadow-[0_1px_0_rgba(255,255,255,0.10)_inset,0_10px_26px_-14px_rgba(10,10,10,0.55)] hover:-translate-y-0.5 transition-all duration-300"
-              style={{ color: "#FFFFFF" }}
+              className="allow-white mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-[rgba(255,255,255,0.18)] text-xs font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-12px_rgba(6,78,59,0.95),0_0_20px_rgba(52,211,153,0.25)] hover:brightness-110 transition-all duration-300"
+              style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
             >
               <Sparkles className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} strokeWidth={2.2} />
               <span style={{ color: "#FFFFFF" }}>Open assistant</span>
