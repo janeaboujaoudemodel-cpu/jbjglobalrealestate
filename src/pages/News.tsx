@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, RefreshCw, Bot, Landmark, Building2, Home, Banknote, Gift, MapPin, Globe, Users } from "lucide-react";
+import { Newspaper, ChevronRight, ArrowLeft, Calendar, TrendingUp, Landmark, Building2, Banknote, Gift, MapPin, Globe } from "lucide-react";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
-import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 as topAreas2025Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
-import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
-
-const dubaiLandmarksVideo = new URL("@/assets/videos/dubai-landmarks-hero.mp4", import.meta.url).href;
+import { isRealEstateArticle } from "@/lib/news/realEstateFilter";
 
 interface MarketNews {
   id: string;
@@ -28,27 +24,12 @@ interface MarketNews {
   is_featured: boolean;
 }
 
-// Category-specific accent colors for premium editorial badges
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  'Market Update': { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
-  'Analysis': { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200' },
-  'Policy': { bg: 'bg-sky-50', text: 'text-sky-800', border: 'border-sky-200' },
-  'Economic': { bg: 'jj-emerald-soft', text: 'text-[color:var(--emerald-1)]', border: 'border-[color:var(--emerald-1)]/30' },
-  'Monthly Report': { bg: 'bg-purple-50', text: 'text-purple-800', border: 'border-purple-200' },
-  'Market Outlook': { bg: 'bg-indigo-50', text: 'text-indigo-800', border: 'border-indigo-200' },
-  'Developer News': { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200' },
-  'Government': { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-200' },
-  'Company News': { bg: 'bg-[hsl(43,45%,94%)]', text: 'text-[hsl(43,45%,30%)]', border: 'border-[hsl(43,45%,54%)]/30' },
-};
-
-const CategoryBadge = ({ category }: { category: string }) => {
-  const colors = CATEGORY_COLORS[category] || { bg: 'bg-[#F7F2EA]', text: 'text-[#1A1A1A]/70', border: 'border-[#B89555]/30' };
-  return (
-    <span className={`text-xs ${colors.text} ${colors.bg} px-3 py-1 rounded-full border ${colors.border} font-medium`}>
-      {category}
-    </span>
-  );
-};
+// Unified champagne badge — single visual language for every category.
+const CategoryBadge = ({ category }: { category: string }) => (
+  <span className="text-xs text-[#1A1A1A] bg-[#F7F2EA] px-3 py-1 rounded-full border border-[#B89555]/40 font-medium">
+    {category}
+  </span>
+);
 
 const News = () => {
   const [searchParams] = useSearchParams();
