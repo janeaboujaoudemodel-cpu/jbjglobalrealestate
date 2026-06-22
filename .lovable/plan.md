@@ -1,28 +1,28 @@
-Implement a focused backend visual pass for the broker portal.
+## Plan
 
-1. Sidebar and header cleanup
-- Remove the “Broker Portal” subtitle under the JBJ watermark in the vertical sidebar.
-- Center the company watermark/monogram area so it does not compete with the horizontal “Broker Workspace” header.
-- Restyle active sidebar items to emerald fill with white text and white icons.
-- Restyle sidebar hover states to emerald/champagne without black-on-emerald conflicts.
-- Change “Back to JBJ Owner” from black to the approved emerald gradient on normal load and hover, with white text/icons plus a stronger hover glow/3D lift.
-- Make the top-bar owner shortcut match the same emerald treatment.
+1. **Restore the global contrast contract**
+   - Update `src/index.css` so any emerald, black, dark, ink, or dark-gradient own-surface forces **white text and white icons** at rest, hover, focus, active, and disabled.
+   - Remove/neutralize the late “champagne parent” rules that currently repaint descendants black inside emerald/dark surfaces.
+   - Keep champagne/light/gold own-surfaces as ink text only when the element itself is genuinely light, not when it sits inside a dark/emerald button or section.
 
-2. Broker dashboard card styling
-- Update the broker portal dashboard cards from mostly champagne/gold accents to emerald-on-champagne: emerald edge accents, emerald icon tiles where appropriate, emerald CTA fills.
-- Keep champagne/gold as the surface system; use emerald for backend action/active/primary states.
-- Keep secondary actions like “Return to Site”, “Log a call”, collapse, and non-primary controls champagne/ink unless they sit on emerald.
+2. **Fix the exact sections shown in the screenshots**
+   - Header utility pills and avatar/menu buttons.
+   - Vertical sidebar highlight buttons, active sections, contact/support, and collapse controls.
+   - Services/Royal Tools dark emerald bands and tab rows.
+   - “Get Verified” dark banner.
+   - Listing card Email/Call/Chat buttons.
+   - AI Property Comparison card/buttons/icon tiles.
+   - Guides/report book covers and recently viewed overlay captions.
 
-3. Broker academy and backend page elements
-- Restyle broker academy KPI cards, training cards, request-access buttons, module dialog primary buttons, certificate progress bars, and active/locked action states to the same emerald system.
-- Replace black primary buttons with emerald fill and white text/icons.
-- Remove inconsistent blue/purple/rose training KPI icon tones where they are acting as backend chrome, replacing them with emerald/gold-champagne equivalents.
+3. **Patch component markup only where CSS cannot infer the surface**
+   - Add/adjust `data-emerald`, `data-surface="dark"`, `data-on-dark`, `allow-white`, or existing emerald primitives on the affected components instead of changing feature logic.
+   - Preserve all existing content and functionality; this is contrast/restyle only.
 
-4. Global emerald contrast lock
-- Strengthen the final global CSS emerald rule so every emerald-owning surface and its hover/focus/active/disabled states force white text, white SVG color, and white SVG stroke.
-- Add backend-safe emerald utility selectors for portal CTAs/cards/sidebar states so no later black-text rule can win on emerald.
+4. **Technical validation**
+   - Use computed-style checks in Playwright to scan representative pages for black text/icons inside emerald/dark surfaces.
+   - Confirm no new CSS rule repaints emerald/dark surfaces back to ink.
 
-5. Visual validation only
-- Use the live preview with restored auth session and navigate as a user through `/broker/portal`, `/broker/messages`, and `/broker/learning`.
-- Capture screenshots showing: sidebar normal/active state, “Back to JBJ Owner” idle and hover, dashboard cards, academy request-access cards, and any visible modal/dialog triggered from academy.
-- Inspect visible screenshots for black text/icons on emerald and correct emerald hover/glow behavior before reporting back.
+5. **Visual validation screenshots**
+   - Capture screenshots for the homepage hero/header/sidebar.
+   - Capture the services band, verified banner, listing cards, tools hub, AI Property Comparison, guides/reports, and recently viewed sections.
+   - Hover representative emerald buttons and capture at least one hover screenshot to confirm white foreground remains white.
