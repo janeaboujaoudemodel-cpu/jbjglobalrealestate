@@ -166,7 +166,7 @@ export function PremiumBook3D({
             )}
           >
             <div
-              className="text-center leading-[1.18]"
+              className="allow-white text-center leading-[1.18]"
               style={{
                 color: compact ? '#FFFFFF' : palette.ink,
                 fontSize: compact ? "clamp(10px, 1.55vw, 14px)" : "clamp(11px, 1.8vw, 16px)",

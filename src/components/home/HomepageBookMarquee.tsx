@@ -21,7 +21,7 @@ export default function HomepageBookMarquee() {
               <h2
                 data-no-contrast-guard
                 className="text-lg md:text-xl font-bold"
-                style={{ color: '#047857', WebkitTextFillColor: '#047857' } as React.CSSProperties}
+                style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' } as React.CSSProperties}
               >
                 Explore Our Guides & Reports
               </h2>
@@ -32,10 +32,10 @@ export default function HomepageBookMarquee() {
             to="/guides"
             data-no-contrast-guard
             className="hidden sm:flex items-center gap-1.5 text-sm font-semibold transition-colors"
-            style={{ color: '#047857', WebkitTextFillColor: '#047857' } as React.CSSProperties}
+            style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' } as React.CSSProperties}
           >
-            <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>View Library</span>
-            <ArrowRight className="w-4 h-4" style={{ color: '#047857', stroke: '#047857' }} />
+            <span style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>View Library</span>
+            <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </Link>
         </div>
       </div>
@@ -49,10 +49,10 @@ export default function HomepageBookMarquee() {
           <Link
             to="/guides"
             className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors"
-            style={{ color: '#047857' }}
+            style={{ color: '#064E3B' }}
           >
             View Full Library
-            <ArrowRight className="w-4 h-4" style={{ color: '#047857', stroke: '#047857' }} />
+            <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </Link>
         </div>
       </div>

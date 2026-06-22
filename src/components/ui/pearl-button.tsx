@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
  *
  * Replaces the legacy dark / black CTA buttons site-wide.
  * Primary + secondary pair mirrors the AI Property Comparison CTAs:
- * primary emerald/dark with white text, secondary champagne with ink text.
+ * primary emerald/dark with white text, secondary champagne with emerald text.
  *
  * Use everywhere you previously had a heavy black "Start Exploring" /
  * "View All Projects" / "Try Our Mortgage Calculator" style CTA.
@@ -20,12 +20,12 @@ type CommonProps = {
   /**
    * Visual variant.
    * - primary: emerald/dark CTA with white text/icons.
-   * - secondary: champagne CTA with ink text/icons.
+   * - secondary: champagne CTA with emerald text/icons.
    */
   variant?: PearlButtonVariant;
   className?: string;
   children: React.ReactNode;
-  /** Leading icon (emerald for primary, white for secondary). */
+  /** Leading icon follows the selected CTA contrast contract. */
   leadingIcon?: React.ReactNode;
   /** Trailing icon (gold/white, translates on hover). */
   trailingIcon?: React.ReactNode;
@@ -55,10 +55,10 @@ const baseLayout =
   "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0";
 
 const primaryClass =
-  "jj-dual-cta-primary allow-white text-white border border-[#B89555]/55 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-[#064E3B]";
+  "jj-dual-cta-primary allow-white text-white border border-white/20 focus-visible:ring-[#064E3B]/70 focus-visible:ring-offset-[#064E3B]";
 
 const secondaryClass =
-  "jj-dual-cta-secondary border border-[#B89555]/40 focus-visible:ring-[#B89555]/60 focus-visible:ring-offset-[#FDFBF7]";
+  "jj-dual-cta-secondary border border-[#064E3B]/35 focus-visible:ring-[#064E3B]/60 focus-visible:ring-offset-[#FDFBF7]";
 
 function InnerContent({
   leadingIcon,
@@ -66,8 +66,8 @@ function InnerContent({
   children,
   variant,
 }: Pick<CommonProps, "leadingIcon" | "trailingIcon" | "children"> & { variant: PearlButtonVariant }) {
-  const iconColor = variant === "secondary" ? "text-[#1A1A1A]" : "text-white allow-white";
-  const labelColor = variant === "secondary" ? "text-[#1A1A1A]" : "text-white allow-white";
+  const iconColor = variant === "secondary" ? "text-[#064E3B]" : "text-white allow-white";
+  const labelColor = variant === "secondary" ? "text-[#064E3B]" : "text-white allow-white";
   return (
     <>
       {leadingIcon ? (
