@@ -5,6 +5,7 @@ import "./styles/theme-tokens.css";
 import "./index.css";
 import { installWhatsAppGuard } from "@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from "@/utils/imageRecoveryGuard";
+import { installEmeraldIconEnforcer } from "@/utils/emeraldIconEnforcer";
 
 // Site-wide guard: every WhatsApp link is normalized to wa.me with sanitized
 // digits.
@@ -13,6 +14,12 @@ installWhatsAppGuard();
 // Site-wide guard: every broken <img> is recovered with a high-res retry then
 // a branded champagne-initials fallback. Opt out per-image via `data-no-fallback`.
 installImageRecoveryGuard();
+
+// JBJ design-system rule: any SVG inside an Emerald-filled icon tile renders
+// pure white at every state, on every page — enforced via inline !important
+// styles so it beats the long :not() repaint sweeps in index.css.
+installEmeraldIconEnforcer();
+
 
 // ---------------------------------------------------------------------------
 // Global diagnostics + chunk-error auto-recovery (added with user approval).
