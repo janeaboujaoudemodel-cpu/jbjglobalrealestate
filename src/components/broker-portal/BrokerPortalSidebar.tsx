@@ -65,34 +65,29 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
 
   return (
     <div className="h-full flex flex-col min-h-0" data-no-contrast-guard>
-      {/* Logo row — height locked to --shell-header-h so divider aligns with top bar.
-          Uses the official JBJ monogram (never the "JBJ" letter fallback). */}
+      {/* Logo row — centered company monogram. "Broker Portal" subtitle removed
+          per owner directive (the horizontal header already says "Broker Workspace"). */}
       <div
-        className="border-b border-[#B89555]/40 flex items-center gap-2 px-3 flex-shrink-0 bg-[#F7F2EA]"
+        className="border-b border-[#B89555]/40 flex items-center justify-center px-3 flex-shrink-0 bg-[#F7F2EA]"
         style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
         <Link
           to="/broker/portal"
           onClick={onNavigate}
           className="flex items-center gap-2 min-w-0"
-          aria-label="JBJ Global Real Estate — Broker Portal"
+          aria-label="JBJ Global Real Estate"
         >
           <img
             src={jbjMonogramNobuffer}
             alt="JBJ"
-            width={collapsed ? 36 : 40}
-            height={collapsed ? 36 : 40}
+            width={collapsed ? 36 : 44}
+            height={collapsed ? 36 : 44}
             className="object-contain flex-shrink-0"
-            style={{ width: collapsed ? 36 : 40, height: collapsed ? 36 : 40 }}
+            style={{ width: collapsed ? 36 : 44, height: collapsed ? 36 : 44 }}
           />
           {!collapsed && (
-            <div className="min-w-0">
-              <div className="text-[9px] uppercase tracking-[0.12em] text-[#1A1A1A]/70 font-semibold whitespace-nowrap leading-none">
-                JBJ GLOBAL REAL ESTATE
-              </div>
-              <div className="font-display text-[13px] font-semibold text-[#1A1A1A] mt-0.5 truncate tracking-tight">
-                Broker Portal
-              </div>
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/80 font-semibold whitespace-nowrap leading-tight text-center">
+              JBJ GLOBAL<br/>REAL ESTATE
             </div>
           )}
         </Link>
@@ -111,17 +106,25 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               to={to}
               onClick={onNavigate}
               title={collapsed ? label : undefined}
+              data-no-contrast-guard={active ? "" : undefined}
+              data-allow-dark-cta={active ? "" : undefined}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors border border-transparent outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
-                // Expanded: labels render gold by default, ink on hover. Collapsed: stay ink for icon clarity.
-                collapsed
-                  ? "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:border-[#B89555]/40"
-                  : "text-[#B89555] hover:text-[#1A1A1A] hover:border-[#B89555]/40",
-                active && "text-[#1A1A1A] font-semibold border-[#B89555] bg-transparent",
+                "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
+                active
+                  ? "allow-white font-semibold border-[rgba(255,255,255,0.18)] shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
+                  : "border-transparent text-[#1A1A1A]/85 hover:text-[#1A1A1A] hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
               )}
+              style={active ? { backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" } : undefined}
             >
-              <Icon className="h-4 w-4 shrink-0" />
-              {!collapsed && <span className="truncate">{label}</span>}
+              <Icon
+                className="h-4 w-4 shrink-0"
+                style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined}
+              />
+              {!collapsed && (
+                <span className="truncate" style={active ? { color: "#FFFFFF" } : undefined}>
+                  {label}
+                </span>
+              )}
             </NavLink>
           );
         })}
@@ -139,12 +142,14 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               onNavigate?.();
             }}
             title={collapsed ? "Back to JBJ Owner" : undefined}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-[#0A0A0A] text-white hover:bg-[#1F1F1F]"
+            data-no-contrast-guard
             data-allow-dark-cta
+            className="allow-white w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[rgba(255,255,255,0.18)] shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-12px_rgba(6,78,59,0.95),0_0_20px_rgba(52,211,153,0.25)] hover:brightness-110"
+            style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
           >
-            <ArrowLeft className="h-5 w-5 shrink-0" />
-            {!collapsed && <span className="truncate">Back to JBJ Owner</span>}
-            {!collapsed && <Crown className="h-3.5 w-3.5 ml-auto opacity-80" />}
+            <ArrowLeft className="h-5 w-5 shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            {!collapsed && <span className="truncate" style={{ color: "#FFFFFF" }}>Back to JBJ Owner</span>}
+            {!collapsed && <Crown className="h-3.5 w-3.5 ml-auto opacity-90" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
           </Link>
         )}
         <Link
