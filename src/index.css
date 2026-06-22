@@ -11149,3 +11149,128 @@ html body :where(
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================
+   CANONICAL EMERALD LOCK — single approved emerald site-wide
+   ------------------------------------------------------------
+   - The ONLY approved emerald = var(--jj-emerald-ombre)
+     (#064E3B → #042c1c → #000, white FG, NO border).
+   - Hover = var(--jj-emerald-ombre-hover) (lighter — swap idle/hover
+     so the deeper tone is idle and lighter on hover, per brand spec).
+   - Replaces every lime/light-green / bg-green-* / bg-emerald-300..600
+     / from-green-* / from-emerald-300..600 leak.
+   - Removes any white/colored border ring on emerald circular triggers,
+     icon tiles, badges, pills and CTAs.
+   ============================================================ */
+
+/* 1. Nuke restricted greens — force canonical emerald + white FG */
+:where(
+  [class*="bg-green-"],
+  [class*="bg-emerald-300"],
+  [class*="bg-emerald-400"],
+  [class*="bg-emerald-500"],
+  [class*="bg-emerald-600"],
+  [class*="from-green-"],
+  [class*="from-emerald-300"],
+  [class*="from-emerald-400"],
+  [class*="from-emerald-500"],
+  [class*="from-emerald-600"],
+  [class*="to-green-"],
+  [class*="to-emerald-300"],
+  [class*="to-emerald-400"],
+  [class*="to-emerald-500"],
+  [class*="to-emerald-600"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="outline"]):not([data-emerald-tone="soft"]) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+:where(
+  [class*="bg-green-"],
+  [class*="bg-emerald-300"],
+  [class*="bg-emerald-400"],
+  [class*="bg-emerald-500"],
+  [class*="bg-emerald-600"],
+  [class*="from-green-"],
+  [class*="from-emerald-300"],
+  [class*="from-emerald-400"],
+  [class*="from-emerald-500"],
+  [class*="from-emerald-600"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+}
+
+/* 2. Replace text-green-* with white when on canonical emerald, otherwise emerald-deep ink */
+:where([class*="text-green-"], [class*="text-emerald-300"], [class*="text-emerald-400"], [class*="text-emerald-500"], [class*="text-emerald-600"]):not([data-no-contrast-guard]) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+[data-surface="emerald"] :where([class*="text-green-"], [class*="text-emerald-"]),
+.jj-cta-emerald :where([class*="text-green-"], [class*="text-emerald-"]),
+.jj-cta-emerald-metallic :where([class*="text-green-"], [class*="text-emerald-"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 3. Strip ALL borders/rings/outlines from canonical emerald circles, pills, CTAs */
+.jj-favorite-trigger,
+.jj-pill-emerald,
+.jj-pill-emerald-metallic,
+.jj-cta-emerald,
+.jj-cta-emerald-metallic,
+.jj-surface-emerald,
+.jj-icon-tile-emerald,
+[data-surface="emerald"],
+[data-emerald-filled],
+[data-emerald-ok="button"],
+[data-emerald-ok="pill"],
+[data-emerald-ok="badge"] {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: 0 6px 18px -8px rgba(4,46,29,0.45) !important;
+}
+.jj-favorite-trigger:hover,
+[data-surface="emerald"]:hover {
+  box-shadow: 0 10px 24px -8px rgba(4,46,29,0.6) !important;
+}
+
+/* 4. Force white glyphs/text inside any canonical emerald surface (idle + hover) */
+:where(
+  .jj-favorite-trigger,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-icon-tile-emerald,
+  [data-surface="emerald"],
+  [data-emerald-filled]
+):not([data-no-contrast-guard]) :where(svg, [class*="lucide"], span, p, a, strong, h1, h2, h3, h4, h5, h6) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill-opacity: 1;
+}
+
+/* 5. Payment plan "TBD" pill — force canonical emerald */
+[data-payment-plan-line] [class*="green"],
+[data-payment-plan-line] [class*="emerald"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 0 !important;
+}
+
+/* 6. Idle/Hover SWAP for mortgage-advisor & sibling emerald CTAs:
+   per brand spec, the DEEPER emerald is idle and the LIGHTER tone is hover. */
+.jj-cta-emerald-metallic,
+.jj-cta-emerald {
+  background-image: var(--jj-emerald-ombre) !important;
+}
+.jj-cta-emerald-metallic:hover,
+.jj-cta-emerald:hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+}
