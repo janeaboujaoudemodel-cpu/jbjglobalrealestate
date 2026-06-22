@@ -9797,12 +9797,13 @@ html body :is(
 }
 
 /* Owner CRM tabs — when the tab is active, paint emerald ombre and lock
-   the label + icon to solid white at all states, overriding the inline
-   text-[#1A1A1A] and the .tab-trigger-champagne champagne fill. */
-html body .tab-trigger-champagne[data-state="active"],
-html body .tab-trigger-champagne[data-state="active"]:hover,
-html body .tab-trigger-champagne[data-state="active"]:focus,
-html body .tab-trigger-champagne[data-state="active"]:focus-visible {
+   the label + icon to solid white at all states. Selector is intentionally
+   stacked with repeated classes to outweigh the global champagne contrast
+   guard which forces ink color on .jj-pill-active surfaces. */
+html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"],
+html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"]:hover,
+html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"]:focus,
+html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"]:focus-visible {
   background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
   background-color: #064E3B !important;
   border: 1px solid rgba(52,211,153,0.55) !important;
@@ -9810,9 +9811,9 @@ html body .tab-trigger-champagne[data-state="active"]:focus-visible {
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 22px -14px rgba(6,78,59,0.85) !important;
 }
-html body .tab-trigger-champagne[data-state="active"] *,
-html body .tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]),
-html body .tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]) * {
+html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"] *,
+html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]),
+html body button.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne.tab-trigger-champagne[data-state="active"] :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
