@@ -10340,3 +10340,16 @@ html body [role="tablist"] button[role="tab"][data-state="active"][data-state="a
   background: none !important;
   animation: none !important;
 }
+
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-\[\#1A1A1A\],
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-\[\#1A1A1A\] *,
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-\[\#1A1A1A\],
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-\[\#1A1A1A\] *,
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-black,
+html body button[role="tab"][data-state="active"].data-\[state\=active\]\:text-black *,
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-black,
+html body button[role="tab"][aria-selected="true"].data-\[state\=active\]\:text-black * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
