@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
  * PearlButton — global premium CTA.
  *
  * Replaces the legacy dark / black CTA buttons site-wide.
- * Emerald metallic gradient, white text/icons, soft 3D depth,
- * floating lift + emerald glow on hover.
+ * Primary + secondary pair mirrors the AI Property Comparison CTAs:
+ * primary emerald/dark with white text, secondary champagne with ink text.
  *
  * Use everywhere you previously had a heavy black "Start Exploring" /
  * "View All Projects" / "Try Our Mortgage Calculator" style CTA.
@@ -19,7 +19,8 @@ type CommonProps = {
   size?: PearlButtonSize;
   /**
    * Visual variant.
-   * - Both variants render as one emerald pill with white text/icons.
+   * - primary: emerald/dark CTA with white text/icons.
+   * - secondary: champagne CTA with ink text/icons.
    */
   variant?: PearlButtonVariant;
   className?: string;
@@ -54,13 +55,10 @@ const baseLayout =
   "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0";
 
 const primaryClass =
-  "jj-emerald-metallic allow-white text-white border border-white/20 " +
-  "shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_14px_34px_-16px_rgba(6,78,59,0.95),0_0_18px_rgba(52,211,153,0.20)] " +
-  "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.30),0_20px_44px_-16px_rgba(6,78,59,1),0_0_26px_rgba(52,211,153,0.30)] " +
-  "focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-[#064E3B]";
+  "jj-dual-cta-primary allow-white text-white border border-[#B89555]/55 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-[#064E3B]";
 
 const secondaryClass =
-  primaryClass;
+  "jj-dual-cta-secondary border border-[#B89555]/40 focus-visible:ring-[#B89555]/60 focus-visible:ring-offset-[#FDFBF7]";
 
 function InnerContent({
   leadingIcon,
@@ -68,8 +66,8 @@ function InnerContent({
   children,
   variant,
 }: Pick<CommonProps, "leadingIcon" | "trailingIcon" | "children"> & { variant: PearlButtonVariant }) {
-  const iconColor = "text-white allow-white";
-  const labelColor = "text-white allow-white";
+  const iconColor = variant === "secondary" ? "text-[#1A1A1A]" : "text-white allow-white";
+  const labelColor = variant === "secondary" ? "text-[#1A1A1A]" : "text-white allow-white";
   return (
     <>
       {leadingIcon ? (
@@ -100,7 +98,9 @@ export const PearlButton = React.forwardRef<
   const { size = "md", variant = "primary", className, children, leadingIcon, trailingIcon } = props;
   const sizeCls = sizeMap[size];
   const variantCls = variant === "secondary" ? secondaryClass : primaryClass;
-  const surfaceAttr = { "data-emerald": "true" as const, "data-no-contrast-guard": true as const };
+  const surfaceAttr = variant === "secondary"
+    ? { "data-cta": "champagne" as const }
+    : { "data-emerald": "true" as const, "data-no-contrast-guard": true as const };
 
   if ("to" in props && props.to !== undefined) {
     const { to, leadingIcon: _l, trailingIcon: _t, size: _s, variant: _v, className: _c, children: _ch, ...rest } =
