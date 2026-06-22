@@ -622,11 +622,11 @@ export default function BrokerCRM() {
                 key={d.grant_id}
                 type="button"
                 onClick={() => setOpenDbSheet({ id: d.database_id, name: d.database_name })}
-                className="block w-full text-left p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 hover:border-[#B89555]/55 transition-colors"
+                className="jj-hover-emerald group block w-full text-left p-4 rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/24"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-md bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center">
-                    <Database className="h-4 w-4 text-[#1A1A1A]" />
+                  <div className="h-10 w-10 rounded-xl jj-icon-tile-emerald grid place-items-center" data-icon-tile="">
+                    <Database className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-[#1A1A1A] truncate">{d.database_name}</div>
@@ -635,10 +635,11 @@ export default function BrokerCRM() {
                       {d.date_window_mode !== "all" && ` · window: ${d.date_window_mode}`}
                     </div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-[#1A1A1A]/50" />
+                  <ArrowRight className="h-4 w-4 text-[color:var(--emerald-1)]/70 group-hover:text-white" />
                 </div>
               </button>
             ))
+
           )}
         </section>
         )
