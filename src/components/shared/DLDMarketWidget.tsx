@@ -105,9 +105,16 @@ const DownloadReportDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="gold" size="sm" className="gap-2 !text-[#0A0A0A] hover:!text-[#0A0A0A]">
-          <Download className="w-4 h-4 text-[#0A0A0A]" />
-          Download Report
+        <Button
+          size="sm"
+          className="gap-2 rounded-lg px-4 py-2 font-semibold text-white border-0 shadow-[0_6px_16px_rgba(4,78,59,0.32)] hover:shadow-[0_10px_22px_rgba(4,78,59,0.42)] hover:-translate-y-0.5 transition-all"
+          style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF" }}
+          data-surface="emerald"
+          data-emerald="true"
+          data-no-contrast-guard
+        >
+          <Download className="w-4 h-4" color="#FFFFFF" stroke="#FFFFFF" />
+          <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Download Report</span>
         </Button>
       </DialogTrigger>
 
