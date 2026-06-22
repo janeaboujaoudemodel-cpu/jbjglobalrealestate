@@ -73,9 +73,12 @@ function SectionHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-end justify-between gap-4 mb-5">
+    <div data-section-header="" className="flex items-end justify-between gap-4 mb-5">
       <div className="min-w-0">
-        <div className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+        <div
+          data-section-label=""
+          className="jj-section-eyebrow inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+        >
           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#EFE6D6] border border-[#B89555]/45">
             <Icon className="h-3 w-3 text-[#1A1A1A]" strokeWidth={2.2} />
           </span>
@@ -87,8 +90,8 @@ function SectionHeader({
           {title}
         </h2>
         <div className="mt-2 flex items-center gap-2" aria-hidden="true">
-          <span className="block h-px w-8 bg-gradient-to-r from-[#B89555]/70 to-transparent" />
-          <span className="block w-1 h-1 rotate-45 bg-[#B89555]/60" />
+          <span className="block h-px w-8 bg-gradient-to-r from-[color:var(--emerald-1)]/60 to-transparent" />
+          <span className="block w-1 h-1 rotate-45 bg-[color:var(--emerald-1)]/70" />
         </div>
       </div>
       {action && <div className="shrink-0">{action}</div>}
@@ -263,10 +266,13 @@ export default function BrokerDashboardLanding() {
                   </div>
                   <div className="min-w-0">
                     {/* eyebrow plaque */}
-                    <div className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
+                    <div
+                      data-section-label=""
+                      className="jj-section-eyebrow inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+                    >
                       <span className="relative inline-flex items-center justify-center w-3.5 h-3.5">
-                        <span className="absolute inset-0 rotate-45 rounded-[3px] border border-[#B89555]/70" aria-hidden="true" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-[#B89555]" aria-hidden="true" />
+                        <span className="absolute inset-0 rotate-45 rounded-[3px] border border-[color:var(--emerald-1)]/70" aria-hidden="true" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-[color:var(--emerald-1)]" aria-hidden="true" />
                       </span>
                       <span className="text-[9.5px] font-semibold uppercase tracking-[0.28em] text-[#1A1A1A]">
                         Broker Workspace

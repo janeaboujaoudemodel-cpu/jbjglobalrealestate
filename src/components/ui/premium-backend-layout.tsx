@@ -125,18 +125,20 @@ interface PremiumStatCardProps {
 }
 
 const accentColors = {
+  // Legacy "gold" KPI accent — re-aliased to the system Emerald accent so
+  // every page that opted in to "gold" automatically inherits Emerald.
   gold: {
-    bg: 'bg-gradient-to-br from-gold/20 to-gold/5',
-    border: 'border-[#B89555]/30',
-    icon: 'text-[#1A1A1A]',
+    bg: 'bg-[#FDFBF7]',
+    border: 'border-[color:var(--emerald-1)]/25',
+    icon: 'text-white',
     text: 'text-[#1A1A1A]',
-    iconBg: 'bg-[#EFE6D6]/10',
+    iconBg: 'jj-icon-tile-emerald',
   },
   emerald: {
-    bg: 'bg-[color:var(--emerald-soft-bg)]',
-    border: 'border-[color:var(--emerald-1)]/30',
-    icon: 'text-[color:var(--emerald-1)]',
-    text: 'text-[color:var(--emerald-1)]',
+    bg: 'bg-[#FDFBF7]',
+    border: 'border-[color:var(--emerald-1)]/25',
+    icon: 'text-white',
+    text: 'text-[#1A1A1A]',
     iconBg: 'jj-icon-tile-emerald',
   },
   blue: {

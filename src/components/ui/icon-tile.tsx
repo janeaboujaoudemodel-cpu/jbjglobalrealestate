@@ -26,7 +26,10 @@ export type IconTileTone =
 export type IconTileSize = "sm" | "md" | "lg" | "xl";
 
 const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
-  gold:    { tile: "surface-raised bg-[#EFE6D6] ring-1 ring-[#B89555]", icon: "text-[#1A1A1A]" },
+  // CHAMPAGNE TILE + EMERALD GLYPH — the global "light surface" tone.
+  // Maps the legacy "gold" tone to the system rule:
+  // Champagne background = dark text + Emerald icon/accent.
+  gold:    { tile: "bg-[color:var(--emerald-soft-bg)] ring-1 ring-[color:var(--emerald-1)]/30", icon: "text-[color:var(--emerald-1)]" },
   emerald: { tile: "jj-icon-tile-emerald", icon: "text-white" },
   red:     { tile: "bg-red-500/10 ring-1 ring-red-500/30",         icon: "text-red-600" },
   blue:    { tile: "bg-blue-500/10 ring-1 ring-blue-500/30",       icon: "text-blue-600" },
@@ -57,6 +60,9 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
     const t = TONE[tone];
     const s = SIZE[size];
     const isDark = tone === "ink" || tone === "navy" || tone === "emerald";
+    // Champagne tones (default "gold") should render their glyph in Emerald,
+    // not black — see TONE.gold above.
+    const isChampagne = tone === "gold";
     return (
       <div
         ref={ref}
