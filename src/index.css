@@ -10113,3 +10113,19 @@ html body a[href="/guides"] * {
   -webkit-text-fill-color: #064E3B !important;
   stroke: #064E3B !important;
 }
+
+/* PASS 46e — final-tier override: extra-specific selector to beat every
+   earlier pass that pins section labels to ink/gold. Active = WHITE. */
+html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sidebar-section][data-active="true"],
+html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sidebar-section][data-active="true"] span[data-sidebar-section-label],
+html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sidebar-section][data-active="true"] svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+}
+html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sidebar-section][data-active="true"] {
+  background-image: var(--jj-emerald-ombre) !important;
+}

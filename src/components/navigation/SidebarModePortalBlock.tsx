@@ -46,22 +46,17 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
   }
 
   return (
-    <div className="px-2.5 pt-2 pb-1">
+    <div className="px-2 pt-2 pb-1">
       <Link
         to={cfg.href}
         data-no-contrast-guard
         data-allow-dark-cta
-        className="allow-white group flex items-center gap-2 px-2.5 h-9 rounded-lg shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:brightness-110 transition-all"
+        className="allow-white group flex items-center gap-1.5 px-2 h-9 rounded-lg shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:brightness-110 transition-all"
         style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.20)" }}
       >
+        <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
         <span
-          className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
-          style={{ backgroundColor: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.40)" }}
-        >
-          <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
-        </span>
-        <span
-          className="flex-1 text-[11px] font-bold tracking-[0.06em] uppercase truncate"
+          className="flex-1 text-[10.5px] font-bold tracking-[0.04em] uppercase whitespace-nowrap"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           {cfg.label}
@@ -71,3 +66,4 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
     </div>
   );
 }
+
