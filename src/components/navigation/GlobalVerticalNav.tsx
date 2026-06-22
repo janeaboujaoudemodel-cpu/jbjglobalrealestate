@@ -1050,6 +1050,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {highlightItems.map((item, i) => {
               const hasMega = !!item.megaMenu;
               const isMenuOpen = activeMegaMenu === item.megaMenu;
+              const routeActive = isRouteActive(item.href);
+              const highlightActive = activeMegaMenu ? isMenuOpen : routeActive;
               const Icon = item.icon;
               return (
                 <Link
@@ -1062,16 +1064,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     else handleNavClick(undefined);
                   }}
                   data-sidebar-highlight
+                  data-emerald={highlightActive ? 'true' : undefined}
+                  data-on-dark={highlightActive ? 'true' : undefined}
                   data-no-contrast-guard
-                  style={{ color: '#1A1A1A' }}
+                  style={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                     className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] font-semibold transition-all duration-200 rounded-lg ${getItemStyle(item)}`}
                 >
                   <span className="w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0">
-                    <Icon className="w-3 h-3 transition-colors" />
+                    <Icon className="w-3 h-3 transition-colors" style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : { color: '#1A1A1A', stroke: '#1A1A1A' }} />
                   </span>
-                  <span data-sidebar-highlight-label data-no-contrast-guard className="flex-1 text-left relative inline-block transition-colors duration-200" style={{ color: '#1A1A1A' }}>{item.label}</span>
+                  <span data-sidebar-highlight-label data-no-contrast-guard className="flex-1 text-left relative inline-block transition-colors duration-200" style={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
                   {hasMega && (
-                    <ChevronRight data-no-contrast-guard className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90" : "opacity-60"}`} />
+                    <ChevronRight data-no-contrast-guard className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : { color: '#1A1A1A', stroke: '#1A1A1A' }} />
                   )}
                 </Link>
               );
@@ -1171,15 +1175,17 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               }}
                               data-sidebar-subitem
                               data-active={subitemActive ? 'true' : undefined}
+                              data-emerald={subitemActive ? 'true' : undefined}
+                              data-on-dark={subitemActive ? 'true' : undefined}
                               aria-current={subitemActive ? 'page' : undefined}
                               data-no-contrast-guard
                               className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150"
-                              style={{ color: '#1A1A1A' }}
+                              style={subitemActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                             >
                               <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                                <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#B89555', stroke: '#B89555' }} />
+                                <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={subitemActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : { color: '#B89555', stroke: '#B89555' }} />
                               </span>
-                              <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: '#1A1A1A' }}>{item.label}</span>
+                              <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={subitemActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
                             </Link>
                             {needsAccountDivider && (
                               <div className="my-1 mx-2 h-px bg-gradient-to-r from-transparent via-[#047857]/45 to-transparent" aria-hidden="true" />
