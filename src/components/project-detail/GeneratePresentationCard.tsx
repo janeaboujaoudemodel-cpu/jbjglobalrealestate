@@ -46,11 +46,11 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <span
-                    className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 ring-1 ring-[#B89555]/70"
-                    style={{ background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 50%, #B89555 100%)" }}
+                    className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(4,120,87,0.35)]"
+                    style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
                     aria-hidden="true"
                   >
-                    <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
+                    <Sparkles className="w-3 h-3" color="#FFFFFF" stroke="#FFFFFF" />
                   </span>
                   <span className="text-[#1A1A1A]/90">{item}</span>
                 </li>
@@ -64,38 +64,32 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
               onClick={() => setOpen(true)}
               whileHover={{ y: -4, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="relative w-[380px] h-[260px] rounded-lg overflow-hidden cursor-pointer flex flex-col items-center justify-center gap-4 text-white"
+              className="relative w-[380px] h-[260px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center gap-4"
               style={{
-                background: "linear-gradient(135deg, #0A0A0A 0%, #1F1F1F 60%, #0A0A0A 100%)",
-                border: "1px solid rgba(184,149,85,0.55)",
-                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.4)",
+                backgroundImage: "var(--jj-emerald-ombre)",
+                backgroundColor: "#064E3B",
+                color: "#FFFFFF",
+                boxShadow: "0 20px 40px -10px rgba(4,78,59,0.45)",
               }}
-              data-allow-dark-cta
+              data-surface="emerald"
+              data-emerald="true"
+              data-no-contrast-guard
             >
               <div
-                className="absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage: "radial-gradient(circle at 30% 20%, rgba(184,149,85,0.35), transparent 60%)",
-                }}
-              />
-              <div
                 className="relative z-10 w-16 h-16 rounded-full inline-flex items-center justify-center"
-                style={{
-                  background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 50%, #B89555 100%)",
-                  boxShadow: "0 8px 18px rgba(0,0,0,0.4)",
-                }}
+                style={{ background: "rgba(255,255,255,0.14)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.25)" }}
               >
-                <Presentation className="w-7 h-7 text-[#1A1A1A]" />
+                <Presentation className="w-7 h-7" color="#FFFFFF" stroke="#FFFFFF" />
               </div>
               <div className="relative z-10 text-center px-6">
                 <div
                   className="text-[11px] uppercase tracking-[0.3em] mb-1"
-                  style={{ color: "#F3D98A" }}
+                  style={{ color: "#FFFFFF", opacity: 0.85 }}
                 >
                   Click to start
                 </div>
-                <div className="text-[20px] font-semibold">Generate Presentation</div>
-                <div className="text-[12px] opacity-70 mt-1">Custom PDF deck · ~30 seconds</div>
+                <div className="text-[20px] font-semibold" style={{ color: "#FFFFFF" }}>Generate Presentation</div>
+                <div className="text-[12px] mt-1" style={{ color: "#FFFFFF", opacity: 0.75 }}>Custom PDF deck · ~30 seconds</div>
               </div>
             </motion.button>
           </div>

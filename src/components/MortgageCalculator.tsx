@@ -528,15 +528,15 @@ const MortgageCalculator = ({
     <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg">
       {/* Header - Gold Premium Style - Centered & Bigger */}
       {!compact && (
-        <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-[#B89555]/30 p-6 lg:p-8">
+        <div className="p-6 lg:p-8" style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }} data-surface="emerald" data-emerald="true" data-no-contrast-guard>
           <div className="flex flex-col items-center text-center">
-            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-[#B89555]/30 flex items-center justify-center mb-4">
-              <Calculator className="w-7 h-7 lg:w-8 lg:h-8 text-[#1A1A1A]" />
+            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl flex items-center justify-center mb-4" style={{ background: "rgba(255,255,255,0.14)", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.25)" }}>
+              <Calculator className="w-7 h-7 lg:w-8 lg:h-8" color="#FFFFFF" stroke="#FFFFFF" />
             </div>
-            <h3 className="text-2xl lg:text-3xl font-bold text-foreground">
+            <h3 className="text-2xl lg:text-3xl font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               Mortgage Calculator
             </h3>
-            <p className="text-muted-foreground text-sm lg:text-base mt-2">Estimate your monthly payments</p>
+            <p className="text-sm lg:text-base mt-2" style={{ color: "rgba(255,255,255,0.85)" }}>Estimate your monthly payments</p>
           </div>
         </div>
       )}
@@ -745,13 +745,16 @@ const MortgageCalculator = ({
             {/* Request Mortgage Introduction CTA */}
             <div className="mt-6 pt-4 border-t border-[#B89555]/20">
               <p className="text-center text-muted-foreground text-sm mb-3">Prefer a Mortgage Advisor Through Our Licensed Partners?</p>
-              <Button 
-                variant="gold" 
-                size="lg" 
-                className="w-full"
+              <Button
+                size="lg"
+                className="w-full font-semibold border-0 shadow-[0_8px_22px_rgba(4,78,59,0.32)] hover:shadow-[0_12px_28px_rgba(4,78,59,0.42)] transition-all"
+                style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                data-surface="emerald"
+                data-emerald="true"
+                data-no-contrast-guard
                 asChild
               >
-                <a href="/contact">
+                <a href="/contact" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} onMouseEnter={(e) => { (e.currentTarget.parentElement as HTMLElement).style.backgroundImage = "var(--jj-emerald-ombre-hover)"; }} onMouseLeave={(e) => { (e.currentTarget.parentElement as HTMLElement).style.backgroundImage = "var(--jj-emerald-ombre)"; }}>
                   Request Mortgage Introduction
                 </a>
               </Button>
