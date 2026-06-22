@@ -10590,3 +10590,22 @@ html body [cmdk-item] > span:first-child:empty {
   display: none !important;
 }
 
+/* PASS XX-D contrast hard-stop: beats legacy light-surface locks with exact primitive specificity. */
+html body button.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
+html body a.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
+html body .jj-cta-primary.jj-cta-champagne[data-surface="emerald"],
+html body .jj-cta-primary[data-cta="primary"],
+html body [data-surface="emerald"][data-cta="primary"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body button.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"] :is(span, svg, [class*="lucide"]),
+html body a.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"] :is(span, svg, [class*="lucide"]),
+html body .jj-cta-primary.jj-cta-champagne[data-surface="emerald"] :is(span, svg, [class*="lucide"]),
+html body .jj-cta-primary[data-cta="primary"] :is(span, svg, [class*="lucide"]),
+html body [data-surface="emerald"][data-cta="primary"] :is(span, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
