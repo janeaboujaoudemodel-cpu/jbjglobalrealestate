@@ -10977,3 +10977,28 @@ html body :is(
 ):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-no-contrast-guard]) :is(svg, svg.lucide, [class*="lucide"]) {
   filter: brightness(0) invert(1) !important;
 }
+
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-champagne[data-surface="emerald"],
+  .jj-badge-dark,
+  .jj-pill-active,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-sidebar-item-active,
+  .jj-tab-pill[data-active="true"],
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-ink-emerald],
+  [data-filter-chip][data-active="true"],
+  [data-pill][data-active="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .btn-primary
+):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-no-contrast-guard]) :is(img, canvas) {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
