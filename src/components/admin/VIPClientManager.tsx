@@ -414,7 +414,7 @@ const VIPClientManager = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/20 to-green-500/5 border-green-500/30">
+        <Card className="bg-gradient-to-br /20 /5 border-[color:var(--emerald-1)]/30/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <CheckCircle className="h-8 w-8 text-green-500" />
@@ -513,7 +513,7 @@ const VIPClientManager = () => {
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-semibold">{client.full_name}</h3>
                           {client.is_verified && (
-                            <Badge variant="outline" className="border-green-500 text-green-500 text-xs">
+                            <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 text-green-500 text-xs">
                               <CheckCircle className="h-3 w-3 mr-1" />
                               Verified
                             </Badge>
@@ -549,7 +549,7 @@ const VIPClientManager = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => toggleVerification(client)}
-                        className={client.is_verified ? 'text-red-500 hover:text-red-600' : 'text-green-500 hover:text-green-600'}
+                        className={client.is_verified ? 'text-red-500 hover:text-red-600' : 'text-green-500 hover:text-[color:var(--emerald-1)]'}
                       >
                         {client.is_verified ? (
                           <>

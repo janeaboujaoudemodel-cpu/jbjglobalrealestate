@@ -93,7 +93,7 @@ const PROPERTY_STATUS = [
 const SALE_STATUS_OPTIONS = [
   { value: "all", label: "All Sale Statuses", color: "" },
   { value: "Announced", label: "Announced", color: "bg-pink-500" },
-  { value: "Presale (EOI)", label: "Presale (EOI)", color: "bg-emerald-500" },
+  { value: "Presale (EOI)", label: "Presale (EOI)", color: "jj-emerald-solid" },
   { value: "Start of Sales", label: "Start of Sales", color: "bg-yellow-500" },
   { value: "On Sale", label: "On Sale", color: "bg-blue-500" },
   { value: "Sold Out", label: "Sold Out", color: "bg-red-500" },

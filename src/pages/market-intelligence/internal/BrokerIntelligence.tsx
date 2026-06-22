@@ -130,7 +130,7 @@ const BrokerIntelligence = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="calendar" 
-                className="flex items-center gap-2 data-[state=active]:bg-emerald-500/20 data-[state=active]:text-emerald-400"
+                className="flex items-center gap-2 data-[state=active]:jj-emerald-solid/20 data-[state=active]:text-emerald-400"
               >
                 <Calendar className="w-4 h-4" />
                 Calendar

@@ -191,9 +191,9 @@ const ListingAdminManager = () => {
 
                 {foundUser && (
                   <>
-                    <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <div className="p-4 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 jj-emerald-solid/20 rounded-full flex items-center justify-center">
                           <User className="w-5 h-5 text-green-400" />
                         </div>
                         <div>
@@ -266,10 +266,10 @@ const ListingAdminManager = () => {
                 <div className="flex items-center gap-3">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      admin.is_active
-                        ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
-                        : "bg-[#EFE6D6] text-white/90"
-                    }`}
+ admin.is_active
+ ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
+ : "bg-[#EFE6D6] text-white/90"
+ }`}
                   >
                     <User className="w-5 h-5" />
                   </div>
@@ -277,7 +277,7 @@ const ListingAdminManager = () => {
                     <div className="flex items-center gap-2">
                       <p className="text-white font-medium">{admin.display_name}</p>
                       {admin.is_active ? (
-                        <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
+                        <Badge className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30 text-xs">
                           Active
                         </Badge>
                       ) : (
@@ -309,7 +309,7 @@ const ListingAdminManager = () => {
                     className={
                       admin.is_active
                         ? "text-[#1A1A1A] hover:text-amber-300"
-                        : "text-green-400 hover:text-green-300"
+                        : "text-green-400 hover:text-[color:var(--emerald-on)]"
                     }
                     title={admin.is_active ? "Deactivate" : "Activate"}
                   >

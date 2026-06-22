@@ -485,7 +485,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                 <ImageIcon className="h-6 w-6 text-[#1A1A1A]" />
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Image Resizer Pro</h1>
-              <Badge className="bg-green-600/10 text-green-700 border-green-600/20 font-medium">Free</Badge>
+              <Badge className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/20 font-medium">Free</Badge>
             </div>
             <p className="text-muted-foreground text-sm ml-[52px]">
               Resize, crop, add text, borders & merge — all processed locally in your browser.
@@ -531,7 +531,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   {/* Preview Header */}
                   <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30 bg-[#F7F2EA]/50">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500" />
+                      <div className="w-2 h-2 rounded-full jj-emerald-solid" />
                       <span className="text-sm font-medium text-foreground">Live Preview</span>
                       {activePreset && (
                         <Badge variant="outline" className="text-xs border-[#B89555]/30 text-[#1A1A1A]-dark font-mono">
@@ -718,10 +718,10 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
               {/* Generated Results */}
               {processedImages.length > 0 && (
-                <div className="bg-[#FDFBF7] rounded-2xl border border-green-200 shadow-sm overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-green-100 bg-green-50/50">
+                <div className="bg-[#FDFBF7] rounded-2xl border border-[color:var(--emerald-1)]/30 shadow-sm overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-green-100 jj-emerald-soft/50">
                     <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                      <Check className="h-4 w-4 text-green-600" />
+                      <Check className="h-4 w-4 text-[color:var(--emerald-1)]" />
                       Generated ({processedImages.length})
                     </h3>
                     <Button size="sm" onClick={downloadZip} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] h-8">
@@ -866,10 +866,10 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         <div className="flex items-center gap-2">
                           {smartCropConfidence !== null && (
                             <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold ${
-                              smartCropConfidence >= 80 ? "bg-emerald-100 text-emerald-700" :
-                              smartCropConfidence >= 50 ? "bg-amber-100 text-amber-700" :
-                              "bg-red-100 text-red-700"
-                            }`}>
+ smartCropConfidence >= 80 ? "jj-emerald-soft text-[color:var(--emerald-1)]" :
+ smartCropConfidence >= 50 ? "bg-amber-100 text-amber-700" :
+ "bg-red-100 text-red-700"
+ }`}>
                               <span>{smartCropConfidence}%</span>
                             </div>
                           )}

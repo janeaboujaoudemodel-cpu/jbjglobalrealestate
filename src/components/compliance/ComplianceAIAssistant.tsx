@@ -255,7 +255,7 @@ Would you like me to run a specific audit or show detailed information? Type "he
             <p className="text-xs text-muted-foreground">Security & Ethics Monitor</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <div className="h-2 w-2 rounded-full jj-emerald-solid animate-pulse" />
             <span className="text-xs text-muted-foreground">Online</span>
           </div>
         </div>

@@ -427,7 +427,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
+      case 'active': return 'jj-emerald-solid';
       case 'away': return 'bg-yellow-500';
       case 'busy': return 'bg-red-500';
       case 'inactive': return 'bg-[#B89555]';
@@ -446,7 +446,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       case 'rejected':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejected</Badge>;
       case 'hired':
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Hired</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30">Hired</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -595,7 +595,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'sales' ? 'border-green-500 ring-2 ring-green-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'sales' ? 'border-[color:var(--emerald-1)]/30 ring-2 ring-green-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('sales')}
         >
           <CardContent className="p-4 text-center">
@@ -645,7 +645,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'email' ? 'border-teal-500 ring-2 ring-teal-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'email' ? 'border-[color:var(--emerald-1)]/30 ring-2 ring-teal-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('email')}
         >
           <CardContent className="p-4 text-center">

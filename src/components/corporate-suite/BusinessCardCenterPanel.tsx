@@ -172,10 +172,10 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
           <button
             onClick={() => setEditLayout(v => !v)}
             className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition-colors border ${
-              editLayout
-                ? "bg-amber-100 text-amber-700 border-amber-300"
-                : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] hover:bg-[hsl(var(--accent))]"
-            }`}
+ editLayout
+ ? "bg-amber-100 text-amber-700 border-amber-300"
+ : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] hover:bg-[hsl(var(--accent))]"
+ }`}
             title={editLayout ? "Exit layout edit mode" : "Enter layout edit mode to drag fields"}
           >
             <Move size={11} />
@@ -184,7 +184,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
           <button
             onClick={handleShareCard}
             disabled={isSharing}
-            className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition-colors border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 disabled:opacity-60"
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition-colors border border-[color:var(--emerald-1)]/30 jj-emerald-soft text-[color:var(--emerald-1)] hover:jj-emerald-soft disabled:opacity-60"
             title="Share card and get a shareable link"
           >
             {isSharing ? <RefreshCw size={11} className="animate-spin" /> : <Share2 size={11} />}
@@ -196,10 +196,10 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
                 key={s}
                 onClick={() => setSide(s)}
                 className={`px-3 py-1.5 font-medium capitalize transition-colors flex items-center gap-1.5 ${
-                  side === s
-                    ? "bg-[hsl(var(--foreground))] text-white"
-                    : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]"
-                }`}
+ side === s
+ ? "bg-[hsl(var(--foreground))] text-white"
+ : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]"
+ }`}
               >
                 <div className="w-2 h-2 rounded-full" style={{ background: s === "front" ? frontPrimary : backPrimary }} />
                 {s}
@@ -281,10 +281,10 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
                   key={tab}
                   onClick={() => setDigitalTab(tab)}
                   className={`flex-1 py-2.5 text-xs font-semibold transition-all ${
-                    digitalTab === tab
-                      ? "bg-blue-600/30 text-blue-100 border-b-2 border-blue-400"
-                      : "bg-[#ffffff08] text-white/90 hover:text-white/70"
-                  }`}
+ digitalTab === tab
+ ? "bg-blue-600/30 text-blue-100 border-b-2 border-blue-400"
+ : "bg-[#ffffff08] text-white/90 hover:text-white/70"
+ }`}
                 >
                   {tab === "card" ? "📇 Card" : "📄 Landing Page"}
                 </button>
@@ -331,10 +331,10 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
               <div key={t.id} className="relative group">
                 <div
                   className={`relative rounded-xl overflow-hidden border-2 transition-all duration-200 ${
-                    isFront || isBack
-                      ? "border-[hsl(var(--gold))] shadow-md"
-                      : "border-transparent hover:border-[hsl(var(--border))]"
-                  }`}
+ isFront || isBack
+ ? "border-[hsl(var(--gold))] shadow-md"
+ : "border-transparent hover:border-[hsl(var(--border))]"
+ }`}
                 >
                   <CardFace
                     data={data}
@@ -369,20 +369,20 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
                     <button
                       onClick={() => handleSetFront(t.id)}
                       className={`text-[9px] font-bold px-3 py-1 rounded-full hover:opacity-90 transition-all ${
-                        isFront
-                          ? "bg-[hsl(var(--gold))] text-white ring-2 ring-white/50"
-                          : "bg-[hsl(var(--gold)/0.8)] text-white"
-                      }`}
+ isFront
+ ? "bg-[hsl(var(--gold))] text-white ring-2 ring-white/50"
+ : "bg-[hsl(var(--gold)/0.8)] text-white"
+ }`}
                     >
                       {isFront ? "✓ Front" : "Set Front"}
                     </button>
                     <button
                       onClick={() => handleSetBack(t.id)}
                       className={`text-[9px] font-bold px-3 py-1 rounded-full hover:opacity-90 transition-all ${
-                        isBack
-                          ? "bg-[#FDFBF7] text-[#1A1A1A] ring-2 ring-[hsl(var(--gold))]/50"
-                          : "bg-[#FDFBF7]/90 text-[#1A1A1A]"
-                      }`}
+ isBack
+ ? "bg-[#FDFBF7] text-[#1A1A1A] ring-2 ring-[hsl(var(--gold))]/50"
+ : "bg-[#FDFBF7]/90 text-[#1A1A1A]"
+ }`}
                     >
                       {isBack ? "✓ Back" : "Set Back"}
                     </button>

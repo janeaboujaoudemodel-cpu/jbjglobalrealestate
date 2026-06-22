@@ -95,7 +95,7 @@ export function StampProjectHeader(props: StampProjectHeaderProps) {
           {/* Save status */}
           {saveLabel && (
             <span className="text-[10px] text-[hsl(var(--muted-foreground))] flex items-center gap-1 flex-shrink-0">
-              {props.saving ? <Loader2 size={10} className="animate-spin" /> : <Check size={10} className="text-emerald-600" />}
+              {props.saving ? <Loader2 size={10} className="animate-spin" /> : <Check size={10} className="text-[color:var(--emerald-1)]" />}
               {saveLabel}
             </span>
           )}
@@ -147,7 +147,7 @@ export function StampProjectHeader(props: StampProjectHeaderProps) {
                     <span className="font-medium">Save Design</span>
                     <span className="block text-[9px] text-[hsl(var(--muted-foreground))]">Finalized stamp design</span>
                   </div>
-                  <Badge variant="secondary" className="text-[7px] px-1 py-0 h-3.5 bg-emerald-50 text-emerald-600 border-emerald-200">Design</Badge>
+                  <Badge variant="secondary" className="text-[7px] px-1 py-0 h-3.5 jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Design</Badge>
                 </DropdownMenuItem>
               )}
               {props.onSavePreset && (

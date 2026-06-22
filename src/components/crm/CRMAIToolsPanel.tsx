@@ -320,17 +320,17 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
                           <div
                             key={tool.id}
                             className={`relative p-3 border rounded-lg transition-all ${
-                              isSelected 
-                                ? "border-[#B89555] bg-[#EFE6D6]/10" 
-                                : "border-border hover:border-muted-foreground/50"
-                            }`}
+ isSelected 
+ ? "border-[#B89555] bg-[#EFE6D6]/10" 
+ : "border-border hover:border-muted-foreground/50"
+ }`}
                           >
                             <div className="flex items-center gap-3">
                               <button
                                 onClick={() => toggleTool(tool.id)}
                                 className={`p-2 rounded-lg transition-colors ${
-                                  isSelected ? "bg-[#EFE6D6]/20" : "bg-muted hover:bg-muted/80"
-                                }`}
+ isSelected ? "bg-[#EFE6D6]/20" : "bg-muted hover:bg-muted/80"
+ }`}
                               >
                                 <Icon className={`h-4 w-4 ${isSelected ? "text-[#1A1A1A]" : tool.color}`} />
                               </button>
@@ -374,7 +374,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
               </Button>
               <Button 
                 onClick={handleSendToClient} 
-                className="flex-1 bg-green-600 hover:bg-green-500 text-white"
+                className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
                 disabled={!lead.email_lower}
               >
                 <Send className="h-4 w-4 mr-2" />
@@ -459,7 +459,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
               </Button>
               <Button 
                 onClick={sendEmailToClient} 
-                className="flex-1 bg-green-600 hover:bg-green-500"
+                className="flex-1 jj-emerald-solid hover:jj-emerald-solid"
                 disabled={sending}
               >
                 <Send className="h-4 w-4 mr-2" />

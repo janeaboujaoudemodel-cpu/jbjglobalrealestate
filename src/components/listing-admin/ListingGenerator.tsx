@@ -718,10 +718,10 @@ const ListingGenerator = () => {
         {(["input", "processing", "preview"] as const).map((s, i) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-              step === s ? "bg-[#EFE6D6] text-[#1A1A1A]" :
-              (["input", "processing", "preview"].indexOf(step) > i) ? "bg-[#EFE6D6]/30 text-[#1A1A1A]" :
-              "bg-[#EFE6D6] text-[#1A1A1A]/70"
-            }`}>
+ step === s ? "bg-[#EFE6D6] text-[#1A1A1A]" :
+ (["input", "processing", "preview"].indexOf(step) > i) ? "bg-[#EFE6D6]/30 text-[#1A1A1A]" :
+ "bg-[#EFE6D6] text-[#1A1A1A]/70"
+ }`}>
               {i + 1}
             </div>
             <span className={`text-sm font-medium ${step === s ? "text-foreground" : "text-muted-foreground"}`}>
@@ -743,10 +743,10 @@ const ListingGenerator = () => {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
-              isDragOver
-                ? "border-[#B89555] bg-[#EFE6D6]/10 scale-[1.01]"
-                : "border-border hover:border-[#B89555]/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"
-            }`}
+ isDragOver
+ ? "border-[#B89555] bg-[#EFE6D6]/10 scale-[1.01]"
+ : "border-border hover:border-[#B89555]/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"
+ }`}
             onClick={() => fileInputRef.current?.click()}
           >
             <input
@@ -991,7 +991,7 @@ const ListingGenerator = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-              <Check className="w-5 h-5 text-green-600" />
+              <Check className="w-5 h-5 text-[color:var(--emerald-1)]" />
               Extracted {extractedProjects.length} Project{extractedProjects.length > 1 ? "s" : ""}
             </h2>
             <div className="flex gap-2">

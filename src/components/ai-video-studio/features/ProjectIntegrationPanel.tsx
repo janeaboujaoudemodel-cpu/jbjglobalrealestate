@@ -149,10 +149,10 @@ function ToggleGroup({ label, value, options, onChange }: {
             key={o.value}
             onClick={() => onChange(o.value)}
             className={`flex-1 py-1.5 text-xs rounded-md border transition-all ${
-              value === o.value
-                ? 'border-amber-400 bg-amber-400/15 text-amber-300 font-semibold'
-                : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-[#B89555]/30'
-            }`}
+ value === o.value
+ ? 'border-amber-400 bg-amber-400/15 text-amber-300 font-semibold'
+ : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-[#B89555]/30'
+ }`}
           >
             {o.label}
           </button>
@@ -537,10 +537,10 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             <button
               onClick={() => setShowFilter(v => !v)}
               className={`flex items-center gap-1 px-2 py-1.5 rounded-md border text-xs transition-colors ${
-                showFilter || selectedEmirate !== 'All'
-                  ? 'border-amber-400 text-amber-300 bg-amber-400/10'
-                  : 'border-[#1A1A1A] text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-[#B89555]/30'
-              }`}
+ showFilter || selectedEmirate !== 'All'
+ ? 'border-amber-400 text-amber-300 bg-amber-400/10'
+ : 'border-[#1A1A1A] text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-[#B89555]/30'
+ }`}
             >
               <MapPin className="w-3 h-3" />
               <ChevronDown className="w-3 h-3" />
@@ -553,10 +553,10 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                   key={em}
                   onClick={() => setSelectedEmirate(em)}
                   className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
-                    selectedEmirate === em
-                      ? 'border-amber-400 bg-amber-400/15 text-amber-300'
-                      : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
-                  }`}
+ selectedEmirate === em
+ ? 'border-amber-400 bg-amber-400/15 text-amber-300'
+ : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
+ }`}
                 >
                   {em === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : em}
                 </button>
@@ -810,8 +810,8 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                   const isActive = idx === currentPhaseIdx;
                   return (
                     <div key={phase.id} className={`flex items-center gap-2 text-xs transition-all ${
-                      isDone ? 'text-emerald-400' : isActive ? 'text-amber-300' : 'text-[#1A1A1A]/80'
-                    }`}>
+ isDone ? 'text-emerald-400' : isActive ? 'text-amber-300' : 'text-[#1A1A1A]/80'
+ }`}>
                       {isDone ? (
                         <Check className="w-3.5 h-3.5 shrink-0" />
                       ) : isActive ? (
@@ -927,7 +927,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
         <div className="p-3 border-t border-[#1A1A1A] space-y-2">
           <button
             onClick={handleAddToTimeline}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-bold hover:from-emerald-500 hover:to-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r text-white text-sm font-bold hover: hover: transition-all shadow-lg shadow-emerald-500/20"
           >
             <Film className="w-4 h-4" />
             Add to Timeline

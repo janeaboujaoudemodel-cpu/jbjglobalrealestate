@@ -42,14 +42,14 @@ const TierCard = ({ tierName, totalPoints, nextTierName, pointsToNext, progressP
   
   const bgClass = isBroker 
     ? 'border-blue-500/30 bg-blue-500/5' 
-    : 'border-emerald-500/30 bg-emerald-500/5';
+    : 'border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/5';
   const iconBgClass = isBroker
     ? 'bg-blue-500/20 border-blue-500/40'
-    : 'bg-emerald-500/20 border-emerald-500/40';
+    : 'jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/40';
   const textClass = isBroker ? 'text-blue-500' : 'text-emerald-500';
   const badgeClass = isBroker
     ? 'bg-blue-500/20 text-blue-500 border-blue-500/40'
-    : 'bg-emerald-500/20 text-emerald-500 border-emerald-500/40';
+    : 'jj-emerald-solid/20 text-emerald-500 border-[color:var(--emerald-1)]/30/40';
 
   return (
     <div className={cn("flex flex-col p-3 rounded-xl border", bgClass)}>
@@ -124,7 +124,7 @@ const BadgesLevelCard = () => {
               "text-xs font-medium px-2 py-0.5 rounded-full ml-2",
               currentTierType === 'broker' 
                 ? 'bg-blue-500/20 text-blue-600 border border-blue-500/30' 
-                : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/30'
+                : 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30/30'
             )}>
               {currentTierType === 'broker' ? 'Broker' : 'Investor'}
             </span>

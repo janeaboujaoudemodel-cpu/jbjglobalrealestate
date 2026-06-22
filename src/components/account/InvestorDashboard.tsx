@@ -188,7 +188,7 @@ const InvestorDashboard = () => {
       case 'resolved':
       case 'completed':
       case 'approved':
-        return 'bg-green-500/10 text-green-600 border-green-500/30';
+        return 'jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
       case 'pending':
       case 'in_progress':
         return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
@@ -272,10 +272,10 @@ const InvestorDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-green-500/30 hover:shadow-[0_4px_20px_rgba(34,197,94,0.15)] transition-shadow">
+        <Card className="border-2 border-[color:var(--emerald-1)]/30/30 hover:shadow-[0_4px_20px_rgba(34,197,94,0.15)] transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-green-500/10">
+              <div className="p-2 rounded-full jj-emerald-solid/10">
                 <Building2 className="h-5 w-5 text-green-500" />
               </div>
               <div>
@@ -615,12 +615,12 @@ const InvestorDashboard = () => {
                   <Key className="h-4 w-4 mr-3 text-[#1A1A1A]" />
                   Change Password
                 </Button>
-                <div className="p-4 rounded-lg bg-green-50 border border-green-200">
-                  <div className="flex items-center gap-2 text-green-700">
+                <div className="p-4 rounded-lg jj-emerald-soft border border-[color:var(--emerald-1)]/30">
+                  <div className="flex items-center gap-2 text-[color:var(--emerald-1)]">
                     <CheckCircle2 className="h-5 w-5" />
                     <span className="font-medium">Email Verified</span>
                   </div>
-                  <p className="text-sm text-green-600 mt-1">Your email has been verified</p>
+                  <p className="text-sm text-[color:var(--emerald-1)] mt-1">Your email has been verified</p>
                 </div>
               </CardContent>
             </Card>

@@ -266,17 +266,17 @@ export default function ResearchUsersPanel() {
                       <TableCell className="text-[#1A1A1A] text-sm">{u.email}</TableCell>
                       <TableCell className="text-[#1A1A1A]/70 text-sm">{u.full_name || "—"}</TableCell>
                       <TableCell>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-[#F7F2EA] text-[#1A1A1A]/70"}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "jj-emerald-soft text-[color:var(--emerald-1)]" : "bg-[#F7F2EA] text-[#1A1A1A]/70"}`}>
                           {u.subscribed ? "Yes" : "No"}
                         </span>
                       </TableCell>
                       <TableCell className="text-[#1A1A1A]/70 text-sm">{u.segment_tag || "—"}</TableCell>
                       <TableCell>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          u.intent_score === "high" ? "bg-amber-100 text-amber-700" :
-                          u.intent_score === "medium" ? "bg-blue-100 text-blue-700" :
-                          "bg-[#F7F2EA] text-[#1A1A1A]/70"
-                        }`}>
+ u.intent_score === "high" ? "bg-amber-100 text-amber-700" :
+ u.intent_score === "medium" ? "bg-blue-100 text-blue-700" :
+ "bg-[#F7F2EA] text-[#1A1A1A]/70"
+ }`}>
                           {u.intent_score || "—"}
                         </span>
                       </TableCell>

@@ -14,10 +14,10 @@ export const SALE_STATUS_CONFIG = {
   },
   "Presale (EOI)": { 
     label: "Pre-sale (EOI)", 
-    dotClass: "bg-green-400", 
+    dotClass: "jj-emerald-solid", 
     textClass: "text-green-400",
-    bgClass: "bg-green-400/10",
-    borderClass: "border-green-400/30"
+    bgClass: "jj-emerald-solid/10",
+    borderClass: "border-[color:var(--emerald-1)]/30/30"
   },
   "Start of Sales": { 
     label: "Start of Sales", 

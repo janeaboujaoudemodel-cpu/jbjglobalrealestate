@@ -961,7 +961,7 @@ const UserProfile = () => {
           </AlertDialogHeader>
 
           <AlertDialogFooter className="flex-col sm:flex-row sm:flex-wrap gap-2 pt-2">
-            <AlertDialogCancel className="w-full sm:flex-1 min-w-0 border-emerald-500/40 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 hover:text-emerald-900 text-[13px] sm:text-sm">
+            <AlertDialogCancel className="w-full sm:flex-1 min-w-0 border-[color:var(--emerald-1)]/30/40 jj-emerald-soft text-[color:var(--emerald-1)] hover:jj-emerald-soft hover:text-[color:var(--emerald-1)] text-[13px] sm:text-sm">
               Keep My Account
             </AlertDialogCancel>
             <AlertDialogAction
@@ -1027,7 +1027,7 @@ const UserProfile = () => {
 
           <AlertDialogFooter className="flex-col sm:flex-row sm:flex-wrap gap-2 pt-2">
             <AlertDialogCancel
-              className="w-full sm:flex-1 min-w-0 border-emerald-500/40 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 hover:text-emerald-900 text-[13px] sm:text-sm"
+              className="w-full sm:flex-1 min-w-0 border-[color:var(--emerald-1)]/30/40 jj-emerald-soft text-[color:var(--emerald-1)] hover:jj-emerald-soft hover:text-[color:var(--emerald-1)] text-[13px] sm:text-sm"
             >
               Keep My Account
             </AlertDialogCancel>

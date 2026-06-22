@@ -128,7 +128,7 @@ const DeveloperCompanyRegistration = () => {
   const isReadOnly = existing?.status === "submitted" || existing?.status === "under_review" || existing?.status === "approved";
 
   const statusInfo = {
-    approved: { label: "Approved", className: "bg-emerald-500/10 text-emerald-600", icon: CheckCircle2 },
+    approved: { label: "Approved", className: "jj-emerald-solid/10 text-[color:var(--emerald-1)]", icon: CheckCircle2 },
     submitted: { label: "Submitted — Awaiting Review", className: "bg-amber-500/10 text-amber-600", icon: Clock },
     under_review: { label: "Under Review", className: "bg-blue-500/10 text-blue-600", icon: Clock },
     rejected: { label: "Rejected — Please Revise", className: "bg-destructive/10 text-destructive", icon: AlertTriangle },
@@ -160,8 +160,8 @@ const DeveloperCompanyRegistration = () => {
             key={s}
             onClick={() => !isReadOnly && setStep(i)}
             className={`flex-1 text-center py-2 px-1 rounded-lg text-xs font-medium transition-all ${
-              step === i ? "bg-primary/15 text-primary border border-primary/30" : "bg-muted text-muted-foreground hover:bg-muted/80"
-            }`}
+ step === i ? "bg-primary/15 text-primary border border-primary/30" : "bg-muted text-muted-foreground hover:bg-muted/80"
+ }`}
           >
             {s}
           </button>

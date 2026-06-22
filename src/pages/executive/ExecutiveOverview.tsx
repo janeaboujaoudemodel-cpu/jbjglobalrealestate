@@ -80,7 +80,7 @@ const ExecutiveOverview = () => {
   const getMomentumColor = (momentum: "high" | "medium" | "low") => {
     switch (momentum) {
       case "high":
-        return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
+        return "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30";
       case "medium":
         return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
       default:
@@ -127,10 +127,10 @@ const ExecutiveOverview = () => {
                 key={nav.path}
                 to={nav.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  nav.active
-                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                    : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
-                }`}
+ nav.active
+ ? "bg-[#EFE6D6] text-[#1A1A1A]"
+ : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
+ }`}
               >
                 {nav.label}
               </Link>

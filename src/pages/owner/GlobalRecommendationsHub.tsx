@@ -249,7 +249,7 @@ export default function GlobalRecommendationsHub() {
           <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
             {pendingCount} Pending
           </Badge>
-          <Badge className="bg-green-500/10 text-green-700 border border-green-500/20">
+          <Badge className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30/20">
             {appliedCount} Applied
           </Badge>
           <Button
@@ -282,10 +282,10 @@ export default function GlobalRecommendationsHub() {
               size="sm"
               onClick={() => setActiveStatus(status)}
             className={`capitalize ${
-                activeStatus === status
-                  ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
-                  : "bg-[#FDFBF7] text-[#1A1A1A]/70 border border-[#B89555]/20 hover:border-[#B89555]/40"
-              }`}
+ activeStatus === status
+ ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
+ : "bg-[#FDFBF7] text-[#1A1A1A]/70 border border-[#B89555]/20 hover:border-[#B89555]/40"
+ }`}
             >
               {status}
             </Button>
@@ -300,10 +300,10 @@ export default function GlobalRecommendationsHub() {
             key={section.id}
             onClick={() => setActiveSource(section.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
-              activeSource === section.id
-                ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
-                : "bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40"
-            }`}
+ activeSource === section.id
+ ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
+ : "bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40"
+ }`}
           >
             <section.icon className="w-4 h-4" />
             <span>{section.label}</span>
@@ -335,17 +335,17 @@ export default function GlobalRecommendationsHub() {
             <Card
               key={rec.id}
               className={`bg-[#FDFBF7] border-[#B89555]/20 transition-all hover:border-[#B89555]/40 hover:shadow-[0_4px_20px_rgba(201,168,76,0.1)] ${
-                rec.status !== "pending" ? "opacity-70" : ""
-              }`}
+ rec.status !== "pending" ? "opacity-70" : ""
+ }`}
             >
               <CardContent className="pt-5 pb-4">
                 <div className="flex items-start gap-4">
                   {/* Impact indicator */}
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    rec.impact === "critical" ? "bg-red-500/10" :
-                    rec.impact === "high" ? "bg-orange-500/10" :
-                    rec.impact === "medium" ? "bg-amber-500/10" : "bg-blue-500/10"
-                  }`}>
+ rec.impact === "critical" ? "bg-red-500/10" :
+ rec.impact === "high" ? "bg-orange-500/10" :
+ rec.impact === "medium" ? "bg-amber-500/10" : "bg-blue-500/10"
+ }`}>
                     {rec.impact === "critical" ? <AlertTriangle className="w-5 h-5 text-red-500" /> :
                      rec.impact === "high" ? <Zap className="w-5 h-5 text-orange-500" /> :
                      <Lightbulb className="w-5 h-5 text-amber-500" />}
@@ -481,8 +481,8 @@ export default function GlobalRecommendationsHub() {
                     <p className="text-[10px] uppercase tracking-wider text-red-500 font-semibold mb-2">Before (Current)</p>
                     <p className="text-sm text-[#1A1A1A]">{selectedRec.previewData.before}</p>
                   </div>
-                  <div className="p-4 bg-[#FDFBF7] rounded-xl border border-green-200">
-                    <p className="text-[10px] uppercase tracking-wider text-green-600 font-semibold mb-2">After (Improved)</p>
+                  <div className="p-4 bg-[#FDFBF7] rounded-xl border border-[color:var(--emerald-1)]/30">
+                    <p className="text-[10px] uppercase tracking-wider text-[color:var(--emerald-1)] font-semibold mb-2">After (Improved)</p>
                     <p className="text-sm text-[#1A1A1A]">{selectedRec.previewData.after}</p>
                   </div>
                 </div>
@@ -491,11 +491,11 @@ export default function GlobalRecommendationsHub() {
               {/* Improvement & Side Effects */}
               {selectedRec.previewData && (
                 <>
-                  <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-xs font-semibold text-green-700 mb-1 flex items-center gap-1">
+                  <div className="p-3 jj-emerald-soft rounded-lg border border-[color:var(--emerald-1)]/30">
+                    <p className="text-xs font-semibold text-[color:var(--emerald-1)] mb-1 flex items-center gap-1">
                       <TrendingUp className="w-3.5 h-3.5" /> Expected Improvement
                     </p>
-                    <p className="text-sm text-green-800">{selectedRec.previewData.improvement}</p>
+                    <p className="text-sm text-[color:var(--emerald-1)]">{selectedRec.previewData.improvement}</p>
                   </div>
 
                   {selectedRec.previewData.sideEffects.length > 0 && (

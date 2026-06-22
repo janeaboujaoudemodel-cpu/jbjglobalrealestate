@@ -23,8 +23,8 @@ const REQUEST_TYPES = [
 const STATUS_BADGE: Record<BrokerRequest["status"], string> = {
   open: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/35",
   in_review: "bg-blue-50 text-blue-900 border-blue-300",
-  approved: "bg-emerald-50 text-emerald-900 border-emerald-300",
-  resolved: "bg-emerald-50 text-emerald-900 border-emerald-300",
+  approved: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
+  resolved: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   rejected: "bg-red-50 text-red-900 border-red-300",
   cancelled: "bg-zinc-100 text-zinc-700 border-zinc-300",
 };

@@ -106,15 +106,15 @@ export default function AlertsDemo() {
 
             {/* Ticket alerts */}
             <div className="space-y-2 mb-4">
-              <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2.5">
-                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+              <div className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-xl p-3 flex items-start gap-2.5">
+                <CheckCircle className="w-5 h-5 text-[color:var(--emerald-1)] mt-0.5 shrink-0" />
                 <div>
                   <p className="text-[#1A1A1A] font-semibold text-sm">Ticket #1042 Resolved</p>
                   <p className="text-[#1A1A1A]/70 text-xs">Your maintenance request has been completed.</p>
                 </div>
               </div>
-              <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2.5">
-                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+              <div className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-xl p-3 flex items-start gap-2.5">
+                <CheckCircle className="w-5 h-5 text-[color:var(--emerald-1)] mt-0.5 shrink-0" />
                 <div>
                   <p className="text-[#1A1A1A] font-semibold text-sm">New reply on Ticket #1038</p>
                   <p className="text-[#1A1A1A]/70 text-xs">Our team has responded to your inquiry.</p>

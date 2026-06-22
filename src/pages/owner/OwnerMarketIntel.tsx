@@ -16,7 +16,7 @@ const SOURCE_KEY: Record<string, string> = {
 };
 
 function statusIcon(s: string) {
-  if (s === "success") return <CheckCircle2 className="h-4 w-4 text-emerald-700" />;
+  if (s === "success") return <CheckCircle2 className="h-4 w-4 text-[color:var(--emerald-1)]" />;
   if (s === "partial") return <AlertTriangle className="h-4 w-4 text-amber-700" />;
   if (s === "error") return <XCircle className="h-4 w-4 text-red-700" />;
   return <Loader2 className="h-4 w-4 animate-spin text-blue-700" />;

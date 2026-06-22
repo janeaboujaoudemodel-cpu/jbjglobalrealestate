@@ -96,7 +96,7 @@ const AutoApproveToggle = () => {
         <p className="text-sm font-semibold text-foreground">Auto-Approve Developer Listings</p>
         <p className="text-xs text-muted-foreground">When ON, listings from the Developer Portal are published immediately</p>
       </div>
-      {autoApprove && <Badge className="ml-auto bg-green-100 text-green-800 border-green-300">Active</Badge>}
+      {autoApprove && <Badge className="ml-auto jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Active</Badge>}
     </div>
   );
 };
@@ -924,14 +924,14 @@ const ListingAdmin = () => {
                     const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
                     const hasHandover = !!project.handover_date;
                     const filledCount = [hasDesc, hasImages, hasAmenities, hasHandover, !!project.price_from, !!project.location].filter(Boolean).length;
-                    const enrichDot = filledCount >= 6 ? "bg-emerald-500" : filledCount >= 3 ? "bg-amber-500" : "bg-red-400";
+                    const enrichDot = filledCount >= 6 ? "jj-emerald-solid" : filledCount >= 3 ? "bg-amber-500" : "bg-red-400";
 
                     return (
                     <Card
                       key={project.id}
                       className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 cursor-pointer transition-all hover:shadow-lg hover:border-[#B89555] overflow-hidden ${
-                        selectedProject?.id === project.id ? "border-[#B89555] ring-2 ring-gold/20" : ""
-                      }`}
+ selectedProject?.id === project.id ? "border-[#B89555] ring-2 ring-gold/20" : ""
+ }`}
                       onClick={() => { setDetailProject(project); setActiveView('project-detail'); }}
                     >
                       {/* Cover Image */}

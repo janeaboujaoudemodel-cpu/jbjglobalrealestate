@@ -32,7 +32,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     pending: { color: 'bg-amber-500/20 text-amber-600 border-amber-500/30', icon: Clock, label: 'Pending' },
     manager_approved: { color: 'bg-blue-500/20 text-blue-600 border-blue-500/30', icon: CheckCircle, label: 'Manager Approved' },
     hr_approved: { color: 'bg-purple-500/20 text-purple-600 border-purple-500/30', icon: CheckCircle, label: 'HR Approved' },
-    owner_approved: { color: 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30', icon: CheckCircle, label: 'Approved' },
+    owner_approved: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle, label: 'Approved' },
     rejected: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle, label: 'Rejected' },
     cancelled: { color: 'bg-muted text-muted-foreground border-border', icon: XCircle, label: 'Cancelled' },
   };
@@ -51,7 +51,7 @@ const StageBadge = ({ stage }: { stage: string }) => {
     manager: { color: 'bg-amber-100 text-amber-700', label: '1. Manager' },
     hr: { color: 'bg-blue-100 text-blue-700', label: '2. HR' },
     owner: { color: 'bg-purple-100 text-purple-700', label: '3. Owner' },
-    completed: { color: 'bg-emerald-100 text-emerald-700', label: 'Completed' },
+    completed: { color: 'jj-emerald-soft text-[color:var(--emerald-1)]', label: 'Completed' },
     rejected: { color: 'bg-red-100 text-red-700', label: 'Rejected' },
   };
   const cfg = stages[stage] || stages.manager;
@@ -237,7 +237,7 @@ export function LeaveManagementPanel() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-xs">Approved This Month</p>
-                <p className="text-2xl font-bold text-emerald-600">
+                <p className="text-2xl font-bold text-[color:var(--emerald-1)]">
                   {requests.filter(r => r.status === 'owner_approved').length}
                 </p>
               </div>
@@ -346,7 +346,7 @@ export function LeaveManagementPanel() {
                           <div className="flex items-center gap-2">
                             <Button 
                               size="sm" 
-                              className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                              className="jj-emerald-solid hover:jj-emerald-solid text-white"
                               onClick={() => handleApproval(request, true)}
                             >
                               <CheckCircle className="h-4 w-4" />

@@ -53,7 +53,7 @@ export default function ConstructionTimelineSection({
     if (progress === 0) return { label: "Pre-Construction", color: "bg-[#B89555]" };
     if (progress < 30) return { label: "Foundation", color: "bg-orange-500" };
     if (progress < 60) return { label: "Superstructure", color: "bg-amber-500" };
-    if (progress < 90) return { label: "Finishing", color: "bg-emerald-500" };
+    if (progress < 90) return { label: "Finishing", color: "jj-emerald-solid" };
     if (progress < 100) return { label: "Final Touches", color: "bg-blue-500" };
     return { label: "Complete", color: "bg-[#EFE6D6]" };
   };
@@ -96,7 +96,7 @@ export default function ConstructionTimelineSection({
         {constructionStartDate && (
           <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full jj-emerald-solid/20 flex items-center justify-center">
                 <Flag className="w-5 h-5 text-emerald-500" />
               </div>
               <div>
@@ -150,8 +150,8 @@ export default function ConstructionTimelineSection({
           <div className="flex justify-between relative">
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress > 0 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
-              }`}>
+ validatedProgress > 0 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
+ }`}>
                 <Flag className="w-4 h-4" />
               </div>
               <span className="text-xs text-muted-foreground mt-2">Start</span>
@@ -159,8 +159,8 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress >= 50 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
-              }`}>
+ validatedProgress >= 50 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
+ }`}>
                 <HardHat className="w-4 h-4" />
               </div>
               <span className="text-xs text-muted-foreground mt-2">50%</span>
@@ -168,8 +168,8 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress >= 100 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
-              }`}>
+ validatedProgress >= 100 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
+ }`}>
                 <Home className="w-4 h-4" />
               </div>
               <span className="text-xs text-muted-foreground mt-2">Handover</span>

@@ -121,7 +121,7 @@ const InvestorServices = () => {
       <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-[50] flex-col gap-3">
         <button
           onClick={handleWhatsAppClick}
-          className="w-12 h-12 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center text-white shadow-lg transition-all hover:scale-110"
+          className="w-12 h-12 jj-emerald-solid hover:jj-emerald-solid rounded-full flex items-center justify-center text-white shadow-lg transition-all hover:scale-110"
           aria-label="WhatsApp"
         >
           <MessageCircle className="w-5 h-5" />
@@ -146,7 +146,7 @@ const InvestorServices = () => {
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[50] bg-gradient-to-br from-champagne-light to-champagne-dark backdrop-blur-sm border-t-2 border-[#B89555]/40 p-3 flex gap-2">
         <button
           onClick={handleWhatsAppClick}
-          className="flex-1 h-11 bg-green-600 hover:bg-green-700 rounded-lg flex items-center justify-center gap-2 text-white font-medium text-sm"
+          className="flex-1 h-11 jj-emerald-solid hover:jj-emerald-solid rounded-lg flex items-center justify-center gap-2 text-white font-medium text-sm"
         >
           <MessageCircle className="w-4 h-4" />
           WhatsApp
@@ -206,7 +206,7 @@ const InvestorServices = () => {
               <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Button
                   onClick={handleWhatsAppClick}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 h-11 rounded-lg gap-2"
+                  className="jj-emerald-solid hover:jj-emerald-solid text-white px-6 h-11 rounded-lg gap-2"
                 >
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp Us
@@ -342,7 +342,7 @@ const InvestorServices = () => {
 
                 {/* CTA under services */}
                 <motion.div variants={fadeInUp} className="flex justify-center mt-6 gap-3">
-                  <Button onClick={handleWhatsAppClick} className="bg-green-600 hover:bg-green-700 text-white gap-2 rounded-lg">
+                  <Button onClick={handleWhatsAppClick} className="jj-emerald-solid hover:jj-emerald-solid text-white gap-2 rounded-lg">
                     <MessageCircle className="w-4 h-4" /> Discuss Services
                   </Button>
                   <Button variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 gap-2 rounded-lg" asChild>
@@ -481,8 +481,8 @@ const InvestorServices = () => {
                   <motion.div variants={fadeInUp}>
                     <button onClick={handleWhatsAppClick} className="block w-full h-full text-left">
                       <div className="jj-card-inner p-5 h-full hover:border-[#B89555]/60 transition-all group cursor-pointer">
-                        <div className="w-10 h-10 bg-green-600/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-green-600/20 transition-colors">
-                          <MessageCircle className="w-5 h-5 text-green-600" />
+                        <div className="w-10 h-10 jj-emerald-solid/10 rounded-lg flex items-center justify-center mb-3 group-hover:jj-emerald-solid/20 transition-colors">
+                          <MessageCircle className="w-5 h-5 text-[color:var(--emerald-1)]" />
                         </div>
                         <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-[#1A1A1A] transition-colors">WhatsApp Consultation</h3>
                         <p className="text-[#1A1A1A]/60 text-sm mb-3">Discuss investment objectives confidentially</p>

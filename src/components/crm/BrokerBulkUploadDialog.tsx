@@ -532,8 +532,8 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
                 if (e.dataTransfer?.files?.length) handleFiles(e.dataTransfer.files);
               }}
               className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl py-8 cursor-pointer transition-colors ${
-                isDragging ? "border-[#B89555] bg-[#EFE6D6]" : "border-[#B89555]/50 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
-              }`}
+ isDragging ? "border-[#B89555] bg-[#EFE6D6]" : "border-[#B89555]/50 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
+ }`}
             >
               <FileSpreadsheet className="w-8 h-8 text-[#B89555]" />
               <div className="text-sm font-semibold text-[#1A1A1A]">
@@ -700,7 +700,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
 
         {step === "done" && summary && (
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-[#1A1A1A]"><CheckCircle2 className="w-5 h-5 text-emerald-600" /> <span className="font-semibold">Import complete</span></div>
+            <div className="flex items-center gap-2 text-[#1A1A1A]"><CheckCircle2 className="w-5 h-5 text-[color:var(--emerald-1)]" /> <span className="font-semibold">Import complete</span></div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
               <Stat label="Total rows" value={summary.total} />
               <Stat label="New brokers" value={summary.new_brokers} />

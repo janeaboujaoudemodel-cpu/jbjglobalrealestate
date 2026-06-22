@@ -293,14 +293,14 @@ function SummaryCard({
           <p className="text-xs text-[#1A1A1A]/70 mt-2">{rule}</p>
         </div>
         {allGood ? (
-          <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+          <CheckCircle2 className="h-6 w-6 text-[color:var(--emerald-1)]" />
         ) : (
           <AlertTriangle className="h-6 w-6 text-amber-600" />
         )}
       </div>
       <div className="mt-3 h-2 rounded-full bg-[#EFE6D6] overflow-hidden">
         <div
-          className={`h-full ${allGood ? "bg-emerald-500" : "bg-amber-500"}`}
+          className={`h-full ${allGood ? "jj-emerald-solid" : "bg-amber-500"}`}
           style={{ width: `${pct}%` }}
         />
       </div>

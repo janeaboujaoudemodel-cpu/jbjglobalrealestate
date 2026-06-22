@@ -383,7 +383,7 @@ const AdminDevelopers = () => {
           </Card>
           <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-emerald-600">
+              <div className="text-2xl font-bold text-[color:var(--emerald-1)]">
                 {salesReps.filter(r => r.is_primary).length}
               </div>
               <p className="text-sm text-muted-foreground">Primary Contacts</p>
@@ -678,7 +678,7 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
                     <Phone className="w-4 h-4" />
                   </a>
                   {rep.whatsapp_number && (
-                    <a href={`https://wa.me/${rep.whatsapp_number.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors" title="WhatsApp">
+                    <a href={`https://wa.me/${rep.whatsapp_number.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg jj-emerald-soft text-[color:var(--emerald-1)] hover:jj-emerald-soft transition-colors" title="WhatsApp">
                       <MessageCircle className="w-4 h-4" />
                     </a>
                   )}

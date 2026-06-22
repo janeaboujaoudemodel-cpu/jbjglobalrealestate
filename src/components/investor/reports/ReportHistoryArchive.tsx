@@ -40,7 +40,7 @@ export default function ReportHistoryArchive({
   const getTypeBadge = (type: Report["type"]) => {
     const styles = {
       market: "bg-blue-500/10 text-blue-600 border-blue-500/30",
-      area: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
+      area: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
       asset: "bg-purple-500/10 text-purple-600 border-purple-500/30",
       advisory: "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30",
     };

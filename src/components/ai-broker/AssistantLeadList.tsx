@@ -22,7 +22,7 @@ interface Props {
 
 function scoreClass(s?: number | null) {
   if (s == null) return "border-[#1A1A1A]/20 text-[#1A1A1A]/40";
-  if (s >= 80) return "border-emerald-500 text-emerald-600";
+  if (s >= 80) return "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]";
   if (s >= 60) return "border-amber-500 text-amber-600";
   return "border-blue-500 text-blue-600";
 }
@@ -58,8 +58,8 @@ export default function AssistantLeadList({ leads, selectedId, onSelect, search,
               key={l.id}
               onClick={() => onSelect(l.id)}
               className={`w-full text-left px-3 py-3 border-b border-[#B89555]/15 transition-colors ${
-                active ? "bg-[#EFE6D6]" : "hover:bg-[#F7F2EA]"
-              }`}
+ active ? "bg-[#EFE6D6]" : "hover:bg-[#F7F2EA]"
+ }`}
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">

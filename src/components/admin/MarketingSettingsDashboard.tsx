@@ -243,8 +243,8 @@ export const MarketingSettingsDashboard = () => {
         </TabsContent>
 
         <TabsContent value="email" className="space-y-4">
-          <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 mb-4">
-            <p className="text-emerald-700 text-sm">
+          <div className="jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30 rounded-xl p-4 mb-4">
+            <p className="text-[color:var(--emerald-1)] text-sm">
               <strong>Recommended:</strong> Brevo (SendinBlue) offers 300 free emails/day, superior automation, and transactional email support.
             </p>
           </div>
@@ -297,8 +297,8 @@ export const MarketingSettingsDashboard = () => {
             ].map(item => (
               <div key={item.label} className="text-center">
                 <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center ${
-                  item.value ? 'bg-emerald-100 border-2 border-emerald-400' : 'bg-[#EFE6D6]/5 border-2 border-[#B89555]/20'
-                }`}>
+ item.value ? 'jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30' : 'bg-[#EFE6D6]/5 border-2 border-[#B89555]/20'
+ }`}>
                   {item.value ? (
                     <CheckCircle className="w-6 h-6 text-emerald-500" />
                   ) : (

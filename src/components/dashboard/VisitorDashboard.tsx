@@ -43,7 +43,7 @@ const PRIMARY_ACTIONS = [
     icon: TrendingUp,
     href: "/investor-education",
     color: "text-emerald-500",
-    bgGradient: "from-emerald-500/20 to-emerald-600/10"
+    bgGradient: "/20 /10"
   },
   {
     title: "List Your Property",

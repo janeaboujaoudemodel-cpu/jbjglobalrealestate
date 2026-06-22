@@ -69,7 +69,7 @@ const STAGE_CONFIG: Record<PartnershipStage, { label: string; color: string; ico
   admin_review: { label: "Admin Review", color: "bg-blue-50 text-blue-700 border-blue-300", icon: Eye },
   senior_management_review: { label: "Senior Mgmt Review", color: "bg-amber-50 text-amber-700 border-amber-300", icon: Shield },
   ceo_approval: { label: "CEO Approval", color: "bg-purple-50 text-purple-700 border-purple-300", icon: Crown },
-  approved: { label: "Approved — Partner", color: "bg-green-50 text-green-700 border-green-300", icon: CheckCircle },
+  approved: { label: "Approved — Partner", color: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30", icon: CheckCircle },
   rejected: { label: "Rejected", color: "bg-red-50 text-red-700 border-red-300", icon: XCircle },
 };
 
@@ -240,7 +240,7 @@ export function PartnershipsDashboard() {
         {[
           { label: "Total Applications", value: stats.total, color: "text-[#1A1A1A]" },
           { label: "Pending Review", value: stats.pending, color: "text-amber-600" },
-          { label: "Approved Partners", value: stats.approved, color: "text-green-600" },
+          { label: "Approved Partners", value: stats.approved, color: "text-[color:var(--emerald-1)]" },
           { label: "Rejected", value: stats.rejected, color: "text-red-500" },
         ].map(s => (
           <Card key={s.label} className="bg-[#FDFBF7]/80 border-[#B89555]/30">
@@ -447,9 +447,9 @@ export function PartnershipsDashboard() {
                     )}
 
                     {messageMode === "action" && !action && selectedApp.stage === "approved" && (
-                      <div className="bg-green-50 border border-green-200 p-4 rounded-lg text-center">
+                      <div className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 p-4 rounded-lg text-center">
                         <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
-                        <p className="text-green-700 font-semibold">This partner has been approved and onboarded.</p>
+                        <p className="text-[color:var(--emerald-1)] font-semibold">This partner has been approved and onboarded.</p>
                       </div>
                     )}
 

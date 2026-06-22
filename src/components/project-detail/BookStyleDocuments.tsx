@@ -47,7 +47,7 @@ const typeIcon: Record<string, React.ReactNode> = {
 const typeGradient: Record<string, string> = {
   brochure: "from-black/80 via-black/60 to-gold/30",
   fact_sheet: "from-black/80 via-black/60 to-amber-700/25",
-  payment_plan: "from-black/80 via-black/60 to-emerald-700/25",
+  payment_plan: "from-black/80 via-black/60 /25",
   floor_plan: "from-black/80 via-black/60 to-sky-700/25",
   inventory: "from-black/80 via-black/60 to-violet-700/25",
   renders: "from-black/80 via-black/60 to-rose-700/25",

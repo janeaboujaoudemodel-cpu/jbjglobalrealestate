@@ -50,7 +50,7 @@ const AIGovernance: React.FC = () => {
       id: 'client',
       name: 'Client AI (Advisory Mode)',
       icon: Users,
-      color: 'bg-green-500',
+      color: 'jj-emerald-solid',
       usage: ['Client portals', 'Property pages', 'Consultations'],
       rules: [
         'Educational explanations only',
@@ -189,14 +189,14 @@ const AIGovernance: React.FC = () => {
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-semibold text-green-600 mb-4 flex items-center gap-2">
+                    <h3 className="font-semibold text-[color:var(--emerald-1)] mb-4 flex items-center gap-2">
                       <CheckCircle2 className="h-5 w-5" />
                       AI IS:
                     </h3>
                     <ul className="space-y-2">
                       {aiRoles.filter(r => r.allowed).map((role, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm">
-                          <Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-500/30">
+                          <Badge variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
                             ✓
                           </Badge>
                           {role.label}
@@ -330,14 +330,14 @@ const AIGovernance: React.FC = () => {
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="font-semibold text-green-600 mb-4 flex items-center gap-2">
+                    <h3 className="font-semibold text-[color:var(--emerald-1)] mb-4 flex items-center gap-2">
                       <CheckCircle2 className="h-5 w-5" />
                       AI May:
                     </h3>
                     <ul className="space-y-2">
                       {dataEthics.allowed.map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm p-2 rounded bg-green-500/5">
-                          <Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-500/30">
+                        <li key={i} className="flex items-center gap-2 text-sm p-2 rounded jj-emerald-solid/5">
+                          <Badge variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
                             ✓
                           </Badge>
                           {item}
@@ -479,8 +479,8 @@ const AIGovernance: React.FC = () => {
                       <span className="h-6 w-6 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">3</span>
                       <span className="text-sm">Review prompt & rules</span>
                     </li>
-                    <li className="flex items-center gap-3 p-3 rounded-lg bg-green-500/5">
-                      <span className="h-6 w-6 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-bold">4</span>
+                    <li className="flex items-center gap-3 p-3 rounded-lg jj-emerald-solid/5">
+                      <span className="h-6 w-6 rounded-full jj-emerald-solid text-white text-xs flex items-center justify-center font-bold">4</span>
                       <span className="text-sm">Patch safeguards</span>
                     </li>
                     <li className="flex items-center gap-3 p-3 rounded-lg bg-purple-500/5">

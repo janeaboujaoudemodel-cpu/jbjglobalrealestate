@@ -314,10 +314,10 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     key={range}
                     onClick={() => setDateRange(range)}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                      dateRange === range 
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-md border border-[#B89555]/40' 
-                        : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10'
-                    }`}
+ dateRange === range 
+ ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-md border border-[#B89555]/40' 
+ : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10'
+ }`}
                   >
                     {range === 'today' ? 'Today' : range === 'week' ? '7 Days' : '30 Days'}
                   </button>
@@ -351,7 +351,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     <span className="text-[#1A1A1A]/70 text-xs font-medium">{stat.label}</span>
                   </div>
                   <p className="text-[#1A1A1A] text-2xl font-bold">{stat.value.toLocaleString()}</p>
-                  <p className={`text-xs font-medium ${stat.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                  <p className={`text-xs font-medium ${stat.change >= 0 ? 'text-[color:var(--emerald-1)]' : 'text-red-500'}`}>
                     {stat.change >= 0 ? '↑' : '↓'} {Math.abs(stat.change)}% vs {dateRange === 'today' ? 'yesterday' : dateRange === 'week' ? 'last week' : 'last month'}
                   </p>
                 </CardContent>
@@ -513,7 +513,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                             <Badge 
                               className={
                                 issue.status === 'pending' ? 'bg-amber-100 text-amber-700 border-amber-300' :
-                                issue.status === 'resolved' ? 'bg-emerald-100 text-emerald-700 border-emerald-300' :
+                                issue.status === 'resolved' ? 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' :
                                 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30'
                               }
                             >

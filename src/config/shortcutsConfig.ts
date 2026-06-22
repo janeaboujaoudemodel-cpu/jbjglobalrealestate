@@ -33,8 +33,8 @@ export const SHORTCUT_GROUPS: ShortcutGroup[] = [
   {
     label: "Quick Access",
     colorBorder: "border-l-emerald-500",
-    colorText: "text-emerald-700",
-    colorBg: "bg-emerald-50",
+    colorText: "text-[color:var(--emerald-1)]",
+    colorBg: "jj-emerald-soft",
     visibility: ['authenticated'],
     items: [
       { label: 'My Tasks', icon: ListChecks, href: '/my-dashboard#tasks' },

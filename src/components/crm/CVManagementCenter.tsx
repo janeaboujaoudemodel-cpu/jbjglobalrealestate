@@ -197,7 +197,7 @@ const CVManagementCenter = () => {
       reviewed: 'bg-blue-100 text-blue-700 border-blue-300',
       interview_scheduled: 'bg-purple-100 text-purple-700 border-purple-300',
       rejected: 'bg-red-100 text-red-700 border-red-300',
-      hired: 'bg-green-100 text-green-700 border-green-300',
+      hired: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
     };
     const labels: Record<string, string> = {
       pending: 'Pending Review',

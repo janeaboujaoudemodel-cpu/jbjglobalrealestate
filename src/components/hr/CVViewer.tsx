@@ -285,7 +285,7 @@ const CVViewer = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full justify-start gap-2 text-green-600 border-green-500/50 hover:bg-green-500/10"
+                    className="w-full justify-start gap-2 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/50 hover:jj-emerald-solid/10"
                     onClick={() => handleContact('whatsapp')}
                     disabled={!candidateData?.phone}
                   >
@@ -365,7 +365,7 @@ const CVViewer = ({
                         </span>
                         <div className="flex flex-wrap gap-1">
                           {candidateData.aiAnalysis.certifications.map((cert, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs border-green-500/30 text-green-600">
+                            <Badge key={idx} variant="outline" className="text-xs border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)]">
                               {cert}
                             </Badge>
                           ))}

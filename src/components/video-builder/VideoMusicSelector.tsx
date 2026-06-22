@@ -38,7 +38,7 @@ const MUSIC_PRESETS = [
     name: "Calm Piano", 
     mood: "calm",
     description: "Peaceful, relaxing feel",
-    color: "from-green-500 to-teal-600"
+    color: " "
   },
   { 
     id: "corporate-inspire", 
@@ -179,10 +179,10 @@ const VideoMusicSelector = ({ project, onUpdate, onNext }: VideoMusicSelectorPro
                 onClick={() => handleSelectPreset(preset.id)}
                 disabled={isGenerating}
                 className={`relative p-4 rounded-lg border text-left transition-all overflow-hidden ${
-                  selectedPreset === preset.id
-                    ? "border-primary ring-2 ring-primary/20"
-                    : "border-border hover:border-primary/50"
-                }`}
+ selectedPreset === preset.id
+ ? "border-primary ring-2 ring-primary/20"
+ : "border-border hover:border-primary/50"
+ }`}
               >
                 {/* Gradient Background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${preset.color} opacity-10`} />

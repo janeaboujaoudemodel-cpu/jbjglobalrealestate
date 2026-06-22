@@ -219,7 +219,7 @@ const AIAnalyticsDashboard = () => {
 
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-xs mb-2">
-            <CheckCircle2 className="w-4 h-4 text-green-600" />
+            <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)]" />
             Success Rate
           </div>
           <p className="text-[#1A1A1A] text-2xl font-bold">
@@ -290,7 +290,7 @@ const AIAnalyticsDashboard = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-[#1A1A1A] font-semibold">{data.calls}</p>
-                      <p className={`text-xs ${data.success === data.calls ? 'text-green-600' : 'text-amber-600'}`}>
+                      <p className={`text-xs ${data.success === data.calls ? 'text-[color:var(--emerald-1)]' : 'text-amber-600'}`}>
                         {((data.success / data.calls) * 100).toFixed(0)}%
                       </p>
                     </div>
@@ -375,7 +375,7 @@ const AIAnalyticsDashboard = () => {
                   <td className="py-2 text-[#1A1A1A]/70">{log.model}</td>
                   <td className="py-2 text-center">
                     {log.success ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-600 inline" />
+                      <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)] inline" />
                     ) : (
                       <XCircle className="w-4 h-4 text-red-500 inline" />
                     )}

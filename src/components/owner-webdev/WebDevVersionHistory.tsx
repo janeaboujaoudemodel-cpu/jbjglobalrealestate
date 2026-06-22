@@ -161,10 +161,10 @@ export default function WebDevVersionHistory({
           <div
             key={v.id}
             className={`rounded-md border px-2 py-1.5 ${
-              isPreviewing
-                ? "border-[#B89555] bg-[#B89555]/10"
-                : "border-[#B89555]/25 bg-[#FDFBF7]"
-            }`}
+ isPreviewing
+ ? "border-[#B89555] bg-[#B89555]/10"
+ : "border-[#B89555]/25 bg-[#FDFBF7]"
+ }`}
           >
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex items-center gap-1.5 min-w-0">
@@ -172,7 +172,7 @@ export default function WebDevVersionHistory({
                   v{v.version_number}
                 </span>
                 {isCurrent && (
-                  <span className="text-[9px] uppercase tracking-wider px-1 py-px rounded bg-emerald-50 text-emerald-700">
+                  <span className="text-[9px] uppercase tracking-wider px-1 py-px rounded jj-emerald-soft text-[color:var(--emerald-1)]">
                     current
                   </span>
                 )}

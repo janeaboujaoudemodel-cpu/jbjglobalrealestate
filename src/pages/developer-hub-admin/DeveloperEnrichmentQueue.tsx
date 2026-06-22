@@ -398,7 +398,7 @@ function DiffTable({ before, after }: { before: Record<string, unknown>; after: 
   };
 
   const badge = (r: typeof rows[number]) => {
-    if (r.isNew) return { label: "New", cls: "bg-emerald-50 text-emerald-800 border border-emerald-200" };
+    if (r.isNew) return { label: "New", cls: "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30" };
     if (r.changed) return { label: "Updated", cls: "bg-[#B89555]/15 text-[#1A1A1A] border border-[#B89555]/40" };
     if (r.confirmed) return { label: "Confirmed", cls: "bg-[#EFE6D6]/60 text-[#1A1A1A]/70 border border-[#B89555]/20" };
     if (r.kept) return { label: "Kept", cls: "bg-[#FDFBF7] text-[#1A1A1A]/60 border border-[#B89555]/20 italic" };

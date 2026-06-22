@@ -259,10 +259,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                           key={opt.id}
                           onClick={() => setGradientDirection(opt.id)}
                           className={`text-[9px] py-1 px-1 rounded-lg border font-semibold transition-all text-center ${
-                            gradientDirection === opt.id
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
+ gradientDirection === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                         >
                           {opt.label}
                         </button>
@@ -334,10 +334,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                         key={opt.id}
                         onClick={() => setSigLayout(opt.id)}
                         className={`flex flex-col items-center gap-0.5 py-2 px-1 rounded-xl border text-center transition-all ${
-                          sigLayout === opt.id
-                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] shadow-sm"
-                            : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
-                        }`}
+ sigLayout === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] shadow-sm"
+ : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                       >
                         <span className="text-[11px] font-mono leading-none" style={{ color: frontPrimary }}>{opt.icon}</span>
                         <span className={`text-[8px] font-semibold ${sigLayout === opt.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--muted-foreground))]"}`}>{opt.label}</span>
@@ -489,10 +489,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                       key={opt.id}
                       onClick={() => setCardTextAlign(opt.id)}
                       className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center transition-all ${
-                        cardTextAlign === opt.id
-                          ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                          : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
-                      }`}
+ cardTextAlign === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
+ }`}
                     >
                       {opt.icon}
                     </button>
@@ -566,10 +566,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                       key={opt.id}
                       onClick={() => setCardFontFamily(opt.id)}
                       className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left ${
-                        cardFontFamily === opt.id
-                          ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                          : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                      }`}
+ cardFontFamily === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                       style={{ fontFamily: opt.id }}
                     >
                       {opt.label}
@@ -617,10 +617,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                           key={opt.id}
                           onClick={() => setQrSide(opt.id)}
                           className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
-                            qrSide === opt.id
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
+ qrSide === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                         >
                           {opt.label}
                         </button>
@@ -645,10 +645,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                             if (opt.id === "phone" && data.phone) setQrCustomContent(data.phone);
                           }}
                           className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
-                            qrContentType === opt.id
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
+ qrContentType === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                         >
                           {opt.label}
                         </button>
@@ -746,10 +746,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                           key={opt.id}
                           onClick={() => setQrPosition(opt.id)}
                           className={`text-[9px] py-1.5 px-1 rounded-lg border font-semibold transition-all text-center ${
-                            qrPosition === opt.id
-                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                          }`}
+ qrPosition === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                         >
                           {opt.label}
                         </button>
@@ -796,7 +796,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                         <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">
                           {qrContentType.toUpperCase()} · {qrSize}px · {qrPosition}
                         </p>
-                        <p className="text-[9px] text-green-600 mt-0.5">
+                        <p className="text-[9px] text-[color:var(--emerald-1)] mt-0.5">
                           Shows on: {qrSide === "both" ? "Front & Back" : qrSide === "front" ? "Front only" : "Back only"}
                         </p>
                       </div>
@@ -844,10 +844,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                       key={opt.id}
                       onClick={() => setAiTone(opt.id)}
                       className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all ${
-                        aiTone === opt.id
-                          ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                          : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                      }`}
+ aiTone === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                     >
                       {opt.label}
                     </button>
@@ -872,10 +872,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                       key={opt.id}
                       onClick={() => setAiIndustry(opt.id)}
                       className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left ${
-                        aiIndustry === opt.id
-                          ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                          : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                      }`}
+ aiIndustry === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                     >
                       {opt.label}
                     </button>
@@ -898,10 +898,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                       key={opt.id}
                       onClick={() => setAiStyle(opt.id)}
                       className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
-                        aiStyle === opt.id
-                          ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                          : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                      }`}
+ aiStyle === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                     >
                       {opt.label}
                     </button>
@@ -1009,10 +1009,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                     key={opt.id}
                     onClick={() => setFinishEffect(opt.id)}
                     className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl border transition-all ${
-                      finishEffect === opt.id
-                        ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
-                        : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                    }`}
+ finishEffect === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                   >
                     {opt.icon}
                     <span className="text-[8px] font-semibold leading-none">{opt.label}</span>
@@ -1064,10 +1064,10 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                     key={opt.id}
                     onClick={() => setMockupScene(opt.id)}
                     className={`text-[9px] py-2 px-1 rounded-xl border font-semibold transition-all ${
-                      mockupScene === opt.id
-                        ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
-                        : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
-                    }`}
+ mockupScene === opt.id
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+ }`}
                   >
                     {opt.label}
                   </button>

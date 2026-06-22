@@ -175,12 +175,12 @@ export default function AddonSelector({
                     key={addon.id}
                     whileHover={{ scale: isIncluded ? 1 : 1.01 }}
                     className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
-                      isIncluded
-                        ? "border-green-500/30 bg-green-500/5 cursor-default"
-                        : isSelected
-                        ? "border-[#B89555]/50 bg-[#EFE6D6]/5 cursor-pointer"
-                        : "border-[#1A1A1A] hover:border-[#1A1A1A] cursor-pointer"
-                    }`}
+ isIncluded
+ ? "border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/5 cursor-default"
+ : isSelected
+ ? "border-[#B89555]/50 bg-[#EFE6D6]/5 cursor-pointer"
+ : "border-[#1A1A1A] hover:border-[#1A1A1A] cursor-pointer"
+ }`}
                     onClick={() => !isIncluded && toggleAddon(addon.id)}
                   >
                     {!isIncluded && (
@@ -196,11 +196,11 @@ export default function AddonSelector({
                     <AddonIcon className={`w-5 h-5 ${isIncluded ? "text-green-400" : "text-[#1A1A1A]/70"}`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className={`text-sm font-medium truncate ${isIncluded ? "text-green-300" : "text-white"}`}>
+                        <span className={`text-sm font-medium truncate ${isIncluded ? "text-[color:var(--emerald-on)]" : "text-white"}`}>
                           {addon.name}
                         </span>
                         {isIncluded && (
-                          <Badge className="bg-green-500/20 text-green-400 text-xs">
+                          <Badge className="jj-emerald-solid/20 text-green-400 text-xs">
                             Included
                           </Badge>
                         )}

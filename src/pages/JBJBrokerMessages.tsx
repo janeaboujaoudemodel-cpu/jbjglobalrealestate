@@ -301,8 +301,8 @@ export default function JBJBrokerMessages() {
                 key={lead.id}
                 onClick={() => setSelectedLead(lead)}
                 className={`p-4 border-b border-[#B89555]/10 cursor-pointer transition-all hover:bg-[#EFE6D6]/5 ${
-                  selectedLead?.id === lead.id ? "bg-[#EFE6D6]/10 border-l-4 border-l-gold" : ""
-                }`}
+ selectedLead?.id === lead.id ? "bg-[#EFE6D6]/10 border-l-4 border-l-gold" : ""
+ }`}
               >
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
@@ -322,7 +322,7 @@ export default function JBJBrokerMessages() {
                       lead.status === "new"
                         ? "border-blue-500 text-blue-500"
                         : lead.status === "qualified"
-                        ? "border-green-500 text-green-500"
+                        ? "border-[color:var(--emerald-1)]/30 text-green-500"
                         : "border-[#B89555]/30 text-[#1A1A1A]/70"
                     }
                   >
@@ -362,16 +362,16 @@ export default function JBJBrokerMessages() {
                     <div
                       key={msg.id}
                       className={`flex gap-3 group ${
-                        msg.direction === "outbound" ? "flex-row-reverse" : "flex-row"
-                      }`}
+ msg.direction === "outbound" ? "flex-row-reverse" : "flex-row"
+ }`}
                     >
                       <div className="flex flex-col max-w-[70%]">
                         <div
                           className={`p-3 rounded-lg select-text cursor-text ${
-                            msg.direction === "outbound"
-                              ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-sm"
-                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-sm"
-                          }`}
+ msg.direction === "outbound"
+ ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-sm"
+ : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-sm"
+ }`}
                         >
                           <div className="flex items-center gap-2 mb-1">
                             <Badge variant="outline" className="text-xs border-[#B89555]/30">
@@ -384,7 +384,7 @@ export default function JBJBrokerMessages() {
                           <p className="select-text">{msg.content}</p>
                           {msg.direction === "outbound" && (
                             <div className="flex items-center justify-end gap-1 mt-1">
-                              <CheckCircle className="h-3 w-3 text-green-600" />
+                              <CheckCircle className="h-3 w-3 text-[color:var(--emerald-1)]" />
                               <span className="text-xs text-[#1A1A1A]/60">{msg.status}</span>
                             </div>
                           )}
@@ -396,8 +396,8 @@ export default function JBJBrokerMessages() {
                             toast.success(t('chat.messageCopied') || "Message copied");
                           }}
                           className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
-                            msg.direction === "outbound" ? "self-end mr-1" : "self-start ml-1"
-                          }`}
+ msg.direction === "outbound" ? "self-end mr-1" : "self-start ml-1"
+ }`}
                         >
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                           <span>{t('chat.copy') || 'Copy'}</span>

@@ -58,8 +58,8 @@ const WhyChooseUs = () => {
                 </h3>
                 <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{prop.text}</p>
                 <div className="flex items-center gap-1.5 mt-4">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-xs uppercase tracking-wider text-green-600 font-semibold">
+                  <Check className="w-4 h-4 text-[color:var(--emerald-1)]" />
+                  <span className="text-xs uppercase tracking-wider text-[color:var(--emerald-1)] font-semibold">
                     {t('whyUs.included', 'Included')}
                   </span>
                 </div>

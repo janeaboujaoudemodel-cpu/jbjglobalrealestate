@@ -26,7 +26,7 @@ const BASE_SHORTCUTS: ShortcutItem[] = [
   { id: 'buy_property', icon: Building2, label: 'Buy Property', description: 'Explore properties for sale', color: 'text-[#1A1A1A]' },
   { id: 'sell_property', icon: Building2, label: 'Sell Your Property', description: 'List your property for sale', color: 'text-amber-600' },
   { id: 'rent_property', icon: Home, label: 'Rent Property', description: 'Find your perfect rental', color: 'text-green-500' },
-  { id: 'list_for_rent', icon: Home, label: 'List for Rent', description: 'List your property for rent', color: 'text-emerald-600' },
+  { id: 'list_for_rent', icon: Home, label: 'List for Rent', description: 'List your property for rent', color: 'text-[color:var(--emerald-1)]' },
   { id: 'property_management', icon: Scale, label: 'Property Management', description: 'Manage your investments', color: 'text-purple-500' },
   { id: 'design_services', icon: Paintbrush, label: 'Design & Build', description: 'Interior & architecture', color: 'text-pink-500' },
   { id: 'guides', icon: Plane, label: 'Guides & Resources', description: 'Dubai guides, visa, golden visa', color: 'text-sky-500' },

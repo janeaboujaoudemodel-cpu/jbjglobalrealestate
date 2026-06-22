@@ -97,11 +97,11 @@ const VirtualStagingForm = ({
   return (
     <div className="w-full space-y-6">
       {/* Empty Room Photo Upload */}
-      <div className="bg-[#FDFBF7]/60 border border-emerald-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-[color:var(--emerald-1)]/30/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <Sofa className="w-5 h-5 text-emerald-400" />
           <h3 className="text-lg font-semibold text-white">Upload Empty Room Photos</h3>
-          <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+          <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
             Required
           </Badge>
         </div>
@@ -136,7 +136,7 @@ const VirtualStagingForm = ({
           {photos.length < 4 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="aspect-square rounded-xl border-2 border-dashed border-[#1A1A1A] hover:border-emerald-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
+              className="aspect-square rounded-xl border-2 border-dashed border-[#1A1A1A] hover:border-[color:var(--emerald-1)]/30/50 flex flex-col items-center justify-center gap-2 transition-colors"
             >
               <Upload className="w-8 h-8 text-white/90" />
               <span className="text-xs text-white/90">Add Photo</span>
@@ -150,7 +150,7 @@ const VirtualStagingForm = ({
       </div>
 
       {/* Room Type */}
-      <div className="bg-[#FDFBF7]/60 border border-emerald-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-[color:var(--emerald-1)]/30/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Room Type</h3>
         </div>
@@ -165,12 +165,12 @@ const VirtualStagingForm = ({
                 type="button"
                 onClick={() => onRoomTypeChange(room.id)}
                 className={`
-                  p-4 rounded-xl border text-center transition-all
-                  ${isSelected
-                    ? 'bg-emerald-500/20 border-emerald-500/50 text-white'
-                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
-                  }
-                `}
+ p-4 rounded-xl border text-center transition-all
+ ${isSelected
+ ? 'jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/50 text-white'
+ : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+ }
+ `}
               >
                 <Icon className="w-6 h-6 mx-auto mb-2" />
                 <span className="text-xs font-medium">{room.label}</span>
@@ -181,7 +181,7 @@ const VirtualStagingForm = ({
       </div>
 
       {/* Furniture Style */}
-      <div className="bg-[#FDFBF7]/60 border border-emerald-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-[color:var(--emerald-1)]/30/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Furniture Style</h3>
         </div>
@@ -195,12 +195,12 @@ const VirtualStagingForm = ({
                 type="button"
                 onClick={() => onFurnitureStyleChange(style.id)}
                 className={`
-                  p-4 rounded-xl border text-left transition-all
-                  ${isSelected
-                    ? 'bg-emerald-500/20 border-emerald-500/50'
-                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
-                  }
-                `}
+ p-4 rounded-xl border text-left transition-all
+ ${isSelected
+ ? 'jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/50'
+ : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
+ }
+ `}
               >
                 <span className={`text-sm font-semibold ${isSelected ? 'text-white' : 'text-white/85'}`}>
                   {style.label}
@@ -213,7 +213,7 @@ const VirtualStagingForm = ({
       </div>
 
       {/* Custom Notes */}
-      <div className="bg-[#FDFBF7]/60 border border-emerald-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-[color:var(--emerald-1)]/30/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Staging Preferences</h3>
           <Badge className="bg-[#1A1A1A] text-white/85">Optional</Badge>
@@ -223,7 +223,7 @@ const VirtualStagingForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe specific furniture you want: L-shaped sofa, marble coffee table, statement artwork, indoor plants..."
-          className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[100px] focus:border-emerald-500/50"
+          className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[100px] focus:border-[color:var(--emerald-1)]/30/50"
           maxLength={1000}
         />
       </div>

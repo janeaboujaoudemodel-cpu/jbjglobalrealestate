@@ -58,7 +58,7 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
       case "event":
         return "bg-purple-500";
       case "visit":
-        return "bg-emerald-500";
+        return "jj-emerald-solid";
       default:
         return "bg-primary";
     }
@@ -73,7 +73,7 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
       case "event":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">Event</Badge>;
       case "visit":
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">Visit</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">Visit</Badge>;
       default:
         return null;
     }
@@ -138,14 +138,14 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
                 key={day.toISOString()}
                 onClick={() => setSelectedDate(isSelected ? null : day)}
                 className={`h-9 rounded-md text-sm relative transition-colors border ${
-                  isToday(day)
-                    ? "bg-[#1A1A1A] text-[#FDFBF7] font-semibold border-[#1A1A1A]"
-                    : isSelected
-                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
-                    : hasEvents
-                    ? "bg-[#EFE6D6]/70 text-[#1A1A1A] border-[#B89555]/50 font-semibold hover:bg-[#EFE6D6]"
-                    : "border-transparent text-[#1A1A1A] hover:bg-[#F7F2EA]"
-                } ${!isSameMonth(day, currentMonth) ? "opacity-40" : ""}`}
+ isToday(day)
+ ? "bg-[#1A1A1A] text-[#FDFBF7] font-semibold border-[#1A1A1A]"
+ : isSelected
+ ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+ : hasEvents
+ ? "bg-[#EFE6D6]/70 text-[#1A1A1A] border-[#B89555]/50 font-semibold hover:bg-[#EFE6D6]"
+ : "border-transparent text-[#1A1A1A] hover:bg-[#F7F2EA]"
+ } ${!isSameMonth(day, currentMonth) ? "opacity-40" : ""}`}
               >
                 {format(day, "d")}
                 {hasEvents && (

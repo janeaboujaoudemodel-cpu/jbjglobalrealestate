@@ -40,7 +40,7 @@ export default function VoiceStudio() {
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                   Voice Studio
-                  <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">FREE</Badge>
+                  <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">FREE</Badge>
                 </h1>
                 <p className="text-[#1A1A1A]/70 text-sm">Record → Multi-Voice Narration</p>
               </div>
@@ -189,10 +189,10 @@ export default function VoiceStudio() {
                           key={voice.id}
                           onClick={() => vs.setSelectedVoice(voice.id)}
                           className={`p-3 rounded-lg border text-left transition-all ${
-                            vs.selectedVoice === voice.id
-                              ? "border-[#D4AF37] bg-[#D4AF37]/10"
-                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-[#B89555]/30"
-                          }`}
+ vs.selectedVoice === voice.id
+ ? "border-[#D4AF37] bg-[#D4AF37]/10"
+ : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-[#B89555]/30"
+ }`}
                         >
                           <div className="flex items-center gap-2">
                             <Volume2 className={`h-4 w-4 ${vs.selectedVoice === voice.id ? "text-[#D4AF37]" : "text-[#1A1A1A]/70"}`} />
@@ -225,10 +225,10 @@ export default function VoiceStudio() {
                           key={voice.id}
                           onClick={() => vs.setSelectedVoice(voice.id)}
                           className={`p-3 rounded-lg border text-left transition-all ${
-                            vs.selectedVoice === voice.id
-                              ? "border-[#D4AF37] bg-[#D4AF37]/10"
-                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-[#B89555]/30"
-                          }`}
+ vs.selectedVoice === voice.id
+ ? "border-[#D4AF37] bg-[#D4AF37]/10"
+ : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-[#B89555]/30"
+ }`}
                         >
                           <span className="text-white text-sm">{voice.name}</span>
                           <span className="text-[#1A1A1A]/70 text-xs ml-2">({voice.accent})</span>
@@ -254,9 +254,9 @@ export default function VoiceStudio() {
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-950/30 border border-emerald-700/50">
+                        <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-950/30 border border-[color:var(--emerald-1)]/30/50">
                           <Check className="h-4 w-4 text-emerald-400" />
-                          <span className="text-emerald-300 text-sm">Voice sample ready for cloning</span>
+                          <span className="text-[color:var(--emerald-on)] text-sm">Voice sample ready for cloning</span>
                         </div>
                         <div className="flex items-start space-x-3 p-4 rounded-lg bg-[#1A1A1A]/50 border border-[#1A1A1A]">
                           <Checkbox
@@ -358,7 +358,7 @@ export default function VoiceStudio() {
 
             {/* Generated Audio */}
             {vs.generatedAudio && !vs.processing && (
-              <Card className="bg-gradient-to-br from-emerald-950/40 to-slate-900/50 border-emerald-700/50">
+              <Card className="bg-gradient-to-br from-emerald-950/40 to-slate-900/50 border-[color:var(--emerald-1)]/30/50">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-emerald-400 flex items-center gap-2 text-lg">
                     <Check className="h-5 w-5" />Narration Ready!
@@ -366,7 +366,7 @@ export default function VoiceStudio() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <Button onClick={vs.playGenerated} variant="outline" className="border-emerald-600 text-emerald-400 hover:bg-emerald-950/50">
+                    <Button onClick={vs.playGenerated} variant="outline" className="border-[color:var(--emerald-1)]/30 text-emerald-400 /50">
                       {vs.isPlaying ? <><Pause className="h-4 w-4 mr-2" />Pause</> : <><Play className="h-4 w-4 mr-2" />Preview</>}
                     </Button>
                   </div>

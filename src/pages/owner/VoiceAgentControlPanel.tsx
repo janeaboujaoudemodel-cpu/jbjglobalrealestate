@@ -244,7 +244,7 @@ export default function VoiceAgentControlPanel() {
                       <td className="px-5 py-3 text-[#1A1A1A]">{fmtDuration(row.duration_seconds)}</td>
                       <td className="px-5 py-3">
                         {row.ended_at ? (
-                          <Badge variant="outline" className="border-emerald-600/40 text-emerald-700">
+                          <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)]">
                             Completed
                           </Badge>
                         ) : (

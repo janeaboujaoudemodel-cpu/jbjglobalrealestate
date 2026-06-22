@@ -48,8 +48,8 @@ export function GmailSenderStatusBanner() {
 
   if (status.ok) {
     return (
-      <div className="flex items-center justify-between gap-3 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm">
-        <div className="flex items-center gap-2 text-emerald-900">
+      <div className="flex items-center justify-between gap-3 rounded-md border border-[color:var(--emerald-1)]/30 jj-emerald-soft px-4 py-2 text-sm">
+        <div className="flex items-center gap-2 text-[color:var(--emerald-1)]">
           <CheckCircle2 className="h-4 w-4" />
           <span>
             Outbound sender ready — emails will be sent directly from{" "}

@@ -143,7 +143,7 @@ const OwnerAuditPage = () => {
     switch (access) {
       case 'owner': return <Badge className="bg-purple-100 text-purple-700 border-purple-300">Owner</Badge>;
       case 'broker': return <Badge className="bg-blue-100 text-blue-700 border-blue-300">Broker</Badge>;
-      case 'investor': return <Badge className="bg-green-100 text-green-700 border-green-300">Investor</Badge>;
+      case 'investor': return <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Investor</Badge>;
       case 'authenticated': return <Badge className="bg-amber-100 text-amber-700 border-amber-300">Auth Required</Badge>;
       case 'public': return <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30">Public</Badge>;
     }
@@ -163,7 +163,7 @@ const OwnerAuditPage = () => {
 
   const getAIStatusBadge = (status: AIToolStatus) => {
     switch (status) {
-      case 'working': return <Badge className="bg-green-100 text-green-700 border-green-300">Working</Badge>;
+      case 'working': return <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Working</Badge>;
       case 'partial': return <Badge className="bg-amber-100 text-amber-700 border-amber-300">Partial</Badge>;
       case '404': return <Badge className="bg-red-100 text-red-700 border-red-300">404</Badge>;
       case 'component_only': return <Badge className="bg-orange-100 text-orange-700 border-orange-300">Component Only</Badge>;
@@ -236,7 +236,7 @@ const OwnerAuditPage = () => {
                 </Card>
                 <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-green-700">{stats.visibleRoutes}</div>
+                    <div className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.visibleRoutes}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Linked in UI</div>
                   </CardContent>
                 </Card>
@@ -325,21 +325,21 @@ const OwnerAuditPage = () => {
                               </td>
                               <td className="p-4 text-center">
                                 {route.dashboard ? (
-                                  <Check className="w-4 h-4 text-green-600 mx-auto" />
+                                  <Check className="w-4 h-4 text-[color:var(--emerald-1)] mx-auto" />
                                 ) : (
                                   <X className="w-4 h-4 text-[#1A1A1A]/70 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
                                 {route.sidebar ? (
-                                  <Check className="w-4 h-4 text-green-600 mx-auto" />
+                                  <Check className="w-4 h-4 text-[color:var(--emerald-1)] mx-auto" />
                                 ) : (
                                   <X className="w-4 h-4 text-[#1A1A1A]/70 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
                                 {route.registry ? (
-                                  <Check className="w-4 h-4 text-green-600 mx-auto" />
+                                  <Check className="w-4 h-4 text-[color:var(--emerald-1)] mx-auto" />
                                 ) : (
                                   <X className="w-4 h-4 text-[#1A1A1A]/70 mx-auto" />
                                 )}
@@ -351,7 +351,7 @@ const OwnerAuditPage = () => {
                                     Orphan
                                   </Badge>
                                 ) : (
-                                  <Badge className="bg-green-100 text-green-700 border-green-300">
+                                  <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">
                                     <Eye className="w-3 h-3 mr-1" />
                                     Visible
                                   </Badge>
@@ -414,7 +414,7 @@ const OwnerAuditPage = () => {
                 </Card>
                 <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-green-700">{aiStats.working}</div>
+                    <div className="text-2xl font-bold text-[color:var(--emerald-1)]">{aiStats.working}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Working</div>
                   </CardContent>
                 </Card>
@@ -521,7 +521,7 @@ const OwnerAuditPage = () => {
                                   <span className="text-xs text-amber-700">{tool.fixNeeded}</span>
                                 </div>
                               ) : (
-                                <span className="text-xs text-green-700">None</span>
+                                <span className="text-xs text-[color:var(--emerald-1)]">None</span>
                               )}
                             </td>
                             <td className="p-4 text-right">
@@ -556,7 +556,7 @@ const OwnerAuditPage = () => {
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">AI Tools Status Legend</h3>
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <Badge className="bg-green-100 text-green-700 border-green-300">Working</Badge>
+                    <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Working</Badge>
                     <span className="text-[#1A1A1A]/70">Fully functional</span>
                   </div>
                   <div className="flex items-center gap-2">

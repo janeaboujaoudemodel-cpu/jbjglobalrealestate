@@ -214,7 +214,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                 onClick={handleShareWhatsApp}
                 size="sm"
                 variant="outline"
-                className="border-green-500/30 text-green-600 hover:bg-green-50"
+                className="border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
               >
                 <MessageCircle className="w-4 h-4 mr-1 text-green-500" />
                 Share
@@ -295,7 +295,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             <Button
               onClick={handleShareWhatsApp}
               variant="outline"
-              className="bg-green-50 border-green-500/30 text-green-600 hover:bg-green-100 hover:text-green-700 h-12"
+              className="jj-emerald-soft border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft hover:text-[color:var(--emerald-1)] h-12"
             >
               <MessageCircle className="w-5 h-5 mr-2 text-green-500" />
               WhatsApp

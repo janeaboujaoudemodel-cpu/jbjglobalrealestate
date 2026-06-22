@@ -387,12 +387,12 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                 <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
                   {migrationLog.map((line, i) => (
                     <div key={i} className={`${
-                      line.includes("[ERROR]") ? "text-red-400" :
-                      line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
-                      line.includes("[START]") ? "text-yellow-300" :
-                      line.includes("[WARN]") ? "text-[#1A1A1A]" :
-                      "text-[#1A1A1A]/70"
-                    }`}>{line}</div>
+ line.includes("[ERROR]") ? "text-red-400" :
+ line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
+ line.includes("[START]") ? "text-yellow-300" :
+ line.includes("[WARN]") ? "text-[#1A1A1A]" :
+ "text-[#1A1A1A]/70"
+ }`}>{line}</div>
                   ))}
                 </div>
               </div>
@@ -426,12 +426,12 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                             {/* Status badge overlay */}
                             <div className="absolute top-3 right-3">
                               <Badge className={`text-xs px-2.5 py-1 ${
-                                parsed.status === "Off-Plan"
-                                  ? "bg-blue-600 text-white"
-                                  : parsed.status === "Ready"
-                                    ? "bg-emerald-600 text-white"
-                                    : "bg-foreground/80 text-background"
-                              }`}>
+ parsed.status === "Off-Plan"
+ ? "bg-blue-600 text-white"
+ : parsed.status === "Ready"
+ ? "jj-emerald-solid text-white"
+ : "bg-foreground/80 text-background"
+ }`}>
                                 {parsed.status || "Off-Plan"}
                               </Badge>
                             </div>
@@ -503,7 +503,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                                 size="sm"
                                 onClick={() => handleApprove(update)}
                                 disabled={isProcessing}
-                                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-9 text-xs"
+                                className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white h-9 text-xs"
                               >
                                 <Check className="h-3.5 w-3.5 mr-1" />
                                 Approve
@@ -547,7 +547,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           </div>
                           <div>
                             <p className="text-[10px] text-[#1A1A1A]/70 mb-1">Proposed</p>
-                            <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-[#1A1A1A]">
+                            <div className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded p-2 text-xs text-[#1A1A1A]">
                               {update.proposed_value}
                             </div>
                           </div>
@@ -556,7 +556,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           <Button variant="outline" size="sm" onClick={() => handleReject(update)} disabled={processingIds.has(update.id)} className="border-red-200 text-red-600 hover:bg-red-50 h-7 text-xs">
                             <X className="h-3 w-3 mr-1" /> Reject
                           </Button>
-                          <Button size="sm" onClick={() => handleApprove(update)} disabled={processingIds.has(update.id)} className="bg-emerald-600 hover:bg-emerald-700 text-white h-7 text-xs">
+                          <Button size="sm" onClick={() => handleApprove(update)} disabled={processingIds.has(update.id)} className="jj-emerald-solid hover:jj-emerald-solid text-white h-7 text-xs">
                             <Check className="h-3 w-3 mr-1" /> Approve
                           </Button>
                         </div>

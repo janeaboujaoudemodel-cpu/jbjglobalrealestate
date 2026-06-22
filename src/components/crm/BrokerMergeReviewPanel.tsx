@@ -108,7 +108,7 @@ function RowCard({ row, onDecision, onEdit }: { row: StagingRow; onDecision: (d:
               <span className="text-[#1A1A1A]/60">· recommended: <b>{recommended === "merge" ? "Merge" : "Keep"}</b></span>
             </>
           ) : (
-            <span className="text-emerald-700 font-semibold">New broker</span>
+            <span className="text-[color:var(--emerald-1)] font-semibold">New broker</span>
           )}
         </div>
         <div className="flex gap-1">
@@ -190,7 +190,7 @@ function Tag({ label, value, tone = "ink" }: { label: string; value: number; ton
   const map: Record<string, string> = {
     ink: "bg-white border-[#B89555]/30 text-[#1A1A1A]",
     amber: "bg-amber-50 border-amber-300 text-amber-900",
-    emerald: "bg-emerald-50 border-emerald-300 text-emerald-900",
+    emerald: "jj-emerald-soft border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]",
     red: "bg-red-50 border-red-300 text-red-900",
   };
   return (

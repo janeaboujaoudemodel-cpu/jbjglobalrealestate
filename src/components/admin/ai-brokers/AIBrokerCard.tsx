@@ -67,12 +67,12 @@ export function AIBrokerCard({
               </Avatar>
               <span
                 className={`absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white ${
-                  broker.status === "active"
-                    ? "bg-emerald-500"
-                    : broker.status === "paused"
-                    ? "bg-amber-500"
-                    : "bg-[#B89555]"
-                }`}
+ broker.status === "active"
+ ? "jj-emerald-solid"
+ : broker.status === "paused"
+ ? "bg-amber-500"
+ : "bg-[#B89555]"
+ }`}
               />
             </div>
             <div>
@@ -101,7 +101,7 @@ export function AIBrokerCard({
               onCheckedChange={(checked) =>
                 onStatusChange(broker.id, checked ? "active" : "paused")
               }
-              className="data-[state=checked]:bg-emerald-500"
+              className="data-[state=checked]:jj-emerald-solid"
             />
 
             <DropdownMenu>
@@ -146,12 +146,12 @@ export function AIBrokerCard({
           <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div
               className={`h-full transition-all ${
-                capacityPercent > 90
-                  ? "bg-red-500"
-                  : capacityPercent > 70
-                  ? "bg-amber-500"
-                  : "bg-emerald-500"
-              }`}
+ capacityPercent > 90
+ ? "bg-red-500"
+ : capacityPercent > 70
+ ? "bg-amber-500"
+ : "jj-emerald-solid"
+ }`}
               style={{ width: `${capacityPercent}%` }}
             />
           </div>

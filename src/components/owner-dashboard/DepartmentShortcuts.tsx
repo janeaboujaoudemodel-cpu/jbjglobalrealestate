@@ -30,7 +30,7 @@ const DEPARTMENTS: DepartmentCard[] = [
     description: "Manage leads & deals", 
     icon: Users, 
     path: "/owner/crm", 
-    color: "text-emerald-600" 
+    color: "text-[color:var(--emerald-1)]" 
   },
   { 
     label: "Relationship Hub", 

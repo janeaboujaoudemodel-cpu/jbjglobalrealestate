@@ -480,10 +480,10 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                             updateProperty('views', views);
                           }}
                           className={`px-3 py-1.5 text-xs rounded-full border transition-all ${
-                            property.views.includes(view)
-                              ? "bg-[#1A1A1A] border-[#1A1A1A] text-white font-medium"
-                              : 'border-[#B89555]/45 text-[#1A1A1A]/70 hover:border-[#B89555]/60 hover:text-[#B89555]'
-                          }`}
+ property.views.includes(view)
+ ? "bg-[#1A1A1A] border-[#1A1A1A] text-white font-medium"
+ : 'border-[#B89555]/45 text-[#1A1A1A]/70 hover:border-[#B89555]/60 hover:text-[#B89555]'
+ }`}
                         >
                           {view}
                         </button>
@@ -652,8 +652,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     className="grid md:grid-cols-2 gap-4"
                   >
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'stock' ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
-                    }`}>
+ property.hasModifications === 'stock' ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
+ }`}>
                       <RadioGroupItem value="stock" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${property.hasModifications === 'stock' ? 'bg-[#1A1A1A]' : 'bg-[#F7F2EA]'}`}>
@@ -669,8 +669,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </label>
 
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'modified' ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
-                    }`}>
+ property.hasModifications === 'modified' ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
+ }`}>
                       <RadioGroupItem value="modified" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${property.hasModifications === 'modified' ? 'bg-[#1A1A1A]' : 'bg-[#F7F2EA]'}`}>
@@ -687,11 +687,11 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   </RadioGroup>
 
                   {property.hasModifications === 'stock' && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-4 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                       <div className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5" />
                         <div>
-                          <p className="text-emerald-300 font-medium">Stock Property Valuation</p>
+                          <p className="text-[color:var(--emerald-on)] font-medium">Stock Property Valuation</p>
                           <p className="text-sm text-[#1A1A1A]/70 mt-1">Your property will be valued at the standard market rate based on DLD comparable transactions.</p>
                         </div>
                       </div>
@@ -723,8 +723,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                               key={type.value}
                               onClick={() => updateProperty('modificationType', type.value)}
                               className={`p-3 rounded-lg border text-left transition-all ${
-                                property.modificationType === type.value ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
-                              }`}
+ property.modificationType === type.value ? 'border-[#B89555] bg-[#1A1A1A]/10' : 'border-[#B89555]/45 hover:border-[#B89555]/60'
+ }`}
                             >
                               <type.icon className={`w-5 h-5 mb-2 ${property.modificationType === type.value ? 'text-[#B89555]' : 'text-[#1A1A1A]/70'}`} />
                               <p className={`text-sm font-medium ${property.modificationType === type.value ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/85'}`}>{type.label}</p>
@@ -861,10 +861,10 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                       AED {evaluation.estimatedValue.pricePerSqFt.toLocaleString()} per sq ft · Community avg: AED {evaluation.communityAverage.toLocaleString()}/sq ft
                     </p>
                     <div className={`inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full ${
-                      evaluation.confidence === 'High' ? 'bg-green-500/20 text-green-400'
-                        : evaluation.confidence === 'Medium' ? 'bg-yellow-500/20 text-yellow-400'
-                        : 'bg-red-500/20 text-red-400'
-                    }`}>
+ evaluation.confidence === 'High' ? 'jj-emerald-solid/20 text-green-400'
+ : evaluation.confidence === 'Medium' ? 'bg-yellow-500/20 text-yellow-400'
+ : 'bg-red-500/20 text-red-400'
+ }`}>
                       {evaluation.confidence === 'High' ? <CheckCircle className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
                       {evaluation.confidence} Confidence
                     </div>

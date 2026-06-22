@@ -276,7 +276,7 @@ const CRMCommunicationPanel = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'online': return 'bg-green-500';
+      case 'online': return 'jj-emerald-solid';
       case 'away': return 'bg-amber-500';
       default: return 'bg-[#B89555]';
     }
@@ -337,8 +337,8 @@ const CRMCommunicationPanel = () => {
                         key={channel.id}
                         onClick={() => setSelectedChannel(channel.id)}
                         className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-[#B89555]/10 transition-colors ${
-                          selectedChannel === channel.id ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40' : 'text-[#1A1A1A]/70'
-                        }`}
+ selectedChannel === channel.id ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40' : 'text-[#1A1A1A]/70'
+ }`}
                       >
                         <span className="flex items-center gap-1.5">
                           <Hash className="h-3 w-3" />
@@ -403,8 +403,8 @@ const CRMCommunicationPanel = () => {
                           </div>
                           <p
                             className={`text-xs p-2 rounded-lg break-words [overflow-wrap:anywhere] [word-break:break-word] ${
-                              msg.isMe ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' : 'bg-[#F7F2EA] text-[#1A1A1A]'
-                            }`}
+ msg.isMe ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' : 'bg-[#F7F2EA] text-[#1A1A1A]'
+ }`}
                           >
                             {msg.message}
                           </p>
@@ -732,7 +732,7 @@ const CRMCommunicationPanel = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 text-green-500 hover:bg-green-500/10"
+                      className="h-6 w-6 text-green-500 hover:jj-emerald-solid/10"
                       onClick={() => addMemberToChannel(member.id)}
                     >
                       <UserPlus className="h-3 w-3" />

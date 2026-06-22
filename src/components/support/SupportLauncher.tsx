@@ -198,16 +198,14 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, y: 10 }}
               >
                 <div className="flex items-center justify-between px-1 mb-1">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
-                    border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7] allow-white">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7] allow-white">
+                    <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
                     Free agent call
                   </span>
                   <button
                     onClick={close}
                     aria-label="Close"
-                    className="h-7 w-7 inline-flex items-center justify-center rounded-full
-                      border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#E2C9A0]"
+                    className="h-7 w-7 inline-flex items-center justify-center rounded-full border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#E2C9A0]"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -231,10 +229,7 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           whileTap={{ scale: 0.94 }}
-          className="allow-white relative inline-flex items-center justify-center h-11 w-11 rounded-full
-            bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 text-white
-            shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_1px_rgba(184,149,85,0.24)]
-            transition-colors"
+          className="allow-white relative inline-flex items-center justify-center h-11 w-11 rounded-full bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 text-white shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_1px_rgba(184,149,85,0.24)] transition-colors"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           {open ? (
@@ -242,7 +237,7 @@ export default function SupportLauncher() {
           ) : (
             <>
               <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0A0A0A] animate-pulse" />
+              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full jj-emerald-solid ring-2 ring-[#0A0A0A] animate-pulse" />
             </>
           )}
         </motion.button>
@@ -260,11 +255,11 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           className={`allow-white jj-emerald-metallic group fixed right-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-l-xl
-            border border-r-0 text-white transform-gpu pointer-events-auto
-            transition-opacity duration-300
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]
-            ${overHero ? "opacity-70" : "opacity-100"}
-          `}
+ border border-r-0 text-white transform-gpu pointer-events-auto
+ transition-opacity duration-300
+ focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]
+ ${overHero ? "opacity-70" : "opacity-100"}
+ `}
 
           style={{
             writingMode: "vertical-rl",
@@ -300,21 +295,18 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.99 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
                 data-no-contrast-guard
-                className="jbj-gold-animated-border fixed right-14 top-1/2 w-[300px] rounded-2xl p-[1.5px] pointer-events-auto
-                  shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.22)]"
+                className="jbj-gold-animated-border fixed right-14 top-1/2 w-[300px] rounded-2xl p-[1.5px] pointer-events-auto shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.22)]"
               >
                 <div className="flex flex-col overflow-hidden rounded-[14px] bg-background text-foreground p-3">
                   <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold
-                      border border-gold bg-raised text-ink">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold border border-gold bg-raised text-ink">
+                      <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
                       Call our agent now · Free
                     </span>
                     <button
                       onClick={close}
                       aria-label="Close"
-                      className="h-7 w-7 inline-flex items-center justify-center rounded-full
-                        border border-gold bg-raised text-[#B89555] hover:bg-[#1A1A1A] hover:text-[#B89555] transition-colors"
+                      className="h-7 w-7 inline-flex items-center justify-center rounded-full border border-gold bg-raised text-[#B89555] hover:bg-[#1A1A1A] hover:text-[#B89555] transition-colors"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>

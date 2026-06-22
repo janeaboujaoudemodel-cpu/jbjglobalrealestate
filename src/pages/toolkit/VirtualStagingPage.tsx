@@ -208,7 +208,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                   AI Virtual Staging
-                  <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
+                  <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">
                     FREE
                   </Badge>
                 </h1>
@@ -256,10 +256,10 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                       <div
                         key={room.id}
                         className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer border transition-all ${
-                          roomType === room.id
-                            ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                            : 'border-[#1A1A1A] hover:border-[#B89555]/30'
-                        }`}
+ roomType === room.id
+ ? 'border-[#B89555] bg-[#EFE6D6]/10'
+ : 'border-[#1A1A1A] hover:border-[#B89555]/30'
+ }`}
                         onClick={() => setRoomType(room.id)}
                       >
                         <RadioGroupItem value={room.id} id={room.id} className="hidden" />
@@ -285,10 +285,10 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                       <div
                         key={style.id}
                         className={`p-3 rounded-lg cursor-pointer border transition-all ${
-                          designStyle === style.id
-                            ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                            : 'border-[#1A1A1A] hover:border-[#B89555]/30'
-                        }`}
+ designStyle === style.id
+ ? 'border-[#B89555] bg-[#EFE6D6]/10'
+ : 'border-[#1A1A1A] hover:border-[#B89555]/30'
+ }`}
                         onClick={() => setDesignStyle(style.id)}
                       >
                         <div className="flex items-center gap-2">
@@ -411,7 +411,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         <Button
                           onClick={downloadResult}
                           variant="outline"
-                          className="text-white border-emerald-400 bg-emerald-500/30 hover:bg-emerald-500/50 font-semibold"
+                          className="text-white border-[color:var(--emerald-1)]/30 jj-emerald-solid/30 hover:jj-emerald-solid/50 font-semibold"
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Download

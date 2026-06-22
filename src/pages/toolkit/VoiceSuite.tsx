@@ -495,7 +495,7 @@ function VoiceToTextPanel() {
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
             <FileAudio className="w-5 h-5 text-[#1A1A1A]" /> Voice to Text
-            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px] ml-2">FREE</Badge>
+            <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-[10px] ml-2">FREE</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -616,10 +616,10 @@ function AudioEnhancePanel() {
             {modeOptions.map(m => (
               <button key={m.value} onClick={() => !processing && setEnhanceMode(m.value)}
                 className={`p-3 rounded-xl border text-left transition-all ${
-                  enhanceMode === m.value
-                    ? 'bg-[#EFE6D6]/10 border-[#B89555]/40 shadow-[0_0_15px_rgba(212,175,55,0.1)]'
-                    : 'bg-[#1a1708]/50 border-[#B89555]/10 hover:border-[#B89555]/25'
-                }`}>
+ enhanceMode === m.value
+ ? 'bg-[#EFE6D6]/10 border-[#B89555]/40 shadow-[0_0_15px_rgba(212,175,55,0.1)]'
+ : 'bg-[#1a1708]/50 border-[#B89555]/10 hover:border-[#B89555]/25'
+ }`}>
                 <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-[#1A1A1A]' : 'text-white/90'}`} />
                 <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-[#1A1A1A]' : 'text-white/70'}`}>{m.label}</p>
                 <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5">{m.desc}</p>
@@ -654,7 +654,7 @@ function AudioEnhancePanel() {
           {enhancedUrl && (
             <div className="space-y-3">
               <CenteredAudioPreview src={enhancedUrl} label="✓ Enhanced Audio" />
-              <Button onClick={downloadEnhanced} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold max-w-xl mx-auto">
+              <Button onClick={downloadEnhanced} className="w-full jj-emerald-solid hover:jj-emerald-solid text-white font-semibold max-w-xl mx-auto">
                 <Download className="w-4 h-4 mr-2" /> Download Enhanced
               </Button>
             </div>
@@ -818,7 +818,7 @@ function AudioEffectsPanel() {
           {processedUrl && (
             <div className="space-y-3">
               <CenteredAudioPreview src={processedUrl} label="✓ Processed Audio" />
-              <Button onClick={downloadProcessed} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold max-w-xl mx-auto">
+              <Button onClick={downloadProcessed} className="w-full jj-emerald-solid hover:jj-emerald-solid text-white font-semibold max-w-xl mx-auto">
                 <Download className="w-4 h-4 mr-2" /> Download Processed
               </Button>
             </div>
@@ -1034,7 +1034,7 @@ function AudioTranslationPanel() {
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
             <Languages className="w-5 h-5 text-[#1A1A1A]" /> Audio Translation
-            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px] ml-2">FREE</Badge>
+            <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-[10px] ml-2">FREE</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -68,7 +68,7 @@ const AINeighborhoodInsightsPremium = () => {
     >
       <div className="space-y-8">
         {/* Input Section */}
-        <Card className="bg-teal-900/20 border-teal-500/30">
+        <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-teal-400 mb-4">
                 <MapPin className="h-5 w-5" />
@@ -85,7 +85,7 @@ const AINeighborhoodInsightsPremium = () => {
                     placeholder="Dubai Marina, JBR, Downtown Dubai..."
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="bg-[#FDFBF7]/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-[color:var(--emerald-1)]/30/30 text-white hover:border-[color:var(--emerald-1)]/30/50 focus:border-[color:var(--emerald-1)]/30 transition-colors"
                   />
                 </div>
 
@@ -96,7 +96,7 @@ const AINeighborhoodInsightsPremium = () => {
                     value={interests}
                     onChange={(e) => setInterests(e.target.value)}
                     rows={3}
-                    className="bg-[#FDFBF7]/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-[color:var(--emerald-1)]/30/30 text-white hover:border-[color:var(--emerald-1)]/30/50 focus:border-[color:var(--emerald-1)]/30 transition-colors"
                   />
                 </div>
               </div>
@@ -104,7 +104,7 @@ const AINeighborhoodInsightsPremium = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-semibold py-6"
+                className="w-full bg-gradient-to-r hover: hover: text-white font-semibold py-6"
               >
                 {loading ? (
                   <>
@@ -123,17 +123,17 @@ const AINeighborhoodInsightsPremium = () => {
 
         {/* Quick Categories */}
         <div className="grid grid-cols-3 gap-3">
-            <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
+            <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4 text-center">
               <School className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-white/90">Education</p>
               <p className="text-sm font-semibold text-white">Schools</p>
             </Card>
-            <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
+            <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4 text-center">
               <Hospital className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-white/90">Healthcare</p>
               <p className="text-sm font-semibold text-white">Facilities</p>
             </Card>
-            <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
+            <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4 text-center">
               <Train className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-white/90">Transport</p>
               <p className="text-sm font-semibold text-white">Access</p>
@@ -156,7 +156,7 @@ const AINeighborhoodInsightsPremium = () => {
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                   >
-                    <Card className="bg-teal-500/10 border-teal-500/30 p-6">
+                    <Card className="jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30 p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div>
                           <p className="text-sm text-white/70">Neighborhood Score</p>
@@ -167,10 +167,10 @@ const AINeighborhoodInsightsPremium = () => {
                             <Star
                               key={star}
                               className={`h-5 w-5 ${
-                                star <= Math.round(response.score / 2)
-                                  ? "text-teal-400 fill-teal-400"
-                                  : "text-[#1A1A1A]/70"
-                              }`}
+ star <= Math.round(response.score / 2)
+ ? "text-teal-400 fill-teal-400"
+ : "text-[#1A1A1A]/70"
+ }`}
                             />
                           ))}
                         </div>
@@ -191,7 +191,7 @@ const AINeighborhoodInsightsPremium = () => {
                           initial={{ scale: 0.9, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                         >
-                          <Card className="bg-teal-900/20 border-teal-500/30 p-4">
+                          <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4">
                             <Icon className="h-5 w-5 mb-2 text-teal-400" />
                             <p className="text-xs text-white/70 capitalize">{key}</p>
                             <p className="text-lg font-bold text-white">{value}</p>
@@ -204,14 +204,14 @@ const AINeighborhoodInsightsPremium = () => {
 
                 {/* Lifestyle Indicators */}
                 {response.lifestyle && (
-                  <Card className="bg-teal-900/20 border-teal-500/30 p-4">
+                  <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4">
                     <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                       <Sun className="h-4 w-4 text-teal-400" />
                       Lifestyle Indicators
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {response.lifestyle.map((item: string, i: number) => (
-                        <Badge key={i} className="bg-teal-500/20 text-teal-400 border-teal-500/30">
+                        <Badge key={i} className="jj-emerald-solid/20 text-teal-400 border-[color:var(--emerald-1)]/30/30">
                           {item}
                         </Badge>
                       ))}
@@ -222,28 +222,28 @@ const AINeighborhoodInsightsPremium = () => {
                 {/* Investment Potential */}
                 {response.investmentPotential && (
                   <Card className={`p-4 ${
-                    response.investmentPotential === 'high' 
-                      ? 'bg-emerald-500/10 border-emerald-500/30' 
-                      : response.investmentPotential === 'medium'
-                      ? 'bg-amber-500/10 border-amber-500/30'
-                      : 'bg-[#FDFBF7]/50 border-[#1A1A1A]'
-                  }`}>
+ response.investmentPotential === 'high' 
+ ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30' 
+ : response.investmentPotential === 'medium'
+ ? 'bg-amber-500/10 border-amber-500/30'
+ : 'bg-[#FDFBF7]/50 border-[#1A1A1A]'
+ }`}>
                     <div className="flex items-center gap-2">
                       <Building className={`h-5 w-5 ${
-                        response.investmentPotential === 'high' ? 'text-emerald-400' :
-                        response.investmentPotential === 'medium' ? 'text-[#1A1A1A]' : 'text-white/70'
-                      }`} />
+ response.investmentPotential === 'high' ? 'text-emerald-400' :
+ response.investmentPotential === 'medium' ? 'text-[#1A1A1A]' : 'text-white/70'
+ }`} />
                       <span className="font-semibold text-white">Investment Potential: </span>
                       <span className={`capitalize ${
-                        response.investmentPotential === 'high' ? 'text-emerald-400' :
-                        response.investmentPotential === 'medium' ? 'text-[#1A1A1A]' : 'text-white/70'
-                      }`}>{response.investmentPotential}</span>
+ response.investmentPotential === 'high' ? 'text-emerald-400' :
+ response.investmentPotential === 'medium' ? 'text-[#1A1A1A]' : 'text-white/70'
+ }`}>{response.investmentPotential}</span>
                     </div>
                   </Card>
                 )}
 
                 {/* Full Analysis */}
-                <Card className="bg-teal-900/20 border-teal-500/30">
+                <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Analysis</h4>
@@ -264,7 +264,7 @@ const AINeighborhoodInsightsPremium = () => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-12 text-center"
             >
-              <div className="p-6 rounded-full bg-teal-500/10 mb-4">
+              <div className="p-6 rounded-full jj-emerald-solid/10 mb-4">
                 <MapPin className="h-12 w-12 text-teal-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Explore</h3>

@@ -262,7 +262,7 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
 
 function Stat({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone: "emerald" | "amber" | "red" | "blue" }) {
   const styles = {
-    emerald: "bg-emerald-50 border-emerald-300 text-emerald-900",
+    emerald: "jj-emerald-soft border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]",
     amber: "bg-amber-50 border-amber-300 text-amber-900",
     red: "bg-red-50 border-red-300 text-red-900",
     blue: "bg-blue-50 border-blue-300 text-blue-900",

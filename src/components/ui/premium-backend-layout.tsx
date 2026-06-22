@@ -133,11 +133,11 @@ const accentColors = {
     iconBg: 'bg-[#EFE6D6]/10',
   },
   green: {
-    bg: 'bg-gradient-to-br from-emerald-500/15 to-emerald-500/5',
-    border: 'border-emerald-500/30',
-    icon: 'text-emerald-600',
-    text: 'text-emerald-600',
-    iconBg: 'bg-emerald-500/10',
+    bg: 'bg-gradient-to-br /15 /5',
+    border: 'border-[color:var(--emerald-1)]/30/30',
+    icon: 'text-[color:var(--emerald-1)]',
+    text: 'text-[color:var(--emerald-1)]',
+    iconBg: 'jj-emerald-solid/10',
   },
   blue: {
     bg: 'bg-gradient-to-br from-blue-500/15 to-blue-500/5',
@@ -205,7 +205,7 @@ export const PremiumStatCard: React.FC<PremiumStatCardProps> = ({
           {trend && trendValue && (
             <div className={cn(
               'flex items-center gap-1 mt-2 text-xs font-medium',
-              trend === 'up' ? 'text-emerald-600' : trend === 'down' ? 'text-red-500' : 'text-[#1A1A1A]/70'
+              trend === 'up' ? 'text-[color:var(--emerald-1)]' : trend === 'down' ? 'text-red-500' : 'text-[#1A1A1A]/70'
             )}>
               <TrendIcon className="w-3 h-3" />
               <span>{trendValue}</span>
@@ -305,7 +305,7 @@ export const PremiumStat: React.FC<PremiumStatProps> = ({
   className
 }) => {
   const changeColors = {
-    positive: 'text-emerald-600',
+    positive: 'text-[color:var(--emerald-1)]',
     negative: 'text-red-500',
     neutral: 'text-[#1A1A1A]/70',
   };
@@ -352,7 +352,7 @@ export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
   const variants = {
     default: 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30',
     gold: 'bg-gradient-to-r from-gold/20 to-gold/10 text-[#1A1A1A] border-[#B89555]/30',
-    success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    success: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
     error: 'bg-red-50 text-red-700 border-red-200',
     info: 'bg-blue-50 text-blue-700 border-blue-200',

@@ -31,7 +31,7 @@ export function PhaseCard({
     switch (status) {
       case 'completed':
         return (
-          <Badge className="bg-emerald-500/20 text-emerald-700 border-emerald-500/30">
+          <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
             Completed
           </Badge>
         );
@@ -66,7 +66,7 @@ export function PhaseCard({
       <Card className={cn(
         "h-full border transition-all duration-300 overflow-hidden",
         status === 'completed' 
-          ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-emerald-500/40" 
+          ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[color:var(--emerald-1)]/30/40" 
           : status === 'in_progress' || status === 'test_pending'
             ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/40"
             : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/20",
@@ -78,7 +78,7 @@ export function PhaseCard({
             <div className={cn(
               "w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg",
               status === 'completed' 
-                ? "bg-emerald-500/20 text-emerald-600"
+                ? "jj-emerald-solid/20 text-[color:var(--emerald-1)]"
                 : status === 'in_progress' || status === 'test_pending'
                   ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
                   : "bg-[#EFE6D6]/10 text-[#1A1A1A]/40"
@@ -107,7 +107,7 @@ export function PhaseCard({
           {/* Action Button */}
           <div className="mt-4 pt-4 border-t border-[#B89555]/20">
             {status === 'completed' ? (
-              <div className="flex items-center gap-2 text-emerald-600 text-sm">
+              <div className="flex items-center gap-2 text-[color:var(--emerald-1)] text-sm">
                 <CheckCircle className="w-4 h-4" />
                 Phase Completed
               </div>

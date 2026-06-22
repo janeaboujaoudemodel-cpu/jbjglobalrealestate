@@ -18,11 +18,11 @@ const STATUS_COLOR: Record<string, string> = {
   "Not Contacted": "bg-[#F7F2EA] text-[#1A1A1A]",
   "Test Sent": "bg-blue-100 text-blue-800",
   "Contacted": "bg-blue-100 text-blue-800",
-  "Replied": "bg-emerald-100 text-emerald-800",
+  "Replied": "jj-emerald-soft text-[color:var(--emerald-1)]",
   "Follow-up Needed": "bg-amber-100 text-amber-800",
   "Documents Requested": "bg-amber-100 text-amber-800",
   "Documents Sent": "bg-blue-100 text-blue-800",
-  "Registered": "bg-emerald-100 text-emerald-900",
+  "Registered": "jj-emerald-soft text-[color:var(--emerald-1)]",
   "Declined": "bg-red-100 text-red-800",
   "No Response": "bg-[#EFE6D6] text-[#1A1A1A]",
 };

@@ -89,7 +89,7 @@ export default function OwnerAcademyApprovals() {
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className="border-[#B89555]/40">{s.status}</Badge>
                   {s.validator_passed ? (
-                    <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300">
+                    <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">
                       <CheckCircle2 className="w-3 h-3 mr-1" /> Telemetry OK
                     </Badge>
                   ) : (

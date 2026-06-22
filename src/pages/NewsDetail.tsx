@@ -280,47 +280,36 @@ const NewsDetail = () => {
             <HtmlT
               html={contentHtml}
               domain="news.article"
-              className="prose prose-lg max-w-none text-[#1A1A1A] leading-relaxed
-                prose-headings:text-[#1A1A1A] prose-headings:font-bold
-                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-[#B89555]/20 prose-h2:pb-2
-                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-                prose-p:text-[#1A1A1A]/70 prose-p:leading-relaxed prose-p:mb-5
-                prose-strong:text-[#1A1A1A]
-                prose-a:text-[#1A1A1A] prose-a:no-underline hover:prose-a:underline
-                prose-li:text-[#1A1A1A]/70
-                prose-img:rounded-xl prose-img:my-8 prose-img:shadow-lg
-                prose-table:border-collapse prose-table:w-full
-                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-[#1A1A1A]/70 prose-th:border prose-th:border-[#B89555]/20
-                prose-td:p-3 prose-td:border prose-td:border-[#B89555]/10 prose-td:text-sm"
+              className="prose prose-lg max-w-none text-[#1A1A1A] leading-relaxed prose-headings:text-[#1A1A1A] prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-[#B89555]/20 prose-h2:pb-2 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-[#1A1A1A]/70 prose-p:leading-relaxed prose-p:mb-5 prose-strong:text-[#1A1A1A] prose-a:text-[#1A1A1A] prose-a:no-underline hover:prose-a:underline prose-li:text-[#1A1A1A]/70 prose-img:rounded-xl prose-img:my-8 prose-img:shadow-lg prose-table:border-collapse prose-table:w-full prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-[#1A1A1A]/70 prose-th:border prose-th:border-[#B89555]/20 prose-td:p-3 prose-td:border prose-td:border-[#B89555]/10 prose-td:text-sm"
             />
 
             {/* AI Analysis Section - Green Theme */}
             {analysisPoints.length > 0 && (
-              <div className="mt-12 pt-8 border-t border-emerald-200">
-                <div className="bg-gradient-to-r from-emerald-50 to-emerald-100/80 rounded-xl p-4 mb-6 border border-emerald-200 flex items-center gap-3">
-                  <Sparkles className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                  <p className="text-emerald-800 font-medium text-sm">
+              <div className="mt-12 pt-8 border-t border-[color:var(--emerald-1)]/30">
+                <div className="bg-gradient-to-r from-emerald-50 to-emerald-100/80 rounded-xl p-4 mb-6 border border-[color:var(--emerald-1)]/30 flex items-center gap-3">
+                  <Sparkles className="w-5 h-5 text-[color:var(--emerald-1)] flex-shrink-0" />
+                  <p className="text-[color:var(--emerald-1)] font-medium text-sm">
                     Learn more how this affects Dubai real estate market with our AI News Analyzer
                   </p>
                 </div>
 
-                <div className="bg-emerald-50 rounded-xl p-6 md:p-8 border border-emerald-200">
+                <div className="jj-emerald-soft rounded-xl p-6 md:p-8 border border-[color:var(--emerald-1)]/30">
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center">
-                      <TrendingUp className="w-5 h-5 text-emerald-600" />
+                    <div className="w-10 h-10 rounded-lg jj-emerald-soft border border-[color:var(--emerald-1)]/30 flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-[color:var(--emerald-1)]" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-emerald-900">
+                      <h3 className="text-lg font-bold text-[color:var(--emerald-1)]">
                         How This Affects Dubai Real Estate
                       </h3>
-                      <p className="text-xs text-emerald-600">AI-powered market impact analysis</p>
+                      <p className="text-xs text-[color:var(--emerald-1)]">AI-powered market impact analysis</p>
                     </div>
                   </div>
                   <div className="space-y-3">
                     {analysisPoints.map((point, i) => (
                       <div key={i} className="flex gap-3 items-start">
                         <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-emerald-800 text-sm leading-relaxed">{point}</p>
+                        <p className="text-[color:var(--emerald-1)] text-sm leading-relaxed">{point}</p>
                       </div>
                     ))}
                   </div>
@@ -398,7 +387,7 @@ const NewsDetail = () => {
                       <span className="text-sm font-bold text-[#1A1A1A]">~{ytd2026Data.cash.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-[#EFE6D6] rounded-full h-2">
-                      <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${(ytd2026Data.cash / (ytd2026Data.cash + ytd2026Data.mortgage) * 100).toFixed(0)}%` }} />
+                      <div className="jj-emerald-solid rounded-full h-2" style={{ width: `${(ytd2026Data.cash / (ytd2026Data.cash + ytd2026Data.mortgage) * 100).toFixed(0)}%` }} />
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-[#1A1A1A]/70">Mortgage</span>
@@ -431,7 +420,7 @@ const NewsDetail = () => {
                       <span className="text-[#1A1A1A]/70 font-medium text-sm w-4 text-right">{i + 1}</span>
                       <span className="text-sm font-medium text-[#1A1A1A] flex-1">{area.area}</span>
                       <span className="text-sm font-bold text-[#1A1A1A]">{area.transactions.toLocaleString()}</span>
-                      <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
+                      <span className="text-xs text-[color:var(--emerald-1)] font-medium jj-emerald-soft px-2 py-0.5 rounded-full">{area.change}</span>
                     </div>
                   ))}
                 </div>

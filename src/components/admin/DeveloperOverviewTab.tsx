@@ -113,7 +113,7 @@ export default function DeveloperOverviewTab() {
         </Card>
         <Card className="border-[#B89555]/20">
           <CardContent className="pt-5">
-            <div className="text-2xl font-bold text-emerald-600">{projects.filter(p => p.is_published).length}</div>
+            <div className="text-2xl font-bold text-[color:var(--emerald-1)]">{projects.filter(p => p.is_published).length}</div>
             <p className="text-sm text-muted-foreground">Published</p>
           </CardContent>
         </Card>

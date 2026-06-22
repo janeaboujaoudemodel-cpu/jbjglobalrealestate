@@ -443,7 +443,7 @@ export default function TrainingManagement() {
                       )}
                       {assignment.promoted_to_elite_at && (
                         <div className="text-right mr-4">
-                          <p className="text-xs text-emerald-600 flex items-center gap-1">
+                          <p className="text-xs text-[color:var(--emerald-1)] flex items-center gap-1">
                             <CheckCircle className="h-3 w-3" />
                             Promoted {new Date(assignment.promoted_to_elite_at).toLocaleDateString()}
                           </p>

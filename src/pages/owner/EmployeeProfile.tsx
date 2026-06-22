@@ -145,7 +145,7 @@ export default function EmployeeProfile() {
                 </Badge>
               )}
               <Badge variant="outline" className={profile.employment_status === "active"
-                ? "border-emerald-500/40 text-emerald-700 bg-emerald-50"
+                ? "border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] jj-emerald-soft"
                 : "border-red-400/50 text-red-700 bg-red-50"}>
                 {profile.employment_status}
               </Badge>
@@ -161,7 +161,7 @@ export default function EmployeeProfile() {
 
       {/* Activity KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Kpi label="Calls (30d)" v={activity?.calls_30d ?? 0} icon={<Phone className="h-5 w-5 text-emerald-600" />} />
+        <Kpi label="Calls (30d)" v={activity?.calls_30d ?? 0} icon={<Phone className="h-5 w-5 text-[color:var(--emerald-1)]" />} />
         <Kpi label="Chats (30d)" v={activity?.chats_30d ?? 0} icon={<MessageSquare className="h-5 w-5 text-blue-600" />} />
         <Kpi label="Leads Assigned" v={activity?.leads_assigned ?? 0} icon={<TrendingUp className="h-5 w-5 text-[#1A1A1A]" />} />
         <Kpi label="Tasks Completed" v={activity?.tasks_completed ?? 0} icon={<Target className="h-5 w-5 text-amber-600" />} />

@@ -113,7 +113,7 @@ export default function DocumentsManager({ documents, onUpdate }: DocumentsManag
                       autoFocus
                     />
                     <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => saveEdit(doc.id)}>
-                      <Check className="w-3.5 h-3.5 text-green-600" />
+                      <Check className="w-3.5 h-3.5 text-[color:var(--emerald-1)]" />
                     </Button>
                     <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setEditingId(null)}>
                       <XCircle className="w-3.5 h-3.5 text-red-500" />

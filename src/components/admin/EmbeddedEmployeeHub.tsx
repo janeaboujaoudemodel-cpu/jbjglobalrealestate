@@ -110,14 +110,14 @@ export function EmbeddedEmployeeHub() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-[#FDFBF7] border-2 border-green-500/30">
+          <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30/30">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#1A1A1A]/70 text-xs">Online Now</p>
-                  <p className="text-2xl font-bold text-green-600">{onlineCount}</p>
+                  <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{onlineCount}</p>
                 </div>
-                <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 jj-emerald-solid/10 rounded-lg flex items-center justify-center">
                   <Users className="w-5 h-5 text-green-500" />
                 </div>
               </div>
@@ -203,7 +203,7 @@ export function EmbeddedEmployeeHub() {
                 className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/60 hover:shadow-lg transition-all duration-300 h-full relative overflow-hidden ${isTopPerformer ? 'ring-2 ring-gold' : ''}`}
               >
                 {newJoinerLabel && (
-                  <div className="absolute top-0 left-0 bg-gradient-to-br from-emerald-500 to-green-600 text-white px-2 py-0.5 text-[10px] font-bold flex items-center gap-1 rounded-br-lg z-10">
+                  <div className="absolute top-0 left-0 bg-gradient-to-br text-white px-2 py-0.5 text-[10px] font-bold flex items-center gap-1 rounded-br-lg z-10">
                     <Sparkles className="h-2.5 w-2.5" />
                     {newJoinerLabel}
                   </div>
@@ -258,7 +258,7 @@ export function EmbeddedEmployeeHub() {
                   </div>
                   
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#B89555]/20">
-                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#FDFBF7]'}`}>
+                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-1)] jj-emerald-soft' : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#FDFBF7]'}`}>
                       {member.status === 'online' ? '● Online' : '○ Away'}
                     </Badge>
                     

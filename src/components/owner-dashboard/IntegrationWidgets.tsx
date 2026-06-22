@@ -124,7 +124,7 @@ export default function IntegrationWidgets() {
             className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
             onClick={() => navigate('/owner/crm?entity=leads&view=tasks&action=new')}
           >
-            <Plus className="h-4 w-4 text-emerald-600" />
+            <Plus className="h-4 w-4 text-[color:var(--emerald-1)]" />
             <span className="text-sm">Add Quick Task</span>
           </Button>
           
@@ -142,7 +142,7 @@ export default function IntegrationWidgets() {
             onClick={() => navigate('/automations')}
           >
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="w-2 h-2 rounded-full jj-emerald-solid animate-pulse" />
               <span className="text-sm text-[#1A1A1A]/70">Active Automations</span>
             </div>
             <span className="text-sm font-medium text-[#B89555]">

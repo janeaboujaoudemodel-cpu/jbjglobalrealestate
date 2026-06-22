@@ -157,12 +157,12 @@ export default function AcademyGraduates() {
                 )}
 
                 {lookupResult && (
-                  <div className="mt-3 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <div className="mt-3 p-4 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       {lookupResult.is_revoked ? (
                         <Badge className="bg-red-500 text-white"><XCircle className="w-3 h-3 mr-1" /> REVOKED</Badge>
                       ) : (
-                        <Badge className="bg-emerald-500 text-white"><CheckCircle className="w-3 h-3 mr-1" /> ACTIVE</Badge>
+                        <Badge className="jj-emerald-solid text-white"><CheckCircle className="w-3 h-3 mr-1" /> ACTIVE</Badge>
                       )}
                     </div>
                     <p className="font-semibold text-[#1A1A1A]">{lookupResult.full_name}</p>

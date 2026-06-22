@@ -179,7 +179,7 @@ const EmployeeCard = ({
           
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#B89555]/20">
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#FDFBF7]'}`}>
+              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-1)] jj-emerald-soft' : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#FDFBF7]'}`}>
                 {member.status === 'online' ? '● Online' : '○ Away'}
               </Badge>
               {member.nationality && (
@@ -371,8 +371,8 @@ const EmployeeHub = () => {
                   <p className="text-3xl font-bold text-[#1A1A1A]">{totalEmployees}</p>
                   <p className="text-[#1A1A1A]/70 text-sm">Team Members</p>
                 </div>
-                <div className="text-center bg-[#FDFBF7]/80 border-2 border-green-500/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
-                  <p className="text-3xl font-bold text-green-600">{onlineCount}</p>
+                <div className="text-center bg-[#FDFBF7]/80 border-2 border-[color:var(--emerald-1)]/30/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+                  <p className="text-3xl font-bold text-[color:var(--emerald-1)]">{onlineCount}</p>
                   <p className="text-[#1A1A1A]/70 text-sm">Online Now</p>
                 </div>
                 <div className="text-center bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">

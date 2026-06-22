@@ -53,7 +53,7 @@ const STATUS_CONFIG = {
   pending_review: { label: 'Pending Review', color: 'bg-orange-500', icon: Clock },
   it_processing: { label: 'IT Processing', color: 'bg-blue-500', icon: AlertCircle },
   webdev_update: { label: 'Web Dev Update', color: 'bg-purple-500', icon: Edit },
-  completed: { label: 'Completed', color: 'bg-green-500', icon: CheckCircle },
+  completed: { label: 'Completed', color: 'jj-emerald-solid', icon: CheckCircle },
   rejected: { label: 'Rejected', color: 'bg-red-500', icon: XCircle }
 };
 
@@ -320,7 +320,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                             )}
                             {application.status === 'webdev_update' && (
                               <DropdownMenuItem 
-                                className="text-green-600 hover:bg-[#EFE6D6]/10"
+                                className="text-[color:var(--emerald-1)] hover:bg-[#EFE6D6]/10"
                                 onClick={() => handleStatusChange(application.id, 'completed')}
                               >
                                 <CheckCircle className="w-4 h-4 mr-2" /> Mark Complete

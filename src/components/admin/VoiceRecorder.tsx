@@ -185,13 +185,13 @@ const VoiceRecorder = () => {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-[#1A1A1A]/60">Recording Progress</span>
-            <span className={totalDuration >= 180 ? "text-green-600" : "text-[#1A1A1A]"}>
+            <span className={totalDuration >= 180 ? "text-[color:var(--emerald-1)]" : "text-[#1A1A1A]"}>
               {formatTime(totalDuration)} / 3:00 min
             </span>
           </div>
           <Progress value={progressPercent} className="h-2" />
           {totalDuration >= 180 && (
-            <p className="text-green-600 text-sm flex items-center gap-1">
+            <p className="text-[color:var(--emerald-1)] text-sm flex items-center gap-1">
               <CheckCircle className="w-4 h-4" />
               You have enough audio! You can record more for better quality.
             </p>

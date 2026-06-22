@@ -344,8 +344,8 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
                 <span
                   key={idx}
                   className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                    idx === currentImageIndex ? "bg-overlay" : "bg-overlay/50"
-                  }`}
+ idx === currentImageIndex ? "bg-overlay" : "bg-overlay/50"
+ }`}
                 />
               ))}
             </div>
@@ -471,7 +471,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
               onClick={handleApprove}
               disabled={isApproving || isIncomplete}
               size="sm"
-              className="flex-1 gap-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="flex-1 gap-1 jj-emerald-solid hover:jj-emerald-solid text-white"
               title={isIncomplete ? "Complete extraction first" : "Approve and add to listings"}
             >
               {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}

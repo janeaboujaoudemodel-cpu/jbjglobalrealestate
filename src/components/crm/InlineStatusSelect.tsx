@@ -73,11 +73,11 @@ export default function InlineStatusSelect({
       >
         {(['positive','neutral','negative'] as const).map((cat) => {
           const headerClass =
-            cat === 'positive' ? 'text-emerald-700'
+            cat === 'positive' ? 'text-[color:var(--emerald-1)]'
             : cat === 'negative' ? 'text-red-700'
             : 'text-blue-700';
           const headerDot =
-            cat === 'positive' ? 'bg-emerald-500'
+            cat === 'positive' ? 'jj-emerald-solid'
             : cat === 'negative' ? 'bg-red-500'
             : 'bg-blue-500';
           const label = cat[0].toUpperCase() + cat.slice(1);

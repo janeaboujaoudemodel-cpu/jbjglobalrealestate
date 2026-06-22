@@ -53,8 +53,8 @@ const CVRankingCard = ({
 }: CVRankingCardProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-green-600 text-white';
-      case 'shortlisted': return 'bg-emerald-600 text-white';
+      case 'approved': return 'jj-emerald-solid text-white';
+      case 'shortlisted': return 'jj-emerald-solid text-white';
       case 'interview_scheduled': return 'bg-blue-600 text-white';
       case 'interviewed': return 'bg-indigo-600 text-white';
       case 'analyzed': return 'bg-purple-600 text-white';
@@ -233,7 +233,7 @@ const CVRankingCard = ({
                 <Button
                   size="sm"
                   onClick={() => onUpdateStatus(candidate.id, 'approved')}
-                  className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                  className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs"
                 >
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Approve

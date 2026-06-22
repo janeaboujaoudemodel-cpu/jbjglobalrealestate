@@ -143,7 +143,7 @@ const BEDROOM_OPTIONS = [
 
 const STATUS_OPTIONS: { value: string; label: string; dotClass: string }[] = [
   { value: 'Announced', label: 'Announced', dotClass: 'bg-pink-400' },
-  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'bg-green-400' },
+  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-emerald-solid' },
   { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-blue-400' },
   { value: 'On Sale', label: 'On Sale', dotClass: 'bg-yellow-400' },
   { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-red-500' },

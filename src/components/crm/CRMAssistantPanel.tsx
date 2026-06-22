@@ -483,7 +483,7 @@ ${COMPANY_CONTACTS.email}`;
                 className="w-10 h-10 rounded-full border-2 border-[#B89555] bg-[#FDFBF7]"
                 style={{ objectFit: "cover", objectPosition: "center 15%" }}
               />
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 jj-emerald-solid rounded-full border-2 border-white" />
             </div>
             <div>
               <span className="text-lg font-bold text-[#1A1A1A]">{ASSISTANT_IDENTITY.name}</span>
@@ -518,11 +518,11 @@ ${COMPANY_CONTACTS.email}`;
             <div className="grid grid-cols-4 gap-2">
               <Button
                 variant="secondary"
-                className="flex flex-col items-center gap-1 h-auto py-3 border-green-200 hover:bg-green-50"
+                className="flex flex-col items-center gap-1 h-auto py-3 border-[color:var(--emerald-1)]/30 hover:jj-emerald-soft"
                 onClick={handleWhatsAppFounder}
               >
-                <MessageSquare className="h-5 w-5 text-green-600" />
-                <span className="text-xs text-green-600">WhatsApp</span>
+                <MessageSquare className="h-5 w-5 text-[color:var(--emerald-1)]" />
+                <span className="text-xs text-[color:var(--emerald-1)]">WhatsApp</span>
               </Button>
               <Button
                 variant="secondary"
@@ -666,19 +666,19 @@ ${COMPANY_CONTACTS.email}`;
                       <div 
                         key={task.id}
                         className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
-                          task.completed 
-                            ? "bg-muted/20 border-border opacity-60" 
-                            : task.priority === 'high' 
-                              ? "bg-red-500/10 border-red-500/30"
-                              : task.priority === 'medium'
-                                ? "bg-amber-500/10 border-amber-500/30"
-                                : "bg-muted/30 border-border"
-                        }`}
+ task.completed 
+ ? "bg-muted/20 border-border opacity-60" 
+ : task.priority === 'high' 
+ ? "bg-red-500/10 border-red-500/30"
+ : task.priority === 'medium'
+ ? "bg-amber-500/10 border-amber-500/30"
+ : "bg-muted/30 border-border"
+ }`}
                       >
                         <Checkbox
                           checked={task.completed}
                           onCheckedChange={() => toggleTask(task.id)}
-                          className="border-muted-foreground data-[state=checked]:bg-green-600"
+                          className="border-muted-foreground data-[state=checked]:jj-emerald-solid"
                         />
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm ${task.completed ? "line-through text-muted-foreground" : "text-white"}`}>
@@ -686,10 +686,10 @@ ${COMPANY_CONTACTS.email}`;
                           </p>
                           <div className="flex items-center gap-2 mt-1">
                             <Badge variant="outline" className={`text-xs ${
-                              task.priority === 'high' ? "border-red-500/50 text-red-400" :
-                              task.priority === 'medium' ? "border-amber-500/50 text-[#1A1A1A]" :
-                              "border-muted-foreground text-muted-foreground"
-                            }`}>
+ task.priority === 'high' ? "border-red-500/50 text-red-400" :
+ task.priority === 'medium' ? "border-amber-500/50 text-[#1A1A1A]" :
+ "border-muted-foreground text-muted-foreground"
+ }`}>
                               {task.priority}
                             </Badge>
                             {task.dueDate && (
@@ -747,7 +747,7 @@ ${COMPANY_CONTACTS.email}`;
                             ))}
                           </div>
                         </div>
-                        <Badge className={employee.is_active ? "bg-green-600" : "bg-muted"}>
+                        <Badge className={employee.is_active ? "jj-emerald-solid" : "bg-muted"}>
                           {employee.is_active ? "Active" : "Inactive"}
                         </Badge>
                       </div>
@@ -777,8 +777,8 @@ ${COMPANY_CONTACTS.email}`;
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-lg ${
-                            draft.draft_type === "whatsapp" ? "bg-green-500/20" : "bg-blue-500/20"
-                          }`}>
+ draft.draft_type === "whatsapp" ? "jj-emerald-solid/20" : "bg-blue-500/20"
+ }`}>
                             {draft.draft_type === "whatsapp" ? (
                               <MessageSquare className="h-4 w-4 text-green-400" />
                             ) : (
@@ -842,7 +842,7 @@ ${COMPANY_CONTACTS.email}`;
                 <div className="flex items-center gap-2">
                   <Badge className={
                     selectedDraft.draft_type === "whatsapp" 
-                      ? "bg-green-600" 
+                      ? "jj-emerald-solid" 
                       : "bg-blue-600"
                   }>
                     {selectedDraft.draft_type === "whatsapp" ? "WhatsApp" : "Email"}
@@ -871,9 +871,9 @@ ${COMPANY_CONTACTS.email}`;
                 </div>
 
                 {/* Security Note */}
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 flex items-start gap-2">
+                <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3 flex items-start gap-2">
                   <Shield className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
-                  <p className="text-xs text-green-300">
+                  <p className="text-xs text-[color:var(--emerald-on)]">
                     This message uses official JBJ Global Real Estate contact information only. 
                     No personal broker details are exposed.
                   </p>
@@ -890,7 +890,7 @@ ${COMPANY_CONTACTS.email}`;
                     Reject
                   </Button>
                   <Button 
-                    className="flex-1 bg-green-600 hover:bg-green-700"
+                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid"
                     onClick={() => handleApproveDraft(selectedDraft)}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />

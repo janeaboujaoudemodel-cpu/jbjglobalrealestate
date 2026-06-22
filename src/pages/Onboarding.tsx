@@ -170,7 +170,7 @@ export default function Onboarding() {
       case "pending":
         return <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/40"><Clock className="w-3 h-3 mr-1" /> Pending Review</Badge>;
       case "approved":
-        return <Badge className="bg-green-500/20 text-green-600 border border-green-500/40"><CheckCircle className="w-3 h-3 mr-1" /> Approved</Badge>;
+        return <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30/40"><CheckCircle className="w-3 h-3 mr-1" /> Approved</Badge>;
       case "rejected":
         return <Badge className="bg-red-500/20 text-red-600 border border-red-500/40"><XCircle className="w-3 h-3 mr-1" /> Rejected</Badge>;
       default:
@@ -396,8 +396,8 @@ export default function Onboarding() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                          }`}>
+ bestAttempt?.passed ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
+ }`}>
                             {bestAttempt?.passed ? (
                               <CheckCircle className="h-5 w-5" />
                             ) : (
@@ -443,8 +443,8 @@ export default function Onboarding() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                          }`}>
+ bestAttempt?.passed ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
+ }`}>
                             {bestAttempt?.passed ? (
                               <CheckCircle className="h-5 w-5" />
                             ) : (

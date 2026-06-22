@@ -132,8 +132,8 @@ export default function BookDownloadDialog({
       <DialogContent className="max-w-md p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-[#B89555]/50 overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35)]">
         {isSuccess ? (
           <div className="p-8 text-center space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 mx-auto rounded-full jj-emerald-soft flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-[color:var(--emerald-1)]" />
             </div>
             <DialogTitle className="text-xl font-bold text-[#1A1A1A]">Opening Your Book!</DialogTitle>
             <p className="text-[#1A1A1A]/60 text-sm">

@@ -110,12 +110,12 @@ export default function BrokerAdminAssistant() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-[#0A0A0A] rounded-full animate-pulse" />
+                  <span className="absolute bottom-0 right-0 w-4 h-4 jj-emerald-solid border-2 border-[#0A0A0A] rounded-full animate-pulse" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                     Sarah Thompson
-                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
+                    <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">
                       Broker's Admin
                     </Badge>
                   </h1>
@@ -126,13 +126,13 @@ export default function BrokerAdminAssistant() {
               <div className="flex items-center gap-3">
                 <Button 
                   variant="outline" 
-                  className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10"
+                  className="border-[color:var(--emerald-1)]/30/30 text-emerald-400 hover:jj-emerald-solid/10"
                   onClick={() => navigate("/jbj-broker-admin")}
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Broker Owner Panel
                 </Button>
-                <button className="relative p-3 rounded-full bg-[#1A1A1A] border border-emerald-500/20 hover:border-emerald-500/40 transition-all">
+                <button className="relative p-3 rounded-full bg-[#1A1A1A] border border-[color:var(--emerald-1)]/30/20 hover:border-[color:var(--emerald-1)]/30/40 transition-all">
                   <Bell className="h-5 w-5 text-emerald-400" />
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center font-bold">
                     4
@@ -144,7 +144,7 @@ export default function BrokerAdminAssistant() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <Card className="bg-[#0E0E0E] border-emerald-500/20">
+            <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs text-[#1A1A1A]/70">👥 Total Brokers</p>
@@ -153,7 +153,7 @@ export default function BrokerAdminAssistant() {
                 <Users className="h-8 w-8 text-emerald-500/60" />
               </CardContent>
             </Card>
-            <Card className="bg-[#0E0E0E] border-green-500/20">
+            <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs text-[#1A1A1A]/70">✅ Active</p>
@@ -184,59 +184,59 @@ export default function BrokerAdminAssistant() {
 
           {/* Main Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full bg-[#0E0E0E] border border-emerald-500/20 p-1 rounded-lg mb-6 flex flex-wrap gap-1">
+            <TabsList className="w-full bg-[#0E0E0E] border border-[color:var(--emerald-1)]/30/20 p-1 rounded-lg mb-6 flex flex-wrap gap-1">
               <TabsTrigger 
                 value="dashboard" 
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Dashboard
               </TabsTrigger>
               <TabsTrigger 
                 value="onboarding"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <UserPlus className="h-4 w-4 mr-2" />
                 Onboarding
               </TabsTrigger>
               <TabsTrigger 
                 value="compliance"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <Shield className="h-4 w-4 mr-2" />
                 Compliance
               </TabsTrigger>
               <TabsTrigger 
                 value="directory"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Broker Directory
               </TabsTrigger>
               <TabsTrigger 
                 value="training"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <GraduationCap className="h-4 w-4 mr-2" />
                 Training
               </TabsTrigger>
               <TabsTrigger 
                 value="communications"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Communications
               </TabsTrigger>
               <TabsTrigger 
                 value="documents"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Documents
               </TabsTrigger>
               <TabsTrigger 
                 value="schedule"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-emerald-500"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
               >
                 <Calendar className="h-4 w-4 mr-2" />
                 Schedule
@@ -253,7 +253,7 @@ export default function BrokerAdminAssistant() {
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Quick Actions */}
-                    <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                    <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
                           <Briefcase className="h-5 w-5 text-emerald-400" />
@@ -281,7 +281,7 @@ export default function BrokerAdminAssistant() {
                     </Card>
 
                     {/* Pending Onboarding */}
-                    <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                    <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
                           <UserPlus className="h-5 w-5 text-yellow-400" />
@@ -306,7 +306,7 @@ export default function BrokerAdminAssistant() {
                                   </Badge>
                                 </div>
                                 <div className="flex items-center gap-2 mt-2">
-                                  <Button size="sm" variant="ghost" className="text-emerald-400 hover:bg-emerald-500/10" onClick={() => handleSendMessage(broker)}>
+                                  <Button size="sm" variant="ghost" className="text-emerald-400 hover:jj-emerald-solid/10" onClick={() => handleSendMessage(broker)}>
                                     <Phone className="h-3 w-3 mr-1" />
                                     Contact
                                   </Button>
@@ -322,7 +322,7 @@ export default function BrokerAdminAssistant() {
                     </Card>
 
                     {/* Recent Activity */}
-                    <Card className="bg-[#0E0E0E] border-emerald-500/20 lg:col-span-2">
+                    <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20 lg:col-span-2">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
                           <BarChart3 className="h-5 w-5 text-emerald-400" />
@@ -332,7 +332,7 @@ export default function BrokerAdminAssistant() {
                       <CardContent>
                         <div className="space-y-3">
                           <div className="flex items-center gap-3 p-3 bg-[#FDFBF7] rounded-lg">
-                            <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-full jj-emerald-solid/20 flex items-center justify-center">
                               <UserPlus className="h-5 w-5 text-emerald-400" />
                             </div>
                             <div className="flex-1">
@@ -368,7 +368,7 @@ export default function BrokerAdminAssistant() {
               {/* Other tabs with placeholder content */}
               <TabsContent value="onboarding" className="mt-0">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                  <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                     <CardHeader>
                       <CardTitle className="text-white">Broker Onboarding Pipeline</CardTitle>
                     </CardHeader>
@@ -385,7 +385,7 @@ export default function BrokerAdminAssistant() {
                             </div>
                             <p className="text-sm text-[#1A1A1A]/70">Start Date: {broker.startDate}</p>
                             <div className="flex gap-2 mt-3">
-                              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+                              <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid">
                                 Continue Onboarding
                               </Button>
                               <Button size="sm" variant="outline" className="border-[#1A1A1A]">
@@ -402,7 +402,7 @@ export default function BrokerAdminAssistant() {
 
               <TabsContent value="compliance" className="mt-0">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                  <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                     <CardHeader>
                       <CardTitle className="text-white">RERA & Compliance Management</CardTitle>
                     </CardHeader>
@@ -415,7 +415,7 @@ export default function BrokerAdminAssistant() {
 
               <TabsContent value="directory" className="mt-0">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                  <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                     <CardHeader>
                       <CardTitle className="text-white flex items-center justify-between">
                         <span>Broker Directory</span>
@@ -436,7 +436,7 @@ export default function BrokerAdminAssistant() {
 
               <TabsContent value="training" className="mt-0">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                  <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                     <CardHeader>
                       <CardTitle className="text-white">Training & Certification</CardTitle>
                     </CardHeader>
@@ -449,7 +449,7 @@ export default function BrokerAdminAssistant() {
 
               <TabsContent value="communications" className="mt-0">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                  <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                     <CardHeader>
                       <CardTitle className="text-white">Broker Communications</CardTitle>
                     </CardHeader>
@@ -462,7 +462,7 @@ export default function BrokerAdminAssistant() {
 
               <TabsContent value="documents" className="mt-0">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                  <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                     <CardHeader>
                       <CardTitle className="text-white">Document Management</CardTitle>
                     </CardHeader>
@@ -475,7 +475,7 @@ export default function BrokerAdminAssistant() {
 
               <TabsContent value="schedule" className="mt-0">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <Card className="bg-[#0E0E0E] border-emerald-500/20">
+                  <Card className="bg-[#0E0E0E] border-[color:var(--emerald-1)]/30/20">
                     <CardHeader>
                       <CardTitle className="text-white">Scheduling & Appointments</CardTitle>
                     </CardHeader>

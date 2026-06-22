@@ -63,7 +63,7 @@ export default function QuickFactsBar({
   const getStatusColor = (status?: string | null) => {
     if (!status) return "bg-red-50 text-red-600 border-red-200";
     const s = status.toLowerCase();
-    if (s.includes("available") || s.includes("selling")) return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
+    if (s.includes("available") || s.includes("selling")) return "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30";
     if (s.includes("limited") || s.includes("few")) return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
     if (s.includes("sold") || s.includes("out")) return "bg-red-500/20 text-red-400 border-red-500/30";
     if (s.includes("launch") || s.includes("soon") || s.includes("new")) return "bg-blue-500/20 text-blue-400 border-blue-500/30";

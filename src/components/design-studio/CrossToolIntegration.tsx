@@ -48,7 +48,7 @@ const CONNECTED_TOOLS = [
     description: 'Generate contracts and agreements',
     icon: FileText,
     path: '/documents',
-    color: 'from-emerald-500 to-teal-500',
+    color: ' ',
     capabilities: ['Contracts', 'Agreements', 'Forms'],
   },
   {

@@ -15,7 +15,7 @@ import { PartyPopper, Plus, Calendar, MapPin, Users, Send, CheckCircle2, Clock, 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   draft: { label: "Draft", className: "bg-muted text-muted-foreground" },
   submitted: { label: "Pending Approval", className: "bg-amber-500/10 text-amber-600" },
-  approved: { label: "Approved", className: "bg-emerald-500/10 text-emerald-600" },
+  approved: { label: "Approved", className: "jj-emerald-solid/10 text-[color:var(--emerald-1)]" },
   rejected: { label: "Rejected", className: "bg-destructive/10 text-destructive" },
 };
 

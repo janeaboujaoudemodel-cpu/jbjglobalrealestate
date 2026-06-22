@@ -253,8 +253,8 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                     key={proj.id}
                     onClick={() => handleSelectProject(proj)}
                     className={`w-full text-left text-xs px-2.5 py-1.5 transition-colors hover:bg-[#1A1A1A] ${
-                      address.startsWith(proj.name) ? 'text-amber-300 bg-amber-400/10' : 'text-[#1A1A1A]/70'
-                    }`}
+ address.startsWith(proj.name) ? 'text-amber-300 bg-amber-400/10' : 'text-[#1A1A1A]/70'
+ }`}
                   >
                     <span className="font-medium">{proj.name}</span>
                     <span className="text-[#1A1A1A]/70 ml-1">· {proj.emirate}</span>
@@ -273,10 +273,10 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                   key={loc.name}
                   onClick={() => handlePreset(loc)}
                   className={`text-left text-[10px] px-2 py-1.5 rounded-md border transition-all leading-tight ${
-                    address === loc.name
-                      ? 'border-amber-400 bg-amber-400/15 text-amber-300'
-                      : 'border-[#1A1A1A] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-amber-400/40 hover:text-white'
-                  }`}
+ address === loc.name
+ ? 'border-amber-400 bg-amber-400/15 text-amber-300'
+ : 'border-[#1A1A1A] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-amber-400/40 hover:text-white'
+ }`}
                 >
                   {loc.name}
                 </button>
@@ -305,10 +305,10 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                     key={anim.id}
                     onClick={() => { setSelectedAnimation(anim); setShowAnimPicker(false); setAnimationComplete(false); }}
                     className={`w-full text-left px-2.5 py-2 rounded-lg border transition-all text-xs ${
-                      selectedAnimation.id === anim.id
-                        ? 'border-amber-400 bg-amber-400/10 text-amber-300'
-                        : 'border-[#1A1A1A] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-amber-400/40'
-                    }`}
+ selectedAnimation.id === anim.id
+ ? 'border-amber-400 bg-amber-400/10 text-amber-300'
+ : 'border-[#1A1A1A] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-amber-400/40'
+ }`}
                   >
                     <div className="font-semibold">{anim.name}</div>
                     <div className="text-[#1A1A1A]/70 mt-0.5">{anim.desc} · {anim.duration}s</div>
@@ -353,7 +353,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
 
               {animationComplete && !isAnimating && (
                 <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                  <div className="flex items-center gap-1.5 bg-[#1A1A1A]/90 px-2 py-1 rounded-full border border-green-500/50">
+                  <div className="flex items-center gap-1.5 bg-[#1A1A1A]/90 px-2 py-1 rounded-full border border-[color:var(--emerald-1)]/30/50">
                     <Check className="w-2.5 h-2.5 text-green-400" />
                     <span className="text-green-400 text-[9px] font-bold">Ready to Insert</span>
                   </div>
@@ -380,10 +380,10 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
           onClick={handleAddToTimeline}
           disabled={!animationComplete}
           className={`flex items-center justify-center gap-1.5 flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
-            animationComplete
-              ? 'border-green-500 text-green-400 bg-green-500/10 hover:bg-green-500/20'
-              : 'border-[#B89555]/30 text-[#1A1A1A]/70 cursor-not-allowed opacity-40'
-          }`}
+ animationComplete
+ ? 'border-[color:var(--emerald-1)]/30 text-green-400 jj-emerald-solid/10 hover:jj-emerald-solid/20'
+ : 'border-[#B89555]/30 text-[#1A1A1A]/70 cursor-not-allowed opacity-40'
+ }`}
         >
           <Plus className="w-3.5 h-3.5" />
           {animationComplete ? 'Insert Clip' : 'Preview first'}

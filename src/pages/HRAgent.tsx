@@ -105,13 +105,13 @@ export default function HRAgent() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800">
+              <Card className="jj-emerald-soft dark:bg-green-950/20 border-[color:var(--emerald-1)]/30 dark:border-green-800">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Shield className="w-5 h-5 text-[color:var(--emerald-1)] flex-shrink-0 mt-0.5" />
                     <div>
-                      <h3 className="font-medium text-green-800 dark:text-green-200">Secure & Private</h3>
-                      <p className="text-sm text-green-700 dark:text-green-300">
+                      <h3 className="font-medium text-[color:var(--emerald-1)] dark:text-[color:var(--emerald-on)]">Secure & Private</h3>
+                      <p className="text-sm text-[color:var(--emerald-1)] dark:text-[color:var(--emerald-on)]">
                         Your data is encrypted and only shared with our HR team
                       </p>
                     </div>

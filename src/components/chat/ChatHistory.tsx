@@ -85,9 +85,9 @@ const ChatHistory = ({
         href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I'd like to chat about my property inquiry.`)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full p-3 mb-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl transition-all duration-300 flex items-center gap-3"
+        className="w-full p-3 mb-4 jj-emerald-solid/10 hover:jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 hover:border-[color:var(--emerald-1)]/30/50 rounded-xl transition-all duration-300 flex items-center gap-3"
       >
-        <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center">
           <MessageCircle className="w-4 h-4 text-white" />
         </div>
         <div className="flex-1">
@@ -159,12 +159,12 @@ const ChatHistory = ({
                     </p>
                     <div className="flex items-center gap-2 mt-1.5">
                       <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                        conv.status === 'active' 
-                          ? 'bg-green-500/20 text-green-400' 
-                          : conv.status === 'submitted_to_team'
-                          ? 'bg-blue-500/20 text-blue-400'
-                          : 'bg-[#1A1A1A] text-[#1A1A1A]/70'
-                      }`}>
+ conv.status === 'active' 
+ ? 'jj-emerald-solid/20 text-green-400' 
+ : conv.status === 'submitted_to_team'
+ ? 'bg-blue-500/20 text-blue-400'
+ : 'bg-[#1A1A1A] text-[#1A1A1A]/70'
+ }`}>
                         {conv.status === 'submitted_to_team' ? <T>With Team</T> : <T>{conv.status}</T>}
                       </span>
                       <span className="text-[#1A1A1A]/70 text-[10px]">

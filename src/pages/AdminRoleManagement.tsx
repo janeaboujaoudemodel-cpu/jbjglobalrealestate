@@ -430,7 +430,7 @@ const AdminRoleManagement = () => {
                     </TableCell>
                     <TableCell>
                       <Badge
-                        className={admin.is_active ? "bg-green-100 text-green-800" : "bg-[#F7F2EA] text-[#1A1A1A]/70"}
+                        className={admin.is_active ? "jj-emerald-soft text-[color:var(--emerald-1)]" : "bg-[#F7F2EA] text-[#1A1A1A]/70"}
                         onClick={() => toggleListingAdminStatus(admin.id, admin.is_active)}
                         style={{ cursor: "pointer" }}
                       >

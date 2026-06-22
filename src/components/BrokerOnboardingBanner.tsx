@@ -180,10 +180,10 @@ const BrokerOnboardingBanner = () => {
                   key={step.id}
                   to={step.link}
                   className={`relative p-3 rounded-xl border transition-all ${
-                    step.completed 
-                      ? 'bg-emerald-500/10 border-emerald-500/30' 
-                      : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#B89555]/50 hover:bg-[#1A1A1A]'
-                  }`}
+ step.completed 
+ ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30' 
+ : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#B89555]/50 hover:bg-[#1A1A1A]'
+ }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     {step.completed ? (

@@ -26,7 +26,7 @@ interface AuditLog {
 }
 
 const ACTION_COLORS: Record<string, string> = {
-  create: "bg-green-100 text-green-700 border-green-200",
+  create: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   read: "bg-blue-100 text-blue-700 border-blue-200",
   update: "bg-yellow-100 text-yellow-700 border-yellow-200",
   delete: "bg-red-100 text-red-700 border-red-200",
@@ -34,10 +34,10 @@ const ACTION_COLORS: Record<string, string> = {
   logout: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30",
   export: "bg-cyan-100 text-cyan-700 border-cyan-200",
   import: "bg-indigo-100 text-indigo-700 border-indigo-200",
-  approve: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  approve: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   reject: "bg-orange-100 text-orange-700 border-orange-200",
   block: "bg-red-100 text-red-700 border-red-200",
-  unblock: "bg-green-100 text-green-700 border-green-200",
+  unblock: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
 };
 
 const RESOURCE_ICONS: Record<string, string> = {

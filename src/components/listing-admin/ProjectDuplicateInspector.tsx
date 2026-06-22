@@ -111,7 +111,7 @@ export function ProjectDuplicateInspector({
   const getSourceBadge = (source: string) => {
     switch (source) {
       case "published":
-        return <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300 text-[10px]">Published</Badge>;
+        return <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[10px]">Published</Badge>;
       case "draft":
         return <Badge className="bg-amber-100 text-amber-800 border-amber-300 text-[10px]">Draft</Badge>;
       case "pending":

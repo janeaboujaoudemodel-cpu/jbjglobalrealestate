@@ -15,7 +15,7 @@ import {
 const REQUEST_TYPE_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   leave_request: { label: 'Leave Request', icon: CalendarDays, color: 'bg-blue-100 text-blue-700' },
   cv_application: { label: 'CV Application', icon: UserPlus, color: 'bg-cyan-100 text-cyan-700' },
-  expense_claim: { label: 'Expense Claim', icon: DollarSign, color: 'bg-emerald-100 text-emerald-700' },
+  expense_claim: { label: 'Expense Claim', icon: DollarSign, color: 'jj-emerald-soft text-[color:var(--emerald-1)]' },
   document_request: { label: 'Document Request', icon: FileText, color: 'bg-purple-100 text-purple-700' },
   salary_advance: { label: 'Salary Advance', icon: DollarSign, color: 'bg-amber-100 text-amber-700' },
   equipment_request: { label: 'Equipment', icon: Briefcase, color: 'bg-muted text-foreground' },
@@ -35,14 +35,14 @@ const StageIndicator = ({ request }: { request: ApprovalRequest }) => {
         <div key={stage.num} className="flex items-center">
           <div 
             className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-              stage.status === 'approved' 
-                ? 'bg-emerald-500 text-white' 
-                : stage.status === 'rejected'
-                ? 'bg-red-500 text-white'
-                : request.current_stage === stage.num
-                ? 'bg-amber-500 text-white'
-                : 'bg-muted text-muted-foreground'
-            }`}
+ stage.status === 'approved' 
+ ? 'jj-emerald-solid text-white' 
+ : stage.status === 'rejected'
+ ? 'bg-red-500 text-white'
+ : request.current_stage === stage.num
+ ? 'bg-amber-500 text-white'
+ : 'bg-muted text-muted-foreground'
+ }`}
           >
             {stage.status === 'approved' ? (
               <CheckCircle className="h-4 w-4" />
@@ -54,8 +54,8 @@ const StageIndicator = ({ request }: { request: ApprovalRequest }) => {
           </div>
           {idx < 2 && (
             <ArrowRight className={`h-4 w-4 mx-1 ${
-              stage.status === 'approved' ? 'text-emerald-500' : 'text-muted-foreground'
-            }`} />
+ stage.status === 'approved' ? 'text-emerald-500' : 'text-muted-foreground'
+ }`} />
           )}
         </div>
       ))}
@@ -66,7 +66,7 @@ const StageIndicator = ({ request }: { request: ApprovalRequest }) => {
 const StatusBadge = ({ status }: { status: string }) => {
   const config: Record<string, { color: string; label: string }> = {
     pending: { color: 'bg-amber-100 text-amber-700', label: 'Pending' },
-    approved: { color: 'bg-emerald-100 text-emerald-700', label: 'Approved' },
+    approved: { color: 'jj-emerald-soft text-[color:var(--emerald-1)]', label: 'Approved' },
     rejected: { color: 'bg-red-100 text-red-700', label: 'Rejected' },
   };
   const cfg = config[status] || config.pending;
@@ -169,7 +169,7 @@ export function ApprovalWorkflowPanel() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-xs">Approved</p>
-                <p className="text-2xl font-bold text-emerald-600">{approvedRequests.length}</p>
+                <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{approvedRequests.length}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500/50" />
             </div>
@@ -294,7 +294,7 @@ export function ApprovalWorkflowPanel() {
                             <div className="flex items-center gap-2">
                               <Button 
                                 size="sm" 
-                                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                                className="jj-emerald-solid hover:jj-emerald-solid text-white"
                                 onClick={() => handleApproval(request, true)}
                               >
                                 <CheckCircle className="h-4 w-4" />

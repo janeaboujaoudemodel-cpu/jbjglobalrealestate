@@ -55,7 +55,7 @@ export const TeamPageVisibilityToggle = () => {
       <CardContent className="space-y-6">
         <div className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7]/60 border border-[#B89555]/20">
           <div className="flex items-center gap-3">
-            {isTeamPageVisible ? <Eye className="w-5 h-5 text-emerald-600" /> : <EyeOff className="w-5 h-5 text-amber-600" />}
+            {isTeamPageVisible ? <Eye className="w-5 h-5 text-[color:var(--emerald-1)]" /> : <EyeOff className="w-5 h-5 text-amber-600" />}
             <div>
               <p className="font-medium text-[#1A1A1A]">
                 {isTeamPageVisible ? "Team page is public" : "Team page is hidden"}
@@ -73,10 +73,10 @@ export const TeamPageVisibilityToggle = () => {
         <Button
           variant="outline"
           className={`w-full border-2 ${
-            isTeamPageVisible
-              ? "border-amber-500 text-amber-700 hover:bg-amber-50"
-              : "border-emerald-500 text-emerald-700 hover:bg-emerald-50"
-          }`}
+ isTeamPageVisible
+ ? "border-amber-500 text-amber-700 hover:bg-amber-50"
+ : "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
+ }`}
           onClick={() => handleToggle(!isTeamPageVisible)}
           disabled={isUpdating}
         >

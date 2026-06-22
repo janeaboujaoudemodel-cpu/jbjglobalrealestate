@@ -492,7 +492,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
     <div className="flex items-center justify-between py-1 px-2 rounded bg-[#F7F2EA]">
       <div className="flex items-center gap-2">
         {passed ? (
-          <CheckCircle className="w-4 h-4 text-emerald-600" />
+          <CheckCircle className="w-4 h-4 text-[color:var(--emerald-1)]" />
         ) : (
           <XCircle className="w-4 h-4 text-red-500" />
         )}
@@ -541,7 +541,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
             {/* Status banners */}
             <div className="flex flex-wrap gap-2">
               {testResult.coreComplete ? (
-                <Badge className="bg-emerald-600 text-white gap-1">
+                <Badge className="jj-emerald-solid text-white gap-1">
                   <Check className="w-3 h-3" />
                   Core Complete — Ready for Bulk
                 </Badge>
@@ -657,7 +657,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                           onClick={handleApproveFromCard}
                           disabled={isApproving || isApproved}
                           size="sm"
-                          className="gap-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                          className="gap-1 jj-emerald-solid hover:jj-emerald-solid text-white"
                         >
                           {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <ThumbsUp className="w-4 h-4" />}
                           Approve
@@ -812,7 +812,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                           <ul className="space-y-1">
                             {testResult.project.usp_bullets.slice(0, 5).map((usp, idx) => (
                               <li key={idx} className="text-xs text-[#1A1A1A]/70 flex items-start gap-1">
-                                <Check className="w-3 h-3 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                <Check className="w-3 h-3 text-[color:var(--emerald-1)] flex-shrink-0 mt-0.5" />
                                 {usp}
                               </li>
                             ))}
@@ -832,7 +832,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                           </div>
                           <div className="flex flex-wrap gap-1">
                             {testResult.project.amenities_list.slice(0, 10).map((amenity, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs bg-green-50 border-green-200 text-green-800">
+                              <Badge key={idx} variant="outline" className="text-xs jj-emerald-soft border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]">
                                 {amenity}
                               </Badge>
                             ))}
@@ -948,7 +948,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
               <div className="flex items-center gap-3 pt-2">
                 <Button
                   onClick={approveTestGate}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
                 >
                   <Check className="w-4 h-4 mr-2" />
                   Approve & Enable Bulk Extraction
@@ -965,11 +965,11 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
             )}
 
             {isApproved && (
-              <div className="rounded-lg bg-emerald-100 border border-emerald-300 p-4 flex items-center gap-3">
-                <Check className="w-5 h-5 text-emerald-600" />
+              <div className="rounded-lg jj-emerald-soft border border-[color:var(--emerald-1)]/30 p-4 flex items-center gap-3">
+                <Check className="w-5 h-5 text-[color:var(--emerald-1)]" />
                 <div>
-                  <div className="font-medium text-emerald-800">Test Approved!</div>
-                  <div className="text-sm text-emerald-700">
+                  <div className="font-medium text-[color:var(--emerald-1)]">Test Approved!</div>
+                  <div className="text-sm text-[color:var(--emerald-1)]">
                     Bulk extraction is now enabled. Go to the "Full Sync" tab and click "Start Bulk Extract".
                   </div>
                 </div>

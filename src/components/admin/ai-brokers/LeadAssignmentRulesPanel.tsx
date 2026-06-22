@@ -211,8 +211,8 @@ export function LeadAssignmentRulesPanel() {
           <Card
             key={rule.id}
             className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 ${
-              !rule.is_active ? "opacity-60" : ""
-            }`}
+ !rule.is_active ? "opacity-60" : ""
+ }`}
           >
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
@@ -227,12 +227,12 @@ export function LeadAssignmentRulesPanel() {
                     <Badge
                       variant="outline"
                       className={`text-xs ${
-                        rule.assignment_method === "round_robin"
-                          ? "border-blue-500 text-blue-600"
-                          : rule.assignment_method === "specific"
-                          ? "border-purple-500 text-purple-600"
-                          : "border-green-500 text-green-600"
-                      }`}
+ rule.assignment_method === "round_robin"
+ ? "border-blue-500 text-blue-600"
+ : rule.assignment_method === "specific"
+ ? "border-purple-500 text-purple-600"
+ : "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]"
+ }`}
                     >
                       {rule.assignment_method?.replace("_", " ")}
                     </Badge>
@@ -270,7 +270,7 @@ export function LeadAssignmentRulesPanel() {
                     onCheckedChange={(checked) =>
                       handleToggleActive(rule.id, checked)
                     }
-                    className="data-[state=checked]:bg-emerald-500"
+                    className="data-[state=checked]:jj-emerald-solid"
                   />
                   <Button
                     variant="ghost"

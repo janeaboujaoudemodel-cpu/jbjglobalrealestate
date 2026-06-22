@@ -104,7 +104,7 @@ const ExternalAccessManagement = () => {
     if (auditor.is_suspended) return <Badge className="bg-red-500/20 text-red-600 border-red-500/40">Suspended</Badge>;
     if (auditor.access_expires_at && new Date(auditor.access_expires_at) < new Date())
       return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/40">Expired</Badge>;
-    return <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/40">Active</Badge>;
+    return <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40">Active</Badge>;
   };
 
   const getDaysRemaining = (expiresAt: string | null) => {
@@ -178,7 +178,7 @@ const ExternalAccessManagement = () => {
                         size="sm"
                         onClick={() => toggleSuspend.mutate({ userId: auditor.user_id, suspend: !auditor.is_suspended })}
                         className={auditor.is_suspended
-                          ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                          ? "jj-emerald-solid hover:jj-emerald-solid text-white"
                           : "bg-red-600 hover:bg-red-700 text-white"
                         }
                       >

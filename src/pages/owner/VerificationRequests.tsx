@@ -50,7 +50,7 @@ interface Verification {
 
 const statusColors: Record<string, string> = {
   pending: "bg-amber-500/10 text-amber-700 border-amber-500/30",
-  approved: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30",
+  approved: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
   rejected: "bg-red-500/10 text-red-700 border-red-500/30",
 };
 
@@ -194,10 +194,10 @@ const VerificationRequests = () => {
               key={f}
               onClick={() => setFilter(f)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all ${
-                filter === f
-                  ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50"
-                  : "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-transparent hover:bg-[#EFE6D6]"
-              }`}
+ filter === f
+ ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50"
+ : "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-transparent hover:bg-[#EFE6D6]"
+ }`}
             >
               {f}
             </button>
@@ -308,7 +308,7 @@ const VerificationRequests = () => {
                               })
                             }
                             disabled={reviewMutation.isPending}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8"
+                            className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs h-8"
                             data-allow-dark-cta
                           >
                             <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Approve

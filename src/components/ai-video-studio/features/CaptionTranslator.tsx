@@ -171,25 +171,25 @@ function StepIndicator({ activeStep, maxStep, onStep }: { activeStep: number; ma
             >
               {/* Circle */}
               <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 transition-all ${
-                current
-                  ? 'bg-amber-500 text-[#1A1A1A] ring-2 ring-amber-400/40'
-                  : done
-                  ? 'bg-emerald-500/30 text-emerald-400 border border-emerald-500/50'
-                  : 'bg-[#1A1A1A] text-[#1A1A1A]/70 border border-[#B89555]/30'
-              }`}>
+ current
+ ? 'bg-amber-500 text-[#1A1A1A] ring-2 ring-amber-400/40'
+ : done
+ ? 'jj-emerald-solid/30 text-emerald-400 border border-[color:var(--emerald-1)]/30/50'
+ : 'bg-[#1A1A1A] text-[#1A1A1A]/70 border border-[#B89555]/30'
+ }`}>
                 {done ? <Check className="w-2.5 h-2.5" /> : step.n}
               </div>
               {/* Label */}
               <span className={`text-[10px] font-semibold whitespace-nowrap hidden sm:inline ${
-                current ? 'text-[#1A1A1A]' : done ? 'text-emerald-400' : 'text-[#1A1A1A]/70'
-              }`}>
+ current ? 'text-[#1A1A1A]' : done ? 'text-emerald-400' : 'text-[#1A1A1A]/70'
+ }`}>
                 {step.label}
               </span>
             </button>
             {idx < STEPS.length - 1 && (
               <div className={`flex-shrink-0 mx-1 h-px transition-all ${
-                step.n < activeStep ? 'w-4 bg-emerald-500/60' : 'w-3 bg-[#1A1A1A]'
-              }`} />
+ step.n < activeStep ? 'w-4 jj-emerald-solid/60' : 'w-3 bg-[#1A1A1A]'
+ }`} />
             )}
           </React.Fragment>
         );
@@ -704,10 +704,10 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       key={lang.code}
                       onClick={() => setSpokenLanguage(lang.code)}
                       className={`flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-left transition-colors ${
-                        spokenLanguage === lang.code
-                          ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40'
-                          : 'bg-[#1A1A1A]/50 text-[#1A1A1A]/70 hover:bg-[#1A1A1A] border border-transparent'
-                      }`}
+ spokenLanguage === lang.code
+ ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40'
+ : 'bg-[#1A1A1A]/50 text-[#1A1A1A]/70 hover:bg-[#1A1A1A] border border-transparent'
+ }`}
                     >
                       <span>{FLAG_EMOJIS[lang.code] || '🏳️'}</span>
                       <span className="truncate">{lang.name}</span>
@@ -807,10 +807,10 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       key={lang.code}
                       onClick={() => setSelectedLang(lang.code)}
                       className={`flex items-center gap-1 px-1.5 py-1.5 rounded text-[10px] text-left transition-colors ${
-                        selectedLang === lang.code
-                          ? 'bg-amber-500/25 text-[#1A1A1A] border border-amber-500/50'
-                          : 'bg-[#1A1A1A]/50 text-[#1A1A1A]/70 hover:bg-[#1A1A1A] border border-transparent'
-                      }`}
+ selectedLang === lang.code
+ ? 'bg-amber-500/25 text-[#1A1A1A] border border-amber-500/50'
+ : 'bg-[#1A1A1A]/50 text-[#1A1A1A]/70 hover:bg-[#1A1A1A] border border-transparent'
+ }`}
                     >
                       <span className="flex-shrink-0">{FLAG_EMOJIS[lang.code] || '🏳️'}</span>
                       <span className="truncate">{lang.name}</span>

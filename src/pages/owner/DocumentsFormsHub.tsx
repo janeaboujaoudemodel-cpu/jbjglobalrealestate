@@ -412,7 +412,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               : mode === "generated" ? "Forms Generated"
               : "Draft Application";
             const sCls =
-              mode === "signed" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+              mode === "signed" ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
               : mode === "submitted" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
               : mode === "sent" ? "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/60"
               : mode === "deleted" ? "bg-red-50 text-red-800 border-red-200"

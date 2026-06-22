@@ -36,11 +36,11 @@ const CHARACTERS: Character[] = [
   { id: "sarah",   name: "Sarah",   title: "Luxury Specialist",  avatar: "S", gender: "female",  style: "Professional & friendly",   color: "from-rose-500 to-pink-600",    elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL" },
   { id: "george",  name: "George",  title: "Senior Advisor",     avatar: "G", gender: "male",    style: "Warm & experienced",         color: "from-blue-500 to-indigo-600",  elevenLabsVoiceId: "JBFqnCBsd6RMkjVDRZzb" },
   { id: "laura",   name: "Laura",   title: "Premium Agent",      avatar: "L", gender: "female",  style: "Luxury & sophisticated",     color: "from-purple-500 to-violet-600",elevenLabsVoiceId: "FGY2WhTYpPnrIDTdsKH5" },
-  { id: "alex",    name: "Alex",    title: "Investment Expert",  avatar: "A", gender: "male",    style: "Confident & authoritative",  color: "from-emerald-500 to-teal-600", elevenLabsVoiceId: "TX3LPaxmHKxFdv7VOQHJ" },
+  { id: "alex",    name: "Alex",    title: "Investment Expert",  avatar: "A", gender: "male",    style: "Confident & authoritative",  color: " ", elevenLabsVoiceId: "TX3LPaxmHKxFdv7VOQHJ" },
   { id: "alice",   name: "Alice",   title: "Modern Broker",      avatar: "A", gender: "female",  style: "Energetic & modern",         color: "from-amber-500 to-orange-600", elevenLabsVoiceId: "Xb7hH8MSUJpSbSDYk0k2" },
   { id: "river",   name: "River",   title: "Prestige Narrator",  avatar: "R", gender: "neutral", style: "Elegant & premium",          color: "from-slate-400 to-gray-600",   elevenLabsVoiceId: "SAz9YHcvj6GT2YYXdXww" },
   { id: "brian",   name: "Brian",   title: "Market Analyst",     avatar: "B", gender: "male",    style: "Deep & trustworthy",         color: "from-cyan-500 to-sky-600",     elevenLabsVoiceId: "onwK4e9ZLuTAKqWW03F9" },
-  { id: "matilda", name: "Matilda", title: "Community Expert",   avatar: "M", gender: "female",  style: "Warm & inviting",            color: "from-lime-500 to-green-600",   elevenLabsVoiceId: "XrExE9yKIg1WjnnlVkGX" },
+  { id: "matilda", name: "Matilda", title: "Community Expert",   avatar: "M", gender: "female",  style: "Warm & inviting",            color: "from-lime-500 ",   elevenLabsVoiceId: "XrExE9yKIg1WjnnlVkGX" },
 ];
 
 const LANGUAGES = [
@@ -322,20 +322,20 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
             <button
               onClick={() => setVoiceEngine("browser")}
               className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
-                voiceEngine === "browser"
-                  ? "bg-[#1A1A1A] text-white border-[#B89555]/30"
-                  : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-[#B89555]/30"
-              }`}
+ voiceEngine === "browser"
+ ? "bg-[#1A1A1A] text-white border-[#B89555]/30"
+ : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-[#B89555]/30"
+ }`}
             >
               🔊 Browser Voice
             </button>
             <button
               onClick={() => setVoiceEngine("premium")}
               className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-1.5 ${
-                voiceEngine === "premium"
-                  ? "bg-purple-500/20 text-purple-300 border-purple-500/50"
-                  : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-purple-500/30"
-              }`}
+ voiceEngine === "premium"
+ ? "bg-purple-500/20 text-purple-300 border-purple-500/50"
+ : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-purple-500/30"
+ }`}
             >
               <Sparkles className="w-3 h-3" /> Premium Voice
             </button>
@@ -356,10 +356,10 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 key={char.id}
                 onClick={() => setSelectedCharacter(char)}
                 className={`relative flex flex-col items-center gap-1 p-2 rounded-xl border transition-all text-center ${
-                  selectedCharacter.id === char.id
-                    ? "border-amber-400 bg-amber-500/10"
-                    : "border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-[#B89555]/30"
-                }`}
+ selectedCharacter.id === char.id
+ ? "border-amber-400 bg-amber-500/10"
+ : "border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-[#B89555]/30"
+ }`}
               >
                 {selectedCharacter.id === char.id && (
                   <CheckCircle2 className="absolute top-1 right-1 w-3 h-3 text-[#1A1A1A]" />
@@ -418,10 +418,10 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 key={d.value}
                 onClick={() => setSelectedDuration(d.value)}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                  selectedDuration === d.value
-                    ? "bg-amber-500 text-[#1A1A1A] border-amber-500"
-                    : "bg-[#1A1A1A] text-[#1A1A1A]/70 border-[#B89555]/30 hover:border-[#B89555]/30"
-                }`}
+ selectedDuration === d.value
+ ? "bg-amber-500 text-[#1A1A1A] border-amber-500"
+ : "bg-[#1A1A1A] text-[#1A1A1A]/70 border-[#B89555]/30 hover:border-[#B89555]/30"
+ }`}
               >
                 {d.label}
               </button>

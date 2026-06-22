@@ -111,12 +111,12 @@ const AIContractReviewer = ({ onResponse }: AIContractReviewerProps) => {
           <div className="mt-6 space-y-4">
             {response.riskLevel && (
               <div className={`p-4 rounded-lg border ${
-                response.riskLevel === "high" 
-                  ? "bg-red-500/10 border-red-500/20" 
-                  : response.riskLevel === "medium" 
-                  ? "bg-amber-500/10 border-amber-500/20"
-                  : "bg-green-500/10 border-green-500/20"
-              }`}>
+ response.riskLevel === "high" 
+ ? "bg-red-500/10 border-red-500/20" 
+ : response.riskLevel === "medium" 
+ ? "bg-amber-500/10 border-amber-500/20"
+ : "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/20"
+ }`}>
                 <div className="flex items-center gap-2">
                   {response.riskLevel === "high" ? (
                     <AlertTriangle className="h-5 w-5 text-red-500" />

@@ -41,7 +41,7 @@ const draftTypeIcons: Record<string, React.ReactNode> = {
 
 const draftTypeColors: Record<string, string> = {
   email: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  whatsapp: 'bg-green-500/20 text-green-400 border-green-500/30',
+  whatsapp: 'jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30',
   proposal: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   report: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
 };
@@ -168,10 +168,10 @@ const FoundersDraftsPanel: React.FC = () => {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                      selectedDraft?.id === draft.id 
-                        ? 'bg-[#EFE6D6]/10 border-[#B89555]/40' 
-                        : 'bg-[#FDFBF7] border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_4px_15px_rgba(200,167,102,0.1)]'
-                    }`}
+ selectedDraft?.id === draft.id 
+ ? 'bg-[#EFE6D6]/10 border-[#B89555]/40' 
+ : 'bg-[#FDFBF7] border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_4px_15px_rgba(200,167,102,0.1)]'
+ }`}
                     onClick={() => handleSelectDraft(draft)}
                   >
                     <div className="flex items-start justify-between">
@@ -186,10 +186,10 @@ const FoundersDraftsPanel: React.FC = () => {
                       <Badge 
                         variant="outline" 
                         className={`text-xs border ${
-                          draft.status === 'sent' 
-                            ? 'border-green-200 text-green-600 bg-green-50' 
-                            : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#F7F2EA]'
-                        }`}
+ draft.status === 'sent' 
+ ? 'border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] jj-emerald-soft' 
+ : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#F7F2EA]'
+ }`}
                       >
                         {draft.status === 'sent' ? 'Sent' : 'Draft'}
                       </Badge>
@@ -239,7 +239,7 @@ const FoundersDraftsPanel: React.FC = () => {
                 <Button
                   size="sm"
                   onClick={() => handleSendDraft(selectedDraft)}
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  className="jj-emerald-solid hover:jj-emerald-solid text-white"
                 >
                   <Send className="w-4 h-4 mr-1" />
                   Send

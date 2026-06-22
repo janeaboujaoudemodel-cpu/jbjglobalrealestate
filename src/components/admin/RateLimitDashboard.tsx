@@ -219,7 +219,7 @@ export const RateLimitDashboard = () => {
     } else if (percentage >= 80) {
       return <Badge className="bg-amber-100 text-amber-700 gap-1"><AlertTriangle className="w-3 h-3" /> Warning</Badge>;
     } else {
-      return <Badge className="bg-emerald-100 text-emerald-700 gap-1"><Activity className="w-3 h-3" /> Normal</Badge>;
+      return <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] gap-1"><Activity className="w-3 h-3" /> Normal</Badge>;
     }
   };
 
@@ -244,7 +244,7 @@ export const RateLimitDashboard = () => {
             size="sm"
             onClick={() => setIsLive(!isLive)}
             className={isLive 
-              ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+              ? "jj-emerald-solid hover:jj-emerald-solid text-white" 
               : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             }
           >
@@ -396,9 +396,9 @@ export const RateLimitDashboard = () => {
                           <div className="w-24 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
                             <div 
                               className={`h-full rounded-full transition-all ${
-                                percentage >= 100 ? "bg-red-500" :
-                                percentage >= 80 ? "bg-amber-500" : "bg-emerald-500"
-                              }`}
+ percentage >= 100 ? "bg-red-500" :
+ percentage >= 80 ? "bg-amber-500" : "jj-emerald-solid"
+ }`}
                               style={{ width: `${percentage}%` }}
                             />
                           </div>

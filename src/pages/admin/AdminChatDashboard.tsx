@@ -103,7 +103,7 @@ const getServiceIcon = (id: string | null) => {
 
 const getStatusConfig = (status: string | null) => {
   switch (status) {
-    case 'completed': return { label: 'Completed', bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' };
+    case 'completed': return { label: 'Completed', bg: 'jj-emerald-soft', text: 'text-[color:var(--emerald-1)]', border: 'border-[color:var(--emerald-1)]/30' };
     case 'submitted_to_team': return { label: 'Submitted', bg: 'bg-sky-100', text: 'text-sky-800', border: 'border-sky-300' };
     case 'closed': return { label: 'Closed', bg: 'bg-[#EFE6D6]', text: 'text-[#1A1A1A]', border: 'border-[#B89555]/30' };
     case 'read': return { label: 'Read', bg: 'bg-violet-100', text: 'text-violet-800', border: 'border-violet-300' };
@@ -119,7 +119,7 @@ const getPriorityConfig = (level: string) => {
     case 'critical': return { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/40' };
     case 'high': return { icon: AlertCircle, color: 'text-[#B89555]', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/30' };
     case 'medium': return { icon: Bell, color: 'text-[#1A1A1A]/70', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/30' };
-    default: return { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-emerald-300' };
+    default: return { icon: CheckCircle2, color: 'text-[color:var(--emerald-1)]', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[color:var(--emerald-1)]/30' };
   }
 };
 
@@ -389,7 +389,7 @@ const AdminChatDashboard = () => {
 
   const renderScoreBar = (score: number, max = 10) => {
     const pct = (score / max) * 100;
-    const color = score >= 8 ? 'bg-emerald-500' : score >= 5 ? 'bg-[#B89555]' : 'bg-red-400';
+    const color = score >= 8 ? 'jj-emerald-solid' : score >= 5 ? 'bg-[#B89555]' : 'bg-red-400';
     return (
       <div className="flex items-center gap-3">
         <div className="flex-1 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
@@ -477,10 +477,10 @@ const AdminChatDashboard = () => {
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                tab === t.id
-                  ? 'bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] text-[#1A1A1A] shadow-md border border-[#B89555]/30'
-                  : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]/50'
-              }`}
+ tab === t.id
+ ? 'bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] text-[#1A1A1A] shadow-md border border-[#B89555]/30'
+ : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]/50'
+ }`}
             >
               <t.icon className={`w-4 h-4 ${tab === t.id ? 'text-[#B89555]' : ''}`} /> {t.label}
             </button>
@@ -684,7 +684,7 @@ const AdminChatDashboard = () => {
                         <Star className="w-3 h-3 mr-1 fill-[#B89555] text-[#B89555]" /> {cv.ai_ranking}/10
                       </Badge>
                     ) : null}
-                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30'}`}>
+                    <Badge className={`${cv.status === 'approved' ? 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30'}`}>
                       {cv.status || 'pending'}
                     </Badge>
                     <span className="text-[10px] text-[#1A1A1A]/70">{format(new Date(cv.created_at), 'dd MMM yyyy')}</span>
@@ -777,13 +777,13 @@ const AdminChatDashboard = () => {
                   <Button
                     size="sm"
                     onClick={handleJoinChat}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold gap-1.5"
+                    className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs font-semibold gap-1.5"
                   >
                     <UserPlus className="w-3 h-3" /> Join Chat Live
                   </Button>
                 )}
                 {isJoined && (
-                  <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300 gap-1">
+                  <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 gap-1">
                     <Radio className="w-3 h-3 animate-pulse" /> Live - Joined as Sarah
                   </Badge>
                 )}
@@ -802,13 +802,13 @@ const AdminChatDashboard = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/30 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70">Resolution</p>
-                    <p className={`text-xs font-bold ${aiSummary.resolution_status === 'resolved' ? 'text-emerald-700' : aiSummary.resolution_status === 'unresolved' ? 'text-red-600' : 'text-amber-600'}`}>
+                    <p className={`text-xs font-bold ${aiSummary.resolution_status === 'resolved' ? 'text-[color:var(--emerald-1)]' : aiSummary.resolution_status === 'unresolved' ? 'text-red-600' : 'text-amber-600'}`}>
                       {aiSummary.resolution_status?.replace('_', ' ')}
                     </p>
                   </div>
                   <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/30 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70">Sentiment</p>
-                    <p className={`text-xs font-bold ${aiSummary.sentiment === 'positive' ? 'text-emerald-700' : aiSummary.sentiment === 'negative' ? 'text-red-600' : 'text-[#1A1A1A]/70'}`}>
+                    <p className={`text-xs font-bold ${aiSummary.sentiment === 'positive' ? 'text-[color:var(--emerald-1)]' : aiSummary.sentiment === 'negative' ? 'text-red-600' : 'text-[#1A1A1A]/70'}`}>
                       {aiSummary.sentiment} ({aiSummary.sentiment_score}%)
                     </p>
                   </div>
@@ -820,16 +820,16 @@ const AdminChatDashboard = () => {
                   </div>
                   <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/30 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70">Lead</p>
-                    <p className={`text-xs font-bold ${aiSummary.is_lead_opportunity ? 'text-emerald-700' : 'text-[#1A1A1A]/70'}`}>
+                    <p className={`text-xs font-bold ${aiSummary.is_lead_opportunity ? 'text-[color:var(--emerald-1)]' : 'text-[#1A1A1A]/70'}`}>
                       {aiSummary.is_lead_opportunity ? 'Yes' : 'No'}
                     </p>
                   </div>
                 </div>
 
                 {aiSummary.is_lead_opportunity && aiSummary.lead_opportunity_detail && (
-                  <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-200 flex items-start gap-2">
-                    <Target className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <p className="text-xs text-emerald-800"><strong>Lead Opportunity:</strong> {aiSummary.lead_opportunity_detail}</p>
+                  <div className="p-2 rounded-lg jj-emerald-soft border border-[color:var(--emerald-1)]/30 flex items-start gap-2">
+                    <Target className="w-4 h-4 text-[color:var(--emerald-1)] shrink-0 mt-0.5" />
+                    <p className="text-xs text-[color:var(--emerald-1)]"><strong>Lead Opportunity:</strong> {aiSummary.lead_opportunity_detail}</p>
                   </div>
                 )}
 
@@ -858,7 +858,7 @@ const AdminChatDashboard = () => {
                             href={`https://wa.me/${selectedConversation.user_phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(aiSummary.suggested_reply)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center h-6 px-2 text-[10px] rounded-md text-emerald-700 hover:bg-emerald-50"
+                            className="inline-flex items-center h-6 px-2 text-[10px] rounded-md text-[color:var(--emerald-1)] hover:jj-emerald-soft"
                             onClick={e => e.stopPropagation()}
                           >
                             <Send className="w-3 h-3 mr-1" /> WhatsApp
@@ -901,10 +901,10 @@ const AdminChatDashboard = () => {
                         </div>
                       )}
                       <div className={`max-w-[75%] rounded-2xl px-3.5 py-2.5 text-sm ${
-                        msg.role === 'user'
-                          ? 'bg-[#B89555]/10 text-[#1A1A1A] rounded-br-md border border-[#B89555]/20'
-                          : 'bg-[#FDFBF7] text-[#1A1A1A] rounded-bl-md border border-[#B89555]/30 shadow-sm'
-                      }`}>
+ msg.role === 'user'
+ ? 'bg-[#B89555]/10 text-[#1A1A1A] rounded-br-md border border-[#B89555]/20'
+ : 'bg-[#FDFBF7] text-[#1A1A1A] rounded-bl-md border border-[#B89555]/30 shadow-sm'
+ }`}>
                         <p className="whitespace-pre-wrap leading-relaxed text-[13px]">{msg.content}</p>
                         {msg.timestamp && (
                           <p className="text-[9px] mt-1.5 text-[#1A1A1A]/70">{format(new Date(msg.timestamp), 'h:mm a')}</p>
@@ -937,9 +937,9 @@ const AdminChatDashboard = () => {
             
             {/* Live Reply Input (when joined) */}
             {isJoined && selectedConversation.status === 'active' && (
-              <div className="px-4 py-3 border-t border-emerald-200 bg-emerald-50/50">
+              <div className="px-4 py-3 border-t border-[color:var(--emerald-1)]/30 jj-emerald-soft/50">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full jj-emerald-solid flex items-center justify-center shrink-0">
                     <span className="text-white text-xs font-bold">S</span>
                   </div>
                   <Input
@@ -947,13 +947,13 @@ const AdminChatDashboard = () => {
                     onChange={(e) => setOwnerReplyInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendOwnerReply()}
                     placeholder="Type your reply as Sarah..."
-                    className="flex-1 bg-[#FDFBF7] border-emerald-200 text-[#1A1A1A] text-sm focus:border-emerald-400 focus:ring-emerald-200"
+                    className="flex-1 bg-[#FDFBF7] border-[color:var(--emerald-1)]/30 text-[#1A1A1A] text-sm focus:border-[color:var(--emerald-1)]/30 focus:ring-emerald-200"
                   />
                   <Button
                     size="sm"
                     onClick={handleSendOwnerReply}
                     disabled={!ownerReplyInput.trim() || sendingReply}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
+                    className="jj-emerald-solid hover:jj-emerald-solid text-white gap-1"
                   >
                     {sendingReply ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
                     Send
@@ -969,7 +969,7 @@ const AdminChatDashboard = () => {
               </p>
               <div className="flex items-center gap-2">
                 {!isJoined && selectedConversation.status === 'active' && (
-                  <Button onClick={handleJoinChat} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs gap-1">
+                  <Button onClick={handleJoinChat} size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs gap-1">
                     <UserPlus className="w-3 h-3" /> Join
                   </Button>
                 )}
@@ -1070,7 +1070,7 @@ const AdminChatDashboard = () => {
                           href={`https://wa.me/${selectedCV.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${selectedCV.full_name}, regarding your CV submission to JBJ Global Real Estate...`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-medium rounded-lg transition-colors border border-emerald-200"
+                          className="flex items-center gap-1.5 px-3 py-1.5 jj-emerald-soft hover:jj-emerald-soft text-[color:var(--emerald-1)] text-xs font-medium rounded-lg transition-colors border border-[color:var(--emerald-1)]/30"
                         >
                           <Send className="w-3 h-3" /> WhatsApp
                         </a>
@@ -1114,7 +1114,7 @@ const AdminChatDashboard = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3 flex-wrap">
-                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold gap-2">
+                <Button className="jj-emerald-solid hover:jj-emerald-solid text-white font-semibold gap-2">
                   <CheckCircle2 className="w-4 h-4" /> Approve
                 </Button>
                 <Button className="bg-red-500 hover:bg-red-600 text-white font-semibold gap-2">

@@ -67,10 +67,10 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               >
                 <Star
                   className={`w-6 h-6 ${
-                    star <= (hoveredRating || rating)
-                      ? 'text-[#1A1A1A] fill-gold'
-                      : 'text-[#1A1A1A]/70'
-                  }`}
+ star <= (hoveredRating || rating)
+ ? 'text-[#1A1A1A] fill-gold'
+ : 'text-[#1A1A1A]/70'
+ }`}
                 />
               </button>
             ))}
@@ -86,10 +86,10 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               <button
                 onClick={() => setWasHelpful(true)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
-                  wasHelpful === true
-                    ? 'border-green-500 bg-green-500/20 text-green-400'
-                    : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-green-500/50'
-                }`}
+ wasHelpful === true
+ ? 'border-[color:var(--emerald-1)]/30 jj-emerald-solid/20 text-green-400'
+ : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[color:var(--emerald-1)]/30/50'
+ }`}
               >
                 <ThumbsUp className="w-4 h-4" />
                 <span className="text-xs">Yes</span>
@@ -97,10 +97,10 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               <button
                 onClick={() => setWasHelpful(false)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
-                  wasHelpful === false
-                    ? 'border-red-500 bg-red-500/20 text-red-400'
-                    : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-red-500/50'
-                }`}
+ wasHelpful === false
+ ? 'border-red-500 bg-red-500/20 text-red-400'
+ : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-red-500/50'
+ }`}
               >
                 <ThumbsDown className="w-4 h-4" />
                 <span className="text-xs">No</span>
@@ -172,10 +172,10 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 >
                   <Star
                     className={`w-5 h-5 ${
-                      star <= (hoveredAgentBehavior || agentBehavior)
-                        ? 'text-[#1A1A1A] fill-gold'
-                        : 'text-[#1A1A1A]/70'
-                    }`}
+ star <= (hoveredAgentBehavior || agentBehavior)
+ ? 'text-[#1A1A1A] fill-gold'
+ : 'text-[#1A1A1A]/70'
+ }`}
                   />
                 </button>
               ))}
@@ -201,10 +201,10 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 >
                   <Star
                     className={`w-5 h-5 ${
-                      star <= (hoveredResponseSpeed || responseSpeed)
-                        ? 'text-[#1A1A1A] fill-gold'
-                        : 'text-[#1A1A1A]/70'
-                    }`}
+ star <= (hoveredResponseSpeed || responseSpeed)
+ ? 'text-[#1A1A1A] fill-gold'
+ : 'text-[#1A1A1A]/70'
+ }`}
                   />
                 </button>
               ))}

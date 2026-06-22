@@ -51,11 +51,11 @@ const activityIcons: Record<string, React.ReactNode> = {
 
 const activityColors: Record<string, string> = {
   email: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  call: 'bg-green-500/10 text-green-400 border-green-500/20',
+  call: 'jj-emerald-solid/10 text-green-400 border-[color:var(--emerald-1)]/30/20',
   meeting: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   task: 'bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/20',
   lead: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-  message: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+  message: 'jj-emerald-solid/10 text-teal-400 border-[color:var(--emerald-1)]/30/20',
   system: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
 };
 
@@ -219,10 +219,10 @@ const FoundersActivityCenter: React.FC = () => {
             <p className="text-xs text-[#1A1A1A]/70">Total Activities</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
           <CardContent className="p-4 text-center">
-            <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+            <CheckCircle className="w-6 h-6 text-[color:var(--emerald-1)] mx-auto mb-2" />
+            <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.completed}</p>
             <p className="text-xs text-[#1A1A1A]/70">Completed</p>
           </CardContent>
         </Card>
@@ -361,11 +361,11 @@ const FoundersActivityCenter: React.FC = () => {
                                 )}
                                 {activity.status && (
                                   <Badge className={`text-xs border ${
-                                    activity.status === 'completed' ? 'bg-green-50 text-green-600 border-green-200' :
-                                    activity.status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-200' :
-                                    activity.status === 'in_progress' ? 'bg-blue-50 text-blue-600 border-blue-200' :
-                                    'bg-red-50 text-red-600 border-red-200'
-                                  }`}>
+ activity.status === 'completed' ? 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' :
+ activity.status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+ activity.status === 'in_progress' ? 'bg-blue-50 text-blue-600 border-blue-200' :
+ 'bg-red-50 text-red-600 border-red-200'
+ }`}>
                                     {activity.status === 'completed' && 'Done'}
                                     {activity.status === 'pending' && 'Pending'}
                                     {activity.status === 'in_progress' && 'In Progress'}
@@ -375,10 +375,10 @@ const FoundersActivityCenter: React.FC = () => {
                                 )}
                                 {activity.priority && activity.priority !== 'low' && (
                                   <Badge className={`text-xs border ${
-                                    activity.priority === 'urgent' ? 'bg-red-50 text-red-600 border-red-200' :
-                                    activity.priority === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
-                                    'bg-amber-50 text-amber-600 border-amber-200'
-                                  }`}>
+ activity.priority === 'urgent' ? 'bg-red-50 text-red-600 border-red-200' :
+ activity.priority === 'high' ? 'bg-orange-50 text-orange-600 border-orange-200' :
+ 'bg-amber-50 text-amber-600 border-amber-200'
+ }`}>
                                     {activity.priority}
                                   </Badge>
                                 )}

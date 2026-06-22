@@ -51,7 +51,7 @@ const channelIcons: Record<string, React.ReactNode> = {
 
 const categoryConfig: Record<string, { color: string; bgColor: string; borderColor: string }> = {
   important: { color: 'text-red-600', bgColor: 'bg-red-50', borderColor: 'border-red-200' },
-  routine: { color: 'text-green-600', bgColor: 'bg-green-50', borderColor: 'border-green-200' },
+  routine: { color: 'text-[color:var(--emerald-1)]', bgColor: 'jj-emerald-soft', borderColor: 'border-[color:var(--emerald-1)]/30' },
   recruitment: { color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
   flagged: { color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
   spam: { color: 'text-[#1A1A1A]/70', bgColor: 'bg-[#F7F2EA]', borderColor: 'border-[#B89555]/30' },
@@ -224,10 +224,10 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                    activeTab === tab 
-                      ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white shadow-md' 
-                      : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#B89555]/10'
-                  }`}
+ activeTab === tab 
+ ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white shadow-md' 
+ : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#B89555]/10'
+ }`}
                 >
                   <div className="flex items-center justify-center gap-1.5">
                     {tab === 'all' && <Bell className="w-3.5 h-3.5" />}
@@ -237,8 +237,8 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                     <span className="capitalize">{tab}</span>
                     {tabCounts[tab] > 0 && (
                       <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
-                        activeTab === tab ? 'bg-[#FDFBF7]/20' : 'bg-[#B89555]/15 text-[#B89555]'
-                      }`}>
+ activeTab === tab ? 'bg-[#FDFBF7]/20' : 'bg-[#B89555]/15 text-[#B89555]'
+ }`}>
                         {tabCounts[tab]}
                       </span>
                     )}
@@ -270,10 +270,10 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.03 }}
                         className={`p-4 rounded-xl border transition-all cursor-pointer group ${
-                          notification.is_read 
-                            ? 'bg-[#FDFBF7]/60 border-[#B89555]/10 hover:border-[#B89555]/30' 
-                            : `${config.bgColor} ${config.borderColor}`
-                        }`}
+ notification.is_read 
+ ? 'bg-[#FDFBF7]/60 border-[#B89555]/10 hover:border-[#B89555]/30' 
+ : `${config.bgColor} ${config.borderColor}`
+ }`}
                         onClick={() => markAsRead(notification.id)}
                       >
                         <div className="flex items-start gap-3">

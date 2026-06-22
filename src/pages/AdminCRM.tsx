@@ -394,7 +394,7 @@ const AdminCRM = () => {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge className={broker.is_active ? "bg-green-100 text-green-700 border-green-300" : "bg-red-100 text-red-700 border-red-300"}>
+                          <Badge className={broker.is_active ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" : "bg-red-100 text-red-700 border-red-300"}>
                             {broker.is_active ? "Active" : "Inactive"}
                           </Badge>
                         </TableCell>

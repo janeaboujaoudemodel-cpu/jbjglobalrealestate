@@ -87,7 +87,7 @@ const EmailHubStatusPanel = () => {
 
   const StatusBadge = ({ active, label }: { active: boolean; label: string }) => (
     <Badge className={active
-      ? "bg-emerald-100 text-emerald-700 border-emerald-300 text-[10px]"
+      ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[10px]"
       : "bg-amber-100 text-amber-700 border-amber-300 text-[10px]"
     }>
       {active ? <CheckCircle2 className="w-3 h-3 mr-1" /> : <AlertCircle className="w-3 h-3 mr-1" />}

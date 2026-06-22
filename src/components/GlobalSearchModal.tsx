@@ -529,16 +529,16 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               key={`${item.id}-${idx}`}
                               onClick={() => handleSelect(item.route)}
                               className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
-                                !hasDbResults && idx === 0
-                                  ? "bg-[#1A1A1A]/10 border border-[#B89555]/40" 
-                                  : "hover:bg-[#EFE6D6]/10"
-                              }`}
+ !hasDbResults && idx === 0
+ ? "bg-[#1A1A1A]/10 border border-[#B89555]/40" 
+ : "hover:bg-[#EFE6D6]/10"
+ }`}
                             >
                               <div className={`w-11 h-11 rounded-lg flex items-center justify-center border ${
-                                !hasDbResults && idx === 0
-                                  ? "bg-[#1A1A1A] text-white border-[#B89555]/50" 
-                                  : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
-                              }`}>
+ !hasDbResults && idx === 0
+ ? "bg-[#1A1A1A] text-white border-[#B89555]/50" 
+ : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+ }`}>
                                 {item.icon && <item.icon className="w-5 h-5" />}
                               </div>
                               <div className="flex-1 text-left">
@@ -770,9 +770,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           {(hasListingAdminAccess || isOwner) && (
                             <button
                               onClick={() => handleSelect('/listing-admin')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-emerald-100 to-emerald-50 border border-emerald-300 hover:shadow-md transition-all"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-emerald-100 to-emerald-50 border border-[color:var(--emerald-1)]/30 hover:shadow-md transition-all"
                             >
-                              <Building2 className="w-5 h-5 text-emerald-600" />
+                              <Building2 className="w-5 h-5 text-[color:var(--emerald-1)]" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">Listings</span>
                             </button>
                           )}

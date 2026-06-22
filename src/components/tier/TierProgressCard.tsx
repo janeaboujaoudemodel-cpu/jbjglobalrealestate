@@ -160,7 +160,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
               progressPercent={investorTierProgress.progressPercent}
               benefits={investorTierProgress.currentTier?.benefits || []}
               colorClass="text-emerald-400"
-              bgClass="bg-emerald-500/10 border-emerald-500/30"
+              bgClass="jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30"
             />
             <SingleTierSection
               label="Broker Path"
@@ -212,7 +212,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
               "text-xs font-medium px-2 py-0.5 rounded-full",
               currentTierType === 'broker' 
                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
-                : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                : 'jj-emerald-solid/20 text-emerald-400 border border-[color:var(--emerald-1)]/30/30'
             )}>
               {currentTierType === 'broker' ? 'Broker Path' : 'Investor Path'}
             </span>

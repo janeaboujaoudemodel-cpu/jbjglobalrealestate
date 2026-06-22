@@ -428,7 +428,7 @@ export default function OwnerFeatureRegistry() {
                 <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
                   {FEATURES.length} Features
                 </Badge>
-                <Badge className="bg-green-100 text-green-700 border border-green-200">
+                <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   All Visible
                 </Badge>
@@ -521,7 +521,7 @@ export default function OwnerFeatureRegistry() {
                                   <Badge className="bg-blue-100 text-blue-700 text-[10px] px-1.5">Approval</Badge>
                                 )}
                                 {feature.isAutomated && (
-                                  <Badge className="bg-green-100 text-green-700 text-[10px] px-1.5">Auto</Badge>
+                                  <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] text-[10px] px-1.5">Auto</Badge>
                                 )}
                                 {feature.isManual && (
                                   <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 text-[10px] px-1.5">Manual</Badge>
@@ -533,7 +533,7 @@ export default function OwnerFeatureRegistry() {
                                   {feature.category}
                                 </Badge>
                                 <span className="text-[#1A1A1A]/70">→</span>
-                                <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                                <code className="text-[11px] text-[color:var(--emerald-1)] jj-emerald-soft px-2 py-0.5 rounded">
                                   {feature.navigationPath}
                                 </code>
                               </div>
@@ -553,9 +553,9 @@ export default function OwnerFeatureRegistry() {
             <TabsContent value="audit">
               <div className="grid gap-4">
                 {/* Audit Status */}
-                <Card className="border-2 border-green-200 bg-green-50">
+                <Card className="border-2 border-[color:var(--emerald-1)]/30 jj-emerald-soft">
                   <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2 text-green-700">
+                    <CardTitle className="text-lg flex items-center gap-2 text-[color:var(--emerald-1)]">
                       <CheckCircle className="h-5 w-5" />
                       Visibility Audit: PASSED
                     </CardTitle>
@@ -609,12 +609,12 @@ export default function OwnerFeatureRegistry() {
                         </div>
                         <p className="text-sm text-blue-600">Actions require explicit Owner approval before they take effect. No auto-send, no silent execution.</p>
                       </div>
-                      <div className="p-4 rounded-lg border border-green-200 bg-green-50">
+                      <div className="p-4 rounded-lg border border-[color:var(--emerald-1)]/30 jj-emerald-soft">
                         <div className="flex items-center gap-2 mb-2">
-                          <Zap className="h-4 w-4 text-green-600" />
-                          <span className="font-medium text-green-700">Automated ({automatedCount})</span>
+                          <Zap className="h-4 w-4 text-[color:var(--emerald-1)]" />
+                          <span className="font-medium text-[color:var(--emerald-1)]">Automated ({automatedCount})</span>
                         </div>
-                        <p className="text-sm text-green-600">Runs automatically in the background (e.g., AI learning, CRM logging). Owner can configure via settings.</p>
+                        <p className="text-sm text-[color:var(--emerald-1)]">Runs automatically in the background (e.g., AI learning, CRM logging). Owner can configure via settings.</p>
                       </div>
                       <div className="p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
                         <div className="flex items-center gap-2 mb-2">
@@ -664,7 +664,7 @@ export default function OwnerFeatureRegistry() {
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded max-w-[300px] truncate">
+                                  <code className="text-[11px] text-[color:var(--emerald-1)] jj-emerald-soft px-2 py-1 rounded max-w-[300px] truncate">
                                     {feature.navigationPath}
                                   </code>
                                   <ExternalLink className="h-3 w-3 text-[#1A1A1A]/70" />
@@ -694,7 +694,7 @@ export default function OwnerFeatureRegistry() {
                 <span className="text-[#1A1A1A]/70">Requires Owner approval before action</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge className="bg-green-100 text-green-700 text-xs">Auto</Badge>
+                <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] text-xs">Auto</Badge>
                 <span className="text-[#1A1A1A]/70">Runs automatically (configurable)</span>
               </div>
               <div className="flex items-center gap-2">
@@ -724,14 +724,14 @@ function StatsCard({
     default: "border-[#B89555]/30 bg-[#FDFBF7]",
     purple: "border-purple-200 bg-purple-50",
     blue: "border-blue-200 bg-blue-50",
-    green: "border-green-200 bg-green-50",
+    green: "border-[color:var(--emerald-1)]/30 jj-emerald-soft",
   };
 
   const iconColors = {
     default: "text-[#1A1A1A]",
     purple: "text-purple-600",
     blue: "text-blue-600",
-    green: "text-green-600",
+    green: "text-[color:var(--emerald-1)]",
   };
 
   return (
@@ -768,7 +768,7 @@ function AuditItem({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7] border border-green-200">
+    <div className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7] border border-[color:var(--emerald-1)]/30">
       <span className="text-sm text-[#1A1A1A]/70">{label}</span>
       <div className="flex items-center gap-2">
         <span className="font-semibold text-[#1A1A1A]">{value}</span>

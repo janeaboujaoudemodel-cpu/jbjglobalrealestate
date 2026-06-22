@@ -132,8 +132,8 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
     const colors: Record<string, string> = {
       "new": "bg-blue-500",
       "contacted": "bg-cyan-500",
-      "interested": "bg-emerald-500",
-      "qualified": "bg-green-500",
+      "interested": "jj-emerald-solid",
+      "qualified": "jj-emerald-solid",
       "proposal": "bg-amber-500",
       "negotiation": "bg-orange-500",
       "viewing_scheduled": "bg-purple-500",
@@ -192,14 +192,14 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-xl bg-emerald-500/20">
+              <div className="p-3 rounded-xl jj-emerald-solid/20">
                 <TrendingUp className="h-5 w-5 text-emerald-500" />
               </div>
-              <Badge variant="outline" className="text-xs border-emerald-500/30 text-emerald-600 px-3 py-1">
+              <Badge variant="outline" className="text-xs border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] px-3 py-1">
                 Forecast
               </Badge>
             </div>
-            <p className="text-2xl md:text-3xl font-bold text-emerald-600 tracking-tight flex-1">
+            <p className="text-2xl md:text-3xl font-bold text-[color:var(--emerald-1)] tracking-tight flex-1">
               {hasNoData || stats.forecastedRevenue === 0 ? "—" : formatValue(stats.forecastedRevenue, true)}
             </p>
             <p className="text-xs text-[#1A1A1A]/70 mt-2">Requires deal values</p>
@@ -228,15 +228,15 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-xl bg-green-500/20">
+              <div className="p-3 rounded-xl jj-emerald-solid/20">
                 <Award className="h-5 w-5 text-green-500" />
               </div>
-              <Badge variant="outline" className="text-xs border-green-500/30 text-green-600 px-3 py-1">
+              <Badge variant="outline" className="text-xs border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] px-3 py-1">
                 Won
               </Badge>
             </div>
             <div className="flex items-baseline gap-2 flex-1">
-              <p className="text-2xl md:text-3xl font-bold text-green-600 tracking-tight">{stats.wonDeals}</p>
+              <p className="text-2xl md:text-3xl font-bold text-[color:var(--emerald-1)] tracking-tight">{stats.wonDeals}</p>
               <span className="text-sm text-red-500 font-medium">/ {stats.lostDeals} lost</span>
             </div>
             <p className="text-xs text-[#1A1A1A]/70 mt-2">Closed deals</p>

@@ -467,7 +467,7 @@ function SummaryCard({
     danger: "border-red-500/30 bg-red-50",
     warning: "border-yellow-500/30 bg-yellow-50",
     info: "border-blue-500/30 bg-blue-50",
-    success: "border-green-500/30 bg-green-50",
+    success: "border-[color:var(--emerald-1)]/30/30 jj-emerald-soft",
   };
 
   const iconColors = {
@@ -475,7 +475,7 @@ function SummaryCard({
     danger: "text-red-600",
     warning: "text-yellow-600",
     info: "text-blue-600",
-    success: "text-green-600",
+    success: "text-[color:var(--emerald-1)]",
   };
 
   return (
@@ -534,7 +534,7 @@ function TaskItem({
 
 function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => void }) {
   const channelColors: Record<string, string> = {
-    whatsapp: 'bg-green-100 text-green-600',
+    whatsapp: 'jj-emerald-soft text-[color:var(--emerald-1)]',
     email_gmail: 'bg-red-100 text-red-600',
     email_hostinger: 'bg-blue-100 text-blue-600',
     instagram: 'bg-pink-100 text-pink-600',

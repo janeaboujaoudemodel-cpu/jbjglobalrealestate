@@ -206,7 +206,7 @@ export function MeetingAIAssistant({
         <div className="flex items-center gap-2">
           <Brain className="w-5 h-5 text-[#1A1A1A]" />
           <span className="text-white font-medium text-sm">AI Meeting Assistant</span>
-          <Badge className="bg-green-500/20 text-green-400 text-[10px]">Live</Badge>
+          <Badge className="jj-emerald-solid/20 text-green-400 text-[10px]">Live</Badge>
         </div>
         <div className="flex items-center gap-1">
           {isMinimized ? <ChevronUp className="w-4 h-4 text-[#1A1A1A]/70" /> : (

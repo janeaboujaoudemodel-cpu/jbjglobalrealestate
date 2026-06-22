@@ -62,9 +62,9 @@ export default function PaymentPlanVisualization({
       label: "On Booking",
       value: legacyBreakdown.down_payment,
       icon: CheckCircle,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-500",
-      lightBg: "bg-emerald-50",
+      color: "text-[color:var(--emerald-1)]",
+      bgColor: "jj-emerald-solid",
+      lightBg: "jj-emerald-soft",
       ringColor: "ring-emerald-200",
     });
   } else if (isDetailedBreakdown && detailedMilestones.length > 0) {
@@ -73,9 +73,9 @@ export default function PaymentPlanVisualization({
       label: first.milestone || "On Booking",
       value: `${first.percentage}%`,
       icon: CheckCircle,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-500",
-      lightBg: "bg-emerald-50",
+      color: "text-[color:var(--emerald-1)]",
+      bgColor: "jj-emerald-solid",
+      lightBg: "jj-emerald-soft",
       ringColor: "ring-emerald-200",
     });
   }
@@ -150,7 +150,7 @@ export default function PaymentPlanVisualization({
         </h3>
         {paymentPlanVerified ? (
           <span
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-300"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30"
             title={paymentPlanVerifiedAt ? `Verified ${new Date(paymentPlanVerifiedAt).toLocaleDateString()}` : "Verified by JBJ"}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
@@ -207,9 +207,9 @@ export default function PaymentPlanVisualization({
               </div>
               
               {postHandoverYears && postHandoverYears > 0 && (
-                <div className="mt-4 flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg w-fit">
-                  <Clock className="w-4 h-4 text-emerald-600" />
-                  <span className="text-sm font-medium text-emerald-700">
+                <div className="mt-4 flex items-center gap-2 px-3 py-2 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg w-fit">
+                  <Clock className="w-4 h-4 text-[color:var(--emerald-1)]" />
+                  <span className="text-sm font-medium text-[color:var(--emerald-1)]">
                     {postHandoverYears} {postHandoverYears === 1 ? 'Year' : 'Years'} Post-Handover
                   </span>
                 </div>
@@ -235,7 +235,7 @@ export default function PaymentPlanVisualization({
               <div className="h-6 rounded-full bg-[#F7F2EA] overflow-hidden flex shadow-inner relative">
                 {bookingPct > 0 && (
                   <div 
-                    className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all flex items-center justify-center"
+                    className="h-full bg-gradient-to-r transition-all flex items-center justify-center"
                     style={{ width: `${(bookingPct / total) * 100}%` }}
                   >
                     <span className="text-[10px] font-bold text-white drop-shadow-sm">{bookingPct}%</span>
@@ -261,10 +261,10 @@ export default function PaymentPlanVisualization({
               
               {/* Timeline Dots */}
               <div className="relative mt-4">
-                <div className="absolute top-3 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-500 via-amber-500 to-blue-500" />
+                <div className="absolute top-3 left-0 right-0 h-0.5 bg-gradient-to-r via-amber-500 to-blue-500" />
                 <div className="flex justify-between relative">
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-emerald-500 border-4 border-white shadow-lg z-10" />
+                    <div className="w-6 h-6 rounded-full jj-emerald-solid border-4 border-white shadow-lg z-10" />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">On Booking</span>
                   </div>
                   <div className="flex flex-col items-center">
@@ -320,13 +320,13 @@ export default function PaymentPlanVisualization({
                       key={idx}
                       className={cn(
                         "flex items-center gap-3 px-4 py-3 border-b border-[#B89555]/30 last:border-b-0",
-                        isFirst && "bg-emerald-50/50",
+                        isFirst && "jj-emerald-soft/50",
                         isLast && "bg-blue-50/50",
                       )}
                     >
                       <div className={cn(
                         "w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold",
-                        isFirst ? "bg-emerald-100 text-emerald-700" :
+                        isFirst ? "jj-emerald-soft text-[color:var(--emerald-1)]" :
                         isLast ? "bg-blue-100 text-blue-700" :
                         "bg-amber-100 text-amber-700"
                       )}>
@@ -340,7 +340,7 @@ export default function PaymentPlanVisualization({
                       </div>
                       <div className={cn(
                         "text-sm font-bold flex-shrink-0",
-                        isFirst ? "text-emerald-600" :
+                        isFirst ? "text-[color:var(--emerald-1)]" :
                         isLast ? "text-blue-600" :
                         "text-amber-600"
                       )}>

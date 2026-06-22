@@ -26,7 +26,7 @@ interface PortfolioAssetCardProps {
 export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
   const getStatusBadge = (status: PortfolioAsset["status"]) => {
     const styles = {
-      owned: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
+      owned: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
       reserved: "bg-amber-500/10 text-amber-600 border-amber-500/30",
       "under-evaluation": "bg-blue-500/10 text-blue-600 border-blue-500/30",
       sold: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30",
@@ -47,7 +47,7 @@ export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
         className={
           type === "off-plan"
             ? "border-[#B89555]/50 text-[#1A1A1A]"
-            : "border-emerald-500/50 text-emerald-600"
+            : "border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-1)]"
         }
       >
         {type === "off-plan" ? "Off-Plan" : "Ready"}
@@ -58,7 +58,7 @@ export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
   const getObjectiveBadge = (objective: PortfolioAsset["objective"]) => {
     const styles = {
       income: "bg-blue-500/10 text-blue-600 border-blue-500/30",
-      growth: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
+      growth: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
       balanced: "bg-purple-500/10 text-purple-600 border-purple-500/30",
       "end-use": "bg-amber-500/10 text-amber-600 border-amber-500/30",
     };

@@ -42,7 +42,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "bg-green-500";
+      case "active": return "jj-emerald-solid";
       case "closed": return "bg-[#B89555]";
       case "pending": return "bg-amber-500";
       default: return "bg-blue-500";
@@ -115,8 +115,8 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                 <div
                   key={message.id || index}
                   className={`flex gap-3 ${
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  }`}
+ message.role === "user" ? "justify-end" : "justify-start"
+ }`}
                 >
                   {message.role !== "user" && (
                     <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center shrink-0">
@@ -126,16 +126,16 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                   
                   <div
                     className={`max-w-[70%] rounded-2xl px-4 py-3 ${
-                      message.role === "user"
-                        ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                        : "bg-[#F7F2EA] text-white"
-                    }`}
+ message.role === "user"
+ ? "bg-[#EFE6D6] text-[#1A1A1A]"
+ : "bg-[#F7F2EA] text-white"
+ }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     {message.timestamp && (
                       <p className={`text-xs mt-1 ${
-                        message.role === "user" ? "text-[#1A1A1A]/60" : "text-white/90"
-                      }`}>
+ message.role === "user" ? "text-[#1A1A1A]/60" : "text-white/90"
+ }`}>
                         {format(new Date(message.timestamp), "h:mm a")}
                       </p>
                     )}

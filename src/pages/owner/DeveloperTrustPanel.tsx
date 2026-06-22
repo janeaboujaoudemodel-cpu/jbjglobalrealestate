@@ -92,7 +92,7 @@ const DeveloperTrustPanel = () => {
   const trustBadge = (level: Developer["trust_level"]) => {
     if (level === "auto_publish")
       return (
-        <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+        <Badge variant="outline" className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">
           <ShieldCheck className="w-3 h-3 mr-1" /> Auto-publish
         </Badge>
       );

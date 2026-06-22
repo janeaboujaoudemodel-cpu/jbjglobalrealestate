@@ -328,17 +328,17 @@ export const ProjectAIAnalyzer = ({
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
               </div>
-              <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-6 shadow-sm border border-emerald-200 flex flex-col items-center justify-center text-center">
+              <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-6 shadow-sm border border-[color:var(--emerald-1)]/30 flex flex-col items-center justify-center text-center">
                 <Star className="w-9 h-9 fill-gold text-[#1A1A1A] mb-2 drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] relative z-10" />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
-                      <span className="text-6xl font-extrabold bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.4)]">{ratingScore}</span>
+                      <span className="text-6xl font-extrabold bg-gradient-to-br to-blue-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.4)]">{ratingScore}</span>
                     </div>
-                    <div className="text-emerald-700 text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
+                    <div className="text-[color:var(--emerald-1)] text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
-                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-emerald-600 text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
+                      <span className="inline-block w-2 h-2 rounded-full jj-emerald-solid animate-pulse" />
+                      <span className="text-[color:var(--emerald-1)] text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
                     </div>
                     {sections?.rating && (
                       <p className="text-foreground/80 text-xs mt-3 leading-relaxed font-medium relative z-10">
@@ -357,12 +357,12 @@ export const ProjectAIAnalyzer = ({
               {/* Price Per Sqft */}
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <BarChart3 className="w-5 h-5 text-emerald-600" />
+                  <BarChart3 className="w-5 h-5 text-[color:var(--emerald-1)]" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
                   {yoyChange !== null && (
                     <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
-                      yoyChange >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"
-                    }`}>
+ yoyChange >= 0 ? "jj-emerald-soft text-[color:var(--emerald-1)]" : "bg-red-100 text-red-600"
+ }`}>
                       {yoyChange >= 0 ? "+" : ""}{yoyChange}% YoY
                     </span>
                   )}
@@ -372,7 +372,7 @@ export const ProjectAIAnalyzer = ({
                   <>
                     {/* Large price stat */}
                     <div className="mb-4">
-                      <div className="text-3xl font-bold text-emerald-600">
+                      <div className="text-3xl font-bold text-[color:var(--emerald-1)]">
                         AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-[#1A1A1A]">/sqft</span>
                       </div>
                       <div className="text-xs text-[#1A1A1A]/90 font-semibold mt-0.5">{areaName} average</div>
@@ -456,7 +456,7 @@ export const ProjectAIAnalyzer = ({
               {/* Investment Metrics */}
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <Shield className="w-5 h-5 text-emerald-600" />
+                  <Shield className="w-5 h-5 text-[color:var(--emerald-1)]" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
                 </div>
 
@@ -470,8 +470,8 @@ export const ProjectAIAnalyzer = ({
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 rounded-xl p-5 text-center border border-emerald-200/80 shadow-[0_4px_20px_rgba(16,185,129,0.12)]">
-                          <div className="text-4xl font-extrabold bg-gradient-to-br from-emerald-500 via-teal-500 to-green-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.35)]">{appreciation}%</div>
+                        <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 rounded-xl p-5 text-center border border-[color:var(--emerald-1)]/30/80 shadow-[0_4px_20px_rgba(16,185,129,0.12)]">
+                          <div className="text-4xl font-extrabold bg-gradient-to-br bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.35)]">{appreciation}%</div>
                           <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
@@ -508,16 +508,16 @@ export const ProjectAIAnalyzer = ({
             {/* Row 4: Pros & Cons — styled pill rows */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {/* Pros */}
-              <div className="bg-gradient-to-br from-emerald-100 via-emerald-50 to-green-100/80 border-2 border-emerald-400 rounded-2xl p-6 shadow-md shadow-emerald-200/60 ring-1 ring-emerald-300">
+              <div className="bg-gradient-to-br from-emerald-100 via-emerald-50 to-green-100/80 border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-md shadow-emerald-200/60 ring-1 ring-emerald-300">
                 <div className="flex items-center gap-2 mb-4">
-                  <ThumbsUp className="w-5 h-5 text-emerald-600" />
-                  <h3 className="font-bold text-emerald-700 text-lg">Pros</h3>
+                  <ThumbsUp className="w-5 h-5 text-[color:var(--emerald-1)]" />
+                  <h3 className="font-bold text-[color:var(--emerald-1)] text-lg">Pros</h3>
                 </div>
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">
                     {prosList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2.5 bg-[#FDFBF7] rounded-lg px-3 py-2.5 border border-emerald-200">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                      <li key={i} className="flex items-start gap-2.5 bg-[#FDFBF7] rounded-lg px-3 py-2.5 border border-[color:var(--emerald-1)]/30">
+                        <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)] mt-0.5 flex-shrink-0" />
                         <span className="text-foreground text-sm leading-snug">{item}</span>
                       </li>
                     ))}

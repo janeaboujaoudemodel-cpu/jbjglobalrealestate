@@ -50,14 +50,14 @@ const AuditDiffViewer: React.FC<AuditDiffViewerProps> = ({ oldValues, newValues,
             key={key}
             className={cn(
               "grid grid-cols-3 border-b border-border last:border-b-0",
-              isAdded && "bg-green-500/5",
+              isAdded && "jj-emerald-solid/5",
               isRemoved && "bg-red-500/5",
               isChanged && !isAdded && !isRemoved && "bg-amber-500/5"
             )}
           >
             <div className="px-3 py-1.5 font-medium text-foreground break-all">
               {key.replace(/_/g, " ")}
-              {isAdded && <span className="ml-1 text-green-600 text-[10px]">NEW</span>}
+              {isAdded && <span className="ml-1 text-[color:var(--emerald-1)] text-[10px]">NEW</span>}
               {isRemoved && <span className="ml-1 text-red-600 text-[10px]">DEL</span>}
             </div>
             <div className={cn(
@@ -68,7 +68,7 @@ const AuditDiffViewer: React.FC<AuditDiffViewerProps> = ({ oldValues, newValues,
             </div>
             <div className={cn(
               "px-3 py-1.5 break-all font-mono",
-              isChanged && "text-green-600 font-semibold"
+              isChanged && "text-[color:var(--emerald-1)] font-semibold"
             )}>
               {formatValue(newVal)}
             </div>

@@ -59,7 +59,7 @@ const DeveloperHubOverview = () => {
   const trustBadge = () => {
     if (trustLevel === "auto_publish") {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30">
           <ShieldCheck className="w-3.5 h-3.5" /> Live publishing enabled
         </span>
       );
@@ -105,7 +105,7 @@ const DeveloperHubOverview = () => {
 
   const statusBadge = (status?: string) => {
     const map: Record<string, { label: string; className: string; icon: typeof CheckCircle2 }> = {
-      approved: { label: "Approved", className: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: CheckCircle2 },
+      approved: { label: "Approved", className: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30", icon: CheckCircle2 },
       submitted: { label: "Submitted", className: "bg-amber-50 text-amber-800 border-amber-200", icon: Clock },
       under_review: { label: "Under Review", className: "bg-blue-50 text-blue-700 border-blue-200", icon: Clock },
       rejected: { label: "Rejected", className: "bg-red-50 text-red-700 border-red-200", icon: AlertTriangle },

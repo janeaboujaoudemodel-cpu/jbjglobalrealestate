@@ -100,7 +100,7 @@ export function MessageComplianceChecker({
 
   if (result.isCompliant) {
     return (
-      <div className="flex items-center gap-1.5 text-green-600 text-xs">
+      <div className="flex items-center gap-1.5 text-[color:var(--emerald-1)] text-xs">
         <CheckCircle className="w-3.5 h-3.5" />
         <span>Message compliant</span>
       </div>

@@ -611,10 +611,10 @@ The content should be:
                         key={value}
                         onClick={() => setCampaignType(value as CampaignType)}
                         className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-all ${
-                          campaignType === value
-                            ? 'border-[#B89555] bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                            : 'border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50'
-                        }`}
+ campaignType === value
+ ? 'border-[#B89555] bg-[#EFE6D6]/20 text-[#1A1A1A]'
+ : 'border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50'
+ }`}
                       >
                         <Icon className="w-4 h-4" />
                         <span className="text-sm font-medium">{label}</span>
@@ -706,8 +706,8 @@ The content should be:
                                 <label
                                   key={r.id}
                                   className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors text-xs ${
-                                    r.selected ? 'bg-[#EFE6D6]/10 border border-[#B89555]/30' : 'hover:bg-[#EFE6D6]/5'
-                                  }`}
+ r.selected ? 'bg-[#EFE6D6]/10 border border-[#B89555]/30' : 'hover:bg-[#EFE6D6]/5'
+ }`}
                                 >
                                   <Checkbox
                                     checked={r.selected}
@@ -912,7 +912,7 @@ The content should be:
             </div>
             <div className="p-3 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30">
               <p className="text-sm text-[#1A1A1A]">
-                <CheckCircle className="w-4 h-4 inline mr-2 text-green-600" />
+                <CheckCircle className="w-4 h-4 inline mr-2 text-[color:var(--emerald-1)]" />
                 Campaign will be sent on{' '}
                 <strong>{scheduleDate && new Date(`${scheduleDate}T${scheduleTime}`).toLocaleString()}</strong>
               </p>

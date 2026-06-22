@@ -202,8 +202,8 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
           className="p-4 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
         >
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-100">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div className="p-2 rounded-lg jj-emerald-soft">
+              <CheckCircle className="w-5 h-5 text-[color:var(--emerald-1)]" />
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1A1A1A]">{activeCount}</p>
@@ -291,7 +291,7 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
                   </TableCell>
                   <TableCell className="text-[#1A1A1A]/70">{subscriber.source || 'Direct'}</TableCell>
                   <TableCell>
-                    <Badge className={subscriber.is_active ? 'bg-green-100 text-green-700' : 'bg-[#F7F2EA] text-[#1A1A1A]/70'}>
+                    <Badge className={subscriber.is_active ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : 'bg-[#F7F2EA] text-[#1A1A1A]/70'}>
                       {subscriber.is_active ? 'Active' : 'Inactive'}
                     </Badge>
                   </TableCell>

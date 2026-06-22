@@ -221,7 +221,7 @@ ${services.length ? `<div class="services"><h2>Our Services</h2><div class="serv
                 <li>Go to <strong className="text-[hsl(var(--foreground))]">DNS Settings</strong> → Add Record:
                   <div className="mt-1 bg-[#FDFBF7]/60 rounded-lg p-2 font-mono text-[10px] space-y-1">
                     <p><span className="text-blue-600">A Record</span>: @ → your-host-IP-address</p>
-                    <p><span className="text-emerald-600">CNAME</span>: www → your-subdomain.host.com</p>
+                    <p><span className="text-[color:var(--emerald-1)]">CNAME</span>: www → your-subdomain.host.com</p>
                   </div>
                 </li>
                 <li>Wait 24-48 hours for DNS propagation</li>

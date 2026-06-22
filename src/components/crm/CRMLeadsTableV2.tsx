@@ -527,7 +527,7 @@ export default function CRMLeadsTableV2({
               <span className="font-bold uppercase tracking-wider text-[#1A1A1A]/60">Distribution:</span>
               <span><b className="text-[#1A1A1A]">{total}</b> total</span>
               <span className="text-[#1A1A1A]/30">·</span>
-              <span><b className="text-emerald-700">{mine}</b> with me</span>
+              <span><b className="text-[color:var(--emerald-1)]">{mine}</b> with me</span>
               <span className="text-[#1A1A1A]/30">·</span>
               <span><b className="text-blue-700">{assigned}</b> assigned</span>
               <span className="text-[#1A1A1A]/30">·</span>
@@ -541,10 +541,10 @@ export default function CRMLeadsTableV2({
                       type="button"
                       onClick={() => setAssigneeFilter(assigneeFilter === id ? "" : id)}
                       className={`px-2 py-0.5 rounded-full border text-[11px] transition-colors ${
-                        assigneeFilter === id
-                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
-                          : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/75 hover:bg-[#EFE6D6]/70"
-                      }`}
+ assigneeFilter === id
+ ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+ : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/75 hover:bg-[#EFE6D6]/70"
+ }`}
                     >
                       {assignedNames[id] || id.slice(0, 6)} · <b>{count}</b>
                     </button>
@@ -789,8 +789,8 @@ export default function CRMLeadsTableV2({
                         variant={vip ? "default" : "outline"}
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleToggleVIP(lead.id, vip); }}
                         className={`min-w-[72px] font-semibold ${vip
-                          ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E8DFCF] border border-[#B89555] shadow-sm"
-                          : "border-[#B89555]/40 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/40 bg-[#FDFBF7]"}`}
+ ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E8DFCF] border border-[#B89555] shadow-sm"
+ : "border-[#B89555]/40 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/40 bg-[#FDFBF7]"}`}
                       >
                         {vip ? (
                           <>

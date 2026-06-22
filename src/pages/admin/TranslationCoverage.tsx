@@ -102,7 +102,7 @@ export default function TranslationCoverage() {
                         </div>
                       </div>
                       <div className="flex items-baseline justify-between">
-                        <span className={`text-2xl font-bold ${healthy ? "text-emerald-600" : "text-amber-600"}`}>
+                        <span className={`text-2xl font-bold ${healthy ? "text-[color:var(--emerald-1)]" : "text-amber-600"}`}>
                           {s.count.toLocaleString()}
                         </span>
                         <span className="text-xs text-[#1A1A1A]/50">strings cached</span>

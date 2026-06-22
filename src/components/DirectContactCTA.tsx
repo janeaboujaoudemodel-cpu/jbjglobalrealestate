@@ -109,10 +109,10 @@ const DirectContactCTA = ({
           <>
             <h2 
               className={`text-center font-bold mb-3 ${
-                titleSize === 'premium' 
-                  ? 'text-3xl md:text-4xl lg:text-5xl' 
-                  : 'text-2xl md:text-3xl'
-              }`}
+ titleSize === 'premium' 
+ ? 'text-3xl md:text-4xl lg:text-5xl' 
+ : 'text-2xl md:text-3xl'
+ }`}
             >
               <span className="text-[#1A1A1A]">{resolvedTitle.split(' ').slice(0, -1).join(' ')}</span>{" "}
               <span className="text-[#1A1A1A]">{resolvedTitle.split(' ').slice(-1)[0]}</span>
@@ -128,16 +128,16 @@ const DirectContactCTA = ({
           {/* WhatsApp */}
           <a 
             href={getWhatsAppUrl()}
-            className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-emerald-500/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:-translate-y-1 hover:border-emerald-500"
+            className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[color:var(--emerald-1)]/30/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:-translate-y-1 hover:border-[color:var(--emerald-1)]/30"
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-emerald-500/50 flex-shrink-0">
-              <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 jj-emerald-solid/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-[color:var(--emerald-1)]/30/50 flex-shrink-0">
+              <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-[color:var(--emerald-1)]" />
             </div>
             <div>
               <h3 className="text-[#1A1A1A] font-semibold text-sm mb-0.5">
                 {t('cta.whatsapp', 'WhatsApp')}
               </h3>
-              <p className="text-emerald-600 text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
+              <p className="text-[color:var(--emerald-1)] text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
             </div>
           </a>
 

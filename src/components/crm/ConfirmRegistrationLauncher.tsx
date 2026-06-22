@@ -80,7 +80,7 @@ function statusLabel(d: DevRow): { label: string; tone: string; tip: string } {
 }
 
 const TONE_CLASS: Record<string, string> = {
-  emerald: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  emerald: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   amber: "bg-amber-100 text-amber-900 border-amber-300",
   blue: "bg-blue-100 text-blue-900 border-blue-300",
   red: "bg-red-100 text-red-900 border-red-300",
@@ -259,14 +259,14 @@ export function ConfirmRegistrationLauncher({
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         {reg && (
-                          <Badge variant="outline" className="border-emerald-300 bg-emerald-50 text-emerald-900 text-[10px]">
+                          <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 jj-emerald-soft text-[color:var(--emerald-1)] text-[10px]">
                             Registered
                           </Badge>
                         )}
                         <span
                           className={`text-[11px] font-bold px-2 py-0.5 rounded ${
-                            already ? "bg-[#1A1A1A] text-white" : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40"
-                          }`}
+ already ? "bg-[#1A1A1A] text-white" : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40"
+ }`}
                         >
                           {already ? "Added" : "Add"}
                         </span>

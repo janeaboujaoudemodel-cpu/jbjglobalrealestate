@@ -123,7 +123,7 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
       responded: { color: 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30', label: 'Responded' },
       qualified: { color: 'bg-purple-500/10 text-purple-600 border-purple-500/30', label: 'Qualified' },
       negotiating: { color: 'bg-amber-500/10 text-amber-600 border-amber-500/30', label: 'Negotiating' },
-      converted: { color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30', label: 'Converted' },
+      converted: { color: 'jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', label: 'Converted' },
       rejected: { color: 'bg-red-500/10 text-red-600 border-red-500/30', label: 'Rejected' },
       not_interested: { color: 'bg-orange-500/10 text-orange-600 border-orange-500/30', label: 'Not Interested' },
     };

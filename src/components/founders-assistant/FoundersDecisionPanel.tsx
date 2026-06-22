@@ -333,10 +333,10 @@ export function FoundersDecisionPanel() {
                         className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors"
                       >
                         <div className={`h-2 w-2 rounded-full mt-2 ${
-                          insight.impactLevel === 'critical' ? 'bg-red-500' :
-                          insight.impactLevel === 'high' ? 'bg-orange-500' :
-                          insight.impactLevel === 'medium' ? 'bg-amber-500' : 'bg-blue-500'
-                        }`} />
+ insight.impactLevel === 'critical' ? 'bg-red-500' :
+ insight.impactLevel === 'high' ? 'bg-orange-500' :
+ insight.impactLevel === 'medium' ? 'bg-amber-500' : 'bg-blue-500'
+ }`} />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">{insight.title}</p>
                           <p className="text-xs text-muted-foreground truncate">
@@ -400,10 +400,10 @@ export function FoundersDecisionPanel() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
-                        insight.category === 'opportunity' ? 'bg-green-500/10' :
-                        insight.category === 'risk' ? 'bg-red-500/10' :
-                        insight.category === 'anomaly' ? 'bg-purple-500/10' : 'bg-blue-500/10'
-                      }`}>
+ insight.category === 'opportunity' ? 'jj-emerald-solid/10' :
+ insight.category === 'risk' ? 'bg-red-500/10' :
+ insight.category === 'anomaly' ? 'bg-purple-500/10' : 'bg-blue-500/10'
+ }`}>
                         {insight.category === 'opportunity' ? <TrendingUp className="h-5 w-5 text-green-500" /> :
                          insight.category === 'risk' ? <AlertTriangle className="h-5 w-5 text-red-500" /> :
                          insight.category === 'anomaly' ? <Activity className="h-5 w-5 text-purple-500" /> :
@@ -527,10 +527,10 @@ export function FoundersDecisionPanel() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
-                        rec.status === 'approved' ? 'bg-green-500/10' :
-                        rec.status === 'rejected' ? 'bg-red-500/10' :
-                        rec.status === 'executed' ? 'bg-blue-500/10' : 'bg-amber-500/10'
-                      }`}>
+ rec.status === 'approved' ? 'jj-emerald-solid/10' :
+ rec.status === 'rejected' ? 'bg-red-500/10' :
+ rec.status === 'executed' ? 'bg-blue-500/10' : 'bg-amber-500/10'
+ }`}>
                         {rec.status === 'approved' ? <CheckCircle className="h-5 w-5 text-green-500" /> :
                          rec.status === 'rejected' ? <ThumbsDown className="h-5 w-5 text-red-500" /> :
                          rec.status === 'executed' ? <Play className="h-5 w-5 text-blue-500" /> :
@@ -609,23 +609,23 @@ export function FoundersDecisionPanel() {
           <div className="grid gap-4">
             {riskAlerts.map((alert) => (
               <Card key={alert.id} className={`border-l-4 ${
-                alert.severity === 'critical' ? 'border-l-red-500' :
-                alert.severity === 'high' ? 'border-l-orange-500' :
-                alert.severity === 'medium' ? 'border-l-amber-500' : 'border-l-blue-500'
-              }`}>
+ alert.severity === 'critical' ? 'border-l-red-500' :
+ alert.severity === 'high' ? 'border-l-orange-500' :
+ alert.severity === 'medium' ? 'border-l-amber-500' : 'border-l-blue-500'
+ }`}>
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
-                        alert.severity === 'critical' ? 'bg-red-500/10' :
-                        alert.severity === 'high' ? 'bg-orange-500/10' :
-                        alert.severity === 'medium' ? 'bg-amber-500/10' : 'bg-blue-500/10'
-                      }`}>
+ alert.severity === 'critical' ? 'bg-red-500/10' :
+ alert.severity === 'high' ? 'bg-orange-500/10' :
+ alert.severity === 'medium' ? 'bg-amber-500/10' : 'bg-blue-500/10'
+ }`}>
                         <AlertTriangle className={`h-5 w-5 ${
-                          alert.severity === 'critical' ? 'text-red-500' :
-                          alert.severity === 'high' ? 'text-orange-500' :
-                          alert.severity === 'medium' ? 'text-amber-500' : 'text-blue-500'
-                        }`} />
+ alert.severity === 'critical' ? 'text-red-500' :
+ alert.severity === 'high' ? 'text-orange-500' :
+ alert.severity === 'medium' ? 'text-amber-500' : 'text-blue-500'
+ }`} />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -710,9 +710,9 @@ export function FoundersDecisionPanel() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
-                        decision.type === 'auto_executed' ? 'bg-blue-500/10' :
-                        decision.type === 'human_approved' ? 'bg-green-500/10' : 'bg-purple-500/10'
-                      }`}>
+ decision.type === 'auto_executed' ? 'bg-blue-500/10' :
+ decision.type === 'human_approved' ? 'jj-emerald-solid/10' : 'bg-purple-500/10'
+ }`}>
                         {decision.type === 'auto_executed' ? <Zap className="h-5 w-5 text-blue-500" /> :
                          decision.type === 'human_approved' ? <CheckCircle className="h-5 w-5 text-green-500" /> :
                          <Brain className="h-5 w-5 text-purple-500" />}
@@ -757,7 +757,7 @@ export function FoundersDecisionPanel() {
                       {decision.resultTracking.actualOutcome && (
                         <div>
                           <p className="text-xs text-muted-foreground">Actual Outcome</p>
-                          <p className="text-sm text-green-600">{decision.resultTracking.actualOutcome}</p>
+                          <p className="text-sm text-[color:var(--emerald-1)]">{decision.resultTracking.actualOutcome}</p>
                         </div>
                       )}
                     </div>

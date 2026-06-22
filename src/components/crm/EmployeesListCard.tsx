@@ -40,8 +40,8 @@ const EmployeesListCard = ({ employees, onView }: EmployeesListCardProps) => {
     <div
       key={employee.id}
       className={`flex items-center justify-between p-3 rounded-lg border transition-colors hover:bg-muted/30 ${
-        isNew ? 'bg-green-500/5 border-green-500/20' : 'bg-background/50 border-border'
-      }`}
+ isNew ? 'jj-emerald-solid/5 border-[color:var(--emerald-1)]/30/20' : 'bg-background/50 border-border'
+ }`}
     >
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
@@ -53,7 +53,7 @@ const EmployeesListCard = ({ employees, onView }: EmployeesListCardProps) => {
           <div className="flex items-center gap-2">
             <p className="font-medium text-white">{employee.candidateName}</p>
             {isNew && (
-              <Badge className="bg-green-600/20 text-green-400 text-xs border-green-500/30">
+              <Badge className="jj-emerald-solid/20 text-green-400 text-xs border-[color:var(--emerald-1)]/30/30">
                 New
               </Badge>
             )}
@@ -103,12 +103,12 @@ const EmployeesListCard = ({ employees, onView }: EmployeesListCardProps) => {
     <div className="space-y-4">
       {/* New Employees Section */}
       {newEmployees.length > 0 && (
-        <Card className="bg-card border-green-500/30">
+        <Card className="bg-card border-[color:var(--emerald-1)]/30/30">
           <CardHeader className="pb-3">
             <CardTitle className="text-white text-lg flex items-center gap-2">
               <UserCheck className="h-5 w-5 text-green-400" />
               New Employees
-              <Badge className="ml-2 bg-green-600">{newEmployees.length}</Badge>
+              <Badge className="ml-2 jj-emerald-solid">{newEmployees.length}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">

@@ -141,8 +141,8 @@ const InterviewCompleteModal = ({
             <Label className="text-white font-medium">Decision</Label>
             <RadioGroup value={decision} onValueChange={(v) => setDecision(v as 'approve' | 'reject' | 'hold')}>
               <div className={`flex items-center space-x-3 p-3 rounded-lg border transition-colors cursor-pointer ${
-                decision === 'approve' ? 'bg-green-500/10 border-green-500/50' : 'bg-background/50 border-border hover:border-green-500/30'
-              }`}>
+ decision === 'approve' ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/50' : 'bg-background/50 border-border hover:border-[color:var(--emerald-1)]/30/30'
+ }`}>
                 <RadioGroupItem value="approve" id="approve" />
                 <Label htmlFor="approve" className="flex items-center gap-2 cursor-pointer flex-1">
                   <CheckCircle className="h-5 w-5 text-green-400" />
@@ -156,8 +156,8 @@ const InterviewCompleteModal = ({
               </div>
 
               <div className={`flex items-center space-x-3 p-3 rounded-lg border transition-colors cursor-pointer ${
-                decision === 'hold' ? 'bg-orange-500/10 border-orange-500/50' : 'bg-background/50 border-border hover:border-orange-500/30'
-              }`}>
+ decision === 'hold' ? 'bg-orange-500/10 border-orange-500/50' : 'bg-background/50 border-border hover:border-orange-500/30'
+ }`}>
                 <RadioGroupItem value="hold" id="hold" />
                 <Label htmlFor="hold" className="flex items-center gap-2 cursor-pointer flex-1">
                   <Clock className="h-5 w-5 text-orange-400" />
@@ -169,8 +169,8 @@ const InterviewCompleteModal = ({
               </div>
 
               <div className={`flex items-center space-x-3 p-3 rounded-lg border transition-colors cursor-pointer ${
-                decision === 'reject' ? 'bg-red-500/10 border-red-500/50' : 'bg-background/50 border-border hover:border-red-500/30'
-              }`}>
+ decision === 'reject' ? 'bg-red-500/10 border-red-500/50' : 'bg-background/50 border-border hover:border-red-500/30'
+ }`}>
                 <RadioGroupItem value="reject" id="reject" />
                 <Label htmlFor="reject" className="flex items-center gap-2 cursor-pointer flex-1">
                   <XCircle className="h-5 w-5 text-red-400" />
@@ -224,10 +224,10 @@ const InterviewCompleteModal = ({
             onClick={handleSubmit}
             disabled={isSubmitting}
             className={`font-semibold ${
-              decision === 'approve' ? 'bg-green-600 hover:bg-green-700' :
-              decision === 'reject' ? 'bg-red-600 hover:bg-red-700' :
-              'bg-orange-600 hover:bg-orange-700'
-            }`}
+ decision === 'approve' ? 'jj-emerald-solid hover:jj-emerald-solid' :
+ decision === 'reject' ? 'bg-red-600 hover:bg-red-700' :
+ 'bg-orange-600 hover:bg-orange-700'
+ }`}
           >
             {isSubmitting ? (
               <>

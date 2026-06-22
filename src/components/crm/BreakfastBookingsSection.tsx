@@ -89,10 +89,10 @@ export const BreakfastBookingsSection = () => {
               key={k}
               onClick={() => setFilter(k)}
               className={`text-xs px-3 py-1 rounded-md border ${
-                filter === k
-                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:bg-[#EFE6D6]"
-              }`}
+ filter === k
+ ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+ : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:bg-[#EFE6D6]"
+ }`}
             >
               {k[0].toUpperCase() + k.slice(1)}
             </button>
@@ -156,8 +156,8 @@ export const BreakfastBookingsSection = () => {
                   </td>
                   <td className="px-3 py-2 align-top">
                     <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-semibold ${
-                      r.status === "completed" ? "bg-emerald-100 text-emerald-800" : "bg-[#EFE6D6] text-[#1A1A1A]"
-                    }`}>{r.status}</span>
+ r.status === "completed" ? "jj-emerald-soft text-[color:var(--emerald-1)]" : "bg-[#EFE6D6] text-[#1A1A1A]"
+ }`}>{r.status}</span>
                   </td>
                 </tr>
               ))}

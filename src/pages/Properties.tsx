@@ -178,7 +178,7 @@ const prioritizeOffPlan = <T extends object>(projects: T[]): T[] =>
 const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses", dotClass: null },
   { value: "Announced", label: "Announced", dotClass: "bg-pink-400" },
-  { value: "Presale (EOI)", label: "Pre-sale (EOI)", dotClass: "bg-green-400" },
+  { value: "Presale (EOI)", label: "Pre-sale (EOI)", dotClass: "jj-emerald-solid" },
   { value: "Start of Sales", label: "Start of Sales", dotClass: "bg-yellow-400" },
   { value: "On Sale", label: "On Sale", dotClass: "bg-blue-400" },
   { value: "Sold Out", label: "Sold Out", dotClass: "bg-red-500" },
@@ -1317,10 +1317,10 @@ const Properties = () => {
                               type="button"
                               onClick={() => { setCurrentPage(p); document.getElementById("properties-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                               className={`h-9 min-w-[36px] px-2 rounded-md border text-[13px] font-semibold tabular-nums transition-colors ${
-                                p === safePage
-                                  ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
-                                  : "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                              }`}
+ p === safePage
+ ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+ : "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+ }`}
                               aria-current={p === safePage ? "page" : undefined}
                             >
                               {p}

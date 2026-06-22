@@ -127,7 +127,7 @@ const ExecutiveAIInsights = () => {
   const getCategoryColor = (category: AIInsight["category"]) => {
     switch (category) {
       case "pattern":
-        return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
+        return "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30";
       case "correlation":
         return "bg-blue-500/20 text-blue-400 border-blue-500/30";
       case "delta":
@@ -191,10 +191,10 @@ const ExecutiveAIInsights = () => {
                 key={nav.path}
                 to={nav.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  nav.active
-                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                    : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
-                }`}
+ nav.active
+ ? "bg-[#EFE6D6] text-[#1A1A1A]"
+ : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
+ }`}
               >
                 {nav.label}
               </Link>
@@ -303,7 +303,7 @@ const ExecutiveAIInsights = () => {
                     <li>✗ Price predictions</li>
                   </ul>
                 </div>
-                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
+                <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
                   <h4 className="text-emerald-400 font-medium mb-2">Allowed Outputs</h4>
                   <ul className="text-sm text-white/85 space-y-1">
                     <li>✓ Pattern recognition</li>

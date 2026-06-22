@@ -40,7 +40,7 @@ const statusColors: Record<string, string> = {
   contacted: "border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#F7F2EA]",
   follow_up: "border-amber-500 text-amber-600 bg-amber-50",
   qualified: "border-purple-500 text-purple-600 bg-purple-50",
-  converted: "border-green-500 text-green-600 bg-green-50",
+  converted: "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] jj-emerald-soft",
 };
 
 export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
@@ -108,7 +108,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
                 variant="outline"
                 onClick={handleWhatsApp}
                 disabled={!lead.phone}
-                className="border-green-500 text-green-600 hover:bg-green-50"
+                className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
               >
                 <MessageSquare className="h-4 w-4" />
               </Button>
@@ -203,7 +203,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
             size="sm"
             onClick={handleWhatsApp}
             disabled={!lead.phone}
-            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+            className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
           >
             <MessageSquare className="h-4 w-4 mr-1" />
             WhatsApp

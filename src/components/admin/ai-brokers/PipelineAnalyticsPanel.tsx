@@ -267,9 +267,9 @@ export function PipelineAnalyticsPanel() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[#1A1A1A]/60 text-sm">Conversion Rate</span>
                   <span className={`text-sm font-medium ${
-                    pipeline.conversionRate >= 20 ? 'text-emerald-500' : 
-                    pipeline.conversionRate >= 10 ? 'text-amber-500' : 'text-red-500'
-                  }`}>
+ pipeline.conversionRate >= 20 ? 'text-emerald-500' : 
+ pipeline.conversionRate >= 10 ? 'text-amber-500' : 'text-red-500'
+ }`}>
                     {pipeline.conversionRate.toFixed(1)}%
                   </span>
                 </div>
@@ -284,7 +284,7 @@ export function PipelineAnalyticsPanel() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[#1A1A1A]/60 text-sm">SLA Compliance</span>
                   <Badge variant={pipeline.slaComplianceRate >= 90 ? "default" : "destructive"} 
-                    className={pipeline.slaComplianceRate >= 90 ? "bg-emerald-100 text-emerald-700" : ""}>
+                    className={pipeline.slaComplianceRate >= 90 ? "jj-emerald-soft text-[color:var(--emerald-1)]" : ""}>
                     {pipeline.slaComplianceRate}%
                   </Badge>
                 </div>
@@ -307,7 +307,7 @@ export function PipelineAnalyticsPanel() {
                           <span className="text-[#1A1A1A] truncate max-w-[120px]">{broker.brokerName}</span>
                           <div className="flex items-center gap-2">
                             <span className="text-[#1A1A1A]/40">{broker.leads} leads</span>
-                            <Badge variant="outline" className="border-[#B89555]/30 text-emerald-600">
+                            <Badge variant="outline" className="border-[#B89555]/30 text-[color:var(--emerald-1)]">
                               {broker.conversions} won
                             </Badge>
                           </div>
@@ -327,7 +327,7 @@ export function PipelineAnalyticsPanel() {
           <div className="flex items-center gap-6 text-sm flex-wrap">
             <span className="text-[#1A1A1A]/60">Intent Classification:</span>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-emerald-500" />
+              <div className="w-3 h-3 rounded-full jj-emerald-solid" />
               <span className="text-[#1A1A1A]">Buy = Investment, Purchase, Off-plan</span>
             </div>
             <div className="flex items-center gap-2">

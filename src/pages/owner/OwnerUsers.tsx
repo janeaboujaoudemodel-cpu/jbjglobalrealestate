@@ -32,7 +32,7 @@ interface DetailPayload {
 }
 
 const CATEGORY_META: Record<Category, { label: string; icon: any; cls: string }> = {
-  investor: { label: "Investor", icon: TrendingUp, cls: "bg-emerald-500/15 text-emerald-700 border-emerald-500/40" },
+  investor: { label: "Investor", icon: TrendingUp, cls: "jj-emerald-solid/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40" },
   broker: { label: "Broker", icon: Handshake, cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" },
   developer: { label: "Developer", icon: Building2, cls: "bg-purple-500/15 text-purple-700 border-purple-500/40" },
   unassigned: { label: "Unassigned", icon: UserX, cls: "bg-[#1A1A1A]/10 text-[#1A1A1A]/70 border-[#1A1A1A]/20" },
@@ -145,8 +145,8 @@ export default function OwnerUsers() {
                 key={c}
                 onClick={() => setFilter(active ? "all" : c)}
                 className={`text-left p-4 rounded-xl border bg-[#F7F2EA] transition-all hover:border-[#B89555] ${
-                  active ? "border-[#B89555] ring-2 ring-[#B89555]/30" : "border-[#B89555]/30"
-                }`}
+ active ? "border-[#B89555] ring-2 ring-[#B89555]/30" : "border-[#B89555]/30"
+ }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">{meta.label}s</span>

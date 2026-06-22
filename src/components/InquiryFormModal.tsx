@@ -377,7 +377,7 @@ const InquiryFormModal = ({
               >
                 ✕
               </button>
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br flex items-center justify-center mx-auto mb-6 shadow-2xl">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">Welcome to the Community!</h3>
@@ -438,10 +438,10 @@ const InquiryFormModal = ({
                               }
                             }}
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
-                              field.value === 'buyer' 
-                                ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
-                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
-                            }`}
+ field.value === 'buyer' 
+ ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
+ : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
+ }`}
                           >
                             <Target className="w-5 h-5" />
                             <span className="text-xs font-medium">Buyer</span>
@@ -453,10 +453,10 @@ const InquiryFormModal = ({
                               form.setValue('buyerType', undefined);
                             }}
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
-                              field.value === 'broker' 
-                                ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
-                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
-                            }`}
+ field.value === 'broker' 
+ ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
+ : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
+ }`}
                           >
                             <Briefcase className="w-5 h-5" />
                             <span className="text-xs font-medium">Broker</span>
@@ -468,10 +468,10 @@ const InquiryFormModal = ({
                               form.setValue('buyerType', undefined);
                             }}
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
-                              field.value === 'visitor' 
-                                ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
-                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
-                            }`}
+ field.value === 'visitor' 
+ ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
+ : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
+ }`}
                           >
                             <Users className="w-5 h-5" />
                             <span className="text-xs font-medium">Visitor</span>
@@ -495,10 +495,10 @@ const InquiryFormModal = ({
                               type="button"
                               onClick={() => field.onChange('homeowner')}
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
-                                field.value === 'homeowner' 
-                                  ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
-                                  : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
-                              }`}
+ field.value === 'homeowner' 
+ ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
+ : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
+ }`}
                             >
                               <Home className="w-4 h-4" />
                               <span className="text-sm font-medium">Buy a Home</span>
@@ -507,10 +507,10 @@ const InquiryFormModal = ({
                               type="button"
                               onClick={() => field.onChange('investor')}
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
-                                field.value === 'investor' 
-                                  ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
-                                  : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
-                              }`}
+ field.value === 'investor' 
+ ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
+ : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
+ }`}
                             >
                               <TrendingUp className="w-4 h-4" />
                               <span className="text-sm font-medium">Invest</span>
@@ -563,10 +563,10 @@ const InquiryFormModal = ({
                               if (emailVerified) setEmailVerified(false);
                             }}
                             className={`h-12 bg-[#FDFBF7] text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 rounded-lg w-full border-2 ${
-                              emailStatus === 'valid' ? 'border-green-500/60 focus:border-green-500' :
-                              emailStatus === 'invalid' ? 'border-red-500/60 focus:border-red-500' :
-                              'border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]'
-                            }`}
+ emailStatus === 'valid' ? 'border-[color:var(--emerald-1)]/30/60 focus:border-[color:var(--emerald-1)]/30' :
+ emailStatus === 'invalid' ? 'border-red-500/60 focus:border-red-500' :
+ 'border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]'
+ }`}
                             placeholder="email@example.com"
                           />
                         </FormControl>

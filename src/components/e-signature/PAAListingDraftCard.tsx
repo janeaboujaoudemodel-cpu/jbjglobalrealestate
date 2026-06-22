@@ -139,7 +139,7 @@ export default function PAAListingDraftCard({ envelopeId, category }: Props) {
         <CardTitle className="text-sm flex items-center justify-between text-[#1A1A1A]">
           <span className="flex items-center gap-2"><Building2 className="w-4 h-4" /> Listing Draft</span>
           <Badge className={project.is_published
-            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+            ? "jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30"
             : "bg-white text-[#1A1A1A]/80 border border-[#B89555]/40"}>
             {project.is_published ? "Published" : "Draft"}
           </Badge>

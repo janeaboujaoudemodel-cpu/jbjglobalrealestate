@@ -257,7 +257,7 @@ const DeveloperCheckin = ({ developer, salesReps, activeCheckin, onCheckinComple
             </CardDescription>
           </div>
           {activeCheckin && (
-            <Badge variant="secondary" className="bg-green-500/20 text-green-600">
+            <Badge variant="secondary" className="jj-emerald-solid/20 text-[color:var(--emerald-1)]">
               <Clock className="h-3 w-3 mr-1" />
               Checked In
             </Badge>
@@ -279,7 +279,7 @@ const DeveloperCheckin = ({ developer, salesReps, activeCheckin, onCheckinComple
                 </a>
               </Button>
               {primaryRep.whatsapp_number && (
-                <Button size="icon" variant="outline" className="text-green-600" asChild>
+                <Button size="icon" variant="outline" className="text-[color:var(--emerald-1)]" asChild>
                   <a href={`https://wa.me/${primaryRep.whatsapp_number.replace(/\D/g, '')}`} target="_blank">
                     <MessageCircle className="h-4 w-4" />
                   </a>

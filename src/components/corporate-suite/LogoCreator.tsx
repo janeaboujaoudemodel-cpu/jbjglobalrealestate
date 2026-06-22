@@ -474,9 +474,9 @@ export default function LogoCreator() {
       </div>
 
       {licenseCode && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center space-y-1">
-          <p className="text-xs text-green-700 font-semibold">Design Licensed</p>
-          <p className="text-sm font-mono font-bold text-green-800">{licenseCode}</p>
+        <div className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-xl p-3 text-center space-y-1">
+          <p className="text-xs text-[color:var(--emerald-1)] font-semibold">Design Licensed</p>
+          <p className="text-sm font-mono font-bold text-[color:var(--emerald-1)]">{licenseCode}</p>
         </div>
       )}
 
@@ -513,10 +513,10 @@ export default function LogoCreator() {
             <button
               onClick={() => setShowFavoritesOnly(v => !v)}
               className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[9px] font-semibold transition-all border ${
-                showFavoritesOnly
-                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]"
-                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold))]/40"
-              }`}
+ showFavoritesOnly
+ ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]"
+ : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold))]/40"
+ }`}
             >
               <Star size={9} className={showFavoritesOnly ? "fill-current" : ""} />
               {showFavoritesOnly ? "All" : "Favorites"}
@@ -527,8 +527,8 @@ export default function LogoCreator() {
               <button key={h.timestamp}
                 onClick={() => { setLogo(h); setGeneratedColors(generatedColors); }}
                 className={`relative group rounded-xl border-2 p-1.5 transition-all hover:border-[hsl(var(--gold))]/60 ${
-                  logo?.timestamp === h.timestamp ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/10" : "border-[hsl(var(--border))]"
-                }`}
+ logo?.timestamp === h.timestamp ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/10" : "border-[hsl(var(--border))]"
+ }`}
               >
                 <div className="flex items-center justify-center" style={{ height: 40 }}>
                   <LogoPreview svgContent={h.svgContent} size={32} />
@@ -540,10 +540,10 @@ export default function LogoCreator() {
                 <button
                   onClick={(e) => { e.stopPropagation(); toggleFavorite(h.timestamp); }}
                   className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center transition-all ${
-                    favorites.has(h.timestamp)
-                      ? "bg-red-500 text-white shadow-sm"
-                      : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100"
-                  }`}
+ favorites.has(h.timestamp)
+ ? "bg-red-500 text-white shadow-sm"
+ : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100"
+ }`}
                 >
                   <Heart size={9} className={favorites.has(h.timestamp) ? "fill-current" : ""} />
                 </button>

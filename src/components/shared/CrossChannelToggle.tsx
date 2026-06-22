@@ -82,7 +82,7 @@ export function CrossChannelToggle({
         <div className="flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm text-[#1A1A1A]">Also notify in Team Chat</span>
-          <Badge className="bg-green-100 text-green-700 border-green-300 text-[10px] px-1.5 h-4">
+          <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[10px] px-1.5 h-4">
             Internal User{detection.displayName ? ` · ${detection.displayName}` : ""}
           </Badge>
         </div>

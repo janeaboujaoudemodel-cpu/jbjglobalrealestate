@@ -74,10 +74,10 @@ const getModeColors = (mode?: DesignMode) => {
       };
     case 'staging':
       return {
-        border: 'border-emerald-500/30',
-        selectedBorder: 'border-emerald-500/50',
-        selectedBg: 'bg-emerald-500/20',
-        selectedText: 'text-emerald-300',
+        border: 'border-[color:var(--emerald-1)]/30/30',
+        selectedBorder: 'border-[color:var(--emerald-1)]/30/50',
+        selectedBg: 'jj-emerald-solid/20',
+        selectedText: 'text-[color:var(--emerald-on)]',
         icon: 'text-emerald-400',
       };
     case 'chat':
@@ -126,7 +126,7 @@ const DesignProjectHeader = ({
           <FileText className={`w-5 h-5 ${colors.icon}`} />
           <h3 className="text-lg font-semibold text-white">Project Details</h3>
           {hasMeasurementData && (
-            <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
+            <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
               Measurements Imported
             </Badge>
           )}
@@ -177,12 +177,12 @@ const DesignProjectHeader = ({
                     type="button"
                     onClick={() => onPropertyTypeChange(type.id)}
                     className={`
-                      flex items-center gap-2 p-3 rounded-xl border transition-all
-                      ${isSelected
-                        ? `${colors.selectedBg} ${colors.selectedBorder} ${colors.selectedText}`
-                        : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
-                      }
-                    `}
+ flex items-center gap-2 p-3 rounded-xl border transition-all
+ ${isSelected
+ ? `${colors.selectedBg} ${colors.selectedBorder} ${colors.selectedText}`
+ : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+ }
+ `}
                   >
                     <Icon className="w-4 h-4" />
                     <span className="text-sm font-medium">{type.label}</span>

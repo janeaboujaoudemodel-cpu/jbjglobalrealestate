@@ -98,8 +98,8 @@ export default function LandlordRentalPortal() {
       pending_review: { label: 'Pending Review', className: 'bg-amber-100 text-amber-700' },
       admin_approved: { label: 'Admin Approved', className: 'bg-blue-100 text-blue-700' },
       assistant_approved: { label: 'Executive Approved', className: 'bg-purple-100 text-purple-700' },
-      founder_approved: { label: 'CEO Approved', className: 'bg-green-100 text-green-700' },
-      live: { label: 'Live', className: 'bg-green-500 text-white' },
+      founder_approved: { label: 'CEO Approved', className: 'jj-emerald-soft text-[color:var(--emerald-1)]' },
+      live: { label: 'Live', className: 'jj-emerald-solid text-white' },
       rejected: { label: 'Rejected', className: 'bg-red-100 text-red-700' },
       withdrawn: { label: 'Withdrawn', className: 'bg-[#F7F2EA] text-[#1A1A1A]/70' },
     };
@@ -230,7 +230,7 @@ export default function LandlordRentalPortal() {
                       'Tenant verification and background checks',
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-3">
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <CheckCircle2 className="h-5 w-5 text-[color:var(--emerald-1)]" />
                         <span className="text-[#1A1A1A]">{item}</span>
                       </div>
                     ))}

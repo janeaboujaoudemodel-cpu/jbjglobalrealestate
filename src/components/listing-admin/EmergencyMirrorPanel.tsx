@@ -89,30 +89,30 @@ export const EmergencyMirrorPanel = () => {
                 <p className="text-[#1A1A1A]/70 text-xs mb-1">Total Reelly Projects</p>
                 <p className="text-[#1A1A1A] text-2xl font-bold">{status.total_reelly_projects?.toLocaleString()}</p>
               </div>
-              <div className={`rounded-lg p-4 text-center border ${status.needs_bedrooms > 0 ? 'bg-red-50 border-red-300' : 'bg-emerald-50 border-emerald-300'}`}>
+              <div className={`rounded-lg p-4 text-center border ${status.needs_bedrooms > 0 ? 'bg-red-50 border-red-300' : 'jj-emerald-soft border-[color:var(--emerald-1)]/30'}`}>
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <BedDouble className="w-3 h-3 text-[#1A1A1A]/70" />
                   <p className="text-[#1A1A1A]/70 text-xs">Missing Bedrooms</p>
                 </div>
-                <p className={`text-2xl font-bold ${status.needs_bedrooms > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                <p className={`text-2xl font-bold ${status.needs_bedrooms > 0 ? 'text-red-600' : 'text-[color:var(--emerald-1)]'}`}>
                   {status.needs_bedrooms?.toLocaleString()}
                 </p>
               </div>
-              <div className={`rounded-lg p-4 text-center border ${status.needs_price > 0 ? 'bg-red-50 border-red-300' : 'bg-emerald-50 border-emerald-300'}`}>
+              <div className={`rounded-lg p-4 text-center border ${status.needs_price > 0 ? 'bg-red-50 border-red-300' : 'jj-emerald-soft border-[color:var(--emerald-1)]/30'}`}>
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <DollarSign className="w-3 h-3 text-[#1A1A1A]/70" />
                   <p className="text-[#1A1A1A]/70 text-xs">Missing Price</p>
                 </div>
-                <p className={`text-2xl font-bold ${status.needs_price > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                <p className={`text-2xl font-bold ${status.needs_price > 0 ? 'text-red-600' : 'text-[color:var(--emerald-1)]'}`}>
                   {status.needs_price?.toLocaleString()}
                 </p>
               </div>
-              <div className={`rounded-lg p-4 text-center border ${status.needs_cover > 0 ? 'bg-amber-50 border-amber-300' : 'bg-emerald-50 border-emerald-300'}`}>
+              <div className={`rounded-lg p-4 text-center border ${status.needs_cover > 0 ? 'bg-amber-50 border-amber-300' : 'jj-emerald-soft border-[color:var(--emerald-1)]/30'}`}>
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <Image className="w-3 h-3 text-[#1A1A1A]/70" />
                   <p className="text-[#1A1A1A]/70 text-xs">Missing Cover</p>
                 </div>
-                <p className={`text-2xl font-bold ${status.needs_cover > 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
+                <p className={`text-2xl font-bold ${status.needs_cover > 0 ? 'text-amber-600' : 'text-[color:var(--emerald-1)]'}`}>
                   {status.needs_cover?.toLocaleString()}
                 </p>
               </div>
@@ -127,7 +127,7 @@ export const EmergencyMirrorPanel = () => {
           )}
 
           {status && status.needs_bedrooms === 0 && status.needs_price === 0 && status.needs_cover === 0 && (
-            <Badge className="bg-emerald-50 text-emerald-700 border-emerald-300">All projects fully enriched</Badge>
+            <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">All projects fully enriched</Badge>
           )}
         </CardContent>
       </Card>
@@ -160,7 +160,7 @@ export const EmergencyMirrorPanel = () => {
 
           {lastResult && (
             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-4 space-y-2">
-              <p className="text-emerald-700 text-sm font-semibold">Mirror Dispatched Successfully</p>
+              <p className="text-[color:var(--emerald-1)] text-sm font-semibold">Mirror Dispatched Successfully</p>
               <div className="text-[#1A1A1A]/70 text-xs space-y-1">
                 <p>Projects queued: <span className="text-[#1A1A1A] font-medium">{lastResult.projects_queued}</span></p>
                 <p>Batches fired: <span className="text-[#1A1A1A] font-medium">{lastResult.batches_fired}</span></p>

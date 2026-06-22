@@ -66,7 +66,7 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
       return 'bg-amber-50 text-[#1A1A1A] border border-amber-200';
     }
     if (messageType === 'success') {
-      return 'bg-green-50 text-[#1A1A1A] border border-green-200';
+      return 'jj-emerald-soft text-[#1A1A1A] border border-[color:var(--emerald-1)]/30';
     }
     // Premium champagne for assistant - Locked Champagne Layer 3
     return variant === 'dark'

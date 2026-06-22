@@ -24,7 +24,7 @@ const VerifiedBadge = ({ size = "sm", className, showLabel = false }: VerifiedBa
     >
       <ShieldCheck className={cn(sizeMap[size], "flex-shrink-0")} />
       {showLabel && (
-        <span className="text-xs font-medium text-emerald-600">Verified</span>
+        <span className="text-xs font-medium text-[color:var(--emerald-1)]">Verified</span>
       )}
     </span>
   );

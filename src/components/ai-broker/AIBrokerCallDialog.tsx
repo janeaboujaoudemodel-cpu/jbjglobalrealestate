@@ -167,7 +167,7 @@ export function AIBrokerCallDialog({
               <Button
                 onClick={startCall}
                 disabled={!lead.phone}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
               >
                 <Phone className="h-4 w-4 mr-2" />
                 Start Call

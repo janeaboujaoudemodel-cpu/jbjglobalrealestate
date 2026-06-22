@@ -184,10 +184,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
             data-no-contrast-guard
             role="dialog"
             aria-label="JBJ Concierge"
-            className="fixed z-[9001] flex min-h-0 flex-col overflow-hidden
-              inset-x-0 top-[88px] bottom-0
-              sm:inset-x-auto sm:left-auto sm:right-4 sm:top-[104px] sm:bottom-4 sm:w-[440px] sm:rounded-3xl
-              border border-[#B89555]/55"
+            className="fixed z-[9001] flex min-h-0 flex-col overflow-hidden inset-x-0 top-[88px] bottom-0 sm:inset-x-auto sm:left-auto sm:right-4 sm:top-[104px] sm:bottom-4 sm:w-[440px] sm:rounded-3xl border border-[#B89555]/55"
             style={{
               background:
                 "linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,242,234,0.90) 45%, rgba(239,230,214,0.92) 100%)",
@@ -254,8 +251,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     {/* Concierge (active) */}
                     <div
                       data-no-contrast-guard
-                      className="relative flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
-                        border border-[#B89555]/70 bg-[#EFE6D6]"
+                      className="relative flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl border border-[#B89555]/70 bg-[#EFE6D6]"
                     >
                       <div className="flex items-center gap-2">
                         <Sparkles className="h-4 w-4 text-[#B89555]" />
@@ -272,8 +268,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         requestAnimationFrame(() => window.dispatchEvent(new CustomEvent('jbj:open-chat-support')));
                       }}
                       data-no-contrast-guard
-                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl text-left
-                        border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
+                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl text-left border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
                       <div className="flex items-center gap-2">
                         <MessageSquare className="h-4 w-4 text-[#B89555]" />
@@ -287,8 +282,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                       target="_blank"
                       rel="noreferrer"
                       data-no-contrast-guard
-                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
-                        border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
+                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
                       <div className="flex items-center gap-2">
                         <MessageCircle className="h-4 w-4 text-[#B89555]" />
@@ -300,8 +294,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     <a
                       href={getCallUrl()}
                       data-no-contrast-guard
-                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl
-                        border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
+                      className="group flex flex-col items-start gap-1.5 px-3.5 py-3 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                     >
                       <div className="flex items-center gap-2">
                         <Phone className="h-4 w-4 text-[#B89555]" />
@@ -317,9 +310,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         setTimeout(() => window.dispatchEvent(new CustomEvent('jbj:open-voice-concierge')), 250);
                       }}
                       data-no-contrast-guard
-                      className="col-span-2 group flex items-center justify-between gap-2 px-3.5 py-3 rounded-xl text-left
-                        border border-[#B89555]/70 bg-[#1A1A1A] text-[#FDFBF7]
-                        hover:bg-[#2A2A2A] hover:shadow-[0_0_24px_rgba(184,149,85,0.35)] transition-all"
+                      className="col-span-2 group flex items-center justify-between gap-2 px-3.5 py-3 rounded-xl text-left border border-[#B89555]/70 bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#2A2A2A] hover:shadow-[0_0_24px_rgba(184,149,85,0.35)] transition-all"
                     >
                       <div className="flex items-center gap-2.5">
                         <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[#1A1A1A]">
@@ -331,7 +322,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         </div>
                       </div>
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#B89555]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
                         Live
                       </span>
                     </button>
@@ -346,9 +337,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         key={s}
                         onClick={() => send(s)}
                         data-no-contrast-guard
-                        className="w-full text-left px-4 py-3 rounded-xl text-[13px] text-[#1A1A1A]
-                          border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70
-                          transition-all"
+                        className="w-full text-left px-4 py-3 rounded-xl text-[13px] text-[#1A1A1A] border border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 transition-all"
                       >
                         {s}
                       </button>
@@ -369,18 +358,14 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     <div
                       data-no-contrast-guard
                       className={`max-w-[90%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed
-                        ${m.role === "user"
-                          ? "bg-[#1A1A1A] text-[#FDFBF7] rounded-br-md"
-                          : "bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 rounded-bl-md"}`}
+ ${m.role === "user"
+ ? "bg-[#1A1A1A] text-[#FDFBF7] rounded-br-md"
+ : "bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 rounded-bl-md"}`}
                     >
                       {m.role === "assistant" ? (
                         <>
                           {cleaned && (
-                            <div className="prose prose-sm max-w-none
-                              prose-p:my-1.5 prose-p:text-[#1A1A1A]
-                              prose-a:text-[#B89555] prose-a:no-underline hover:prose-a:underline
-                              prose-strong:text-[#1A1A1A] prose-ul:my-1.5 prose-li:my-0.5 prose-li:text-[#1A1A1A]
-                              prose-code:text-[#1A1A1A] prose-code:bg-[#EFE6D6] prose-code:px-1 prose-code:rounded">
+                            <div className="prose prose-sm max-w-none prose-p:my-1.5 prose-p:text-[#1A1A1A] prose-a:text-[#B89555] prose-a:no-underline hover:prose-a:underline prose-strong:text-[#1A1A1A] prose-ul:my-1.5 prose-li:my-0.5 prose-li:text-[#1A1A1A] prose-code:text-[#1A1A1A] prose-code:bg-[#EFE6D6] prose-code:px-1 prose-code:rounded">
                               <ReactMarkdown
                                 components={{
                                   a: ({ href, children }) => {
@@ -432,7 +417,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 {messages.length > 0 && (
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/70">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
                       Call our agent now · Free
                     </span>
                     <Popover>
@@ -440,8 +425,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         <button
                           type="button"
                           data-no-contrast-guard
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold
-                            text-[#1A1A1A] border border-[#B89555]/55 bg-[#FDFBF7] hover:bg-[#EFE6D6] hover:border-[#B89555] transition"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold text-[#1A1A1A] border border-[#B89555]/55 bg-[#FDFBF7] hover:bg-[#EFE6D6] hover:border-[#B89555] transition"
                         >
                           Switch channel
                           <ChevronDown className="h-3 w-3 text-[#B89555]" />
@@ -503,10 +487,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         disabled={streaming}
                         data-no-contrast-guard
                         title={q.prompt}
-                        className="shrink-0 inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11.5px] font-medium text-[#1A1A1A]
-                          border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.85)_100%)]
-                          hover:border-[#B89555] hover:bg-[#FDFBF7] hover:shadow-[0_2px_10px_rgba(184,149,85,0.22)]
-                          disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="shrink-0 inline-flex items-center gap-1 h-7 px-2.5 rounded-full text-[11.5px] font-medium text-[#1A1A1A] border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.85)_100%)] hover:border-[#B89555] hover:bg-[#FDFBF7] hover:shadow-[0_2px_10px_rgba(184,149,85,0.22)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                       >
                         <Sparkles className="h-3 w-3 text-[#B89555]" />
                         {q.label}
@@ -524,10 +505,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     placeholder="Ask the concierge…"
                     disabled={streaming}
                     data-no-contrast-guard
-                    className="w-full h-12 pl-4 pr-14 rounded-xl text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45
-                      bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.88)_100%)]
-                      border border-[#B89555]/55 focus:border-[#B89555] outline-none transition
-                      shadow-[0_1px_0_rgba(255,255,255,0.65)_inset,0_2px_8px_rgba(184,149,85,0.10)]"
+                    className="w-full h-12 pl-4 pr-14 rounded-xl text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(247,242,234,0.88)_100%)] border border-[#B89555]/55 focus:border-[#B89555] outline-none transition shadow-[0_1px_0_rgba(255,255,255,0.65)_inset,0_2px_8px_rgba(184,149,85,0.10)]"
 
                   />
                   <button
@@ -535,10 +513,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                     disabled={streaming || !draft.trim()}
                     aria-label="Send"
                     data-no-contrast-guard
-                    className="absolute right-1.5 top-1.5 bottom-1.5 flex w-9 items-center justify-center
-                      rounded-lg bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#2A2A2A] disabled:opacity-40
-                      hover:shadow-[0_0_18px_rgba(184,149,85,0.40)]
-                      disabled:cursor-not-allowed transition"
+                    className="absolute right-1.5 top-1.5 bottom-1.5 flex w-9 items-center justify-center rounded-lg bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#2A2A2A] disabled:opacity-40 hover:shadow-[0_0_18px_rgba(184,149,85,0.40)] disabled:cursor-not-allowed transition"
                   >
                     <Send className="h-4 w-4" />
                   </button>

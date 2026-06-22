@@ -17,7 +17,7 @@ interface AuditEntry {
 }
 
 const actionColors: Record<string, string> = {
-  create: "bg-emerald-100 text-emerald-700",
+  create: "jj-emerald-soft text-[color:var(--emerald-1)]",
   update: "bg-blue-100 text-blue-700",
   delete: "bg-red-100 text-red-700",
   status_change: "bg-amber-100 text-amber-700",
@@ -90,7 +90,7 @@ export default function LeadAuditHistory({ leadId }: { leadId: string }) {
                             <span className="font-medium text-[#1A1A1A]/70">{key}:</span>
                             <span className="text-red-500 line-through">{String(oldVal ?? "—")}</span>
                             <ArrowRight className="h-3 w-3 text-[#1A1A1A]/70 shrink-0" />
-                            <span className="text-emerald-600">{String(newVal ?? "—")}</span>
+                            <span className="text-[color:var(--emerald-1)]">{String(newVal ?? "—")}</span>
                           </div>
                         );
                       })}

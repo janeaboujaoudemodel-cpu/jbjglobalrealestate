@@ -380,12 +380,12 @@ export function StampInteractivePreview({
           onClick={(e) => { e.stopPropagation(); handleZoneClick(zone, e); }}
           onDoubleClick={(e) => { e.stopPropagation(); handleZoneDoubleClick(zone); }}
           className={`absolute rounded cursor-pointer transition-all duration-150 ${
-            selected === zone.id
-              ? selectionMode === 'letter'
-                ? 'ring-2 ring-amber-400 bg-amber-400/10'
-                : 'ring-2 ring-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.12)]'
-              : 'hover:bg-[hsl(var(--gold)/0.06)] hover:ring-1 hover:ring-[hsl(var(--gold)/0.3)]'
-          }`}
+ selected === zone.id
+ ? selectionMode === 'letter'
+ ? 'ring-2 ring-amber-400 bg-amber-400/10'
+ : 'ring-2 ring-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.12)]'
+ : 'hover:bg-[hsl(var(--gold)/0.06)] hover:ring-1 hover:ring-[hsl(var(--gold)/0.3)]'
+ }`}
           style={{
             left: zone.rect.x,
             top: zone.rect.y,
@@ -447,7 +447,7 @@ export function StampInteractivePreview({
                 autoFocus
                 className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-[#FDFBF7] text-[#1A1A1A] font-mono"
               />
-              <button onClick={commitTextEdit} className="p-1 rounded hover:bg-green-50 text-green-600"><Check size={11} /></button>
+              <button onClick={commitTextEdit} className="p-1 rounded hover:jj-emerald-soft text-[color:var(--emerald-1)]"><Check size={11} /></button>
               <button onClick={() => setEditingText(null)} className="p-1 rounded hover:bg-[hsl(var(--muted))]"><X size={11} /></button>
             </div>
           ) : null}
@@ -532,10 +532,10 @@ export function StampInteractivePreview({
                     key={style}
                     onClick={() => onSeparatorChange(style)}
                     className={`text-[10px] px-1 py-0.5 rounded border transition-all ${
-                      currentSeparatorStyle === style
-                        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] font-bold'
-                        : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))]'
-                    }`}
+ currentSeparatorStyle === style
+ ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] font-bold'
+ : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))]'
+ }`}
                     title={separatorLabel(style)}
                   >
                     {separatorLabel(style).slice(0, 4)}
@@ -555,10 +555,10 @@ export function StampInteractivePreview({
                     key={mode.value}
                     onClick={() => onCenterModeChange(mode.value)}
                     className={`text-[9px] px-1.5 py-1 rounded border transition-all ${
-                      currentCenterMode === mode.value
-                        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] font-bold'
-                        : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))]'
-                    }`}
+ currentCenterMode === mode.value
+ ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] font-bold'
+ : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))]'
+ }`}
                   >
                     {mode.label}
                   </button>
@@ -615,10 +615,10 @@ function ToolBtn({ icon, label, onClick, danger }: { icon: React.ReactNode; labe
     <button
       onClick={onClick}
       className={`flex items-center gap-0.5 px-1.5 py-1 rounded text-[9px] border transition-all ${
-        danger
-          ? 'border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300'
-          : 'border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.06)] hover:border-[hsl(var(--gold)/0.4)]'
-      }`}
+ danger
+ ? 'border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300'
+ : 'border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.06)] hover:border-[hsl(var(--gold)/0.4)]'
+ }`}
       title={label}
     >
       {icon}

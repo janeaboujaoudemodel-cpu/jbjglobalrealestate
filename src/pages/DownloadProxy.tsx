@@ -82,7 +82,7 @@ export default function DownloadProxy() {
           </div>
         )}
         {state === "ok" && (
-          <div className="text-xs text-emerald-700 mb-4">
+          <div className="text-xs text-[color:var(--emerald-1)] mb-4">
             Download started — check your downloads folder.
           </div>
         )}

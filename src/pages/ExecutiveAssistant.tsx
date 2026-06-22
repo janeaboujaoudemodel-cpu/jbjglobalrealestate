@@ -110,7 +110,7 @@ interface IgnoreRule {
 
 const categoryColors: Record<CommCategory, string> = {
   important: "bg-red-500",
-  routine: "bg-green-500",
+  routine: "jj-emerald-solid",
   recruitment: "bg-blue-500",
   flagged: "bg-yellow-500",
   spam: "bg-[#B89555]"
@@ -128,7 +128,7 @@ const channelIcons: Record<CommChannel, React.ReactNode> = {
 
 const statusConfig: Record<AIStatus, { label: string; color: string; icon: React.ReactNode }> = {
   pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800 border-yellow-300", icon: <Clock className="h-3 w-3" /> },
-  auto_responded: { label: "Auto Responded", color: "bg-green-100 text-green-800 border-green-300", icon: <Zap className="h-3 w-3" /> },
+  auto_responded: { label: "Auto Responded", color: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30", icon: <Zap className="h-3 w-3" /> },
   flagged_for_review: { label: "Needs Review", color: "bg-red-100 text-red-800 border-red-300", icon: <AlertTriangle className="h-3 w-3" /> },
   human_responded: { label: "You Responded", color: "bg-blue-100 text-blue-800 border-blue-300", icon: <CheckCircle className="h-3 w-3" /> },
   ignored: { label: "Ignored", color: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/30", icon: <Eye className="h-3 w-3" /> }
@@ -461,14 +461,14 @@ export default function ExecutiveAssistant() {
               </CardContent>
             </Card>
             
-            <Card className="bg-[#FDFBF7] border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-green-600">Auto Handled</p>
-                    <p className="text-2xl font-bold text-green-600">{stats.autoResponded}</p>
+                    <p className="text-sm text-[color:var(--emerald-1)]">Auto Handled</p>
+                    <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.autoResponded}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg jj-emerald-solid/10 flex items-center justify-center">
                     <Zap className="h-5 w-5 text-green-500" />
                   </div>
                 </div>
@@ -527,7 +527,7 @@ export default function ExecutiveAssistant() {
                   Important ({stats.important})
                 </Badge>
                 <Badge
-                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'routine' ? 'bg-green-500 text-white' : 'bg-green-50 text-green-600 border-2 border-green-200'}`}
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'routine' ? 'jj-emerald-solid text-white' : 'jj-emerald-soft text-[color:var(--emerald-1)] border-2 border-[color:var(--emerald-1)]/30'}`}
                   onClick={() => setSelectedCategory('routine')}
                 >
                   Routine
@@ -662,7 +662,7 @@ export default function ExecutiveAssistant() {
                               <Badge key={kw} variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">{kw}</Badge>
                             ))}
                             {response.is_auto_respond && (
-                              <Badge className="bg-green-100 text-green-800 border-green-300">Auto-reply</Badge>
+                              <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Auto-reply</Badge>
                             )}
                           </div>
                           <p className="text-sm text-[#1A1A1A]/70 line-clamp-2">{response.response_template}</p>
@@ -799,9 +799,9 @@ export default function ExecutiveAssistant() {
                 </div>
                 
                 {selectedComm.ai_response && (
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm font-medium text-green-800 mb-2">AI Suggested Response:</p>
-                    <p className="text-green-700">{selectedComm.ai_response}</p>
+                  <div className="p-4 jj-emerald-soft rounded-lg border border-[color:var(--emerald-1)]/30">
+                    <p className="text-sm font-medium text-[color:var(--emerald-1)] mb-2">AI Suggested Response:</p>
+                    <p className="text-[color:var(--emerald-1)]">{selectedComm.ai_response}</p>
                   </div>
                 )}
 

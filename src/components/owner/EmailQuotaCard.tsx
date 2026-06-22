@@ -83,10 +83,10 @@ export function EmailQuotaCard() {
               <Badge
                 variant="outline"
                 className={`text-[10px] uppercase tracking-wide border ${
-                  isPaid
-                    ? "border-emerald-400/60 bg-emerald-50 text-emerald-800"
-                    : "border-[#B89555]/50 bg-[#EFE6D6] text-[#1A1A1A]"
-                }`}
+ isPaid
+ ? "border-[color:var(--emerald-1)]/30/60 jj-emerald-soft text-[color:var(--emerald-1)]"
+ : "border-[#B89555]/50 bg-[#EFE6D6] text-[#1A1A1A]"
+ }`}
               >
                 {PLAN_LABEL[q.plan]} plan
               </Badge>
@@ -194,11 +194,11 @@ export function EmailQuotaCard() {
       </div>
 
       {isPaid ? (
-        <div className="mt-5 rounded-xl border border-emerald-300/60 bg-emerald-50 px-4 py-3 flex items-center gap-3">
-          <InfinityIcon className="h-6 w-6 text-emerald-700" />
+        <div className="mt-5 rounded-xl border border-[color:var(--emerald-1)]/30/60 jj-emerald-soft px-4 py-3 flex items-center gap-3">
+          <InfinityIcon className="h-6 w-6 text-[color:var(--emerald-1)]" />
           <div>
-            <div className="text-sm font-semibold text-emerald-900">Unlimited daily sends</div>
-            <div className="text-xs text-emerald-800/80">
+            <div className="text-sm font-semibold text-[color:var(--emerald-1)]">Unlimited daily sends</div>
+            <div className="text-xs text-[color:var(--emerald-1)]/80">
               {q.sentToday.toLocaleString()} sent today · {q.sentMonth.toLocaleString()} in last 30 days · {q.ratePerSec} req/s throttle
             </div>
           </div>

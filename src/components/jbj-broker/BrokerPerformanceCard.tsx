@@ -50,7 +50,7 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
         <Badge
           className={
             broker.status === "active"
-              ? "bg-emerald-500/20 text-emerald-700 border-emerald-500/30"
+              ? "jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30"
               : broker.status === "paused"
               ? "bg-amber-500/20 text-amber-700 border-amber-500/30"
               : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30"
@@ -71,8 +71,8 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
         <div className="h-2 bg-[#1A1A1A]/10 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all ${
-              usagePercent > 90 ? "bg-red-500" : usagePercent > 70 ? "bg-amber-500" : "bg-emerald-500"
-            }`}
+ usagePercent > 90 ? "bg-red-500" : usagePercent > 70 ? "bg-amber-500" : "jj-emerald-solid"
+ }`}
             style={{ width: `${usagePercent}%` }}
           />
         </div>

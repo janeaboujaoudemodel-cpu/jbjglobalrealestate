@@ -11,7 +11,7 @@ interface ChatCVConfirmationProps {
 const ChatCVConfirmation = ({ userFirstName, onStartNewChat, onGoToShortcuts }: ChatCVConfirmationProps) => {
   return (
     <div className="flex-1 p-6 flex flex-col items-center justify-center">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-r from-emerald-500/20 to-emerald-500/10 flex items-center justify-center mb-4">
+      <div className="w-16 h-16 rounded-full bg-gradient-to-r /20 /10 flex items-center justify-center mb-4">
         <CheckCircle2 className="w-8 h-8 text-emerald-500" />
       </div>
       <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2 text-center">

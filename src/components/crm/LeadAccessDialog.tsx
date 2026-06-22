@@ -283,7 +283,7 @@ export default function LeadAccessDialog({
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
                     {pending.action === "restore" ? (
-                      <ShieldCheck className="w-5 h-5 text-emerald-700" />
+                      <ShieldCheck className="w-5 h-5 text-[color:var(--emerald-1)]" />
                     ) : (
                       <ShieldAlert className="w-5 h-5 text-red-700" />
                     )}
@@ -363,7 +363,7 @@ export default function LeadAccessDialog({
                     }
                     className={
                       pending.action === "restore"
-                        ? "bg-emerald-700 text-white hover:bg-emerald-800"
+                        ? "jj-emerald-solid text-white hover:jj-emerald-solid"
                         : "bg-red-700 text-white hover:bg-red-800"
                     }
                   >
@@ -431,7 +431,7 @@ function Section({
                     className={
                       "text-[10px] " +
                       (isActive
-                        ? "border-emerald-300 text-emerald-700 bg-emerald-50/40"
+                        ? "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] jj-emerald-soft/40"
                         : isSuspended
                         ? "border-red-300 text-red-700 bg-red-50/40"
                         : "border-[#B89555]/40 text-[#1A1A1A]/70")
@@ -471,7 +471,7 @@ function Section({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 h-8"
+                    className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft h-8"
                     onClick={() => onAction(r, "restore")}
                   >
                     Restore

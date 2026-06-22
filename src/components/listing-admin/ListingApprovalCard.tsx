@@ -121,8 +121,8 @@ export function ListingApprovalCard({
                   <span
                     key={idx}
                     className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                      idx === currentImageIndex ? 'bg-[#FDFBF7]' : 'bg-[#FDFBF7]/50'
-                    }`}
+ idx === currentImageIndex ? 'bg-[#FDFBF7]' : 'bg-[#FDFBF7]/50'
+ }`}
                   />
                 ))}
                 {images.length > 5 && (
@@ -233,7 +233,7 @@ export function ListingApprovalCard({
             size="sm"
             onClick={onApprove}
             disabled={isProcessing}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            className="jj-emerald-solid hover:jj-emerald-solid text-white"
           >
             <Check className="h-4 w-4 mr-1" />
             Approve & Publish

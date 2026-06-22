@@ -20,7 +20,7 @@ import {
 
 // Filled check circle component for better visibility
 const FilledCheckCircle = ({ className }: { className?: string }) => (
-  <div className={`rounded-full bg-emerald-600 flex items-center justify-center ${className}`}>
+  <div className={`rounded-full jj-emerald-solid flex items-center justify-center ${className}`}>
     <Check className="w-3 h-3 text-white" />
   </div>
 );
@@ -216,7 +216,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
       {testResult && (
         <div className="space-y-4">
           {/* Status Banner */}
-          <Card className={`${testResult.success ? 'bg-emerald-50 border-emerald-300' : 'bg-red-50 border-red-300'}`}>
+          <Card className={`${testResult.success ? 'jj-emerald-soft border-[color:var(--emerald-1)]/30' : 'bg-red-50 border-red-300'}`}>
             <CardContent className="py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -226,10 +226,10 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     <XCircle className="w-8 h-8 text-red-600" />
                   )}
                   <div>
-                    <h3 className={`font-bold text-lg ${testResult.success ? 'text-emerald-800' : 'text-red-800'}`}>
+                    <h3 className={`font-bold text-lg ${testResult.success ? 'text-[color:var(--emerald-1)]' : 'text-red-800'}`}>
                       {testResult.success ? "Extraction completed" : "Extraction needs review"}
                     </h3>
-                    <p className={`text-sm ${testResult.success ? 'text-emerald-600' : 'text-red-600'}`}>
+                    <p className={`text-sm ${testResult.success ? 'text-[color:var(--emerald-1)]' : 'text-red-600'}`}>
                       {testResult.success 
                         ? "Review the extracted fields and images below."
                         : "Review issues below (missing/incorrect fields, image problems, etc.)."}
@@ -325,7 +325,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                   </div>
                   <div>
                     <div className="text-xs text-[#1A1A1A]/70 uppercase">Price From</div>
-                    <div className="font-medium text-emerald-600">{formatPrice(testResult.project.price_from)}</div>
+                    <div className="font-medium text-[color:var(--emerald-1)]">{formatPrice(testResult.project.price_from)}</div>
                   </div>
                   <div>
                     <div className="text-xs text-[#1A1A1A]/70 uppercase">Bedrooms</div>
@@ -423,7 +423,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className={`p-4 rounded-lg border ${testResult.documents.brochure ? 'bg-emerald-50 border-emerald-200' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.brochure ? 'jj-emerald-soft border-[color:var(--emerald-1)]/30' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.brochure ? (
                       <FilledCheckCircle className="w-5 h-5" />
@@ -437,7 +437,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                       href={testResult.documents.brochure}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:underline"
+                      className="inline-flex items-center gap-1 text-sm text-[color:var(--emerald-1)] hover:underline"
                     >
                       <Download className="w-4 h-4" />
                       Download PDF
@@ -445,7 +445,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                   )}
                 </div>
 
-                <div className={`p-4 rounded-lg border ${testResult.documents.paymentPlan ? 'bg-emerald-50 border-emerald-200' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.paymentPlan ? 'jj-emerald-soft border-[color:var(--emerald-1)]/30' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.paymentPlan ? (
                       <FilledCheckCircle className="w-5 h-5" />
@@ -459,7 +459,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                       href={testResult.documents.paymentPlan}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:underline"
+                      className="inline-flex items-center gap-1 text-sm text-[color:var(--emerald-1)] hover:underline"
                     >
                       <Download className="w-4 h-4" />
                       Download PDF
@@ -467,7 +467,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                   )}
                 </div>
 
-                <div className={`p-4 rounded-lg border ${testResult.documents.floorPlans.length > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.floorPlans.length > 0 ? 'jj-emerald-soft border-[color:var(--emerald-1)]/30' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.floorPlans.length > 0 ? (
                       <FilledCheckCircle className="w-5 h-5" />
@@ -484,7 +484,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:underline block"
+                          className="inline-flex items-center gap-1 text-sm text-[color:var(--emerald-1)] hover:underline block"
                         >
                           <Download className="w-4 h-4" />
                           Floor Plan {i + 1}

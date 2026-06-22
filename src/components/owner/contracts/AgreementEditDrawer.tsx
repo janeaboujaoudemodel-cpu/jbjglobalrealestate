@@ -155,7 +155,7 @@ export function AgreementEditDrawer({ open, onOpenChange, agreement }: Props) {
               </div>
             )}
             {developerId && (
-              <p className="text-[10px] text-emerald-700 mt-1">Linked to canonical developer</p>
+              <p className="text-[10px] text-[color:var(--emerald-1)] mt-1">Linked to canonical developer</p>
             )}
           </div>
 

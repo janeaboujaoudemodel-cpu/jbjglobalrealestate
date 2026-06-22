@@ -227,12 +227,12 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
               </div>
-              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#0A0A0A] rounded-full animate-pulse" />
+              <span className="absolute bottom-0 right-0 w-3 h-3 jj-emerald-solid border-2 border-[#0A0A0A] rounded-full animate-pulse" />
             </div>
             <div>
               <h3 className="text-[#1A1A1A] font-semibold">Amanda Clarke</h3>
               <p className="text-[#1A1A1A]/70 text-xs flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                <span className="w-1.5 h-1.5 jj-emerald-solid rounded-full" />
                 Available 24/7
               </p>
             </div>
@@ -274,10 +274,10 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                 )}
                 <div className="flex flex-col max-w-[80%]">
                   <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
-                    message.role === 'user' 
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-sm' 
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-sm'
-                  }`}>
+ message.role === 'user' 
+ ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-sm' 
+ : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-sm'
+ }`}>
                     {message.isTyping ? (
                       <div className="flex gap-1 py-1">
                         <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -296,8 +296,8 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                         toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
                       className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
-                        message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
-                      }`}
+ message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
+ }`}
                     >
                       <Copy className="w-3 h-3" />
                       <span>{t('chat.copy') || 'Copy'}</span>

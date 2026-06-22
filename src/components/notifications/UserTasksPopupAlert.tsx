@@ -108,8 +108,8 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
         {ticketAlerts.length > 0 && (
           <div className="space-y-2 mb-4">
             {ticketAlerts.map((alert) => (
-              <div key={alert.id} className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2.5">
-                <CheckCircle className="w-5 h-5 text-green-700 mt-0.5 shrink-0" />
+              <div key={alert.id} className="jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-xl p-3 flex items-start gap-2.5">
+                <CheckCircle className="w-5 h-5 text-[color:var(--emerald-1)] mt-0.5 shrink-0" />
                 <div>
                   <p className="text-[#1A1A1A] font-semibold text-sm">{alert.title}</p>
                   <p className="text-[#1A1A1A]/75 text-xs">{alert.message}</p>

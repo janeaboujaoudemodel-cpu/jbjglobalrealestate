@@ -56,8 +56,8 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           transition={{ delay: 0.5, duration: 0.5 }}
         >
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full jj-emerald-solid opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 jj-emerald-solid" />
           </span>
           <span className="text-white/90 text-xs uppercase tracking-widest font-medium">DLD Live Data</span>
         </motion.div>
@@ -162,13 +162,13 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               </div>
 
               <div data-allow-dark-cta data-no-contrast-guard className={`allow-white flex items-center gap-2 backdrop-blur-md border rounded-xl px-5 py-3 ${
-                isPositive
-                  ? 'bg-emerald-500/20 border-emerald-400/40'
-                  : 'bg-red-500/20 border-red-400/40'
-              }`}>
-                <ArrowUpRight className={`w-5 h-5 transition-transform ${isPositive ? 'text-emerald-300' : 'text-red-300 rotate-180'}`} />
+ isPositive
+ ? 'jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/40'
+ : 'bg-red-500/20 border-red-400/40'
+ }`}>
+                <ArrowUpRight className={`w-5 h-5 transition-transform ${isPositive ? 'text-[color:var(--emerald-on)]' : 'text-red-300 rotate-180'}`} />
                 <div>
-                  <div className={`text-xl font-bold leading-tight ${isPositive ? 'text-emerald-300' : 'text-red-300'}`}>
+                  <div className={`text-xl font-bold leading-tight ${isPositive ? 'text-[color:var(--emerald-on)]' : 'text-red-300'}`}>
                     {dldAreaData.change}
                   </div>
                   <div className="text-white/80 text-xs">YoY Growth</div>

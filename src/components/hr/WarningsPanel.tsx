@@ -31,7 +31,7 @@ const WarningTypeBadge = ({ type }: { type: string }) => {
 const StatusBadge = ({ status }: { status: string }) => {
   const config: Record<string, { color: string; icon: React.ElementType; label: string }> = {
     pending: { color: 'bg-amber-500/20 text-amber-600 border-amber-500/30', icon: Clock, label: 'Pending Signature' },
-    acknowledged: { color: 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30', icon: CheckCircle, label: 'Acknowledged' },
+    acknowledged: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle, label: 'Acknowledged' },
     disputed: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle, label: 'Disputed' },
   };
   const cfg = config[status] || config.pending;
@@ -237,7 +237,7 @@ export function WarningsPanel() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[#1A1A1A]/70 text-xs">Acknowledged</p>
-                <p className="text-2xl font-bold text-emerald-600">{acknowledgedWarnings.length}</p>
+                <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{acknowledgedWarnings.length}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500/50" />
             </div>
@@ -327,7 +327,7 @@ export function WarningsPanel() {
                     </TableCell>
                     <TableCell>
                       {warning.employee_signed_at ? (
-                        <div className="flex items-center gap-1 text-emerald-600">
+                        <div className="flex items-center gap-1 text-[color:var(--emerald-1)]">
                           <Pen className="h-4 w-4" />
                           <span className="text-sm">
                             {format(new Date(warning.employee_signed_at), 'MMM dd')}

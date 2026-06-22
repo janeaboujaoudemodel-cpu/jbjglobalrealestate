@@ -186,7 +186,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0">
           {syncing && <RefreshCw className="h-3 w-3 text-[#1A1A1A] animate-spin" />}
-          <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 text-xs">
+          <Badge variant="secondary" className="jj-emerald-soft text-[color:var(--emerald-1)] text-xs">
             {activeCount} Active
           </Badge>
           <Badge variant="secondary" className="bg-[#F7F2EA] text-[#1A1A1A] text-xs">
@@ -200,10 +200,10 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
           <div
             key={rule.id}
             className={`flex items-start gap-3 p-3 rounded-xl border transition-all min-w-0 overflow-hidden ${
-              rule.is_active
-                ? "bg-[#FDFBF7] border-[#B89555]/30 shadow-sm"
-                : "bg-[#F7F2EA] border-[#B89555]/30"
-            }`}
+ rule.is_active
+ ? "bg-[#FDFBF7] border-[#B89555]/30 shadow-sm"
+ : "bg-[#F7F2EA] border-[#B89555]/30"
+ }`}
           >
             <div className="p-2 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 flex-shrink-0">
               {getIcon(rule.action_type)}
@@ -244,7 +244,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
                 checked={!!rule.is_active}
                 onCheckedChange={() => toggleRule(rule.id)}
                 disabled={syncing || !isOwner}
-                className="data-[state=checked]:bg-emerald-500"
+                className="data-[state=checked]:jj-emerald-solid"
               />
             </div>
           </div>

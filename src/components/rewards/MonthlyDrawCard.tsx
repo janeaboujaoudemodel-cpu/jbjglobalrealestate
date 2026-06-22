@@ -93,9 +93,9 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
 
             {/* Entry Status */}
             {userEntry ? (
-              <div className="bg-emerald-500/10 rounded-xl p-4 border border-emerald-500/30 text-center">
+              <div className="jj-emerald-solid/10 rounded-xl p-4 border border-[color:var(--emerald-1)]/30/30 text-center">
                 <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
-                <p className="text-emerald-300 font-semibold">You're Entered!</p>
+                <p className="text-[color:var(--emerald-on)] font-semibold">You're Entered!</p>
                 <p className="text-white/90 text-sm mt-1">
                   Entered with {userEntry.activity_points_at_entry} points
                 </p>

@@ -141,7 +141,7 @@ function ProviderPanel({
           <Mail className="h-5 w-5" /> {title}
         </h2>
         {existing && (
-          <div className="text-xs text-emerald-700 mt-1">✓ Credentials saved · ready to connect mailboxes</div>
+          <div className="text-xs text-[color:var(--emerald-1)] mt-1">✓ Credentials saved · ready to connect mailboxes</div>
         )}
       </div>
 

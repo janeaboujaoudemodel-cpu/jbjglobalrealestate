@@ -198,7 +198,7 @@ export default function CallReview() {
 
   const getScoreColor = (score: number | null) => {
     if (!score) return 'bg-muted';
-    if (score >= 80) return 'bg-green-500';
+    if (score >= 80) return 'jj-emerald-solid';
     if (score >= 60) return 'bg-yellow-500';
     return 'bg-red-500';
   };
@@ -352,8 +352,8 @@ export default function CallReview() {
                             setDecryptedPII(null); // Clear previous decryption
                           }}
                           className={`w-full p-4 text-left hover:bg-muted/50 transition-colors ${
-                            selectedCall?.id === call.id ? 'bg-muted' : ''
-                          }`}
+ selectedCall?.id === call.id ? 'bg-muted' : ''
+ }`}
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-2">
@@ -479,8 +479,8 @@ export default function CallReview() {
                           </div>
                         )}
                         {selectedCall.ai_highlights && selectedCall.ai_highlights.length > 0 && (
-                          <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
-                            <h4 className="font-medium mb-2 flex items-center gap-2 text-green-600">
+                          <div className="p-4 jj-emerald-soft dark:bg-green-950/20 rounded-lg">
+                            <h4 className="font-medium mb-2 flex items-center gap-2 text-[color:var(--emerald-1)]">
                               <CheckCircle className="w-4 h-4" /> Highlights
                             </h4>
                             <ul className="space-y-1">

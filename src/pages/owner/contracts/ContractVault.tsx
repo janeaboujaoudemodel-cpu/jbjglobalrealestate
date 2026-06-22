@@ -366,7 +366,7 @@ export default function ContractVault() {
                           <td className="px-4 py-3 text-[#1A1A1A]/80">{a.effective_date ?? "—"}</td>
                           <td className="px-4 py-3 text-[#1A1A1A]/80">{a.expiry_date ?? "—"}</td>
                           <td className="px-4 py-3">
-                            <Badge variant="outline" className={a.status === "filed" ? "border-emerald-600/40 text-emerald-700" : "border-amber-500/50 text-amber-700"}>
+                            <Badge variant="outline" className={a.status === "filed" ? "border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)]" : "border-amber-500/50 text-amber-700"}>
                               {a.status?.replace("_", " ") ?? "—"}
                             </Badge>
                           </td>

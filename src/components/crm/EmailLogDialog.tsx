@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { useEmailDeliveryStatus } from "@/hooks/useCRMRelationships";
 
 const STATUS_STYLE: Record<string, string> = {
-  sent: "bg-emerald-100 text-emerald-900 border-emerald-300",
-  delivered: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  sent: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
+  delivered: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",
   pending: "bg-amber-100 text-amber-900 border-amber-300",
   failed: "bg-red-100 text-red-900 border-red-300",
   dlq: "bg-red-100 text-red-900 border-red-300",

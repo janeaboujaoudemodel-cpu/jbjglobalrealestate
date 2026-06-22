@@ -547,8 +547,8 @@ const ListingPortalSubmit = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="max-w-2xl mx-auto text-center"
           >
-            <div className="w-20 h-20 bg-emerald-500/15 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-emerald-500/30">
-              <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+            <div className="w-20 h-20 jj-emerald-solid/15 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-[color:var(--emerald-1)]/30/30">
+              <CheckCircle2 className="w-10 h-10 text-[color:var(--emerald-1)]" />
             </div>
             <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">
               {isOwner ? 'Listing Approved & Published!' : 'Listing Submitted for Approval!'}
@@ -717,12 +717,12 @@ const ListingPortalSubmit = () => {
                   >
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
-                        isActive
-                          ? 'border-white text-white shadow-lg [&_svg]:!text-white'
-                          : isDone
-                            ? 'border-white/80 text-white [&_svg]:!text-white'
-                            : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
-                      }`}
+ isActive
+ ? 'border-white text-white shadow-lg [&_svg]:!text-white'
+ : isDone
+ ? 'border-white/80 text-white [&_svg]:!text-white'
+ : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
+ }`}
                       style={isActive
                         ? { background: 'linear-gradient(135deg, #A855F7 0%, #5B21B6 100%)' }
                         : isDone
@@ -782,10 +782,10 @@ const ListingPortalSubmit = () => {
                                 key={cat.id}
                                 onClick={() => setListingCategory(cat.id)}
                                 className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
-                                  isSelected
-                                    ? 'bg-[#A855F7]/10 border-[#A855F7] text-[#1A1A1A] shadow-lg'
-                                    : 'bg-[#FDFBF7]/60 border-[#A855F7]/30 text-[#1A1A1A]/80 hover:border-[#A855F7]/70'
-                                }`}
+ isSelected
+ ? 'bg-[#A855F7]/10 border-[#A855F7] text-[#1A1A1A] shadow-lg'
+ : 'bg-[#FDFBF7]/60 border-[#A855F7]/30 text-[#1A1A1A]/80 hover:border-[#A855F7]/70'
+ }`}
                               >
                                 {isSelected && (
                                   <div
@@ -1028,9 +1028,9 @@ const ListingPortalSubmit = () => {
                         {/* Price Prediction Results */}
                         {pricePrediction && (
                           <div className="mt-6 space-y-4">
-                            <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-5">
+                            <div className="jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30 rounded-xl p-5">
                               <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
-                                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                                <CheckCircle2 className="w-5 h-5 text-[color:var(--emerald-1)]" />
                                 Estimated Market Value
                               </h3>
                               <div className="grid grid-cols-3 gap-4 text-center">
@@ -1038,9 +1038,9 @@ const ListingPortalSubmit = () => {
                                   <p className="text-[#1A1A1A]/70 text-xs mb-1">Low</p>
                                   <p className="text-[#1A1A1A] font-bold text-lg">AED {pricePrediction.estimatedValue.low.toLocaleString()}</p>
                                 </div>
-                                <div className="border-x border-emerald-200">
+                                <div className="border-x border-[color:var(--emerald-1)]/30">
                                   <p className="text-[#1A1A1A]/70 text-xs mb-1">Recommended</p>
-                                  <p className="text-emerald-700 font-bold text-xl">AED {pricePrediction.estimatedValue.mid.toLocaleString()}</p>
+                                  <p className="text-[color:var(--emerald-1)] font-bold text-xl">AED {pricePrediction.estimatedValue.mid.toLocaleString()}</p>
                                 </div>
                                 <div>
                                   <p className="text-[#1A1A1A]/70 text-xs mb-1">High</p>
@@ -1091,14 +1091,14 @@ const ListingPortalSubmit = () => {
                       {/* AI Confidence Banner */}
                       {extractedData && (
                         <div className={`flex items-center gap-3 p-4 rounded-xl border-2 ${
-                          extractedData.confidence_score >= 80 
-                            ? 'bg-emerald-50 border-emerald-300' 
-                            : extractedData.confidence_score >= 50 
-                            ? 'bg-amber-50 border-amber-300' 
-                            : 'bg-red-50 border-red-300'
-                        }`}>
+ extractedData.confidence_score >= 80 
+ ? 'jj-emerald-soft border-[color:var(--emerald-1)]/30' 
+ : extractedData.confidence_score >= 50 
+ ? 'bg-amber-50 border-amber-300' 
+ : 'bg-red-50 border-red-300'
+ }`}>
                           {extractedData.confidence_score >= 80 ? (
-                            <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                            <CheckCircle2 className="w-5 h-5 text-[color:var(--emerald-1)] flex-shrink-0" />
                           ) : (
                             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
                           )}
@@ -1388,8 +1388,8 @@ const ListingPortalSubmit = () => {
                         <RadioGroup value={sellerRole} onValueChange={setSellerRole} className="grid grid-cols-2 gap-3">
                           {sellerRoles.map(role => (
                             <div key={role.value} className={`flex items-center gap-3 p-3 rounded-2xl border-2 transition-all cursor-pointer ${
-                              sellerRole === role.value ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-md shadow-gold/10' : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
-                            }`}>
+ sellerRole === role.value ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-md shadow-gold/10' : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
+ }`}>
                               <RadioGroupItem value={role.value} id={`role-${role.value}`} className="border-[#B89555]/50" />
                               <Label htmlFor={`role-${role.value}`} className="text-[#1A1A1A] text-sm cursor-pointer">{role.label}</Label>
                             </div>
@@ -1410,10 +1410,10 @@ const ListingPortalSubmit = () => {
                           <button
                             onClick={() => setContactMode('direct')}
                             className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
-                              contactMode === 'direct' 
-                                ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
-                                : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
-                            }`}
+ contactMode === 'direct' 
+ ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
+ : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
+ }`}
                           >
                             {contactMode === 'direct' && (
                               <div className="absolute top-3 right-3 w-6 h-6 bg-[#EFE6D6] rounded-full flex items-center justify-center">
@@ -1426,8 +1426,8 @@ const ListingPortalSubmit = () => {
                             </div>
                             <p className="text-[#1A1A1A] font-bold text-lg mb-1">{LISTING_FEES.direct.label}</p>
                             <p className="text-[#1A1A1A]/70 text-xs">{LISTING_FEES.direct.description}</p>
-                            <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-2">
-                              <p className="text-emerald-700 text-xs font-medium">50% less than Property Finder & Bayut</p>
+                            <div className="mt-3 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-2xl p-2">
+                              <p className="text-[color:var(--emerald-1)] text-xs font-medium">50% less than Property Finder & Bayut</p>
                             </div>
                           </button>
 
@@ -1435,10 +1435,10 @@ const ListingPortalSubmit = () => {
                           <button
                             onClick={() => setContactMode('commission')}
                             className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
-                              contactMode === 'commission' 
-                                ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
-                                : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
-                            }`}
+ contactMode === 'commission' 
+ ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
+ : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
+ }`}
                           >
                             {contactMode === 'commission' && (
                               <div className="absolute top-3 right-3 w-6 h-6 bg-[#EFE6D6] rounded-full flex items-center justify-center">
@@ -1482,9 +1482,9 @@ const ListingPortalSubmit = () => {
                       )}
 
                       {isOwner && (
-                        <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-5">
+                        <div className="jj-emerald-soft border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-5">
                           <div className="flex items-center gap-3">
-                            <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+                            <CheckCircle2 className="w-6 h-6 text-[color:var(--emerald-1)]" />
                             <div>
                               <p className="text-[#1A1A1A] font-semibold text-sm">Owner Auto-Approval</p>
                               <p className="text-[#1A1A1A]/70 text-xs">As the Owner, your listing will be approved and published immediately upon submission.</p>

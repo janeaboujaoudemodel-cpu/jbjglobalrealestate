@@ -691,7 +691,7 @@ export function ReellyImportPanel() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-[#B89555]/30">
-              <p className="text-2xl font-bold text-emerald-600">{displayTotalProjects?.toLocaleString() || '—'}</p>
+              <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{displayTotalProjects?.toLocaleString() || '—'}</p>
               <p className="text-xs text-[#1A1A1A]/70">API Total (Reelly)</p>
             </div>
             <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-[#B89555]/30">
@@ -699,7 +699,7 @@ export function ReellyImportPanel() {
               <p className="text-xs text-[#1A1A1A]/70">Pending Queue</p>
             </div>
             <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-[#B89555]/30">
-              <p className="text-2xl font-bold text-green-600">{liveCounts.reelly_approved.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{liveCounts.reelly_approved.toLocaleString()}</p>
               <p className="text-xs text-[#1A1A1A]/70">Approved (Live DB)</p>
             </div>
           </div>
@@ -725,25 +725,25 @@ export function ReellyImportPanel() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* ██  SECTION 1: REELLY ENRICHMENT                     */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-300 shadow-lg">
+      <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-[color:var(--emerald-1)]/30 shadow-lg">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-emerald-500">
+              <div className="p-2 rounded-lg jj-emerald-solid">
                 <Zap className="w-5 h-5 text-white" />
               </div>
               <div>
-                <CardTitle className="text-xl text-emerald-900 flex items-center gap-2">
+                <CardTitle className="text-xl text-[color:var(--emerald-1)] flex items-center gap-2">
                   Reelly Enrichment
-                  {apiConnected === true && <Badge className="bg-emerald-500 text-white">Connected</Badge>}
+                  {apiConnected === true && <Badge className="jj-emerald-solid text-white">Connected</Badge>}
                   {apiConnected === false && <Badge variant="destructive">Disconnected</Badge>}
                 </CardTitle>
-                <CardDescription className="text-emerald-700">
+                <CardDescription className="text-[color:var(--emerald-1)]">
                   Full API sync — projects, developers, areas, backfill details
                 </CardDescription>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-sm text-emerald-700">
+            <div className="flex items-center gap-2 text-sm text-[color:var(--emerald-1)]">
               {displayTotalProjects && <span className="font-bold">{displayTotalProjects.toLocaleString()} projects</span>}
             </div>
           </div>
@@ -752,30 +752,30 @@ export function ReellyImportPanel() {
 
           {/* ── 1. API Connection + Sync ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200">
+            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30">
               <h3 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
-                <Database className="w-4 h-4 text-emerald-600" /> API Connection
+                <Database className="w-4 h-4 text-[color:var(--emerald-1)]" /> API Connection
               </h3>
-              <Button onClick={handleTestApiConnection} disabled={isTestingApi} className="w-full bg-emerald-600 hover:bg-emerald-700">
+              <Button onClick={handleTestApiConnection} disabled={isTestingApi} className="w-full jj-emerald-solid hover:jj-emerald-solid">
                 {isTestingApi ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Testing...</> : <><Zap className="h-4 w-4 mr-2" />Test API Connection</>}
               </Button>
               {apiConnected === true && totalProjects && (
-                <div className="mt-3 p-3 bg-emerald-100 rounded-lg">
-                  <p className="text-emerald-800 text-sm font-medium">✓ Connected</p>
-                  <p className="text-emerald-700 text-2xl font-bold">{totalProjects.toLocaleString()} projects</p>
+                <div className="mt-3 p-3 jj-emerald-soft rounded-lg">
+                  <p className="text-[color:var(--emerald-1)] text-sm font-medium">✓ Connected</p>
+                  <p className="text-[color:var(--emerald-1)] text-2xl font-bold">{totalProjects.toLocaleString()} projects</p>
                 </div>
               )}
             </div>
 
-            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200">
+            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30">
               <h3 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
-                <CloudDownload className="w-4 h-4 text-emerald-600" /> Project Sync
+                <CloudDownload className="w-4 h-4 text-[color:var(--emerald-1)]" /> Project Sync
               </h3>
               <div className="space-y-2">
-                <Button onClick={() => handleSyncProjects(false)} disabled={isSyncing || apiConnected !== true} className="w-full bg-emerald-600 hover:bg-emerald-700">
+                <Button onClick={() => handleSyncProjects(false)} disabled={isSyncing || apiConnected !== true} className="w-full jj-emerald-solid hover:jj-emerald-solid">
                   {isSyncing ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Syncing...</> : <><Play className="h-4 w-4 mr-2" />Quick Sync (100)</>}
                 </Button>
-                <Button onClick={() => handleSyncProjects(true)} disabled={isSyncing || apiConnected !== true} variant="outline" className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50">
+                <Button onClick={() => handleSyncProjects(true)} disabled={isSyncing || apiConnected !== true} variant="outline" className="w-full border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                   <Download className="h-4 w-4 mr-2" /> Full Sync (All)
                 </Button>
               </div>
@@ -784,9 +784,9 @@ export function ReellyImportPanel() {
 
           {/* Sync progress */}
           {isSyncing && (
-            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200">
+            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30">
               <div className="flex items-center gap-3 mb-3">
-                <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
+                <RefreshCw className="h-5 w-5 text-[color:var(--emerald-1)] animate-spin" />
                 <span className="font-medium text-[#1A1A1A]">Syncing projects from Reelly API...</span>
               </div>
               <Progress value={syncPercent} className="h-2" />
@@ -807,7 +807,7 @@ export function ReellyImportPanel() {
 
           {/* Sync results */}
           {syncResult && (
-            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200">
+            <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30">
               <h3 className="font-semibold text-[#1A1A1A] mb-3">Sync Results</h3>
               {syncResult.success ? (
                 <>
@@ -816,8 +816,8 @@ export function ReellyImportPanel() {
                       <p className="text-xl font-bold text-blue-600">{syncResult.total_fetched?.toLocaleString() || 0}</p>
                       <p className="text-xs text-[#1A1A1A]/70">Fetched</p>
                     </div>
-                    <div className="bg-emerald-50 rounded-lg p-3 text-center">
-                      <p className="text-xl font-bold text-emerald-600">{syncResult.inserted || 0}</p>
+                    <div className="jj-emerald-soft rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-[color:var(--emerald-1)]">{syncResult.inserted || 0}</p>
                       <p className="text-xs text-[#1A1A1A]/70">New</p>
                     </div>
                     <div className="bg-cyan-50 rounded-lg p-3 text-center">
@@ -850,43 +850,43 @@ export function ReellyImportPanel() {
           )}
 
           {/* ── Divider ── */}
-          <div className="border-t border-emerald-200" />
+          <div className="border-t border-[color:var(--emerald-1)]/30" />
 
           {/* ── 2. Backfill Details ── */}
           <div>
-            <h3 className="font-semibold text-emerald-900 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-[color:var(--emerald-1)] mb-3 flex items-center gap-2">
               <Database className="w-4 h-4" /> Backfill Missing Details
               {backfillStats?.missing_any === 0 && <CheckCircle className="h-4 w-4 text-emerald-500" />}
             </h3>
-            <p className="text-sm text-emerald-700 mb-3">Fetch floor plans, amenities, documents for approved projects from Reelly API detail endpoint.</p>
+            <p className="text-sm text-[color:var(--emerald-1)] mb-3">Fetch floor plans, amenities, documents for approved projects from Reelly API detail endpoint.</p>
             
             {backfillStats?.missing_any === 0 ? (
-              <div className="flex items-center gap-3 p-4 bg-emerald-100 rounded-xl border border-emerald-300 mb-4">
-                <CheckCircle className="h-6 w-6 text-emerald-600 flex-shrink-0" />
+              <div className="flex items-center gap-3 p-4 jj-emerald-soft rounded-xl border border-[color:var(--emerald-1)]/30 mb-4">
+                <CheckCircle className="h-6 w-6 text-[color:var(--emerald-1)] flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-emerald-800">All projects are fully backfilled</p>
-                  <p className="text-sm text-emerald-600">{backfillStats.total_projects.toLocaleString()} projects have complete data.</p>
+                  <p className="font-semibold text-[color:var(--emerald-1)]">All projects are fully backfilled</p>
+                  <p className="text-sm text-[color:var(--emerald-1)]">{backfillStats.total_projects.toLocaleString()} projects have complete data.</p>
                 </div>
-                <Button onClick={handleLoadBackfillStats} variant="outline" size="sm" className="ml-auto border-emerald-300 text-emerald-700">
+                <Button onClick={handleLoadBackfillStats} variant="outline" size="sm" className="ml-auto border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]">
                   <RefreshCw className="h-4 w-4 mr-1" /> Recheck
                 </Button>
               </div>
             ) : (
               <div className="flex flex-wrap gap-2 mb-4">
-                <Button onClick={handleLoadBackfillStats} disabled={isBackfilling} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
+                <Button onClick={handleLoadBackfillStats} disabled={isBackfilling} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                   <RefreshCw className="h-4 w-4 mr-2" /> Check Missing
                 </Button>
-                <Button onClick={() => handleRunBackfill("batch")} disabled={isBackfilling} className="bg-emerald-600 hover:bg-emerald-700">
+                <Button onClick={() => handleRunBackfill("batch")} disabled={isBackfilling} className="jj-emerald-solid hover:jj-emerald-solid">
                   {isBackfilling ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Backfilling...</> : <><Zap className="h-4 w-4 mr-2" />Backfill Batch (50)</>}
                 </Button>
-                <Button onClick={() => handleRunBackfill("all")} disabled={isBackfilling} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
+                <Button onClick={() => handleRunBackfill("all")} disabled={isBackfilling} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                   <Download className="h-4 w-4 mr-2" /> Backfill All
                 </Button>
               </div>
             )}
 
             {backfillStats && (
-              <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200 mb-4">
+              <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30 mb-4">
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                   {[
                     { label: "Total", value: backfillStats.total_projects, color: "emerald" },
@@ -905,7 +905,7 @@ export function ReellyImportPanel() {
             )}
 
             {backfillResult && (
-              <div className={`bg-[#FDFBF7]/80 rounded-xl p-4 border ${backfillResult.success ? 'border-emerald-200' : 'border-red-200'}`}>
+              <div className={`bg-[#FDFBF7]/80 rounded-xl p-4 border ${backfillResult.success ? 'border-[color:var(--emerald-1)]/30' : 'border-red-200'}`}>
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold text-[#1A1A1A]">Backfill Results</h4>
                   {backfillProjectList.length > 0 && (
@@ -920,8 +920,8 @@ export function ReellyImportPanel() {
                       <p className="text-xl font-bold text-blue-600">{backfillResult.processed || 0}</p>
                       <p className="text-xs text-[#1A1A1A]/70">Processed</p>
                     </button>
-                    <button type="button" className="bg-emerald-50 rounded-lg p-3 text-center hover:shadow-md transition cursor-pointer" onClick={() => { setBackfillListFilter("success"); setIsBackfillListOpen(true); }}>
-                      <p className="text-xl font-bold text-emerald-600">{backfillResult.updated || 0}</p>
+                    <button type="button" className="jj-emerald-soft rounded-lg p-3 text-center hover:shadow-md transition cursor-pointer" onClick={() => { setBackfillListFilter("success"); setIsBackfillListOpen(true); }}>
+                      <p className="text-xl font-bold text-[color:var(--emerald-1)]">{backfillResult.updated || 0}</p>
                       <p className="text-xs text-[#1A1A1A]/70">Updated</p>
                     </button>
                     <button type="button" className="bg-red-50 rounded-lg p-3 text-center hover:shadow-md transition cursor-pointer" onClick={() => { setBackfillListFilter("failed"); setIsBackfillListOpen(true); }}>
@@ -944,14 +944,14 @@ export function ReellyImportPanel() {
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t border-emerald-200" />
+          <div className="border-t border-[color:var(--emerald-1)]/30" />
 
           {/* ── Quick Extract by Reelly ID ── */}
           <div>
-            <h3 className="font-semibold text-emerald-900 mb-1 flex items-center gap-2">
+            <h3 className="font-semibold text-[color:var(--emerald-1)] mb-1 flex items-center gap-2">
               <Zap className="w-4 h-4" /> Quick Extract by Reelly ID
             </h3>
-            <p className="text-xs text-emerald-700 mb-3">
+            <p className="text-xs text-[color:var(--emerald-1)] mb-3">
               Enter one or more Reelly IDs (comma-separated) to extract full project data, images, bedrooms, prices, and amenities immediately.
               <strong className="ml-1">Example: 3003, 1261</strong>
             </p>
@@ -961,13 +961,13 @@ export function ReellyImportPanel() {
                 value={quickExtractId}
                 onChange={e => setQuickExtractId(e.target.value)}
                 placeholder="e.g. 3003, 1261, 2945"
-                className="flex-1 rounded-lg border border-emerald-300 px-3 py-2 text-sm text-[#1A1A1A] bg-[#FDFBF7] focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                className="flex-1 rounded-lg border border-[color:var(--emerald-1)]/30 px-3 py-2 text-sm text-[#1A1A1A] bg-[#FDFBF7] focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 onKeyDown={e => { if (e.key === "Enter") handleQuickExtract(); }}
               />
               <Button
                 onClick={handleQuickExtract}
                 disabled={isQuickExtracting || !quickExtractId.trim()}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white whitespace-nowrap"
+                className="jj-emerald-solid hover:jj-emerald-solid text-white whitespace-nowrap"
               >
                 {isQuickExtracting ? (
                   <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</>
@@ -977,36 +977,36 @@ export function ReellyImportPanel() {
               </Button>
             </div>
             {quickExtractResult && (
-              <div className={`mt-3 p-3 rounded-lg border text-sm ${quickExtractResult.success ? "bg-emerald-50 border-emerald-300 text-emerald-800" : "bg-red-50 border-red-300 text-red-700"}`}>
+              <div className={`mt-3 p-3 rounded-lg border text-sm ${quickExtractResult.success ? "jj-emerald-soft border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]" : "bg-red-50 border-red-300 text-red-700"}`}>
                 {quickExtractResult.success ? `${quickExtractResult.message}` : `${quickExtractResult.error}`}
               </div>
             )}
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t border-emerald-200" />
+          <div className="border-t border-[color:var(--emerald-1)]/30" />
 
           <div>
-            <h3 className="font-semibold text-emerald-900 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-[color:var(--emerald-1)] mb-3 flex items-center gap-2">
               <Database className="w-4 h-4" /> Developer Sync
-              {totalDevelopers && <Badge variant="outline" className="border-emerald-300 text-emerald-700">{totalDevelopers} devs</Badge>}
+              {totalDevelopers && <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]">{totalDevelopers} devs</Badge>}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-              <Button onClick={() => handleSyncDevelopers("test")} disabled={isSyncingDevs} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-50">
+              <Button onClick={() => handleSyncDevelopers("test")} disabled={isSyncingDevs} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                 {isSyncingDevs ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Testing...</> : <><Zap className="h-4 w-4 mr-2" />Test</>}
               </Button>
-              <Button onClick={() => handleSyncDevelopers("quick")} disabled={isSyncingDevs} className="bg-emerald-600 hover:bg-emerald-700">
+              <Button onClick={() => handleSyncDevelopers("quick")} disabled={isSyncingDevs} className="jj-emerald-solid hover:jj-emerald-solid">
                 <Play className="h-4 w-4 mr-2" /> Quick Sync (50)
               </Button>
-              <Button onClick={() => handleSyncDevelopers("full")} disabled={isSyncingDevs} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-50">
+              <Button onClick={() => handleSyncDevelopers("full")} disabled={isSyncingDevs} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                 <Download className="h-4 w-4 mr-2" /> Full Sync
               </Button>
             </div>
             {devSyncResult && devSyncResult.success && devSyncResult.mode !== "test" && (
-              <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200">
+              <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30">
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                  <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-900">{devSyncResult.processed || 0}</p><p className="text-xs text-emerald-600">Processed</p></div>
-                  <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{devSyncResult.inserted || 0}</p><p className="text-xs text-emerald-600">New</p></div>
+                  <div className="jj-emerald-soft rounded-lg p-3 text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{devSyncResult.processed || 0}</p><p className="text-xs text-[color:var(--emerald-1)]">Processed</p></div>
+                  <div className="jj-emerald-soft rounded-lg p-3 text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{devSyncResult.inserted || 0}</p><p className="text-xs text-[color:var(--emerald-1)]">New</p></div>
                   <div className="bg-blue-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-blue-700">{devSyncResult.updated || 0}</p><p className="text-xs text-blue-600">Updated</p></div>
                   <div className="bg-[#F7F2EA] rounded-lg p-3 text-center"><p className="text-xl font-bold text-[#1A1A1A]/70">{devSyncResult.skipped || 0}</p><p className="text-xs text-[#1A1A1A]/70">Skipped</p></div>
                   <div className={`rounded-lg p-3 text-center ${(devSyncResult.errors || 0) > 0 ? 'bg-red-50' : 'bg-[#F7F2EA]'}`}><p className={`text-xl font-bold ${(devSyncResult.errors || 0) > 0 ? 'text-red-600' : 'text-[#1A1A1A]/70'}`}>{devSyncResult.errors || 0}</p><p className="text-xs text-[#1A1A1A]/70">Errors</p></div>
@@ -1016,22 +1016,22 @@ export function ReellyImportPanel() {
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t border-emerald-200" />
+          <div className="border-t border-[color:var(--emerald-1)]/30" />
 
           {/* ── 4. Areas Sync ── */}
           <div>
-            <h3 className="font-semibold text-emerald-900 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-[color:var(--emerald-1)] mb-3 flex items-center gap-2">
               <MapPin className="w-4 h-4" /> Areas Sync
-              {totalAreas && <Badge variant="outline" className="border-emerald-300 text-emerald-700">{totalAreas} areas</Badge>}
+              {totalAreas && <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]">{totalAreas} areas</Badge>}
             </h3>
-            <Button onClick={() => handleSyncAreas("extract_from_projects")} disabled={isSyncingAreas} className="w-full bg-emerald-600 hover:bg-emerald-700 mb-4">
+            <Button onClick={() => handleSyncAreas("extract_from_projects")} disabled={isSyncingAreas} className="w-full jj-emerald-solid hover:jj-emerald-solid mb-4">
               {isSyncingAreas ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</> : <><Download className="h-4 w-4 mr-2" />Extract Areas from Projects</>}
             </Button>
             {areasSyncResult && areasSyncResult.success && (
-              <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200">
+              <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30">
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-900">{areasSyncResult.total_available || 0}</p><p className="text-xs text-emerald-600">Found</p></div>
-                  <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{areasSyncResult.inserted || 0}</p><p className="text-xs text-emerald-600">New</p></div>
+                  <div className="jj-emerald-soft rounded-lg p-3 text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{areasSyncResult.total_available || 0}</p><p className="text-xs text-[color:var(--emerald-1)]">Found</p></div>
+                  <div className="jj-emerald-soft rounded-lg p-3 text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{areasSyncResult.inserted || 0}</p><p className="text-xs text-[color:var(--emerald-1)]">New</p></div>
                   <div className="bg-[#F7F2EA] rounded-lg p-3 text-center"><p className="text-xl font-bold text-[#1A1A1A]/70">{areasSyncResult.skipped || 0}</p><p className="text-xs text-[#1A1A1A]/70">Existing</p></div>
                 </div>
               </div>
@@ -1039,14 +1039,14 @@ export function ReellyImportPanel() {
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t border-emerald-200" />
+          <div className="border-t border-[color:var(--emerald-1)]/30" />
 
           {/* ── 5. Test Project Enrichment + Provident Extraction ── */}
           <div>
-            <h3 className="font-semibold text-emerald-900 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-[color:var(--emerald-1)] mb-3 flex items-center gap-2">
               <Zap className="w-4 h-4" /> Project Enrichment (Test → Bulk)
             </h3>
-            <p className="text-sm text-emerald-700 mb-3">Step 1: Test a single project enrichment. Step 2: Run bulk extraction after confirming quality.</p>
+            <p className="text-sm text-[color:var(--emerald-1)] mb-3">Step 1: Test a single project enrichment. Step 2: Run bulk extraction after confirming quality.</p>
             <div className="flex gap-2 mb-2">
               <input type="text" placeholder="Enter project slug" value={enrichTestSlug} onChange={(e) => setEnrichTestSlug(e.target.value)} className="flex-1 px-3 py-2 border border-[#B89555]/30 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
               <Button variant="outline" size="sm" className="text-xs whitespace-nowrap" onClick={async () => {
@@ -1064,7 +1064,7 @@ export function ReellyImportPanel() {
                   setEnrichTestResult(data);
                 } catch (err: any) { toast.error(err.message); setEnrichTestResult({ success: false, error: err.message }); }
                 finally { setIsEnrichTesting(false); }
-              }} disabled={isEnrichTesting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+              }} disabled={isEnrichTesting} className="jj-emerald-solid hover:jj-emerald-solid text-white">
                 {isEnrichTesting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
               </Button>
             </div>
@@ -1094,7 +1094,7 @@ export function ReellyImportPanel() {
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     { label: "BEFORE", data: enrichTestResult.before, borderColor: "border-red-200", bgColor: "bg-red-50", textColor: "text-red-700" },
-                    { label: "AFTER ENRICHMENT", data: enrichTestResult.after, borderColor: "border-green-200", bgColor: "bg-green-50", textColor: "text-green-700" },
+                    { label: "AFTER ENRICHMENT", data: enrichTestResult.after, borderColor: "border-[color:var(--emerald-1)]/30", bgColor: "jj-emerald-soft", textColor: "text-[color:var(--emerald-1)]" },
                   ].map(({ label, data, borderColor, bgColor, textColor }) => (
                     <div key={label} className={`border ${borderColor} rounded-xl overflow-hidden bg-[#FDFBF7]`}>
                       <div className={`${bgColor} px-3 py-1.5 border-b ${borderColor}`}>
@@ -1128,10 +1128,10 @@ export function ReellyImportPanel() {
                           ].map((item, idx) => {
                             const isOk = item.ok !== undefined ? item.ok : (typeof item.value === 'number' ? item.value > 0 : item.value === "Yes");
                             return (
-                              <div key={idx} className={`flex items-center gap-2 p-1.5 rounded-md text-xs ${isOk ? 'text-emerald-700 bg-emerald-50' : 'text-red-500 bg-red-50'}`}>
+                              <div key={idx} className={`flex items-center gap-2 p-1.5 rounded-md text-xs ${isOk ? 'text-[color:var(--emerald-1)] jj-emerald-soft' : 'text-red-500 bg-red-50'}`}>
                                 {item.icon}
                                 <span className="font-medium">{item.label}</span>
-                                <span className="ml-auto font-bold">{item.value}{item.extra && <span className="text-emerald-600 ml-0.5">{item.extra}</span>}</span>
+                                <span className="ml-auto font-bold">{item.value}{item.extra && <span className="text-[color:var(--emerald-1)] ml-0.5">{item.extra}</span>}</span>
                               </div>
                             );
                           })}
@@ -1181,7 +1181,7 @@ export function ReellyImportPanel() {
                         else toast.error(data?.error || "Apply failed");
                       } catch (err: any) { toast.error(err.message); }
                       finally { setIsEnrichApplying(false); }
-                    }} disabled={isEnrichApplying} className="bg-green-600 hover:bg-green-700 text-white flex-1">
+                    }} disabled={isEnrichApplying} className="jj-emerald-solid hover:jj-emerald-solid text-white flex-1">
                       {isEnrichApplying ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <CheckCircle className="h-4 w-4 mr-2" />} Apply Enrichment
                     </Button>
                   )}
@@ -1190,10 +1190,10 @@ export function ReellyImportPanel() {
                   </button>
                 </div>
                 {enrichTestResult.applied && (
-                  <Alert className="bg-green-50 border-green-300">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertTitle className="text-green-700">Applied</AlertTitle>
-                    <AlertDescription className="text-green-600">Data written to database.</AlertDescription>
+                  <Alert className="jj-emerald-soft border-[color:var(--emerald-1)]/30">
+                    <CheckCircle className="h-4 w-4 text-[color:var(--emerald-1)]" />
+                    <AlertTitle className="text-[color:var(--emerald-1)]">Applied</AlertTitle>
+                    <AlertDescription className="text-[color:var(--emerald-1)]">Data written to database.</AlertDescription>
                   </Alert>
                 )}
               </div>
@@ -1211,29 +1211,29 @@ export function ReellyImportPanel() {
             {/* Provident Firecrawl Extraction moved to Provident Portal Hub */}
 
             {/* ── Page-Data Enrichment (Free) ── */}
-            <div className="border-t border-emerald-200 pt-4 mt-4">
-              <h4 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2 text-sm">
+            <div className="border-t border-[color:var(--emerald-1)]/30 pt-4 mt-4">
+              <h4 className="font-semibold text-[color:var(--emerald-1)] mb-2 flex items-center gap-2 text-sm">
                 <FileText className="w-4 h-4" /> Page-Data Enrichment (Free)
               </h4>
-              <p className="text-xs text-emerald-600 mb-3">
+              <p className="text-xs text-[color:var(--emerald-1)] mb-3">
                 Uses free page-data.json to fill FAQs, descriptions, amenities — no Firecrawl credits.
               </p>
-              <Button onClick={handleProvidentPageDataEnrich} disabled={isBulkEnriching} className="w-full bg-emerald-600 hover:bg-emerald-700 font-bold py-3">
+              <Button onClick={handleProvidentPageDataEnrich} disabled={isBulkEnriching} className="w-full jj-emerald-solid hover:jj-emerald-solid font-bold py-3">
                 {isBulkEnriching ? <><RefreshCw className="h-5 w-5 mr-2 animate-spin" />Enriching...</> : <><Zap className="h-5 w-5 mr-2" />Enrich All (Free)</>}
               </Button>
 
               {isBulkEnriching && (
-                <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-emerald-200 mt-4">
+                <div className="bg-[#FDFBF7]/80 rounded-xl p-4 border border-[color:var(--emerald-1)]/30 mt-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
+                      <RefreshCw className="h-5 w-5 text-[color:var(--emerald-1)] animate-spin" />
                       <span className="font-medium text-sm">Running enrichment...</span>
                     </div>
                     <Button variant="outline" size="sm" className="border-red-300 text-red-600" onClick={() => setFullAiStopRequested(true)}>Stop</Button>
                   </div>
                   <div className="grid grid-cols-3 gap-3 mt-3">
-                    <div className="text-center"><p className="text-xl font-bold text-emerald-700">{fullAiProgress.processed}</p><p className="text-xs text-[#1A1A1A]/70">Processed</p></div>
-                    <div className="text-center"><p className="text-xl font-bold text-emerald-600">{fullAiProgress.enriched}</p><p className="text-xs text-[#1A1A1A]/70">Enriched</p></div>
+                    <div className="text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{fullAiProgress.processed}</p><p className="text-xs text-[#1A1A1A]/70">Processed</p></div>
+                    <div className="text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{fullAiProgress.enriched}</p><p className="text-xs text-[#1A1A1A]/70">Enriched</p></div>
                     <div className="text-center"><p className="text-xl font-bold text-red-600">{fullAiProgress.errors}</p><p className="text-xs text-[#1A1A1A]/70">Errors</p></div>
                   </div>
                 </div>
@@ -1242,10 +1242,10 @@ export function ReellyImportPanel() {
               {bulkEnrichResult && !isBulkEnriching && (
                 <div className="mt-4">
                   {bulkEnrichResult.success ? (
-                    <Alert className="bg-emerald-50 border-emerald-300">
-                      <CheckCircle className="h-4 w-4 text-emerald-600" />
-                      <AlertTitle className="text-emerald-700">Enrichment Complete</AlertTitle>
-                      <AlertDescription className="text-emerald-600">
+                    <Alert className="jj-emerald-soft border-[color:var(--emerald-1)]/30">
+                      <CheckCircle className="h-4 w-4 text-[color:var(--emerald-1)]" />
+                      <AlertTitle className="text-[color:var(--emerald-1)]">Enrichment Complete</AlertTitle>
+                      <AlertDescription className="text-[color:var(--emerald-1)]">
                         <strong>{bulkEnrichResult.processed}</strong> processed, <strong>{bulkEnrichResult.images_added || 0}</strong> images, <strong>{bulkEnrichResult.docs_added || 0}</strong> docs, <strong>{bulkEnrichResult.fields_updated || 0}</strong> fields updated
                       </AlertDescription>
                     </Alert>
@@ -1297,7 +1297,7 @@ export function ReellyImportPanel() {
                 {isCleaningAndSyncing ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />{cleanupStep || "Processing"}...</> : <><Trash2 className="h-4 w-4 mr-2" />Clean & Sync Fresh</>}
               </Button>
               {cleanupResult && cleanupResult.success && (
-                <div className="mt-3 text-sm text-emerald-700">
+                <div className="mt-3 text-sm text-[color:var(--emerald-1)]">
                   Cleaned {cleanupResult.deleted?.non_reelly_areas || 0} areas, {cleanupResult.deleted?.non_reelly_queue_items || 0} queue items
                 </div>
               )}
@@ -1316,7 +1316,7 @@ export function ReellyImportPanel() {
 
               {integrityStats && (
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                  <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{integrityStats.projects_from_reelly}</p><p className="text-xs text-emerald-600">From Reelly</p></div>
+                  <div className="jj-emerald-soft rounded-lg p-3 text-center"><p className="text-xl font-bold text-[color:var(--emerald-1)]">{integrityStats.projects_from_reelly}</p><p className="text-xs text-[color:var(--emerald-1)]">From Reelly</p></div>
                   <div className="bg-amber-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-amber-700">{integrityStats.projects_with_provident_enrichments}</p><p className="text-xs text-amber-600">Provident Enriched</p></div>
                   <div className="bg-amber-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-amber-700">{integrityStats.provident_images}</p><p className="text-xs text-amber-600">Provident Images</p></div>
                   <div className="bg-amber-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-amber-700">{integrityStats.provident_documents}</p><p className="text-xs text-amber-600">Provident Docs</p></div>
@@ -1325,9 +1325,9 @@ export function ReellyImportPanel() {
               )}
 
               {restoreResult && restoreResult.success && restoreResult.restored && (
-                <Alert className="border-emerald-300 bg-emerald-50 mb-3">
-                  <CheckCircle className="h-4 w-4 text-emerald-600" />
-                  <AlertDescription className="text-emerald-700">
+                <Alert className="border-[color:var(--emerald-1)]/30 jj-emerald-soft mb-3">
+                  <CheckCircle className="h-4 w-4 text-[color:var(--emerald-1)]" />
+                  <AlertDescription className="text-[color:var(--emerald-1)]">
                     Restored {restoreResult.restored.projects} projects, deleted {restoreResult.restored.images_deleted} images, {restoreResult.restored.documents_deleted} docs
                   </AlertDescription>
                 </Alert>
@@ -1405,7 +1405,7 @@ export function ReellyImportPanel() {
                       <>
                         {(p.images ?? 0) > 0 && <Badge variant="outline" className="text-xs">{p.images} imgs</Badge>}
                         {(p.docs ?? 0) > 0 && <Badge variant="outline" className="text-xs">{p.docs} docs</Badge>}
-                        <Badge className="bg-emerald-500 text-xs">✓</Badge>
+                        <Badge className="jj-emerald-solid text-xs">✓</Badge>
                       </>
                     ) : <Badge variant="destructive" className="text-xs">{p.status}</Badge>}
                   </div>

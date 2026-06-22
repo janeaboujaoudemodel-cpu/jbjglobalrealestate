@@ -649,8 +649,8 @@ const AIMeetingSummarizerPremium = () => {
               </div>
 
               {linkedLead ? (
-                <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
+                <div className="flex items-center gap-3 p-3 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
+                  <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center">
                     <Check className="h-4 w-4 text-white" />
                   </div>
                   <div className="flex-1">
@@ -818,8 +818,8 @@ const AIMeetingSummarizerPremium = () => {
               {/* Session Info After Recording */}
               {!isRecording && sessionDuration && !sessionDeleted && (
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                    <Clock className="h-5 w-5 text-emerald-600" />
+                  <div className="flex items-center gap-3 p-3 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
+                    <Clock className="h-5 w-5 text-[color:var(--emerald-1)]" />
                     <div className="flex-1">
                       <p className="text-[#1A1A1A] font-medium text-sm">Session Recorded</p>
                       <p className="text-[#1A1A1A]/70 text-xs">Duration: {sessionDuration} · {sessionDate}</p>
@@ -831,7 +831,7 @@ const AIMeetingSummarizerPremium = () => {
                     <div className="flex gap-2">
                       <Button
                         onClick={handleSaveSession}
-                        className="bg-emerald-600 hover:bg-emerald-500 text-white flex-1"
+                        className="jj-emerald-solid hover:jj-emerald-solid text-white flex-1"
                         size="sm"
                       >
                         <Save className="h-4 w-4 mr-1.5" /> Save Session
@@ -847,7 +847,7 @@ const AIMeetingSummarizerPremium = () => {
                     </div>
                   )}
                   {sessionSaved && (
-                    <p className="text-emerald-600 text-xs flex items-center gap-1 font-medium">
+                    <p className="text-[color:var(--emerald-1)] text-xs flex items-center gap-1 font-medium">
                       <Check className="h-3 w-3" /> Session saved as draft (kept for 30 days)
                     </p>
                   )}
@@ -869,7 +869,7 @@ const AIMeetingSummarizerPremium = () => {
                             <span className="text-[#1A1A1A] text-xs font-medium">[{entry.lang || 'Original'}]</span> {entry.original}
                           </p>
                           <p className="text-[#1A1A1A] font-medium">
-                            <span className="text-emerald-600 text-xs font-medium">[English]</span> {entry.translated}
+                            <span className="text-[color:var(--emerald-1)] text-xs font-medium">[English]</span> {entry.translated}
                           </p>
                         </>
                       ) : (
@@ -983,7 +983,7 @@ const AIMeetingSummarizerPremium = () => {
                           <p className="text-[#1A1A1A]/70">Property: <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.price.toLocaleString()}</span></p>
                           <p className="text-[#1A1A1A]/70">Down Payment (20%): <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.down.toLocaleString()}</span></p>
                           <p className="text-[#1A1A1A]/70">Loan: <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.loan.toLocaleString()}</span></p>
-                          <p className="text-[#1A1A1A]/70">Monthly: <span className="text-emerald-600 font-bold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
+                          <p className="text-[#1A1A1A]/70">Monthly: <span className="text-[color:var(--emerald-1)] font-bold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
                           <p className="text-[#1A1A1A]/70 text-xs mt-1">Rate: {mortgageResult.rate}% · {mortgageResult.years} years · Estimate only</p>
                         </div>
                       )}
@@ -1040,7 +1040,7 @@ const AIMeetingSummarizerPremium = () => {
                         onClick={handleCreateAllTasks}
                         disabled={creatingTasks || tasksCreated}
                         className={tasksCreated
-                          ? "bg-emerald-600 text-white text-xs"
+                          ? "jj-emerald-solid text-white text-xs"
                           : "bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white text-xs"
                         }
                       >
@@ -1056,7 +1056,7 @@ const AIMeetingSummarizerPremium = () => {
                       ))}
                     </ul>
                     {tasksCreated && (
-                      <p className="text-emerald-600 text-xs mt-3 flex items-center gap-1 font-medium">
+                      <p className="text-[color:var(--emerald-1)] text-xs mt-3 flex items-center gap-1 font-medium">
                         <Check className="h-3 w-3" /> Tasks + 3-day, 7-day, 14-day follow-up reminders created
                       </p>
                     )}
@@ -1067,9 +1067,9 @@ const AIMeetingSummarizerPremium = () => {
               {/* Key Decisions */}
               {response.keyDecisions && response.keyDecisions.length > 0 && (
                 <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }}>
-                  <Card className="bg-gradient-to-br from-[#F0FDF4] to-[#ECFDF5] border border-emerald-200 p-5">
+                  <Card className="bg-gradient-to-br from-[#F0FDF4] to-[#ECFDF5] border border-[color:var(--emerald-1)]/30 p-5">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-7 h-7 rounded-full bg-emerald-700 flex items-center justify-center">
+                      <div className="w-7 h-7 rounded-full jj-emerald-solid flex items-center justify-center">
                         <Target className="h-3.5 w-3.5 text-white" />
                       </div>
                       <h4 className="font-semibold text-[#1A1A1A]">Key Decisions</h4>
@@ -1077,7 +1077,7 @@ const AIMeetingSummarizerPremium = () => {
                     <ul className="space-y-2">
                       {response.keyDecisions.map((decision: any, idx: number) => (
                         <li key={idx} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
-                          <span className="text-emerald-600 font-bold">[OK]</span>
+                          <span className="text-[color:var(--emerald-1)] font-bold">[OK]</span>
                           {typeof decision === "string" ? decision : decision.decision || JSON.stringify(decision)}
                         </li>
                       ))}

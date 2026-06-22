@@ -37,10 +37,10 @@ interface Props {
 }
 
 const ACTION_META: Record<Action, { label: string; Icon: typeof Phone; tone: string }> = {
-  call:     { label: "Call now",      Icon: Phone,        tone: "bg-emerald-50 text-emerald-800 border-emerald-300" },
+  call:     { label: "Call now",      Icon: Phone,        tone: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" },
   email:    { label: "Send email",    Icon: Mail,         tone: "bg-blue-50 text-blue-800 border-blue-300" },
   schedule: { label: "Schedule",      Icon: CalendarPlus, tone: "bg-amber-50 text-amber-800 border-amber-300" },
-  won:      { label: "Mark as won",   Icon: Trophy,       tone: "bg-emerald-100 text-emerald-900 border-emerald-400" },
+  won:      { label: "Mark as won",   Icon: Trophy,       tone: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" },
   snooze:   { label: "Snooze",        Icon: Clock,        tone: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" },
 };
 

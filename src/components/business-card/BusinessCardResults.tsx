@@ -203,7 +203,7 @@ const BusinessCardResults = ({
                         </Badge>
                       )}
                       {saveStatus === "saved" && (
-                        <Badge className="text-[10px] border border-emerald-400/70 bg-emerald-500/20 text-emerald-100 gap-1 allow-white" data-no-contrast-guard>
+                        <Badge className="text-[10px] border border-[color:var(--emerald-1)]/30/70 jj-emerald-solid/20 text-[color:var(--emerald-on)] gap-1 allow-white" data-no-contrast-guard>
                           <CheckCircle2 className="h-3 w-3 allow-white" /> In CRM
                         </Badge>
                       )}
@@ -303,10 +303,10 @@ const BusinessCardResults = ({
                               type="button"
                               onClick={() => toggleLabel(contact.id, l, labels)}
                               className={`text-[11px] px-2 py-0.5 rounded-full border transition ${
-                                active
-                                  ? "bg-rose-500/22 text-white border-rose-300 allow-white"
-                                  : "bg-transparent text-white/75 border-rose-500/35 hover:border-rose-300 hover:text-white allow-white"
-                              }`}
+ active
+ ? "bg-rose-500/22 text-white border-rose-300 allow-white"
+ : "bg-transparent text-white/75 border-rose-500/35 hover:border-rose-300 hover:text-white allow-white"
+ }`}
                               data-no-contrast-guard
                             >
                               {l}

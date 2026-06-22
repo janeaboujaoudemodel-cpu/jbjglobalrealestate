@@ -129,7 +129,7 @@ export default function RedeemReferral() {
               {isSuccess ? (
                 /* Success State */
                 <div className="text-center py-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br /20 /10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-10 h-10 text-green-500" />
                   </div>
                   <h2 className="text-2xl font-bold text-foreground mb-2">

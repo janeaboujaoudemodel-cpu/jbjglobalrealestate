@@ -333,7 +333,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
             </Card>
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardContent className="p-4 text-center">
-                <TrendingUp className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
+                <TrendingUp className="w-6 h-6 text-[color:var(--emerald-1)] mx-auto mb-2" />
                 <p className="text-2xl font-bold text-[#1A1A1A]">{totalSessions.toLocaleString()}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Total Sessions</p>
               </CardContent>
@@ -509,7 +509,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                       <p className="text-[10px] text-[#1A1A1A]/70 mt-1">Sessions, time, pages, features used</p>
                     </div>
                     <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-[#B89555]/20">
-                      <p className="text-xl font-bold text-emerald-700">{selectedUser.conversion_probability}%</p>
+                      <p className="text-xl font-bold text-[color:var(--emerald-1)]">{selectedUser.conversion_probability}%</p>
                       <p className="text-xs font-semibold text-[#1A1A1A]/70">Conversion Likelihood</p>
                       <p className="text-[10px] text-[#1A1A1A]/70 mt-1">Intent × Engagement × Recency</p>
                     </div>
@@ -637,7 +637,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                               </span>
                               <span className="text-[#1A1A1A]/70">→</span>
                               <span className="text-[#1A1A1A]/70 whitespace-nowrap w-28 shrink-0">
-                                {sess.ended_at ? format(new Date(sess.ended_at), "dd MMM HH:mm") : <Badge variant="outline" className="text-[10px] h-4 px-1 border-emerald-500/30 bg-emerald-500/10 text-emerald-700">Active</Badge>}
+                                {sess.ended_at ? format(new Date(sess.ended_at), "dd MMM HH:mm") : <Badge variant="outline" className="text-[10px] h-4 px-1 border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/10 text-[color:var(--emerald-1)]">Active</Badge>}
                               </span>
                               <span className="text-[#1A1A1A] font-semibold w-14 text-right">{formatDuration(sess.duration_seconds || 0)}</span>
                               <div className="flex items-center gap-1 text-[#1A1A1A]/70">

@@ -33,7 +33,7 @@ const EXPORT_FORMATS = [
 ];
 
 const SHARE_OPTIONS = [
-  { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, color: "bg-green-500" },
+  { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, color: "jj-emerald-solid" },
   { id: "email", label: "Email", icon: Mail, color: "bg-blue-500" },
   { id: "instagram", label: "Instagram", icon: Instagram, color: "bg-pink-500" },
   { id: "youtube", label: "YouTube", icon: Youtube, color: "bg-red-500" },
@@ -222,12 +222,12 @@ const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: Video
 
         {/* Ready Status */}
         {project.status === "ready" && !isGenerating && (
-          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-green-500/20 flex items-center justify-center">
-              <Check className="h-5 w-5 text-green-600" />
+          <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full jj-emerald-solid/20 flex items-center justify-center">
+              <Check className="h-5 w-5 text-[color:var(--emerald-1)]" />
             </div>
             <div>
-              <p className="text-green-600 font-medium">Video Ready!</p>
+              <p className="text-[color:var(--emerald-1)] font-medium">Video Ready!</p>
               <p className="text-sm text-muted-foreground">
                 Your video is ready to download and share
               </p>
@@ -248,10 +248,10 @@ const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: Video
                 key={q.id}
                 htmlFor={`quality-${q.id}`}
                 className={`flex flex-col p-3 rounded-lg border cursor-pointer transition-all ${
-                  quality === q.id
-                    ? "border-primary bg-primary/10"
-                    : "border-border hover:border-primary/50"
-                }`}
+ quality === q.id
+ ? "border-primary bg-primary/10"
+ : "border-border hover:border-primary/50"
+ }`}
               >
                 <RadioGroupItem value={q.id} id={`quality-${q.id}`} className="sr-only" />
                 <span className="font-medium text-sm">{q.label}</span>
@@ -275,10 +275,10 @@ const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: Video
                 key={f.id}
                 htmlFor={`format-${f.id}`}
                 className={`flex flex-col p-3 rounded-lg border cursor-pointer transition-all ${
-                  format === f.id
-                    ? "border-primary bg-primary/10"
-                    : "border-border hover:border-primary/50"
-                }`}
+ format === f.id
+ ? "border-primary bg-primary/10"
+ : "border-border hover:border-primary/50"
+ }`}
               >
                 <RadioGroupItem value={f.id} id={`format-${f.id}`} className="sr-only" />
                 <span className="font-medium text-sm uppercase">{f.label}</span>

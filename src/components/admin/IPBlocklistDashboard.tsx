@@ -240,7 +240,7 @@ export const IPBlocklistDashboard = () => {
             size="sm"
             onClick={() => setIsLive(!isLive)}
             className={isLive 
-              ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
+              ? "jj-emerald-solid hover:jj-emerald-solid text-white" 
               : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             }
           >

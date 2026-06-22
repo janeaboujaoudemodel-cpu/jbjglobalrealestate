@@ -187,18 +187,18 @@ const MeetingConsentSection = ({
 
   if (consentSaved) {
     return (
-      <Card className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 shadow-sm">
+      <Card className="bg-gradient-to-br from-emerald-50 to-green-50 border border-[color:var(--emerald-1)]/30 shadow-sm">
         <CardContent className="p-5 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-full jj-emerald-solid flex items-center justify-center flex-shrink-0">
             <ShieldCheck className="h-5 w-5 text-white" />
           </div>
           <div>
             <p className="font-semibold text-[#1A1A1A] text-sm">Consent Recorded</p>
-            <p className="text-emerald-700 text-xs">
+            <p className="text-[color:var(--emerald-1)] text-xs">
               {clientName} signed the recording authorization · {new Date().toLocaleString()}
             </p>
           </div>
-          <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300 text-xs ml-auto">Signed</Badge>
+          <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-xs ml-auto">Signed</Badge>
         </CardContent>
       </Card>
     );

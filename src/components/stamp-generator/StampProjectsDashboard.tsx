@@ -451,7 +451,7 @@ export default function StampProjectsDashboard() {
                       </div>
                       <div className="flex gap-2 pt-1">
                         <Button size="sm" variant="outline"
-                          className="flex-1 h-7 text-xs gap-1 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                          className="flex-1 h-7 text-xs gap-1 border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
                           onClick={() => recoverProject(project.id)}>
                           <RotateCw size={11}/> Recover
                         </Button>
@@ -498,7 +498,7 @@ export default function StampProjectsDashboard() {
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#FDFBF7] rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] shadow-2xl px-5 py-3 flex items-center gap-3">
           <span className="text-sm font-semibold text-[hsl(var(--foreground))]">{selectedDeletedIds.size} selected</span>
           <div className="w-px h-5 bg-[hsl(var(--border))]"/>
-          <Button size="sm" variant="outline" className="gap-1.5 text-xs border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
             disabled={bulkDeleting} onClick={bulkRecover}>
             <RotateCw size={12}/> Recover All
           </Button>

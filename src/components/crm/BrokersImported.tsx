@@ -79,7 +79,7 @@ export default function BrokersImported() {
     if (k === "skip")    return { label: "Skipped",         cls: "bg-red-50 text-red-800 border-red-200" };
     if (k === "pending") return { label: "Pending review",  cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" };
     if (k === "edit")    return { label: "Needs edit",      cls: "bg-blue-50 text-blue-800 border-blue-200" };
-    if (k === "imported")return { label: "Imported",        cls: "bg-emerald-100 text-emerald-900 border-emerald-300" };
+    if (k === "imported")return { label: "Imported",        cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" };
     return { label: d || "Pending review", cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" };
   };
 

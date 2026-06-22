@@ -161,7 +161,7 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
                 currentStep === step.number
                   ? 'bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] font-semibold'
                   : currentStep > step.number
-                  ? 'bg-green-100 text-green-700'
+                  ? 'jj-emerald-soft text-[color:var(--emerald-1)]'
                   : 'bg-muted text-muted-foreground'
               )}
             >
@@ -172,7 +172,7 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               <div
                 className={cn(
                   'w-12 h-0.5 mx-2',
-                  currentStep > step.number ? 'bg-green-500' : 'bg-muted'
+                  currentStep > step.number ? 'jj-emerald-solid' : 'bg-muted'
                 )}
               />
             )}

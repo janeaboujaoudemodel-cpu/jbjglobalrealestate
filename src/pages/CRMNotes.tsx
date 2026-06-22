@@ -25,7 +25,7 @@ interface Note {
 const NOTE_COLORS = [
   'bg-gradient-to-br from-amber-50 to-amber-100 border-amber-300',
   'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-300',
-  'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-300',
+  'bg-gradient-to-br from-emerald-50 to-emerald-100 border-[color:var(--emerald-1)]/30',
   'bg-gradient-to-br from-pink-50 to-pink-100 border-pink-300',
   'bg-gradient-to-br from-purple-50 to-purple-100 border-purple-300',
   'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-300',

@@ -120,7 +120,7 @@ const getNotificationColor = (type: Notification['type'], priority: Notification
   
   switch (type) {
     case 'lead':
-      return 'text-emerald-600 bg-emerald-50';
+      return 'text-[color:var(--emerald-1)] jj-emerald-soft';
     case 'task':
       return 'text-amber-600 bg-amber-50';
     case 'message':

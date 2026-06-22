@@ -185,7 +185,7 @@ const ChatCVSubmission = ({
   if (submitted) {
     return (
       <div className="flex-1 p-4 flex flex-col items-center justify-center text-center">
-        <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-full jj-emerald-solid/20 flex items-center justify-center mb-4">
           <CheckCircle className="w-8 h-8 text-green-500" />
         </div>
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
@@ -290,18 +290,18 @@ const ChatCVSubmission = ({
           <button
             onClick={() => fileInputRef.current?.click()}
             className={`w-full p-4 border-2 border-dashed rounded-xl transition-all duration-300 flex flex-col items-center justify-center gap-2 ${
-              cvFile 
-                ? 'border-green-500 bg-green-50' 
-                : formErrors.cv 
-                  ? 'border-red-500 bg-red-50'
-                  : 'border-[#B89555]/40 hover:border-[#B89555] bg-[#FDFBF7]'
-            }`}
+ cvFile 
+ ? 'border-[color:var(--emerald-1)]/30 jj-emerald-soft' 
+ : formErrors.cv 
+ ? 'border-red-500 bg-red-50'
+ : 'border-[#B89555]/40 hover:border-[#B89555] bg-[#FDFBF7]'
+ }`}
           >
             {cvFile ? (
               <>
                 <CheckCircle className="w-6 h-6 text-green-500" />
-                <span className="text-green-700 text-sm font-medium truncate max-w-full px-2">{cvFile.name}</span>
-                <span className="text-green-600 text-xs">{formatFileSize(cvFile.size)} · Click to change file</span>
+                <span className="text-[color:var(--emerald-1)] text-sm font-medium truncate max-w-full px-2">{cvFile.name}</span>
+                <span className="text-[color:var(--emerald-1)] text-xs">{formatFileSize(cvFile.size)} · Click to change file</span>
               </>
             ) : (
               <>

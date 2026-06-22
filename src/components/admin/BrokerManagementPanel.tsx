@@ -194,7 +194,7 @@ export function BrokerManagementPanel() {
                           <Badge
                             className={
                               broker.verification_status === "verified"
-                                ? "bg-emerald-500/20 text-emerald-600 border-emerald-500/30"
+                                ? "jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30"
                                 : broker.verification_status === "expired"
                                 ? "bg-red-500/20 text-red-600 border-red-500/30"
                                 : "bg-muted text-muted-foreground"
@@ -221,7 +221,7 @@ export function BrokerManagementPanel() {
                       </TableCell>
                       <TableCell>
                         {broker.probation_skipped ? (
-                          <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 text-xs">
+                          <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 text-xs">
                             <Zap className="w-3 h-3 mr-1" /> Skipped
                           </Badge>
                         ) : broker.probation_end ? (
@@ -251,7 +251,7 @@ export function BrokerManagementPanel() {
                             broker.performance_rating === "elite"
                               ? "border-amber-500 text-amber-600"
                               : broker.performance_rating === "top_performer"
-                              ? "border-emerald-500 text-emerald-600"
+                              ? "border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]"
                               : "border-muted text-muted-foreground"
                           }
                         >

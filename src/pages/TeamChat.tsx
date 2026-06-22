@@ -264,7 +264,7 @@ const TeamChat = () => {
   const dmChannels = channels.filter(c => c.type === "dm");
 
   const statusColors: Record<string, string> = {
-    online: "bg-green-500",
+    online: "jj-emerald-solid",
     away: "bg-amber-500",
     offline: "bg-[#E5D9C4]",
   };
@@ -400,7 +400,7 @@ const TeamChat = () => {
                       <AvatarImage src={amanda.avatar} alt={amanda.name} />
                       <AvatarFallback className="text-[9px] bg-[#B89555]/10 text-[#B89555] font-semibold">AC</AvatarFallback>
                     </Avatar>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#FDFBF7] bg-green-500" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#FDFBF7] jj-emerald-solid" />
                   </div>
                   <div className="min-w-0 text-left">
                     <span className="truncate flex items-center gap-1">
@@ -452,7 +452,7 @@ const TeamChat = () => {
               <Avatar className="h-8 w-8 border border-[#B89555]/20">
                 <AvatarFallback className="bg-gradient-to-br from-[#B89555] to-[#A68444] text-white text-xs font-semibold">JB</AvatarFallback>
               </Avatar>
-              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white bg-green-500" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white jj-emerald-solid" />
             </div>
             <div className="min-w-0">
               <p className="text-sm font-medium text-[#1A1A1A] truncate">{currentUser.name}</p>
@@ -493,8 +493,8 @@ const TeamChat = () => {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInCall ? "bg-green-500/20" : "hover:bg-[#B89555]/10")} onClick={handleCall}>
-              <Phone className={cn("w-4 h-4", isInCall ? "text-green-600 animate-pulse" : "text-[#1A1A1A]/50")} />
+            <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInCall ? "jj-emerald-solid/20" : "hover:bg-[#B89555]/10")} onClick={handleCall}>
+              <Phone className={cn("w-4 h-4", isInCall ? "text-[color:var(--emerald-1)] animate-pulse" : "text-[#1A1A1A]/50")} />
             </Button>
             <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInVideo ? "bg-blue-500/20" : "hover:bg-[#B89555]/10")} onClick={handleVideo}>
               <Video className={cn("w-4 h-4", isInVideo ? "text-blue-600 animate-pulse" : "text-[#1A1A1A]/50")} />
@@ -515,7 +515,7 @@ const TeamChat = () => {
         {(isInCall || isInVideo) && (
           <div className={cn(
             "px-4 py-2 flex items-center justify-between text-sm font-medium",
-            isInCall ? "bg-green-500/10 text-green-700 border-b border-green-500/20" : "bg-blue-500/10 text-blue-700 border-b border-blue-500/20"
+            isInCall ? "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-b border-[color:var(--emerald-1)]/30/20" : "bg-blue-500/10 text-blue-700 border-b border-blue-500/20"
           )}>
             <span className="flex items-center gap-2">
               {isInCall ? <Phone className="w-4 h-4 animate-pulse" /> : <Video className="w-4 h-4 animate-pulse" />}
@@ -674,7 +674,7 @@ const TeamChat = () => {
             <h3 className="text-xs font-semibold text-[#1A1A1A]/40 uppercase tracking-wider">
               Team — {totalCount} members
             </h3>
-            <p className="text-[10px] text-green-600 mt-0.5">{onlineCount} online</p>
+            <p className="text-[10px] text-[color:var(--emerald-1)] mt-0.5">{onlineCount} online</p>
           </div>
           <ScrollArea className="flex-1 p-2">
             {Object.entries(departmentGroups).map(([dept, members]) => {

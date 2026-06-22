@@ -191,14 +191,14 @@ export function FilterManagerPanel() {
           <div
             key={filter.id}
             className={`jj-card-inner flex items-center justify-between p-4 ${
-              !filter.is_active ? "opacity-60" : ""
-            }`}
+ !filter.is_active ? "opacity-60" : ""
+ }`}
           >
             <div className="flex items-center gap-3">
               <AlertTriangle className={`h-4 w-4 ${
-                filter.filter_type === "block" ? "text-red-600" :
-                filter.filter_type === "warn" ? "text-amber-600" : "text-blue-600"
-              }`} />
+ filter.filter_type === "block" ? "text-red-600" :
+ filter.filter_type === "warn" ? "text-amber-600" : "text-blue-600"
+ }`} />
               <div>
                 <p className="text-[#1A1A1A] font-medium">{filter.keyword}</p>
                 {filter.replacement_text && (
@@ -214,7 +214,7 @@ export function FilterManagerPanel() {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleToggleActive(filter.id, filter.is_active)}
-                className={filter.is_active ? "text-emerald-600" : "text-[#1A1A1A]/50"}
+                className={filter.is_active ? "text-[color:var(--emerald-1)]" : "text-[#1A1A1A]/50"}
               >
                 {filter.is_active ? "Active" : "Inactive"}
               </Button>

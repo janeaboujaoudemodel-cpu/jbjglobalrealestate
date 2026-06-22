@@ -60,7 +60,7 @@ export function MyVisitRequests({ refreshTrigger }: MyVisitRequestsProps) {
     switch (status) {
       case "approved":
         return (
-          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+          <Badge className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30">
             <CheckCircle className="h-3 w-3 mr-1" />
             Approved
           </Badge>

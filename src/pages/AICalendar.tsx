@@ -362,7 +362,7 @@ const AICalendar = () => {
 
   const eventTypeColors: Record<CalendarEvent['type'], string> = {
     meeting: 'bg-blue-500',
-    viewing: 'bg-emerald-500',
+    viewing: 'jj-emerald-solid',
     call: 'bg-purple-500',
     reminder: 'bg-yellow-500',
     other: 'bg-[#B89555]'
@@ -636,10 +636,10 @@ const AICalendar = () => {
                         key={i}
                         onClick={() => setSelectedDate(date)}
                         className={`aspect-square p-1 rounded-lg cursor-pointer transition-all ${
-                          isSelected ? 'bg-blue-600/30 border border-blue-500' :
-                          isToday ? 'bg-[#F7F2EA] border border-[#1A1A1A]' :
-                          'hover:bg-[#1A1A1A]/50'
-                        }`}
+ isSelected ? 'bg-blue-600/30 border border-blue-500' :
+ isToday ? 'bg-[#F7F2EA] border border-[#1A1A1A]' :
+ 'hover:bg-[#1A1A1A]/50'
+ }`}
                       >
                         <p className={`text-xs ${isToday ? 'text-blue-400 font-bold' : 'text-[#1A1A1A]/70'}`}>
                           {date.getDate()}
@@ -737,7 +737,7 @@ const AICalendar = () => {
                                 </span>
                               )}
                               {event.phoneReminder && (
-                                <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded">
+                                <span className="text-[10px] jj-emerald-solid/20 text-green-400 px-2 py-0.5 rounded">
                                   <Phone className="w-2 h-2 inline mr-1" /> Phone
                                 </span>
                               )}

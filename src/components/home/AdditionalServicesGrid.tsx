@@ -38,7 +38,7 @@ const additionalServices: ServiceCard[] = [
     icon: Calculator,
     href: "/property-evaluator",
     available: true,
-    color: "from-emerald-500 to-emerald-600"
+    color: " "
   },
   {
     id: "legal",

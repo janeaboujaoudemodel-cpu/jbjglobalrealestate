@@ -167,10 +167,10 @@ const ExecutiveRisk = () => {
                 key={nav.path}
                 to={nav.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  nav.active
-                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                    : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
-                }`}
+ nav.active
+ ? "bg-[#EFE6D6] text-[#1A1A1A]"
+ : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
+ }`}
               >
                 {nav.label}
               </Link>
@@ -272,10 +272,10 @@ const ExecutiveRisk = () => {
                         <div
                           key={alert.id}
                           className={`flex items-start gap-4 p-4 rounded-lg border ${
-                            alert.resolved
-                              ? "bg-[#F7F2EA]/50 border-[#1A1A1A]"
-                              : getSeverityColor(alert.severity).replace("bg-", "bg-").replace("/20", "/10")
-                          }`}
+ alert.resolved
+ ? "bg-[#F7F2EA]/50 border-[#1A1A1A]"
+ : getSeverityColor(alert.severity).replace("bg-", "bg-").replace("/20", "/10")
+ }`}
                         >
                           <div className="flex-shrink-0 mt-0.5">
                             {alert.severity === "critical" ? (
@@ -295,7 +295,7 @@ const ExecutiveRisk = () => {
                                 {alert.type}
                               </Badge>
                               {alert.resolved && (
-                                <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                                <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">
                                   RESOLVED
                                 </Badge>
                               )}
@@ -321,7 +321,7 @@ const ExecutiveRisk = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
+                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
                       <h4 className="text-emerald-400 font-medium mb-2 flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" />
                         Active Filters
@@ -369,17 +369,17 @@ const ExecutiveRisk = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
+                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">Data Attribution</p>
                       <p className="text-xs text-white/70 mt-1">All sources logged</p>
                     </div>
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
+                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">Access Logging</p>
                       <p className="text-xs text-white/70 mt-1">All access tracked</p>
                     </div>
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
+                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">AI Explainability</p>
                       <p className="text-xs text-white/70 mt-1">Insights are logged</p>

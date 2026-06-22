@@ -18,7 +18,7 @@ export interface TriageResult {
 }
 
 export const CATEGORY_META: Record<string, { label: string; color: string }> = {
-  real_estate_lead:    { label: "Real Estate Lead",    color: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
+  real_estate_lead:    { label: "Real Estate Lead",    color: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30" },
   real_estate_ops:     { label: "Real Estate Ops",     color: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
   sales_offer:         { label: "Sales / Offers",      color: "bg-orange-500/10 text-orange-700 border-orange-500/30" },
   campaign:            { label: "Campaign / Influencer", color: "bg-pink-500/10 text-pink-700 border-pink-500/30" },

@@ -46,7 +46,7 @@ export default function ReadyMessageCard({ message, leadName, leadPhone, leadWha
         {waHref && (
           <a
             href={waHref} target="_blank" rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-emerald-600 text-emerald-700 hover:bg-emerald-50"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
           >
             <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
           </a>

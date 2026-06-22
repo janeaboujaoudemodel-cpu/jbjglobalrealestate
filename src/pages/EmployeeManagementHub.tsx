@@ -186,7 +186,7 @@ const EmployeeManagementHub: React.FC = () => {
       hr_approved: { color: 'bg-blue-500/20 text-blue-700 border-blue-500/30', label: 'HR Approved' },
       it_processing: { color: 'bg-purple-500/20 text-purple-700 border-purple-500/30', label: 'IT Processing' },
       webdev_processing: { color: 'bg-cyan-500/20 text-cyan-700 border-cyan-500/30', label: 'Web Setup' },
-      completed: { color: 'bg-green-500/20 text-green-700 border-green-500/30', label: 'Completed' },
+      completed: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', label: 'Completed' },
       rejected: { color: 'bg-red-500/20 text-red-700 border-red-500/30', label: 'Rejected' }
     };
     const config = statusConfig[status] || { color: 'bg-[#B89555]/20 text-[#1A1A1A]/70', label: status };
@@ -225,7 +225,7 @@ const EmployeeManagementHub: React.FC = () => {
     { key: 'pendingHR', label: 'Pending HR', value: stats.pendingHR, Icon: Clock, ring: 'border-amber-500/40', tint: 'text-amber-700', tab: 'applications' },
     { key: 'pendingIT', label: 'IT Queue', value: stats.pendingIT, Icon: Monitor, ring: 'border-purple-500/40', tint: 'text-purple-700', tab: 'provisioning' },
     { key: 'inProgress', label: 'In Progress', value: stats.inProgress, Icon: Zap, ring: 'border-blue-500/40', tint: 'text-blue-700', tab: 'journey' },
-    { key: 'completedThisMonth', label: 'This Month', value: stats.completedThisMonth, Icon: CheckCircle, ring: 'border-green-500/40', tint: 'text-green-700', tab: 'audit' },
+    { key: 'completedThisMonth', label: 'This Month', value: stats.completedThisMonth, Icon: CheckCircle, ring: 'border-[color:var(--emerald-1)]/30/40', tint: 'text-[color:var(--emerald-1)]', tab: 'audit' },
     { key: 'activeEmployees', label: 'Active Staff', value: stats.activeEmployees, Icon: Users, ring: 'border-[#B89555]/40', tint: 'text-[#1A1A1A]', tab: 'journey' },
     { key: 'onProbation', label: 'On Probation', value: stats.onProbation, Icon: AlertCircle, ring: 'border-orange-500/40', tint: 'text-orange-700', tab: 'journey' },
     { key: 'avgOnboardingDays', label: 'Avg Onboard', value: `${stats.avgOnboardingDays}d`, Icon: TrendingUp, ring: 'border-cyan-500/40', tint: 'text-cyan-700', tab: 'audit' },
@@ -422,7 +422,7 @@ const EmployeeManagementHub: React.FC = () => {
                       { label: 'HR Approved', count: 0, color: 'bg-blue-500' },
                       { label: 'IT Setup', count: stats.pendingIT, color: 'bg-purple-500' },
                       { label: 'CRM Access', count: 0, color: 'bg-cyan-500' },
-                      { label: 'Completed', count: stats.completedThisMonth, color: 'bg-green-500' }
+                      { label: 'Completed', count: stats.completedThisMonth, color: 'jj-emerald-solid' }
                     ].map((stage, idx) => (
                       <React.Fragment key={stage.label}>
                         <div className="flex-1 text-center">

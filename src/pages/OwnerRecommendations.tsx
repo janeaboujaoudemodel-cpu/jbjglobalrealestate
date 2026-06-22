@@ -30,10 +30,10 @@ interface Recommendation {
 const SOURCE_CONFIG: Record<string, { icon: any; label: string; color: string }> = {
   crm: { icon: Users, label: "CRM", color: "bg-blue-100 text-blue-700" },
   hr: { icon: Briefcase, label: "HR", color: "bg-violet-100 text-violet-700" },
-  operations: { icon: BarChart3, label: "Operations", color: "bg-emerald-100 text-emerald-700" },
+  operations: { icon: BarChart3, label: "Operations", color: "jj-emerald-soft text-[color:var(--emerald-1)]" },
   listings: { icon: Building2, label: "Listings", color: "bg-amber-100 text-amber-700" },
   marketing: { icon: Megaphone, label: "Marketing", color: "bg-pink-100 text-pink-700" },
-  finance: { icon: DollarSign, label: "Finance", color: "bg-teal-100 text-teal-700" },
+  finance: { icon: DollarSign, label: "Finance", color: "jj-emerald-soft text-[color:var(--emerald-1)]" },
 };
 
 const IMPACT_COLORS: Record<string, string> = {
@@ -148,7 +148,7 @@ const OwnerRecommendations = () => {
         <div className="grid grid-cols-3 gap-4 mb-6">
           {[
             { label: "Pending", count: counts.pending, icon: AlertTriangle, color: "text-amber-600" },
-            { label: "Applied", count: counts.applied, icon: CheckCircle2, color: "text-emerald-600" },
+            { label: "Applied", count: counts.applied, icon: CheckCircle2, color: "text-[color:var(--emerald-1)]" },
             { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-[#1A1A1A]/70" },
           ].map(s => (
             <div key={s.label} className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-xl p-4 flex items-center gap-3">
@@ -232,8 +232,8 @@ const OwnerRecommendations = () => {
                             </div>
                           )}
                           {rec.after_preview && (
-                            <div className="rounded-lg border border-green-200 bg-green-50/50 p-4">
-                              <p className="text-[10px] font-bold uppercase text-green-600 mb-2">After</p>
+                            <div className="rounded-lg border border-[color:var(--emerald-1)]/30 jj-emerald-soft/50 p-4">
+                              <p className="text-[10px] font-bold uppercase text-[color:var(--emerald-1)] mb-2">After</p>
                               <p className="text-xs text-[#1A1A1A]/70">{rec.after_preview}</p>
                             </div>
                           )}
@@ -249,7 +249,7 @@ const OwnerRecommendations = () => {
                       <div className="flex gap-2">
                         {rec.status === "pending" && (
                           <>
-                            <Button size="sm" onClick={() => updateStatus(rec.id, "applied")} className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs">
+                            <Button size="sm" onClick={() => updateStatus(rec.id, "applied")} className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs">
                               <CheckCircle2 className="h-3 w-3 mr-1" /> Apply
                             </Button>
                             <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "dismissed")} className="text-xs border-[#B89555]/30">

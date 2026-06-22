@@ -14,7 +14,7 @@ import { format } from "date-fns";
 
 const STATUS_STYLES: Record<string, string> = {
   draft: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30",
-  published: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
+  published: "jj-emerald-solid/10 text-emerald-500 border-[color:var(--emerald-1)]/30/30",
   cancelled: "bg-red-500/10 text-red-500 border-red-500/30",
   completed: "bg-blue-500/10 text-blue-500 border-blue-500/30",
 };
@@ -162,7 +162,7 @@ export default function EventManagementHub() {
                     </div>
                     <div className="flex gap-2 flex-shrink-0">
                       {event.status === "draft" && (
-                        <Button size="sm" variant="outline" onClick={() => handlePublish(event.id)} className="text-emerald-500 border-emerald-500/30 hover:bg-emerald-500/10 text-xs">
+                        <Button size="sm" variant="outline" onClick={() => handlePublish(event.id)} className="text-emerald-500 border-[color:var(--emerald-1)]/30/30 hover:jj-emerald-solid/10 text-xs">
                           <CheckCircle2 className="w-3 h-3 mr-1" /> Publish
                         </Button>
                       )}

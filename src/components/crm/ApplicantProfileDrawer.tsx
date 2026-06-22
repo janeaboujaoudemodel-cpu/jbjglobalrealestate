@@ -388,7 +388,7 @@ export default function ApplicantProfileDrawer({
                 size="sm"
                 variant="outline"
                 onClick={() => onUpdateStatus(candidate.id, "approved")}
-                className="border-emerald-600/40 text-emerald-700 hover:bg-emerald-50"
+                className="border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] hover:jj-emerald-soft"
               >
                 <CheckCircle2 className="h-3.5 w-3.5 mr-1" /> Accept
               </Button>

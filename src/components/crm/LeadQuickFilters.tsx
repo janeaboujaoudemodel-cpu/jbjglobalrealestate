@@ -42,7 +42,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "hot", 
     label: "Hot Leads", 
     icon: TrendingUp, 
-    color: "text-emerald-700",
+    color: "text-[color:var(--emerald-1)]",
     bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-[#B89555]/30",
     statuses: ["interested", "qualified", "negotiation"] 
   },
@@ -58,7 +58,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "closed_won", 
     label: "Won", 
     icon: CheckCircle, 
-    color: "text-emerald-700",
+    color: "text-[color:var(--emerald-1)]",
     bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-[#B89555]/30",
     statuses: ["closed_won"] 
   },

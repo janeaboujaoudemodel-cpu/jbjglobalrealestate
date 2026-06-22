@@ -122,7 +122,7 @@ JBJ Global Real Estate Team`
       <DialogContent className="sm:max-w-3xl flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-green-600" />
+            <MessageCircle className="h-5 w-5 text-[color:var(--emerald-1)]" />
             Bulk WhatsApp Messages
           </DialogTitle>
           <DialogDescription>
@@ -199,7 +199,7 @@ JBJ Global Real Estate Team`
                         onClick={() => copyLink(recipient)}
                       >
                         {copiedId === recipient.id ? (
-                          <Check className="h-4 w-4 text-green-600" />
+                          <Check className="h-4 w-4 text-[color:var(--emerald-1)]" />
                         ) : (
                           <Copy className="h-4 w-4" />
                         )}
@@ -208,7 +208,7 @@ JBJ Global Real Estate Team`
                         variant="default"
                         size="sm"
                         onClick={() => openWhatsApp(recipient)}
-                        className="bg-green-600 hover:bg-green-700"
+                        className="jj-emerald-solid hover:jj-emerald-solid"
                       >
                         <ExternalLink className="h-4 w-4 mr-1" />
                         Open

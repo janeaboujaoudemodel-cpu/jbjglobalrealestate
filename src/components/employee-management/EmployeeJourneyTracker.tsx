@@ -86,10 +86,10 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
 
   const getEventColor = (type: string) => {
     switch (type) {
-      case 'hired': return 'bg-green-500/20 text-green-700 border-green-500/30';
+      case 'hired': return 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
       case 'promoted': return 'bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30';
       case 'department_change': return 'bg-blue-500/20 text-blue-700 border-blue-500/30';
-      case 'probation_passed': return 'bg-emerald-500/20 text-emerald-700 border-emerald-500/30';
+      case 'probation_passed': return 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
       case 'warning_issued': return 'bg-red-500/20 text-red-700 border-red-500/30';
       default: return 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30';
     }
@@ -120,10 +120,10 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                   key={emp.id}
                   onClick={() => setSelectedEmployee(emp.user_id)}
                   className={`w-full text-left p-3 rounded-lg border transition-all ${
-                    selectedEmployee === emp.user_id 
-                      ? 'bg-[#EFE6D6]/20 border-[#B89555]' 
-                      : 'bg-[#FDFBF7]/50 border-[#B89555]/20 hover:border-[#B89555]/40'
-                  }`}
+ selectedEmployee === emp.user_id 
+ ? 'bg-[#EFE6D6]/20 border-[#B89555]' 
+ : 'bg-[#FDFBF7]/50 border-[#B89555]/20 hover:border-[#B89555]/40'
+ }`}
                 >
                   <p className="font-medium text-[#1A1A1A] text-sm">{emp.display_name}</p>
                   <p className="text-xs text-[#1A1A1A]/70">{emp.job_title} • {emp.department}</p>

@@ -69,10 +69,10 @@ const STATUS_LABEL: Record<EmploymentStatus, string> = {
 };
 
 const PIPELINE_COLORS: Record<string, string> = {
-  interested: "border-emerald-500/40 text-emerald-700 bg-emerald-50",
+  interested: "border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] jj-emerald-soft",
   not_interested: "border-red-500/40 text-red-700 bg-red-50",
   junk: "border-amber-500/40 text-amber-700 bg-amber-50",
-  won: "border-emerald-600/40 text-emerald-800 bg-emerald-50",
+  won: "border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] jj-emerald-soft",
   lost: "border-red-600/40 text-red-800 bg-red-50",
   contacted: "border-blue-500/40 text-blue-700 bg-blue-50",
   new: "border-[#B89555]/40 text-[#1A1A1A] bg-[#EFE6D6]",
@@ -236,7 +236,7 @@ export function EmployeePerformanceDashboard() {
     <div className="space-y-6">
       {/* KPI cards (filtered) */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KpiCard label="Calls (30d)" value={totals.calls} icon={<Phone className="h-6 w-6 text-emerald-600" />} />
+        <KpiCard label="Calls (30d)" value={totals.calls} icon={<Phone className="h-6 w-6 text-[color:var(--emerald-1)]" />} />
         <KpiCard label="Chats (30d)" value={totals.chats} icon={<MessageSquare className="h-6 w-6 text-blue-600" />} />
         <KpiCard label="Leads Contacted (30d)" value={totals.leads} icon={<TrendingUp className="h-6 w-6 text-[#1A1A1A]" />} />
         <KpiCard label="Tasks Completed" value={totals.tasks} icon={<Target className="h-6 w-6 text-amber-600" />} />
@@ -324,8 +324,8 @@ export function EmployeePerformanceDashboard() {
                   <div
                     key={emp.id}
                     className={`border rounded-xl p-4 transition-all ${
-                      isSelected ? "border-[#B89555] bg-[#FDFBF7]" : "border-[#B89555]/20 bg-[#FDFBF7]/60"
-                    } ${inactive ? "opacity-70" : ""}`}
+ isSelected ? "border-[#B89555] bg-[#FDFBF7]" : "border-[#B89555]/20 bg-[#FDFBF7]/60"
+ } ${inactive ? "opacity-70" : ""}`}
                   >
                     <div className="flex items-start gap-3">
                       <Checkbox checked={isSelected} onCheckedChange={() => toggleOne(emp.user_id)} className="mt-2" />

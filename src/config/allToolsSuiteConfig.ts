@@ -39,23 +39,23 @@ export const toolColorThemes: Record<string, {
   // Property & Valuation
   'property-analyzer': { bg: 'bg-orange-950/40', accent: 'text-orange-400', border: 'border-orange-500/30', gradient: 'from-orange-500/20 to-orange-950/40', ring: 'ring-orange-500/30' },
   'price-predictor': { bg: 'bg-blue-950/40', accent: 'text-blue-400', border: 'border-blue-500/30', gradient: 'from-blue-500/20 to-blue-950/40', ring: 'ring-blue-500/30' },
-  'neighborhood-insights': { bg: 'bg-teal-950/40', accent: 'text-teal-400', border: 'border-teal-500/30', gradient: 'from-teal-500/20 to-teal-950/40', ring: 'ring-teal-500/30' },
+  'neighborhood-insights': { bg: 'bg-teal-950/40', accent: 'text-teal-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-teal-950/40', ring: 'ring-teal-500/30' },
   'property-evaluator': { bg: 'bg-blue-950/40', accent: 'text-blue-400', border: 'border-blue-500/30', gradient: 'from-blue-500/20 to-blue-950/40', ring: 'ring-blue-500/30' },
   'property-comparison': { bg: 'bg-sky-950/40', accent: 'text-sky-400', border: 'border-sky-500/30', gradient: 'from-sky-500/20 to-sky-950/40', ring: 'ring-sky-500/30' },
   'home-finder': { bg: 'bg-purple-950/40', accent: 'text-purple-400', border: 'border-purple-500/30', gradient: 'from-purple-500/20 to-purple-950/40', ring: 'ring-purple-500/30' },
   
   // Investment
-  'roi-calculator': { bg: 'bg-emerald-950/40', accent: 'text-emerald-400', border: 'border-emerald-500/30', gradient: 'from-emerald-500/20 to-emerald-950/40', ring: 'ring-emerald-500/30' },
+  'roi-calculator': { bg: 'bg-emerald-950/40', accent: 'text-emerald-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-emerald-950/40', ring: 'ring-emerald-500/30' },
   'mortgage-calculator': { bg: 'bg-amber-950/40', accent: 'text-[#1A1A1A]', border: 'border-amber-500/30', gradient: 'from-amber-500/20 to-amber-950/40', ring: 'ring-amber-500/30' },
-  'rental-index': { bg: 'bg-emerald-950/40', accent: 'text-emerald-400', border: 'border-emerald-500/30', gradient: 'from-emerald-500/20 to-emerald-950/40', ring: 'ring-emerald-500/30' },
-  'investment-report': { bg: 'bg-green-950/40', accent: 'text-green-400', border: 'border-green-500/30', gradient: 'from-green-500/20 to-green-950/40', ring: 'ring-green-500/30' },
+  'rental-index': { bg: 'bg-emerald-950/40', accent: 'text-emerald-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-emerald-950/40', ring: 'ring-emerald-500/30' },
+  'investment-report': { bg: 'bg-green-950/40', accent: 'text-green-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-green-950/40', ring: 'ring-green-500/30' },
   
   // Market Intelligence
   'market-report': { bg: 'bg-cyan-950/40', accent: 'text-cyan-400', border: 'border-cyan-500/30', gradient: 'from-cyan-500/20 to-cyan-950/40', ring: 'ring-cyan-500/30' },
   'competitor-analysis': { bg: 'bg-orange-950/40', accent: 'text-orange-400', border: 'border-orange-500/30', gradient: 'from-orange-500/20 to-orange-950/40', ring: 'ring-orange-500/30' },
   
   // Communication
-  'email-generator': { bg: 'bg-teal-950/40', accent: 'text-teal-400', border: 'border-teal-500/30', gradient: 'from-teal-500/20 to-teal-950/40', ring: 'ring-teal-500/30' },
+  'email-generator': { bg: 'bg-teal-950/40', accent: 'text-teal-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-teal-950/40', ring: 'ring-teal-500/30' },
   'translation-hub': { bg: 'bg-amber-950/40', accent: 'text-[#1A1A1A]', border: 'border-amber-500/30', gradient: 'from-amber-500/20 to-amber-950/40', ring: 'ring-amber-500/30' },
   'video-tour-script': { bg: 'bg-pink-950/40', accent: 'text-pink-400', border: 'border-pink-500/30', gradient: 'from-pink-500/20 to-pink-950/40', ring: 'ring-pink-500/30' },
   'objection-handler': { bg: 'bg-rose-950/40', accent: 'text-rose-400', border: 'border-rose-500/30', gradient: 'from-rose-500/20 to-rose-950/40', ring: 'ring-rose-500/30' },
@@ -70,7 +70,7 @@ export const toolColorThemes: Record<string, {
   'ai-stamp': { bg: 'bg-amber-950/40', accent: 'text-[#1A1A1A]', border: 'border-amber-500/30', gradient: 'from-amber-500/20 to-amber-950/40', ring: 'ring-amber-500/30' },
   'business-card-designer': { bg: 'bg-[#EFE6D6]/10', accent: 'text-yellow-400', border: 'border-yellow-500/30', gradient: 'from-yellow-500/20 to-amber-950/40', ring: 'ring-yellow-500/30' },
   'logo-maker': { bg: 'bg-purple-950/40', accent: 'text-purple-400', border: 'border-purple-500/30', gradient: 'from-purple-500/20 to-purple-950/40', ring: 'ring-purple-500/30' },
-  'cv-builder': { bg: 'bg-emerald-950/40', accent: 'text-emerald-400', border: 'border-emerald-500/30', gradient: 'from-emerald-500/20 to-emerald-950/40', ring: 'ring-emerald-500/30' },
+  'cv-builder': { bg: 'bg-emerald-950/40', accent: 'text-emerald-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-emerald-950/40', ring: 'ring-emerald-500/30' },
   'cover-letter': { bg: 'bg-sky-950/40', accent: 'text-sky-400', border: 'border-sky-500/30', gradient: 'from-sky-500/20 to-sky-950/40', ring: 'ring-sky-500/30' },
   'company-profile': { bg: 'bg-rose-950/40', accent: 'text-rose-400', border: 'border-rose-500/30', gradient: 'from-rose-500/20 to-rose-950/40', ring: 'ring-rose-500/30' },
   'e-sign': { bg: 'bg-cyan-950/40', accent: 'text-cyan-400', border: 'border-cyan-500/30', gradient: 'from-cyan-500/20 to-cyan-950/40', ring: 'ring-cyan-500/30' },
@@ -78,7 +78,7 @@ export const toolColorThemes: Record<string, {
   'meeting-summarizer': { bg: 'bg-violet-950/40', accent: 'text-violet-400', border: 'border-violet-500/30', gradient: 'from-violet-500/20 to-violet-950/40', ring: 'ring-violet-500/30' },
   'call-summarizer': { bg: 'bg-violet-950/40', accent: 'text-violet-400', border: 'border-violet-500/30', gradient: 'from-violet-500/20 to-violet-950/40', ring: 'ring-violet-500/30' },
   'lead-qualification': { bg: 'bg-purple-950/40', accent: 'text-purple-400', border: 'border-purple-500/30', gradient: 'from-purple-500/20 to-purple-950/40', ring: 'ring-purple-500/30' },
-  'followup-scheduler': { bg: 'bg-green-950/40', accent: 'text-green-400', border: 'border-green-500/30', gradient: 'from-green-500/20 to-green-950/40', ring: 'ring-green-500/30' },
+  'followup-scheduler': { bg: 'bg-green-950/40', accent: 'text-green-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-green-950/40', ring: 'ring-green-500/30' },
   'client-matcher': { bg: 'bg-indigo-950/40', accent: 'text-indigo-400', border: 'border-indigo-500/30', gradient: 'from-indigo-500/20 to-indigo-950/40', ring: 'ring-indigo-500/30' },
   'calendar-notes': { bg: 'bg-cyan-950/40', accent: 'text-cyan-400', border: 'border-cyan-500/30', gradient: 'from-cyan-500/20 to-cyan-950/40', ring: 'ring-cyan-500/30' },
   'video-meet': { bg: 'bg-violet-950/40', accent: 'text-violet-400', border: 'border-violet-500/30', gradient: 'from-violet-500/20 to-violet-950/40', ring: 'ring-violet-500/30' },
@@ -90,7 +90,7 @@ export const toolColorThemes: Record<string, {
   'video-studio': { bg: 'bg-fuchsia-950/40', accent: 'text-fuchsia-400', border: 'border-fuchsia-500/30', gradient: 'from-fuchsia-500/20 to-fuchsia-950/40', ring: 'ring-fuchsia-500/30' },
   'voice-studio': { bg: 'bg-purple-950/40', accent: 'text-purple-400', border: 'border-purple-500/30', gradient: 'from-purple-500/20 to-purple-950/40', ring: 'ring-purple-500/30' },
   'background-remover': { bg: 'bg-rose-950/40', accent: 'text-rose-400', border: 'border-rose-500/30', gradient: 'from-rose-500/20 to-rose-950/40', ring: 'ring-rose-500/30' },
-  'image-resize': { bg: 'bg-teal-950/40', accent: 'text-teal-400', border: 'border-teal-500/30', gradient: 'from-teal-500/20 to-teal-950/40', ring: 'ring-teal-500/30' },
+  'image-resize': { bg: 'bg-teal-950/40', accent: 'text-teal-400', border: 'border-[color:var(--emerald-1)]/30/30', gradient: '/20 to-teal-950/40', ring: 'ring-teal-500/30' },
 };
 
 // All tool categories for the unified hub
@@ -131,7 +131,7 @@ export const ALL_TOOL_CATEGORIES: ToolCategory[] = [
 // Section color mappings
 export const sectionColors: Record<string, { active: string; inactive: string; border: string }> = {
   sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-sky-400', border: 'border-sky-400' },
-  emerald: { active: 'text-emerald-400 bg-emerald-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-emerald-400', border: 'border-emerald-400' },
+  emerald: { active: 'text-emerald-400 jj-emerald-solid/10', inactive: 'text-[#1A1A1A]/70 ', border: 'border-[color:var(--emerald-1)]/30' },
   indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-indigo-400', border: 'border-indigo-400' },
   amber: { active: 'text-[#1A1A1A] bg-amber-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-amber-400' },
   lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-lime-400', border: 'border-lime-400' },

@@ -224,7 +224,7 @@ JBJ Contact Information:
         onClick={() => setIsAssistantOpen(true)}
       >
         <MessageCircle className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse border-2 border-white" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 jj-emerald-solid rounded-full animate-pulse border-2 border-white" />
       </motion.button>
     );
   }
@@ -245,7 +245,7 @@ JBJ Contact Information:
                 <AvatarImage src={userAssistant.avatar} alt={userAssistant.name} />
                 <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A]">{userAssistant.name[0]}</AvatarFallback>
               </Avatar>
-              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+              <span className="absolute bottom-0 right-0 w-3 h-3 jj-emerald-solid border-2 border-white rounded-full" />
             </div>
             <div>
               <button 
@@ -289,8 +289,8 @@ JBJ Contact Information:
                     }]);
                   }}
                   className={`w-full flex items-center gap-3 p-3 hover:bg-[#EFE6D6]/10 transition-colors ${
-                    activeAgent?.id === agent.id ? 'bg-[#EFE6D6]/20' : ''
-                  }`}
+ activeAgent?.id === agent.id ? 'bg-[#EFE6D6]/20' : ''
+ }`}
                 >
                   <Avatar className="w-8 h-8 border border-[#B89555]/30">
                     <AvatarImage src={agent.avatar} alt={agent.name} />
@@ -317,10 +317,10 @@ JBJ Contact Information:
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div className={`max-w-[85%] ${
-                  message.role === 'user' 
-                    ? 'bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A]' 
-                    : 'bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/30 shadow-sm'
-                } rounded-2xl px-4 py-3`}>
+ message.role === 'user' 
+ ? 'bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A]' 
+ : 'bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/30 shadow-sm'
+ } rounded-2xl px-4 py-3`}>
                   {message.isTyping ? (
                     <div className="flex gap-1">
                       <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />

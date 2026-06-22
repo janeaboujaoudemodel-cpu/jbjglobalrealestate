@@ -292,7 +292,7 @@ export function AIBrokerWhatsAppDialog({
             <Button
               onClick={handleSend}
               disabled={sending || !message.trim()}
-              className="bg-emerald-600 text-white hover:bg-emerald-700"
+              className="jj-emerald-solid text-white hover:jj-emerald-solid"
             >
               {sending ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

@@ -68,7 +68,7 @@ const ClientMarketSnapshot = ({
       case "active":
       case "high":
         return (
-          <Badge variant="outline" className="border-emerald-500/50 text-emerald-400 bg-emerald-500/10 text-xs">
+          <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400 jj-emerald-solid/10 text-xs">
             Active
           </Badge>
         );
@@ -171,11 +171,11 @@ const ClientMarketSnapshot = ({
           </div>
           
           <div className="flex items-center justify-between text-sm">
-            <span className="text-emerald-700 font-medium">Demand Level</span>
-            <span className="text-emerald-700 font-bold">{demandLevel}%</span>
+            <span className="text-[color:var(--emerald-1)] font-medium">Demand Level</span>
+            <span className="text-[color:var(--emerald-1)] font-bold">{demandLevel}%</span>
           </div>
-          <div className="h-2.5 bg-emerald-100 rounded-full overflow-hidden shadow-inner">
-            <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all" style={{ width: `${demandLevel}%` }} />
+          <div className="h-2.5 jj-emerald-soft rounded-full overflow-hidden shadow-inner">
+            <div className="h-full bg-gradient-to-r rounded-full transition-all" style={{ width: `${demandLevel}%` }} />
           </div>
         </div>
 

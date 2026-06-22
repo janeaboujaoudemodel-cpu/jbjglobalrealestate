@@ -266,21 +266,21 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
                 <div
                   key={docType.id}
                   className={`p-4 rounded-xl border-2 transition-all ${
-                    existingDoc
-                      ? "border-emerald-500/50 bg-emerald-50/50"
-                      : "border-border/50 bg-[#FDFBF7]/50 hover:border-[#B89555]/50"
-                  }`}
+ existingDoc
+ ? "border-[color:var(--emerald-1)]/30/50 jj-emerald-soft/50"
+ : "border-border/50 bg-[#FDFBF7]/50 hover:border-[#B89555]/50"
+ }`}
                 >
                   <div className="flex items-start gap-3">
                     <div
                       className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        existingDoc ? "bg-emerald-100" : "bg-muted"
-                      }`}
+ existingDoc ? "jj-emerald-soft" : "bg-muted"
+ }`}
                     >
                       <Icon
                         className={`w-5 h-5 ${
-                          existingDoc ? "text-emerald-600" : "text-muted-foreground"
-                        }`}
+ existingDoc ? "text-[color:var(--emerald-1)]" : "text-muted-foreground"
+ }`}
                       />
                     </div>
 
@@ -306,7 +306,7 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
                           </div>
                           <div className="flex items-center gap-2 mt-2">
                             {existingDoc.is_verified ? (
-                              <Badge className="bg-emerald-500/20 text-emerald-700 border-emerald-500/30 text-[10px]">
+                              <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 text-[10px]">
                                 <CheckCircle2 className="w-3 h-3 mr-1" />
                                 Verified
                               </Badge>
