@@ -783,7 +783,7 @@ const ListingAdmin = () => {
                 {activeSource === "provident" && (
                   <TabsTrigger 
                     value="provident-hub"
-                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
                   >
                     <Database className="w-3.5 h-3.5 mr-1.5" />
                     Provident Portal
@@ -791,21 +791,21 @@ const ListingAdmin = () => {
                 )}
                 <TabsTrigger 
                   value="enrichment"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
                 >
                   <Zap className="w-3.5 h-3.5 mr-1.5" />
                   Enrichment & Extraction
                 </TabsTrigger>
                 <TabsTrigger 
                   value="approvals"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
                 >
                   <Check className="w-3.5 h-3.5 mr-1.5" />
                   Approval Center
                 </TabsTrigger>
                 <TabsTrigger 
                   value="external"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
                 >
                   <Database className="w-3.5 h-3.5 mr-1.5" />
                   Sources
@@ -813,7 +813,7 @@ const ListingAdmin = () => {
                 {activeSource === "reelly" && (
                   <TabsTrigger 
                     value="reelly" 
-                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
                   >
                     <Globe className="w-3.5 h-3.5 mr-1.5" />
                     Reelly Sync
@@ -821,7 +821,7 @@ const ListingAdmin = () => {
                 )}
                 <TabsTrigger 
                   value="dev-visibility"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
                 >
                   <Building2 className="w-3.5 h-3.5 mr-1.5" />
                   Visibility
@@ -1102,19 +1102,19 @@ const ListingAdmin = () => {
               <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 <Tabs defaultValue="details" className="space-y-6">
                   <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30">
-                    <TabsTrigger value="details" className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A]">
+                    <TabsTrigger value="details" className="tab-trigger-champagne text-[#1A1A1A]/70">
                       {t('listingAdmin.details')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="documents" 
-                      className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A]"
+                      className="tab-trigger-champagne text-[#1A1A1A]/70"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.documents')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="images" 
-                      className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A]"
+                      className="tab-trigger-champagne text-[#1A1A1A]/70"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.images')}

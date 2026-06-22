@@ -189,17 +189,17 @@ export default function LandlordRentalPortal() {
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="bg-[#FDFBF7]/60 border border-[#B89555]/30 mb-8">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-[#EFE6D6]">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="guide" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+              <TabsTrigger value="guide" className="data-[state=active]:bg-[#EFE6D6]">
                 Landlord Guide
               </TabsTrigger>
-              <TabsTrigger value="list-property" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+              <TabsTrigger value="list-property" className="data-[state=active]:bg-[#EFE6D6]">
                 List Property
               </TabsTrigger>
               {isAuthenticated && (
-                <TabsTrigger value="my-listings" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+                <TabsTrigger value="my-listings" className="data-[state=active]:bg-[#EFE6D6]">
                   My Listings
                   {listings.length > 0 && (
                     <Badge variant="secondary" className="ml-2 bg-[#EFE6D6]">

@@ -537,10 +537,10 @@ const News = () => {
 
                 <Tabs defaultValue="ytd" className="w-full">
                   <TabsList className="mb-6 bg-champagne-light/50 border border-[#B89555]/20">
-                    <TabsTrigger value="ytd" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-xs font-semibold">
+                    <TabsTrigger value="ytd" className="data-[state=active]:bg-[#EFE6D6] text-xs font-semibold">
                       YTD 2026
                     </TabsTrigger>
-                    <TabsTrigger value="daily" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-xs font-semibold">
+                    <TabsTrigger value="daily" className="data-[state=active]:bg-[#EFE6D6] text-xs font-semibold">
                       Today's Average
                     </TabsTrigger>
                   </TabsList>

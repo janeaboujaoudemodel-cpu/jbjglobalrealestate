@@ -185,11 +185,11 @@ const ExclusiveDocuments = () => {
         <div className="max-w-6xl mx-auto px-6 py-8">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-[#1A1A1A]/5 border border-[#B89555]/20 p-1 h-auto flex-wrap">
-              <TabsTrigger value="templates" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] gap-2">
+              <TabsTrigger value="templates" className="data-[state=active]:bg-[#EFE6D6] gap-2">
                 <FileText className="w-4 h-4" />
                 Templates
               </TabsTrigger>
-              <TabsTrigger value="ai-generate" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] gap-2">
+              <TabsTrigger value="ai-generate" className="data-[state=active]:bg-[#EFE6D6] gap-2">
                 <Sparkles className="w-4 h-4" />
                 AI Generate
               </TabsTrigger>

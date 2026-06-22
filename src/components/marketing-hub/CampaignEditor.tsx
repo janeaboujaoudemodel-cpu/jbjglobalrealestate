@@ -781,11 +781,11 @@ The content should be:
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <div className="flex items-center justify-between mb-4">
                   <TabsList className="bg-[#EFE6D6]/10 border-2 border-[#B89555]/30">
-                    <TabsTrigger value="content" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">Content</TabsTrigger>
-                    <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+                    <TabsTrigger value="content" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A]">Content</TabsTrigger>
+                    <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A]">
                       <Eye className="w-3.5 h-3.5 mr-1" /> Preview
                     </TabsTrigger>
-                    <TabsTrigger value="attachments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+                    <TabsTrigger value="attachments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] text-[#1A1A1A]">
                       Attachments
                       {attachments.length > 0 && (
                         <Badge className="ml-2 bg-[#EFE6D6]/30 text-[#1A1A1A] text-xs">{attachments.length}</Badge>

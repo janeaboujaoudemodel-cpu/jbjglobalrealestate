@@ -311,14 +311,14 @@ export default function AdoptSignatureStudio() {
         <TabsList className="bg-[#F7F2EA] border border-[#B89555]/25 h-11 p-1 gap-1">
           <TabsTrigger
             value="signature"
-            className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/50 px-5 h-9 text-sm font-semibold"
+            className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555]/50 px-5 h-9 text-sm font-semibold"
           >
             <PenLine className="h-4 w-4 mr-2" />
             Signature
           </TabsTrigger>
           <TabsTrigger
             value="stamp"
-            className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/50 px-5 h-9 text-sm font-semibold"
+            className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:border data-[state=active]:border-[#B89555]/50 px-5 h-9 text-sm font-semibold"
           >
             <Stamp className="h-4 w-4 mr-2" />
             Stamp

@@ -319,19 +319,19 @@ const PodcastStudio = () => {
       <div className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 mb-6">
-            <TabsTrigger value="record" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
+            <TabsTrigger value="record" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
               <Mic className="w-3.5 h-3.5 mr-1.5" /> Record Episode
             </TabsTrigger>
-            <TabsTrigger value="voices" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
+            <TabsTrigger value="voices" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
               <Volume2 className="w-3.5 h-3.5 mr-1.5" /> Voice Library
             </TabsTrigger>
-            <TabsTrigger value="episodes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
+            <TabsTrigger value="episodes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
               <FileAudio className="w-3.5 h-3.5 mr-1.5" /> Episodes ({episodes.length})
             </TabsTrigger>
-            <TabsTrigger value="video" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
+            <TabsTrigger value="video" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
               <Video className="w-3.5 h-3.5 mr-1.5" /> Video Studio
             </TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
+            <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-[#1A1A1A]">
               <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Settings
             </TabsTrigger>
           </TabsList>

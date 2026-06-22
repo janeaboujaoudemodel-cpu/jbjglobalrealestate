@@ -210,13 +210,13 @@ export default function OwnerTemplates() {
             <TabsList className="bg-[#EFE6D6] border border-[#B89555]/30 mb-6">
               <TabsTrigger
                 value="templates"
-                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]"
+                className="data-[state=active]:bg-[#1A1A1A]"
               >
                 <FileText className="w-4 h-4 mr-2" />Message Templates
               </TabsTrigger>
               <TabsTrigger
                 value="ingestion"
-                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]"
+                className="data-[state=active]:bg-[#1A1A1A]"
               >
                 <Inbox className="w-4 h-4 mr-2" />Media Ingestion
               </TabsTrigger>

@@ -517,49 +517,49 @@ export default function OwnerDashboardOverview() {
         <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-2 mb-6 flex flex-wrap justify-center gap-1.5 rounded-xl shadow-sm h-auto">
           <TabsTrigger 
             value="overview" 
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
           >
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
           <TabsTrigger 
             value="leads"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
           >
             <Users className="h-4 w-4 mr-2" />
             All Leads
           </TabsTrigger>
           <TabsTrigger 
             value="flagged"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
           >
             <Flag className="h-4 w-4 mr-2" />
             Flagged
           </TabsTrigger>
           <TabsTrigger 
             value="vip"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
           >
             <Crown className="h-4 w-4 mr-2" />
             VIP Leads
           </TabsTrigger>
           <TabsTrigger 
             value="leads-management"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Leads Management
           </TabsTrigger>
           <TabsTrigger 
             value="employees"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
           >
             <Briefcase className="h-4 w-4 mr-2" />
             Employees Hub
           </TabsTrigger>
           <TabsTrigger 
             value="audit"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
           >
             <Shield className="h-4 w-4 mr-2" />
             Audit Logs

@@ -1137,7 +1137,7 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
 export default function VoiceSuite() {
   const { isOwner } = useAuth();
 
-  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] text-white/90 hover:text-white/85 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
+  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] text-white/90 hover:text-white/85 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
 
   return (
     <>

@@ -293,11 +293,11 @@ const VisitorInsightsDashboard = () => {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
         <TabsList className="bg-[#FDFBF7]/50 border border-[#B89555]/20">
-          <TabsTrigger value="visitors" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="visitors" className="data-[state=active]:bg-[#EFE6D6]">
             <Users className="h-4 w-4 mr-2" />
             Visitors ({groupedVisitors.length})
           </TabsTrigger>
-          <TabsTrigger value="contacts" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="contacts" className="data-[state=active]:bg-[#EFE6D6]">
             <Mail className="h-4 w-4 mr-2" />
             Contacts ({contacts.length})
           </TabsTrigger>

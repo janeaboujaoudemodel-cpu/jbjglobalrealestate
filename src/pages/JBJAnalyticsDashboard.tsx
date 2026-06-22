@@ -362,15 +362,15 @@ const JBJAnalyticsDashboard: React.FC = () => {
 
         <Tabs defaultValue="visitors" className="space-y-6">
           <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
-            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
+            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
               <Users className="w-4 h-4 mr-2" />
               Daily Visitors
             </TabsTrigger>
-            <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
+            <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
               <BarChart3 className="w-4 h-4 mr-2" />
               Tool Usage
             </TabsTrigger>
-            <TabsTrigger value="issues" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
+            <TabsTrigger value="issues" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
               <AlertCircle className="w-4 h-4 mr-2" />
               Issue Reports
             </TabsTrigger>

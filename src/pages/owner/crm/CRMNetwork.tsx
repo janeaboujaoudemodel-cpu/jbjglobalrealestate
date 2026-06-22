@@ -349,7 +349,7 @@ export default function CRMNetwork({ initialRole }: CRMNetworkProps = {}) {
                 <TabsTrigger
                   key={t.key}
                   value={t.key}
-                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]"
+                  className="data-[state=active]:bg-[#EFE6D6]"
                 >
                   {t.label}
                   <span className="ml-2 text-[11px] text-[#1A1A1A]/60">

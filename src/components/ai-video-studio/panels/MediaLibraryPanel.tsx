@@ -139,28 +139,28 @@ export function MediaLibraryPanel({
         <TabsList className="w-full justify-start rounded-none border-b border-[#1A1A1A] bg-transparent p-0">
           <TabsTrigger 
             value="uploads" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555]"
           >
             <FolderOpen className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">Uploads</span>
           </TabsTrigger>
           <TabsTrigger 
             value="stock"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555]"
           >
             <Music className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">Stock</span>
           </TabsTrigger>
           <TabsTrigger 
             value="ai"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555]"
           >
             <Wand2 className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">AI</span>
           </TabsTrigger>
           <TabsTrigger 
             value="templates"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555]"
           >
             <LayoutTemplate className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">Templates</span>

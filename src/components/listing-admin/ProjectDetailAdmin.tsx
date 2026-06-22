@@ -213,16 +213,16 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
       {/* Tabs: Overview, Gallery, Enrichment Log */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/30">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-background">
             <Layers className="w-3.5 h-3.5 mr-1.5" /> Overview
           </TabsTrigger>
-          <TabsTrigger value="gallery" className="data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="gallery" className="data-[state=active]:bg-background">
             <ImageIcon className="w-3.5 h-3.5 mr-1.5" /> Gallery ({project.images?.length ?? 0})
           </TabsTrigger>
-          <TabsTrigger value="documents" className="data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="documents" className="data-[state=active]:bg-background">
             <FileText className="w-3.5 h-3.5 mr-1.5" /> Documents ({documents?.length ?? 0})
           </TabsTrigger>
-          <TabsTrigger value="enrichment" className="data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="enrichment" className="data-[state=active]:bg-background">
             <Zap className="w-3.5 h-3.5 mr-1.5" /> Enrichment Log
           </TabsTrigger>
         </TabsList>

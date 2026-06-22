@@ -493,19 +493,19 @@ export default function ExecutiveAssistant() {
           {/* Main Tabs - Premium Theme */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-              <TabsTrigger value="inbox" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+              <TabsTrigger value="inbox" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
                 <Mail className="h-4 w-4 mr-2" />
                 Inbox
               </TabsTrigger>
-              <TabsTrigger value="responses" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+              <TabsTrigger value="responses" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
                 <Brain className="h-4 w-4 mr-2" />
                 AI Responses
               </TabsTrigger>
-              <TabsTrigger value="rules" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+              <TabsTrigger value="rules" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
                 <Filter className="h-4 w-4 mr-2" />
                 Rules
               </TabsTrigger>
-              <TabsTrigger value="integrations" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+              <TabsTrigger value="integrations" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
                 <Settings className="h-4 w-4 mr-2" />
                 Integrations
               </TabsTrigger>

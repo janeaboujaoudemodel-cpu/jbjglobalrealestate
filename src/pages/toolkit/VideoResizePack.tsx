@@ -576,14 +576,14 @@ const VideoResizePack = () => {
               <TabsList className="w-full max-w-md mx-auto grid grid-cols-2 bg-jj-layer-2 p-1 rounded-xl">
                 <TabsTrigger 
                   value="resize" 
-                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] rounded-lg"
+                  className="data-[state=active]:bg-[#EFE6D6] rounded-lg"
                 >
                   <LayoutGrid className="h-4 w-4 mr-2" />
                   Multi-Format Export
                 </TabsTrigger>
                 <TabsTrigger 
                   value="smart-reframe"
-                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] rounded-lg"
+                  className="data-[state=active]:bg-[#EFE6D6] rounded-lg"
                 >
                   <Target className="h-4 w-4 mr-2" />
                   Smart Reframe AI

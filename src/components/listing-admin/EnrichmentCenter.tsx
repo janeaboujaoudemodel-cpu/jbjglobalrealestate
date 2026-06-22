@@ -553,14 +553,14 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
         <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 p-1">
           <TabsTrigger
             value="provident"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
           >
             <Database className="w-4 h-4 mr-2" />
             Source Enrichment
           </TabsTrigger>
           <TabsTrigger
             value="audit"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
           >
             <Eye className="w-4 h-4 mr-2" />
             Audit & Diff Viewer
@@ -568,7 +568,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
           {activeSource === "reelly" && (
             <TabsTrigger
               value="reelly"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
             >
               <Globe className="w-4 h-4 mr-2" />
               Reelly API Enrichment

@@ -203,23 +203,23 @@ export const MarketingSettingsDashboard = () => {
 
       <Tabs defaultValue="analytics" className="space-y-6">
         <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30">
-          <TabsTrigger value="analytics" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="analytics" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
             <BarChart3 className="w-4 h-4 mr-2" />
             Analytics
           </TabsTrigger>
-          <TabsTrigger value="advertising" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="advertising" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
             <Target className="w-4 h-4 mr-2" />
             Advertising
           </TabsTrigger>
-          <TabsTrigger value="email" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="email" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
             <Mail className="w-4 h-4 mr-2" />
             Email & CRM
           </TabsTrigger>
-          <TabsTrigger value="automation" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="automation" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
             <Webhook className="w-4 h-4 mr-2" />
             Automation
           </TabsTrigger>
-          <TabsTrigger value="local" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="local" className="data-[state=active]:bg-[#EFE6D6] text-[#1A1A1A]">
             <Globe className="w-4 h-4 mr-2" />
             Local & Trust
           </TabsTrigger>

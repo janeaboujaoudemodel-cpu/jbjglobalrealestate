@@ -337,31 +337,31 @@ const Testimonials = () => {
                 <TabsList className="w-full flex flex-wrap justify-center gap-2 bg-transparent mb-8">
                   <TabsTrigger 
                     value="buyers" 
-                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Buyers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="sellers"
-                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Sellers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="investors"
-                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Investors
                   </TabsTrigger>
                   <TabsTrigger 
                     value="landlords"
-                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Landlords
                   </TabsTrigger>
                   <TabsTrigger 
                     value="partners"
-                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Brokers & Partners
                   </TabsTrigger>

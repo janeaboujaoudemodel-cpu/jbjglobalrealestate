@@ -188,7 +188,7 @@ export function PersonHub({
               <TabsTrigger
                 key={t}
                 value={t}
-                className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70"
+                className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:border-[#B89555] text-[#1A1A1A]/70"
               >
                 <Icon className="h-3.5 w-3.5 mr-1.5" />
                 {meta.label}

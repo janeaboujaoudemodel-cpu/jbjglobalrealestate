@@ -84,11 +84,11 @@ export function EmbeddedEmployeeHub() {
   return (
     <Tabs defaultValue="team" className="space-y-6">
       <TabsList className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
-        <TabsTrigger value="team" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+        <TabsTrigger value="team" className="data-[state=active]:bg-[#EFE6D6]">
           <Users className="w-4 h-4 mr-2" />
           Team Members
         </TabsTrigger>
-        <TabsTrigger value="email" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
+        <TabsTrigger value="email" className="data-[state=active]:bg-[#EFE6D6]">
           <AtSign className="w-4 h-4 mr-2" />
           Email Accounts
         </TabsTrigger>

@@ -193,15 +193,15 @@ const OwnerAuditPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Tabs defaultValue="routes" className="w-full">
             <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-2 border-[#B89555]/30 mb-6">
-              <TabsTrigger value="routes" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
+              <TabsTrigger value="routes" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <FileText className="w-4 h-4 mr-2" />
                 Route Inventory
               </TabsTrigger>
-              <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
+              <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <Brain className="w-4 h-4 mr-2" />
                 AI Tools Audit
               </TabsTrigger>
-              <TabsTrigger value="delivery" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
+              <TabsTrigger value="delivery" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <ClipboardCheck className="w-4 h-4 mr-2" />
                 Delivery Checklist
               </TabsTrigger>
