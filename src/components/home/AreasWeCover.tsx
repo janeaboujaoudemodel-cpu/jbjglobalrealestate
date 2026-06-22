@@ -3,6 +3,7 @@
  * 3-per-row featured photo cards with high-contrast captions, premium hover,
  * and two CTAs: "Read Area Guides" + "Explore All Areas".
  */
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, ArrowRight, TrendingUp, Flame, BookOpen, Compass } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -12,6 +13,13 @@ import { PearlButton } from "@/components/ui/pearl-button";
 const AreasWeCover = () => {
   const { t } = useLanguage();
   const { data: areas, isLoading } = useAreas({ limit: 12 });
+
+  useEffect(() => {
+    if (window.location.hash !== "#top-areas-dubai") return;
+    requestAnimationFrame(() => {
+      document.getElementById("top-areas-dubai")?.scrollIntoView({ block: "start" });
+    });
+  }, [isLoading]);
 
   const displayAreas = (areas ?? [])
     .slice()
@@ -37,7 +45,7 @@ const AreasWeCover = () => {
   }
 
   return (
-    <section className="py-12 md:py-20">
+    <section id="top-areas-dubai" className="py-12 md:py-20">
       <div className="w-full">
         {/* Premium champagne frame */}
         <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12 border border-[#B89555]/45 shadow-[0_24px_70px_-32px_rgba(184,149,85,0.45)]">
@@ -107,13 +115,13 @@ const AreasWeCover = () => {
               {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
                 {area.isTrending && (
-                  <span data-no-contrast-guard className="jj-emerald-chip">
+                  <span data-no-contrast-guard className="jj-emerald-chip jj-area-status-chip">
                     <TrendingUp className="w-2.5 h-2.5" />
                     Trending
                   </span>
                 )}
                 {area.isHighDemand && (
-                  <span data-no-contrast-guard className="jj-emerald-chip">
+                  <span data-no-contrast-guard className="jj-emerald-chip jj-area-status-chip">
                     <Flame className="w-2.5 h-2.5" />
                     High Demand
                   </span>
@@ -134,7 +142,7 @@ const AreasWeCover = () => {
                   </div>
 
                   <span
-                    className="jj-pill-emerald shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
+                    className="jj-pill-emerald jj-area-explore-pill shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] transition-all group-hover:translate-y-[-1px]"
                     data-on-dark
                     data-no-contrast-guard
                   >
