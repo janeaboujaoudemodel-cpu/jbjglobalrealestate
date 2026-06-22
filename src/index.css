@@ -10195,3 +10195,57 @@ html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sideb
   background: none !important;
   animation: none !important;
 }
+
+/* ============================================================
+   PASS XX-A — UNIFIED EMERALD TOKEN SYSTEM (single source of truth)
+   Every emerald surface in the app MUST resolve to these tokens,
+   via the <EmeraldBadge|Pill|Button|Dot> primitives in
+   src/components/ui/emerald/*. Raw bg-green-* / bg-emerald-*
+   utilities are deprecated.
+   ============================================================ */
+:root {
+  --emerald-1: #064E3B;
+  --emerald-2: #047857;
+  --emerald-3: #022C22;
+  --emerald-on: #FFFFFF;
+  --emerald-soft-bg: #ECFDF5;
+  --emerald-soft-fg: #064E3B;
+  --emerald-ring: rgba(6, 78, 59, 0.32);
+  --gradient-emerald: linear-gradient(135deg, #047857 0%, #064E3B 55%, #022C22 100%);
+  --gradient-emerald-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+}
+
+/* Primitive surfaces — locked. */
+.jj-emerald-solid {
+  background-image: var(--gradient-emerald) !important;
+  color: var(--emerald-on) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+.jj-emerald-solid:hover {
+  background-image: var(--gradient-emerald-hover) !important;
+  color: var(--emerald-on) !important;
+}
+.jj-emerald-solid svg,
+.jj-emerald-solid [class*="lucide"] {
+  color: var(--emerald-on) !important;
+  stroke: var(--emerald-on) !important;
+}
+.jj-emerald-soft {
+  background-color: var(--emerald-soft-bg) !important;
+  color: var(--emerald-soft-fg) !important;
+  border: 1px solid rgba(6,78,59,0.18) !important;
+}
+.jj-emerald-soft svg { color: var(--emerald-soft-fg) !important; stroke: var(--emerald-soft-fg) !important; }
+.jj-emerald-outline {
+  background-color: transparent !important;
+  color: var(--emerald-1) !important;
+  border: 1px solid var(--emerald-1) !important;
+}
+.jj-emerald-outline:hover {
+  background-image: var(--gradient-emerald) !important;
+  color: var(--emerald-on) !important;
+}
+.jj-emerald-dot {
+  background-image: var(--gradient-emerald) !important;
+  box-shadow: 0 0 0 2px rgba(6,78,59,0.18), 0 0 10px rgba(16,185,129,0.55);
+}
