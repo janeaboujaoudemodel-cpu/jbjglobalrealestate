@@ -10848,3 +10848,132 @@ html body :is(
 ) :is(svg[data-filled], svg[data-filled] *) {
   fill: #FFFFFF !important;
 }
+
+/* ============================================================
+   GATE 1 — GLOBAL EMERALD FILLED FOREGROUND CONTRACT
+   This is the platform-level rule, not an icon-tile rule:
+   ANY filled Emerald own-surface renders pure white content.
+   Covers shared primitives, raw legacy Emerald utilities, active
+   nav pills, active tabs, badges, CTAs, icon buttons, FABs, and
+   future components that opt into [data-surface="emerald"].
+   ============================================================ */
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-champagne[data-surface="emerald"],
+  .jj-badge-dark,
+  .jj-pill-active,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-sidebar-item-active,
+  .jj-tab-pill[data-active="true"],
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-ink-emerald],
+  [data-filter-chip][data-active="true"],
+  [data-pill][data-active="true"],
+  [data-sidebar="menu-button"][data-active="true"],
+  [data-sidebar-item][data-active="true"],
+  [data-sidebar-subitem][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [role="checkbox"][data-state="checked"],
+  [role="radio"][data-state="checked"],
+  button[role="checkbox"][aria-checked="true"],
+  button[role="switch"][data-state="checked"],
+  [data-state="checked"][role="switch"],
+  .btn-primary,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-green-500, .bg-green-600, .bg-green-700, .bg-green-800, .bg-green-900,
+  [class~="bg-[#064E3B]"], [class~="bg-[#064e3b]"],
+  [class~="bg-[#047857]"], [class~="bg-[#047857]"],
+  [class~="bg-[#022C22]"], [class~="bg-[#022c22]"],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#022c22" i]
+):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-no-contrast-guard]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-champagne[data-surface="emerald"],
+  .jj-badge-dark,
+  .jj-pill-active,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-sidebar-item-active,
+  .jj-tab-pill[data-active="true"],
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-ink-emerald],
+  [data-filter-chip][data-active="true"],
+  [data-pill][data-active="true"],
+  [data-sidebar="menu-button"][data-active="true"],
+  [data-sidebar-item][data-active="true"],
+  [data-sidebar-subitem][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [role="checkbox"][data-state="checked"],
+  [role="radio"][data-state="checked"],
+  button[role="checkbox"][aria-checked="true"],
+  button[role="switch"][data-state="checked"],
+  [data-state="checked"][role="switch"],
+  .btn-primary,
+  .bg-emerald-500, .bg-emerald-600, .bg-emerald-700, .bg-emerald-800, .bg-emerald-900,
+  .bg-green-500, .bg-green-600, .bg-green-700, .bg-green-800, .bg-green-900,
+  [class~="bg-[#064E3B]"], [class~="bg-[#064e3b]"],
+  [class~="bg-[#047857]"], [class~="bg-[#047857]"],
+  [class~="bg-[#022C22]"], [class~="bg-[#022c22]"],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#022c22" i]
+):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-no-contrast-guard]) :is(h1, h2, h3, h4, h5, h6, p, span, a, strong, small, em, b, label, button, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  text-shadow: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-primary,
+  .jj-cta-champagne[data-surface="emerald"],
+  .jj-badge-dark,
+  .jj-pill-active,
+  .jj-icon-tile-emerald,
+  .jj-card-emerald,
+  .jj-sidebar-item-active,
+  .jj-tab-pill[data-active="true"],
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-filled],
+  [data-ink-emerald],
+  [data-filter-chip][data-active="true"],
+  [data-pill][data-active="true"],
+  [data-sidebar="menu-button"][data-active="true"],
+  [data-sidebar-item][data-active="true"],
+  [data-sidebar-subitem][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .btn-primary
+):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-no-contrast-guard]) :is(svg, svg.lucide, [class*="lucide"]) {
+  filter: brightness(0) invert(1) !important;
+}

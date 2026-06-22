@@ -15,8 +15,10 @@ export const EmeraldButton = React.forwardRef<HTMLButtonElement, EmeraldButtonPr
     return (
       <Button
         ref={ref}
-        variant="ghost"
+        variant={tone === "solid" ? "primary" : "secondary"}
         data-emerald-ok="button"
+        data-surface={tone === "solid" ? "emerald" : "champagne"}
+        data-cta={tone === "solid" ? "primary" : "outline"}
         data-ink-emerald={tone === "solid" ? "" : undefined}
         className={cn(
           "font-semibold transition-colors",
