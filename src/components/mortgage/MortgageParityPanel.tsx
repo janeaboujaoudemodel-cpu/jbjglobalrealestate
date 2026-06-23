@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Scale } from "lucide-react";
 
 interface Props {
