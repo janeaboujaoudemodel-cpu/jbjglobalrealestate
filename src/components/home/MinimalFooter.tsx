@@ -15,7 +15,7 @@ const MinimalFooter = () => {
   return (
     <footer
       className={[
-        "w-full bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC]",
+        "w-full bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA]",
         "border-t border-[#B89555]/35",
       ].join(" ")}
       data-surface="champagne"
@@ -31,8 +31,8 @@ const MinimalFooter = () => {
               <Link
                 to={l.href}
                 data-no-contrast-guard
-                className="jj-text-emerald text-[12px] md:text-[13px] font-semibold transition-opacity hover:opacity-80"
-                style={{ color: "#047857" }}
+                className="text-[12px] md:text-[13px] font-semibold transition-opacity hover:opacity-70"
+                style={{ color: "#1A1A1A" }}
               >
                 {l.label}
               </Link>
@@ -40,8 +40,7 @@ const MinimalFooter = () => {
                 <span
                   aria-hidden
                   data-decorative="true"
-                  className="jj-text-emerald"
-                  style={{ color: "#047857" }}
+                  style={{ color: "#1A1A1A" }}
                 >
                   ·
                 </span>
@@ -54,14 +53,14 @@ const MinimalFooter = () => {
           className="mx-auto mt-4 h-px w-40 max-w-full"
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(4,120,87,0.55), transparent)",
+              "linear-gradient(90deg, transparent, rgba(184,149,85,0.55), transparent)",
           }}
           aria-hidden
         />
 
         <p
           className="mt-3 text-center text-[11px] md:text-[12px] font-semibold tracking-[0.02em]"
-          style={{ color: "#047857" }}
+          style={{ color: "#1A1A1A" }}
           data-no-contrast-guard
         >
           © 2026 JBJ GLOBAL REAL ESTATE. All rights reserved.
