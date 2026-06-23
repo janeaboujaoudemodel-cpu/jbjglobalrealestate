@@ -21,6 +21,9 @@ import AIPropertyAnalyzer from "@/components/ai-tools/AIPropertyAnalyzer";
 import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { Input } from "@/components/ui/input";
+import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
+import { SearchableSelect } from "@/components/ui/searchable-select";
+import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +44,10 @@ import RiskScoreGauge from "@/components/compare/RiskScoreGauge";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
+const NATIONALITY_OPTIONS = getCountryList();
+const LANGUAGE_OPTIONS = getLanguageList();
+const CONTACT_TIME_OPTIONS = ["Morning (9AM - 12PM)", "Afternoon (12PM - 5PM)", "Evening (5PM - 9PM)", "Anytime"];
+const CONTACT_METHOD_OPTIONS = ["WhatsApp", "Phone Call", "Email", "Video Call"];
 
 interface AIAnalysis {
   projectDetailsTable: Array<{
@@ -152,6 +159,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
     name: activeLead?.full_name || "",
     email: activeLead?.email || user?.email || "",
     phone: activeLead?.phone || "",
+    nationality: "",
+    language: "",
+    preferredContactTime: "",
+    preferredContactMethod: "",
   });
   const [requestSent, setRequestSent] = useState(false);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -493,6 +504,13 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const submitRequest = useMutation({
     mutationFn: async () => {
       if (!projects?.length) throw new Error("No projects to compare");
+      if (!formData.name || !formData.email || !formData.phone || !formData.nationality || !formData.language || !formData.preferredContactTime || !formData.preferredContactMethod) {
+        throw new Error("Please complete all required contact details");
+      }
+      const phoneValidation = getPhoneValidation(formData.phone);
+      if (!phoneValidation.isValid) {
+        throw new Error(phoneValidation.message);
+      }
       if (!user?.id) {
         toast.error("Please sign in to request a consultation.");
         navigate("/auth");
@@ -505,7 +523,15 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         user_email: formData.email,
         user_name: formData.name,
         user_phone: formData.phone,
-        ai_comparison: aiAnalysis ? JSON.stringify(aiAnalysis) : null,
+        ai_comparison: JSON.stringify({
+          analysis: aiAnalysis,
+          contactPreferences: {
+            nationality: formData.nationality,
+            language: formData.language,
+            preferredContactTime: formData.preferredContactTime,
+            preferredContactMethod: formData.preferredContactMethod,
+          },
+        }),
         status: "pending",
       });
 
@@ -517,7 +543,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Failed to submit request. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to submit request. Please try again.");
     },
   });
 
