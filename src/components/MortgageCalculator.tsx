@@ -123,10 +123,12 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       style={
         {
           background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-          ["--mortgage-range-thumb" as any]: "#FFFFFF",
-          ["--mortgage-range-thumb-shadow" as any]: "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
+          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.18)",
+          ["--mortgage-range-thumb" as any]: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+          ["--mortgage-range-thumb-shadow" as any]: "0 0 0 1px rgba(255,255,255,0.55), 0 4px 10px rgba(4,44,28,0.45)",
         } as CSSProperties
       }
+
     />
   );
 };
