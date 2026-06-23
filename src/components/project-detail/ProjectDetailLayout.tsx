@@ -663,7 +663,7 @@ export default function ProjectDetailLayout({
   return (
     <>
       {/* HERO SECTION - Full Screen */}
-      <section className="relative w-full h-screen min-h-[700px] -mt-24 xl:-mt-28">
+      <section data-hero-dark data-no-contrast-guard data-ink-emerald-opt-out className="jj-project-hero relative w-full h-screen min-h-[700px] -mt-24 xl:-mt-28">
         {/* Owner-only: Edit hero / pick from gallery → set as Cover or Profile */}
         <HeroImagePicker
           projectId={project.id}
@@ -960,8 +960,9 @@ export default function ProjectDetailLayout({
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="jj-section-champagne" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
-        <div className="max-w-[1240px] mx-auto px-6 sm:px-10 lg:px-16 xl:px-20 py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
+      <section className="jj-section-champagne jj-project-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+        <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
+
 
           {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
@@ -1671,10 +1672,10 @@ export default function ProjectDetailLayout({
       </section>
       <div
         ref={inquiryRef}
-        className="scroll-mt-32 jj-band jj-band--surface"
+        className="scroll-mt-32 jj-band jj-band--surface jj-project-band"
         data-section="register-interest"
       >
-        <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
+        <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 py-12 md:py-16">
           <ConsultationRequestForm
             title={`Register Interest in ${project.name}`}
             subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
@@ -1683,6 +1684,7 @@ export default function ProjectDetailLayout({
           />
         </div>
       </div>
+
       <section className="hidden">
         <div>
 
@@ -1695,15 +1697,16 @@ export default function ProjectDetailLayout({
 
       {/* READY TO GET STARTED — full-bleed CTA band */}
       <SectionDividerGoldFullBleed />
-      <div className="bg-[#FDFBF7]">
-        <div className="max-w-[1240px] mx-auto px-4 md:px-8 lg:px-12">
+      <div className="bg-[#FDFBF7] jj-project-band">
+        <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
           <CallToActionSection projectName={project.name} projectId={project.id} />
         </div>
       </div>
 
       {/* Recommended Projects — seamless champagne bg continuation */}
       <SectionDividerGoldFullBleed />
-      <div className="pt-10 md:pt-14 pb-10 md:pb-14" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}
@@ -1711,6 +1714,8 @@ export default function ProjectDetailLayout({
         currentEmirate={(project as any).emirate || null}
       />
       </div>
+      </div>
+
 
 
       {/* DirectContactCTA is now rendered globally in MainLayout - removed duplicate */}

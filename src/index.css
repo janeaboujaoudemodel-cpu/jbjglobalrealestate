@@ -12313,3 +12313,113 @@ html body .jj-hero-ghost-cta :is(svg, [class*="lucide"]) * {
   stroke: #FFFFFF !important;
   fill: none !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PROJECT DETAIL — HERO HARD CONTRAST LOCK + SIDEBAR-SAFE SHELL
+   Fixes:
+   - hero text/CTAs disappearing on bright photos
+   - cards touching viewport / sidebar edges
+   - presentation card unreadability
+   Locked, idempotent overrides — safe to append.
+   ════════════════════════════════════════════════════════════════ */
+
+/* 1) Hero hard lock — every text/icon/link/button inside the project
+      hero renders pure white, no matter what later guard runs. */
+html body section.jj-project-hero,
+html body section.jj-project-hero *:not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body section.jj-project-hero :is(svg, [class*="lucide"]),
+html body section.jj-project-hero :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Hero CTAs: keep ghost styling; remove gold/emerald-fill artifacts */
+html body section.jj-project-hero .jj-hero-ghost-cta,
+html body section.jj-project-hero .jj-pill-emerald,
+html body section.jj-project-hero [data-cta="dark"] {
+  background: rgba(0, 0, 0, 0.30) !important;
+  background-image: none !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  color: #FFFFFF !important;
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+}
+html body section.jj-project-hero .jj-hero-ghost-cta:hover,
+html body section.jj-project-hero .jj-pill-emerald:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: #FFFFFF !important;
+}
+/* Kill any stray underline / hairline rendering as a white bar in CTA row */
+html body section.jj-project-hero a { text-decoration: none !important; }
+html body section.jj-project-hero a:hover { text-decoration: underline !important; }
+
+/* 2) Sidebar-safe project shell — every project section is padded so
+      cards never touch the viewport edge or sidebar edge, in both
+      open and collapsed sidebar states. */
+.jj-project-shell {
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (min-width: 1024px) {
+  /* Reserve right rail clearance on lg+ to match the rest of the site */
+  .jj-project-band .jj-project-shell {
+    padding-right: max(64px, var(--rail-safe-right, 56px)) !important;
+  }
+}
+/* When sidebar is open (200px) on lg+, allow extra inner breathing room */
+@media (min-width: 1024px) {
+  body.jj-vertical-nav-active .jj-project-band .jj-project-shell {
+    padding-left: 32px !important;
+  }
+  body.jj-vertical-nav-collapsed .jj-project-band .jj-project-shell {
+    padding-left: 24px !important;
+  }
+}
+
+/* 3) Generate Presentation card — force readable white on dark surface */
+html body .jj-card-inner [data-allow-dark-cta],
+html body .jj-card-inner [data-allow-dark-cta] *:not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Generate Presentation card — pure white text lock */
+html body button[data-hero-dark] :is(div, span, p) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body button[data-hero-dark] [data-allow-ink],
+html body button[data-hero-dark] [data-allow-ink] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* Final lock: presentation button text always white at runtime */
+html body button[data-hero-dark] > div.relative.z-10.text-center > div {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* SUPER-LATE override: presentation button text — beat all earlier ink locks */
+html body button[data-hero-dark][data-no-contrast-guard] *,
+html body button[data-hero-dark][data-no-contrast-guard] *::before,
+html body button[data-hero-dark][data-no-contrast-guard] *::after {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body button[data-hero-dark][data-no-contrast-guard] [data-allow-ink],
+html body button[data-hero-dark][data-no-contrast-guard] [data-allow-ink] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* ID-specificity lock for Generate Presentation card text */
+#jj-genpres-eyebrow, #jj-genpres-title, #jj-genpres-sub {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+#jj-genpres-sub { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }

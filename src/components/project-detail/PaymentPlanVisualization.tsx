@@ -158,13 +158,14 @@ export default function PaymentPlanVisualization({
           </span>
         ) : (
           <span
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30"
             title="Confirm the official milestone breakdown with our team before signing."
           >
             <ShieldAlert className="w-3.5 h-3.5" />
             Pending verification — confirm with our team
           </span>
         )}
+
       </div>
 
 

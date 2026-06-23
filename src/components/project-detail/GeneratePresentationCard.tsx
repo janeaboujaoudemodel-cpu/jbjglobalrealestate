@@ -70,7 +70,10 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                 border: "1px solid rgba(184,149,85,0.55)",
                 boxShadow: "0 20px 40px -10px rgba(0,0,0,0.4)",
               }}
-              data-allow-dark-cta
+              data-hero-dark
+              data-surface="emerald"
+              data-no-contrast-guard
+
             >
               <div
                 className="absolute inset-0 opacity-30"
@@ -85,19 +88,20 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                   boxShadow: "0 8px 18px rgba(0,0,0,0.4)",
                 }}
               >
-                <Presentation className="w-7 h-7 text-[#1A1A1A]" />
+                <Presentation className="w-7 h-7" style={{ color: "#1A1A1A" }} data-allow-ink />
               </div>
-              <div className="relative z-10 text-center px-6">
-                <div
-                  className="text-[11px] uppercase tracking-[0.3em] mb-1"
-                  style={{ color: "#F3D98A" }}
-                >
+              <div className="relative z-10 text-center px-6" data-no-contrast-guard>
+                <div id="jj-genpres-eyebrow" className="text-[11px] uppercase tracking-[0.3em] mb-1">
                   Click to start
                 </div>
-                <div className="text-[20px] font-semibold">Generate Presentation</div>
-                <div className="text-[12px] opacity-70 mt-1">Custom PDF deck · ~30 seconds</div>
+                <div id="jj-genpres-title" className="text-[20px] font-semibold">Generate Presentation</div>
+                <div id="jj-genpres-sub" className="text-[12px] mt-1">Custom PDF deck · ~30 seconds</div>
               </div>
+
+
             </motion.button>
+
+
           </div>
         </div>
       </div>
