@@ -1441,8 +1441,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-7 h-7 rounded-lg flex items-center justify-center"
+                    className="jbj-sidebar-expand-ink group relative w-7 h-7 rounded-lg flex items-center justify-center border border-[#B89555]/40 bg-transparent hover:bg-[#EFE6D6]/60 transition-colors"
                     aria-label="Expand navigation"
+                    style={{ color: '#1A1A1A' }}
                   >
                     {/* Soft teaching pulse only — no extra visible border */}
                     {collapsed && showExpandPulse && (
@@ -1451,7 +1452,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
                       />
                     )}
-                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
+                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
