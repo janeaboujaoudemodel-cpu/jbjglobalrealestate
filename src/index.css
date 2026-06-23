@@ -10354,33 +10354,39 @@ html body div[data-chrome="sidebar"] div[data-sidebar-emerald] button[data-sideb
   --brand-accent-soft: #ECFDF5;
 }
 
-/* --- Primary CTA: champagne primitive → emerald gradient + white --- */
-.jj-cta-champagne,
-[data-cta="champagne"],
-button[data-surface="champagne"][data-cta="champagne"],
+/* --- Primary CTA: emerald gradient + white --- *
+ * NOTE: .jj-cta-champagne is SECONDARY (champagne bg + emerald text) and
+ * MUST NOT appear here. Only true primary primitives belong in this rule.
+ */
+.jj-cta-primary,
+[data-cta="primary"],
 .btn-primary,
-button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data-no-emerald]):not(.jj-cta-dark):not(.jj-cta-outline):not(.jj-cta-gold-metallic) {
+button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data-cta="champagne"]):not([data-no-emerald]):not(.jj-cta-champagne):not(.jj-cta-outline):not(.jj-cta-dark):not(.jj-cta-gold-metallic) {
   background-image: var(--gradient-emerald) !important;
   background-color: transparent !important;
   color: var(--emerald-on) !important;
+  -webkit-text-fill-color: var(--emerald-on) !important;
   border: 1px solid rgba(6,78,59,0.55) !important;
   box-shadow: 0 4px 14px -4px rgba(6,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
-.jj-cta-champagne:hover,
-[data-cta="champagne"]:hover,
-button[data-surface="champagne"][data-cta="champagne"]:hover,
+.jj-cta-primary:hover,
+[data-cta="primary"]:hover,
 .btn-primary:hover,
-button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data-no-emerald]):not(.jj-cta-dark):not(.jj-cta-outline):not(.jj-cta-gold-metallic):hover {
+button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data-cta="champagne"]):not([data-no-emerald]):not(.jj-cta-champagne):not(.jj-cta-outline):not(.jj-cta-dark):not(.jj-cta-gold-metallic):hover {
   background-image: var(--gradient-emerald-hover) !important;
   color: var(--emerald-on) !important;
+  -webkit-text-fill-color: var(--emerald-on) !important;
   box-shadow: 0 10px 28px -8px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.22) !important;
 }
-.jj-cta-champagne svg,
-[data-cta="champagne"] svg,
-.btn-primary svg {
+.jj-cta-primary :where(span, svg, [class*="lucide"]),
+[data-cta="primary"] :where(span, svg, [class*="lucide"]),
+.btn-primary :where(span, svg, [class*="lucide"]),
+button[type="submit"]:not([data-cta="dark"]):not([data-cta="outline"]):not([data-cta="champagne"]):not([data-no-emerald]):not(.jj-cta-champagne):not(.jj-cta-outline):not(.jj-cta-dark):not(.jj-cta-gold-metallic) :where(span, svg, [class*="lucide"]) {
   color: var(--emerald-on) !important;
+  -webkit-text-fill-color: var(--emerald-on) !important;
   stroke: var(--emerald-on) !important;
 }
+
 
 /* --- Secondary / Outline CTA: champagne fill + emerald ink + emerald hairline --- */
 .jj-cta-outline,
