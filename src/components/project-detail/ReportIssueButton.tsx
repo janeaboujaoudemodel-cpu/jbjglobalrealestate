@@ -165,7 +165,8 @@ export default function ReportIssueButton({
             <button
               onClick={handleSubmit}
               disabled={submitting || !issueType}
-              className="jj-cta-gold-metallic w-full h-11 text-sm font-semibold inline-flex items-center justify-center gap-2"
+              data-emerald-action="true"
+              className="jj-emerald-action w-full h-11 text-sm font-semibold inline-flex items-center justify-center gap-2 rounded-md"
             >
               {submitting ? "Submitting..." : "Submit Report"}
             </button>
