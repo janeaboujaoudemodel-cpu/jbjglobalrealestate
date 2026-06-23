@@ -11386,3 +11386,39 @@ html body :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] sv
 html body :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg {
   fill: #FFFFFF !important;
 }
+
+/* ============================================================
+   PASS 60 — Single Emerald Lock (final).
+   Forbid every bright/light/secondary emerald variant globally
+   and force the canonical deep-emerald (#064E3B → #042c1c).
+   ============================================================ */
+html body :is([class*="text-emerald-300"], [class*="text-emerald-400"],
+              [class*="text-emerald-500"], [class*="text-green-300"],
+              [class*="text-green-400"],   [class*="text-green-500"]):not([data-no-contrast-guard]):not([data-emerald="true"] *) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+html body [data-emerald="true"] :is([class*="text-emerald-"], [class*="text-green-"]),
+html body .jj-dual-cta-primary :is([class*="text-emerald-"], [class*="text-green-"]),
+html body .jj-cta-emerald :is([class*="text-emerald-"], [class*="text-green-"]),
+html body .jj-cta-emerald-metallic :is([class*="text-emerald-"], [class*="text-green-"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Any background-color / border using bright emerald utility → canonical */
+html body :is([class*="bg-emerald-300"], [class*="bg-emerald-400"],
+              [class*="bg-emerald-500"], [class*="bg-green-300"],
+              [class*="bg-green-400"],   [class*="bg-green-500"],
+              [class*="bg-green-600"],   [class*="bg-emerald-600"]) {
+  background-color: #064E3B !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+html body :is([class*="border-emerald-3"], [class*="border-emerald-4"],
+              [class*="border-emerald-5"], [class*="border-green-"]) {
+  border-color: rgba(6,78,59,0.45) !important;
+}
