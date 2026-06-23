@@ -39,7 +39,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, surface, ...props }, ref) => (
     <div
       ref={ref}
-      data-bk-card="true"
       className={cn(cardVariants({ surface }), className)}
       {...props}
     />
