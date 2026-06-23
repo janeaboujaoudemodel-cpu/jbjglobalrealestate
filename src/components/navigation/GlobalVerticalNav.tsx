@@ -819,8 +819,8 @@ export default function GlobalVerticalNav() {
     });
   }, []);
 
-  const navHoverUnderline = "group-hover:jj-emerald-ombre-text after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:[background-image:var(--jj-emerald-ombre)]";
-  const subNavHoverUnderline = "group-hover:jj-emerald-ombre-text after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:[background-image:var(--jj-emerald-ombre)]";
+  const navHoverUnderline = "group-hover:[background-image:var(--jj-emerald-ombre)] group-hover:[-webkit-background-clip:text] group-hover:bg-clip-text group-hover:text-transparent group-hover:[-webkit-text-fill-color:transparent] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:[background-image:var(--jj-emerald-ombre)]";
+  const subNavHoverUnderline = "group-hover:[background-image:var(--jj-emerald-ombre)] group-hover:[-webkit-background-clip:text] group-hover:bg-clip-text group-hover:text-transparent group-hover:[-webkit-text-fill-color:transparent] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:[background-image:var(--jj-emerald-ombre)]";
 
 
 
