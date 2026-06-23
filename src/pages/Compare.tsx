@@ -753,11 +753,11 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 <>
                   <button
                     onClick={downloadComprehensiveReport}
-                    data-no-contrast-guard
-                    className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-[#0E8A66] border border-[#0E8A66] text-white hover:bg-[#0B6F52] shadow-sm group"
+                    data-emerald-action="true"
+                    className="jj-emerald-action relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 shadow-sm group"
                   >
-                    <Download className="w-5 h-5 text-white" />
-                    <span className="text-white">Download Report</span>
+                    <Download className="w-5 h-5" />
+                    <span>Download Report</span>
                   </button>
                   <button
                     onClick={() => {

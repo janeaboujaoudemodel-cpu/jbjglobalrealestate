@@ -158,16 +158,16 @@ export default function CompleteProfilePrompt() {
               type="button"
               onClick={close}
               aria-label="Close"
-              data-no-contrast-guard
-              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#0E8A66] border border-[#0E8A66] flex items-center justify-center text-white hover:bg-[#0B6F52] transition-colors"
+              data-emerald-action="true"
+              className="jj-emerald-action absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
             >
-              <X className="w-4 h-4 text-white" strokeWidth={2.25} />
+              <X className="w-4 h-4" strokeWidth={2.25} />
             </button>
 
             <div className="px-6 pt-7 pb-2">
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-10 h-10 rounded-xl bg-[#0E8A66] border border-[#0E8A66] flex items-center justify-center" data-no-contrast-guard>
-                  <Trophy className="w-5 h-5 text-white" strokeWidth={2.25} />
+                <span className="jj-emerald-action w-10 h-10 rounded-xl flex items-center justify-center" data-emerald-action="true">
+                  <Trophy className="w-5 h-5" strokeWidth={2.25} />
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.18em] font-bold text-[#1A1A1A]/70">
                   Earn rewards · 2 minutes
@@ -215,12 +215,12 @@ export default function CompleteProfilePrompt() {
               <button
                 type="button"
                 onClick={goRegister}
-                data-no-contrast-guard
-                className="flex-1 h-11 rounded-[999px] inline-flex items-center justify-center gap-2 bg-[#0E8A66] border border-[#0E8A66] text-sm font-semibold text-white hover:bg-[#0B6F52] transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
+                data-emerald-action="true"
+                className="jj-emerald-action flex-1 h-11 rounded-[999px] inline-flex items-center justify-center gap-2 text-sm font-semibold transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
               >
-                <Sparkles className="w-4 h-4 text-white" strokeWidth={2.25} />
-                <span className="text-white">Take me there</span>
-                <ArrowRight className="w-4 h-4 text-white" strokeWidth={2.25} />
+                <Sparkles className="w-4 h-4" strokeWidth={2.25} />
+                <span>Take me there</span>
+                <ArrowRight className="w-4 h-4" strokeWidth={2.25} />
               </button>
             </div>
           </motion.div>

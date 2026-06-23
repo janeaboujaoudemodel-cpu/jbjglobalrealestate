@@ -964,11 +964,11 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                 <div className="flex justify-center gap-4">
                   <Button
                     onClick={generatePDFReport}
-                    data-no-contrast-guard
-                    className="bg-[#0E8A66] hover:bg-[#0B6F52] border border-[#0E8A66] text-white font-semibold"
+                    data-emerald-action="true"
+                    className="jj-emerald-action font-semibold"
                   >
-                    <Download className="w-4 h-4 mr-2 text-white" />
-                    <span className="text-white">Download Report</span>
+                    <Download className="w-4 h-4 mr-2" />
+                    <span>Download Report</span>
                   </Button>
                   <Button 
                     variant="outline" 

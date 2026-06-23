@@ -266,11 +266,11 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               {developer.slug && (
                 <Link
                   to={`/developer/${developer.slug}`}
-                  data-no-contrast-guard
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold tracking-[0.02em] px-4 py-2 bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
+                  data-emerald-action="true"
+                  className="jj-emerald-action inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold tracking-[0.02em] px-4 py-2 transition-colors shadow-sm"
                 >
-                  <span className="text-white">View All Projects by {developer.name}</span>
-                  <ExternalLink strokeWidth={2.2} className="w-4 h-4 text-white" />
+                  <span>View All Projects by {developer.name}</span>
+                  <ExternalLink strokeWidth={2.2} className="w-4 h-4" />
                 </Link>
               )}
 

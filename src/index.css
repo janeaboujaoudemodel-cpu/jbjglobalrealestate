@@ -9240,29 +9240,20 @@ html body [data-jj-utility-bar] .jj-sqtoggle {
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:hover,
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:focus-visible {
-  /* PASS 37 FINAL — emerald metallic only (no white linear).
-     Slightly lighter so "sq ft" stays visibly readable. */
-  background-image:
-    linear-gradient(112deg,
-      rgba(110,231,183,0)   0%,
-      rgba(110,231,183,0)   34%,
-      rgba(110,231,183,.55) 50%,
-      rgba(4,78,59,0.45)  60%,
-      rgba(110,231,183,0)   72%,
-      rgba(110,231,183,0)   100%),
-    linear-gradient(135deg, #1AB385 0%, #0E8A66 38%, #064E3B 72%, #042c1c 100%) !important;
-  background-color: #0A6B53 !important;
+  /* Locked to approved dark emerald only — no normal/bright green sweep. */
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
   background-size: 240% 100%, 100% 100% !important;
   background-repeat: no-repeat !important;
   background-blend-mode: normal !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
-    inset 0 0 0 1px rgba(110,231,183,.55),
+    inset 0 0 0 1px rgba(255,255,255,.16),
     inset 0 1px 0 rgba(255,255,255,.20),
     inset 0 -1px 0 rgba(0,0,0,.35),
-    0 0 22px rgba(4,78,59,0.45) !important;
-  animation: jj-sqtoggle-emerald-sweep 3.2s ease-in-out infinite !important;
+    0 0 22px rgba(4,44,28,0.45) !important;
+  animation: none !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::before {
   content: none !important;
@@ -12575,9 +12566,9 @@ html body :is([data-active="true"], [data-state="active"]).jj-kpi-card {
   background-image: linear-gradient(
     110deg,
     #064E3B 0%,
-    #0A6B53 35%,
-    #0E8A66 50%,
-    #0A6B53 65%,
+    #053D2F 35%,
+    #064E3B 50%,
+    #042c1c 65%,
     #064E3B 100%
   ) !important;
   background-size: 220% 100% !important;
@@ -12863,6 +12854,55 @@ html body a.jj-cta-gold-metallic:not([data-keep-gold]) :where(span, svg, [class*
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+
+/* =====================================================================
+   FINAL EMERALD ACTION LOCK — no rejected flat green, no black-on-emerald.
+   Use on every project/property/developer/form CTA and selected chip. This
+   intentionally wins even when older elements carry data-no-contrast-guard.
+   ===================================================================== */
+html body :is(.jj-emerald-action, [data-emerald-action="true"]),
+html body :is(.jj-emerald-action, [data-emerald-action="true"]):is(:hover, :focus, :focus-visible, :active, :disabled),
+html body :is(.jj-pill-emerald-metallic, .jj-cta-emerald, .jj-official-emerald, .jj-surface-emerald):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 10px 24px -10px rgba(4, 44, 28, 0.70),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body :is(.jj-emerald-action, [data-emerald-action="true"], .jj-pill-emerald-metallic, .jj-cta-emerald, .jj-official-emerald, .jj-surface-emerald) :where(span, a, p, strong, em, small, label, h1, h2, h3, h4, h5, h6, div, li, button, svg, [class*="lucide"]),
+html body :is(.jj-emerald-action, [data-emerald-action="true"], .jj-pill-emerald-metallic, .jj-cta-emerald, .jj-official-emerald, .jj-surface-emerald) :where(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none;
+  opacity: 1 !important;
+}
+html body :is(.jj-emerald-action, [data-emerald-action="true"], .jj-pill-emerald-metallic, .jj-cta-emerald, .jj-official-emerald, .jj-surface-emerald) :where(svg.fill-current, .fill-current),
+html body :is(.jj-emerald-action, [data-emerald-action="true"], .jj-pill-emerald-metallic, .jj-cta-emerald, .jj-official-emerald, .jj-surface-emerald) :where(svg [fill]:not([fill="none"])) {
+  fill: #FFFFFF !important;
+}
+
+html body [role="tab"][data-state="active"][data-emerald-active],
+html body [data-jj-segmented-trigger][data-state="active"][data-emerald-active] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [role="tab"][data-state="active"][data-emerald-active] :where(span, svg, [class*="lucide"], div),
+html body [data-jj-segmented-trigger][data-state="active"][data-emerald-active] :where(span, svg, [class*="lucide"], div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 

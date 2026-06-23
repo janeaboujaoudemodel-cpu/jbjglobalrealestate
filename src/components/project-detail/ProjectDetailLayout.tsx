@@ -1081,11 +1081,11 @@ export default function ProjectDetailLayout({
                        <button
                          type="button"
                          onClick={() => handleDocumentDownload("images", images[0]?.url)}
-                         data-no-contrast-guard
-                         className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
+                         data-emerald-action="true"
+                         className="jj-emerald-action inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold transition-colors shadow-sm"
                        >
-                         <Download className="w-4 h-4 text-white" />
-                         <span className="text-white">Download Images</span>
+                          <Download className="w-4 h-4" />
+                          <span>Download Images</span>
                        </button>
                    </div>
                  </div>
@@ -1292,11 +1292,11 @@ export default function ProjectDetailLayout({
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-no-contrast-guard
-                  className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
+                  data-emerald-action="true"
+                  className="jj-emerald-action inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold transition-colors shadow-sm"
                 >
-                  <MapPin className="w-4 h-4 text-white" />
-                  <span className="text-white">Open in Maps</span>
+                  <MapPin className="w-4 h-4" />
+                  <span>Open in Maps</span>
                 </a>
               </div>
 

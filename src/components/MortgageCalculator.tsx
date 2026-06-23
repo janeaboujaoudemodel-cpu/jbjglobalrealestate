@@ -747,10 +747,10 @@ const MortgageCalculator = ({
               <p className="text-center text-muted-foreground text-sm mb-3">Prefer a Mortgage Advisor Through Our Licensed Partners?</p>
               <a
                 href="/contact"
-                data-no-contrast-guard
-                className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-md text-base font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
+                data-emerald-action="true"
+                className="jj-emerald-action w-full h-12 inline-flex items-center justify-center gap-2 rounded-md text-base font-semibold transition-colors shadow-sm"
               >
-                <span className="text-white">Request Mortgage Introduction</span>
+                <span>Request Mortgage Introduction</span>
               </a>
             </div>
 
