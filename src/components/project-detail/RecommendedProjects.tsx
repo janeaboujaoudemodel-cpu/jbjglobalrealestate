@@ -144,14 +144,19 @@ export default function RecommendedProjects({
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
+            <span className="inline-flex items-center justify-center w-9 h-9 rounded-full jj-pill-emerald-metallic" data-no-contrast-guard style={{ color: '#FFFFFF' }}>
+              <Sparkles className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+            </span>
             <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">Recommended Projects</h2>
           </div>
           <Link
             to="/properties"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/60 text-[#1A1A1A] font-semibold text-sm shadow-md hover:shadow-lg hover:border-[#B89555] transition-all"
+            data-no-contrast-guard
+            className="jj-pill-emerald-metallic inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md transition-all"
+            style={{ color: '#FFFFFF' }}
           >
-            View All <ChevronRight className="w-4 h-4" />
+            <span style={{ color: '#FFFFFF' }}>View All</span>
+            <ChevronRight className="w-4 h-4" style={{ color: '#FFFFFF' }} />
           </Link>
         </div>
 
@@ -197,19 +202,16 @@ export default function RecommendedProjects({
                     loading="eager"
                   />
 
-                  {/* Developer Logo — TOP-LEFT (moved up from where "On Sale" used to be) */}
+                  {/* Developer Logo — TOP-LEFT (unified square plate, no rectangular text fallback) */}
                   <div className="absolute top-3 left-3 z-20">
-                    {devLogo ? (
-                      <DeveloperLogo
-                        src={devLogo}
-                        alt={project.developer?.name || "Developer"}
-                        loading="eager"
-                      />
-                    ) : project.developer?.name ? (
-                      <span className="inline-flex items-center rounded-md bg-[#F7F2EA] border border-[#B89555]/60 px-2 py-1 text-[11px] font-semibold text-[#1A1A1A] shadow-sm">
-                        {project.developer.name}
-                      </span>
-                    ) : null}
+                    <DeveloperLogo
+                      src={devLogo}
+                      alt={project.developer?.name || "Developer"}
+                      name={project.developer?.name}
+                      variant="bare"
+                      renderFallback
+                      loading="eager"
+                    />
                   </div>
 
                   {/* Sale Status — BOTTOM-RIGHT — champagne+gold treatment (no orange/red/emerald fills) */}
