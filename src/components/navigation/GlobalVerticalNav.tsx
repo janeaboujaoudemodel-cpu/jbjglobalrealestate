@@ -1028,15 +1028,17 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     else handleNavClick(undefined);
                   }}
                   data-no-contrast-guard
-                  className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] transition-all duration-200 rounded-lg hover:bg-[#EFE6D6]/45 ${getItemStyle(item)}`}
-                  style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                  data-sidebar-highlight
+                  data-active={highlightActive ? 'true' : undefined}
+                  aria-current={highlightActive ? 'page' : undefined}
+                  className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] transition-all duration-200 rounded-lg hover:bg-[#EFE6D6]/60 ${getItemStyle(item)}`}
                 >
-                  <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                    <Icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                  <span data-sidebar-highlight-tile className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0`}>
+                    <Icon data-sidebar-highlight-icon className="w-3 h-3 transition-colors" />
                   </span>
-                  <span className="flex-1 text-left relative inline-block transition-colors duration-200" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{item.label}</span>
+                  <span data-sidebar-highlight-label className="flex-1 text-left relative inline-block transition-colors duration-200">{item.label}</span>
                   {hasMega && (
-                    <ChevronRight data-no-contrast-guard className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+                    <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} />
                   )}
                 </Link>
 

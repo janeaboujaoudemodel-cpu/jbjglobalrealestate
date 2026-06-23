@@ -11501,3 +11501,172 @@ html body :is(
   color: #FFFFFF !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════
+   SIDEBAR VISUAL HIERARCHY — final cascade lock.
+   Rule: EMERALD background reserved for the currently-active row
+   (and the collapse button). All other rows render on champagne
+   with BLACK text/icons. Hover = subtle champagne, never emerald.
+   This block intentionally appears LAST so it beats earlier passes.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 1. INACTIVE SECTION HEADER ROWS ──────────────────────────── */
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) {
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label],
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-icon],
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) svg {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+}
+/* Inactive section row hover: subtle champagne, NEVER emerald. */
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover {
+  background-image: none !important;
+  background-color: rgba(239, 230, 214, 0.65) !important;
+  transform: none !important;
+  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
+  border-color: rgba(184,149,85,0.18) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-label],
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-sidebar-section-icon],
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover svg {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+/* Inactive section row's icon tile: no fill, no border. */
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) > div:first-child {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ── 2. INACTIVE HIGHLIGHT ROWS (AI Home Finder, List Property,
+       Careers, Resale Properties, Broker/Investor/Developer Portal) ── */
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]),
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]),
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]),
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]),
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) {
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+}
+/* Inactive highlight hover: subtle champagne. */
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]):hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]):hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]):hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]):hover,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]):hover {
+  background-image: none !important;
+  background-color: rgba(239, 230, 214, 0.65) !important;
+  transform: none !important;
+  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
+  border-color: rgba(184,149,85,0.18) !important;
+}
+/* Inactive highlight row icon tile: no fill, no border. */
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) > span:first-child {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ── 3. INACTIVE SUBITEMS — already champagne, just enforce ink + no emerald hover ── */
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]),
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) > span:first-child {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover {
+  background-color: rgba(239, 230, 214, 0.55) !important;
+  background-image: none !important;
+  transform: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover > span:first-child {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-label],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon],
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-sidebar-subitem-icon] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* ── 4. ACTIVE row treatment (canonical emerald-ombre, white FG) ── */
+html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-highlight][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"][data-active="true"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"][data-active="true"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"][data-active="true"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"][data-active="true"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 18px -10px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.15) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"] *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"][data-active="true"] *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"][data-active="true"] *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"][data-active="true"] *,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"][data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
