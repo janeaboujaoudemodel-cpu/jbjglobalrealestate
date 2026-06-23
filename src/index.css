@@ -11900,6 +11900,37 @@ html body :is(
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
+   Must remain after all inactive-sidebar black repaint rules. */
+html body [data-chrome="sidebar"] [data-emerald-icon-surface],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:hover,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus-visible,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:active,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:disabled {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"] *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
 /* Path-level lock so an inherited fill/stroke can't repaint icon strokes. */
 html body :is(
   .jj-official-emerald,
