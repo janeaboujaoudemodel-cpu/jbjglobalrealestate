@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight, BookOpen, CheckCircle, Download, FileText,
@@ -12,6 +13,20 @@ import { FounderContent } from "@/components/FounderContent";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
 import { useMarketReport } from "./useMarketReport";
+
+const CONTACT_TIME_OPTIONS = [
+  { value: "morning", label: "Morning (9AM - 12PM)" },
+  { value: "afternoon", label: "Afternoon (12PM - 5PM)" },
+  { value: "evening", label: "Evening (5PM - 9PM)" },
+  { value: "anytime", label: "Anytime" },
+];
+
+const CONTACT_METHOD_OPTIONS = [
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "phone", label: "Phone Call" },
+  { value: "email", label: "Email" },
+  { value: "video", label: "Video Call" },
+];
 
 const MarketReport = () => {
   const {
@@ -222,7 +237,9 @@ const MarketReport = () => {
                       </div>
                       <div>
                         <Label className="text-[#1A1A1A] text-sm font-medium">Phone <span className="text-[#1A1A1A]">*</span></Label>
-                        <Input type="tel" value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="+971 50 123 4567" className="mt-2 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A] h-12 rounded-xl focus:border-[#B89555]/50 focus:ring-gold/20" />
+                        <div className="mt-2">
+                          <PhoneInput value={form.phone} onChange={(value) => setForm((p) => ({ ...p, phone: value || "" }))} placeholder="Phone number" variant="light" />
+                        </div>
                       </div>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
@@ -236,6 +253,20 @@ const MarketReport = () => {
                         <Label className="text-[#1A1A1A] text-sm font-medium">Preferred Language <span className="text-[#1A1A1A]">*</span></Label>
                         <div className="mt-2">
                           <SearchableSelect value={form.language} onChange={(v) => setForm((p) => ({ ...p, language: v }))} options={languages} placeholder="Select language" searchPlaceholder="Search languages..." priorityItem="English" flagType="language" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-[#1A1A1A] text-sm font-medium">Preferred Contact Time <span className="text-[#1A1A1A]">*</span></Label>
+                        <div className="mt-2">
+                          <SearchableSelect value={form.preferredContactTime} onChange={(v) => setForm((p) => ({ ...p, preferredContactTime: v }))} options={CONTACT_TIME_OPTIONS.map((o) => o.label)} placeholder="Select time" searchPlaceholder="Search times..." showFlags={false} />
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="text-[#1A1A1A] text-sm font-medium">Preferred Contact Method <span className="text-[#1A1A1A]">*</span></Label>
+                        <div className="mt-2">
+                          <SearchableSelect value={form.preferredContact} onChange={(v) => setForm((p) => ({ ...p, preferredContact: v }))} options={CONTACT_METHOD_OPTIONS.map((o) => o.label)} placeholder="Select method" searchPlaceholder="Search methods..." showFlags={false} />
                         </div>
                       </div>
                     </div>
