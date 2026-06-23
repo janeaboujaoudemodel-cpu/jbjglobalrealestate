@@ -1218,13 +1218,50 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                   className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                 />
-                <Input
-                  type="tel"
-                  placeholder="Phone Number"
+                <PhoneInput
                   value={formData.phone}
-                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
+                  onChange={(value) => setFormData(prev => ({ ...prev, phone: value || "" }))}
+                  placeholder="Phone number"
+                  variant="light"
                 />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <SearchableSelect
+                    value={formData.nationality}
+                    onChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
+                    options={NATIONALITY_OPTIONS}
+                    placeholder="Select nationality"
+                    searchPlaceholder="Search countries..."
+                    priorityItem="United Arab Emirates"
+                    flagType="country"
+                  />
+                  <SearchableSelect
+                    value={formData.language}
+                    onChange={(value) => setFormData(prev => ({ ...prev, language: value }))}
+                    options={LANGUAGE_OPTIONS}
+                    placeholder="Select language"
+                    searchPlaceholder="Search languages..."
+                    priorityItem="English"
+                    flagType="language"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <SearchableSelect
+                    value={formData.preferredContactTime}
+                    onChange={(value) => setFormData(prev => ({ ...prev, preferredContactTime: value }))}
+                    options={CONTACT_TIME_OPTIONS}
+                    placeholder="Preferred contact time"
+                    searchPlaceholder="Search times..."
+                    showFlags={false}
+                  />
+                  <SearchableSelect
+                    value={formData.preferredContactMethod}
+                    onChange={(value) => setFormData(prev => ({ ...prev, preferredContactMethod: value }))}
+                    options={CONTACT_METHOD_OPTIONS}
+                    placeholder="Preferred contact method"
+                    searchPlaceholder="Search methods..."
+                    showFlags={false}
+                  />
+                </div>
                 <div className="flex gap-3">
                   <Button
                     onClick={() => submitRequest.mutate()}
