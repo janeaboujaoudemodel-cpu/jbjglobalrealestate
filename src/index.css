@@ -12905,4 +12905,28 @@ html body [data-jj-segmented-trigger][data-state="active"][data-emerald-active] 
   opacity: 1 !important;
 }
 
+/* ID-specific final override: beats the global champagne/ink guards that use
+   very high :not() specificity. Emerald action surfaces must never show ink. */
+html body #root :is(.jj-emerald-action, [data-emerald-action="true"]),
+html body #root :is(.jj-emerald-action, [data-emerald-action="true"]):is(:hover, :focus, :focus-visible, :active, :disabled),
+html body #root [role="tab"][data-state="active"][data-emerald-active] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root :is(.jj-emerald-action, [data-emerald-action="true"]) *,
+html body #root :is(.jj-emerald-action, [data-emerald-action="true"]) :is(svg, [class*="lucide"]),
+html body #root :is(.jj-emerald-action, [data-emerald-action="true"]) :is(svg, [class*="lucide"]) *,
+html body #root [role="tab"][data-state="active"][data-emerald-active] *,
+html body #root [role="tab"][data-state="active"][data-emerald-active] :is(svg, [class*="lucide"]),
+html body #root [role="tab"][data-state="active"][data-emerald-active] :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 
