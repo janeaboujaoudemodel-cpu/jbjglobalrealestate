@@ -6443,8 +6443,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
   --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
   --jj-emerald-ombre-hover: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
-  --jj-official-emerald-surface: var(--jj-emerald-metallic-sheen), var(--jj-emerald-ombre);
+  /* GATE 1 LOCK: metallic sheen disabled — the white sheen + screen blend
+     produced a bright lime band that read as "light green". Official emerald
+     must be the pure ombre, identical to Call/Chat/Email reference buttons. */
+  --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%);
+  --jj-official-emerald-surface: var(--jj-emerald-ombre);
   --jj-emerald-light-ombre: var(--jj-emerald-ombre);
   --jj-emerald-neon: #064E3B;
   /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
@@ -6486,7 +6489,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   border-color: transparent !important;
   color: #FFFFFF !important;
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px -14px rgba(6, 78, 59, 0.95), 0 0 18px rgba(52,211,153,0.22), inset 0 1px 0 rgba(255,255,255,0.22) !important;
+  box-shadow: 0 14px 30px -14px rgba(6, 78, 59, 0.95), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.22) !important;
 }
 .jj-pill-emerald:hover svg { color: #FFFFFF; stroke: #FFFFFF; }
 
@@ -6824,10 +6827,10 @@ html body .jj-loop-block .jj-loop-divider {
 
 .jj-emerald-card {
   background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(52,211,153,0.45) !important;
+  border: 1px solid rgba(4,78,59,0.45) !important;
   box-shadow:
-    0 0 0 1px rgba(52,211,153,0.18),
-    0 0 28px rgba(52,211,153,0.22),
+    0 0 0 1px rgba(4,78,59,0.45),
+    0 0 28px rgba(4,78,59,0.45),
     0 18px 38px rgba(0,0,0,0.30),
     inset 0 1px 0 rgba(255,255,255,0.10) !important;
 }
@@ -6845,7 +6848,7 @@ html body .jj-emerald-card :is(svg, [class*="lucide"]) * {
 /* Sidebar — section header rows: emerald-ombre fill, white text/icon */
 html body [data-chrome="sidebar"] [data-sidebar-section] {
   background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(52,211,153,0.40) !important;
+  border: 1px solid rgba(4,78,59,0.45) !important;
   border-radius: 8px !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -6876,11 +6879,11 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-i
 /* Support launcher — emerald glow (not gold) */
 html body [aria-label="Talk to JBJ support"],
 html body [aria-label="Contact us"] {
-  border-color: rgba(52,211,153,0.65) !important;
+  border-color: rgba(4,78,59,0.45) !important;
   box-shadow:
     -10px 0 28px rgba(0,0,0,0.34),
-    0 0 0 1px rgba(52,211,153,0.30),
-    0 0 24px rgba(52,211,153,0.30) !important;
+    0 0 0 1px rgba(4,78,59,0.45),
+    0 0 24px rgba(4,78,59,0.45) !important;
 }
 
 
@@ -6981,7 +6984,7 @@ html body [data-chrome="sidebar"] [data-sidebar-section] {
 html body [data-chrome="sidebar"] [data-sidebar-section]:hover {
   background-image: var(--jj-emerald-ombre-hover) !important;
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(52,211,153,0.32), inset 0 1px 0 rgba(255,255,255,0.18);
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 /* Inside icon tile on the section row: translucent white tile,
    white glyph — NEVER gold. */
@@ -7014,7 +7017,7 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem] > span:first-child {
   background-color: transparent !important;
   background-image: none !important;
   border: 1px solid rgba(52, 211, 153, 0.65) !important;
-  box-shadow: 0 0 0 1px rgba(52,211,153,0.18), 0 0 10px rgba(52,211,153,0.20);
+  box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 0 10px rgba(4,78,59,0.45);
   transition: background-image 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon],
@@ -7024,12 +7027,12 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-i
   stroke: #FFFFFF !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover {
-  background-color: rgba(52,211,153,0.06) !important;
+  background-color: rgba(4,78,59,0.45) !important;
   transform: translateX(2px);
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover > span:first-child {
   background-image: var(--jj-emerald-ombre) !important;
-  box-shadow: 0 0 0 1px rgba(52,211,153,0.55), 0 0 16px rgba(52,211,153,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+  box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 0 16px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
   transform: translateY(-1px);
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover [data-sidebar-subitem-icon],
@@ -7062,7 +7065,7 @@ html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:hover,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:hover {
   background-image: var(--jj-emerald-ombre-hover) !important;
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(52,211,153,0.32), inset 0 1px 0 rgba(255,255,255,0.18);
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"] *,
 html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"] *,
@@ -7105,11 +7108,11 @@ html body span.jj-pill-emerald :is(svg, [class*="lucide"]) * {
 html body button[aria-label="Scroll to top"] {
   background-image: var(--jj-emerald-ombre) !important;
   background-color: transparent !important;
-  border: 1px solid rgba(52,211,153,0.55) !important;
+  border: 1px solid rgba(4,78,59,0.45) !important;
   box-shadow:
     0 14px 32px -12px rgba(6,78,59,0.55),
-    0 0 0 1px rgba(52,211,153,0.20),
-    0 0 18px rgba(52,211,153,0.30) !important;
+    0 0 0 1px rgba(4,78,59,0.45),
+    0 0 18px rgba(4,78,59,0.45) !important;
   transition: transform 220ms cubic-bezier(0.22,1,0.36,1),
               box-shadow 220ms ease,
               background-image 220ms ease;
@@ -7119,8 +7122,8 @@ html body button[aria-label="Scroll to top"]:hover {
   transform: translateY(-3px) scale(1.04);
   box-shadow:
     0 22px 44px -14px rgba(6,78,59,0.70),
-    0 0 0 1px rgba(52,211,153,0.55),
-    0 0 28px rgba(52,211,153,0.55) !important;
+    0 0 0 1px rgba(4,78,59,0.45),
+    0 0 28px rgba(4,78,59,0.45) !important;
 }
 
 /* Footer copyright line → emerald accent */
@@ -7145,9 +7148,9 @@ html body footer p:last-child {
   background-image: linear-gradient(
     100deg,
     rgba(255,255,255,0) 30%,
-    rgba(52,211,153,0.45) 48%,
+    rgba(4,78,59,0.45) 48%,
     rgba(255,255,255,0.75) 52%,
-    rgba(52,211,153,0.45) 56%,
+    rgba(4,78,59,0.45) 56%,
     rgba(255,255,255,0) 74%
   );
   background-size: 250% 100%;
@@ -7218,9 +7221,9 @@ html body footer p:last-child {
   background-image: var(--jj-emerald-ombre) !important;
   border: 0 !important;
   box-shadow:
-    0 0 0 1px rgba(52,211,153,0.20),
+    0 0 0 1px rgba(4,78,59,0.45),
     0 8px 22px rgba(0,0,0,0.32),
-    0 0 24px rgba(52,211,153,0.22),
+    0 0 24px rgba(4,78,59,0.45),
     inset 0 1px 0 rgba(255,255,255,0.12) !important;
   overflow: hidden;
   transition: transform .25s ease, box-shadow .25s ease;
@@ -7233,9 +7236,9 @@ html body footer p:last-child {
     115deg,
     rgba(255,255,255,0) 0%,
     rgba(255,255,255,0) 38%,
-    rgba(52,211,153,0.35) 48%,
+    rgba(4,78,59,0.45) 48%,
     rgba(255,255,255,0.55) 52%,
-    rgba(52,211,153,0.35) 56%,
+    rgba(4,78,59,0.45) 56%,
     rgba(255,255,255,0) 70%,
     rgba(255,255,255,0) 100%
   );
@@ -7606,7 +7609,7 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section][data-active="true"]:hover {
   background-image: var(--jj-emerald-ombre-hover) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(52,211,153,0.32), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.65), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 
 /* Kill underline pseudo on section labels — clean look */
@@ -7694,7 +7697,7 @@ html body .jj-pill-emerald[class]:is(:hover,:focus,:active,:focus-visible) {
   background-image: var(--jj-emerald-ombre-hover) !important;
   background-color: #064E3B !important;
   border-color: transparent !important;
-  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.85), 0 0 18px rgba(52,211,153,0.28), inset 0 1px 0 rgba(255,255,255,0.20) !important;
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.85), 0 0 18px rgba(4,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.20) !important;
 }
 html body .jj-pill-emerald[class],
 html body .jj-pill-emerald[class] *,
@@ -7770,12 +7773,13 @@ html body [data-sidebar-collapse-control]:not(.jj-side-tile) {
 }
 html body button.jbj-sidebar-collapse-control:hover,
 html body [data-sidebar-collapse-control]:not(.jj-side-tile):hover {
-  background: linear-gradient(135deg, rgba(236,253,245,0.95), rgba(209,250,229,0.95)) !important;
-  border-color: #047857 !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border: 0 !important;
+  color: #FFFFFF !important;
   box-shadow:
-    0 10px 24px -10px rgba(4,120,87,0.55),
-    0 0 0 1px rgba(4,120,87,0.45),
-    0 0 12px rgba(52,211,153,0.30) !important;
+    0 10px 24px -10px rgba(4,78,59,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 
 /* 3) Kill underline / after-bar on sidebar highlight links and
@@ -7992,17 +7996,21 @@ html body .jbj-sidebar-collapse-control svg * {
 }
 html body button.jbj-sidebar-collapse-control,
 html body [data-sidebar-collapse-control]:not(.jj-side-tile) {
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  background: linear-gradient(135deg, #064E3B 0%, #065F46 45%, #042c1c 100%) !important;
-  background-size: 200% 200% !important;
+  border: 0 !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-size: 100% 100% !important;
   box-shadow: 0 4px 12px -4px rgba(4,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.15) !important;
-  animation: jj-emerald-metallic-sweep 5s linear infinite;
+  animation: none !important;
 }
 html body button.jbj-sidebar-collapse-control:hover,
 html body [data-sidebar-collapse-control]:not(.jj-side-tile):hover {
-  background: linear-gradient(135deg, #065F46 0%, #047857 45%, #064E3B 100%) !important;
-  background-size: 200% 200% !important;
-  border-color: rgba(255,255,255,0.28) !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-size: 100% 100% !important;
+  border: 0 !important;
   box-shadow: 0 8px 20px -6px rgba(4,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.22) !important;
 }
 
@@ -8401,8 +8409,8 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
   100% { background-position:  200% 0; }
 }
 @keyframes jj-emerald-pulse {
-  0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 0 rgba(52,211,153,0.0); }
-  50%      { box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 16px 2px rgba(52,211,153,0.35); }
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 0 rgba(4,78,59,0.45); }
+  50%      { box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 16px 2px rgba(4,78,59,0.45); }
 }
 
 /* Animated metallic emerald shimmer overlay for active pills/tabs. */
@@ -8444,7 +8452,7 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
 .jj-emerald-card,
 .jj-loop-block {
   background-image:
-    radial-gradient(120% 80% at 0% 0%, rgba(52,211,153,0.18) 0%, transparent 60%),
+    radial-gradient(120% 80% at 0% 0%, rgba(4,78,59,0.45) 0%, transparent 60%),
     linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
   border: 1px solid rgba(255,255,255,0.18) !important;
   box-shadow: 0 18px 48px -20px rgba(4,120,87,0.55),
@@ -8543,11 +8551,11 @@ body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight]
     linear-gradient(135deg, #0A6B53 0%, #064E3B 55%, #032419 100%) !important;
   background-size: 250% 100%, 100% 100% !important;
   background-position: -50% 0, 0 0 !important;
-  background-blend-mode: screen, normal !important;
+  background-blend-mode: normal !important;
   animation: jj-metallic-sweep 3.2s ease-in-out infinite !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),
               inset 0 -1px 0 rgba(0,0,0,0.25),
-              0 0 14px rgba(52,211,153,0.30) !important;
+              0 0 14px rgba(4,78,59,0.45) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -8584,7 +8592,7 @@ body.jj-vertical-nav-collapsed [data-chrome="sidebar"] a[data-sidebar-highlight]
     linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
   background-size: 250% 100%, 100% 100% !important;
   background-position: -50% 0, 0 0 !important;
-  background-blend-mode: screen, normal !important;
+  background-blend-mode: normal !important;
   animation: jj-metallic-sweep 4.5s ease-in-out infinite !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -8756,14 +8764,14 @@ html body .jj-sqtoggle[data-active="true"] {
       rgba(255,255,255,0.00) 100%
     ),
     linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010a07 100%) !important;
-  background-size: 220% 100%, 100% 100% !important;
+  background-size: 100% 100% !important;
   background-position: -50% 0, 0 0 !important;
   background-blend-mode: overlay, normal !important;
   animation: jj-metallic-sweep 5s ease-in-out infinite !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.22),
     inset 0 -1px 0 rgba(0,0,0,0.30),
-    0 0 10px rgba(52,211,153,0.18) !important;
+    0 0 10px rgba(4,78,59,0.45) !important;
 }
 
 /* (b) Sidebar collapse control — emerald metallic when collapsed,
@@ -8779,11 +8787,11 @@ html body.jj-vertical-nav-collapsed [data-sidebar-collapse-control] {
       rgba(255,255,255,0.00) 100%
     ),
     linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010a07 100%) !important;
-  background-size: 220% 100%, 100% 100% !important;
+  background-size: 100% 100% !important;
   background-position: -50% 0, 0 0 !important;
   background-blend-mode: overlay, normal !important;
   animation: jj-metallic-sweep 5s ease-in-out infinite !important;
-  border: 1px solid rgba(52,211,153,0.45) !important;
+  border: 1px solid rgba(4,78,59,0.45) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.22),
     0 6px 14px -8px rgba(6,78,59,0.85) !important;
@@ -8803,7 +8811,7 @@ html body.jj-vertical-nav-collapsed [data-sidebar-collapse-control]:hover {
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.30),
     0 10px 22px -10px rgba(6,78,59,0.95),
-    0 0 14px rgba(52,211,153,0.30) !important;
+    0 0 14px rgba(4,78,59,0.45) !important;
 }
 
 /* (c) 3D hover on emerald pill (Email / Call / Chat) */
@@ -8822,7 +8830,7 @@ html body .jj-pill-emerald[class]:hover {
   transform: translateY(-2px) scale(1.015) !important;
   box-shadow:
     0 18px 34px -14px rgba(6,78,59,0.95),
-    0 0 22px rgba(52,211,153,0.30),
+    0 0 22px rgba(4,78,59,0.45),
     inset 0 1px 0 rgba(255,255,255,0.28) !important;
   filter: brightness(1.06) !important;
 }
@@ -8956,17 +8964,17 @@ html body :is(a,button,span).jj-pill-emerald {
       rgba(255,255,255,0.00) 64%,
       rgba(255,255,255,0.00) 100%),
     linear-gradient(135deg, #0A6B53 0%, #064E3B 42%, #042c1c 78%, #02130d 100%) !important;
-  background-size: 220% 100%, 100% 100% !important;
-  background-repeat: no-repeat, no-repeat !important;
-  background-blend-mode: screen, normal !important;
-  border: 1px solid rgba(52,211,153,0.55) !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-blend-mode: normal !important;
+  border: 1px solid rgba(4,78,59,0.45) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.22),
     inset 0 -1px 0 rgba(0,0,0,0.30),
     0 8px 22px -10px rgba(6,78,59,0.85),
-    0 0 18px rgba(52,211,153,0.20) !important;
+    0 0 18px rgba(4,78,59,0.45) !important;
   animation: jj-pill-emerald-sweep 4.5s ease-in-out infinite !important;
   transition: transform .25s ease, box-shadow .25s ease, filter .25s ease !important;
 }
@@ -8982,7 +8990,7 @@ html body :is(a,button,span).jj-pill-emerald:hover {
     inset 0 1px 0 rgba(255,255,255,0.30),
     inset 0 -1px 0 rgba(0,0,0,0.36),
     0 14px 32px -10px rgba(6,78,59,0.95),
-    0 0 28px rgba(52,211,153,0.36) !important;
+    0 0 28px rgba(4,78,59,0.45) !important;
 }
 
 /* Emerald chip primitive (Top Areas badges, Trending, High Demand, etc.)
@@ -9000,10 +9008,10 @@ html body .jj-emerald-chip {
   background-image:
     linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.28) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%),
     linear-gradient(135deg, #0A6B53 0%, #064E3B 50%, #042c1c 100%) !important;
-  background-size: 220% 100%, 100% 100% !important;
-  background-repeat: no-repeat, no-repeat !important;
-  background-blend-mode: screen, normal !important;
-  border: 1px solid rgba(52,211,153,0.55) !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-blend-mode: normal !important;
+  border: 1px solid rgba(4,78,59,0.45) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
@@ -9029,7 +9037,7 @@ html body .jj-emerald-chip:hover {
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.30),
     0 12px 24px -12px rgba(6,78,59,0.95),
-    0 0 18px rgba(52,211,153,0.30) !important;
+    0 0 18px rgba(4,78,59,0.45) !important;
 }
 
 /* (b) Mortgage Compare-Bank-Rates slider — DEFER to .mortgage-range-input
@@ -9046,7 +9054,7 @@ html body.jj-vertical-nav-collapsed aside [aria-label*="xpand" i],
 html body.jj-vertical-nav-collapsed aside [aria-label*="xpand" i]:hover {
   background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 50%, #042c1c 100%) !important;
   background-color: transparent !important;
-  border-color: rgba(52,211,153,0.55) !important;
+  border-color: rgba(4,78,59,0.45) !important;
   color: #FFFFFF !important;
 }
 html body.jj-vertical-nav-collapsed [data-jj-nav-collapse-toggle] :is(svg, [class*="lucide"]),
@@ -9079,9 +9087,9 @@ html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-emerald-chip, [data-em
   --jj-locked-emerald-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
   background-image: var(--jj-locked-emerald-sheen), var(--jj-locked-emerald) !important;
   background-color: #064E3B !important;
-  background-size: 220% 100%, 100% 100% !important;
+  background-size: 100% 100% !important;
   background-repeat: no-repeat !important;
-  background-blend-mode: screen, normal !important;
+  background-blend-mode: normal !important;
   border-color: rgba(4,120,87,.95) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -9119,9 +9127,9 @@ html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus,:focus-visible
   border-radius: 10px !important;
   background-image: var(--jj-official-emerald-surface) !important;
   background-color: #064E3B !important;
-  background-size: 220% 100%, 100% 100% !important;
+  background-size: 100% 100% !important;
   background-repeat: no-repeat !important;
-  background-blend-mode: screen, normal !important;
+  background-blend-mode: normal !important;
   border: 0 !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -9132,7 +9140,7 @@ html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus,:focus-visible
 }
 
 html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus-visible) {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.30), inset 0 -1px 0 rgba(0,0,0,.38), 0 14px 30px -12px rgba(6,78,59,.95), 0 0 28px rgba(52,211,153,.42) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.30), inset 0 -1px 0 rgba(0,0,0,.38), 0 14px 30px -12px rgba(6,78,59,.95), 0 0 28px rgba(4,78,59,0.45) !important;
 }
 
 html body :is(a,button,div).jj-emerald-rect-pill *,
@@ -9188,21 +9196,21 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:focus-visible {
       rgba(110,231,183,0)   0%,
       rgba(110,231,183,0)   34%,
       rgba(110,231,183,.55) 50%,
-      rgba(52,211,153,.28)  60%,
+      rgba(4,78,59,0.45)  60%,
       rgba(110,231,183,0)   72%,
       rgba(110,231,183,0)   100%),
     linear-gradient(135deg, #1AB385 0%, #0E8A66 38%, #064E3B 72%, #042c1c 100%) !important;
   background-color: #0A6B53 !important;
   background-size: 240% 100%, 100% 100% !important;
-  background-repeat: no-repeat, no-repeat !important;
-  background-blend-mode: screen, normal !important;
+  background-repeat: no-repeat !important;
+  background-blend-mode: normal !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
     inset 0 0 0 1px rgba(110,231,183,.55),
     inset 0 1px 0 rgba(255,255,255,.20),
     inset 0 -1px 0 rgba(0,0,0,.35),
-    0 0 22px rgba(52,211,153,.50) !important;
+    0 0 22px rgba(4,78,59,0.45) !important;
   animation: jj-sqtoggle-emerald-sweep 3.2s ease-in-out infinite !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::before {
@@ -9350,8 +9358,8 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highligh
     linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 50%, rgba(255,255,255,0) 100%),
     linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
   background-color: #064E3B !important;
-  background-size: 220% 100%, 100% 100% !important;
-  background-blend-mode: screen, normal !important;
+  background-size: 100% 100% !important;
+  background-blend-mode: normal !important;
   border: 1px solid rgba(4,120,87,.95) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 22px -14px rgba(6,78,59,.90) !important;
   color: #FFFFFF !important;
@@ -9383,7 +9391,7 @@ html body .jj-favorites-tab[data-state="active"] * {
 
 html body .mortgage-compare-card {
   min-height: 100% !important;
-  box-shadow: 0 0 0 1px rgba(52,211,153,.20), 0 12px 34px -24px rgba(6,78,59,.55) !important;
+  box-shadow: 0 0 0 1px rgba(4,78,59,0.45), 0 12px 34px -24px rgba(6,78,59,.55) !important;
 }
 /* mortgage-compare-rate-input legacy override removed — slider now uses
    .mortgage-range-input shape (44px frame, 8px track, 24px thumb) so it
@@ -11301,9 +11309,9 @@ html body :is(
   background: var(--jj-official-emerald-surface) !important;
   background-image: var(--jj-official-emerald-surface) !important;
   background-color: #064E3B !important;
-  background-size: 220% 100%, 100% 100% !important;
-  background-repeat: no-repeat, no-repeat !important;
-  background-blend-mode: screen, normal !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-blend-mode: normal !important;
   border: 0 !important;
   outline: 0 !important;
   --tw-ring-color: transparent !important;
