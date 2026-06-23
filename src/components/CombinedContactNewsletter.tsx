@@ -126,11 +126,12 @@ const CombinedContactNewsletter = ({
               Stay in the Loop
             </span>
             <h3 className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
-              Get the Edge — Listings Before the Market
+              Get the Inside Track — Listings Before the Market
             </h3>
             <p className="text-xs md:text-sm mb-4" style={{ color: "rgba(255,255,255,0.88)" }}>
-              New launches, off-market deals, market moves &amp; insider insights — straight to your inbox.
+              Off-market launches, price moves, and concierge intel — curated weekly, never spammy.
             </p>
+
             <NewsletterBrevo variant="compact" source="combined_cta" />
           </div>
         </div>
