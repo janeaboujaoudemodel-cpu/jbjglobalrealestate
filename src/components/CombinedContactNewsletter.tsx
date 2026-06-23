@@ -46,7 +46,7 @@ const CombinedContactNewsletter = ({
         <div
           data-ink-emerald
           data-no-contrast-guard
-          className="jj-emerald-card jj-loop-block relative rounded-2xl p-4 md:p-5 max-w-3xl mx-auto"
+          className="jj-emerald-card jj-loop-block relative rounded-2xl px-4 md:px-5 pt-4 md:pt-5 pb-6 md:pb-7 max-w-3xl mx-auto"
         >
 
           {/* Header */}
