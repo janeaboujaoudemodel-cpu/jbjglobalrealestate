@@ -6443,8 +6443,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
   --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
   --jj-emerald-ombre-hover: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
-  --jj-official-emerald-surface: var(--jj-emerald-metallic-sheen), var(--jj-emerald-ombre);
+  /* GATE 1 LOCK: metallic sheen disabled — the white sheen + screen blend
+     produced a bright lime band that read as "light green". Official emerald
+     must be the pure ombre, identical to Call/Chat/Email reference buttons. */
+  --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%);
+  --jj-official-emerald-surface: var(--jj-emerald-ombre);
   --jj-emerald-light-ombre: var(--jj-emerald-ombre);
   --jj-emerald-neon: #064E3B;
   /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
