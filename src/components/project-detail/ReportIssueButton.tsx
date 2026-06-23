@@ -110,10 +110,11 @@ export default function ReportIssueButton({
         </div>
         <button
           onClick={() => setOpen(true)}
-          className="jj-cta-gold-metallic inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold whitespace-nowrap"
+          data-no-contrast-guard
+          className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold whitespace-nowrap rounded-md bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
         >
-          <AlertCircle className="w-4 h-4" />
-          Report an issue
+          <AlertCircle className="w-4 h-4 text-white" />
+          <span className="text-white">Report an issue</span>
         </button>
       </div>
 

@@ -345,15 +345,15 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-muted-foreground text-sm">{total} Photos</span>
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
+                type="button"
                 onClick={handleDownloadAll}
-                className="text-muted-foreground hover:text-foreground hover:bg-muted text-sm"
+                data-no-contrast-guard
+                className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
               >
-                <Download className="w-4 h-4 mr-1" />
-                Download All Photos
-              </Button>
+                <Download className="w-4 h-4 text-white" />
+                <span className="text-white">Download All Photos</span>
+              </button>
             </div>
             <div className="grid grid-cols-6 gap-2">
               {images.slice(0, 6).map((image, index) => {

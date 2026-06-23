@@ -1078,14 +1078,15 @@ export default function ProjectDetailLayout({
                    <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
                    <div className="flex items-center gap-2">
                      <OwnerSectionEditor projectId={project.id} coverImageUrl={project.cover_image_url} section="gallery" initial={project as any} label="Manage photos" />
-                     <Button
-                       variant="primary"
-                       size="sm"
-                       onClick={() => handleDocumentDownload("images", images[0]?.url)}
-                     >
-                       <Download className="w-4 h-4" />
-                       Download Images
-                     </Button>
+                       <button
+                         type="button"
+                         onClick={() => handleDocumentDownload("images", images[0]?.url)}
+                         data-no-contrast-guard
+                         className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
+                       >
+                         <Download className="w-4 h-4 text-white" />
+                         <span className="text-white">Download Images</span>
+                       </button>
                    </div>
                  </div>
                   <ImageCarousel
@@ -1291,11 +1292,11 @@ export default function ProjectDetailLayout({
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-no-contrast-guard
+                  className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
                 >
-                  <Button variant="secondary" size="sm">
-                    <MapPin className="w-4 h-4" />
-                    Open in Maps
-                  </Button>
+                  <MapPin className="w-4 h-4 text-white" />
+                  <span className="text-white">Open in Maps</span>
                 </a>
               </div>
 

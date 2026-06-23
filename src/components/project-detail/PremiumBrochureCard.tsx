@@ -304,48 +304,47 @@ const PremiumBrochureCard = ({
         />
       </motion.div>
 
-      {/* Download Button - Premium champagne style with visible hover */}
+      {/* Download Button — locked emerald primitive */}
       <motion.button
         onClick={handleClick}
+        data-no-contrast-guard
         className={cn(
           "flex items-center gap-3 px-10 py-4 rounded-lg font-semibold text-base transition-all duration-300",
-          // Premium champagne gradient background
-          "bg-gradient-to-r from-champagne via-champagne-light to-champagne",
-          "text-foreground border-2 border-foreground/70",
-          "shadow-[0_10px_30px_rgba(200,167,102,0.25),0_6px_15px_rgba(0,0,0,0.22)]",
-          "hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:border-[#B89555]/80",
+          "bg-[#0E8A66] text-white border border-[#0E8A66]",
+          "shadow-[0_10px_30px_rgba(14,138,102,0.25),0_6px_15px_rgba(0,0,0,0.18)]",
+          "hover:bg-[#0B6F52] hover:shadow-[0_14px_45px_rgba(14,138,102,0.35)]",
           "group"
         )}
-        whileHover={{ 
-          y: -3, 
+        whileHover={{
+          y: -3,
           scale: 1.02,
         }}
         whileTap={{ scale: 0.98, y: 0 }}
       >
         {isLocked ? (
           <>
-            <Lock className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-[#1A1A1A] transition-colors">Unlock Brochure</span>
+            <Lock className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+            <span className="text-white">Unlock Brochure</span>
           </>
         ) : isFetching ? (
           <>
-            <Loader2 className="w-5 h-5 text-foreground animate-spin" />
-            <span>Fetching Brochure…</span>
+            <Loader2 className="w-5 h-5 text-white animate-spin" />
+            <span className="text-white">Fetching Brochure…</span>
           </>
         ) : isDownloading ? (
           <>
-            <Loader2 className="w-5 h-5 text-foreground animate-spin" />
-            <span>Downloading...</span>
+            <Loader2 className="w-5 h-5 text-white animate-spin" />
+            <span className="text-white">Downloading...</span>
           </>
         ) : !brochureUrl ? (
           <>
-            <FileText className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-[#1A1A1A] transition-colors">Request Brochure</span>
+            <FileText className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+            <span className="text-white">Request Brochure</span>
           </>
         ) : (
           <>
-            <Download className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-[#1A1A1A] transition-colors">Download Brochure</span>
+            <Download className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+            <span className="text-white">Download Brochure</span>
           </>
         )}
       </motion.button>
