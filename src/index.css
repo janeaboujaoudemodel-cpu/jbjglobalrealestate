@@ -12384,3 +12384,42 @@ html body .jj-card-inner [data-allow-dark-cta] *:not([data-allow-ink]):not([data
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* Generate Presentation card — pure white text lock */
+html body button[data-hero-dark] :is(div, span, p) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body button[data-hero-dark] [data-allow-ink],
+html body button[data-hero-dark] [data-allow-ink] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* Final lock: presentation button text always white at runtime */
+html body button[data-hero-dark] > div.relative.z-10.text-center > div {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* SUPER-LATE override: presentation button text — beat all earlier ink locks */
+html body button[data-hero-dark][data-no-contrast-guard] *,
+html body button[data-hero-dark][data-no-contrast-guard] *::before,
+html body button[data-hero-dark][data-no-contrast-guard] *::after {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body button[data-hero-dark][data-no-contrast-guard] [data-allow-ink],
+html body button[data-hero-dark][data-no-contrast-guard] [data-allow-ink] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* ID-specificity lock for Generate Presentation card text */
+#jj-genpres-eyebrow, #jj-genpres-title, #jj-genpres-sub {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+#jj-genpres-sub { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
