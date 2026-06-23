@@ -11771,3 +11771,139 @@ html body [data-chrome="sidebar"] [data-sidebar-bottom-cta][data-active="true"] 
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   GLOBAL EMERALD ICON CONTRACT — final cascade.
+   Rule: any icon rendered inside an emerald surface is pure white
+   at ALL states (idle, hover, focus, focus-visible, active, disabled).
+   Zero exceptions. Appears last so it beats every prior pass.
+   ════════════════════════════════════════════════════════════════ */
+html body :is(
+  .jj-official-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-dual-cta-primary,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-favorite-trigger,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-active="true"][data-sidebar-section],
+  [data-active="true"][data-sidebar-subitem],
+  [data-active="true"][data-sidebar-highlight],
+  [data-active="true"][data-sidebar-bottom-cta],
+  [data-active="true"][data-sidebar-mode-portal],
+  [data-sidebar-collapse-control],
+  .jbj-sidebar-collapse-control
+) :is(svg, [class*="lucide"], [data-lucide], i[class*="icon"]),
+html body :is(
+  .jj-official-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-dual-cta-primary,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-favorite-trigger,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-active="true"][data-sidebar-section],
+  [data-active="true"][data-sidebar-subitem],
+  [data-active="true"][data-sidebar-highlight],
+  [data-active="true"][data-sidebar-bottom-cta],
+  [data-active="true"][data-sidebar-mode-portal],
+  [data-sidebar-collapse-control],
+  .jbj-sidebar-collapse-control
+) :is(svg, [class*="lucide"], [data-lucide], i[class*="icon"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+/* Path-level lock so an inherited fill/stroke can't repaint icon strokes. */
+html body :is(
+  .jj-official-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-dual-cta-primary,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-favorite-trigger,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-active="true"][data-sidebar-section],
+  [data-active="true"][data-sidebar-subitem],
+  [data-active="true"][data-sidebar-highlight],
+  [data-active="true"][data-sidebar-bottom-cta],
+  [data-active="true"][data-sidebar-mode-portal],
+  [data-sidebar-collapse-control],
+  .jbj-sidebar-collapse-control
+) svg :is(path, line, polyline, polygon, rect, circle, ellipse) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+/* All interactive states — same lock, no recoloring on hover/focus/active. */
+html body :is(
+  .jj-official-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-dual-cta-primary,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-favorite-trigger,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-active="true"][data-sidebar-section],
+  [data-active="true"][data-sidebar-subitem],
+  [data-active="true"][data-sidebar-highlight],
+  [data-active="true"][data-sidebar-bottom-cta],
+  [data-active="true"][data-sidebar-mode-portal],
+  [data-sidebar-collapse-control],
+  .jbj-sidebar-collapse-control
+):is(:hover, :focus, :focus-visible, :active, :disabled) :is(svg, [class*="lucide"], [data-lucide]),
+html body :is(
+  .jj-official-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-dual-cta-primary,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-favorite-trigger,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-active="true"][data-sidebar-section],
+  [data-active="true"][data-sidebar-subitem],
+  [data-active="true"][data-sidebar-highlight],
+  [data-active="true"][data-sidebar-bottom-cta],
+  [data-active="true"][data-sidebar-mode-portal],
+  [data-sidebar-collapse-control],
+  .jbj-sidebar-collapse-control
+):is(:hover, :focus, :focus-visible, :active, :disabled) :is(svg, [class*="lucide"], [data-lucide]) *,
+html body :is(
+  .jj-official-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-dual-cta-primary,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-favorite-trigger,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-active="true"][data-sidebar-section],
+  [data-active="true"][data-sidebar-subitem],
+  [data-active="true"][data-sidebar-highlight],
+  [data-active="true"][data-sidebar-bottom-cta],
+  [data-active="true"][data-sidebar-mode-portal],
+  [data-sidebar-collapse-control],
+  .jbj-sidebar-collapse-control
+):is(:hover, :focus, :focus-visible, :active, :disabled) svg :is(path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
