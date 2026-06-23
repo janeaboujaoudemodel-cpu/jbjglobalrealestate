@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Scale } from "lucide-react";
 
 interface Props {
@@ -34,7 +34,29 @@ export default function MortgageParityPanel({
   const [residency, setResidency] = useState<Residency>("expat");
   const [monthlyIncome, setMonthlyIncome] = useState<number>(40000);
   const [showSchedule, setShowSchedule] = useState(false);
-  const [compareRate, setCompareRate] = useState<number>(Math.max(2, interestRate - 0.5));
+
+  // UAE bank rate reference (indicative starting fixed rates for mortgages)
+  const UAE_BANKS: { id: string; name: string; rate: number }[] = [
+    { id: "enbd", name: "Emirates NBD", rate: 4.24 },
+    { id: "fab", name: "First Abu Dhabi Bank (FAB)", rate: 4.19 },
+    { id: "adcb", name: "Abu Dhabi Commercial Bank (ADCB)", rate: 4.29 },
+    { id: "adib", name: "Abu Dhabi Islamic Bank (ADIB)", rate: 4.39 },
+    { id: "dib", name: "Dubai Islamic Bank (DIB)", rate: 4.35 },
+    { id: "mashreq", name: "Mashreq Bank", rate: 4.49 },
+    { id: "hsbc", name: "HSBC UAE", rate: 4.15 },
+    { id: "scb", name: "Standard Chartered UAE", rate: 4.25 },
+    { id: "cbd", name: "Commercial Bank of Dubai", rate: 4.45 },
+    { id: "rakbank", name: "RAKBANK", rate: 4.55 },
+    { id: "enbd_islamic", name: "Emirates Islamic", rate: 4.40 },
+    { id: "ajman", name: "Ajman Bank", rate: 4.60 },
+    { id: "custom", name: "Custom Rate", rate: 4.00 },
+  ];
+  const [bankAId, setBankAId] = useState<string>("enbd");
+  const [bankBId, setBankBId] = useState<string>("hsbc");
+  const bankA = UAE_BANKS.find((b) => b.id === bankAId) || UAE_BANKS[0];
+  const bankB = UAE_BANKS.find((b) => b.id === bankBId) || UAE_BANKS[1];
+  const [compareRate, setCompareRate] = useState<number>(bankB.rate);
+  const [bankARate, setBankARate] = useState<number>(bankA.rate);
 
   const cap = RESIDENCY[residency].maxLtv;
   const ltv = 100 - downPaymentPercent;
@@ -57,12 +79,14 @@ export default function MortgageParityPanel({
   const dbrOk = monthlyPayment <= dbrCap;
 
   // Comparison
-  const compareMonthly = useMemo(() => {
-    const r = compareRate / 100 / 12;
+  const calcMonthly = (rate: number) => {
+    const r = rate / 100 / 12;
     const n = loanTermYears * 12;
     if (r <= 0) return loanAmount / n;
     return (loanAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
-  }, [compareRate, loanAmount, loanTermYears]);
+  };
+  const bankAMonthly = useMemo(() => calcMonthly(bankARate), [bankARate, loanAmount, loanTermYears]);
+  const compareMonthly = useMemo(() => calcMonthly(compareRate), [compareRate, loanAmount, loanTermYears]);
 
   // Amortization (yearly summary)
   const schedule = useMemo(() => {
@@ -85,14 +109,6 @@ export default function MortgageParityPanel({
     return rows;
   }, [interestRate, loanTermYears, loanAmount, monthlyPayment]);
 
-  const compareMinRate = 2;
-  const compareMaxRate = 10;
-  const setCompareRateFromPointer = useCallback((target: HTMLInputElement, clientX: number) => {
-    const rect = target.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-    const raw = compareMinRate + ratio * (compareMaxRate - compareMinRate);
-    setCompareRate(Number((compareMinRate + Math.round((raw - compareMinRate) / 0.05) * 0.05).toFixed(2)));
-  }, []);
 
   const cardBg = isNavy
     ? "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)"
@@ -219,66 +235,102 @@ export default function MortgageParityPanel({
       </Card>
 
       {/* Comparison */}
-      <Card title="Compare to Bank Rates" className="mortgage-compare-card">
-        <div className={`grid grid-cols-2 gap-3 text-sm ${inkClass}`}>
-          <div>
-            <p className={`text-xs ${subClass}`}>Bank A — {interestRate}%</p>
-            <p className="font-bold text-lg tabular-nums mt-1">{aed(monthlyPayment)}</p>
-            <p className={`text-[11px] ${subClass}`}>per month</p>
-          </div>
-          <div>
-            <p className={`text-xs ${subClass}`}>Bank B — {compareRate.toFixed(2)}%</p>
-            <p className="font-bold text-lg tabular-nums mt-1">{aed(compareMonthly)}</p>
-            <p className={`text-[11px] ${subClass}`}>per month</p>
-          </div>
-        </div>
-        <div className="mt-3 py-1">
-          {(() => {
-            const minR = compareMinRate;
-            const maxR = compareMaxRate;
-            const progress = Math.min(100, Math.max(0, ((compareRate - minR) / (maxR - minR)) * 100));
-            const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
-            const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
-            return (
-              <input
-                type="range"
-                data-mortgage-slider="Compare rate"
+      <Card title="Compare Two Bank Rates" className="mortgage-compare-card">
+        {(() => {
+          const selectStyle: React.CSSProperties = {
+            background: isNavy ? "rgba(255,255,255,0.08)" : "#FFFFFF",
+            border: isNavy ? "1px solid rgba(147,197,253,0.40)" : "1px solid rgba(184,149,85,0.45)",
+            color: isNavy ? "#FFFFFF" : "#1A1A1A",
+          };
+          const inputStyle: React.CSSProperties = { ...selectStyle };
+          const BankBlock = ({
+            label,
+            bankId,
+            setBankId,
+            rate,
+            setRate,
+            monthly,
+          }: {
+            label: string;
+            bankId: string;
+            setBankId: (v: string) => void;
+            rate: number;
+            setRate: (v: number) => void;
+            monthly: number;
+          }) => (
+            <div>
+              <p className={`text-[11px] uppercase tracking-wider font-semibold mb-1.5 ${subClass}`}>{label}</p>
+              <select
+                value={bankId}
+                onChange={(e) => {
+                  const id = e.target.value;
+                  setBankId(id);
+                  const b = UAE_BANKS.find((x) => x.id === id);
+                  if (b && b.id !== "custom") setRate(b.rate);
+                }}
                 data-no-contrast-guard
-                min={minR}
-                max={maxR}
-                step={0.05}
-                value={compareRate}
-                aria-label="Compare rate"
-                onPointerDown={(e) => {
-                  e.currentTarget.setPointerCapture?.(e.pointerId);
-                  setCompareRateFromPointer(e.currentTarget, e.clientX);
-                }}
-                onPointerMove={(e) => {
-                  if (e.buttons !== 1) return;
-                  setCompareRateFromPointer(e.currentTarget, e.clientX);
-                }}
-                onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
-                onChange={(e) => setCompareRate(Number(e.target.value))}
-                className="mortgage-range-input w-full"
-                style={{
-                  background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-                  boxShadow: isNavy ? 'inset 0 0 0 1px rgba(255,255,255,0.08)' : 'inset 0 0 0 1px rgba(6,78,59,0.14)',
-                  ["--mortgage-range-thumb" as any]:
-                    "#FFFFFF",
-                  ["--mortgage-range-thumb-shadow" as any]:
-                    "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
-                }}
+                className="allow-white w-full rounded-lg px-2.5 py-2 text-sm font-semibold"
+                style={selectStyle}
+              >
+                {UAE_BANKS.map((b) => (
+                  <option key={b.id} value={b.id} style={{ color: "#1A1A1A", background: "#FFFFFF" }}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  type="number"
+                  step={0.05}
+                  min={1}
+                  max={12}
+                  value={rate}
+                  onChange={(e) => {
+                    setRate(Number(e.target.value) || 0);
+                    setBankId("custom");
+                  }}
+                  data-no-contrast-guard
+                  className="allow-white w-20 rounded-lg px-2 py-1.5 text-sm font-semibold tabular-nums"
+                  style={inputStyle}
+                />
+                <span className={`text-xs ${subClass}`}>% APR</span>
+              </div>
+              <p className="font-bold text-lg tabular-nums mt-2">{aed(monthly)}</p>
+              <p className={`text-[11px] ${subClass}`}>per month</p>
+            </div>
+          );
+          return (
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm ${inkClass}`}>
+              <BankBlock
+                label="Bank A"
+                bankId={bankAId}
+                setBankId={setBankAId}
+                rate={bankARate}
+                setRate={setBankARate}
+                monthly={bankAMonthly}
               />
-            );
+              <BankBlock
+                label="Bank B"
+                bankId={bankBId}
+                setBankId={setBankBId}
+                rate={compareRate}
+                setRate={setCompareRate}
+                monthly={compareMonthly}
+              />
+            </div>
+          );
+        })()}
 
-          })()}
-        </div>
-
-        <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
+        <div className="mt-4 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
           <Scale className="w-3.5 h-3.5" />
-          <span>Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(monthlyPayment - compareMonthly))}</span> ({(monthlyPayment > compareMonthly ? "save" : "extra")} on Bank B)</span>
+          <span>
+            Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(bankAMonthly - compareMonthly))}</span>
+            {" "}({bankAMonthly > compareMonthly ? `Bank B saves ${aed(bankAMonthly - compareMonthly)}` : `Bank A saves ${aed(compareMonthly - bankAMonthly)}`} per month)
+          </span>
         </div>
+        <p className={`mt-2 text-[10px] ${subClass}`}>Indicative starting fixed rates. Final pricing depends on profile, LTV and term.</p>
       </Card>
+
 
       {/* Amortization */}
       <div className="lg:col-span-2">
