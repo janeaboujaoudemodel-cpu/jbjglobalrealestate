@@ -161,6 +161,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         disabled={isLoading}
         style={triggerStyle}
         data-no-contrast-guard
+        data-emerald-action="true"
         data-mode-trigger="compact"
         className={cn(
           "flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all duration-200 hover:-translate-y-0.5",
@@ -168,11 +169,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         )}
       >
         {isLoading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: '#1A1A1A' }} />
+          <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
         ) : (
-          <CurrentIcon className="w-3.5 h-3.5" style={{ color: '#1A1A1A' }} />
+          <CurrentIcon className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
         )}
-        <span className="text-xs font-bold" style={{ color: '#1A1A1A' }}>
+        <span className="text-xs font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
           {triggerShortLabel}
         </span>
       </button>
@@ -193,6 +194,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             disabled={isLoading}
             style={triggerStyle}
             data-no-contrast-guard
+            data-emerald-action="true"
             data-allow-dark-cta
             data-on-dark
             data-mode-trigger="header"

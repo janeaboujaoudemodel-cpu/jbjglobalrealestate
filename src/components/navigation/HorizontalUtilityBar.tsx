@@ -107,6 +107,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 data-no-contrast-guard
+                data-emerald-action="true"
                 onClick={() => setSearchOpen(true)}
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
                 className="allow-white h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
@@ -130,6 +131,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 data-no-contrast-guard
+                data-emerald-action="true"
                 onClick={() => setFilterOpen(true)}
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
                 className="allow-white h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
@@ -151,6 +153,7 @@ export default function HorizontalUtilityBar() {
               <Link
                 to="/favorites"
                 data-no-contrast-guard
+                data-emerald-action="true"
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
                 className="allow-white h-9 w-9 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Favorites"
@@ -168,6 +171,7 @@ export default function HorizontalUtilityBar() {
           {/* Sq ft / Sq m — emerald pill to match Search/Filter/Heart */}
           <div
             data-no-contrast-guard
+            data-emerald-action="true"
             data-on-dark
             data-allow-dark-cta
             data-jj-utility-pill
@@ -176,6 +180,7 @@ export default function HorizontalUtilityBar() {
           >
             <button
               data-no-contrast-guard
+                data-emerald-action="true"
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
               data-active={areaUnit === 'sqft'}
               data-on-dark
@@ -187,6 +192,7 @@ export default function HorizontalUtilityBar() {
             <span aria-hidden className="w-px h-4 bg-white/25" />
             <button
               data-no-contrast-guard
+                data-emerald-action="true"
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
               data-active={areaUnit === 'sqm'}
               data-on-dark
