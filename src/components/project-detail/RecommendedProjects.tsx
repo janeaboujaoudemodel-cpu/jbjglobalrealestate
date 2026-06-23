@@ -262,13 +262,13 @@ export default function RecommendedProjects({
                   {/* Divider + Price (LEFT) + Handover (RIGHT) — pinned to bottom, same line */}
                   <div className="border-t border-[#B89555]/20 pt-3 mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 min-w-0">
                     {project.price_from ? (
-                      <div className="price-pill-premium max-w-full min-w-0 shrink" data-price-badge data-no-contrast-guard>
-                        <span className="price-pill-eyebrow">From</span>
-                        <span className="price-pill-value truncate">{formatPrice(project.price_from)}</span>
+                      <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center gap-1 px-3 py-1 rounded-full text-[12px] font-semibold max-w-full min-w-0 shrink">
+                        <span className="text-[10px] uppercase tracking-wider opacity-90">From</span>
+                        <span className="truncate font-bold">{formatPrice(project.price_from)}</span>
                       </div>
                     ) : (
-                      <div className="price-pill-premium max-w-full min-w-0 shrink" data-price-badge data-no-contrast-guard>
-                        <span className="price-pill-value truncate">Price on request</span>
+                      <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center px-3 py-1 rounded-full text-[12px] font-semibold max-w-full min-w-0 shrink">
+                        <span className="truncate">Price on request</span>
                       </div>
                     )}
 
@@ -279,7 +279,11 @@ export default function RecommendedProjects({
                           {paymentLabel}
                         </span>
                       )}
-                      <HandoverPill value={project.handover_date} />
+                      {project.handover_date && (
+                        <span data-emerald-action="true" className="jj-emerald-action inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap shrink-0">
+                          {project.handover_date}
+                        </span>
+                      )}
                     </div>
                   </div>
 
