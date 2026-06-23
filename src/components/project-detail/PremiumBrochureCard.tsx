@@ -249,7 +249,11 @@ const PremiumBrochureCard = ({
               <h3
                 data-no-contrast-guard
                 className="text-2xl font-bold mb-3 line-clamp-2 leading-tight allow-white"
-                style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)" }}
+                style={{
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)",
+                }}
               >
                 {projectName}
               </h3>
