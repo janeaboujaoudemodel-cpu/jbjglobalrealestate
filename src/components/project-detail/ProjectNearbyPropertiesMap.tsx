@@ -258,25 +258,29 @@ export default function ProjectNearbyPropertiesMap({
     navigate(`/project/${slug}`);
   };
 
-  const chip = (mode: FilterMode, label: string, count: number, disabled = false) => (
-    <button
-      key={mode}
-      type="button"
-      onClick={() => !disabled && setFilterMode(mode)}
-      disabled={disabled}
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${
-        filterMode === mode
-          ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-          : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
-      } ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
-      data-no-contrast-guard
-    >
-      {label}
-      <span className={`text-[10px] tabular-nums ${filterMode === mode ? "text-white/70" : "text-[#1A1A1A]/60"}`}>
-        {count}
-      </span>
-    </button>
-  );
+  const chip = (mode: FilterMode, label: string, count: number, disabled = false) => {
+    const isActive = filterMode === mode;
+    return (
+      <button
+        key={mode}
+        type="button"
+        onClick={() => !disabled && setFilterMode(mode)}
+        disabled={disabled}
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${
+          isActive
+            ? "jj-pill-emerald-metallic text-white border-transparent"
+            : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
+        } ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
+        data-no-contrast-guard={isActive ? undefined : true}
+        style={isActive ? { color: "#FFFFFF" } : undefined}
+      >
+        <span style={isActive ? { color: "#FFFFFF" } : undefined}>{label}</span>
+        <span className="text-[10px] tabular-nums" style={isActive ? { color: "#FFFFFF", opacity: 0.85 } : { color: "rgba(26,26,26,0.6)" }}>
+          {count}
+        </span>
+      </button>
+    );
+  };
 
   return (
     <div className={className}>
