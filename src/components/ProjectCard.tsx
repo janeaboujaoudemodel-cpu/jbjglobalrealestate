@@ -445,44 +445,40 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </Link>
 
-      {/* CTA Buttons — Email, Call, WhatsApp. Premium rectangular emerald tiles. */}
+      {/* CTA Buttons — Email, Call, Chat. Emerald-ombre pills matching the header AED chip. */}
       <div className="px-4 pb-4">
         <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/40 pt-3">
-          <a
-            href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
-            onClick={(e) => e.stopPropagation()}
-            aria-label={`Email about ${project.name}`}
-            data-surface="emerald"
-            data-emerald-ok="button"
-            className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
-          >
-            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Email</span>
-          </a>
-          <a
-            href={callHref}
-            onClick={(e) => e.stopPropagation()}
-            aria-label={`Call about ${project.name}`}
-            data-surface="emerald"
-            data-emerald-ok="button"
-            className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
-          >
-            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Call</span>
-          </a>
-          <a
-            href={whatsappHref}
-            onClick={(e) => e.stopPropagation()}
-            aria-label={`WhatsApp about ${project.name}`}
-            data-surface="emerald"
-            data-emerald-ok="button"
-            className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
-          >
-            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Chat</span>
-          </a>
+          {[
+            { href: `mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`, label: "Email", aria: `Email about ${project.name}`, Icon: Mail, target: undefined as string | undefined, rel: undefined as string | undefined },
+            { href: callHref, label: "Call", aria: `Call about ${project.name}`, Icon: Phone, target: undefined, rel: undefined },
+            { href: whatsappHref, label: "Chat", aria: `WhatsApp about ${project.name}`, Icon: MessageCircle, target: "_blank", rel: "noopener noreferrer" },
+          ].map(({ href, label, aria, Icon, target, rel }) => (
+            <a
+              key={label}
+              href={href}
+              onClick={(e) => e.stopPropagation()}
+              aria-label={aria}
+              target={target}
+              rel={rel}
+              data-surface="emerald"
+              data-emerald-ok="button"
+              data-no-contrast-guard
+              className="w-full min-w-0 overflow-hidden h-9 px-3 inline-flex items-center justify-center gap-1.5 rounded-full text-xs font-semibold transition-all duration-200 hover:brightness-110"
+              style={{
+                backgroundImage: "var(--jj-emerald-ombre)",
+                border: "1px solid rgba(255,255,255,0.18)",
+                boxShadow: "0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.10)",
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+              }}
+            >
+              <Icon className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="truncate">{label}</span>
+            </a>
+          ))}
         </div>
       </div>
+
     </div>
   );
 };
