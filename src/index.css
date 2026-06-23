@@ -1208,10 +1208,12 @@ All colors MUST be HSL.
     color: hsl(var(--foreground));
   }
 
-/* ===== GLOBAL GOLD SCROLLBAR — site-wide default ===== */
+/* ===== GLOBAL SCROLLBAR — neutral default (gold scrollbars removed) =====
+   Locked: never gold (#B89555). If a custom rail is required, use the
+   official Emerald token (#064E3B). Default = system scrollbar. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #B89555 transparent;
+  scrollbar-color: rgba(6, 78, 59, 0.55) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
@@ -1221,19 +1223,17 @@ All colors MUST be HSL.
   background: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background: #B89555;
+  background: rgba(6, 78, 59, 0.55);
   border-radius: 999px;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(184, 149, 85, 0.85);
+  background: #064E3B;
 }
 *::-webkit-scrollbar-corner {
   background: transparent;
 }
 
-/* Hidden scrollbar utility — keeps scroll/swipe behaviour, removes the visible gold rail.
-   Used on horizontal tab strips inside cards (Explore Our Services, Royal Tools Hub, etc.)
-   so the gold rail never overlays content or cheapens the surface. */
+/* Hidden scrollbar utility — keeps scroll/swipe behaviour, removes the visible rail. */
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -1249,80 +1249,41 @@ All colors MUST be HSL.
 }
 
 
-/* Scrollbar styling — gold */
-.jj-scrollbar-gold {
-  overflow-y: auto;
+/* Legacy class names retained for compatibility — now render in the official
+   Emerald token. NEVER gold. */
+.jj-scrollbar-gold,
+.jj-scrollbar-always-visible,
+.jj-scrollbar-gold-x {
   scrollbar-width: thin;
-  scrollbar-color: #B89555 rgba(184, 149, 85, 0.08);
+  scrollbar-color: rgba(6, 78, 59, 0.55) transparent;
 }
-
-.jj-scrollbar-gold::-webkit-scrollbar {
-  width: 4px;
-  display: block !important;
-}
-
-.jj-scrollbar-gold::-webkit-scrollbar-track {
-  background: rgba(184, 149, 85, 0.08);
-  border-radius: 4px;
-}
-
-.jj-scrollbar-gold::-webkit-scrollbar-thumb {
-  background: #B89555;
-  border-radius: 4px;
-  min-height: 40px;
-}
-
-.jj-scrollbar-gold::-webkit-scrollbar-thumb:hover {
-  background: rgba(184, 149, 85, 0.85);
-}
-
-/* Force scrollbar always visible */
-.jj-scrollbar-always-visible {
-  overflow-y: scroll !important;
-}
-
-.jj-scrollbar-always-visible::-webkit-scrollbar {
-  display: block !important;
-  width: 7px;
-}
-
-.jj-scrollbar-always-visible::-webkit-scrollbar-track {
-  background: rgba(184, 149, 85, 0.1);
-  border-radius: 4px;
-}
-
-.jj-scrollbar-always-visible::-webkit-scrollbar-thumb {
-  background: #B89555;
-  border-radius: 4px;
-  min-height: 30px;
-}
-
-/* Horizontal scrollbar */
+.jj-scrollbar-gold { overflow-y: auto; }
+.jj-scrollbar-always-visible { overflow-y: scroll !important; }
 .jj-scrollbar-gold-x {
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: #B89555 transparent;
 }
-
-.jj-scrollbar-gold-x::-webkit-scrollbar {
-  height: 6px;
-  display: block !important;
-}
-
+.jj-scrollbar-gold::-webkit-scrollbar,
+.jj-scrollbar-always-visible::-webkit-scrollbar { width: 6px; display: block !important; }
+.jj-scrollbar-gold-x::-webkit-scrollbar { height: 6px; display: block !important; }
+.jj-scrollbar-gold::-webkit-scrollbar-track,
+.jj-scrollbar-always-visible::-webkit-scrollbar-track,
 .jj-scrollbar-gold-x::-webkit-scrollbar-track {
   background: transparent;
-}
-
-.jj-scrollbar-gold-x::-webkit-scrollbar-thumb {
-  background: #B89555;
   border-radius: 4px;
 }
-
+.jj-scrollbar-gold::-webkit-scrollbar-thumb,
+.jj-scrollbar-always-visible::-webkit-scrollbar-thumb,
+.jj-scrollbar-gold-x::-webkit-scrollbar-thumb {
+  background: rgba(6, 78, 59, 0.55);
+  border-radius: 4px;
+}
+.jj-scrollbar-gold::-webkit-scrollbar-thumb:hover,
+.jj-scrollbar-always-visible::-webkit-scrollbar-thumb:hover,
 .jj-scrollbar-gold-x::-webkit-scrollbar-thumb:hover {
-  background: rgba(184, 149, 85, 0.85);
+  background: #064E3B;
 }
 
 
@@ -2602,21 +2563,18 @@ All colors MUST be HSL.
     text-shadow: none;
   }
 
-  /* Scrollbar utilities — gold */
+  /* Scrollbar utilities — legacy "gold" names, now Emerald (gold scrollbars removed) */
   .scrollbar-thin {
     scrollbar-width: thin;
   }
-  
-  .scrollbar-thumb-gold {
-    scrollbar-color: #B89555 transparent;
-  }
-  
+
+  .scrollbar-thumb-gold,
   .scrollbar-thumb-gold\/60 {
-    scrollbar-color: #B89555 rgba(184, 149, 85, 0.1);
+    scrollbar-color: rgba(6, 78, 59, 0.55) transparent;
   }
-  
+
   .scrollbar-track-gold\/10 {
-    scrollbar-color: inherit rgba(184, 149, 85, 0.1);
+    scrollbar-color: inherit transparent;
   }
 
   /* Webkit scrollbar styling */
@@ -2624,18 +2582,20 @@ All colors MUST be HSL.
     width: 6px;
     height: 6px;
   }
-  
-  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb {
-    background: #B89555;
+
+  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb,
+  .scrollbar-thumb-gold::-webkit-scrollbar-thumb {
+    background: rgba(6, 78, 59, 0.55);
     border-radius: 3px;
   }
-  
-  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover {
-    background: rgba(184, 149, 85, 0.85);
+
+  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover,
+  .scrollbar-thumb-gold::-webkit-scrollbar-thumb:hover {
+    background: #064E3B;
   }
-  
+
   .scrollbar-track-gold\/10::-webkit-scrollbar-track {
-    background: rgba(184, 149, 85, 0.1);
+    background: transparent;
     border-radius: 3px;
   }
 
@@ -10879,7 +10839,7 @@ html body :is(
   [data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"],
   [data-icon-tile][data-surface="emerald"][data-surface="emerald"]
 ) {
-  background-image: var(--gradient-emerald) !important;
+  background-image: var(--jj-emerald-ombre) !important;
   background-color: var(--emerald-1) !important;
   border-color: var(--emerald-1) !important;
   opacity: 1 !important;
