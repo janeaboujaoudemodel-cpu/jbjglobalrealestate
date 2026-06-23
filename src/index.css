@@ -6414,16 +6414,19 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --ink-emerald-3: #000000;
   --ink-emerald-ring: transparent;
   --ink-emerald-accent: #FFFFFF;
-  --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
-  --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
-  --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-emerald-ombre-hover: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  /* GATE 1 LOCK: metallic sheen disabled — the white sheen + screen blend
-     produced a bright lime band that read as "light green". Official emerald
-     must be the pure ombre, identical to Call/Chat/Email reference buttons. */
+  /* GLOBAL EMERALD LOCK — SOLID FILL ONLY.
+     Previously these tokens faded emerald → black, making every CTA pill look
+     "split" / half-dark. The brand identity is one solid official emerald
+     (#064E3B) with WHITE text + WHITE icons in every state. The only allowed
+     variation is a slightly lighter hover. Segmented-control active states
+     opt-in separately. */
+  --gradient-ink: #064E3B;
+  --gradient-ink-hover: #0a6b53;
+  --jj-emerald-ombre: #064E3B;
+  --jj-emerald-ombre-hover: #0a6b53;
   --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%);
-  --jj-official-emerald-surface: var(--jj-emerald-ombre);
-  --jj-emerald-light-ombre: var(--jj-emerald-ombre);
+  --jj-official-emerald-surface: #064E3B;
+  --jj-emerald-light-ombre: #064E3B;
   --jj-emerald-neon: #064E3B;
   /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
      Locked to the approved emerald/black ombre family — no flat green. */
