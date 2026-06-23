@@ -253,9 +253,15 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
               <div className="flex justify-center mb-4 text-[#1A1A1A]">
                 <JJLogoImage variant="light" size="sm" />
               </div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#EFE6D6] border border-[#B89555]/40 rounded-full mb-3">
-                <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                <span className="text-[#1A1A1A] text-xs font-medium">
+              <div
+                data-surface="emerald"
+                data-emerald-icon-surface
+                data-no-contrast-guard
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 jj-official-emerald"
+                style={{ color: "#FFFFFF" }}
+              >
+                <Sparkles className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="allow-white text-xs font-medium" style={{ color: "#FFFFFF" }}>
                   {phase === "welcome" ? "Welcome Guide" : "You're all set"}
                 </span>
               </div>

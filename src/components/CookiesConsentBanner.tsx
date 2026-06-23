@@ -143,11 +143,14 @@ const CookiesConsentBanner = () => {
                     <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="jj-official-emerald shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="jj-official-emerald allow-white shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                         data-cta="primary"
                         data-surface="emerald"
+                        data-emerald-icon-surface
+                        data-no-contrast-guard
+                        style={{ color: "#FFFFFF" }}
                       >
-                        Accept All
+                        <span className="allow-white" style={{ color: "#FFFFFF" }}>Accept All</span>
                       </Button>
                       <Button
                         onClick={handleRejectNonEssential}
@@ -159,11 +162,14 @@ const CookiesConsentBanner = () => {
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        variant="dark"
-                        className="shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
-                        data-cta="dark"
+                        className="jj-official-emerald allow-white shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        data-cta="primary"
+                        data-surface="emerald"
+                        data-emerald-icon-surface
+                        data-no-contrast-guard
+                        style={{ color: "#FFFFFF" }}
                       >
-                        Manage Preferences
+                        <span className="allow-white" style={{ color: "#FFFFFF" }}>Manage Preferences</span>
                       </Button>
                     </div>
                     <p className="text-[#1A1A1A]/70 text-[10px] sm:text-xs mt-3">

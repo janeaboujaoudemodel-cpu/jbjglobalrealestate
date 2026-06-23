@@ -326,11 +326,23 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
 
-          {/* Sold Out Badge */}
+          {/* Sold Out marker — placed at BOTTOM of the cover (never top),
+              styled as a refined emerald-frame pill that also hints at the
+              secondary-market alternative. Owner directive: sold inventory
+              must never be promoted aggressively at the top of a card. */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
-            <CardBadge variant="sold" className={`absolute top-3 right-3 z-10`}>
-              Sold Out
-            </CardBadge>
+            <div
+              data-surface="emerald"
+              data-emerald-icon-surface
+              data-no-contrast-guard
+              className="allow-white absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full jj-official-emerald shadow-md text-[10px] font-semibold uppercase tracking-[0.08em]"
+              style={{ color: "#FFFFFF" }}
+              title="Sold out with the developer — available on the secondary market"
+            >
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Sold Out</span>
+              <span className="opacity-70 allow-white" style={{ color: "#FFFFFF" }}>·</span>
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Resale Available</span>
+            </div>
           )}
         </div>
 
