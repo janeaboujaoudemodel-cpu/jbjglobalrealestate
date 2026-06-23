@@ -12281,3 +12281,35 @@ html body :is(
   opacity: 1 !important;
   mix-blend-mode: normal !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   HERO GHOST CTA — outlined white-on-photo button for project hero.
+   Replaces filled .jj-pill-emerald CTAs that became unreadable on
+   bright hero photos. Locked to white text/border/icon at all states.
+   ════════════════════════════════════════════════════════════════ */
+html body .jj-hero-ghost-cta,
+html body .jj-hero-ghost-cta:hover,
+html body .jj-hero-ghost-cta:focus,
+html body .jj-hero-ghost-cta:focus-visible {
+  background: rgba(0, 0, 0, 0.28) !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 1px 16px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  transition: background 220ms ease, border-color 220ms ease, transform 220ms ease;
+}
+html body .jj-hero-ghost-cta:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-color: #FFFFFF !important;
+}
+html body .jj-hero-ghost-cta * ,
+html body .jj-hero-ghost-cta :is(svg, [class*="lucide"]),
+html body .jj-hero-ghost-cta :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
