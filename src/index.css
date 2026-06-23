@@ -9152,7 +9152,7 @@ html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus,:focus-visible
 
 html body .jj-history-emerald-icon {
   animation: jj-pill-emerald-sweep 4.8s ease-in-out infinite !important;
-  border: 1px solid rgba(4,120,87,.95) !important;
+  border: 0 !important;
 }
 
 /* Card favorite / shortlist / badge buttons: emerald own-surface, white glyph only. */
@@ -9160,10 +9160,12 @@ html body :is(button, a).jj-favorite-trigger,
 html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) {
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
-  border-color: rgba(255,255,255,0.35) !important;
+  border: 0 !important;
+  border-color: transparent !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
+  box-shadow: 0 10px 24px -12px rgba(6,78,59,.95), inset 0 1px 0 rgba(255,255,255,.18) !important;
 }
 html body :is(button, a).jj-favorite-trigger *,
 html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) * {
