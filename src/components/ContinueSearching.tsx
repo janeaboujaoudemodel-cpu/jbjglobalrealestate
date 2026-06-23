@@ -459,7 +459,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         )}
 
         {/* Gradient overlay — stronger at bottom for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" data-ink-emerald-opt-out />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#031B12]/95 via-[#064E3B]/55 to-transparent" data-ink-emerald-opt-out />
 
         {/* Elevated glass reflection effect */}
         <div
