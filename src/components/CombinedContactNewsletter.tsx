@@ -84,7 +84,8 @@ const CombinedContactNewsletter = ({
                 target={card.label === "WhatsApp" ? "_blank" : undefined}
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
                 data-no-contrast-guard
-                className="jj-emerald-rect-pill allow-white group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
+                data-emerald="true"
+                className="jj-emerald-metallic allow-white group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
               >
                 <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
                 <div className="min-w-0 text-left">
@@ -104,6 +105,17 @@ const CombinedContactNewsletter = ({
 
           {/* Newsletter */}
           <div className="relative max-w-md mx-auto text-center">
+            <span
+              data-no-contrast-guard
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-3 border"
+              style={{
+                color: "#FFFFFF",
+                borderColor: "rgba(255,255,255,0.35)",
+                backgroundColor: "rgba(255,255,255,0.08)",
+              }}
+            >
+              Stay in the Loop
+            </span>
             <h3 className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
               Get the Edge — Listings Before the Market
             </h3>
