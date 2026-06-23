@@ -358,10 +358,10 @@ export const ConsultationRequestForm = ({
                             key={b.value}
                             type="button"
                             onClick={() => toggle(b.value)}
-                            data-cta={active ? "champagne-active" : undefined}
+                            data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
+                                ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border"
                                 : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
                             }
                           >
@@ -410,10 +410,10 @@ export const ConsultationRequestForm = ({
                             key={b.value}
                             type="button"
                             onClick={() => toggle(b.value)}
-                            data-cta={active ? "champagne-active" : undefined}
+                            data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
+                                ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border"
                                 : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
                             }
                           >
@@ -582,7 +582,8 @@ export const ConsultationRequestForm = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="jj-cta-gold-metallic h-14 px-8 text-base font-bold inline-flex items-center justify-center gap-2 shrink-0 w-full sm:w-auto"
+              data-emerald-action="true"
+              className="jj-emerald-action h-14 px-8 text-base font-bold inline-flex items-center justify-center gap-2 shrink-0 w-full sm:w-auto rounded-md"
             >
               {isSubmitting ? (
                 <>

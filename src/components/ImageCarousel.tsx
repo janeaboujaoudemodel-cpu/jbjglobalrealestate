@@ -348,11 +348,11 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
               <button
                 type="button"
                 onClick={handleDownloadAll}
-                data-no-contrast-guard
-                className="inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
+                data-emerald-action="true"
+                className="jj-emerald-action inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold transition-colors shadow-sm"
               >
-                <Download className="w-4 h-4 text-white" />
-                <span className="text-white">Download All Photos</span>
+                <Download className="w-4 h-4" />
+                <span>Download All Photos</span>
               </button>
             </div>
             <div className="grid grid-cols-6 gap-2">

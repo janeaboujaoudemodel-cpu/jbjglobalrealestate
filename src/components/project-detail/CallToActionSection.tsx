@@ -315,18 +315,18 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    data-no-contrast-guard
-                    className="w-full h-12 inline-flex items-center justify-center gap-2 text-base font-semibold rounded-md bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] disabled:opacity-60 transition-colors shadow-sm"
+                    data-emerald-action="true"
+                    className="jj-emerald-action w-full h-12 inline-flex items-center justify-center gap-2 text-base font-semibold rounded-md disabled:opacity-60 transition-colors shadow-sm"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin text-white" />
-                        <span className="text-white">Submitting...</span>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Submitting...</span>
                       </>
                     ) : (
                       <>
-                        <Send className="w-4 h-4 text-white" />
-                        <span className="text-white">Request a Call Back Now</span>
+                        <Send className="w-4 h-4" />
+                        <span>Request a Call Back Now</span>
                       </>
                     )}
                   </button>
