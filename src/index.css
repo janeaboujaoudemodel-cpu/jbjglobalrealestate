@@ -12547,3 +12547,112 @@ html body main .jj-project-nested-band > *:not([role="presentation"]) {
   max-width: 100%;
   box-sizing: border-box;
 }
+
+/* =====================================================================
+   GATE 2 — GLOBAL EMERALD PRIMARY ENFORCEMENT
+   Single source of truth that promotes Emerald to the platform's primary
+   interactive accent and neutralises dark/black defaults. Scoped to keep
+   intentional dark surfaces (hero-dark, sidebar emerald) untouched.
+   ===================================================================== */
+
+/* --- 1) Kill any "fill-swipe" / dark gradient sweep on active dashboard
+   cards or KPI tiles. Replace with a subtle emerald metallic sheen. --- */
+@keyframes jj-active-card-sheen {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+html body :is([data-active="true"], [data-state="active"]).jj-overview-card,
+html body :is([data-active="true"], [data-state="active"])[data-jj-active-card],
+html body :is([data-active="true"], [data-state="active"]).jj-kpi-card {
+  background-color: #064E3B !important;
+  background-image: linear-gradient(
+    110deg,
+    #064E3B 0%,
+    #0A6B53 35%,
+    #0E8A66 50%,
+    #0A6B53 65%,
+    #064E3B 100%
+  ) !important;
+  background-size: 220% 100% !important;
+  background-repeat: no-repeat !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 0 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 rgba(0,0,0,0.25),
+    0 6px 22px rgba(4,78,59,0.30) !important;
+  animation: jj-active-card-sheen 6s ease-in-out infinite alternate !important;
+  transition: none !important;
+}
+html body :is([data-active="true"], [data-state="active"]).jj-overview-card *,
+html body :is([data-active="true"], [data-state="active"])[data-jj-active-card] *,
+html body :is([data-active="true"], [data-state="active"]).jj-kpi-card * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body :is([data-active="true"], [data-state="active"]).jj-overview-card::before,
+html body :is([data-active="true"], [data-state="active"]).jj-overview-card::after,
+html body :is([data-active="true"], [data-state="active"])[data-jj-active-card]::before,
+html body :is([data-active="true"], [data-state="active"])[data-jj-active-card]::after {
+  content: none !important;
+}
+
+/* --- 2) Promote Emerald as the default action colour for raw black/dark
+   buttons that bypass the <Button> primitive. Excludes intentional dark
+   surfaces (hero overlays, sidebar emerald, opt-out via data attr). --- */
+html body button:not([data-no-contrast-guard]):not([data-hero-dark] *):not([data-sidebar-emerald] *):is(
+  .bg-black,
+  .bg-neutral-900,
+  .bg-neutral-950,
+  .bg-zinc-900,
+  .bg-zinc-950,
+  .bg-slate-900,
+  .bg-slate-950,
+  .bg-gray-900,
+  .bg-gray-950,
+  .bg-foreground
+) {
+  background-color: #064E3B !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 60%, #053D2F 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+html body button:not([data-no-contrast-guard]):not([data-hero-dark] *):not([data-sidebar-emerald] *):is(
+  .bg-black, .bg-neutral-900, .bg-neutral-950, .bg-zinc-900, .bg-zinc-950,
+  .bg-slate-900, .bg-slate-950, .bg-gray-900, .bg-gray-950, .bg-foreground
+) :is(span, svg, p, a) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* --- 3) Global Emerald focus ring. Replaces stray neutral focus outlines. --- */
+html body :is(button, a, input, select, textarea, [role="tab"], [role="button"]):focus-visible {
+  outline: 2px solid #064E3B !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(6,78,59,0.15) !important;
+}
+
+/* --- 4) Progress / range tracks default to champagne with emerald fill --- */
+html body progress:not([data-no-contrast-guard])::-webkit-progress-bar { background: #EFE6D6 !important; }
+html body progress:not([data-no-contrast-guard])::-webkit-progress-value { background: #064E3B !important; }
+html body progress:not([data-no-contrast-guard])::-moz-progress-bar { background: #064E3B !important; }
+html body [role="progressbar"]:not([data-no-contrast-guard]) > [data-state] {
+  background-color: #064E3B !important;
+}
+
+/* --- 5) Empty-state icon tiles default to emerald accent --- */
+html body .jj-empty-state [data-icon-tile],
+html body [data-jj-empty-state] [data-icon-tile] {
+  background: #064E3B !important;
+  color: #FFFFFF !important;
+}
+html body .jj-empty-state [data-icon-tile] svg,
+html body [data-jj-empty-state] [data-icon-tile] svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
