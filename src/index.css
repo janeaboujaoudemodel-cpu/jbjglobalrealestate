@@ -13720,8 +13720,8 @@ html body [data-bk-scope="back-office"] nav button[data-sidebar-owner-item][data
 html body [data-bk-scope="back-office"] nav button[data-sidebar-owner-item][data-surface="emerald"].jj-emerald-metallic,
 html body [data-jj-utility-bar] button[aria-label="Currency"].jj-surface-emerald,
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"], [data-jj-utility-pill], [data-mode-trigger], a[href="/auth"]) {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   background-color: #064E3B !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
