@@ -18,6 +18,7 @@ import { toolThemes } from "@/components/tools/toolThemes";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
 import {
   readMatchmakerSession,
   writeMatchmakerSession,
@@ -247,6 +248,8 @@ const PROPERTY_TYPE_KEYWORDS: Record<string, string[]> = {
 
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
+const CONTACT_TIMES = ["Morning (9AM - 12PM)", "Afternoon (12PM - 5PM)", "Evening (5PM - 9PM)", "Anytime"];
+const CONTACT_METHODS = ["WhatsApp", "Phone Call", "Email", "Video Call"];
 
 const AIHF_STYLE = `
   .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div), .aihf-root svg {
@@ -315,6 +318,8 @@ const Quiz = () => {
     phone: "",
     nationality: "",
     preferredLanguage: "",
+    preferredContactTime: "",
+    preferredContactMethod: "",
   });
   const [resumed, setResumed] = useState(false);
   const estimatedTime = 45;
@@ -457,9 +462,11 @@ const Quiz = () => {
   const isFormValid = () => {
     return formData.fullName.trim() !== "" && 
            formData.email.trim() !== "" && 
-           formData.phone.trim() !== "" &&
+           getPhoneValidation(formData.phone).isValid &&
            formData.nationality !== "" &&
-           formData.preferredLanguage !== "";
+           formData.preferredLanguage !== "" &&
+           formData.preferredContactTime !== "" &&
+           formData.preferredContactMethod !== "";
   };
 
   const handleNext = () => {
@@ -790,7 +797,13 @@ const Quiz = () => {
           phone: formData.phone,
           nationality: formData.nationality || null,
           preferred_language: formData.preferredLanguage || null,
-          answers,
+          answers: {
+            ...answers,
+            contact_preferences: {
+              preferredContactTime: formData.preferredContactTime,
+              preferredContactMethod: formData.preferredContactMethod,
+            },
+          },
           recommended_slugs: top.map((p) => p.slug),
           recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
           result_tier: tier,
