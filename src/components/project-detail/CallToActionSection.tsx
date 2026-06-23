@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { getLanguageList, LANGUAGE_FLAGS } from "@/constants/localeOptions";
-import { getCountryList } from "@/constants/localeOptions";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { MessageCircle, Phone, Send, Loader2, CheckCircle, Clock, Calendar } from "lucide-react";
 
@@ -28,10 +27,9 @@ const ctaFormSchema = z.object({
     }, (val) => ({
       message: getPhoneValidation(val).message
     })),
-  nationality: z.string().min(1, "Please select your nationality"),
   language: z.string().min(1, "Please select your preferred language"),
-  preferredTime: z.string().min(1, "Please select your preferred contact time"),
-  contactMethod: z.string().min(1, "Please select your preferred contact method"),
+  preferredTime: z.string().optional(),
+  contactMethod: z.string().optional(),
   preferredDate: z.string().optional(),
   message: z.string().max(1000).optional(),
 });
@@ -52,7 +50,6 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
   const languageOptions = getLanguageList();
-  const nationalityOptions = getCountryList();
 
   const form = useForm<CTAFormData>({
     resolver: zodResolver(ctaFormSchema),
@@ -60,7 +57,6 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
       fullName: "",
       email: "",
       phone: "",
-      nationality: "",
       language: "",
       preferredTime: "",
       contactMethod: "",
@@ -76,7 +72,6 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
         email: data.email,
         fullName: data.fullName,
         phone: data.phone,
-        nationality: data.nationality,
         language: data.language,
       }, `project-cta-${projectId || projectName}`, "client");
 
@@ -215,55 +210,33 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     )}
                   />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="nationality"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[#1A1A1A] font-medium">Nationality *</FormLabel>
-                          <SearchableSelect
-                            value={field.value}
-                            onChange={field.onChange}
-                            options={nationalityOptions}
-                            placeholder="Select nationality"
-                            searchPlaceholder="Search countries..."
-                            priorityItem="United Arab Emirates"
-                            flagType="country"
-                          />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="language"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-[#1A1A1A] font-medium">Preferred Language *</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] rounded-lg h-12">
-                                <SelectValue placeholder="Select language" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {languageOptions.map((lang) => (
-                                <SelectItem key={lang} value={lang}>
-                                  <span className="flex items-center gap-2">
-                                    <span>{LANGUAGE_FLAGS[lang] || ""}</span>
-                                    <span>{lang}</span>
-                                  </span>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="language"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[#1A1A1A] font-medium">Preferred Language *</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] rounded-lg h-12">
+                              <SelectValue placeholder="Select language" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {languageOptions.map((lang) => (
+                              <SelectItem key={lang} value={lang}>
+                                <span className="flex items-center gap-2">
+                                  <span>{LANGUAGE_FLAGS[lang] || ""}</span>
+                                  <span>{lang}</span>
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   {/* Preferred Time to Call */}
                   <FormField
@@ -273,7 +246,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                       <FormItem>
                         <FormLabel className="text-[#1A1A1A] font-medium flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                          Preferred Contact Time *
+                          Preferred Time to Call
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
@@ -301,7 +274,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                       <FormItem>
                         <FormLabel className="text-[#1A1A1A] font-medium flex items-center gap-1.5">
                           <MessageCircle className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                          Preferred Contact Method *
+                          Preferred Contact Method
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>

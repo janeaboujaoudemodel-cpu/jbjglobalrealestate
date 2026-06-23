@@ -190,14 +190,12 @@ const PremiumBrochureCard = ({
               data-on-dark
               className="absolute top-4 left-6 flex items-center gap-2 pr-3 py-1.5 rounded-md allow-white"
               style={{
-                background: "linear-gradient(180deg, rgba(8,12,20,0.55) 0%, rgba(8,12,20,0.88) 50%, rgba(8,12,20,0.96) 100%)",
-                backdropFilter: "blur(6px)",
-                WebkitBackdropFilter: "blur(6px)",
+                background: "rgba(6,10,18,0.95)",
                 paddingLeft: 6,
                 right: 64, // never overlap lock icon (top-4 right-4 + 44px)
                 maxWidth: "calc(100% - 88px)",
                 border: "1px solid rgba(184,149,85,0.7)",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.45)",
+                boxShadow: "0 6px 18px rgba(0,0,0,0.4)",
               }}
             >
               <div
@@ -249,11 +247,7 @@ const PremiumBrochureCard = ({
               <h3
                 data-no-contrast-guard
                 className="text-2xl font-bold mb-3 line-clamp-2 leading-tight allow-white"
-                style={{
-                  color: "#FFFFFF",
-                  WebkitTextFillColor: "#FFFFFF",
-                  textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)",
-                }}
+                style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)" }}
               >
                 {projectName}
               </h3>

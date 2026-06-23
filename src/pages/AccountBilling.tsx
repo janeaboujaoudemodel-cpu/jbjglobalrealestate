@@ -26,7 +26,7 @@ export default function AccountBilling() {
       <div className="grid sm:grid-cols-2 gap-4">
         <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30">
           <div className="flex items-start gap-3">
-            <IconTile icon={Shield} tone="emerald" />
+            <IconTile icon={Shield} tone="gold" />
             <div className="flex-1">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Current Plan</p>
               <p className="text-lg font-semibold text-[#1A1A1A] mt-1">Free</p>
@@ -38,19 +38,19 @@ export default function AccountBilling() {
 
         <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30">
           <div className="flex items-start gap-3">
-            <IconTile icon={CreditCard} tone="emerald" />
+            <IconTile icon={CreditCard} tone="gold" />
             <div className="flex-1">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Payment Method</p>
               <p className="text-lg font-semibold text-[#1A1A1A] mt-1">None on file</p>
               <p className="text-sm text-[#1A1A1A]/70 mt-1">Add a card or bank to enable subscriptions and one-off purchases.</p>
-              <Button className="mt-3 jj-cta-emerald" data-cta="primary" data-surface="emerald">Add payment method</Button>
+              <Button variant="outline" className="mt-3 jj-cta-outline" data-cta="outline">Add payment method</Button>
             </div>
           </div>
         </Card>
 
         <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30">
           <div className="flex items-start gap-3">
-            <IconTile icon={Receipt} tone="emerald" />
+            <IconTile icon={Receipt} tone="gold" />
             <div className="flex-1">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Invoices</p>
               <p className="text-lg font-semibold text-[#1A1A1A] mt-1">No invoices yet</p>
@@ -61,7 +61,7 @@ export default function AccountBilling() {
 
         <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30">
           <div className="flex items-start gap-3">
-            <IconTile icon={Gauge} tone="emerald" />
+            <IconTile icon={Gauge} tone="gold" />
             <div className="flex-1">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Usage</p>
               <p className="text-lg font-semibold text-[#1A1A1A] mt-1">Within free limits</p>

@@ -120,23 +120,20 @@ const CookiesConsentBanner = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="cookie-banner pointer-events-none fixed bottom-0 right-0 z-50 p-2 sm:p-3 md:p-4"
-          style={{
-            left: "var(--app-content-left, 0px)",
-            paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))",
-          }}
+          className="cookie-banner pointer-events-none fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4"
+          style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
           data-chrome="cookie-banner"
         >
-          <div data-surface="champagne" className="surface-champagne pointer-events-auto relative max-w-[calc(100vw-1rem)] sm:max-w-2xl md:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-[#B89555]/40 rounded-xl sm:rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden max-h-[70vh] sm:max-h-[80vh] overflow-y-auto overscroll-contain">
+          <div data-surface="champagne" className="surface-champagne pointer-events-auto relative max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-[#B89555]/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden max-h-[80vh] overflow-y-auto overscroll-contain">
             {/* Top gold accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
             {/* Main Banner */}
             {!showPreferences ? (
-              <div className="p-3 sm:p-5 md:p-6">
-                <div className="flex items-start gap-2.5 sm:gap-4">
-                  <div className="w-8 h-8 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-gold/20 to-gold/10 border border-[#B89555]/50 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
-                    <Cookie className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#1A1A1A]" />
+              <div className="p-4 sm:p-6">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gold/20 to-gold/10 border border-[#B89555]/50 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
+                    <Cookie className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]" />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-[#1A1A1A] font-semibold text-base sm:text-lg mb-1.5">We value your privacy</h3>

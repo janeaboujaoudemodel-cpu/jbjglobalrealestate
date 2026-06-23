@@ -7,7 +7,6 @@ import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { useActivityTracking } from "@/hooks/useActivityTracking";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { CONTACT_INFO } from "@/constants/stats";
-import { getPhoneValidation } from "@/components/ui/phone-input";
 import { ytd2026, topAreas2026, topNationalities } from "@/constants/dldMarketData";
 import { buildMarketReportHtml } from "./marketReportTemplate";
 
@@ -17,7 +16,6 @@ export interface MarketReportForm {
   phone: string;
   nationality: string;
   language: string;
-  preferredContactTime: string;
   preferredContact: string;
   serviceNeeded: string;
 }
@@ -44,7 +42,6 @@ export function useMarketReport() {
     phone: "",
     nationality: "",
     language: "",
-    preferredContactTime: "",
     preferredContact: "",
     serviceNeeded: "",
   });
@@ -58,7 +55,6 @@ export function useMarketReport() {
         phone: leadData.phone || "",
         nationality: leadData.nationality || "",
         language: leadData.language || "",
-        preferredContactTime: "",
         preferredContact: "",
         serviceNeeded: "",
       });
@@ -70,10 +66,9 @@ export function useMarketReport() {
   const isValid = canDirectDownload || (
     form.fullName.trim().length > 1 &&
     form.email.trim().includes("@") &&
-    getPhoneValidation(form.phone).isValid &&
+    form.phone.trim().length >= 6 &&
     form.nationality.trim().length > 0 &&
     form.language.trim().length > 0 &&
-    form.preferredContactTime.trim().length > 0 &&
     form.preferredContact.trim().length > 0 &&
     form.serviceNeeded.trim().length > 0
   );
@@ -87,8 +82,6 @@ export function useMarketReport() {
     if (form.phone) params.set("phone", form.phone);
     if (form.nationality) params.set("nationality", form.nationality);
     if (form.language) params.set("language", form.language);
-    if (form.preferredContactTime) params.set("preferredContactTime", form.preferredContactTime);
-    if (form.preferredContact) params.set("preferredContact", form.preferredContact);
     return `${base}?${params.toString()}`;
   };
 
@@ -331,8 +324,6 @@ export function useMarketReport() {
             phone: form.phone || leadData?.phone,
             nationality: form.nationality || leadData?.nationality,
             language: form.language || leadData?.language,
-            preferredContactTime: form.preferredContactTime || "Not specified",
-            preferredContact: form.preferredContact || "Not specified",
           },
         })
         .catch(console.error);

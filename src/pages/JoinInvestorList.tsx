@@ -12,15 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { toast } from "sonner";
-import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
-import { SearchableSelect } from "@/components/ui/searchable-select";
-import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 
 const DRAFT_KEY = "jbj_investor_join_draft";
-const COUNTRIES = getCountryList();
-const LANGUAGES = getLanguageList();
-const CONTACT_TIMES = ["Morning (9AM - 12PM)", "Afternoon (12PM - 5PM)", "Evening (5PM - 9PM)", "Anytime"];
-const CONTACT_METHODS = ["WhatsApp", "Phone Call", "Email", "Video Call"];
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 16 },
@@ -40,9 +33,6 @@ const emptyForm = {
   phone: "",
   email: "",
   nationality: "",
-  preferredLanguage: "",
-  preferredContactTime: "",
-  preferredContactMethod: "",
   residencyStatus: "",
   budgetRange: "",
   investmentGoal: "",
@@ -95,12 +85,10 @@ const JoinInvestorList = () => {
       toast.error("Please accept the privacy policy to continue");
       return;
     }
-    if (!formData.fullName || !formData.phone || !formData.nationality || !formData.preferredLanguage || !formData.preferredContactTime || !formData.preferredContactMethod) {
+    if (!formData.fullName || !formData.phone) {
       toast.error("Please fill in all required fields");
       return;
     }
-    const phoneValidation = getPhoneValidation(formData.phone);
-    if (!phoneValidation.isValid) { toast.error(phoneValidation.message); return; }
     setIsSubmitting(true);
     try {
       const success = await captureLead(
@@ -109,7 +97,6 @@ const JoinInvestorList = () => {
           fullName: formData.fullName,
           phone: formData.phone,
           nationality: formData.nationality || undefined,
-          language: formData.preferredLanguage || undefined,
         },
         "investors-join"
       );
@@ -230,27 +217,11 @@ const JoinInvestorList = () => {
                   </div>
                   <div>
                     <Label htmlFor="phone" className="text-foreground font-medium">Mobile Number (WhatsApp) *</Label>
-                    <PhoneInput value={formData.phone} onChange={(value) => handleChange("phone", value || "")} placeholder="Phone number" variant="light" />
+                    <Input id="phone" type="tel" value={formData.phone} onChange={(e) => handleChange("phone", e.target.value)} placeholder="+971 50 123 4567" required />
                   </div>
-                  <div>
+                  <div className="md:col-span-2">
                     <Label htmlFor="email" className="text-foreground font-medium">Email</Label>
                     <Input id="email" type="email" value={formData.email} onChange={(e) => handleChange("email", e.target.value)} placeholder="your@email.com" />
-                  </div>
-                  <div>
-                    <Label className="text-foreground font-medium">Nationality *</Label>
-                    <SearchableSelect value={formData.nationality} onChange={(v) => handleChange("nationality", v)} options={COUNTRIES} placeholder="Select nationality" searchPlaceholder="Search countries..." priorityItem="United Arab Emirates" flagType="country" />
-                  </div>
-                  <div>
-                    <Label className="text-foreground font-medium">Preferred Language *</Label>
-                    <SearchableSelect value={formData.preferredLanguage} onChange={(v) => handleChange("preferredLanguage", v)} options={LANGUAGES} placeholder="Select language" searchPlaceholder="Search languages..." priorityItem="English" flagType="language" />
-                  </div>
-                  <div>
-                    <Label className="text-foreground font-medium">Preferred Contact Time *</Label>
-                    <SearchableSelect value={formData.preferredContactTime} onChange={(v) => handleChange("preferredContactTime", v)} options={CONTACT_TIMES} placeholder="Select time" searchPlaceholder="Search times..." showFlags={false} />
-                  </div>
-                  <div>
-                    <Label className="text-foreground font-medium">Preferred Contact Method *</Label>
-                    <SearchableSelect value={formData.preferredContactMethod} onChange={(v) => handleChange("preferredContactMethod", v)} options={CONTACT_METHODS} placeholder="Select method" searchPlaceholder="Search methods..." showFlags={false} />
                   </div>
                 </div>
 
@@ -266,6 +237,10 @@ const JoinInvestorList = () => {
                   <p className="text-xs text-muted-foreground pl-8">Help us match you with the right opportunities</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="nationality" className="text-foreground font-medium">Nationality</Label>
+                    <Input id="nationality" value={formData.nationality} onChange={(e) => handleChange("nationality", e.target.value)} placeholder="e.g., British, Indian, American" />
+                  </div>
                   <div>
                     <Label htmlFor="residencyStatus" className="text-foreground font-medium">Residency Status</Label>
                     <Select value={formData.residencyStatus} onValueChange={(v) => handleChange("residencyStatus", v)}>

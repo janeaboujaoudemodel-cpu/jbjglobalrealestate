@@ -17,14 +17,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
-import { SearchableSelect } from "@/components/ui/searchable-select";
-import { getCountryList, getLanguageList } from "@/constants/localeOptions";
-
-const NATIONALITIES = getCountryList();
-const LANGUAGES = getLanguageList();
-const CONTACT_TIMES = ["Morning (9AM - 12PM)", "Afternoon (12PM - 5PM)", "Evening (5PM - 9PM)", "Anytime"];
-const CONTACT_METHODS = ["WhatsApp", "Phone Call", "Email", "Video Call"];
 
 interface TripPlan {
   id: string;
@@ -77,7 +69,7 @@ const AIPersonalShopper = () => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [planName, setPlanName] = useState('');
   const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', phone: '', nationality: '', language: '', preferredContactTime: '', preferredContactMethod: '' });
+  const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', phone: '' });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Load saved plans
@@ -182,14 +174,8 @@ const AIPersonalShopper = () => {
   };
 
   const submitInquiry = async () => {
-    if (!inquiryForm.name || !inquiryForm.email || !inquiryForm.phone || !inquiryForm.nationality || !inquiryForm.language || !inquiryForm.preferredContactTime || !inquiryForm.preferredContactMethod) {
-      toast.error("Please complete all required contact details");
-      return;
-    }
-
-    const phoneValidation = getPhoneValidation(inquiryForm.phone);
-    if (!phoneValidation.isValid) {
-      toast.error(phoneValidation.message);
+    if (!inquiryForm.email) {
+      toast.error("Please enter your email");
       return;
     }
 
@@ -202,14 +188,10 @@ const AIPersonalShopper = () => {
           body: {
             fullName: inquiryForm.name || 'Guest',
             email: inquiryForm.email,
-            phone: inquiryForm.phone,
-            nationality: inquiryForm.nationality,
-            language: inquiryForm.language,
-            message: [
-              fullPlan,
-              `Preferred contact time: ${inquiryForm.preferredContactTime}`,
-              `Preferred contact method: ${inquiryForm.preferredContactMethod}`,
-            ].join('\n\n'),
+            phone: inquiryForm.phone?.replace(/[\s\-\(\)]/g, '') || '+971000000000',
+            nationality: 'Not specified',
+            language: 'English',
+            message: fullPlan,
             source: 'AI Travel Concierge',
           }
         });
@@ -226,7 +208,7 @@ const AIPersonalShopper = () => {
       }
 
       setShowInquiryModal(false);
-      setInquiryForm({ name: '', email: '', phone: '', nationality: '', language: '', preferredContactTime: '', preferredContactMethod: '' });
+      setInquiryForm({ name: '', email: '', phone: '' });
       toast.success("Your trip plan has been sent to our team! We'll contact you shortly.");
     } catch (error) {
       console.error('Submit error:', error);
@@ -296,7 +278,7 @@ const AIPersonalShopper = () => {
                     <Save className="w-3 h-3 mr-1" /> Save Plan
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-h-[90vh] overflow-y-auto">
+                <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                   <DialogHeader>
                     <DialogTitle className="text-white">Save Trip Plan</DialogTitle>
                   </DialogHeader>
@@ -332,7 +314,7 @@ const AIPersonalShopper = () => {
                   </p>
                   <div className="space-y-4 mt-4">
                     <div>
-                      <Label className="text-white/70">Full Name *</Label>
+                      <Label className="text-white/70">Full Name</Label>
                       <Input
                         value={inquiryForm.name}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
@@ -351,63 +333,13 @@ const AIPersonalShopper = () => {
                       />
                     </div>
                     <div>
-                      <Label className="text-white/70">Phone Number *</Label>
-                      <PhoneInput
+                      <Label className="text-white/70">Phone (WhatsApp preferred)</Label>
+                      <Input
                         value={inquiryForm.phone}
-                        onChange={(value) => setInquiryForm(prev => ({ ...prev, phone: value || '' }))}
-                        placeholder="Phone number"
-                        variant="light"
+                        onChange={(e) => setInquiryForm(prev => ({ ...prev, phone: e.target.value }))}
+                        placeholder="+1 234 567 8900"
+                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                       />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-white/70">Nationality *</Label>
-                        <SearchableSelect
-                          value={inquiryForm.nationality}
-                          onChange={(value) => setInquiryForm(prev => ({ ...prev, nationality: value }))}
-                          options={NATIONALITIES}
-                          placeholder="Select nationality"
-                          searchPlaceholder="Search countries..."
-                          priorityItem="United Arab Emirates"
-                          flagType="country"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-white/70">Preferred Language *</Label>
-                        <SearchableSelect
-                          value={inquiryForm.language}
-                          onChange={(value) => setInquiryForm(prev => ({ ...prev, language: value }))}
-                          options={LANGUAGES}
-                          placeholder="Select language"
-                          searchPlaceholder="Search languages..."
-                          priorityItem="English"
-                          flagType="language"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-white/70">Preferred Contact Time *</Label>
-                        <SearchableSelect
-                          value={inquiryForm.preferredContactTime}
-                          onChange={(value) => setInquiryForm(prev => ({ ...prev, preferredContactTime: value }))}
-                          options={CONTACT_TIMES}
-                          placeholder="Select time"
-                          searchPlaceholder="Search times..."
-                          showFlags={false}
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-white/70">Preferred Contact Method *</Label>
-                        <SearchableSelect
-                          value={inquiryForm.preferredContactMethod}
-                          onChange={(value) => setInquiryForm(prev => ({ ...prev, preferredContactMethod: value }))}
-                          options={CONTACT_METHODS}
-                          placeholder="Select method"
-                          searchPlaceholder="Search methods..."
-                          showFlags={false}
-                        />
-                      </div>
                     </div>
                     <Button onClick={submitInquiry} variant="primary" className="w-full">
                       Submit to Concierge Team

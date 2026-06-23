@@ -57,15 +57,13 @@ export const ModeSelectionModal = () => {
 
   useEffect(() => {
     if (hasMadeInitialSelection) return;
-    if (user) return; // signed-in users skip the first-visit greeter entirely
     try {
       if (sessionStorage.getItem(DISMISS_KEY) === '1') return;
     } catch {}
     requestToShow();
-  }, [hasMadeInitialSelection, requestToShow, user]);
+  }, [hasMadeInitialSelection, requestToShow]);
 
   if (hasMadeInitialSelection) return null;
-  if (user) return null;
 
 
 

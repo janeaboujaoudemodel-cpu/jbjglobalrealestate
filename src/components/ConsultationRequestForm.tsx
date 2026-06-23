@@ -16,11 +16,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
-import { SearchableSelect } from "@/components/ui/searchable-select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
-import { getCountryList, getLanguageList, LANGUAGE_FLAGS } from "@/constants/localeOptions";
+import { getCountryList, getLanguageList, COUNTRY_FLAGS, LANGUAGE_FLAGS } from "@/constants/localeOptions";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -32,10 +31,10 @@ const consultationSchema = z.object({
   serviceNeeded: z.string().min(1, "Please select a service"),
   bedrooms: z.string().optional(),
   sizeBucket: z.string().optional(),
-  nationality: z.string().min(1, "Please select your nationality"),
-  preferredLanguage: z.string().min(1, "Please select your preferred language"),
-  preferredTime: z.string().min(1, "Please select your preferred contact time"),
-  contactMethod: z.string().min(1, "Please select your preferred contact method"),
+  nationality: z.string().optional(),
+  preferredLanguage: z.string().optional(),
+  preferredTime: z.string().optional(),
+  contactMethod: z.string().optional(),
   budgetRange: z.string().optional(),
   timeline: z.string().optional(),
   message: z.string().max(500).optional(),
@@ -437,16 +436,18 @@ export const ConsultationRequestForm = ({
               name="nationality"
               render={({ field }) => (
                 <FormItem>
-                  <SearchableSelect
-                    value={field.value}
-                    onChange={field.onChange}
-                    options={getCountryList()}
-                    placeholder="Nationality *"
-                    searchPlaceholder="Search countries..."
-                    priorityItem="United Arab Emirates"
-                    flagType="country"
-                  />
-                  <FormMessage />
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className={selectTriggerClass}>
+                        <SelectValue placeholder="Nationality" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className={`${selectContentClass} max-h-[300px] overflow-y-auto`}>
+                      {getCountryList().map((n) => (
+                        <SelectItem key={n} value={n}>{COUNTRY_FLAGS[n] ? `${COUNTRY_FLAGS[n]} ${n}` : n}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />

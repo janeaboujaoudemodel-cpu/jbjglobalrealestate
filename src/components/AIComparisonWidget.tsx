@@ -11,7 +11,6 @@ import {
   Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import IconTile from "@/components/ui/icon-tile";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -73,14 +72,9 @@ const AIComparisonWidget = () => {
               key={i}
               className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl shadow-sm"
             >
-              <IconTile
-                icon={feature.icon}
-                tone="gold"
-                size="md"
-                data-ai-comparison-icon
-                className="rounded-lg"
-                iconClassName="w-5 h-5"
-              />
+              <div className="w-10 h-10 bg-[#EFE6D6]/20 rounded-lg flex items-center justify-center">
+                <feature.icon className="w-5 h-5 text-[#1A1A1A]" />
+              </div>
               <div>
                 <p className="text-[#1A1A1A] font-medium text-sm">{feature.label}</p>
                 <p className="text-[#1A1A1A]/70 text-xs">{feature.description}</p>
@@ -125,10 +119,9 @@ const AIComparisonWidget = () => {
           </Link>
           <Link to="/compare-manual" className="flex-1">
             <button
-              data-emerald-outline-action
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold rounded-xl bg-[#F7F2EA] text-[color:var(--emerald-ink)] border border-[color:var(--emerald-ink)]/35 hover:bg-[#EFE6D6] hover:-translate-y-0.5 transition-all duration-300"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold rounded-xl bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:-translate-y-0.5 transition-all duration-300"
             >
-              <Building2 className="w-5 h-5 text-[color:var(--emerald-ink)]" />
+              <Building2 className="w-5 h-5 text-[#1A1A1A]/70" />
               <span>Enter manually</span>
             </button>
           </Link>

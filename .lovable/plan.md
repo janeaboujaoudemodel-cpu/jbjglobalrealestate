@@ -1,82 +1,163 @@
-# Restore the approved Emerald→Black Ombre gradient (revert flattening)
+# Backend Design System Rebuild — Fix primitives once, every page inherits
 
-## What went wrong last turn
+Treat this as a single primitive-layer refactor. Every fix lands in a shared component or a single CSS rule. No page-level patches. A page edit is only allowed when the page bypasses the primitive (those bypasses are listed and replaced with the primitive).
 
-In the previous pass I flattened the brand's locked ombre tokens in `src/index.css` to a solid `#064E3B`. That is a forbidden change — the only approved emerald fill across the site is the **Emerald → Black Ombre** gradient, never a flat `#064E3B`.
+## 0. Lock the two-color contract (single source of truth)
 
-Tokens that were wrongly flattened:
-- `--jj-emerald-ombre`
-- `--jj-emerald-ombre-hover`
-- `--jj-official-emerald-surface`
-- `--jj-emerald-light-ombre`
-- `--jj-emerald-neon`
-- `--jj-emerald-metallic-sheen`
-- `--gradient-ink`
-- `--gradient-ink-hover`
-- `--emerald-ink`, `--emerald-ink-soft`
+Add a "backend tokens" block to `src/index.css` (after the existing emerald block) so every primitive reads the same values:
 
-## Plan
+- `--bk-emerald`: `#064E3B` (fill, active, dots)
+- `--bk-emerald-ombre`: existing `--jj-emerald-ombre` (active surfaces)
+- `--bk-champagne`: `#EFE6D6` (label chip background)
+- `--bk-champagne-soft`: `#F7F2EA` (single card surface)
+- `--bk-gold`: `#B89555` (hairline + champagne label text)
+- `--bk-ink`: `#1A1A1A` (text on champagne)
+- `--bk-white`: `#FFFFFF` (text/icons on emerald only)
 
-### 1. Restore the ombre tokens (single source of truth)
+Icon-color rule encoded as a tiny CSS contract (no per-page overrides):
 
-In `src/index.css` (the `:root` block around lines 6417–6435), restore the canonical Emerald → Black Ombre values (the same family already referenced later in the file at line 10593):
-
-```css
---gradient-ink:       linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
---gradient-ink-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
-
---jj-emerald-ombre:        linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
---jj-emerald-ombre-hover:  linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
-
---jj-official-emerald-surface: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
---jj-emerald-light-ombre:      linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #042C1C 100%);
---jj-emerald-neon:             linear-gradient(135deg, #0A6B53 0%, #064E3B 60%, #042C1C 100%);
-
-/* Restore the metallic top-light sheen (was zeroed-out last turn) */
---jj-emerald-metallic-sheen:
-  linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 38%, rgba(0,0,0,0.18) 100%);
-
-/* Emerald accent (titles, area labels) stays ink-emerald */
---emerald-ink:      #064E3B;
---emerald-ink-soft: #0A6B53;
+```
+[data-bk-surface="emerald"]  { color: var(--bk-white); }
+[data-bk-surface="emerald"] svg { color: var(--bk-white) !important; }
+[data-bk-surface="champagne"]{ color: var(--bk-ink); }
+[data-bk-surface="champagne"] svg { color: var(--bk-emerald) !important; }
+[data-bk-surface="light"] svg { color: var(--bk-emerald); }
 ```
 
-Update the comment block above these tokens so it reads "Approved Emerald → Black Ombre — solid flat green is forbidden."
+Every primitive below sets the matching `data-bk-surface` so icons follow automatically (rule 12).
 
-### 2. Keep the white-foreground lock — do NOT remove it
+## 1. Lead Status Timeline — `src/components/crm/ActivityTimeline.tsx` + `KanbanPipeline.tsx` stage strip
 
-The Gate-1 Global Emerald Lock starting at line 11154 (white text, white SVG icons, no border colour flips on hover) stays exactly as-is. The user's complaint is about the *fill*, not the foreground.
+Replace the framed step boxes with one shared primitive `<StatusTimeline />` (new file `src/components/crm/StatusTimeline.tsx`) that renders:
 
-The only adjustment: in the white-icon block, the rule currently sets `border-color: #FFFFFF !important` on every emerald surface. The user has explicitly banned white borders on emerald surfaces in the project memory. Change `border-color: #FFFFFF !important;` → `border-color: transparent !important;` so the ombre pill stays borderless.
+- 10px emerald dot (`<EmeraldDot />`, already exists)
+- gold-champagne label below
+- thin gold hairline connecting dots
+- NO border, NO background, NO shadow, NO container chip
 
-### 3. Kill the split-overlay rules I added last turn
+Every consumer (Lead drawer, Kanban header, ApplicantProfileDrawer, BrokerLifecycleActionCenter) imports this primitive. Delete the per-step `border`/`bg-*`/`rounded-*` props from those callers.
 
-Remove the `::before` / `::after` neutralising blocks I appended at lines ~13224 and ~13417 (the "Kill split-color pseudo overlays" / "Kill any leftover ::after/::before split overlays on primary pills" blocks). The original metallic sheen overlay is part of the approved ombre look — those kills were the cause of the flat appearance.
+## 2. Double card layers — `src/components/ui/card.tsx` + `src/components/ui/Surface.tsx`
 
-### 4. Sanity sweep
+Audit all CRM/back-office surfaces for `Card` nested inside another `Card`/`div.rounded-*.bg-*`. Fix at the primitive:
 
-Search the file for any other place where I substituted a flat `#064E3B` for what used to be a gradient (e.g. anywhere the value reads `background: #064E3B !important` and the surrounding selector is `.jj-cta-primary` / `.jj-pill-emerald` / `.jj-emerald-solid` / `[data-cta="primary"]`). Revert each one to `background: var(--jj-emerald-ombre)`.
+- `Card` now refuses to render a background when an ancestor already has `data-bk-card="true"` (uses `:has()` CSS guard in `index.css`):
+  `[data-bk-card="true"] [data-bk-card="true"] { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }`
+- Add `data-bk-card="true"` to `Card`, `Surface`, and the back-office `PremiumSectionCard`.
 
-### 5. Visual validation (Playwright, 1280×1800)
+Result: any accidental "second layer behind" collapses globally without touching pages.
 
-After the edits, run a fresh Playwright pass and capture screenshots on:
+## 3. Status badges — `src/components/ui/badge.tsx` + `src/components/crm/LeadStatusBadge.tsx`, `BrokerStatusBadge.tsx`, `ApplicantStatusPill.tsx`, `StatusPillSelect.tsx`
 
-1. `/` — hero CTA pills (Explore Properties, AI Home Finder, Get Started), header mode chip, AED/filter/favourite pills
-2. `/auth` — Sign In pill
-3. `/owner` (Command Center) — "Welcome back" band + primary CTAs
-4. `/ai-hub` — emerald band + tool tiles
-5. `/broker-portal` — sidebar active tile + primary CTAs
+Rebuild `Badge` to render exactly ONE pill. Add `data-bk-badge="single"`. CSS guard in `index.css`:
 
-Each screenshot must visibly show:
-- Pill fill = Emerald → Black Ombre (deeper toward the bottom-right corner, with the subtle top-light sheen)
-- Text + icons = pure white at rest **and** hover
-- No white border ring on emerald pills
-- No flat half-and-half / split appearance
+`[data-bk-badge="single"] ~ * [class*="rounded-full"]:has(> [data-bk-badge="single"]) { all: unset; }`
+and inside the badge wrapper, ban outer frames via:
+`[data-bk-badge-wrap] { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }`
 
-Only after the screenshots confirm all five surfaces will I report done.
+Then sweep the four badge components above to remove their hand-rolled outer `rounded-full border ...` wrappers and render `<Badge>` directly.
 
-## Files touched
+## 4. Role labels — Crown / Investor / Broker / Owner / Developer
 
-- `src/index.css` — restore ombre tokens, change `border-color` to `transparent`, delete the two split-overlay kill blocks I appended last turn.
+New shared primitive `src/components/crm/RoleLabel.tsx` with two variants only:
+- emerald (filled, white text + icon)
+- champagne (transparent, gold text + emerald icon, NO border, NO chip frame)
 
-No other files change.
+Find every existing inline role tag in `src/components/crm/*` and `src/pages/Admin*.tsx`, `OwnerDashboard*`, and replace with `<RoleLabel role="…" tone="champagne|emerald" />`. Delete the wrapping `rounded-full border bg-*` divs.
+
+## 5. Backend navigation — single active level
+
+Centralize active-state resolution in `src/components/crm/CRMListSidebar.tsx`, `CRMToolsSidebar.tsx`, and the global `GlobalVerticalNav`:
+
+- Introduce `useActiveNavScope()` hook that returns `{ topLevel, subLevel }` from the current route.
+- Sidebar primitive only sets `data-active` on the deepest matching node. Parent nodes drop to `data-active-trail="true"` (rendered as a thin gold accent, not a filled pill).
+
+CSS encodes the rule: only `[data-active="true"]` gets the emerald fill; `[data-active-trail="true"]` gets only the gold left-border. No page changes needed once the sidebar primitives obey the hook.
+
+## 6 + 7. CRM primary tabs & secondary tabs — `src/components/ui/tabs.tsx` (+ thin `BackOfficeTabs` wrapper)
+
+Strengthen active state at the primitive (one place):
+
+```
+[role="tab"][data-state="active"][data-bk-tabs="primary"]   → emerald ombre + white text + white underline
+[role="tab"][data-state="active"][data-bk-tabs="secondary"] → emerald ombre + white text + 2px white underline + subtle white inset
+```
+
+Idle: champagne text on transparent, gold hairline underline. No drift, no per-page overrides.
+
+Apply `data-bk-tabs` once on the `TabsList` wrappers in `CRMShell` / `CRMToolsSidebar` consumers — single edit per shell, not per page. Lists currently overriding via inline classes get those overrides stripped.
+
+## 8. Filter dropdowns — `src/components/ui/dropdown-menu.tsx` + `src/components/ui/popover.tsx` + `CRMFiltersPopover.tsx`
+
+Lock the dropdown content shell:
+
+- `DropdownMenuContent` / `PopoverContent` default to `p-2`, `gap-1`, `rounded-xl`, gold hairline, champagne surface, 14px row height, `pl-3 pr-4`.
+- New `<FilterCheckboxRow />` primitive: 16px checkbox + 12px gap + label + right-side count, never wrapping, `truncate` on label.
+- `CRMFiltersPopover` switches to `<FilterCheckboxRow />` everywhere, removing the current hand-rolled rows that overlap.
+
+Result: All Sources / All Owners / All Tags and every other filter inherit consistent spacing.
+
+## 9. Scrollbars — `src/index.css` global rule (already partially set)
+
+Tighten to 6px width, transparent track, emerald-at-30%-opacity thumb, rounded thumb, fade-in on `:hover`. Remove the long gold horizontal scrollbar by adding `overflow-x:auto` + `scrollbar-width: thin` globally on `[data-bk-scroll]` and tagging the long horizontal CRM tables with `data-bk-scroll`.
+
+```
+[data-bk-scroll]::-webkit-scrollbar { width:6px; height:6px; }
+[data-bk-scroll]::-webkit-scrollbar-thumb { background: rgba(6,78,59,.35); border-radius:999px; }
+[data-bk-scroll]::-webkit-scrollbar-thumb:hover { background: rgba(6,78,59,.6); }
+```
+
+## 10. Insights & Analytics — `src/components/crm/CRMDashboardCards.tsx`, `CRMEnhancedDashboard.tsx`, `BrokerageAnalyticsStrip.tsx`
+
+Build three shared chart primitives (one file `src/components/crm/insights/`):
+- `<KpiCard />` (emerald icon tile, large ink number, gold delta)
+- `<EmeraldBarChart />` / `<EmeraldAreaChart />` (recharts; series colors locked to emerald scale)
+- `<ProgressBar tone="emerald" />`
+
+Swap inline KPI markup in the three dashboard components for these primitives. No page edits beyond those three files; every dashboard consumer (Investors, Brokers, Employees, Reports) imports through them.
+
+## 11. Owner account label
+
+`RoleLabel` from §4 already covers this. Owner chip in header + sidebar = `<RoleLabel role="owner" tone="champagne" />`. Single change.
+
+## 12. Icons — already enforced by the `data-bk-surface` contract in §0
+
+Sweep `src/components/ui/icon-tile.tsx` so every `IconTile` sets `data-bk-surface` based on its `tone` prop. Pages stop forcing colors.
+
+## 13. Global hygiene sweep (no page edits)
+
+One codemod step (`scripts/backend-restyle-sweep.mjs`):
+1. Find files under `src/components/crm/` and `src/pages/(Admin|CRM|Owner|Broker|Developer)*` that hardcode `rounded-full border` around a `<Badge>`, `<RoleLabel>`, status chip, or filter row.
+2. Replace with primitive usage. Print a diff for review before applying.
+3. CI guard: `scripts/contrast/check-backend-frames.mjs` fails if any file outside the primitives folder reintroduces `border rounded-* bg-*` around a `<Badge>` or status pill.
+
+## Files that change
+
+Primitives (≈12 files):
+- `src/index.css` (tokens + surface contract + dropdown + scrollbar + double-card guard)
+- `src/components/ui/card.tsx`, `badge.tsx`, `tabs.tsx`, `dropdown-menu.tsx`, `popover.tsx`, `icon-tile.tsx`
+- `src/components/ui/emerald/*` (already correct, audit only)
+- `src/components/crm/StatusTimeline.tsx` (new)
+- `src/components/crm/RoleLabel.tsx` (new)
+- `src/components/crm/insights/{KpiCard,EmeraldBarChart,EmeraldAreaChart,ProgressBar}.tsx` (new)
+- `src/components/crm/CRMListSidebar.tsx` + `CRMToolsSidebar.tsx` (active-state hook)
+
+Targeted primitive consumers (≈8 files):
+- `LeadStatusBadge.tsx`, `BrokerStatusBadge.tsx`, `ApplicantStatusPill.tsx`, `StatusPillSelect.tsx`
+- `ActivityTimeline.tsx`, `KanbanPipeline.tsx`
+- `CRMDashboardCards.tsx`, `CRMEnhancedDashboard.tsx`, `BrokerageAnalyticsStrip.tsx`
+- `CRMFiltersPopover.tsx`
+
+Codemod: 1 script under `scripts/`.
+
+## Visual validation (mandatory before claiming done)
+
+Playwright sweep at 1280×1800 (sidebar expanded) of every back-office route:
+`/admin/crm`, `/admin/crm/leads`, `/admin/crm/leads/:id`, `/admin/crm/databases`, `/admin/crm/investors`, `/admin/crm/developers`, `/admin/crm/brokers`, `/admin/crm/employees`, `/crm/calendar`, `/crm/notes`, `/crm/relationships`, `/crm/tasks`, `/owner/inbox`, `/contract-forms`, `/admin/reports`, plus a Lead drawer open and the filter popovers open.
+
+Saved to `/tmp/browser/bk-rebuild/`. Each screenshot is checked against the 13 rules above with a small DOM assertion (no nested `Card` background, no badge double frame, exactly one active sidebar item, scrollbar height ≤ 6px). Only ship when every screenshot passes.
+
+## Out of scope
+
+- No new features, no data model changes, no copy changes, no route changes.
+- Public-site styling untouched.

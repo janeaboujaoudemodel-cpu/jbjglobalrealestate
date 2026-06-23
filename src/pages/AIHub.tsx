@@ -477,9 +477,8 @@ const AIHub = () => {
         <section
           data-allow-dark-cta
           data-on-dark
-          data-surface="emerald"
           className="py-16 md:py-20 relative overflow-hidden"
-          style={{ background: "#064E3B" }}
+          style={{ background: "#0A0A0A" }}
         >
           <div
             aria-hidden

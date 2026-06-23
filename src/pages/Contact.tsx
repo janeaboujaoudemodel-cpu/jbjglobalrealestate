@@ -44,8 +44,6 @@ const consultationSchema = z.object({
   serviceNeeded: z.string().min(1, "Please select a service"),
   budgetRange: z.string().optional(),
   timeline: z.string().optional(),
-  preferredContactTime: z.string().min(1, "Please select your preferred contact time"),
-  preferredContactMethod: z.string().min(1, "Please select your preferred contact method"),
   referralCode: z.string().max(20).optional(),
   message: z.string().max(1000, "Message must be less than 1000 characters").optional(),
   confirmAccurate: z.boolean().refine((val) => val === true, {
@@ -87,20 +85,6 @@ const TIMELINE_OPTIONS = [
   { value: "just-exploring", label: "Just Exploring" },
 ];
 
-const CONTACT_TIME_OPTIONS = [
-  { value: "morning", label: "Morning (9AM - 12PM)" },
-  { value: "afternoon", label: "Afternoon (12PM - 5PM)" },
-  { value: "evening", label: "Evening (5PM - 9PM)" },
-  { value: "anytime", label: "Anytime" },
-];
-
-const CONTACT_METHOD_OPTIONS = [
-  { value: "whatsapp", label: "WhatsApp" },
-  { value: "phone", label: "Phone Call" },
-  { value: "email", label: "Email" },
-  { value: "video", label: "Video Call" },
-];
-
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -122,8 +106,6 @@ const Contact = () => {
       serviceNeeded: "",
       budgetRange: "",
       timeline: "",
-      preferredContactTime: "",
-      preferredContactMethod: "",
       referralCode: "",
       message: "",
       confirmAccurate: false,
@@ -192,8 +174,6 @@ const Contact = () => {
               serviceNeeded: data.serviceNeeded,
               budgetRange: data.budgetRange || "Not specified",
               timeline: data.timeline || "Not specified",
-              preferredContactTime: data.preferredContactTime,
-              preferredContactMethod: data.preferredContactMethod,
               marketingConsent: data.marketingConsent ? "Yes" : "No",
               referralCode: data.referralCode || "None",
             },
@@ -623,58 +603,6 @@ END:VCARD`;
                                   ))}
                                 </SelectContent>
                               </Select>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="preferredContactTime"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Preferred Contact Time *</FormLabel>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                  <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
-                                    <SelectValue placeholder="Select preferred time" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {CONTACT_TIME_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
-                                      {option.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage className="text-red-500 text-xs" />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="preferredContactMethod"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Preferred Contact Method *</FormLabel>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                  <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
-                                    <SelectValue placeholder="How should we contact you?" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {CONTACT_METHOD_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
-                                      {option.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage className="text-red-500 text-xs" />
                             </FormItem>
                           )}
                         />
