@@ -962,9 +962,13 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
                 {/* Actions */}
                 <div className="flex justify-center gap-4">
-                  <Button onClick={generatePDFReport} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white font-medium">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download Report
+                  <Button
+                    onClick={generatePDFReport}
+                    data-no-contrast-guard
+                    className="bg-[#0E8A66] hover:bg-[#0B6F52] border border-[#0E8A66] text-white font-semibold"
+                  >
+                    <Download className="w-4 h-4 mr-2 text-white" />
+                    <span className="text-white">Download Report</span>
                   </Button>
                   <Button 
                     variant="outline" 

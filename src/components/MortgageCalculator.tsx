@@ -745,16 +745,13 @@ const MortgageCalculator = ({
             {/* Request Mortgage Introduction CTA */}
             <div className="mt-6 pt-4 border-t border-[#B89555]/20">
               <p className="text-center text-muted-foreground text-sm mb-3">Prefer a Mortgage Advisor Through Our Licensed Partners?</p>
-              <Button 
-                variant="gold" 
-                size="lg" 
-                className="w-full"
-                asChild
+              <a
+                href="/contact"
+                data-no-contrast-guard
+                className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-md text-base font-semibold bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
               >
-                <a href="/contact">
-                  Request Mortgage Introduction
-                </a>
-              </Button>
+                <span className="text-white">Request Mortgage Introduction</span>
+              </a>
             </div>
 
           </div>
