@@ -34,6 +34,7 @@ const inquirySchema = z.object({
     .min(1, '⚠️ This field is required.'),
   nationality: z.string().min(1, '⚠️ Please select your nationality'),
   language: z.string().min(1, '⚠️ Please select your preferred language'),
+  preferredContactTime: z.string().min(1, '⚠️ Please choose your preferred contact time'),
   preferredContact: z.string().min(1, '⚠️ Please choose your preferred contact method'),
   role: z.enum(['buyer', 'broker', 'visitor'], { required_error: '⚠️ Please select your role' }),
   buyerType: z.enum(['homeowner', 'investor']).optional(),
@@ -73,6 +74,7 @@ const InquiryFormModal = ({
   const countries = getCountryList('en');
   const languages = getLanguageList();
   const contactMethodOptions = ['WhatsApp', 'Phone Call', 'SMS', 'Email'];
+  const contactTimeOptions = ['Morning (9AM - 12PM)', 'Afternoon (12PM - 5PM)', 'Evening (5PM - 9PM)', 'Anytime'];
   const buyingServiceOptions = [
     'Buy / Sell Brokerage',
     'Rent Brokerage',
@@ -90,6 +92,7 @@ const InquiryFormModal = ({
       phone: '',
       nationality: '',
       language: '',
+      preferredContactTime: '',
       preferredContact: '',
       role: preselectedRole,
       buyerType: undefined,
@@ -203,6 +206,7 @@ const InquiryFormModal = ({
           role: data.role,
           buyerType: data.buyerType,
           preferredContact: data.preferredContact,
+          preferredContactTime: data.preferredContactTime,
           buyingService: data.buyingService,
           message: data.message,
         },
@@ -223,6 +227,7 @@ const InquiryFormModal = ({
           message: [
             data.message,
             `Preferred Contact: ${data.preferredContact}`,
+            `Preferred Contact Time: ${data.preferredContactTime}`,
             data.buyingService ? `Requested Service: ${data.buyingService}` : null,
           ].filter(Boolean).join('\n\n'),
           property_name: propertyName || null,
@@ -247,6 +252,7 @@ const InquiryFormModal = ({
               role: data.role,
               buyerType: data.buyerType || '',
               preferredContact: data.preferredContact,
+              preferredContactTime: data.preferredContactTime,
               buyingService: data.buyingService || '',
               emailVerified: emailVerified ? 'Yes' : 'No',
             },
@@ -652,6 +658,27 @@ const InquiryFormModal = ({
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="preferredContactTime"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#1A1A1A]/70 text-sm">Preferred Contact Time *</FormLabel>
+                          <FormControl>
+                            <SearchableSelect
+                              value={field.value}
+                              onChange={field.onChange}
+                              options={contactTimeOptions}
+                              placeholder="Select contact time"
+                              searchPlaceholder="Search times..."
+                              showFlags={false}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-400 text-xs" />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormField
                       control={form.control}
                       name="preferredContact"

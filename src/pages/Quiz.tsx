@@ -18,6 +18,7 @@ import { toolThemes } from "@/components/tools/toolThemes";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
 import {
   readMatchmakerSession,
   writeMatchmakerSession,
@@ -247,6 +248,8 @@ const PROPERTY_TYPE_KEYWORDS: Record<string, string[]> = {
 
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
+const CONTACT_TIMES = ["Morning (9AM - 12PM)", "Afternoon (12PM - 5PM)", "Evening (5PM - 9PM)", "Anytime"];
+const CONTACT_METHODS = ["WhatsApp", "Phone Call", "Email", "Video Call"];
 
 const AIHF_STYLE = `
   .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div), .aihf-root svg {
@@ -315,6 +318,8 @@ const Quiz = () => {
     phone: "",
     nationality: "",
     preferredLanguage: "",
+    preferredContactTime: "",
+    preferredContactMethod: "",
   });
   const [resumed, setResumed] = useState(false);
   const estimatedTime = 45;
@@ -365,6 +370,7 @@ const Quiz = () => {
         .then(({ data }) => {
           if (data) {
             setFormData(prev => ({
+              ...prev,
               fullName: (data as any).full_name || (data as any).display_name || prev.fullName,
               email: user.email || prev.email,
               phone: (data as any).phone || prev.phone,
@@ -457,9 +463,11 @@ const Quiz = () => {
   const isFormValid = () => {
     return formData.fullName.trim() !== "" && 
            formData.email.trim() !== "" && 
-           formData.phone.trim() !== "" &&
+           getPhoneValidation(formData.phone).isValid &&
            formData.nationality !== "" &&
-           formData.preferredLanguage !== "";
+           formData.preferredLanguage !== "" &&
+           formData.preferredContactTime !== "" &&
+           formData.preferredContactMethod !== "";
   };
 
   const handleNext = () => {
@@ -790,7 +798,13 @@ const Quiz = () => {
           phone: formData.phone,
           nationality: formData.nationality || null,
           preferred_language: formData.preferredLanguage || null,
-          answers,
+          answers: {
+            ...answers,
+            contact_preferences: {
+              preferredContactTime: formData.preferredContactTime,
+              preferredContactMethod: formData.preferredContactMethod,
+            },
+          },
           recommended_slugs: top.map((p) => p.slug),
           recommended_project_ids: recommendations.slice(0, 5).map((p) => p.id),
           result_tier: tier,
@@ -1070,12 +1084,11 @@ const Quiz = () => {
                 </div>
                 <div>
                   <Label className="text-[#1A1A1A] mb-2 block">Phone Number *</Label>
-                  <Input
-                    type="tel"
+                  <PhoneInput
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+971 XX XXX XXXX"
-                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
+                    onChange={(value) => setFormData({ ...formData, phone: value || "" })}
+                    placeholder="Phone number"
+                    variant="light"
                   />
                 </div>
                 <div>
@@ -1100,6 +1113,32 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
+                  />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Contact Time *</Label>
+                  <SearchableSelect
+                    value={formData.preferredContactTime}
+                    onChange={(value) => setFormData({ ...formData, preferredContactTime: value })}
+                    options={CONTACT_TIMES}
+                    placeholder="Select preferred time"
+                    searchPlaceholder="Search times..."
+                    showFlags={false}
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
+                  />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Contact Method *</Label>
+                  <SearchableSelect
+                    value={formData.preferredContactMethod}
+                    onChange={(value) => setFormData({ ...formData, preferredContactMethod: value })}
+                    options={CONTACT_METHODS}
+                    placeholder="Select contact method"
+                    searchPlaceholder="Search methods..."
+                    showFlags={false}
                     triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
                     className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
                   />
