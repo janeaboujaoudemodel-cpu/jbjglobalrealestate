@@ -17,6 +17,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
+import { SearchableSelect } from "@/components/ui/searchable-select";
+import { getCountryList, getLanguageList } from "@/constants/localeOptions";
+
+const NATIONALITIES = getCountryList();
+const LANGUAGES = getLanguageList();
+const CONTACT_TIMES = ["Morning (9AM - 12PM)", "Afternoon (12PM - 5PM)", "Evening (5PM - 9PM)", "Anytime"];
+const CONTACT_METHODS = ["WhatsApp", "Phone Call", "Email", "Video Call"];
 
 interface TripPlan {
   id: string;
@@ -69,7 +77,7 @@ const AIPersonalShopper = () => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [planName, setPlanName] = useState('');
   const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', phone: '' });
+  const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', phone: '', nationality: '', language: '', preferredContactTime: '', preferredContactMethod: '' });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Load saved plans
@@ -174,8 +182,14 @@ const AIPersonalShopper = () => {
   };
 
   const submitInquiry = async () => {
-    if (!inquiryForm.email) {
-      toast.error("Please enter your email");
+    if (!inquiryForm.name || !inquiryForm.email || !inquiryForm.phone || !inquiryForm.nationality || !inquiryForm.language || !inquiryForm.preferredContactTime || !inquiryForm.preferredContactMethod) {
+      toast.error("Please complete all required contact details");
+      return;
+    }
+
+    const phoneValidation = getPhoneValidation(inquiryForm.phone);
+    if (!phoneValidation.isValid) {
+      toast.error(phoneValidation.message);
       return;
     }
 
@@ -188,10 +202,14 @@ const AIPersonalShopper = () => {
           body: {
             fullName: inquiryForm.name || 'Guest',
             email: inquiryForm.email,
-            phone: inquiryForm.phone?.replace(/[\s\-\(\)]/g, '') || '+971000000000',
-            nationality: 'Not specified',
-            language: 'English',
-            message: fullPlan,
+            phone: inquiryForm.phone,
+            nationality: inquiryForm.nationality,
+            language: inquiryForm.language,
+            message: [
+              fullPlan,
+              `Preferred contact time: ${inquiryForm.preferredContactTime}`,
+              `Preferred contact method: ${inquiryForm.preferredContactMethod}`,
+            ].join('\n\n'),
             source: 'AI Travel Concierge',
           }
         });
@@ -208,7 +226,7 @@ const AIPersonalShopper = () => {
       }
 
       setShowInquiryModal(false);
-      setInquiryForm({ name: '', email: '', phone: '' });
+      setInquiryForm({ name: '', email: '', phone: '', nationality: '', language: '', preferredContactTime: '', preferredContactMethod: '' });
       toast.success("Your trip plan has been sent to our team! We'll contact you shortly.");
     } catch (error) {
       console.error('Submit error:', error);
