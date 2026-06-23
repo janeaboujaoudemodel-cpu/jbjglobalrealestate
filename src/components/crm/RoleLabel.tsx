@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 
 export type RoleKind = "owner" | "investor" | "broker" | "developer" | "admin" | "vip";
 
-const ICONS: Record<RoleKind, React.ComponentType<{ className?: string }>> = {
+const ICONS: Record<RoleKind, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   owner: Crown,
   vip: Crown,
   admin: Shield,
