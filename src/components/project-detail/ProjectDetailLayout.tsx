@@ -663,7 +663,7 @@ export default function ProjectDetailLayout({
   return (
     <>
       {/* HERO SECTION - Full Screen */}
-      <section data-hero-dark data-no-contrast-guard data-ink-emerald-opt-out className="jj-project-hero relative w-full h-screen min-h-[700px] -mt-24 xl:-mt-28">
+      <section data-hero-dark data-on-dark data-no-contrast-guard data-ink-emerald-opt-out className="jj-project-hero jj-fullbleed-band allow-white relative w-full h-screen min-h-[700px] -mt-24 xl:-mt-28">
         {/* Owner-only: Edit hero / pick from gallery → set as Cover or Profile */}
         <HeroImagePicker
           projectId={project.id}
@@ -703,7 +703,7 @@ export default function ProjectDetailLayout({
         )}
 
         {/* Hero content - Bottom aligned */}
-        <div data-surface="dark" data-ink-emerald-opt-out data-no-contrast-guard className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
+        <div data-surface="dark" data-on-dark data-ink-emerald-opt-out data-no-contrast-guard className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl mb-2 text-white/85 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" data-no-contrast-guard>
@@ -960,7 +960,7 @@ export default function ProjectDetailLayout({
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="jj-section-champagne jj-project-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <section className="jj-section-champagne jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
         <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
 
 
@@ -1596,7 +1596,7 @@ export default function ProjectDetailLayout({
             </div>
 
            {/* DLD MARKET WIDGET — full-bleed band (escapes outer max-w container) */}
-           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen mb-10 md:mb-12">
+           <div className="jj-project-nested-band mb-10 md:mb-12">
              <SectionDividerGoldFullBleed />
              <DLDMarketWidget />
              <SectionDividerGoldFullBleed />
@@ -1672,7 +1672,7 @@ export default function ProjectDetailLayout({
       </section>
       <div
         ref={inquiryRef}
-        className="scroll-mt-32 jj-band jj-band--surface jj-project-band"
+        className="scroll-mt-32 jj-band jj-band--surface jj-project-band jj-fullbleed-band"
         data-section="register-interest"
       >
         <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 py-12 md:py-16">
@@ -1697,7 +1697,7 @@ export default function ProjectDetailLayout({
 
       {/* READY TO GET STARTED — full-bleed CTA band */}
       <SectionDividerGoldFullBleed />
-      <div className="bg-[#FDFBF7] jj-project-band">
+      <div className="bg-[#FDFBF7] jj-project-band jj-fullbleed-band">
         <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
           <CallToActionSection projectName={project.name} projectId={project.id} />
         </div>
@@ -1705,7 +1705,7 @@ export default function ProjectDetailLayout({
 
       {/* Recommended Projects — seamless champagne bg continuation */}
       <SectionDividerGoldFullBleed />
-      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
       <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
       <RecommendedProjects
         currentProjectId={project.id}
