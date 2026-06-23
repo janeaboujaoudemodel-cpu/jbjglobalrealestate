@@ -7,9 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Send, Loader2, Check, ChevronsUpDown, Building2, MapPin } from "lucide-react";
+import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useDevelopers, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
+import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { cn } from "@/lib/utils";
 
 interface ProjectInquiryFormProps {
@@ -49,6 +52,9 @@ const CONTACT_TIME_OPTIONS = [
   { value: "anytime", label: "Anytime" },
 ];
 
+const LANGUAGE_OPTIONS = getLanguageList();
+const NATIONALITY_OPTIONS = getCountryList();
+
 // UAE Emirates list
 const UAE_EMIRATES = [
   { value: "dubai", label: "Dubai" },
@@ -87,6 +93,8 @@ export function ProjectInquiryForm({
     name: "",
     email: "",
     phone: "",
+    nationality: "",
+    language: "",
     bedrooms: "",
     sizeMin: "",
     sizeMax: "",
@@ -213,8 +221,14 @@ export function ProjectInquiryForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.phone) {
+    if (!formData.name || !formData.email || !formData.phone || !formData.nationality || !formData.language) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const phoneValidation = getPhoneValidation(formData.phone);
+    if (!phoneValidation.isValid) {
+      toast.error(phoneValidation.message);
       return;
     }
 
@@ -242,6 +256,8 @@ export function ProjectInquiryForm({
         return nums.length ? Math.min(...nums) : null;
       })();
       const extras: string[] = [];
+      if (formData.nationality) extras.push(`Nationality: ${formData.nationality}`);
+      if (formData.language) extras.push(`Preferred language: ${formData.language}`);
       if (timelineLabel) extras.push(`Purchase timeline: ${timelineLabel}`);
       if (contactTimeLabel) extras.push(`Preferred contact time: ${contactTimeLabel}`);
       if (contactMethodLabel) extras.push(`Preferred contact method: ${contactMethodLabel}`);
@@ -257,6 +273,11 @@ export function ProjectInquiryForm({
         full_name: formData.name,
         email: formData.email,
         phone: formData.phone,
+        phone_e164: formData.phone,
+        phone_raw: formData.phone,
+        whatsapp_e164: formData.phone,
+        nationality: formData.nationality || null,
+        preferred_language: formData.language || null,
         source: "project_inquiry",
         source_details: projectName,
         source_page: window.location.pathname,
@@ -284,6 +305,8 @@ export function ProjectInquiryForm({
         name: "",
         email: "",
         phone: "",
+        nationality: "",
+        language: "",
         bedrooms: "",
         sizeMin: "",
         sizeMax: "",
@@ -367,18 +390,42 @@ export function ProjectInquiryForm({
           />
         </div>
 
-        {/* Phone */}
+        {/* Phone — unified country-code picker */}
         <div className="space-y-2">
           <Label htmlFor="phone" className="text-foreground text-sm font-medium">Phone Number *</Label>
-          <Input
-            id="phone"
-            type="tel"
+          <PhoneInput
             value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            placeholder="+971 XX XXX XXXX"
-            className="h-12 text-base px-4"
-            required
+            onChange={(value) => setFormData({ ...formData, phone: value || "" })}
+            placeholder="Phone number"
+            variant="light"
           />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label className="text-foreground text-sm font-medium">Nationality *</Label>
+            <SearchableSelect
+              value={formData.nationality}
+              onChange={(value) => setFormData({ ...formData, nationality: value })}
+              options={NATIONALITY_OPTIONS}
+              placeholder="Select nationality"
+              searchPlaceholder="Search countries..."
+              priorityItem="United Arab Emirates"
+              flagType="country"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-foreground text-sm font-medium">Preferred Language *</Label>
+            <SearchableSelect
+              value={formData.language}
+              onChange={(value) => setFormData({ ...formData, language: value })}
+              options={LANGUAGE_OPTIONS}
+              placeholder="Select language"
+              searchPlaceholder="Search languages..."
+              priorityItem="English"
+              flagType="language"
+            />
+          </div>
         </div>
 
         {/* Bedrooms — multi-select pill row (real-estate standard) */}
