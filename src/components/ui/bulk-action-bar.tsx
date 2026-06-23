@@ -54,7 +54,7 @@ export function BulkActionBar({
             "overflow-x-auto",
             // Hide scrollbar visuals but keep functionality.
             "[scrollbar-width:thin] [&::-webkit-scrollbar]:h-1.5",
-            "[&::-webkit-scrollbar-thumb]:bg-[#B89555]/30",
+            "[&::-webkit-scrollbar-thumb]:bg-[#064E3B]/55",
             "[&::-webkit-scrollbar-thumb]:rounded-full",
           )}
         >
