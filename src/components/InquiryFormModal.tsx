@@ -660,6 +660,27 @@ const InquiryFormModal = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
+                      name="preferredContactTime"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-[#1A1A1A]/70 text-sm">Preferred Contact Time *</FormLabel>
+                          <FormControl>
+                            <SearchableSelect
+                              value={field.value}
+                              onChange={field.onChange}
+                              options={contactTimeOptions}
+                              placeholder="Select contact time"
+                              searchPlaceholder="Search times..."
+                              showFlags={false}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-400 text-xs" />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
                       name="preferredContact"
                       render={({ field }) => (
                         <FormItem>
