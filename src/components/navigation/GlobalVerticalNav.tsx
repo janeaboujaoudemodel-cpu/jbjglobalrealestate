@@ -1172,24 +1172,36 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         <div className="h-px mb-1.5 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.4) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
         <div className="px-2 py-1.5 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
           <div className="flex gap-1.5 mb-1">
-            <Link
-              to="/contact"
-              data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform hover:bg-[#064E3B]/[0.06]"
-              style={{ color: '#047857', borderColor: 'rgba(4,120,87,0.42)', background: 'transparent' }}
-            >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
-              <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>Contact</span>
-            </Link>
-            <Link
-              to="/ticket-hub"
-              data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform hover:bg-[#064E3B]/[0.06]"
-              style={{ color: '#047857', borderColor: 'rgba(4,120,87,0.42)', background: 'transparent' }}
-            >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
-              <span style={{ color: '#047857', WebkitTextFillColor: '#047857' }}>Support</span>
-            </Link>
+            {(() => {
+              const contactActive = isRouteActive('/contact');
+              const supportActive = isRouteActive('/ticket-hub');
+              return (
+                <>
+                  <Link
+                    to="/contact"
+                    data-no-contrast-guard
+                    data-sidebar-bottom-cta
+                    data-active={contactActive ? 'true' : undefined}
+                    aria-current={contactActive ? 'page' : undefined}
+                    className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
+                  >
+                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} />
+                    <span>Contact</span>
+                  </Link>
+                  <Link
+                    to="/ticket-hub"
+                    data-no-contrast-guard
+                    data-sidebar-bottom-cta
+                    data-active={supportActive ? 'true' : undefined}
+                    aria-current={supportActive ? 'page' : undefined}
+                    className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
+                  >
+                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} />
+                    <span>Support</span>
+                  </Link>
+                </>
+              );
+            })()}
 
           </div>
           {session ? (

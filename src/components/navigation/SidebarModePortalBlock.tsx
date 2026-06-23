@@ -1,34 +1,40 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, Briefcase, TrendingUp, Building2 } from "lucide-react";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 
 /**
- * SidebarModePortalBlock — compact emerald portal CTA pinned at the top of
- * the vertical sidebar, directly above "AI Home Finder". Mode-aware.
- * Visual: same emerald-ombre family as the sidebar logo header, but smaller.
+ * SidebarModePortalBlock — compact mode-aware portal CTA pinned at the
+ * top of the vertical sidebar. Follows the global sidebar hierarchy rule:
+ * EMERALD only when the user is currently inside the portal route;
+ * otherwise champagne with black text/icons.
  */
 const MODE_CONFIG = {
   broker: {
     icon: Briefcase,
     label: "Broker Portal",
     href: "/broker/portal",
+    matchPrefix: "/broker",
   },
   investor: {
     icon: TrendingUp,
     label: "Investor Portal",
     href: "/investor-dashboard",
+    matchPrefix: "/investor",
   },
   developer: {
     icon: Building2,
     label: "Developer Portal",
     href: "/developers-portal",
+    matchPrefix: "/developers-portal",
   },
 } as const;
 
 export default function SidebarModePortalBlock({ collapsed = false }: { collapsed?: boolean }) {
   const { mode } = useUserModeContext();
+  const { pathname } = useLocation();
   const cfg = (mode && MODE_CONFIG[mode as keyof typeof MODE_CONFIG]) || MODE_CONFIG.investor;
   const Icon = cfg.icon;
+  const active = pathname === cfg.href || pathname.startsWith(cfg.matchPrefix + "/") || pathname === cfg.matchPrefix;
 
   if (collapsed) {
     return (
@@ -36,11 +42,12 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         to={cfg.href}
         aria-label={cfg.label}
         data-no-contrast-guard
-        data-allow-dark-cta
-        className="allow-white mx-auto my-1.5 w-9 h-9 flex items-center justify-center rounded-lg shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
-        style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.20)" }}
+        data-sidebar-mode-portal
+        data-active={active ? "true" : undefined}
+        aria-current={active ? "page" : undefined}
+        className="mx-auto my-1.5 w-9 h-9 flex items-center justify-center rounded-lg transition-all"
       >
-        <Icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
+        <Icon className="w-4 h-4" strokeWidth={2.2} />
       </Link>
     );
   }
@@ -50,20 +57,17 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
       <Link
         to={cfg.href}
         data-no-contrast-guard
-        data-allow-dark-cta
-        className="allow-white group flex items-center gap-1.5 px-2 h-9 rounded-lg shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:brightness-110 transition-all"
-        style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.20)" }}
+        data-sidebar-mode-portal
+        data-active={active ? "true" : undefined}
+        aria-current={active ? "page" : undefined}
+        className="group flex items-center gap-1.5 px-2 h-9 rounded-lg transition-all"
       >
-        <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.2} />
-        <span
-          className="flex-1 text-[10.5px] font-bold tracking-[0.04em] uppercase whitespace-nowrap"
-          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-        >
+        <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={2.2} />
+        <span className="flex-1 text-[10.5px] font-bold tracking-[0.04em] uppercase whitespace-nowrap">
           {cfg.label}
         </span>
-        <ArrowRight className="w-3 h-3 shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+        <ArrowRight className="w-3 h-3 shrink-0" strokeWidth={2.5} />
       </Link>
     </div>
   );
 }
-
