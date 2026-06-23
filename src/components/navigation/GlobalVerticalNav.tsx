@@ -1410,7 +1410,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <TooltipTrigger asChild>
                   <button
                     data-no-contrast-guard
-                    data-sidebar-collapse-control
+                    data-sidebar-expand-control
                     data-tour-target="sidebar-expand"
                     onClick={() => {
                       setShowExpandPulse(false);
