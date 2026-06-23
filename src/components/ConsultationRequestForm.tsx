@@ -20,7 +20,7 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
-import { getCountryList, getLanguageList, COUNTRY_FLAGS, LANGUAGE_FLAGS } from "@/constants/localeOptions";
+import { getCountryList, getLanguageList, LANGUAGE_FLAGS } from "@/constants/localeOptions";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -33,7 +33,7 @@ const consultationSchema = z.object({
   bedrooms: z.string().optional(),
   sizeBucket: z.string().optional(),
   nationality: z.string().min(1, "Please select your nationality"),
-  preferredLanguage: z.string().optional(),
+  preferredLanguage: z.string().min(1, "Please select your preferred language"),
   preferredTime: z.string().min(1, "Please select your preferred contact time"),
   contactMethod: z.string().min(1, "Please select your preferred contact method"),
   budgetRange: z.string().optional(),
