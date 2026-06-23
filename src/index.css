@@ -11431,6 +11431,23 @@ html body :is(
   opacity: 1 !important;
 }
 
+/* 🔒 TRUE FINAL FILE-END LOCK — sidebar emerald mini-tile glyphs are white. */
+html body [data-chrome="sidebar"] [data-emerald-icon-surface],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 /* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
    Must remain after all inactive-sidebar black repaint rules. */
 html body [data-chrome="sidebar"] [data-emerald-icon-surface],
