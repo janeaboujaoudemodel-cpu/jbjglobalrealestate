@@ -138,7 +138,7 @@ export default function InlineEditable({
         <button
           onClick={save}
           disabled={saving}
-          className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#1E5F3F] text-white hover:bg-[#194f35]"
+          className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#064E3B] text-white hover:bg-[#042c1c]"
           aria-label="Save"
           data-no-contrast-guard
         >
