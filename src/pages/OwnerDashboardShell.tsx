@@ -127,6 +127,8 @@ const OwnerDashboardShell = () => {
   return (
     <div
       data-surface="champagne"
+      data-bk-scope="back-office"
+      data-bk-nav=""
       className="owner-dashboard-shell owner-shell-surface min-h-screen bg-[#F7F2EA] flex"
       style={{ ["--app-content-left" as never]: contentLeft, ["--app-content-top" as never]: contentTop }}
     >
