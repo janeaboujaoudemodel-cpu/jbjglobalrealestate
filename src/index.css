@@ -11180,7 +11180,7 @@ html body :where(
 ):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-cta-outline):not([data-cta="outline"]):not([data-emerald-tone="outline"]) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  border-color: #FFFFFF !important;
+  border-color: transparent !important;
 }
 
 html body :where(
