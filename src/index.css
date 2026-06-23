@@ -6441,9 +6441,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --ink-emerald-accent: #6EE7B7;
   --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
-  --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-emerald-ombre-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
-  --jj-emerald-light-ombre: linear-gradient(135deg, #13A078 0%, #0A6B53 56%, #064E3B 100%);
+  /* CANONICAL emerald primitive — deep dark emerald → near-black.
+     Matches Mode: Broker / AED chip exactly. No lighter variant exists. */
+  --jj-emerald-ombre: linear-gradient(135deg, #043b2c 0%, #02261a 55%, #000000 100%);
+  --jj-emerald-ombre-hover: linear-gradient(135deg, #064E3B 0%, #032a1d 55%, #000000 100%);
+  --jj-emerald-light-ombre: linear-gradient(135deg, #043b2c 0%, #02261a 55%, #000000 100%);
   --jj-emerald-neon: #34D399;
   /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
      Locked to the approved emerald/black ombre family — no flat green. */
@@ -8442,8 +8444,8 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
 .jj-emerald-card,
 .jj-loop-block {
   background-image:
-    radial-gradient(120% 80% at 0% 0%, rgba(52,211,153,0.18) 0%, transparent 60%),
-    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+    radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,0.08) 0%, transparent 60%),
+    var(--jj-emerald-ombre) !important;
   border: 1px solid rgba(255,255,255,0.18) !important;
   box-shadow: 0 18px 48px -20px rgba(4,120,87,0.55),
               inset 0 1px 0 rgba(255,255,255,0.12) !important;
@@ -11529,7 +11531,7 @@ html body :is(
    No restricted light green at rest or hover. No component opt-out.
    ============================================================ */
 :root {
-  --jj-emerald-primitive: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj-emerald-primitive: linear-gradient(135deg, #043b2c 0%, #02261a 55%, #000000 100%);
   --jj-emerald-primitive-hover: var(--jj-emerald-primitive);
   --jj-emerald-ombre: var(--jj-emerald-primitive);
   --jj-emerald-ombre-hover: var(--jj-emerald-primitive);
@@ -11640,4 +11642,62 @@ html body :is(.mortgage-range-input, input[type="range"][data-mortgage-slider]):
   background: var(--jj-emerald-primitive) !important;
   border: 0 !important;
   box-shadow: 0 8px 18px -8px rgba(6,78,59,0.85) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   GATE 1 FINAL EMERALD LOCK
+   - All emerald surfaces use the canonical dark primitive.
+   - Adds metallic sweep on every emerald CTA/pill/tile so they
+     match the Mode: Broker / AED chip look + a clean animation.
+   - Forces white text + white SVG. No bright/light variants.
+   ════════════════════════════════════════════════════════════════ */
+@keyframes jj-emerald-final-sweep {
+  0%   { background-position: -120% 0, 0 0; }
+  60%  { background-position: 220% 0, 0 0; }
+  100% { background-position: 220% 0, 0 0; }
+}
+
+html body :is(
+  .jj-emerald, .jj-emerald-solid, .jj-surface-emerald, .jj-cta-emerald,
+  .jj-cta-emerald-metallic, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jj-emerald-rect-pill, .jj-emerald-chip,
+  .jj-favorite-trigger, .jj-card-emerald-action, .jj-card-emerald-label,
+  .jj-history-emerald-icon, .jj-icon-tile-emerald, .jj-emerald-card,
+  .jj-emerald-metallic, .jj-emerald-fill,
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-filled],
+  [data-emerald-ok="button"], [data-emerald-ok="pill"], [data-emerald-ok="badge"],
+  [data-card-action], [data-cta="primary"],
+  [class*="bg-green-"], [class*="bg-emerald-"]
+):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="outline"]):not([data-emerald-tone="soft"]) {
+  position: relative;
+  overflow: hidden;
+  background-image:
+    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.42) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%),
+    var(--jj-emerald-ombre) !important;
+  background-color: #02261a !important;
+  background-size: 220% 100%, 100% 100% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-blend-mode: screen, normal !important;
+  animation: jj-emerald-final-sweep 4.6s ease-in-out infinite !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+html body :is(
+  .jj-emerald, .jj-emerald-solid, .jj-surface-emerald, .jj-cta-emerald,
+  .jj-cta-emerald-metallic, .jj-cta-primary, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jj-emerald-rect-pill, .jj-emerald-chip,
+  .jj-favorite-trigger, .jj-card-emerald-action, .jj-card-emerald-label,
+  .jj-history-emerald-icon, .jj-icon-tile-emerald, .jj-emerald-card,
+  .jj-emerald-metallic, .jj-emerald-fill,
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-filled],
+  [data-emerald-ok="button"], [data-emerald-ok="pill"], [data-emerald-ok="badge"],
+  [data-card-action], [data-cta="primary"],
+  [class*="bg-green-"], [class*="bg-emerald-"]
+) :is(*, span, p, h1, h2, h3, h4, strong, small, em, b, label, a, svg, path, circle, rect, line, polyline, polygon, use, g, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill-opacity: 1 !important;
 }
