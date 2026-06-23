@@ -1243,18 +1243,39 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           )}
 
-          {/* Collapse — champagne pill with black icon + black text */}
+          {/* Collapse — gold pill, glow + 3D lift on hover */}
           <button
             data-no-contrast-guard
+            data-sidebar-collapse-control
+            data-on-dark
+            data-allow-dark-cta
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform border border-[#B89555]/45 bg-transparent hover:bg-[#EFE6D6]/60"
-            style={{ color: '#1A1A1A' }}
+            className="allow-white jbj-sidebar-collapse-control group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
+            style={{
+              color: '#FFFFFF',
+              background: 'var(--jj-emerald-ombre)',
+              border: '1px solid rgba(255,255,255,0.22)',
+              boxShadow: 'none',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
+              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
+              e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), 0 0 12px rgba(52,211,153,0.30)';
+              e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-2px) scale(1.02)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
+              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.transform = 'none';
+            }}
           >
-            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
-            <span data-no-contrast-guard style={{ color: '#1A1A1A' }}>Collapse</span>
+            <PanelLeftClose className="allow-white w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <span className="allow-white" data-no-contrast-guard data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
           </button>
-
 
         </div>
       </div>
@@ -1356,9 +1377,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#B89555]/40 bg-transparent hover:bg-[#EFE6D6]/60 transition-colors"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
                   >
-                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1369,14 +1390,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#B89555]/40 bg-transparent hover:bg-[#EFE6D6]/60 transition-colors"
+                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
                   >
-                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
               </Tooltip>
-
 
               {session ? (
                 <Tooltip>
@@ -1410,7 +1430,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <TooltipTrigger asChild>
                   <button
                     data-no-contrast-guard
-                    data-sidebar-expand-control
+                    data-sidebar-collapse-control
                     data-tour-target="sidebar-expand"
                     onClick={() => {
                       setShowExpandPulse(false);
@@ -1420,9 +1440,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-expand-ink group relative w-7 h-7 rounded-lg flex items-center justify-center border border-[#B89555]/40 bg-transparent hover:bg-[#EFE6D6]/60 transition-colors"
+                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-7 h-7 rounded-lg flex items-center justify-center"
                     aria-label="Expand navigation"
-                    style={{ color: '#1A1A1A' }}
                   >
                     {/* Soft teaching pulse only — no extra visible border */}
                     {collapsed && showExpandPulse && (
@@ -1431,7 +1450,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
                       />
                     )}
-                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">

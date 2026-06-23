@@ -249,7 +249,6 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
         <button
           ref={setActiveRefCallback(item.path)}
           data-sidebar-owner-item
-          data-surface={active ? "emerald" : undefined}
           data-emerald={active ? "true" : undefined}
           onClick={() => {
             // Always navigate to the parent's own path. Expansion is automatic

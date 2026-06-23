@@ -51,7 +51,6 @@ const OwnerDashboardShell = () => {
     <>
       {/* Logo Area — height locked to --shell-header-h so sidebar divider aligns with main top-header bottom border */}
       <div
-        data-backend-sidebar-logo
         className="owner-shell-surface border-b border-[#B89555]/40 flex items-center justify-between gap-2 px-3 flex-shrink-0 bg-[#F7F2EA]"
         style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
@@ -68,7 +67,7 @@ const OwnerDashboardShell = () => {
             style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
           />
           {!collapsed && (
-            <span className="min-w-0 flex-none text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A] font-bold whitespace-nowrap leading-none text-left truncate">
+            <span className="min-w-0 flex-1 text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A] font-bold whitespace-nowrap leading-none text-center truncate">
               JBJ GLOBAL REAL ESTATE
             </span>
           )}
@@ -151,7 +150,6 @@ const OwnerDashboardShell = () => {
       {/* Desktop Sidebar */}
       {!isMobile && !fullscreen && (
         <aside 
-          data-backend-sidebar
           data-surface="champagne"
           className={cn(
             "owner-shell-surface fixed left-0 top-0 h-full bg-[#F7F2EA] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",

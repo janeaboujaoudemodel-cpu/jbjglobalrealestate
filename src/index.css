@@ -9352,27 +9352,20 @@ html body .jj-area-status-chip:hover,
 html body .jj-area-status-chip:focus,
 html body .jj-area-status-chip:focus-visible,
 html body .jj-area-status-chip:active {
-  background: var(--jj-emerald-ombre) !important;
+  background: #064E3B !important;
   background-color: #064E3B !important;
-  background-image:
-    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.28) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%),
-    var(--jj-emerald-ombre) !important;
-  background-size: 100% 100% !important;
-  background-repeat: no-repeat !important;
-  background-blend-mode: normal !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,.30) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.28),
-    0 10px 24px -12px rgba(6,78,59,.95),
-    0 0 18px rgba(4,120,87,.22) !important;
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.24),
+    0 10px 24px -12px rgba(6,78,59,.90) !important;
   filter: none !important;
   animation: none !important;
   opacity: 1 !important;
 }
-
 
 html body .jj-area-explore-pill,
 html body .jj-area-explore-pill:hover,
@@ -9429,29 +9422,28 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
 }
 
 
-/* Highlight hubs (first 4 categories) — idle/hover must match section idle:
-   transparent bg, ink text. Emerald fill ONLY when [data-active="true"].
-   Lock added because earlier rules were forcing them green at idle/hover. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):focus,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):focus-visible {
-  background-image: none !important;
-  background-color: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus-visible {
+  background-image:
+    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 50%, rgba(255,255,255,0) 100%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  background-size: 100% 100% !important;
+  background-blend-mode: normal !important;
+  border: 1px solid rgba(4,120,87,.95) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 22px -14px rgba(6,78,59,.90) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover {
-  background-color: rgba(184,149,85,0.10) !important;
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover [data-sidebar-highlight-label] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
 
 html body .jj-favorites-tab[data-state="active"] {
   background-image:
@@ -13524,215 +13516,4 @@ html body [data-emerald-outline-action]:hover * {
   color: var(--emerald-ink) !important;
   -webkit-text-fill-color: var(--emerald-ink) !important;
   stroke: var(--emerald-ink) !important;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   FINAL WINNING RULE — Emerald/Champagne contrast + backend parity
-   - Emerald own-surfaces: approved emerald→black ombre with WHITE text/icons.
-   - Champagne/light/gold own-surfaces: ink text/icons, never white-on-light.
-   - Owner/backend sidebar active rows follow the same emerald primitive.
-   - Mortgage sliders use a custom visible emerald track/thumb; native range is
-     transparent only for reliable drag/click interaction.
-   ════════════════════════════════════════════════════════════════ */
-
-html body :is(
-  [data-surface="emerald"],
-  [data-emerald="true"],
-  [data-jj-emerald],
-  .jj-surface-emerald,
-  .jj-official-emerald,
-  .jj-emerald-solid,
-  .jj-emerald-metallic,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-cta-emerald,
-  .jj-cta-primary[data-surface="emerald"],
-  .jj-emerald-fill,
-  .jj-bg-emerald,
-  [data-chrome="sidebar"] [data-active="true"],
-  [data-bk-scope="back-office"] nav [data-sidebar-owner-item][data-surface="emerald"],
-  [data-bk-scope="back-office"] nav [data-sidebar-owner-item][data-emerald="true"]
-) {
-  background: var(--jj-emerald-ombre) !important;
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.18) !important;
-  box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-}
-
-html body :is(
-  [data-surface="emerald"],
-  [data-emerald="true"],
-  [data-jj-emerald],
-  .jj-surface-emerald,
-  .jj-official-emerald,
-  .jj-emerald-solid,
-  .jj-emerald-metallic,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-cta-emerald,
-  .jj-cta-primary[data-surface="emerald"],
-  .jj-emerald-fill,
-  .jj-bg-emerald,
-  [data-chrome="sidebar"] [data-active="true"],
-  [data-bk-scope="back-office"] nav [data-sidebar-owner-item][data-surface="emerald"],
-  [data-bk-scope="back-office"] nav [data-sidebar-owner-item][data-emerald="true"]
-) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,button,div,svg,[class*="lucide"]),
-html body :is(
-  [data-surface="emerald"],
-  [data-emerald="true"],
-  [data-jj-emerald],
-  .jj-surface-emerald,
-  .jj-official-emerald,
-  .jj-emerald-solid,
-  .jj-emerald-metallic,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-cta-emerald,
-  .jj-cta-primary[data-surface="emerald"],
-  .jj-emerald-fill,
-  .jj-bg-emerald,
-  [data-chrome="sidebar"] [data-active="true"],
-  [data-bk-scope="back-office"] nav [data-sidebar-owner-item][data-surface="emerald"],
-  [data-bk-scope="back-office"] nav [data-sidebar-owner-item][data-emerald="true"]
-) :is(svg,[class*="lucide"]) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-html body :is(
-  [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-  .owner-shell-surface,
-  [data-bk-scope="back-office"] :is(aside, header, section, article, .card, [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"])
-):not([data-surface="emerald"]):not([data-emerald="true"]):not(.jj-surface-emerald):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-cta-emerald)
-  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,button,div):not([data-surface="emerald"] *):not([data-emerald="true"] *):not(.jj-surface-emerald *):not(.jj-emerald-metallic *):not(.jj-pill-emerald *):not(.jj-cta-emerald *):not([data-on-dark] *):not([data-allow-dark-cta] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  text-shadow: none !important;
-  opacity: 1 !important;
-}
-
-html body :is(
-  [data-surface="page"], [data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="gold"],
-  .surface-page, .surface-light, .surface-champagne, .surface-cream, .surface-raised, .surface-gold,
-  .owner-shell-surface,
-  [data-bk-scope="back-office"] :is(aside, header, section, article, .card, [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"])
-):not([data-surface="emerald"]):not([data-emerald="true"]):not(.jj-surface-emerald):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-cta-emerald)
-  :is(svg,[class*="lucide"]):not([data-surface="emerald"] *):not([data-emerald="true"] *):not(.jj-surface-emerald *):not(.jj-emerald-metallic *):not(.jj-pill-emerald *):not(.jj-cta-emerald *):not([data-on-dark] *):not([data-allow-dark-cta] *) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  opacity: 1 !important;
-}
-
-html body [data-bk-scope="back-office"] [data-backend-sidebar],
-html body [data-bk-scope="back-office"] [data-backend-sidebar] .owner-shell-surface,
-html body [data-bk-scope="back-office"] > main > header.owner-shell-surface {
-  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 60%, #F2EBDC 100%) !important;
-  background-color: #F7F2EA !important;
-}
-
-html body [data-bk-scope="back-office"] [data-backend-sidebar-logo] button {
-  justify-content: flex-start !important;
-  text-align: left !important;
-}
-
-html body [data-bk-scope="back-office"] [data-backend-sidebar-logo] img {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-html body [data-bk-scope="back-office"] [data-backend-sidebar-logo] span {
-  flex: 0 1 auto !important;
-  text-align: left !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  white-space: nowrap !important;
-}
-
-html body [data-bk-scope="back-office"] nav [data-sidebar-owner-item]:not([data-surface="emerald"]):not([data-emerald="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-html body [data-bk-scope="back-office"] nav [data-sidebar-owner-item]:not([data-surface="emerald"]):not([data-emerald="true"]):hover {
-  background-color: rgba(4,120,87,0.06) !important;
-  border-left-color: rgba(4,120,87,0.45) !important;
-}
-
-html body [data-bk-scope="back-office"] nav [data-sidebar-owner-item]:not([data-surface="emerald"]):not([data-emerald="true"]) :is(svg,[class*="lucide"]) {
-  color: #064E3B !important;
-  stroke: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-}
-
-html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"], button[aria-label="Currency"], [data-jj-utility-pill], [data-mode-trigger], a[href="/auth"]),
-html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"], button[aria-label="Currency"], [data-jj-utility-pill], [data-mode-trigger], a[href="/auth"]) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-.mortgage-range-shell { touch-action: pan-y; }
-.mortgage-range-input {
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  cursor: pointer !important;
-  touch-action: pan-y !important;
-}
-.mortgage-range-input::-webkit-slider-runnable-track {
-  height: 44px !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-.mortgage-range-input::-webkit-slider-thumb {
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  width: 44px !important;
-  height: 44px !important;
-  margin-top: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-.mortgage-range-input::-moz-range-track {
-  height: 44px !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-.mortgage-range-input::-moz-range-thumb {
-  width: 44px !important;
-  height: 44px !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Absolute last lock: outrank legacy .jj-emerald-metallic background resets. */
-html body [data-bk-scope="back-office"] nav button[data-sidebar-owner-item][data-emerald="true"].jj-emerald-metallic,
-html body [data-bk-scope="back-office"] nav button[data-sidebar-owner-item][data-surface="emerald"].jj-emerald-metallic,
-html body [data-jj-utility-bar] button[aria-label="Currency"].jj-surface-emerald,
-html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"], [data-jj-utility-pill], [data-mode-trigger], a[href="/auth"]) {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
-  background-color: #064E3B !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.18) !important;
-}
-
-html body [data-bk-scope="back-office"] nav button[data-sidebar-owner-item][data-emerald="true"].jj-emerald-metallic *,
-html body [data-bk-scope="back-office"] nav button[data-sidebar-owner-item][data-surface="emerald"].jj-emerald-metallic *,
-html body [data-jj-utility-bar] button[aria-label="Currency"].jj-surface-emerald *,
-html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"], [data-jj-utility-pill], [data-mode-trigger], a[href="/auth"]) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }

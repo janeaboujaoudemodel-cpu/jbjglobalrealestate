@@ -85,17 +85,9 @@ const CombinedContactNewsletter = ({
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
                 data-surface="emerald"
                 data-emerald-ok="button"
-                data-no-contrast-guard
-                className="group flex flex-row items-center justify-center gap-2.5 px-4 py-3 rounded-md transition-all duration-200 hover:brightness-110"
-                style={{
-                  backgroundImage: "var(--jj-emerald-ombre)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  boxShadow: "0 10px 24px -14px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.10)",
-                  color: "#FFFFFF",
-                  WebkitTextFillColor: "#FFFFFF",
-                }}
+                className="jj-surface-emerald group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
               >
-                <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2.2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2.2} />
                 <div className="min-w-0 text-left">
                   <p className="text-[10px] uppercase tracking-wider font-semibold mb-0.5">{card.label}</p>
                   <p className="text-xs sm:text-sm font-semibold">{card.value}</p>
@@ -103,7 +95,6 @@ const CombinedContactNewsletter = ({
               </a>
             ))}
           </div>
-
 
           {/* Divider */}
           <div className="relative flex items-center gap-3 max-w-2xl mx-auto mb-5">
@@ -126,12 +117,11 @@ const CombinedContactNewsletter = ({
               Stay in the Loop
             </span>
             <h3 className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
-              Get the Inside Track — Listings Before the Market
+              Get the Edge — Listings Before the Market
             </h3>
             <p className="text-xs md:text-sm mb-4" style={{ color: "rgba(255,255,255,0.88)" }}>
-              Off-market launches, price moves, and concierge intel — curated weekly, never spammy.
+              New launches, off-market deals, market moves &amp; insider insights — straight to your inbox.
             </p>
-
             <NewsletterBrevo variant="compact" source="combined_cta" />
           </div>
         </div>

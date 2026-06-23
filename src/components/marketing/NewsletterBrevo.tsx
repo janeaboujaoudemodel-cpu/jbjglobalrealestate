@@ -9,12 +9,11 @@ import NewsletterDetailModal from '@/components/marketing/NewsletterDetailModal'
 import { useTypewriter } from '@/hooks/useTypewriter';
 
 const NEWSLETTER_TYPEWRITER_PHRASES = [
-  'Enter your email — get the edge',
-  'Be first to off-market launches',
-  'Weekly intel from JBJ concierge',
-  'No spam. Unsubscribe anytime.',
+  'Enter your email address',
+  'Get new listings first',
+  'Market moves & insider insights',
+  'Free weekly intel — no spam',
 ];
-
 
 
 interface NewsletterBrevoProps {

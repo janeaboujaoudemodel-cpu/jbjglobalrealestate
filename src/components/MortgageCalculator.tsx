@@ -69,10 +69,10 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
+  const inputRef = useRef<HTMLInputElement>(null);
   const lastEmittedValueRef = useRef(value);
-  const fill = "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))";
+  const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
-
 
   useEffect(() => {
     lastEmittedValueRef.current = value;
@@ -85,40 +85,48 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
     onChange(next);
   }, [max, min, onChange]);
 
+  const emitFromPointer = useCallback((clientX: number) => {
+    const el = inputRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const ratio = clampNumber((clientX - rect.left) / rect.width, 0, 1);
+    const raw = min + ratio * (max - min);
+    const decimals = step.toString().split(".")[1]?.length ?? 0;
+    const stepped = min + Math.round((raw - min) / step) * step;
+    emitValue(Number(clampNumber(stepped, min, max).toFixed(decimals)));
+  }, [emitValue, max, min, step]);
+
   return (
-    <div className="mortgage-range-shell relative h-11 w-full" data-no-contrast-guard>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-full"
-        style={{
+    <input
+      type="range"
+      data-mortgage-slider={ariaLabel}
+      data-no-contrast-guard
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      aria-label={ariaLabel}
+      aria-valuetext={`${value}`}
+      ref={inputRef}
+      onPointerDown={(event) => {
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        emitFromPointer(event.clientX);
+      }}
+      onPointerMove={(event) => {
+        if (event.buttons !== 1) return;
+        emitFromPointer(event.clientX);
+      }}
+      onInput={(event) => emitValue(event.currentTarget.valueAsNumber)}
+      onChange={(event) => emitValue(event.currentTarget.valueAsNumber)}
+      className="mortgage-range-input w-full"
+      style={
+        {
           background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.18), 0 8px 18px -14px rgba(6,78,59,0.75)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 h-6 w-6 -translate-y-1/2 rounded-full"
-        style={{
-          left: `calc(${progress}% - 12px)`,
-          background: fill,
-          boxShadow: "0 0 0 1px rgba(255,255,255,0.55), 0 4px 10px rgba(4,44,28,0.45)",
-        }}
-      />
-      <input
-        type="range"
-        data-mortgage-slider={ariaLabel}
-        data-no-contrast-guard
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        aria-label={ariaLabel}
-        aria-valuetext={`${value}`}
-        onInput={(event) => emitValue(event.currentTarget.valueAsNumber)}
-        onChange={(event) => emitValue(event.currentTarget.valueAsNumber)}
-        className="mortgage-range-input absolute inset-0 h-full w-full opacity-0"
-      />
-    </div>
+          ["--mortgage-range-thumb" as any]: "#FFFFFF",
+          ["--mortgage-range-thumb-shadow" as any]: "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
+        } as CSSProperties
+      }
+    />
   );
 };
 
