@@ -46,11 +46,11 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <span
-                    className="inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0 ring-1 ring-[#B89555]/70"
-                    style={{ background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 50%, #B89555 100%)" }}
+                    data-emerald-action="true"
+                    className="jj-emerald-action inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0"
                     aria-hidden="true"
                   >
-                    <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
+                    <Sparkles className="w-3 h-3" style={{ color: '#FFFFFF' }} />
                   </span>
                   <span className="text-[#1A1A1A]/90">{item}</span>
                 </li>
@@ -82,13 +82,11 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                 }}
               />
               <div
-                className="relative z-10 w-16 h-16 rounded-full inline-flex items-center justify-center"
-                style={{
-                  background: "linear-gradient(135deg, #F7ECD0 0%, #E8C77A 50%, #B89555 100%)",
-                  boxShadow: "0 8px 18px rgba(0,0,0,0.4)",
-                }}
+                data-emerald-action="true"
+                className="jj-emerald-action relative z-10 w-16 h-16 rounded-full inline-flex items-center justify-center"
+                style={{ boxShadow: "0 8px 18px rgba(0,0,0,0.4)" }}
               >
-                <Presentation className="w-7 h-7" style={{ color: "#1A1A1A" }} data-allow-ink />
+                <Presentation className="w-7 h-7" style={{ color: "#FFFFFF" }} />
               </div>
               <div className="relative z-10 text-center px-6" data-no-contrast-guard>
                 <div id="jj-genpres-eyebrow" className="text-[11px] uppercase tracking-[0.3em] mb-1">

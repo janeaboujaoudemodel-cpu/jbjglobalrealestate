@@ -508,10 +508,10 @@ export const ProjectAIAnalyzer = ({
             {/* Row 4: Pros & Cons — styled pill rows */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {/* Pros */}
-              <div className="bg-gradient-to-br from-emerald-100 via-emerald-50 to-green-100/80 border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-md shadow-emerald-200/60 ring-1 ring-emerald-300">
+              <div data-emerald-action="true" className="jj-emerald-action border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-md">
                 <div className="flex items-center gap-2 mb-4">
-                  <ThumbsUp className="w-5 h-5 text-[color:var(--emerald-1)]" />
-                  <h3 className="font-bold text-[color:var(--emerald-1)] text-lg">Pros</h3>
+                  <ThumbsUp className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+                  <h3 className="font-bold text-lg" style={{ color: '#FFFFFF' }}>Pros</h3>
                 </div>
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">

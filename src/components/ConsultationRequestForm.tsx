@@ -226,7 +226,7 @@ export const ConsultationRequestForm = ({
     >
       {/* Header */}
       <div className="text-center mb-6">
-        <div className="jj-cta-gold-metallic inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-wider mb-3">
+        <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-wider mb-3">
           <Calendar className="w-3 h-3" />
           Expert Consultation
         </div>

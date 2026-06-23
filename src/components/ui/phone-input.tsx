@@ -579,22 +579,19 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                 aria-haspopup="dialog"
                 disabled={disabled}
                 data-phone-code-trigger
+                data-emerald-action="true"
                 className={cn(
-                  "w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors",
-                  isLight ? "" : "allow-white",
+                  "jj-emerald-action w-full sm:w-[160px] h-12 inline-flex items-center justify-between shrink-0 rounded-lg px-3 transition-colors",
                   buttonStyles,
                 )}
                 data-no-contrast-guard
-                {...(isLight ? {} : { "data-allow-dark-cta": true })}
-                style={isCareersPhoneInput
-                  ? { backgroundColor: "#0A0A0A", border: "2px solid #0A0A0A", color: "#FFFFFF", boxShadow: "none" }
-                  : isLight ? undefined : { backgroundColor: "#1A1A1A", color: "#FFFFFF" }}
+                data-allow-dark-cta
               >
-                <span className="flex items-center gap-2 truncate" style={isLight ? undefined : { color: "#FFFFFF" }}>
+                <span className="flex items-center gap-2 truncate" style={{ color: "#FFFFFF" }}>
                   <span className="text-xl">{currentCountry.flag}</span>
-                  <span className="font-medium" style={isLight ? undefined : { color: "#FFFFFF" }}>{currentCode}</span>
+                  <span className="font-medium" style={{ color: "#FFFFFF" }}>{currentCode}</span>
                 </span>
-                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={isLight ? undefined : { color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </button>
             </PopoverTrigger>
             <PopoverContent 

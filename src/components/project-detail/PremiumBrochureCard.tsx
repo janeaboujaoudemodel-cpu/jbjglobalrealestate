@@ -236,13 +236,12 @@ const PremiumBrochureCard = ({
                 backdropFilter: "blur(4px)",
               }}
             >
-              <p
-                data-no-contrast-guard
-                className="text-[11px] uppercase tracking-[0.32em] font-extrabold mb-2 allow-white"
-                style={{ color: "#F3D98A", textShadow: "0 1px 2px rgba(0,0,0,0.9)" }}
+              <span
+                data-emerald-action="true"
+                className="jj-emerald-action inline-flex items-center px-3 py-1 rounded-md text-[11px] uppercase tracking-[0.28em] font-extrabold mb-2"
               >
                 Project Brochure
-              </p>
+              </span>
 
               <h3
                 data-no-contrast-guard

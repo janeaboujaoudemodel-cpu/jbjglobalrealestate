@@ -96,8 +96,8 @@ export default function MortgageAIAssistant({ context }: MortgageAIAssistantProp
           />
           <Button
             type="button"
-            variant="gold"
-            className="shrink-0 h-11 px-6"
+            data-emerald-action="true"
+            className="jj-emerald-action shrink-0 h-11 px-6"
             disabled={isLoading || !question.trim()}
             onClick={() => void submit()}
           >
