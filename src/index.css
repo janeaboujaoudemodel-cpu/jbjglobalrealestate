@@ -11457,6 +11457,32 @@ html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg :is(path, line
   color: #FFFFFF !important;
 }
 
+/* Sidebar inactive-row selectors above intentionally paint row text/icons black;
+   these higher-specificity locks protect ONLY icons inside emerald mini tiles. */
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 html body :is(.jj-favorite-trigger, [data-card-action]) :is(svg, [class*="lucide"]) {
   fill: none !important;
 }
