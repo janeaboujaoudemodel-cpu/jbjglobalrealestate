@@ -12757,6 +12757,11 @@ html body :is(
   .jj-sidebar-item-active
 ):not([data-no-contrast-guard]) :where(span, a, p, label, svg, [class*="lucide"]) {
   color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+
 
 /* =====================================================================
    REJECTED-GREEN REPAINT — PASS 1
