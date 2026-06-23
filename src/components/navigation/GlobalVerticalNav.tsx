@@ -1243,39 +1243,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           )}
 
-          {/* Collapse — gold pill, glow + 3D lift on hover */}
+          {/* Collapse — champagne pill with black icon + black text */}
           <button
             data-no-contrast-guard
-            data-sidebar-collapse-control
-            data-on-dark
-            data-allow-dark-cta
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="allow-white jbj-sidebar-collapse-control group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
-            style={{
-              color: '#FFFFFF',
-              background: 'var(--jj-emerald-ombre)',
-              border: '1px solid rgba(255,255,255,0.22)',
-              boxShadow: 'none',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
-              e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), 0 0 12px rgba(52,211,153,0.30)';
-              e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-2px) scale(1.02)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
-              e.currentTarget.style.boxShadow = 'none';
-              e.currentTarget.style.transform = 'none';
-            }}
+            className="group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[5px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform border border-[#B89555]/45 bg-transparent hover:bg-[#EFE6D6]/60"
+            style={{ color: '#1A1A1A' }}
           >
-            <PanelLeftClose className="allow-white w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-            <span className="allow-white" data-no-contrast-guard data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
+            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+            <span data-no-contrast-guard style={{ color: '#1A1A1A' }}>Collapse</span>
           </button>
+
 
         </div>
       </div>
