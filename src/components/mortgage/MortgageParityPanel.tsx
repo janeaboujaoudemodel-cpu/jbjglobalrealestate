@@ -79,12 +79,14 @@ export default function MortgageParityPanel({
   const dbrOk = monthlyPayment <= dbrCap;
 
   // Comparison
-  const compareMonthly = useMemo(() => {
-    const r = compareRate / 100 / 12;
+  const calcMonthly = (rate: number) => {
+    const r = rate / 100 / 12;
     const n = loanTermYears * 12;
     if (r <= 0) return loanAmount / n;
     return (loanAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
-  }, [compareRate, loanAmount, loanTermYears]);
+  };
+  const bankAMonthly = useMemo(() => calcMonthly(bankARate), [bankARate, loanAmount, loanTermYears]);
+  const compareMonthly = useMemo(() => calcMonthly(compareRate), [compareRate, loanAmount, loanTermYears]);
 
   // Amortization (yearly summary)
   const schedule = useMemo(() => {
