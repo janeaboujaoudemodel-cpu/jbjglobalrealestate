@@ -1,62 +1,45 @@
-## Goal
+I will fix the rejected green/black-content violations by making the real-estate UI use only the approved emerald system: dark metallic emerald (#064E3B / gradient-to-black where the existing official primitive requires it) with pure white text/icons inside.
 
-Every action button on real-estate surfaces (project, area, developer, properties, resale) renders in the **one approved emerald** (`#0E8A66`) with **pure white** text and **pure white** icons — no champagne fills, no ink text, no gold borders on these CTAs.
+Plan:
 
-## Scope (pages swept in one pass)
+1. Lock the official emerald CTA primitive globally
+- Update the global CTA contract so `.jj-cta-primary`, `.jj-pill-emerald-metallic`, `.jj-official-emerald`, `data-cta="primary"`, and selected active tabs/chips all render:
+  - approved emerald/dark-metallic emerald fill
+  - no rejected `#0E8A66` flat fill as the main CTA color
+  - pure white text and pure white SVG/icon strokes/fills
+- Convert the old `.jj-cta-gold-metallic` primitive usage for action CTAs/forms to the emerald metallic contract, because it is currently still gold/ink and conflicts with this request.
+- Strengthen the final cascade guard so hardcoded `bg-[#0E8A66]` and inline emerald-style elements are repainted to approved emerald and descendants become pure white unless explicitly excluded for non-action surfaces.
 
-- `/project/:slug` — all selected CTAs in the screenshot:
-  Read More, Download Images, gallery prev/next arrows, +14 overlay, Download All Photos, View All Projects by Developer, Open in Maps, Describe with AI, Payment Plan tab CTA, Brochure download, Request Mortgage Introduction, Contact our team, Request a Call Back Now, Report an issue, Download Report.
-- `/area/:slug` (AreaDetail) — same hero/section CTAs.
-- `/developer/:slug` (DeveloperDetail) — "View Projects", contact, brochure CTAs.
-- `/properties` & `/resale` listing pages — primary CTAs on cards' overlays and detail panels (price pill stays orange — locked, not touched).
-- `/compare` primary action CTA.
+2. Fix specific project page violations shown in the screenshots
+- `Payment Plan (60 / 40)` active segmented button: emerald fill + pure white label/icon.
+- `All nearby` and nearby-map active chips: approved emerald fill + pure white count/text; inactive chips stay champagne/ink.
+- `Download Brochure`, `Open in Maps`, `View All Projects`, `Report an issue`, `Request a Call Back`, `Request Mortgage Introduction`, `Request Consultation`, and related real-estate CTAs: approved emerald + pure white text/icons.
+- `Noticed something incorrect?` warning icon tile: convert the icon tile to emerald fill with pure white icon.
+- Recommended Projects header star and `View All` button: emerald fill + pure white content where the element is acting as an accent/action.
+- Developer-info action/link area: ensure developer-action buttons use the same emerald metallic treatment with pure white content.
 
-Out of scope (locked by other standards, untouched):
-- Price pill (orange).
-- Developer name link (DeveloperLink).
-- Sidebar / header chrome.
-- Card cover arrows (banned by Card Arrows rule — stay banned, not re-added as emerald).
-- Sale-status rectangular gold badge (owner opt-in).
+3. Fix forms and picker controls
+- Convert active multi-select chips in consultation/register-interest forms from champagne/gold/ink to emerald fill + pure white content.
+- Ensure phone/country picker trigger and submit buttons keep pure white text/icons on emerald/dark fill.
+- Preserve form fields themselves as champagne/ink; only active choices, icons, and action buttons become emerald.
 
-## Approach
+4. Fix global icon color issues without breaking content readability
+- Apply a scoped project/property/forms icon rule so decorative/action icons in cards and sections are emerald by default.
+- Any icon inside an emerald-filled tile/button remains pure white.
+- Mortgage calculator header/icon tiles and summary card icons will use emerald instead of black/gold, while text remains readable on champagne backgrounds.
 
-1. **Centralize via the locked primitive.** All in-scope CTAs route through `EmeraldButton` (or `.jj-pill-emerald-metallic` for pill shape). Both already carry `data-no-contrast-guard` + the emerald foreground lock added in the previous turn, so text and `<svg>` glyphs render pure white at idle, hover, focus, and active.
+5. Fix developer-logo/card consistency
+- Keep project card developer logo plates as the existing plain square format matching the Emaar-style square plate.
+- Remove rectangular text fallback usage in Recommended Projects and replace with the unified square `DeveloperLogo` fallback/nameplate behavior.
+- Keep `DeveloperLink` as the canonical developer-name renderer; adjust only where the user explicitly requested filled emerald action styling, not every inline developer text link.
 
-2. **Replace champagne / ink / outline CTAs in scope** with `<EmeraldButton>` (rectangular) or `.jj-pill-emerald-metallic` (pill). Icon-only buttons (gallery arrows, X, close) get `bg-[#0E8A66] text-white` + `data-no-contrast-guard`, matching the profile-prompt pattern just shipped.
-
-3. **Keep "Maybe later" / secondary** as champagne-with-emerald-text (already standard per CTA Hierarchy memory) — not touched unless visibly wrong.
-
-4. **Visual validation (mandatory).** Drive Playwright against the live preview at 1280×1800, screenshot each page:
-   - `/project/distrikt-majid-al-futtaim-city-of-arabia` (top, gallery, developer card, location, payment, brochure, mortgage, AI analyzer, contact form, report-issue).
-   - `/area/tilal-al-ghaf`
-   - `/developer/majid-al-futtaim-properties`
-   - `/properties`
-   - `/resale`
-   - Profile-prompt popup (`?completeProfile=1`) to confirm the X + Trophy + Take me there are emerald/white as already fixed.
-
-   For each screenshot, sample CTA pixels and assert R<40, G in 100-160, B in 90-130 for the fill, and >240/240/240 for the inner text/icon. Save shots to `/tmp/browser/emerald-sweep/` and report.
-
-5. **Report back** with a side-by-side of before / after screenshots and the list of files changed.
-
-## Files likely to change
-
-- `src/pages/ProjectDetail.tsx` (or composing layout in `src/components/project-detail/ProjectDetailLayout.tsx`)
-- `src/components/project-detail/`: `PremiumBrochureCard.tsx`, `DeveloperInfoCard.tsx`, `ProjectLocationMap.tsx`, `GeneratePresentationCard.tsx`, `ReportIssueButton.tsx`, `ProjectInquiryForm.tsx`, `CallToActionSection.tsx`, `ProjectMediaSection.tsx` (Download Images / +14 / arrows), `ProjectAIAnalyzer.tsx` (Contact our team), `PaymentPlanVisualization.tsx`.
-- `src/components/MortgageCalculator.tsx` (Request Mortgage Introduction, Download Report).
-- `src/components/area-detail/` equivalents.
-- `src/pages/AreaDetail.tsx`, `src/pages/DeveloperDetail.tsx`.
-
-No CSS rules added — the emerald foreground lock is already in `src/index.css`. This is a component-level normalization, not a theme change.
-
-## Risks / guardrails
-
-- Do **not** convert anything currently champagne by spec (Maybe later, secondary outline pills) unless the screenshot shows it next to an emerald primary and the user wants both emerald — they don't.
-- Do **not** touch card cover arrows (banned).
-- Do **not** widen the emerald contract — same one CSS rule already shipped.
-- Preserve all existing handlers, hrefs, aria-labels, and `data-` attributes.
-
-## Deliverable
-
-- Updated components.
-- Playwright screenshots at `/tmp/browser/emerald-sweep/*.png` showing every in-scope CTA emerald + white.
-- Short diff summary in the response.
+6. Visual validation only
+- Use Playwright at 1280×1800 to inspect and screenshot:
+  - `/project/elwood-sobha-realty-dubailand` payment plan section
+  - location/nearby map section
+  - developer section
+  - brochure section
+  - mortgage section including Request Mortgage Introduction
+  - register-interest/consultation form area
+  - recommended projects section
+- Save screenshots under `/tmp/browser/emerald-fix/` and visually confirm: no rejected green action fills, no black text/icons on emerald, and no non-white content inside emerald surfaces.
