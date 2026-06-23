@@ -53,7 +53,7 @@ interface DLDMarketWidgetProps {
 // ─── Premium institutional palette (muted, semantic) ────────────────
 // gold accent for chrome/borders only; data tones below
 const TONE = {
-  emerald: { text: "text-[#1E5F3F]", soft: "bg-[#1E5F3F]/8", border: "border-[#1E5F3F]/25", dot: "bg-[#1E5F3F]", bar: "bg-[#1E5F3F]" },
+  emerald: { text: "text-[#064E3B]", soft: "bg-[#064E3B]/8", border: "border-[#064E3B]/25", dot: "bg-[#064E3B]", bar: "bg-[#064E3B]" },
   navy:    { text: "text-[#1F3A5F]", soft: "bg-[#1F3A5F]/8", border: "border-[#1F3A5F]/25", dot: "bg-[#1F3A5F]", bar: "bg-[#1F3A5F]" },
   steel:   { text: "text-[#0A0A0A]", soft: "bg-[#0A0A0A]/8", border: "border-[#0A0A0A]/25", dot: "bg-[#0A0A0A]", bar: "bg-[#0A0A0A]" },
   bronze:  { text: "text-[#B89555]", soft: "bg-[#B89555]/8", border: "border-[#B89555]/25", dot: "bg-[#B89555]", bar: "bg-[#B89555]" },
@@ -203,7 +203,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <p className="text-[10px] text-[#1A1A1A]/65 uppercase tracking-wider mb-1">This Area</p>
             <div className="flex items-center justify-between">
               <span className="text-[#1A1A1A] text-sm font-medium">{matchedArea.transactions.toLocaleString()} transactions</span>
-              <span className="text-[#1E5F3F] text-sm font-semibold">{matchedArea.change}</span>
+              <span className="text-[#064E3B] text-sm font-semibold">{matchedArea.change}</span>
             </div>
           </div>
         )}
@@ -268,7 +268,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Growth Banner */}
           <div className="bg-[#F7F2EA] border border-[#B89555]/40 rounded-2xl p-5 mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#1E5F3F] flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-[#064E3B] flex items-center justify-center">
                 <ArrowUpRight className="w-6 h-6 text-[#FDFBF7]" />
               </div>
               <div>
@@ -277,7 +277,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
             </div>
             <div className="text-right">
-              <p className="text-3xl md:text-5xl font-extrabold text-[#1E5F3F]">{ytd2026.growth}</p>
+              <p className="text-3xl md:text-5xl font-extrabold text-[#064E3B]">{ytd2026.growth}</p>
             </div>
           </div>
 
@@ -305,7 +305,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
 
               <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div className="h-full bg-[#1E5F3F] rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
+                <div className="h-full bg-[#064E3B] rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
                   <span className="text-[#FDFBF7] text-[10px] font-bold">{offPlanPct}%</span>
                 </div>
                 <div className="h-full bg-[#8C4A2B] flex-1 rounded-r-full flex items-center justify-center">
@@ -313,12 +313,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-[#1E5F3F]/8 border border-[#1E5F3F]/25 rounded-lg p-3">
+                <div className="bg-[#064E3B]/8 border border-[#064E3B]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#1E5F3F]" />
-                    <span className="text-[#1E5F3F] text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#064E3B]" />
+                    <span className="text-[#064E3B] text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
                   </div>
-                  <p className="text-[#1E5F3F] text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
+                  <p className="text-[#064E3B] text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
                   <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{offPlanPct}% of total</p>
                 </div>
                 <div className="bg-[#8C4A2B]/8 border border-[#8C4A2B]/25 rounded-lg p-3">
@@ -408,7 +408,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-[#0A0A0A] text-xs font-bold">{area.transactions.toLocaleString()}</span>
-                          <span className="text-[#1E5F3F] text-xs font-extrabold bg-[#1E5F3F]/8 border border-[#1E5F3F]/25 px-2 py-0.5 rounded-full">
+                          <span className="text-[#064E3B] text-xs font-extrabold bg-[#064E3B]/8 border border-[#064E3B]/25 px-2 py-0.5 rounded-full">
                             {area.change}
                           </span>
                           {nats.length > 0 &&

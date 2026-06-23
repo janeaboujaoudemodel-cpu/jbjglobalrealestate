@@ -239,6 +239,17 @@ All colors MUST be HSL.
      * these via inline style on their root container. */
     --app-content-top: 88px;
     --app-content-left: 0px;
+  }
+
+  /* Sidebar-aware content origin — drives BrandedLoader & any centered overlay
+     to sit inside the visible content area (right of the fixed vertical sidebar),
+     matching the open/collapsed sidebar widths set in MainLayout. */
+  @media (min-width: 640px) {
+    body.jj-vertical-nav-collapsed { --app-content-left: 48px; }
+    body.jj-vertical-nav-active    { --app-content-left: 200px; }
+  }
+
+  :root {
 
     /* ============================================================
      * CHAMPAGNE / GOLD GLOBAL THEME (replaces white-monochrome)
