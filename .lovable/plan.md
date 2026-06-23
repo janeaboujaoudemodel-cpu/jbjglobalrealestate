@@ -1,71 +1,48 @@
-# Gate 1 — One Official Emerald Primitive
+Plan to fix and validate the emerald issues:
 
-## Goal
-Eliminate every emerald variant. The sidebar **COLLAPSE** button becomes the single visual reference. Every emerald surface across the site reuses one shared primitive with white text and white icons.
+1. Lock the approved emerald source of truth
+- Use the same approved emerald treatment as the Email / Call / Chat buttons: `var(--jj-emerald-ombre)` / `var(--jj-emerald-ombre-hover)`.
+- Add a final high-specificity CSS lock at the bottom of `src/index.css` so emerald action buttons, icon circles, badges, labels, and mortgage controls render:
+  - approved emerald background only
+  - pure white text/icons
+  - no visible border/ring/outline
+  - deeper emerald at rest, lighter emerald on hover
 
-## 1. Define the single primitive
-In `src/index.css`, create one canonical class — `.jj-emerald` — and one outline sibling `.jj-emerald-outline`. They will own:
-- gradient (locked metallic emerald used by the Collapse button)
-- shadow, radius, border, transition
-- hover (lighter emerald) and active states
-- forced `color:#fff` for text and all descendant SVGs (`stroke`, `fill` where appropriate)
-- `border:0` unless the Collapse primitive has one
+2. Fix project card heart / shortlist / add-badge directly
+- Update `FavoriteButton.tsx`, `ShortlistBadgeButton.tsx`, and `DesignFavoriteButton.tsx` so they do not rely on old green utility classes or old bordered pill styling.
+- Force the button circles to approved emerald, white heart/list/award/check icons, and no border.
+- Ensure the add-badge button on project cards is the same approved emerald and not restricted green.
 
-All previous emerald classes (`jj-cta-emerald`, `jj-pill-emerald`, `jj-pill-emerald-metallic`, `jj-cta-emerald-metallic`, `jj-card-emerald-action`, `jj-favorite-trigger`, `jj-surface-emerald`, `jj-emerald-solid`, `jj-emerald-ombre*`, `--jj-emerald-ombre*`) become **aliases** that `@extend`/forward to `.jj-emerald`. No alternative gradients remain.
+3. Fix all project-card labels and card CTAs
+- Replace the EOI / handover inline restricted-green gradients in `ProjectCard.tsx` with the approved emerald variable.
+- Remove the white border from those labels.
+- Ensure Email / Call / Chat, Register Interest, Download Brochure, Download Branded Presentation, and similar emerald CTAs use the same approved emerald + white content + no border.
 
-Add a final lock block:
-```css
-html body :is(.jj-emerald, [data-emerald="true"]) {
-  background: var(--jj-emerald-primitive) !important;
-  color:#fff !important; border:0 !important;
-}
-html body :is(.jj-emerald, [data-emerald="true"]) :is(svg, [data-icon]) {
-  color:#fff !important; stroke:#fff !important;
-}
-html body :is(.jj-emerald, [data-emerald="true"]):hover {
-  background: var(--jj-emerald-primitive-hover) !important;
-}
-```
+4. Fix Continue Searching section
+- Ensure the history icon circle and property-card heart in `ContinueSearching.tsx` use the same approved emerald and white icon.
+- Remove remaining border styling from those emerald controls.
 
-## 2. Sample the Collapse button
-Read the rendered Collapse button (in `BrokerPortalSidebar.tsx` / `OwnerDashboardShell.tsx`) via Playwright, capture its computed `background-image`, `box-shadow`, `border-radius`, `transition`. Those exact values become `--jj-emerald-primitive` / `--jj-emerald-primitive-hover`. No new values invented.
+5. Fix mortgage calculator / compare bank rates
+- Replace any bank-rate slider green, mortgage range track/thumb green leaks, and “Try our / AI mortgage calculator” green CTA styles with approved emerald.
+- Remove borders from emerald mortgage buttons/pickers.
+- Keep text/icons pure white on emerald states.
 
-## 3. Migrate every emerald surface to `.jj-emerald`
-Replace inline `style={{ backgroundImage: 'var(--jj-emerald-ombre)' ... }}`, raw Tailwind `bg-emerald-*` / `bg-green-*` / `from-*-green-*`, and per-component emerald CSS with `<… className="jj-emerald" />`.
+6. Sweep restricted green globally
+- Search and replace remaining restricted green sources in touched UI areas:
+  - `bg-green-*`, `from-green-*`, `text-green-*`, `border-green-*`
+  - light `emerald-300/400/500/600` utilities
+  - direct restricted hexes such as `#047857`, `#059669`, `#10B981`, `#34D399` where they paint visible buttons, labels, badges, or icon circles.
+- Preserve semantic data colors only where they are clearly not requested CTA/icon/label surfaces.
 
-Targets (audited list):
-- **Cards:** `FavoriteButton`, `ShortlistBadgeButton`, `DesignFavoriteButton`, `ProjectCard` (EOI/Handover chips, Email/Call/Chat, Add Badge, Register Interest, Download Brochure, Download Branded Presentation), `ReellyProjectCard`, `ContinueSearching` (history circle + heart).
-- **Contact CTAs (Ready to Get Started):** WhatsApp, Call, Email, Chat, Contact, Support buttons.
-- **AI:** AI Property Comparison icon tile, AI Mortgage Calculator CTA, "AI Powered" label, AI badges, AI CTA buttons.
-- **Mortgage:** "Compare to Bank Rates" slider track fill, thumb, hover/focus/active — unify with Interest Rate / Loan Term / Down Payment / Property Price sliders via shared `--slider-range-bg` / `--slider-thumb-bg` tokens set to the primitive.
-- **Explore Our Guides:** Book icon tile + "View Library" arrow button.
-- **Labels:** single `<EmeraldLabel>` primitive used by AI Powered, Pipeline, Data Access, Professional Development, Foundations, Practical, Internal, Market Intelligence, etc. Remove page-local label CSS.
-- **Header chips:** Mode, AED, sq ft/sq m, filter, favorites count.
-
-## 4. Codebase sweep
-Run a codemod across `src/**/*.{ts,tsx,css}` that:
-- removes inline emerald `style={{ backgroundImage|background|backgroundColor }}` set to greens
-- removes `border-white/*`, `borderColor: 'rgba(255,255,255,…)'` on emerald surfaces
-- maps `bg-green-*`, `bg-emerald-300..900`, `from/to/via-(green|emerald|teal)-*`, `text-emerald-*`, `border-emerald-*` → `jj-emerald` (or removes when redundant)
-- deletes legacy class definitions in `index.css` after aliasing
-Fails the build if any of those patterns reappear (ESLint rule + grep check in `scripts/contrast/`).
-
-## 5. Validation (must pass before declaring done)
-Playwright run (`/tmp/browser/emerald/`) on `/`, `/properties`, `/project/<slug>`, `/mortgage-calculator`, `/compare`, `/ai-home-finder`, `/guides`, broker portal, owner dashboard:
-1. Screenshot full viewport.
-2. For each emerald element, read computed `background-image`, `color`, `border-width`, descendant `<svg>` `color`/`stroke`.
-3. Assert they equal the Collapse button's values exactly. Any mismatch fails the gate.
-4. Zoomed crops of: card heart/shortlist/Add Badge, Email/Call/Chat row, Ready to Get Started cards, AI Mortgage CTA, Compare-to-Bank-Rates slider, Explore Our Guides book + arrow, label chips.
-
-Deliver the contact sheet + per-surface zoom crops. No "fixed" claim without the diff report showing zero mismatches.
-
-## Files expected to change
-- `src/index.css` (consolidate + lock primitive, alias legacy classes)
-- `src/components/ui/emerald/EmeraldButton.tsx`, add `EmeraldLabel.tsx`, `EmeraldIconTile.tsx`
-- `src/components/ui/slider.tsx` (single emerald token for filled track + thumb)
-- `FavoriteButton`, `ShortlistBadgeButton`, `DesignFavoriteButton`, `ProjectCard`, `ReellyProjectCard`, `ContinueSearching`, `MortgageCalculator`, `mortgage/MortgageParityPanel`, guides/AI/contact sections, header chips
-- `scripts/contrast/check-emerald-primitive.mjs` (new guard)
-- `eslint-rules/no-raw-emerald.js` (new)
-
-## Out of scope
-No logic changes, no copy changes, no layout restructuring — visual primitive consolidation only.
+7. Visual validation before reporting back
+- Use Playwright after changes and only send screenshots that pass visual checks.
+- Validate these pages/areas:
+  - `/` Continue Searching section: history circle + heart icon
+  - `/properties`: project card heart, shortlist, add badge, EOI/handover labels, Email/Call/Chat
+  - one `/project/:slug`: project-detail badge/actions where visible
+  - `/mortgage-calculator`: compare bank rates picker and mortgage CTA
+- In the validation script, also inspect computed styles for the target elements and confirm:
+  - background is the approved emerald gradient or `#064E3B` fallback
+  - icon/text color is white
+  - border width is `0px` or visually none
+- Save screenshots/crops and report only after the checks pass.
