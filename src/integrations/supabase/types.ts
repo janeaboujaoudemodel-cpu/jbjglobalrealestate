@@ -39638,6 +39638,10 @@ export type Database = {
       next_booking_id: { Args: { prefix?: string }; Returns: string }
       next_doc_number: { Args: { _template_key: string }; Returns: string }
       owner_delete_junk_lead: { Args: { _lead_id: string }; Returns: undefined }
+      owner_disable_broker_2fa: {
+        Args: { _broker_user_id: string }
+        Returns: boolean
+      }
       owner_redistribute_junk_lead: {
         Args: { _lead_id: string; _new_broker_id: string }
         Returns: undefined
@@ -39733,6 +39737,10 @@ export type Database = {
           issued_at: string
           track: string
         }[]
+      }
+      verify_email_otp: {
+        Args: { _email: string; _otp_code: string }
+        Returns: boolean
       }
       verify_email_otp_secure: {
         Args: { p_code: string; p_email: string }
