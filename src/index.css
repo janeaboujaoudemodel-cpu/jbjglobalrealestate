@@ -10619,6 +10619,67 @@ html body [cmdk-item] > span:first-child:empty {
   display: none !important;
 }
 
+/* ════════════════════════════════════════════════════════════════
+   FINAL LOCK — Emerald icon containers must be official dark emerald
+   Reason: older sidebar passes still used #047857 / #10b981 gradients,
+   which visually read as light green. This terminal rule replaces every
+   emerald icon-tile surface with the official emerald ombre and keeps the
+   glyph pure white in expanded, collapsed, active, and hover states.
+   ════════════════════════════════════════════════════════════════ */
+html body :is(
+  [data-emerald-icon-surface],
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child
+),
+html body :is(
+  [data-emerald-icon-surface],
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child
+):is(:hover, :focus, :focus-visible, :active) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 8px 18px -12px rgba(6, 78, 59, 0.78), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+  filter: none !important;
+}
+html body :is(
+  [data-emerald-icon-surface],
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child
+) :is(svg, [class*="lucide"]),
+html body :is(
+  [data-emerald-icon-surface],
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
+  [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child
+) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
 /* PASS XX-D contrast hard-stop: beats legacy light-surface locks with exact primitive specificity. */
 html body button.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
 html body a.jj-cta-primary.jj-cta-champagne[data-surface="emerald"][data-cta="primary"],
@@ -11878,6 +11939,185 @@ html body :is(
   opacity: 1 !important;
 }
 
+/* 🔒 TRUE EOF LOCK — official dark emerald icon tiles only.
+   Cause: older sidebar rules used #047857/#10b981 and white rings/shadows,
+   making tiles visually read as light green. */
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-blend-mode: normal !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Selector-specific sidebar lock — beats older [data-sidebar-section] > div rules. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight] > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child:is(:hover, :focus, :focus-visible, :active),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight] > span:first-child:is(:hover, :focus, :focus-visible, :active),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child:is(:hover, :focus, :focus-visible, :active),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child:is(:hover, :focus, :focus-visible, :active) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child :is(svg, [class*="lucide"]) *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight] > span:first-child :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight] > span:first-child :is(svg, [class*="lucide"]) *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child :is(svg, [class*="lucide"]) *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > span:first-child :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+/* Highest-specificity duplicate to beat earlier :not([data-active]) light-green stops. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]) > div:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]):hover > div:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]):hover > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]):hover > span:first-child {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* 🔒 ABSOLUTE LAST RULE — official dark emerald icon tiles only.
+   Older sidebar passes used lighter #047857/#10b981 stops and white rings,
+   which made the icons read as green-filled. This end-of-file lock removes
+   the light treatment and forces the canonical ombre everywhere. */
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-blend-mode: normal !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* 🔒 ABSOLUTE LAST RULE — no light-green sidebar/icon-tile fills.
+   Cause fixed: older rules and collapsed-sidebar inline styles used white
+   rings/shadows plus lighter #047857/#10b981 stops, so screenshots read as
+   green-filled instead of official dark emerald. */
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-blend-mode: normal !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
 /* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
    Must remain after all inactive-sidebar black repaint rules. */
 html body [data-chrome="sidebar"] [data-emerald-icon-surface],
@@ -11993,4 +12233,48 @@ html body :is(
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
+}
+
+/* 🔒 TRUE EOF LOCK — official dark emerald icon tiles only.
+   Cause: older sidebar rules used #047857/#10b981 and white rings/shadows,
+   making tiles visually read as light green. */
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-blend-mode: normal !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]),
+html body :is(
+  [data-chrome="sidebar"] [data-emerald-icon-surface],
+  [data-chrome="sidebar"] .jj-side-tile,
+  [data-icon-tile][data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :is(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
 }
