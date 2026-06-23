@@ -42,6 +42,8 @@ export default function BrokerPortalLayout() {
   return (
     <div
       data-surface="champagne"
+      data-bk-scope="back-office"
+      data-bk-nav=""
       className="min-h-screen w-full bg-[#FDFBF7] relative"
     >
       {/* Mobile sidebar */}
