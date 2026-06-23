@@ -7168,14 +7168,14 @@ html body footer p:last-child {
    2px halo + heavy drop-shadow). Hover gives a subtle bloom only. */
 .jj-emerald-glow-wrap::before {
   inset: 0 !important;
-  padding: 1px !important;
+  padding: 0 !important;
   filter: none !important;
   opacity: 1 !important;
   animation: none !important;
-  background: linear-gradient(135deg, rgba(52,211,153,0.85), rgba(6,78,59,0.85)) !important;
+  background: var(--jj-emerald-ombre) !important;
 }
 .jj-emerald-glow-wrap:hover::before {
-  filter: drop-shadow(0 0 8px rgba(52,211,153,0.55)) !important;
+  filter: none !important;
 }
 
 /* Kill ANY border / ring / outline inside a unified emerald pill,
@@ -7214,7 +7214,7 @@ html body footer p:last-child {
   position: relative;
   isolation: isolate;
   background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(52,211,153,0.55) !important;
+  border: 0 !important;
   box-shadow:
     0 0 0 1px rgba(52,211,153,0.20),
     0 8px 22px rgba(0,0,0,0.32),
@@ -7248,9 +7248,7 @@ html body footer p:last-child {
 .jj-emerald-metallic:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 0 0 1px rgba(52,211,153,0.40),
     0 14px 32px rgba(0,0,0,0.42),
-    0 0 38px rgba(52,211,153,0.42),
     inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 .jj-emerald-metallic, .jj-emerald-metallic *,
