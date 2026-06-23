@@ -20,8 +20,7 @@ export default function HomepageBookMarquee() {
             <div>
               <h2
                 data-no-contrast-guard
-                className="text-lg md:text-xl font-bold"
-                style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' } as React.CSSProperties}
+                className="jj-emerald-ombre-text text-lg md:text-xl font-bold"
               >
                 Explore Our Guides & Reports
               </h2>
@@ -31,11 +30,10 @@ export default function HomepageBookMarquee() {
           <Link
             to="/guides"
             data-no-contrast-guard
-            className="hidden sm:flex items-center gap-1.5 text-sm font-semibold transition-colors"
-            style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' } as React.CSSProperties}
+            className="hidden sm:flex items-center gap-1.5 text-sm font-semibold transition-colors group"
           >
-            <span style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>View Library</span>
-            <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
+            <span className="jj-emerald-ombre-text">View Library</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </Link>
         </div>
       </div>
