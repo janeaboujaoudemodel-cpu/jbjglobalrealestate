@@ -11431,6 +11431,106 @@ html body :is(
   opacity: 1 !important;
 }
 
+/* 🔒 TRUE FINAL FILE-END LOCK — sidebar emerald mini-tile glyphs are white. */
+html body [data-chrome="sidebar"] [data-emerald-icon-surface],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
+   Must remain after all inactive-sidebar black repaint rules. */
+html body [data-chrome="sidebar"] [data-emerald-icon-surface],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:hover,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus-visible,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:active,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:disabled {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"] *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* ABSOLUTE FINAL LOCK — sidebar emerald icon tiles.
+   This fixes the visually highlighted issue: row text can be black on champagne,
+   but every glyph inside an emerald tile remains pure white in idle/hover/active. */
+html body [data-chrome="sidebar"] [data-emerald-icon-surface],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]),
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]) *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) :is(svg, [class*="lucide"], [data-lucide]),
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) :is(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg :is(path, line, polyline, polygon, rect, circle, ellipse) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+/* Sidebar inactive-row selectors above intentionally paint row text/icons black;
+   these higher-specificity locks protect ONLY icons inside emerald mini tiles. */
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]),
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-section-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-highlight-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]) *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-sidebar-subitem-icon]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 html body :is(.jj-favorite-trigger, [data-card-action]) :is(svg, [class*="lucide"]) {
   fill: none !important;
 }
@@ -11589,12 +11689,12 @@ html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
-/* Inactive section row's icon tile: no fill, no border. */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) > div:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+/* Inactive section row stays champagne, but the emerald icon tile keeps white glyphs. */
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 
 /* ── 2. INACTIVE HIGHLIGHT ROWS (AI Home Finder, List Property,
@@ -11633,16 +11733,12 @@ html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="tru
   box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
   border-color: rgba(184,149,85,0.18) !important;
 }
-/* Inactive highlight row icon tile: no fill, no border. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+/* Inactive highlight rows stay champagne, but emerald icon tiles keep white glyphs. */
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 
 /* ── 3. INACTIVE SUBITEMS — already champagne, just enforce ink + no emerald hover ── */
@@ -11661,22 +11757,22 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover {
   background-color: rgba(239, 230, 214, 0.55) !important;
   background-image: none !important;
   transform: none !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   transform: none !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover *,
@@ -11820,6 +11916,37 @@ html body :is(
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
+}
+
+/* 🔒 FINAL FILE-END SIDEBAR EMERALD GLYPH LOCK
+   Must remain after all inactive-sidebar black repaint rules. */
+html body [data-chrome="sidebar"] [data-emerald-icon-surface],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:hover,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:focus-visible,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:active,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:disabled {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] [class*="lucide"] *,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg,
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
 }
 /* Path-level lock so an inherited fill/stroke can't repaint icon strokes. */
 html body :is(
