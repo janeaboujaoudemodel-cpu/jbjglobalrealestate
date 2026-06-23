@@ -2563,21 +2563,18 @@ All colors MUST be HSL.
     text-shadow: none;
   }
 
-  /* Scrollbar utilities — gold */
+  /* Scrollbar utilities — legacy "gold" names, now Emerald (gold scrollbars removed) */
   .scrollbar-thin {
     scrollbar-width: thin;
   }
-  
-  .scrollbar-thumb-gold {
-    scrollbar-color: #B89555 transparent;
-  }
-  
+
+  .scrollbar-thumb-gold,
   .scrollbar-thumb-gold\/60 {
-    scrollbar-color: #B89555 rgba(184, 149, 85, 0.1);
+    scrollbar-color: rgba(6, 78, 59, 0.55) transparent;
   }
-  
+
   .scrollbar-track-gold\/10 {
-    scrollbar-color: inherit rgba(184, 149, 85, 0.1);
+    scrollbar-color: inherit transparent;
   }
 
   /* Webkit scrollbar styling */
@@ -2585,18 +2582,20 @@ All colors MUST be HSL.
     width: 6px;
     height: 6px;
   }
-  
-  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb {
-    background: #B89555;
+
+  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb,
+  .scrollbar-thumb-gold::-webkit-scrollbar-thumb {
+    background: rgba(6, 78, 59, 0.55);
     border-radius: 3px;
   }
-  
-  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover {
-    background: rgba(184, 149, 85, 0.85);
+
+  .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover,
+  .scrollbar-thumb-gold::-webkit-scrollbar-thumb:hover {
+    background: #064E3B;
   }
-  
+
   .scrollbar-track-gold\/10::-webkit-scrollbar-track {
-    background: rgba(184, 149, 85, 0.1);
+    background: transparent;
     border-radius: 3px;
   }
 
