@@ -236,41 +236,67 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
             initial={{ scale: 0.96, y: 12, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 8, opacity: 0 }}
-            data-surface="light"
+            data-surface="emerald"
+            data-allow-dark-cta
+            data-no-contrast-guard
             data-jbj-guided-tour-card
-            className="relative w-full max-w-md my-auto bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl overflow-hidden"
+            className="allow-white relative w-full max-w-md my-auto rounded-2xl shadow-2xl overflow-hidden border border-[#B89555]/40"
+            style={{
+              backgroundImage: "var(--jj-emerald-ombre)",
+              color: "#FFFFFF",
+            }}
           >
+            {/* Animated shimmer sheen */}
+            <motion.div
+              aria-hidden
+              initial={{ x: "-120%" }}
+              animate={{ x: "120%" }}
+              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.2 }}
+              className="pointer-events-none absolute inset-y-0 w-1/2"
+              style={{
+                background:
+                  "linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.10) 45%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.10) 55%, transparent 100%)",
+                mixBlendMode: "screen",
+              }}
+            />
+            {/* Soft glow orbs */}
+            <div aria-hidden className="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(184,149,85,0.35), transparent 70%)" }} />
+            <div aria-hidden className="pointer-events-none absolute -bottom-20 -left-16 w-60 h-60 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(255,255,255,0.10), transparent 70%)" }} />
+
             <button
               onClick={handleComplete}
-              className="absolute top-3 right-3 z-20 p-2 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
+              className="absolute top-3 right-3 z-20 p-2 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur transition-colors"
               aria-label="Close tour"
             >
-              <X className="w-4 h-4 text-[#1A1A1A]/70" />
+              <X className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </button>
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
 
-            <div className="px-6 py-7 text-center">
-              <div className="flex justify-center mb-4 text-[#1A1A1A]">
-                <JJLogoImage variant="light" size="sm" />
-              </div>
+            <div className="relative px-6 py-8 text-center">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 18 }}
+                className="flex justify-center mb-4"
+              >
+                <JJLogoImage variant="dark" size="sm" />
+              </motion.div>
               <div
-                data-surface="emerald"
-                data-emerald-icon-surface
                 data-no-contrast-guard
-                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 jj-official-emerald"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 border border-white/30 bg-white/10 backdrop-blur"
                 style={{ color: "#FFFFFF" }}
               >
                 <Sparkles className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                <span className="allow-white text-xs font-medium" style={{ color: "#FFFFFF" }}>
+                <span className="allow-white text-xs font-medium tracking-wide" style={{ color: "#FFFFFF" }}>
                   {phase === "welcome" ? "Welcome Guide" : "You're all set"}
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-[#1A1A1A] mb-2">
+              <h2 className="allow-white text-xl sm:text-2xl font-semibold mb-2" style={{ color: "#FFFFFF" }}>
                 {phase === "welcome"
                   ? "Welcome to JBJ Global Real Estate"
                   : "Enjoy exploring the platform"}
               </h2>
-              <p className="text-[#1A1A1A]/70 text-sm mb-5">
+              <p className="allow-white text-sm mb-5" style={{ color: "rgba(255,255,255,0.85)" }}>
                 {phase === "welcome"
                   ? "We'll highlight key icons right on the page so you know exactly where to tap."
                   : "You can restart this tour anytime from the help menu."}
@@ -281,33 +307,34 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <button
                     onClick={() => { setStepIdx(0); setPhase("spotlight"); }}
                     type="button"
-                    data-surface="navy"
-                    data-allow-dark-cta
-                    className="allow-white surface-navy w-full h-12 rounded-xl group inline-flex items-center justify-center gap-2 px-4 bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/60 text-white font-semibold transition-all"
+                    data-no-contrast-guard
+                    className="allow-white w-full h-12 rounded-xl group inline-flex items-center justify-center gap-2 px-4 border border-white/40 bg-white/15 hover:bg-white/25 backdrop-blur font-semibold transition-all"
                     style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
-                    <Compass className="w-4 h-4 mr-2 text-white allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                    <span className="flex-1 text-left text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Start the quick tour</span>
-                    <ArrowRight className="w-4 h-4 text-white allow-white group-hover:translate-x-0.5 transition-transform" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <Compass className="w-4 h-4 mr-2 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span className="flex-1 text-left allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Start the quick tour</span>
+                    <ArrowRight className="w-4 h-4 allow-white group-hover:translate-x-0.5 transition-transform" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </button>
-                  <Button
+                  <button
                     onClick={handleComplete}
                     type="button"
-                    variant="secondary"
-                    className="w-full h-10 rounded-xl text-sm"
+                    data-no-contrast-guard
+                    className="allow-white w-full h-10 rounded-xl text-sm border border-white/25 hover:bg-white/10 transition-colors"
+                    style={{ color: "#FFFFFF" }}
                   >
                     Skip for now
-                  </Button>
+                  </button>
                 </div>
               ) : (
-                <Button
+                <button
                   onClick={handleComplete}
                   type="button"
-                  variant="dark"
-                  className="w-full h-12 rounded-xl"
+                  data-no-contrast-guard
+                  className="allow-white w-full h-12 rounded-xl border border-white/40 bg-white/15 hover:bg-white/25 backdrop-blur font-semibold transition-all"
+                  style={{ color: "#FFFFFF" }}
                 >
                   Done
-                </Button>
+                </button>
               )}
             </div>
           </motion.div>
