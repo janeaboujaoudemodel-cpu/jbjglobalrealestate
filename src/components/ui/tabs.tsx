@@ -20,12 +20,13 @@ const Tabs = TabsPrimitive.Root;
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> & { bkTabs?: "primary" | "secondary" }
+>(({ className, bkTabs = "primary", ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
     data-surface="champagne"
     data-jj-segmented-list=""
+    data-bk-tabs-list={bkTabs}
     className={cn(
       "surface-champagne inline-flex h-10 items-center justify-center rounded-md bg-[color:var(--surface,#F7F2EA)] p-1 text-[#1A1A1A] border border-[color:var(--emerald-1)]/25",
       className,
@@ -37,11 +38,12 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & { bkTabs?: "primary" | "secondary" }
+>(({ className, bkTabs, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     data-jj-segmented-trigger=""
+    data-bk-tabs={bkTabs ?? "primary"}
     className={cn(
       "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium text-[#1A1A1A] ring-offset-background transition-colors duration-150 hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
       className,
