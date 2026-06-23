@@ -459,7 +459,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         )}
 
         {/* Gradient overlay — stronger at bottom for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#031B12]/95 via-[#064E3B]/55 to-transparent" data-ink-emerald-opt-out />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" data-ink-emerald-opt-out />
 
         {/* Elevated glass reflection effect */}
         <div
@@ -502,8 +502,8 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         )}
         {/* Bottom content — heavy opaque black plate guarantees project-name
             legibility over any image (light, dark, busy, washed out). */}
-        <div className="absolute inset-x-0 bottom-0 h-[62%] z-10 bg-gradient-to-t from-black via-[#042C1C]/95 via-40% to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-[38%] z-10 pointer-events-none" style={{ backgroundImage: 'var(--jj-emerald-ombre)', opacity: 0.92 }} />
+        <div className="absolute inset-x-0 bottom-0 h-[62%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-[38%] z-10 bg-black/85 pointer-events-none" style={{ mixBlendMode: "normal" }} />
         <div data-ink-emerald-opt-out data-photo-copy-lock className="absolute bottom-0 left-0 right-0 px-3 pt-3 pb-3 z-20 flex min-h-[96px] flex-col justify-end gap-2" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
             <span

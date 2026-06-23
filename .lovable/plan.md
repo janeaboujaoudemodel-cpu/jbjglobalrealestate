@@ -1,68 +1,82 @@
-## Goal
+# Restore the approved Emerald→Black Ombre gradient (revert flattening)
 
-When you say **"emerald"**, treat it as the agreed **emerald-ombre gradient** already defined in tokens (`--jj-emerald-ombre`: `#064E3B → #042C1C → #000000`, same gradient used on the dark "View All Projects" / header "Mode" pill / "Invest in Dubai from anywhere in the world" surfaces). Never flat bright green. Apply globally.
+## What went wrong last turn
 
-## Fix 1 — "Explore Our Guides & Reports" title (homepage)
+In the previous pass I flattened the brand's locked ombre tokens in `src/index.css` to a solid `#064E3B`. That is a forbidden change — the only approved emerald fill across the site is the **Emerald → Black Ombre** gradient, never a flat `#064E3B`.
 
-File: `src/components/home/HomepageBookMarquee.tsx`
+Tokens that were wrongly flattened:
+- `--jj-emerald-ombre`
+- `--jj-emerald-ombre-hover`
+- `--jj-official-emerald-surface`
+- `--jj-emerald-light-ombre`
+- `--jj-emerald-neon`
+- `--jj-emerald-metallic-sheen`
+- `--gradient-ink`
+- `--gradient-ink-hover`
+- `--emerald-ink`, `--emerald-ink-soft`
 
-- The H2 currently renders as flat `#064E3B`. Re-style the heading text using a gradient text clip:
-  - `background-image: var(--jj-emerald-ombre)` + `-webkit-background-clip: text` + transparent fill, so the title visually fades emerald → near-black just like the headline on the dark pills.
-- Apply the same ombre text-clip to the **"View Library"** / **"View Full Library"** inline links, and switch their icon `stroke` to `#064E3B` (darker end is fine for the chevron).
-- The small `BookOpen` icon tile stays as is (emerald glyph on champagne).
+## Plan
 
-## Fix 2 — Recently Viewed card overlays (replace black fade with emerald)
+### 1. Restore the ombre tokens (single source of truth)
 
-File: `src/components/ContinueSearching.tsx` (the `RecentCard3D` block, around lines 460–510)
-
-Currently three overlay layers use solid `black/95`, `black/55`, `black/10`, plus an opaque `black/85` plate at the bottom. Replace those with an emerald-ombre palette so the bottom of every card fades into emerald, not black:
-
-- Top legibility overlay: `bg-gradient-to-t from-[#031B12]/95 via-[#064E3B]/55 to-transparent`.
-- Bottom 62% plate: `bg-gradient-to-t from-[#000000] via-[#042C1C]/95 to-transparent` (keeps text crisp but introduces the emerald mid-tone instead of pure grey-black).
-- Bottom 38% solid plate: replace `bg-black/85` with `background: var(--jj-emerald-ombre)` at `opacity ~0.92` so the "BY SOBHA REALTY" + project-name strip sits on the ombre, not on pure black.
-- Keep developer-name in white, project-name in white, accent ("by") stays gold `#B89555`. No text-color changes needed.
-
-## Fix 3 — Vertical sidebar **expanded** item hover (main titles)
-
-File: `src/components/navigation/GlobalVerticalNav.tsx` (lines 822–823 and the expanded `<Link>` rows around 1048+)
-
-The expanded sidebar uses `navHoverUnderline` / `subNavHoverUnderline` which force hover text and the underline bar to `#0A0A0A` (pure black). Switch both to the emerald-ombre:
-
-- Hover text color → emerald-ombre via background-clip text (so the label fades emerald → near-black on hover, matching the collapsed icon-tile hover state).
-- Underline bar (`after:bg-[#0A0A0A]`) → `after:bg-[image:var(--jj-emerald-ombre)]` so the growing pill underline is the same ombre.
-- Hover row background `hover:bg-[#EFE6D6]/60` stays champagne (no change) — only the text/underline accent flips to emerald-ombre.
-
-The collapsed icon tiles (`.jj-side-tile`) already use `--jj-emerald-ombre-hover`; no change there.
-
-## Fix 4 — Global sweep for "flat emerald" leaks
-
-Add a single helper CSS utility in `src/index.css` and reuse it everywhere we need emerald text:
+In `src/index.css` (the `:root` block around lines 6417–6435), restore the canonical Emerald → Black Ombre values (the same family already referenced later in the file at line 10593):
 
 ```css
-.jj-emerald-ombre-text {
-  background-image: var(--jj-emerald-ombre);
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-.jj-emerald-ombre-bg { background-image: var(--jj-emerald-ombre); }
+--gradient-ink:       linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+--gradient-ink-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+
+--jj-emerald-ombre:        linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+--jj-emerald-ombre-hover:  linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+
+--jj-official-emerald-surface: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+--jj-emerald-light-ombre:      linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #042C1C 100%);
+--jj-emerald-neon:             linear-gradient(135deg, #0A6B53 0%, #064E3B 60%, #042C1C 100%);
+
+/* Restore the metallic top-light sheen (was zeroed-out last turn) */
+--jj-emerald-metallic-sheen:
+  linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 38%, rgba(0,0,0,0.18) 100%);
+
+/* Emerald accent (titles, area labels) stays ink-emerald */
+--emerald-ink:      #064E3B;
+--emerald-ink-soft: #0A6B53;
 ```
 
-Then audit and convert the remaining solid `#064E3B` / `bg-emerald-*` text usages on these surfaces only (no behavior change, presentation only):
+Update the comment block above these tokens so it reads "Approved Emerald → Black Ombre — solid flat green is forbidden."
 
-- Homepage "Continue Searching for Your Dream Property" header chips ("Register Your Interest", "View Search History") — keep the metallic ombre fill they already have (already correct), but if any sibling label still uses flat emerald, swap to `.jj-emerald-ombre-text`.
-- Any other H2/H3 currently set to flat `style={{ color: '#064E3B' }}` on champagne sections — switch to the new `.jj-emerald-ombre-text` class so all "emerald headings" share the same ombre.
+### 2. Keep the white-foreground lock — do NOT remove it
 
-## Out of scope
+The Gate-1 Global Emerald Lock starting at line 11154 (white text, white SVG icons, no border colour flips on hover) stays exactly as-is. The user's complaint is about the *fill*, not the foreground.
 
-- No backend / data / route changes.
-- No layout or copy changes.
-- The bright-emerald icon tiles on champagne (e.g. `.jj-icon-emerald` glyphs inside small circular badges) stay as-is — they're glyphs, not headings, and removing them would break the icon contrast lock.
+The only adjustment: in the white-icon block, the rule currently sets `border-color: #FFFFFF !important` on every emerald surface. The user has explicitly banned white borders on emerald surfaces in the project memory. Change `border-color: #FFFFFF !important;` → `border-color: transparent !important;` so the ombre pill stays borderless.
 
-## Validation
+### 3. Kill the split-overlay rules I added last turn
 
-After edits, screenshot the homepage at desktop:
-1. "Explore Our Guides & Reports" — title visibly fades emerald → near-black, matches the "View All Projects" pill tone.
-2. "Continue Searching" cards — bottom strip is emerald-ombre, no pure black plate.
-3. Expand the sidebar, hover "AI Home Finder" / "List Your Property" — label text and underline animate in the emerald-ombre, not black.
+Remove the `::before` / `::after` neutralising blocks I appended at lines ~13224 and ~13417 (the "Kill split-color pseudo overlays" / "Kill any leftover ::after/::before split overlays on primary pills" blocks). The original metallic sheen overlay is part of the approved ombre look — those kills were the cause of the flat appearance.
+
+### 4. Sanity sweep
+
+Search the file for any other place where I substituted a flat `#064E3B` for what used to be a gradient (e.g. anywhere the value reads `background: #064E3B !important` and the surrounding selector is `.jj-cta-primary` / `.jj-pill-emerald` / `.jj-emerald-solid` / `[data-cta="primary"]`). Revert each one to `background: var(--jj-emerald-ombre)`.
+
+### 5. Visual validation (Playwright, 1280×1800)
+
+After the edits, run a fresh Playwright pass and capture screenshots on:
+
+1. `/` — hero CTA pills (Explore Properties, AI Home Finder, Get Started), header mode chip, AED/filter/favourite pills
+2. `/auth` — Sign In pill
+3. `/owner` (Command Center) — "Welcome back" band + primary CTAs
+4. `/ai-hub` — emerald band + tool tiles
+5. `/broker-portal` — sidebar active tile + primary CTAs
+
+Each screenshot must visibly show:
+- Pill fill = Emerald → Black Ombre (deeper toward the bottom-right corner, with the subtle top-light sheen)
+- Text + icons = pure white at rest **and** hover
+- No white border ring on emerald pills
+- No flat half-and-half / split appearance
+
+Only after the screenshots confirm all five surfaces will I report done.
+
+## Files touched
+
+- `src/index.css` — restore ombre tokens, change `border-color` to `transparent`, delete the two split-overlay kill blocks I appended last turn.
+
+No other files change.
