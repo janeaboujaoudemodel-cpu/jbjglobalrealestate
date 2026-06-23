@@ -34,7 +34,29 @@ export default function MortgageParityPanel({
   const [residency, setResidency] = useState<Residency>("expat");
   const [monthlyIncome, setMonthlyIncome] = useState<number>(40000);
   const [showSchedule, setShowSchedule] = useState(false);
-  const [compareRate, setCompareRate] = useState<number>(Math.max(2, interestRate - 0.5));
+
+  // UAE bank rate reference (indicative starting fixed rates for mortgages)
+  const UAE_BANKS: { id: string; name: string; rate: number }[] = [
+    { id: "enbd", name: "Emirates NBD", rate: 4.24 },
+    { id: "fab", name: "First Abu Dhabi Bank (FAB)", rate: 4.19 },
+    { id: "adcb", name: "Abu Dhabi Commercial Bank (ADCB)", rate: 4.29 },
+    { id: "adib", name: "Abu Dhabi Islamic Bank (ADIB)", rate: 4.39 },
+    { id: "dib", name: "Dubai Islamic Bank (DIB)", rate: 4.35 },
+    { id: "mashreq", name: "Mashreq Bank", rate: 4.49 },
+    { id: "hsbc", name: "HSBC UAE", rate: 4.15 },
+    { id: "scb", name: "Standard Chartered UAE", rate: 4.25 },
+    { id: "cbd", name: "Commercial Bank of Dubai", rate: 4.45 },
+    { id: "rakbank", name: "RAKBANK", rate: 4.55 },
+    { id: "enbd_islamic", name: "Emirates Islamic", rate: 4.40 },
+    { id: "ajman", name: "Ajman Bank", rate: 4.60 },
+    { id: "custom", name: "Custom Rate", rate: 4.00 },
+  ];
+  const [bankAId, setBankAId] = useState<string>("enbd");
+  const [bankBId, setBankBId] = useState<string>("hsbc");
+  const bankA = UAE_BANKS.find((b) => b.id === bankAId) || UAE_BANKS[0];
+  const bankB = UAE_BANKS.find((b) => b.id === bankBId) || UAE_BANKS[1];
+  const [compareRate, setCompareRate] = useState<number>(bankB.rate);
+  const [bankARate, setBankARate] = useState<number>(bankA.rate);
 
   const cap = RESIDENCY[residency].maxLtv;
   const ltv = 100 - downPaymentPercent;
