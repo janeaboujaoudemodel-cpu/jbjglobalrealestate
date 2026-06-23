@@ -8645,11 +8645,9 @@ html body .jj-icon-emerald * {
   fill: none !important;
 }
 
-/* PASS 31 — final emerald override for the exact reported regressions.
-   Wins after PASS 21 black/gold sidebar controls and after generic light
-   surface guards. Emerald surfaces = white text/icons only. */
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"],
+/* PASS 31 — final emerald override for collapse control only.
+   Contact/Support are now governed by the sidebar hierarchy rule:
+   emerald only when their route is active. */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control],
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control]:hover {
   background: var(--jj-emerald-ombre) !important;
@@ -8660,13 +8658,60 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] *,
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/contact"] :is(svg, [class*="lucide"]),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] .mt-auto a[href="/ticket-hub"] :is(svg, [class*="lucide"]),
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, [class*="lucide"]),
 html body [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-collapse-control] :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Contact / Support pinned buttons — active-aware. Inactive = champagne+ink;
+   active = canonical emerald-ombre + white. Both expanded and collapsed icon
+   variants are covered. */
+html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]),
+html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(184,149,85,0.45) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
+}
+html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]) *,
+html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) *,
+html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]) :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]) :is(svg, [class*="lucide"]) *,
+html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]) :is(svg, [class*="lucide"]) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+}
+html body [data-chrome="sidebar"] a[href="/contact"]:not([data-active="true"]):hover,
+html body [data-chrome="sidebar"] a[href="/ticket-hub"]:not([data-active="true"]):hover {
+  background: rgba(239,230,214,0.65) !important;
+  background-color: rgba(239,230,214,0.65) !important;
+  background-image: none !important;
+  border-color: rgba(184,149,85,0.65) !important;
+  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
+}
+html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"],
+html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"] *,
+html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] *,
+html body [data-chrome="sidebar"] a[href="/contact"][data-active="true"] :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] a[href="/ticket-hub"][data-active="true"] :is(svg, [class*="lucide"]) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
