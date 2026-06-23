@@ -1084,12 +1084,11 @@ const Quiz = () => {
                 </div>
                 <div>
                   <Label className="text-[#1A1A1A] mb-2 block">Phone Number *</Label>
-                  <Input
-                    type="tel"
+                  <PhoneInput
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+971 XX XXX XXXX"
-                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
+                    onChange={(value) => setFormData({ ...formData, phone: value || "" })}
+                    placeholder="Phone number"
+                    variant="light"
                   />
                 </div>
                 <div>
@@ -1114,6 +1113,32 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
+                  />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Contact Time *</Label>
+                  <SearchableSelect
+                    value={formData.preferredContactTime}
+                    onChange={(value) => setFormData({ ...formData, preferredContactTime: value })}
+                    options={CONTACT_TIMES}
+                    placeholder="Select preferred time"
+                    searchPlaceholder="Search times..."
+                    showFlags={false}
+                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
+                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
+                  />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Contact Method *</Label>
+                  <SearchableSelect
+                    value={formData.preferredContactMethod}
+                    onChange={(value) => setFormData({ ...formData, preferredContactMethod: value })}
+                    options={CONTACT_METHODS}
+                    placeholder="Select contact method"
+                    searchPlaceholder="Search methods..."
+                    showFlags={false}
                     triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
                     className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
                   />
