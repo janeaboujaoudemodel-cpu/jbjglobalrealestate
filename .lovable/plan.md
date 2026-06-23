@@ -1,59 +1,38 @@
-## Goal
-Fix Gate 1 properly: every emerald surface must use the same approved dark emerald/black primitive seen on the sidebar Collapse button, with white text/icons, and no light/restricted green variants.
+## Gate 1 Emerald Fix Plan
 
-## What I will change
-1. **Remove the broken emerald drift**
-   - Delete/replace the recent high-specificity rule that introduced a white border and glow around emerald surfaces.
-   - Stop using light emerald tokens like `--jj-emerald-light-ombre`, neon emerald, and rgba green glow values for buttons/badges/labels.
-   - Make `--jj-emerald-primitive` the single source of truth and alias all old emerald/green button classes to it.
+1. **Replace the remaining light-green sources globally**
+   - Remove/override every remaining `#047857`, `#059669`, `#10b981`, `#34d399`, `emerald-300`, and light emerald gradient use on interactive emerald surfaces.
+   - Set the single official primitive to the dark Mode Broker/AED style only: dark emerald into near-black/black.
+   - Make `--jj-emerald-ombre`, `--jj-emerald-ombre-hover`, `--jj-emerald-light-ombre`, `--gradient-emerald`, and all legacy emerald helpers resolve to the same dark primitive, not a lighter hover variant.
 
-2. **Make the official primitive match the Collapse button**
-   - Use the Collapse button’s visual style as the canonical primitive: dark emerald to black gradient, white content, no light green fill, no white card border/ring.
-   - Apply it globally to:
-     - heart favorite buttons
-     - shortlist buttons
-     - Add Badge buttons
-     - Email / Call / Chat buttons
-     - EOI and handover/date labels
-     - AI labels and badges
-     - mortgage CTA/buttons/sliders
-     - View Library / Explore Our Guides icon and CTA
-     - header mode/action chips and sidebar emerald controls where they are emerald surfaces
+2. **Hard-lock the specific failed items from the screenshots**
+   - Heart button.
+   - Shortlist button.
+   - Add Badge button.
+   - Email / Call / Chat card buttons.
+   - Explore Our Guides book icon.
+   - View Library / View Full Library.
+   - AI Property Comparison icon tile.
+   - Mortgage slider filled track, knob, and “Try Our AI Mortgage Calculator”.
+   - Sidebar collapsed hover state.
+   - Ready To Get Started WhatsApp / Call Us / Email cards.
 
-3. **Fix Explore Our Guides & Reports directly**
-   - The book icon tile will be emerald primitive with a white book icon.
-   - The `View Library` desktop button will be emerald primitive with white text and white arrow.
-   - The mobile `View Full Library` link will also become an emerald primitive button instead of green text.
-   - Remove the hardcoded `#064E3B` title styling if it causes black/light green conflicts; labels that are surfaces will be emerald+white.
+3. **Make Ready To Get Started contact cards metallic animated**
+   - Apply the same official dark emerald primitive.
+   - Add one clean metallic sweep animation using the existing emerald metallic primitive pattern.
+   - Keep white icons/text at rest and hover.
 
-4. **Fix component-level overrides that fight the global system**
-   - Remove inline hardcoded green backgrounds from favorite/shortlist/badge components where they prevent the primitive from winning.
-   - Replace them with the single `jj-emerald` primitive class and `data-emerald="true"` only where the element itself is an emerald surface.
-   - Ensure child SVG paths are forced white without using black filters or light-green text.
+4. **Fix component-level inline overrides that beat CSS**
+   - Remove or replace inline styles still forcing light emerald gradients/backgrounds in affected components.
+   - Use the official `jj-emerald` / `jj-emerald-metallic` primitive classes only.
+   - Ensure no `data-no-contrast-guard` or inline icon color causes black icons on emerald surfaces.
 
-5. **Visual validation only before claiming completion**
-   - Use Playwright against the live preview after implementation.
-   - Capture zoomed screenshots/crops of:
-     - sidebar Collapse button reference
-     - homepage project card heart / shortlist / Add Badge
-     - Email / Call / Chat row
-     - Continue Searching heart buttons
-     - Explore Our Guides & Reports icon and View Library button
-     - Mortgage calculator CTA/sliders
-   - Compare rendered/computed backgrounds against the Collapse button primitive.
-   - Repeat fixes until screenshots show no mismatched light/restricted greens and all emerald surfaces have white content.
+5. **Visual validation only after edits**
+   - Use Playwright screenshots after refreshing the live preview.
+   - Capture zoomed screenshots for each circled group: property card actions, guide section, AI comparison card, mortgage slider/CTA, footer Ready To Get Started cards, and sidebar collapsed hover.
+   - Inspect computed backgrounds and screenshot pixels; repeat fixes until no light/static green remains on emerald controls.
 
-## Files I expect to edit
-- `src/index.css`
-- `src/components/home/HomepageBookMarquee.tsx`
-- `src/components/FavoriteButton.tsx`
-- `src/components/ShortlistBadgeButton.tsx`
-- `src/components/toolkit/DesignFavoriteButton.tsx`
-- Possibly `src/components/ProjectCard.tsx`, mortgage components, and any remaining component found by the green/emerald audit that visually mismatches.
+## Technical scope
 
-## Acceptance criteria
-- One emerald primitive only.
-- No light green or alternate green on emerald buttons, badges, labels, icons, sliders, or CTAs.
-- White text/icons/arrows inside every emerald surface.
-- No visible white borders/rings around project card heart/shortlist/Add Badge controls.
-- Completion message only after visual screenshots confirm the fix.
+- Primary files likely affected: `src/index.css`, `src/components/home/HomepageBookMarquee.tsx`, `src/components/tools/AnimatedShineCTA.tsx`, `src/components/support/ChannelCard.tsx`, and any component discovered with inline light-green overrides for the circled controls.
+- No new emerald variants will be created. Existing legacy names will be aliased to the single official primitive.
