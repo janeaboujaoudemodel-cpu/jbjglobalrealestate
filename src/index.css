@@ -1087,6 +1087,10 @@ All colors MUST be HSL.
    (post-sidebar), never beyond. */
 [data-content-gutter="1"] > .jj-band,
 [data-content-gutter="1"] .jj-band,
+[data-content-gutter="1"] > .jj-project-band,
+[data-content-gutter="1"] .jj-project-band,
+[data-content-gutter="1"] > .jj-project-hero,
+[data-content-gutter="1"] .jj-project-hero,
 [data-content-gutter="1"] .jj-fullbleed-band {
   margin-left: calc(-1 * var(--jj-content-gutter));
   margin-right: calc(-1 * var(--jj-content-gutter));
@@ -12423,3 +12427,70 @@ html body button[data-hero-dark][data-no-contrast-guard] [data-allow-ink] * {
   -webkit-text-fill-color: #FFFFFF !important;
 }
 #jj-genpres-sub { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
+
+/* 🔒 FINAL PROJECT DETAIL RUNTIME LOCK — verified selectors.
+   The global champagne surface guard is extremely specific and was still
+   repainting project hero copy to ink. This selector is intentionally later
+   and more specific, and it also normalizes the project shell to the global
+   page gutter while keeping only the background bands full-bleed. */
+html body main section.jj-project-hero,
+html body main section.jj-project-hero :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,time,dt,dd,button,div):not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72) !important;
+  opacity: 1 !important;
+}
+html body main section.jj-project-hero :is(svg, [class*="lucide"]),
+html body main section.jj-project-hero :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body main section.jj-project-hero .jj-hero-ghost-cta,
+html body main section.jj-project-hero .jj-hero-ghost-cta:hover,
+html body main section.jj-project-hero .jj-hero-ghost-cta:focus-visible {
+  background: rgba(0, 0, 0, 0.34) !important;
+  background-image: none !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.92) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24) !important;
+}
+
+html body main .jj-project-band {
+  box-sizing: border-box !important;
+  padding-left: var(--page-px-mobile) !important;
+  padding-right: var(--page-px-mobile) !important;
+}
+html body main .jj-project-band .jj-project-shell {
+  width: 100% !important;
+  max-width: 1240px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+@media (min-width: 768px) {
+  html body main .jj-project-band {
+    padding-left: var(--page-px-tablet) !important;
+    padding-right: var(--page-px-tablet) !important;
+  }
+}
+@media (min-width: 1024px) {
+  html body main .jj-project-band {
+    padding-left: var(--page-px-desktop) !important;
+    padding-right: calc(var(--page-px-desktop) + var(--rail-safe-right)) !important;
+  }
+  body.jj-vertical-nav-active main .jj-project-band .jj-project-shell,
+  body.jj-vertical-nav-collapsed main .jj-project-band .jj-project-shell {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+html body main .jj-project-band :is(.jj-card-inner, [class*="rounded-"]) {
+  box-sizing: border-box;
+  max-width: 100%;
+}
