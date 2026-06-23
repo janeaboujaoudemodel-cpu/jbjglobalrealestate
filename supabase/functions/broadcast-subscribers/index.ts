@@ -97,6 +97,16 @@ serve(async (req: Request): Promise<Response> => {
   const headerSecret = req.headers.get("x-broadcast-secret");
   const isTriggerCall = !!triggerSecret && headerSecret === triggerSecret;
 
+  // Bootstrap: ensure the DB-side trigger secret matches the edge env so
+  // pg_net trigger calls authenticate. Cheap upsert, runs on every call.
+  if (triggerSecret) {
+    await supabase
+      .from("broadcast_settings")
+      .upsert({ id: true, function_url:
+        `${Deno.env.get("SUPABASE_URL")}/functions/v1/broadcast-subscribers`,
+        trigger_secret: triggerSecret, enabled: true }, { onConflict: "id" });
+  }
+
   if (!isTriggerCall) {
     const owner = await requireOwnerAuth(req, corsHeaders);
     if (owner.response) return owner.response;
