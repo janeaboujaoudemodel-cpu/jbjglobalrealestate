@@ -6443,6 +6443,8 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
   --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
   --jj-emerald-ombre-hover: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
+  --jj-official-emerald-surface: var(--jj-emerald-metallic-sheen), var(--jj-emerald-ombre);
   --jj-emerald-light-ombre: var(--jj-emerald-ombre);
   --jj-emerald-neon: #064E3B;
   /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
@@ -9119,13 +9121,11 @@ html body :is(a,button).jj-pill-emerald:hover {
 
 html body :is(a,button,div).jj-emerald-rect-pill,
 html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus,:focus-visible,:active) {
-  --jj-locked-emerald: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-locked-emerald-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
   position: relative !important;
   isolation: isolate !important;
   overflow: hidden !important;
   border-radius: 10px !important;
-  background-image: var(--jj-locked-emerald-sheen), var(--jj-locked-emerald) !important;
+  background-image: var(--jj-official-emerald-surface) !important;
   background-color: #064E3B !important;
   background-size: 220% 100%, 100% 100% !important;
   background-repeat: no-repeat !important;
