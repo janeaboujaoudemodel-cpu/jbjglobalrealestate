@@ -614,10 +614,9 @@ const PropertyMeasurement = () => {
             animate={{ opacity: 1, y: 0 }}
           >
             <Card
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white !border-0 rounded-2xl overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)", boxShadow: "0 0 0 1px rgba(16,185,129,0.32), 0 18px 40px rgba(16,185,129,0.22)" }}
+              data-surface="emerald"
+              data-emerald-ok="card"
+              className="jj-surface-emerald rounded-2xl overflow-hidden"
             >
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
@@ -695,10 +694,9 @@ const PropertyMeasurement = () => {
             animate={{ opacity: 1, y: 0 }}
           >
             <Card
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white !border-0 rounded-2xl overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)", boxShadow: "0 0 0 1px rgba(16,185,129,0.32), 0 18px 40px rgba(16,185,129,0.22)" }}
+              data-surface="emerald"
+              data-emerald-ok="card"
+              className="jj-surface-emerald rounded-2xl overflow-hidden"
             >
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
@@ -782,10 +780,9 @@ const PropertyMeasurement = () => {
             animate={{ opacity: 1, y: 0 }}
           >
             <Card
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white !border-0 rounded-2xl overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)", boxShadow: "0 0 0 1px rgba(16,185,129,0.32), 0 18px 40px rgba(16,185,129,0.22)" }}
+              data-surface="emerald"
+              data-emerald-ok="card"
+              className="jj-surface-emerald rounded-2xl overflow-hidden"
             >
               <CardHeader>
                 <div className="flex items-center justify-between">

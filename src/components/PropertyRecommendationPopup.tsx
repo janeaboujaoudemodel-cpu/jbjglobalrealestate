@@ -388,7 +388,7 @@ const PropertyRecommendationPopup = () => {
             <div className="px-3 pb-3 space-y-2">
               <Button
                 onClick={() => { handleMinimize(); navigate("/properties"); }}
-                className="w-full bg-gradient-to-r from-gold/90 to-amber-600 text-[#1A1A1A] font-semibold text-sm hover:from-gold hover:to-amber-500"
+                className="w-full jj-surface-emerald font-semibold text-sm"
                 size="sm"
               >
                 Explore All Properties

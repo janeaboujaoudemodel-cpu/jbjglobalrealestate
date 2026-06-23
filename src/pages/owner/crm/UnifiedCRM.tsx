@@ -466,12 +466,12 @@ export default function UnifiedCRM() {
             <button
               type="button"
               onClick={() => setAddLeadOpen(true)}
-              data-emerald="true"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              className="jj-emerald-metallic allow-white shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors text-white"
+              data-surface="emerald"
+              data-emerald-ok="button"
+              className="jj-surface-emerald shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
             >
-              <Plus className="allow-white h-3.5 w-3.5 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="allow-white text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Add Lead</span>
+              <Plus className="h-3.5 w-3.5" />
+              <span>Add Lead</span>
             </button>
             <button
               type="button"
@@ -540,10 +540,11 @@ export default function UnifiedCRM() {
                   "shrink-0 inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
                   "border-b-2 -mb-px transition-colors",
                   active
-                    ? "jj-emerald-metallic allow-white border-transparent text-white"
+                    ? "jj-surface-emerald border-transparent"
                     : "border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA]",
                 ].join(" ")}
-                data-emerald={active ? "true" : undefined}
+                data-surface={active ? "emerald" : undefined}
+                data-emerald-ok={active ? "tab" : undefined}
               >
                 <Icon className="h-4 w-4" />
                 {it.label}
@@ -595,10 +596,11 @@ export default function UnifiedCRM() {
                     className={[
                       "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border",
                       active
-                        ? "jj-emerald-metallic allow-white text-white border-transparent"
+                        ? "jj-surface-emerald border-transparent"
                         : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
                     ].join(" ")}
-                    data-emerald={active ? "true" : undefined}
+                    data-surface={active ? "emerald" : undefined}
+                    data-emerald-ok={active ? "tab" : undefined}
                   >
                     {t.label}
                     {c !== null && c > 0 && (

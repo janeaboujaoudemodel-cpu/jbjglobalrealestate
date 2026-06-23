@@ -770,10 +770,12 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           {(hasListingAdminAccess || isOwner) && (
                             <button
                               onClick={() => handleSelect('/listing-admin')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-emerald-100 to-emerald-50 border border-[color:var(--emerald-1)]/30 hover:shadow-md transition-all"
+                              data-surface="emerald"
+                              data-emerald-ok="button"
+                              className="jj-surface-emerald flex items-center gap-3 p-3 rounded-xl hover:shadow-md transition-all"
                             >
-                              <Building2 className="w-5 h-5 text-[color:var(--emerald-1)]" />
-                              <span className="text-sm font-semibold text-[#1A1A1A]">Listings</span>
+                              <Building2 className="w-5 h-5" />
+                              <span className="text-sm font-semibold">Listings</span>
                             </button>
                           )}
                         </div>

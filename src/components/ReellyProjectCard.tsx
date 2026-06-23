@@ -263,8 +263,9 @@ const ReellyProjectCard = ({
                 href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`Email about ${project.name}`}
-                data-no-contrast-guard
-                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+                 data-surface="emerald"
+                 data-emerald-ok="button"
+                 className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
               >
                 <Mail className="w-4 h-4" />
                 <span>Email</span>
@@ -273,8 +274,9 @@ const ReellyProjectCard = ({
                 href={callHref}
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`Call about ${project.name}`}
-                data-no-contrast-guard
-                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+                 data-surface="emerald"
+                 data-emerald-ok="button"
+                 className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
               >
                 <Phone className="w-4 h-4" />
                 <span>Call</span>
@@ -283,8 +285,9 @@ const ReellyProjectCard = ({
                 href={whatsappHref}
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`WhatsApp about ${project.name}`}
-                data-no-contrast-guard
-                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+                 data-surface="emerald"
+                 data-emerald-ok="button"
+                 className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Chat</span>

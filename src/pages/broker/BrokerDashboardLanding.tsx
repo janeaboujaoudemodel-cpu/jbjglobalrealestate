@@ -334,14 +334,13 @@ export default function BrokerDashboardLanding() {
             <div className="flex items-center gap-2.5 flex-wrap">
               <Link
                 to="/broker/leads"
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="allow-white inline-flex items-center gap-2 h-11 pl-5 pr-3 rounded-xl border border-[rgba(255,255,255,0.18)] text-sm font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-12px_rgba(6,78,59,0.95),0_0_20px_rgba(52,211,153,0.25)] hover:brightness-110 transition-all duration-300"
-                style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
+                data-surface="emerald"
+                data-emerald-ok="button"
+                className="jj-surface-emerald inline-flex items-center gap-2 h-11 pl-5 pr-3 rounded-xl text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-all duration-300"
               >
-                <span style={{ color: "#FFFFFF" }}>Add lead</span>
+                <span>Add lead</span>
                 <span className="inline-flex w-7 h-7 rounded-lg items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.32)" }}>
-                  <Plus className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} strokeWidth={2.4} />
+                  <Plus className="h-3.5 w-3.5" strokeWidth={2.4} />
                 </span>
               </Link>
               <button
@@ -445,13 +444,12 @@ export default function BrokerDashboardLanding() {
             </p>
             <Link
               to="/broker/ai"
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-[rgba(255,255,255,0.18)] text-xs font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-12px_rgba(6,78,59,0.95),0_0_20px_rgba(52,211,153,0.25)] hover:brightness-110 transition-all duration-300"
-              style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
+              data-surface="emerald"
+              data-emerald-ok="button"
+              className="jj-surface-emerald mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-all duration-300"
             >
-              <Sparkles className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} strokeWidth={2.2} />
-              <span style={{ color: "#FFFFFF" }}>Open assistant</span>
+              <Sparkles className="h-3.5 w-3.5" strokeWidth={2.2} />
+              <span>Open assistant</span>
             </Link>
           </PremiumCard>
 
