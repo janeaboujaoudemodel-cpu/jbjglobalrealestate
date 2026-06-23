@@ -296,7 +296,7 @@ const AIPersonalShopper = () => {
                     <Save className="w-3 h-3 mr-1" /> Save Plan
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
+                <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle className="text-white">Save Trip Plan</DialogTitle>
                   </DialogHeader>
