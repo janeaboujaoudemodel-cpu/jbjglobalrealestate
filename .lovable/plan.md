@@ -1,59 +1,71 @@
+# Gate 1 — One Official Emerald Primitive
+
 ## Goal
-Fix Gate 1 properly: every emerald surface must use the same approved dark emerald/black primitive seen on the sidebar Collapse button, with white text/icons, and no light/restricted green variants.
+Eliminate every emerald variant. The sidebar **COLLAPSE** button becomes the single visual reference. Every emerald surface across the site reuses one shared primitive with white text and white icons.
 
-## What I will change
-1. **Remove the broken emerald drift**
-   - Delete/replace the recent high-specificity rule that introduced a white border and glow around emerald surfaces.
-   - Stop using light emerald tokens like `--jj-emerald-light-ombre`, neon emerald, and rgba green glow values for buttons/badges/labels.
-   - Make `--jj-emerald-primitive` the single source of truth and alias all old emerald/green button classes to it.
+## 1. Define the single primitive
+In `src/index.css`, create one canonical class — `.jj-emerald` — and one outline sibling `.jj-emerald-outline`. They will own:
+- gradient (locked metallic emerald used by the Collapse button)
+- shadow, radius, border, transition
+- hover (lighter emerald) and active states
+- forced `color:#fff` for text and all descendant SVGs (`stroke`, `fill` where appropriate)
+- `border:0` unless the Collapse primitive has one
 
-2. **Make the official primitive match the Collapse button**
-   - Use the Collapse button’s visual style as the canonical primitive: dark emerald to black gradient, white content, no light green fill, no white card border/ring.
-   - Apply it globally to:
-     - heart favorite buttons
-     - shortlist buttons
-     - Add Badge buttons
-     - Email / Call / Chat buttons
-     - EOI and handover/date labels
-     - AI labels and badges
-     - mortgage CTA/buttons/sliders
-     - View Library / Explore Our Guides icon and CTA
-     - header mode/action chips and sidebar emerald controls where they are emerald surfaces
+All previous emerald classes (`jj-cta-emerald`, `jj-pill-emerald`, `jj-pill-emerald-metallic`, `jj-cta-emerald-metallic`, `jj-card-emerald-action`, `jj-favorite-trigger`, `jj-surface-emerald`, `jj-emerald-solid`, `jj-emerald-ombre*`, `--jj-emerald-ombre*`) become **aliases** that `@extend`/forward to `.jj-emerald`. No alternative gradients remain.
 
-3. **Fix Explore Our Guides & Reports directly**
-   - The book icon tile will be emerald primitive with a white book icon.
-   - The `View Library` desktop button will be emerald primitive with white text and white arrow.
-   - The mobile `View Full Library` link will also become an emerald primitive button instead of green text.
-   - Remove the hardcoded `#064E3B` title styling if it causes black/light green conflicts; labels that are surfaces will be emerald+white.
+Add a final lock block:
+```css
+html body :is(.jj-emerald, [data-emerald="true"]) {
+  background: var(--jj-emerald-primitive) !important;
+  color:#fff !important; border:0 !important;
+}
+html body :is(.jj-emerald, [data-emerald="true"]) :is(svg, [data-icon]) {
+  color:#fff !important; stroke:#fff !important;
+}
+html body :is(.jj-emerald, [data-emerald="true"]):hover {
+  background: var(--jj-emerald-primitive-hover) !important;
+}
+```
 
-4. **Fix component-level overrides that fight the global system**
-   - Remove inline hardcoded green backgrounds from favorite/shortlist/badge components where they prevent the primitive from winning.
-   - Replace them with the single `jj-emerald` primitive class and `data-emerald="true"` only where the element itself is an emerald surface.
-   - Ensure child SVG paths are forced white without using black filters or light-green text.
+## 2. Sample the Collapse button
+Read the rendered Collapse button (in `BrokerPortalSidebar.tsx` / `OwnerDashboardShell.tsx`) via Playwright, capture its computed `background-image`, `box-shadow`, `border-radius`, `transition`. Those exact values become `--jj-emerald-primitive` / `--jj-emerald-primitive-hover`. No new values invented.
 
-5. **Visual validation only before claiming completion**
-   - Use Playwright against the live preview after implementation.
-   - Capture zoomed screenshots/crops of:
-     - sidebar Collapse button reference
-     - homepage project card heart / shortlist / Add Badge
-     - Email / Call / Chat row
-     - Continue Searching heart buttons
-     - Explore Our Guides & Reports icon and View Library button
-     - Mortgage calculator CTA/sliders
-   - Compare rendered/computed backgrounds against the Collapse button primitive.
-   - Repeat fixes until screenshots show no mismatched light/restricted greens and all emerald surfaces have white content.
+## 3. Migrate every emerald surface to `.jj-emerald`
+Replace inline `style={{ backgroundImage: 'var(--jj-emerald-ombre)' ... }}`, raw Tailwind `bg-emerald-*` / `bg-green-*` / `from-*-green-*`, and per-component emerald CSS with `<… className="jj-emerald" />`.
 
-## Files I expect to edit
-- `src/index.css`
-- `src/components/home/HomepageBookMarquee.tsx`
-- `src/components/FavoriteButton.tsx`
-- `src/components/ShortlistBadgeButton.tsx`
-- `src/components/toolkit/DesignFavoriteButton.tsx`
-- Possibly `src/components/ProjectCard.tsx`, mortgage components, and any remaining component found by the green/emerald audit that visually mismatches.
+Targets (audited list):
+- **Cards:** `FavoriteButton`, `ShortlistBadgeButton`, `DesignFavoriteButton`, `ProjectCard` (EOI/Handover chips, Email/Call/Chat, Add Badge, Register Interest, Download Brochure, Download Branded Presentation), `ReellyProjectCard`, `ContinueSearching` (history circle + heart).
+- **Contact CTAs (Ready to Get Started):** WhatsApp, Call, Email, Chat, Contact, Support buttons.
+- **AI:** AI Property Comparison icon tile, AI Mortgage Calculator CTA, "AI Powered" label, AI badges, AI CTA buttons.
+- **Mortgage:** "Compare to Bank Rates" slider track fill, thumb, hover/focus/active — unify with Interest Rate / Loan Term / Down Payment / Property Price sliders via shared `--slider-range-bg` / `--slider-thumb-bg` tokens set to the primitive.
+- **Explore Our Guides:** Book icon tile + "View Library" arrow button.
+- **Labels:** single `<EmeraldLabel>` primitive used by AI Powered, Pipeline, Data Access, Professional Development, Foundations, Practical, Internal, Market Intelligence, etc. Remove page-local label CSS.
+- **Header chips:** Mode, AED, sq ft/sq m, filter, favorites count.
 
-## Acceptance criteria
-- One emerald primitive only.
-- No light green or alternate green on emerald buttons, badges, labels, icons, sliders, or CTAs.
-- White text/icons/arrows inside every emerald surface.
-- No visible white borders/rings around project card heart/shortlist/Add Badge controls.
-- Completion message only after visual screenshots confirm the fix.
+## 4. Codebase sweep
+Run a codemod across `src/**/*.{ts,tsx,css}` that:
+- removes inline emerald `style={{ backgroundImage|background|backgroundColor }}` set to greens
+- removes `border-white/*`, `borderColor: 'rgba(255,255,255,…)'` on emerald surfaces
+- maps `bg-green-*`, `bg-emerald-300..900`, `from/to/via-(green|emerald|teal)-*`, `text-emerald-*`, `border-emerald-*` → `jj-emerald` (or removes when redundant)
+- deletes legacy class definitions in `index.css` after aliasing
+Fails the build if any of those patterns reappear (ESLint rule + grep check in `scripts/contrast/`).
+
+## 5. Validation (must pass before declaring done)
+Playwright run (`/tmp/browser/emerald/`) on `/`, `/properties`, `/project/<slug>`, `/mortgage-calculator`, `/compare`, `/ai-home-finder`, `/guides`, broker portal, owner dashboard:
+1. Screenshot full viewport.
+2. For each emerald element, read computed `background-image`, `color`, `border-width`, descendant `<svg>` `color`/`stroke`.
+3. Assert they equal the Collapse button's values exactly. Any mismatch fails the gate.
+4. Zoomed crops of: card heart/shortlist/Add Badge, Email/Call/Chat row, Ready to Get Started cards, AI Mortgage CTA, Compare-to-Bank-Rates slider, Explore Our Guides book + arrow, label chips.
+
+Deliver the contact sheet + per-surface zoom crops. No "fixed" claim without the diff report showing zero mismatches.
+
+## Files expected to change
+- `src/index.css` (consolidate + lock primitive, alias legacy classes)
+- `src/components/ui/emerald/EmeraldButton.tsx`, add `EmeraldLabel.tsx`, `EmeraldIconTile.tsx`
+- `src/components/ui/slider.tsx` (single emerald token for filled track + thumb)
+- `FavoriteButton`, `ShortlistBadgeButton`, `DesignFavoriteButton`, `ProjectCard`, `ReellyProjectCard`, `ContinueSearching`, `MortgageCalculator`, `mortgage/MortgageParityPanel`, guides/AI/contact sections, header chips
+- `scripts/contrast/check-emerald-primitive.mjs` (new guard)
+- `eslint-rules/no-raw-emerald.js` (new)
+
+## Out of scope
+No logic changes, no copy changes, no layout restructuring — visual primitive consolidation only.
