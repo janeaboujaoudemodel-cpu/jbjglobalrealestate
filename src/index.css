@@ -6414,24 +6414,22 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --ink-emerald-3: #000000;
   --ink-emerald-ring: transparent;
   --ink-emerald-accent: #FFFFFF;
-  /* GLOBAL EMERALD LOCK — SOLID FILL ONLY.
-     Previously these tokens faded emerald → black, making every CTA pill look
-     "split" / half-dark. The brand identity is one solid official emerald
-     (#064E3B) with WHITE text + WHITE icons in every state. The only allowed
-     variation is a slightly lighter hover. Segmented-control active states
-     opt-in separately. */
-  --gradient-ink: #064E3B;
-  --gradient-ink-hover: #0a6b53;
-  --jj-emerald-ombre: #064E3B;
-  --jj-emerald-ombre-hover: #0a6b53;
-  --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%);
-  --jj-official-emerald-surface: #064E3B;
-  --jj-emerald-light-ombre: #064E3B;
-  --jj-emerald-neon: #064E3B;
-  /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
-     Locked to the approved emerald/black ombre family — no flat green. */
-  --emerald-ink: #064E3B;
-  --emerald-ink-soft: #064E3B;
+  /* APPROVED EMERALD → BLACK OMBRE — solid flat green is forbidden.
+     The brand fill is a 135° gradient from official emerald (#064E3B) into
+     near-black (#000). White text + white icons on every state. Hover lifts
+     to the lighter variant. Segmented-control active states opt-in separately. */
+  --gradient-ink:       linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+  --gradient-ink-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+  --jj-emerald-ombre:        linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+  --jj-emerald-ombre-hover:  linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+  --jj-emerald-metallic-sheen:
+    linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 38%, rgba(0,0,0,0.18) 100%);
+  --jj-official-emerald-surface: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+  --jj-emerald-light-ombre:      linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #042C1C 100%);
+  --jj-emerald-neon:             linear-gradient(135deg, #0A6B53 0%, #064E3B 60%, #042C1C 100%);
+  /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons). */
+  --emerald-ink:      #064E3B;
+  --emerald-ink-soft: #0A6B53;
 }
 
 /* Gate 1 canonical Emerald primitive.
