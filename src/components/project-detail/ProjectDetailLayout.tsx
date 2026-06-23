@@ -859,8 +859,8 @@ export default function ProjectDetailLayout({
                     setBrandedDeckBusy(false);
                   }
                 }}
-                className="jj-pill-emerald inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-70 disabled:cursor-wait"
-                data-allow-dark-cta
+                className="jj-hero-ghost-cta inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-70 disabled:cursor-wait"
+                data-no-contrast-guard
                 title="Download a JBJ-branded presentation for this project"
               >
                 <Download className="w-4 h-4" />
@@ -870,11 +870,13 @@ export default function ProjectDetailLayout({
               {!brokerHasBrand && (
                 <Link
                   to="/broker/brand"
-                  className="text-xs text-[#1A1A1A]/70 underline decoration-[#B89555]/60 underline-offset-2 hover:text-[#1A1A1A]"
+                  className="text-xs text-white/85 underline decoration-white/70 underline-offset-2 hover:text-white"
+                  data-no-contrast-guard
                 >
                   Add your logo & photo for full co-branding →
                 </Link>
               )}
+
             </div>
           )}
 
