@@ -317,8 +317,6 @@ export function useMarketReport() {
             phone: form.phone,
             nationality: form.nationality,
             language: form.language,
-            preferredContactTime: form.preferredContactTime,
-            preferredContact: form.preferredContact,
           },
           "market_report_download",
           "client"
