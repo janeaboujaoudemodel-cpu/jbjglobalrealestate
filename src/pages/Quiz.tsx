@@ -370,6 +370,7 @@ const Quiz = () => {
         .then(({ data }) => {
           if (data) {
             setFormData(prev => ({
+              ...prev,
               fullName: (data as any).full_name || (data as any).display_name || prev.fullName,
               email: user.email || prev.email,
               phone: (data as any).phone || prev.phone,
