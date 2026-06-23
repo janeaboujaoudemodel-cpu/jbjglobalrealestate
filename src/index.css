@@ -10839,7 +10839,7 @@ html body :is(
   [data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"][data-icon-tile-tone="emerald"],
   [data-icon-tile][data-surface="emerald"][data-surface="emerald"]
 ) {
-  background-image: var(--gradient-emerald) !important;
+  background-image: var(--jj-emerald-ombre) !important;
   background-color: var(--emerald-1) !important;
   border-color: var(--emerald-1) !important;
   opacity: 1 !important;
