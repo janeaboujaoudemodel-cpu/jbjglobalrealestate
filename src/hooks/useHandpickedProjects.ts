@@ -46,6 +46,14 @@ const isCompletedReady = (p: any) => {
   if (derived && /^ready$/i.test(derived)) return true;
   return false;
 };
+// Owner-locked: NEVER surface a sold-out project on the homepage / Handpicked.
+// Sold inventory is routed to the secondary-market surface instead.
+const isSoldOut = (p: any) => {
+  if (p?.is_sold_out === true) return true;
+  const s = String(p?.status_label || "").toLowerCase();
+  const ss = String(p?.sale_status || "").toLowerCase();
+  return /sold/.test(s) || /sold/.test(ss);
+};
 const isDirectWithDeveloper = (p: any) => p?.developer?.has_active_rep === true;
 // Owner directive (explicit): NEVER show any ready project on the homepage,
 // even from direct-with-developer brands. Off-plan only on /.
