@@ -109,14 +109,6 @@ export default function MortgageParityPanel({
     return rows;
   }, [interestRate, loanTermYears, loanAmount, monthlyPayment]);
 
-  const compareMinRate = 2;
-  const compareMaxRate = 10;
-  const setCompareRateFromPointer = useCallback((target: HTMLInputElement, clientX: number) => {
-    const rect = target.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-    const raw = compareMinRate + ratio * (compareMaxRate - compareMinRate);
-    setCompareRate(Number((compareMinRate + Math.round((raw - compareMinRate) / 0.05) * 0.05).toFixed(2)));
-  }, []);
 
   const cardBg = isNavy
     ? "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)"
