@@ -388,16 +388,11 @@ const PropertyRecommendationPopup = () => {
             <div className="px-3 pb-3 space-y-2">
               <Button
                 onClick={() => { handleMinimize(); navigate("/properties"); }}
-                data-surface="emerald"
-                data-cta="primary"
-                data-allow-dark-cta
-                data-no-contrast-guard
-                className="jj-cta-emerald jj-pill-emerald-metallic w-full font-semibold text-sm text-white hover:text-white [&_svg]:text-white"
+                className="w-full bg-gradient-to-r from-gold/90 to-amber-600 text-[#1A1A1A] font-semibold text-sm hover:from-gold hover:to-amber-500"
                 size="sm"
-                style={{ color: "#FFFFFF" }}
               >
-                <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore All Properties</span>
-                <ArrowRight className="w-4 h-4 ml-1 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                Explore All Properties
+                <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
               <button
                 type="button"
