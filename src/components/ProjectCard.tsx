@@ -440,30 +440,36 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             onClick={(e) => e.stopPropagation()}
             aria-label={`Email about ${project.name}`}
             data-no-contrast-guard
-            className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+            data-emerald="true"
+            className="jj-emerald-metallic allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            style={{ color: "#FFFFFF" }}
           >
-            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Email</span>
+            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="truncate text-xs font-semibold" style={{ color: "#FFFFFF" }}>Email</span>
           </a>
           <a
             href={callHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Call about ${project.name}`}
             data-no-contrast-guard
-            className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+            data-emerald="true"
+            className="jj-emerald-metallic allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            style={{ color: "#FFFFFF" }}
           >
-            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Call</span>
+            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="truncate text-xs font-semibold" style={{ color: "#FFFFFF" }}>Call</span>
           </a>
           <a
             href={whatsappHref}
             onClick={(e) => e.stopPropagation()}
             aria-label={`WhatsApp about ${project.name}`}
             data-no-contrast-guard
-            className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+            data-emerald="true"
+            className="jj-emerald-metallic allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            style={{ color: "#FFFFFF" }}
           >
-            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Chat</span>
+            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="truncate text-xs font-semibold" style={{ color: "#FFFFFF" }}>Chat</span>
           </a>
         </div>
       </div>
