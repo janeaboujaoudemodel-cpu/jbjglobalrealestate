@@ -6762,7 +6762,10 @@ html body .jj-newsletter-emerald input:hover {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   caret-color: #FFFFFF !important;
+  background: transparent !important;
+  background-image: none !important;
 }
+
 html body .jj-newsletter-emerald input::placeholder,
 html body .jj-newsletter-emerald .jj-newsletter-placeholder,
 html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
