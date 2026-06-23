@@ -283,7 +283,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
               </motion.div>
               <div
                 data-no-contrast-guard
-                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 border border-white/30 bg-white/10 backdrop-blur"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 border border-[#B89555]/40 bg-white/10 backdrop-blur"
                 style={{ color: "#FFFFFF" }}
               >
                 <Sparkles className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
@@ -308,7 +308,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     onClick={() => { setStepIdx(0); setPhase("spotlight"); }}
                     type="button"
                     data-no-contrast-guard
-                    className="allow-white w-full h-12 rounded-xl group inline-flex items-center justify-center gap-2 px-4 border border-white/40 bg-white/15 hover:bg-white/25 backdrop-blur font-semibold transition-all"
+                    className="allow-white w-full h-12 rounded-xl group inline-flex items-center justify-center gap-2 px-4 border border-[#B89555]/50 bg-white/15 hover:bg-white/25 backdrop-blur font-semibold transition-all"
                     style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
                     <Compass className="w-4 h-4 mr-2 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
@@ -319,7 +319,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     onClick={handleComplete}
                     type="button"
                     data-no-contrast-guard
-                    className="allow-white w-full h-10 rounded-xl text-sm border border-white/25 hover:bg-white/10 transition-colors"
+                    className="allow-white w-full h-10 rounded-xl text-sm border border-[#B89555]/30 hover:bg-white/10 transition-colors"
                     style={{ color: "#FFFFFF" }}
                   >
                     Skip for now
@@ -330,7 +330,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   onClick={handleComplete}
                   type="button"
                   data-no-contrast-guard
-                  className="allow-white w-full h-12 rounded-xl border border-white/40 bg-white/15 hover:bg-white/25 backdrop-blur font-semibold transition-all"
+                  className="allow-white w-full h-12 rounded-xl border border-[#B89555]/50 bg-white/15 hover:bg-white/25 backdrop-blur font-semibold transition-all"
                   style={{ color: "#FFFFFF" }}
                 >
                   Done
