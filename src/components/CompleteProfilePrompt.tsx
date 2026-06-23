@@ -158,15 +158,16 @@ export default function CompleteProfilePrompt() {
               type="button"
               onClick={close}
               aria-label="Close"
-              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#EFE6D6]/60 border border-[#B89555]/40 flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+              data-no-contrast-guard
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#0E8A66] border border-[#0E8A66] flex items-center justify-center text-white hover:bg-[#0B6F52] transition-colors"
             >
-              <X className="w-4 h-4" strokeWidth={2.25} />
+              <X className="w-4 h-4 text-white" strokeWidth={2.25} />
             </button>
 
             <div className="px-6 pt-7 pb-2">
               <div className="flex items-center gap-2.5 mb-4">
-                <span className="w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center">
-                  <Trophy className="w-5 h-5 text-[#1A1A1A]" strokeWidth={2.25} />
+                <span className="w-10 h-10 rounded-xl bg-[#0E8A66] border border-[#0E8A66] flex items-center justify-center" data-no-contrast-guard>
+                  <Trophy className="w-5 h-5 text-white" strokeWidth={2.25} />
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.18em] font-bold text-[#1A1A1A]/70">
                   Earn rewards · 2 minutes
