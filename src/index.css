@@ -11274,3 +11274,120 @@ html body :where(
 .jj-cta-emerald:hover {
   background-image: var(--jj-emerald-ombre-hover) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   GATE 1 — OFFICIAL EMERALD ONLY
+   The Call button emerald is the single platform emerald. No mint,
+   light green, alternate emerald, white outline, border, or ring is
+   allowed on emerald-owned surfaces.
+   ════════════════════════════════════════════════════════════════ */
+html body :is(
+  .jj-official-emerald,
+  .jj-emerald-rect-pill,
+  .jj-favorite-trigger,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-emerald-solid,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-icon-tile-emerald,
+  .jj-history-emerald-icon,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok],
+  [data-card-action],
+  [class*="bg-green-"],
+  [class*="bg-emerald-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  outline: 0 !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -12px rgba(6, 78, 59, 0.95), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+html body :is(
+  .jj-official-emerald,
+  .jj-emerald-rect-pill,
+  .jj-favorite-trigger,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-emerald-solid,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-icon-tile-emerald,
+  .jj-history-emerald-icon,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok],
+  [data-card-action],
+  [class*="bg-green-"],
+  [class*="bg-emerald-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is(
+  .jj-official-emerald,
+  .jj-emerald-rect-pill,
+  .jj-favorite-trigger,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-emerald-solid,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-icon-tile-emerald,
+  .jj-history-emerald-icon,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok],
+  [data-card-action],
+  [class*="bg-green-"],
+  [class*="bg-emerald-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]) :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, span, p, strong, small, label, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is(.jj-favorite-trigger, [data-card-action]) :is(svg, [class*="lucide"]) {
+  fill: none !important;
+}
+
+html body :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] svg,
+html body :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg {
+  fill: #FFFFFF !important;
+}
