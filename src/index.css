@@ -11531,7 +11531,7 @@ html body :is(
    No restricted light green at rest or hover. No component opt-out.
    ============================================================ */
 :root {
-  --jj-emerald-primitive: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj-emerald-primitive: linear-gradient(135deg, #043b2c 0%, #02261a 55%, #000000 100%);
   --jj-emerald-primitive-hover: var(--jj-emerald-primitive);
   --jj-emerald-ombre: var(--jj-emerald-primitive);
   --jj-emerald-ombre-hover: var(--jj-emerald-primitive);
