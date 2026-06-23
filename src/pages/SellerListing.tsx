@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useFormAutoSave } from "@/hooks/useFormAutoSave";
+import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
 import { 
   User, Building2, DollarSign, Home, Camera, FileText, 
   CheckCircle2, ArrowRight, ArrowLeft, Loader2, 
@@ -37,7 +38,7 @@ import {
 const sellerListingSchema = z.object({
   // Step 1 - Seller Details
   seller_full_name: z.string().min(2, "Full name is required"),
-  seller_phone: z.string().min(8, "Valid phone number is required"),
+  seller_phone: z.string().min(1, "Valid phone number is required").refine((value) => getPhoneValidation(value).isValid, (value) => ({ message: getPhoneValidation(value).message })),
   seller_email: z.string().email("Valid email is required"),
   preferred_language: z.string().default("en"),
   preferred_contact_method: z.string().default("whatsapp"),
@@ -308,7 +309,7 @@ Requirements:
     
     switch (step) {
       case 1:
-        return !!(values.seller_full_name && values.seller_phone && values.seller_email);
+        return !!(values.seller_full_name && values.seller_email && getPhoneValidation(values.seller_phone).isValid);
       case 2:
         return !!(values.property_type && values.property_location);
       case 3:
@@ -734,10 +735,12 @@ Requirements:
                       </div>
                       <div>
                         <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Phone Number <span style={{color:"#B91C1C"}}>*</span></Label>
-                        <Input
-                          {...form.register("seller_phone")}
-                          placeholder="+971 50 123 4567"
-                          className="mt-1 bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
+                        <PhoneInput
+                          value={form.watch("seller_phone")}
+                          onChange={(value) => form.setValue("seller_phone", value || "", { shouldValidate: true })}
+                          placeholder="Phone number"
+                          variant="light"
+                          className="mt-1"
                         />
                       </div>
                     </div>
