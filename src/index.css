@@ -13157,3 +13157,90 @@ html body #root [role="tab"][data-state="active"][data-emerald-active] :is(svg, 
   border: 1px solid var(--bk-gold-hairline) !important;
   border-radius: 16px !important;
 }
+
+/* ============================================================
+   GLOBAL EMERALD PILL LOCK (Front + Back office) — Pass 13
+   ------------------------------------------------------------
+   Every filled action pill / primary CTA renders a SINGLE solid
+   emerald (#064E3B) with white text + white icons.
+   No split panels, no fades to black, no half-dark overlays.
+   Hover = slightly brighter solid emerald, never multi-color.
+   Allowed exception: segmented-control active states (sq ft / sq m).
+   ============================================================ */
+html body :is(
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  [data-cta="primary"],
+  [data-surface="emerald"]
+):not([data-emerald-tone="soft"]):not(.jj-emerald-soft):not(.jj-surface-emerald-soft):not(.jj-emerald-outline):not([data-segmented-active]) {
+  background: #064E3B !important;
+  background-image: none !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is(
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  [data-cta="primary"],
+  [data-surface="emerald"]
+):not([data-emerald-tone="soft"]):not(.jj-emerald-soft):not(.jj-surface-emerald-soft):not(.jj-emerald-outline):not([data-segmented-active]):hover {
+  background: #0a6b53 !important;
+  background-image: none !important;
+  background-color: #0a6b53 !important;
+  color: #FFFFFF !important;
+}
+html body :is(
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  [data-cta="primary"],
+  [data-surface="emerald"]
+):not([data-emerald-tone="soft"]):not(.jj-emerald-soft):not(.jj-surface-emerald-soft):not(.jj-emerald-outline):not([data-segmented-active]) :is(span, svg, [class*="lucide"], strong, em, b, small, label, p, a) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+/* Kill split-color pseudo overlays previously layered on these pills. */
+html body :is(
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  [data-cta="primary"],
+  [data-surface="emerald"]
+):not([data-segmented-active])::before,
+html body :is(
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  [data-cta="primary"],
+  [data-surface="emerald"]
+):not([data-segmented-active])::after {
+  background: transparent !important;
+  background-image: none !important;
+  display: none !important;
+}
