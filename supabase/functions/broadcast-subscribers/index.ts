@@ -98,13 +98,8 @@ serve(async (req: Request): Promise<Response> => {
   const isTriggerCall = !!triggerSecret && headerSecret === triggerSecret;
 
   if (!isTriggerCall) {
-    const owner = await requireOwnerAuth(req);
-    if (!owner.ok) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    const owner = await requireOwnerAuth(req, corsHeaders);
+    if (owner.response) return owner.response;
   }
 
   let payload: BroadcastPayload;
