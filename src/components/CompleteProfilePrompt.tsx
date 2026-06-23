@@ -216,11 +216,11 @@ export default function CompleteProfilePrompt() {
                 type="button"
                 onClick={goRegister}
                 data-no-contrast-guard
-                className="flex-1 h-11 rounded-[999px] inline-flex items-center justify-center gap-2 bg-[#EFE6D6] border border-[#B89555] text-sm font-semibold text-[#1A1A1A] hover:bg-[#E6DAC2] transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+                className="flex-1 h-11 rounded-[999px] inline-flex items-center justify-center gap-2 bg-[#0E8A66] border border-[#0E8A66] text-sm font-semibold text-white hover:bg-[#0B6F52] transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
               >
-                <Sparkles className="w-4 h-4" strokeWidth={2.25} />
-                Take me there
-                <ArrowRight className="w-4 h-4" strokeWidth={2.25} />
+                <Sparkles className="w-4 h-4 text-white" strokeWidth={2.25} />
+                <span className="text-white">Take me there</span>
+                <ArrowRight className="w-4 h-4 text-white" strokeWidth={2.25} />
               </button>
             </div>
           </motion.div>
