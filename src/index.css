@@ -13391,10 +13391,5 @@ html body [data-no-contrast-guard] :where([style*="#1A1A1A"], .text-\[\#1A1A1A\]
   -webkit-text-fill-color: #F4E9CC !important;
 }
 
-/* 7) Kill any leftover ::after/::before split overlays on primary pills */
-html body :is(.jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, [data-cta="primary"], [data-cta="dark"])::before,
-html body :is(.jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, [data-cta="primary"], [data-cta="dark"])::after {
-  background: transparent !important;
-  background-image: none !important;
-  display: none !important;
-}
+/* (Removed leftover ::after/::before kill — metallic sheen overlay is approved
+   and must remain on Emerald → Black Ombre pills.) */
