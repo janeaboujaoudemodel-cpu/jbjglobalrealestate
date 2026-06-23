@@ -1033,7 +1033,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   aria-current={highlightActive ? 'page' : undefined}
                   className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] transition-all duration-200 rounded-lg hover:bg-[#EFE6D6]/60 ${getItemStyle(item)}`}
                 >
-                  <span data-sidebar-highlight-tile className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0`}>
+                  <span data-sidebar-highlight-tile data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0`}>
                     <Icon data-sidebar-highlight-icon className="w-3 h-3 transition-colors" />
                   </span>
                   <span data-sidebar-highlight-label className="flex-1 text-left relative inline-block transition-colors duration-200">{item.label}</span>
@@ -1069,7 +1069,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     }}
                     className="w-full flex items-center gap-2 px-2.5 h-[34px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
                   >
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
+                    <div data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
                       <SectionIcon data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </div>
                     <span
@@ -1145,7 +1145,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] transition-all duration-150 hover:bg-[#EFE6D6]/40 ${subitemActive ? 'font-semibold' : 'font-medium'}`}
                               style={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}
                             >
-                              <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
+                              <span data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
                                 <Icon data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                               </span>
                               <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}>{item.label}</span>
