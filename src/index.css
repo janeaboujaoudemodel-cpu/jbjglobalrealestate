@@ -6930,7 +6930,7 @@ html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
   inset: -2px;
   border-radius: inherit;
   padding: 1px;
-  background: conic-gradient(from 0deg, #064E3B, #13A078, #34D399, #13A078, #064E3B, #000000, #064E3B);
+  background: conic-gradient(from 0deg, #064E3B, #042c1c, #000000, #042c1c, #064E3B);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
@@ -7019,9 +7019,9 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem] > span:first-child {
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon],
 html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-icon] * {
-  color: #34D399 !important;
-  -webkit-text-fill-color: #34D399 !important;
-  stroke: #34D399 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:hover {
   background-color: rgba(52,211,153,0.06) !important;
@@ -7481,17 +7481,19 @@ html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
   -webkit-text-fill-color: #047857 !important;
 }
 
-/* Compare Two Bank Rates slider — emerald metallic to match brand theme */
+/* Compare Two Bank Rates slider — canonical deep emerald only */
 html body input[type="range"][data-mortgage-slider="Compare rate"] {
-  background-image: linear-gradient(90deg, #064E3B 0%, #13A078 55%, #34D399 100%) !important;
+  background-image: linear-gradient(90deg, #064E3B 0%, #042c1c 100%) !important;
 }
 html body input[type="range"][data-mortgage-slider="Compare rate"]::-webkit-slider-thumb {
-  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%) !important;
-  border: 1px solid #047857 !important;
+  background: #FFFFFF !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
 }
 html body input[type="range"][data-mortgage-slider="Compare rate"]::-moz-range-thumb {
-  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%) !important;
-  border: 1px solid #047857 !important;
+  background: #FFFFFF !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
 }
 
 /* Page-nav arrow (triple chevron) — guarantee white glyph on emerald,
@@ -8674,8 +8676,8 @@ html body section#ready-to-get-started .jj-emerald-metallic :is(svg, [class*="lu
 }
 
 html body input.mortgage-range-input {
-  --mortgage-range-thumb: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 45%, #34D399 100%) !important;
-  --mortgage-range-thumb-shadow: 0 0 0 2px #047857 inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(52,211,153,0.75), 0 4px 14px rgba(4,120,87,0.45) !important;
+  --mortgage-range-thumb: #FFFFFF !important;
+  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
 }
 
 /* Legacy `[role="tablist"] button[role="tab"][aria-selected="true"]` sweep
@@ -8848,22 +8850,12 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] {
   /* PASS 37 — true emerald metallic shine: emerald-light → emerald-deep,
      no white linear overlay. Slight teal glint moves through. */
   background-image:
-    linear-gradient(110deg,
-      rgba(110,231,183,0) 0%,
-      rgba(110,231,183,0) 38%,
-      rgba(110,231,183,0.55) 50%,
-      rgba(52,211,153,0.18) 58%,
-      rgba(110,231,183,0) 70%,
-      rgba(110,231,183,0) 100%),
-    linear-gradient(135deg, #13A078 0%, #0A6B53 38%, #064E3B 72%, #042c1c 100%) !important;
-  background-size: 240% 100%, 100% 100% !important;
-  background-blend-mode: screen, normal !important;
-  animation: jj-metallic-sweep 3.2s ease-in-out infinite !important;
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-size: 100% 100% !important;
   box-shadow:
-    inset 0 0 0 1px rgba(110,231,183,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.10),
     inset 0 -1px 0 rgba(0,0,0,0.35),
-    0 0 22px rgba(52,211,153,0.45) !important;
+    0 8px 22px -10px rgba(4,44,28,0.55) !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
   background: rgba(0,0,0,0.28) !important;
@@ -8894,8 +8886,8 @@ html body section#ready-to-get-started a :is(svg, [class*="lucide"]) * {
   fill: none !important;
 }
 html body input.mortgage-range-input {
-  --mortgage-range-thumb: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D1FAE5 42%, #064E3B 100%) !important;
-  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.68), 0 0 18px rgba(6,78,59,0.70), 0 4px 14px rgba(4,44,28,0.50) !important;
+  --mortgage-range-thumb: #FFFFFF !important;
+  --mortgage-range-thumb-shadow: 0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.72), 0 4px 14px rgba(4,44,28,0.45) !important;
   accent-color: #064E3B !important;
 }
 html body input[type="range"][data-mortgage-slider]::-webkit-slider-runnable-track {
@@ -9071,7 +9063,7 @@ html body.jj-vertical-nav-collapsed aside [aria-label*="xpand" i]:hover :is(svg,
 /* (d) Footer link hover → emerald accent (no plain green) */
 html body footer a:hover,
 html body footer a:focus-visible {
-  color: #34D399 !important;
+  color: #064E3B !important;
 }
 
 /* =========================================================================
@@ -9403,9 +9395,9 @@ html body footer[data-footer="corporate"] :is(h4, a, p, span, bdi):hover {
   -webkit-text-fill-color: #D1FAE5 !important;
 }
 html body footer[data-footer="corporate"] :is(h4, a:hover, a:focus-visible, bdi, svg, [class*="lucide"]) {
-  color: #34D399 !important;
-  -webkit-text-fill-color: #34D399 !important;
-  stroke: #34D399 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 html body footer[data-footer="corporate"] .inline-flex.rounded-full {
   border-color: rgba(4,120,87,.65) !important;
