@@ -2323,6 +2323,30 @@ export type Database = {
           },
         ]
       }
+      broadcast_settings: {
+        Row: {
+          enabled: boolean
+          function_url: string
+          id: boolean
+          trigger_secret: string
+          updated_at: string
+        }
+        Insert: {
+          enabled?: boolean
+          function_url: string
+          id?: boolean
+          trigger_secret: string
+          updated_at?: string
+        }
+        Update: {
+          enabled?: boolean
+          function_url?: string
+          id?: boolean
+          trigger_secret?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       broker_2fa_secrets: {
         Row: {
           broker_user_id: string
