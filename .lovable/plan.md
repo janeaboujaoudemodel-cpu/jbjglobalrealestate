@@ -1,118 +1,77 @@
-# Global UI System Rebuild — Emerald + Champagne Gold
+# Single-Source CTA Contract — Emerald Primary / Champagne Secondary
 
-Stop patching pages. Rebuild the shared primitives so every page inherits the Homepage's premium identity automatically.
+Lock the platform to exactly two CTA primitives, remove every duplicated/conflicting rule, and validate live.
 
-## Scope
+## The contract (one rule, no exceptions)
 
-The Homepage becomes the **visual benchmark**. Every reusable component is rewritten once, in one place, so all routes (Overview, CRM, Broker portal, Developer portal, Owner dashboard, Tools, Marketing pages) inherit the same look automatically.
+- **Primary CTA → emerald-filled, pure white text + pure white icon.**
+  Applies to every primary action across every page, regardless of label (Request Call Back, Book Now, Download, Submit, Ask, Save, Continue, etc.).
+- **Secondary CTA → champagne-filled, emerald text + emerald icon, 1px gold hairline.**
+- **Hero CTA on dark imagery** stays the existing ghost/white-border variant — out of scope, not a "primary CTA".
+- **Gold metallic CTA** (`.jj-cta-gold-metallic`) stays as-is — it is a separately documented primitive, not a primary.
 
-## Design Language (locked tokens)
+## Root cause to remove
 
-- **Champagne** = page surfaces, cards, raised panels (`#FDFBF7`, `#F7F2EA`, `#EFE6D6`)
-- **Gold `#B89555`** = decorative hairline accent only (1px), never a fill
-- **Emerald `#064E3B`** = the **primary interactive accent** for the entire platform
-- **Ink `#1A1A1A`** = default text on champagne
-- **White** = mandatory text/icon color on every Emerald or dark surface
-- Black is **not** a default action color — only intentional, rare use
+`src/index.css` has the same primitive (`.jj-cta-champagne`, `[data-cta="champagne"]`) defined in two places with opposite intents:
 
-## Workstream 1 — Reusable Primitives (single source of truth)
+- Line ~4527 + ~4879 + ~4908: champagne bg + ink text (secondary)
+- Line ~10357: emerald gradient bg (primary)
 
-Rebuild these so every consumer inherits the system:
+The earlier ink-text rule wins specificity for color, the later emerald rule wins for background → emerald button with black text. Every other "duplicate" symptom (Project page mortgage CTA, Ask, Download Report, segmented tab, etc.) traces to this collision.
 
-1. **Button system** (`src/components/ui/button.tsx` + variants)
-   - `default` / `primary` → Emerald metallic with WHITE text+icon
-   - `secondary` → Champagne with EMERALD text+icon
-   - `ghost` → transparent with Emerald hover
-   - Remove every black default. Migrate all `bg-black`, `bg-foreground`, raw dark buttons.
+## Workstream 1 — Collapse to one primitive each
 
-2. **Card** (`src/components/ui/card.tsx`)
-   - Champagne raised surface, 1px gold hairline option, Emerald accent bar for active state
+1. Make `.jj-cta-primary` / `[data-cta="primary"]` / `.btn-primary` / `button[type=submit]` (with documented opt-outs) the **only** selectors that paint the emerald gradient.
+2. Make `.jj-cta-champagne` / `[data-cta="champagne"]` / `.jj-cta-outline` / `[data-cta="outline"]` the **only** selectors that paint champagne with emerald ink.
+3. Delete every redundant block in `src/index.css` that re-asserts either primitive (`.jj-emerald-solid`, `.jj-pill-emerald`, `.jj-surface-emerald` re-declarations, `.jj-official-emerald`, the gate-1/gate-2 promotion blocks, etc.) and forward all of them to alias `.jj-cta-primary` in one place.
+4. Inside the primary rule, force `color`, `-webkit-text-fill-color`, and `stroke` to `#FFFFFF` on the button **and** on descendants (`span`, `svg`, `[class*="lucide"]`) at the same specificity used by the older ink-text rule, so it wins deterministically without relying on `!important` stacking.
+5. Remove the `.jj-cta-champagne` entry from the older "light own-surfaces" ink-text contract (line ~4908) because that primitive's color now lives in the single secondary rule.
 
-3. **Tabs / Filters / Chips** (`tabs.tsx`, filter pills, segmented controls)
-   - Active = Emerald fill + white text. Idle = champagne + ink. No dark gradient swipe.
+## Workstream 2 — Global enforcement net
 
-4. **Active "Overview" card animation**
-   - Remove the dark gradient swipe fill entirely
-   - Replace with subtle Emerald metallic sheen (slow shimmer, no fill animation, no dark block)
+Add one final guard at the end of `index.css`:
 
-5. **Icons** — unify through `IconTile` (already standard). Audit every direct `<Lucide />` usage on dashboards and migrate.
+```css
+/* Any element whose computed emerald primitive is active MUST render white. */
+.jj-cta-primary, [data-cta="primary"], .jj-cta-primary *, [data-cta="primary"] *,
+.jj-surface-emerald, .jj-surface-emerald *,
+.jj-emerald-solid, .jj-emerald-solid *,
+[data-surface="emerald"], [data-surface="emerald"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: currentColor;
+}
+```
 
-6. **KPI cards / Stat cards / Dashboard widgets**
-   - Champagne surface, Emerald accent number/icon, gold hairline divider
-   - Replace any purple/blue/neutral accents
+This catches any future button on any page (Book Now, Call Back, Reserve, anything) the moment it lands on an emerald primitive — no per-page patch needed.
 
-7. **Charts** (Recharts wrappers in `src/components/charts/*`)
-   - Primary series = Emerald `#064E3B`, secondary = Emerald-light, tertiary = Champagne-dark
-   - Tooltips/legends use the same tokens. Remove default Recharts blues.
+## Workstream 3 — Component sweep
 
-8. **Progress / Sliders / Focus rings**
-   - Track = champagne, fill = Emerald metallic
-   - Focus ring = Emerald
+For each consumer that currently paints emerald via a hardcoded class or inline style instead of the primitive:
 
-9. **Scrollbars** — global CSS replacement
-   - Replace **all** gold/champagne scrollbar styling with Emerald (`#064E3B` thumb, champagne track)
-   - Webkit + Firefox
+- Replace `bg-[#064E3B]`, `bg-emerald-*`, inline `style={{background:'#064E3B'}}`, and one-off gradients with `className="jj-cta-primary"` (or keep their existing class but add `data-cta="primary"`).
+- Verify Button.tsx variant map: every variant the design system considers "primary" must emit `data-cta="primary"`; everything else must emit `data-cta="champagne"` or `data-cta="outline"` or `data-cta="dark"`.
+- No component should set `color` inline on a primary CTA — the global rule owns it.
 
-10. **Empty states & illustrations**
-    - Emerald icon tile + champagne backdrop + ink copy
+Files to audit (grep + visual): `src/components/ui/button.tsx`, `src/components/ui/emerald/EmeraldButton.tsx`, `src/components/tools/PrimaryCTA.tsx`, every `ContactButton`, `BookingButton`, `RequestCallback*`, `Download*Button`, `Ask*Button`, `Reserve*Button`, project-detail CTAs, news/intel hub CTAs.
 
-11. **Titles / headings / arrows**
-    - Single Typography primitive enforcing weight/tracking
-    - Decorative arrows = Emerald or ink, never white-on-image
+## Workstream 4 — Publish + live audit
 
-## Workstream 2 — Homepage as Benchmark
+1. Publish the build so the live bundle matches source.
+2. Re-run the Playwright audit against `jbjglobalrealestate.lovable.app` on `/`, `/properties`, `/project/:slug`, `/tools`, `/news`, `/broker`, `/owner`, `/compare`, `/favorites`, `/contact`.
+3. Per route, fail on any element whose computed background is emerald (`rgb(6,78,59)` or close) AND whose text/svg color is not pure white.
+4. Deliver the screenshots + a zero-violation report. Do not claim done until the live audit returns 0 across all routes.
 
-- Lock the Homepage hero, section bands, card grid spacing, and CTA hierarchy as the canonical reference
-- Extract any one-off Homepage styles into the primitives so other pages match by default
-- Document the benchmark in `mem://style/...` for future runs
+## Out of scope
 
-## Workstream 3 — Global Migration Sweep
-
-After primitives land, sweep consumers:
-- Replace remaining hardcoded `bg-black` / dark-button uses → `<Button>` default
-- Replace direct Recharts color props → chart theme tokens
-- Replace any custom Emerald hex strings → `.jj-surface-emerald` primitive
-- Remove any remaining "fill-swipe" active-card animations
-- Audit: Overview, CRM Kanban, Broker dashboard, Developer portal, Owner dashboard, Tools hub, Marketing/News hubs
-
-## Workstream 4 — Visual Validation (Playwright)
-
-Capture screenshots at 1280×1800 on every major route:
-`/`, `/properties`, `/project/:slug`, `/favorites`, `/compare`, `/tools`, `/broker`, `/broker/dashboard`, `/developer`, `/owner`, `/owner/crm`, `/news`, `/intel`, `/guides`.
-
-Automated checks per route:
-- No Emerald surface with non-white text/icon
-- No black-default buttons in branded flows
-- No gold scrollbar
-- No dark swipe-fill animations on active cards
-- Charts/KPIs use Emerald primary
-- Section padding matches Homepage
-
-Deliver screenshots as proof before claiming completion.
-
-## Technical Targets
-
-- `src/index.css` — scrollbars, active-card animation, primitive class definitions
-- `src/components/ui/button.tsx`, `card.tsx`, `tabs.tsx`, `badge.tsx`, `input.tsx`, `progress.tsx`, `slider.tsx`
-- `src/components/ui/icon-tile.tsx` — audit consumers
-- `src/components/charts/*` — chart theme
-- `tailwind.config.ts` — ensure tokens map to Emerald primary
-- Sweep: `src/pages/**`, `src/components/**` for `bg-black`, hardcoded gold scrollbars, custom Emerald hex, dark swipe animations
-- `mem://style/...` — record Homepage-as-benchmark + Emerald-primary rules
-
-## Out of Scope
-
-- No business logic changes
-- No data model, edge function, or backend changes
-- No new features — only visual unification
+- No business logic, no data, no backend.
+- No changes to hero ghost CTAs, gold metallic CTA, or dark/navy CTA primitives.
+- No new colors or tokens.
 
 ## Definition of Done
 
-1. All reusable primitives rebuilt and consumed everywhere
-2. Zero Emerald surfaces with dark text/icons across all audited routes
-3. Zero gold scrollbars; Emerald scrollbars everywhere
-4. Zero black default buttons in branded flows
-5. Overview active card uses Emerald metallic sheen (no swipe-fill)
-6. Charts, KPIs, tabs, filters, progress all Emerald-accented
-7. Section padding matches Homepage globally
-8. Playwright screenshots delivered for every major route as proof
+1. Exactly one CSS rule defines the emerald primary; exactly one defines the champagne secondary. No conflicting re-declarations remain in `src/index.css`.
+2. Every primary CTA across every page renders emerald fill + pure white text + pure white icon — verified by Playwright on the published bundle.
+3. Zero black/ink text on any emerald surface anywhere in the audited routes.
+4. Screenshots delivered per route as proof.

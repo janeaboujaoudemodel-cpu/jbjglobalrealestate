@@ -12662,3 +12662,102 @@ html body [data-jj-empty-state] [data-icon-tile] svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* =============================================================
+ * FINAL CTA CONTRACT — Single-source white-on-emerald guard.
+ * Wins over every earlier rule (last declaration in the cascade).
+ * Any element that resolves to the brand emerald primitive — by class,
+ * data-attr, hardcoded hex utility, or inline style — renders pure
+ * white text + pure white SVG content, at every interactive state.
+ * Opt-out: [data-no-contrast-guard].
+ * ============================================================= */
+html body :is(
+  .jj-cta-primary,
+  [data-cta="primary"],
+  .btn-primary,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-badge-dark,
+  [data-surface="emerald"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline),
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#053D2F]"],
+  [class~="bg-[#0A6B53]"],
+  [class~="bg-[#0E8A66]"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-900"],
+  [style*="background-color: #064E3B" i],
+  [style*="background-color:#064E3B" i],
+  [style*="background:#064E3B" i],
+  [style*="background: #064E3B" i]
+):not([data-no-contrast-guard]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is(
+  .jj-cta-primary,
+  [data-cta="primary"],
+  .btn-primary,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-badge-dark,
+  [data-surface="emerald"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline),
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#053D2F]"],
+  [class~="bg-[#0A6B53]"],
+  [class~="bg-[#0E8A66]"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-900"]
+):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is(
+  .jj-cta-primary,
+  [data-cta="primary"],
+  .btn-primary,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-badge-dark,
+  [data-surface="emerald"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline),
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#053D2F]"],
+  [class~="bg-[#0A6B53]"],
+  [class~="bg-[#0E8A66]"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-900"]
+):not([data-no-contrast-guard]) :where(span, a, p, strong, em, small, label, h1, h2, h3, h4, h5, h6, div, li, button, svg, [class*="lucide"]):not([data-allow-gold]):not(.jj-gold-accent):not(.text-gold) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: currentColor;
+  opacity: 1 !important;
+}
+
+/* Same guard for tab/segmented active state and active sidebar — already
+ * emerald per earlier blocks, this just locks descendants to white. */
+html body :is(
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [data-sidebar="menu-button"][data-active="true"],
+  [data-sidebar-item][data-active="true"],
+  aside a[aria-current="page"],
+  nav[data-app-sidebar] a[aria-current="page"],
+  .jj-sidebar-item-active
+):not([data-no-contrast-guard]) :where(span, a, p, label, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
