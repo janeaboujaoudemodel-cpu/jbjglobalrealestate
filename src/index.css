@@ -12013,6 +12013,21 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[href="/ai-hub"] > spa
   fill: none !important;
 }
 
+/* Highest-specificity duplicate to beat earlier :not([data-active]) light-green stops. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]) > div:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-section][data-sidebar-section]:not([data-active="true"]):hover > div:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-highlight][data-sidebar-highlight]:not([data-active="true"]):hover > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]) > span:first-child,
+html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [data-sidebar-subitem][data-sidebar-subitem]:not([data-active="true"]):hover > span:first-child {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
 /* 🔒 ABSOLUTE LAST RULE — official dark emerald icon tiles only.
    Older sidebar passes used lighter #047857/#10b981 stops and white rings,
    which made the icons read as green-filled. This end-of-file lock removes
