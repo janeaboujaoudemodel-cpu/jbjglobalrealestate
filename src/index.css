@@ -11431,6 +11431,32 @@ html body :is(
   opacity: 1 !important;
 }
 
+/* ABSOLUTE FINAL LOCK — sidebar emerald icon tiles.
+   This fixes the visually highlighted issue: row text can be black on champagne,
+   but every glyph inside an emerald tile remains pure white in idle/hover/active. */
+html body [data-chrome="sidebar"] [data-emerald-icon-surface],
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]),
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]) *,
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) :is(svg, [class*="lucide"], [data-lucide]),
+html body [data-chrome="sidebar"] [data-emerald-icon-surface]:is(:hover, :focus, :focus-visible, :active, :disabled) :is(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+html body [data-chrome="sidebar"] [data-emerald-icon-surface] svg :is(path, line, polyline, polygon, rect, circle, ellipse) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
 html body :is(.jj-favorite-trigger, [data-card-action]) :is(svg, [class*="lucide"]) {
   fill: none !important;
 }
