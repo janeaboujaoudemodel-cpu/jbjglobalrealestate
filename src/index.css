@@ -13393,3 +13393,110 @@ html body [data-no-contrast-guard] :where([style*="#1A1A1A"], .text-\[\#1A1A1A\]
 
 /* (Removed leftover ::after/::before kill — metallic sheen overlay is approved
    and must remain on Emerald → Black Ombre pills.) */
+
+/* ════════════════════════════════════════════════════════════════
+   FINAL CONTRAST REPAIR — sidebar + premium emerald accents
+   - Contact / Support are always emerald-ombre with WHITE text/icons.
+   - Active sidebar child rows are emerald-ombre with WHITE text/icons.
+   - Top shortcut labels have no row frame/fill; titles stay ink, icons keep
+     their own tile treatment. Broker portal frame is untouched.
+   - Emerald outline actions keep emerald text/icons on hover.
+   ════════════════════════════════════════════════════════════════ */
+
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta],
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:focus,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:focus-visible,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:active {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] *,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:hover *,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:focus *,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:active *,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] svg,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] svg *,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:hover svg,
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:hover svg * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-subitem][aria-current="page"],
+html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-subitem][aria-current="page"]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"]:hover {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem][aria-current="page"] *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem][data-active="true"]:hover *,
+html body [data-chrome="sidebar"] [data-sidebar-subitem][aria-current="page"]:hover *,
+html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-section][data-active="true"]:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus-visible,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:active,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:hover,
+html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:hover {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] [data-sidebar-highlight-label],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover [data-sidebar-highlight-label],
+html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not(:has([data-emerald-icon-surface])),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > [data-sidebar-highlight-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:not([data-emerald-icon-surface]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:not([data-emerald-icon-surface]) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body [data-emerald-outline-action],
+html body [data-emerald-outline-action]:hover,
+html body [data-emerald-outline-action]:focus,
+html body [data-emerald-outline-action]:focus-visible,
+html body [data-emerald-outline-action]:active,
+html body [data-emerald-outline-action] *,
+html body [data-emerald-outline-action]:hover * {
+  color: var(--emerald-ink) !important;
+  -webkit-text-fill-color: var(--emerald-ink) !important;
+  stroke: var(--emerald-ink) !important;
+}
