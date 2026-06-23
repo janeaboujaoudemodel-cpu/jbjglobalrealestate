@@ -12494,3 +12494,17 @@ html body main .jj-project-band :is(.jj-card-inner, [class*="rounded-"]) {
   box-sizing: border-box;
   max-width: 100%;
 }
+
+html body main .jj-project-nested-band {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+html body main .jj-project-nested-band > *:not([role="presentation"]) {
+  max-width: 100%;
+  box-sizing: border-box;
+}
