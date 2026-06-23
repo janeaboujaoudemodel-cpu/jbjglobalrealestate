@@ -243,66 +243,102 @@ export default function MortgageParityPanel({
       </Card>
 
       {/* Comparison */}
-      <Card title="Compare to Bank Rates" className="mortgage-compare-card">
-        <div className={`grid grid-cols-2 gap-3 text-sm ${inkClass}`}>
-          <div>
-            <p className={`text-xs ${subClass}`}>Bank A — {interestRate}%</p>
-            <p className="font-bold text-lg tabular-nums mt-1">{aed(monthlyPayment)}</p>
-            <p className={`text-[11px] ${subClass}`}>per month</p>
-          </div>
-          <div>
-            <p className={`text-xs ${subClass}`}>Bank B — {compareRate.toFixed(2)}%</p>
-            <p className="font-bold text-lg tabular-nums mt-1">{aed(compareMonthly)}</p>
-            <p className={`text-[11px] ${subClass}`}>per month</p>
-          </div>
-        </div>
-        <div className="mt-3 py-1">
-          {(() => {
-            const minR = compareMinRate;
-            const maxR = compareMaxRate;
-            const progress = Math.min(100, Math.max(0, ((compareRate - minR) / (maxR - minR)) * 100));
-            const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
-            const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
-            return (
-              <input
-                type="range"
-                data-mortgage-slider="Compare rate"
+      <Card title="Compare Two Bank Rates" className="mortgage-compare-card">
+        {(() => {
+          const selectStyle: React.CSSProperties = {
+            background: isNavy ? "rgba(255,255,255,0.08)" : "#FFFFFF",
+            border: isNavy ? "1px solid rgba(147,197,253,0.40)" : "1px solid rgba(184,149,85,0.45)",
+            color: isNavy ? "#FFFFFF" : "#1A1A1A",
+          };
+          const inputStyle: React.CSSProperties = { ...selectStyle };
+          const BankBlock = ({
+            label,
+            bankId,
+            setBankId,
+            rate,
+            setRate,
+            monthly,
+          }: {
+            label: string;
+            bankId: string;
+            setBankId: (v: string) => void;
+            rate: number;
+            setRate: (v: number) => void;
+            monthly: number;
+          }) => (
+            <div>
+              <p className={`text-[11px] uppercase tracking-wider font-semibold mb-1.5 ${subClass}`}>{label}</p>
+              <select
+                value={bankId}
+                onChange={(e) => {
+                  const id = e.target.value;
+                  setBankId(id);
+                  const b = UAE_BANKS.find((x) => x.id === id);
+                  if (b && b.id !== "custom") setRate(b.rate);
+                }}
                 data-no-contrast-guard
-                min={minR}
-                max={maxR}
-                step={0.05}
-                value={compareRate}
-                aria-label="Compare rate"
-                onPointerDown={(e) => {
-                  e.currentTarget.setPointerCapture?.(e.pointerId);
-                  setCompareRateFromPointer(e.currentTarget, e.clientX);
-                }}
-                onPointerMove={(e) => {
-                  if (e.buttons !== 1) return;
-                  setCompareRateFromPointer(e.currentTarget, e.clientX);
-                }}
-                onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
-                onChange={(e) => setCompareRate(Number(e.target.value))}
-                className="mortgage-range-input w-full"
-                style={{
-                  background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-                  boxShadow: isNavy ? 'inset 0 0 0 1px rgba(255,255,255,0.08)' : 'inset 0 0 0 1px rgba(6,78,59,0.14)',
-                  ["--mortgage-range-thumb" as any]:
-                    "#FFFFFF",
-                  ["--mortgage-range-thumb-shadow" as any]:
-                    "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
-                }}
+                className="allow-white w-full rounded-lg px-2.5 py-2 text-sm font-semibold"
+                style={selectStyle}
+              >
+                {UAE_BANKS.map((b) => (
+                  <option key={b.id} value={b.id} style={{ color: "#1A1A1A", background: "#FFFFFF" }}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  type="number"
+                  step={0.05}
+                  min={1}
+                  max={12}
+                  value={rate}
+                  onChange={(e) => {
+                    setRate(Number(e.target.value) || 0);
+                    setBankId("custom");
+                  }}
+                  data-no-contrast-guard
+                  className="allow-white w-20 rounded-lg px-2 py-1.5 text-sm font-semibold tabular-nums"
+                  style={inputStyle}
+                />
+                <span className={`text-xs ${subClass}`}>% APR</span>
+              </div>
+              <p className="font-bold text-lg tabular-nums mt-2">{aed(monthly)}</p>
+              <p className={`text-[11px] ${subClass}`}>per month</p>
+            </div>
+          );
+          return (
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm ${inkClass}`}>
+              <BankBlock
+                label="Bank A"
+                bankId={bankAId}
+                setBankId={setBankAId}
+                rate={bankARate}
+                setRate={setBankARate}
+                monthly={bankAMonthly}
               />
-            );
+              <BankBlock
+                label="Bank B"
+                bankId={bankBId}
+                setBankId={setBankBId}
+                rate={compareRate}
+                setRate={setCompareRate}
+                monthly={compareMonthly}
+              />
+            </div>
+          );
+        })()}
 
-          })()}
-        </div>
-
-        <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
+        <div className="mt-4 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
           <Scale className="w-3.5 h-3.5" />
-          <span>Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(monthlyPayment - compareMonthly))}</span> ({(monthlyPayment > compareMonthly ? "save" : "extra")} on Bank B)</span>
+          <span>
+            Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(bankAMonthly - compareMonthly))}</span>
+            {" "}({bankAMonthly > compareMonthly ? `Bank B saves ${aed(bankAMonthly - compareMonthly)}` : `Bank A saves ${aed(compareMonthly - bankAMonthly)}`} per month)
+          </span>
         </div>
+        <p className={`mt-2 text-[10px] ${subClass}`}>Indicative starting fixed rates. Final pricing depends on profile, LTV and term.</p>
       </Card>
+
 
       {/* Amortization */}
       <div className="lg:col-span-2">
