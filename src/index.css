@@ -11589,12 +11589,12 @@ html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
-/* Inactive section row's icon tile: no fill, no border. */
-html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) > div:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+/* Inactive section row stays champagne, but the emerald icon tile keeps white glyphs. */
+html body [data-chrome="sidebar"] [data-sidebar-section]:not([data-active="true"]) [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 
 /* ── 2. INACTIVE HIGHLIGHT ROWS (AI Home Finder, List Property,
@@ -11633,16 +11633,12 @@ html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="tru
   box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
   border-color: rgba(184,149,85,0.18) !important;
 }
-/* Inactive highlight row icon tile: no fill, no border. */
-html body [data-chrome="sidebar"] nav > div > div > a[href="/ai-home-finder"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/list-property"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/join"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] nav > div > div > a[href="/resale-properties"]:not([data-active="true"]) > span:first-child,
-html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+/* Inactive highlight rows stay champagne, but emerald icon tiles keep white glyphs. */
+html body [data-chrome="sidebar"] [data-sidebar-highlight]:not([data-active="true"]) [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 
 /* ── 3. INACTIVE SUBITEMS — already champagne, just enforce ink + no emerald hover ── */
@@ -11661,22 +11657,22 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]) [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover {
   background-color: rgba(239, 230, 214, 0.55) !important;
   background-image: none !important;
   transform: none !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover > span:first-child {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
+html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover [data-emerald-icon-surface] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   transform: none !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-subitem]:not([data-active="true"]):hover *,
