@@ -80,7 +80,7 @@ const ExecutiveOverview = () => {
   const getMomentumColor = (momentum: "high" | "medium" | "low") => {
     switch (momentum) {
       case "high":
-        return "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30";
+        return "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30";
       case "medium":
         return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
       default:

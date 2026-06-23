@@ -823,7 +823,7 @@ export default function JoinApplication() {
                     data-no-contrast-guard
                     className="careers-open-badge inline-flex items-center gap-1.5 px-3 py-1.5 self-start sm:self-end"
                   >
-                    <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
+                    <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
                     <span>{filteredPositions.length} open</span>
                   </Badge>
                 </div>

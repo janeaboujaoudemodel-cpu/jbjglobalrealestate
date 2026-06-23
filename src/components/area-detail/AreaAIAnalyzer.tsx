@@ -287,7 +287,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
           <span className="text-[#1A1A1A]/70">Supply (New Units)</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full jj-emerald-solid" />
+          <div className="w-3 h-3 rounded-full jj-surface-emerald" />
           <span className="text-[#1A1A1A]/70">Demand (Absorption)</span>
         </div>
       </div>
@@ -592,7 +592,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
                           <div key={status} className="flex items-center gap-1.5">
                             <div className={`w-2 h-2 rounded-full ${
- status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'jj-emerald-solid' : 
+ status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'jj-surface-emerald' : 
  status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
  status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-[#B89555]'
  }`} />

@@ -295,7 +295,7 @@ export default function LeadAssignModal({
                       </div>
                       <Badge
                         variant="outline"
-                        className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30 text-xs"
+                        className="jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30 text-xs"
                       >
                         Active
                       </Badge>

@@ -58,7 +58,7 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
       case "event":
         return "bg-purple-500";
       case "visit":
-        return "jj-emerald-solid";
+        return "jj-surface-emerald";
       default:
         return "bg-primary";
     }
@@ -73,7 +73,7 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
       case "event":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">Event</Badge>;
       case "visit":
-        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">Visit</Badge>;
+        return <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">Visit</Badge>;
       default:
         return null;
     }

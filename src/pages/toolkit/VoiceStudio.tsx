@@ -40,7 +40,7 @@ export default function VoiceStudio() {
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                   Voice Studio
-                  <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">FREE</Badge>
+                  <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">FREE</Badge>
                 </h1>
                 <p className="text-[#1A1A1A]/70 text-sm">Record → Multi-Voice Narration</p>
               </div>

@@ -183,7 +183,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30';
+      case 'completed': return 'jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30';
       case 'in_progress': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       case 'draft': return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30';
       default: return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30';

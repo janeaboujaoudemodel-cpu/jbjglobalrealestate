@@ -384,7 +384,7 @@ export function ProvidentPortalHub() {
             <Button
               onClick={handleAutoPublish}
               disabled={isAutoPublishing || (autoPublishCount ?? 0) === 0}
-              className="jj-emerald-solid hover:jj-emerald-solid text-white"
+              className="jj-surface-emerald hover:jj-surface-emerald text-white"
             >
               {isAutoPublishing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
               Auto-Publish Complete ({autoPublishCount ?? '…'})

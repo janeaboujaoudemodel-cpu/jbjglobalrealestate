@@ -110,7 +110,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
           </CardHeader>
 
           <CardContent className="space-y-4">
-            <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
+            <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
               <p className="text-[color:var(--emerald-on)] text-sm">
                 For security, you'll be signed out and redirected to the login page.
               </p>

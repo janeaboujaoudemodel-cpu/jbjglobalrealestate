@@ -128,7 +128,7 @@ const DeveloperCompanyRegistration = () => {
   const isReadOnly = existing?.status === "submitted" || existing?.status === "under_review" || existing?.status === "approved";
 
   const statusInfo = {
-    approved: { label: "Approved", className: "jj-emerald-solid/10 text-[color:var(--emerald-1)]", icon: CheckCircle2 },
+    approved: { label: "Approved", className: "jj-surface-emerald-soft text-[color:var(--emerald-1)]", icon: CheckCircle2 },
     submitted: { label: "Submitted — Awaiting Review", className: "bg-amber-500/10 text-amber-600", icon: Clock },
     under_review: { label: "Under Review", className: "bg-blue-500/10 text-blue-600", icon: Clock },
     rejected: { label: "Rejected — Please Revise", className: "bg-destructive/10 text-destructive", icon: AlertTriangle },

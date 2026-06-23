@@ -138,7 +138,7 @@ export function NewProjectDetector() {
           <CardTitle className="flex items-center gap-2 text-base">
             <Sparkles className="h-5 w-5 text-blue-600" />
             <span className="text-blue-900">New Projects Ready to Publish</span>
-            <Badge className="jj-emerald-solid text-white border-0 ml-1">
+            <Badge className="jj-surface-emerald text-white border-0 ml-1">
               {totalCount} NEW
             </Badge>
           </CardTitle>
@@ -147,7 +147,7 @@ export function NewProjectDetector() {
               <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Refresh
             </Button>
             {projects.length > 1 && (
-              <Button size="sm" onClick={handleImportAll} className="jj-emerald-solid hover:jj-emerald-solid text-white">
+              <Button size="sm" onClick={handleImportAll} className="jj-surface-emerald hover:jj-surface-emerald text-white">
                 <Download className="w-3.5 h-3.5 mr-1.5" /> Publish All
               </Button>
             )}
@@ -219,7 +219,7 @@ export function NewProjectDetector() {
                   size="sm"
                   onClick={() => handleImportProject(project)}
                   disabled={importing.has(project.id)}
-                  className="w-full jj-emerald-solid hover:jj-emerald-solid text-white text-xs h-8"
+                  className="w-full jj-surface-emerald hover:jj-surface-emerald text-white text-xs h-8"
                 >
                   {importing.has(project.id) ? (
                     <><RefreshCw className="w-3 h-3 mr-1.5 animate-spin" />Extracting & Publishing...</>

@@ -203,7 +203,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
             size="sm"
             onClick={handleWhatsApp}
             disabled={!lead.phone}
-            className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
+            className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white"
           >
             <MessageSquare className="h-4 w-4 mr-1" />
             WhatsApp

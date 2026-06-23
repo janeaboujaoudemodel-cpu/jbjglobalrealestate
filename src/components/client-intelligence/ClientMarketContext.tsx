@@ -58,7 +58,7 @@ const ClientMarketContext = ({
     switch (rentDemandLevel) {
       case "high":
         return (
-          <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 text-emerald-500 jj-emerald-solid/10 font-medium">
+          <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 text-emerald-500 jj-surface-emerald-soft font-medium">
             High RENT demand
           </Badge>
         );

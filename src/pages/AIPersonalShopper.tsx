@@ -236,7 +236,7 @@ const AIPersonalShopper = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
               <Plane className="w-4 h-4 text-emerald-400" />
               <span className="text-[color:var(--emerald-on)] text-sm font-medium">AI Travel & Property Concierge</span>
             </div>
@@ -261,7 +261,7 @@ const AIPersonalShopper = () => {
               {currentPlan ? currentPlan.name : "New Trip Plan"}
             </span>
             {currentPlan?.status === 'submitted' && (
-              <Badge className="jj-emerald-solid text-xs">Submitted</Badge>
+              <Badge className="jj-surface-emerald text-xs">Submitted</Badge>
             )}
           </div>
           <div className="flex-1" />
@@ -479,7 +479,7 @@ const AIPersonalShopper = () => {
                           <div
                             className={`max-w-[85%] p-4 rounded-2xl ${
  message.role === 'user'
- ? 'jj-emerald-solid text-white'
+ ? 'jj-surface-emerald text-white'
  : 'bg-[#F7F2EA] text-gray-100 border border-[#1A1A1A]'
  }`}
                           >
@@ -535,7 +535,7 @@ const AIPersonalShopper = () => {
                   <Button
                     onClick={() => sendMessage(inputMessage)}
                     disabled={!inputMessage.trim() || isLoading}
-                    className="jj-emerald-solid hover:jj-emerald-solid self-end"
+                    className="jj-surface-emerald hover:jj-surface-emerald self-end"
                   >
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />

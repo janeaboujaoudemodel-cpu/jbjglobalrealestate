@@ -322,7 +322,7 @@ ${response.script}
 
                 {/* Call to Action */}
                 {response.callToAction && (
-                  <Card className="jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30">
+                  <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-2 mb-2">
                         <Play className="h-4 w-4 text-emerald-400" />

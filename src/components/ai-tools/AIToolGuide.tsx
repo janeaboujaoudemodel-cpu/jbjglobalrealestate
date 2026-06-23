@@ -11,10 +11,10 @@ interface AIToolGuideProps {
 }
 
 const colorClasses: Record<string, { bg: string; border: string; text: string; icon: string }> = {
-  emerald: { bg: "jj-emerald-solid/10", border: "border-[color:var(--emerald-1)]/30/30", text: "text-emerald-400", icon: "text-emerald-400" },
+  emerald: { bg: "jj-surface-emerald-soft", border: "border-[color:var(--emerald-1)]/30/30", text: "text-emerald-400", icon: "text-emerald-400" },
   purple: { bg: "bg-purple-500/10", border: "border-purple-500/30", text: "text-purple-400", icon: "text-purple-400" },
   blue: { bg: "bg-blue-500/10", border: "border-blue-500/30", text: "text-blue-400", icon: "text-blue-400" },
-  teal: { bg: "jj-emerald-solid/10", border: "border-[color:var(--emerald-1)]/30/30", text: "text-teal-400", icon: "text-teal-400" },
+  teal: { bg: "jj-surface-emerald-soft", border: "border-[color:var(--emerald-1)]/30/30", text: "text-teal-400", icon: "text-teal-400" },
   orange: { bg: "bg-orange-500/10", border: "border-orange-500/30", text: "text-orange-400", icon: "text-orange-400" },
   indigo: { bg: "bg-indigo-500/10", border: "border-indigo-500/30", text: "text-indigo-400", icon: "text-indigo-400" },
   rose: { bg: "bg-rose-500/10", border: "border-rose-500/30", text: "text-rose-400", icon: "text-rose-400" },

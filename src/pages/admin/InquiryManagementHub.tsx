@@ -442,7 +442,7 @@ const InquiryManagementHub: React.FC = () => {
                     {selectedInquiry.phone && (
                       <Button
                         onClick={() => handleWhatsAppClick(selectedInquiry)}
-                        className="jj-emerald-solid hover:jj-emerald-solid text-white gap-2"
+                        className="jj-surface-emerald hover:jj-surface-emerald text-white gap-2"
                       >
                         <MessageCircle className="w-4 h-4" /> WhatsApp
                       </Button>

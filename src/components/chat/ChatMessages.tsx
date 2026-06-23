@@ -218,7 +218,7 @@ const ChatMessages = React.memo(({
               href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 jj-emerald-solid hover:jj-emerald-solid text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
+              className="flex-1 flex items-center justify-center gap-2 jj-surface-emerald hover:jj-surface-emerald text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
             >
               <MessageCircle className="w-4 h-4" />
               <T>WhatsApp</T>

@@ -244,7 +244,7 @@ export const RateLimitDashboard = () => {
             size="sm"
             onClick={() => setIsLive(!isLive)}
             className={isLive 
-              ? "jj-emerald-solid hover:jj-emerald-solid text-white" 
+              ? "jj-surface-emerald hover:jj-surface-emerald text-white" 
               : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             }
           >
@@ -397,7 +397,7 @@ export const RateLimitDashboard = () => {
                             <div 
                               className={`h-full rounded-full transition-all ${
  percentage >= 100 ? "bg-red-500" :
- percentage >= 80 ? "bg-amber-500" : "jj-emerald-solid"
+ percentage >= 80 ? "bg-amber-500" : "jj-surface-emerald"
  }`}
                               style={{ width: `${percentage}%` }}
                             />

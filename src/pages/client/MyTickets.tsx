@@ -53,7 +53,7 @@ interface TicketWithMessages {
 const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
   open: { label: "Open", className: "bg-yellow-500/20 text-yellow-600", icon: AlertCircle },
   in_progress: { label: "In Review", className: "bg-blue-500/20 text-blue-600", icon: Clock },
-  resolved: { label: "Resolved", className: "jj-emerald-solid/20 text-[color:var(--emerald-1)]", icon: CheckCircle },
+  resolved: { label: "Resolved", className: "jj-surface-emerald-soft text-[color:var(--emerald-1)]", icon: CheckCircle },
 };
 
 const MyTickets = () => {

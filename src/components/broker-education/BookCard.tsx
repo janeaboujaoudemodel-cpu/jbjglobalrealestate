@@ -19,7 +19,7 @@ const fadeInUp = {
 
 const LEARNING_PATH_COLORS: Record<string, string> = {
   'Foundations': 'bg-blue-500/20 text-blue-700 border-blue-500/30',
-  'Buyer & Investor Advisory': 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30',
+  'Buyer & Investor Advisory': 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30',
   'Seller & Landlord Advisory': 'bg-amber-500/20 text-amber-700 border-amber-500/30',
   'Market Intelligence': 'bg-purple-500/20 text-purple-700 border-purple-500/30',
   'Advanced (Restricted)': 'bg-red-500/20 text-red-700 border-red-500/30',
@@ -34,7 +34,7 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
     switch (progress.status) {
       case 'completed':
         return (
-          <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
+          <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
             <CheckCircle className="w-3 h-3 mr-1" />
             Completed
           </Badge>

@@ -212,7 +212,7 @@ export default function WebDevChangeHighlight() {
             <button
               type="button"
               onClick={save}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-md jj-emerald-solid hover:jj-emerald-solid text-white text-xs font-semibold allow-white"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-md jj-surface-emerald hover:jj-surface-emerald text-white text-xs font-semibold allow-white"
               data-no-contrast-guard
               data-allow-dark-cta
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}

@@ -376,7 +376,7 @@ export default function IndividualBrokersTab() {
                         <span className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] capitalize">{r.broker_type}</span>
                       )}
                       {r.is_global_broker && (
-                        <span className="px-2 py-0.5 rounded-full border border-[color:var(--emerald-1)]/30/40 jj-emerald-solid/10 text-[color:var(--emerald-1)] inline-flex items-center gap-1"><Globe className="w-3 h-3" />Global</span>
+                        <span className="px-2 py-0.5 rounded-full border border-[color:var(--emerald-1)]/30/40 jj-surface-emerald-soft text-[color:var(--emerald-1)] inline-flex items-center gap-1"><Globe className="w-3 h-3" />Global</span>
                       )}
                     </div>
                     <div className="mt-1.5 text-[11px] text-[#1A1A1A]/70 truncate">

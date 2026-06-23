@@ -110,12 +110,12 @@ export default function BrokerAdminAssistant() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-4 h-4 jj-emerald-solid border-2 border-[#0A0A0A] rounded-full animate-pulse" />
+                  <span className="absolute bottom-0 right-0 w-4 h-4 jj-surface-emerald border-2 border-[#0A0A0A] rounded-full animate-pulse" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                     Sarah Thompson
-                    <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">
+                    <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">
                       Broker's Admin
                     </Badge>
                   </h1>
@@ -126,7 +126,7 @@ export default function BrokerAdminAssistant() {
               <div className="flex items-center gap-3">
                 <Button 
                   variant="outline" 
-                  className="border-[color:var(--emerald-1)]/30/30 text-emerald-400 hover:jj-emerald-solid/10"
+                  className="border-[color:var(--emerald-1)]/30/30 text-emerald-400 hover:jj-surface-emerald-soft"
                   onClick={() => navigate("/jbj-broker-admin")}
                 >
                   <Settings className="h-4 w-4 mr-2" />
@@ -187,56 +187,56 @@ export default function BrokerAdminAssistant() {
             <TabsList className="w-full bg-[#0E0E0E] border border-[color:var(--emerald-1)]/30/20 p-1 rounded-lg mb-6 flex flex-wrap gap-1">
               <TabsTrigger 
                 value="dashboard" 
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Dashboard
               </TabsTrigger>
               <TabsTrigger 
                 value="onboarding"
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <UserPlus className="h-4 w-4 mr-2" />
                 Onboarding
               </TabsTrigger>
               <TabsTrigger 
                 value="compliance"
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <Shield className="h-4 w-4 mr-2" />
                 Compliance
               </TabsTrigger>
               <TabsTrigger 
                 value="directory"
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Broker Directory
               </TabsTrigger>
               <TabsTrigger 
                 value="training"
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <GraduationCap className="h-4 w-4 mr-2" />
                 Training
               </TabsTrigger>
               <TabsTrigger 
                 value="communications"
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Communications
               </TabsTrigger>
               <TabsTrigger 
                 value="documents"
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Documents
               </TabsTrigger>
               <TabsTrigger 
                 value="schedule"
-                className="flex-1 min-w-[100px] data-[state=active]:jj-emerald-solid"
+                className="flex-1 min-w-[100px] data-[state=active]:jj-surface-emerald"
               >
                 <Calendar className="h-4 w-4 mr-2" />
                 Schedule
@@ -306,7 +306,7 @@ export default function BrokerAdminAssistant() {
                                   </Badge>
                                 </div>
                                 <div className="flex items-center gap-2 mt-2">
-                                  <Button size="sm" variant="ghost" className="text-emerald-400 hover:jj-emerald-solid/10" onClick={() => handleSendMessage(broker)}>
+                                  <Button size="sm" variant="ghost" className="text-emerald-400 hover:jj-surface-emerald-soft" onClick={() => handleSendMessage(broker)}>
                                     <Phone className="h-3 w-3 mr-1" />
                                     Contact
                                   </Button>
@@ -332,7 +332,7 @@ export default function BrokerAdminAssistant() {
                       <CardContent>
                         <div className="space-y-3">
                           <div className="flex items-center gap-3 p-3 bg-[#FDFBF7] rounded-lg">
-                            <div className="w-10 h-10 rounded-full jj-emerald-solid/20 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-full jj-surface-emerald-soft flex items-center justify-center">
                               <UserPlus className="h-5 w-5 text-emerald-400" />
                             </div>
                             <div className="flex-1">
@@ -385,7 +385,7 @@ export default function BrokerAdminAssistant() {
                             </div>
                             <p className="text-sm text-[#1A1A1A]/70">Start Date: {broker.startDate}</p>
                             <div className="flex gap-2 mt-3">
-                              <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid">
+                              <Button size="sm" className="jj-surface-emerald hover:jj-surface-emerald">
                                 Continue Onboarding
                               </Button>
                               <Button size="sm" variant="outline" className="border-[#1A1A1A]">

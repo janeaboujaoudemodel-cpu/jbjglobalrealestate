@@ -203,7 +203,7 @@ export function SiteCheckIn({ developerId, developerName, onSuccess, onCancel }:
           </Label>
           
           {location ? (
-            <div className="p-3 rounded-lg jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30">
+            <div className="p-3 rounded-lg jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30">
               <div className="flex items-center gap-2 text-emerald-400">
                 <CheckCircle className="h-4 w-4" />
                 <span className="font-medium">Location captured</span>

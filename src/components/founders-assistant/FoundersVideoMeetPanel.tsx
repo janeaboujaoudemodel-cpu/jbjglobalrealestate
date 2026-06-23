@@ -144,7 +144,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Button size="sm" onClick={() => navigate(`/video-meeting/${generatedLink.split('/').pop()}`)} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white"><Video className="w-4 h-4 mr-2" />Join Now</Button>
                     <Button size="sm" variant="outline" onClick={() => handleSendInvite('email')} className="border-blue-500/30 text-blue-600 hover:bg-blue-500/10"><Mail className="w-4 h-4 mr-2" />Email</Button>
-                    <Button size="sm" variant="outline" onClick={() => handleSendInvite('whatsapp')} className="border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] hover:jj-emerald-solid/10"><MessageSquare className="w-4 h-4 mr-2" />WhatsApp</Button>
+                    <Button size="sm" variant="outline" onClick={() => handleSendInvite('whatsapp')} className="border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] hover:jj-surface-emerald-soft"><MessageSquare className="w-4 h-4 mr-2" />WhatsApp</Button>
                   </div>
                 </motion.div>
               )}

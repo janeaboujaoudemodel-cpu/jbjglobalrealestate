@@ -327,7 +327,7 @@ export function PipelineAnalyticsPanel() {
           <div className="flex items-center gap-6 text-sm flex-wrap">
             <span className="text-[#1A1A1A]/60">Intent Classification:</span>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full jj-emerald-solid" />
+              <div className="w-3 h-3 rounded-full jj-surface-emerald" />
               <span className="text-[#1A1A1A]">Buy = Investment, Purchase, Off-plan</span>
             </div>
             <div className="flex items-center gap-2">

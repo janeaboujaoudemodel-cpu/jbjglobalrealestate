@@ -533,7 +533,7 @@ const SupportTicketBox = () => {
                                 <motion.div
                                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
                                   transition={{ duration: 2, repeat: Infinity }}
-                                  className="absolute inset-0 jj-emerald-solid/30 rounded-full"
+                                  className="absolute inset-0 jj-surface-emerald-soft rounded-full"
                                 />
                                 <div className="relative w-full h-full bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center shadow-lg">
                                   <motion.div

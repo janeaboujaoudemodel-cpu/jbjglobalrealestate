@@ -206,7 +206,7 @@ export function getInitials(name: string): string {
 export function getStatusColorClass(status?: 'online' | 'away' | 'offline'): string {
   switch (status) {
     case 'online':
-      return 'jj-emerald-solid';
+      return 'jj-surface-emerald';
     case 'away':
       return 'bg-amber-500';
     case 'offline':

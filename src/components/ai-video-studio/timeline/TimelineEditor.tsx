@@ -196,7 +196,7 @@ export function TimelineEditor({
   const getTrackColor = (type: Track['type']) => {
     switch (type) {
       case 'video': return 'bg-blue-500/80';
-      case 'audio': return 'jj-emerald-solid/80';
+      case 'audio': return 'jj-surface-emerald/80';
       case 'voiceover': return 'bg-purple-500/80';
       case 'text': return 'bg-amber-500/80';
       case 'effects': return 'bg-pink-500/80';

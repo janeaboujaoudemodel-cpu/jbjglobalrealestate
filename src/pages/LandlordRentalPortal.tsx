@@ -99,7 +99,7 @@ export default function LandlordRentalPortal() {
       admin_approved: { label: 'Admin Approved', className: 'bg-blue-100 text-blue-700' },
       assistant_approved: { label: 'Executive Approved', className: 'bg-purple-100 text-purple-700' },
       founder_approved: { label: 'CEO Approved', className: 'jj-emerald-soft text-[color:var(--emerald-1)]' },
-      live: { label: 'Live', className: 'jj-emerald-solid text-white' },
+      live: { label: 'Live', className: 'jj-surface-emerald text-white' },
       rejected: { label: 'Rejected', className: 'bg-red-100 text-red-700' },
       withdrawn: { label: 'Withdrawn', className: 'bg-[#F7F2EA] text-[#1A1A1A]/70' },
     };

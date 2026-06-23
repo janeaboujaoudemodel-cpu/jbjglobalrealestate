@@ -326,7 +326,7 @@ export const DeveloperApprovalQueue = () => {
         {/* Bulk Actions Row */}
         {pendingDevelopers.length > 0 && (
           <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#B89555]/10">
-            <Button size="sm" onClick={approveAll} className="jj-emerald-solid hover:jj-emerald-solid text-white">
+            <Button size="sm" onClick={approveAll} className="jj-surface-emerald hover:jj-surface-emerald text-white">
               <Check className="w-4 h-4 mr-2" />
               Approve All ({pendingDevelopers.length})
             </Button>
@@ -437,7 +437,7 @@ export const DeveloperApprovalQueue = () => {
                           size="sm"
                           onClick={() => approveDeveloper(developer)}
                           disabled={isProcessing}
-                          className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white text-xs h-8"
+                          className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white text-xs h-8"
                         >
                           {isProcessing ? (
                             <Loader2 className="w-3 h-3 animate-spin" />

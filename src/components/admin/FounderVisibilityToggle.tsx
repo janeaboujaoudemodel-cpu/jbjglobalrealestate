@@ -207,7 +207,7 @@ export const FounderVisibilityToggle = () => {
             <AlertDialogAction
               onClick={handleConfirm}
               className={pendingValue 
-                ? "jj-emerald-solid hover:jj-emerald-solid text-white" 
+                ? "jj-surface-emerald hover:jj-surface-emerald text-white" 
                 : "bg-amber-600 hover:bg-amber-700 text-white"
               }
             >

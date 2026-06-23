@@ -149,9 +149,9 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
   const getStatusBadge = (status: Task['status']) => {
     const configs = {
       pending_approval: { icon: Clock, label: 'Pending Approval', className: 'bg-amber-500/20 text-[#1A1A1A]' },
-      approved: { icon: CheckCircle, label: 'Approved', className: 'jj-emerald-solid/20 text-green-400' },
+      approved: { icon: CheckCircle, label: 'Approved', className: 'jj-surface-emerald-soft text-green-400' },
       in_progress: { icon: Code2, label: 'In Progress', className: 'bg-blue-500/20 text-blue-400' },
-      completed: { icon: CheckCircle, label: 'Completed', className: 'jj-emerald-solid/20 text-emerald-400' },
+      completed: { icon: CheckCircle, label: 'Completed', className: 'jj-surface-emerald-soft text-emerald-400' },
       review_needed: { icon: AlertCircle, label: 'Review Needed', className: 'bg-purple-500/20 text-purple-400' },
     };
     
@@ -182,7 +182,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                   }}
                 />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-8 h-8 jj-emerald-solid rounded-full flex items-center justify-center border-2 border-white">
+              <div className="absolute -bottom-1 -right-1 w-8 h-8 jj-surface-emerald rounded-full flex items-center justify-center border-2 border-white">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
             </div>
@@ -224,7 +224,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             {/* Status */}
             <div className="text-right">
               <div className="flex items-center gap-2 justify-end mb-2">
-                <span className="w-2 h-2 jj-emerald-solid rounded-full animate-pulse" />
+                <span className="w-2 h-2 jj-surface-emerald rounded-full animate-pulse" />
                 <span className="text-sm text-[color:var(--emerald-1)] font-medium">Online</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
@@ -294,7 +294,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                           <Button 
                             size="sm"
                             onClick={() => handleCompleteReview(task.id)}
-                            className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                            className="jj-surface-emerald hover:jj-surface-emerald text-white"
                           >
                             Approve Changes
                           </Button>
@@ -358,7 +358,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                         <History className="w-4 h-4 text-[#1A1A1A]" />
                         <span className="font-mono font-medium text-[#1A1A1A]">{version.id}</span>
                         {index === 0 && (
-                          <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)]">Current</Badge>
+                          <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)]">Current</Badge>
                         )}
                       </div>
                       <span className="text-xs text-[#1A1A1A]/70">

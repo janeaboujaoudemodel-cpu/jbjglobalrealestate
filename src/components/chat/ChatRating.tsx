@@ -87,7 +87,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 onClick={() => setWasHelpful(true)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
  wasHelpful === true
- ? 'border-[color:var(--emerald-1)]/30 jj-emerald-solid/20 text-green-400'
+ ? 'border-[color:var(--emerald-1)]/30 jj-surface-emerald-soft text-green-400'
  : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[color:var(--emerald-1)]/30/50'
  }`}
               >

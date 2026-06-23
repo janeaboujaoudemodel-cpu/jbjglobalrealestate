@@ -770,7 +770,7 @@ const DeveloperPortal = () => {
       pending_review: "bg-amber-500/20 text-amber-700",
       received: "bg-blue-500/20 text-blue-700",
       under_review: "bg-amber-500/20 text-amber-700",
-      approved: "jj-emerald-solid/20 text-[color:var(--emerald-1)]",
+      approved: "jj-surface-emerald-soft text-[color:var(--emerald-1)]",
       rejected: "bg-red-500/20 text-red-700",
       restricted: "bg-red-500/20 text-red-700",
     };
@@ -1069,7 +1069,7 @@ const DeveloperPortal = () => {
                             </div>
                             <div className="flex items-center gap-2">
                               {statusBadge(p.status)}
-                              {p.auto_approved && <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] text-[10px]">Auto-Approved</Badge>}
+                              {p.auto_approved && <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] text-[10px]">Auto-Approved</Badge>}
                             </div>
                           </div>
                         ))}
@@ -1336,7 +1336,7 @@ const DeveloperPortal = () => {
                                   <Badge className={event.submission_subtype === 'launch' ? 'bg-blue-500/20 text-blue-700' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'}>
                                     {event.submission_subtype === 'launch' ? 'Launch' : 'Event'}
                                   </Badge>
-                                  {registered && <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] text-[10px]">Registered</Badge>}
+                                  {registered && <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] text-[10px]">Registered</Badge>}
                                 </div>
                                 <p className="text-xs text-[#1A1A1A] font-medium">{event.developer_name}</p>
                                 {event.event_date && (
@@ -1361,7 +1361,7 @@ const DeveloperPortal = () => {
                                   setInterestModalOpen(true);
                                 }}
                                 className={registered
-                                  ? "jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
+                                  ? "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
                                   : "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                                 }
                               >
@@ -1399,7 +1399,7 @@ const DeveloperPortal = () => {
                             <p className="text-xs text-muted-foreground">{i.developer_name} · {format(new Date(i.created_at), "MMM d, yyyy")}</p>
                           </div>
                           <Badge className={
-                            i.interest_type === 'eoi' ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' :
+                            i.interest_type === 'eoi' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
                             i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
                             'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                           }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
@@ -1540,7 +1540,7 @@ const DeveloperPortal = () => {
                           </div>
                           <div>
                             <p className="text-xs text-muted-foreground">Auto-Approve Uploads</p>
-                            <Badge className={repProfile?.auto_approve_uploads ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' : 'bg-muted text-muted-foreground'}>
+                            <Badge className={repProfile?.auto_approve_uploads ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' : 'bg-muted text-muted-foreground'}>
                               {repProfile?.auto_approve_uploads ? 'Enabled' : 'Disabled'}
                             </Badge>
                           </div>
@@ -1695,7 +1695,7 @@ const DeveloperPortal = () => {
                               <p className="text-xs text-muted-foreground">{format(new Date(a.created_at), "MMM d, yyyy")}</p>
                             </div>
                             <Badge className={
-                              a.status === 'completed' ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' :
+                              a.status === 'completed' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
                               a.status === 'pending' ? 'bg-amber-500/20 text-amber-700' :
                               a.status === 'voided' ? 'bg-red-500/20 text-red-700' :
                               'bg-muted text-muted-foreground'
@@ -1743,7 +1743,7 @@ const DeveloperPortal = () => {
                               </p>
                             </div>
                             <Badge className={
-                              t.status === 'completed' ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' :
+                              t.status === 'completed' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
                               t.status === 'in_progress' ? 'bg-blue-500/20 text-blue-700' :
                               t.status === 'pending' ? 'bg-amber-500/20 text-amber-700' :
                               'bg-muted text-muted-foreground'
@@ -1888,7 +1888,7 @@ const DeveloperPortal = () => {
                                   <div className="flex items-center gap-2 mt-1">
                                     {statusBadge(rep.status || 'pending_review')}
                                     {rep.auto_approve_uploads && (
-                                      <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] text-[10px]">Auto-Approve</Badge>
+                                      <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] text-[10px]">Auto-Approve</Badge>
                                     )}
                                     {rep.is_on_leave && (
                                       <Badge className="bg-amber-500/20 text-amber-700 text-[10px]">On Leave</Badge>
@@ -1971,7 +1971,7 @@ const DeveloperPortal = () => {
                                       <p className="text-[10px] text-muted-foreground mt-1">{format(new Date(i.created_at), "MMM d, yyyy 'at' h:mm a")}</p>
                                     </div>
                                     <Badge className={
-                                      i.interest_type === 'eoi' ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' :
+                                      i.interest_type === 'eoi' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
                                       i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
                                       'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                                     }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>

@@ -729,13 +729,13 @@ export function ReellyImportPanel() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg jj-emerald-solid">
+              <div className="p-2 rounded-lg jj-surface-emerald">
                 <Zap className="w-5 h-5 text-white" />
               </div>
               <div>
                 <CardTitle className="text-xl text-[color:var(--emerald-1)] flex items-center gap-2">
                   Reelly Enrichment
-                  {apiConnected === true && <Badge className="jj-emerald-solid text-white">Connected</Badge>}
+                  {apiConnected === true && <Badge className="jj-surface-emerald text-white">Connected</Badge>}
                   {apiConnected === false && <Badge variant="destructive">Disconnected</Badge>}
                 </CardTitle>
                 <CardDescription className="text-[color:var(--emerald-1)]">
@@ -756,7 +756,7 @@ export function ReellyImportPanel() {
               <h3 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
                 <Database className="w-4 h-4 text-[color:var(--emerald-1)]" /> API Connection
               </h3>
-              <Button onClick={handleTestApiConnection} disabled={isTestingApi} className="w-full jj-emerald-solid hover:jj-emerald-solid">
+              <Button onClick={handleTestApiConnection} disabled={isTestingApi} className="w-full jj-surface-emerald hover:jj-surface-emerald">
                 {isTestingApi ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Testing...</> : <><Zap className="h-4 w-4 mr-2" />Test API Connection</>}
               </Button>
               {apiConnected === true && totalProjects && (
@@ -772,7 +772,7 @@ export function ReellyImportPanel() {
                 <CloudDownload className="w-4 h-4 text-[color:var(--emerald-1)]" /> Project Sync
               </h3>
               <div className="space-y-2">
-                <Button onClick={() => handleSyncProjects(false)} disabled={isSyncing || apiConnected !== true} className="w-full jj-emerald-solid hover:jj-emerald-solid">
+                <Button onClick={() => handleSyncProjects(false)} disabled={isSyncing || apiConnected !== true} className="w-full jj-surface-emerald hover:jj-surface-emerald">
                   {isSyncing ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Syncing...</> : <><Play className="h-4 w-4 mr-2" />Quick Sync (100)</>}
                 </Button>
                 <Button onClick={() => handleSyncProjects(true)} disabled={isSyncing || apiConnected !== true} variant="outline" className="w-full border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
@@ -876,7 +876,7 @@ export function ReellyImportPanel() {
                 <Button onClick={handleLoadBackfillStats} disabled={isBackfilling} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                   <RefreshCw className="h-4 w-4 mr-2" /> Check Missing
                 </Button>
-                <Button onClick={() => handleRunBackfill("batch")} disabled={isBackfilling} className="jj-emerald-solid hover:jj-emerald-solid">
+                <Button onClick={() => handleRunBackfill("batch")} disabled={isBackfilling} className="jj-surface-emerald hover:jj-surface-emerald">
                   {isBackfilling ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Backfilling...</> : <><Zap className="h-4 w-4 mr-2" />Backfill Batch (50)</>}
                 </Button>
                 <Button onClick={() => handleRunBackfill("all")} disabled={isBackfilling} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
@@ -967,7 +967,7 @@ export function ReellyImportPanel() {
               <Button
                 onClick={handleQuickExtract}
                 disabled={isQuickExtracting || !quickExtractId.trim()}
-                className="jj-emerald-solid hover:jj-emerald-solid text-white whitespace-nowrap"
+                className="jj-surface-emerald hover:jj-surface-emerald text-white whitespace-nowrap"
               >
                 {isQuickExtracting ? (
                   <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</>
@@ -995,7 +995,7 @@ export function ReellyImportPanel() {
               <Button onClick={() => handleSyncDevelopers("test")} disabled={isSyncingDevs} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
                 {isSyncingDevs ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Testing...</> : <><Zap className="h-4 w-4 mr-2" />Test</>}
               </Button>
-              <Button onClick={() => handleSyncDevelopers("quick")} disabled={isSyncingDevs} className="jj-emerald-solid hover:jj-emerald-solid">
+              <Button onClick={() => handleSyncDevelopers("quick")} disabled={isSyncingDevs} className="jj-surface-emerald hover:jj-surface-emerald">
                 <Play className="h-4 w-4 mr-2" /> Quick Sync (50)
               </Button>
               <Button onClick={() => handleSyncDevelopers("full")} disabled={isSyncingDevs} variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] hover:jj-emerald-soft">
@@ -1024,7 +1024,7 @@ export function ReellyImportPanel() {
               <MapPin className="w-4 h-4" /> Areas Sync
               {totalAreas && <Badge variant="outline" className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)]">{totalAreas} areas</Badge>}
             </h3>
-            <Button onClick={() => handleSyncAreas("extract_from_projects")} disabled={isSyncingAreas} className="w-full jj-emerald-solid hover:jj-emerald-solid mb-4">
+            <Button onClick={() => handleSyncAreas("extract_from_projects")} disabled={isSyncingAreas} className="w-full jj-surface-emerald hover:jj-surface-emerald mb-4">
               {isSyncingAreas ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</> : <><Download className="h-4 w-4 mr-2" />Extract Areas from Projects</>}
             </Button>
             {areasSyncResult && areasSyncResult.success && (
@@ -1064,7 +1064,7 @@ export function ReellyImportPanel() {
                   setEnrichTestResult(data);
                 } catch (err: any) { toast.error(err.message); setEnrichTestResult({ success: false, error: err.message }); }
                 finally { setIsEnrichTesting(false); }
-              }} disabled={isEnrichTesting} className="jj-emerald-solid hover:jj-emerald-solid text-white">
+              }} disabled={isEnrichTesting} className="jj-surface-emerald hover:jj-surface-emerald text-white">
                 {isEnrichTesting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
               </Button>
             </div>
@@ -1181,7 +1181,7 @@ export function ReellyImportPanel() {
                         else toast.error(data?.error || "Apply failed");
                       } catch (err: any) { toast.error(err.message); }
                       finally { setIsEnrichApplying(false); }
-                    }} disabled={isEnrichApplying} className="jj-emerald-solid hover:jj-emerald-solid text-white flex-1">
+                    }} disabled={isEnrichApplying} className="jj-surface-emerald hover:jj-surface-emerald text-white flex-1">
                       {isEnrichApplying ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <CheckCircle className="h-4 w-4 mr-2" />} Apply Enrichment
                     </Button>
                   )}
@@ -1218,7 +1218,7 @@ export function ReellyImportPanel() {
               <p className="text-xs text-[color:var(--emerald-1)] mb-3">
                 Uses free page-data.json to fill FAQs, descriptions, amenities — no Firecrawl credits.
               </p>
-              <Button onClick={handleProvidentPageDataEnrich} disabled={isBulkEnriching} className="w-full jj-emerald-solid hover:jj-emerald-solid font-bold py-3">
+              <Button onClick={handleProvidentPageDataEnrich} disabled={isBulkEnriching} className="w-full jj-surface-emerald hover:jj-surface-emerald font-bold py-3">
                 {isBulkEnriching ? <><RefreshCw className="h-5 w-5 mr-2 animate-spin" />Enriching...</> : <><Zap className="h-5 w-5 mr-2" />Enrich All (Free)</>}
               </Button>
 
@@ -1405,7 +1405,7 @@ export function ReellyImportPanel() {
                       <>
                         {(p.images ?? 0) > 0 && <Badge variant="outline" className="text-xs">{p.images} imgs</Badge>}
                         {(p.docs ?? 0) > 0 && <Badge variant="outline" className="text-xs">{p.docs} docs</Badge>}
-                        <Badge className="jj-emerald-solid text-xs">✓</Badge>
+                        <Badge className="jj-surface-emerald text-xs">✓</Badge>
                       </>
                     ) : <Badge variant="destructive" className="text-xs">{p.status}</Badge>}
                   </div>

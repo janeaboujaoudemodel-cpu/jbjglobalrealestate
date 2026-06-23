@@ -92,6 +92,21 @@ const isPropertyTypeOnlyLabel = (value?: string | null) => {
   return PROPERTY_TYPE_ONLY_LABELS.has(value.trim().toLowerCase());
 };
 
+const getCardPhaseLabel = (project: Project & { is_sold_out?: boolean | null }): string | null => {
+  const source = [project.status_label, (project as any).sale_status, (project as any).status]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  if (!source || project.is_sold_out || source.includes("sold")) return null;
+  if (source.includes("eoi") || source.includes("expression of interest")) return "EOI";
+  if (source.includes("presale") || source.includes("pre-sale") || source.includes("pre sale")) return "Pre-sale";
+  if (source.includes("on sale") || source.includes("selling")) return "On Sale";
+  if (source.includes("ready") || source.includes("complete") || source.includes("delivered")) return "Ready";
+  if (source.includes("announce")) return "Announced";
+  if (source.includes("launch")) return "Launch";
+  return null;
+};
+
 // Sale status label resolver — visual style is owned by <CardBadge variant="status" />.
 const getSaleStatusLabel = resolveSaleStatusLabel;
 
@@ -291,27 +306,27 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               return s;
             };
             const handover = formatHandover(raw);
-            const showHandover = Boolean(handover);
-            const showEoi = !project.is_sold_out;
-            if (!showEoi && !showHandover) return null;
+            const phaseLabel = getCardPhaseLabel(project);
+            const showHandover = Boolean(handover && handover !== phaseLabel);
+            if (!phaseLabel && !showHandover) return null;
             return (
-              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5" data-no-contrast-guard>
-                {showEoi && (
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+                {phaseLabel && (
                   <span
                     data-surface="emerald"
-                    data-emerald-filled
-                    className="jj-official-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase"
+                    data-emerald-ok="badge"
+                    className="jj-surface-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase"
                   >
-                    <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>EOI</span>
+                    <span>{phaseLabel}</span>
                   </span>
                 )}
                 {showHandover && (
                   <span
                     data-surface="emerald"
-                    data-emerald-filled
-                    className="jj-official-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide"
+                    data-emerald-ok="badge"
+                    className="jj-surface-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide"
                   >
-                    <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} className={/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}>{handover}</span>
+                    <span className={/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}>{handover}</span>
                   </span>
                 )}
               </div>
@@ -333,15 +348,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
             <div
               data-surface="emerald"
-              data-emerald-icon-surface
-              data-no-contrast-guard
-              className="allow-white absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full jj-official-emerald shadow-md text-[10px] font-semibold uppercase tracking-[0.08em]"
-              style={{ color: "#FFFFFF" }}
+              data-emerald-ok="badge"
+              className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full jj-surface-emerald text-[10px] font-semibold uppercase tracking-[0.08em]"
               title="Sold out with the developer — available on the secondary market"
             >
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>Sold Out</span>
-              <span className="opacity-70 allow-white" style={{ color: "#FFFFFF" }}>·</span>
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>Resale Available</span>
+              <span>Sold Out</span>
+              <span className="opacity-70">·</span>
+              <span>Resale Available</span>
             </div>
           )}
         </div>

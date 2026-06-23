@@ -101,7 +101,7 @@ const VirtualStagingForm = ({
         <div className="flex items-center gap-3 mb-5">
           <Sofa className="w-5 h-5 text-emerald-400" />
           <h3 className="text-lg font-semibold text-white">Upload Empty Room Photos</h3>
-          <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
+          <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
             Required
           </Badge>
         </div>
@@ -167,7 +167,7 @@ const VirtualStagingForm = ({
                 className={`
  p-4 rounded-xl border text-center transition-all
  ${isSelected
- ? 'jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/50 text-white'
+ ? 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/50 text-white'
  : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
  }
  `}
@@ -197,7 +197,7 @@ const VirtualStagingForm = ({
                 className={`
  p-4 rounded-xl border text-left transition-all
  ${isSelected
- ? 'jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/50'
+ ? 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/50'
  : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
  }
  `}

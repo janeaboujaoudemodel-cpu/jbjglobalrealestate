@@ -66,7 +66,7 @@ export function CongratulationsModal({
               className={cn(
                 'absolute w-2 h-2 rounded-full',
                 i % 4 === 0 ? 'bg-[#EFE6D6]' :
-                i % 4 === 1 ? 'jj-emerald-solid' :
+                i % 4 === 1 ? 'jj-surface-emerald' :
                 i % 4 === 2 ? 'bg-champagne' :
                 'bg-amber-400'
               )}
@@ -114,7 +114,7 @@ export function CongratulationsModal({
             className="jj-emerald-soft dark:bg-green-950/20 border border-[color:var(--emerald-1)]/30 dark:border-green-800 rounded-xl p-4 mb-6"
           >
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-full jj-surface-emerald flex items-center justify-center flex-shrink-0">
                 <Check className="h-5 w-5 text-white" />
               </div>
               <div>
@@ -145,13 +145,13 @@ export function CongratulationsModal({
               ].map((item, index) => (
                 <div key={item.step} className="flex items-center">
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center text-white text-sm">
+                    <div className="w-8 h-8 rounded-full jj-surface-emerald flex items-center justify-center text-white text-sm">
                       {item.icon}
                     </div>
                     <span className="text-xs mt-1 text-muted-foreground">{item.step}</span>
                   </div>
                   {index < 3 && (
-                    <div className="w-8 h-0.5 jj-emerald-solid mx-1" />
+                    <div className="w-8 h-0.5 jj-surface-emerald mx-1" />
                   )}
                 </div>
               ))}

@@ -146,7 +146,7 @@ const SmartWhatsAppComposer = ({ lead, onSend }: SmartWhatsAppComposerProps) => 
         <Button 
           onClick={generateMessage} 
           disabled={loading}
-          className="w-full jj-emerald-solid hover:jj-emerald-solid"
+          className="w-full jj-surface-emerald hover:jj-surface-emerald"
         >
           <Sparkles className="h-4 w-4 mr-2" />
           {loading ? "Generating..." : "Generate with AI"}
@@ -180,7 +180,7 @@ const SmartWhatsAppComposer = ({ lead, onSend }: SmartWhatsAppComposerProps) => 
               </Button>
               <Button 
                 onClick={handleSendWhatsApp} 
-                className="flex-1 jj-emerald-solid hover:jj-emerald-solid"
+                className="flex-1 jj-surface-emerald hover:jj-surface-emerald"
                 disabled={!lead.phone_e164}
               >
                 <Send className="h-4 w-4 mr-2" />

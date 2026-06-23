@@ -29,7 +29,7 @@ const StatusBadge = ({ status }: { status: string }) => {
   const config = {
     pending: { color: 'bg-amber-500/20 text-amber-600 border-amber-500/30', icon: Clock },
     approved: { color: 'bg-blue-500/20 text-blue-600 border-blue-500/30', icon: CheckCircle },
-    paid: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle },
+    paid: { color: 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle },
     cancelled: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle },
   }[status] || { color: 'bg-[#EFE6D6] text-[#1A1A1A]/70', icon: Clock };
   const Icon = config.icon;

@@ -174,8 +174,8 @@ const AILeadScoring = ({ lead, activities = [], onScoreUpdate }: AILeadScoringPr
   };
 
   const getScoreBg = (value: number) => {
-    if (value >= 80) return "jj-emerald-solid";
-    if (value >= 60) return "jj-emerald-solid";
+    if (value >= 80) return "jj-surface-emerald";
+    if (value >= 60) return "jj-surface-emerald";
     if (value >= 40) return "bg-amber-400";
     return "bg-red-400";
   };

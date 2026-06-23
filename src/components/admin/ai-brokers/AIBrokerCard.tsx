@@ -68,7 +68,7 @@ export function AIBrokerCard({
               <span
                 className={`absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white ${
  broker.status === "active"
- ? "jj-emerald-solid"
+ ? "jj-surface-emerald"
  : broker.status === "paused"
  ? "bg-amber-500"
  : "bg-[#B89555]"
@@ -101,7 +101,7 @@ export function AIBrokerCard({
               onCheckedChange={(checked) =>
                 onStatusChange(broker.id, checked ? "active" : "paused")
               }
-              className="data-[state=checked]:jj-emerald-solid"
+              className="data-[state=checked]:jj-surface-emerald"
             />
 
             <DropdownMenu>
@@ -150,7 +150,7 @@ export function AIBrokerCard({
  ? "bg-red-500"
  : capacityPercent > 70
  ? "bg-amber-500"
- : "jj-emerald-solid"
+ : "jj-surface-emerald"
  }`}
               style={{ width: `${capacityPercent}%` }}
             />

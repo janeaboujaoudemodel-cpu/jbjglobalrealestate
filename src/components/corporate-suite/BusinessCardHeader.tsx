@@ -122,7 +122,7 @@ export function BusinessCardHeader({
             onClick={onExportToResizer}
             disabled={isExportingToResizer}
             variant="outline"
-            className="gap-1.5 h-8 text-xs font-semibold border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] hover:jj-emerald-solid/10"
+            className="gap-1.5 h-8 text-xs font-semibold border-[color:var(--emerald-1)]/30/40 text-[color:var(--emerald-1)] hover:jj-surface-emerald-soft"
             title="Send card to Image Resizer for social media sizes"
           >
             {isExportingToResizer ? <RefreshCw size={12} className="animate-spin" /> : <Maximize size={12} />}

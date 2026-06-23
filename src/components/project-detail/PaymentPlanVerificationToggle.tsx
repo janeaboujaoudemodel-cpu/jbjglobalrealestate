@@ -43,7 +43,7 @@ export default function PaymentPlanVerificationToggle({ projectId, verified }: P
         data-no-contrast-guard
         className={`allow-white inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
  isVerified
- ? "jj-emerald-solid text-white border-[color:var(--emerald-1)]/30 hover:jj-emerald-solid"
+ ? "jj-surface-emerald text-white border-[color:var(--emerald-1)]/30 hover:jj-surface-emerald"
  : "bg-[#0A0A0A] text-white border-[#B89555]/60 hover:bg-[#1F1F1F]"
  } disabled:opacity-60`}
         title="Owner only — toggles the Verified by JBJ badge"

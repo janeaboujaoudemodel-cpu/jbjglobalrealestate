@@ -185,7 +185,7 @@ const ChatCVSubmission = ({
   if (submitted) {
     return (
       <div className="flex-1 p-4 flex flex-col items-center justify-center text-center">
-        <div className="w-16 h-16 rounded-full jj-emerald-solid/20 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-full jj-surface-emerald-soft flex items-center justify-center mb-4">
           <CheckCircle className="w-8 h-8 text-green-500" />
         </div>
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">

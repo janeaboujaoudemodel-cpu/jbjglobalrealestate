@@ -162,7 +162,7 @@ export default function AcademyGraduates() {
                       {lookupResult.is_revoked ? (
                         <Badge className="bg-red-500 text-white"><XCircle className="w-3 h-3 mr-1" /> REVOKED</Badge>
                       ) : (
-                        <Badge className="jj-emerald-solid text-white"><CheckCircle className="w-3 h-3 mr-1" /> ACTIVE</Badge>
+                        <Badge className="jj-surface-emerald text-white"><CheckCircle className="w-3 h-3 mr-1" /> ACTIVE</Badge>
                       )}
                     </div>
                     <p className="font-semibold text-[#1A1A1A]">{lookupResult.full_name}</p>

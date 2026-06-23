@@ -99,7 +99,7 @@ const AIROICalculatorPremium = () => {
         className="bg-gradient-to-br from-emerald-950/40 via-zinc-900/60 to-emerald-950/20 backdrop-blur-sm border border-[color:var(--emerald-1)]/30/30 rounded-3xl p-8 md:p-10 mb-8"
       >
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl jj-emerald-solid/15 border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl jj-surface-emerald/15 border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
             <Building className="w-6 h-6 text-emerald-400" />
           </div>
           <div>
@@ -267,7 +267,7 @@ const AIROICalculatorPremium = () => {
                   </div>
                 )}
                 {response.netYield && (
-                  <div className="jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/50 rounded-2xl p-6 text-center">
+                  <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/50 rounded-2xl p-6 text-center">
                     <p className="text-emerald-400 text-sm mb-2 font-medium">Net Yield</p>
                     <p className="text-white text-4xl font-bold">{response.netYield}%</p>
                     <p className="text-white/70 text-xs mt-1">annual return</p>
@@ -302,7 +302,7 @@ const AIROICalculatorPremium = () => {
  ? 'bg-red-500/10 border border-red-500/20' 
  : response.riskLevel === 'medium'
  ? 'bg-amber-500/10 border border-amber-500/20'
- : 'jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20'
+ : 'jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/20'
  }`}>
                   <div className="flex items-center gap-2">
                     <AlertTriangle className={`h-5 w-5 ${

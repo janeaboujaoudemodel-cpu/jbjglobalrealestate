@@ -374,7 +374,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
               </Button>
               <Button 
                 onClick={handleSendToClient} 
-                className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
+                className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white"
                 disabled={!lead.email_lower}
               >
                 <Send className="h-4 w-4 mr-2" />
@@ -459,7 +459,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
               </Button>
               <Button 
                 onClick={sendEmailToClient} 
-                className="flex-1 jj-emerald-solid hover:jj-emerald-solid"
+                className="flex-1 jj-surface-emerald hover:jj-surface-emerald"
                 disabled={sending}
               >
                 <Send className="h-4 w-4 mr-2" />

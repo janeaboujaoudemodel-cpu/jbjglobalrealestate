@@ -107,7 +107,7 @@ export function BrokerAvailabilityToggle({
     available: {
       icon: CheckCircle,
       label: "Available",
-      color: "jj-emerald-solid",
+      color: "jj-surface-emerald",
       textColor: "text-green-500",
       borderColor: "border-[color:var(--emerald-1)]/30",
       description: "Receiving new leads automatically"

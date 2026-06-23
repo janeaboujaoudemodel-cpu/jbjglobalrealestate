@@ -117,7 +117,7 @@ const ProfileSummaryCard = () => {
                   {/* Show dual tier badges in combined mode */}
                   {isCombinedMode ? (
                     <>
-                      <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40 text-xs">
+                      <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40 text-xs">
                         {investorTierName}
                       </Badge>
                       <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/40 text-xs">

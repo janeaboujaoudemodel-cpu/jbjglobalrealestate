@@ -287,7 +287,7 @@ export function ChangeRequestsQueue() {
                   <X className="h-4 w-4 mr-2" />
                   Reject
                 </Button>
-                <Button onClick={handleApprove} disabled={isProcessing} className="jj-emerald-solid hover:jj-emerald-solid text-white">
+                <Button onClick={handleApprove} disabled={isProcessing} className="jj-surface-emerald hover:jj-surface-emerald text-white">
                   <Check className="h-4 w-4 mr-2" />
                   Approve & Apply
                 </Button>

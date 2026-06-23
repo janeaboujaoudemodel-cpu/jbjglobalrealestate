@@ -23,7 +23,7 @@ interface DesignHistoryListProps {
 const modeLabels: Record<string, { label: string; color: string }> = {
   concept: { label: 'Concept', color: 'bg-fuchsia-500/20 text-fuchsia-300' },
   redesign: { label: 'Redesign', color: 'bg-blue-500/20 text-blue-300' },
-  staging: { label: 'Staging', color: 'jj-emerald-solid/20 text-[color:var(--emerald-on)]' },
+  staging: { label: 'Staging', color: 'jj-surface-emerald-soft text-[color:var(--emerald-on)]' },
   chat: { label: 'Chat', color: 'bg-amber-500/20 text-amber-300' },
 };
 

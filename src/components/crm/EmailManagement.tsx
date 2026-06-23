@@ -460,7 +460,7 @@ Generated on: ${new Date().toLocaleDateString()}
                       <Badge
                         className={
                           email.status === 'active'
-                            ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30'
+                            ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30'
                             : 'bg-yellow-500/20 text-yellow-600 border-yellow-500/30'
                         }
                       >

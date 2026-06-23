@@ -637,7 +637,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                               </span>
                               <span className="text-[#1A1A1A]/70">→</span>
                               <span className="text-[#1A1A1A]/70 whitespace-nowrap w-28 shrink-0">
-                                {sess.ended_at ? format(new Date(sess.ended_at), "dd MMM HH:mm") : <Badge variant="outline" className="text-[10px] h-4 px-1 border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/10 text-[color:var(--emerald-1)]">Active</Badge>}
+                                {sess.ended_at ? format(new Date(sess.ended_at), "dd MMM HH:mm") : <Badge variant="outline" className="text-[10px] h-4 px-1 border-[color:var(--emerald-1)]/30/30 jj-surface-emerald-soft text-[color:var(--emerald-1)]">Active</Badge>}
                               </span>
                               <span className="text-[#1A1A1A] font-semibold w-14 text-right">{formatDuration(sess.duration_seconds || 0)}</span>
                               <div className="flex items-center gap-1 text-[#1A1A1A]/70">

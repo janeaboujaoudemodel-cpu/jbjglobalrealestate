@@ -42,7 +42,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "jj-emerald-solid";
+      case "active": return "jj-surface-emerald";
       case "closed": return "bg-[#B89555]";
       case "pending": return "bg-amber-500";
       default: return "bg-blue-500";

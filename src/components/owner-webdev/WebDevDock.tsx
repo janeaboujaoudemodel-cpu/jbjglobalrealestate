@@ -600,7 +600,7 @@ export default function WebDevDock() {
                       <Button
                         size="sm"
                         onClick={() => decide(cr, "approved")}
-                        className="h-7 text-xs px-2 jj-emerald-solid hover:jj-emerald-solid text-white allow-white font-semibold"
+                        className="h-7 text-xs px-2 jj-surface-emerald hover:jj-surface-emerald text-white allow-white font-semibold"
                         data-no-contrast-guard
                         data-allow-dark-cta
                         style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}

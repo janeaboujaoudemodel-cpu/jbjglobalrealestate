@@ -93,7 +93,7 @@ const EmployeeChatPage: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
             <Card className="bg-[#FDFBF7] border border-[#B89555]/20 shadow-sm">
               <CardContent className="p-3 sm:p-4 flex items-center gap-3">
-                <div className="p-2 rounded-lg jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20">
+                <div className="p-2 rounded-lg jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/20">
                   <Wifi className="h-4 w-4 text-[color:var(--emerald-1)]" />
                 </div>
                 <div>

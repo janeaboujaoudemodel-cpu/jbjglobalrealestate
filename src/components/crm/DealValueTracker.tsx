@@ -132,8 +132,8 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
     const colors: Record<string, string> = {
       "new": "bg-blue-500",
       "contacted": "bg-cyan-500",
-      "interested": "jj-emerald-solid",
-      "qualified": "jj-emerald-solid",
+      "interested": "jj-surface-emerald",
+      "qualified": "jj-surface-emerald",
       "proposal": "bg-amber-500",
       "negotiation": "bg-orange-500",
       "viewing_scheduled": "bg-purple-500",
@@ -192,7 +192,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-xl jj-emerald-solid/20">
+              <div className="p-3 rounded-xl jj-surface-emerald-soft">
                 <TrendingUp className="h-5 w-5 text-emerald-500" />
               </div>
               <Badge variant="outline" className="text-xs border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] px-3 py-1">
@@ -228,7 +228,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-xl jj-emerald-solid/20">
+              <div className="p-3 rounded-xl jj-surface-emerald-soft">
                 <Award className="h-5 w-5 text-green-500" />
               </div>
               <Badge variant="outline" className="text-xs border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] px-3 py-1">

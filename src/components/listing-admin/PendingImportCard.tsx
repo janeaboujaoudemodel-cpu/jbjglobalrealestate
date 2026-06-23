@@ -471,7 +471,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
               onClick={handleApprove}
               disabled={isApproving || isIncomplete}
               size="sm"
-              className="flex-1 gap-1 jj-emerald-solid hover:jj-emerald-solid text-white"
+              className="flex-1 gap-1 jj-surface-emerald hover:jj-surface-emerald text-white"
               title={isIncomplete ? "Complete extraction first" : "Approve and add to listings"}
             >
               {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}

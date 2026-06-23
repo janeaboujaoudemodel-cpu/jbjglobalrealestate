@@ -77,7 +77,7 @@ export default function InlineStatusSelect({
             : cat === 'negative' ? 'text-red-700'
             : 'text-blue-700';
           const headerDot =
-            cat === 'positive' ? 'jj-emerald-solid'
+            cat === 'positive' ? 'jj-surface-emerald'
             : cat === 'negative' ? 'bg-red-500'
             : 'bg-blue-500';
           const label = cat[0].toUpperCase() + cat.slice(1);

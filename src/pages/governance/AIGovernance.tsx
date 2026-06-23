@@ -50,7 +50,7 @@ const AIGovernance: React.FC = () => {
       id: 'client',
       name: 'Client AI (Advisory Mode)',
       icon: Users,
-      color: 'jj-emerald-solid',
+      color: 'jj-surface-emerald',
       usage: ['Client portals', 'Property pages', 'Consultations'],
       rules: [
         'Educational explanations only',
@@ -196,7 +196,7 @@ const AIGovernance: React.FC = () => {
                     <ul className="space-y-2">
                       {aiRoles.filter(r => r.allowed).map((role, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm">
-                          <Badge variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
+                          <Badge variant="outline" className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
                             ✓
                           </Badge>
                           {role.label}
@@ -336,8 +336,8 @@ const AIGovernance: React.FC = () => {
                     </h3>
                     <ul className="space-y-2">
                       {dataEthics.allowed.map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm p-2 rounded jj-emerald-solid/5">
-                          <Badge variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
+                        <li key={i} className="flex items-center gap-2 text-sm p-2 rounded jj-surface-emerald-soft">
+                          <Badge variant="outline" className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
                             ✓
                           </Badge>
                           {item}
@@ -479,8 +479,8 @@ const AIGovernance: React.FC = () => {
                       <span className="h-6 w-6 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-bold">3</span>
                       <span className="text-sm">Review prompt & rules</span>
                     </li>
-                    <li className="flex items-center gap-3 p-3 rounded-lg jj-emerald-solid/5">
-                      <span className="h-6 w-6 rounded-full jj-emerald-solid text-white text-xs flex items-center justify-center font-bold">4</span>
+                    <li className="flex items-center gap-3 p-3 rounded-lg jj-surface-emerald-soft">
+                      <span className="h-6 w-6 rounded-full jj-surface-emerald text-white text-xs flex items-center justify-center font-bold">4</span>
                       <span className="text-sm">Patch safeguards</span>
                     </li>
                     <li className="flex items-center gap-3 p-3 rounded-lg bg-purple-500/5">

@@ -23,7 +23,7 @@ interface DepartmentInfoSectionProps {
 const statusConfig = {
   Active: {
     icon: Rocket,
-    bgColor: 'jj-emerald-solid/10',
+    bgColor: 'jj-surface-emerald-soft',
     textColor: 'text-emerald-400',
     borderColor: 'border-[color:var(--emerald-1)]/30/30',
   },

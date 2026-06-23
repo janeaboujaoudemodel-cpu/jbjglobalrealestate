@@ -134,13 +134,13 @@ const ActivityTimeline = ({ userId, leadId, limit = 20, showLeadName = true }: A
       case "call":
         return "bg-blue-500/20 text-blue-400 border-blue-500/30";
       case "whatsapp_click":
-        return "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30";
+        return "jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30";
       case "email_click":
         return "bg-purple-500/20 text-purple-400 border-purple-500/30";
       case "status_change":
         return "bg-orange-500/20 text-orange-400 border-orange-500/30";
       case "followup_completed":
-        return "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30";
+        return "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30";
       default:
         return "bg-muted text-muted-foreground border-border";
     }

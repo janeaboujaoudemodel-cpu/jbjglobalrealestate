@@ -71,7 +71,7 @@ function calcHealthScore(stats: { completionRate: number; failureRate: number; a
 }
 
 function HealthBadge({ score }: { score: number }) {
-  if (score >= 80) return <Badge className="jj-emerald-solid text-white">{score}</Badge>;
+  if (score >= 80) return <Badge className="jj-surface-emerald text-white">{score}</Badge>;
   if (score >= 50) return <Badge className="bg-amber-500 text-white">{score}</Badge>;
   return <Badge variant="destructive">{score}</Badge>;
 }

@@ -300,7 +300,7 @@ const AIPricePredictorPremium = () => {
  response.comparison === 'overpriced' 
  ? 'bg-red-500/10 border border-red-500/20' 
  : response.comparison === 'underpriced'
- ? 'jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20'
+ ? 'jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/20'
  : 'bg-amber-500/10 border border-amber-500/20'
  }`}>
                     {response.comparison === 'overpriced' && <AlertTriangle className="h-5 w-5 mb-2 text-red-400" />}

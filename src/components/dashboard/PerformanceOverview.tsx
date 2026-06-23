@@ -128,7 +128,7 @@ export function PerformanceOverview() {
       subValue: `${stats.verifiedDeals} verified`,
       icon: FileCheck,
       color: "text-emerald-400",
-      bgColor: "jj-emerald-solid/10",
+      bgColor: "jj-surface-emerald-soft",
     },
     {
       label: "Site Visits",

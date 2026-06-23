@@ -400,7 +400,7 @@ export function FoundersDecisionPanel() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
- insight.category === 'opportunity' ? 'jj-emerald-solid/10' :
+ insight.category === 'opportunity' ? 'jj-surface-emerald-soft' :
  insight.category === 'risk' ? 'bg-red-500/10' :
  insight.category === 'anomaly' ? 'bg-purple-500/10' : 'bg-blue-500/10'
  }`}>
@@ -527,7 +527,7 @@ export function FoundersDecisionPanel() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
- rec.status === 'approved' ? 'jj-emerald-solid/10' :
+ rec.status === 'approved' ? 'jj-surface-emerald-soft' :
  rec.status === 'rejected' ? 'bg-red-500/10' :
  rec.status === 'executed' ? 'bg-blue-500/10' : 'bg-amber-500/10'
  }`}>
@@ -711,7 +711,7 @@ export function FoundersDecisionPanel() {
                     <div className="flex items-start gap-3">
                       <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
  decision.type === 'auto_executed' ? 'bg-blue-500/10' :
- decision.type === 'human_approved' ? 'jj-emerald-solid/10' : 'bg-purple-500/10'
+ decision.type === 'human_approved' ? 'jj-surface-emerald-soft' : 'bg-purple-500/10'
  }`}>
                         {decision.type === 'auto_executed' ? <Zap className="h-5 w-5 text-blue-500" /> :
                          decision.type === 'human_approved' ? <CheckCircle className="h-5 w-5 text-green-500" /> :

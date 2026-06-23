@@ -20,7 +20,7 @@ import {
 
 // Filled check circle component for better visibility
 const FilledCheckCircle = ({ className }: { className?: string }) => (
-  <div className={`rounded-full jj-emerald-solid flex items-center justify-center ${className}`}>
+  <div className={`rounded-full jj-surface-emerald flex items-center justify-center ${className}`}>
     <Check className="w-3 h-3 text-white" />
   </div>
 );

@@ -956,7 +956,7 @@ export default function AdminOnboarding() {
                     <Button
                       onClick={() => handleApprove(selectedApplication)}
                       disabled={processing}
-                      className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                      className="jj-surface-emerald hover:jj-surface-emerald text-white"
                     >
                       {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle className="h-4 w-4 mr-2" />}
                       Approve

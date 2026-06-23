@@ -553,7 +553,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                   Edit & Fix
                 </Button>
                 <Button 
-                  className="flex-1 jj-emerald-solid hover:jj-emerald-solid"
+                  className="flex-1 jj-surface-emerald hover:jj-surface-emerald"
                   onClick={() => handleMarkResolved(selectedLead.id)}
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />

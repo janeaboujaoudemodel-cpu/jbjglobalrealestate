@@ -876,7 +876,7 @@ export default function EnvelopeDetail() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white"
+              <Button size="sm" className="jj-surface-emerald hover:jj-surface-emerald text-white"
                 onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                 <Download className="w-3.5 h-3.5 mr-1.5" /> Signed PDF
               </Button>
@@ -1107,7 +1107,7 @@ export default function EnvelopeDetail() {
               </button>
               {openSigned && (
                 <CardContent className="space-y-2 pt-0">
-                  <Button size="sm" className="w-full jj-emerald-solid hover:jj-emerald-solid text-white"
+                  <Button size="sm" className="w-full jj-surface-emerald hover:jj-surface-emerald text-white"
                     onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                     <Download className="w-4 h-4 mr-2" /> Download Signed PDF
                   </Button>

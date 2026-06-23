@@ -188,7 +188,7 @@ const InvestorDashboard = () => {
       case 'resolved':
       case 'completed':
       case 'approved':
-        return 'jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
+        return 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
       case 'pending':
       case 'in_progress':
         return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
@@ -275,7 +275,7 @@ const InvestorDashboard = () => {
         <Card className="border-2 border-[color:var(--emerald-1)]/30/30 hover:shadow-[0_4px_20px_rgba(34,197,94,0.15)] transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full jj-emerald-solid/10">
+              <div className="p-2 rounded-full jj-surface-emerald-soft">
                 <Building2 className="h-5 w-5 text-green-500" />
               </div>
               <div>

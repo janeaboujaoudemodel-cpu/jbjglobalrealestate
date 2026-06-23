@@ -35,11 +35,11 @@ const STEP_STYLES = {
   },
   approved: {
     border: "border-[color:var(--emerald-1)]/30/40",
-    bg: "jj-emerald-solid/10",
+    bg: "jj-surface-emerald-soft",
     icon: CheckCircle2,
     iconColor: "text-emerald-500",
     label: "Approved",
-    badgeClass: "jj-emerald-solid/10 text-emerald-500 border-[color:var(--emerald-1)]/30/30",
+    badgeClass: "jj-surface-emerald-soft text-emerald-500 border-[color:var(--emerald-1)]/30/30",
   },
   rejected: {
     border: "border-red-500/40",
@@ -134,7 +134,7 @@ export default function ApprovalTimeline({ steps, className }: ApprovalTimelineP
 
       {/* Final status */}
       {allApproved && (
-        <div className="flex items-center gap-3 p-4 rounded-xl jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30">
+        <div className="flex items-center gap-3 p-4 rounded-xl jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30">
           <CheckCircle2 className="w-6 h-6 text-emerald-500" />
           <div>
             <p className="font-semibold text-sm text-emerald-500">Congratulations!</p>

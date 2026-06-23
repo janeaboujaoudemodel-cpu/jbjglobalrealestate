@@ -170,7 +170,7 @@ export function UrgencyIndicator({ urgency, deadline, showCountdown = false }: U
   const urgencyStyles: Record<UrgencyLevel, string> = {
     critical: 'bg-red-500 text-white animate-pulse',
     high: 'bg-orange-500 text-white',
-    normal: 'jj-emerald-solid text-white',
+    normal: 'jj-surface-emerald text-white',
     low: 'bg-[#B89555] text-white',
   };
   

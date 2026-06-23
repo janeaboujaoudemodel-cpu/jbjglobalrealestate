@@ -33,7 +33,7 @@ interface Task {
 const PRIORITY_STYLES: Record<string, string> = {
   high: "bg-red-500/15 text-red-600 border-red-500/30",
   medium: "bg-amber-500/15 text-amber-600 border-amber-500/30",
-  low: "jj-emerald-solid/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
+  low: "jj-surface-emerald/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
 };
 
 export default function MyTasksCard() {
@@ -290,7 +290,7 @@ export default function MyTasksCard() {
                       if (ids.length) bulkComplete.mutate(ids);
                     }}
                     disabled={bulkComplete.isPending}
-                    className="h-6 px-2 text-[10px] border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] hover:jj-emerald-solid/10"
+                    className="h-6 px-2 text-[10px] border-[color:var(--emerald-1)]/30/30 text-[color:var(--emerald-1)] hover:jj-surface-emerald-soft"
                   >
                     {bulkComplete.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCheck className="w-3 h-3 mr-1" />}
                     Mark Complete
@@ -385,7 +385,7 @@ export default function MyTasksCard() {
                       className={cn(
                         "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
                         isCompleted
-                          ? "jj-emerald-solid border-[color:var(--emerald-1)]/30"
+                          ? "jj-surface-emerald border-[color:var(--emerald-1)]/30"
                           : "border-[#B89555]/40 hover:border-[#B89555]"
                       )}
                     >

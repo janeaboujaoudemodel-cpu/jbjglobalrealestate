@@ -1060,7 +1060,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                       </p>
                     </div>
                     <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
- post.status === 'published' ? 'jj-emerald-solid/20 text-green-400' :
+ post.status === 'published' ? 'jj-surface-emerald-soft text-green-400' :
  post.status === 'failed' ? 'bg-red-500/20 text-red-400' :
  post.status === 'cancelled' ? 'bg-[#B89555]/20 text-[#1A1A1A]/70' :
  'bg-yellow-500/20 text-yellow-400'

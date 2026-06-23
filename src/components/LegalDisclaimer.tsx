@@ -112,7 +112,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
               href={getWhatsAppUrl("Hello, I used your AI tool and would like expert guidance.")}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 jj-emerald-solid/30 border border-[color:var(--emerald-1)]/30/50 rounded-lg text-green-400 text-xs hover:jj-emerald-solid/50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/50 rounded-lg text-green-400 text-xs hover:jj-surface-emerald-soft0 transition-colors"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               WhatsApp Us

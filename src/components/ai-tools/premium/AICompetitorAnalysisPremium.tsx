@@ -216,7 +216,7 @@ const AICompetitorAnalysisPremium = () => {
 
               {/* Competitive Advantages */}
               {response.advantages && response.advantages.length > 0 && (
-                <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6 mb-6">
+                <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6 mb-6">
                   <h4 className="font-semibold text-emerald-400 mb-3 flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
                     Competitive Advantages
@@ -224,7 +224,7 @@ const AICompetitorAnalysisPremium = () => {
                   <ul className="space-y-2">
                     {response.advantages.map((adv: string, i: number) => (
                       <li key={i} className="text-sm text-white/85 flex items-start gap-2">
-                        <span className="w-5 h-5 rounded-full jj-emerald-solid/20 flex items-center justify-center flex-shrink-0 text-xs text-emerald-400">
+                        <span className="w-5 h-5 rounded-full jj-surface-emerald-soft flex items-center justify-center flex-shrink-0 text-xs text-emerald-400">
                           ✓
                         </span>
                         {adv}

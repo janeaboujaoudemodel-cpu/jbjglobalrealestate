@@ -260,7 +260,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
           <div>
             <h3 className="text-white font-semibold text-sm">{employee.name}</h3>
             <div className="flex items-center gap-1">
-              <span className="w-2 h-2 jj-emerald-solid rounded-full animate-pulse" />
+              <span className="w-2 h-2 jj-surface-emerald rounded-full animate-pulse" />
               <span className="text-white/90 text-xs">Online</span>
             </div>
           </div>

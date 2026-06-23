@@ -298,7 +298,7 @@ const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProp
                         variant="ghost"
                         size="sm"
                         onClick={() => handleSendAlert(broker, 'whatsapp')}
-                        className="h-7 text-xs text-green-400 hover:text-[color:var(--emerald-on)] hover:jj-emerald-solid/20"
+                        className="h-7 text-xs text-green-400 hover:text-[color:var(--emerald-on)] hover:jj-surface-emerald-soft"
                       >
                         WhatsApp
                       </Button>

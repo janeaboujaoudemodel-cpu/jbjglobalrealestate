@@ -103,7 +103,7 @@ function BrokerProfileHero() {
           )}
         </div>
         {isVerified && (
-          <div className="absolute -bottom-1 -right-1 w-7 h-7 jj-emerald-solid rounded-full flex items-center justify-center border-2 border-background">
+          <div className="absolute -bottom-1 -right-1 w-7 h-7 jj-surface-emerald rounded-full flex items-center justify-center border-2 border-background">
             <CheckCircle className="w-4 h-4 text-white" />
           </div>
         )}
@@ -231,7 +231,7 @@ function DocumentVerificationSection() {
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">Verification Status</span>
           <Badge variant={verificationStatus === "verified" ? "default" : verificationStatus === "expired" ? "destructive" : "secondary"}
-            className={verificationStatus === "verified" ? "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30" : ""}>
+            className={verificationStatus === "verified" ? "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30" : ""}>
             {verificationStatus === "verified" ? "Verified" : verificationStatus === "expired" ? "Expired" : "Unverified"}
           </Badge>
         </div>
@@ -451,11 +451,11 @@ export default function BrokerPortal() {
                           <div key={inv.id} className="p-4 rounded-xl border border-[hsl(36,40%,70%)]/20 bg-background/50">
                             <div className="flex items-center justify-between">
                               <p className="font-semibold text-sm text-foreground">{(inv.event as any)?.title || "Event"}</p>
-                              <Badge className={inv.status === "accepted" ? "jj-emerald-solid/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}>{inv.status}</Badge>
+                              <Badge className={inv.status === "accepted" ? "jj-surface-emerald-soft text-emerald-500" : "bg-amber-500/10 text-amber-500"}>{inv.status}</Badge>
                             </div>
                             {inv.status === "invited" && (
                               <div className="flex gap-2 mt-3">
-                                <Button size="sm" onClick={() => respondToInvitation(inv.id, "accepted")} className="jj-emerald-solid text-white hover:jj-emerald-solid text-xs">Accept</Button>
+                                <Button size="sm" onClick={() => respondToInvitation(inv.id, "accepted")} className="jj-surface-emerald text-white hover:jj-surface-emerald text-xs">Accept</Button>
                                 <Button size="sm" variant="outline" onClick={() => respondToInvitation(inv.id, "declined")} className="text-xs">Decline</Button>
                               </div>
                             )}
@@ -490,7 +490,7 @@ export default function BrokerPortal() {
                             <p className="font-semibold text-sm text-foreground">{(inv.event as any)?.title}</p>
                             <p className="text-[10px] text-muted-foreground">{(inv.event as any)?.location || "TBA"}</p>
                           </div>
-                          <Badge className={inv.status === "accepted" ? "jj-emerald-solid/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}>{inv.status}</Badge>
+                          <Badge className={inv.status === "accepted" ? "jj-surface-emerald-soft text-emerald-500" : "bg-amber-500/10 text-amber-500"}>{inv.status}</Badge>
                         </div>
                       ))}
                     </div>

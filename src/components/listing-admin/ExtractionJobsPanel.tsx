@@ -124,7 +124,7 @@ export function ExtractionJobsPanel() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "completed":
-        return <Badge className="jj-emerald-solid">Completed</Badge>;
+        return <Badge className="jj-surface-emerald">Completed</Badge>;
       case "failed":
         return <Badge variant="destructive">Failed</Badge>;
       case "running":

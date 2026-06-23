@@ -40,7 +40,7 @@ const TASK_TYPE_CONFIG = {
   new_joiner_account: { label: 'New Joiner Account', color: 'bg-blue-500' },
   password_reset: { label: 'Password Reset', color: 'bg-orange-500' },
   access_request: { label: 'Access Request', color: 'bg-purple-500' },
-  equipment_setup: { label: 'Equipment Setup', color: 'jj-emerald-solid' },
+  equipment_setup: { label: 'Equipment Setup', color: 'jj-surface-emerald' },
   system_update: { label: 'System Update', color: 'bg-cyan-500' },
   security_audit: { label: 'Security Audit', color: 'bg-red-500' },
   other: { label: 'Other', color: 'bg-[#B89555]' }
@@ -50,7 +50,7 @@ const STATUS_CONFIG = {
   open: { label: 'Open', color: 'bg-orange-500', icon: AlertCircle },
   in_progress: { label: 'In Progress', color: 'bg-blue-500', icon: Play },
   pending_review: { label: 'Pending Review', color: 'bg-purple-500', icon: Clock },
-  completed: { label: 'Completed', color: 'jj-emerald-solid', icon: CheckCircle },
+  completed: { label: 'Completed', color: 'jj-surface-emerald', icon: CheckCircle },
   cancelled: { label: 'Cancelled', color: 'bg-[#B89555]', icon: X }
 };
 

@@ -427,7 +427,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'jj-emerald-solid';
+      case 'active': return 'jj-surface-emerald';
       case 'away': return 'bg-yellow-500';
       case 'busy': return 'bg-red-500';
       case 'inactive': return 'bg-[#B89555]';
@@ -446,7 +446,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       case 'rejected':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejected</Badge>;
       case 'hired':
-        return <Badge className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30">Hired</Badge>;
+        return <Badge className="jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30">Hired</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }

@@ -131,7 +131,7 @@ export const ALL_TOOL_CATEGORIES: ToolCategory[] = [
 // Section color mappings
 export const sectionColors: Record<string, { active: string; inactive: string; border: string }> = {
   sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-sky-400', border: 'border-sky-400' },
-  emerald: { active: 'text-emerald-400 jj-emerald-solid/10', inactive: 'text-[#1A1A1A]/70 ', border: 'border-[color:var(--emerald-1)]/30' },
+  emerald: { active: 'text-emerald-400 jj-surface-emerald-soft', inactive: 'text-[#1A1A1A]/70 ', border: 'border-[color:var(--emerald-1)]/30' },
   indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-indigo-400', border: 'border-indigo-400' },
   amber: { active: 'text-[#1A1A1A] bg-amber-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]', border: 'border-amber-400' },
   lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-[#1A1A1A]/70 hover:text-lime-400', border: 'border-lime-400' },

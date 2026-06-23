@@ -48,7 +48,7 @@ function getRoleLabel(role: string | null): string {
 function getRoleBadgeColor(role: string | null): string {
   switch (role) {
     case 'investor': return 'bg-blue-500/20 text-blue-600 border-blue-500/30';
-    case 'owner': return 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
+    case 'owner': return 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
     case 'broker':
     case 'broker_jbj':
     case 'broker_partner': return 'bg-purple-500/20 text-purple-600 border-purple-500/30';

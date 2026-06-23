@@ -68,7 +68,7 @@ const ClientMarketSnapshot = ({
       case "active":
       case "high":
         return (
-          <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400 jj-emerald-solid/10 text-xs">
+          <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400 jj-surface-emerald-soft text-xs">
             Active
           </Badge>
         );

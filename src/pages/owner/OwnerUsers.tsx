@@ -32,7 +32,7 @@ interface DetailPayload {
 }
 
 const CATEGORY_META: Record<Category, { label: string; icon: any; cls: string }> = {
-  investor: { label: "Investor", icon: TrendingUp, cls: "jj-emerald-solid/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40" },
+  investor: { label: "Investor", icon: TrendingUp, cls: "jj-surface-emerald/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40" },
   broker: { label: "Broker", icon: Handshake, cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" },
   developer: { label: "Developer", icon: Building2, cls: "bg-purple-500/15 text-purple-700 border-purple-500/40" },
   unassigned: { label: "Unassigned", icon: UserX, cls: "bg-[#1A1A1A]/10 text-[#1A1A1A]/70 border-[#1A1A1A]/20" },

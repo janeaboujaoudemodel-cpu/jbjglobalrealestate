@@ -715,7 +715,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           {/* Status Badge */}
           <div className="absolute top-2 left-2">
             <span className={`text-[10px] px-2.5 py-1 rounded-full font-bold backdrop-blur-sm ${
- isApproved ? "jj-emerald-solid/90 text-white" : "bg-amber-500/90 text-white"
+ isApproved ? "jj-surface-emerald/90 text-white" : "bg-amber-500/90 text-white"
  }`}>
               {isApproved ? "● LIVE" : "◎ PENDING REVIEW"}
             </span>
@@ -905,7 +905,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <Trash2 className="w-4 h-4" />
         </Button>
         <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 jj-emerald-solid rounded-full animate-pulse" />
+          <div className="w-2 h-2 jj-surface-emerald rounded-full animate-pulse" />
           <span className="text-xs text-[#1A1A1A]/70">Online</span>
         </div>
       </div>

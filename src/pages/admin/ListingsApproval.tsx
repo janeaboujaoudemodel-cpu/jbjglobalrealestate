@@ -58,7 +58,7 @@ const getReadinessBlockers = (p: ProjectRow) => {
 const MediaStatusBadge = ({ status }: { status: MediaStatus }) => {
   if (status === "complete") {
     return (
-      <Badge className="jj-emerald-solid text-white border-0 gap-1">
+      <Badge className="jj-surface-emerald text-white border-0 gap-1">
         <ImageIcon className="h-3 w-3" /> Media Complete
       </Badge>
     );

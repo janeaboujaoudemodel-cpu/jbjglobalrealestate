@@ -81,7 +81,7 @@ export function ApprovalWorkflowTimeline({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'jj-emerald-solid border-[color:var(--emerald-1)]/30';
+        return 'jj-surface-emerald border-[color:var(--emerald-1)]/30';
       case 'current':
         return 'bg-amber-500 border-amber-500';
       case 'rejected':
@@ -102,7 +102,7 @@ export function ApprovalWorkflowTimeline({
           </p>
         </div>
         {isLive && (
-          <Badge className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/20">
+          <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/20">
             Live
           </Badge>
         )}
@@ -125,7 +125,7 @@ export function ApprovalWorkflowTimeline({
                 <div
                   className={cn(
                     'absolute left-6 top-14 w-0.5 h-16',
-                    status === 'completed' ? 'jj-emerald-solid' : 'bg-muted-foreground/20'
+                    status === 'completed' ? 'jj-surface-emerald' : 'bg-muted-foreground/20'
                   )}
                 />
               )}

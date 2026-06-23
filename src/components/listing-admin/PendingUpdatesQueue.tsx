@@ -429,7 +429,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
  parsed.status === "Off-Plan"
  ? "bg-blue-600 text-white"
  : parsed.status === "Ready"
- ? "jj-emerald-solid text-white"
+ ? "jj-surface-emerald text-white"
  : "bg-foreground/80 text-background"
  }`}>
                                 {parsed.status || "Off-Plan"}
@@ -503,7 +503,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                                 size="sm"
                                 onClick={() => handleApprove(update)}
                                 disabled={isProcessing}
-                                className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white h-9 text-xs"
+                                className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white h-9 text-xs"
                               >
                                 <Check className="h-3.5 w-3.5 mr-1" />
                                 Approve
@@ -556,7 +556,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           <Button variant="outline" size="sm" onClick={() => handleReject(update)} disabled={processingIds.has(update.id)} className="border-red-200 text-red-600 hover:bg-red-50 h-7 text-xs">
                             <X className="h-3 w-3 mr-1" /> Reject
                           </Button>
-                          <Button size="sm" onClick={() => handleApprove(update)} disabled={processingIds.has(update.id)} className="jj-emerald-solid hover:jj-emerald-solid text-white h-7 text-xs">
+                          <Button size="sm" onClick={() => handleApprove(update)} disabled={processingIds.has(update.id)} className="jj-surface-emerald hover:jj-surface-emerald text-white h-7 text-xs">
                             <Check className="h-3 w-3 mr-1" /> Approve
                           </Button>
                         </div>

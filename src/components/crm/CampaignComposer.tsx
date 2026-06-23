@@ -151,7 +151,7 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
   const quotaBlocked = !quota.unlimited && quota.sentToday >= quota.dailyLimit;
   const quotaPct = Math.min(100, Math.round((quota.sentToday / Math.max(1, quota.dailyLimit)) * 100));
   const quotaTone =
-    quotaPct >= 100 ? "bg-red-600" : quotaPct >= 80 ? "bg-amber-500" : "jj-emerald-solid";
+    quotaPct >= 100 ? "bg-red-600" : quotaPct >= 80 ? "bg-amber-500" : "jj-surface-emerald";
 
   async function createCampaignRow() {
     const { data: { user } } = await supabase.auth.getUser();

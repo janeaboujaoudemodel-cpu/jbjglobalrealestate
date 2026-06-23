@@ -199,7 +199,7 @@ export default function SupportLauncher() {
               >
                 <div className="flex items-center justify-between px-1 mb-1">
                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7] allow-white">
-                    <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
+                    <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
                     Free agent call
                   </span>
                   <button
@@ -237,7 +237,7 @@ export default function SupportLauncher() {
           ) : (
             <>
               <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full jj-emerald-solid ring-2 ring-[#0A0A0A] animate-pulse" />
+              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full jj-surface-emerald ring-2 ring-[#0A0A0A] animate-pulse" />
             </>
           )}
         </motion.button>
@@ -300,7 +300,7 @@ export default function SupportLauncher() {
                 <div className="flex flex-col overflow-hidden rounded-[14px] bg-background text-foreground p-3">
                   <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3">
                     <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold border border-gold bg-raised text-ink">
-                      <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
+                      <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
                       Call our agent now · Free
                     </span>
                     <button

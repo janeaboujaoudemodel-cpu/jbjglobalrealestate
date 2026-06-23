@@ -284,7 +284,7 @@ export const ProvidentSyncButton = () => {
             onClick={bulkApprove}
             disabled={isApproving || isSyncing || (pendingCount ?? 0) === 0}
             variant="secondary"
-            className="jj-emerald-solid hover:jj-emerald-solid text-white"
+            className="jj-surface-emerald hover:jj-surface-emerald text-white"
           >
             {isApproving ? (
               <>
@@ -377,7 +377,7 @@ export const ProvidentSyncButton = () => {
 
         {/* Success state */}
         {!isSyncing && currentPage === totalPages && currentPage > 0 && (
-          <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded p-3 flex items-center gap-2">
+          <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded p-3 flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-emerald-400" />
             <span className="text-[color:var(--emerald-on)]">Sync complete!</span>
           </div>

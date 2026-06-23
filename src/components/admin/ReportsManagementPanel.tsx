@@ -443,7 +443,7 @@ export default function ReportsManagementPanel() {
                           Flagged
                         </Badge>
                       ) : (
-                        <Badge className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30">
+                        <Badge className="jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Reviewed
                         </Badge>
@@ -522,7 +522,7 @@ export default function ReportsManagementPanel() {
                         Needs Attention
                       </Badge>
                     ) : (
-                      <Badge className="jj-emerald-solid/20 text-green-400">
+                      <Badge className="jj-surface-emerald-soft text-green-400">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Reviewed
                       </Badge>

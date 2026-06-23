@@ -1292,7 +1292,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                       </div>
                                       <div className="bg-[#EFE6D6] rounded-full h-2 mb-1">
                                         <div
-                                          className={`h-2 rounded-full ${item.value >= item.max * 0.7 ? 'jj-emerald-solid' : item.value >= item.max * 0.4 ? 'bg-amber-500' : 'bg-red-400'}`}
+                                          className={`h-2 rounded-full ${item.value >= item.max * 0.7 ? 'jj-surface-emerald' : item.value >= item.max * 0.4 ? 'bg-amber-500' : 'bg-red-400'}`}
                                           style={{ width: `${(item.value / item.max) * 100}%` }}
                                         />
                                       </div>
@@ -1321,7 +1321,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                       <Button
                                         size="sm"
                                         variant="outline"
-                                        className="h-7 gap-1.5 text-xs border-[color:var(--emerald-1)]/30/30 text-green-400 hover:jj-emerald-solid/10"
+                                        className="h-7 gap-1.5 text-xs border-[color:var(--emerald-1)]/30/30 text-green-400 hover:jj-surface-emerald-soft"
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           const clean = cv.phone_e164!.replace(/[^0-9]/g, '');
@@ -1628,7 +1628,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                       <div className="flex items-center gap-2 p-2 rounded-md bg-amber-50 border border-amber-200">
                         <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0" />
                         <span className="text-xs text-amber-700 flex-1">Review the task above before sending. Approve?</span>
-                        <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white h-7 px-3 text-xs" onClick={() => setApproveTaskForUser(false)}>
+                        <Button size="sm" className="jj-surface-emerald hover:jj-surface-emerald text-white h-7 px-3 text-xs" onClick={() => setApproveTaskForUser(false)}>
                           <CheckCircle className="h-3 w-3 mr-1" /> Approve Task
                         </Button>
                         <Button size="sm" variant="outline" className="h-7 px-3 text-xs border-red-300 text-red-600 hover:bg-red-50" onClick={() => { setCreateTaskForUser(false); setApproveTaskForUser(false); }}>

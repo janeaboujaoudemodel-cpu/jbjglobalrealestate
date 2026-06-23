@@ -678,7 +678,7 @@ const VideoResizePack = () => {
                               className={`${
  uploadedVideo.orientation === "vertical" ? "bg-purple-500/20 text-purple-400 border-purple-500/30" :
  uploadedVideo.orientation === "landscape" ? "bg-blue-500/20 text-blue-400 border-blue-500/30" :
- "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30"
+ "jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30"
  }`}
                             >
                               {uploadedVideo.aspectRatio} {uploadedVideo.orientation}

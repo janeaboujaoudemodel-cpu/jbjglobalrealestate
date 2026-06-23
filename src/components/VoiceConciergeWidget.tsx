@@ -382,7 +382,7 @@ const VoiceConciergeWidget = () => {
         ) : (
           <Phone className="w-[18px] h-[18px] text-[#1A1A1A]" strokeWidth={2} />
         )}
-        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full jj-emerald-solid ring-2 ring-white" />
+        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full jj-surface-emerald ring-2 ring-white" />
       </button>
 
       {/* Shared Choice popover: voice or WhatsApp — anchored above launcher for mobile & desktop */}
@@ -496,7 +496,7 @@ const VoiceConciergeWidget = () => {
               <Phone className="w-3.5 h-3.5 text-[#1A1A1A]" strokeWidth={2.1} />
             )}
             {/* live dot — quiet pearl-edge badge */}
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full jj-emerald-solid ring-2 ring-white" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full jj-surface-emerald ring-2 ring-white" />
           </span>
           <span className="inline-flex items-center leading-none">
             <span className="text-[13px] font-semibold tracking-tight text-[#1A1A1A]">

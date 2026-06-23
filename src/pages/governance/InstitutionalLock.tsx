@@ -48,7 +48,7 @@ const InstitutionalLock: React.FC = () => {
               Non-negotiable foundation for {BRAND_LOCK.COMPANY_NAME}
             </p>
           </div>
-          <Badge variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 text-lg px-4 py-2">
+          <Badge variant="outline" className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 text-lg px-4 py-2">
             <CheckCircle2 className="h-5 w-5 mr-2" />
             {SYSTEM_STATUS.STATUS}
           </Badge>
@@ -189,7 +189,7 @@ const InstitutionalLock: React.FC = () => {
                     {SERVICE_SCOPE.LICENSED.map((service, i) => (
                       <div
                         key={i}
-                        className="flex-1 p-6 rounded-lg jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 text-center"
+                        className="flex-1 p-6 rounded-lg jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 text-center"
                       >
                         <span className="text-2xl font-bold text-[color:var(--emerald-1)]">{service}</span>
                       </div>
@@ -242,7 +242,7 @@ const InstitutionalLock: React.FC = () => {
                     <h4 className="text-sm font-semibold text-[color:var(--emerald-1)] mb-2">AI May</h4>
                     <div className="flex flex-wrap gap-2">
                       {AI_GOVERNANCE.ALLOWED_ACTIONS.map((action, i) => (
-                        <Badge key={i} variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
+                        <Badge key={i} variant="outline" className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
                           {action}
                         </Badge>
                       ))}
@@ -392,7 +392,7 @@ const InstitutionalLock: React.FC = () => {
                 <CardContent>
                   <div className="space-y-2">
                     {SECURITY_LOCK.ENFORCED.map((item, i) => (
-                      <div key={i} className="flex items-center gap-2 p-3 rounded-lg jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30">
+                      <div key={i} className="flex items-center gap-2 p-3 rounded-lg jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30">
                         <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                         <span className="text-sm">{item.replace(/_/g, ' ')}</span>
                       </div>
@@ -474,7 +474,7 @@ const InstitutionalLock: React.FC = () => {
           transition={{ delay: 0.5 }}
           className="mt-8 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30">
+          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30">
             <CheckCircle2 className="h-5 w-5 text-green-500" />
             <span className="font-bold text-[color:var(--emerald-1)]">{BRAND_LOCK.COMPANY_NAME}</span>
             <span className="text-[color:var(--emerald-1)]">•</span>

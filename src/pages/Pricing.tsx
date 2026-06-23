@@ -131,7 +131,7 @@ export default function Pricing() {
                     Yearly
                   </span>
                   {billingPeriod === "yearly" && (
-                    <Badge variant="default" className="jj-emerald-solid text-white">
+                    <Badge variant="default" className="jj-surface-emerald text-white">
                       2 Months Free
                     </Badge>
                   )}

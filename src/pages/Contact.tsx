@@ -452,7 +452,7 @@ END:VCARD`;
                                       href={whatsappUrl}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="flex-shrink-0 h-12 px-3 jj-emerald-solid hover:jj-emerald-solid text-white rounded-md flex items-center justify-center transition-colors"
+                                      className="flex-shrink-0 h-12 px-3 jj-surface-emerald hover:jj-surface-emerald text-white rounded-md flex items-center justify-center transition-colors"
                                       title="Chat on WhatsApp"
                                     >
                                       <MessageCircle className="w-5 h-5 text-white" />
@@ -861,7 +861,7 @@ END:VCARD`;
             </Button>
             <Button 
               onClick={() => handlePhoneAction('whatsapp')}
-              className="w-full h-12 jj-emerald-solid hover:jj-emerald-solid text-white justify-start gap-3"
+              className="w-full h-12 jj-surface-emerald hover:jj-surface-emerald text-white justify-start gap-3"
             >
               <MessageCircle className="w-5 h-5" />
               WhatsApp

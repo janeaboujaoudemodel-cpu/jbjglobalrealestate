@@ -537,7 +537,7 @@ export const SecurityDashboardSummary = () => {
             PDF
           </Button>
           <Badge 
-            className={`gap-1.5 cursor-pointer ${isLive ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40' : 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30'}`}
+            className={`gap-1.5 cursor-pointer ${isLive ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40' : 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30'}`}
             onClick={() => setIsLive(!isLive)}
           >
             <Radio className={`w-3 h-3 ${isLive ? "animate-pulse" : ""}`} />

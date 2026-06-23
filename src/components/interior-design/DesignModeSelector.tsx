@@ -33,7 +33,7 @@ const modes = [
     title: 'Staging',
     icon: Sofa,
     color: 'emerald',
-    activeClasses: 'data-[state=active]:jj-emerald-solid/20 data-[state=active]:text-[color:var(--emerald-on)] data-[state=active]:border-[color:var(--emerald-1)]/30/50',
+    activeClasses: 'data-[state=active]:jj-surface-emerald-soft data-[state=active]:text-[color:var(--emerald-on)] data-[state=active]:border-[color:var(--emerald-1)]/30/50',
   },
   {
     id: 'chat' as DesignMode,

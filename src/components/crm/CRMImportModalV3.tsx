@@ -1134,7 +1134,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                         variant="outline"
                         size="sm"
                         onClick={() => downloadTemplate("xlsx")}
-                        className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/50 text-green-400 hover:jj-emerald-solid/30"
+                        className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/50 text-green-400 hover:jj-surface-emerald-soft"
                       >
                         <Download className="h-4 w-4 mr-1" />
                         Excel
@@ -1294,7 +1294,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
 
             {/* Summary */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="p-3 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg text-center">
+              <div className="p-3 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg text-center">
                 <Users className="h-5 w-5 text-green-500 mx-auto mb-1" />
                 <p className="text-lg font-bold text-green-400">{analyzedData.valid.length}</p>
                 <p className="text-xs text-[color:var(--emerald-on)]">Will Import</p>
@@ -1312,7 +1312,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
             </div>
 
             {/* Important Notice */}
-            <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3 flex items-start gap-2">
+            <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3 flex items-start gap-2">
               <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
               <div className="text-xs text-[color:var(--emerald-on)]">
                 <strong>All {analyzedData.valid.length} rows will be imported.</strong>
@@ -1459,7 +1459,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
             <div className="bg-muted/30 rounded-lg p-4 border border-border">
               <h4 className="text-sm font-semibold text-white mb-3">Summary</h4>
               <div className="grid grid-cols-3 gap-3 text-center">
-                <div className="p-3 jj-emerald-solid/10 rounded-lg">
+                <div className="p-3 jj-surface-emerald-soft rounded-lg">
                   <p className="text-xl font-bold text-green-400">{result.inserted}</p>
                   <p className="text-xs text-[color:var(--emerald-on)]">Imported</p>
                 </div>

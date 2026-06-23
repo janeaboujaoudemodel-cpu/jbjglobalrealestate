@@ -14,9 +14,9 @@ export const SALE_STATUS_CONFIG = {
   },
   "Presale (EOI)": { 
     label: "Pre-sale (EOI)", 
-    dotClass: "jj-emerald-solid", 
+    dotClass: "jj-surface-emerald", 
     textClass: "text-green-400",
-    bgClass: "jj-emerald-solid/10",
+    bgClass: "jj-surface-emerald-soft",
     borderClass: "border-[color:var(--emerald-1)]/30/30"
   },
   "Start of Sales": { 

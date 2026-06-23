@@ -130,7 +130,7 @@ const DirectContactCTA = ({
             href={getWhatsAppUrl()}
             className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[color:var(--emerald-1)]/30/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:-translate-y-1 hover:border-[color:var(--emerald-1)]/30"
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 jj-emerald-solid/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-[color:var(--emerald-1)]/30/50 flex-shrink-0">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 jj-surface-emerald-soft rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-[color:var(--emerald-1)]/30/50 flex-shrink-0">
               <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-[color:var(--emerald-1)]" />
             </div>
             <div>

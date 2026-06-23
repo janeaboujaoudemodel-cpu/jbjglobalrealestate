@@ -110,7 +110,7 @@ interface IgnoreRule {
 
 const categoryColors: Record<CommCategory, string> = {
   important: "bg-red-500",
-  routine: "jj-emerald-solid",
+  routine: "jj-surface-emerald",
   recruitment: "bg-blue-500",
   flagged: "bg-yellow-500",
   spam: "bg-[#B89555]"
@@ -468,7 +468,7 @@ export default function ExecutiveAssistant() {
                     <p className="text-sm text-[color:var(--emerald-1)]">Auto Handled</p>
                     <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{stats.autoResponded}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-lg jj-emerald-solid/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg jj-surface-emerald-soft flex items-center justify-center">
                     <Zap className="h-5 w-5 text-green-500" />
                   </div>
                 </div>
@@ -527,7 +527,7 @@ export default function ExecutiveAssistant() {
                   Important ({stats.important})
                 </Badge>
                 <Badge
-                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'routine' ? 'jj-emerald-solid text-white' : 'jj-emerald-soft text-[color:var(--emerald-1)] border-2 border-[color:var(--emerald-1)]/30'}`}
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'routine' ? 'jj-surface-emerald text-white' : 'jj-emerald-soft text-[color:var(--emerald-1)] border-2 border-[color:var(--emerald-1)]/30'}`}
                   onClick={() => setSelectedCategory('routine')}
                 >
                   Routine

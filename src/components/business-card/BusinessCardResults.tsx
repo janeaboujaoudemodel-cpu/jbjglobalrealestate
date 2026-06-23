@@ -203,7 +203,7 @@ const BusinessCardResults = ({
                         </Badge>
                       )}
                       {saveStatus === "saved" && (
-                        <Badge className="text-[10px] border border-[color:var(--emerald-1)]/30/70 jj-emerald-solid/20 text-[color:var(--emerald-on)] gap-1 allow-white" data-no-contrast-guard>
+                        <Badge className="text-[10px] border border-[color:var(--emerald-1)]/30/70 jj-surface-emerald-soft text-[color:var(--emerald-on)] gap-1 allow-white" data-no-contrast-guard>
                           <CheckCircle2 className="h-3 w-3 allow-white" /> In CRM
                         </Badge>
                       )}

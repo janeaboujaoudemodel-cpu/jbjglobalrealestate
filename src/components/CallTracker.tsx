@@ -156,7 +156,7 @@ const CallTracker = ({ leadId, phoneNumber: initialPhone, onCallLogged }: CallTr
         <div className="space-y-4 py-4">
           {/* Call Timer Display */}
           {isCallActive && (
-            <div className="text-center p-4 jj-emerald-solid/10 rounded-lg border border-[color:var(--emerald-1)]/30/20">
+            <div className="text-center p-4 jj-surface-emerald-soft rounded-lg border border-[color:var(--emerald-1)]/30/20">
               <PhoneCall className="h-8 w-8 mx-auto text-green-500 animate-pulse mb-2" />
               <p className="text-2xl font-mono font-bold">{formatTime(elapsedTime)}</p>
               <p className="text-sm text-muted-foreground">Call in progress</p>

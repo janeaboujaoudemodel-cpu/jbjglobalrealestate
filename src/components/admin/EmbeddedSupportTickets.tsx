@@ -52,13 +52,13 @@ const priorityConfig: Record<string, { label: string; className: string; dotColo
   critical: { label: "Critical", className: "bg-red-500/20 text-red-600 border-red-500/30", dotColor: "bg-red-500" },
   high: { label: "High", className: "bg-orange-500/20 text-orange-600 border-orange-500/30", dotColor: "bg-orange-500" },
   normal: { label: "Normal", className: "bg-blue-500/20 text-blue-600 border-blue-500/30", dotColor: "bg-blue-500" },
-  low: { label: "Low", className: "jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30", dotColor: "jj-emerald-solid" },
+  low: { label: "Low", className: "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30", dotColor: "jj-surface-emerald" },
 };
 
 const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
   open: { label: "Open", className: "bg-yellow-500/20 text-yellow-600", icon: AlertCircle },
   in_progress: { label: "In Progress", className: "bg-blue-500/20 text-blue-600", icon: Clock },
-  resolved: { label: "Resolved", className: "jj-emerald-solid/20 text-[color:var(--emerald-1)]", icon: CheckCircle },
+  resolved: { label: "Resolved", className: "jj-surface-emerald-soft text-[color:var(--emerald-1)]", icon: CheckCircle },
 };
 
 export function EmbeddedSupportTickets() {
@@ -209,7 +209,7 @@ export function EmbeddedSupportTickets() {
                 <p className="text-[#1A1A1A]/70 text-xs">Resolved</p>
                 <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{ticketCounts.resolved}</p>
               </div>
-              <div className="w-10 h-10 jj-emerald-solid/10 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 jj-surface-emerald-soft rounded-lg flex items-center justify-center">
                 <CheckCircle className="w-5 h-5 text-green-500" />
               </div>
             </div>
@@ -312,7 +312,7 @@ export function EmbeddedSupportTickets() {
                 size="sm"
                 onClick={() => handleBulkStatusChange("resolved")}
                 disabled={bulkUpdate.isPending}
-                className="jj-emerald-solid hover:jj-emerald-solid text-white h-7 text-xs"
+                className="jj-surface-emerald hover:jj-surface-emerald text-white h-7 text-xs"
               >
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Resolved

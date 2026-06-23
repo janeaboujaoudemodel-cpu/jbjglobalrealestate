@@ -687,7 +687,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   </RadioGroup>
 
                   {property.hasModifications === 'stock' && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-4 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-4 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                       <div className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5" />
                         <div>
@@ -861,7 +861,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                       AED {evaluation.estimatedValue.pricePerSqFt.toLocaleString()} per sq ft · Community avg: AED {evaluation.communityAverage.toLocaleString()}/sq ft
                     </p>
                     <div className={`inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full ${
- evaluation.confidence === 'High' ? 'jj-emerald-solid/20 text-green-400'
+ evaluation.confidence === 'High' ? 'jj-surface-emerald-soft text-green-400'
  : evaluation.confidence === 'Medium' ? 'bg-yellow-500/20 text-yellow-400'
  : 'bg-red-500/20 text-red-400'
  }`}>

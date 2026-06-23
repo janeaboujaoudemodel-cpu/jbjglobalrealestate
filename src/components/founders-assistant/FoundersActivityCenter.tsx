@@ -51,11 +51,11 @@ const activityIcons: Record<string, React.ReactNode> = {
 
 const activityColors: Record<string, string> = {
   email: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  call: 'jj-emerald-solid/10 text-green-400 border-[color:var(--emerald-1)]/30/20',
+  call: 'jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/20',
   meeting: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   task: 'bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/20',
   lead: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-  message: 'jj-emerald-solid/10 text-teal-400 border-[color:var(--emerald-1)]/30/20',
+  message: 'jj-surface-emerald-soft text-teal-400 border-[color:var(--emerald-1)]/30/20',
   system: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
 };
 

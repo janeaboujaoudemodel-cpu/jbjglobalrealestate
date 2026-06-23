@@ -75,20 +75,7 @@ const ShortlistBadgeButton = ({
     md: "w-4 h-4",
     lg: "w-5 h-5",
   };
-  const emeraldButtonStyle: React.CSSProperties = {
-    backgroundImage: "var(--jj-emerald-ombre)",
-    backgroundColor: "#064E3B",
-    color: "#FFFFFF",
-    WebkitTextFillColor: "#FFFFFF",
-    border: "none",
-    opacity: 1,
-  };
-  const whiteIconStyle: React.CSSProperties = {
-    color: "#FFFFFF",
-    stroke: "#FFFFFF",
-    opacity: 1,
-    filter: "none",
-  };
+  const actionClass = "jj-surface-emerald jj-favorite-trigger flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap";
 
   const handleSetBadge = (badge: ShortlistBadge | null) => {
     // Auto-add to shortlist if not already shortlisted
@@ -129,13 +116,12 @@ const ShortlistBadgeButton = ({
           <button
             onClick={(e) => e.stopPropagation()}
             data-surface="emerald"
-            data-emerald="true"
+            data-emerald-ok="button"
             data-card-action="badge-shortlist"
-            className={`${sizeClasses[size]} jj-official-emerald jj-favorite-trigger allow-white flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${className}`}
-            style={emeraldButtonStyle}
+            className={`${sizeClasses[size]} ${actionClass} ${className}`}
           >
-            <Award className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
-            <span className="hidden sm:inline allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{currentBadge ? "Change" : "Add Badge"}</span>
+            <Award className={iconSizes[size]} />
+            <span className="hidden sm:inline">{currentBadge ? "Change" : "Add Badge"}</span>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>

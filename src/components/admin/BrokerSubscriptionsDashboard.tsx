@@ -67,7 +67,7 @@ interface BrokerSubscription {
 }
 
 const STATUS_COLORS: { [key: string]: string } = {
-  active: "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30",
+  active: "jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30",
   trial: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   pending: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",

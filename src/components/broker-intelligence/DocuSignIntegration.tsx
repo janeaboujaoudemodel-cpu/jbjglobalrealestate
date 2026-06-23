@@ -73,7 +73,7 @@ export function DocuSignIntegration() {
       case "viewed":
         return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30"><AlertCircle className="w-3 h-3 mr-1" />Viewed</Badge>;
       case "signed":
-        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30"><CheckCircle2 className="w-3 h-3 mr-1" />Signed</Badge>;
+        return <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30"><CheckCircle2 className="w-3 h-3 mr-1" />Signed</Badge>;
       case "declined":
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30"><AlertCircle className="w-3 h-3 mr-1" />Declined</Badge>;
     }

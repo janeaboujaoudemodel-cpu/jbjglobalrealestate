@@ -33,7 +33,7 @@ const EXPORT_FORMATS = [
 ];
 
 const SHARE_OPTIONS = [
-  { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, color: "jj-emerald-solid" },
+  { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, color: "jj-surface-emerald" },
   { id: "email", label: "Email", icon: Mail, color: "bg-blue-500" },
   { id: "instagram", label: "Instagram", icon: Instagram, color: "bg-pink-500" },
   { id: "youtube", label: "YouTube", icon: Youtube, color: "bg-red-500" },
@@ -222,8 +222,8 @@ const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: Video
 
         {/* Ready Status */}
         {project.status === "ready" && !isGenerating && (
-          <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full jj-emerald-solid/20 flex items-center justify-center">
+          <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full jj-surface-emerald-soft flex items-center justify-center">
               <Check className="h-5 w-5 text-[color:var(--emerald-1)]" />
             </div>
             <div>

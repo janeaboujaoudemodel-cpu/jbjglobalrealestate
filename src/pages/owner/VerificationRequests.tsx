@@ -50,7 +50,7 @@ interface Verification {
 
 const statusColors: Record<string, string> = {
   pending: "bg-amber-500/10 text-amber-700 border-amber-500/30",
-  approved: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
+  approved: "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
   rejected: "bg-red-500/10 text-red-700 border-red-500/30",
 };
 
@@ -308,7 +308,7 @@ const VerificationRequests = () => {
                               })
                             }
                             disabled={reviewMutation.isPending}
-                            className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs h-8"
+                            className="jj-surface-emerald hover:jj-surface-emerald text-white text-xs h-8"
                             data-allow-dark-cta
                           >
                             <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Approve

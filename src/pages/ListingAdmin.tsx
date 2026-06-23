@@ -924,7 +924,7 @@ const ListingAdmin = () => {
                     const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
                     const hasHandover = !!project.handover_date;
                     const filledCount = [hasDesc, hasImages, hasAmenities, hasHandover, !!project.price_from, !!project.location].filter(Boolean).length;
-                    const enrichDot = filledCount >= 6 ? "jj-emerald-solid" : filledCount >= 3 ? "bg-amber-500" : "bg-red-400";
+                    const enrichDot = filledCount >= 6 ? "jj-surface-emerald" : filledCount >= 3 ? "bg-amber-500" : "bg-red-400";
 
                     return (
                     <Card

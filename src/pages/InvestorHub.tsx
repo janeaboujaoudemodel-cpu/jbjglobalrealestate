@@ -260,7 +260,7 @@ const InvestorHub = () => {
                         </div>
                         <Badge className={
                           ticket.status === 'open' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' :
-                          ticket.status === 'resolved' ? 'jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30' :
+                          ticket.status === 'resolved' ? 'jj-surface-emerald-soft text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30' :
                           'bg-blue-500/20 text-blue-300 border-blue-500/30'
                         }>
                           {ticket.status}
@@ -321,7 +321,7 @@ const InvestorHub = () => {
               <Palette className="w-4 h-4 mr-2" />
               Creative Suite
             </Button>
-            <Button onClick={() => navigate('/ai-hub?suite=productivity')} className="jj-emerald-solid hover:jj-emerald-solid text-white font-medium">
+            <Button onClick={() => navigate('/ai-hub?suite=productivity')} className="jj-surface-emerald hover:jj-surface-emerald text-white font-medium">
               <Wrench className="w-4 h-4 mr-2" />
               Productivity Suite
             </Button>

@@ -295,7 +295,7 @@ const ExecutiveRisk = () => {
                                 {alert.type}
                               </Badge>
                               {alert.resolved && (
-                                <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">
+                                <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30">
                                   RESOLVED
                                 </Badge>
                               )}
@@ -321,7 +321,7 @@ const ExecutiveRisk = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
+                    <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
                       <h4 className="text-emerald-400 font-medium mb-2 flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" />
                         Active Filters
@@ -369,17 +369,17 @@ const ExecutiveRisk = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
+                    <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">Data Attribution</p>
                       <p className="text-xs text-white/70 mt-1">All sources logged</p>
                     </div>
-                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
+                    <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">Access Logging</p>
                       <p className="text-xs text-white/70 mt-1">All access tracked</p>
                     </div>
-                    <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
+                    <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">AI Explainability</p>
                       <p className="text-xs text-white/70 mt-1">Insights are logged</p>

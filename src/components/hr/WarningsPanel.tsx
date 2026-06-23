@@ -31,7 +31,7 @@ const WarningTypeBadge = ({ type }: { type: string }) => {
 const StatusBadge = ({ status }: { status: string }) => {
   const config: Record<string, { color: string; icon: React.ElementType; label: string }> = {
     pending: { color: 'bg-amber-500/20 text-amber-600 border-amber-500/30', icon: Clock, label: 'Pending Signature' },
-    acknowledged: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle, label: 'Acknowledged' },
+    acknowledged: { color: 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle, label: 'Acknowledged' },
     disputed: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle, label: 'Disputed' },
   };
   const cfg = config[status] || config.pending;

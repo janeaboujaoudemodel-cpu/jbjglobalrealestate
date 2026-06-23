@@ -296,7 +296,7 @@ const BriefingAttendance = () => {
                 </div>
               </div>
               <div className="mt-3">
-                <Badge className={briefing.status === 'approved' ? 'jj-emerald-solid/20 text-[color:var(--emerald-1)]' : 'bg-amber-500/20 text-amber-700'}>
+                <Badge className={briefing.status === 'approved' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' : 'bg-amber-500/20 text-amber-700'}>
                   {briefing.status}
                 </Badge>
               </div>

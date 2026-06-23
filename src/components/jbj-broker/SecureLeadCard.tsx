@@ -169,7 +169,7 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
         <Button
           onClick={handleCompanyWhatsApp}
           disabled={isContacting}
-          className="w-full jj-emerald-solid hover:jj-emerald-solid text-white"
+          className="w-full jj-surface-emerald hover:jj-surface-emerald text-white"
         >
           <MessageCircle className="w-4 h-4 mr-2" />
           Contact via Company WhatsApp

@@ -389,7 +389,7 @@ const AdminChatDashboard = () => {
 
   const renderScoreBar = (score: number, max = 10) => {
     const pct = (score / max) * 100;
-    const color = score >= 8 ? 'jj-emerald-solid' : score >= 5 ? 'bg-[#B89555]' : 'bg-red-400';
+    const color = score >= 8 ? 'jj-surface-emerald' : score >= 5 ? 'bg-[#B89555]' : 'bg-red-400';
     return (
       <div className="flex items-center gap-3">
         <div className="flex-1 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
@@ -777,7 +777,7 @@ const AdminChatDashboard = () => {
                   <Button
                     size="sm"
                     onClick={handleJoinChat}
-                    className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs font-semibold gap-1.5"
+                    className="jj-surface-emerald hover:jj-surface-emerald text-white text-xs font-semibold gap-1.5"
                   >
                     <UserPlus className="w-3 h-3" /> Join Chat Live
                   </Button>
@@ -939,7 +939,7 @@ const AdminChatDashboard = () => {
             {isJoined && selectedConversation.status === 'active' && (
               <div className="px-4 py-3 border-t border-[color:var(--emerald-1)]/30 jj-emerald-soft/50">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full jj-emerald-solid flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full jj-surface-emerald flex items-center justify-center shrink-0">
                     <span className="text-white text-xs font-bold">S</span>
                   </div>
                   <Input
@@ -953,7 +953,7 @@ const AdminChatDashboard = () => {
                     size="sm"
                     onClick={handleSendOwnerReply}
                     disabled={!ownerReplyInput.trim() || sendingReply}
-                    className="jj-emerald-solid hover:jj-emerald-solid text-white gap-1"
+                    className="jj-surface-emerald hover:jj-surface-emerald text-white gap-1"
                   >
                     {sendingReply ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
                     Send
@@ -969,7 +969,7 @@ const AdminChatDashboard = () => {
               </p>
               <div className="flex items-center gap-2">
                 {!isJoined && selectedConversation.status === 'active' && (
-                  <Button onClick={handleJoinChat} size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs gap-1">
+                  <Button onClick={handleJoinChat} size="sm" className="jj-surface-emerald hover:jj-surface-emerald text-white text-xs gap-1">
                     <UserPlus className="w-3 h-3" /> Join
                   </Button>
                 )}
@@ -1114,7 +1114,7 @@ const AdminChatDashboard = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3 flex-wrap">
-                <Button className="jj-emerald-solid hover:jj-emerald-solid text-white font-semibold gap-2">
+                <Button className="jj-surface-emerald hover:jj-surface-emerald text-white font-semibold gap-2">
                   <CheckCircle2 className="w-4 h-4" /> Approve
                 </Button>
                 <Button className="bg-red-500 hover:bg-red-600 text-white font-semibold gap-2">

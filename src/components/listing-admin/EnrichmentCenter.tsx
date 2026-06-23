@@ -151,8 +151,8 @@ const ReellyEnrichmentPanel = () => {
     <div className="space-y-4">
       {/* Background mode banner */}
       {isActive && (
-        <div className="jj-emerald-solid/10 border-2 border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 flex items-center gap-3">
-          <div className="w-3 h-3 jj-emerald-solid rounded-full animate-pulse" />
+        <div className="jj-surface-emerald-soft border-2 border-[color:var(--emerald-1)]/30/30 rounded-lg p-4 flex items-center gap-3">
+          <div className="w-3 h-3 jj-surface-emerald rounded-full animate-pulse" />
           <div className="flex-1">
             <p className="text-foreground font-semibold text-sm">Enrichment running in background</p>
             <p className="text-muted-foreground text-xs">Safe to navigate away — processing continues on the server.</p>

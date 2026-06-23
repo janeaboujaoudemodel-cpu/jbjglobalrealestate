@@ -232,7 +232,7 @@ ${response.report}
                 {response.outlook && (
                   <Card className={`p-4 ${
  response.outlook === "bullish" 
- ? "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30" 
+ ? "jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30" 
  : response.outlook === "bearish"
  ? "bg-red-500/10 border-red-500/30"
  : "bg-amber-500/10 border-amber-500/30"

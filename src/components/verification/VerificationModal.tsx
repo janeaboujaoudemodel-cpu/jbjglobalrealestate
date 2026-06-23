@@ -712,7 +712,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                           key={c.id}
                           className={`w-2 h-2 rounded-full ${
  i < livenessFrames.length
- ? "jj-emerald-solid"
+ ? "jj-surface-emerald"
  : i === livenessIdx
  ? "bg-[#B89555] animate-pulse"
  : "bg-white/30"
@@ -799,7 +799,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* SUCCESS */}
           {step === "success" && (
             <div className="flex flex-col items-center text-center py-6 gap-4">
-              <div className="w-16 h-16 rounded-full jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
                 <CheckCircle2 className="w-8 h-8 text-[color:var(--emerald-1)]" />
               </div>
               <div>

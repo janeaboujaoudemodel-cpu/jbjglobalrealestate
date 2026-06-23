@@ -466,7 +466,7 @@ Would you like me to run a specific audit or show detailed information? Type **"
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full jj-emerald-solid animate-pulse" />
+              <div className="h-2 w-2 rounded-full jj-surface-emerald animate-pulse" />
               <span className="text-xs text-muted-foreground">Online</span>
             </div>
           </div>

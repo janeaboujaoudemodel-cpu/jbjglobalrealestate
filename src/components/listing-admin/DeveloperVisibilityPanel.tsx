@@ -148,7 +148,7 @@ export function DeveloperVisibilityPanel() {
                   size="sm"
                   onClick={bulkShow}
                   disabled={bulkMutation.isPending}
-                  className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                  className="jj-surface-emerald hover:jj-surface-emerald text-white"
                 >
                   <EyeIcon className="w-4 h-4 mr-1" />
                   Show ({selectedIds.size})

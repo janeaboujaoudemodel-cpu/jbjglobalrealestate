@@ -74,7 +74,7 @@ const statusConfig: Record<ThreadStatus, { label: string; color: string; icon: R
   needs_reply: { label: "Needs Reply", color: "bg-red-500/10 text-red-500 border-red-500/30", icon: <AlertTriangle className="h-3 w-3" /> },
   waiting: { label: "Waiting", color: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30", icon: <Clock className="h-3 w-3" /> },
   follow_up_due: { label: "Follow-up Due", color: "bg-orange-500/10 text-orange-500 border-orange-500/30", icon: <Bell className="h-3 w-3" /> },
-  closed: { label: "Closed", color: "jj-emerald-solid/10 text-green-500 border-[color:var(--emerald-1)]/30/30", icon: <CheckCircle className="h-3 w-3" /> },
+  closed: { label: "Closed", color: "jj-surface-emerald-soft text-green-500 border-[color:var(--emerald-1)]/30/30", icon: <CheckCircle className="h-3 w-3" /> },
 };
 
 type ActiveStatFilter = 'none' | 'unread' | 'needs_reply' | 'new' | 'follow_up_due';

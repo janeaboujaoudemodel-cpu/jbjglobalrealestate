@@ -36,7 +36,7 @@ const StageIndicator = ({ request }: { request: ApprovalRequest }) => {
           <div 
             className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
  stage.status === 'approved' 
- ? 'jj-emerald-solid text-white' 
+ ? 'jj-surface-emerald text-white' 
  : stage.status === 'rejected'
  ? 'bg-red-500 text-white'
  : request.current_stage === stage.num
@@ -294,7 +294,7 @@ export function ApprovalWorkflowPanel() {
                             <div className="flex items-center gap-2">
                               <Button 
                                 size="sm" 
-                                className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                                className="jj-surface-emerald hover:jj-surface-emerald text-white"
                                 onClick={() => handleApproval(request, true)}
                               >
                                 <CheckCircle className="h-4 w-4" />

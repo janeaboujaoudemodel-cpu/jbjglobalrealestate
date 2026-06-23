@@ -568,8 +568,8 @@ const AdminTrainingGuide = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
-                    <div className="w-8 h-8 jj-emerald-solid rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg">
+                    <div className="w-8 h-8 jj-surface-emerald rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                       5
                     </div>
                     <div>

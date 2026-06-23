@@ -478,7 +478,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                   </div>
 
                   {currentOutfit && (
-                    <div className="p-3 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
+                    <div className="p-3 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                       <div className="flex items-center gap-2 text-green-400 text-sm">
                         <Check className="w-4 h-4" />
                         <span>Current outfit: {currentOutfit}</span>
@@ -541,7 +541,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant="outline"
           onClick={handleShareScreen}
-          className={`rounded-full w-14 h-14 ${isScreenSharing ? 'jj-emerald-solid hover:jj-emerald-solid border-none' : 'bg-[#1A1A1A] hover:bg-[#1A1A1A] border-none'}`}
+          className={`rounded-full w-14 h-14 ${isScreenSharing ? 'jj-surface-emerald hover:jj-surface-emerald border-none' : 'bg-[#1A1A1A] hover:bg-[#1A1A1A] border-none'}`}
         >
           <Monitor className="w-6 h-6" />
         </Button>
@@ -710,7 +710,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             <div>
               <Label className="text-white mb-2 block">Microphone Enhancement</Label>
               <p className="text-xs text-white/70 mb-2">Professional studio-quality audio</p>
-              <Badge className="jj-emerald-solid/20 text-green-400">
+              <Badge className="jj-surface-emerald-soft text-green-400">
                 <Volume2 className="w-3 h-3 mr-1" />
                 Active - Studio Quality
               </Badge>

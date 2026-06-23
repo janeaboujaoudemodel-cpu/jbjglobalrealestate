@@ -122,7 +122,7 @@ const contractTemplates: ContractTemplate[] = [
 ];
 
 const categoryLabels: Record<string, { label: string; color: string }> = {
-  sales: { label: "Sales", color: "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30" },
+  sales: { label: "Sales", color: "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30" },
   rentals: { label: "Rentals", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
   agency: { label: "Agency", color: "bg-purple-500/20 text-purple-400 border-purple-500/30" },
   developer: { label: "Developer", color: "bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30" },
@@ -244,7 +244,7 @@ export default function ContractForms() {
                   {/* References */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {template.reraReference && (
-                      <span className="text-xs px-2 py-1 rounded jj-emerald-solid/10 text-emerald-400 border border-[color:var(--emerald-1)]/30/20">
+                      <span className="text-xs px-2 py-1 rounded jj-surface-emerald-soft text-emerald-400 border border-[color:var(--emerald-1)]/30/20">
                         RERA: {template.reraReference}
                       </span>
                     )}

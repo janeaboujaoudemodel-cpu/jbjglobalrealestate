@@ -150,7 +150,7 @@ const ThankYou = () => {
                 variants={fadeInUp}
                 className="mb-8"
               >
-                <div className="w-20 h-20 jj-emerald-solid/10 border-2 border-[color:var(--emerald-1)]/30/30 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-20 h-20 jj-surface-emerald-soft border-2 border-[color:var(--emerald-1)]/30/30 rounded-full flex items-center justify-center mx-auto">
                   <CheckCircle className="w-10 h-10 text-green-500" />
                 </div>
               </motion.div>

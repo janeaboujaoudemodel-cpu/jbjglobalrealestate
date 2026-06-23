@@ -54,13 +54,13 @@ const priorityConfig: Record<string, { label: string; className: string; dotColo
   critical: { label: "Critical", className: "bg-red-500/20 text-red-400 border-red-500/30", dotColor: "bg-red-500" },
   high: { label: "High", className: "bg-orange-500/20 text-orange-400 border-orange-500/30", dotColor: "bg-orange-500" },
   normal: { label: "Normal", className: "bg-blue-500/20 text-blue-400 border-blue-500/30", dotColor: "bg-blue-500" },
-  low: { label: "Low", className: "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30", dotColor: "jj-emerald-solid" },
+  low: { label: "Low", className: "jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30", dotColor: "jj-surface-emerald" },
 };
 
 const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
   open: { label: "Open", className: "bg-yellow-500/20 text-yellow-400", icon: AlertCircle },
   in_progress: { label: "In Progress", className: "bg-blue-500/20 text-blue-400", icon: Clock },
-  resolved: { label: "Resolved", className: "jj-emerald-solid/20 text-green-400", icon: CheckCircle },
+  resolved: { label: "Resolved", className: "jj-surface-emerald-soft text-green-400", icon: CheckCircle },
 };
 
 const SupportTicketHub = () => {
@@ -262,7 +262,7 @@ const SupportTicketHub = () => {
                   </SelectItem>
                   <SelectItem value="resolved">
                     <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full jj-emerald-solid" />
+                      <span className="w-2 h-2 rounded-full jj-surface-emerald" />
                       Resolved
                     </span>
                   </SelectItem>
@@ -325,7 +325,7 @@ const SupportTicketHub = () => {
                 size="sm"
                 onClick={() => handleBulkStatusChange("resolved")}
                 disabled={bulkUpdate.isPending}
-                className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                className="jj-surface-emerald hover:jj-surface-emerald text-white"
               >
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Mark Resolved

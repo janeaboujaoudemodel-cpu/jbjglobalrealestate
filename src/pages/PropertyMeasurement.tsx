@@ -393,7 +393,7 @@ const PropertyMeasurement = () => {
             animate="visible"
             variants={fadeInUp}
           >
-            <span className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium jj-emerald-solid/20 text-[color:var(--emerald-on)] border border-[color:var(--emerald-1)]/30/30 select-none">
+            <span className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium jj-surface-emerald-soft text-[color:var(--emerald-on)] border border-[color:var(--emerald-1)]/30/30 select-none">
               <Ruler className="w-4 h-4 mr-2" />
               FREE AI Tool
             </span>
@@ -446,13 +446,13 @@ const PropertyMeasurement = () => {
               <div key={s} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
  step >= s 
- ? "jj-emerald-solid text-white shadow-[0_0_16px_rgba(16,185,129,0.55)]" 
+ ? "jj-surface-emerald text-white shadow-[0_0_16px_rgba(16,185,129,0.55)]" 
  : "bg-white/10 text-white/70 border border-white/15"
  }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
                 {s < 5 && (
-                  <div className={`w-8 md:w-12 h-1 rounded-full ${step > s ? "jj-emerald-solid" : "bg-white/10"}`} />
+                  <div className={`w-8 md:w-12 h-1 rounded-full ${step > s ? "jj-surface-emerald" : "bg-white/10"}`} />
                 )}
               </div>
             ))}
@@ -626,25 +626,25 @@ const PropertyMeasurement = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6">
+                <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6">
                   <h3 className="text-[color:var(--emerald-on)] font-semibold text-lg mb-4">📱 Room-by-Room Guide</h3>
                   <div className="space-y-4 text-white/85">
                     <div className="flex items-start gap-3">
-                      <span className="w-8 h-8 jj-emerald-solid/30 rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">1</span>
+                      <span className="w-8 h-8 jj-surface-emerald-soft rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">1</span>
                       <div>
                         <p className="font-medium text-white">Select your rooms</p>
                         <p className="text-sm text-white/70">We'll suggest rooms based on your property type. Add custom rooms if needed.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="w-8 h-8 jj-emerald-solid/30 rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">2</span>
+                      <span className="w-8 h-8 jj-surface-emerald-soft rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">2</span>
                       <div>
                         <p className="font-medium text-white">Upload for each room</p>
                         <p className="text-sm text-white/70">Choose to upload <strong>photos</strong> (2-3 per room) OR a <strong>video walkthrough</strong> of each specific room.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="w-8 h-8 jj-emerald-solid/30 rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">3</span>
+                      <span className="w-8 h-8 jj-surface-emerald-soft rounded-full flex items-center justify-center text-[color:var(--emerald-on)] font-bold flex-shrink-0">3</span>
                       <div>
                         <p className="font-medium text-white">Get accurate measurements</p>
                         <p className="text-sm text-white/70">AI analyzes each room separately for precise individual and total area calculations.</p>
@@ -676,7 +676,7 @@ const PropertyMeasurement = () => {
                   </Button>
                   <Button 
                     onClick={initializeRooms}
-                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white py-6"
+                    className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white py-6"
                   >
                     Start Adding Rooms
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -763,7 +763,7 @@ const PropertyMeasurement = () => {
                   <Button 
                     onClick={() => setStep(4)}
                     disabled={roomUploads.length === 0}
-                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white py-6"
+                    className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white py-6"
                   >
                     Continue to Upload Media
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -793,7 +793,7 @@ const PropertyMeasurement = () => {
                     <Upload className="w-5 h-5 text-teal-400" />
                     Step 4: Upload Media for Each Room
                   </CardTitle>
-                  <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
+                  <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
                     {completedRoomsCount}/{roomUploads.length} Complete
                   </Badge>
                 </div>
@@ -916,7 +916,7 @@ const PropertyMeasurement = () => {
 
                 {/* Processing Indicator */}
                 {isProcessing && (
-                  <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6">
+                  <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-xl p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Sparkles className="w-6 h-6 text-teal-400 animate-pulse" />
                       <p className="text-[color:var(--emerald-on)] font-medium">AI is analyzing each room...</p>
@@ -938,7 +938,7 @@ const PropertyMeasurement = () => {
                   <Button 
                     onClick={processWithAI}
                     disabled={completedRoomsCount < 1 || isProcessing}
-                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white py-6"
+                    className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white py-6"
                   >
                     {isProcessing ? "Analyzing..." : `Analyze ${completedRoomsCount} Room(s) with AI`}
                     <Sparkles className="w-4 h-4 ml-2" />
@@ -982,7 +982,7 @@ const PropertyMeasurement = () => {
                 <div
                   data-allow-dark-cta
                   data-no-contrast-guard
-                  className="allow-white jj-emerald-solid border border-[color:var(--emerald-1)]/30/40 rounded-xl p-6 text-center shadow-[0_0_24px_rgba(16,185,129,0.35)]"
+                  className="allow-white jj-surface-emerald border border-[color:var(--emerald-1)]/30/40 rounded-xl p-6 text-center shadow-[0_0_24px_rgba(16,185,129,0.35)]"
                 >
                   <p className="text-white/90 mb-2 allow-white">Total Property Area</p>
                   <p className="text-4xl md:text-5xl font-bold text-white allow-white">
@@ -998,7 +998,7 @@ const PropertyMeasurement = () => {
                   <div
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="allow-white jj-emerald-solid/80 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-4"
+                    className="allow-white jj-surface-emerald/80 border border-[color:var(--emerald-1)]/30/30 rounded-xl p-4"
                   >
                     <div className="flex items-start gap-3">
                       <Info className="w-5 h-5 text-white mt-0.5 flex-shrink-0 allow-white" />
@@ -1019,7 +1019,7 @@ const PropertyMeasurement = () => {
                         key={i}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="allow-white jj-emerald-solid/70 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4"
+                        className="allow-white jj-surface-emerald/70 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4"
                       >
                         <div className="flex justify-between items-center">
                           <span className="text-white allow-white">{room.name}</span>
@@ -1059,7 +1059,7 @@ const PropertyMeasurement = () => {
                   <Button 
                     onClick={downloadReport}
                     variant="outline"
-                    className="flex-1 border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-on)] hover:jj-emerald-solid/20"
+                    className="flex-1 border-[color:var(--emerald-1)]/30/50 text-[color:var(--emerald-on)] hover:jj-surface-emerald-soft"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download Report

@@ -285,7 +285,7 @@ const CVViewer = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full justify-start gap-2 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/50 hover:jj-emerald-solid/10"
+                    className="w-full justify-start gap-2 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/50 hover:jj-surface-emerald-soft"
                     onClick={() => handleContact('whatsapp')}
                     disabled={!candidateData?.phone}
                   >

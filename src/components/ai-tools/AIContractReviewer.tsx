@@ -115,7 +115,7 @@ const AIContractReviewer = ({ onResponse }: AIContractReviewerProps) => {
  ? "bg-red-500/10 border-red-500/20" 
  : response.riskLevel === "medium" 
  ? "bg-amber-500/10 border-amber-500/20"
- : "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/20"
+ : "jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/20"
  }`}>
                 <div className="flex items-center gap-2">
                   {response.riskLevel === "high" ? (

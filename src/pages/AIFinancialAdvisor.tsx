@@ -229,7 +229,7 @@ const AIFinancialAdvisor = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
               <Calculator className="w-4 h-4 text-emerald-400" />
               <span className="text-[color:var(--emerald-on)] text-sm font-medium">AI-Powered Budget Planning</span>
             </div>
@@ -282,7 +282,7 @@ const AIFinancialAdvisor = () => {
                     className="bg-[#F7F2EA] border-[#1A1A1A]"
                   />
                 </div>
-                <Button onClick={createProject} className="w-full jj-emerald-solid">
+                <Button onClick={createProject} className="w-full jj-surface-emerald">
                   Create Project
                 </Button>
               </div>
@@ -495,7 +495,7 @@ const AIFinancialAdvisor = () => {
                     <ul className="space-y-3">
                       {analysis.recommendations.map((rec, index) => (
                         <li key={index} className="flex items-start gap-3">
-                          <div className="w-6 h-6 jj-emerald-solid/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-6 h-6 jj-surface-emerald-soft rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                             <span className="text-emerald-400 text-xs">{index + 1}</span>
                           </div>
                           <p className="text-white/85 text-sm">{rec}</p>

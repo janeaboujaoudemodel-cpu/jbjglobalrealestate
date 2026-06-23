@@ -50,7 +50,7 @@ export function PremiumCVUpload({
         <div className="relative overflow-hidden rounded-2xl border-2 border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 shadow-[0_8px_24px_-12px_rgba(184,149,85,0.3)]">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="absolute inset-0 rounded-xl jj-emerald-solid/15 blur-lg" />
+              <div className="absolute inset-0 rounded-xl jj-surface-emerald/15 blur-lg" />
               <div className="relative grid h-14 w-14 place-items-center rounded-xl bg-[#FDFBF7] border-2 border-[color:var(--emerald-1)]/30">
                 <FileText className="h-7 w-7 text-[color:var(--emerald-1)]" />
               </div>

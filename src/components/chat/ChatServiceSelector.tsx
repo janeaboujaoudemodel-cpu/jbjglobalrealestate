@@ -27,9 +27,9 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
           href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I'd like to chat about my property inquiry.`)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 p-4 mb-4 jj-emerald-solid/10 hover:jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 hover:border-[color:var(--emerald-1)]/30/50 rounded-xl transition-all duration-300 group"
+          className="flex items-center gap-3 p-4 mb-4 jj-surface-emerald-soft hover:jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 hover:border-[color:var(--emerald-1)]/30/50 rounded-xl transition-all duration-300 group"
         >
-          <div className="w-12 h-12 rounded-full jj-emerald-solid flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full jj-surface-emerald flex items-center justify-center">
             <MessageCircle className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">

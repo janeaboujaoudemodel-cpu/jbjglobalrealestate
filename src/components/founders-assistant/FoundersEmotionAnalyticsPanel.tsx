@@ -108,7 +108,7 @@ export function FoundersEmotionAnalyticsPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-xs text-[#1A1A1A]/70">Positive</p><p className="text-2xl font-bold text-[color:var(--emerald-1)]">{overallSentiment.positive}%</p></div>
-              <div className="h-12 w-12 rounded-full jj-emerald-solid/10 flex items-center justify-center"><Smile className="h-6 w-6 text-[color:var(--emerald-1)]" /></div>
+              <div className="h-12 w-12 rounded-full jj-surface-emerald-soft flex items-center justify-center"><Smile className="h-6 w-6 text-[color:var(--emerald-1)]" /></div>
             </div>
             <div className="mt-2 flex items-center gap-1 text-xs text-[color:var(--emerald-1)]"><TrendingUp className="h-3 w-3" /><span>+5% from last week</span></div>
           </CardContent>

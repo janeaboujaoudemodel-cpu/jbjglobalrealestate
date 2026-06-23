@@ -448,13 +448,13 @@ export default function InvestorDashboard() {
                                 {(inv.event as any)?.event_date ? format(new Date((inv.event as any).event_date), "dd MMM yyyy, HH:mm") : ""}
                               </p>
                             </div>
-                            <Badge className={inv.status === "accepted" ? "jj-emerald-solid/10 text-emerald-500 border-[color:var(--emerald-1)]/30/30" : inv.status === "declined" ? "bg-red-500/10 text-red-500 border-red-500/30" : "bg-amber-500/10 text-amber-500 border-amber-500/30"}>
+                            <Badge className={inv.status === "accepted" ? "jj-surface-emerald-soft text-emerald-500 border-[color:var(--emerald-1)]/30/30" : inv.status === "declined" ? "bg-red-500/10 text-red-500 border-red-500/30" : "bg-amber-500/10 text-amber-500 border-amber-500/30"}>
                               {inv.status}
                             </Badge>
                           </div>
                           {inv.status === "invited" && (
                             <div className="flex gap-2 mt-3">
-                              <Button size="sm" onClick={() => respondToInvitation(inv.id, "accepted")} className="jj-emerald-solid text-white hover:jj-emerald-solid text-xs">Accept</Button>
+                              <Button size="sm" onClick={() => respondToInvitation(inv.id, "accepted")} className="jj-surface-emerald text-white hover:jj-surface-emerald text-xs">Accept</Button>
                               <Button size="sm" variant="outline" onClick={() => respondToInvitation(inv.id, "declined")} className="text-xs">Decline</Button>
                             </div>
                           )}
@@ -508,7 +508,7 @@ export default function InvestorDashboard() {
                             <p className="font-semibold text-sm text-foreground">{(inv.event as any)?.title}</p>
                             <p className="text-[10px] text-muted-foreground">{(inv.event as any)?.location || "Location TBA"}</p>
                           </div>
-                          <Badge className={inv.status === "accepted" ? "jj-emerald-solid/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}>
+                          <Badge className={inv.status === "accepted" ? "jj-surface-emerald-soft text-emerald-500" : "bg-amber-500/10 text-amber-500"}>
                             {inv.status}
                           </Badge>
                         </div>

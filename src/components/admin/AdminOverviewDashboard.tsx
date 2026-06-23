@@ -250,7 +250,7 @@ export const AdminOverviewDashboard = () => {
 
   const getHealthBg = (status: "healthy" | "degraded" | "down") => {
     switch (status) {
-      case "healthy": return "jj-emerald-solid/10";
+      case "healthy": return "jj-surface-emerald-soft";
       case "degraded": return "bg-amber-500/10";
       case "down": return "bg-red-500/10";
     }
@@ -268,7 +268,7 @@ export const AdminOverviewDashboard = () => {
 
   const getSeverityColor = (severity?: RecentActivity["severity"]) => {
     switch (severity) {
-      case "success": return "text-emerald-500 jj-emerald-solid/10";
+      case "success": return "text-emerald-500 jj-surface-emerald-soft";
       case "warning": return "text-amber-500 bg-amber-500/10";
       case "error": return "text-red-500 bg-red-500/10";
       default: return "text-blue-500 bg-blue-500/10";
@@ -332,7 +332,7 @@ export const AdminOverviewDashboard = () => {
                     <p className="text-[#1A1A1A] font-medium text-sm">{service.name}</p>
                     <div className="flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${
- service.status === "healthy" ? "jj-emerald-solid" :
+ service.status === "healthy" ? "jj-surface-emerald" :
  service.status === "degraded" ? "bg-amber-500" : "bg-red-500"
  } animate-pulse`} />
                       <span className={`text-xs capitalize ${getHealthColor(service.status)}`}>

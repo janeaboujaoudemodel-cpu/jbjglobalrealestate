@@ -179,7 +179,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
           transition={{ delay: index * 0.05 }}
           className={`relative p-4 rounded-xl border transition-all ${
  platform.connected 
- ? 'border-[color:var(--emerald-1)]/30/50 jj-emerald-solid/5' 
+ ? 'border-[color:var(--emerald-1)]/30/50 jj-surface-emerald-soft' 
  : 'border-[#B89555]/20 bg-[#0E0E0E] hover:border-[#B89555]/40'
  }`}
         >
@@ -191,7 +191,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
             
             {platform.connected ? (
               <>
-                <Badge className="jj-emerald-solid/20 text-green-400 border-0 mb-2">
+                <Badge className="jj-surface-emerald-soft text-green-400 border-0 mb-2">
                   <Check className="w-3 h-3 mr-1" />
                   Connected
                 </Badge>
@@ -224,7 +224,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
 
           {/* Connection indicator */}
           <div className={`absolute top-2 right-2 w-2 h-2 rounded-full ${
- platform.connected ? 'jj-emerald-solid' : 'bg-[#1A1A1A]'
+ platform.connected ? 'jj-surface-emerald' : 'bg-[#1A1A1A]'
  }`} />
         </motion.div>
       ))}

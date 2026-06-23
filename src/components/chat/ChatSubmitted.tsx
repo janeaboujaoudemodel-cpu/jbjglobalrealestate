@@ -23,7 +23,7 @@ const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) =>
           href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I just submitted an inquiry through your AI chat.`)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full jj-emerald-solid hover:jj-emerald-solid text-white py-3 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 w-full jj-surface-emerald hover:jj-surface-emerald text-white py-3 rounded-lg transition-colors"
         >
           <MessageCircle className="w-5 h-5" />
           Continue on WhatsApp
