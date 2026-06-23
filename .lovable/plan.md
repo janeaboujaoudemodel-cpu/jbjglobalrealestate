@@ -1,52 +1,73 @@
-## Goal
-On the "Ready to Get Started" / "Get the Edge" block (`src/components/CombinedContactNewsletter.tsx`): restore the metallic animated sheen on the three contact cards, refine the newsletter header, ensure the typewriter placeholder is visible in the email input, and ensure every subscriber automatically receives news (new listings / features / announcements) via automated emails.
+## Project page — hero contrast + global layout padding fix
 
-## 1. WhatsApp / Call Us / Email — metallic animated cards
-- Replace the static `jj-emerald-rect-pill` styling on the three contact anchors with the locked emerald metallic primitive (`jj-pill-emerald-metallic`, same animated sheen used elsewhere in the brand system — emerald ombré + sweeping white shine on hover, white icons + white text at rest+hover).
-- Keep two-line layout (label small caps + value bold), white icon + white text locked (`data-no-contrast-guard`, inline `color:#FFFFFF`).
-- No layout / grid changes; same 3-column responsive grid.
+### Diagnosis (from the two annotated screenshots + code at `src/components/project-detail/ProjectDetailLayout.tsx`)
 
-## 2. "Get the Edge" newsletter section
-- Keep the main title `GET THE EDGE — LISTINGS BEFORE THE MARKET` (clear, premium).
-- Add a small uppercase eyebrow chip above the title: **"Stay in the Loop"** — matched style to the existing `GET IN TOUCH` chip at the top (1px white/15 border, white text, tracking-[0.22em]).
-- Keep the subtitle line unchanged.
+**Hero is broken**
+- The hero content (`Starting from AED 9.9M`, the `Elwood` H1, developer name, location row, breadcrumb) renders almost invisible — it sits over a bright pool background and the inline `color: rgba(255,255,255,0.85)` etc. is being overridden by a contrast guard (`data-ink-emerald-opt-out` is set but the `[data-surface="dark"]` wrapper is being clobbered by a newer `same-tone` guard pass, so text drops to ink).
+- The three CTAs (`Download Brochure`, `Register Interest`, `Download branded presentation`) use `.jj-pill-emerald` — emerald fill on emerald-shadowed image = unreadable. User wants the opposite treatment.
 
-## 3. Email input — typewriter effect
-- `NewsletterBrevo` (compact variant) already uses `useTypewriter` with rotating phrases (`Enter your email address`, `Get new listings first`, …) — same engine the hero search uses.
-- Visually verify it animates inside the emerald pill on `/` and matches the hero look. If suppressed by an overflow/z-index regression, fix only the offending CSS so the animated phrases are visible at rest and pause on focus/typing. No new phrases needed unless the user wants them changed later.
+**Layout is broken**
+- `STARTING PRICE / HANDOVER / BEDROOMS / SIZE` cards (`ProjectDetailLayout.tsx` line 967–996) run inside `max-w-[1240px] mx-auto px-5 sm:px-8 lg:px-12`, but the surrounding section uses an inline gradient background that bleeds the band edge to edge — so on the user's preview width the cards appear to "touch the edges" because the gold-bordered tiles inherit the band's full width with only 20px padding while the homepage uses ~32–48px.
+- Same issue cascades to other in-content sections that use bespoke padding instead of the shared band/card primitives.
 
-## 4. Automated subscriber broadcasts (backend wiring)
-Subscribers already land in `public.newsletter_subscribers` via the existing `newsletter-subscribe` edge function (Brevo + Resend). Today there is **no automatic fan-out** when a new listing / feature / news item is published. Add it.
+### What to change (surgical, frontend only)
 
-### New edge function: `broadcast-subscribers`
-- Inputs: `{ type: 'new_listing' | 'new_feature' | 'news' | 'announcement', subject, preheader, html, cta_url, cta_label, audience_filter? }`.
-- Loads all `newsletter_subscribers` where `is_active = true`, batches (Resend 100/req), injects per-recipient unsubscribe token, throttles per the existing Resend quota standard.
-- Logs every send into `newsletter_events` (already exists) for analytics + dedupe.
-- Uses the locked premium newsletter template (per `mem://features/marketing/premium-newsletter-standard`) — champagne/emerald brand, JBJ monogram, footer with unsubscribe + company NAP.
+**1. Hero — make all hero text and CTAs render white on the photo**
 
-### Auto-triggers (server-side, no UI required)
-Hook the broadcast into existing publishing flows so it fires automatically:
-- **New listing published**: when a project transitions to `is_published = true` AND passes the publish gate (photo + developer logo), enqueue a `new_listing` broadcast (subject, hero image, price pill, location, CTA → `/project/:slug`).
-- **New news article / market intel post**: when a row in the news / market-intelligence tables is set live, enqueue a `news` broadcast.
-- **New feature announcement**: manual trigger from owner dashboard (single button "Announce to subscribers") that calls the same edge function.
+In `src/components/project-detail/ProjectDetailLayout.tsx` (lines 705–815):
+- Tag the hero `<section>` with `data-hero-dark` and keep `data-surface="dark" data-no-contrast-guard` on the inner container so the universal same-tone guard skips it (matches the locked Hero Rule in memory).
+- Replace inline `color: 'rgba(255,255,255,0.85)'` / `#FDE68A` / `#FCD34D` chains with explicit `text-white` / `text-white/80` Tailwind classes plus `[--tw-text-opacity:1]` so no later CSS pass can reroute them to ink.
+- Keep `Starting from` in white, keep the price in `--price-orange` via the existing `<span>` pattern (locked Price Rule).
+- Replace the three filled `.jj-pill-emerald` CTAs with a new **ghost-on-dark** primitive class (added in `src/index.css`):
+  ```
+  .jj-hero-ghost-cta {
+    background: transparent;
+    color: #FFFFFF;
+    border: 1.5px solid rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+  }
+  .jj-hero-ghost-cta:hover {
+    background: rgba(255,255,255,0.10);
+    border-color: #FFFFFF;
+  }
+  .jj-hero-ghost-cta svg { color: #FFFFFF; stroke: #FFFFFF; }
+  ```
+  Apply this to `Download Brochure`, `Register Interest`, `Request Brochure`, and `Download branded presentation` in the hero. Drop `jj-pill-emerald`. Add `data-no-contrast-guard` so the global guard doesn't try to "fix" them back to ink.
+- Force `ProjectBreadcrumb surface="dark"` text to white via the same opt-out.
 
-Implementation: Postgres trigger → `pg_net` POST to the edge function with the relevant payload + `x-broadcast-secret` (stored in Supabase secrets, validated inside the function). Soft rate-limit: max 1 broadcast per topic per 30 min to prevent runaway sends.
+**2. Layout padding — adopt the homepage card padding everywhere on the project page**
 
-### Safety
-- Owner-only invocation outside of the trigger path (requireOwnerAuth).
-- All HTML sanitized via `contentSanitizer`.
-- Honors `is_active=false` and `unsubscribed_at` — never mails opted-out users.
-- Respects the existing Resend quota standard.
+In `ProjectDetailLayout.tsx` (line 962–964) the main band uses:
+```
+max-w-[1240px] mx-auto px-5 sm:px-8 lg:px-12
+```
+Replace with the homepage standard (used by `<PremiumSectionCard>` and the home `ProjectCard` grid):
+```
+max-w-[1240px] mx-auto px-6 sm:px-10 lg:px-16 xl:px-20
+```
+and add `gap-6 md:gap-8` to the quick-stats grid so the gold-bordered tiles get the same breathing room as homepage cards. Only the background band stays full-bleed.
 
-## Files touched
-- `src/components/CombinedContactNewsletter.tsx` — metallic contact cards, eyebrow chip.
-- `src/components/marketing/NewsletterBrevo.tsx` (only if typewriter visibility regression confirmed).
-- `src/index.css` — minor style for eyebrow chip if a primitive doesn't already exist.
-- `supabase/functions/broadcast-subscribers/index.ts` (new).
-- `supabase/migrations/<ts>_subscriber_broadcast_triggers.sql` — DB triggers + secret + helper RPC.
-- Owner dashboard: small "Announce to subscribers" button (existing marketing hub surface).
+**3. Same audit on adjacent project-page sections**
 
-## Validation
-- Playwright screenshots of the CTA block: rest + hover on each metallic card; eyebrow visible; typewriter animating in the input.
-- Manual trigger of `broadcast-subscribers` against the test address `infoo.jane@gmail.com` with three variants (new_listing / news / announcement) for visual comparison.
-- DB check: a test project flipped to published produces a `newsletter_events` row and a queued send.
+Walk through these and apply the same `px-6 sm:px-10 lg:px-16 xl:px-20` (no other markup changes):
+- `QuickFactsBar` wrapper (line 998)
+- `OwnerProvenanceCard` wrapper (line 1011)
+- `DETAILS` / `GALLERY` / `AMENITIES` / `MASTER PLAN` / `LOCATION` section wrappers down to the bottom of `ProjectDetailLayout.tsx`.
+- `ProjectDetailTabs.tsx` outer container.
+
+No backend, schema, or data changes. No removal of any section or feature.
+
+### Validation (Playwright via shell, headless Chromium)
+
+For each route, scroll to top + middle + bottom, take a screenshot at 1280×1800, and open the screenshots to confirm contrast + padding:
+1. `/project/elwood-sobha-realty-dubailand` (the page in the user's screenshots).
+2. `/project/<one published apartment>` and `/project/<one published villa>` picked from the live DB so we cover both hero photo types.
+3. `/` (homepage) and `/properties` to confirm we didn't regress the existing card padding.
+4. `/dashboard` and `/broker` to spot-check that the dashboard didn't inherit the new hero CSS.
+
+Failing screenshots → patch and re-shoot. Final delivery includes the before/after screenshot pair for the project hero + quick-stats band.
+
+### Out of scope
+- No copy changes, no new CTAs, no backend/edge-function/RLS changes.
+- No restyling of cards on the homepage or listing pages — they already match the target.
+- No new contrast guard — we use the existing `data-no-contrast-guard` + `data-hero-dark` hooks already in `index.css`.
