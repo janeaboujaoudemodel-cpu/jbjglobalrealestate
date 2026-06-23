@@ -15,13 +15,13 @@ export const EmeraldButton = React.forwardRef<HTMLButtonElement, EmeraldButtonPr
     return (
       <Button
         ref={ref}
-        variant={tone === "solid" ? "primary" : "secondary"}
+        variant="primary"
         data-emerald-ok="button"
-        data-surface={tone === "solid" ? "emerald" : "champagne"}
-        data-cta={tone === "solid" ? "primary" : "outline"}
+        data-surface="emerald"
+        data-cta="primary"
         className={cn(
           "font-semibold transition-colors",
-          tone === "solid" ? "jj-surface-emerald" : "jj-surface-emerald-outline",
+          "jj-official-emerald jj-surface-emerald",
           className
         )}
         {...props}

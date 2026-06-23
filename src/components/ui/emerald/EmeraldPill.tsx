@@ -14,17 +14,12 @@ export interface EmeraldPillProps extends React.HTMLAttributes<HTMLSpanElement> 
  */
 export const EmeraldPill = React.forwardRef<HTMLSpanElement, EmeraldPillProps>(
   ({ className, variant = "solid", ...props }, ref) => {
-    const variantCls =
-      variant === "solid"
-        ? "jj-surface-emerald"
-        : variant === "soft"
-        ? "jj-surface-emerald-soft"
-        : "jj-surface-emerald-outline";
+    const variantCls = "jj-official-emerald jj-surface-emerald";
     return (
       <span
         ref={ref}
         data-emerald-ok="pill"
-        data-surface={variant === "solid" ? "emerald" : "champagne"}
+        data-surface="emerald"
         className={cn(
           "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-colors",
           variantCls,

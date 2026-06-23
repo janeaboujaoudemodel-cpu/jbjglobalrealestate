@@ -131,7 +131,7 @@ const ShortlistBadgeButton = ({
             data-surface="emerald"
             data-emerald="true"
             data-card-action="badge-shortlist"
-            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap shadow-lg ${className}`}
+            className={`${sizeClasses[size]} jj-official-emerald jj-favorite-trigger allow-white flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${className}`}
             style={emeraldButtonStyle}
           >
             <Award className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />

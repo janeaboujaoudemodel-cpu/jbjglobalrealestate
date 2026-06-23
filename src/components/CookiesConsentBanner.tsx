@@ -143,8 +143,9 @@ const CookiesConsentBanner = () => {
                     <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="jj-cta-champagne shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
-                        data-cta="champagne"
+                        className="jj-official-emerald shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        data-cta="primary"
+                        data-surface="emerald"
                       >
                         Accept All
                       </Button>

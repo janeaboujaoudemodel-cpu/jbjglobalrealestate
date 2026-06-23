@@ -6437,18 +6437,20 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --ink-emerald-1: #064E3B;
   --ink-emerald-2: #042c1c;
   --ink-emerald-3: #000000;
-  --ink-emerald-ring: rgba(16, 185, 129, 0.32);
-  --ink-emerald-accent: #6EE7B7;
+  --ink-emerald-ring: transparent;
+  --ink-emerald-accent: #FFFFFF;
   --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
   --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-emerald-ombre-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
-  --jj-emerald-light-ombre: linear-gradient(135deg, #13A078 0%, #0A6B53 56%, #064E3B 100%);
-  --jj-emerald-neon: #34D399;
+  --jj-emerald-ombre-hover: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  --jj-emerald-metallic-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
+  --jj-official-emerald-surface: var(--jj-emerald-metallic-sheen), var(--jj-emerald-ombre);
+  --jj-emerald-light-ombre: var(--jj-emerald-ombre);
+  --jj-emerald-neon: #064E3B;
   /* Brand emerald — used as ACCENT (titles, area names, contact labels, icons).
      Locked to the approved emerald/black ombre family — no flat green. */
   --emerald-ink: #064E3B;
-  --emerald-ink-soft: #0A6B53;
+  --emerald-ink-soft: #064E3B;
 }
 
 /* Title + accent utilities — opt-in only, never global. */
@@ -6473,7 +6475,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 .jj-pill-emerald {
   background-image: var(--jj-emerald-ombre) !important;
   background-color: transparent !important;
-  border: 1px solid rgba(52, 211, 153, 0.58) !important;
+  border: 0 !important;
   color: #FFFFFF !important;
   box-shadow: 0 10px 24px -14px rgba(6, 78, 59, 0.85), inset 0 1px 0 rgba(255,255,255,0.18) !important;
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, filter 200ms ease;
@@ -6481,7 +6483,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 .jj-pill-emerald svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 .jj-pill-emerald:hover {
   background-image: var(--jj-emerald-ombre-hover) !important;
-  border-color: rgba(52, 211, 153, 0.82) !important;
+  border-color: transparent !important;
   color: #FFFFFF !important;
   transform: translateY(-1px);
   box-shadow: 0 14px 30px -14px rgba(6, 78, 59, 0.95), 0 0 18px rgba(52,211,153,0.22), inset 0 1px 0 rgba(255,255,255,0.22) !important;
@@ -7168,14 +7170,14 @@ html body footer p:last-child {
    2px halo + heavy drop-shadow). Hover gives a subtle bloom only. */
 .jj-emerald-glow-wrap::before {
   inset: 0 !important;
-  padding: 1px !important;
+  padding: 0 !important;
   filter: none !important;
   opacity: 1 !important;
   animation: none !important;
-  background: linear-gradient(135deg, rgba(52,211,153,0.85), rgba(6,78,59,0.85)) !important;
+  background: var(--jj-emerald-ombre) !important;
 }
 .jj-emerald-glow-wrap:hover::before {
-  filter: drop-shadow(0 0 8px rgba(52,211,153,0.55)) !important;
+  filter: none !important;
 }
 
 /* Kill ANY border / ring / outline inside a unified emerald pill,
@@ -7214,7 +7216,7 @@ html body footer p:last-child {
   position: relative;
   isolation: isolate;
   background-image: var(--jj-emerald-ombre) !important;
-  border: 1px solid rgba(52,211,153,0.55) !important;
+  border: 0 !important;
   box-shadow:
     0 0 0 1px rgba(52,211,153,0.20),
     0 8px 22px rgba(0,0,0,0.32),
@@ -7248,9 +7250,7 @@ html body footer p:last-child {
 .jj-emerald-metallic:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 0 0 1px rgba(52,211,153,0.40),
     0 14px 32px rgba(0,0,0,0.42),
-    0 0 38px rgba(52,211,153,0.42),
     inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 .jj-emerald-metallic, .jj-emerald-metallic *,
@@ -7683,15 +7683,15 @@ html body button.jj-pill-emerald,
 html body .jj-pill-emerald[class] {
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
+  border: 0 !important;
   box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.14) !important;
 }
 html body a.jj-pill-emerald:is(:hover,:focus,:active,:focus-visible),
 html body button.jj-pill-emerald:is(:hover,:focus,:active,:focus-visible),
 html body .jj-pill-emerald[class]:is(:hover,:focus,:active,:focus-visible) {
   background-image: var(--jj-emerald-ombre-hover) !important;
-  background-color: #0a6b53 !important;
-  border-color: rgba(255,255,255,0.30) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
   box-shadow: 0 14px 30px -12px rgba(6,78,59,0.85), 0 0 18px rgba(52,211,153,0.28), inset 0 1px 0 rgba(255,255,255,0.20) !important;
 }
 html body .jj-pill-emerald[class],
@@ -9121,18 +9121,16 @@ html body :is(a,button).jj-pill-emerald:hover {
 
 html body :is(a,button,div).jj-emerald-rect-pill,
 html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus,:focus-visible,:active) {
-  --jj-locked-emerald: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-locked-emerald-sheen: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.52) 50%, rgba(255,255,255,0) 62%, rgba(255,255,255,0) 100%);
   position: relative !important;
   isolation: isolate !important;
   overflow: hidden !important;
   border-radius: 10px !important;
-  background-image: var(--jj-locked-emerald-sheen), var(--jj-locked-emerald) !important;
+  background-image: var(--jj-official-emerald-surface) !important;
   background-color: #064E3B !important;
   background-size: 220% 100%, 100% 100% !important;
   background-repeat: no-repeat !important;
   background-blend-mode: screen, normal !important;
-  border: 1px solid rgba(4,120,87,.95) !important;
+  border: 0 !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.34), 0 10px 24px -12px rgba(6,78,59,.95), 0 0 20px rgba(4,120,87,.28) !important;
@@ -9154,7 +9152,7 @@ html body :is(a,button,div).jj-emerald-rect-pill:is(:hover,:focus,:focus-visible
 
 html body .jj-history-emerald-icon {
   animation: jj-pill-emerald-sweep 4.8s ease-in-out infinite !important;
-  border: 1px solid rgba(4,120,87,.95) !important;
+  border: 0 !important;
 }
 
 /* Card favorite / shortlist / badge buttons: emerald own-surface, white glyph only. */
@@ -9162,10 +9160,12 @@ html body :is(button, a).jj-favorite-trigger,
 html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) {
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
-  border-color: rgba(255,255,255,0.35) !important;
+  border: 0 !important;
+  border-color: transparent !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
+  box-shadow: 0 10px 24px -12px rgba(6,78,59,.95), inset 0 1px 0 rgba(255,255,255,.18) !important;
 }
 html body :is(button, a).jj-favorite-trigger *,
 html body :is(button, a).jj-favorite-trigger:is(:hover,:focus,:focus-visible,:active,:disabled) * {
@@ -11273,4 +11273,124 @@ html body :where(
 .jj-cta-emerald-metallic:hover,
 .jj-cta-emerald:hover {
   background-image: var(--jj-emerald-ombre-hover) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   GATE 1 — OFFICIAL EMERALD ONLY
+   The Call button emerald is the single platform emerald. No mint,
+   light green, alternate emerald, white outline, border, or ring is
+   allowed on emerald-owned surfaces.
+   ════════════════════════════════════════════════════════════════ */
+html body :is(
+  .jj-official-emerald,
+  .jj-emerald-rect-pill,
+  .jj-favorite-trigger,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-emerald-solid,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-icon-tile-emerald,
+  .jj-history-emerald-icon,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok],
+  [data-card-action],
+  [class*="bg-green-"],
+  [class*="bg-emerald-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]) {
+  background: var(--jj-official-emerald-surface) !important;
+  background-image: var(--jj-official-emerald-surface) !important;
+  background-color: #064E3B !important;
+  background-size: 220% 100%, 100% 100% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-blend-mode: screen, normal !important;
+  border: 0 !important;
+  outline: 0 !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -12px rgba(6, 78, 59, 0.95), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+html body :is(
+  .jj-official-emerald,
+  .jj-emerald-rect-pill,
+  .jj-favorite-trigger,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-emerald-solid,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-icon-tile-emerald,
+  .jj-history-emerald-icon,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok],
+  [data-card-action],
+  [class*="bg-green-"],
+  [class*="bg-emerald-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]):is(:hover,:focus,:focus-visible,:active,:disabled) {
+  background: var(--jj-official-emerald-surface) !important;
+  background-image: var(--jj-official-emerald-surface) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is(
+  .jj-official-emerald,
+  .jj-emerald-rect-pill,
+  .jj-favorite-trigger,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-emerald-solid,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-icon-tile-emerald,
+  .jj-history-emerald-icon,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok],
+  [data-card-action],
+  [class*="bg-green-"],
+  [class*="bg-emerald-"],
+  [class*="bg-teal-"]
+):not([data-no-contrast-guard]) :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, span, p, strong, small, label, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is(.jj-favorite-trigger, [data-card-action]) :is(svg, [class*="lucide"]) {
+  fill: none !important;
+}
+
+html body :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] svg,
+html body :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg {
+  fill: #FFFFFF !important;
 }

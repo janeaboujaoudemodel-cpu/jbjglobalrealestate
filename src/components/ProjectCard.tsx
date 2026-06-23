@@ -300,8 +300,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   <span
                     data-surface="emerald"
                     data-emerald-filled
-                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase border shadow-[0_2px_8px_rgba(0,0,0,0.22)]"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: "linear-gradient(135deg, #047857 0%, #059669 100%)", borderColor: "rgba(255,255,255,0.25)" }}
+                    className="jj-official-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase"
                   >
                     <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>EOI</span>
                   </span>
@@ -310,8 +309,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   <span
                     data-surface="emerald"
                     data-emerald-filled
-                    className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide border shadow-[0_2px_8px_rgba(0,0,0,0.22)]"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: "linear-gradient(135deg, #047857 0%, #059669 100%)", borderColor: "rgba(255,255,255,0.25)" }}
+                    className="jj-official-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide"
                   >
                     <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} className={/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}>{handover}</span>
                   </span>

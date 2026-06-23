@@ -184,10 +184,10 @@ const ContinueSearching = ({
               <button
                 onClick={() => setLeadCaptureOpen(true)}
                 data-emerald="true"
-                data-surface="dark"
+                data-surface="emerald"
                 data-on-dark
                 data-allow-dark-cta
-                className="surface-dark allow-white px-4 h-9 rounded-lg border border-white/20 text-white text-xs font-semibold tracking-wide transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(6,78,59,0.65)] hover:-translate-y-0.5"
+                className="jj-official-emerald allow-white px-4 h-9 rounded-lg text-white text-xs font-semibold tracking-wide transition-all duration-300 hover:-translate-y-0.5"
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
               >
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Register Your Interest</span>
@@ -197,10 +197,10 @@ const ContinueSearching = ({
                   <button
                     aria-label="View search history"
                     data-emerald="true"
-                    data-surface="dark"
+                    data-surface="emerald"
                     data-on-dark
                     data-allow-dark-cta
-                    className="surface-dark allow-white px-3 h-9 rounded-lg border border-white/20 text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 shadow-[0_8px_22px_-12px_rgba(6,78,59,0.65)] hover:-translate-y-0.5"
+                    className="jj-official-emerald allow-white px-3 h-9 rounded-lg text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 hover:-translate-y-0.5"
                     style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
                   >
                     <Clock className="w-3.5 h-3.5 text-white allow-white" />
