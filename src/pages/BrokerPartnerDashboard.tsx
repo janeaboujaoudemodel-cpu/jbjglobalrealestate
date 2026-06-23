@@ -252,7 +252,7 @@ const BrokerPartnerDashboard = () => {
                           </div>
                           <div className="flex items-center gap-4">
                             <span className="text-xs text-white/90 hidden md:block">{list.lastUpdated}</span>
-                            <Badge className={list.status === 'active' ? 'jj-emerald-solid/20 text-emerald-400' : 'bg-amber-500/20 text-[#1A1A1A]'}>
+                            <Badge className={list.status === 'active' ? 'jj-surface-emerald-soft text-emerald-400' : 'bg-amber-500/20 text-[#1A1A1A]'}>
                               {list.status === 'active' ? 'Active' : 'Follow-up'}
                             </Badge>
                             <ChevronRight className="w-5 h-5 text-white/90" />

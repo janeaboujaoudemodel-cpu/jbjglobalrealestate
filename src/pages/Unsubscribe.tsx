@@ -63,7 +63,7 @@ const Unsubscribe = () => {
 
         {status === "success" && (
           <div className="space-y-6">
-            <div className="mx-auto w-20 h-20 rounded-full jj-emerald-solid/10 border-2 border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
+            <div className="mx-auto w-20 h-20 rounded-full jj-surface-emerald-soft border-2 border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
               <CheckCircle className="w-10 h-10 text-emerald-500" />
             </div>
             <div>

@@ -68,7 +68,7 @@ const AINeighborhoodInsightsPremium = () => {
     >
       <div className="space-y-8">
         {/* Input Section */}
-        <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30">
+        <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-teal-400 mb-4">
                 <MapPin className="h-5 w-5" />
@@ -123,17 +123,17 @@ const AINeighborhoodInsightsPremium = () => {
 
         {/* Quick Categories */}
         <div className="grid grid-cols-3 gap-3">
-            <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4 text-center">
+            <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30 p-4 text-center">
               <School className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-white/90">Education</p>
               <p className="text-sm font-semibold text-white">Schools</p>
             </Card>
-            <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4 text-center">
+            <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30 p-4 text-center">
               <Hospital className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-white/90">Healthcare</p>
               <p className="text-sm font-semibold text-white">Facilities</p>
             </Card>
-            <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4 text-center">
+            <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30 p-4 text-center">
               <Train className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-white/90">Transport</p>
               <p className="text-sm font-semibold text-white">Access</p>
@@ -156,7 +156,7 @@ const AINeighborhoodInsightsPremium = () => {
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                   >
-                    <Card className="jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30 p-6">
+                    <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30 p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div>
                           <p className="text-sm text-white/70">Neighborhood Score</p>
@@ -191,7 +191,7 @@ const AINeighborhoodInsightsPremium = () => {
                           initial={{ scale: 0.9, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                         >
-                          <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4">
+                          <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30 p-4">
                             <Icon className="h-5 w-5 mb-2 text-teal-400" />
                             <p className="text-xs text-white/70 capitalize">{key}</p>
                             <p className="text-lg font-bold text-white">{value}</p>
@@ -204,14 +204,14 @@ const AINeighborhoodInsightsPremium = () => {
 
                 {/* Lifestyle Indicators */}
                 {response.lifestyle && (
-                  <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30 p-4">
+                  <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30 p-4">
                     <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                       <Sun className="h-4 w-4 text-teal-400" />
                       Lifestyle Indicators
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {response.lifestyle.map((item: string, i: number) => (
-                        <Badge key={i} className="jj-emerald-solid/20 text-teal-400 border-[color:var(--emerald-1)]/30/30">
+                        <Badge key={i} className="jj-surface-emerald-soft text-teal-400 border-[color:var(--emerald-1)]/30/30">
                           {item}
                         </Badge>
                       ))}
@@ -223,7 +223,7 @@ const AINeighborhoodInsightsPremium = () => {
                 {response.investmentPotential && (
                   <Card className={`p-4 ${
  response.investmentPotential === 'high' 
- ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30' 
+ ? 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30' 
  : response.investmentPotential === 'medium'
  ? 'bg-amber-500/10 border-amber-500/30'
  : 'bg-[#FDFBF7]/50 border-[#1A1A1A]'
@@ -243,7 +243,7 @@ const AINeighborhoodInsightsPremium = () => {
                 )}
 
                 {/* Full Analysis */}
-                <Card className="jj-emerald-solid/20 border-[color:var(--emerald-1)]/30/30">
+                <Card className="jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Analysis</h4>
@@ -264,7 +264,7 @@ const AINeighborhoodInsightsPremium = () => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-12 text-center"
             >
-              <div className="p-6 rounded-full jj-emerald-solid/10 mb-4">
+              <div className="p-6 rounded-full jj-surface-emerald-soft mb-4">
                 <MapPin className="h-12 w-12 text-teal-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Explore</h3>

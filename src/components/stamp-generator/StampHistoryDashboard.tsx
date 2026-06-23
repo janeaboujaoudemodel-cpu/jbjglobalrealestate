@@ -346,7 +346,7 @@ function GridView({ rows, getTint, navigate }: {
                   <span className="bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">★ FAV</span>
                 )}
                 {row.exported_at && (
-                  <span className="jj-emerald-solid text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                  <span className="jj-surface-emerald text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
                     <Download size={8}/> EXPORTED
                   </span>
                 )}

@@ -52,14 +52,12 @@ export const ScrollToTopButton = () => {
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
           transition={{ duration: 0.2 }}
           onClick={scrollToTop}
-          data-surface="dark"
-          data-allow-dark-cta
-          data-no-contrast-guard
-          className="allow-white fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center border border-[#B89555]/60 text-white shadow-[0_14px_32px_-12px_rgba(6,78,59,0.55),0_0_0_1px_rgba(184,149,85,0.25)] hover:-translate-y-0.5 transition-transform duration-300"
-          style={{ backgroundColor: "#064E3B" }}
+          data-surface="emerald"
+          data-emerald-ok="button"
+          className="jj-surface-emerald fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center hover:-translate-y-0.5 transition-transform duration-300"
           aria-label="Scroll to top"
         >
-          <ArrowUpToLine className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.25} />
+          <ArrowUpToLine className="w-5 h-5" strokeWidth={2.25} />
         </motion.button>
       )}
     </AnimatePresence>

@@ -56,7 +56,7 @@ const categories = [
   { value: 'no_reply', label: 'No Reply', color: 'bg-yellow-500' },
   { value: 'follow_up', label: 'Follow-up', color: 'bg-orange-500' },
   { value: 'viewing', label: 'Viewing', color: 'bg-purple-500' },
-  { value: 'offer', label: 'Offer', color: 'jj-emerald-solid' },
+  { value: 'offer', label: 'Offer', color: 'jj-surface-emerald' },
   { value: 'closing', label: 'Closing', color: 'bg-[#EFE6D6]' },
   { value: 'nurture', label: 'Nurture', color: 'bg-pink-500' },
   { value: 'support', label: 'Support', color: 'bg-cyan-500' },

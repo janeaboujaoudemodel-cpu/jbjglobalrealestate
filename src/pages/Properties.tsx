@@ -178,7 +178,7 @@ const prioritizeOffPlan = <T extends object>(projects: T[]): T[] =>
 const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses", dotClass: null },
   { value: "Announced", label: "Announced", dotClass: "bg-pink-400" },
-  { value: "Presale (EOI)", label: "Pre-sale (EOI)", dotClass: "jj-emerald-solid" },
+  { value: "Presale (EOI)", label: "Pre-sale (EOI)", dotClass: "jj-surface-emerald" },
   { value: "Start of Sales", label: "Start of Sales", dotClass: "bg-yellow-400" },
   { value: "On Sale", label: "On Sale", dotClass: "bg-blue-400" },
   { value: "Sold Out", label: "Sold Out", dotClass: "bg-red-500" },

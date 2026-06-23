@@ -49,8 +49,8 @@ const stageBadges: Record<string, { label: string; color: string; icon: React.Re
   cv_collection: { label: 'CV Collection', color: 'bg-amber-500', icon: <FileText className="w-3 h-3" /> },
   qualification: { label: 'Qualification', color: 'bg-purple-500', icon: <CheckCircle className="w-3 h-3" /> },
   interview: { label: 'Interview', color: 'bg-[#EFE6D6]', icon: <Bot className="w-3 h-3" /> },
-  assessment: { label: 'Assessment', color: 'jj-emerald-solid', icon: <CheckCircle className="w-3 h-3" /> },
-  completed: { label: 'Completed', color: 'jj-emerald-solid', icon: <CheckCircle className="w-3 h-3" /> }
+  assessment: { label: 'Assessment', color: 'jj-surface-emerald', icon: <CheckCircle className="w-3 h-3" /> },
+  completed: { label: 'Completed', color: 'jj-surface-emerald', icon: <CheckCircle className="w-3 h-3" /> }
 };
 
 export default function HRAgentChat() {

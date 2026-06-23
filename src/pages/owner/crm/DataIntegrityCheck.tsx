@@ -300,7 +300,7 @@ function SummaryCard({
       </div>
       <div className="mt-3 h-2 rounded-full bg-[#EFE6D6] overflow-hidden">
         <div
-          className={`h-full ${allGood ? "jj-emerald-solid" : "bg-amber-500"}`}
+          className={`h-full ${allGood ? "jj-surface-emerald" : "bg-amber-500"}`}
           style={{ width: `${pct}%` }}
         />
       </div>

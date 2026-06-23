@@ -31,7 +31,7 @@ export function PhaseCard({
     switch (status) {
       case 'completed':
         return (
-          <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
+          <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
             Completed
           </Badge>
         );
@@ -78,7 +78,7 @@ export function PhaseCard({
             <div className={cn(
               "w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg",
               status === 'completed' 
-                ? "jj-emerald-solid/20 text-[color:var(--emerald-1)]"
+                ? "jj-surface-emerald-soft text-[color:var(--emerald-1)]"
                 : status === 'in_progress' || status === 'test_pending'
                   ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
                   : "bg-[#EFE6D6]/10 text-[#1A1A1A]/40"

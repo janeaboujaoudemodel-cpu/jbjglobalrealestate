@@ -117,7 +117,7 @@ export function VideoCallPanel({
             </div>
             <Badge 
               className={isCallActive 
-                ? "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30" 
+                ? "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30" 
                 : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30"
               }
             >
@@ -131,7 +131,7 @@ export function VideoCallPanel({
             <Button
               onClick={startCall}
               disabled={isCallActive || !leadPhone}
-              className="jj-emerald-solid hover:jj-emerald-solid text-white h-12"
+              className="jj-surface-emerald hover:jj-surface-emerald text-white h-12"
             >
               <Phone className="h-4 w-4 mr-2" />
               Start Call
@@ -185,7 +185,7 @@ export function VideoCallPanel({
         <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full jj-emerald-solid animate-pulse" />
+              <div className="w-3 h-3 rounded-full jj-surface-emerald animate-pulse" />
               Call in Progress
             </DialogTitle>
           </DialogHeader>

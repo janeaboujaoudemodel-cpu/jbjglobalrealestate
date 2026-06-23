@@ -35,7 +35,7 @@ const RiskBadge = ({ risk }: { risk: string }) => {
     critical: "bg-red-500/20 text-red-400 border-red-500/30",
     high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
     medium: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30",
-    low: "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30",
+    low: "jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30",
   };
   return (
     <Badge variant="outline" className={colors[risk] || colors.low}>
@@ -546,7 +546,7 @@ const ZeroTrustAuditPanel = () => {
                   </TableBody>
                 </Table>
               )}
-              <div className="mt-4 p-3 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/20 rounded-lg text-sm">
+              <div className="mt-4 p-3 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/20 rounded-lg text-sm">
                 <div className="flex items-center gap-2 text-green-400 font-medium">
                   <Lock className="w-4 h-4" />
                   Privilege Escalation Prevention Active

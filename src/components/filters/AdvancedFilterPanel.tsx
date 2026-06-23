@@ -27,7 +27,7 @@ const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '
 
 const STATUS_OPTIONS = [
   { value: 'Announced', label: 'Announced', dotClass: 'bg-pink-400' },
-  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-emerald-solid' },
+  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-surface-emerald' },
   { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-blue-400' },
   { value: 'On Sale', label: 'On Sale', dotClass: 'bg-yellow-400' },
   { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-red-500' },

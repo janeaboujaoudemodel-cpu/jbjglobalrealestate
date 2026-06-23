@@ -13,15 +13,15 @@ interface TierBadgeProps {
 const TIER_CONFIGS: Record<string, { icon: typeof Crown; color: string; bgClass: string }> = {
   // Broker tiers
   'Starter': { icon: Star, color: '#064E3B', bgClass: 'jj-emerald-soft' },
-  'Rising': { icon: Zap, color: '#064E3B', bgClass: 'jj-emerald-solid' },
-  'Performer': { icon: Award, color: '#064E3B', bgClass: 'jj-emerald-solid' },
-  'Elite': { icon: Crown, color: '#064E3B', bgClass: 'jj-emerald-solid' },
-  'Legend': { icon: Trophy, color: '#064E3B', bgClass: 'jj-emerald-solid' },
+  'Rising': { icon: Zap, color: '#064E3B', bgClass: 'jj-surface-emerald' },
+  'Performer': { icon: Award, color: '#064E3B', bgClass: 'jj-surface-emerald' },
+  'Elite': { icon: Crown, color: '#064E3B', bgClass: 'jj-surface-emerald' },
+  'Legend': { icon: Trophy, color: '#064E3B', bgClass: 'jj-surface-emerald' },
   // Client tiers
   'Explorer': { icon: Star, color: '#064E3B', bgClass: 'jj-emerald-soft' },
-  'Seeker': { icon: Zap, color: '#064E3B', bgClass: 'jj-emerald-solid' },
-  'Investor': { icon: Award, color: '#064E3B', bgClass: 'jj-emerald-solid' },
-  'Premium': { icon: Crown, color: '#064E3B', bgClass: 'jj-emerald-solid' },
+  'Seeker': { icon: Zap, color: '#064E3B', bgClass: 'jj-surface-emerald' },
+  'Investor': { icon: Award, color: '#064E3B', bgClass: 'jj-surface-emerald' },
+  'Premium': { icon: Crown, color: '#064E3B', bgClass: 'jj-surface-emerald' },
 };
 
 export function TierBadge({ tierName, tierType = 'broker', size = 'md', showIcon = true, className }: TierBadgeProps) {

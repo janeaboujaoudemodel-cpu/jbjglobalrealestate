@@ -208,7 +208,7 @@ JBJ Global Real Estate Team`
                         variant="default"
                         size="sm"
                         onClick={() => openWhatsApp(recipient)}
-                        className="jj-emerald-solid hover:jj-emerald-solid"
+                        className="jj-surface-emerald hover:jj-surface-emerald"
                       >
                         <ExternalLink className="h-4 w-4 mr-1" />
                         Open

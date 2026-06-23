@@ -218,7 +218,7 @@ const ITDepartment: React.FC = () => {
                   <p className="text-[#1A1A1A]/70 text-sm">Completed Today</p>
                   <p className="text-3xl font-bold text-[color:var(--emerald-1)]">{stats.completedToday}</p>
                 </div>
-                <div className="w-12 h-12 jj-emerald-solid/10 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 jj-surface-emerald-soft rounded-xl flex items-center justify-center">
                   <CheckCircle className="w-6 h-6 text-green-500" />
                 </div>
               </div>

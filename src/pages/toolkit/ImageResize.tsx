@@ -485,7 +485,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                 <ImageIcon className="h-6 w-6 text-[#1A1A1A]" />
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Image Resizer Pro</h1>
-              <Badge className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/20 font-medium">Free</Badge>
+              <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/20 font-medium">Free</Badge>
             </div>
             <p className="text-muted-foreground text-sm ml-[52px]">
               Resize, crop, add text, borders & merge — all processed locally in your browser.
@@ -531,7 +531,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   {/* Preview Header */}
                   <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30 bg-[#F7F2EA]/50">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full jj-emerald-solid" />
+                      <div className="w-2 h-2 rounded-full jj-surface-emerald" />
                       <span className="text-sm font-medium text-foreground">Live Preview</span>
                       {activePreset && (
                         <Badge variant="outline" className="text-xs border-[#B89555]/30 text-[#1A1A1A]-dark font-mono">

@@ -247,7 +247,7 @@ export default function FoundersAssistant() {
               >
                 <div className="relative w-10 h-10 rounded-full border-2 border-[#B89555]/50 overflow-hidden">
                   <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 jj-emerald-solid border-2 border-white rounded-full" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 jj-surface-emerald border-2 border-white rounded-full" />
                 </div>
                 <div className="hidden sm:block">
                   <h1 className="text-sm font-bold text-foreground leading-tight">Amanda Clarke</h1>

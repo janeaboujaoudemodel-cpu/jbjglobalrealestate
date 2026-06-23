@@ -174,7 +174,7 @@ function StepIndicator({ activeStep, maxStep, onStep }: { activeStep: number; ma
  current
  ? 'bg-amber-500 text-[#1A1A1A] ring-2 ring-amber-400/40'
  : done
- ? 'jj-emerald-solid/30 text-emerald-400 border border-[color:var(--emerald-1)]/30/50'
+ ? 'jj-surface-emerald-soft text-emerald-400 border border-[color:var(--emerald-1)]/30/50'
  : 'bg-[#1A1A1A] text-[#1A1A1A]/70 border border-[#B89555]/30'
  }`}>
                 {done ? <Check className="w-2.5 h-2.5" /> : step.n}
@@ -188,7 +188,7 @@ function StepIndicator({ activeStep, maxStep, onStep }: { activeStep: number; ma
             </button>
             {idx < STEPS.length - 1 && (
               <div className={`flex-shrink-0 mx-1 h-px transition-all ${
- step.n < activeStep ? 'w-4 jj-emerald-solid/60' : 'w-3 bg-[#1A1A1A]'
+ step.n < activeStep ? 'w-4 jj-surface-emerald/60' : 'w-3 bg-[#1A1A1A]'
  }`} />
             )}
           </React.Fragment>

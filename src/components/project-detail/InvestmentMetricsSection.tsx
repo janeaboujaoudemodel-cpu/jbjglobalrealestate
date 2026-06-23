@@ -39,7 +39,7 @@ export default function InvestmentMetricsSection({
         {/* ROI Estimate */}
         {roiEstimate && (
           <div className="rounded-xl border-2 border-[color:var(--emerald-1)]/30 bg-gradient-to-br from-card via-card to-emerald-50 shadow-md hover:shadow-lg hover:shadow-black/10 transition-all p-5 text-center">
-            <div className="w-12 h-12 rounded-full jj-emerald-solid/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-emerald-200">
+            <div className="w-12 h-12 rounded-full jj-surface-emerald-soft mx-auto mb-3 flex items-center justify-center ring-4 ring-emerald-200">
               <TrendingUp className="w-6 h-6 text-emerald-500" />
             </div>
             <p className="text-xs text-[#1A1A1A] font-medium uppercase tracking-wider mb-1">Estimated ROI</p>

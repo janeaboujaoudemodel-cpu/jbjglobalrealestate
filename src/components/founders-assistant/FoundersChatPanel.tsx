@@ -410,7 +410,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             <>
               <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/50 shadow-md">
                 <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
-                <span className="absolute bottom-0 right-0 w-3 h-3 jj-emerald-solid border-2 border-white rounded-full" />
+                <span className="absolute bottom-0 right-0 w-3 h-3 jj-surface-emerald border-2 border-white rounded-full" />
               </div>
               <div>
                 <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">

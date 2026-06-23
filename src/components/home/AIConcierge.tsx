@@ -322,7 +322,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                         </div>
                       </div>
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#B89555]">
-                        <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
+                        <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
                         Live
                       </span>
                     </button>
@@ -417,7 +417,7 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 {messages.length > 0 && (
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/70">
-                      <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
+                      <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
                       Call our agent now · Free
                     </span>
                     <Popover>

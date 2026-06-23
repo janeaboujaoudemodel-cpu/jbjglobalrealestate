@@ -403,10 +403,9 @@ export default function BrokerLearning() {
                   <DialogHeader>
                     <div className="flex items-start gap-3">
                       <div
-                        className="shrink-0 w-12 h-12 rounded-xl grid place-items-center border border-[rgba(255,255,255,0.18)] shadow-[0_8px_18px_-10px_rgba(6,78,59,0.85)]"
-                        data-allow-dark-cta
-                        data-no-contrast-guard
-                        style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
+                        className="jj-surface-emerald shrink-0 w-12 h-12 rounded-xl grid place-items-center"
+                        data-surface="emerald"
+                        data-emerald-ok="icon"
                       >
                         {activeModule.icon}
                       </div>
@@ -501,13 +500,12 @@ export default function BrokerLearning() {
                         <button
                           type="button"
                           onClick={() => setLessonIndex((i) => i + 1)}
-                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold border border-[rgba(255,255,255,0.18)] shadow-[0_8px_18px_-10px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(6,78,59,0.95),0_0_16px_rgba(52,211,153,0.25)] hover:brightness-110 transition-all"
-                          data-allow-dark-cta
-                          data-no-contrast-guard
-                          style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                          className="jj-surface-emerald inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-all"
+                          data-surface="emerald"
+                          data-emerald-ok="button"
                         >
-                          <span className="allow-white" style={{ color: "#FFFFFF" }}>Next lesson</span>
-                          <ChevronRight className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
+                          <span>Next lesson</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
                         </button>
                       ) : (
                         <button
@@ -516,13 +514,12 @@ export default function BrokerLearning() {
                             setModuleProgress((p) => ({ ...p, [activeModule.id]: 100 }));
                             closeModule();
                           }}
-                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold border border-[rgba(255,255,255,0.18)] shadow-[0_8px_18px_-10px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(6,78,59,0.95),0_0_16px_rgba(52,211,153,0.25)] hover:brightness-110 transition-all"
-                          data-allow-dark-cta
-                          data-no-contrast-guard
-                          style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                          className="jj-surface-emerald inline-flex items-center gap-1.5 h-10 px-4 rounded-md font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-all"
+                          data-surface="emerald"
+                          data-emerald-ok="button"
                         >
-                          <CheckCircle className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
-                          <span className="allow-white" style={{ color: "#FFFFFF" }}>Mark complete</span>
+                          <CheckCircle className="w-3.5 h-3.5" />
+                          <span>Mark complete</span>
                         </button>
                       )}
                     </div>
@@ -659,13 +656,12 @@ function TrainingCard({
             <button
               type="button"
               onClick={onStart}
-              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold border border-[rgba(255,255,255,0.18)] shadow-[0_8px_18px_-10px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(6,78,59,0.95),0_0_16px_rgba(52,211,153,0.25)] hover:brightness-110 leading-none transition-all"
-              data-allow-dark-cta
-              data-no-contrast-guard
-              style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              className="jj-surface-emerald shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 leading-none transition-all"
+              data-surface="emerald"
+              data-emerald-ok="button"
             >
-              <Play className="w-3 h-3 shrink-0" style={{ color: "#FFFFFF" }} />
-              <span className="allow-white whitespace-nowrap" style={{ color: "#FFFFFF" }}>Start</span>
+              <Play className="w-3 h-3 shrink-0" />
+              <span className="whitespace-nowrap">Start</span>
             </button>
           )}
         </div>

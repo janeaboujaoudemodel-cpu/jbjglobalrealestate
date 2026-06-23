@@ -257,7 +257,7 @@ const DeveloperCheckin = ({ developer, salesReps, activeCheckin, onCheckinComple
             </CardDescription>
           </div>
           {activeCheckin && (
-            <Badge variant="secondary" className="jj-emerald-solid/20 text-[color:var(--emerald-1)]">
+            <Badge variant="secondary" className="jj-surface-emerald-soft text-[color:var(--emerald-1)]">
               <Clock className="h-3 w-3 mr-1" />
               Checked In
             </Badge>

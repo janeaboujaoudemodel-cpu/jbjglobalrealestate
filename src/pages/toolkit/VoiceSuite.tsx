@@ -495,7 +495,7 @@ function VoiceToTextPanel() {
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
             <FileAudio className="w-5 h-5 text-[#1A1A1A]" /> Voice to Text
-            <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-[10px] ml-2">FREE</Badge>
+            <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-[10px] ml-2">FREE</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -654,7 +654,7 @@ function AudioEnhancePanel() {
           {enhancedUrl && (
             <div className="space-y-3">
               <CenteredAudioPreview src={enhancedUrl} label="✓ Enhanced Audio" />
-              <Button onClick={downloadEnhanced} className="w-full jj-emerald-solid hover:jj-emerald-solid text-white font-semibold max-w-xl mx-auto">
+              <Button onClick={downloadEnhanced} className="w-full jj-surface-emerald hover:jj-surface-emerald text-white font-semibold max-w-xl mx-auto">
                 <Download className="w-4 h-4 mr-2" /> Download Enhanced
               </Button>
             </div>
@@ -818,7 +818,7 @@ function AudioEffectsPanel() {
           {processedUrl && (
             <div className="space-y-3">
               <CenteredAudioPreview src={processedUrl} label="✓ Processed Audio" />
-              <Button onClick={downloadProcessed} className="w-full jj-emerald-solid hover:jj-emerald-solid text-white font-semibold max-w-xl mx-auto">
+              <Button onClick={downloadProcessed} className="w-full jj-surface-emerald hover:jj-surface-emerald text-white font-semibold max-w-xl mx-auto">
                 <Download className="w-4 h-4 mr-2" /> Download Processed
               </Button>
             </div>
@@ -1034,7 +1034,7 @@ function AudioTranslationPanel() {
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
             <Languages className="w-5 h-5 text-[#1A1A1A]" /> Audio Translation
-            <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-[10px] ml-2">FREE</Badge>
+            <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-[10px] ml-2">FREE</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

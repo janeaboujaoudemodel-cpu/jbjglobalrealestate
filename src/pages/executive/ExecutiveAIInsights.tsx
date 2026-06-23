@@ -127,7 +127,7 @@ const ExecutiveAIInsights = () => {
   const getCategoryColor = (category: AIInsight["category"]) => {
     switch (category) {
       case "pattern":
-        return "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30";
+        return "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30";
       case "correlation":
         return "bg-blue-500/20 text-blue-400 border-blue-500/30";
       case "delta":
@@ -303,7 +303,7 @@ const ExecutiveAIInsights = () => {
                     <li>✗ Price predictions</li>
                   </ul>
                 </div>
-                <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
+                <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
                   <h4 className="text-emerald-400 font-medium mb-2">Allowed Outputs</h4>
                   <ul className="text-sm text-white/85 space-y-1">
                     <li>✓ Pattern recognition</li>

@@ -25,7 +25,7 @@ export default function ReportCard({ report, onView, onDownload }: ReportCardPro
   const getTypeBadge = (type: Report["type"]) => {
     const styles = {
       market: "bg-blue-500/10 text-blue-600 border-blue-500/30",
-      area: "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
+      area: "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
       asset: "bg-purple-500/10 text-purple-600 border-purple-500/30",
       advisory: "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30",
     };
@@ -42,7 +42,7 @@ export default function ReportCard({ report, onView, onDownload }: ReportCardPro
     const styles = {
       uae: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30",
       dubai: "bg-blue-500/10 text-blue-600 border-blue-500/30",
-      "abu-dhabi": "jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
+      "abu-dhabi": "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30",
       sharjah: "bg-amber-500/10 text-amber-600 border-amber-500/30",
       area: "bg-purple-500/10 text-purple-600 border-purple-500/30",
       project: "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30",

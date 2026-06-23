@@ -54,7 +54,7 @@ const integrationConfigs = {
     title: 'Phone Integration',
     icon: Phone,
     color: 'text-green-500',
-    bgColor: 'jj-emerald-solid/10',
+    bgColor: 'jj-surface-emerald-soft',
     steps: [
       {
         title: 'VAPI.ai Setup',
@@ -74,7 +74,7 @@ const integrationConfigs = {
     title: 'WhatsApp Integration',
     icon: MessageSquare,
     color: 'text-emerald-500',
-    bgColor: 'jj-emerald-solid/10',
+    bgColor: 'jj-surface-emerald-soft',
     steps: [
       {
         title: 'Meta Business Account',
@@ -248,7 +248,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8"
               >
-                <div className="w-16 h-16 rounded-full jj-emerald-solid/20 flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-full jj-surface-emerald-soft flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-500" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Connected Successfully!</h3>

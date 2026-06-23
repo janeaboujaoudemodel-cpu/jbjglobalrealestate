@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 
 const PRIORITIES = [
-  { value: "low", label: "Low", color: "jj-emerald-solid/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30" },
+  { value: "low", label: "Low", color: "jj-surface-emerald/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30" },
   { value: "medium", label: "Medium", color: "bg-amber-500/15 text-amber-600 border-amber-500/30" },
   { value: "high", label: "High", color: "bg-red-500/15 text-red-600 border-red-500/30" },
   { value: "urgent", label: "Urgent", color: "bg-purple-500/15 text-purple-600 border-purple-500/30" },

@@ -165,7 +165,7 @@ const News = () => {
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
-              <div className="jj-emerald-solid rounded-full h-2" style={{ width: `${cashPct}%` }} />
+              <div className="jj-surface-emerald rounded-full h-2" style={{ width: `${cashPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-[#1A1A1A]/70">Mortgage</span>
@@ -475,7 +475,7 @@ const News = () => {
                       <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
                     </div>
                   </div>
-                  <Badge data-no-contrast-guard data-surface="emerald" className="jj-emerald-solid allow-white text-white border-0 px-3 py-1 text-xs font-bold animate-pulse" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  <Badge data-no-contrast-guard data-surface="emerald" className="jj-surface-emerald allow-white text-white border-0 px-3 py-1 text-xs font-bold animate-pulse" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                     <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>LIVE · 2026 YTD</span>
                   </Badge>
                 </div>

@@ -244,7 +244,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
                 checked={!!rule.is_active}
                 onCheckedChange={() => toggleRule(rule.id)}
                 disabled={syncing || !isOwner}
-                className="data-[state=checked]:jj-emerald-solid"
+                className="data-[state=checked]:jj-surface-emerald"
               />
             </div>
           </div>

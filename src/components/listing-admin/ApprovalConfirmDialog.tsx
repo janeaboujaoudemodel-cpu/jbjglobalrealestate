@@ -137,7 +137,7 @@ export function ApprovalConfirmDialog({
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={!isConfirmValid}
-            className="jj-emerald-solid hover:jj-emerald-solid text-white disabled:opacity-50"
+            className="jj-surface-emerald hover:jj-surface-emerald text-white disabled:opacity-50"
           >
             <Check className="h-4 w-4 mr-2" />
             {mode === "all" ? "Approve All" : "Approve Selected"} ({count})

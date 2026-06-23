@@ -393,7 +393,7 @@ const FormBuilder = () => {
                     )}
                   </div>
                 ))}
-                <Button onClick={handlePreviewSubmit} className="w-full jj-emerald-solid hover:jj-emerald-solid">
+                <Button onClick={handlePreviewSubmit} className="w-full jj-surface-emerald hover:jj-surface-emerald">
                   Submit
                 </Button>
               </CardContent>

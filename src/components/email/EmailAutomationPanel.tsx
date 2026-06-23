@@ -107,7 +107,7 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
                   <Badge className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30 text-[8px] px-1 h-3.5">Active</Badge>
                 )}
               </div>
-              <Switch checked={t.isActive} onCheckedChange={() => toggleTemplate(t.id)} className="h-4 w-7 data-[state=checked]:jj-emerald-solid" />
+              <Switch checked={t.isActive} onCheckedChange={() => toggleTemplate(t.id)} className="h-4 w-7 data-[state=checked]:jj-surface-emerald" />
             </div>
           ))}
         </div>

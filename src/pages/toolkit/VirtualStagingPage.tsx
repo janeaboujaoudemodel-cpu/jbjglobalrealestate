@@ -208,7 +208,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                   AI Virtual Staging
-                  <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">
+                  <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">
                     FREE
                   </Badge>
                 </h1>
@@ -411,7 +411,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         <Button
                           onClick={downloadResult}
                           variant="outline"
-                          className="text-white border-[color:var(--emerald-1)]/30 jj-emerald-solid/30 hover:jj-emerald-solid/50 font-semibold"
+                          className="text-white border-[color:var(--emerald-1)]/30 jj-surface-emerald-soft hover:jj-surface-emerald-soft0 font-semibold"
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Download

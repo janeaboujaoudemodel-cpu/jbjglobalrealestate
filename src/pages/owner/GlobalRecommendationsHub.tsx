@@ -249,7 +249,7 @@ export default function GlobalRecommendationsHub() {
           <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
             {pendingCount} Pending
           </Badge>
-          <Badge className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30/20">
+          <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30/20">
             {appliedCount} Applied
           </Badge>
           <Button

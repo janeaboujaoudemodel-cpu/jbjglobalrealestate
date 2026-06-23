@@ -88,7 +88,7 @@ const GovernmentMethodology: React.FC = () => {
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {GOVERNMENT_POSTURE.APPROVED_TERMS.map((term, i) => (
-                      <Badge key={i} variant="outline" className="jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
+                      <Badge key={i} variant="outline" className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
                         {term}
                       </Badge>
                     ))}

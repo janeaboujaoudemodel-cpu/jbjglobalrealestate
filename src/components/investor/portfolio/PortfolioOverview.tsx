@@ -27,7 +27,7 @@ export default function PortfolioOverview({ stats }: PortfolioOverviewProps) {
       value: stats.activeHoldings,
       icon: CheckCircle2,
       color: "text-emerald-500",
-      bg: "jj-emerald-solid/10",
+      bg: "jj-surface-emerald-soft",
     },
     {
       label: "Under Evaluation",

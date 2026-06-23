@@ -436,7 +436,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 <span className="text-xs font-semibold text-[#1A1A1A]">Bake into Export</span>
               </div>
               {exportFilterActive && (
-                <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400 jj-emerald-solid/15 border border-[color:var(--emerald-1)]/30/30 px-1.5 py-0.5 rounded-full">
+                <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400 jj-surface-emerald/15 border border-[color:var(--emerald-1)]/30/30 px-1.5 py-0.5 rounded-full">
                   <CheckCircle2 className="w-2.5 h-2.5" />
                   APPLIED
                 </span>
@@ -458,7 +458,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   }}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-bold transition-all border ${
  exportFilterActive
- ? 'jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/40 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/40'
+ ? 'jj-surface-emerald-soft text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/40 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/40'
  : 'bg-amber-500 text-[#1A1A1A] border-amber-500 hover:bg-amber-400'
  }`}
                 >

@@ -63,7 +63,7 @@ export const SyncHistoryLog = () => {
   }, []);
 
   const statusBadge = (status: string) => {
-    if (status === "completed") return <Badge className="jj-emerald-solid text-white"><CheckCircle2 className="w-3 h-3 mr-1" />Completed</Badge>;
+    if (status === "completed") return <Badge className="jj-surface-emerald text-white"><CheckCircle2 className="w-3 h-3 mr-1" />Completed</Badge>;
     if (status === "failed") return <Badge variant="destructive"><AlertCircle className="w-3 h-3 mr-1" />Failed</Badge>;
     return <Badge variant="secondary"><Clock className="w-3 h-3 mr-1" />{status}</Badge>;
   };

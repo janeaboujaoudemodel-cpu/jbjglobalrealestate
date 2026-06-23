@@ -141,7 +141,7 @@ const InterviewCompleteModal = ({
             <Label className="text-white font-medium">Decision</Label>
             <RadioGroup value={decision} onValueChange={(v) => setDecision(v as 'approve' | 'reject' | 'hold')}>
               <div className={`flex items-center space-x-3 p-3 rounded-lg border transition-colors cursor-pointer ${
- decision === 'approve' ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/50' : 'bg-background/50 border-border hover:border-[color:var(--emerald-1)]/30/30'
+ decision === 'approve' ? 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/50' : 'bg-background/50 border-border hover:border-[color:var(--emerald-1)]/30/30'
  }`}>
                 <RadioGroupItem value="approve" id="approve" />
                 <Label htmlFor="approve" className="flex items-center gap-2 cursor-pointer flex-1">
@@ -224,7 +224,7 @@ const InterviewCompleteModal = ({
             onClick={handleSubmit}
             disabled={isSubmitting}
             className={`font-semibold ${
- decision === 'approve' ? 'jj-emerald-solid hover:jj-emerald-solid' :
+ decision === 'approve' ? 'jj-surface-emerald hover:jj-surface-emerald' :
  decision === 'reject' ? 'bg-red-600 hover:bg-red-700' :
  'bg-orange-600 hover:bg-orange-700'
  }`}

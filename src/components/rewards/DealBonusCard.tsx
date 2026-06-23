@@ -81,7 +81,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                 <div className="flex items-center gap-3">
                   <div className={cn(
                     "w-12 h-12 rounded-lg flex items-center justify-center",
-                    eligibility.claimed ? "jj-emerald-solid/20" : "bg-[#EFE6D6]/20"
+                    eligibility.claimed ? "jj-surface-emerald-soft" : "bg-[#EFE6D6]/20"
                   )}>
                     <IconComponent className={cn(
                       "w-6 h-6",

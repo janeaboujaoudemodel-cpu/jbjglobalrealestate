@@ -53,7 +53,7 @@ const STATUS_CONFIG = {
   pending_review: { label: 'Pending Review', color: 'bg-orange-500', icon: Clock },
   it_processing: { label: 'IT Processing', color: 'bg-blue-500', icon: AlertCircle },
   webdev_update: { label: 'Web Dev Update', color: 'bg-purple-500', icon: Edit },
-  completed: { label: 'Completed', color: 'jj-emerald-solid', icon: CheckCircle },
+  completed: { label: 'Completed', color: 'jj-surface-emerald', icon: CheckCircle },
   rejected: { label: 'Rejected', color: 'bg-red-500', icon: XCircle }
 };
 

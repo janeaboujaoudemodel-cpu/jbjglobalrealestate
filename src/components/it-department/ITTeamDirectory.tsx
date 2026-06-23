@@ -55,7 +55,7 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
               <div className="relative">
                 {/* Status Indicator */}
                 <div className={`absolute top-3 right-3 w-3 h-3 rounded-full ${
- member.status === 'online' ? 'jj-emerald-solid' :
+ member.status === 'online' ? 'jj-surface-emerald' :
  member.status === 'away' ? 'bg-yellow-500' : 'bg-[#B89555]'
  } ring-2 ring-white z-10`} />
                 

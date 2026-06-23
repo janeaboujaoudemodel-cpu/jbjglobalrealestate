@@ -96,7 +96,7 @@ const AIInsights = () => {
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string; border: string; text: string; icon: string }> = {
-      emerald: { bg: 'jj-emerald-solid/10', border: 'border-[color:var(--emerald-1)]/30/30', text: 'text-emerald-400', icon: 'text-emerald-400' },
+      emerald: { bg: 'jj-surface-emerald-soft', border: 'border-[color:var(--emerald-1)]/30/30', text: 'text-emerald-400', icon: 'text-emerald-400' },
       amber: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-[#1A1A1A]', icon: 'text-[#1A1A1A]' },
       blue: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-400', icon: 'text-blue-400' },
     };

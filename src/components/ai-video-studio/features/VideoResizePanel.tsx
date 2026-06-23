@@ -202,7 +202,7 @@ export function VideoResizePanel() {
               <div
                 key={job.id}
                 className={`p-2.5 rounded-lg border ${
- job.status === 'completed' ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30'
+ job.status === 'completed' ? 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30'
  : job.status === 'failed' ? 'bg-red-500/10 border-red-500/30'
  : 'bg-[#1A1A1A] border-[#1A1A1A]'
  }`}
@@ -253,7 +253,7 @@ export function VideoResizePanel() {
           </Button>
           {hasCompletedJobs && (
             <Button
-              className="w-full jj-emerald-solid text-white hover:jj-emerald-solid text-xs h-9"
+              className="w-full jj-surface-emerald text-white hover:jj-surface-emerald text-xs h-9"
               onClick={downloadAll}
             >
               <Download className="w-3.5 h-3.5 mr-2" />

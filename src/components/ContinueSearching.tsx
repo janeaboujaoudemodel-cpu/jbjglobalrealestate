@@ -163,12 +163,11 @@ const ContinueSearching = ({
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div
-              className="jj-history-emerald-icon allow-white w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+              className="jj-surface-emerald w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
               data-surface="emerald"
-              data-emerald="true"
-              style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1 }}
+              data-emerald-ok="icon"
             >
-              <History className="w-5 h-5 allow-white" color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1, filter: "none" }} />
+              <History className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
@@ -183,27 +182,21 @@ const ContinueSearching = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setLeadCaptureOpen(true)}
-                data-emerald="true"
                 data-surface="emerald"
-                data-on-dark
-                data-allow-dark-cta
-                className="jj-official-emerald allow-white px-4 h-9 rounded-lg text-white text-xs font-semibold tracking-wide transition-all duration-300 hover:-translate-y-0.5"
-                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
+                data-emerald-ok="button"
+                className="jj-surface-emerald px-4 h-9 rounded-lg text-xs font-semibold tracking-wide transition-all duration-300 hover:-translate-y-0.5"
               >
-                <span className="allow-white" style={{ color: "#FFFFFF" }}>Register Your Interest</span>
+                <span>Register Your Interest</span>
               </button>
               <Popover open={historyOpen} onOpenChange={setHistoryOpen}>
                 <PopoverTrigger asChild>
                   <button
                     aria-label="View search history"
-                    data-emerald="true"
                     data-surface="emerald"
-                    data-on-dark
-                    data-allow-dark-cta
-                    className="jj-official-emerald allow-white px-3 h-9 rounded-lg text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 hover:-translate-y-0.5"
-                    style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
+                    data-emerald-ok="button"
+                    className="jj-surface-emerald px-3 h-9 rounded-lg text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300 hover:-translate-y-0.5"
                   >
-                    <Clock className="w-3.5 h-3.5 text-white allow-white" />
+                    <Clock className="w-3.5 h-3.5" />
                     View Search History
                   </button>
                 </PopoverTrigger>

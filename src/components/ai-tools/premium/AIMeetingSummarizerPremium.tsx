@@ -650,7 +650,7 @@ const AIMeetingSummarizerPremium = () => {
 
               {linkedLead ? (
                 <div className="flex items-center gap-3 p-3 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg">
-                  <div className="w-8 h-8 rounded-full jj-emerald-solid flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full jj-surface-emerald flex items-center justify-center">
                     <Check className="h-4 w-4 text-white" />
                   </div>
                   <div className="flex-1">
@@ -831,7 +831,7 @@ const AIMeetingSummarizerPremium = () => {
                     <div className="flex gap-2">
                       <Button
                         onClick={handleSaveSession}
-                        className="jj-emerald-solid hover:jj-emerald-solid text-white flex-1"
+                        className="jj-surface-emerald hover:jj-surface-emerald text-white flex-1"
                         size="sm"
                       >
                         <Save className="h-4 w-4 mr-1.5" /> Save Session
@@ -1040,7 +1040,7 @@ const AIMeetingSummarizerPremium = () => {
                         onClick={handleCreateAllTasks}
                         disabled={creatingTasks || tasksCreated}
                         className={tasksCreated
-                          ? "jj-emerald-solid text-white text-xs"
+                          ? "jj-surface-emerald text-white text-xs"
                           : "bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white text-xs"
                         }
                       >
@@ -1069,7 +1069,7 @@ const AIMeetingSummarizerPremium = () => {
                 <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }}>
                   <Card className="bg-gradient-to-br from-[#F0FDF4] to-[#ECFDF5] border border-[color:var(--emerald-1)]/30 p-5">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-7 h-7 rounded-full jj-emerald-solid flex items-center justify-center">
+                      <div className="w-7 h-7 rounded-full jj-surface-emerald flex items-center justify-center">
                         <Target className="h-3.5 w-3.5 text-white" />
                       </div>
                       <h4 className="font-semibold text-[#1A1A1A]">Key Decisions</h4>

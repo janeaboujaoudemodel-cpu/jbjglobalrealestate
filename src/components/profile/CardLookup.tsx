@@ -238,7 +238,7 @@ export function CardLookup() {
                         <Badge
                           className={
                             activity.points > 0
-                              ? "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30"
+                              ? "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30"
                               : "bg-red-500/20 text-red-400 border-red-500/30"
                           }
                         >

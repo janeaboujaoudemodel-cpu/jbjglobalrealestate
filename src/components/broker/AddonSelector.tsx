@@ -176,7 +176,7 @@ export default function AddonSelector({
                     whileHover={{ scale: isIncluded ? 1 : 1.01 }}
                     className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
  isIncluded
- ? "border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/5 cursor-default"
+ ? "border-[color:var(--emerald-1)]/30/30 jj-surface-emerald-soft cursor-default"
  : isSelected
  ? "border-[#B89555]/50 bg-[#EFE6D6]/5 cursor-pointer"
  : "border-[#1A1A1A] hover:border-[#1A1A1A] cursor-pointer"
@@ -200,7 +200,7 @@ export default function AddonSelector({
                           {addon.name}
                         </span>
                         {isIncluded && (
-                          <Badge className="jj-emerald-solid/20 text-green-400 text-xs">
+                          <Badge className="jj-surface-emerald-soft text-green-400 text-xs">
                             Included
                           </Badge>
                         )}

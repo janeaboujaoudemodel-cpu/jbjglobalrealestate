@@ -66,14 +66,14 @@ const AILeadQualificationPremium = () => {
   };
 
   const getScoreBg = (score: number) => {
-    if (score >= 80) return "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30";
+    if (score >= 80) return "jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30";
     if (score >= 60) return "bg-amber-500/10 border-amber-500/30";
     if (score >= 40) return "bg-orange-500/10 border-orange-500/30";
     return "bg-red-500/10 border-red-500/30";
   };
 
   const getLeadLabel = (score: number) => {
-    if (score >= 80) return { text: "Hot Lead", color: "text-emerald-400", bg: "jj-emerald-solid/20" };
+    if (score >= 80) return { text: "Hot Lead", color: "text-emerald-400", bg: "jj-surface-emerald-soft" };
     if (score >= 60) return { text: "Warm Lead", color: "text-[#1A1A1A]", bg: "bg-amber-500/20" };
     if (score >= 40) return { text: "Lukewarm", color: "text-orange-400", bg: "bg-orange-500/20" };
     return { text: "Cold Lead", color: "text-red-400", bg: "bg-red-500/20" };

@@ -103,7 +103,7 @@ export function TodaysMarketSignals() {
       case "medium":
         return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30 text-xs">Medium</Badge>;
       case "low":
-        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">Low</Badge>;
+        return <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">Low</Badge>;
     }
   };
 
@@ -152,7 +152,7 @@ export function TodaysMarketSignals() {
  signal.signalType === "opportunity" ? "bg-[#EFE6D6]/10 text-[#1A1A1A]" :
  signal.signalType === "supply_alert" ? "bg-amber-500/10 text-[#1A1A1A]" :
  signal.signalType === "rent_demand" ? "bg-blue-500/10 text-blue-400" :
- "jj-emerald-solid/10 text-emerald-400"
+ "jj-surface-emerald-soft text-emerald-400"
  }`}>
                     {getSignalIcon(signal.signalType)}
                   </div>

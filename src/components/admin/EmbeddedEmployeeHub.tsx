@@ -117,7 +117,7 @@ export function EmbeddedEmployeeHub() {
                   <p className="text-[#1A1A1A]/70 text-xs">Online Now</p>
                   <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{onlineCount}</p>
                 </div>
-                <div className="w-10 h-10 jj-emerald-solid/10 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 jj-surface-emerald-soft rounded-lg flex items-center justify-center">
                   <Users className="w-5 h-5 text-green-500" />
                 </div>
               </div>

@@ -362,7 +362,7 @@ const AICalendar = () => {
 
   const eventTypeColors: Record<CalendarEvent['type'], string> = {
     meeting: 'bg-blue-500',
-    viewing: 'jj-emerald-solid',
+    viewing: 'jj-surface-emerald',
     call: 'bg-purple-500',
     reminder: 'bg-yellow-500',
     other: 'bg-[#B89555]'
@@ -737,7 +737,7 @@ const AICalendar = () => {
                                 </span>
                               )}
                               {event.phoneReminder && (
-                                <span className="text-[10px] jj-emerald-solid/20 text-green-400 px-2 py-0.5 rounded">
+                                <span className="text-[10px] jj-surface-emerald-soft text-green-400 px-2 py-0.5 rounded">
                                   <Phone className="w-2 h-2 inline mr-1" /> Phone
                                 </span>
                               )}

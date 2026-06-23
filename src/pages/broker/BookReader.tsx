@@ -271,7 +271,7 @@ export default function BookReader() {
               disabled={currentIsDone || completingId === currentModule.id}
               className={
                 currentIsDone
-                  ? "jj-emerald-solid hover:jj-emerald-solid text-white border border-[color:var(--emerald-1)]/30"
+                  ? "jj-surface-emerald hover:jj-surface-emerald text-white border border-[color:var(--emerald-1)]/30"
                   : isLastBodyOfModule
                     ? "bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555]/50"
                     : "bg-[#EFE6D6] hover:bg-[#E5D8BD] text-[#1A1A1A] border border-[#B89555]/50"

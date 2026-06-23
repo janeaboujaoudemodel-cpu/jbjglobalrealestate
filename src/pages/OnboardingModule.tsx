@@ -425,7 +425,7 @@ export default function OnboardingModule() {
  currentQuestionIndex === index
  ? 'bg-[#EFE6D6] text-[#1A1A1A]'
  : answers[q.id]
- ? 'jj-emerald-solid/20 text-green-500 border border-[color:var(--emerald-1)]/30'
+ ? 'jj-surface-emerald-soft text-green-500 border border-[color:var(--emerald-1)]/30'
  : 'bg-muted text-muted-foreground'
  }`}
               >

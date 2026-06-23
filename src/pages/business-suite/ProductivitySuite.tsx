@@ -193,7 +193,7 @@ const ProductivitySuite = () => {
             </span>
             <span className="text-[#1A1A1A]/70">|</span>
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 jj-emerald-solid rounded-full" />
+              <span className="w-2 h-2 jj-surface-emerald rounded-full" />
               Free Access
             </span>
           </div>

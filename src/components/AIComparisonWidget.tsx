@@ -40,9 +40,9 @@ const AIComparisonWidget = () => {
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4" style={{ background: '#E8F2EC', border: '1px solid rgba(4,120,87,0.35)', color: '#047857' }}>
-              <Sparkles className="w-4 h-4" style={{ color: '#047857', stroke: '#047857' }} />
-              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: '#047857' }}>AI Powered</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 jj-surface-emerald-soft">
+              <Sparkles className="w-4 h-4" />
+              <span className="text-xs font-medium uppercase tracking-wider">AI Powered</span>
             </div>
             <h3 
               className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-2"
@@ -57,15 +57,11 @@ const AIComparisonWidget = () => {
             </p>
           </div>
           <div
-            data-emerald="true"
-            data-surface="dark"
-            data-on-dark
-            data-no-contrast-guard
-            data-allow-dark-cta
-            className="allow-white hidden md:flex w-16 h-16 rounded-2xl items-center justify-center shadow-lg border border-white/20"
-            style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
+            data-surface="emerald"
+            data-emerald-ok="icon"
+            className="jj-surface-emerald hidden md:flex w-16 h-16 rounded-2xl items-center justify-center shadow-lg"
           >
-            <BarChart3 className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <BarChart3 className="w-8 h-8" />
           </div>
         </div>
 

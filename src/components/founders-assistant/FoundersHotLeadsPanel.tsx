@@ -128,14 +128,14 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
     critical: 'bg-red-500/10 border-red-500/40',
     high: 'bg-orange-500/10 border-orange-500/40',
     medium: 'bg-yellow-500/10 border-yellow-500/40',
-    low: 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/40',
+    low: 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/40',
   };
 
   const urgencyBadgeStyles = {
     critical: 'bg-red-500/20 text-red-400 border-red-500/30',
     high: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
     medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    low: 'jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30',
+    low: 'jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30',
   };
 
   const handleContact = (lead: HotLead, method: 'call' | 'email' | 'whatsapp') => {

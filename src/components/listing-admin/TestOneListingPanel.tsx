@@ -541,7 +541,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
             {/* Status banners */}
             <div className="flex flex-wrap gap-2">
               {testResult.coreComplete ? (
-                <Badge className="jj-emerald-solid text-white gap-1">
+                <Badge className="jj-surface-emerald text-white gap-1">
                   <Check className="w-3 h-3" />
                   Core Complete — Ready for Bulk
                 </Badge>
@@ -657,7 +657,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                           onClick={handleApproveFromCard}
                           disabled={isApproving || isApproved}
                           size="sm"
-                          className="gap-1 jj-emerald-solid hover:jj-emerald-solid text-white"
+                          className="gap-1 jj-surface-emerald hover:jj-surface-emerald text-white"
                         >
                           {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <ThumbsUp className="w-4 h-4" />}
                           Approve
@@ -948,7 +948,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
               <div className="flex items-center gap-3 pt-2">
                 <Button
                   onClick={approveTestGate}
-                  className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
+                  className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white"
                 >
                   <Check className="w-4 h-4 mr-2" />
                   Approve & Enable Bulk Extraction

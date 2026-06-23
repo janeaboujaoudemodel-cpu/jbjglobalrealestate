@@ -112,7 +112,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             
             {/* Status Indicator */}
             <div className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center ${
- stage === 'connecting' ? 'bg-[#EFE6D6]/20' : 'jj-emerald-solid'
+ stage === 'connecting' ? 'bg-[#EFE6D6]/20' : 'jj-surface-emerald'
  } transition-colors duration-500 border-2 border-[#B89555]/40`}>
               {stage === 'connecting' ? (
                 <Loader2 className="w-4 h-4 text-[#1A1A1A]/60 animate-spin" />

@@ -381,7 +381,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
           disabled={!animationComplete}
           className={`flex items-center justify-center gap-1.5 flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
  animationComplete
- ? 'border-[color:var(--emerald-1)]/30 text-green-400 jj-emerald-solid/10 hover:jj-emerald-solid/20'
+ ? 'border-[color:var(--emerald-1)]/30 text-green-400 jj-surface-emerald-soft hover:jj-surface-emerald-soft'
  : 'border-[#B89555]/30 text-[#1A1A1A]/70 cursor-not-allowed opacity-40'
  }`}
         >

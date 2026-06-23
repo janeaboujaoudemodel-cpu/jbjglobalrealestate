@@ -59,7 +59,7 @@ export function EmbeddedHRDashboard() {
                 <p className="text-[#1A1A1A]/70 text-xs">New Hires</p>
                 <p className="text-2xl font-bold text-[color:var(--emerald-1)]">{statsLoading ? "..." : String(stats?.newHires || 0)}</p>
               </div>
-              <div className="w-10 h-10 jj-emerald-solid/10 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 jj-surface-emerald-soft rounded-lg flex items-center justify-center">
                 <UserCheck className="w-5 h-5 text-green-500" />
               </div>
             </div>

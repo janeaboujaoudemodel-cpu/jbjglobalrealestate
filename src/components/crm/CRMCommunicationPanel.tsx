@@ -276,7 +276,7 @@ const CRMCommunicationPanel = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'online': return 'jj-emerald-solid';
+      case 'online': return 'jj-surface-emerald';
       case 'away': return 'bg-amber-500';
       default: return 'bg-[#B89555]';
     }
@@ -732,7 +732,7 @@ const CRMCommunicationPanel = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 text-green-500 hover:jj-emerald-solid/10"
+                      className="h-6 w-6 text-green-500 hover:jj-surface-emerald-soft"
                       onClick={() => addMemberToChannel(member.id)}
                     >
                       <UserPlus className="h-3 w-3" />

@@ -33,7 +33,7 @@ const ExecutiveMarketSignals = () => {
   const getPressureColor = (pressure: "high" | "balanced" | "low") => {
     switch (pressure) {
       case "high":
-        return "jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30";
+        return "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30";
       case "low":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       default:
@@ -224,7 +224,7 @@ const ExecutiveMarketSignals = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
+              <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-4">
                 <h4 className="text-emerald-400 font-medium mb-2">RENT Focus Areas</h4>
                 <p className="text-white/85 text-sm">
                   Downtown Dubai, Dubai Marina, and Business Bay show strong RENT absorption. 

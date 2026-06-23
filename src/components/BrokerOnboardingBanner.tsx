@@ -181,7 +181,7 @@ const BrokerOnboardingBanner = () => {
                   to={step.link}
                   className={`relative p-3 rounded-xl border transition-all ${
  step.completed 
- ? 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30' 
+ ? 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30' 
  : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#B89555]/50 hover:bg-[#1A1A1A]'
  }`}
                 >

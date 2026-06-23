@@ -363,7 +363,7 @@ export default function LeadAccessDialog({
                     }
                     className={
                       pending.action === "restore"
-                        ? "jj-emerald-solid text-white hover:jj-emerald-solid"
+                        ? "jj-surface-emerald text-white hover:jj-surface-emerald"
                         : "bg-red-700 text-white hover:bg-red-800"
                     }
                   >

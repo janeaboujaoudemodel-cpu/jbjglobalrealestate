@@ -265,7 +265,7 @@ const CompanyCommunicationHub = () => {
   const activeDMUser = activeDM ? getTeamMemberById(activeDM) : null;
 
   const statusColors = {
-    online: 'jj-emerald-solid',
+    online: 'jj-surface-emerald',
     away: 'bg-yellow-500',
     offline: 'bg-[#B89555]',
   };

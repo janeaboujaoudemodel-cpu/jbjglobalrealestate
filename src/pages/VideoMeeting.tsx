@@ -1240,7 +1240,7 @@ const VideoMeeting = () => {
             
             {participants.map((p) => (
               <div key={p.oderId} className="flex items-center gap-3 p-3 bg-[#F7F2EA] rounded-lg group">
-                <div className="w-10 h-10 rounded-full jj-emerald-solid flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full jj-surface-emerald flex items-center justify-center text-white font-bold">
                   {p.odername.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1">
@@ -1283,7 +1283,7 @@ const VideoMeeting = () => {
               <p className="text-white text-sm whitespace-pre-line">{generateInviteText()}</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <Button onClick={shareViaWhatsApp} className="jj-emerald-solid hover:jj-emerald-solid">
+              <Button onClick={shareViaWhatsApp} className="jj-surface-emerald hover:jj-surface-emerald">
                 <Share2 className="w-4 h-4 mr-2" /> WhatsApp
               </Button>
               <Button onClick={shareViaEmail} variant="outline">
@@ -1499,7 +1499,7 @@ const VideoMeeting = () => {
                     webrtcRef.current?.toggleAudio(true);
                     toast.success('Microphone enabled');
                   }}
-                  className={audioEnabled ? "jj-emerald-solid hover:jj-emerald-solid" : "border-[#1A1A1A]"}
+                  className={audioEnabled ? "jj-surface-emerald hover:jj-surface-emerald" : "border-[#1A1A1A]"}
                 >
                   <Mic className="w-4 h-4 mr-2" />
                   {audioEnabled ? 'Mic On' : 'Enable Mic'}
@@ -1511,7 +1511,7 @@ const VideoMeeting = () => {
                     webrtcRef.current?.toggleVideo(true);
                     toast.success('Camera enabled');
                   }}
-                  className={videoEnabled ? "jj-emerald-solid hover:jj-emerald-solid" : "border-[#1A1A1A]"}
+                  className={videoEnabled ? "jj-surface-emerald hover:jj-surface-emerald" : "border-[#1A1A1A]"}
                 >
                   <Video className="w-4 h-4 mr-2" />
                   {videoEnabled ? 'Camera On' : 'Enable Camera'}

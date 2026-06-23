@@ -152,7 +152,7 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
           data-no-contrast-guard
           className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border border-[#B89555]/55 bg-[#F7F2EA] text-[#1A1A1A]"
         >
-          <span className="h-1.5 w-1.5 rounded-full jj-emerald-solid animate-pulse" />
+          <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
           Call our agent now · Free
         </span>
       </div>

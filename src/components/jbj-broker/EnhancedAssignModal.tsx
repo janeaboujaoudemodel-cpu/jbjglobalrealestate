@@ -476,7 +476,7 @@ export function EnhancedAssignModal({
                               {broker.avatar_url ? (
                                 <AvatarImage src={broker.avatar_url} />
                               ) : (
-                                <AvatarFallback className="jj-emerald-solid/20 text-emerald-400">
+                                <AvatarFallback className="jj-surface-emerald-soft text-emerald-400">
                                   <Bot className="h-5 w-5" />
                                 </AvatarFallback>
                               )}

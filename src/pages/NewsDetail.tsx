@@ -387,7 +387,7 @@ const NewsDetail = () => {
                       <span className="text-sm font-bold text-[#1A1A1A]">~{ytd2026Data.cash.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-[#EFE6D6] rounded-full h-2">
-                      <div className="jj-emerald-solid rounded-full h-2" style={{ width: `${(ytd2026Data.cash / (ytd2026Data.cash + ytd2026Data.mortgage) * 100).toFixed(0)}%` }} />
+                      <div className="jj-surface-emerald rounded-full h-2" style={{ width: `${(ytd2026Data.cash / (ytd2026Data.cash + ytd2026Data.mortgage) * 100).toFixed(0)}%` }} />
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-[#1A1A1A]/70">Mortgage</span>

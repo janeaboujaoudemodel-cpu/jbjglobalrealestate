@@ -440,7 +440,7 @@ export function FoundersEscalationsPanel() {
                                     setSelectedEscalation(event);
                                     setResolveDialogOpen(true);
                                   }}
-                                  className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                                  className="jj-surface-emerald hover:jj-surface-emerald text-white"
                                 >
                                   <CheckCircle className="h-4 w-4 mr-1" />
                                   Resolve
@@ -546,7 +546,7 @@ export function FoundersEscalationsPanel() {
             <Button variant="outline" onClick={() => setResolveDialogOpen(false)} className="border-[#B89555]/20 text-[#1A1A1A]">
               Cancel
             </Button>
-            <Button onClick={handleResolve} className="jj-emerald-solid hover:jj-emerald-solid text-white">
+            <Button onClick={handleResolve} className="jj-surface-emerald hover:jj-surface-emerald text-white">
               <CheckCircle className="h-4 w-4 mr-1" />
               Resolve Escalation
             </Button>

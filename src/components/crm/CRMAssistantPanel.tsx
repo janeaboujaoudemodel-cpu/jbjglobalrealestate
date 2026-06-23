@@ -483,7 +483,7 @@ ${COMPANY_CONTACTS.email}`;
                 className="w-10 h-10 rounded-full border-2 border-[#B89555] bg-[#FDFBF7]"
                 style={{ objectFit: "cover", objectPosition: "center 15%" }}
               />
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 jj-emerald-solid rounded-full border-2 border-white" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 jj-surface-emerald rounded-full border-2 border-white" />
             </div>
             <div>
               <span className="text-lg font-bold text-[#1A1A1A]">{ASSISTANT_IDENTITY.name}</span>
@@ -678,7 +678,7 @@ ${COMPANY_CONTACTS.email}`;
                         <Checkbox
                           checked={task.completed}
                           onCheckedChange={() => toggleTask(task.id)}
-                          className="border-muted-foreground data-[state=checked]:jj-emerald-solid"
+                          className="border-muted-foreground data-[state=checked]:jj-surface-emerald"
                         />
                         <div className="flex-1 min-w-0">
                           <p className={`text-sm ${task.completed ? "line-through text-muted-foreground" : "text-white"}`}>
@@ -747,7 +747,7 @@ ${COMPANY_CONTACTS.email}`;
                             ))}
                           </div>
                         </div>
-                        <Badge className={employee.is_active ? "jj-emerald-solid" : "bg-muted"}>
+                        <Badge className={employee.is_active ? "jj-surface-emerald" : "bg-muted"}>
                           {employee.is_active ? "Active" : "Inactive"}
                         </Badge>
                       </div>
@@ -777,7 +777,7 @@ ${COMPANY_CONTACTS.email}`;
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-lg ${
- draft.draft_type === "whatsapp" ? "jj-emerald-solid/20" : "bg-blue-500/20"
+ draft.draft_type === "whatsapp" ? "jj-surface-emerald-soft" : "bg-blue-500/20"
  }`}>
                             {draft.draft_type === "whatsapp" ? (
                               <MessageSquare className="h-4 w-4 text-green-400" />
@@ -842,7 +842,7 @@ ${COMPANY_CONTACTS.email}`;
                 <div className="flex items-center gap-2">
                   <Badge className={
                     selectedDraft.draft_type === "whatsapp" 
-                      ? "jj-emerald-solid" 
+                      ? "jj-surface-emerald" 
                       : "bg-blue-600"
                   }>
                     {selectedDraft.draft_type === "whatsapp" ? "WhatsApp" : "Email"}
@@ -871,7 +871,7 @@ ${COMPANY_CONTACTS.email}`;
                 </div>
 
                 {/* Security Note */}
-                <div className="jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3 flex items-start gap-2">
+                <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3 flex items-start gap-2">
                   <Shield className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                   <p className="text-xs text-[color:var(--emerald-on)]">
                     This message uses official JBJ Global Real Estate contact information only. 
@@ -890,7 +890,7 @@ ${COMPANY_CONTACTS.email}`;
                     Reject
                   </Button>
                   <Button 
-                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid"
+                    className="flex-1 jj-surface-emerald hover:jj-surface-emerald"
                     onClick={() => handleApproveDraft(selectedDraft)}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />

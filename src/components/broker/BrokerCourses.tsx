@@ -278,7 +278,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                           
                           <div className="flex items-center gap-2">
                             {lesson.free && (
-                              <Badge className="jj-emerald-solid/20 text-green-400 text-xs">
+                              <Badge className="jj-surface-emerald-soft text-green-400 text-xs">
                                 Free
                               </Badge>
                             )}

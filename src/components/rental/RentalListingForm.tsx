@@ -172,7 +172,7 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               <div
                 className={cn(
                   'w-12 h-0.5 mx-2',
-                  currentStep > step.number ? 'jj-emerald-solid' : 'bg-muted'
+                  currentStep > step.number ? 'jj-surface-emerald' : 'bg-muted'
                 )}
               />
             )}

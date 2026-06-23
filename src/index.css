@@ -6420,6 +6420,45 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --emerald-ink-soft: #064E3B;
 }
 
+/* Gate 1 canonical Emerald primitive.
+   Filled Emerald is owned by .jj-surface-emerald only; legacy aliases below
+   resolve to this exact contract instead of carrying independent gradients. */
+.jj-surface-emerald,
+.jj-official-emerald,
+.jj-emerald-solid,
+.jj-emerald-metallic,
+.jj-pill-emerald,
+.jj-pill-emerald-metallic,
+.jj-cta-emerald,
+.jj-cta-primary[data-surface="emerald"],
+[data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
+  background: var(--jj-official-emerald-surface) !important;
+  background-image: var(--jj-official-emerald-surface) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  outline: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -12px rgba(6, 78, 59, 0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+.jj-surface-emerald-soft,
+.jj-emerald-soft {
+  background: #F0FAF6 !important;
+  background-image: none !important;
+  border: 1px solid rgba(6, 78, 59, 0.24) !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+.jj-surface-emerald :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,svg,[class*="lucide"]),
+.jj-official-emerald :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,svg,[class*="lucide"]),
+[data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,svg,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* Title + accent utilities — opt-in only, never global. */
 .jj-title-emerald,
 .jj-title-emerald * {

@@ -627,7 +627,7 @@ export default function ScanSignPage() {
                       {signatures.some(s => s.pageIndex === index) && <Pen className="w-2.5 h-2.5 text-emerald-400" />}
                     </div>
                     {selectedPageIndex === index && (
-                      <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center jj-emerald-solid">
+                      <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center jj-surface-emerald">
                         <CheckCircle2 className="w-2.5 h-2.5 text-white" />
                       </div>
                     )}
@@ -672,7 +672,7 @@ export default function ScanSignPage() {
                     <img src={selectedPage.imageData} alt="Preview" className="max-w-full max-h-[380px] object-contain"
                       style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }} />
                     {selectedPage.rotation > 0 && (
-                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-semibold jj-emerald-solid text-white">
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-semibold jj-surface-emerald text-white">
                         {selectedPage.rotation}°
                       </div>
                     )}

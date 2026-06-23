@@ -186,7 +186,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
       case 'stale': return 'bg-red-500/10 border-red-500/30';
       case 'no_response': return 'bg-amber-500/10 border-amber-500/30';
       case 'followup_due': return 'bg-blue-500/10 border-blue-500/30';
-      case 'hot_lead': return 'jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30';
+      case 'hot_lead': return 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30';
       case 'callback': return 'bg-purple-500/10 border-purple-500/30';
       default: return 'bg-muted/30 border-border';
     }
@@ -297,7 +297,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-7 text-xs text-green-400 hover:text-[color:var(--emerald-on)] hover:jj-emerald-solid/20"
+                      className="h-7 text-xs text-green-400 hover:text-[color:var(--emerald-on)] hover:jj-surface-emerald-soft"
                       onClick={() => handleQuickAction(alert, 'call')}
                     >
                       <Phone className="h-3 w-3 mr-1" />
@@ -306,7 +306,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-7 text-xs text-emerald-400 hover:text-[color:var(--emerald-on)] hover:jj-emerald-solid/20"
+                      className="h-7 text-xs text-emerald-400 hover:text-[color:var(--emerald-on)] hover:jj-surface-emerald-soft"
                       onClick={() => handleQuickAction(alert, 'whatsapp')}
                     >
                       <MessageSquare className="h-3 w-3 mr-1" />

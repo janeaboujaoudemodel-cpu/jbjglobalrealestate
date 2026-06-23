@@ -68,7 +68,7 @@ const EVENT_CONFIG: Record<
   inquiry: {
     icon: FileText,
     color: "text-emerald-400",
-    bg: "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30",
+    bg: "jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30",
     label: "Submitted inquiry",
   },
   property_view: {
@@ -80,7 +80,7 @@ const EVENT_CONFIG: Record<
   community_view: {
     icon: MapPin,
     color: "text-teal-400",
-    bg: "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30",
+    bg: "jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30",
     label: "Viewed community",
   },
   click: {
@@ -92,7 +92,7 @@ const EVENT_CONFIG: Record<
   form_submission: {
     icon: FileText,
     color: "text-emerald-400",
-    bg: "jj-emerald-solid/10 border-[color:var(--emerald-1)]/30/30",
+    bg: "jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/30",
     label: "Form submitted",
   },
   role_selection: {

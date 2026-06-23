@@ -233,7 +233,7 @@ export function ListingApprovalCard({
             size="sm"
             onClick={onApprove}
             disabled={isProcessing}
-            className="jj-emerald-solid hover:jj-emerald-solid text-white"
+            className="jj-surface-emerald hover:jj-surface-emerald text-white"
           >
             <Check className="h-4 w-4 mr-1" />
             Approve & Publish

@@ -232,7 +232,7 @@ const BulkAssignModal = ({
 
           {/* Preview */}
           {selectedBroker && (
-            <div className="jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3">
+            <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg p-3">
               <div className="flex items-center gap-2 text-emerald-400">
                 <Check className="h-4 w-4" />
                 <span className="font-semibold">Ready to assign</span>

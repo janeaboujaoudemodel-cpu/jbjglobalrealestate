@@ -354,7 +354,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                       <div className="flex items-center gap-2">
                         {b.status === 'pending' && (
                           <>
-                            <Button size="sm" onClick={() => handleApprove(b)} className="jj-emerald-solid hover:jj-emerald-solid text-white">
+                            <Button size="sm" onClick={() => handleApprove(b)} className="jj-surface-emerald hover:jj-surface-emerald text-white">
                               <CheckCircle className="w-4 h-4 mr-1" /> Approve
                             </Button>
                             <Button size="sm" variant="destructive" onClick={() => handleReject(b)}>
@@ -713,7 +713,7 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
         <Label>Description</Label>
         <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-[#FDFBF7] border-[#B89555]/20" />
       </div>
-      <Button onClick={handleLog} disabled={submitting} className="jj-emerald-solid hover:jj-emerald-solid text-white">
+      <Button onClick={handleLog} disabled={submitting} className="jj-surface-emerald hover:jj-surface-emerald text-white">
         {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <MessageCircle className="w-4 h-4 mr-2" />}
         Log Activity
       </Button>

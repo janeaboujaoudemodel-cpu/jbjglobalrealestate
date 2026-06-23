@@ -191,9 +191,9 @@ const ListingAdminManager = () => {
 
                 {foundUser && (
                   <>
-                    <div className="p-4 jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30 rounded-lg">
+                    <div className="p-4 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 jj-emerald-solid/20 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 jj-surface-emerald-soft rounded-full flex items-center justify-center">
                           <User className="w-5 h-5 text-green-400" />
                         </div>
                         <div>
@@ -277,7 +277,7 @@ const ListingAdminManager = () => {
                     <div className="flex items-center gap-2">
                       <p className="text-white font-medium">{admin.display_name}</p>
                       {admin.is_active ? (
-                        <Badge className="jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30 text-xs">
+                        <Badge className="jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30 text-xs">
                           Active
                         </Badge>
                       ) : (

@@ -287,7 +287,7 @@ export function MessageFiltersPanel() {
                     onCheckedChange={(checked) =>
                       handleToggleActive(filter.id, checked)
                     }
-                    className="data-[state=checked]:jj-emerald-solid"
+                    className="data-[state=checked]:jj-surface-emerald"
                   />
                   <Button
                     variant="ghost"

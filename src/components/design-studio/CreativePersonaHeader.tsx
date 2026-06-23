@@ -97,7 +97,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
               </AvatarFallback>
             </Avatar>
             {/* Online indicator */}
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 jj-emerald-solid rounded-full border-4 border-white shadow-md" />
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 jj-surface-emerald rounded-full border-4 border-white shadow-md" />
           </div>
 
           <div className="flex-1">

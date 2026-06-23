@@ -227,12 +227,12 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
               </div>
-              <span className="absolute bottom-0 right-0 w-3 h-3 jj-emerald-solid border-2 border-[#0A0A0A] rounded-full animate-pulse" />
+              <span className="absolute bottom-0 right-0 w-3 h-3 jj-surface-emerald border-2 border-[#0A0A0A] rounded-full animate-pulse" />
             </div>
             <div>
               <h3 className="text-[#1A1A1A] font-semibold">Amanda Clarke</h3>
               <p className="text-[#1A1A1A]/70 text-xs flex items-center gap-1">
-                <span className="w-1.5 h-1.5 jj-emerald-solid rounded-full" />
+                <span className="w-1.5 h-1.5 jj-surface-emerald rounded-full" />
                 Available 24/7
               </p>
             </div>

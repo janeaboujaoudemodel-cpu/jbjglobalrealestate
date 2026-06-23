@@ -41,7 +41,7 @@ const draftTypeIcons: Record<string, React.ReactNode> = {
 
 const draftTypeColors: Record<string, string> = {
   email: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  whatsapp: 'jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30',
+  whatsapp: 'jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30',
   proposal: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   report: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
 };
@@ -239,7 +239,7 @@ const FoundersDraftsPanel: React.FC = () => {
                 <Button
                   size="sm"
                   onClick={() => handleSendDraft(selectedDraft)}
-                  className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                  className="jj-surface-emerald hover:jj-surface-emerald text-white"
                 >
                   <Send className="w-4 h-4 mr-1" />
                   Send

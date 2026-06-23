@@ -50,7 +50,7 @@ const AuditDiffViewer: React.FC<AuditDiffViewerProps> = ({ oldValues, newValues,
             key={key}
             className={cn(
               "grid grid-cols-3 border-b border-border last:border-b-0",
-              isAdded && "jj-emerald-solid/5",
+              isAdded && "jj-surface-emerald-soft",
               isRemoved && "bg-red-500/5",
               isChanged && !isAdded && !isRemoved && "bg-amber-500/5"
             )}

@@ -428,7 +428,7 @@ const SecurityDashboard: React.FC = () => {
                             {event.severity}
                           </Badge>
                           {event.is_resolved && (
-                            <Badge variant="default" className="text-xs jj-emerald-solid">
+                            <Badge variant="default" className="text-xs jj-surface-emerald">
                               Resolved
                             </Badge>
                           )}

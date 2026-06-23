@@ -90,7 +90,7 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
       <Button 
         onClick={handleSendWhatsApp}
         size="sm" 
-        className="jj-emerald-solid hover:jj-emerald-solid text-white font-semibold shadow-md"
+        className="jj-surface-emerald hover:jj-surface-emerald text-white font-semibold shadow-md"
         disabled={!lead.phone}
       >
         <MessageCircle className="w-4 h-4 mr-1.5" />

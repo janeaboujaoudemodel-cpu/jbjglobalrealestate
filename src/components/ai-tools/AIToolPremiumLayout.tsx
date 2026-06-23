@@ -19,7 +19,7 @@ interface AIToolPremiumLayoutProps {
 
 const colorClasses: Record<string, { bg: string; border: string; text: string; glow: string; gradient: string }> = {
   emerald: {
-    bg: "jj-emerald-solid/10",
+    bg: "jj-surface-emerald-soft",
     border: "border-[color:var(--emerald-1)]/30/30",
     text: "text-emerald-400",
     glow: "shadow-emerald-500/20",
@@ -40,7 +40,7 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; g
     gradient: "from-blue-400 to-cyan-400",
   },
   teal: {
-    bg: "jj-emerald-solid/10",
+    bg: "jj-surface-emerald-soft",
     border: "border-[color:var(--emerald-1)]/30/30",
     text: "text-teal-400",
     glow: "shadow-teal-500/20",

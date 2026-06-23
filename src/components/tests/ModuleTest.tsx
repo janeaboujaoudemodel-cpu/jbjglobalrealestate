@@ -216,7 +216,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
                   idx === currentQuestionIndex
                     ? "bg-[#EFE6D6] text-[#1A1A1A]"
                     : userAnswers[currentTest[idx].id] !== undefined
-                      ? "jj-emerald-solid/20 text-emerald-400"
+                      ? "jj-surface-emerald-soft text-emerald-400"
                       : "bg-[#FDFBF7]/10 text-white/90 hover:bg-[#FDFBF7]/20"
                 )}
               >

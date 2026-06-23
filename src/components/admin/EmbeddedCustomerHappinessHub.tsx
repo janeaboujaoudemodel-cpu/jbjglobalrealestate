@@ -262,7 +262,7 @@ export const EmbeddedCustomerHappinessHub = () => {
         return <Badge className="bg-yellow-500/20 text-yellow-600 border-yellow-500/40"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
       case "approved":
       case "resolved":
-        return <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40"><CheckCircle className="w-3 h-3 mr-1" />Approved</Badge>;
+        return <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40"><CheckCircle className="w-3 h-3 mr-1" />Approved</Badge>;
       case "rejected":
         return <Badge className="bg-red-500/20 text-red-600 border-red-500/40"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>;
       case "open":
@@ -298,7 +298,7 @@ export const EmbeddedCustomerHappinessHub = () => {
         >
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg jj-emerald-solid/10 border-2 border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg jj-surface-emerald-soft border-2 border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
                 <Ticket className="w-5 h-5 text-emerald-500" />
               </div>
               <div>
@@ -421,7 +421,7 @@ export const EmbeddedCustomerHappinessHub = () => {
               {selectedReviewIds.size > 0 && (
                 <div className="flex items-center gap-2 mt-3 p-3 bg-[#EFE6D6]/10 rounded-lg border border-[#B89555]/30">
                   <span className="text-sm font-semibold text-[#1A1A1A]">{selectedReviewIds.size} selected</span>
-                  <Button size="sm" className="jj-emerald-solid hover:jj-emerald-solid text-white" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "approve" })} disabled={bulkReviewMutation.isPending}>
+                  <Button size="sm" className="jj-surface-emerald hover:jj-surface-emerald text-white" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "approve" })} disabled={bulkReviewMutation.isPending}>
                     <ThumbsUp className="w-3 h-3 mr-1" /> Approve All
                   </Button>
                   <Button size="sm" variant="destructive" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "reject" })} disabled={bulkReviewMutation.isPending}>
@@ -680,7 +680,7 @@ export const EmbeddedCustomerHappinessHub = () => {
               <div className="flex gap-3">
                 {selectedReview.status !== "approved" && (
                   <Button
-                    className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
+                    className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white"
                     onClick={() => reviewMutation.mutate({ id: selectedReview.id, action: "approve", notes: adminNotes })}
                     disabled={reviewMutation.isPending}
                   >
@@ -756,7 +756,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                   </div>
                   <div className="flex gap-3">
                     <Button
-                      className="flex-1 jj-emerald-solid hover:jj-emerald-solid text-white"
+                      className="flex-1 jj-surface-emerald hover:jj-surface-emerald text-white"
                       onClick={() => ideaMutation.mutate({ id: selectedIdea.id, action: "approve", notes: adminNotes, userId: selectedIdea.user_id })}
                       disabled={ideaMutation.isPending}
                     >

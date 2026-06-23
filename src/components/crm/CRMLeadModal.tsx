@@ -562,7 +562,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                       {(['positive','neutral','negative'] as const).map((cat) => {
                         const items = PIPELINE_STATUSES.filter(s => s.category === cat);
                         if (!items.length) return null;
-                        const dot = cat === 'positive' ? 'jj-emerald-solid' : cat === 'negative' ? 'bg-red-500' : 'bg-blue-500';
+                        const dot = cat === 'positive' ? 'jj-surface-emerald' : cat === 'negative' ? 'bg-red-500' : 'bg-blue-500';
                         const label = cat === 'positive' ? 'Positive' : cat === 'negative' ? 'Negative' : 'Neutral';
                         return (
                           <div key={cat}>

@@ -249,7 +249,7 @@ const OwnerRecommendations = () => {
                       <div className="flex gap-2">
                         {rec.status === "pending" && (
                           <>
-                            <Button size="sm" onClick={() => updateStatus(rec.id, "applied")} className="jj-emerald-solid hover:jj-emerald-solid text-white text-xs">
+                            <Button size="sm" onClick={() => updateStatus(rec.id, "applied")} className="jj-surface-emerald hover:jj-surface-emerald text-white text-xs">
                               <CheckCircle2 className="h-3 w-3 mr-1" /> Apply
                             </Button>
                             <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "dismissed")} className="text-xs border-[#B89555]/30">

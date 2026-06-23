@@ -63,7 +63,7 @@ export default function PaymentPlanVisualization({
       value: legacyBreakdown.down_payment,
       icon: CheckCircle,
       color: "text-[color:var(--emerald-1)]",
-      bgColor: "jj-emerald-solid",
+      bgColor: "jj-surface-emerald",
       lightBg: "jj-emerald-soft",
       ringColor: "ring-emerald-200",
     });
@@ -74,7 +74,7 @@ export default function PaymentPlanVisualization({
       value: `${first.percentage}%`,
       icon: CheckCircle,
       color: "text-[color:var(--emerald-1)]",
-      bgColor: "jj-emerald-solid",
+      bgColor: "jj-surface-emerald",
       lightBg: "jj-emerald-soft",
       ringColor: "ring-emerald-200",
     });
@@ -265,7 +265,7 @@ export default function PaymentPlanVisualization({
                 <div className="absolute top-3 left-0 right-0 h-0.5 bg-gradient-to-r via-amber-500 to-blue-500" />
                 <div className="flex justify-between relative">
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full jj-emerald-solid border-4 border-white shadow-lg z-10" />
+                    <div className="w-6 h-6 rounded-full jj-surface-emerald border-4 border-white shadow-lg z-10" />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">On Booking</span>
                   </div>
                   <div className="flex flex-col items-center">

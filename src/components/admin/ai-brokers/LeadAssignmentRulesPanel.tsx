@@ -270,7 +270,7 @@ export function LeadAssignmentRulesPanel() {
                     onCheckedChange={(checked) =>
                       handleToggleActive(rule.id, checked)
                     }
-                    className="data-[state=checked]:jj-emerald-solid"
+                    className="data-[state=checked]:jj-surface-emerald"
                   />
                   <Button
                     variant="ghost"

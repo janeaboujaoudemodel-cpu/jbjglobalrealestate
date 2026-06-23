@@ -226,7 +226,7 @@ const DesignResultsGallery = ({
         {/* Success Header */}
         <div className="p-6 border-b border-[#1A1A1A] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full jj-emerald-solid/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full jj-surface-emerald-soft flex items-center justify-center">
               <CheckCircle2 className="w-5 h-5 text-green-400" />
             </div>
             <div>

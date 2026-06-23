@@ -547,7 +547,7 @@ const ListingPortalSubmit = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="max-w-2xl mx-auto text-center"
           >
-            <div className="w-20 h-20 jj-emerald-solid/15 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-[color:var(--emerald-1)]/30/30">
+            <div className="w-20 h-20 jj-surface-emerald/15 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-[color:var(--emerald-1)]/30/30">
               <CheckCircle2 className="w-10 h-10 text-[color:var(--emerald-1)]" />
             </div>
             <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">

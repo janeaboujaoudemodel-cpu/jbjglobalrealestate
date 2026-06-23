@@ -194,7 +194,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
               </div>
               <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all ${enrichment.status === "enriched" ? "jj-emerald-solid" : enrichment.status === "partial" ? "bg-amber-500" : "bg-red-400"}`}
+                  className={`h-full rounded-full transition-all ${enrichment.status === "enriched" ? "jj-surface-emerald" : enrichment.status === "partial" ? "bg-amber-500" : "bg-red-400"}`}
                   style={{ width: `${(enrichment.filled / enrichment.total) * 100}%` }}
                 />
               </div>

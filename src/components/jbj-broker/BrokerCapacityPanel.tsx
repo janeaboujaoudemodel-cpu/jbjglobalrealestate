@@ -123,7 +123,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                 <Badge
                   className={
                     broker.status === "active"
-                      ? "jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30"
+                      ? "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30"
                       : broker.status === "paused"
                       ? "bg-amber-500/20 text-amber-700 border-amber-500/30"
                       : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30"
@@ -151,7 +151,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
  ? "bg-red-500"
  : usagePercent > 70
  ? "bg-amber-500"
- : "jj-emerald-solid"
+ : "jj-surface-emerald"
  }`}
                     style={{ width: `${usagePercent}%` }}
                   />

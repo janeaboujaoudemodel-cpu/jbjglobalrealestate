@@ -47,8 +47,8 @@ export default function JessicaAIPanel() {
             </div>
             {/* Online indicator */}
             <span className="absolute bottom-1 right-1 inline-flex items-center justify-center">
-              <span className="absolute inline-flex h-3 w-3 rounded-full jj-emerald-solid opacity-70 animate-ping" />
-              <span className="relative inline-flex h-3 w-3 rounded-full jj-emerald-solid border-2 border-[#FDFBF7]" />
+              <span className="absolute inline-flex h-3 w-3 rounded-full jj-surface-emerald opacity-70 animate-ping" />
+              <span className="relative inline-flex h-3 w-3 rounded-full jj-surface-emerald border-2 border-[#FDFBF7]" />
             </span>
           </div>
 
@@ -74,7 +74,7 @@ export default function JessicaAIPanel() {
 
             <div className="mt-3 flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5 text-[11px] font-medium">
               <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/75">
-                <span className="w-1.5 h-1.5 rounded-full jj-emerald-solid" />
+                <span className="w-1.5 h-1.5 rounded-full jj-surface-emerald" />
                 Typically replies instantly
               </span>
               <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/75">

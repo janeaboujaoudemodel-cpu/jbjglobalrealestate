@@ -24,8 +24,8 @@ export function LiveVisitorIndicator({ className, showDetails = false }: LiveVis
           <Users className="w-5 h-5 text-primary" />
           {isConnected && (
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full jj-emerald-solid opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 jj-emerald-solid" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full jj-surface-emerald opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 jj-surface-emerald" />
             </span>
           )}
         </div>

@@ -62,22 +62,7 @@ const FavoriteButton = ({
     lg: "w-6 h-6",
   };
 
-  const emeraldButtonStyle: React.CSSProperties = {
-    backgroundImage: "var(--jj-emerald-ombre)",
-    backgroundColor: "#064E3B",
-    color: "#FFFFFF",
-    WebkitTextFillColor: "#FFFFFF",
-    border: "none",
-    opacity: 1,
-  };
-
-
-  const whiteIconStyle: React.CSSProperties = {
-    color: "#FFFFFF",
-    stroke: "#FFFFFF",
-    opacity: 1,
-    filter: "none",
-  };
+  const actionClass = "jj-surface-emerald jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200";
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -116,19 +101,15 @@ const FavoriteButton = ({
           <button
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
             data-surface="emerald"
-            data-emerald="true"
+            data-emerald-ok="button"
             data-card-action="favorite"
             onClick={handleFavoriteClick}
             disabled={toggleUserFavorite.isPending}
-            className={`${sizeClasses[size]} jj-official-emerald jj-favorite-trigger allow-white flex items-center justify-center rounded-full transition-all duration-200`}
-            style={emeraldButtonStyle}
+            className={`${sizeClasses[size]} ${actionClass}`}
           >
             <Heart
-              className={`${iconSizes[size]} allow-white transition-all duration-200`}
-              color="#FFFFFF"
-              stroke="#FFFFFF"
+              className={`${iconSizes[size]} transition-all duration-200`}
               fill={isFavorite ? "#FFFFFF" : "none"}
-              style={whiteIconStyle}
             />
           </button>
         </TooltipTrigger>
@@ -143,17 +124,16 @@ const FavoriteButton = ({
             <button
               aria-label={isShortlisted ? "Remove from shortlist" : "Add to shortlist"}
               data-surface="emerald"
-              data-emerald="true"
+              data-emerald-ok="button"
               data-card-action="shortlist"
               onClick={handleShortlistClick}
               disabled={toggleUserShortlist.isPending}
-              className={`${sizeClasses[size]} jj-official-emerald jj-favorite-trigger allow-white flex items-center justify-center rounded-full transition-all duration-200`}
-              style={emeraldButtonStyle}
+              className={`${sizeClasses[size]} ${actionClass}`}
             >
               {isShortlisted ? (
-                <Check className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
+                <Check className={iconSizes[size]} />
               ) : (
-                <ListPlus className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />
+                <ListPlus className={iconSizes[size]} />
               )}
             </button>
           </TooltipTrigger>

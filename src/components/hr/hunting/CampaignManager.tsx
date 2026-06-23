@@ -89,7 +89,7 @@ export function CampaignManager({ targetType }: CampaignManagerProps) {
 
   const getStatusColor = (status: CampaignStatus) => {
     switch (status) {
-      case 'active': return 'jj-emerald-solid/10 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
+      case 'active': return 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30';
       case 'paused': return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
       case 'completed': return 'bg-blue-500/10 text-blue-600 border-blue-500/30';
       default: return 'bg-muted text-muted-foreground';

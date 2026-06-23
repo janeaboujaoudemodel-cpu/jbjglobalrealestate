@@ -32,7 +32,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     pending: { color: 'bg-amber-500/20 text-amber-600 border-amber-500/30', icon: Clock, label: 'Pending' },
     manager_approved: { color: 'bg-blue-500/20 text-blue-600 border-blue-500/30', icon: CheckCircle, label: 'Manager Approved' },
     hr_approved: { color: 'bg-purple-500/20 text-purple-600 border-purple-500/30', icon: CheckCircle, label: 'HR Approved' },
-    owner_approved: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle, label: 'Approved' },
+    owner_approved: { color: 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', icon: CheckCircle, label: 'Approved' },
     rejected: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle, label: 'Rejected' },
     cancelled: { color: 'bg-muted text-muted-foreground border-border', icon: XCircle, label: 'Cancelled' },
   };
@@ -346,7 +346,7 @@ export function LeaveManagementPanel() {
                           <div className="flex items-center gap-2">
                             <Button 
                               size="sm" 
-                              className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                              className="jj-surface-emerald hover:jj-surface-emerald text-white"
                               onClick={() => handleApproval(request, true)}
                             >
                               <CheckCircle className="h-4 w-4" />

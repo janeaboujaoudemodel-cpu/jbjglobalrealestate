@@ -186,7 +186,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       subValue: `${stats.callsWeek} this week`,
       icon: Phone,
       color: "text-green-500",
-      bgColor: "jj-emerald-solid/10",
+      bgColor: "jj-surface-emerald-soft",
       trend: stats.callsToday > 0 ? "up" : "neutral"
     },
     {
@@ -195,7 +195,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       subValue: `${stats.whatsappWeek} this week`,
       icon: MessageSquare,
       color: "text-emerald-500",
-      bgColor: "jj-emerald-solid/10",
+      bgColor: "jj-surface-emerald-soft",
       trend: stats.whatsappToday > 0 ? "up" : "neutral"
     },
     {
@@ -379,7 +379,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
         <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg jj-emerald-solid/10">
+              <div className="p-2 rounded-lg jj-surface-emerald-soft">
                 <CheckCircle className="h-5 w-5 text-green-500" />
               </div>
               <div>

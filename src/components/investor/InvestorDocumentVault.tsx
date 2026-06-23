@@ -306,7 +306,7 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
                           </div>
                           <div className="flex items-center gap-2 mt-2">
                             {existingDoc.is_verified ? (
-                              <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 text-[10px]">
+                              <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30 text-[10px]">
                                 <CheckCircle2 className="w-3 h-3 mr-1" />
                                 Verified
                               </Badge>

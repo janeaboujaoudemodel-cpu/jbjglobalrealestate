@@ -120,7 +120,7 @@ function ChannelActivityPanel({ channelId }: { channelId: string }) {
 function ToneAggregatePill({ aggregate }: { aggregate: ProviderState["autoReplyAggregate"] }) {
   if (aggregate === "all_on") {
     return (
-      <Badge className="jj-emerald-solid text-white border-[color:var(--emerald-1)]/30">
+      <Badge className="jj-surface-emerald text-white border-[color:var(--emerald-1)]/30">
         <Sparkles className="h-3 w-3 mr-1" /> Reply tone: Active
       </Badge>
     );
@@ -161,7 +161,7 @@ export default function ChannelTile({
   const statusPill = (() => {
     if (status === "connected") {
       return (
-        <Badge className="jj-emerald-solid text-white border-[color:var(--emerald-1)]/30">
+        <Badge className="jj-surface-emerald text-white border-[color:var(--emerald-1)]/30">
           <CheckCircle2 className="h-3 w-3 mr-1" /> Connected
         </Badge>
       );

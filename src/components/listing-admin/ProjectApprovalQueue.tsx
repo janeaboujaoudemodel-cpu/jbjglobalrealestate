@@ -1096,7 +1096,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     size="sm"
                     onClick={showApproveSelectedConfirmation}
                     disabled={isBulkProcessing || isLoading}
-                    className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                    className="jj-surface-emerald hover:jj-surface-emerald text-white"
                   >
                     <CheckSquare className="h-4 w-4 mr-2" />
                     Approve Selected ({selectedIds.size})
@@ -1108,7 +1108,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                      size="sm"
                      onClick={showApproveAllConfirmation}
                      disabled={isBulkProcessing || isLoading}
-                     className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                     className="jj-surface-emerald hover:jj-surface-emerald text-white"
                    >
                      <Check className="h-4 w-4 mr-2" />
                      Approve ALL ({(totalCount ?? 0).toLocaleString()})
@@ -1421,7 +1421,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   {selectedImport.is_new_project ? (
-                    <Badge className="jj-emerald-solid">New Project</Badge>
+                    <Badge className="jj-surface-emerald">New Project</Badge>
                   ) : (
                     <Badge className="bg-blue-500">Update Existing</Badge>
                   )}
@@ -1680,7 +1680,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   <Button
                     onClick={() => handleApprove(selectedImport)}
                     disabled={processingId === selectedImport.id}
-                    className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                    className="jj-surface-emerald hover:jj-surface-emerald text-white"
                   >
                     <Check className="h-4 w-4 mr-2" />
                     {selectedImport.is_new_project ? 'Approve & Create' : 'Approve as New'}

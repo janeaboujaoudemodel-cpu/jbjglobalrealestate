@@ -69,7 +69,7 @@ export function BrokerCalendarWidget() {
   const getEventTypeBadge = (type: CalendarEvent["type"]) => {
     switch (type) {
       case "viewing":
-        return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">Viewing</Badge>;
+        return <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30 text-xs">Viewing</Badge>;
       case "meeting":
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">Meeting</Badge>;
       case "call":

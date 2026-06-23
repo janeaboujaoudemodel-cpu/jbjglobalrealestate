@@ -142,7 +142,7 @@ export default function IntegrationWidgets() {
             onClick={() => navigate('/automations')}
           >
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full jj-emerald-solid animate-pulse" />
+              <div className="w-2 h-2 rounded-full jj-surface-emerald animate-pulse" />
               <span className="text-sm text-[#1A1A1A]/70">Active Automations</span>
             </div>
             <span className="text-sm font-medium text-[#B89555]">

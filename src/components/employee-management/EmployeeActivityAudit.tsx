@@ -111,7 +111,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
   };
 
   const getScoreBarColor = (score: number) => {
-    if (score >= 80) return 'jj-emerald-solid';
+    if (score >= 80) return 'jj-surface-emerald';
     if (score >= 60) return 'bg-amber-500';
     return 'bg-red-500';
   };

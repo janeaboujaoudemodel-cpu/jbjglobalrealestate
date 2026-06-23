@@ -110,17 +110,17 @@ const MyDashboardProgress = () => {
             {isCombinedMode && investorTierProgress && brokerTierProgress ? (
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 {/* Investor Path */}
-                <Card className="border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/5">
+                <Card className="border-[color:var(--emerald-1)]/30/30 jj-surface-emerald-soft">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-[color:var(--emerald-1)]">
-                      <div className="w-12 h-12 rounded-xl jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-xl jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/40 flex items-center justify-center">
                         {investorTierIcons[investorTierProgress.currentTier?.tier_name?.toLowerCase() || 'explorer'] || <Compass className="w-6 h-6" />}
                       </div>
                       Investor Path
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40 mb-4">
+                    <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40 mb-4">
                       {investorTierProgress.currentTier?.tier_name || 'Explorer'}
                     </Badge>
                     <p className="text-2xl font-bold text-foreground mb-4">
@@ -179,7 +179,7 @@ const MyDashboardProgress = () => {
                         "mb-1",
                         currentTierType === 'broker' 
                           ? 'bg-blue-500/20 text-blue-600 border-blue-500/40' 
-                          : 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40'
+                          : 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40'
                       )}>
                         {currentTierType === 'broker' ? 'Broker Path' : 'Investor Path'}
                       </Badge>

@@ -527,7 +527,7 @@ export default function DeveloperProfilePage() {
                           id="confirm-check"
                           checked={confirmChecked}
                           onCheckedChange={(v) => setConfirmChecked(v === true)}
-                          className="mt-0.5 h-5 w-5 border-[#1A1A1A]/40 data-[state=checked]:jj-emerald-solid data-[state=checked]:border-[color:var(--emerald-1)]/30 data-[state=checked]:text-white"
+                          className="mt-0.5 h-5 w-5 border-[#1A1A1A]/40 data-[state=checked]:jj-surface-emerald data-[state=checked]:border-[color:var(--emerald-1)]/30 data-[state=checked]:text-white"
                         />
                         <span className="text-sm text-[#1A1A1A] flex-1 leading-relaxed">
                           I confirm that the description, website, logo and headquarters above match the developer's official website,
@@ -538,7 +538,7 @@ export default function DeveloperProfilePage() {
                         <Button
                           disabled={!confirmChecked || confirmMutation.isPending}
                           onClick={() => confirmMutation.mutate()}
-                          className="jj-emerald-solid hover:jj-emerald-solid text-white disabled:opacity-40"
+                          className="jj-surface-emerald hover:jj-surface-emerald text-white disabled:opacity-40"
                         >
                           {confirmMutation.isPending ? "Submitting…" : "I agree & confirm"}
                         </Button>
@@ -553,7 +553,7 @@ export default function DeveloperProfilePage() {
             <Dialog open={thanksOpen} onOpenChange={setThanksOpen}>
               <DialogContent className="max-w-md bg-[#FDFBF7] border-2 border-[#B89555]/40 p-0 overflow-hidden">
                 <div className="bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] px-8 pt-10 pb-8 text-center">
-                  <div className="w-16 h-16 mx-auto rounded-full jj-emerald-solid flex items-center justify-center shadow-lg shadow-emerald-600/20 mb-5">
+                  <div className="w-16 h-16 mx-auto rounded-full jj-surface-emerald flex items-center justify-center shadow-lg shadow-emerald-600/20 mb-5">
                     <CheckCircle2 className="w-9 h-9 text-white" strokeWidth={2.5} />
                   </div>
                   <h2 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">Thank you</h2>

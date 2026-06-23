@@ -52,7 +52,7 @@ const priorityConfig: Record<
   critical: { label: "Critical", className: "bg-red-500/20 text-red-400 border-red-500/30" },
   high: { label: "High", className: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
   normal: { label: "Normal", className: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  low: { label: "Low", className: "jj-emerald-solid/20 text-green-400 border-[color:var(--emerald-1)]/30/30" },
+  low: { label: "Low", className: "jj-surface-emerald-soft text-green-400 border-[color:var(--emerald-1)]/30/30" },
 };
 
 const statusConfig: Record<
@@ -61,7 +61,7 @@ const statusConfig: Record<
 > = {
   open: { label: "Open", className: "bg-yellow-500/20 text-yellow-400", icon: AlertCircle },
   in_progress: { label: "In Progress", className: "bg-blue-500/20 text-blue-400", icon: Clock },
-  resolved: { label: "Resolved", className: "jj-emerald-solid/20 text-green-400", icon: CheckCircle },
+  resolved: { label: "Resolved", className: "jj-surface-emerald-soft text-green-400", icon: CheckCircle },
 };
 
 // Attachment item component with signed URL support
@@ -500,7 +500,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                   size="sm"
                   onClick={() => handleStatusChange("resolved")}
                   disabled={updateStatus.isPending}
-                  className="jj-emerald-solid hover:jj-emerald-solid text-white"
+                  className="jj-surface-emerald hover:jj-surface-emerald text-white"
                 >
                   {updateStatus.isPending ? (
                     <Loader2 className="w-4 h-4 animate-spin mr-2" />

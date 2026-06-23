@@ -415,8 +415,8 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
           className="flex-1 h-1.5 accent-amber-500 cursor-pointer"
         />
         <span className="text-xs text-[#1A1A1A]/70 w-8 text-right">{Math.round(volume * 100)}%</span>
-        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md jj-emerald-solid/10 border border-[color:var(--emerald-1)]/30/30">
-          <div className="w-1.5 h-1.5 rounded-full jj-emerald-solid" />
+        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30">
+          <div className="w-1.5 h-1.5 rounded-full jj-surface-emerald" />
           <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">Zero Credits</span>
         </div>
       </div>

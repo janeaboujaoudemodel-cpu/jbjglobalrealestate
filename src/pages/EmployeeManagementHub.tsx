@@ -186,7 +186,7 @@ const EmployeeManagementHub: React.FC = () => {
       hr_approved: { color: 'bg-blue-500/20 text-blue-700 border-blue-500/30', label: 'HR Approved' },
       it_processing: { color: 'bg-purple-500/20 text-purple-700 border-purple-500/30', label: 'IT Processing' },
       webdev_processing: { color: 'bg-cyan-500/20 text-cyan-700 border-cyan-500/30', label: 'Web Setup' },
-      completed: { color: 'jj-emerald-solid/20 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', label: 'Completed' },
+      completed: { color: 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30', label: 'Completed' },
       rejected: { color: 'bg-red-500/20 text-red-700 border-red-500/30', label: 'Rejected' }
     };
     const config = statusConfig[status] || { color: 'bg-[#B89555]/20 text-[#1A1A1A]/70', label: status };
@@ -422,7 +422,7 @@ const EmployeeManagementHub: React.FC = () => {
                       { label: 'HR Approved', count: 0, color: 'bg-blue-500' },
                       { label: 'IT Setup', count: stats.pendingIT, color: 'bg-purple-500' },
                       { label: 'CRM Access', count: 0, color: 'bg-cyan-500' },
-                      { label: 'Completed', count: stats.completedThisMonth, color: 'jj-emerald-solid' }
+                      { label: 'Completed', count: stats.completedThisMonth, color: 'jj-surface-emerald' }
                     ].map((stage, idx) => (
                       <React.Fragment key={stage.label}>
                         <div className="flex-1 text-center">

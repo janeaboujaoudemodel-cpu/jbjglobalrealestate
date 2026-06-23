@@ -75,7 +75,7 @@ const SERVICE_CATEGORIES = [
 ];
 
 const PRIORITY_OPTIONS = [
-  { value: "low", label: "Low", color: "jj-emerald-solid/20 text-[color:var(--emerald-1)]" },
+  { value: "low", label: "Low", color: "jj-surface-emerald-soft text-[color:var(--emerald-1)]" },
   { value: "medium", label: "Normal", color: "bg-blue-500/20 text-blue-700" },
   { value: "high", label: "High", color: "bg-orange-500/20 text-orange-700" },
   { value: "critical", label: "Critical", color: "bg-red-500/20 text-red-700" },
@@ -84,7 +84,7 @@ const PRIORITY_OPTIONS = [
 const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
   open: { label: "Open", className: "bg-yellow-500/20 text-yellow-600", icon: AlertCircle },
   in_progress: { label: "In Review", className: "bg-blue-500/20 text-blue-600", icon: Clock },
-  resolved: { label: "Resolved", className: "jj-emerald-solid/20 text-[color:var(--emerald-1)]", icon: CheckCircle },
+  resolved: { label: "Resolved", className: "jj-surface-emerald-soft text-[color:var(--emerald-1)]", icon: CheckCircle },
 };
 
 interface AttachmentFile {

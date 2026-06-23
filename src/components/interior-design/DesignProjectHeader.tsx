@@ -76,7 +76,7 @@ const getModeColors = (mode?: DesignMode) => {
       return {
         border: 'border-[color:var(--emerald-1)]/30/30',
         selectedBorder: 'border-[color:var(--emerald-1)]/30/50',
-        selectedBg: 'jj-emerald-solid/20',
+        selectedBg: 'jj-surface-emerald-soft',
         selectedText: 'text-[color:var(--emerald-on)]',
         icon: 'text-emerald-400',
       };
@@ -126,7 +126,7 @@ const DesignProjectHeader = ({
           <FileText className={`w-5 h-5 ${colors.icon}`} />
           <h3 className="text-lg font-semibold text-white">Project Details</h3>
           {hasMeasurementData && (
-            <Badge className="jj-emerald-solid/20 text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
+            <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-on)] border-[color:var(--emerald-1)]/30/30">
               Measurements Imported
             </Badge>
           )}

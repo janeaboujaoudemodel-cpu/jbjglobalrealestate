@@ -170,7 +170,7 @@ export default function FreeToolsBanner() {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 jj-emerald-solid/20 border border-[color:var(--emerald-1)]/30/50 rounded-full mb-4"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/50 rounded-full mb-4"
                 >
                   <span className="text-emerald-400 text-xs font-bold tracking-wide uppercase">Limited Time Offer</span>
                 </motion.div>

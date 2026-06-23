@@ -337,7 +337,7 @@ export const ProjectAIAnalyzer = ({
                     </div>
                     <div className="text-[color:var(--emerald-1)] text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
-                      <span className="inline-block w-2 h-2 rounded-full jj-emerald-solid animate-pulse" />
+                      <span className="inline-block w-2 h-2 rounded-full jj-surface-emerald animate-pulse" />
                       <span className="text-[color:var(--emerald-1)] text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
                     </div>
                     {sections?.rating && (

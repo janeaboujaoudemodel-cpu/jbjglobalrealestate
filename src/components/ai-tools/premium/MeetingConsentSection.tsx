@@ -189,7 +189,7 @@ const MeetingConsentSection = ({
     return (
       <Card className="bg-gradient-to-br from-emerald-50 to-green-50 border border-[color:var(--emerald-1)]/30 shadow-sm">
         <CardContent className="p-5 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full jj-emerald-solid flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-full jj-surface-emerald flex items-center justify-center flex-shrink-0">
             <ShieldCheck className="h-5 w-5 text-white" />
           </div>
           <div>

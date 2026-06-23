@@ -170,7 +170,7 @@ function getStatusBadge(unit: UnitType) {
       );
     default:
       return (
-        <Badge variant="secondary" className="gap-1 jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">
+        <Badge variant="secondary" className="gap-1 jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30">
           <CheckCircle2 className="w-3 h-3" />
           Available
         </Badge>

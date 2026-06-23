@@ -198,7 +198,7 @@ export default function CallReview() {
 
   const getScoreColor = (score: number | null) => {
     if (!score) return 'bg-muted';
-    if (score >= 80) return 'jj-emerald-solid';
+    if (score >= 80) return 'jj-surface-emerald';
     if (score >= 60) return 'bg-yellow-500';
     return 'bg-red-500';
   };

@@ -48,7 +48,7 @@ interface RotationRow {
 
 const riskBadge = (level: string | null) => {
   switch (level) {
-    case "low": return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">Low Risk</Badge>;
+    case "low": return <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30">Low Risk</Badge>;
     case "medium": return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Medium</Badge>;
     case "high": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Risk</Badge>;
     default: return <Badge variant="outline">Unknown</Badge>;
@@ -84,7 +84,7 @@ function rotationStatusBadge(row: RotationRow) {
   if (row.status === "pending") return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Not Set</Badge>;
   if (days >= row.rotation_interval_days) return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Overdue</Badge>;
   if (days >= row.alert_threshold_days) return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Due Soon</Badge>;
-  return <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">Active</Badge>;
+  return <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30">Active</Badge>;
 }
 
 export default function EncryptionAuditDashboard() {
@@ -224,7 +224,7 @@ export default function EncryptionAuditDashboard() {
       )}
 
       {/* Key Status Banner */}
-      <Card className={keyStatus.configured ? "border-[color:var(--emerald-1)]/30/30 jj-emerald-solid/5" : "border-amber-500/30 bg-amber-500/5"}>
+      <Card className={keyStatus.configured ? "border-[color:var(--emerald-1)]/30/30 jj-surface-emerald-soft" : "border-amber-500/30 bg-amber-500/5"}>
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -253,7 +253,7 @@ export default function EncryptionAuditDashboard() {
             {keyStatus.configured && (
               <div className="flex gap-2">
                 {(["crm_leads", "hr_employees", "resale_listings"] as const).map(t => (
-                  <Button key={t} onClick={() => runMigration(t)} disabled={migrating} size="sm" variant="outline" className="border-[color:var(--emerald-1)]/30/30 text-emerald-400 hover:jj-emerald-solid/10 text-xs">
+                  <Button key={t} onClick={() => runMigration(t)} disabled={migrating} size="sm" variant="outline" className="border-[color:var(--emerald-1)]/30/30 text-emerald-400 hover:jj-surface-emerald-soft text-xs">
                     {migrating ? <RefreshCw className="w-3 h-3 mr-1 animate-spin" /> : <Lock className="w-3 h-3 mr-1" />}
                     {t.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}
                   </Button>
@@ -401,7 +401,7 @@ export default function EncryptionAuditDashboard() {
                       </TableCell>
                       <TableCell>
                         {row.bucket_is_private ? (
-                          <Badge className="jj-emerald-solid/20 text-emerald-400 border-[color:var(--emerald-1)]/30/30">
+                          <Badge className="jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30">
                             <Lock className="w-3 h-3 mr-1" /> Private
                           </Badge>
                         ) : (
