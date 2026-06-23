@@ -1,39 +1,82 @@
-I will fix this as a global design-system integrity repair, not page-by-page patching.
+# Restore the approved Emerald→Black Ombre gradient (revert flattening)
 
-1. Correct the global contrast rules
-- Replace the current broken “light surface wins” override that is forcing black text into dark/emerald areas.
-- Add a final global lock so every own-background emerald/dark CTA, hero band, dark photo overlay, dark book cover, and emerald pill renders white text/icons at rest, hover, focus, active, and disabled states.
-- Keep champagne/light cards using black text only when the element’s own surface is truly light.
+## What went wrong last turn
 
-2. Remove black surfaces from hero/CTA areas
-- Convert dark/black branded CTA and dark hero surfaces to the official emerald surface instead of black.
-- Specifically fix the “Welcome back to your Command Center” band so the background and highlighted words are emerald/white, not black/gold.
-- Fix “Complete Broker Success System” and other photo hero overlays so headings, subtitles, and CTA labels are readable and white where they sit on dark/emerald/image overlays.
+In the previous pass I flattened the brand's locked ombre tokens in `src/index.css` to a solid `#064E3B`. That is a forbidden change — the only approved emerald fill across the site is the **Emerald → Black Ombre** gradient, never a flat `#064E3B`.
 
-3. Normalize all CTA pill shapes and text color
-- Make primary CTAs use one shape contract matching “Open My Dashboard”: same rectangular rounded pill, official emerald fill, white text/icons.
-- Fix secondary filled/outlined CTAs like “See What’s Included” so they do not use a mismatched oval shape or black text on emerald.
-- Enforce hover states globally so emerald CTAs never flip to black text.
+Tokens that were wrongly flattened:
+- `--jj-emerald-ombre`
+- `--jj-emerald-ombre-hover`
+- `--jj-official-emerald-surface`
+- `--jj-emerald-light-ombre`
+- `--jj-emerald-neon`
+- `--jj-emerald-metallic-sheen`
+- `--gradient-ink`
+- `--gradient-ink-hover`
+- `--emerald-ink`, `--emerald-ink-soft`
 
-4. Fix vertical sidebar rules exactly as requested
-- Main category titles such as Tools & Workspace, My Account, Properties, Insights & Guides, Services, Broker & Academy, Company & Legal stay black text.
-- Sidebar icons remain untouched.
-- Remove the emerald highlight fills, green borders, shadows, and framed treatment from the four top shortcut rows: AI Home Finder, List Your Property, Careers, Resale/Research Properties.
-- Keep those rows visually plain like normal sidebar entries, with black titles and untouched icon tiles.
-- Active sidebar section may still use emerald with white text/icons only when actually active.
+## Plan
 
-5. Fix broker library/book readability
-- Repair book cover text so dark/colored book covers use readable white/cream text, not black.
-- Ensure book titles such as Broker Training Manual, Broker Certification Guide, Broker FAQ, Market Intelligence Report, and Golden Visa UAE Guide are visible.
-- Keep gold only as foil/accent, not as unreadable title text on dark covers.
+### 1. Restore the ombre tokens (single source of truth)
 
-6. Fix auth and welcome guide emerald consistency
-- Update the login/welcome-back screen to use the emerald/champagne system for fields and buttons.
-- Make the Welcome Guide label emerald, with white text/icons when it is an emerald pill.
-- Ensure “Start the quick tour” uses official emerald with white text/icons.
+In `src/index.css` (the `:root` block around lines 6417–6435), restore the canonical Emerald → Black Ombre values (the same family already referenced later in the file at line 10593):
 
-7. Visual validation only before reporting done
-- Run Playwright screenshots at 1280×1800 after implementation.
-- Capture proof for: homepage hero/search, /ai-hub command center section, /broker-toolkit hero and library, sidebar expanded state, auth page, and welcome guide modal.
-- Check both normal and hover states for representative emerald CTAs.
-- I will not claim completion unless the screenshots visibly show white-on-emerald/dark contrast restored and the sidebar highlights removed.
+```css
+--gradient-ink:       linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+--gradient-ink-hover: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+
+--jj-emerald-ombre:        linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+--jj-emerald-ombre-hover:  linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%);
+
+--jj-official-emerald-surface: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
+--jj-emerald-light-ombre:      linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #042C1C 100%);
+--jj-emerald-neon:             linear-gradient(135deg, #0A6B53 0%, #064E3B 60%, #042C1C 100%);
+
+/* Restore the metallic top-light sheen (was zeroed-out last turn) */
+--jj-emerald-metallic-sheen:
+  linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 38%, rgba(0,0,0,0.18) 100%);
+
+/* Emerald accent (titles, area labels) stays ink-emerald */
+--emerald-ink:      #064E3B;
+--emerald-ink-soft: #0A6B53;
+```
+
+Update the comment block above these tokens so it reads "Approved Emerald → Black Ombre — solid flat green is forbidden."
+
+### 2. Keep the white-foreground lock — do NOT remove it
+
+The Gate-1 Global Emerald Lock starting at line 11154 (white text, white SVG icons, no border colour flips on hover) stays exactly as-is. The user's complaint is about the *fill*, not the foreground.
+
+The only adjustment: in the white-icon block, the rule currently sets `border-color: #FFFFFF !important` on every emerald surface. The user has explicitly banned white borders on emerald surfaces in the project memory. Change `border-color: #FFFFFF !important;` → `border-color: transparent !important;` so the ombre pill stays borderless.
+
+### 3. Kill the split-overlay rules I added last turn
+
+Remove the `::before` / `::after` neutralising blocks I appended at lines ~13224 and ~13417 (the "Kill split-color pseudo overlays" / "Kill any leftover ::after/::before split overlays on primary pills" blocks). The original metallic sheen overlay is part of the approved ombre look — those kills were the cause of the flat appearance.
+
+### 4. Sanity sweep
+
+Search the file for any other place where I substituted a flat `#064E3B` for what used to be a gradient (e.g. anywhere the value reads `background: #064E3B !important` and the surrounding selector is `.jj-cta-primary` / `.jj-pill-emerald` / `.jj-emerald-solid` / `[data-cta="primary"]`). Revert each one to `background: var(--jj-emerald-ombre)`.
+
+### 5. Visual validation (Playwright, 1280×1800)
+
+After the edits, run a fresh Playwright pass and capture screenshots on:
+
+1. `/` — hero CTA pills (Explore Properties, AI Home Finder, Get Started), header mode chip, AED/filter/favourite pills
+2. `/auth` — Sign In pill
+3. `/owner` (Command Center) — "Welcome back" band + primary CTAs
+4. `/ai-hub` — emerald band + tool tiles
+5. `/broker-portal` — sidebar active tile + primary CTAs
+
+Each screenshot must visibly show:
+- Pill fill = Emerald → Black Ombre (deeper toward the bottom-right corner, with the subtle top-light sheen)
+- Text + icons = pure white at rest **and** hover
+- No white border ring on emerald pills
+- No flat half-and-half / split appearance
+
+Only after the screenshots confirm all five surfaces will I report done.
+
+## Files touched
+
+- `src/index.css` — restore ombre tokens, change `border-color` to `transparent`, delete the two split-overlay kill blocks I appended last turn.
+
+No other files change.
