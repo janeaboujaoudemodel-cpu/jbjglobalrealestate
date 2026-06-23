@@ -1,37 +1,39 @@
-I will stop patching individual pages and fix this at the reusable design-system layer.
+I will fix this as a global design-system integrity repair, not page-by-page patching.
 
-Implementation plan:
+1. Correct the global contrast rules
+- Replace the current broken “light surface wins” override that is forcing black text into dark/emerald areas.
+- Add a final global lock so every own-background emerald/dark CTA, hero band, dark photo overlay, dark book cover, and emerald pill renders white text/icons at rest, hover, focus, active, and disabled states.
+- Keep champagne/light cards using black text only when the element’s own surface is truly light.
 
-1. Create one canonical Emerald pill/CTA contract
-- Every filled action pill must use one solid official emerald surface only.
-- No split backgrounds, no half-dark/half-light overlays, no shine bands that look like a second color.
-- Normal, hover, focus, active, and disabled states keep the same emerald identity.
-- Text and icons inside these pills are forced white in every state.
+2. Remove black surfaces from hero/CTA areas
+- Convert dark/black branded CTA and dark hero surfaces to the official emerald surface instead of black.
+- Specifically fix the “Welcome back to your Command Center” band so the background and highlighted words are emerald/white, not black/gold.
+- Fix “Complete Broker Success System” and other photo hero overlays so headings, subtitles, and CTA labels are readable and white where they sit on dark/emerald/image overlays.
 
-2. Fix the Button primitive once
-- Update `src/components/ui/button.tsx` so all primary/default/destructive/AI action buttons use the canonical emerald class.
-- Prevent legacy classes from injecting divided gradients or dark side panels into buttons like “Explore Properties” and “AI Home Finder”.
-- Keep secondary/outline buttons champagne unless they are being used as filled actions.
+3. Normalize all CTA pill shapes and text color
+- Make primary CTAs use one shape contract matching “Open My Dashboard”: same rectangular rounded pill, official emerald fill, white text/icons.
+- Fix secondary filled/outlined CTAs like “See What’s Included” so they do not use a mismatched oval shape or black text on emerald.
+- Enforce hover states globally so emerald CTAs never flip to black text.
 
-3. Add a global CSS guard for bad pill patterns
-- In `src/index.css`, add a scoped rule for action pills/buttons that removes pseudo-element split panels, background-size gradients, before/after overlays, and mixed green/dark/gray treatments.
-- Apply to frontend and backend CTA surfaces through shared selectors: `button`, links with button roles/classes, `[data-cta="primary"]`, `[data-surface="emerald"]`, `.jj-cta-primary`, `.jj-cta-emerald`, `.jj-pill-emerald`, `.jj-pill-emerald-metallic`.
-- Explicitly force descendants and SVG icons to white.
+4. Fix vertical sidebar rules exactly as requested
+- Main category titles such as Tools & Workspace, My Account, Properties, Insights & Guides, Services, Broker & Academy, Company & Legal stay black text.
+- Sidebar icons remain untouched.
+- Remove the emerald highlight fills, green borders, shadows, and framed treatment from the four top shortcut rows: AI Home Finder, List Your Property, Careers, Resale/Research Properties.
+- Keep those rows visually plain like normal sidebar entries, with black titles and untouched icon tiles.
+- Active sidebar section may still use emerald with white text/icons only when actually active.
 
-4. Preserve allowed active segmented controls
-- Keep square-foot / square-meter style segmented controls allowed to show a slightly lighter active emerald so the active selection is visible.
-- Limit that exception to segmented/toggle components only, not normal CTA pills.
+5. Fix broker library/book readability
+- Repair book cover text so dark/colored book covers use readable white/cream text, not black.
+- Ensure book titles such as Broker Training Manual, Broker Certification Guide, Broker FAQ, Market Intelligence Report, and Golden Visa UAE Guide are visible.
+- Keep gold only as foil/accent, not as unreadable title text on dark covers.
 
-5. Remove the specific split-color source shown in the screenshot
-- Find the rule/component creating the dark vertical half-panel inside “Explore Properties” and “AI Home Finder”.
-- Replace it with the same canonical emerald pill system instead of a page-level patch.
+6. Fix auth and welcome guide emerald consistency
+- Update the login/welcome-back screen to use the emerald/champagne system for fields and buttons.
+- Make the Welcome Guide label emerald, with white text/icons when it is an emerald pill.
+- Ensure “Start the quick tour” uses official emerald with white text/icons.
 
-6. Sweep remaining non-official greens
-- Replace remaining UI green button shades such as medium emerald, teal, mint, lime, and alternate green gradients with the official emerald token.
-- Keep semantic data colors only where they are not CTA/action fills.
-
-7. Visual validation only
-- Use Playwright screenshots at 1280×1800 after implementation.
-- Validate `/favorites` specifically for “Explore Properties” and “AI Home Finder”: one emerald pill, white text, white icons, no split sections, normal and hover states.
-- Validate representative frontend header controls and backend/admin pages to confirm the global system applies consistently.
-- I will not claim completion unless the screenshots visually show the pills fixed.
+7. Visual validation only before reporting done
+- Run Playwright screenshots at 1280×1800 after implementation.
+- Capture proof for: homepage hero/search, /ai-hub command center section, /broker-toolkit hero and library, sidebar expanded state, auth page, and welcome guide modal.
+- Check both normal and hover states for representative emerald CTAs.
+- I will not claim completion unless the screenshots visibly show white-on-emerald/dark contrast restored and the sidebar highlights removed.
