@@ -101,8 +101,8 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
       <div className="relative rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 p-6 md:p-7 shadow-sm">
         <div className="flex items-start gap-3 mb-4">
           <span
-            className="inline-flex w-9 h-9 items-center justify-center rounded-lg ring-1 ring-[#B89555]/50"
-            style={{ background: "linear-gradient(135deg,#F7ECD0 0%,#EFE6D6 100%)" }}
+            data-emerald-action="true"
+            className="jj-emerald-action inline-flex w-9 h-9 items-center justify-center rounded-lg"
           >
             {icon}
           </span>
@@ -111,7 +111,10 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
             <h4 className="text-lg md:text-xl font-semibold text-[#1A1A1A] leading-tight truncate">{title}</h4>
           </div>
           {proxyBadge && (
-            <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-[#EFE6D6] text-[#1A1A1A] ring-1 ring-[#B89555]/40">
+            <span
+              data-emerald-action="true"
+              className="jj-emerald-action shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide"
+            >
               {proxyBadge}
             </span>
           )}

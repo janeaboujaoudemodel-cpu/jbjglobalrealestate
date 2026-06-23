@@ -1,45 +1,74 @@
-I will fix the rejected green/black-content violations by making the real-estate UI use only the approved emerald system: dark metallic emerald (#064E3B / gradient-to-black where the existing official primitive requires it) with pure white text/icons inside.
+## Global Emerald + White Contrast Lock — Final Pass
 
-Plan:
+Root cause of the persistent failures: previous attempts added scoped overrides on individual components, but the cascade kept losing because (a) child elements set their own `text-*` / `bg-*` classes with higher specificity, (b) the dark metallic gradient was applied as `background-color` without overriding the inner gradient layers, and (c) Tailwind arbitrary `bg-[#0E8A66]` and component-level inline styles weren't all repainted. I'll fix it with one decisive global guard plus targeted component swaps, then validate every flagged area with screenshots.
 
-1. Lock the official emerald CTA primitive globally
-- Update the global CTA contract so `.jj-cta-primary`, `.jj-pill-emerald-metallic`, `.jj-official-emerald`, `data-cta="primary"`, and selected active tabs/chips all render:
-  - approved emerald/dark-metallic emerald fill
-  - no rejected `#0E8A66` flat fill as the main CTA color
-  - pure white text and pure white SVG/icon strokes/fills
-- Convert the old `.jj-cta-gold-metallic` primitive usage for action CTAs/forms to the emerald metallic contract, because it is currently still gold/ink and conflicts with this request.
-- Strengthen the final cascade guard so hardcoded `bg-[#0E8A66]` and inline emerald-style elements are repainted to approved emerald and descendants become pure white unless explicitly excluded for non-action surfaces.
+### 1. Single global emerald lock (src/index.css)
 
-2. Fix specific project page violations shown in the screenshots
-- `Payment Plan (60 / 40)` active segmented button: emerald fill + pure white label/icon.
-- `All nearby` and nearby-map active chips: approved emerald fill + pure white count/text; inactive chips stay champagne/ink.
-- `Download Brochure`, `Open in Maps`, `View All Projects`, `Report an issue`, `Request a Call Back`, `Request Mortgage Introduction`, `Request Consultation`, and related real-estate CTAs: approved emerald + pure white text/icons.
-- `Noticed something incorrect?` warning icon tile: convert the icon tile to emerald fill with pure white icon.
-- Recommended Projects header star and `View All` button: emerald fill + pure white content where the element is acting as an accent/action.
-- Developer-info action/link area: ensure developer-action buttons use the same emerald metallic treatment with pure white content.
+Replace the prior layered overrides with one final `@layer utilities` block, scoped under `html body` for maximum specificity, that covers every selector currently rendering as flat green or with dark text on emerald:
 
-3. Fix forms and picker controls
-- Convert active multi-select chips in consultation/register-interest forms from champagne/gold/ink to emerald fill + pure white content.
-- Ensure phone/country picker trigger and submit buttons keep pure white text/icons on emerald/dark fill.
-- Preserve form fields themselves as champagne/ink; only active choices, icons, and action buttons become emerald.
+```css
+html body :is(
+  .jj-emerald-action, [data-emerald-action="true"],
+  .jj-official-emerald, .jj-pill-emerald-metallic,
+  .jj-cta-gold-metallic, .jj-cta-primary,
+  [data-cta="primary"][data-surface="emerald"],
+  [data-surface="emerald"][data-emerald-ok],
+  .bg-\[\#0E8A66\], .bg-\[\#0B6F52\], .bg-\[\#064E3B\]
+) {
+  background-image: linear-gradient(135deg,#0A6B53 0%,#064E3B 55%,#04231A 100%) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+html body :is(<same selectors>) :where(*, svg, span, strong, p, h1,h2,h3,h4) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  fill: currentColor !important;
+  stroke: #FFFFFF !important;
+}
+html body :is(<same selectors>) :where(svg [fill]:not([fill="none"])) { fill: #FFFFFF !important; }
+```
 
-4. Fix global icon color issues without breaking content readability
-- Apply a scoped project/property/forms icon rule so decorative/action icons in cards and sections are emerald by default.
-- Any icon inside an emerald-filled tile/button remains pure white.
-- Mortgage calculator header/icon tiles and summary card icons will use emerald instead of black/gold, while text remains readable on champagne backgrounds.
+This single block kills: gold "Expert Consultation" badge, green country-picker pills, green "View All" / "Report Issue" / "Download Report" / "Request Mortgage Introduction" / mortgage Ask chat-send / mortgage icon tiles / Recommended Projects star tile / Noticed-Something-Incorrect tile / Pros header / Dubai Market Intelligence header icon + YTD growth arrow tile / Off-Plan-vs-Secondary + Cash-vs-Mortgage bars / Recommended Projects "From AED" + handover pills.
 
-5. Fix developer-logo/card consistency
-- Keep project card developer logo plates as the existing plain square format matching the Emaar-style square plate.
-- Remove rectangular text fallback usage in Recommended Projects and replace with the unified square `DeveloperLogo` fallback/nameplate behavior.
-- Keep `DeveloperLink` as the canonical developer-name renderer; adjust only where the user explicitly requested filled emerald action styling, not every inline developer text link.
+### 2. Mark every flagged surface with the lock attribute
 
-6. Visual validation only
-- Use Playwright at 1280×1800 to inspect and screenshot:
-  - `/project/elwood-sobha-realty-dubailand` payment plan section
-  - location/nearby map section
-  - developer section
-  - brochure section
-  - mortgage section including Request Mortgage Introduction
-  - register-interest/consultation form area
-  - recommended projects section
-- Save screenshots under `/tmp/browser/emerald-fix/` and visually confirm: no rejected green action fills, no black text/icons on emerald, and no non-white content inside emerald surfaces.
+Add `data-emerald-action="true"` (or swap to `.jj-emerald-action`) on:
+
+- `src/components/project-detail/RecommendedProjects.tsx` — star header tile, View-All button, **and** each card's price + handover pill
+- `src/components/project-detail/PremiumBrochureCard.tsx` — Brochure label/star, "Generate Presentation" star icon
+- `src/components/project-detail/ProjectMarketContext.tsx` (or wherever "Dubai Proxy" / building/pin icons + "Noticed something incorrect" + "Report an Issue" live) — header icons + report button
+- `src/components/project-detail/CallToActionSection.tsx` — "Expert Consultation" pill (replace gold metallic with emerald metallic)
+- `src/components/PhoneInput*.tsx` / country code trigger used by ConsultationRequestForm + Request-Callback — `button[data-phone-code-trigger]` swap
+- `src/components/MortgageCalculator.tsx` — main calculator icon tile, Property/Down/Loan icon tiles, "Request Mortgage Introduction", "Ask" send button
+- `src/pages/PropertyEvaluator.tsx` — "Download Report" in Live Market Data, YTD market growth arrow tile, Pros header (thumbs-up + "Pros")
+- `src/components/market-intelligence/*` — Off-Plan-vs-Secondary + Cash-vs-Mortgage bars: convert active emerald segment to gradient and set the inline `%` label to `#FFFFFF`
+
+### 3. Developer logo regression (Recommended Projects cards)
+
+In `RecommendedProjects.tsx`, the card currently shows a building fallback icon for projects whose developer record was matched but whose `developer.logo_url` evaluated as falsy at card-build time. Restore the same resolver used elsewhere: pull from `developer_logo_url` / `developers.logo_url` and only fall back to the JBJ monogram tile when both are empty — never the building icon. No DB writes. No logo overrides.
+
+### 4. Card alignment with collapsed sidebar
+
+In `src/components/project-detail/ProjectDetailLayout.tsx` (and the Recommended Projects section wrapper), replace the current `max-w` + asymmetric left padding with the standard `mx-auto px-6 md:px-10` container used by `/compare`. That removes the leftward shift when the sidebar collapses.
+
+### 5. Visual validation (mandatory)
+
+Run Playwright at 1280×1800 on `/project/distrikt-majid-al-futtaim-city-of-arabia` and capture screenshots for each flagged area, plus `/property-evaluator`, the mortgage calculator section, and the Request-a-Callback / Consultation forms. Save under `/tmp/browser/emerald-final/` and post them in the reply. If any single surface still renders flat green or non-white text/icon, iterate before responding.
+
+### Files to edit
+
+- `src/index.css` (final emerald lock + repaint of arbitrary green classes)
+- `src/components/project-detail/RecommendedProjects.tsx` (star, View All, price/handover pills, developer logo fallback)
+- `src/components/project-detail/PremiumBrochureCard.tsx`
+- `src/components/project-detail/CallToActionSection.tsx` (Expert Consultation pill)
+- `src/components/project-detail/ReportIssueButton.tsx` + the buyers-by-nationality header tiles
+- `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` (already partly done — verify pill swap)
+- `src/components/MortgageCalculator.tsx` (all icon tiles, Ask, Request Mortgage Introduction)
+- `src/pages/PropertyEvaluator.tsx` (Download Report, YTD arrow tile, Pros header)
+- Phone country picker primitive used by both forms
+- DLD bars component (Off-Plan vs Secondary / Cash vs Mortgage label color)
+- `src/components/project-detail/ProjectDetailLayout.tsx` (container alignment)
+
+No business logic, no DB, no logo overrides — pure visual contract fix.

@@ -105,8 +105,8 @@ const DownloadReportDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="gold" size="sm" className="gap-2 !text-[#0A0A0A] hover:!text-[#0A0A0A]">
-          <Download className="w-4 h-4 text-[#0A0A0A]" />
+        <Button data-emerald-action="true" size="sm" className="jj-emerald-action gap-2">
+          <Download className="w-4 h-4" />
           Download Report
         </Button>
       </DialogTrigger>
@@ -268,8 +268,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Growth Banner */}
           <div className="bg-[#F7F2EA] border border-[#B89555]/40 rounded-2xl p-5 mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#1E5F3F] flex items-center justify-center">
-                <ArrowUpRight className="w-6 h-6 text-[#FDFBF7]" />
+              <div data-emerald-action="true" className="jj-emerald-action w-12 h-12 rounded-xl flex items-center justify-center">
+                <ArrowUpRight className="w-6 h-6" style={{ color: '#FFFFFF' }} />
               </div>
               <div>
                 <p className="text-[#1A1A1A] text-xs uppercase tracking-wider font-bold">YTD Market Growth</p>
@@ -305,11 +305,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
 
               <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div className="h-full bg-[#1E5F3F] rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
-                  <span className="text-[#FDFBF7] text-[10px] font-bold">{offPlanPct}%</span>
+                <div data-emerald-action="true" className="jj-emerald-action h-full rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
+                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
                 </div>
                 <div className="h-full bg-[#8C4A2B] flex-1 rounded-r-full flex items-center justify-center">
-                  <span className="text-[#FDFBF7] text-[10px] font-bold">{secondaryPct}%</span>
+                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{secondaryPct}%</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -339,11 +339,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
               <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div className="h-full bg-[#0A0A0A] rounded-l-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
-                  <span className="text-white text-[10px] font-bold">{cashPct}%</span>
+                <div data-emerald-action="true" className="jj-emerald-action h-full rounded-l-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
+                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{cashPct}%</span>
                 </div>
                 <div className="h-full bg-[#B89555] flex-1 rounded-r-full flex items-center justify-center">
-                  <span className="text-[#1A1A1A] text-[10px] font-bold">{mortgagePct}%</span>
+                  <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{mortgagePct}%</span>
                 </div>
               </div>
 

@@ -12930,3 +12930,67 @@ html body #root [role="tab"][data-state="active"][data-emerald-active] :is(svg, 
 }
 
 
+
+/* ============================================================
+   FINAL EMERALD ACTION LOCK — DO NOT REMOVE
+   Forces every emerald CTA / pill / metallic surface to the
+   dark emerald → ink gradient with pure white descendants.
+   Highest specificity in the file. Plain green (#0E8A66) and
+   gold metallic pills get repainted here.
+   ============================================================ */
+html body #root :is(
+  .jj-emerald-action,
+  .jj-pill-emerald-metallic,
+  .jj-cta-gold-metallic,
+  .jj-official-emerald,
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"]
+) {
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 55%, #04231A 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 55%, #04231A 100%) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+html body #root :is(
+  .jj-emerald-action,
+  .jj-pill-emerald-metallic,
+  .jj-cta-gold-metallic,
+  .jj-official-emerald,
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"]
+) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root :is(
+  .jj-emerald-action,
+  .jj-pill-emerald-metallic,
+  .jj-cta-gold-metallic,
+  .jj-official-emerald,
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"]
+) :where(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+html body #root :is(
+  .jj-emerald-action,
+  .jj-pill-emerald-metallic,
+  .jj-cta-gold-metallic,
+  .jj-official-emerald,
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"]
+) :where(svg [fill]:not([fill="none"])) {
+  fill: #FFFFFF !important;
+}
