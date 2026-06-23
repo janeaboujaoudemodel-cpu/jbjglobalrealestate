@@ -13219,29 +13219,8 @@ html body :is(
   fill: none !important;
 }
 
-/* Kill split-color pseudo overlays previously layered on these pills. */
-html body :is(
-  .jj-cta-primary,
-  .jj-cta-emerald,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-surface-emerald,
-  [data-cta="primary"],
-  [data-surface="emerald"]
-):not([data-segmented-active])::before,
-html body :is(
-  .jj-cta-primary,
-  .jj-cta-emerald,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-surface-emerald,
-  [data-cta="primary"],
-  [data-surface="emerald"]
-):not([data-segmented-active])::after {
-  background: transparent !important;
-  background-image: none !important;
-  display: none !important;
-}
+/* (Split-overlay kill removed — the metallic top-light sheen is part of the
+   approved Emerald → Black Ombre look and must be preserved.) */
 
 /* ════════════════════════════════════════════════════════════════
    PASS 24 — INTEGRITY REPAIR (final, wins all)
