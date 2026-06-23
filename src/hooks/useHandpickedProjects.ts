@@ -57,7 +57,7 @@ const isSoldOut = (p: any) => {
 const isDirectWithDeveloper = (p: any) => p?.developer?.has_active_rep === true;
 // Owner directive (explicit): NEVER show any ready project on the homepage,
 // even from direct-with-developer brands. Off-plan only on /.
-const isHomepagePromotable = (p: any) => !isCompletedReady(p);
+const isHomepagePromotable = (p: any) => !isCompletedReady(p) && !isSoldOut(p);
 
 
 const ELITE_DEVELOPERS = [
