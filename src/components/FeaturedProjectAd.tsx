@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import featuredInauraImg from "@/assets/featured-inaura.jpg";
 
 interface FeaturedProjectAdProps {
   title: string;
