@@ -46,11 +46,10 @@ export default function HomepageBookMarquee() {
         <div className="mt-4 sm:hidden text-center">
           <Link
             to="/guides"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors"
-            style={{ color: '#064E3B' }}
+            className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors group"
           >
-            View Full Library
-            <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
+            <span className="jj-emerald-ombre-text">View Full Library</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </Link>
         </div>
       </div>
