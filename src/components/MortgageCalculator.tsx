@@ -71,7 +71,7 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
   const progress = getRangePercent(value, min, max);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastEmittedValueRef = useRef(value);
-  const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
+  const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
 
   useEffect(() => {
@@ -122,8 +122,8 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       style={
         {
           background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-          ["--mortgage-range-thumb" as any]: "var(--jj-emerald-ombre)",
-          ["--mortgage-range-thumb-shadow" as any]: "0 8px 18px -8px rgba(4,46,29,0.75)",
+          ["--mortgage-range-thumb" as any]: "#FFFFFF",
+          ["--mortgage-range-thumb-shadow" as any]: "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
         } as CSSProperties
       }
     />
@@ -158,16 +158,16 @@ const MortgageCalculator = ({
   const navySliderWrapperStyle = {
     background:
       "linear-gradient(135deg, #064E3B 0%, #042c1c 62%, #000000 100%)",
-    border: 0,
+    border: "1px solid rgba(255,255,255,0.18)",
     boxShadow: "inset 0 0 22px rgba(6,78,59,0.18)",
     // Slider theme overrides (cascade into <Slider />)
     ["--slider-track-bg" as any]: "rgba(255,255,255,0.10)",
     ["--slider-range-bg" as any]:
       "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)",
     ["--slider-thumb-bg" as any]:
-      "var(--jj-emerald-ombre)",
+      "#FFFFFF",
     ["--slider-thumb-shadow" as any]:
-      "0 8px 18px -8px rgba(4,46,29,0.75)",
+      "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
   } as CSSProperties;
 
   useEffect(() => {
@@ -387,7 +387,7 @@ const MortgageCalculator = ({
         {showHeading && (
         <div className="text-center mb-6 md:mb-8">
           <h3 className="text-[#0A0A0A] text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
-            Mortgage <span>Calculator</span>
+            Mortgage <span className={isNavy ? "text-transparent bg-clip-text" : ""} style={isNavy ? { backgroundImage: "linear-gradient(135deg, #FFFFFF 0%, #6EE7B7 45%, #10B981 100%)", WebkitBackgroundClip: "text" } : undefined}>Calculator</span>
           </h3>
           <p className="text-[#1A1A1A]/70 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
             Estimate your monthly payments and explore financing options.
@@ -471,11 +471,11 @@ const MortgageCalculator = ({
             className="rounded-xl p-3 md:p-4 text-center flex flex-col justify-center md:scale-[1.03]"
             style={{
               background: isNavy
-                ? "var(--jj-emerald-ombre)"
+                ? "linear-gradient(135deg, #FFFFFF 0%, #D1FAE5 18%, #047857 58%, #031B12 100%)"
                 : "linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 50%, #ECE2D2 100%)",
-              border: isNavy ? 0 : "1px solid rgba(184,149,85,0.55)",
+              border: isNavy ? "1px solid rgba(52,211,153,0.78)" : "1px solid rgba(184,149,85,0.55)",
               boxShadow: isNavy
-                ? "0 10px 24px -14px rgba(4,46,29,0.85)"
+                ? "0 0 0 1px rgba(52,211,153,0.35), 0 12px 36px rgba(4,120,87,0.42), inset 0 1px 0 rgba(255,255,255,0.55)"
                 : "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
             }}
           >

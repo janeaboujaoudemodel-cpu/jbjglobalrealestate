@@ -264,7 +264,7 @@ const ReellyProjectCard = ({
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`Email about ${project.name}`}
                 data-no-contrast-guard
-                className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
               >
                 <Mail className="w-4 h-4" />
                 <span>Email</span>
@@ -274,7 +274,7 @@ const ReellyProjectCard = ({
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`Call about ${project.name}`}
                 data-no-contrast-guard
-                className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
               >
                 <Phone className="w-4 h-4" />
                 <span>Call</span>
@@ -284,7 +284,7 @@ const ReellyProjectCard = ({
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`WhatsApp about ${project.name}`}
                 data-no-contrast-guard
-                className="jj-emerald-rect-pill allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
+                className="jj-pill-emerald allow-white w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg text-white"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Chat</span>

@@ -97,7 +97,7 @@ export default function MortgageParityPanel({
   const cardBg = isNavy
     ? "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)"
     : "#F7F2EA";
-  const cardBorder = isNavy ? "0" : "1px solid rgba(184,149,85,0.30)";
+  const cardBorder = isNavy ? "1px solid rgba(52,211,153,0.48)" : "1px solid rgba(184,149,85,0.30)";
   const inkClass = isNavy ? "text-white" : "text-[#1A1A1A]";
   const subClass = isNavy ? "text-white/70" : "text-[#1A1A1A]/70";
 
@@ -237,7 +237,7 @@ export default function MortgageParityPanel({
             const minR = compareMinRate;
             const maxR = compareMaxRate;
             const progress = Math.min(100, Math.max(0, ((compareRate - minR) / (maxR - minR)) * 100));
-            const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
+            const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
             const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
             return (
               <input
@@ -262,11 +262,11 @@ export default function MortgageParityPanel({
                 className="mortgage-range-input w-full"
                 style={{
                   background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
-                  boxShadow: isNavy ? 'none' : 'inset 0 0 0 1px rgba(6,78,59,0.14)',
+                  boxShadow: isNavy ? 'inset 0 0 0 1px rgba(255,255,255,0.08)' : 'inset 0 0 0 1px rgba(6,78,59,0.14)',
                   ["--mortgage-range-thumb" as any]:
-                    "var(--jj-emerald-ombre)",
+                    "#FFFFFF",
                   ["--mortgage-range-thumb-shadow" as any]:
-                    "0 8px 18px -8px rgba(4,46,29,0.75)",
+                    "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
                 }}
               />
             );

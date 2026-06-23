@@ -80,9 +80,7 @@ const ShortlistBadgeButton = ({
     backgroundColor: "#064E3B",
     color: "#FFFFFF",
     WebkitTextFillColor: "#FFFFFF",
-    border: 0,
-    outline: 0,
-    boxShadow: "0 6px 18px -8px rgba(4,46,29,0.55)",
+    border: "none",
     opacity: 1,
   };
   const whiteIconStyle: React.CSSProperties = {
@@ -133,7 +131,7 @@ const ShortlistBadgeButton = ({
             data-surface="emerald"
             data-emerald="true"
             data-card-action="badge-shortlist"
-            className={`${sizeClasses[size]} jj-favorite-trigger jj-card-emerald-action allow-white flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${className}`}
+            className={`${sizeClasses[size]} jj-favorite-trigger jj-pill-emerald allow-white flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap shadow-lg ${className}`}
             style={emeraldButtonStyle}
           >
             <Award className={`${iconSizes[size]} allow-white`} color="#FFFFFF" stroke="#FFFFFF" style={whiteIconStyle} />

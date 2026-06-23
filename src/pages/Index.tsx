@@ -410,8 +410,8 @@ const Index = () => {
 
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="py-4">
         <LazyVisible minHeight={420} rootMargin="1200px">
-            <div
-              className="rounded-2xl border border-[#B89555]/35 bg-[#FDFBF7] p-5 md:p-8 shadow-[0_1px_0_rgba(184,149,85,0.18),0_10px_30px_-18px_rgba(26,26,26,0.24)]"
+          <div
+            className="rounded-2xl border border-[#047857]/35 bg-[#FDFBF7] p-5 md:p-8 shadow-[0_1px_0_rgba(4,120,87,0.20),0_10px_30px_-18px_rgba(4,120,87,0.35)]"
             style={{ contain: "layout paint" }}
           >
 
