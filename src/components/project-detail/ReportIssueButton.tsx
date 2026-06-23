@@ -100,8 +100,12 @@ export default function ReportIssueButton({
         className={`rounded-2xl border border-[#B89555]/45 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 flex items-center justify-between gap-4 flex-wrap shadow-[0_6px_24px_rgba(184,149,85,0.18),inset_0_1px_0_rgba(255,255,255,0.6)] ${className}`}
       >
         <div className="flex items-center gap-4">
-          <div className="w-11 h-11 rounded-full bg-[#F7F2EA] flex items-center justify-center flex-shrink-0 ring-1 ring-[#B89555]/55">
-            <AlertTriangle className="w-5 h-5 text-[#B89555]" />
+          <div
+            data-no-contrast-guard
+            className="jj-pill-emerald-metallic w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ color: '#FFFFFF' }}
+          >
+            <AlertTriangle className="w-5 h-5" style={{ color: '#FFFFFF' }} />
           </div>
           <div>
             <p className="text-sm font-semibold text-[#1A1A1A] tracking-wide">Noticed something incorrect?</p>
@@ -111,10 +115,11 @@ export default function ReportIssueButton({
         <button
           onClick={() => setOpen(true)}
           data-no-contrast-guard
-          className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold whitespace-nowrap rounded-md bg-[#0E8A66] text-white border border-[#0E8A66] hover:bg-[#0B6F52] transition-colors shadow-sm"
+          className="jj-pill-emerald-metallic inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold whitespace-nowrap rounded-md transition-colors shadow-sm"
+          style={{ color: '#FFFFFF' }}
         >
-          <AlertCircle className="w-4 h-4 text-white" />
-          <span className="text-white">Report an issue</span>
+          <AlertCircle className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+          <span style={{ color: '#FFFFFF' }}>Report an issue</span>
         </button>
       </div>
 

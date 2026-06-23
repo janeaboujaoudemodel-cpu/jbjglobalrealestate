@@ -171,11 +171,11 @@ export default function PaymentPlanVisualization({
 
       <Tabs defaultValue="installment" className="w-full">
         <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30">
-          <TabsTrigger value="installment" className="flex-1 text-[#1A1A1A]/70 data-[state=active]:bg-[#FDFBF7] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
+          <TabsTrigger value="installment" data-emerald-active className="flex-1 text-[#1A1A1A]/70 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:!border-[#064E3B] data-[state=active]:shadow-sm">
             <CreditCard className="w-4 h-4 mr-2" />
             Payment Plan {paymentPlan && `(${paymentPlan})`}
           </TabsTrigger>
-          <TabsTrigger value="full" className="flex-1 text-[#1A1A1A]/70 data-[state=active]:bg-[#FDFBF7] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
+          <TabsTrigger value="full" data-emerald-active className="flex-1 text-[#1A1A1A]/70 data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:!border-[#064E3B] data-[state=active]:shadow-sm">
             <Wallet className="w-4 h-4 mr-2" />
             100% Payment
           </TabsTrigger>
