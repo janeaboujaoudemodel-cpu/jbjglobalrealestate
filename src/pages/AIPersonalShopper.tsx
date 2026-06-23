@@ -332,7 +332,7 @@ const AIPersonalShopper = () => {
                   </p>
                   <div className="space-y-4 mt-4">
                     <div>
-                      <Label className="text-white/70">Full Name</Label>
+                      <Label className="text-white/70">Full Name *</Label>
                       <Input
                         value={inquiryForm.name}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
@@ -351,13 +351,63 @@ const AIPersonalShopper = () => {
                       />
                     </div>
                     <div>
-                      <Label className="text-white/70">Phone (WhatsApp preferred)</Label>
-                      <Input
+                      <Label className="text-white/70">Phone Number *</Label>
+                      <PhoneInput
                         value={inquiryForm.phone}
-                        onChange={(e) => setInquiryForm(prev => ({ ...prev, phone: e.target.value }))}
-                        placeholder="+1 234 567 8900"
-                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
+                        onChange={(value) => setInquiryForm(prev => ({ ...prev, phone: value || '' }))}
+                        placeholder="Phone number"
+                        variant="light"
                       />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-white/70">Nationality *</Label>
+                        <SearchableSelect
+                          value={inquiryForm.nationality}
+                          onChange={(value) => setInquiryForm(prev => ({ ...prev, nationality: value }))}
+                          options={NATIONALITIES}
+                          placeholder="Select nationality"
+                          searchPlaceholder="Search countries..."
+                          priorityItem="United Arab Emirates"
+                          flagType="country"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-white/70">Preferred Language *</Label>
+                        <SearchableSelect
+                          value={inquiryForm.language}
+                          onChange={(value) => setInquiryForm(prev => ({ ...prev, language: value }))}
+                          options={LANGUAGES}
+                          placeholder="Select language"
+                          searchPlaceholder="Search languages..."
+                          priorityItem="English"
+                          flagType="language"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-white/70">Preferred Contact Time *</Label>
+                        <SearchableSelect
+                          value={inquiryForm.preferredContactTime}
+                          onChange={(value) => setInquiryForm(prev => ({ ...prev, preferredContactTime: value }))}
+                          options={CONTACT_TIMES}
+                          placeholder="Select time"
+                          searchPlaceholder="Search times..."
+                          showFlags={false}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-white/70">Preferred Contact Method *</Label>
+                        <SearchableSelect
+                          value={inquiryForm.preferredContactMethod}
+                          onChange={(value) => setInquiryForm(prev => ({ ...prev, preferredContactMethod: value }))}
+                          options={CONTACT_METHODS}
+                          placeholder="Select method"
+                          searchPlaceholder="Search methods..."
+                          showFlags={false}
+                        />
+                      </div>
                     </div>
                     <Button onClick={submitInquiry} variant="primary" className="w-full">
                       Submit to Concierge Team
