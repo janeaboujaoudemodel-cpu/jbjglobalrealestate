@@ -323,21 +323,16 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
-      {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block,
-          pushed further down with extra spacing above. */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="pt-6 md:pt-8">
+      {/* VERIFICATION + MODE-AWARE PORTAL — paired full-bleed banner block. */}
+      <div className="jj-fullbleed-band pt-6 md:pt-8" data-fullbleed-band>
         <Suspense fallback={null}>
           <VerificationBanner />
         </Suspense>
-        {/* ModePortalBanner removed here — now lives as a green block in the
-            vertical sidebar (above AI Home Finder). When the user completes
-            verification, VerificationBanner's CTA flips from "Get Verified"
-            to "Open Portal" — no duplicate portal CTA is rendered. */}
         <Suspense fallback={null}>
           <PartnerVerifyHeroCTA />
         </Suspense>
+      </div>
 
-      </PremiumSectionCard>
 
 
       {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
@@ -350,24 +345,24 @@ const Index = () => {
 
 
 
-      {/* FEATURED LISTINGS */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
+      {/* FEATURED LISTINGS — full-bleed band */}
+      <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
         <LazyVisible minHeight={500}>
           <Suspense fallback={<SectionLoader />}>
             <FeaturedListings />
           </Suspense>
         </LazyVisible>
-      </PremiumSectionCard>
+      </div>
 
-      {/* CONTINUE SEARCHING */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
-
+      {/* CONTINUE SEARCHING — full-bleed band */}
+      <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <ContinueSearching type="property" />
           </Suspense>
         </LazyVisible>
-      </PremiumSectionCard>
+      </div>
+
 
       {/* RESALE PROPERTIES */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
@@ -386,14 +381,15 @@ const Index = () => {
       </LazyVisible>
 
 
-      {/* EXPLORE OUR GUIDES & REPORTS */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
+      {/* EXPLORE OUR GUIDES & REPORTS — full-bleed band */}
+      <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
         <LazyVisible minHeight={400}>
           <Suspense fallback={<SectionLoader />}>
             <HomepageBookMarquee />
           </Suspense>
         </LazyVisible>
-      </PremiumSectionCard>
+      </div>
+
 
       {/* (EXPLORE OUR SERVICES moved up — now sits between Partners marquee
           and the Get Verified / Mode Portal pair as a visual separator.) */}
