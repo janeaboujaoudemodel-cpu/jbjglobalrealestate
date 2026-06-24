@@ -181,7 +181,7 @@ const MortgageCalculatorPage = () => {
                       className="jj-bank-partner-chip rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em]"
                       style={{
                         background: "rgba(255,255,255,0.74)",
-                        border: `1px solid rgba(6,78,59,0.28)`,
+                        border: `1px solid ${GOLD}80`,
                       }}
                     >
                       {bank}
