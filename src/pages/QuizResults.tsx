@@ -1951,7 +1951,7 @@ const QuizResults = () => {
                 onClick={() => {
                   document.getElementById("aihf-top-pick")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
-                className="aihf-cta aihf-cta-glow font-bold px-8 py-5 text-base rounded-xl"
+                className="aihf-cta aihf-cta-glow jj-pill-emerald-metallic font-bold px-8 py-5 text-base rounded-xl"
               >
                 Back to property #1
                 <ChevronDown className="w-5 h-5 ml-2 rotate-180" />
@@ -2040,7 +2040,7 @@ const QuizResults = () => {
         {/* Footer */}
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <Link to="/">
+            <Link to="/properties">
               <Button
                 data-no-contrast-guard
                 className="aihf-cta aihf-cta-glow jj-pill-emerald-metallic font-bold px-10 py-6 text-base rounded-xl"
