@@ -137,7 +137,7 @@ export default function BookStyleDocuments({
                   <div className="w-full h-full bg-gradient-to-br from-[#2a2a2a] to-[#1A1A1A]" />
                 )}
                 {/* Subtle vignette on image */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/60 via-transparent to-[#1A1A1A]/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/32 via-transparent to-[#1A1A1A]/5" />
               </div>
 
               {/* Spine effect on left edge */}

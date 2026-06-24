@@ -7,6 +7,7 @@ import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUti
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import InlineEditable from "@/components/project-detail/owner/InlineEditable";
 import DeveloperLogoUploader from "@/components/project-detail/owner/DeveloperLogoUploader";
+import { DeveloperLink } from "@/components/ui/developer-link";
 
 type PublicFieldKey =
   | "instagram_url" | "linkedin_url" | "office_address" | "google_maps_url"
@@ -68,16 +69,16 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
     : developer.description;
 
   return (
-    <div className="w-full py-6 md:py-8 rounded-2xl">
+    <div className="w-full py-4 md:py-6 rounded-2xl">
       <div className="container mx-auto px-4 md:px-8">
         <div 
-          className="rounded-2xl border-2 border-[#B89555]/40 p-6 md:p-8"
+          className="rounded-2xl border border-[#B89555]/35 p-5 md:p-7"
           style={{
-            background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
-            boxShadow: '0 8px 32px rgba(200,167,102,0.25), inset 0 1px 2px rgba(255,255,255,0.4)',
+            background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 62%, #EFE6D6 100%)',
+            boxShadow: '0 10px 32px rgba(184,149,85,0.18), inset 0 1px 2px rgba(255,255,255,0.42)',
           }}
         >
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[190px_minmax(0,1fr)] gap-6 md:gap-8 items-start">
             {/* Developer Logo (owner-editable) */}
             {editable && developer.id ? (
               <DeveloperLogoUploader
@@ -87,6 +88,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               />
             ) : (
               <div
+                data-keep-gold
                 className="jj-cta-gold-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-[10px]"
                 style={{
                   border: '3px solid hsl(42 45% 59%)',
@@ -116,7 +118,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
             )}
 
             {/* Developer Info */}
-            <div className="flex-1">
+            <div className="min-w-0">
               {/* Header */}
               <div className="flex items-center gap-3 mb-3">
                 {editable && developer.id ? (
@@ -127,10 +129,15 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     value={developer.name}
                     invalidateKeys={["project", "projects", "developer", "developers"]}
                   >
-                    <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                    <h3 className="text-2xl md:text-[32px] font-bold text-[#1A1A1A] leading-tight">{developer.name}</h3>
                   </InlineEditable>
                 ) : (
-                  <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
+                  <DeveloperLink
+                    name={developer.name}
+                    slug={developer.slug}
+                    showPrefix={false}
+                    className="text-2xl md:text-[32px] font-bold leading-tight"
+                  />
                 )}
                 <Award className="w-6 h-6 text-[#1A1A1A]" />
               </div>
@@ -210,7 +217,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     )}
                   </div>
                   <div 
-                    className="rounded-xl p-4 border border-[#B89555]/20"
+                    className="rounded-xl p-4 border border-[#B89555]/25 max-w-3xl"
                     style={{
                       background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(253,251,247,0.6) 100%)',
                     }}

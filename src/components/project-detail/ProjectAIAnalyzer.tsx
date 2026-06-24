@@ -237,14 +237,14 @@ export const ProjectAIAnalyzer = ({
   return (
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl">
       <div className="container mx-auto px-4">
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center justify-center gap-3 mb-5 text-center">
           <Brain className="w-6 h-6 text-[#1A1A1A]" />
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             JBJ AI Project Intelligence
           </h2>
         </div>
 
-        <p className="text-[#1A1A1A]/80 text-sm mb-6 font-medium">
+        <p className="text-[#1A1A1A]/80 text-sm mb-6 font-medium text-center max-w-3xl mx-auto">
           Comprehensive AI analysis for <span className="font-semibold text-[#1A1A1A]">{projectName}</span>
           {developer && (
             <> by {developerSlug ? (
@@ -267,7 +267,7 @@ export const ProjectAIAnalyzer = ({
             </Button>
           </div>
         ) : !analysis ? (
-          <div className="text-center py-8">
+          <div className="rounded-2xl border border-[#B89555]/25 bg-[#FDFBF7] min-h-[380px] flex items-center justify-center text-center p-8 shadow-sm">
             {hasTimedOut ? (
               <div className="space-y-4">
                 <p className="text-red-600 text-sm font-medium">Analysis is taking longer than expected.</p>
@@ -277,7 +277,7 @@ export const ProjectAIAnalyzer = ({
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-5 py-12">
+              <div className="flex min-h-[300px] w-full flex-col items-center justify-center gap-5">
                 <img
                   src={jbjMonogramNobuffer}
                   alt="JBJ AI analyzing..."
@@ -317,13 +317,13 @@ export const ProjectAIAnalyzer = ({
 
             {/* Row 1: Overview + Rating */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-3">
+              <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
+                <div className="flex items-center justify-center gap-2 mb-3">
                   <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
                 </div>
                 {sections?.overview ? (
-                  <p className="text-[#1A1A1A]/90 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
+                <p className="text-[#1A1A1A]/90 text-sm leading-relaxed max-w-3xl mx-auto">{cleanMarkdown(sections.overview)}</p>
                 ) : (
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
@@ -508,17 +508,17 @@ export const ProjectAIAnalyzer = ({
             {/* Row 4: Pros & Cons — styled pill rows */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {/* Pros */}
-              <div data-emerald-action="true" className="jj-emerald-action border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-md">
+              <div className="jj-project-pros-panel border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-md">
                 <div className="flex items-center gap-2 mb-4">
                   <ThumbsUp className="w-5 h-5" style={{ color: '#FFFFFF' }} />
-                  <h3 className="font-bold text-lg" style={{ color: '#FFFFFF' }}>Pros</h3>
+                  <h3 className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Pros</h3>
                 </div>
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">
                     {prosList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2.5 bg-[#FDFBF7] rounded-lg px-3 py-2.5 border border-[color:var(--emerald-1)]/30">
+                      <li key={i} className="jj-project-pros-item flex items-start gap-2.5 bg-[#FDFBF7] rounded-lg px-3 py-2.5 border border-[color:var(--emerald-1)]/30">
                         <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)] mt-0.5 flex-shrink-0" />
-                        <span className="text-foreground text-sm leading-snug">{item}</span>
+                        <span className="text-[#1A1A1A] text-sm leading-snug">{item}</span>
                       </li>
                     ))}
                   </ul>
