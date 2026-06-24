@@ -223,12 +223,12 @@ export default function RoyalToolsHub() {
         
         {/* Fair Usage Notice */}
         <div className="max-w-7xl mx-auto px-4 pb-8">
-          <div className="rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] p-6 md:p-8">
+          <AIShellCard padding="lg">
             <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
               <Shield className="h-5 w-5 text-[#1A1A1A]" />
               Fair Usage & Privacy
             </h3>
-            
+
             <div className="grid md:grid-cols-2 gap-6 text-sm text-[#1A1A1A]/70">
               <div>
                 <h4 className="text-[#1A1A1A] font-medium mb-2">Media Tool Limits</h4>
@@ -239,7 +239,7 @@ export default function RoyalToolsHub() {
                   <li>• Projects save automatically</li>
                 </ul>
               </div>
-              
+
               <div>
                 <h4 className="text-[#1A1A1A] font-medium mb-2">Your Privacy</h4>
                 <ul className="space-y-1">
@@ -250,15 +250,16 @@ export default function RoyalToolsHub() {
                 </ul>
               </div>
             </div>
-            
+
             <div className="mt-6 pt-6 border-t border-[#B89555]/30">
               <p className="text-xs text-[#1A1A1A]/70">
-                By using these tools, you confirm you own the content or have permission to edit it. 
+                By using these tools, you confirm you own the content or have permission to edit it.
                 The platform operator is not responsible for misuse of these tools.
               </p>
             </div>
-          </div>
+          </AIShellCard>
         </div>
+
       </div>
     </>
   );
