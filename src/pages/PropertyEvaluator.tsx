@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { AIShellCard } from "@/components/ui/ai-shell-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -329,7 +330,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
         </a>
       </div>
 
-      <div>
+      <AIShellCard padding="lg">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-[#EFE6D6] border border-[#B89555]/45 mb-8">
             <TabsTrigger value="property" data-cta="dark" className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
@@ -988,7 +989,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
         <LegalDisclaimer variant="ai-tools" className="mt-8" />
         <LegalDisclaimer variant="investment" className="mt-4" />
-      </div>
+      </AIShellCard>
+
     </PremiumToolShell>
   );
 };
