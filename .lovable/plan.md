@@ -1,71 +1,60 @@
-# Apply AI Comparison shell style to public + tool pages
+## Goal
 
-## What changes
+Make the AI Home Finder hero card visually identical in chrome to the homepage's AI Property Comparison widget, then apply the same chrome to similar hero/intro cards site-wide (homepage stays locked).
 
-Every top-level section on public marketing pages and tool pages will be wrapped in the same outer shell as the AI Property Comparison card:
+## Reference style (from `src/components/AIComparisonWidget.tsx`)
 
-- Champagne `#F7F2EA` background
-- `rounded-2xl` corners
-- `p-8 md:p-10` inner padding
-- Two soft `#EFE6D6/10` blur orbs in opposite corners
-- Sits inside a centered, padded container so it never touches screen edges
+- **Outer shell**: `bg-[#F7F2EA] rounded-2xl p-8 md:p-10 relative overflow-hidden` + two champagne blur orbs. **No gold border.** Already encapsulated as `<AIShellCard>`.
+- **Label pill (top-left, not centered)**: emerald-soft pill — `jj-surface-emerald-soft` with `Sparkles` icon + uppercase tracked label (e.g. "AI Powered" / "Completely Free").
+- **Identity tile (top-right)**: emerald solid `jj-surface-emerald` 64×64 rounded-2xl with WHITE icon (`data-surface="emerald" data-emerald-ok="icon"`).
+- **Feature row**: 3 horizontal tiles in a `md:grid-cols-3` grid — each tile is `bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl`, icon in a soft champagne square `bg-[#EFE6D6]/20`, label + tiny description. **Replaces** the vertical gold-circle-tick list.
+- **CTA**: dark navy primary + champagne secondary (already standard).
 
-Inner content (titles, mini-cards, CTAs, tables) stays exactly as each page already has it. Only the outer shell changes.
+## Fix Plan
 
-## Homepage lock
+### 1. AI Home Finder hero (`src/pages/Quiz.tsx`, intro block lines ~895-1005)
 
-`src/pages/Index.tsx` and every component under `src/components/home/**` are off-limits. No edits, no imports changed. I'll add a guard comment at the top of each modified file confirming it's not a homepage component.
+Replace the current gold-bordered champagne card with the AIComparisonWidget chrome:
 
-## Scope (in this delivery)
+- Drop the inline `border: "1px solid rgba(184,149,85,0.45)"` outer card → use `<AIShellCard>` (or its raw classes).
+- Replace centered gold-tinted "Completely Free" pill → top-left `jj-surface-emerald-soft` pill with `Sparkles` icon.
+- Replace the standalone wand circle → top-right emerald 64×64 tile with white `Wand2` icon.
+- Replace the "FREE Access" sub-card with 3 gold-checkmark list → 3-column feature grid matching AIComparisonWidget (Unlimited AI Home Matches / AI Comparison Reports / Download Excel Report), each with champagne icon tile + label + short description.
+- Keep the `~60 seconds / AI-Powered / 100% Free` meta row but restyle to inherit the same tile chrome (subtle, no gold border).
+- Keep the existing dark CTA "Find My Property" and trailing helper line.
 
-Public marketing + tool pages only:
+### 2. Sweep similar hero cards (excluding `src/pages/Index.tsx` and `src/components/home/**`)
 
-- Properties listing, project detail, area pages
-- Tools: Mortgage Calculator, Compare Projects, Compare Units, AI Home Finder, Property Evaluator, Rental Index, Royal Tools Hub
-- Services pages (investor services, complaints, legal hub, RERA forms, etc.)
-- Marketing hubs: News, Market Intel, Guides, FAQ, Careers, Contact, About, Company Profile
+Audit the 6 files currently using `1px solid rgba(184,149,85,0.45)` or stronger as the outer card frame and re-chrome them to match:
 
-Owner CRM, broker portal, developer hub stay as-is — out of scope until you confirm Phase 2.
+- `src/pages/QuizResults.tsx` — results hero card
+- `src/pages/RentalIndex.tsx` — top intro/landing card
+- `src/pages/Guides.tsx` — hub intro card
+- `src/pages/PropertyMeasurement.tsx` — tool intro card
+- `src/pages/DeveloperDashboard.tsx` — dashboard greeter card (only if it's a public/hero intro; skip if it's an internal CRM panel)
 
-## How it's built
+For each: drop the gold outer border, wrap in `<AIShellCard>`, normalize the label pill to `jj-surface-emerald-soft + Sparkles`, normalize the identity tile to `jj-surface-emerald` with white icon, and convert any vertical "gold-circle checkmark" list into the 3-column feature grid pattern when there are 3 short bullets.
 
-1. **New primitive** `src/components/ui/ai-shell-card.tsx`:
-   - Reuses the exact classes from `AIComparisonWidget` lines 33-38 (champagne shell + blur orbs).
-   - Accepts `padding` (`md` | `lg`), `tone` (default `surface`), and pass-through `className`.
-   - Wraps content in `relative z-10` so existing layouts don't shift.
+### 3. Inner gold-bordered sub-cards
 
-2. **Section sweep** per page:
-   - Find each top-level section block (typically a `<section>` or `<div>` with marketing copy + a CTA).
-   - Replace its outer wrapper with `<AIShellCard>`.
-   - Leave child grids, mini-cards, tables, buttons untouched.
+Leave inner content boxes inside tool flows (form fields, result panels) untouched unless they are themselves a hero intro. Scope is hero/intro cards only this turn.
 
-3. **Spacing rule**: Cards stack with `space-y-6 md:space-y-10` between them inside the page container — same rhythm AI Comparison already uses.
+### 4. Validation
 
-## Validation
+After edits, run Playwright over: `/ai-home-finder`, `/ai-home-finder/results` (if reachable without state), `/rental-index`, `/guides`, `/property-measurement`. Capture one screenshot per page and confirm:
+- No double-border / gold outline on the outer card
+- Emerald pill + emerald identity tile present
+- 3-column feature grid renders (where applicable)
+- Existing CTAs and copy unchanged
 
-After each page batch (5-8 pages at a time), one desktop screenshot per restyled page at 1280×900, scrolled through to confirm:
+## Out of Scope
 
-- Outer shell renders correctly
-- No double-card stacking (e.g. shell-inside-shell)
-- No content overflow or broken grids
-- Homepage screenshot at the end to prove it's untouched
+- Homepage (`src/pages/Index.tsx`, `src/components/home/**`) — locked.
+- Owner CRM, broker portal, developer hub internals — only public/tool hero cards in this batch.
+- Functional behavior — visual chrome only.
 
-If a page already uses `PremiumSectionCard`, I'll swap it for `AIShellCard` rather than nesting.
+## Technical Notes
 
-## Delivery order
-
-1. Tools hub + 5 tool pages (highest visibility)
-2. Properties listing + project detail + area pages
-3. Services + legal + RERA
-4. Marketing hubs (News, Intel, Guides, FAQ, Careers, Contact, About, Company Profile)
-
-Each batch ends with screenshots and a brief written summary. Homepage verified untouched at the end.
-
-## Technical notes
-
-- Memory `mem://ui-ux/visual-standards/global-surface-theme-standard` continues to govern color tokens; the new shell uses tokens, not raw hexes once moved into the primitive.
-- `data-marketing-page` and `.jj-band` rules from `mem://ui-ux/visual-standards/full-bleed-band-system` are preserved — the shell sits *inside* bands, not replacing them.
-- `IconTile`, `PricePill`, `DeveloperLink`, and CTA primitives are not touched.
-- No removal of any existing feature or content (per `mem://constraints/ui-restructuring-no-removal-policy`).
-
-After you approve, I'll start with Phase 1 (tools hub + 5 tool pages) and post screenshots before continuing.
+- Canonical primitives: `AIShellCard` (`src/components/ui/ai-shell-card.tsx`), `jj-surface-emerald` / `jj-surface-emerald-soft` (already in `index.css`).
+- Champagne palette only — `#F7F2EA`, `#EFE6D6`, `#FDFBF7`, `#B89555` hairline at `/20` for inner tiles, never as a full outer border on hero cards.
+- Preserve all `data-allow-dark-cta` / `data-no-contrast-guard` attributes on the dark primary CTA.

@@ -6,8 +6,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
-  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown, Check, RefreshCcw
+  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown, Check, RefreshCcw,
+  BarChart3, TrendingUp, Calculator, FileText, Target
 } from "lucide-react";
+import { AIShellCard } from "@/components/ui/ai-shell-card";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -897,115 +899,99 @@ const Quiz = () => {
 
 
         <div className="flex-1 flex items-center justify-center px-4 py-12">
-          <div
-            className="w-full max-w-2xl rounded-2xl px-6 sm:px-10 py-10 text-center"
-            style={{
-              background: "#F7F2EA",
-              border: "1px solid rgba(184,149,85,0.45)",
-              boxShadow: "0 24px 60px rgba(10,10,10,0.06)",
-            }}
-          >
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7"
-              style={{
-                background: "rgba(184,149,85,0.12)",
-                border: "1px solid rgba(184,149,85,0.45)",
-              }}
-            >
-              <Gift className="w-4 h-4" style={{ color: "#B89555" }} />
-              <span className="text-sm font-medium" style={{ color: "#1A1A1A" }}>Completely Free</span>
-            </div>
-
-            <div
-              className="w-20 h-20 rounded-full mx-auto mb-7 flex items-center justify-center"
-              style={{
-                background: "#FDFBF7",
-                border: "1px solid rgba(184,149,85,0.65)",
-                boxShadow: "0 0 28px rgba(184,149,85,0.20)",
-              }}
-            >
-              <Wand2 className="w-10 h-10" style={{ color: "#B89555" }} />
-            </div>
-
-
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight" style={{ color: "#1A1A1A" }}>
-              AI Home Finder
-            </h1>
-
-            <p className="text-lg mb-7 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(26,26,26,0.75)" }}>
-              Find your perfect home with our AI — it searches across every project on JBJ and matches them to your exact requirements. Completely{" "}
-              <span className="font-semibold" style={{ color: "#B89555" }}>FREE</span>.
-            </p>
-
-            <div className="max-w-sm mx-auto mb-8">
-              <div
-                className="rounded-2xl p-5 text-left"
-                style={{
-                  background: "#FDFBF7",
-                  border: "1px solid rgba(184,149,85,0.45)",
-                }}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <Gift className="w-5 h-5" style={{ color: "#B89555" }} />
-                  <span className="font-semibold" style={{ color: "#1A1A1A" }}>FREE Access</span>
+          <AIShellCard as="div" padding="lg" className="w-full max-w-3xl">
+            {/* Header — emerald pill (top-left) + emerald identity tile (top-right) */}
+            <div className="flex items-start justify-between gap-4 mb-8">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 jj-surface-emerald-soft">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-xs font-medium uppercase tracking-wider">Completely Free</span>
                 </div>
-                <ul className="space-y-2.5 text-sm">
-                  {["Unlimited AI Home Matches", "AI Comparison Reports", "Download Excel Report"].map((label) => (
-                    <li key={label} className="flex items-center gap-2.5" style={{ color: "rgba(26,26,26,0.85)" }}>
-                      <span
-                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ background: "#B89555" }}
-                      >
-                        <Check className="w-3 h-3" style={{ color: "#FFFFFF" }} strokeWidth={3} />
-                      </span>
-                      <span>{label}</span>
-                    </li>
-                  ))}
-                </ul>
+                <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-2">
+                  AI Home Finder
+                </h1>
+                <p className="text-[#1A1A1A]/70 max-w-md">
+                  Find your perfect home with our AI — it searches every project on JBJ and matches them to your exact requirements. Completely{" "}
+                  <span className="font-semibold text-[#1A1A1A]">FREE</span>.
+                </p>
+                <p className="text-[#1A1A1A]/70 text-sm mt-2">
+                  Powered by JBJ Global Real Estate
+                </p>
+              </div>
+              <div
+                data-surface="emerald"
+                data-emerald-ok="icon"
+                className="jj-surface-emerald hidden md:flex w-16 h-16 rounded-2xl items-center justify-center shadow-lg shrink-0"
+              >
+                <Wand2 className="w-8 h-8" />
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-9" style={{ color: "rgba(26,26,26,0.65)" }}>
+            {/* 3-column feature grid (matches AIComparisonWidget) */}
+            <div className="grid md:grid-cols-3 gap-4 mb-8">
+              {[
+                { icon: Target, label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
+                { icon: BarChart3, label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
+                { icon: FileText, label: "Download Excel Report", description: "Take your matches with you" },
+              ].map((f, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl shadow-sm"
+                >
+                  <div className="w-10 h-10 bg-[#EFE6D6]/60 rounded-lg flex items-center justify-center shrink-0">
+                    <f.icon className="w-5 h-5 text-[#1A1A1A]" />
+                  </div>
+                  <div>
+                    <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
+                    <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Meta row */}
+            <div className="flex flex-wrap items-center gap-6 text-sm mb-6 text-[#1A1A1A]/70">
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: "rgba(184,149,85,0.18)" }}>
-                    <Icon className="w-3 h-3" style={{ color: "#B89555" }} />
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center bg-[#EFE6D6]/60">
+                    <Icon className="w-3 h-3 text-[#1A1A1A]" />
                   </div>
                   <span>{label}</span>
                 </div>
               ))}
             </div>
 
-
+            {/* Primary CTA */}
             <Button
               onClick={() => setStarted(true)}
+              data-surface="navy"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white font-semibold px-10 py-6 text-lg"
+              className="allow-white surface-navy w-full sm:w-auto font-semibold px-10 py-6 text-base rounded-xl"
               style={{
                 background: "#0A0A0A",
                 border: "1px solid rgba(184,149,85,0.55)",
                 color: "#FFFFFF",
-                boxShadow: "0 0 28px rgba(184,149,85,0.45)",
               }}
             >
-              Find My Property
-              <ArrowUpRight className="w-5 h-5 ml-2 allow-white" />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Find My Property</span>
+              <ArrowUpRight className="w-5 h-5 ml-2 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </Button>
 
-            <p className="text-xs mt-6" style={{ color: "rgba(26,26,26,0.65)" }}>
+            <p className="text-xs mt-5 text-[#1A1A1A]/60">
               Save money by choosing the right property the first time.
             </p>
-          </div>
+          </AIShellCard>
         </div>
       </section>
       </ToolAnimatedFrame>
     );
   }
+
 
   // Form Screen after completing questions
   if (showForm) {
