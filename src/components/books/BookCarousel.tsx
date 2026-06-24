@@ -84,8 +84,8 @@ export function BookCarousel({
 
   return (
     <div
-      className={`overflow-hidden w-full select-none cursor-grab active:cursor-grabbing ${className ?? ""}`}
-      style={{ touchAction: "pan-y" }}
+      className={`w-full select-none overflow-x-auto md:overflow-hidden cursor-grab active:cursor-grabbing snap-x snap-mandatory md:snap-none [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
+      style={{ touchAction: "pan-x pan-y" }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -95,7 +95,7 @@ export function BookCarousel({
     >
       <div
         ref={trackRef}
-        className="flex w-max gap-6 md:gap-8 will-change-transform"
+        className="flex w-max gap-6 md:gap-8 will-change-transform px-4 md:px-0"
         style={{
           animation: books.length > 1
             ? `jbj-book-marquee ${durationSec}s linear infinite`
