@@ -49,11 +49,11 @@ const AnimatedStat = ({ stat, start, index }: { stat: Stat; start: boolean; inde
       className="oi-stat group/stat flex flex-col items-center gap-1.5 px-3 py-2 text-center"
       style={{ animationDelay: `${index * 70}ms` }}
     >
-      <Icon className="h-4 w-4 text-white/80" strokeWidth={1.75} />
-      <span className="text-[1.5rem] font-bold leading-none tabular-nums text-white sm:text-[1.75rem]" style={{ letterSpacing: "-0.02em" }}>
+      <Icon className="oi-muted h-4 w-4" strokeWidth={1.75} />
+      <span className="text-[1.5rem] font-bold leading-none tabular-nums sm:text-[1.75rem]" style={{ letterSpacing: "-0.02em" }}>
         {stat.prefix ?? ""}{val}{stat.suffix ?? ""}
       </span>
-      <span className="text-[9.5px] font-semibold uppercase tracking-[0.22em] text-white/65">
+      <span className="oi-faint text-[9.5px] font-semibold uppercase tracking-[0.22em]">
         {stat.label}
       </span>
     </div>
