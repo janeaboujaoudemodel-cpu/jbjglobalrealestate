@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { isOwnerEmail } from "@/config/ownerEmails";
 
 const GlobalVisitorTracking = lazy(() => import("@/components/GlobalVisitorTracking"));
-const OwnerVisitorToggle = lazy(() => import("@/components/project-detail/OwnerVisitorToggle"));
+// OwnerVisitorToggle removed — Owner/Visitor view is now driven by the header mode switcher.
 const SeoHighlightOverlay = lazy(() => import("@/components/SeoHighlightOverlay"));
 const OwnerOverrideLoader = lazy(() => import("@/components/owner-overrides/OwnerOverrideLoader"));
 const WebDevDock = lazy(() => import("@/components/owner-webdev/WebDevDock"));
@@ -49,7 +49,7 @@ export default function DeferredAppExtras() {
   return (
     <Suspense fallback={null}>
       <GlobalVisitorTracking />
-      <OwnerVisitorToggle />
+      {/* OwnerVisitorToggle removed — Mode switcher in header now controls Owner/Visitor view */}
       <SeoHighlightOverlay />
       {/* Owner-only chunks: not even imported for non-owners */}
       {ownerGate && (

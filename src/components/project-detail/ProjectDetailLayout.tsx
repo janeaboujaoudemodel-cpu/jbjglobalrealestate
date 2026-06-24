@@ -95,7 +95,7 @@ import { useAreaUnit } from "@/hooks/useAreaUnit";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { getProjectStatus } from "@/utils/projectStatus";
-import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
+// OwnerVisitorToggle removed — Mode switcher drives Owner/Visitor view
 // BrokerBrandedMaterialsCard removed — replaced by inline branded-presentation download
 import { useUserMode } from "@/hooks/useUserMode";
 import { useAuth } from "@/contexts/AuthContext";
@@ -1777,8 +1777,7 @@ export default function ProjectDetailLayout({
 
       {/* Footer is now rendered globally in MainLayout - removed duplicate */}
 
-      {/* Owner ⇄ Visitor preview toggle (owner-only) */}
-      <OwnerVisitorToggle />
+      {/* Owner/Visitor view is now driven by the header Mode switcher */}
     </>
   );
 }
