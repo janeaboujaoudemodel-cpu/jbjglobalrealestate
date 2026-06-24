@@ -716,22 +716,35 @@ export default function ProjectDetailLayout({
           )}
 
           {/* Project Title - BIGGER */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]" data-no-contrast-guard>
+          <h1
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
+            data-no-contrast-guard
+            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+          >
             <InlineEditable projectId={project.id} field="name" value={project.name} surface="dark">
-              <span className="text-white" style={{ color: '#FFFFFF' }}>{project.name}</span>
+              <span className="text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{project.name}</span>
             </InlineEditable>
           </h1>
 
           {/* Developer */}
           {project.developer?.name && (
-            <p className="text-lg mb-6 text-white/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" data-no-contrast-guard>
+            <p
+              className="text-lg mb-6 text-white/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]"
+              data-no-contrast-guard
+              style={{ color: 'rgba(255,255,255,0.92)', WebkitTextFillColor: 'rgba(255,255,255,0.92)' }}
+            >
               by{" "}
               {project.developer?.slug ? (
-                <Link to={`/developer/${project.developer.slug}`} className="hover:underline font-semibold transition-colors text-white" data-no-contrast-guard>
+                <Link
+                  to={`/developer/${project.developer.slug}`}
+                  className="hover:underline font-semibold transition-colors text-white"
+                  data-no-contrast-guard
+                  style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                >
                   {project.developer.name}
                 </Link>
               ) : (
-                <span className="font-semibold text-white" data-no-contrast-guard>{project.developer.name}</span>
+                <span className="font-semibold text-white" data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{project.developer.name}</span>
               )}
             </p>
           )}
@@ -739,32 +752,32 @@ export default function ProjectDetailLayout({
           {/* USPs Row - Location, Bedrooms, Size, Handover, Payment Plan */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8" data-no-contrast-guard>
             {project.location && (
-              <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <MapPin className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                <MapPin className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 <InlineEditable projectId={project.id} field="location" value={project.location} surface="dark">
-                  <span className="text-sm md:text-base text-white">{project.location}</span>
+                  <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{project.location}</span>
                 </InlineEditable>
               </div>
             )}
             {bedroomsText && (
-              <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Bed className="w-5 h-5 text-white" />
-                <span className="text-sm md:text-base text-white">{bedroomsText}</span>
+              <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                <Bed className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{bedroomsText}</span>
               </div>
             )}
             {sizeText && (
-              <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Maximize className="w-5 h-5 text-white" />
-                <span className="text-sm md:text-base text-white">{sizeText}</span>
+              <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                <Maximize className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{sizeText}</span>
               </div>
             )}
             {(() => {
               const synced = getProjectStatus(project);
               return synced.label !== "TBA" ? (
-                <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                  <Calendar className="w-5 h-5 text-white" />
+                <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                  <Calendar className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" surface="dark" scope="quick_facts" label="Edit handover date">
-                    <span className="text-sm md:text-base text-white">{synced.label}</span>
+                    <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{synced.label}</span>
                   </InlineEditable>
                 </div>
               ) : null;
