@@ -24,7 +24,11 @@ const tocItems = [
 ];
 
 const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-xl p-6 ${className}`}>{children}</div>
+  <div className={`relative overflow-hidden bg-[#F7F2EA] rounded-2xl p-6 ${className}`}>
+    <div className="pointer-events-none absolute top-0 right-0 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
+    <div className="pointer-events-none absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
+    <div className="relative z-10">{children}</div>
+  </div>
 );
 
 const AmlKycPolicy = () => {
