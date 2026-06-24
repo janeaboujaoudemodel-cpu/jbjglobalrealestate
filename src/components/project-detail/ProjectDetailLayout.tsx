@@ -663,7 +663,7 @@ export default function ProjectDetailLayout({
   return (
     <>
       {/* HERO SECTION - Full Screen */}
-      <section data-hero-dark data-on-dark data-no-contrast-guard data-ink-emerald-opt-out className="jj-project-hero jj-fullbleed-band allow-white relative w-full h-screen min-h-[700px] -mt-24 xl:-mt-28">
+      <section data-hero-dark data-on-dark data-no-contrast-guard data-ink-emerald-opt-out className="jj-project-hero jj-fullbleed-band allow-white relative w-full h-screen min-h-[700px]">
         {/* Owner-only: Edit hero / pick from gallery → set as Cover or Profile */}
         <HeroImagePicker
           projectId={project.id}
@@ -704,7 +704,7 @@ export default function ProjectDetailLayout({
         )}
 
         {/* Hero content - Bottom aligned */}
-        <div data-surface="dark" data-on-dark data-ink-emerald-opt-out data-no-contrast-guard className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
+        <div data-surface="dark" data-on-dark data-ink-emerald-opt-out data-no-contrast-guard className="jj-content-track relative z-20 h-full flex flex-col justify-end pb-8">
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl mb-2 text-white/85 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" data-no-contrast-guard>
@@ -903,7 +903,7 @@ export default function ProjectDetailLayout({
 
       {previousProject && (
         <div className="sticky top-[88px] z-30 w-full bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/30">
-          <div className="max-w-[1240px] mx-auto px-4 md:px-8 py-2 flex items-center justify-between gap-3">
+          <div className="jj-content-track py-2 flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={handleReturnToPrevious}
@@ -922,7 +922,7 @@ export default function ProjectDetailLayout({
 
       {/* STICKY SUB-NAVIGATION - Two rows: Search + Shortcuts */}
       <div 
-        className={`fixed top-[88px] [body.jj-vertical-nav-collapsed_&]:top-[48px] right-0 z-[9990] backdrop-blur-md transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] ${
+        className={`fixed top-[88px] [body.jj-vertical-nav-collapsed_&]:top-[48px] left-0 right-0 z-[9990] backdrop-blur-md transition-all duration-300 sm:left-[48px] [body.jj-vertical-nav-active_&]:sm:left-[200px] [body.jj-vertical-nav-collapsed_&]:sm:left-[48px] ${
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
@@ -935,7 +935,7 @@ export default function ProjectDetailLayout({
 
         {/* Row 2: Curated Shortcuts — gold bottom border for visibility */}
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
-          <div className="container mx-auto px-4">
+          <div className="jj-content-track">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
               <div className="flex items-center gap-1 py-2.5">
                 {visibleTabs.map((tab) => (
@@ -975,7 +975,7 @@ export default function ProjectDetailLayout({
 
       {/* MAIN CONTENT */}
       <section className="jj-section-champagne jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
-        <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
+        <div className="jj-project-shell py-10 md:py-14" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
 
 
           {/* Quick Stats Grid - Premium gold border visible */}
@@ -1690,7 +1690,7 @@ export default function ProjectDetailLayout({
         className="scroll-mt-32 jj-band jj-band--surface jj-project-band jj-fullbleed-band"
         data-section="register-interest"
       >
-        <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 py-12 md:py-16">
+        <div className="jj-project-shell py-12 md:py-16">
           <ConsultationRequestForm
             title={`Register Interest in ${project.name}`}
             subtitle={`Get expert guidance on ${project.name}${project.location ? ` at ${project.location}` : ''}. Our specialists are ready to assist you.`}
@@ -1713,7 +1713,7 @@ export default function ProjectDetailLayout({
       {/* READY TO GET STARTED — full-bleed CTA band */}
       <SectionDividerGoldFullBleed />
       <div className="bg-[#FDFBF7] jj-project-band jj-fullbleed-band">
-        <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
+        <div className="jj-project-shell">
           <CallToActionSection projectName={project.name} projectId={project.id} />
         </div>
       </div>
@@ -1721,7 +1721,7 @@ export default function ProjectDetailLayout({
       {/* Recommended Projects — seamless champagne bg continuation */}
       <SectionDividerGoldFullBleed />
       <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
-      <div className="jj-project-shell max-w-[1240px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
+      <div className="jj-project-shell">
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}
