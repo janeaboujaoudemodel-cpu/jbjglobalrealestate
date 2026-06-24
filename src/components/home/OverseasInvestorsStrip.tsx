@@ -78,7 +78,9 @@ const OverseasInvestorsStrip = () => {
     <section
       className="jj-fullbleed-band relative w-full overflow-hidden"
       data-fullbleed-band
-      style={{ background: "#FDFBF7" }}
+      data-surface="dark"
+      data-on-dark
+      data-no-contrast-guard
     >
       <style>{`
         @keyframes oi-orb-drift {
