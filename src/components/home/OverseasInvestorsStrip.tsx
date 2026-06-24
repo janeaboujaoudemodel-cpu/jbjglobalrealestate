@@ -6,21 +6,23 @@ type Stat = {
   prefix?: string;
   suffix?: string;
   target: number;
-  display?: (n: number) => string;
   label: string;
-  sublabel?: string;
   icon: typeof Globe;
 };
 
+const EMERALD = "#0B5D43";
+const EMERALD_DEEP = "#063A2A";
+const EMERALD_BRIGHT = "#10C285";
+
 const microStats: Stat[] = [
-  { target: 0, suffix: "%", label: "Income Tax", sublabel: "Personal · Capital Gains", icon: Globe },
-  { target: 10, suffix: " Yr", label: "Golden Visa", sublabel: "Renewable Residency", icon: ShieldCheck },
-  { prefix: "#", target: 1, label: "Safest City", sublabel: "Numbeo Global Index", icon: Trophy },
-  { target: 200, suffix: "+", label: "Nationalities", sublabel: "Cosmopolitan Hub", icon: Users },
-  { target: 4, suffix: "×", label: "Co-Owners", sublabel: "25% Each on Title Deed", icon: Users2 },
+  { target: 0, suffix: "%", label: "Income Tax", icon: Globe },
+  { target: 10, suffix: " Yr", label: "Golden Visa", icon: ShieldCheck },
+  { prefix: "#", target: 1, label: "Safest City", icon: Trophy },
+  { target: 200, suffix: "+", label: "Nationalities", icon: Users },
+  { target: 4, suffix: "×", label: "Co-Owners", icon: Users2 },
 ];
 
-const useCountUp = (target: number, start: boolean, duration = 1600) => {
+const useCountUp = (target: number, start: boolean, duration = 1400) => {
   const [val, setVal] = useState(0);
   useEffect(() => {
     if (!start) return;
@@ -42,40 +44,18 @@ const useCountUp = (target: number, start: boolean, duration = 1600) => {
 const AnimatedStat = ({ stat, start, index }: { stat: Stat; start: boolean; index: number }) => {
   const Icon = stat.icon;
   const val = useCountUp(stat.target, start);
-  const display = stat.display ? stat.display(val) : String(val);
   return (
     <div
-      className="oi-stat group/stat relative flex flex-col items-start gap-3 px-6 py-5 lg:px-7 lg:py-6 transition-all duration-500"
-      style={{ animationDelay: `${index * 90}ms` }}
+      className="oi-stat group/stat flex flex-col items-center gap-1.5 px-3 py-2 text-center"
+      style={{ animationDelay: `${index * 70}ms` }}
     >
-      <div className="flex items-center gap-3">
-        <span className="inline-flex h-9 w-9 items-center justify-center border border-[#B89555]/45 bg-gradient-to-br from-[#B89555]/15 to-transparent">
-          <Icon className="h-4 w-4" style={{ color: "#E6C97A", stroke: "#E6C97A" }} strokeWidth={2} />
-        </span>
-        <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/55">
-          {stat.label}
-        </span>
-      </div>
-      <div className="flex items-baseline gap-1">
-        <span
-          className="text-[2.4rem] font-extrabold leading-none tabular-nums sm:text-[2.8rem] lg:text-[3rem]"
-          style={{
-            background: "linear-gradient(180deg, #F5E4B3 0%, #B89555 65%, #8A6B36 100%)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            color: "transparent",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {stat.prefix ?? ""}{display}{stat.suffix ?? ""}
-        </span>
-      </div>
-      {stat.sublabel && (
-        <span className="text-[10.5px] font-medium tracking-[0.04em] text-white/45">
-          {stat.sublabel}
-        </span>
-      )}
+      <Icon className="h-4 w-4 text-white/80" strokeWidth={1.75} />
+      <span className="text-[1.5rem] font-bold leading-none tabular-nums text-white sm:text-[1.75rem]" style={{ letterSpacing: "-0.02em" }}>
+        {stat.prefix ?? ""}{val}{stat.suffix ?? ""}
+      </span>
+      <span className="text-[9.5px] font-semibold uppercase tracking-[0.22em] text-white/65">
+        {stat.label}
+      </span>
     </div>
   );
 };
@@ -101,46 +81,18 @@ const OverseasInvestorsStrip = () => {
       style={{ background: "#FDFBF7" }}
     >
       <style>{`
-        @keyframes oi-shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-        .oi-shimmer-text {
-          background: linear-gradient(90deg, #B89555 0%, #F5E4B3 50%, #B89555 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          color: transparent;
-          animation: oi-shimmer 6s linear infinite;
-        }
         @keyframes oi-orb-drift {
           0%, 100% { transform: translate(0,0) scale(1); opacity: 0.55; }
-          50% { transform: translate(20px,-12px) scale(1.08); opacity: 0.9; }
+          50% { transform: translate(18px,-10px) scale(1.06); opacity: 0.85; }
         }
-        .oi-orb { animation: oi-orb-drift 9s ease-in-out infinite; }
+        .oi-orb { animation: oi-orb-drift 10s ease-in-out infinite; }
         @keyframes oi-stat-in {
-          from { opacity: 0; transform: translateY(14px); }
+          from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .oi-stat { animation: oi-stat-in 0.7s cubic-bezier(0.22,1,0.36,1) both; }
-        .oi-stat::before {
-          content: "";
-          position: absolute;
-          left: 0; top: 18%; bottom: 18%;
-          width: 1px;
-          background: linear-gradient(180deg, transparent, rgba(184,149,85,0.42), transparent);
-        }
-        .oi-stat:first-child::before { display: none; }
-        @media (max-width: 1023px) {
-          .oi-stat::before { display: none; }
-        }
-        .oi-grain {
-          background-image: radial-gradient(rgba(184,149,85,0.06) 1px, transparent 1px);
-          background-size: 3px 3px;
-        }
+        .oi-stat { animation: oi-stat-in 0.6s cubic-bezier(0.22,1,0.36,1) both; }
         @media (prefers-reduced-motion: reduce) {
-          .oi-shimmer-text, .oi-orb, .oi-stat { animation: none !important; }
+          .oi-orb, .oi-stat { animation: none !important; }
         }
       `}</style>
 
@@ -151,61 +103,46 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white group relative block w-full overflow-hidden px-6 py-10 sm:px-10 md:px-16 md:py-12 lg:px-20 lg:py-14"
+        className="allow-white group relative block w-full overflow-hidden px-6 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
         style={{
-          background:
-            "radial-gradient(ellipse 70% 100% at 20% 0%, #1a1610 0%, transparent 60%), radial-gradient(ellipse 60% 100% at 100% 100%, #0f0d09 0%, transparent 55%), linear-gradient(135deg, #050505 0%, #0E0C08 48%, #030303 100%)",
-          borderTop: "1px solid rgba(184,149,85,0.32)",
-          borderBottom: "1px solid rgba(184,149,85,0.32)",
+          background: `radial-gradient(ellipse 80% 100% at 0% 0%, ${EMERALD} 0%, transparent 60%), radial-gradient(ellipse 70% 100% at 100% 100%, ${EMERALD_BRIGHT}22 0%, transparent 55%), linear-gradient(135deg, ${EMERALD_DEEP} 0%, #052A1E 50%, ${EMERALD_DEEP} 100%)`,
           color: "#FFFFFF",
         }}
       >
-        {/* Ambient layers */}
-        <span aria-hidden className="pointer-events-none absolute inset-0 oi-grain opacity-50" />
-        <span aria-hidden className="oi-orb pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-[#B89555]/12 blur-[100px]" />
-        <span aria-hidden className="oi-orb pointer-events-none absolute -right-16 bottom-0 h-80 w-80 rounded-full bg-[#B89555]/10 blur-[120px]" style={{ animationDelay: "2s" }} />
-        <span aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[3px]" style={{ background: "linear-gradient(180deg, transparent, #B89555 50%, transparent)" }} />
+        {/* Ambient orbs */}
+        <span aria-hidden className="oi-orb pointer-events-none absolute -left-24 -top-16 h-64 w-64 rounded-full blur-[100px]" style={{ background: `${EMERALD_BRIGHT}26` }} />
+        <span aria-hidden className="oi-orb pointer-events-none absolute -right-20 -bottom-16 h-72 w-72 rounded-full blur-[120px]" style={{ background: `${EMERALD_BRIGHT}1f`, animationDelay: "2s" }} />
 
         {/* Header row */}
-        <div className="relative z-[1] mx-auto flex w-full max-w-[1600px] flex-col gap-6 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
+        <div className="relative z-[1] mx-auto flex w-full max-w-[1500px] flex-col gap-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10">
           <div className="min-w-0">
-            <div className="mb-4 inline-flex items-center gap-3">
-              <span className="inline-flex h-8 w-8 items-center justify-center border border-[#B89555]/50 bg-[#B89555]/10">
-                <Globe className="h-3.5 w-3.5" style={{ color: "#E6C97A", stroke: "#E6C97A" }} strokeWidth={2} />
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: "#B89555" }}>
+            <div className="mb-3 inline-flex items-center gap-2.5">
+              <Globe className="h-3.5 w-3.5 text-white/80" strokeWidth={2} />
+              <span className="text-[10px] font-bold uppercase tracking-[0.36em] text-white/80">
                 Global Investors
               </span>
-              <span aria-hidden className="h-px w-16 bg-gradient-to-r from-[#B89555]/60 to-transparent" />
             </div>
 
-            <h2 className="block max-w-[920px] text-[1.85rem] font-extrabold leading-[1.02] tracking-[-0.02em] sm:text-[2.4rem] md:text-[3rem] lg:text-[3.4rem]" style={{ color: "#FFFFFF" }}>
-              Invest in Dubai from{" "}
-              <em className="oi-shimmer-text not-italic font-extrabold">anywhere</em>{" "}
-              in the world
+            <h2 className="block max-w-[820px] text-[1.5rem] font-bold leading-[1.08] tracking-[-0.02em] text-white sm:text-[1.9rem] md:text-[2.25rem] lg:text-[2.5rem]">
+              Invest in Dubai from <span className="font-extrabold italic text-white">anywhere</span> in the world
             </h2>
-            <p className="mt-4 max-w-[640px] text-[13px] font-medium leading-relaxed text-white/55 sm:text-[14px]">
+            <p className="mt-2.5 max-w-[600px] text-[13px] font-medium leading-relaxed text-white/75">
               Sovereign-grade infrastructure, zero income tax, and a decade-long residency programme — engineered for international capital.
             </p>
           </div>
 
-          <span className="inline-flex w-fit items-center gap-3 border border-[#B89555]/45 bg-[#B89555]/5 px-6 py-3.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white transition-all duration-300 group-hover:border-[#B89555] group-hover:bg-[#B89555]/15">
+          <span className="inline-flex w-fit items-center gap-3 rounded-full bg-white px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-300 group-hover:bg-white/95 group-hover:shadow-lg group-hover:shadow-black/20"
+            style={{ color: EMERALD_DEEP }}>
             <span>Discover the opportunity</span>
-            <span className="inline-flex h-7 w-7 items-center justify-center" style={{ background: "#B89555" }}>
-              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" style={{ color: "#0A0A0A", stroke: "#0A0A0A" }} strokeWidth={2.4} />
-            </span>
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={2.4} style={{ color: EMERALD_DEEP }} />
           </span>
         </div>
 
-        {/* Divider */}
-        <div className="relative z-[1] mx-auto mt-10 flex w-full max-w-[1600px] items-center gap-4">
-          <span className="h-px flex-1" style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.45), rgba(184,149,85,0.45), transparent)" }} />
-          <span className="text-[9px] font-bold uppercase tracking-[0.45em] text-[#B89555]/80">By the Numbers</span>
-          <span className="h-px flex-1" style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.45), rgba(184,149,85,0.45), transparent)" }} />
-        </div>
+        {/* Hairline divider */}
+        <div className="relative z-[1] mx-auto mt-6 h-px w-full max-w-[1500px]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
 
-        {/* Stats grid */}
-        <div className="relative z-[1] mx-auto mt-6 grid w-full max-w-[1600px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+        {/* Stats row */}
+        <div className="relative z-[1] mx-auto mt-4 grid w-full max-w-[1500px] grid-cols-2 gap-y-3 sm:grid-cols-3 lg:grid-cols-5">
           {microStats.map((s, i) => (
             <AnimatedStat key={s.label} stat={s} start={inView} index={i} />
           ))}
