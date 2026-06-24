@@ -13441,3 +13441,70 @@ html body #root input.mortgage-range-input[data-mortgage-slider]::-moz-range-thu
     0 0 18px rgba(6,78,59,0.65),
     0 4px 14px rgba(4,44,28,0.45) !important;
 }
+
+/* =====================================================================
+   TERMINAL CARD ICON CONTRAST LOCK — favorite / shortlist / history.
+   Any emerald own-surface card action renders pure white SVG strokes at
+   rest, hover, focus, active and disabled. This intentionally sits last
+   so light-surface guards can never repaint these icons black.
+   ===================================================================== */
+html body #root :is(
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-emerald-ok="icon"][data-surface="emerald"],
+  [data-emerald-action="true"]
+):not([data-no-contrast-guard]),
+html body #root :is(
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-emerald-ok="icon"][data-surface="emerald"],
+  [data-emerald-action="true"]
+):not([data-no-contrast-guard]):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is(
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-emerald-ok="icon"][data-surface="emerald"],
+  [data-emerald-action="true"]
+):not([data-no-contrast-guard]) :where(svg, [class*="lucide"], [data-lucide]),
+html body #root :is(
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-emerald-ok="icon"][data-surface="emerald"],
+  [data-emerald-action="true"]
+):not([data-no-contrast-guard]) :where(svg, [class*="lucide"], [data-lucide]) *,
+html body #root :is(
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-emerald-ok="icon"][data-surface="emerald"],
+  [data-emerald-action="true"]
+):not([data-no-contrast-guard]) svg :where(path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(.jj-favorite-trigger, [data-card-action]) svg[fill="none"],
+html body #root :is(.jj-favorite-trigger, [data-card-action]) svg[fill="none"] * {
+  fill: none !important;
+}
+
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] svg,
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg,
+html body #root :is(.jj-favorite-trigger, [data-card-action]) svg :where([fill]:not([fill="none"]), .fill-current) {
+  fill: #FFFFFF !important;
+}
