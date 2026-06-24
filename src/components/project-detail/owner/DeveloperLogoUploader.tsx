@@ -44,17 +44,14 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
   return (
     <div
       data-keep-gold
-      className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group p-[10px]"
+      className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group"
     >
       {isValidDeveloperLogoUrl(logoUrl) ? (
-        <div
-          className="jj-developer-logo-metallic-inner w-full h-full rounded-xl flex items-center justify-center overflow-hidden"
-        >
-          <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-2" />
-        </div>
+        <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3" />
       ) : (
         <span className="text-[#1A1A1A] font-bold text-base text-center px-2">{developerName}</span>
       )}
+
 
       {canEdit && (
         <>
