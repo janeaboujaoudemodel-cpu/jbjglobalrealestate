@@ -899,7 +899,6 @@ const Quiz = () => {
   // Intro screen before starting — teal/cyan dark ombre (matches Property Measurement language)
   if (!started && currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
     return (
-      <ToolAnimatedFrame theme={toolThemes.teal}>
       <section
         data-allow-dark-cta
         data-no-contrast-guard
@@ -1019,7 +1018,6 @@ const Quiz = () => {
           </AIShellCard>
         </div>
       </section>
-      </ToolAnimatedFrame>
     );
   }
 
@@ -1172,7 +1170,6 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <ToolAnimatedFrame theme={toolThemes.teal}>
     <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
       {/* Header */}
@@ -1332,7 +1329,6 @@ const Quiz = () => {
         </div>
       </div>
     </section>
-    </ToolAnimatedFrame>
   );
 };
 
