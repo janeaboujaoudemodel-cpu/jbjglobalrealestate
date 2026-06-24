@@ -58,7 +58,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
         className={`w-full ${wrapperClassName}`}
         {...rest}
       >
-        <div className={inner}>
+        <div className={inner} data-layout-width={width}>
           <div
             className={`jj-content-track ${toneClass} ${PADDING[padding]} ${className}`}
           >
