@@ -124,25 +124,24 @@ const OverseasInvestorsStrip = () => {
         {/* Header row */}
         <div className="relative z-[1] mx-auto flex w-full max-w-[1500px] flex-col gap-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10">
           <div className="min-w-0">
-            <div className="mb-3 inline-flex items-center gap-2.5">
-              <Globe className="h-3.5 w-3.5 text-white/80" strokeWidth={2} />
-              <span className="text-[10px] font-bold uppercase tracking-[0.36em] text-white/80">
+            <div className="oi-muted mb-3 inline-flex items-center gap-2.5">
+              <Globe className="h-3.5 w-3.5" strokeWidth={2} />
+              <span className="text-[10px] font-bold uppercase tracking-[0.36em]">
                 Global Investors
               </span>
             </div>
 
-            <h2 className="block max-w-[820px] text-[1.5rem] font-bold leading-[1.08] tracking-[-0.02em] text-white sm:text-[1.9rem] md:text-[2.25rem] lg:text-[2.5rem]">
-              Invest in Dubai from <span className="font-extrabold italic text-white">anywhere</span> in the world
+            <h2 className="block max-w-[820px] text-[1.5rem] font-bold leading-[1.08] tracking-[-0.02em] sm:text-[1.9rem] md:text-[2.25rem] lg:text-[2.5rem]">
+              Invest in Dubai from <span className="font-extrabold italic">anywhere</span> in the world
             </h2>
-            <p className="mt-2.5 max-w-[600px] text-[13px] font-medium leading-relaxed text-white/75">
+            <p className="oi-muted mt-2.5 max-w-[600px] text-[13px] font-medium leading-relaxed">
               Sovereign-grade infrastructure, zero income tax, and a decade-long residency programme — engineered for international capital.
             </p>
           </div>
 
-          <span className="inline-flex w-fit items-center gap-3 rounded-full bg-white px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-300 group-hover:bg-white/95 group-hover:shadow-lg group-hover:shadow-black/20"
-            style={{ color: EMERALD_DEEP }}>
+          <span className="oi-cta inline-flex w-fit items-center gap-3 rounded-full bg-white px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] transition-all duration-300 group-hover:bg-white group-hover:shadow-[0_14px_36px_-12px_rgba(0,0,0,0.7)]">
             <span>Discover the opportunity</span>
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={2.4} style={{ color: EMERALD_DEEP }} />
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={2.4} />
           </span>
         </div>
 
