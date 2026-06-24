@@ -142,11 +142,11 @@ const BEDROOM_OPTIONS = [
 ];
 
 const STATUS_OPTIONS: { value: string; label: string; dotClass: string }[] = [
-  { value: 'Announced', label: 'Announced', dotClass: 'bg-pink-400' },
+  { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
   { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-surface-emerald' },
-  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-blue-400' },
-  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-yellow-400' },
-  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-red-500' },
+  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
+  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
+  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
 ];
 
 const CONSTRUCTION_OPTIONS = [
