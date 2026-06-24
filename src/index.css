@@ -13785,3 +13785,143 @@ html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remov
 html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg :where(path, line, polyline, polygon, rect, circle, ellipse) {
   fill: #FFFFFF !important;
 }
+
+/* =====================================================================
+   TERMINAL MORTGAGE / SIDEBAR / READY CTA VISUAL LOCK
+   - Mortgage partner CTAs: official emerald, pure-white text + icons.
+   - Bank partner names: approved emerald ink on premium pearl chips.
+   - Sidebar "View All Tools": emerald pill, white glyphs, no green glow.
+   - Ready card: rounded card on global rail; all inner content pure white.
+   ===================================================================== */
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  button[data-emerald-action="true"],
+  a[data-emerald-action="true"]
+),
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  button[data-emerald-action="true"],
+  a[data-emerald-action="true"]
+):is(:hover, :focus, :focus-visible, :active) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  button[data-emerald-action="true"],
+  a[data-emerald-action="true"]
+) :where(*, span, strong, p, small, em, b, label, div),
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  button[data-emerald-action="true"],
+  a[data-emerald-action="true"]
+):is(:hover, :focus, :focus-visible, :active) :where(*, span, strong, p, small, em, b, label, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  button[data-emerald-action="true"],
+  a[data-emerald-action="true"]
+) :where(svg, [class*="lucide"], [data-lucide]),
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  button[data-emerald-action="true"],
+  a[data-emerald-action="true"]
+) :where(svg, [class*="lucide"], [data-lucide]) *,
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  button[data-emerald-action="true"],
+  a[data-emerald-action="true"]
+) svg :where(path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root .jj-bank-partner-chip,
+html body #root .jj-bank-partner-chip * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+html body #root [data-sidebar-view-all-tools],
+html body #root [data-sidebar-view-all-tools]:is(:hover, :focus, :focus-visible, :active) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16) !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+html body #root [data-sidebar-view-all-tools] *,
+html body #root [data-sidebar-view-all-tools] :where(svg, [class*="lucide"], [data-lucide]),
+html body #root [data-sidebar-view-all-tools] :where(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+html body #root section#ready-to-get-started {
+  background: transparent !important;
+  background-image: none !important;
+  padding-top: clamp(3rem, 5vw, 5rem) !important;
+  padding-bottom: clamp(3rem, 5vw, 5rem) !important;
+}
+
+html body #root section#ready-to-get-started > .jj-content-track {
+  padding-left: var(--shell-px-mobile) !important;
+  padding-right: var(--shell-px-mobile) !important;
+}
+
+@media (min-width: 768px) {
+  html body #root section#ready-to-get-started > .jj-content-track {
+    padding-left: var(--shell-px-tablet) !important;
+    padding-right: var(--shell-px-tablet) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  html body #root section#ready-to-get-started > .jj-content-track {
+    padding-left: var(--shell-px-desktop) !important;
+    padding-right: calc(var(--shell-px-desktop) + var(--shell-rail-safe)) !important;
+  }
+}
+
+html body #root section#ready-to-get-started .jj-emerald-card {
+  width: 100% !important;
+  border-radius: 28px !important;
+  padding: clamp(1.5rem, 3vw, 3rem) !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+html body #root section#ready-to-get-started .jj-emerald-card,
+html body #root section#ready-to-get-started .jj-emerald-card *,
+html body #root section#ready-to-get-started .jj-emerald-card :where(svg, [class*="lucide"], [data-lucide]),
+html body #root section#ready-to-get-started .jj-emerald-card :where(svg, [class*="lucide"], [data-lucide]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}

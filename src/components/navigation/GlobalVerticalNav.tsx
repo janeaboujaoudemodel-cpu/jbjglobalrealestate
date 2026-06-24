@@ -906,11 +906,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <Link
                   to={viewAllHref}
                   onClick={collapseAfterNavigation}
-                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-[#1A1A1A] bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-[#B89555] shadow-sm"
+                  data-sidebar-view-all-tools
+                  data-emerald-action="true"
+                  data-surface="emerald"
+                  data-emerald="true"
+                  className="jj-emerald-action flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold transition-all border border-transparent"
+                  style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                 >
-                  <Eye className="w-4 h-4 text-white flex-shrink-0" />
-                  <span className="flex-1">{viewAllLabel}</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-white" />
+                  <Eye className="w-4 h-4 flex-shrink-0" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                  <span className="flex-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{viewAllLabel}</span>
+                  <ChevronRight className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 </Link>
                 {!isDev && (
                   <Link
@@ -1115,15 +1120,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           <Link
                             to="/ai-hub"
                             onClick={collapseAfterNavigation}
-                            data-no-contrast-guard
-                            className="group flex items-center gap-2 px-2.5 py-[7px] rounded-lg text-[12px] font-bold transition-all duration-150 border border-[#B89555]/60 bg-[#FDFBF7] hover:bg-[#EFE6D6]/40"
-                            style={{ color: '#1A1A1A' }}
+                            data-sidebar-view-all-tools
+                            data-emerald-action="true"
+                            data-surface="emerald"
+                            data-emerald="true"
+                            className="jj-emerald-action group flex items-center gap-2 px-2.5 py-[7px] rounded-lg text-[12px] font-bold transition-all duration-150 border border-transparent"
+                            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                           >
-                            <span className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 border border-[#B89555]/60 bg-[#EFE6D6]/40">
-                              <Eye className="w-3 h-3" style={{ color: '#B89555' }} />
+                            <span className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 bg-white/10">
+                              <Eye className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                             </span>
-                            <span className="flex-1">View All Tools</span>
-                            <ChevronRight className="w-3 h-3" style={{ color: '#B89555' }} />
+                            <span className="flex-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>View All Tools</span>
+                            <ChevronRight className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                           </Link>
                           <div
                             className="my-1.5 mx-1 h-px"

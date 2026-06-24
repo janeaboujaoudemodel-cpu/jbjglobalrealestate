@@ -44,15 +44,14 @@ const CombinedContactNewsletter = ({
   return (
     <section
       id="ready-to-get-started"
-      data-ink-emerald
-      data-no-contrast-guard
-      className={`jj-emerald-card w-full py-10 md:py-14 ${className}`}
+      className={`w-full py-12 md:py-20 ${className}`}
     >
       <ContentTrack>
         <div
           data-ink-emerald
-          data-no-contrast-guard
-          className="jj-loop-block relative max-w-3xl mx-auto"
+          data-surface="emerald"
+          data-emerald="true"
+          className="jj-emerald-card jj-loop-block relative w-full rounded-[28px] p-6 md:p-10 lg:p-12 overflow-hidden"
         >
 
 

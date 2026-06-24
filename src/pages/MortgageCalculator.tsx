@@ -156,19 +156,21 @@ const MortgageCalculatorPage = () => {
             </div>
 
             <div
-              className="mt-8 rounded-2xl p-5 md:p-6"
+              className="mt-8 rounded-[24px] p-5 md:p-6 overflow-hidden relative"
               style={{
-                background: SURFACE,
-                border: `1px solid ${GOLD}55`,
+                background: `linear-gradient(135deg, ${SURFACE} 0%, #FFFFFF 52%, ${RAISED} 100%)`,
+                border: `1px solid rgba(6,78,59,0.22)`,
+                boxShadow: `0 18px 48px -28px rgba(6,78,59,0.42)`,
               }}
             >
-              <div className="flex flex-col md:flex-row md:items-center gap-5">
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 opacity-20" style={{ background: "radial-gradient(circle at 100% 0%, rgba(6,78,59,0.28), transparent 62%)" }} />
+              <div className="relative flex flex-col md:flex-row md:items-center gap-5">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: RAISED, border: `1px solid ${GOLD}55` }}>
-                    <Landmark className="w-6 h-6" style={{ color: GOLD }} />
+                  <div data-surface="emerald" data-emerald="true" className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                    <Landmark className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg" style={{ color: INK }}>Bank Partner Network</h3>
+                    <h3 className="font-bold text-lg jj-title-emerald">Bank Partner Network</h3>
                     <p className="text-sm" style={{ color: `${INK}B3` }}>Introductions through licensed mortgage partners connected with leading UAE banks.</p>
                   </div>
                 </div>
@@ -176,11 +178,10 @@ const MortgageCalculatorPage = () => {
                   {bankPartners.map((bank) => (
                     <span
                       key={bank}
-                      className="rounded-full px-3 py-1.5 text-xs font-semibold"
+                      className="jj-bank-partner-chip rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em]"
                       style={{
-                        color: INK,
-                        background: RAISED,
-                        border: `1px solid ${GOLD}55`,
+                        background: "rgba(255,255,255,0.74)",
+                        border: `1px solid rgba(6,78,59,0.28)`,
                       }}
                     >
                       {bank}
@@ -193,11 +194,14 @@ const MortgageCalculatorPage = () => {
             <div className="text-center mt-10">
               <button
                 onClick={() => setIsInquiryOpen(true)}
-                data-cta="dark"
-                className="jj-cta-dark inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all hover:scale-[1.02]"
+                data-emerald-action="true"
+                data-surface="emerald"
+                data-emerald="true"
+                className="jj-emerald-action inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all hover:scale-[1.02]"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
-                Request Mortgage Partner Introduction
-                <ArrowUpRight className="w-5 h-5" />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Mortgage Partner Introduction</span>
+                <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </button>
 
               <p className="mt-6 text-xs max-w-2xl mx-auto" style={{ color: `${INK}99` }}>

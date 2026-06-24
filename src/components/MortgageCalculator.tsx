@@ -717,9 +717,12 @@ const MortgageCalculator = ({
               <a
                 href="/contact"
                 data-emerald-action="true"
+                data-surface="emerald"
+                data-emerald="true"
                 className="jj-emerald-action w-full h-12 inline-flex items-center justify-center gap-2 rounded-md text-base font-semibold transition-colors shadow-sm"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
-                <span>Request Mortgage Introduction</span>
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Mortgage Introduction</span>
               </a>
             </div>
 
