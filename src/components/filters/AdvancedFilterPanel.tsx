@@ -452,16 +452,14 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
-                          {dev.logo_url && (
-                            <DeveloperLogo
-                              src={dev.logo_url}
-                              alt={dev.name}
-                              name={dev.name}
-                              variant="bare"
-                              className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
-                              renderFallback={false}
-                            />
-                          )}
+                          <DeveloperLogo
+                            src={dev.logo_url}
+                            alt={dev.name}
+                            name={dev.name}
+                            variant="bare"
+                            className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
+                            renderFallback
+                          />
                           <span className="text-sm text-[#1A1A1A] text-left truncate flex-1">{dev.name}</span>
                         </button>
                       );
