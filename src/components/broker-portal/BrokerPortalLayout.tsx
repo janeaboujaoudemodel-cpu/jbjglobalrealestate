@@ -64,6 +64,8 @@ export default function BrokerPortalLayout() {
       {/* Desktop sidebar — fixed full-height */}
       {!isMobile && (
         <aside
+          data-chrome="sidebar"
+          data-backend-sidebar="broker"
           data-surface="champagne"
           data-no-contrast-guard
           className={cn(

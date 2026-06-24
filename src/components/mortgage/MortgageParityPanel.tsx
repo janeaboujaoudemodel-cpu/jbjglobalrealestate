@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Scale } from "lucide-react";
 
 interface Props {
@@ -87,13 +87,6 @@ export default function MortgageParityPanel({
 
   const compareMinRate = 2;
   const compareMaxRate = 10;
-  const setCompareRateFromPointer = useCallback((target: HTMLInputElement, clientX: number) => {
-    const rect = target.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-    const raw = compareMinRate + ratio * (compareMaxRate - compareMinRate);
-    setCompareRate(Number((compareMinRate + Math.round((raw - compareMinRate) / 0.05) * 0.05).toFixed(2)));
-  }, []);
-
   const cardBg = isNavy
     ? "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)"
     : "#F7F2EA";
@@ -237,7 +230,7 @@ export default function MortgageParityPanel({
             const minR = compareMinRate;
             const maxR = compareMaxRate;
             const progress = Math.min(100, Math.max(0, ((compareRate - minR) / (maxR - minR)) * 100));
-            const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
+            const fill = "linear-gradient(90deg, #064E3B 0%, #042C1C 58%, #000000 100%)";
             const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
             return (
               <input
@@ -249,24 +242,18 @@ export default function MortgageParityPanel({
                 step={0.05}
                 value={compareRate}
                 aria-label="Compare rate"
-                onPointerDown={(e) => {
-                  e.currentTarget.setPointerCapture?.(e.pointerId);
-                  setCompareRateFromPointer(e.currentTarget, e.clientX);
-                }}
-                onPointerMove={(e) => {
-                  if (e.buttons !== 1) return;
-                  setCompareRateFromPointer(e.currentTarget, e.clientX);
-                }}
                 onInput={(e) => setCompareRate(Number((e.target as HTMLInputElement).value))}
                 onChange={(e) => setCompareRate(Number(e.target.value))}
                 className="mortgage-range-input w-full"
                 style={{
-                  background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
+                  ["--mortgage-range-progress" as any]: `${progress}%`,
+                  ["--mortgage-range-fill" as any]: fill,
+                  ["--mortgage-range-track" as any]: track,
                   boxShadow: isNavy ? 'inset 0 0 0 1px rgba(255,255,255,0.08)' : 'inset 0 0 0 1px rgba(6,78,59,0.14)',
                   ["--mortgage-range-thumb" as any]:
                     "#FFFFFF",
                   ["--mortgage-range-thumb-shadow" as any]:
-                    "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
+                    "0 0 0 1px rgba(255,255,255,0.72), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
                 }}
               />
             );

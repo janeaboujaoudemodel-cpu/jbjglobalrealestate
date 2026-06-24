@@ -85,8 +85,8 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
           />
           {!collapsed && (
-            <div className="min-w-0 flex-1 text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A] font-bold whitespace-nowrap leading-none text-center truncate">
-              JBJ GLOBAL REAL ESTATE
+            <div className="min-w-0 text-[10px] uppercase tracking-[0.13em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate">
+              JBJ Global Real Estate L.L.C S.O.C.
             </div>
           )}
         </Link>

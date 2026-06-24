@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -69,32 +69,8 @@ interface MortgageRangeProps {
 
 const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: MortgageRangeProps) => {
   const progress = getRangePercent(value, min, max);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const lastEmittedValueRef = useRef(value);
-  const fill = "linear-gradient(90deg, #064E3B 0%, #042c1c 100%)";
+  const fill = "linear-gradient(90deg, #064E3B 0%, #042C1C 58%, #000000 100%)";
   const track = isNavy ? "rgba(255,255,255,0.12)" : "#EFE6D6";
-
-  useEffect(() => {
-    lastEmittedValueRef.current = value;
-  }, [value]);
-
-  const emitValue = useCallback((nextValue: number) => {
-    const next = clampNumber(nextValue, min, max);
-    if (next === lastEmittedValueRef.current) return;
-    lastEmittedValueRef.current = next;
-    onChange(next);
-  }, [max, min, onChange]);
-
-  const emitFromPointer = useCallback((clientX: number) => {
-    const el = inputRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const ratio = clampNumber((clientX - rect.left) / rect.width, 0, 1);
-    const raw = min + ratio * (max - min);
-    const decimals = step.toString().split(".")[1]?.length ?? 0;
-    const stepped = min + Math.round((raw - min) / step) * step;
-    emitValue(Number(clampNumber(stepped, min, max).toFixed(decimals)));
-  }, [emitValue, max, min, step]);
 
   return (
     <input
@@ -107,23 +83,16 @@ const MortgageRange = ({ value, min, max, step, ariaLabel, isNavy, onChange }: M
       value={value}
       aria-label={ariaLabel}
       aria-valuetext={`${value}`}
-      ref={inputRef}
-      onPointerDown={(event) => {
-        event.currentTarget.setPointerCapture?.(event.pointerId);
-        emitFromPointer(event.clientX);
-      }}
-      onPointerMove={(event) => {
-        if (event.buttons !== 1) return;
-        emitFromPointer(event.clientX);
-      }}
-      onInput={(event) => emitValue(event.currentTarget.valueAsNumber)}
-      onChange={(event) => emitValue(event.currentTarget.valueAsNumber)}
+      onInput={(event) => onChange(clampNumber(event.currentTarget.valueAsNumber, min, max))}
+      onChange={(event) => onChange(clampNumber(event.currentTarget.valueAsNumber, min, max))}
       className="mortgage-range-input w-full"
       style={
         {
-          background: `${fill} 0 / ${progress}% 100% no-repeat, ${track}`,
+          ["--mortgage-range-progress" as any]: `${progress}%`,
+          ["--mortgage-range-fill" as any]: fill,
+          ["--mortgage-range-track" as any]: track,
           ["--mortgage-range-thumb" as any]: "#FFFFFF",
-          ["--mortgage-range-thumb-shadow" as any]: "0 0 0 2px #064E3B inset, 0 0 0 1px rgba(255,255,255,0.65), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
+          ["--mortgage-range-thumb-shadow" as any]: "0 0 0 1px rgba(255,255,255,0.72), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
         } as CSSProperties
       }
     />
