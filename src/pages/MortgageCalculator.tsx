@@ -9,6 +9,7 @@ import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
+import { AIShellCard } from "@/components/ui/ai-shell-card";
 
 // JBJ brand palette
 const PAGE = "#FDFBF7";       // champagne page
