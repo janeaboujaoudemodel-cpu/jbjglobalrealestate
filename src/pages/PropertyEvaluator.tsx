@@ -990,7 +990,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
         <LegalDisclaimer variant="ai-tools" className="mt-8" />
         <LegalDisclaimer variant="investment" className="mt-4" />
-      </div>
+      </AIShellCard>
+
     </PremiumToolShell>
   );
 };
