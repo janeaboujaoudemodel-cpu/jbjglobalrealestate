@@ -14152,23 +14152,26 @@ html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-a
 }
 html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
   position: absolute !important;
-  inset: -35% -70% !important;
+  inset: 0 !important;
   display: block !important;
   z-index: 1 !important;
   border-radius: inherit !important;
+  pointer-events: none !important;
   background:
-    repeating-linear-gradient(115deg,
-      rgba(0,0,0,0.00) 0%,
-      rgba(0,0,0,0.00) 17%,
-      rgba(0,0,0,0.46) 24%,
-      rgba(6,78,59,0.78) 31%,
-      rgba(0,0,0,0.56) 38%,
-      rgba(0,0,0,0.00) 48%);
-  background-size: 165% 165% !important;
-  mix-blend-mode: normal !important;
-  opacity: 0.95 !important;
-  animation: jj-sqtoggle-fast-3d-metal 0.75s linear infinite !important;
-  filter: saturate(1.25) contrast(1.18) !important;
+    linear-gradient(115deg,
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.00) 30%,
+      rgba(180,240,210,0.45) 45%,
+      rgba(255,255,255,0.90) 50%,
+      rgba(180,240,210,0.45) 55%,
+      rgba(255,255,255,0.00) 70%,
+      rgba(255,255,255,0.00) 100%) !important;
+  background-size: 220% 100% !important;
+  background-repeat: no-repeat !important;
+  mix-blend-mode: screen !important;
+  opacity: 1 !important;
+  animation: jj-sqtoggle-fast-3d-metal 1.6s linear infinite !important;
+  filter: saturate(1.1) !important;
 }
 html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] > span:not(.jj-sqtoggle-sweep) {
   position: relative !important;
@@ -14182,8 +14185,8 @@ html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-a
   box-shadow: inset 0 4px 12px rgba(0,0,0,0.62), 0 2px 6px rgba(0,0,0,0.36) !important;
 }
 @keyframes jj-sqtoggle-fast-3d-metal {
-  0% { transform: translate3d(-18%, 0, 0) rotate(0.001deg); }
-  100% { transform: translate3d(18%, 0, 0) rotate(0.001deg); }
+  0%   { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
 }
 
 
