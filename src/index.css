@@ -7427,8 +7427,8 @@ html body footer p:last-child {
    - No gold borders/dividers anywhere inside the sidebar nav rows
    ============================================================ */
 
-/* Kill gold left-border on expanded section column */
-[data-sidebar-emerald] .border-l { border-left-color: rgba(4, 120, 87, 0.25) !important; }
+/* Gold left-border on expanded section column */
+[data-sidebar-emerald] .border-l { border-left-color: rgba(184, 149, 85, 0.45) !important; }
 
 /* Emerald gradient utility (reuse) */
 [data-sidebar-emerald] :where([data-sidebar-section], a.group)[class*="!text-[#B89555]"],
