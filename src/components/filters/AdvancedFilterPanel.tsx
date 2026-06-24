@@ -262,7 +262,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         style={{
           // Emerald slider override for this modal
           ['--slider-track-bg' as any]: '#E6DCC7',
-          ['--slider-range-bg' as any]: 'linear-gradient(90deg, #064E3B 0%, #0d7a5f 60%, #10b981 100%)',
+          ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
           ['--slider-thumb-bg' as any]: '#FFFFFF',
           ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
         }}
@@ -705,7 +705,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         <div className="px-6 py-4 border-t border-[#B89555]/30 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <button
             onClick={handleClearAll}
-            className="px-5 py-2.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] text-xs font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]"
+            className="px-5 py-2.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] text-xs font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]"
           >
             Clear all
           </button>
