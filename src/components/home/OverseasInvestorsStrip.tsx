@@ -34,11 +34,10 @@ const OverseasInvestorsStrip = () => {
       }}
     >
       <style>{`
-        @keyframes oi-label-cycle {
-          0%, 22% { transform: translateY(0); }
-          25%, 47% { transform: translateY(-1.1em); }
-          50%, 72% { transform: translateY(-2.2em); }
-          75%, 100% { transform: translateY(-3.3em); }
+        @keyframes oi-label-fade {
+          0%, 28% { opacity: 1; transform: translateY(0); }
+          33%, 95% { opacity: 0; transform: translateY(-4px); }
+          100% { opacity: 1; transform: translateY(0); }
         }
         @keyframes oi-shimmer {
           0% { background-position: -200% 0; }
@@ -48,9 +47,18 @@ const OverseasInvestorsStrip = () => {
           0%, 100% { filter: drop-shadow(0 0 1px rgba(184,149,85,0.35)); }
           50% { filter: drop-shadow(0 0 10px rgba(184,149,85,0.75)); }
         }
-        .oi-label-track {
-          animation: oi-label-cycle 9s cubic-bezier(0.85,0,0.15,1) infinite;
-          will-change: transform;
+        .oi-label-reel {
+          position: relative;
+          display: block;
+          height: 14px;
+          min-width: 110px;
+        }
+        .oi-label-reel > span.oi-label {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          animation: oi-label-fade 9s ease-in-out infinite;
+          will-change: opacity, transform;
         }
         .oi-shimmer-text {
           background: linear-gradient(90deg, #B89555 0%, #F3E2B1 50%, #B89555 100%);
@@ -66,9 +74,10 @@ const OverseasInvestorsStrip = () => {
           animation: oi-pulse-glow 4s ease-in-out infinite;
         }
         @media (prefers-reduced-motion: reduce) {
-          .oi-label-track, .oi-shimmer-text, .oi-pulse-gold { animation: none !important; }
+          .oi-label, .oi-shimmer-text, .oi-pulse-gold { animation: none !important; opacity: 1 !important; }
         }
       `}</style>
+
 
       {/* Double gold hairlines top/bottom */}
       <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-[#B89555]/55" />
