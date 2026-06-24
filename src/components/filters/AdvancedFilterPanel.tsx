@@ -11,7 +11,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { EMIRATES_OPTIONS, VIEWS_OPTIONS } from "@/constants/filterConfig";
-import { SafeImage } from "@/components/SafeImage";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import type { ShortcutFilterState } from "./FilterShortcutBar";
 import { defaultShortcutFilters } from "./FilterShortcutBar";
 
@@ -26,11 +27,11 @@ const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
 
 const STATUS_OPTIONS = [
-  { value: 'Announced', label: 'Announced', dotClass: 'bg-pink-400' },
+  { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
   { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-surface-emerald' },
-  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-blue-400' },
-  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-yellow-400' },
-  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-red-500' },
+  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
+  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
+  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
 ];
 
 const CONSTRUCTION_OPTIONS = [
@@ -77,6 +78,7 @@ const premiumRank = (name: string) => {
 interface DeveloperEntry {
   name: string;
   logo_url: string | null;
+  slug?: string | null;
 }
 
 interface AreaEntry {
