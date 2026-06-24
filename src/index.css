@@ -1080,16 +1080,16 @@ All colors MUST be HSL.
   --page-px-desktop: var(--shell-px-desktop);
   --page-max-w: var(--shell-max-w);
   --rail-safe-right: var(--shell-rail-safe);
-  /* Global content gutter — must mirror MainLayout <main>'s wrapper px-4 sm:px-6 lg:px-8.
-     Full-bleed bands escape this gutter via negative margins so they stay edge-to-edge
-     INSIDE <main> (post-sidebar) but never extend under the fixed vertical sidebar. */
+  /* Global content gutter — mirrors MainLayout <main>'s symmetric padding-left
+     AND padding-right. Full-bleed bands escape this gutter via negative margins
+     so they stay edge-to-edge INSIDE the viewport (the sidebar overlays the
+     leftmost slice; bands never extend past the viewport edges on the right). */
   --jj-content-gutter: 0px;
 }
 @media (min-width: 640px) {
-  :root { --jj-content-gutter: 0px; }
-}
-@media (min-width: 1024px) {
-  :root { --jj-content-gutter: 0px; }
+  :root { --jj-content-gutter: 48px; }
+  body.jj-vertical-nav-active { --jj-content-gutter: 200px; }
+  body.jj-vertical-nav-collapsed { --jj-content-gutter: 48px; }
 }
 
 /* Canonical global layout primitives — the only approved width system. */
