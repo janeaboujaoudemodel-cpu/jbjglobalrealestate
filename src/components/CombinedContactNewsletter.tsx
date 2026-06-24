@@ -42,13 +42,19 @@ const CombinedContactNewsletter = ({
   ];
 
   return (
-    <section id="ready-to-get-started" className={`py-4 sm:py-5 md:py-6 bg-[#FDFBF7] ${className}`}>
+    <section
+      id="ready-to-get-started"
+      data-ink-emerald
+      data-no-contrast-guard
+      className={`jj-emerald-card w-full py-10 md:py-14 ${className}`}
+    >
       <ContentTrack>
         <div
           data-ink-emerald
           data-no-contrast-guard
-          className="jj-emerald-card jj-loop-block relative rounded-2xl px-4 md:px-5 pt-4 md:pt-5 pb-6 md:pb-7 max-w-3xl mx-auto"
+          className="jj-loop-block relative max-w-3xl mx-auto"
         >
+
 
           {/* Header */}
           <div className="relative text-center mb-5">
