@@ -180,20 +180,20 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     setLocalFilters({ ...defaultShortcutFilters });
   };
 
-  // Tokens — match the canonical filter UI styling. Active state uses solid
-  // ink + white label with a gold ring (high contrast, on-brand).
+  // Tokens — selected state uses the locked Emerald system (white text/icons via global guard).
   const togglePillBase =
     "px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer " +
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]";
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]";
   const togglePillOff =
     "border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
   const togglePillOn =
-    "border border-[#1A1A1A] bg-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555]";
+    "jj-surface-emerald border border-[color:var(--emerald-1)] font-bold shadow-[0_2px_8px_rgba(6,78,59,0.25)]";
   const sectionTitle = "text-sm font-bold text-[#1A1A1A] mb-3 tracking-tight";
   const inputClass =
     "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
     "text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 " +
-    "focus:outline-none focus:border-[#1A1A1A] focus:ring-2 focus:ring-[#B89555]/30 transition-all";
+    "focus:outline-none focus:border-[color:var(--emerald-1)] focus:ring-2 focus:ring-[color:var(--emerald-1)]/25 transition-all";
+
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
     !emirateSearch || e.label.toLowerCase().includes(emirateSearch.toLowerCase())
