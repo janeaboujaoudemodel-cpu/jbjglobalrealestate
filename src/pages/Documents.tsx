@@ -444,11 +444,11 @@ const Documents = () => {
           <div className="max-w-[1600px] mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,148,62,0.4)" }}>
-                  <FileText className="w-5 h-5" style={{ color: "#B8943E" }} />
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,149,85,0.4)" }}>
+                  <FileText className="w-5 h-5" style={{ color: "#B89555" }} />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold" style={{ color: "#1A1A1A" }}>Document <span style={{ color: "#B8943E" }}>Designer</span></h1>
+                  <h1 className="text-xl font-bold" style={{ color: "#1A1A1A" }}>Document <span style={{ color: "#B89555" }}>Designer</span></h1>
                   <p className="text-[11px]" style={{ color: "rgba(0,0,0,0.4)" }}>Create, scan & export professional documents</p>
                 </div>
               </div>

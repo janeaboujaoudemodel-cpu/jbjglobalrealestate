@@ -29,15 +29,15 @@ import { supabase } from '@/integrations/supabase/client';
 // ── Design tokens (Champagne-Gold on dark canvas) ──
 const C = {
   bg: "#0D0C08",
-  surface: "rgba(184,148,62,0.06)",
+  surface: "rgba(184,149,85,0.06)",
   border: "rgba(184,149,85,0.2)",
-  borderHover: "rgba(184,148,62,0.55)",
+  borderHover: "rgba(184,149,85,0.55)",
   accent: "#B89555",
   accentText: "#D4AF37",
   mutedText: "rgba(255,255,255,0.45)",
   dimText: "rgba(255,255,255,0.3)",
   btnPrimary: "linear-gradient(135deg, #B89555 0%, #9A7B2F 100%)",
-  btnShadow: "0 4px 20px rgba(184,148,62,0.3)",
+  btnShadow: "0 4px 20px rgba(184,149,85,0.3)",
   btnDanger: "rgba(239,68,68,0.15)",
   btnDangerText: "#f87171",
   btnDangerBorder: "rgba(239,68,68,0.35)",
@@ -877,7 +877,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
         {/* Hero */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5"
-            style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${C.border}`, boxShadow: "0 0 32px rgba(184,149,85,0.2)" }}>
+            style={{ background: "rgba(184,149,85,0.12)", border: `1px solid ${C.border}`, boxShadow: "0 0 32px rgba(184,149,85,0.2)" }}>
             <Wand2 className="h-8 w-8" style={{ color: C.accentText }} />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">AI Background Studio</h1>
@@ -918,10 +918,10 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             onClick={() => fileInputRef.current?.click()}
             className="rounded-2xl p-14 text-center cursor-pointer transition-all duration-300 group"
             style={{ border: `2px dashed ${C.border}`, background: C.surface }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = C.borderHover; (e.currentTarget as HTMLElement).style.background = "rgba(184,148,62,0.1)"; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = C.borderHover; (e.currentTarget as HTMLElement).style.background = "rgba(184,149,85,0.1)"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = C.border; (e.currentTarget as HTMLElement).style.background = C.surface; }}
           >
-            <Upload className="h-14 w-14 mx-auto mb-4" style={{ color: "rgba(184,148,62,0.5)" }} />
+            <Upload className="h-14 w-14 mx-auto mb-4" style={{ color: "rgba(184,149,85,0.5)" }} />
             <p className="text-white font-semibold text-xl mb-2">Drop your photo here</p>
             <p className="text-sm mb-6" style={{ color: C.dimText }}>JPG, PNG, WebP · Max 10MB</p>
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
@@ -982,7 +982,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               <div className="rounded-2xl overflow-hidden"
                 style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="px-4 py-2.5 flex items-center justify-between"
-                  style={{ borderBottom: "1px solid rgba(184,148,62,0.1)" }}>
+                  style={{ borderBottom: "1px solid rgba(184,149,85,0.1)" }}>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText }}>Original</span>
                 </div>
                 <div className="aspect-square flex items-center justify-center p-2" style={{ background: checkerboard }}>
@@ -994,7 +994,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               <div className="rounded-2xl overflow-hidden"
                 style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="px-4 py-2.5 flex items-center justify-between"
-                  style={{ borderBottom: "1px solid rgba(184,148,62,0.1)" }}>
+                  style={{ borderBottom: "1px solid rgba(184,149,85,0.1)" }}>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText }}>Result</span>
                   {result && (
                     <span className="flex items-center gap-1 text-xs" style={{ color: "#4ade80" }}>
@@ -1031,7 +1031,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             )}
 
             {/* Mode Tabs */}
-            <div className="flex gap-1 p-1 rounded-xl" style={{ background: "rgba(184,148,62,0.06)", border: `1px solid ${C.border}` }}>
+            <div className="flex gap-1 p-1 rounded-xl" style={{ background: "rgba(184,149,85,0.06)", border: `1px solid ${C.border}` }}>
               {[
                 { id: 'remove', label: 'Remove BG', icon: Wand2 },
                 { id: 'generate', label: 'AI Scene', icon: Sparkles },
@@ -1162,7 +1162,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       className="rounded-xl p-10 text-center cursor-pointer transition-all"
                       style={{ border: `2px dashed ${C.border}`, background: "rgba(184,148,62,0.03)" }}
                     >
-                      <Video className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(184,148,62,0.5)" }} />
+                      <Video className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(184,149,85,0.5)" }} />
                       <p className="text-white font-medium mb-1">Drop your video here</p>
                       <p className="text-xs mb-4" style={{ color: C.dimText }}>MP4, MOV, WebM · Max 200MB</p>
                       <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white"
@@ -1174,11 +1174,11 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                     <div className="space-y-3">
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.border}` }}>
-                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(184,148,62,0.1)` }}>Original</div>
+                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(184,149,85,0.1)` }}>Original</div>
                           <video src={videoPreviewUrl!} controls className="w-full" style={{ maxHeight: 200 }} />
                         </div>
                         <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.border}` }}>
-                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(184,148,62,0.1)` }}>Result</div>
+                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(184,149,85,0.1)` }}>Result</div>
                           {videoResult ? (
                             <video src={videoResult} controls className="w-full" style={{ maxHeight: 200 }} />
                           ) : (
@@ -1209,14 +1209,14 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                           {BG_PRESETS.map(p => (
                             <button key={p.id} onClick={() => setVideoBackground(p.id)}
                               className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                              style={{ background: videoBackground === p.id ? "rgba(184,148,62,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
+                              style={{ background: videoBackground === p.id ? "rgba(184,149,85,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
                               <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color === 'transparent' ? 'repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%, transparent 0% 50%) 50% / 6px 6px' : p.color.startsWith('linear') ? p.color : p.color, backgroundColor: (!p.color.startsWith('linear') && p.color !== 'transparent') ? p.color : undefined }} />
                               {p.label}
                             </button>
                           ))}
                         </div>
                       </div>
-                      <p className="text-xs rounded-lg px-3 py-2" style={{ background: "rgba(184,148,62,0.06)", color: C.accentText }}>
+                      <p className="text-xs rounded-lg px-3 py-2" style={{ background: "rgba(184,149,85,0.06)", color: C.accentText }}>
                         ℹ️ AI samples the first frame to detect background color, then applies FFmpeg colorkey filter across all frames.
                       </p>
                     </div>

@@ -28,15 +28,15 @@ import { supabase } from '@/integrations/supabase/client';
 // ── Design tokens (Champagne-Gold on dark canvas) ──
 const I = {
   bg: "#0D0C08",
-  surface: "rgba(184,148,62,0.06)",
+  surface: "rgba(184,149,85,0.06)",
   border: "rgba(184,149,85,0.2)",
-  borderHover: "rgba(184,148,62,0.55)",
+  borderHover: "rgba(184,149,85,0.55)",
   accent: "#B89555",
   text: "#D4AF37",
   muted: "rgba(255,255,255,0.45)",
   dim: "rgba(255,255,255,0.28)",
   btnGrad: "linear-gradient(135deg, #B89555 0%, #9A7B2F 100%)",
-  btnShadow: "0 4px 20px rgba(184,148,62,0.3)",
+  btnShadow: "0 4px 20px rgba(184,149,85,0.3)",
 };
 
 // ── Types ──
@@ -454,7 +454,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = I.borderHover; }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = I.border; }}>
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-          style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}` }}>
+          style={{ background: "rgba(184,149,85,0.12)", border: `1px solid ${I.border}` }}>
           <Camera className="h-8 w-8" style={{ color: I.text }} />
         </div>
         <p className="text-white font-semibold text-lg mb-2">Drop your photo here</p>
@@ -471,7 +471,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
   // ── Persistent Canvas Preview (always visible when image loaded) ──
   const canvasPreview = (
     <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(0,0,0,0.5)", border: `1px solid ${I.border}` }}>
-      <div className="px-4 py-2.5 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(184,148,62,0.1)` }}>
+      <div className="px-4 py-2.5 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(184,149,85,0.1)` }}>
         <span className="text-sm font-medium text-white truncate max-w-[200px]">{image?.name || 'Photo'}</span>
         <div className="flex items-center gap-2">
           {isProcessingAI && (
@@ -481,7 +481,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
           )}
           <button onClick={() => setShowBefore(v => !v)}
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-            style={{ background: showBefore ? "rgba(184,149,85,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(184,148,62,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
+            style={{ background: showBefore ? "rgba(184,149,85,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(184,149,85,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
             <SplitSquareHorizontal className="h-3 w-3" />{showBefore ? 'Original' : 'B/A'}
           </button>
           <button onClick={() => { setImage(null); setImagePreview(null); setAdjustments({ ...DEFAULT_ADJ }); setSelectedPreset('none'); setFaceAdj({ ...DEFAULT_FACE }); setBodyAdj({ ...DEFAULT_BODY }); }}
@@ -522,7 +522,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
               <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back</span>
             </Link>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-              style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}`, color: I.text }}>
+              style={{ background: "rgba(184,149,85,0.12)", border: `1px solid ${I.border}`, color: I.text }}>
               <Sparkles className="w-3 h-3" /> Photo Studio Pro
             </div>
           </div>
@@ -533,7 +533,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
         {/* Title */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
-            style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}`, boxShadow: "0 0 32px rgba(184,149,85,0.2)" }}>
+            style={{ background: "rgba(184,149,85,0.12)", border: `1px solid ${I.border}`, boxShadow: "0 0 32px rgba(184,149,85,0.2)" }}>
             <Wand2 className="h-7 w-7" style={{ color: I.text }} />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Photo Studio <span style={{ color: "#D4AF37" }}>Pro</span></h1>
@@ -859,7 +859,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                     </div>
 
                     {isProcessingAI && (
-                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: "rgba(184,148,62,0.06)", border: `1px solid ${I.border}` }}>
+                      <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: "rgba(184,149,85,0.06)", border: `1px solid ${I.border}` }}>
                         <Loader2 className="h-5 w-5 animate-spin" style={{ color: I.text }} />
                         <p className="text-sm text-white">Applying AI transformation…</p>
                       </div>
