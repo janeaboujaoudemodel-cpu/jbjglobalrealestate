@@ -33,6 +33,43 @@ const OverseasInvestorsStrip = () => {
           "radial-gradient(900px 320px at 12% 50%, rgba(184,149,85,0.18), transparent 60%), radial-gradient(700px 280px at 88% 50%, rgba(184,149,85,0.12), transparent 65%), linear-gradient(180deg, #0B0B0B 0%, #141414 100%)",
       }}
     >
+      <style>{`
+        @keyframes oi-label-cycle {
+          0%, 22% { transform: translateY(0); }
+          25%, 47% { transform: translateY(-1.1em); }
+          50%, 72% { transform: translateY(-2.2em); }
+          75%, 100% { transform: translateY(-3.3em); }
+        }
+        @keyframes oi-shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        @keyframes oi-pulse-glow {
+          0%, 100% { filter: drop-shadow(0 0 1px rgba(184,149,85,0.35)); }
+          50% { filter: drop-shadow(0 0 10px rgba(184,149,85,0.75)); }
+        }
+        .oi-label-track {
+          animation: oi-label-cycle 9s cubic-bezier(0.85,0,0.15,1) infinite;
+          will-change: transform;
+        }
+        .oi-shimmer-text {
+          background: linear-gradient(90deg, #B89555 0%, #F3E2B1 50%, #B89555 100%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          animation: oi-shimmer 5s linear infinite;
+        }
+        .oi-pulse-gold {
+          color: #FFFFFF;
+          animation: oi-pulse-glow 4s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .oi-label-track, .oi-shimmer-text, .oi-pulse-gold { animation: none !important; }
+        }
+      `}</style>
+
       {/* Double gold hairlines top/bottom */}
       <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-[#B89555]/55" />
       <span aria-hidden className="absolute inset-x-0 top-[3px] h-px bg-[#B89555]/20" />
