@@ -609,7 +609,7 @@ export default function GlobalVerticalNav() {
   }, [isDeveloperMode, isOwner, showBrokerSurfaces, showInvestorSurfaces]);
 
   // Collapsible sections state — accordion: only one open at a time
-  const [openSection, setOpenSection] = useState<SectionKey | null>('MY ACCOUNT');
+  const [openSection, setOpenSection] = useState<SectionKey | null>(null);
 
   // Data hooks for rich flyouts
   const { data: developers } = useDevelopers(false);
@@ -743,20 +743,17 @@ export default function GlobalVerticalNav() {
     return { highlightItems: highlights, sectionGroups: sections };
   }, [shouldShowItem]);
 
-  // Close mega menu and auto-expand active section on route change.
+  // Close mega menu on route change. Only auto-open a section if the
+  // current route matches a child item — never force "MY ACCOUNT" open
+  // by default on home. The user must click to expand.
   useEffect(() => {
     closeMegaMenu();
     setMobileOpen(false);
-    let matchedActiveSection = false;
     for (const [section, items] of Object.entries(sectionGroups)) {
       if (items.some(item => isRouteActive(item.href))) {
         setOpenSection(section as SectionKey);
-        matchedActiveSection = true;
-        break;
+        return;
       }
-    }
-    if (!matchedActiveSection && location.pathname === '/') {
-      setOpenSection('MY ACCOUNT');
     }
   }, [location.pathname, closeMegaMenu, sectionGroups]);
 
@@ -1116,29 +1113,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   >
                     <div className="ml-4 pl-2.5 border-l border-[#B89555]/15 space-y-1 pt-1 pb-1.5">
                       {sectionKey === 'TOOLS & WORKSPACE' && (
-                        <>
-                          <Link
-                            to="/ai-hub"
-                            onClick={collapseAfterNavigation}
-                            data-sidebar-view-all-tools
-                            data-emerald-action="true"
-                            data-surface="emerald"
-                            data-emerald="true"
-                            className="jj-emerald-action group flex items-center gap-2 px-2.5 py-[7px] rounded-lg text-[12px] font-bold transition-all duration-150 border border-transparent"
-                            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                          >
-                            <span className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 bg-white/10">
-                              <Eye className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                            </span>
-                            <span className="flex-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>View All Tools</span>
-                            <ChevronRight className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                          </Link>
-                          <div
-                            className="my-1.5 mx-1 h-px"
-                            style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(184,149,85,0.35) 50%, transparent 100%)' }}
-                            aria-hidden="true"
-                          />
-                        </>
+                        <Link
+                          to="/ai-hub"
+                          onClick={collapseAfterNavigation}
+                          data-sidebar-subitem
+                          data-no-contrast-guard
+                          className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 hover:bg-[#EFE6D6]/40"
+                          style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                        >
+                          <span data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}>
+                            <Eye ref={lockEmeraldGlyphWhite} className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          </span>
+                          <span data-sidebar-subitem-label className="flex-1" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>View All Tools</span>
+                        </Link>
                       )}
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
@@ -1385,9 +1372,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
+                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
                   >
-                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
+                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1398,13 +1385,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
+                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
                   >
-                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
+                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
               </Tooltip>
+
 
               {session ? (
                 <Tooltip>

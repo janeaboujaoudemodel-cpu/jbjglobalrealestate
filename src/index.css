@@ -8078,7 +8078,7 @@ html body [data-jj-utility-bar] {
 }
 /* keep the gold hairline at the header bottom — leave PASS 15/18 rules alone */
 
-/* 2) Footer — champagne band, BLACK text & dot */
+/* 2) Footer — champagne band, EMERALD text/links/dots */
 html body footer[data-jj-minimal-footer] {
   background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
   background-color: #F7F2EA !important;
@@ -8087,14 +8087,25 @@ html body footer[data-jj-minimal-footer] p,
 html body footer[data-jj-minimal-footer] p:last-child,
 html body footer[data-jj-minimal-footer] a,
 html body footer[data-jj-minimal-footer] a:visited,
+html body footer[data-jj-minimal-footer] span,
 html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  background: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+html body footer[data-jj-minimal-footer] svg,
+html body footer[data-jj-minimal-footer] svg * {
+  color: #047857 !important;
+  stroke: #047857 !important;
 }
 html body footer[data-jj-minimal-footer] a:hover {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  opacity: 0.7 !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  opacity: 0.85 !important;
 }
 
 /* 3) Sidebar bottom panel — champagne (kills white seam) */
@@ -9052,19 +9063,26 @@ html body [data-jj-utility-bar] .jj-sqtoggle {
   -webkit-text-fill-color: #FFFFFF !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] {
-  /* PASS 37 — true emerald metallic shine: emerald-light → emerald-deep,
-     no white linear overlay. Slight teal glint moves through. */
+  /* SELECTED — bright emerald metallic pill with clear white inner ring */
   background-image:
-    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+    linear-gradient(135deg, #0A6B53 0%, #047857 45%, #064E3B 100%) !important;
   background-size: 100% 100% !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 0 0 1.5px rgba(255,255,255,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.25),
     inset 0 -1px 0 rgba(0,0,0,0.35),
-    0 8px 22px -10px rgba(4,44,28,0.55) !important;
+    0 0 0 1px rgba(16,185,129,0.45),
+    0 6px 18px -6px rgba(4,120,87,0.65) !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
-  background: rgba(0,0,0,0.28) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06) !important;
+  /* UNSELECTED — flat dim, no border, dimmed text */
+  background: transparent !important;
+  background-image: none !important;
+  color: rgba(255,255,255,0.55) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
+  box-shadow: none !important;
 }
 html body .jj-emerald-metallic,
 html body .jj-emerald-metallic *,
@@ -9386,20 +9404,29 @@ html body [data-jj-utility-bar] .jj-sqtoggle {
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:hover,
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:focus-visible {
-  /* Locked to approved dark emerald only — no normal/bright green sweep. */
-  background-image: var(--jj-emerald-ombre) !important;
-  background-color: #064E3B !important;
-  background-size: 240% 100%, 100% 100% !important;
+  /* SELECTED — bright emerald metallic with clear inner ring */
+  background-image: linear-gradient(135deg, #0A6B53 0%, #047857 45%, #064E3B 100%) !important;
+  background-color: #047857 !important;
+  background-size: 100% 100% !important;
   background-repeat: no-repeat !important;
-  background-blend-mode: normal !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.16),
-    inset 0 1px 0 rgba(255,255,255,.20),
-    inset 0 -1px 0 rgba(0,0,0,.35),
-    0 0 22px rgba(4,44,28,0.45) !important;
+    inset 0 0 0 1.5px rgba(255,255,255,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -1px 0 rgba(0,0,0,0.35),
+    0 0 0 1px rgba(16,185,129,0.45),
+    0 6px 18px -6px rgba(4,120,87,0.65) !important;
   animation: none !important;
+}
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"],
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"]:hover {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  color: rgba(255,255,255,0.55) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
+  box-shadow: none !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::before {
   content: none !important;
@@ -13216,12 +13243,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ),
 html body #root [data-chrome="sidebar"] :is(
   [data-active="true"],
@@ -13286,12 +13313,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ):is(:hover, :focus, :focus-visible, :active, :disabled) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
@@ -13343,12 +13370,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
 html body #root [data-chrome="sidebar"] :is([data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-subitem][data-active="true"], [data-sidebar-highlight-tile]) :where(*) {
   color: #FFFFFF !important;
@@ -13398,12 +13425,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ) :where(svg, [class*="lucide"]),
 html body #root :is(
   .jj-emerald-action,
@@ -13924,4 +13951,39 @@ html body #root section#ready-to-get-started .jj-emerald-card :where(svg, [class
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FINAL FOOTER EMERALD LOCK — beats all upstream contrast guards.
+   Footer text/links/dots/icons are emerald on champagne.
+   No backgrounds, no borders, no highlight boxes.
+   ════════════════════════════════════════════════════════════════ */
+html body footer[data-jj-minimal-footer],
+html body footer[data-jj-minimal-footer] :is(p, a, span, bdi, time, small, li, button, nav, div) {
+  background: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+html body footer[data-jj-minimal-footer][data-surface="champagne"] {
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
+  background-color: #F7F2EA !important;
+}
+html body footer[data-jj-minimal-footer] :is(p, a, span, bdi, time, small, li, label, h1, h2, h3, h4, h5, h6),
+html body footer[data-jj-minimal-footer] :is(p, a, span, bdi, time, small, li, label, h1, h2, h3, h4, h5, h6) * {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  border-color: transparent !important;
+}
+html body footer[data-jj-minimal-footer] :is(svg, [class*="lucide"]),
+html body footer[data-jj-minimal-footer] :is(svg, [class*="lucide"]) * {
+  color: #047857 !important;
+  stroke: #047857 !important;
+  fill: none !important;
+}
+html body footer[data-jj-minimal-footer] a:hover,
+html body footer[data-jj-minimal-footer] a:hover * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  opacity: 0.9 !important;
 }

@@ -107,11 +107,11 @@ const MortgageCalculatorPage = () => {
         <div className="container mx-auto px-4 pt-8 md:pt-12 pb-16">
           <div className="max-w-5xl mx-auto">
             <div
-              className="rounded-2xl overflow-hidden"
+              className="rounded-[24px] overflow-hidden"
               style={{
                 background: SURFACE,
-                border: `1px solid ${GOLD}55`,
-                boxShadow: `0 18px 50px -20px ${GOLD}33`,
+                border: `1.5px solid ${GOLD}`,
+                boxShadow: `0 18px 50px -20px ${GOLD}55`,
               }}
             >
               <div className="px-4 md:px-8 py-8 md:py-10">
@@ -159,8 +159,8 @@ const MortgageCalculatorPage = () => {
               className="mt-8 rounded-[24px] p-5 md:p-6 overflow-hidden relative"
               style={{
                 background: `linear-gradient(135deg, ${SURFACE} 0%, #FFFFFF 52%, ${RAISED} 100%)`,
-                border: `1px solid rgba(6,78,59,0.22)`,
-                boxShadow: `0 18px 48px -28px rgba(6,78,59,0.42)`,
+                border: `1.5px solid ${GOLD}`,
+                boxShadow: `0 18px 48px -28px ${GOLD}55`,
               }}
             >
               <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 opacity-20" style={{ background: "radial-gradient(circle at 100% 0%, rgba(6,78,59,0.28), transparent 62%)" }} />
@@ -181,7 +181,7 @@ const MortgageCalculatorPage = () => {
                       className="jj-bank-partner-chip rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em]"
                       style={{
                         background: "rgba(255,255,255,0.74)",
-                        border: `1px solid rgba(6,78,59,0.28)`,
+                        border: `1px solid ${GOLD}80`,
                       }}
                     >
                       {bank}
