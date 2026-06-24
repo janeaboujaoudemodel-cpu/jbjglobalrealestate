@@ -1372,9 +1372,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
+                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
                   >
-                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
+                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1385,13 +1385,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="group w-7 h-7 rounded-lg flex items-center justify-center border border-[#047857]/40 bg-transparent hover:bg-[#064E3B]/[0.06]"
+                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
                   >
-                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#047857', stroke: '#047857' }} />
+                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
               </Tooltip>
+
 
               {session ? (
                 <Tooltip>
