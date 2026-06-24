@@ -1281,12 +1281,12 @@ const Quiz = () => {
 
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-[#B89555]/55 bg-[#F7F2EA] p-5">
-              <h3 className="text-sm font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#B89555]" />
-                Your Preferences
-              </h3>
-              <div className="space-y-3">
+            <div className="sticky top-24 rounded-2xl border border-[color:var(--emerald-1)]/30 bg-[#F7F2EA] overflow-hidden shadow-[0_4px_18px_rgba(6,78,59,0.08)]">
+              <div className="jj-surface-emerald px-5 py-3 flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                <h3 className="text-sm font-bold">Your Preferences</h3>
+              </div>
+              <div className="p-5 space-y-3">
                 {QUIZ_QUESTIONS.slice(0, currentStep + 1).map((q) => {
                   const answer = answers[q.id];
                   if (!answer) return null;
@@ -1308,6 +1308,7 @@ const Quiz = () => {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
