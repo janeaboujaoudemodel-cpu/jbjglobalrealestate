@@ -114,7 +114,7 @@ const OverseasInvestorsStrip = () => {
         data-no-contrast-guard
         className="allow-white group relative block w-full overflow-hidden px-6 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
         style={{
-          background: `linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)`,
+          background: `linear-gradient(135deg, #064E3B 0%, #053C2E 50%, #042418 100%)`,
           color: "#FFFFFF",
         }}
       >
