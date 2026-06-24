@@ -12,6 +12,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProjectCard from "@/components/ProjectCard";
 import { useHandpickedProjects } from "@/hooks/useHandpickedProjects";
+import ContentTrack from "@/components/layout/ContentTrack";
+import CardGrid from "@/components/layout/CardGrid";
 
 const FeaturedListings = () => {
   const { t } = useLanguage();
@@ -22,7 +24,7 @@ const FeaturedListings = () => {
   return (
     <section className="bg-[#FDFBF7] py-10 md:py-14">
       {/* Full-bleed container — edge to edge, no max-width constraint */}
-      <div className="w-full px-3 sm:px-5 lg:px-8">
+      <ContentTrack>
         {/* Section Header */}
         <div className="text-center mb-8 md:mb-10">
           <span
@@ -44,7 +46,7 @@ const FeaturedListings = () => {
 
         {/* Listings Grid — 3 per row on desktop, edge-to-edge full width.
             Increased gap for premium breathing room. */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 items-stretch auto-rows-fr">
+        <CardGrid columns={3} className="items-stretch auto-rows-fr">
           {isLoading
             ? [1, 2, 3, 4, 5, 6].map((i) => (
                 <div
@@ -86,7 +88,7 @@ const FeaturedListings = () => {
               <p className="text-[#1A1A1A]/70 text-sm">Featured projects coming soon</p>
             </div>
           )}
-        </div>
+        </CardGrid>
 
         {/* View All CTA — navy blue, white text + icon */}
         <div className="text-center mt-10 md:mt-12">
@@ -105,7 +107,7 @@ const FeaturedListings = () => {
             <ArrowRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
           </Link>
         </div>
-      </div>
+      </ContentTrack>
     </section>
   );
 };

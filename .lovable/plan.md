@@ -1,80 +1,98 @@
 
-I will implement this as a single global visual repair, not one-off patches.
+# Global Layout Unification
 
-Tasks to complete one by one:
+Goal: every page (home, project, developer, broker, owner, investor, dashboards, landings) reads as one consistent shell — same left edge, same right edge, same rhythm — at every breakpoint. Full-bleed straps stretch edge-to-edge inside the main content area, and "card" sections (Ready to Get Started, Top Areas, etc.) sit on the same inner content track.
 
-1. Lock the correct emerald source globally
-- Use the same dark emerald gradient already approved on EOI, handover date, Email / Call / Chat, and the horizontal header Search / Filter / Heart controls.
-- Remove the restricted lighter green from heart, shortlist, ad badge, payment-plan TBD, mortgage, report, brochure, presentation, and CTA surfaces.
-- Ensure normal state uses the darker approved emerald, and hover never switches to black text or restricted green.
-- Remove white borders/rings around emerald circles.
+## 1. Single source of truth — layout tokens + primitives
 
-2. Fix favorite / shortlist / heart icons globally
-- Update all card favorite and shortlist controls to be rounded emerald circles with no border.
-- Force every heart, shortlist, check, and related SVG inside emerald surfaces to pure white at idle, hover, focus, active, and disabled states.
-- Include project cards, recently viewed / Continue Searching cards, homepage sections, properties grid, and project-detail recommendations if present.
+Extend `src/index.css` `:root` with the canonical layout contract (replaces ad-hoc `max-w-7xl mx-auto px-4` everywhere):
 
-3. Fix Continue Searching section
-- Make the history circle before "Continue Searching for Your Dream Property" filled with the approved emerald.
-- Make the History icon pure white.
-- Make the heart icon in Continue Searching cards pure white on emerald.
+```text
+--shell-px-mobile: 16px
+--shell-px-tablet: 24px       (≥768px)
+--shell-px-desktop: 32px      (≥1024px)
+--shell-px-xl: 40px           (≥1440px)
+--shell-max-w: 1760px         (matches PremiumSectionCard "full")
+--shell-rail-safe: 56px       (right-side Contact rail clearance, lg+)
+--section-gap-y: clamp(40px, 5vw, 72px)
+--hero-min-h: clamp(420px, 70vh, 760px)
+```
 
-4. Restyle project-detail hero CTAs
-- Download Brochure: approved emerald fill, white icon, white text, no restricted green.
-- Register Interest: approved emerald fill, white text/icon behavior.
-- Download branded presentation: remove the pill-like broken style and make it premium, clean, and contrast-safe.
-- Keep these visually consistent with the approved horizontal header emerald controls.
+Build (or harden) **five primitives** that every page must use — no other container patterns allowed:
 
-5. Fix brochure and presentation checklist icons
-- In Project Brochure checklist: fill the tick circles with approved emerald and make ticks pure white.
-- In Generate Presentation checklist: same emerald circle + white tick treatment.
-- Fix the "Brochure" and "Generate Presentation" labels so their contrast is clean and not black-on-emerald or restricted green.
+| Primitive | File | Role |
+|---|---|---|
+| `<PageShell>` | `src/components/layout/PageShell.tsx` (new) | Page root. Vertical stack, sets `--section-gap-y`, applies rail-safe right padding on lg+, no horizontal padding itself. |
+| `<SectionStrap>` | `src/components/layout/SectionStrap.tsx` (new) | Full-bleed band. Spans the entire main-content width (edge-to-edge between sidebar and viewport edge). Inner child auto-wrapped in `<ContentTrack>`. Used for hero, Get Verified, Developers strap, Recently Viewed, Handpicked, Top Areas, Ready to Get Started, emerald campaign banners. |
+| `<ContentTrack>` | `src/components/layout/ContentTrack.tsx` (new) | The inner content rail. `max-w: var(--shell-max-w)`, centered, horizontal padding from shell tokens, rail-safe on lg+. Every card/grid lives inside one of these so they all share an identical left/right edge. |
+| `<HeroFrame>` | `src/components/layout/HeroFrame.tsx` (new) | Hero wrapper. Full-bleed background layer (image/video) + `<ContentTrack>` for copy. Guarantees `min-h: var(--hero-min-h)`, no random side gaps, no unfinished corners. |
+| `<CardGrid>` | `src/components/layout/CardGrid.tsx` (new) | Responsive grid (`1 / 2 / 3 / 4` cols) with consistent gap tokens. |
 
-6. Fix Generate Presentation card
-- Repair the broken contrast of "Click to start", "Generate Presentation", and "Custom PDF deck · ~30 seconds".
-- Restyle the card surface so it looks intentional and premium, not visually broken.
-- Use approved emerald only where the surface is emerald, with pure white foreground.
+Retire/alias the legacy helpers (`.jj-page`, `.jj-band`, `.jj-fullbleed-band`, `PremiumSectionCard width="full"`) to delegate to these primitives so older call sites pick up the new contract automatically — no behavioural change for sections already on the new track.
 
-7. Fix Payment Plan TBD
-- Replace the restricted green on "Payment Plan (TBD)" with the approved emerald style.
-- Ensure icon and text are white where the tab/button is emerald.
+## 2. Edge-to-edge rule
 
-8. Fix Mortgage Calculator section
-- Replace all restricted green with approved emerald.
-- Fix mortgage icon tiles, title accents, cards, sliders/metrics, "Compared to bank rate", and CTA surfaces.
-- Swap the current states for Request Mortgage Introduction / Prefer Mortgage Advisor style: darker approved emerald on normal load, lighter/softer state only on hover if needed.
-- Ensure title/text on emerald areas is white, not black.
+`<SectionStrap>` is the ONLY way to render a full-bleed band. It:
 
-9. Fix Live Market Data / Dubai Market Intelligence
-- Make Download Report approved emerald with white text and icon.
-- Fix any black text on emerald in the market widget.
-- Repair the broken layout/overflow so it does not cross or collide with the vertical sidebar.
+- spans the main column (sidebar to viewport right edge, minus rail-safe on lg+),
+- never has horizontal margin,
+- alternates tone via `tone="page" | "surface" | "raised" | "emerald" | "ink"`,
+- wraps children in `<ContentTrack>` so the inner copy/cards line up with every other section's content edge.
 
-10. Fix global project-page spacing and sticky bars
-- Repair the project page layout where cards/sections are touching screen edges.
-- Only the background layer can be full-width to the sidebar; cards/content must always have safe padding.
-- Fix both horizontal filter bars: Price / Payments / Handover / Property Type etc. and Details / Gallery / Progress / Developer / Location / Brochure / Payment Plan etc.
-- Ensure they stop correctly at the vertical sidebar and do not look glued together.
-- Apply this globally across desktop, tablet, and phone.
+Every section listed by the user — Hero, Developers strap, Project hero, Recently Viewed / Continue Searching, Get Verified, Invest in Dubai, Explore Guides & Reports, Handpicked For You, Featured Properties, Top Areas in Dubai, Ready to Get Started, animated/emerald banners — is converted to `<SectionStrap><...>...</SectionStrap>`. Their inner content all sits on the same `<ContentTrack>` rail → identical left/right edges.
 
-11. Visual validation proof
-- Navigate as a user through:
-  - Homepage cards and Continue Searching
-  - Properties / All Projects cards
-  - The selected project detail page
-  - Brochure section
-  - Generate Presentation section
-  - Mortgage Calculator section
-  - Live Market Data section
-- Capture screenshots after the fix proving:
-  - heart/shortlist/history icons are white on emerald
-  - no restricted green is visible on the affected controls
-  - project cards and sections no longer touch borders
-  - sticky bars and market widget no longer cross the sidebar
-  - Download Brochure / Register Interest / Download branded presentation / Download Report have correct contrast
+## 3. Hero fix
 
-Technical approach:
-- Centralize the approved emerald styling in the global CSS terminal lock so later rules cannot repaint emerald icons black.
-- Add or normalize component data attributes/classes only where needed so the global emerald contract can detect affected controls.
-- Fix spacing at the project layout shell/container level instead of adding random per-card margins.
-- Validate with Playwright screenshots using desktop viewport first, then responsive checks for tablet/phone-safe padding.
+`<HeroFrame>` standardises every hero:
+
+- background layer = absolute, inset-0, full bleed (no gaps, no rounded corners cutting the image),
+- overlay = dark gradient token,
+- content = `<ContentTrack>` so headline/CTA align with the rest of the page,
+- `min-height: var(--hero-min-h)` so heroes never look short or floaty,
+- responsive: same behaviour on mobile/tablet/desktop/xl.
+
+Applies to Home hero, Project hero, Developer hero, Broker/Owner/Investor portal landings, AI Home Finder hero, etc.
+
+## 4. Migration sweep
+
+Run an automated sweep + targeted manual replacement:
+
+1. `rg` for legacy width/margin patterns to inventory call sites:
+   - `max-w-7xl`, `max-w-6xl`, `max-w-[1280px]`, `max-w-[1440px]`, `max-w-[1600px]`, `max-w-[1760px]`
+   - `container mx-auto`
+   - `px-4 md:px-6 lg:px-8`, `px-4 sm:px-6 lg:px-8`
+   - hand-rolled `w-screen`, `-mx-*`, `ml-[200px]`, `left-[200px]`
+2. Replace with `<PageShell>` / `<SectionStrap>` / `<ContentTrack>` / `<HeroFrame>` / `<CardGrid>`.
+3. Delete local section width overrides; if a page truly needs a narrower rail, it passes `<ContentTrack width="narrow">` (820px) or `width="wide"` (1440px) — no inline pixel values.
+4. Update `PremiumSectionCard` to render as `<SectionStrap><ContentTrack>` under the hood so existing usages auto-conform.
+5. Update `GlobalFilterBar` and the project-detail sticky sub-nav to use the same shell tokens (already partly done — finish by removing breakpoint-specific `left-[…]` offsets and using `var(--sidebar-w)` from the existing sidebar context).
+
+## 5. Pages touched (non-exhaustive)
+
+- `src/pages/Index.tsx` (Home) and every homepage strap component
+- `src/components/project-detail/ProjectDetailLayout.tsx`
+- `src/pages/Developers*.tsx` and `src/routes/DevelopersPortalRoutes.tsx` landings
+- Broker portal landings under `src/routes/BrokerPortalRoutes.tsx`
+- Owner dashboards under `src/pages/owner/*`
+- Investor portal pages under `src/pages/investor/*`
+- All AI tool landings under `src/routes/AIToolRoutes.tsx` / `ToolkitRoutes.tsx`
+- Marketing/guide/news/FAQ neon pages (kept neon, layout primitive still applies)
+
+## 6. Responsive validation
+
+Playwright run that visits ~14 representative pages at 4 viewports each (375, 834, 1280, 1760) and:
+
+1. Measures the left and right edge of every `<SectionStrap>` and every `<ContentTrack>` on the page. Asserts they match within 1px across all sections on that page.
+2. Asserts no hero has horizontal gaps (background layer bounding box == strap bounding box).
+3. Captures full-page screenshots saved to `/tmp/browser/layout-audit/<page>-<viewport>.png`.
+4. Prints a per-page pass/fail table.
+
+Pages in the audit: `/`, `/properties`, `/project/<slug>`, `/developers`, `/developers/<slug>`, `/broker-dashboard`, `/owner-dashboard`, `/investor/portfolio-views`, `/ai-home-finder`, `/market-intelligence`, `/services`, `/about`, `/guides/legal`, `/areas`.
+
+## 7. Done criteria
+
+- One primitive set, used everywhere.
+- Every strap section listed by the user is full-bleed and shares the exact same inner content rail.
+- Every hero fully fills its frame at every breakpoint.
+- Playwright audit passes on all 14 pages × 4 viewports with edge-alignment within 1px.
+- Screenshots attached in the final reply as visual proof.

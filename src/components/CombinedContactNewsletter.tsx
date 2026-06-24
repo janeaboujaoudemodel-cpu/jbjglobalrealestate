@@ -7,6 +7,7 @@
 import { Phone, Mail, MessageCircle } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { NewsletterBrevo } from "@/components/marketing/NewsletterBrevo";
+import ContentTrack from "@/components/layout/ContentTrack";
 
 interface CombinedContactNewsletterProps {
   title?: string;
@@ -42,7 +43,7 @@ const CombinedContactNewsletter = ({
 
   return (
     <section id="ready-to-get-started" className={`py-4 sm:py-5 md:py-6 bg-[#FDFBF7] ${className}`}>
-      <div className="w-full px-4 md:px-6">
+      <ContentTrack>
         <div
           data-ink-emerald
           data-no-contrast-guard
@@ -125,7 +126,7 @@ const CombinedContactNewsletter = ({
             <NewsletterBrevo variant="compact" source="combined_cta" />
           </div>
         </div>
-      </div>
+      </ContentTrack>
     </section>
   );
 };

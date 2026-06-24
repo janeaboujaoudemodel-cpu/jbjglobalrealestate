@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import VerificationModal from "./VerificationModal";
+import ContentTrack from "@/components/layout/ContentTrack";
 
 const VerificationBanner = () => {
   const { user } = useAuth();
@@ -47,7 +48,7 @@ const VerificationBanner = () => {
             "linear-gradient(135deg, #042c1c 0%, #064E3B 55%, #0A6B53 100%)",
         }}
       >
-        <div className="max-w-[1600px] mx-auto px-4 py-4 sm:py-5 relative z-10">
+        <ContentTrack className="py-4 sm:py-5 relative z-10">
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
             {/* Shield icon — translucent white tile, white icon */}
             <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-white/15 border border-white/40 flex items-center justify-center">
@@ -92,7 +93,7 @@ const VerificationBanner = () => {
 
 
           </div>
-        </div>
+        </ContentTrack>
       </motion.div>
 
       <VerificationModal open={modalOpen} onOpenChange={setModalOpen} />
