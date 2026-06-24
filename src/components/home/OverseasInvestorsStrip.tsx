@@ -6,6 +6,7 @@
  */
 import { Link } from "react-router-dom";
 import { Globe, ArrowRight } from "lucide-react";
+import ContentTrack from "@/components/layout/ContentTrack";
 
 const microStats = [
   { v: "0%", l: "Tax" },
@@ -28,8 +29,9 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="overseas-investors-strip-link allow-white group flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 md:gap-8 px-6 sm:px-10 md:px-14 py-10 md:py-14 lg:py-16 text-white"
+        className="overseas-investors-strip-link allow-white group block py-10 md:py-14 lg:py-16 text-white"
       >
+        <ContentTrack className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 md:gap-8">
 
         {/* Left: globe + headline — full width below xl so it never gets crushed into one-char-per-line */}
         <span className="allow-white flex items-center gap-3 min-w-0 basis-full xl:basis-auto xl:flex-1">
@@ -76,6 +78,7 @@ const OverseasInvestorsStrip = () => {
         </span>
 
 
+        </ContentTrack>
       </Link>
     </section>
   );
