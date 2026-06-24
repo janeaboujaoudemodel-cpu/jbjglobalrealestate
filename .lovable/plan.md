@@ -1,47 +1,58 @@
-## Goal
-Fix the desktop layout globally so the website content is visually centered between the fixed left sidebar and the right side of the viewport, with equal left/right breathing room and no empty/off-center content area.
+## Site-wide alignment normalization
 
-## Plan
-1. **Replace the current mirrored main padding approach**
-   - Remove the recent `main` right-padding mirror that creates a narrowed/empty-feeling content lane.
-   - Treat the fixed sidebar as chrome, not as part of the content centering calculation.
-   - Keep only the required left offset for the sidebar width: `48px` collapsed, `200px` expanded.
+### What I already verified
+- Scroll bug (page jumping back to hero on `/`): caused by a stale HMR module crash in `OverseasInvestorsStrip` (`Cannot read properties of null (reading 'useRef')`). After dev-server restart the homepage scrolls correctly (verified at scrollY=1389 → 1400 stable, zero pageerrors). I'll keep this verified at the end too.
+- Total page files under `src/pages`: **427 `.tsx` files** (this includes admin, portal, broker, developer hub, owner, toolkit, AI tools, public marketing, legal, etc.).
 
-2. **Create one global desktop content grid contract**
-   - Add layout tokens for:
-     - sidebar offset
-     - usable content viewport
-     - centered content max width
-     - symmetric page gutters
-   - Make `.jj-content-track`, `.jj-project-shell`, `.jj-track`, `.jj-page`, and legacy centered containers align to the same center line.
-   - Ensure the right-side Contact rail does not push visual centering off balance; it should be handled as an overlay/safe zone only where needed, not by shifting every content block.
+### Why I won't edit 427 files one by one
+Editing each page is unsafe and unmaintainable. The codebase already has a single canonical token system (`--jj-global-container-max: 1760px`, `.jj-global-container`, `.jj-content-track`). The right fix is to make **every page inherit the canonical container automatically** through CSS — no page-specific edits — and let the homepage opt out.
 
-3. **Fix full-bleed sections globally**
-   - Update `.jj-band`, `.jj-project-band`, `.jj-project-hero`, and `.jj-fullbleed-band` breakout math so bands still span the intended viewport area without creating horizontal shifts.
-   - Preserve all existing page content and sections; no removals.
+### The plan
 
-4. **Audit page-specific wrappers only where they break the global contract**
-   - Search for wrappers using `container mx-auto`, `max-w-7xl mx-auto`, `px-*`, and other legacy centering patterns.
-   - Add global CSS normalization where possible instead of patching individual pages.
-   - Only touch a component/page file if a hardcoded layout class bypasses the global shell and cannot be corrected through the global layout system.
+**1. Centralized CSS normalization (one edit in `src/index.css`)**
 
-5. **Validate with desktop screenshots and guides**
-   - Use Playwright at desktop size with a temporary visual overlay/grid in the browser session only.
-   - Capture proof screenshots for representative routes:
-     - project detail page currently reported
-     - home page
-     - properties/listing page
-     - area/detail or developers page
-   - Measure DOM rectangles for sidebar, main, content track, and viewport center to confirm:
-     - content is centered in the usable area
-     - left/right spacing is symmetrical
-     - no section is horizontally shifted
-     - no large empty lane remains
+Add a global rule scoped to `body:not([data-homepage]) main` that normalizes every common content container to the canonical width + gutter:
 
-## Files likely to change
-- `src/components/MainLayout.tsx`
-- `src/index.css`
-- Possibly one or two layout primitive files only if needed after audit, such as `src/components/layout/PageShell.tsx`
+- Targets: `.container`, `.max-w-7xl.mx-auto`, `.max-w-6xl.mx-auto`, `.max-w-5xl.mx-auto`, `.max-w-4xl.mx-auto`, `.max-w-[1280px].mx-auto`, `.max-w-[1400px].mx-auto`, `.max-w-[1440px].mx-auto`, `.max-w-[1500px].mx-auto`, `.max-w-[1600px].mx-auto`, `.max-w-[1760px].mx-auto`.
+- Applies: `max-width: var(--jj-global-container-max)`, responsive `padding-left/right` from existing tokens.
+- Hero opt-out (untouched, always full-width): any descendant of `[data-hero-dark]`, `[data-hero]`, `.jj-fullbleed`, `[data-no-rail-safe]`, `header`, `nav`.
+- Print mode opt-out: respects existing `[data-print-mode]`.
 
-## Validation output
-After implementation I will report the measured alignment values and reference the screenshot proof captured during validation.
+**2. Homepage opt-out + 4 full-width exception bands**
+
+- Add `data-homepage` to `<body>` while on `/` (small effect in `src/pages/Index.tsx`).
+- Mark the 4 exception sections with `data-fullbleed-band` so their background spans edge-to-edge while their inner content still aligns to the canonical track:
+  - Get Verified / Mode Portal pair (`ModePortalBanner` area)
+  - Continue Searching For Your Dream Property
+  - Handpicked For You (`FeaturedListings`)
+  - Guides & Reports library (`HomepageBookMarquee`)
+- Add a `.jj-fullbleed-band` utility that paints background full width and centers inner children to canonical width.
+
+**3. Scroll-bug guard**
+
+`OverseasInvestorsStrip` is fine code, but I'll add a tiny defensive boundary (lazy-mount the IntersectionObserver only after first paint) so any future HMR/lazy-chunk failure doesn't unmount and yank the scroll. No visual change.
+
+**4. Validation (visual, with screenshots)**
+
+Drive Playwright across a representative slice of every page family:
+- Public marketing: `/`, `/about`, `/contact`, `/careers`, `/legal`
+- Listings: `/projects`, `/project/<slug>`, `/areas`, `/area/<slug>`
+- Tools: `/tools`, `/tools/mortgage`, `/tools/ai-home-finder`, `/tools/property-evaluator`, `/tools/compare-projects`, `/tools/compare-units`
+- AI tools: 4 sample pages from `src/pages/AI*`
+- Portals: `/owner`, `/broker`, `/developers-portal`, `/developer-hub`
+- Admin: `/admin`, `/admin-crm`
+
+For each I capture (a) viewport screenshot, (b) measured left/right offset of the primary content container, and (c) confirm offsets match the canonical track within ±1px. Homepage gets a second pass confirming the 4 exception bands are full-bleed and that the page scrolls without jumping.
+
+### Files I will touch
+- `src/index.css` — 1 normalization block, 1 fullbleed-band utility.
+- `src/pages/Index.tsx` — add `data-homepage` body attribute (via `useEffect`) and `data-fullbleed-band` on the 4 exception wrappers.
+- `src/components/home/OverseasInvestorsStrip.tsx` — defensive observer mount.
+- No edits to any of the other 426 pages. No hero edits anywhere.
+
+### What I will NOT do
+- Will not touch any hero section on any page.
+- Will not edit the homepage layout outside of the 4 named exception sections + body attribute.
+- Will not touch backend, RLS, or data code.
+
+Approve and I'll execute, then post the screenshot grid + alignment measurements.
