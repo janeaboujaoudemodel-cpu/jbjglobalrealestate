@@ -286,7 +286,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main className={`w-full max-w-full overflow-x-hidden bg-[#F7F2EA] min-h-screen transition-[padding-left,padding-right,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "pl-0 pr-0" : "sm:pl-[80px] sm:pr-[32px] [body.jj-vertical-nav-active_&]:sm:pl-[232px] [body.jj-vertical-nav-active_&]:sm:pr-[32px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[80px] [body.jj-vertical-nav-collapsed_&]:sm:pr-[32px]"} ${needsHeaderSpacing && !isHomePage ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+        <main className={`jj-main-shell w-full max-w-full overflow-x-clip bg-[#F7F2EA] min-h-screen transition-[margin-left,width,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "jj-main-shell--standalone" : ""} ${needsHeaderSpacing && !isHomePage ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
           <div data-content-gutter="1" className="w-full max-w-full">
 
 
@@ -306,7 +306,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           leaving a champagne strip between the sidebar and the footer). The
           sidebar visually overlays the leftmost slice; footer inner content
           uses max-w-7xl mx-auto so it stays optically centered. */}
-      <div data-chrome="footer" className="w-full">
+      <div data-chrome="footer" className="jj-footer-shell w-full">
         {!usesStandalonePortalChrome && !isToolkitGeneratorRoute && <Footer />}
       </div>
 
