@@ -264,9 +264,9 @@ const ContinueSearching = ({
               </button>
             </div>
           )}
-        </ContentTrack>
-        {/* /header padded inner */}
         </div>
+        {/* /header padded inner */}
+        </ContentTrack>
 
         {isEmpty ? (
           <div className="px-4 md:px-8 lg:px-12 flex flex-col items-center justify-center py-12 text-center">
