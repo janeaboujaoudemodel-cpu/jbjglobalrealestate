@@ -419,15 +419,9 @@ const Index = () => {
 
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={420} rootMargin="1200px">
-          <div
-            className="relative w-full mx-auto rounded-[28px] bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12 border border-[#B89555]/45 shadow-[0_24px_70px_-32px_rgba(184,149,85,0.45)]"
-            style={{ contain: "layout paint" }}
-          >
-            {/* Gold corner accents — matched to Top Areas in Dubai card */}
-            <span aria-hidden className="pointer-events-none absolute top-0 left-0 h-12 w-12 border-t border-l border-[#B89555]/70 rounded-tl-[28px]" />
-            <span aria-hidden className="pointer-events-none absolute top-0 right-0 h-12 w-12 border-t border-r border-[#B89555]/70 rounded-tr-[28px]" />
-            <span aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-12 w-12 border-b border-l border-[#B89555]/70 rounded-bl-[28px]" />
-            <span aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-12 w-12 border-b border-r border-[#B89555]/70 rounded-br-[28px]" />
+          <div className="jj-premium-shell" style={{ contain: "layout paint" }}>
+            <span aria-hidden className="jj-premium-shell__c-bl" />
+            <span aria-hidden className="jj-premium-shell__c-br" />
 
             <Suspense fallback={<SectionLoader />}>
               <MortgageCalculator compact />
