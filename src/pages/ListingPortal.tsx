@@ -177,7 +177,7 @@ const ListingPortal = () => {
                       className="group cursor-pointer bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl p-8 hover:border-[#B89555]/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
                     >
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/8 to-transparent rounded-bl-full" />
-                      <Badge className="absolute top-4 right-4 text-xs" style={{ background: '#ede9fe', color: '#6d28d9', border: '1px solid #c4b5fd' }}>
+                      <Badge className="absolute top-4 right-4 text-xs" style={{ background: '#EFE6D6', color: '#1A1A1A', border: '1px solid rgba(184,149,85,0.4)' }}>
                         <Sparkles className="w-3 h-3 mr-1" style={{ color: '#7c3aed' }} />
                         AI Powered
                       </Badge>

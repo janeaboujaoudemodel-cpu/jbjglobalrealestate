@@ -41,20 +41,20 @@ export function AIVideoStudioExportBar({
     .join(' · ') : '';
 
   return (
-    <div className="flex flex-col" style={{ background: '#0A0A10', borderTop: '1px solid rgba(184,148,62,0.12)' }}>
+    <div className="flex flex-col" style={{ background: '#0A0A10', borderTop: '1px solid rgba(184,149,85,0.12)' }}>
       {/* Filter banner */}
       {hasFilter && (
         <div
           className="flex items-center gap-2 px-4 py-1.5"
-          style={{ background: 'rgba(184,148,62,0.06)', borderBottom: '1px solid rgba(184,148,62,0.15)' }}
+          style={{ background: 'rgba(184,149,85,0.06)', borderBottom: '1px solid rgba(184,149,85,0.15)' }}
         >
-          <Sparkles className="w-3 h-3 shrink-0" style={{ color: '#B8943E' }} />
-          <span className="text-[10px] font-semibold" style={{ color: '#B8943E' }}>Beauty filter baked into export:</span>
+          <Sparkles className="w-3 h-3 shrink-0" style={{ color: '#B89555' }} />
+          <span className="text-[10px] font-semibold" style={{ color: '#B89555' }}>Beauty filter baked into export:</span>
           <span className="text-[10px] flex-1 truncate" style={{ color: '#8A8A9A' }}>{filterSummary}</span>
           <button
             onClick={onClearExportFilter}
             className="transition-opacity hover:opacity-70"
-            style={{ color: '#B8943E' }}
+            style={{ color: '#B89555' }}
             title="Remove filter from export"
           >
             <X className="w-3 h-3" />
@@ -65,7 +65,7 @@ export function AIVideoStudioExportBar({
       <div className="flex items-center justify-between px-4 py-2.5">
         {/* Presets */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs mr-1 font-semibold tracking-wide uppercase" style={{ color: '#B8943E' }}>Export:</span>
+          <span className="text-xs mr-1 font-semibold tracking-wide uppercase" style={{ color: '#B89555' }}>Export:</span>
           {EXPORT_PRESETS.map((preset) => {
             const isActive = selectedPreset === preset.id;
             return (
@@ -74,9 +74,9 @@ export function AIVideoStudioExportBar({
                 onClick={() => onSelectPreset(preset.id)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                 style={{
-                  background: isActive ? 'rgba(184,148,62,0.12)' : 'rgba(255,255,255,0.04)',
-                  border: isActive ? '1px solid rgba(184,148,62,0.4)' : '1px solid rgba(255,255,255,0.08)',
-                  color: isActive ? '#B8943E' : '#8A8A9A',
+                  background: isActive ? 'rgba(184,149,85,0.12)' : 'rgba(255,255,255,0.04)',
+                  border: isActive ? '1px solid rgba(184,149,85,0.4)' : '1px solid rgba(255,255,255,0.08)',
+                  color: isActive ? '#B89555' : '#8A8A9A',
                 }}
               >
                 <PresetIcon iconKey={preset.icon} />
@@ -94,9 +94,9 @@ export function AIVideoStudioExportBar({
             disabled={isExporting}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all disabled:opacity-40"
             style={{
-              background: 'linear-gradient(135deg, #D8C7A6, #B8943E)',
+              background: 'linear-gradient(135deg, #D8C7A6, #B89555)',
               color: '#0A0A0F',
-              boxShadow: '0 0 16px rgba(184,148,62,0.2)',
+              boxShadow: '0 0 16px rgba(184,149,85,0.2)',
             }}
           >
             <Package className="w-3.5 h-3.5" />

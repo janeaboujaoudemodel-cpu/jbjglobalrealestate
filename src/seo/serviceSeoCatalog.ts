@@ -227,7 +227,7 @@ export function logServiceSeoReport(): void {
   // eslint-disable-next-line no-console
   console.log(
     `%c[JBJ SEO] Service catalog — ${entries.length} slugs · ${SUPPORTED_LANGUAGES.length} languages + x-default`,
-    "color:#B8943E;font-weight:bold",
+    "color:#B89555;font-weight:bold",
   );
   entries.forEach((e) => {
     // eslint-disable-next-line no-console
