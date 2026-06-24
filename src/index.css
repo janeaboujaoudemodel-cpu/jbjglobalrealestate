@@ -1245,19 +1245,19 @@ All colors MUST be HSL.
 .jj-band {
   width: 100%;
   padding-block: clamp(2rem, 4vw, 3.5rem);
-  padding-inline: var(--page-px-mobile);
+  padding-inline: 0;
 }
 @media (min-width: 768px) {
-  .jj-band { padding-inline: var(--page-px-tablet); }
+  .jj-band { padding-inline: 0; }
 }
 @media (min-width: 1024px) {
   .jj-band {
-    padding-left: var(--page-px-desktop);
-    padding-right: calc(var(--page-px-desktop) + var(--rail-safe-right));
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 .jj-band > * {
-  max-width: var(--page-max-w);
+  max-width: none;
   margin-inline: auto;
 }
 
