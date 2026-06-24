@@ -71,6 +71,7 @@ import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { SectionDividerGoldFullBleed } from "@/components/ui/section-divider-gold-fullbleed";
 import { PremiumSectionCard } from "@/components/ui/premium-section-card";
+import PageShell from "@/components/layout/PageShell";
 import LazyVisible from "@/components/util/LazyVisible";
 
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
@@ -202,7 +203,7 @@ const Index = () => {
   }, []);
 
   return (
-    <section data-home-page className="relative w-full min-h-screen bg-[#F7F2EA] overflow-hidden">
+    <PageShell data-home-page className="relative w-full min-h-screen bg-[#F7F2EA] overflow-hidden">
 
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
@@ -257,7 +258,7 @@ const Index = () => {
         
         {/* MERGED HERO CONTENT — tagline + CTAs + pillars */}
         <motion.div 
-          className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 lg:px-16"
+          className="jj-content-track relative z-10 w-full flex flex-col items-center justify-center text-center"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
@@ -488,7 +489,7 @@ const Index = () => {
           onClose={() => setIsInquiryOpen(false)} 
         />
       </Suspense>
-    </section>
+    </PageShell>
   );
 };
 
