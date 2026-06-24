@@ -1080,16 +1080,32 @@ All colors MUST be HSL.
   --page-px-desktop: var(--shell-px-desktop);
   --page-max-w: var(--shell-max-w);
   --rail-safe-right: var(--shell-rail-safe);
-  /* Global content gutter — mirrors MainLayout <main>'s symmetric padding-left
-     AND padding-right. Full-bleed bands escape this gutter via negative margins
-     so they stay edge-to-edge INSIDE the viewport (the sidebar overlays the
-     leftmost slice; bands never extend past the viewport edges on the right). */
+  /* Global content gutters — asymmetric L/R so visual centering accounts for
+     the fixed sidebar on the left. Left gutter = sidebar width + symmetric
+     gap; right gutter = symmetric gap only. Full-bleed bands escape these
+     gutters via negative margins so they stay edge-to-edge inside the visible
+     post-sidebar viewport area. */
+  --jj-content-gutter-l: 0px;
+  --jj-content-gutter-r: 0px;
+  /* Back-compat alias (legacy callers). Tracks left gutter. */
   --jj-content-gutter: 0px;
 }
 @media (min-width: 640px) {
-  :root { --jj-content-gutter: 48px; }
-  body.jj-vertical-nav-active { --jj-content-gutter: 200px; }
-  body.jj-vertical-nav-collapsed { --jj-content-gutter: 48px; }
+  :root {
+    --jj-content-gutter-l: 80px;
+    --jj-content-gutter-r: 32px;
+    --jj-content-gutter: 80px;
+  }
+  body.jj-vertical-nav-active {
+    --jj-content-gutter-l: 232px;
+    --jj-content-gutter-r: 32px;
+    --jj-content-gutter: 232px;
+  }
+  body.jj-vertical-nav-collapsed {
+    --jj-content-gutter-l: 80px;
+    --jj-content-gutter-r: 32px;
+    --jj-content-gutter: 80px;
+  }
 }
 
 /* Canonical global layout primitives — the only approved width system. */
@@ -1236,8 +1252,8 @@ All colors MUST be HSL.
 [data-content-gutter="1"] > .jj-project-hero,
 [data-content-gutter="1"] .jj-project-hero,
 [data-content-gutter="1"] .jj-fullbleed-band {
-  margin-left: calc(-1 * var(--jj-content-gutter));
-  margin-right: calc(-1 * var(--jj-content-gutter));
+  margin-left: calc(-1 * var(--jj-content-gutter-l));
+  margin-right: calc(-1 * var(--jj-content-gutter-r));
   width: auto;
 }
 
