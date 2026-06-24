@@ -74,30 +74,48 @@ const OverseasInvestorsStrip = () => {
             </span>
           </span>
 
-          {/* Center micro-stats with gold dividers */}
+          {/* Center micro-stats with gold dividers + kinetic labels */}
           <span className="allow-white flex items-center flex-wrap gap-x-5 gap-y-2 md:gap-x-7 min-w-0">
             {microStats.map((s, i) => (
-              <span key={s.l} className="allow-white flex items-center gap-x-5 md:gap-x-7">
+              <span key={s.v + i} className="allow-white flex items-center gap-x-5 md:gap-x-7">
                 {i > 0 && (
                   <span aria-hidden className="hidden sm:inline-block h-8 w-px bg-gradient-to-b from-transparent via-[#B89555]/45 to-transparent" />
                 )}
                 <span className="allow-white flex flex-col items-start leading-tight whitespace-nowrap">
                   <span
-                    className="allow-white text-xl sm:text-2xl md:text-[1.75rem] font-bold tabular-nums"
-                    style={{ color: "#FFFFFF" }}
+                    className={
+                      "allow-white text-xl sm:text-2xl md:text-[1.75rem] font-bold tabular-nums " +
+                      (s.effect === "shimmer" ? "oi-shimmer-text" : s.effect === "pulse" ? "oi-pulse-gold" : "")
+                    }
+                    style={s.effect === "shimmer" ? undefined : { color: "#FFFFFF" }}
                   >
                     {s.v}
                   </span>
                   <span
-                    className="allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.18em] mt-0.5"
-                    style={{ color: "rgba(255,255,255,0.6)" }}
+                    className="allow-white oi-label-reel overflow-hidden mt-0.5"
+                    style={{ height: "1.1em" }}
+                    aria-label={s.labels[0]}
                   >
-                    {s.l}
+                    <span
+                      className="allow-white flex flex-col oi-label-track"
+                      style={{ animationDelay: `${i * 0.6}s` }}
+                    >
+                      {[...s.labels, s.labels[0]].map((label, li) => (
+                        <span
+                          key={li}
+                          className="allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.22em] leading-[1.1em]"
+                          style={{ color: li === 1 ? "#B89555" : "rgba(255,255,255,0.62)" }}
+                        >
+                          {label}
+                        </span>
+                      ))}
+                    </span>
                   </span>
                 </span>
               </span>
             ))}
           </span>
+
 
           {/* Right: premium CTA */}
           <span
