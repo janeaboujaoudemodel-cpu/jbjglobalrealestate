@@ -159,8 +159,8 @@ const MortgageCalculatorPage = () => {
               className="mt-8 rounded-[24px] p-5 md:p-6 overflow-hidden relative"
               style={{
                 background: `linear-gradient(135deg, ${SURFACE} 0%, #FFFFFF 52%, ${RAISED} 100%)`,
-                border: `1px solid rgba(6,78,59,0.22)`,
-                boxShadow: `0 18px 48px -28px rgba(6,78,59,0.42)`,
+                border: `1.5px solid ${GOLD}`,
+                boxShadow: `0 18px 48px -28px ${GOLD}55`,
               }}
             >
               <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 opacity-20" style={{ background: "radial-gradient(circle at 100% 0%, rgba(6,78,59,0.28), transparent 62%)" }} />
