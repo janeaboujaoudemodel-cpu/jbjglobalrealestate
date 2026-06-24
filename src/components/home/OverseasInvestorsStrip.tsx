@@ -49,13 +49,17 @@ const OverseasInvestorsStrip = () => {
         }
         .oi-label-reel {
           position: relative;
-          display: block;
+          display: inline-block;
           height: 14px;
           min-width: 110px;
+          vertical-align: top;
         }
-        .oi-label-reel > span.oi-label {
-          position: absolute;
-          inset: 0;
+        .oi-label-reel > .oi-label {
+          position: absolute !important;
+          top: 0;
+          left: 0;
+          right: 0;
+          display: block;
           opacity: 0;
           animation: oi-label-fade 9s ease-in-out infinite;
           will-change: opacity, transform;
