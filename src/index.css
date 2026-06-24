@@ -12542,16 +12542,16 @@ html body section.jj-project-hero a:hover { text-decoration: underline !importan
 @media (min-width: 1024px) {
   /* Reserve right rail clearance on lg+ to match the rest of the site */
   .jj-project-band .jj-project-shell {
-    padding-right: max(64px, var(--rail-safe-right, 56px)) !important;
+    padding-right: calc(var(--shell-px-desktop) + var(--shell-rail-safe)) !important;
   }
 }
 /* When sidebar is open (200px) on lg+, allow extra inner breathing room */
 @media (min-width: 1024px) {
   body.jj-vertical-nav-active .jj-project-band .jj-project-shell {
-    padding-left: 32px !important;
+    padding-left: var(--shell-px-desktop) !important;
   }
   body.jj-vertical-nav-collapsed .jj-project-band .jj-project-shell {
-    padding-left: 24px !important;
+    padding-left: var(--shell-px-desktop) !important;
   }
 }
 
@@ -12643,33 +12643,36 @@ html body main section.jj-project-hero .jj-hero-ghost-cta:focus-visible {
 
 html body main .jj-project-band {
   box-sizing: border-box !important;
-  padding-left: var(--page-px-mobile) !important;
-  padding-right: var(--page-px-mobile) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 html body main .jj-project-band .jj-project-shell {
   width: 100% !important;
-  max-width: 1240px !important;
+  max-width: var(--shell-max-w) !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding-left: var(--shell-px-mobile) !important;
+  padding-right: var(--shell-px-mobile) !important;
   box-sizing: border-box !important;
 }
 @media (min-width: 768px) {
-  html body main .jj-project-band {
-    padding-left: var(--page-px-tablet) !important;
-    padding-right: var(--page-px-tablet) !important;
+  html body main .jj-project-band .jj-project-shell {
+    padding-left: var(--shell-px-tablet) !important;
+    padding-right: var(--shell-px-tablet) !important;
   }
 }
 @media (min-width: 1024px) {
-  html body main .jj-project-band {
-    padding-left: var(--page-px-desktop) !important;
-    padding-right: calc(var(--page-px-desktop) + var(--rail-safe-right)) !important;
-  }
   body.jj-vertical-nav-active main .jj-project-band .jj-project-shell,
   body.jj-vertical-nav-collapsed main .jj-project-band .jj-project-shell {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-left: var(--shell-px-desktop) !important;
+    padding-right: calc(var(--shell-px-desktop) + var(--shell-rail-safe)) !important;
+  }
+}
+@media (min-width: 1440px) {
+  body.jj-vertical-nav-active main .jj-project-band .jj-project-shell,
+  body.jj-vertical-nav-collapsed main .jj-project-band .jj-project-shell {
+    padding-left: var(--shell-px-xl) !important;
+    padding-right: calc(var(--shell-px-xl) + var(--shell-rail-safe)) !important;
   }
 }
 
