@@ -1,68 +1,30 @@
-/**
- * OverseasInvestorsStrip — premium full-bleed ink band with gold detailing.
- * Deep ink gradient base, dual gold hairlines, faint radial glow, refined
- * typography hierarchy and gold-tinted micro-stat dividers. White foreground
- * preserved by the global allow-white guard.
- */
 import { Link } from "react-router-dom";
-import { Globe, ArrowRight } from "lucide-react";
+import { Globe, ArrowRight, ShieldCheck, Trophy, Users } from "lucide-react";
 import ContentTrack from "@/components/layout/ContentTrack";
 
 type Stat = {
   v: string;
-  labels: string[];
-  effect?: "shimmer" | "pulse" | "plain";
+  label: string;
+  icon: typeof Globe;
 };
 
 const microStats: Stat[] = [
-  { v: "0%", labels: ["Income Tax", "Capital Gains", "Inheritance Tax"], effect: "shimmer" },
-  { v: "10Y", labels: ["Golden Visa", "Full Residency", "Family Sponsored"], effect: "pulse" },
-  { v: "#1", labels: ["Safest City", "Global Ranking", "Mercer Index"], effect: "shimmer" },
-  { v: "200+", labels: ["Nationalities", "Global Community", "Open Borders"], effect: "pulse" },
+  { v: "0%", label: "Income Tax", icon: Globe },
+  { v: "10Y", label: "Golden Visa", icon: ShieldCheck },
+  { v: "#1", label: "Safest City", icon: Trophy },
+  { v: "200+", label: "Nationalities", icon: Users },
 ];
 
 const OverseasInvestorsStrip = () => {
   return (
     <section
-      data-surface="dark"
-      data-on-dark
-      data-no-contrast-guard
-      className="allow-white relative w-full overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(900px 320px at 12% 50%, rgba(184,149,85,0.18), transparent 60%), radial-gradient(700px 280px at 88% 50%, rgba(184,149,85,0.12), transparent 65%), linear-gradient(180deg, #0B0B0B 0%, #141414 100%)",
-      }}
+      className="relative w-full overflow-hidden py-10 md:py-14 lg:py-16"
+      style={{ background: "#FDFBF7" }}
     >
       <style>{`
-        @keyframes oi-label-fade {
-          0%, 28% { opacity: 1; transform: translateY(0); }
-          33%, 95% { opacity: 0; transform: translateY(-4px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
         @keyframes oi-shimmer {
           0% { background-position: -200% 0; }
           100% { background-position: 200% 0; }
-        }
-        @keyframes oi-pulse-glow {
-          0%, 100% { filter: drop-shadow(0 0 1px rgba(184,149,85,0.35)); }
-          50% { filter: drop-shadow(0 0 10px rgba(184,149,85,0.75)); }
-        }
-        .oi-label-reel {
-          position: relative;
-          display: inline-block;
-          height: 14px;
-          min-width: 110px;
-          vertical-align: top;
-        }
-        .oi-label-reel > .oi-label {
-          position: absolute !important;
-          top: 0;
-          left: 0;
-          right: 0;
-          display: block;
-          opacity: 0;
-          animation: oi-label-fade 9s ease-in-out infinite;
-          will-change: opacity, transform;
         }
         .oi-shimmer-text {
           background: linear-gradient(90deg, #B89555 0%, #F3E2B1 50%, #B89555 100%);
@@ -73,111 +35,103 @@ const OverseasInvestorsStrip = () => {
           color: transparent;
           animation: oi-shimmer 5s linear infinite;
         }
-        .oi-pulse-gold {
-          color: #FFFFFF;
-          animation: oi-pulse-glow 4s ease-in-out infinite;
+        @keyframes oi-gold-float {
+          0%, 100% { transform: translateY(0); opacity: 0.72; }
+          50% { transform: translateY(-5px); opacity: 1; }
+        }
+        .oi-card-orb {
+          animation: oi-gold-float 6s ease-in-out infinite;
+        }
+        .oi-investor-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          border-radius: inherit;
+          background:
+            radial-gradient(520px 220px at 20% 12%, rgba(184,149,85,0.16), transparent 62%),
+            radial-gradient(420px 180px at 86% 82%, rgba(184,149,85,0.10), transparent 66%);
+        }
+        .oi-investor-card::after {
+          content: "";
+          position: absolute;
+          inset: 1px;
+          pointer-events: none;
+          border-radius: inherit;
+          border: 1px solid rgba(184,149,85,0.28);
         }
         @media (prefers-reduced-motion: reduce) {
-          .oi-label, .oi-shimmer-text, .oi-pulse-gold { animation: none !important; opacity: 1 !important; }
+          .oi-shimmer-text, .oi-card-orb { animation: none !important; }
         }
       `}</style>
 
+      <ContentTrack>
+        <Link
+          to="/overseas-investors"
+          aria-label="Invest in Dubai from anywhere in the world — discover the opportunity"
+          data-surface="dark"
+          data-on-dark
+          data-no-contrast-guard
+          className="oi-investor-card allow-white group relative mx-auto block w-full overflow-hidden rounded-[28px] px-6 py-7 shadow-[0_30px_80px_-36px_rgba(10,8,4,0.78)] transition-transform duration-300 hover:-translate-y-0.5 sm:px-8 md:max-w-[930px] md:rounded-[34px] md:px-10 md:py-9 lg:px-12 lg:py-10"
+          style={{
+            background:
+              "linear-gradient(135deg, #080808 0%, #12110E 48%, #050505 100%)",
+            border: "1px solid rgba(184,149,85,0.38)",
+            color: "#FFFFFF",
+          }}
+        >
+          <span aria-hidden className="oi-card-orb absolute left-5 top-5 h-20 w-20 rounded-full bg-[#B89555]/10 blur-2xl" />
+          <span aria-hidden className="oi-card-orb absolute bottom-6 right-10 h-24 w-24 rounded-full bg-[#B89555]/10 blur-2xl" style={{ animationDelay: "1.4s" }} />
 
-      {/* Double gold hairlines top/bottom */}
-      <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-[#B89555]/55" />
-      <span aria-hidden className="absolute inset-x-0 top-[3px] h-px bg-[#B89555]/20" />
-      <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-[#B89555]/55" />
-      <span aria-hidden className="absolute inset-x-0 bottom-[3px] h-px bg-[#B89555]/20" />
-
-      <Link
-        to="/overseas-investors"
-        aria-label="Invest in Dubai from anywhere in the world — learn more"
-        data-surface="dark"
-        data-on-dark
-        data-no-contrast-guard
-        className="overseas-investors-strip-link allow-white group block py-12 md:py-16 lg:py-20 text-white relative"
-      >
-        <ContentTrack className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-6 md:gap-10">
-
-          {/* Left: globe medallion + headline */}
-          <span className="allow-white flex items-center gap-4 min-w-0 basis-full xl:basis-auto xl:flex-1">
-            <span
-              aria-hidden
-              className="allow-white relative shrink-0 inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-[#B89555]/55 bg-gradient-to-b from-white/[0.06] to-transparent shadow-[0_4px_18px_rgba(184,149,85,0.18)]"
-            >
-              <Globe className="w-6 h-6 md:w-7 md:h-7 allow-white" style={{ color: "#B89555", stroke: "#B89555" }} />
-            </span>
-            <span className="flex flex-col min-w-0">
-              <span
-                className="allow-white text-[10px] md:text-[11px] uppercase tracking-[0.22em] mb-1"
-                style={{ color: "#B89555" }}
-              >
-                Global Investors
-              </span>
-              <span
-                className="allow-white text-xl sm:text-2xl md:text-3xl lg:text-[2rem] font-bold leading-[1.15] tracking-tight"
-                style={{ color: "#FFFFFF", fontFamily: "Inter, system-ui, sans-serif" }}
-              >
-                Invest in Dubai from{" "}
-                <span style={{ color: "#B89555" }}>anywhere in the world</span>
-              </span>
-            </span>
-          </span>
-
-          {/* Center micro-stats with gold dividers + kinetic labels */}
-          <span className="allow-white flex items-center flex-wrap gap-x-5 gap-y-2 md:gap-x-7 min-w-0">
-            {microStats.map((s, i) => (
-              <span key={s.v + i} className="allow-white flex items-center gap-x-5 md:gap-x-7">
-                {i > 0 && (
-                  <span aria-hidden className="hidden sm:inline-block h-8 w-px bg-gradient-to-b from-transparent via-[#B89555]/45 to-transparent" />
-                )}
-                <span className="allow-white flex flex-col items-start leading-tight whitespace-nowrap">
-                  <span
-                    className={
-                      "allow-white text-xl sm:text-2xl md:text-[1.75rem] font-bold tabular-nums " +
-                      (s.effect === "shimmer" ? "oi-shimmer-text" : s.effect === "pulse" ? "oi-pulse-gold" : "")
-                    }
-                    style={s.effect === "shimmer" ? undefined : { color: "#FFFFFF" }}
-                  >
-                    {s.v}
-                  </span>
-                  <span
-                    className="allow-white oi-label-reel mt-1"
-                    aria-label={s.labels[0]}
-                  >
-                    {s.labels.map((label, li) => (
-                      <span
-                        key={li}
-                        className="oi-label allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.22em] whitespace-nowrap"
-                        style={{
-                          color: li === 1 ? "#B89555" : "rgba(255,255,255,0.62)",
-                          animationDelay: `${(li * 3) + (i * 0.4)}s`,
-                          lineHeight: "14px",
-                        }}
-                      >
-                        {label}
-                      </span>
-                    ))}
-                  </span>
-
+          <span className="relative z-[1] flex flex-col gap-8 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-10">
+            <span className="min-w-0">
+              <span className="mb-5 inline-flex items-center gap-3">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#B89555]/10">
+                  <Globe className="h-4 w-4" style={{ color: "#B89555", stroke: "#B89555" }} />
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.34em]" style={{ color: "#B89555" }}>
+                  Global Investors
                 </span>
               </span>
-            ))}
+
+              <span className="block max-w-[680px] text-[2rem] font-extrabold leading-[0.98] tracking-normal sm:text-[2.7rem] md:text-[4rem] lg:text-[4.4rem]" style={{ color: "#FFFFFF" }}>
+                Invest in Dubai from{" "}
+                <em className="oi-shimmer-text not-italic font-extrabold">anywhere</em>{" "}
+                in the world
+              </span>
+            </span>
+
+            <span className="inline-flex w-fit items-center gap-3 rounded-full border px-5 py-3 text-[11px] font-extrabold uppercase leading-tight tracking-[0.08em] transition-all duration-300 group-hover:border-[#B89555] group-hover:bg-[#B89555]/15" style={{ borderColor: "rgba(184,149,85,0.42)", color: "#FFFFFF" }}>
+              <span>Discover the<br className="hidden sm:block" /> opportunity</span>
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full" style={{ background: "#B89555" }}>
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
+              </span>
+            </span>
           </span>
 
+          <span className="relative z-[1] mt-8 block h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.34), transparent)" }} />
 
-          {/* Right: premium CTA */}
-          <span
-            data-no-contrast-guard
-            className="allow-white inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#B89555]/70 bg-gradient-to-b from-[#B89555]/15 to-transparent text-sm md:text-base font-semibold tracking-wide shrink-0 whitespace-nowrap shadow-[0_8px_24px_-8px_rgba(184,149,85,0.5)] transition-all duration-300 group-hover:bg-[#B89555]/25 group-hover:border-[#B89555] group-hover:-translate-y-0.5"
-            style={{ color: "#FFFFFF" }}
-          >
-            <span className="allow-white" style={{ color: "#FFFFFF" }}>Discover the Opportunity</span>
-            <ArrowRight className="allow-white w-4 h-4 transition-transform group-hover:translate-x-1" style={{ color: "#B89555", stroke: "#B89555" }} />
+          <span className="relative z-[1] mt-7 grid grid-cols-2 gap-y-6 sm:grid-cols-4">
+            {microStats.map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <span key={s.label} className="relative flex items-start gap-3 px-1 sm:px-5 first:sm:pl-0">
+                  {i > 0 && <span aria-hidden className="absolute left-0 top-1 hidden h-12 w-px sm:block" style={{ background: "linear-gradient(180deg, transparent, rgba(184,149,85,0.28), transparent)" }} />}
+                  <Icon className="mt-1 h-4 w-4 shrink-0" style={{ color: "#B89555", stroke: "#B89555" }} />
+                  <span className="flex flex-col">
+                    <span className="text-2xl font-extrabold leading-none tabular-nums sm:text-3xl" style={{ color: i % 2 === 0 ? "#B89555" : "#FFFFFF" }}>
+                      {s.v}
+                    </span>
+                    <span className="mt-1 text-[9px] font-bold uppercase tracking-[0.22em]" style={{ color: "rgba(255,255,255,0.58)" }}>
+                      {s.label}
+                    </span>
+                  </span>
+                </span>
+              );
+            })}
           </span>
-
-        </ContentTrack>
-      </Link>
+        </Link>
+      </ContentTrack>
     </section>
   );
 };
