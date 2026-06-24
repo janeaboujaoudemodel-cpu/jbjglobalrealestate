@@ -9052,19 +9052,26 @@ html body [data-jj-utility-bar] .jj-sqtoggle {
   -webkit-text-fill-color: #FFFFFF !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] {
-  /* PASS 37 — true emerald metallic shine: emerald-light → emerald-deep,
-     no white linear overlay. Slight teal glint moves through. */
+  /* SELECTED — bright emerald metallic pill with clear white inner ring */
   background-image:
-    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+    linear-gradient(135deg, #0A6B53 0%, #047857 45%, #064E3B 100%) !important;
   background-size: 100% 100% !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 0 0 1.5px rgba(255,255,255,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.25),
     inset 0 -1px 0 rgba(0,0,0,0.35),
-    0 8px 22px -10px rgba(4,44,28,0.55) !important;
+    0 0 0 1px rgba(16,185,129,0.45),
+    0 6px 18px -6px rgba(4,120,87,0.65) !important;
 }
 html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
-  background: rgba(0,0,0,0.28) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06) !important;
+  /* UNSELECTED — flat dim, no border, dimmed text */
+  background: transparent !important;
+  background-image: none !important;
+  color: rgba(255,255,255,0.55) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
+  box-shadow: none !important;
 }
 html body .jj-emerald-metallic,
 html body .jj-emerald-metallic *,
