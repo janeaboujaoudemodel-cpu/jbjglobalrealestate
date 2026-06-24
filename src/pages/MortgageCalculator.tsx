@@ -105,21 +105,14 @@ const MortgageCalculatorPage = () => {
         </div>
 
         {/* Calculator body — champagne raised card */}
-        <div className="container mx-auto px-4 pt-8 md:pt-12 pb-16">
+        <div className="container mx-auto px-4 pt-8 md:pt-12 pb-16 space-y-10">
           <div className="max-w-5xl mx-auto">
-            <div
-              className="rounded-[24px] overflow-hidden"
-              style={{
-                background: SURFACE,
-                border: `1.5px solid ${GOLD}`,
-                boxShadow: `0 18px 50px -20px ${GOLD}55`,
-              }}
-            >
-              <div className="px-4 md:px-8 py-8 md:py-10">
-                <MortgageCalculator compact showHeading={false} showAssistant />
-              </div>
-            </div>
+            <AIShellCard padding="lg">
+              <MortgageCalculator compact showHeading={false} showAssistant />
+            </AIShellCard>
           </div>
+
+
 
           {/* Advisor benefits and bank partners — champagne tiles */}
           <div className="max-w-5xl mx-auto mt-12">
