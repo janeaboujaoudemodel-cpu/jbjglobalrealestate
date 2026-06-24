@@ -287,7 +287,6 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
