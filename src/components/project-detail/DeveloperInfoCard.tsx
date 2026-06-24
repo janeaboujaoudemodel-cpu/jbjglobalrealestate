@@ -264,15 +264,17 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               )}
 
 
-              {/* View Developer Button */}
+              {/* View Developer Button — compact balanced 2-line emerald pill */}
               {developer.slug && (
                 <Link
                   to={`/developer/${developer.slug}`}
                   data-emerald-action="true"
-                  className="jj-emerald-action inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold tracking-[0.02em] px-4 py-2 transition-colors shadow-sm"
+                  className="jj-emerald-action inline-flex max-w-[260px] items-center justify-center gap-2 rounded-lg text-[12px] font-semibold tracking-[0.02em] leading-tight text-center px-4 py-2.5 transition-colors shadow-sm"
                 >
-                  <span>View All Projects by {developer.name}</span>
-                  <ExternalLink strokeWidth={2.2} className="w-4 h-4" />
+                  <span className="block whitespace-normal break-words [text-wrap:balance]">
+                    View All Projects<br />by {developer.name}
+                  </span>
+                  <ExternalLink strokeWidth={2.2} className="w-3.5 h-3.5 shrink-0" />
                 </Link>
               )}
 
