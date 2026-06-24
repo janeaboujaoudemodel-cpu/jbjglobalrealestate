@@ -307,7 +307,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -365,7 +365,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                                    isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                                    isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                                   )}>
                                     {isSelected && <Check className="w-3 h-3 text-white" />}
                                   </div>
@@ -414,7 +414,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -626,7 +626,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
-                            ? "bg-[#1A1A1A] border border-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555] shadow-sm"
+                            ? "bg-[color:var(--emerald-1)] border border-[color:var(--emerald-1)] text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -653,7 +653,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
-                            ? "bg-[#1A1A1A] border border-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555] shadow-sm"
+                            ? "bg-[color:var(--emerald-1)] border border-[color:var(--emerald-1)] text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
