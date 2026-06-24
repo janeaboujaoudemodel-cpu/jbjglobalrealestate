@@ -10,8 +10,6 @@ type Stat = {
   icon: typeof Globe;
 };
 
-const EMERALD = "#0B5D43";
-const EMERALD_DEEP = "#063A2A";
 const EMERALD_BRIGHT = "#10C285";
 
 const microStats: Stat[] = [
@@ -53,6 +51,9 @@ const AnimatedStat = ({ stat, start, index }: { stat: Stat; start: boolean; inde
       <span className="text-[1.5rem] font-bold leading-none tabular-nums sm:text-[1.75rem]" style={{ letterSpacing: "-0.02em" }}>
         {stat.prefix ?? ""}{val}{stat.suffix ?? ""}
       </span>
+      <span className="oi-meter" aria-hidden="true">
+        <span style={{ transform: start ? "scaleX(1)" : "scaleX(0)", transitionDelay: `${index * 80 + 120}ms` }} />
+      </span>
       <span className="oi-faint text-[9.5px] font-semibold uppercase tracking-[0.22em]">
         {stat.label}
       </span>
@@ -88,21 +89,39 @@ const OverseasInvestorsStrip = () => {
     >
       <style>{`
         @keyframes oi-orb-drift {
-          0%, 100% { transform: translate(0,0) scale(1); opacity: 0.55; }
-          50% { transform: translate(18px,-10px) scale(1.06); opacity: 0.85; }
+          0%, 100% { transform: translate(0,0) scale(1); opacity: 0.22; }
+          50% { transform: translate(18px,-10px) scale(1.06); opacity: 0.38; }
+        }
+        @keyframes oi-metallic-sweep {
+          0% { transform: translateX(-130%) skewX(-18deg); opacity: 0; }
+          18% { opacity: 0.38; }
+          58% { opacity: 0.16; }
+          100% { transform: translateX(130%) skewX(-18deg); opacity: 0; }
         }
         .oi-orb { animation: oi-orb-drift 10s ease-in-out infinite; }
+        .oi-metallic::after {
+          content: "";
+          position: absolute;
+          inset: -35% -18%;
+          background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.18) 48%, rgba(16,194,133,0.18) 52%, transparent 60%);
+          animation: oi-metallic-sweep 5.8s cubic-bezier(0.22,1,0.36,1) infinite;
+          pointer-events: none;
+          mix-blend-mode: screen;
+          z-index: 0;
+        }
         @keyframes oi-stat-in {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
         .oi-stat { animation: oi-stat-in 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+        .oi-meter { display: block; width: min(72px, 80%); height: 2px; overflow: hidden; background: rgba(255,255,255,0.12); }
+        .oi-meter > span { display: block; width: 100%; height: 100%; transform-origin: left center; background: linear-gradient(90deg, rgba(255,255,255,0.45), rgba(255,255,255,0.95)); transition: transform 1.3s cubic-bezier(0.22,1,0.36,1); }
         .oi-band, .oi-band * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         .oi-band .oi-muted, .oi-band .oi-muted * { color: rgba(255,255,255,0.72) !important; -webkit-text-fill-color: rgba(255,255,255,0.72) !important; }
         .oi-band .oi-faint, .oi-band .oi-faint * { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
         .oi-band svg { stroke: currentColor !important; color: inherit !important; }
         @media (prefers-reduced-motion: reduce) {
-          .oi-orb, .oi-stat { animation: none !important; }
+          .oi-orb, .oi-stat, .oi-metallic::after { animation: none !important; }
         }
       `}</style>
 
@@ -112,15 +131,15 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white group relative block w-full overflow-hidden px-6 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
+        className="allow-white oi-metallic group relative block w-full overflow-hidden px-6 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
         style={{
-          background: `linear-gradient(135deg, #064E3B 0%, #053C2E 50%, #042418 100%)`,
+          background: "var(--jj-emerald-ombre)",
           color: "#FFFFFF",
         }}
       >
         {/* Ambient orbs */}
-        <span aria-hidden className="oi-orb pointer-events-none absolute -left-24 -top-16 h-64 w-64 rounded-full blur-[100px]" style={{ background: `${EMERALD_BRIGHT}26` }} />
-        <span aria-hidden className="oi-orb pointer-events-none absolute -right-20 -bottom-16 h-72 w-72 rounded-full blur-[120px]" style={{ background: `${EMERALD_BRIGHT}1f`, animationDelay: "2s" }} />
+        <span aria-hidden className="oi-orb pointer-events-none absolute -left-24 -top-16 h-64 w-64 rounded-full blur-[110px]" style={{ background: `${EMERALD_BRIGHT}17` }} />
+        <span aria-hidden className="oi-orb pointer-events-none absolute -right-20 -bottom-16 h-72 w-72 rounded-full blur-[130px]" style={{ background: `${EMERALD_BRIGHT}12`, animationDelay: "2s" }} />
 
         {/* Header row */}
         <div className="relative z-[1] mx-auto flex w-full max-w-[1500px] flex-col gap-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10">
