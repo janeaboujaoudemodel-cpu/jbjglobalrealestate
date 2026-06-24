@@ -13987,3 +13987,39 @@ html body footer[data-jj-minimal-footer] a:hover * {
   -webkit-text-fill-color: #064E3B !important;
   opacity: 0.9 !important;
 }
+
+/* ─── ACTIVE sq ft / sq m — continuous metallic shine sweep ─── */
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background-image: linear-gradient(
+    115deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0) 38%,
+    rgba(255,255,255,0.55) 50%,
+    rgba(255,255,255,0) 62%,
+    rgba(255,255,255,0) 100%
+  ) !important;
+  background-size: 220% 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: 200% 0 !important;
+  mix-blend-mode: screen !important;
+  animation: jj-sqtoggle-metallic-shine 2.4s linear infinite !important;
+  border-radius: inherit !important;
+}
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] > span {
+  position: relative !important;
+  z-index: 2 !important;
+}
+@keyframes jj-sqtoggle-metallic-shine {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::after {
+    animation: none !important;
+  }
+}
