@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Globe, ArrowRight, ShieldCheck, Trophy, Users } from "lucide-react";
-import ContentTrack from "@/components/layout/ContentTrack";
+
 
 type Stat = {
   v: string;
