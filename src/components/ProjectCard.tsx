@@ -314,19 +314,21 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 {phaseLabel && (
                   <span
                     data-surface="emerald"
+                    data-emerald="true"
                     data-emerald-ok="badge"
-                    className="jj-surface-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase"
+                    className="jj-emerald-metallic inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-[0.12em] uppercase text-white [&_*]:text-white"
                   >
-                    <span>{phaseLabel}</span>
+                    <span className="text-white">{phaseLabel}</span>
                   </span>
                 )}
                 {showHandover && (
                   <span
                     data-surface="emerald"
+                    data-emerald="true"
                     data-emerald-ok="badge"
-                    className="jj-surface-emerald inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide"
+                    className="jj-emerald-metallic inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tabular-nums tracking-wide text-white [&_*]:text-white"
                   >
-                    <span className={/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}>{handover}</span>
+                    <span className={`text-white ${/^ready$/i.test(handover) ? "uppercase tracking-[0.12em]" : ""}`}>{handover}</span>
                   </span>
                 )}
               </div>
