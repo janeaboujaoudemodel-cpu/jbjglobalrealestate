@@ -138,25 +138,24 @@ const OverseasInvestorsStrip = () => {
                     {s.v}
                   </span>
                   <span
-                    className="allow-white oi-label-reel mt-1 block"
-                    style={{ height: "1.1em", overflow: "hidden", display: "block" }}
+                    className="allow-white oi-label-reel mt-1"
                     aria-label={s.labels[0]}
                   >
-                    <span
-                      className="allow-white oi-label-track"
-                      style={{ animationDelay: `${i * 0.6}s`, display: "block" }}
-                    >
-                      {[...s.labels, s.labels[0]].map((label, li) => (
-                        <span
-                          key={li}
-                          className="allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.22em]"
-                          style={{ color: li === 1 ? "#B89555" : "rgba(255,255,255,0.62)", display: "block", height: "1.1em", lineHeight: "1.1em" }}
-                        >
-                          {label}
-                        </span>
-                      ))}
-                    </span>
+                    {s.labels.map((label, li) => (
+                      <span
+                        key={li}
+                        className="oi-label allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.22em] whitespace-nowrap"
+                        style={{
+                          color: li === 1 ? "#B89555" : "rgba(255,255,255,0.62)",
+                          animationDelay: `${(li * 3) + (i * 0.4)}s`,
+                          lineHeight: "14px",
+                        }}
+                      >
+                        {label}
+                      </span>
+                    ))}
                   </span>
+
                 </span>
               </span>
             ))}
