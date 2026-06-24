@@ -48,7 +48,7 @@ export default function PortalShell() {
     <div className="min-h-screen bg-[#FDFBF7]">
       {/* Sticky top bar — brand + horizontal button nav + actions */}
       <header className="sticky top-0 z-40 bg-[#F7F2EA]/95 backdrop-blur border-b border-[#B89555]/40">
-        <div className="max-w-[1500px] mx-auto px-6 py-3 flex items-center gap-4 flex-wrap">
+        <div className="jj-global-container py-3 flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2.5 pr-4 border-r border-[#B89555]/30">
             <Building2 className="w-4 h-4 text-[#1A1A1A]" />
             <div className="leading-tight">
@@ -101,7 +101,7 @@ export default function PortalShell() {
       </header>
 
       <main>
-        <div className="max-w-[1500px] mx-auto px-6 py-8">
+        <div className="jj-global-container py-8">
           <Outlet />
         </div>
       </main>

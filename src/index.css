@@ -1065,12 +1065,17 @@ All colors MUST be HSL.
    Used by .jj-page, .jj-band, GlobalFilterBar, and any wrapper that
    needs to respect the fixed left nav AND the right Contact-Us rail. */
 :root {
-  --shell-px-mobile: 16px;
-  --shell-px-tablet: 24px;
-  --shell-px-desktop: 32px;
-  --shell-px-xl: 40px;
-  --shell-max-w: 1760px;
-  --shell-max-w-wide: 1760px;
+  --jj-global-container-px-mobile: 16px;
+  --jj-global-container-px-tablet: 24px;
+  --jj-global-container-px-desktop: 32px;
+  --jj-global-container-px-xl: 40px;
+  --jj-global-container-max: 1760px;
+  --shell-px-mobile: var(--jj-global-container-px-mobile);
+  --shell-px-tablet: var(--jj-global-container-px-tablet);
+  --shell-px-desktop: var(--jj-global-container-px-desktop);
+  --shell-px-xl: var(--jj-global-container-px-xl);
+  --shell-max-w: var(--jj-global-container-max);
+  --shell-max-w-wide: var(--jj-global-container-max);
   --shell-max-w-narrow: 1040px;
   --shell-rail-safe: 56px;        /* clearance for fixed right Contact-Us rail */
   --section-gap-y: clamp(40px, 5vw, 72px);
@@ -1201,15 +1206,16 @@ All colors MUST be HSL.
   border-bottom-right-radius: 28px;
 }
 
+.jj-global-container,
 .jj-content-track,
 .jj-project-shell,
 .jj-track {
   width: 100%;
-  max-width: var(--shell-max-w) !important;
+  max-width: var(--jj-global-container-max) !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  padding-left: var(--shell-px-mobile) !important;
-  padding-right: var(--shell-px-mobile) !important;
+  padding-left: var(--jj-global-container-px-mobile) !important;
+  padding-right: var(--jj-global-container-px-mobile) !important;
   box-sizing: border-box;
 }
 
@@ -1218,6 +1224,7 @@ All colors MUST be HSL.
 .jj-content-track--full { max-width: none !important; }
 
 /* Nested legacy wrappers must not compound gutters. */
+.jj-global-container .jj-content-track,
 .jj-content-track .jj-content-track,
 .jj-content-track .jj-project-shell,
 .jj-project-shell .jj-content-track {
@@ -1227,29 +1234,32 @@ All colors MUST be HSL.
 }
 
 @media (min-width: 768px) {
+  .jj-global-container,
   .jj-content-track,
   .jj-project-shell,
   .jj-track {
-    padding-left: var(--shell-px-tablet) !important;
-    padding-right: var(--shell-px-tablet) !important;
+    padding-left: var(--jj-global-container-px-tablet) !important;
+    padding-right: var(--jj-global-container-px-tablet) !important;
   }
 }
 
 @media (min-width: 1024px) {
+  .jj-global-container,
   .jj-content-track,
   .jj-project-shell,
   .jj-track {
-    padding-left: var(--shell-px-desktop) !important;
-    padding-right: calc(var(--shell-px-desktop) + var(--shell-rail-safe)) !important;
+    padding-left: var(--jj-global-container-px-desktop) !important;
+    padding-right: var(--jj-global-container-px-desktop) !important;
   }
 }
 
 @media (min-width: 1440px) {
+  .jj-global-container,
   .jj-content-track,
   .jj-project-shell,
   .jj-track {
-    padding-left: var(--shell-px-xl) !important;
-    padding-right: calc(var(--shell-px-xl) + var(--shell-rail-safe)) !important;
+    padding-left: var(--jj-global-container-px-xl) !important;
+    padding-right: var(--jj-global-container-px-xl) !important;
   }
 }
 
@@ -14059,25 +14069,6 @@ html body #root section#ready-to-get-started {
   padding-bottom: clamp(3rem, 5vw, 5rem) !important;
 }
 
-html body #root section#ready-to-get-started > .jj-content-track {
-  padding-left: var(--shell-px-mobile) !important;
-  padding-right: var(--shell-px-mobile) !important;
-}
-
-@media (min-width: 768px) {
-  html body #root section#ready-to-get-started > .jj-content-track {
-    padding-left: var(--shell-px-tablet) !important;
-    padding-right: var(--shell-px-tablet) !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  html body #root section#ready-to-get-started > .jj-content-track {
-    padding-left: var(--shell-px-desktop) !important;
-    padding-right: calc(var(--shell-px-desktop) + var(--shell-rail-safe)) !important;
-  }
-}
-
 html body #root section#ready-to-get-started .jj-emerald-card {
   width: 100% !important;
   border-radius: 28px !important;
@@ -14426,31 +14417,59 @@ html body #root main.jj-main-shell [data-content-gutter="1"] .jj-fullbleed-band 
   box-sizing: border-box !important;
 }
 
-html body #root main.jj-main-shell :is(.jj-content-track, .jj-project-shell, .jj-track) {
+html body #root main.jj-main-shell :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track) {
   width: 100% !important;
-  max-width: min(var(--shell-max-w), 100%) !important;
+  max-width: min(var(--jj-global-container-max), 100%) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box !important;
 }
 
+html body #root main.jj-main-shell :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+  width: 100% !important;
+  max-width: min(var(--jj-global-container-max), 100%) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+html body #root main:not(.jj-main-shell) > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]),
+html body #root main:not(.jj-main-shell) > div > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+  width: 100% !important;
+  max-width: min(var(--jj-global-container-max), 100%) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--jj-global-container-px-mobile) !important;
+  padding-right: var(--jj-global-container-px-mobile) !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+  html body #root main:not(.jj-main-shell) > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body #root main:not(.jj-main-shell) > div > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+    padding-left: var(--jj-global-container-px-tablet) !important;
+    padding-right: var(--jj-global-container-px-tablet) !important;
+  }
+}
+
 @media (min-width: 1024px) {
-  html body #root main.jj-main-shell :is(.jj-content-track, .jj-project-shell, .jj-track),
-  html body #root main.jj-main-shell .jj-project-band .jj-project-shell,
-  html body:not([data-no-rail-safe]) #root main.jj-main-shell .container:not(.jj-fullbleed):not([data-no-rail-safe]),
-  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-7xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
-  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-6xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
-  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-5xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
-  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1600px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
-  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1440px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
-  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1280px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]) {
-    padding-left: var(--shell-px-desktop) !important;
-    padding-right: var(--shell-px-desktop) !important;
+  html body #root main:not(.jj-main-shell) > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body #root main:not(.jj-main-shell) > div > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+    padding-left: var(--jj-global-container-px-desktop) !important;
+    padding-right: var(--jj-global-container-px-desktop) !important;
   }
 }
 
 @media (min-width: 1440px) {
-  html body #root main.jj-main-shell :is(.jj-content-track, .jj-project-shell, .jj-track),
+  html body #root main:not(.jj-main-shell) > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body #root main:not(.jj-main-shell) > div > :is(.container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-3xl.mx-auto, .max-w-2xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1500px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+    padding-left: var(--jj-global-container-px-xl) !important;
+    padding-right: var(--jj-global-container-px-xl) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  html body #root main.jj-main-shell :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track),
   html body #root main.jj-main-shell .jj-project-band .jj-project-shell,
   html body:not([data-no-rail-safe]) #root main.jj-main-shell .container:not(.jj-fullbleed):not([data-no-rail-safe]),
   html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-7xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
@@ -14459,14 +14478,48 @@ html body #root main.jj-main-shell :is(.jj-content-track, .jj-project-shell, .jj
   html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1600px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
   html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1440px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
   html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1280px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]) {
-    padding-left: var(--shell-px-xl) !important;
-    padding-right: var(--shell-px-xl) !important;
+    padding-left: var(--jj-global-container-px-desktop) !important;
+    padding-right: var(--jj-global-container-px-desktop) !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  html body #root main.jj-main-shell :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track),
+  html body #root main.jj-main-shell .jj-project-band .jj-project-shell,
+  html body:not([data-no-rail-safe]) #root main.jj-main-shell .container:not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-7xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-6xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-5xl.mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1600px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1440px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]),
+  html body:not([data-no-rail-safe]) #root main.jj-main-shell .max-w-\[1280px\].mx-auto:not(.jj-fullbleed):not([data-no-rail-safe]) {
+    padding-left: var(--jj-global-container-px-xl) !important;
+    padding-right: var(--jj-global-container-px-xl) !important;
   }
 }
 
 html body #root main.jj-main-shell :is(.jj-hero-frame, .jj-project-hero, .jj-section-strap, .jj-band, .jj-project-band, .jj-fullbleed-band) {
   max-width: 100% !important;
   overflow-x: clip !important;
+}
+
+/* Final nested-track guard: a major section can be wrapped by PremiumSectionCard
+   and also render its own ContentTrack internally. The outer track owns the page
+   grid; all nested tracks must fill it without adding another horizontal gutter. */
+html body #root main.jj-main-shell .jj-section-strap > :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track)
+  :is(.jj-content-track, .jj-project-shell, .jj-track, .container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Same normalization for standalone/admin/portal shells that do not use
+   MainLayout's fixed-sidebar <main> but still render shared section straps. */
+html body #root :is(main, .jj-page-shell) .jj-section-strap > :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track)
+  :is(.jj-content-track, .jj-project-shell, .jj-track, .container.mx-auto, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto, .max-w-4xl.mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1440px\].mx-auto, .max-w-\[1280px\].mx-auto):not(.jj-fullbleed):not([data-no-rail-safe]) {
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 /* Final project hero contrast lock: the layout shell reflow must not let the

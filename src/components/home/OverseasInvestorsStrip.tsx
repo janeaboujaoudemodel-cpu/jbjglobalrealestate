@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Globe, ArrowRight, ShieldCheck, Trophy, Users, Users2 } from "lucide-react";
+import ContentTrack from "@/components/layout/ContentTrack";
 
 type Stat = {
   prefix?: string;
@@ -100,25 +101,25 @@ const OverseasInvestorsStrip = () => {
         }
       `}</style>
 
-      <Link
-        ref={ref}
-        to="/overseas-investors"
-        aria-label="Invest in Dubai from anywhere in the world — discover the opportunity"
-        data-surface="dark"
-        data-on-dark
-        data-no-contrast-guard
-        className="oi-investor-card allow-white group relative block w-full overflow-hidden px-6 py-6 transition-colors duration-300 sm:px-10 md:px-16 md:py-7 lg:px-24 lg:py-8"
-        style={{
-          background: "linear-gradient(135deg, #080808 0%, #12110E 48%, #050505 100%)",
-          borderTop: "1px solid rgba(184,149,85,0.38)",
-          borderBottom: "1px solid rgba(184,149,85,0.38)",
-          color: "#FFFFFF",
-        }}
-      >
-        <span aria-hidden className="oi-card-orb absolute left-10 top-6 h-24 w-24 rounded-full bg-[#B89555]/10 blur-3xl" />
-        <span aria-hidden className="oi-card-orb absolute bottom-6 right-16 h-28 w-28 rounded-full bg-[#B89555]/10 blur-3xl" style={{ animationDelay: "1.4s" }} />
+      <ContentTrack>
+        <Link
+          ref={ref}
+          to="/overseas-investors"
+          aria-label="Invest in Dubai from anywhere in the world — discover the opportunity"
+          data-surface="dark"
+          data-on-dark
+          data-no-contrast-guard
+          className="oi-investor-card allow-white group relative block w-full overflow-hidden rounded-[28px] px-6 py-6 transition-colors duration-300 sm:px-10 md:px-16 md:py-7 lg:px-20 lg:py-8"
+          style={{
+            background: "linear-gradient(135deg, #080808 0%, #12110E 48%, #050505 100%)",
+            border: "1px solid rgba(184,149,85,0.38)",
+            color: "#FFFFFF",
+          }}
+        >
+          <span aria-hidden className="oi-card-orb absolute left-10 top-6 h-24 w-24 rounded-full bg-[#B89555]/10 blur-3xl" />
+          <span aria-hidden className="oi-card-orb absolute bottom-6 right-16 h-28 w-28 rounded-full bg-[#B89555]/10 blur-3xl" style={{ animationDelay: "1.4s" }} />
 
-        <span className="relative z-[1] mx-auto flex w-full max-w-[1400px] flex-col gap-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-10">
+          <span className="relative z-[1] mx-auto flex w-full flex-col gap-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-10">
           <span className="min-w-0">
             <span className="mb-3 inline-flex items-center gap-3">
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#B89555]/10">
@@ -142,16 +143,17 @@ const OverseasInvestorsStrip = () => {
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
             </span>
           </span>
-        </span>
+          </span>
 
-        <span className="relative z-[1] mx-auto mt-5 block h-px w-full max-w-[1400px]" style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.34), transparent)" }} />
+          <span className="relative z-[1] mx-auto mt-5 block h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.34), transparent)" }} />
 
-        <span className="relative z-[1] mx-auto mt-4 grid w-full max-w-[1400px] grid-cols-2 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
-          {microStats.map((s, i) => (
-            <AnimatedStat key={s.label} stat={s} start={inView} alt={i % 2 === 1} />
-          ))}
-        </span>
-      </Link>
+          <span className="relative z-[1] mx-auto mt-4 grid w-full grid-cols-2 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
+            {microStats.map((s, i) => (
+              <AnimatedStat key={s.label} stat={s} start={inView} alt={i % 2 === 1} />
+            ))}
+          </span>
+        </Link>
+      </ContentTrack>
     </section>
   );
 };
