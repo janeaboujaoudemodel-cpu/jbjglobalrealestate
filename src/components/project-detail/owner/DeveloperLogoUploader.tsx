@@ -43,6 +43,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
 
   return (
     <div
+      data-keep-gold
       className="jj-cta-gold-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group p-[10px]"
       style={{
         border: '3px solid hsl(42 45% 59%)',
@@ -60,7 +61,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
           <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-2" />
         </div>
       ) : (
-        <span className="text-white font-bold text-base text-center px-2">{developerName}</span>
+        <span className="text-[#1A1A1A] font-bold text-base text-center px-2">{developerName}</span>
       )}
 
       {canEdit && (

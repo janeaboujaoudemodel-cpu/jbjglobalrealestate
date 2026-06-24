@@ -166,11 +166,11 @@ const PremiumBrochureCard = ({
           />
           
           {/* Layered scrims — top + bottom — guarantee wordmark and title legibility on any photo */}
-          <div className="absolute inset-x-0 top-0 h-[42%] bg-gradient-to-b from-black/75 via-black/35 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-[34%] bg-gradient-to-b from-black/50 via-black/18 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/46 via-black/8 to-transparent" />
 
           {/* Subtle emerald depth overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#064E3B]/10 via-transparent to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#064E3B]/6 via-transparent to-black/5" />
 
           {/* Spine effect on left - book binding */}
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
@@ -231,7 +231,7 @@ const PremiumBrochureCard = ({
               data-on-dark
               className="mt-auto -mx-1 px-4 py-3 rounded-lg allow-white"
               style={{
-                background: "linear-gradient(135deg, rgba(6,78,59,0.94) 0%, rgba(4,44,28,0.96) 58%, rgba(0,0,0,0.98) 100%)",
+                background: "linear-gradient(135deg, rgba(6,78,59,0.86) 0%, rgba(4,44,28,0.88) 58%, rgba(0,0,0,0.92) 100%)",
                 backdropFilter: "blur(4px)",
                 border: "1px solid rgba(0,0,0,0.30)",
                 boxShadow: "0 10px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",

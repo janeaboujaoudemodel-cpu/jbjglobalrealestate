@@ -89,7 +89,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
   const whatsappMessage = `Hi, I'm interested in ${projectName}. Please share more details and call me back.`;
 
   return (
-    <section className="py-16 md:py-20">
+    <section id="project-callback" className="py-16 md:py-20">
       <div className="jj-card-inner bg-gradient-to-br from-card via-card to-gold/5 border-2 border-[#B89555]/40 p-8 md:p-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           {/* Left: Text content */}
@@ -104,13 +104,13 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
             {/* Quick action buttons */}
             <div className="flex flex-wrap gap-4 mb-8">
               <a href={getWhatsAppUrl(whatsappMessage)} target="_blank" rel="noopener noreferrer">
-                <Button variant="secondary" size="lg" className="gap-2">
+                <Button data-emerald-action="true" variant="secondary" size="lg" className="jj-emerald-action gap-2">
                   <MessageCircle className="w-5 h-5" />
                   Chat with us now
                 </Button>
               </a>
               <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, "")}`}>
-                <Button variant="outline" size="lg" className="gap-2">
+                <Button data-emerald-action="true" variant="outline" size="lg" className="jj-emerald-action gap-2">
                   <Phone className="w-5 h-5" />
                   Call us now
                 </Button>
@@ -118,17 +118,17 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
             </div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#1A1A1A]" />
+            <div className="flex flex-wrap gap-3 text-sm text-[#1A1A1A]">
+              <span className="flex items-center gap-2 rounded-full border border-[color:var(--emerald-1)]/30 bg-[#FDFBF7] px-3 py-1.5 font-semibold">
+                <CheckCircle className="w-4 h-4 text-[color:var(--emerald-1)]" />
                 Licensed RERA Broker
               </span>
-              <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="flex items-center gap-2 rounded-full border border-[color:var(--emerald-1)]/30 bg-[#FDFBF7] px-3 py-1.5 font-semibold">
+                <CheckCircle className="w-4 h-4 text-[color:var(--emerald-1)]" />
                 Trusted by 1000+ clients
               </span>
-              <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="flex items-center gap-2 rounded-full border border-[color:var(--emerald-1)]/30 bg-[#FDFBF7] px-3 py-1.5 font-semibold">
+                <CheckCircle className="w-4 h-4 text-[color:var(--emerald-1)]" />
                 Expert guidance
               </span>
             </div>

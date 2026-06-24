@@ -114,15 +114,18 @@ export default function MortgageParityPanel({
                 type="button"
                 onClick={() => setResidency(k)}
                 data-no-contrast-guard
-                className={`allow-white px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${active ? "" : "opacity-70 hover:opacity-100"}`}
+                className={`jj-residency-chip px-3.5 py-1.5 rounded-full text-xs font-extrabold transition-all shadow-sm ${active ? "jj-residency-chip-active" : ""}`}
+                data-residency-active={active ? "true" : "false"}
                 style={{
                   background: active
-                    ? (isNavy ? "rgba(184,149,85,0.22)" : "#EFE6D6")
-                    : "transparent",
+                    ? "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)"
+                    : (isNavy ? "rgba(255,255,255,0.08)" : "#FDFBF7"),
                   border: active
-                    ? (isNavy ? "1px solid rgba(147,197,253,0.55)" : "1px solid #B89555")
-                    : (isNavy ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(184,149,85,0.35)"),
-                  color: isNavy ? "#FFFFFF" : "#1A1A1A",
+                    ? "1px solid rgba(4,44,28,0.75)"
+                    : (isNavy ? "1px solid rgba(255,255,255,0.35)" : "1px solid rgba(184,149,85,0.55)"),
+                  color: active ? "#FFFFFF" : (isNavy ? "#FFFFFF" : "#1A1A1A"),
+                  WebkitTextFillColor: active ? "#FFFFFF" : (isNavy ? "#FFFFFF" : "#1A1A1A"),
+                  opacity: 1,
                 }}
               >
                 {RESIDENCY[k].label}
