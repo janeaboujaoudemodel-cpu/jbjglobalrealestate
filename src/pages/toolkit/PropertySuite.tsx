@@ -18,7 +18,7 @@ const MortgageCalculatorComponent = lazy(() => import('@/components/MortgageCalc
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
     <div className="flex flex-col items-center gap-3">
-      <Loader2 className="h-7 w-7 animate-spin" style={{ color: "#B8943E" }} />
+      <Loader2 className="h-7 w-7 animate-spin" style={{ color: "#B89555" }} />
       <p className="text-xs" style={{ color: "rgba(0,0,0,0.35)" }}>Loading tool...</p>
     </div>
   </div>
@@ -37,7 +37,7 @@ export default function PropertySuite() {
   const { allowed: canCompare } = useCompareAccess();
   const tabs = useMemo(() => ALL_TABS.filter(t => t.value !== "compare" || canCompare), [canCompare]);
   const [activeTab, setActiveTab] = useState(tabs[0]?.value || "finder");
-  const activeColor = tabs.find(t => t.value === activeTab)?.color || "#B8943E";
+  const activeColor = tabs.find(t => t.value === activeTab)?.color || "#B89555";
 
   return (
     <>
@@ -48,7 +48,7 @@ export default function PropertySuite() {
       
       <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%)" }}>
         {/* ── Suite Header ── */}
-        <div style={{ background: "linear-gradient(180deg, #F7F1E6 0%, #EFE6D6 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
+        <div style={{ background: "linear-gradient(180deg, #F7F1E6 0%, #EFE6D6 100%)", borderBottom: "1px solid rgba(184,149,85,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Back link */}
             <Link to="/ai-hub"
@@ -63,13 +63,13 @@ export default function PropertySuite() {
             {/* Title row */}
             <div className="flex items-center gap-4 mb-5">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,148,62,0.4)", boxShadow: "0 0 30px rgba(184,148,62,0.15)" }}>
-                <Home className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "#B8943E" }} />
+                style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,149,85,0.4)", boxShadow: "0 0 30px rgba(184,149,85,0.15)" }}>
+                <Home className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "#B89555" }} />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
                   <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight" style={{ color: "#1A1A1A" }}>
-                    Property Intelligence <span style={{ color: "#B8943E" }}>Suite</span>
+                    Property Intelligence <span style={{ color: "#B89555" }}>Suite</span>
                   </h1>
                   <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
                     style={{ background: "#ede9fe", border: "1px solid #c4b5fd", color: "#6d28d9" }}>
@@ -87,7 +87,7 @@ export default function PropertySuite() {
         {/* ── Tabs ── */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tab Bar */}
-          <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,148,62,0.15)" }}>
+          <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,149,85,0.15)" }}>
             <div className="max-w-7xl mx-auto px-2 sm:px-6">
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
                 {tabs.map(({ value, label, shortLabel, icon: Icon, color }) => {

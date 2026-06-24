@@ -23,7 +23,7 @@ const ThumbnailGenerator = lazy(() => import('@/components/video-suite/Thumbnail
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
     <div className="flex flex-col items-center gap-3">
-      <Loader2 className="h-7 w-7 animate-spin" style={{ color: "#B8943E" }} />
+      <Loader2 className="h-7 w-7 animate-spin" style={{ color: "#B89555" }} />
       <p className="text-xs" style={{ color: "rgba(0,0,0,0.35)" }}>Loading tool...</p>
     </div>
   </div>
@@ -54,18 +54,18 @@ export default function VideoSuite() {
 
       <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%)" }}>
         {/* ── Suite Header — centered ── */}
-        <div style={{ background: "linear-gradient(180deg, #F7F1E6 0%, #EFE6D6 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
+        <div style={{ background: "linear-gradient(180deg, #F7F1E6 0%, #EFE6D6 100%)", borderBottom: "1px solid rgba(184,149,85,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Title row — centered */}
             <div className="flex flex-col items-center text-center gap-3 mb-5">
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,148,62,0.4)", boxShadow: "0 0 30px rgba(184,148,62,0.15)" }}>
-                <Play className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: "#B8943E" }} />
+                style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,149,85,0.4)", boxShadow: "0 0 30px rgba(184,149,85,0.15)" }}>
+                <Play className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: "#B89555" }} />
               </div>
               <div>
                 <div className="flex items-center justify-center gap-2 mb-0.5">
                   <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight" style={{ color: "#1A1A1A" }}>
-                    Creative <span style={{ color: "#B8943E" }}>Video Suite</span>
+                    Creative <span style={{ color: "#B89555" }}>Video Suite</span>
                   </h1>
                   <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
                     style={{ background: "#ede9fe", border: "1px solid #c4b5fd", color: "#6d28d9" }}>
@@ -83,7 +83,7 @@ export default function VideoSuite() {
         {/* ── Tabs ── */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tab Bar — horizontally scrollable on all devices */}
-          <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,148,62,0.15)" }}>
+          <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,149,85,0.15)" }}>
             <div className="max-w-7xl mx-auto">
               <ScrollArea className="w-full">
                 <div className="px-2 sm:px-6">
@@ -91,9 +91,9 @@ export default function VideoSuite() {
                     {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
                       <TabsTrigger key={value} value={value}
                         className="relative flex items-center gap-1.5 px-2.5 sm:px-4 md:px-5 py-3 sm:py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-[11px] sm:text-xs md:text-sm font-medium transition-all outline-none
-                          data-[state=inactive]:text-[#1A1A1A]/40 data-[state=active]:text-[#B8943E]
+                          data-[state=inactive]:text-[#1A1A1A]/40 data-[state=active]:text-[#B89555]
                           after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
-                          data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
+                          data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B89555]"
                       >
                         <Icon className="w-3.5 h-3.5 shrink-0" />
                         <span className="md:hidden">{shortLabel}</span>
@@ -108,7 +108,7 @@ export default function VideoSuite() {
           </div>
 
           {/* Neon gradient divider */}
-          <div className="h-[2px]" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,148,62,0.5) 30%, rgba(201,168,76,0.7) 50%, rgba(184,148,62,0.5) 70%, transparent 100%)" }} />
+          <div className="h-[2px]" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0.5) 30%, rgba(201,168,76,0.7) 50%, rgba(184,149,85,0.5) 70%, transparent 100%)" }} />
 
           {/* Tab Content */}
           <div>
