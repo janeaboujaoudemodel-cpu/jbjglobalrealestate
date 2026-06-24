@@ -1,7 +1,6 @@
 import { useRef, useMemo, useState } from "react";
-import { Download, FileText, DollarSign, Layers, ClipboardList, Image, ChevronLeft, ChevronRight, Eye, X } from "lucide-react";
+import { Download, FileText, DollarSign, Layers, ClipboardList, Image, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { SafeImage } from "@/components/SafeImage";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -42,15 +41,6 @@ const typeIcon: Record<string, React.ReactNode> = {
   floor_plan: <Layers className="w-4 h-4" />,
   inventory: <ClipboardList className="w-4 h-4" />,
   renders: <Image className="w-4 h-4" />,
-};
-
-const typeGradient: Record<string, string> = {
-  brochure: "from-black/80 via-black/60 to-gold/30",
-  fact_sheet: "from-black/80 via-black/60 to-amber-700/25",
-  payment_plan: "from-black/80 via-black/60 /25",
-  floor_plan: "from-black/80 via-black/60 to-sky-700/25",
-  inventory: "from-black/80 via-black/60 to-violet-700/25",
-  renders: "from-black/80 via-black/60 to-rose-700/25",
 };
 
 export default function BookStyleDocuments({
@@ -154,10 +144,10 @@ export default function BookStyleDocuments({
               <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A1A]/40 to-transparent z-10" />
               <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
 
-              {/* Top-right type chip — solid champagne pill for guaranteed legibility */}
-              <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F7F2EA] ring-1 ring-[#B89555]/70 shadow-sm">
-                <span className="text-[#B89555]">{icon}</span>
-                <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#1A1A1A]">{typeLabel}</span>
+              {/* Top-right type chip — approved emerald label, pure white content */}
+              <div data-emerald-action="true" className="jj-emerald-action absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full shadow-sm">
+                <span className="text-white">{icon}</span>
+                <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-white">{typeLabel}</span>
               </div>
 
               {/* Bottom label panel — solid champagne for guaranteed legibility */}

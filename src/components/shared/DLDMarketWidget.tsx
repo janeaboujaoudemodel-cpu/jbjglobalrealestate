@@ -57,7 +57,7 @@ const TONE = {
   navy:    { text: "text-[#1F3A5F]", soft: "bg-[#1F3A5F]/8", border: "border-[#1F3A5F]/25", dot: "bg-[#1F3A5F]", bar: "bg-[#1F3A5F]" },
   steel:   { text: "text-[#0A0A0A]", soft: "bg-[#0A0A0A]/8", border: "border-[#0A0A0A]/25", dot: "bg-[#0A0A0A]", bar: "bg-[#0A0A0A]" },
   bronze:  { text: "text-[#B89555]", soft: "bg-[#B89555]/8", border: "border-[#B89555]/25", dot: "bg-[#B89555]", bar: "bg-[#B89555]" },
-  copper:  { text: "text-[#8C4A2B]", soft: "bg-[#8C4A2B]/8", border: "border-[#8C4A2B]/25", dot: "bg-[#8C4A2B]", bar: "bg-[#8C4A2B]" },
+  copper:  { text: "text-[#B89555]", soft: "bg-[#B89555]/8", border: "border-[#B89555]/25", dot: "bg-[#B89555]", bar: "bg-[#B89555]" },
   ink:     { text: "text-[#1A1A1A]", soft: "bg-[#1A1A1A]/5",  border: "border-[#1A1A1A]/15", dot: "bg-[#1A1A1A]", bar: "bg-[#1A1A1A]" },
 } as const;
 
@@ -308,7 +308,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <div data-emerald-action="true" className="jj-emerald-action h-full rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
                 </div>
-                <div className="h-full bg-[#8C4A2B] flex-1 rounded-r-full flex items-center justify-center">
+                <div className="h-full bg-[#B89555] flex-1 rounded-r-full flex items-center justify-center">
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{secondaryPct}%</span>
                 </div>
               </div>
@@ -321,12 +321,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   <p className="text-[#1E5F3F] text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
                   <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{offPlanPct}% of total</p>
                 </div>
-                <div className="bg-[#8C4A2B]/8 border border-[#8C4A2B]/25 rounded-lg p-3">
+                <div className="bg-[#B89555]/8 border border-[#B89555]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#8C4A2B]" />
-                    <span className="text-[#8C4A2B] text-[10px] uppercase tracking-wider font-bold">Secondary</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#B89555]" />
+                    <span className="text-[#B89555] text-[10px] uppercase tracking-wider font-bold">Secondary</span>
                   </div>
-                  <p className="text-[#8C4A2B] text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
+                  <p className="text-[#B89555] text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
                   <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{secondaryPct}% of total</p>
                 </div>
               </div>

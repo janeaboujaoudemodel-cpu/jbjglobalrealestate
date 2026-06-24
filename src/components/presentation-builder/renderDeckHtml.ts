@@ -18,12 +18,18 @@ export type DeckSectionKey =
 
 export interface DeckPresenter {
   photoDataUrl?: string;
+  logoDataUrl?: string;
   name?: string;
   title?: string;
   email?: string;
   phone?: string;
   whatsapp?: string;
   company?: string;
+  clientName?: string;
+  clientPhone?: string;
+  clientAddress?: string;
+  clientPassport?: string;
+  clientNotes?: string;
 }
 
 export interface DeckUnit {
@@ -112,11 +118,13 @@ const baseStyles = `
   .cover-content h1 { color: #FFFFFF; font-size: 56px; }
   .cover-content .lead { color: rgba(255,255,255,0.85); }
   .brand-mark { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid rgba(184,149,85,0.55); border-radius: 6px; background: rgba(8,12,20,0.78); color: #FFF; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }
+  .brand-mark img { width: 28px; height: 28px; object-fit: contain; border-radius: 4px; background: rgba(255,255,255,0.08); }
   .brand-mark .gold { color: #F3D98A; font-weight: 800; }
   .presenter-card { display: flex; gap: 14px; align-items: center; padding: 16px; background: #FDFBF7; border: 1px solid rgba(184,149,85,0.4); border-radius: 10px; }
   .presenter-card img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(184,149,85,0.5); }
   .contact-row { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: #1A1A1A; }
   .contact-row .k { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(26,26,26,0.55); margin-bottom: 2px; }
+  .client-card { margin-top: 16px; padding: 14px; background: #F7F2EA; border: 1px solid rgba(184,149,85,0.34); border-radius: 10px; }
   ul.bullets { list-style: none; padding: 0; margin: 0; }
   ul.bullets li { position: relative; padding-left: 18px; margin-bottom: 8px; font-size: 14px; line-height: 1.5; color: #1A1A1A; }
   ul.bullets li::before { content: "•"; color: #B89555; position: absolute; left: 0; font-weight: 700; }
@@ -131,7 +139,7 @@ function coverSlide(project: DeckProject, presenter: DeckPresenter): string {
     <section class="slide" style="padding:0;">
       ${cover ? `<div class="cover-photo" style="background-image:url('${esc(cover)}');"></div><div class="cover-scrim"></div>` : `<div class="cover-photo" style="background:#0A0A0A;"></div>`}
       <div class="cover-content" style="position:absolute; left:20mm; right:20mm; bottom:24mm;">
-        <div class="brand-mark"><span class="gold">JBJ</span><span>${esc(company)}</span></div>
+        <div class="brand-mark">${presenter.logoDataUrl ? `<img src="${esc(presenter.logoDataUrl)}" alt="" />` : `<span class="gold">JBJ</span>`}<span>${esc(company)}</span></div>
         <div class="kicker" style="margin-top:18px;">Project Presentation</div>
         <h1 class="title">${esc(project.name)}</h1>
         ${project.area_name || project.location ? `<div class="lead">${esc(project.area_name || project.location)}${project.emirate ? ` · ${esc(project.emirate)}` : ""}</div>` : ""}
@@ -276,7 +284,14 @@ function offerSlide(project: DeckProject, offer?: string): string | null {
 }
 
 function contactSlide(project: DeckProject, presenter: DeckPresenter): string | null {
-  const hasAny = presenter.name || presenter.email || presenter.phone || presenter.whatsapp;
+  const clientRows: Array<[string, string | undefined]> = [
+    ["Client name", presenter.clientName],
+    ["Client phone", presenter.clientPhone],
+    ["Address", presenter.clientAddress],
+    ["Passport / ID", presenter.clientPassport],
+    ["Notes", presenter.clientNotes],
+  ].filter(([, value]) => Boolean(value?.trim())) as Array<[string, string]>;
+  const hasAny = presenter.name || presenter.email || presenter.phone || presenter.whatsapp || clientRows.length > 0;
   if (!hasAny) return null;
   const company = presenter.company || "JBJ Global Real Estate";
   return `
@@ -297,6 +312,7 @@ function contactSlide(project: DeckProject, presenter: DeckPresenter): string | 
         ${presenter.phone ? `<div><div class="k">Phone</div>${esc(presenter.phone)}</div>` : ""}
         ${presenter.whatsapp ? `<div><div class="k">WhatsApp</div>${esc(presenter.whatsapp)}</div>` : ""}
       </div>
+      ${clientRows.length ? `<div class="client-card"><div class="k" style="margin-bottom:8px;">Client details</div><div class="contact-row">${clientRows.map(([label, value]) => `<div><div class="k">${esc(label)}</div>${esc(value)}</div>`).join("")}</div></div>` : ""}
       <div class="footer-strip"><span>JBJ Global Real Estate</span><span>${esc(project.name)}</span></div>
     </section>`;
 }

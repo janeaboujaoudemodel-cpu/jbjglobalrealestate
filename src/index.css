@@ -14067,6 +14067,59 @@ html body [data-jj-utility-bar] .jj-sqtoggle:active {
   }
 }
 
+/* TERMINAL sq ft / sq m active lock — faster, stronger dark emerald 3D sweep. */
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle {
+  transform-style: preserve-3d !important;
+  isolation: isolate !important;
+}
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:focus-visible {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 52%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 52%, #000000 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -10px 16px rgba(0,0,0,0.48),
+    inset 0 0 0 1px rgba(255,255,255,0.10),
+    0 8px 18px rgba(0,0,0,0.32) !important;
+  transform: translateY(-1px) perspective(80px) rotateX(7deg) !important;
+}
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
+  position: absolute !important;
+  inset: -35% -70% !important;
+  display: block !important;
+  z-index: 1 !important;
+  border-radius: inherit !important;
+  background:
+    repeating-linear-gradient(115deg,
+      rgba(0,0,0,0.00) 0%,
+      rgba(0,0,0,0.00) 17%,
+      rgba(0,0,0,0.46) 24%,
+      rgba(6,78,59,0.78) 31%,
+      rgba(0,0,0,0.56) 38%,
+      rgba(0,0,0,0.00) 48%);
+  background-size: 165% 165% !important;
+  mix-blend-mode: normal !important;
+  opacity: 0.95 !important;
+  animation: jj-sqtoggle-fast-3d-metal 0.75s linear infinite !important;
+  filter: saturate(1.25) contrast(1.18) !important;
+}
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] > span:not(.jj-sqtoggle-sweep) {
+  position: relative !important;
+  z-index: 3 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.7) !important;
+}
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:active {
+  transform: translateY(1px) scale(0.965) perspective(80px) rotateX(-7deg) !important;
+  box-shadow: inset 0 4px 12px rgba(0,0,0,0.62), 0 2px 6px rgba(0,0,0,0.36) !important;
+}
+@keyframes jj-sqtoggle-fast-3d-metal {
+  0% { transform: translate3d(-18%, 0, 0) rotate(0.001deg); }
+  100% { transform: translate3d(18%, 0, 0) rotate(0.001deg); }
+}
+
 
 
 

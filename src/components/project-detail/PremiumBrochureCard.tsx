@@ -130,7 +130,7 @@ const PremiumBrochureCard = ({
       >
         {/* Stacked Pages Effect - visible underneath the main cover */}
         <div 
-          className="absolute w-[380px] h-[260px] rounded-lg"
+          className="absolute w-[340px] h-[220px] rounded-lg"
           style={{
             transform: "translateZ(-8px) translateX(6px) translateY(6px)",
             background: "linear-gradient(135deg, #ECE2D2 0%, #D8C7A6 100%)",
@@ -138,7 +138,7 @@ const PremiumBrochureCard = ({
           }}
         />
         <div 
-          className="absolute w-[380px] h-[260px] rounded-lg"
+          className="absolute w-[340px] h-[220px] rounded-lg"
           style={{
             transform: "translateZ(-4px) translateX(3px) translateY(3px)",
             background: "linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 100%)",
@@ -148,7 +148,7 @@ const PremiumBrochureCard = ({
 
         {/* Main Card Container - Larger brochure with project image */}
         <div 
-          className="relative w-[380px] h-[260px] rounded-lg overflow-hidden"
+          className="relative w-[340px] h-[220px] rounded-lg overflow-hidden"
           style={{
             transformStyle: "preserve-3d",
             boxShadow: `
@@ -169,40 +169,39 @@ const PremiumBrochureCard = ({
           <div className="absolute inset-x-0 top-0 h-[42%] bg-gradient-to-b from-black/75 via-black/35 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
 
-          {/* Premium Gold Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 via-transparent to-gold/5" />
+          {/* Subtle emerald depth overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#064E3B]/10 via-transparent to-black/10" />
 
           {/* Spine effect on left - book binding */}
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
           <div className="absolute left-2 top-4 bottom-4 w-[2px] bg-[#EFE6D6]/40 rounded-full" />
 
-          {/* Gold border accent */}
-          <div className="absolute inset-0 border-2 border-[#B89555]/50 rounded-lg group-hover:border-[#B89555]/80 transition-colors" />
-
-          {/* Top gold line accent */}
-          <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+          {/* Clean image frame — no gold border on brochure cover */}
+          <div className="absolute inset-0 rounded-lg ring-1 ring-black/20 group-hover:ring-black/30 transition-colors" />
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Brand mark — compact monogram + wordmark sized to fit 380px card without clipping */}
+            {/* Top: Brand mark — emerald label, pure white content */}
             <div
               data-no-contrast-guard
               data-on-dark
-              className="absolute top-4 left-6 flex items-center gap-2 pr-3 py-1.5 rounded-md allow-white"
+              className="absolute top-3 left-5 flex items-center gap-2 pr-3 py-1.5 rounded-md allow-white"
               style={{
-                background: "rgba(6,10,18,0.95)",
+                background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                 paddingLeft: 6,
                 right: 64, // never overlap lock icon (top-4 right-4 + 44px)
                 maxWidth: "calc(100% - 88px)",
-                border: "1px solid rgba(184,149,85,0.7)",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.4)",
+                border: "1px solid rgba(0,0,0,0.30)",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.12)",
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
               }}
             >
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden shrink-0"
                 style={{
                   background: "radial-gradient(circle at 30% 30%, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)",
-                  border: "1px solid rgba(184,149,85,0.65)",
+                  border: "1px solid rgba(0,0,0,0.18)",
                   boxShadow:
                     "0 4px 10px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.18)",
                 }}
@@ -219,39 +218,34 @@ const PremiumBrochureCard = ({
                 className="text-[12.5px] uppercase leading-none whitespace-nowrap allow-white truncate"
                 style={{ color: "#FFFFFF", letterSpacing: "0.10em", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
               >
-                <span style={{ color: "#F3D98A", fontWeight: 800 }}>JBJ</span>{" "}
+                <span style={{ color: "#FFFFFF", fontWeight: 800 }}>JBJ</span>{" "}
                 <span style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.12em" }}>Global Real Estate</span>
               </p>
             </div>
 
 
 
-            {/* Bottom: Brochure info — solid near-black panel for guaranteed contrast on any photo */}
+            {/* Bottom: Brochure info — compact emerald panel for guaranteed contrast */}
             <div
               data-no-contrast-guard
               data-on-dark
-              className="mt-auto -mx-2 px-4 py-4 rounded-lg allow-white"
+              className="mt-auto -mx-1 px-4 py-3 rounded-lg allow-white"
               style={{
-                background: "linear-gradient(180deg, rgba(8,12,20,0.55) 0%, rgba(8,12,20,0.88) 35%, rgba(8,12,20,0.98) 100%)",
+                background: "linear-gradient(135deg, rgba(6,78,59,0.94) 0%, rgba(4,44,28,0.96) 58%, rgba(0,0,0,0.98) 100%)",
                 backdropFilter: "blur(4px)",
+                border: "1px solid rgba(0,0,0,0.30)",
+                boxShadow: "0 10px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
               }}
             >
-              <span
-                data-emerald-action="true"
-                className="jj-emerald-action inline-flex items-center px-3 py-1 rounded-md text-[11px] uppercase tracking-[0.28em] font-extrabold mb-2"
-              >
-                Project Brochure
-              </span>
-
               <h3
                 data-no-contrast-guard
-                className="text-2xl font-bold mb-3 line-clamp-2 leading-tight allow-white"
+                className="text-xl font-bold mb-2 line-clamp-1 leading-tight allow-white"
                 style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)" }}
               >
                 {projectName}
               </h3>
-
-              <div className="w-20 h-[2px] bg-gradient-to-r from-[#B89555] to-[#B89555]/20 mb-3" />
 
               <p
                 data-no-contrast-guard
