@@ -1263,6 +1263,91 @@ All colors MUST be HSL.
   }
 }
 
+/* ============================================================
+   GLOBAL ALIGNMENT NORMALIZATION  (site-wide, excludes homepage)
+   ------------------------------------------------------------
+   Every common content container inside <main> on non-homepage
+   routes inherits the canonical width and gutter so all major
+   sections share identical left/right alignment — no per-page
+   tweaks. Hero sections, full-bleed bands, headers and nav are
+   always exempt.
+   ============================================================ */
+body:not([data-homepage]) main :is(
+  .container,
+  .max-w-7xl.mx-auto,
+  .max-w-6xl.mx-auto,
+  .max-w-5xl.mx-auto,
+  .max-w-4xl.mx-auto,
+  .max-w-\[1200px\].mx-auto,
+  .max-w-\[1280px\].mx-auto,
+  .max-w-\[1400px\].mx-auto,
+  .max-w-\[1440px\].mx-auto,
+  .max-w-\[1500px\].mx-auto,
+  .max-w-\[1600px\].mx-auto,
+  .max-w-\[1760px\].mx-auto
+) {
+  max-width: var(--jj-global-container-max) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--jj-global-container-px-mobile) !important;
+  padding-right: var(--jj-global-container-px-mobile) !important;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  body:not([data-homepage]) main :is(
+    .container, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto,
+    .max-w-4xl.mx-auto, .max-w-\[1200px\].mx-auto, .max-w-\[1280px\].mx-auto,
+    .max-w-\[1400px\].mx-auto, .max-w-\[1440px\].mx-auto,
+    .max-w-\[1500px\].mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1760px\].mx-auto
+  ) {
+    padding-left: var(--jj-global-container-px-tablet) !important;
+    padding-right: var(--jj-global-container-px-tablet) !important;
+  }
+}
+@media (min-width: 1024px) {
+  body:not([data-homepage]) main :is(
+    .container, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto,
+    .max-w-4xl.mx-auto, .max-w-\[1200px\].mx-auto, .max-w-\[1280px\].mx-auto,
+    .max-w-\[1400px\].mx-auto, .max-w-\[1440px\].mx-auto,
+    .max-w-\[1500px\].mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1760px\].mx-auto
+  ) {
+    padding-left: var(--jj-global-container-px-desktop) !important;
+    padding-right: var(--jj-global-container-px-desktop) !important;
+  }
+}
+@media (min-width: 1280px) {
+  body:not([data-homepage]) main :is(
+    .container, .max-w-7xl.mx-auto, .max-w-6xl.mx-auto, .max-w-5xl.mx-auto,
+    .max-w-4xl.mx-auto, .max-w-\[1200px\].mx-auto, .max-w-\[1280px\].mx-auto,
+    .max-w-\[1400px\].mx-auto, .max-w-\[1440px\].mx-auto,
+    .max-w-\[1500px\].mx-auto, .max-w-\[1600px\].mx-auto, .max-w-\[1760px\].mx-auto
+  ) {
+    padding-left: var(--jj-global-container-px-xl) !important;
+    padding-right: var(--jj-global-container-px-xl) !important;
+  }
+}
+
+/* Exempt: heroes, full-bleed bands, navigation chrome, opt-outs. */
+body:not([data-homepage]) main :is([data-hero-dark], [data-hero], .jj-fullbleed, [data-no-rail-safe], .jj-fullbleed-band)
+  :is(.container, [class*="max-w-"].mx-auto) {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Full-bleed band utility: background spans edge-to-edge while inner
+   content centers to the canonical track. Used by homepage exception
+   sections (Get Verified, Continue Searching, Handpicked, Guides). */
+.jj-fullbleed-band {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+
 .jj-hero-frame {
   position: relative;
   width: 100%;
