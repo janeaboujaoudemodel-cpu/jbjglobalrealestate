@@ -61,21 +61,25 @@ const AnimatedStat = ({ stat, start, index }: { stat: Stat; start: boolean; inde
 };
 
 const OverseasInvestorsStrip = () => {
-  const ref = useRef<HTMLAnchorElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
-    const el = ref.current;
+    const el = sectionRef.current;
     if (!el) return;
     const io = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) { setInView(true); io.disconnect(); } },
-      { threshold: 0.2 }
+      { threshold: 0.05, rootMargin: "0px 0px -10% 0px" }
     );
     io.observe(el);
+    // Fallback: if section is already on screen at mount, kick off
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) setInView(true);
     return () => io.disconnect();
   }, []);
 
   return (
     <section
+      ref={sectionRef}
       className="jj-fullbleed-band oi-band relative w-full overflow-hidden"
       data-fullbleed-band
       data-surface="dark"
@@ -96,16 +100,13 @@ const OverseasInvestorsStrip = () => {
         .oi-band, .oi-band * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         .oi-band .oi-muted, .oi-band .oi-muted * { color: rgba(255,255,255,0.72) !important; -webkit-text-fill-color: rgba(255,255,255,0.72) !important; }
         .oi-band .oi-faint, .oi-band .oi-faint * { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
-        .oi-band .oi-cta, .oi-band .oi-cta * { color: #063A2A !important; -webkit-text-fill-color: #063A2A !important; }
         .oi-band svg { stroke: currentColor !important; color: inherit !important; }
-        .oi-band .oi-cta svg { stroke: #063A2A !important; color: #063A2A !important; }
         @media (prefers-reduced-motion: reduce) {
           .oi-orb, .oi-stat { animation: none !important; }
         }
       `}</style>
 
       <Link
-        ref={ref}
         to="/overseas-investors"
         aria-label="Invest in Dubai from anywhere in the world — discover the opportunity"
         data-surface="dark"
@@ -139,7 +140,10 @@ const OverseasInvestorsStrip = () => {
             </p>
           </div>
 
-          <span className="oi-cta inline-flex w-fit items-center gap-3 rounded-full bg-white px-6 py-3 text-[11px] font-bold uppercase tracking-[0.18em] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] transition-all duration-300 group-hover:bg-white group-hover:shadow-[0_14px_36px_-12px_rgba(0,0,0,0.7)]">
+          {/* Locked emerald metallic CTA — matches "Start exploring" */}
+          <span
+            className="jj-cta-emerald inline-flex h-12 w-fit items-center gap-2.5 rounded-xl px-6 text-[13px] font-semibold tracking-wide transition-transform duration-300 group-hover:-translate-y-0.5"
+          >
             <span>Discover the opportunity</span>
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={2.4} />
           </span>
