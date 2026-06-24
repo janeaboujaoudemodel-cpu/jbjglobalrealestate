@@ -212,9 +212,15 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     !emirateSearch || e.label.toLowerCase().includes(emirateSearch.toLowerCase())
   );
 
-  const filteredDevs = developers.filter(d =>
-    !devSearch || d.name.toLowerCase().includes(devSearch.toLowerCase())
-  );
+  const filteredDevs = developers
+    .filter(d => !devSearch || d.name.toLowerCase().includes(devSearch.toLowerCase()))
+    .sort((a, b) => {
+      const ra = premiumRank(a.name);
+      const rb = premiumRank(b.name);
+      if (ra !== rb) return ra - rb;
+      return a.name.localeCompare(b.name);
+    });
+
 
   // Filter areas by search, then group by emirate
   const filteredAreasList = allAreas.filter(a =>
