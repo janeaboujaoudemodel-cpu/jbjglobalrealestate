@@ -699,15 +699,19 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           >
             Clear all
           </button>
-          <button className="p-2.5 rounded-full border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 hover:border-[#B89555]/60 transition-all">
-            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+          <button
+            aria-label="Save to favourites"
+            className="jj-surface-emerald p-2.5 rounded-full border border-[color:var(--emerald-1)] hover:brightness-110 transition-all"
+          >
+            <Heart className="w-4 h-4" />
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-3 rounded-full bg-[#1A1A1A] text-white font-bold text-sm ring-1 ring-[#B89555] hover:bg-[#0d0d0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] transition-all"
+            className="jj-pill-emerald-metallic flex-1 py-3 rounded-full font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] transition-all"
           >
             Show {projectCount !== null ? projectCount.toLocaleString() : '...'} projects
           </button>
+
         </div>
       </DialogContent>
     </Dialog>
