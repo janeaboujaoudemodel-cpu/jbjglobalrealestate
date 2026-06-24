@@ -13510,3 +13510,112 @@ html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true
 html body #root :is(.jj-favorite-trigger, [data-card-action]) svg :where([fill]:not([fill="none"]), .fill-current) {
   fill: #FFFFFF !important;
 }
+
+/* =====================================================================
+   FINAL EMERALD HOVER + GREEN PURGE (terminal lock).
+   - Emerald-owned surfaces render the deep ombre at rest and the
+     lighter ombre on hover (idle darker, hover lighter per spec).
+   - Any remaining lighter green / lime / teal accents on the favorite,
+     shortlist, brochure checklist, presentation checklist, payment plan
+     TBD, mortgage stat tiles, "Download Report", and CTA primitives are
+     forced to the canonical emerald.
+   ===================================================================== */
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-surface="emerald"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+  [data-emerald="true"]
+):not([data-no-contrast-guard]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-surface="emerald"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+  [data-emerald="true"]
+):not([data-no-contrast-guard]):is(:hover, :focus-visible) {
+  background: var(--jj-emerald-ombre-hover) !important;
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  background-color: #0a6b53 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Pure-white SVG glyphs on every emerald-owned surface, at every state. */
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-surface="emerald"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+  [data-emerald="true"]
+):not([data-no-contrast-guard]) :where(svg, [class*="lucide"], [data-lucide]),
+html body #root :is(
+  .jj-emerald-action,
+  [data-emerald-action="true"],
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-favorite-trigger,
+  [data-card-action],
+  .jj-history-emerald-icon,
+  [data-surface="emerald"]:not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]),
+  [data-emerald="true"]
+):not([data-no-contrast-guard]) svg :where(path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Heart/Shortlist/Favorite glyphs: keep outline at rest, white fill when active. */
+html body #root :is(.jj-favorite-trigger, [data-card-action]) svg[fill="none"],
+html body #root :is(.jj-favorite-trigger, [data-card-action]) svg[fill="none"] :where(path, line, polyline, polygon, rect, circle, ellipse) {
+  fill: none !important;
+}
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] svg,
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg {
+  fill: #FFFFFF !important;
+}
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-label*="Remove"] svg :where(path, line, polyline, polygon, rect, circle, ellipse),
+html body #root :is(.jj-favorite-trigger, [data-card-action])[aria-pressed="true"] svg :where(path, line, polyline, polygon, rect, circle, ellipse) {
+  fill: #FFFFFF !important;
+}
