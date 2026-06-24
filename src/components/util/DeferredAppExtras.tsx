@@ -49,7 +49,7 @@ export default function DeferredAppExtras() {
   return (
     <Suspense fallback={null}>
       <GlobalVisitorTracking />
-      <OwnerVisitorToggle />
+      {/* OwnerVisitorToggle removed — Mode switcher in header now controls Owner/Visitor view */}
       <SeoHighlightOverlay />
       {/* Owner-only chunks: not even imported for non-owners */}
       {ownerGate && (
