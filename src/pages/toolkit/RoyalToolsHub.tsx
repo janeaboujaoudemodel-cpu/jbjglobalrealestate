@@ -169,54 +169,57 @@ export default function RoyalToolsHub() {
         
         {/* Tools Grid */}
         <div className="max-w-7xl mx-auto px-4 py-8">
-          {filteredTools.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-[#1A1A1A]/70 text-lg">No tools found matching your criteria.</p>
-              <Button
-                variant="outline"
-                className="mt-4 border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
-                onClick={() => { setSearch(''); setSelectedCategory('all'); }}
-              >
-                Clear Filters
-              </Button>
-            </div>
-          ) : selectedCategory === 'all' ? (
-            <div className="space-y-10">
-              {categories.map(category => {
-                const categoryTools = toolsByCategory[category];
-                if (categoryTools.length === 0) return null;
-                
-                return (
-                  <div key={category}>
-                    <div className="flex items-center gap-3 mb-6">
-                      <Sparkles className="w-5 h-5 text-[#B89555]" />
-                      <h2 
-                        className="text-xl md:text-2xl font-bold text-[#1A1A1A]"
-                      >
-                        {categoryLabels[category]}
-                      </h2>
-                      <span className="px-3 py-1 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 text-[#1A1A1A] text-sm">
-                        {categoryTools.length} tools
-                      </span>
+          <AIShellCard padding="lg">
+            {filteredTools.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-[#1A1A1A]/70 text-lg">No tools found matching your criteria.</p>
+                <Button
+                  variant="outline"
+                  className="mt-4 border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
+                  onClick={() => { setSearch(''); setSelectedCategory('all'); }}
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            ) : selectedCategory === 'all' ? (
+              <div className="space-y-10">
+                {categories.map(category => {
+                  const categoryTools = toolsByCategory[category];
+                  if (categoryTools.length === 0) return null;
+
+                  return (
+                    <div key={category}>
+                      <div className="flex items-center gap-3 mb-6">
+                        <Sparkles className="w-5 h-5 text-[#B89555]" />
+                        <h2
+                          className="text-xl md:text-2xl font-bold text-[#1A1A1A]"
+                        >
+                          {categoryLabels[category]}
+                        </h2>
+                        <span className="px-3 py-1 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 text-[#1A1A1A] text-sm">
+                          {categoryTools.length} tools
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {categoryTools.map(tool => (
+                          <ToolCard key={tool.id} tool={tool} />
+                        ))}
+                      </div>
                     </div>
-                    
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {categoryTools.map(tool => (
-                        <ToolCard key={tool.id} tool={tool} />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {filteredTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
-              ))}
-            </div>
-          )}
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {filteredTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))}
+              </div>
+            )}
+          </AIShellCard>
         </div>
+
         
         {/* Fair Usage Notice */}
         <div className="max-w-7xl mx-auto px-4 pb-8">
