@@ -368,14 +368,13 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
-      {/* OVERSEAS INVESTORS */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
-        <LazyVisible minHeight={300}>
-          <Suspense fallback={<SectionLoader />}>
-            <OverseasInvestorsBanner />
-          </Suspense>
-        </LazyVisible>
-      </PremiumSectionCard>
+      {/* OVERSEAS INVESTORS — full-bleed edge-to-edge */}
+      <LazyVisible minHeight={300}>
+        <Suspense fallback={<SectionLoader />}>
+          <OverseasInvestorsBanner />
+        </Suspense>
+      </LazyVisible>
+
 
       {/* EXPLORE OUR GUIDES & REPORTS */}
       <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
