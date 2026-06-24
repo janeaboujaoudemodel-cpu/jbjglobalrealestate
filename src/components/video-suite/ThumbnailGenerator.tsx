@@ -121,10 +121,10 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Settings */}
         <div className="space-y-4">
-          <Card style={{ background: 'rgba(253,251,247,0.8)', border: '1px solid rgba(184,148,62,0.2)' }}>
+          <Card style={{ background: 'rgba(253,251,247,0.8)', border: '1px solid rgba(184,149,85,0.2)' }}>
             <CardContent className="p-4 space-y-4">
               <div className="flex items-center gap-2 mb-1">
-                <Type className="w-4 h-4" style={{ color: '#B8943E' }} />
+                <Type className="w-4 h-4" style={{ color: '#B89555' }} />
                 <span className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>Thumbnail Content</span>
               </div>
 
@@ -134,7 +134,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   placeholder="e.g. Luxury Villa Tour in Palm Jumeirah"
-                  style={{ borderColor: 'rgba(184,148,62,0.25)' }}
+                  style={{ borderColor: 'rgba(184,149,85,0.25)' }}
                 />
               </div>
 
@@ -144,7 +144,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
                   value={subtitle}
                   onChange={e => setSubtitle(e.target.value)}
                   placeholder="e.g. $5M | 5 Bedrooms | Sea View"
-                  style={{ borderColor: 'rgba(184,148,62,0.25)' }}
+                  style={{ borderColor: 'rgba(184,149,85,0.25)' }}
                 />
               </div>
 
@@ -152,7 +152,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
                 <div className="space-y-2">
                   <Label className="text-xs" style={{ color: 'rgba(0,0,0,0.5)' }}>Style</Label>
                   <Select value={style} onValueChange={setStyle}>
-                    <SelectTrigger style={{ borderColor: 'rgba(184,148,62,0.25)' }}>
+                    <SelectTrigger style={{ borderColor: 'rgba(184,149,85,0.25)' }}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -165,7 +165,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
                 <div className="space-y-2">
                   <Label className="text-xs" style={{ color: 'rgba(0,0,0,0.5)' }}>Aspect Ratio</Label>
                   <Select value={ratio} onValueChange={setRatio}>
-                    <SelectTrigger style={{ borderColor: 'rgba(184,148,62,0.25)' }}>
+                    <SelectTrigger style={{ borderColor: 'rgba(184,149,85,0.25)' }}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -180,16 +180,16 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
           </Card>
 
           {/* Base Image Upload */}
-          <Card style={{ background: 'rgba(253,251,247,0.8)', border: '1px solid rgba(184,148,62,0.2)' }}>
+          <Card style={{ background: 'rgba(253,251,247,0.8)', border: '1px solid rgba(184,149,85,0.2)' }}>
             <CardContent className="p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <Palette className="w-4 h-4" style={{ color: '#B8943E' }} />
+                <Palette className="w-4 h-4" style={{ color: '#B89555' }} />
                 <span className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>Base Image (optional)</span>
               </div>
               <p className="text-[11px]" style={{ color: 'rgba(0,0,0,0.4)' }}>Upload a photo to use as the thumbnail background</p>
 
               {baseImage ? (
-                <div className="relative rounded-lg overflow-hidden border" style={{ borderColor: 'rgba(184,148,62,0.2)' }}>
+                <div className="relative rounded-lg overflow-hidden border" style={{ borderColor: 'rgba(184,149,85,0.2)' }}>
                   <img src={baseImage} alt="Base" className="w-full h-32 object-cover" />
                   <button
                     onClick={() => setBaseImage(null)}
@@ -200,10 +200,10 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
               ) : (
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full flex flex-col items-center gap-2 py-6 rounded-xl border-2 border-dashed transition-colors hover:border-[#B8943E]/50"
-                  style={{ borderColor: 'rgba(184,148,62,0.2)' }}
+                  className="w-full flex flex-col items-center gap-2 py-6 rounded-xl border-2 border-dashed transition-colors hover:border-[#B89555]/50"
+                  style={{ borderColor: 'rgba(184,149,85,0.2)' }}
                 >
-                  <Upload className="w-5 h-5" style={{ color: 'rgba(184,148,62,0.5)' }} />
+                  <Upload className="w-5 h-5" style={{ color: 'rgba(184,149,85,0.5)' }} />
                   <span className="text-xs" style={{ color: 'rgba(0,0,0,0.4)' }}>Drop or click to upload</span>
                 </button>
               )}
@@ -216,7 +216,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
             onClick={generateThumbnail}
             disabled={loading || !title.trim()}
             className="w-full h-11 text-white font-semibold"
-            style={{ background: 'linear-gradient(135deg, #B89555, #B8943E)', opacity: loading || !title.trim() ? 0.6 : 1 }}
+            style={{ background: 'linear-gradient(135deg, #B89555, #B89555)', opacity: loading || !title.trim() ? 0.6 : 1 }}
           >
             {loading ? (
               <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
@@ -228,11 +228,11 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
 
         {/* Right: Preview */}
         <div className="space-y-4">
-          <Card style={{ background: 'rgba(253,251,247,0.8)', border: '1px solid rgba(184,148,62,0.2)' }}>
+          <Card style={{ background: 'rgba(253,251,247,0.8)', border: '1px solid rgba(184,149,85,0.2)' }}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Image className="w-4 h-4" style={{ color: '#B8943E' }} />
+                  <Image className="w-4 h-4" style={{ color: '#B89555' }} />
                   <span className="text-sm font-semibold" style={{ color: '#1A1A1A' }}>Preview</span>
                 </div>
                 {generatedThumbnail && (
@@ -251,7 +251,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
                 className="rounded-xl overflow-hidden flex items-center justify-center"
                 style={{
                   background: 'linear-gradient(135deg, #F7F1E6, #EFE6D6)',
-                  border: '1px solid rgba(184,148,62,0.15)',
+                  border: '1px solid rgba(184,149,85,0.15)',
                   aspectRatio: ratio === '9:16' ? '9/16' : ratio === '1:1' ? '1/1' : ratio === '4:3' ? '4/3' : '16/9',
                   maxHeight: '400px',
                 }}
@@ -260,8 +260,8 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
                   <img src={generatedThumbnail} alt="Generated thumbnail" className="w-full h-full object-cover" />
                 ) : (
                   <div className="flex flex-col items-center gap-3 py-12 px-6 text-center">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: 'rgba(184,148,62,0.1)' }}>
-                      <Sparkles className="w-6 h-6" style={{ color: 'rgba(184,148,62,0.4)' }} />
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: 'rgba(184,149,85,0.1)' }}>
+                      <Sparkles className="w-6 h-6" style={{ color: 'rgba(184,149,85,0.4)' }} />
                     </div>
                     <p className="text-sm font-medium" style={{ color: 'rgba(0,0,0,0.3)' }}>Your thumbnail will appear here</p>
                     <p className="text-[11px]" style={{ color: 'rgba(0,0,0,0.2)' }}>Add a title and hit Generate</p>
@@ -272,8 +272,8 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
           </Card>
 
           {/* How to use */}
-          <div className="rounded-xl p-4" style={{ background: 'rgba(184,148,62,0.06)', border: '1px solid rgba(184,148,62,0.12)' }}>
-            <p className="text-xs font-semibold mb-2" style={{ color: '#B8943E' }}>How to Use</p>
+          <div className="rounded-xl p-4" style={{ background: 'rgba(184,149,85,0.06)', border: '1px solid rgba(184,149,85,0.12)' }}>
+            <p className="text-xs font-semibold mb-2" style={{ color: '#B89555' }}>How to Use</p>
             <ol className="text-[11px] space-y-1.5" style={{ color: 'rgba(0,0,0,0.45)' }}>
               <li>1. Enter a catchy title for your video thumbnail</li>
               <li>2. Optionally upload a base image or property photo</li>

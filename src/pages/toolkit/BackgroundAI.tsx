@@ -937,7 +937,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             {/* Image Info Bar */}
             {imageInfo && (
               <div className="flex flex-wrap items-center gap-3 p-3 rounded-xl"
-                style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
+                style={{ background: "rgba(184,149,85,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="flex items-center gap-1.5">
                   <ZoomIn className="h-3.5 w-3.5" style={{ color: C.accentText }} />
                   <span className="text-xs text-white/90">{imageInfo.width} × {imageInfo.height} px</span>
@@ -980,7 +980,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             <div className="grid md:grid-cols-2 gap-5">
               {/* Original */}
               <div className="rounded-2xl overflow-hidden"
-                style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
+                style={{ background: "rgba(184,149,85,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="px-4 py-2.5 flex items-center justify-between"
                   style={{ borderBottom: "1px solid rgba(184,149,85,0.1)" }}>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText }}>Original</span>
@@ -992,7 +992,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
               {/* Result */}
               <div className="rounded-2xl overflow-hidden"
-                style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
+                style={{ background: "rgba(184,149,85,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="px-4 py-2.5 flex items-center justify-between"
                   style={{ borderBottom: "1px solid rgba(184,149,85,0.1)" }}>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText }}>Result</span>
@@ -1078,8 +1078,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       onClick={() => setSelectedBackground(preset.id)}
                       className="flex items-center gap-3 p-3 rounded-xl text-sm text-left transition-all"
                       style={{
-                        background: selectedBackground === preset.id ? "rgba(184,148,62,0.28)" : "rgba(255,255,255,0.10)",
-                        border: `1px solid ${selectedBackground === preset.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.22)"}`,
+                        background: selectedBackground === preset.id ? "rgba(184,149,85,0.28)" : "rgba(255,255,255,0.10)",
+                        border: `1px solid ${selectedBackground === preset.id ? "rgba(184,149,85,0.7)" : "rgba(255,255,255,0.22)"}`,
                         color: selectedBackground === preset.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
@@ -1117,8 +1117,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       onClick={() => setSelectedScene(scene)}
                       className="flex flex-col items-center gap-2 p-3 rounded-xl text-sm transition-all"
                       style={{
-                        background: selectedScene.id === scene.id ? "rgba(184,148,62,0.28)" : "rgba(255,255,255,0.10)",
-                        border: `1px solid ${selectedScene.id === scene.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.22)"}`,
+                        background: selectedScene.id === scene.id ? "rgba(184,149,85,0.28)" : "rgba(255,255,255,0.10)",
+                        border: `1px solid ${selectedScene.id === scene.id ? "rgba(184,149,85,0.7)" : "rgba(255,255,255,0.22)"}`,
                         color: selectedScene.id === scene.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
@@ -1136,7 +1136,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   />
                 )}
                 {selectedScene.id !== 'custom' && (
-                  <p className="text-xs rounded-lg p-2" style={{ background: "rgba(184,148,62,0.08)", color: C.accentText }}>
+                  <p className="text-xs rounded-lg p-2" style={{ background: "rgba(184,149,85,0.08)", color: C.accentText }}>
                     <span className="font-medium">Scene:</span> {selectedScene.prompt}
                   </p>
                 )}
@@ -1153,14 +1153,14 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   <h3 className="text-white font-semibold flex items-center gap-2">
                     <Video className="h-4 w-4" style={{ color: C.accentText }} />
                     Video Background Removal
-                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(184,148,62,0.15)", color: C.accentText }}>FFmpeg + AI</span>
+                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(184,149,85,0.15)", color: C.accentText }}>FFmpeg + AI</span>
                   </h3>
                   {/* Video Upload */}
                   {!videoFile ? (
                     <div
                       onClick={() => videoInputRef.current?.click()}
                       className="rounded-xl p-10 text-center cursor-pointer transition-all"
-                      style={{ border: `2px dashed ${C.border}`, background: "rgba(184,148,62,0.03)" }}
+                      style={{ border: `2px dashed ${C.border}`, background: "rgba(184,149,85,0.03)" }}
                     >
                       <Video className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(184,149,85,0.5)" }} />
                       <p className="text-white font-medium mb-1">Drop your video here</p>
@@ -1209,7 +1209,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                           {BG_PRESETS.map(p => (
                             <button key={p.id} onClick={() => setVideoBackground(p.id)}
                               className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                              style={{ background: videoBackground === p.id ? "rgba(184,149,85,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(184,148,62,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
+                              style={{ background: videoBackground === p.id ? "rgba(184,149,85,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(184,149,85,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
                               <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color === 'transparent' ? 'repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%, transparent 0% 50%) 50% / 6px 6px' : p.color.startsWith('linear') ? p.color : p.color, backgroundColor: (!p.color.startsWith('linear') && p.color !== 'transparent') ? p.color : undefined }} />
                               {p.label}
                             </button>
@@ -1227,7 +1227,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
             {/* Consent */}
             <div className="flex items-start gap-3 p-4 rounded-xl"
-              style={{ background: "rgba(184,148,62,0.04)", border: "1px solid rgba(184,148,62,0.15)" }}>
+              style={{ background: "rgba(184,149,85,0.04)", border: "1px solid rgba(184,149,85,0.15)" }}>
               <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" />
               <label htmlFor="consent" className="text-sm cursor-pointer" style={{ color: C.mutedText }}>
                 I own this content or have the rights to edit it.
@@ -1330,7 +1330,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
           </div>
         )}
 
-        <div className="mt-8 p-4 rounded-xl text-center" style={{ background: "rgba(184,148,62,0.03)", border: "1px solid rgba(184,148,62,0.08)" }}>
+        <div className="mt-8 p-4 rounded-xl text-center" style={{ background: "rgba(184,149,85,0.03)", border: "1px solid rgba(184,149,85,0.08)" }}>
           <p className="text-xs" style={{ color: C.dimText }}>
             Smart edge-detection removal · AI scene generation uses cloud processing · Background switching is instant after first removal · Max 10MB per image
           </p>

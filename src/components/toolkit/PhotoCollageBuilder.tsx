@@ -144,7 +144,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
         {!embedded && (
           <div className="text-center mb-6">
             <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: "#1A1A1A" }}>
-              Photo <span style={{ color: "#B8943E" }}>Collage</span> Builder
+              Photo <span style={{ color: "#B89555" }}>Collage</span> Builder
             </h1>
             <p className="text-sm mt-1" style={{ color: "rgba(0,0,0,0.45)" }}>Arrange photos in grids, mosaics, and filmstrips — export as a single image</p>
           </div>

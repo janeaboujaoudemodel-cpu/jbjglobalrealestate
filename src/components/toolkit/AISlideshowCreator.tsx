@@ -149,7 +149,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
         {!embedded && (
           <div className="text-center mb-6">
             <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: "#1A1A1A" }}>
-              AI <span style={{ color: "#B8943E" }}>Slideshow</span> Creator
+              AI <span style={{ color: "#B89555" }}>Slideshow</span> Creator
             </h1>
             <p className="text-sm mt-1" style={{ color: "rgba(0,0,0,0.45)" }}>Build animated photo slideshows for real estate promotions</p>
           </div>

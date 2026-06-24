@@ -573,7 +573,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               {/* Tab bar */}
               <TabsList className="w-full justify-start rounded-2xl bg-transparent p-0 h-auto gap-1 border-0 overflow-x-auto mb-6 flex-wrap"
-                style={{ scrollbarWidth: "none", background: "rgba(184,148,62,0.04)", border: `1px solid ${I.border}`, padding: "6px" }}>
+                style={{ scrollbarWidth: "none", background: "rgba(184,149,85,0.04)", border: `1px solid ${I.border}`, padding: "6px" }}>
                 {TABS.map(({ value, label, icon: Icon }) => (
                   <TabsTrigger key={value} value={value}
                     className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all border-0 outline-none whitespace-nowrap
@@ -602,8 +602,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={p.id} onClick={() => applyPreset(p.id)}
                             className="px-3 py-1.5 rounded-xl text-xs transition-all font-medium"
                             style={{
-                              background: selectedPreset === p.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.10)",
-                              border: `1px solid ${selectedPreset === p.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.22)"}`,
+                              background: selectedPreset === p.id ? "rgba(184,149,85,0.35)" : "rgba(255,255,255,0.10)",
+                              border: `1px solid ${selectedPreset === p.id ? "rgba(184,149,85,0.75)" : "rgba(255,255,255,0.22)"}`,
                               color: selectedPreset === p.id ? I.text : "rgba(255,255,255,0.88)",
                             }}>{p.name}</button>
                         ))}
@@ -703,8 +703,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={look.id} onClick={() => { setSelectedMakeup(look.id); processWithAI('edit', `Apply ${look.name} makeup look`); }}
                             className="flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedMakeup === look.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.12)",
-                              border: `1px solid ${selectedMakeup === look.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              background: selectedMakeup === look.id ? "rgba(184,149,85,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedMakeup === look.id ? "rgba(184,149,85,0.75)" : "rgba(255,255,255,0.25)"}`,
                               color: selectedMakeup === look.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-lg">{look.icon}</span>
@@ -822,8 +822,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={style.id} onClick={() => { setSelectedHairStyle(style.id); processWithAI('edit', `Change hair to ${style.name} style`); }}
                             className="flex flex-col items-center gap-1 p-2.5 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedHairStyle === style.id ? "rgba(184,148,62,0.35)" : "rgba(255,255,255,0.12)",
-                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(184,148,62,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              background: selectedHairStyle === style.id ? "rgba(184,149,85,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(184,149,85,0.75)" : "rgba(255,255,255,0.25)"}`,
                               color: selectedHairStyle === style.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-xl">{style.icon}</span>
@@ -846,7 +846,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={hc.id} onClick={() => { setSelectedHairColor(hc.id); processWithAI('edit', `Change hair color to ${hc.name}`); }}
                             className="flex flex-col items-center gap-1.5 p-2 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedHairColor === hc.id ? "rgba(184,148,62,0.30)" : "rgba(255,255,255,0.12)",
+                              background: selectedHairColor === hc.id ? "rgba(184,149,85,0.30)" : "rgba(255,255,255,0.12)",
                               border: `2px solid ${selectedHairColor === hc.id ? I.accent : "rgba(255,255,255,0.28)"}`,
                               color: selectedHairColor === hc.id ? I.text : "rgba(255,255,255,0.9)",
                               minWidth: '52px',
