@@ -33,7 +33,7 @@ export default function OwnerVisitorToggle() {
   };
 
   return (
-    <div ref={wrapRef} className="fixed bottom-6 right-6 z-[10000]">
+    <div ref={wrapRef} className="fixed bottom-6 right-20 z-[10000]">
       {open && (
         <div
           role="menu"
