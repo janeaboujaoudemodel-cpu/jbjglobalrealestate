@@ -87,9 +87,10 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               />
             ) : (
               <div
-                className="jj-emerald-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-[10px]"
+                className="jj-cta-gold-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-[10px]"
                 style={{
-                  boxShadow: '0 10px 28px rgba(4,44,28,0.5), inset 0 1px 2px rgba(255,255,255,0.18), inset 0 0 0 1px rgba(255,255,255,0.06)'
+                  border: '3px solid hsl(42 45% 59%)',
+                  boxShadow: '0 10px 28px rgba(200,167,102,0.35), inset 0 1px 2px rgba(255,255,255,0.4)'
                 }}
               >
                 {isValidDeveloperLogoUrl(developer.logo_url) ? (
