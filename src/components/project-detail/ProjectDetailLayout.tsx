@@ -253,6 +253,7 @@ export default function ProjectDetailLayout({
   const [activeTab, setActiveTab] = useState("details");
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
   const [brandedDeckBusy, setBrandedDeckBusy] = useState(false);
+  const [brandCaptureOpen, setBrandCaptureOpen] = useState(false);
   const [captureDocType, setCaptureDocType] = useState<"brochure" | "floor_plan" | "payment_plan" | "images">("brochure");
   const [captureDocUrl, setCaptureDocUrl] = useState<string | undefined>();
   const [showStickyNav, setShowStickyNav] = useState(false);
