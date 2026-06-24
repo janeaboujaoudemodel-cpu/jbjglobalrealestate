@@ -688,9 +688,10 @@ export default function ProjectDetailLayout({
             </div>
           )}
           {/* Enhanced gradient overlay — strong bottom blackout so hero copy is always WHITE-readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/95 via-black/55 to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-transparent to-black/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/20 pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[42%] bg-black/55 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-black/55 pointer-events-none" />
         </div>
 
         {/* Sold Out Badge - Top Right */}
@@ -826,71 +827,73 @@ export default function ProjectDetailLayout({
           </div>
 
 
-          {/* Broker-only: one-click branded presentation download (no editor, no navigation) */}
+          {/* Broker-only: one-click branded presentation. If broker has no brand assets,
+              the button routes to /broker/brand to capture logo + photo, then comes back. */}
           {isBrokerMode && (
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                disabled={brandedDeckBusy}
-                onClick={async () => {
-                  if (brandedDeckBusy) return;
-                  setBrandedDeckBusy(true);
-                  const { toast } = await import("sonner");
-                  const tId = toast.loading("Generating your branded presentation…");
-                  try {
-                    const { generateBrandedProjectDeck } = await import("@/utils/generateBrandedProjectDeck");
-                    const { data: brokerRow } = await supabase
-                      .from("crm_brokers")
-                      .select("full_name, personal_email, personal_phone, phone_e164, logo_url, headshot_url, current_company")
-                      .eq("user_id", user?.id || "")
-                      .maybeSingle();
-                    await generateBrandedProjectDeck({
-                      projectName: project.name,
-                      developerName: project.developer?.name || null,
-                      location: project.location || null,
-                      priceFrom: project.price_from ?? null,
-                      bedroomsText: bedroomsText || null,
-                      sizeText: sizeText || null,
-                      handoverText: getProjectStatus(project).label,
-                      description: project.description || null,
-                      heroImageUrl: heroImage?.url || null,
-                      broker: brokerRow
-                        ? {
-                            fullName: (brokerRow as any).full_name,
-                            email: (brokerRow as any).personal_email,
-                            phone: (brokerRow as any).personal_phone || (brokerRow as any).phone_e164,
-                            logoUrl: (brokerRow as any).logo_url,
-                            headshotUrl: (brokerRow as any).headshot_url,
-                            agencyName: (brokerRow as any).current_company,
-                          }
-                        : null,
-                    });
-                    toast.success("Presentation downloaded", { id: tId });
-                  } catch (err: any) {
-                    console.error("[branded-deck] failed", err);
-                    toast.error(err?.message || "Could not generate presentation", { id: tId });
-                  } finally {
-                    setBrandedDeckBusy(false);
-                  }
-                }}
-                className="jj-hero-ghost-cta inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-70 disabled:cursor-wait"
-                data-no-contrast-guard
-                title="Download a JBJ-branded presentation for this project"
-              >
-                <Download className="w-4 h-4" />
-                <span>{brandedDeckBusy ? "Generating…" : "Download branded presentation"}</span>
-              </button>
-
-              {!brokerHasBrand && (
-                <Link
-                  to="/broker/brand"
-                  className="text-xs text-white/85 underline decoration-white/70 underline-offset-2 hover:text-white"
+              {brokerHasBrand ? (
+                <button
+                  type="button"
+                  disabled={brandedDeckBusy}
+                  onClick={async () => {
+                    if (brandedDeckBusy) return;
+                    setBrandedDeckBusy(true);
+                    const { toast } = await import("sonner");
+                    const tId = toast.loading("Generating your branded presentation…");
+                    try {
+                      const { generateBrandedProjectDeck } = await import("@/utils/generateBrandedProjectDeck");
+                      const { data: brokerRow } = await supabase
+                        .from("crm_brokers")
+                        .select("full_name, personal_email, personal_phone, phone_e164, logo_url, headshot_url, current_company")
+                        .eq("user_id", user?.id || "")
+                        .maybeSingle();
+                      await generateBrandedProjectDeck({
+                        projectName: project.name,
+                        developerName: project.developer?.name || null,
+                        location: project.location || null,
+                        priceFrom: project.price_from ?? null,
+                        bedroomsText: bedroomsText || null,
+                        sizeText: sizeText || null,
+                        handoverText: getProjectStatus(project).label,
+                        description: project.description || null,
+                        heroImageUrl: heroImage?.url || null,
+                        broker: brokerRow
+                          ? {
+                              fullName: (brokerRow as any).full_name,
+                              email: (brokerRow as any).personal_email,
+                              phone: (brokerRow as any).personal_phone || (brokerRow as any).phone_e164,
+                              logoUrl: (brokerRow as any).logo_url,
+                              headshotUrl: (brokerRow as any).headshot_url,
+                              agencyName: (brokerRow as any).current_company,
+                            }
+                          : null,
+                      });
+                      toast.success("Presentation downloaded", { id: tId });
+                    } catch (err: any) {
+                      console.error("[branded-deck] failed", err);
+                      toast.error(err?.message || "Could not generate presentation", { id: tId });
+                    } finally {
+                      setBrandedDeckBusy(false);
+                    }
+                  }}
+                  className="jj-hero-ghost-cta inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-70 disabled:cursor-wait"
                   data-no-contrast-guard
+                  title="Download a JBJ-branded presentation for this project"
                 >
-                  Add your logo & photo for full co-branding →
+                  <Download className="w-4 h-4" />
+                  <span>{brandedDeckBusy ? "Generating…" : "Download branded presentation"}</span>
+                </button>
+              ) : (
+                <Link
+                  to={`/broker/brand?return=${encodeURIComponent(typeof window !== "undefined" ? window.location.pathname : "/")}`}
+                  className="jj-hero-ghost-cta inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold"
+                  data-no-contrast-guard
+                  title="Add your logo & photo, then come back to download a fully co-branded presentation"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Generate branded presentation — add your logo & photo →</span>
                 </Link>
               )}
-
             </div>
           )}
 
