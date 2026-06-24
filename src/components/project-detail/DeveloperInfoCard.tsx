@@ -108,7 +108,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     />
                   </div>
                 ) : (
-                  <span className="text-white font-bold text-base text-center px-2">
+                  <span className="text-[#3a2a08] font-bold text-base text-center px-2">
                     {developer.name}
                   </span>
                 )}
