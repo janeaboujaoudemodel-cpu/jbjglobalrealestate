@@ -14007,7 +14007,7 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:focus-visible {
     ),
     linear-gradient(135deg, #0A6B53 0%, #047857 44%, #031f16 100%) !important;
   background-size: 180% 100%, 100% 100% !important;
-  background-position: 0 0, 0 0 !important;
+  background-position: 0 0, 0 0;
   animation: jj-sqtoggle-metallic-ribbons 0.95s linear infinite !important;
 }
 
@@ -14030,7 +14030,7 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sw
       rgba(255,255,255,0.95) 58%,
       rgba(255,255,255,0.00) 100%
     ) !important;
-  transform: translateX(0) skewX(-18deg) !important;
+  transform: translateX(0) skewX(-18deg);
   opacity: 0.92 !important;
   filter: blur(0.2px) drop-shadow(0 0 7px rgba(255,255,255,0.65)) !important;
   animation: jj-sqtoggle-metallic-shine 0.95s linear infinite !important;
