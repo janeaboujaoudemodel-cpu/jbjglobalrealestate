@@ -78,10 +78,10 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     <div
       ref={ref}
       className={cn(
-        // Mobile: sit on the same line as the SupportLauncher phone (bottom-5)
-        // Desktop/tablet: sit on the same line as the owner FAB pair (bottom-6)
+        // Mobile: same line as SupportLauncher phone (bottom-5, phone at right-4 → arrow at right-20)
+        // Desktop/tablet: same line as owner FAB pair (sparkle right-6, eye right-20 → arrow right-36)
         "fixed z-[55] pointer-events-auto bottom-5 md:bottom-6",
-        isRTL ? "left-4 md:left-20" : "right-20 md:right-20",
+        isRTL ? "left-20 md:left-36" : "right-20 md:right-36",
       )}
       data-no-contrast-guard
     >
