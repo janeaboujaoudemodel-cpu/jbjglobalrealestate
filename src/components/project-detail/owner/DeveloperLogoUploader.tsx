@@ -44,19 +44,11 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
   return (
     <div
       data-keep-gold
-      className="jj-cta-gold-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group p-[10px]"
-      style={{
-        border: '3px solid hsl(42 45% 59%)',
-        boxShadow: '0 10px 28px rgba(200,167,102,0.35), inset 0 1px 2px rgba(255,255,255,0.4)'
-      }}
+      className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group p-[10px]"
     >
       {isValidDeveloperLogoUrl(logoUrl) ? (
         <div
-          className="w-full h-full rounded-xl flex items-center justify-center overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 100%)',
-            boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.4)'
-          }}
+          className="jj-developer-logo-metallic-inner w-full h-full rounded-xl flex items-center justify-center overflow-hidden"
         >
           <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-2" />
         </div>
