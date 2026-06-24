@@ -301,7 +301,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             <section>
               <h4 className={sectionTitle}>Location</h4>
               <button
-                onClick={() => setEmiratesOpen(!emiratesOpen)}
+                onClick={() => { setEmiratesOpen(!emiratesOpen); setAreasOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
                 <span className={localFilters.emirates.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
@@ -310,7 +310,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", emiratesOpen && "rotate-180")} />
               </button>
               {emiratesOpen && (
-                <div className="mt-2">
+                <div className={dropdownPanel}>
                   <input
                     type="text"
                     value={emirateSearch}
@@ -318,18 +318,18 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     placeholder="Search emirate..."
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
-                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto pr-1">
                     {filteredEmirates.map((em) => {
                       const isSelected = localFilters.emirates.includes(em.value);
                       return (
                         <button
                           key={em.value}
                           onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
-                          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
+                          className={optionRow}
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -346,7 +346,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             <section>
               <h4 className={sectionTitle}>By Area</h4>
               <button
-                onClick={() => setAreasOpen(!areasOpen)}
+                onClick={() => { setAreasOpen(!areasOpen); setEmiratesOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
                 <span className={localFilters.areas && localFilters.areas.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
@@ -357,7 +357,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", areasOpen && "rotate-180")} />
               </button>
               {areasOpen && (
-                <div className="mt-2">
+                <div className={dropdownPanel}>
                   <input
                     type="text"
                     value={areaSearch}
@@ -368,7 +368,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   {allAreas.length === 0 ? (
                     <div className="py-4 text-center text-xs text-[#1A1A1A]/70">Loading areas...</div>
                   ) : (
-                    <div className="space-y-3 max-h-72 overflow-y-auto">
+                    <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                       {Object.entries(areasGroupedByEmirate).sort(([a], [b]) => a.localeCompare(b)).map(([emirate, areaNames]) => (
                         <div key={emirate}>
                           <div className="flex items-center gap-2 mb-1 px-1">
@@ -376,18 +376,18 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                             <div className="flex-1 h-px bg-[#EFE6D6]/20" />
                             <span className="text-[10px] text-[#1A1A1A]/70">{areaNames.length}</span>
                           </div>
-                          <div className="space-y-0.5">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                             {areaNames.map(areaName => {
                               const isSelected = (localFilters.areas || []).includes(areaName);
                               return (
                                 <button
                                   key={areaName}
                                   onClick={() => update({ areas: toggleArray(localFilters.areas || [], areaName) })}
-                                  className="flex items-center gap-3 w-full px-3 py-1.5 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
+                                  className={optionRow}
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                                    isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                                    isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
                                   )}>
                                     {isSelected && <Check className="w-3 h-3 text-white" />}
                                   </div>
@@ -408,7 +408,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             <section>
               <h4 className={sectionTitle}>By Developer</h4>
               <button
-                onClick={() => setDevsOpen(!devsOpen)}
+                onClick={() => { setDevsOpen(!devsOpen); setEmiratesOpen(false); setAreasOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
                 <span className={localFilters.developers.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
@@ -417,7 +417,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", devsOpen && "rotate-180")} />
               </button>
               {devsOpen && (
-                <div className="mt-2">
+                <div className={dropdownPanel}>
                   <input
                     type="text"
                     value={devSearch}
@@ -425,43 +425,31 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     placeholder="Search developer..."
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
-                  <div className="space-y-1 max-h-56 overflow-y-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-64 overflow-y-auto pr-1">
                     {filteredDevs.map((dev) => {
                       const isSelected = localFilters.developers.includes(dev.name);
                       return (
                         <button
                           key={dev.name}
                           onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
-                          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
+                          className={optionRow}
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
-                          <div className="w-8 h-8 rounded-lg bg-[#FDFBF7] border border-[#B89555]/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm">
-                            {dev.logo_url ? (
-                              <img
-                                src={dev.logo_url}
-                                alt={dev.name}
-                                className="w-full h-full object-contain"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                  const parent = e.currentTarget.parentElement;
-                                  if (parent) {
-                                    parent.textContent = '';
-                                    const span = document.createElement('span');
-                                    span.style.cssText = 'font-size:9px;font-weight:700;color:rgba(0,0,0,0.4)';
-                                    span.textContent = dev.name.charAt(0);
-                                    parent.appendChild(span);
-                                  }
-                                }}
-                              />
-                            ) : (
-                              <span className="text-[9px] font-bold text-[#1A1A1A]/40">{dev.name.charAt(0)}</span>
-                            )}
-                          </div>
+                          {dev.logo_url && (
+                            <DeveloperLogo
+                              src={dev.logo_url}
+                              alt={dev.name}
+                              name={dev.name}
+                              variant="bare"
+                              className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
+                              renderFallback={false}
+                            />
+                          )}
                           <span className="text-sm text-[#1A1A1A] text-left truncate flex-1">{dev.name}</span>
                         </button>
                       );
