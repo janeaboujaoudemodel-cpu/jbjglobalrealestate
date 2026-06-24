@@ -6,8 +6,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
-  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown, Check, RefreshCcw
+  Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown, Check, RefreshCcw,
+  BarChart3, TrendingUp, Calculator, FileText, Target
 } from "lucide-react";
+import { AIShellCard } from "@/components/ui/ai-shell-card";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
