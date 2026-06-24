@@ -14196,32 +14196,88 @@ html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-a
   100% { background-position: -90% 0; }
 }
 
-/* Filled animated metallic-gold developer logo box — no white inset card. */
+/* Premium 3D animated metallic-gold developer logo box.
+   - Solid rich metallic gold base
+   - Animated bright shine sweep via ::before pseudo (transform — GPU)
+   - Animated specular highlight via ::after (slow drift)
+   - Strong inner bevel + outer drop shadow for 3D depth. */
 html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic {
+  position: relative;
+  background-color: #c89a48 !important;
   background-image:
-    radial-gradient(120% 90% at 18% 0%, rgba(255,244,210,0.72) 0%, rgba(255,244,210,0) 42%),
-    linear-gradient(120deg, #b89555 0%, #f6e7ac 22%, #d0a84f 44%, #8e6e36 60%, #f4e3a8 78%, #b89555 100%) !important;
-  background-size: 160% 160%, 260% 260% !important;
-  border: 1px solid rgba(142,110,54,0.72) !important;
+    linear-gradient(155deg,
+      #8e6e36 0%,
+      #d8b86a 18%,
+      #fff1c2 34%,
+      #b89555 50%,
+      #fff1c2 66%,
+      #d8b86a 82%,
+      #8e6e36 100%) !important;
+  background-size: 100% 100% !important;
+  border: 1px solid rgba(142,110,54,0.85) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,244,210,0.82),
-    inset 0 -10px 18px rgba(92,64,20,0.28),
-    0 14px 30px -12px rgba(142,110,54,0.72) !important;
-  animation: jj-developer-logo-gold-metal 1.9s linear infinite !important;
+    inset 0 2px 0 rgba(255,250,225,0.9),
+    inset 0 -2px 0 rgba(70,48,14,0.6),
+    inset 0 -14px 22px rgba(70,48,14,0.45),
+    inset 0 14px 22px rgba(255,244,210,0.32),
+    0 18px 36px -12px rgba(142,110,54,0.75),
+    0 2px 6px rgba(0,0,0,0.20) !important;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateZ(0);
 }
-/* Inner wrapper is deprecated — flattened to a single metallic gold layer.
-   Any legacy inner div must render transparent with no inset frame. */
+/* Sweeping bright shine — diagonal band continuously moving L→R */
+html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(115deg,
+    rgba(255,255,255,0) 40%,
+    rgba(255,250,225,0.55) 47%,
+    rgba(255,255,255,0.95) 50%,
+    rgba(255,250,225,0.55) 53%,
+    rgba(255,255,255,0) 60%);
+  transform: translateX(-100%);
+  animation: jj-dev-logo-shine 2.6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+/* Secondary slow specular drift for depth */
+html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 30% 0%,
+    rgba(255,250,225,0.55) 0%,
+    rgba(255,250,225,0) 55%);
+  animation: jj-dev-logo-drift 5.5s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
 html body #root .jj-developer-logo-metallic-inner {
   background: transparent !important;
   box-shadow: none !important;
   border: 0 !important;
 }
 html body #root .jj-developer-logo-metallic img {
-  filter: drop-shadow(0 1px 1px rgba(58,42,8,0.22)) !important;
+  position: relative;
+  z-index: 3;
+  filter: drop-shadow(0 1px 1px rgba(58,42,8,0.32)) drop-shadow(0 2px 4px rgba(0,0,0,0.18)) !important;
 }
-@keyframes jj-developer-logo-gold-metal {
-  0%   { background-position: 0% 0%, 190% 50%; }
-  100% { background-position: 0% 0%, -90% 50%; }
+@keyframes jj-dev-logo-shine {
+  0%   { transform: translateX(-110%) rotate(0deg); }
+  100% { transform: translateX(110%) rotate(0deg); }
+}
+@keyframes jj-dev-logo-drift {
+  0%   { transform: translate(-6%, -4%); opacity: 0.7; }
+  100% { transform: translate(6%, 4%);   opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::before,
+  html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic::after {
+    animation: none !important;
+  }
 }
 
 
