@@ -265,7 +265,7 @@ const ReellyProjectCard = ({
                 aria-label={`Email about ${project.name}`}
                  data-surface="emerald"
                  data-emerald-ok="button"
-                 className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+                 className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
               >
                 <Mail className="w-4 h-4" />
                 <span>Email</span>
@@ -276,7 +276,7 @@ const ReellyProjectCard = ({
                 aria-label={`Call about ${project.name}`}
                  data-surface="emerald"
                  data-emerald-ok="button"
-                 className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+                 className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
               >
                 <Phone className="w-4 h-4" />
                 <span>Call</span>
@@ -287,7 +287,7 @@ const ReellyProjectCard = ({
                 aria-label={`WhatsApp about ${project.name}`}
                  data-surface="emerald"
                  data-emerald-ok="button"
-                 className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+                 className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Chat</span>

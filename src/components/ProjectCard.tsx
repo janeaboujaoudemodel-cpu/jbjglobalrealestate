@@ -454,7 +454,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`Email about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
             <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Email</span>
@@ -465,7 +465,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`Call about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
             <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Call</span>
@@ -476,7 +476,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`WhatsApp about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-surface-emerald w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
             <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
             <span className="truncate text-xs font-semibold">Chat</span>
