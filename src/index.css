@@ -6406,7 +6406,9 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   --gradient-ink: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%);
   --gradient-ink-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%);
   --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
-  --jj-emerald-ombre-hover: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%);
+  /* Hover variant — slightly LIGHTER than idle, per locked spec:
+     idle = deep emerald → black; hover = mid emerald → deep emerald. */
+  --jj-emerald-ombre-hover: linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #042c1c 100%);
   /* GATE 1 LOCK: metallic sheen disabled — the white sheen + screen blend
      produced a bright lime band that read as "light green". Official emerald
      must be the pure ombre, identical to Call/Chat/Email reference buttons. */
