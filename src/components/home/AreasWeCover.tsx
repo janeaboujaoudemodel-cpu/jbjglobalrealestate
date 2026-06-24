@@ -9,6 +9,8 @@ import { MapPin, ArrowRight, TrendingUp, Flame, BookOpen, Compass } from "lucide
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAreas } from "@/hooks/useAreas";
 import { PearlButton } from "@/components/ui/pearl-button";
+import ContentTrack from "@/components/layout/ContentTrack";
+import CardGrid from "@/components/layout/CardGrid";
 
 const AreasWeCover = () => {
   const { t } = useLanguage();
@@ -46,7 +48,7 @@ const AreasWeCover = () => {
 
   return (
     <section id="top-areas-dubai" className="py-12 md:py-20">
-      <div className="w-full">
+      <ContentTrack>
         {/* Premium champagne frame */}
         <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12 border border-[#B89555]/45 shadow-[0_24px_70px_-32px_rgba(184,149,85,0.45)]">
           {/* Corner gold flourishes */}
@@ -83,7 +85,7 @@ const AreasWeCover = () => {
 
 
 
-          <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <CardGrid columns={3} className="relative">
 
           {displayAreas.map((area) => (
             <Link
@@ -154,7 +156,7 @@ const AreasWeCover = () => {
 
             </Link>
           ))}
-        </div>
+          </CardGrid>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10 md:mt-12">
           <PearlButton
@@ -177,7 +179,7 @@ const AreasWeCover = () => {
         </div>
 
         </div>
-      </div>
+      </ContentTrack>
     </section>
 
   );
