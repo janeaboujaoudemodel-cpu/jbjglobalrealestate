@@ -1,6 +1,6 @@
 /**
- * Photo & Image Suite — Simplified entry point
- * Now primarily routes to the unified Photo Studio Pro hub
+ * Photo & Image Suite — Aligned to AIShellCard standard
+ * Champagne palette only. No banned hexes.
  */
 
 import React, { lazy, Suspense } from 'react';
@@ -16,10 +16,10 @@ const ScanSignPage = lazy(() => import('@/pages/toolkit/ScanSignPage'));
 const PdfFromPhotos = lazy(() => import('@/pages/toolkit/PdfFromPhotos'));
 
 const LoadingSpinner = () => (
-  <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
+  <div className="min-h-[50vh] flex items-center justify-center bg-[#FDFBF7]">
     <div className="flex flex-col items-center gap-3">
-      <Loader2 className="h-7 w-7 animate-spin" style={{ color: "#B8943E" }} />
-      <p className="text-xs" style={{ color: "rgba(0,0,0,0.35)" }}>Loading tool...</p>
+      <Loader2 className="h-7 w-7 animate-spin text-[#B89555]" />
+      <p className="text-xs text-[#1A1A1A]/60">Loading tool...</p>
     </div>
   </div>
 );
@@ -40,35 +40,30 @@ export default function PhotoSuite() {
         description="AI photo studio, interior design, virtual staging, scan & sign, and photo-to-PDF tools."
       />
 
-      <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%)" }}>
+      <div className="min-h-screen bg-[#FDFBF7]">
         {/* ── Suite Header ── */}
-        <div style={{ background: "linear-gradient(180deg, #F7F1E6 0%, #EFE6D6 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
+        <div className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             <Link to="/toolkit"
-              className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
-              style={{ color: "rgba(0,0,0,0.4)" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.75)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.4)"}>
+              className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
               Back to Royal Tools Hub
             </Link>
 
             <div className="flex items-center gap-4 mb-5">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,148,62,0.4)", boxShadow: "0 0 30px rgba(184,148,62,0.15)" }}>
-                <Image className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "#B8943E" }} />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0 bg-[#EFE6D6] border border-[#B89555]/40">
+                <Image className="w-5 h-5 sm:w-6 sm:h-6 text-[#B89555]" />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight" style={{ color: "#1A1A1A" }}>
-                    Photo & Image <span style={{ color: "#B8943E" }}>Suite</span>
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight text-[#1A1A1A]">
+                    Photo & Image <span className="text-[#B89555]">Suite</span>
                   </h1>
-                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
-                    style={{ background: "#ede9fe", border: "1px solid #c4b5fd", color: "#6d28d9" }}>
+                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A]">
                     <Sparkles className="w-2.5 h-2.5" /> AI Powered
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm mt-0.5 hidden sm:block" style={{ color: "rgba(0,0,0,0.45)" }}>
+                <p className="text-xs sm:text-sm mt-0.5 hidden sm:block text-[#1A1A1A]/70">
                   Photo Studio Pro · Interior Design · Virtual Staging · Scan & Sign · PDF
                 </p>
               </div>
@@ -78,15 +73,15 @@ export default function PhotoSuite() {
 
         {/* ── Tabs ── */}
         <Tabs defaultValue="studio" className="w-full">
-          <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,148,62,0.15)" }}>
+          <div className="border-b border-[#B89555]/30 bg-[#FDFBF7]">
             <div className="max-w-7xl mx-auto px-2 sm:px-6">
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
                 {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
                   <TabsTrigger key={value} value={value}
                     className="relative flex items-center gap-1.5 px-3 sm:px-4 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
-                      data-[state=inactive]:text-[#1A1A1A]/40 data-[state=active]:text-[#B8943E]
+                      data-[state=inactive]:text-[#1A1A1A]/70 data-[state=active]:text-[#B89555]
                       after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
-                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
+                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B89555]"
                   >
                     <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                     <span className="sm:hidden">{shortLabel}</span>
@@ -97,7 +92,7 @@ export default function PhotoSuite() {
             </div>
           </div>
 
-          <div>
+          <div className="bg-[#FDFBF7]">
             <TabsContent value="studio" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}><BeautyFilters embedded /></Suspense>
             </TabsContent>
