@@ -115,96 +115,91 @@ const MortgageCalculatorPage = () => {
 
 
           {/* Advisor benefits and bank partners — champagne tiles */}
-          <div className="max-w-5xl mx-auto mt-12">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold" style={{ color: INK }}>
-                Prefer a <span style={{ color: GOLD }}>Mortgage Advisor</span> Through Our Licensed Partners?
-              </h2>
-              <p className="mt-3 max-w-2xl mx-auto" style={{ color: `${INK}B3` }}>
-                Our calculator gives you instant estimates. For personalized guidance through our licensed partners, we connect you with dedicated mortgage advisors.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {advisorBenefits.map((b) => (
-                <div
-                  key={b.title}
-                  className="rounded-xl p-5"
-                  style={{
-                    background: SURFACE,
-                    border: `1px solid ${GOLD}40`,
-                  }}
-                >
+          <div className="max-w-5xl mx-auto">
+            <AIShellCard padding="lg">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold" style={{ color: INK }}>
+                  Prefer a <span style={{ color: GOLD }}>Mortgage Advisor</span> Through Our Licensed Partners?
+                </h2>
+                <p className="mt-3 max-w-2xl mx-auto" style={{ color: `${INK}B3` }}>
+                  Our calculator gives you instant estimates. For personalized guidance through our licensed partners, we connect you with dedicated mortgage advisors.
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {advisorBenefits.map((b) => (
                   <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-3"
+                    key={b.title}
+                    className="rounded-xl p-5"
                     style={{
-                      background: RAISED,
-                      border: `1px solid ${GOLD}55`,
+                      background: SURFACE,
+                      border: `1px solid ${GOLD}40`,
                     }}
                   >
-                    <b.icon className="w-5 h-5" style={{ color: GOLD }} />
-                  </div>
-                  <h3 className="font-semibold mb-1" style={{ color: INK }}>{b.title}</h3>
-                  <p className="text-sm" style={{ color: `${INK}B3` }}>{b.body}</p>
-                </div>
-              ))}
-            </div>
-
-            <div
-              className="mt-8 rounded-[24px] p-5 md:p-6 overflow-hidden relative"
-              style={{
-                background: `linear-gradient(135deg, ${SURFACE} 0%, #FFFFFF 52%, ${RAISED} 100%)`,
-                border: `1.5px solid ${GOLD}`,
-                boxShadow: `0 18px 48px -28px ${GOLD}55`,
-              }}
-            >
-              <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 opacity-20" style={{ background: "radial-gradient(circle at 100% 0%, rgba(6,78,59,0.28), transparent 62%)" }} />
-              <div className="relative flex flex-col md:flex-row md:items-center gap-5">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div data-surface="emerald" data-emerald="true" className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
-                    <Landmark className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg jj-title-emerald">Bank Partner Network</h3>
-                    <p className="text-sm" style={{ color: `${INK}B3` }}>Introductions through licensed mortgage partners connected with leading UAE banks.</p>
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-wrap gap-2 md:justify-end">
-                  {bankPartners.map((bank) => (
-                    <span
-                      key={bank}
-                      className="jj-bank-partner-chip rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em]"
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center mb-3"
                       style={{
-                        background: "rgba(255,255,255,0.74)",
-                        border: `1px solid ${GOLD}80`,
+                        background: RAISED,
+                        border: `1px solid ${GOLD}55`,
                       }}
                     >
-                      {bank}
-                    </span>
-                  ))}
+                      <b.icon className="w-5 h-5" style={{ color: GOLD }} />
+                    </div>
+                    <h3 className="font-semibold mb-1" style={{ color: INK }}>{b.title}</h3>
+                    <p className="text-sm" style={{ color: `${INK}B3` }}>{b.body}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 rounded-2xl p-5 md:p-6 overflow-hidden relative bg-[#EFE6D6]/40 border border-[#B89555]/30">
+                <div className="relative flex flex-col md:flex-row md:items-center gap-5">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div data-surface="emerald" data-emerald="true" className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                      <Landmark className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg jj-title-emerald">Bank Partner Network</h3>
+                      <p className="text-sm" style={{ color: `${INK}B3` }}>Introductions through licensed mortgage partners connected with leading UAE banks.</p>
+                    </div>
+                  </div>
+                  <div className="flex-1 flex flex-wrap gap-2 md:justify-end">
+                    {bankPartners.map((bank) => (
+                      <span
+                        key={bank}
+                        className="jj-bank-partner-chip rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em]"
+                        style={{
+                          background: "rgba(255,255,255,0.74)",
+                          border: `1px solid ${GOLD}80`,
+                        }}
+                      >
+                        {bank}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="text-center mt-10">
-              <button
-                onClick={() => setIsInquiryOpen(true)}
-                data-emerald-action="true"
-                data-surface="emerald"
-                data-emerald="true"
-                className="jj-emerald-action inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all hover:scale-[1.02]"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              >
-                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Mortgage Partner Introduction</span>
-                <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              </button>
+              <div className="text-center mt-10">
+                <button
+                  onClick={() => setIsInquiryOpen(true)}
+                  data-emerald-action="true"
+                  data-surface="emerald"
+                  data-emerald="true"
+                  className="jj-emerald-action inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold rounded-xl transition-all hover:scale-[1.02]"
+                  style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                >
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Mortgage Partner Introduction</span>
+                  <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                </button>
 
-              <p className="mt-6 text-xs max-w-2xl mx-auto" style={{ color: `${INK}99` }}>
-                <strong>Disclaimer:</strong> This calculator provides estimates for informational purposes only and does not constitute financial advice.
-              </p>
-            </div>
+                <p className="mt-6 text-xs max-w-2xl mx-auto" style={{ color: `${INK}99` }}>
+                  <strong>Disclaimer:</strong> This calculator provides estimates for informational purposes only and does not constitute financial advice.
+                </p>
+              </div>
+            </AIShellCard>
           </div>
         </div>
       </section>
+
 
       <InquiryFormModal
         isOpen={isInquiryOpen}
