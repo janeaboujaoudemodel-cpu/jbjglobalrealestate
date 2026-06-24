@@ -87,9 +87,10 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               />
             ) : (
               <div
-                className="jj-emerald-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-[10px]"
+                className="jj-cta-gold-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-[10px]"
                 style={{
-                  boxShadow: '0 10px 28px rgba(4,44,28,0.5), inset 0 1px 2px rgba(255,255,255,0.18), inset 0 0 0 1px rgba(255,255,255,0.06)'
+                  border: '3px solid hsl(42 45% 59%)',
+                  boxShadow: '0 10px 28px rgba(200,167,102,0.35), inset 0 1px 2px rgba(255,255,255,0.4)'
                 }}
               >
                 {isValidDeveloperLogoUrl(developer.logo_url) ? (
@@ -107,7 +108,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     />
                   </div>
                 ) : (
-                  <span className="text-white font-bold text-base text-center px-2">
+                  <span className="text-[#3a2a08] font-bold text-base text-center px-2">
                     {developer.name}
                   </span>
                 )}
@@ -274,7 +275,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 <Link
                   to={`/developer/${developer.slug}`}
                   data-emerald-action="true"
-                  className="jj-emerald-action inline-flex max-w-[260px] items-center justify-center gap-2 rounded-lg text-[12px] font-semibold tracking-[0.02em] leading-tight text-center px-4 py-2.5 transition-colors shadow-sm"
+                  className="jj-emerald-action inline-flex max-w-[280px] items-center justify-center gap-2.5 rounded-xl text-[12px] font-semibold tracking-[0.02em] leading-[1.35] text-center px-5 py-4 min-h-[58px] transition-colors shadow-sm active:scale-[0.97] active:translate-y-[1px]"
                 >
                   <span className="block whitespace-normal break-words [text-wrap:balance]">
                     View All Projects<br />by {developer.name}
