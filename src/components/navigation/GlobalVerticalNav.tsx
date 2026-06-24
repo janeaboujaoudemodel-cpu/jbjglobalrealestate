@@ -1116,29 +1116,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   >
                     <div className="ml-4 pl-2.5 border-l border-[#B89555]/15 space-y-1 pt-1 pb-1.5">
                       {sectionKey === 'TOOLS & WORKSPACE' && (
-                        <>
-                          <Link
-                            to="/ai-hub"
-                            onClick={collapseAfterNavigation}
-                            data-sidebar-view-all-tools
-                            data-emerald-action="true"
-                            data-surface="emerald"
-                            data-emerald="true"
-                            className="jj-emerald-action group flex items-center gap-2 px-2.5 py-[7px] rounded-lg text-[12px] font-bold transition-all duration-150 border border-transparent"
-                            style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                          >
-                            <span className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 bg-white/10">
-                              <Eye className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                            </span>
-                            <span className="flex-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>View All Tools</span>
-                            <ChevronRight className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                          </Link>
-                          <div
-                            className="my-1.5 mx-1 h-px"
-                            style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(184,149,85,0.35) 50%, transparent 100%)' }}
-                            aria-hidden="true"
-                          />
-                        </>
+                        <Link
+                          to="/ai-hub"
+                          onClick={collapseAfterNavigation}
+                          data-sidebar-subitem
+                          data-no-contrast-guard
+                          className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 hover:bg-[#EFE6D6]/40"
+                          style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                        >
+                          <span data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}>
+                            <Eye ref={lockEmeraldGlyphWhite} className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          </span>
+                          <span data-sidebar-subitem-label className="flex-1" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>View All Tools</span>
+                        </Link>
                       )}
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;

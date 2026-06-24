@@ -13216,12 +13216,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ),
 html body #root [data-chrome="sidebar"] :is(
   [data-active="true"],
@@ -13286,12 +13286,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ):is(:hover, :focus, :focus-visible, :active, :disabled) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
@@ -13343,12 +13343,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
 html body #root [data-chrome="sidebar"] :is([data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-subitem][data-active="true"], [data-sidebar-highlight-tile]) :where(*) {
   color: #FFFFFF !important;
@@ -13398,12 +13398,12 @@ html body #root :is(
   [class~="bg-emerald-700"],
   [class~="bg-emerald-800"],
   [class~="bg-emerald-900"],
-  [style*="#0E8A66" i],
-  [style*="#0B6F52" i],
-  [style*="#0A6B53" i],
-  [style*="#047857" i],
-  [style*="rgb(14, 138, 102)" i],
-  [style*="rgb(4, 120, 87)" i]
+  [style*="background" i][style*="#0E8A66" i],
+  [style*="background" i][style*="#0B6F52" i],
+  [style*="background" i][style*="#0A6B53" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="rgb(14, 138, 102)" i],
+  [style*="background" i][style*="rgb(4, 120, 87)" i]
 ) :where(svg, [class*="lucide"]),
 html body #root :is(
   .jj-emerald-action,
