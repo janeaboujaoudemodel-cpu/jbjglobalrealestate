@@ -13291,3 +13291,153 @@ html body #root [data-chrome="sidebar"] :is([data-active="true"], [data-sidebar-
 html body #root :is(.jj-emerald-action, [data-emerald-action="true"], [data-emerald-ok="icon"], [data-icon-tile][data-icon-tile-tone="emerald"], .jj-icon-tile-emerald, .jj-side-tile) :where(svg [fill]:not([fill="none"]), .fill-current) {
   fill: #FFFFFF !important;
 }
+
+/* =====================================================================
+   🔒 BACK-OFFICE EMERALD + CONTRAST TERMINAL LOCK
+   Matches the approved front-end collapsed-sidebar ombre exactly:
+   emerald #064E3B → forest #042C1C → black, with pure white text/icons.
+   Also eliminates white text on champagne/gold surfaces and removes the
+   inner-ring artefact from every mortgage range thumb while preserving drag.
+   ===================================================================== */
+html body #root :is(
+  [data-backend-sidebar] [data-sidebar-owner-item][data-emerald="true"],
+  [data-backend-sidebar] [data-sidebar-owner-item][data-emerald="true"]:is(:hover,:focus,:focus-visible,:active),
+  [data-backend-sidebar] a[data-allow-dark-cta],
+  [data-backend-sidebar] button[data-allow-dark-cta],
+  [data-backend-sidebar] .jj-emerald-metallic,
+  [data-backend-sidebar] .jj-pill-emerald,
+  [data-backend-sidebar] .jj-pill-emerald-metallic,
+  [data-backend-sidebar] [data-emerald="true"],
+  [data-backend-sidebar] [data-emerald-action="true"],
+  [data-backend-sidebar] [role="tab"][data-state="active"],
+  .owner-dashboard-shell [role="tab"][data-state="active"],
+  .owner-dashboard-shell [data-jj-segmented-trigger][data-state="active"]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4, 44, 28, 0.86),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+html body #root :is(
+  [data-backend-sidebar] [data-sidebar-owner-item][data-emerald="true"],
+  [data-backend-sidebar] a[data-allow-dark-cta],
+  [data-backend-sidebar] button[data-allow-dark-cta],
+  [data-backend-sidebar] .jj-emerald-metallic,
+  [data-backend-sidebar] .jj-pill-emerald,
+  [data-backend-sidebar] .jj-pill-emerald-metallic,
+  [data-backend-sidebar] [data-emerald="true"],
+  [data-backend-sidebar] [data-emerald-action="true"],
+  [data-backend-sidebar] [role="tab"][data-state="active"],
+  .owner-dashboard-shell [role="tab"][data-state="active"],
+  .owner-dashboard-shell [data-jj-segmented-trigger][data-state="active"]
+) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
+html body #root :is(
+  [data-backend-sidebar] [data-sidebar-owner-item][data-emerald="true"],
+  [data-backend-sidebar] a[data-allow-dark-cta],
+  [data-backend-sidebar] button[data-allow-dark-cta],
+  [data-backend-sidebar] .jj-emerald-metallic,
+  [data-backend-sidebar] .jj-pill-emerald,
+  [data-backend-sidebar] .jj-pill-emerald-metallic,
+  [data-backend-sidebar] [data-emerald="true"],
+  [data-backend-sidebar] [data-emerald-action="true"],
+  [data-backend-sidebar] [role="tab"][data-state="active"],
+  .owner-dashboard-shell [role="tab"][data-state="active"],
+  .owner-dashboard-shell [data-jj-segmented-trigger][data-state="active"]
+) :where(svg, [class*="lucide"], [data-lucide], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+html body #root :is(
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#B89555]"],
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-raised,
+  .surface-gold
+):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) :where(.text-white, [class*="text-white/"]):not(.allow-white):not([data-allow-dark-cta] *):not(.jj-emerald-metallic *):not(.jj-pill-emerald *):not(.jj-pill-emerald-metallic *):not(.jj-emerald-action *):not([data-emerald="true"] *):not([data-emerald-action="true"] *),
+html body #root :is(
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#B89555]"]
+):is(.text-white, [class*="text-white/"]):not(.allow-white):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#0A0A0A]"]):not([class~="bg-black"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  height: 44px !important;
+  border-radius: 9999px !important;
+  cursor: ew-resize !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  accent-color: #064E3B !important;
+  background:
+    var(--mortgage-range-fill, linear-gradient(90deg, #064E3B 0%, #042C1C 58%, #000000 100%)) 0 / var(--mortgage-range-progress, 0%) 100% no-repeat,
+    var(--mortgage-range-track, #EFE6D6) !important;
+  box-shadow: none !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-webkit-slider-runnable-track {
+  height: 8px !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-webkit-slider-thumb {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  margin-top: -8px !important;
+  border: 0 !important;
+  border-radius: 9999px !important;
+  background: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.72),
+    0 0 18px rgba(6,78,59,0.65),
+    0 4px 14px rgba(4,44,28,0.45) !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-moz-range-track {
+  height: 8px !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root input.mortgage-range-input[data-mortgage-slider]::-moz-range-thumb {
+  width: 24px !important;
+  height: 24px !important;
+  border: 0 !important;
+  border-radius: 9999px !important;
+  background: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.72),
+    0 0 18px rgba(6,78,59,0.65),
+    0 4px 14px rgba(4,44,28,0.45) !important;
+}
