@@ -275,7 +275,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 <Link
                   to={`/developer/${developer.slug}`}
                   data-emerald-action="true"
-                  className="jj-emerald-action inline-flex max-w-[260px] items-center justify-center gap-2 rounded-lg text-[12px] font-semibold tracking-[0.02em] leading-tight text-center px-4 py-2.5 transition-colors shadow-sm"
+                  className="jj-emerald-action inline-flex max-w-[280px] items-center justify-center gap-2.5 rounded-xl text-[12px] font-semibold tracking-[0.02em] leading-[1.35] text-center px-5 py-4 min-h-[58px] transition-colors shadow-sm active:scale-[0.97] active:translate-y-[1px]"
                 >
                   <span className="block whitespace-normal break-words [text-wrap:balance]">
                     View All Projects<br />by {developer.name}
