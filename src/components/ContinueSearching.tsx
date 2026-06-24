@@ -9,6 +9,7 @@ import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { getRecentSearches, clearRecentSearches } from "@/lib/searchHistory";
+import ContentTrack from "@/components/layout/ContentTrack";
 
 
 interface ContinueSearchingProps {
@@ -156,7 +157,7 @@ const ContinueSearching = ({
       </div>
 
       <div className="relative z-20">
-        <div className="px-4 md:px-8 lg:px-12">
+        <ContentTrack>
 
 
         {/* Header */}
@@ -263,7 +264,7 @@ const ContinueSearching = ({
               </button>
             </div>
           )}
-        </div>
+        </ContentTrack>
         {/* /header padded inner */}
         </div>
 
