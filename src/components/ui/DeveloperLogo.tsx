@@ -44,36 +44,34 @@ export function DeveloperLogo({
   const override = getDeveloperLogoOverride(name ?? alt);
   const valid = isValidDeveloperLogoUrl(src) && !error;
 
-  // ── Nameplate variant — champagne plate with developer NAME wordmark ──
-  if (variant === "nameplate" || (variant === "bare" && override.forceNameplate)) {
+  // Shared label renderer — when a logo is missing, we ALWAYS keep the
+  // identical square container and place the developer name/initials inside.
+  const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]") => {
     const raw = (name || alt || "Developer").trim();
-    // Drop generic legal/suffix words so wordmark fits on ONE line
-    // ("Avenew Development" → "Avenew", "Sobha Realty" → "Sobha").
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
     const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim();
-    const label = cleaned || raw.split(/\s+/)[0];
-    // Auto-shrink so any label fits on a SINGLE line (no wrap, no truncate).
+    const label = (cleaned || raw.split(/\s+/)[0] || "—").toUpperCase();
     const sizeClass =
-      label.length <= 5
+      label.length <= 4
         ? "text-[11px]"
-        : label.length <= 7
+        : label.length <= 6
         ? "text-[10px]"
-        : label.length <= 9
+        : label.length <= 8
         ? "text-[9px]"
-        : label.length <= 12
+        : label.length <= 11
         ? "text-[8px]"
         : "text-[7px]";
     return (
       <div
-        className={cn(UNIFIED_PLATE, className)}
+        className={cn(containerClass)}
         aria-label={raw}
         title={raw}
         data-developer-nameplate
       >
         <span
           className={cn(
-            "font-bold tracking-tight leading-none text-center text-[#1A1A1A]",
-            "whitespace-nowrap",
+            "font-bold tracking-tight leading-none text-center whitespace-nowrap",
+            textTone,
             sizeClass,
           )}
         >
@@ -81,11 +79,18 @@ export function DeveloperLogo({
         </span>
       </div>
     );
+  };
+
+  // ── Nameplate variant — always renders the wordmark ──
+  if (variant === "nameplate" || (variant === "bare" && override.forceNameplate)) {
+    return renderNameLabel(cn(UNIFIED_PLATE, className));
   }
 
   if (variant === "bare") {
     if (!valid) {
-      if (!renderFallback) return null;
+      if (!renderFallback && !(name || alt)) return null;
+      // Always keep the identical square container and place the dev name inside.
+      if (name || alt) return renderNameLabel(cn(UNIFIED_PLATE, className));
       return (
         <div
           className={cn(UNIFIED_PLATE, className)}
@@ -105,20 +110,13 @@ export function DeveloperLogo({
             setError(true);
             onError?.();
           }}
-          // max-w/max-h + w-auto/h-auto + object-contain → image scales to
-          // the largest size that fits the plate on BOTH axes without ever
-          // being cropped, regardless of source aspect ratio.
           className="block max-w-full max-h-full w-auto h-auto object-contain"
           style={{
-            // Keep logos at full color saturation (no multiply — it dimmed
-            // Emaar/Sobha to a faded look). White-on-dark marks still flip
-            // to solid ink via the override `invert` flag.
             filter: override.invert
               ? "invert(1) brightness(1)"
               : "contrast(1.08) saturate(1.1)",
           }}
         />
-
       </div>
     );
   }
@@ -126,26 +124,30 @@ export function DeveloperLogo({
 
   // ── Card variant — Reelly-style hero plate (developer directory) ──
   if (variant === "card") {
+    const cardContainer = cn(
+      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/30 p-6 overflow-hidden",
+      className,
+    );
     if (!valid) {
+      if (name || alt) {
+        // Use a slightly larger label inside the big card container.
+        const raw = (name || alt || "Developer").trim();
+        return (
+          <div className={cardContainer} aria-label={raw} title={raw} data-developer-nameplate>
+            <span className="font-bold tracking-tight leading-none text-center text-[#1A1A1A] text-2xl uppercase truncate">
+              {raw}
+            </span>
+          </div>
+        );
+      }
       return (
-        <div
-          className={cn(
-            "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/30 p-6",
-            className,
-          )}
-          aria-label={`${alt} (logo unavailable)`}
-        >
+        <div className={cardContainer} aria-label={`${alt} (logo unavailable)`}>
           <Building2 className="w-12 h-12 text-[#1A1A1A]/50" />
         </div>
       );
     }
     return (
-      <div
-        className={cn(
-          "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/30 p-6 overflow-hidden",
-          className,
-        )}
-      >
+      <div className={cardContainer}>
         <img
           src={src as string}
           alt={alt}
@@ -157,34 +159,27 @@ export function DeveloperLogo({
           className="block max-h-full max-w-full w-auto h-auto object-contain"
           style={{ filter: "contrast(1.08) saturate(1.1)" }}
         />
-
       </div>
     );
   }
 
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
+  const tileContainer = cn(
+    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/30 overflow-hidden",
+    className,
+  );
   if (!valid) {
-    if (!renderFallback) return null;
+    if (!renderFallback && !(name || alt)) return null;
+    if (name || alt) return renderNameLabel(tileContainer);
     return (
-      <div
-        className={cn(
-          "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/30",
-          className,
-        )}
-        aria-label={`${alt} (logo unavailable)`}
-      >
+      <div className={tileContainer} aria-label={`${alt} (logo unavailable)`}>
         <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
       </div>
     );
   }
 
   return (
-    <div
-      className={cn(
-        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/30 overflow-hidden",
-        className,
-      )}
-    >
+    <div className={tileContainer}>
       <img
         src={src as string}
         alt={alt}
@@ -196,7 +191,6 @@ export function DeveloperLogo({
         className="block max-h-full max-w-full w-auto h-auto rounded-sm object-contain"
         style={{ filter: "contrast(1.08) saturate(1.1)" }}
       />
-
     </div>
   );
 }

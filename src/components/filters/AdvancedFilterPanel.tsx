@@ -126,11 +126,16 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           for (const d of data) {
             const name = String(d.name || '').trim();
             if (!name) continue;
+            if (FORBIDDEN_DEVELOPER_NAME.test(name)) continue;
             const logo = getDeveloperLogoUrl(d);
-            if (!logo || FORBIDDEN_DEVELOPER_NAME.test(name)) continue;
             const key = canonicalDeveloperKey(name);
             const existing = byName.get(key);
-            if (!existing || (!existing.logo_url && logo) || premiumRank(name) < premiumRank(existing.name)) {
+            // Prefer an entry that HAS a logo over one without; otherwise prefer premium-ranked names.
+            if (
+              !existing ||
+              (!existing.logo_url && logo) ||
+              (((!existing.logo_url) === (!logo)) && premiumRank(name) < premiumRank(existing.name))
+            ) {
               byName.set(key, { name, slug: d.slug, logo_url: logo });
             }
           }
@@ -447,16 +452,14 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
-                          {dev.logo_url && (
-                            <DeveloperLogo
-                              src={dev.logo_url}
-                              alt={dev.name}
-                              name={dev.name}
-                              variant="bare"
-                              className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
-                              renderFallback={false}
-                            />
-                          )}
+                          <DeveloperLogo
+                            src={dev.logo_url}
+                            alt={dev.name}
+                            name={dev.name}
+                            variant="bare"
+                            className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
+                            renderFallback
+                          />
                           <span className="text-sm text-[#1A1A1A] text-left truncate flex-1">{dev.name}</span>
                         </button>
                       );
