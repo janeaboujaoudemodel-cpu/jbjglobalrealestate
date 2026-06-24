@@ -13377,7 +13377,7 @@ html body #root :is(
   [class~="bg-[#F7F2EA]"],
   [class~="bg-[#EFE6D6]"],
   [class~="bg-[#B89555]"]
-):is(.text-white, [class*="text-white/"]):not(.allow-white):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]) {
+):is(.text-white, [class*="text-white/"]):not(.allow-white):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#0A0A0A]"]):not([class~="bg-black"]) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
