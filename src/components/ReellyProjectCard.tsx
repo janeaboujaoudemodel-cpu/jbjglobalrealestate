@@ -246,7 +246,12 @@ const ReellyProjectCard = ({
 
             {deriveHandover(project) && (
               <div className="flex justify-end mt-1">
-                <span className="text-[#1A1A1A]/75 text-[11px] font-semibold tabular-nums handover-orange">
+                <span
+                  data-surface="emerald"
+                  data-emerald="true"
+                  data-emerald-ok="badge"
+                  className="jj-emerald-metallic inline-flex items-center px-2 py-1 rounded-md text-[11px] font-semibold tabular-nums tracking-wide text-white [&_*]:text-white"
+                >
                   {deriveHandover(project)}
                 </span>
               </div>
