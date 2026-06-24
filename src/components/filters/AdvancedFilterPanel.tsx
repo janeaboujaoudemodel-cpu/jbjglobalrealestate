@@ -103,16 +103,31 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     if (open) setLocalFilters(filters);
   }, [open, filters]);
 
-  // Fetch developers with logos from developers table
+  // Fetch canonical developer identities only. Logos must come from developers.logo_url;
+  // project photos or generated initials are never used as logo fallbacks.
   useEffect(() => {
     if (!open) return;
     supabase
       .from('developers')
-      .select('name, logo_url')
+      .select('name, slug, logo_url')
       .order('name')
       .then(({ data }) => {
         if (data) {
-          setDevelopers(data.map(d => ({ name: d.name, logo_url: d.logo_url })));
+          const byName = new Map<string, DeveloperEntry>();
+          for (const d of data) {
+            const name = String(d.name || '').trim();
+            if (!name) continue;
+            const key = name
+              .toLowerCase()
+              .replace(/\b(properties|property|realty|real estate|developers?|developments?|holding|holdings|group|llc|pjsc|psc)\b/g, '')
+              .replace(/[^a-z0-9]/g, '');
+            const logo = getDeveloperLogoUrl(d);
+            const existing = byName.get(key);
+            if (!existing || (!existing.logo_url && logo) || premiumRank(name) < premiumRank(existing.name)) {
+              byName.set(key, { name, slug: d.slug, logo_url: logo });
+            }
+          }
+          setDevelopers(Array.from(byName.values()));
         }
       });
   }, [open]);
@@ -208,6 +223,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
     "text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 " +
     "focus:outline-none focus:border-[color:var(--emerald-1)] focus:ring-2 focus:ring-[color:var(--emerald-1)]/25 transition-all";
+  const dropdownPanel =
+    "mt-2 rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
+  const optionRow =
+    "flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA]";
+  const selectedBox = "jj-surface-emerald border-0";
 
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
