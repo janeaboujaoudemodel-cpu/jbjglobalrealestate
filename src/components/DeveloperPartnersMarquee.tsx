@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "@/contexts/LanguageContext";
 import { ImageWithSkeleton } from "@/components/ui/image-skeleton";
+import ContentTrack from "@/components/layout/ContentTrack";
 
 // LOCKED: Featured developer partners
 const FEATURED_DEVELOPERS: {
@@ -169,15 +170,19 @@ const DeveloperPartnersMarquee = () => {
       )}
 
       <div className="w-full">
-        <div className="jbj-shimmer-bg py-5 md:py-6 px-4">
+        <div className="jbj-shimmer-bg py-5 md:py-6">
+          <ContentTrack>
           <p className="text-center text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-[#B89555]">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
+          </ContentTrack>
 
         </div>
 
         {/* Clean gold divider between title and marquee */}
-        <div aria-hidden className="mx-auto h-px w-full max-w-7xl bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+        <ContentTrack>
+          <div aria-hidden className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+        </ContentTrack>
 
 
         <div
