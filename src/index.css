@@ -1143,6 +1143,64 @@ All colors MUST be HSL.
 .jj-section-strap--ink { background: #0A0A0A; }
 .jj-section-strap--transparent { background: transparent; }
 
+/* ============================================================
+   JJ PREMIUM SHELL — canonical champagne-gradient + gold-corner
+   section frame (matches Mortgage Calculator / Top Areas in Dubai).
+   Add `.jj-premium-shell` to any section card to inherit the same
+   border, background, shadow and rounded radius. Gold corner
+   accents are painted via ::before / ::after.
+   ============================================================ */
+.jj-premium-shell {
+  position: relative;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 28px;
+  background: linear-gradient(to bottom, #FFFDF8 0%, #F7F2EA 55%, #EFE6D6 100%);
+  border: 1px solid rgba(184, 149, 85, 0.45);
+  box-shadow: 0 24px 70px -32px rgba(184, 149, 85, 0.45);
+  padding: 1.5rem;
+}
+@media (min-width: 768px) {
+  .jj-premium-shell { padding: 2.5rem; }
+}
+@media (min-width: 1024px) {
+  .jj-premium-shell { padding: 3rem; }
+}
+.jj-premium-shell::before,
+.jj-premium-shell::after,
+.jj-premium-shell > .jj-premium-shell__c-bl,
+.jj-premium-shell > .jj-premium-shell__c-br {
+  content: "";
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  pointer-events: none;
+  border-color: rgba(184, 149, 85, 0.7);
+  border-style: solid;
+  border-width: 0;
+}
+.jj-premium-shell::before {
+  top: 0; left: 0;
+  border-top-width: 1px; border-left-width: 1px;
+  border-top-left-radius: 28px;
+}
+.jj-premium-shell::after {
+  top: 0; right: 0;
+  border-top-width: 1px; border-right-width: 1px;
+  border-top-right-radius: 28px;
+}
+.jj-premium-shell > .jj-premium-shell__c-bl {
+  bottom: 0; left: 0;
+  border-bottom-width: 1px; border-left-width: 1px;
+  border-bottom-left-radius: 28px;
+}
+.jj-premium-shell > .jj-premium-shell__c-br {
+  bottom: 0; right: 0;
+  border-bottom-width: 1px; border-right-width: 1px;
+  border-bottom-right-radius: 28px;
+}
+
 .jj-content-track,
 .jj-project-shell,
 .jj-track {
