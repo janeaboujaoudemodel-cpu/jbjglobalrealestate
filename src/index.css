@@ -13952,3 +13952,38 @@ html body #root section#ready-to-get-started .jj-emerald-card :where(svg, [class
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   FINAL FOOTER EMERALD LOCK — beats all upstream contrast guards.
+   Footer text/links/dots/icons are emerald on champagne.
+   No backgrounds, no borders, no highlight boxes.
+   ════════════════════════════════════════════════════════════════ */
+html body footer[data-jj-minimal-footer],
+html body footer[data-jj-minimal-footer] :is(p, a, span, bdi, time, small, li, button, nav, div) {
+  background: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+html body footer[data-jj-minimal-footer][data-surface="champagne"] {
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
+  background-color: #F7F2EA !important;
+}
+html body footer[data-jj-minimal-footer] :is(p, a, span, bdi, time, small, li, label, h1, h2, h3, h4, h5, h6),
+html body footer[data-jj-minimal-footer] :is(p, a, span, bdi, time, small, li, label, h1, h2, h3, h4, h5, h6) * {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  border-color: transparent !important;
+}
+html body footer[data-jj-minimal-footer] :is(svg, [class*="lucide"]),
+html body footer[data-jj-minimal-footer] :is(svg, [class*="lucide"]) * {
+  color: #047857 !important;
+  stroke: #047857 !important;
+  fill: none !important;
+}
+html body footer[data-jj-minimal-footer] a:hover,
+html body footer[data-jj-minimal-footer] a:hover * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  opacity: 0.9 !important;
+}
