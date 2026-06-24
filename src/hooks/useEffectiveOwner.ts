@@ -3,53 +3,54 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useUserMode } from "@/hooks/useUserMode";
 
-const KEY = "jbj_preview_as_visitor";
+/**
+ * Preview-as-visitor is now driven entirely by the user-mode selector
+ * (Mode: Owner vs Mode: Broker/Investor/Developer).
+ *
+ *   - Mode === 'owner'  AND user is the app owner  → Owner Mode (edit affordances)
+ *   - Any other mode                               → Visitor Mode (no edit chrome)
+ *
+ * The legacy floating "eye" toggle and its sessionStorage flag are removed.
+ */
+
+const LEGACY_KEY = "jbj_preview_as_visitor";
 const EVT = "jbj:preview-as-visitor-change";
 
+/** @deprecated Mode now drives this. Kept as a no-op for back-compat callers. */
 export function getPreviewAsVisitor(): boolean {
-  if (typeof window === "undefined") return true;
-  try {
-    const v = sessionStorage.getItem(KEY);
-    // Default to USER (visitor) view — owners must opt-in to Owner Mode so
-    // edit controls never appear by accident on first landing.
-    if (v === null) return true;
-    return v === "1";
-  } catch {
-    return true;
+  return true;
+}
+
+/** @deprecated No-op shim. */
+export function setPreviewAsVisitor(_on: boolean) {
+  try { sessionStorage.removeItem(LEGACY_KEY); } catch {}
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(EVT, { detail: { on: true } }));
   }
 }
 
-export function setPreviewAsVisitor(on: boolean) {
-  try {
-    // Persist BOTH on and off explicitly so we never fall back to the
-    // visitor-default after the owner has chosen Owner Mode.
-    sessionStorage.setItem(KEY, on ? "1" : "0");
-  } catch {}
-  window.dispatchEvent(new CustomEvent(EVT, { detail: { on } }));
-}
-
 export function usePreviewAsVisitor() {
-  const [on, setOn] = useState<boolean>(() => getPreviewAsVisitor());
-  useEffect(() => {
-    const h = () => setOn(getPreviewAsVisitor());
-    window.addEventListener(EVT, h);
-    window.addEventListener("storage", h);
-    return () => {
-      window.removeEventListener(EVT, h);
-      window.removeEventListener("storage", h);
-    };
-  }, []);
-  return { previewAsVisitor: on, toggle: () => setPreviewAsVisitor(!on), set: setPreviewAsVisitor };
+  const { mode } = useUserMode();
+  const previewAsVisitor = mode !== "owner";
+  // Toggle/set retained as no-ops so legacy call sites do not crash; mode
+  // is the single source of truth and must be changed via the mode switcher.
+  return {
+    previewAsVisitor,
+    toggle: () => {},
+    set: (_on: boolean) => {},
+  };
 }
 
 /**
- * Like useIsAppOwner but flips to FALSE while the owner is previewing the page
- * as a normal visitor. Use this everywhere editing affordances render.
+ * Like useIsAppOwner but flips to FALSE unless the owner has explicitly
+ * picked "Mode: Owner" in the header mode switcher.
  */
 export function useEffectiveOwner() {
   const { isOwner, isLoading } = useIsAppOwner();
-  const { previewAsVisitor } = usePreviewAsVisitor();
+  const { mode } = useUserMode();
+  const previewAsVisitor = mode !== "owner";
   return {
     isOwner,
     effectiveOwner: isOwner && !previewAsVisitor,
@@ -57,6 +58,7 @@ export function useEffectiveOwner() {
     isLoading,
   };
 }
+
 
 /** Returns the delegate scopes JSON for the current user (empty for owners). */
 export function useDelegateScopes() {
