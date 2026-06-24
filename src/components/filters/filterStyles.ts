@@ -65,7 +65,7 @@ export const filterSecondaryButton ="h-9 px-3 text-xs rounded-lg border border-[
 
 // Checkbox box (used inside panel rows). Ink/gold instead of bg-[#EFE6D6]/20.
 export const filterCheckBox ="w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors";
-export const filterCheckBoxOn ="border-[#1A1A1A] bg-[#1A1A1A]";
+export const filterCheckBoxOn ="jj-surface-emerald border-0";
 export const filterCheckBoxOff ="border-[#B89555]/60 bg-[#FDFBF7]";
 
 // Search input wrapper (pill-shaped row in shortcut bar)
