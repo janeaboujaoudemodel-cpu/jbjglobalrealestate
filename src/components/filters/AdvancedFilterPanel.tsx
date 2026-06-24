@@ -463,12 +463,14 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           <DeveloperLogo
                             src={dev.logo_url}
                             alt={dev.name}
-                            name={dev.name}
+                            name={shortDeveloperName(dev.name)}
                             variant="bare"
-                            className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
+                            className="!w-10 !h-10 !rounded-lg !p-[3px] flex-shrink-0"
                             renderFallback
                           />
-                          <span className="text-sm text-[#1A1A1A] text-left truncate flex-1">{dev.name}</span>
+                          <span className="text-sm text-[#1A1A1A] text-left truncate flex-1" title={dev.name}>
+                            {shortDeveloperName(dev.name)}
+                          </span>
                         </button>
                       );
                     })}
