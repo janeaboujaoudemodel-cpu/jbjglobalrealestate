@@ -237,7 +237,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const togglePillOff =
     "border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
   const togglePillOn =
-    "jj-surface-emerald border border-[color:var(--emerald-1)] font-bold shadow-[0_2px_8px_rgba(6,78,59,0.25)]";
+    "jj-chip-emerald font-bold";
   const sectionTitle = "text-sm font-bold text-[#1A1A1A] mb-3 tracking-tight";
   const inputClass =
     "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
