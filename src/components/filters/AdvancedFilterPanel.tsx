@@ -237,7 +237,15 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-[#B89555]/50 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(200,167,102,0.2)]"
+        style={{
+          // Emerald slider override for this modal
+          ['--slider-track-bg' as any]: '#E6DCC7',
+          ['--slider-range-bg' as any]: 'linear-gradient(90deg, #064E3B 0%, #0d7a5f 60%, #10b981 100%)',
+          ['--slider-thumb-bg' as any]: '#FFFFFF',
+          ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
+        }}
       >
+
         {/* Header */}
         <div className="px-6 pt-6 pb-4 border-b border-[#B89555]/30 flex-shrink-0 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <div className="flex items-center justify-between mb-3">
