@@ -1016,7 +1016,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       <div className="flex justify-between items-start mb-3">
                         <h4 className="text-white font-semibold">{rating.projectName}</h4>
                         <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold" style={{ color: '#B8943E' }}>{toScore(rating.overallRating)}</span>
+                          <span className="text-2xl font-bold" style={{ color: '#B89555' }}>{toScore(rating.overallRating)}</span>
                           <span className="text-white/90 text-xs">/10</span>
                         </div>
                       </div>

@@ -30,13 +30,13 @@ import { supabase } from '@/integrations/supabase/client';
 const C = {
   bg: "#0D0C08",
   surface: "rgba(184,148,62,0.06)",
-  border: "rgba(184,148,62,0.2)",
+  border: "rgba(184,149,85,0.2)",
   borderHover: "rgba(184,148,62,0.55)",
-  accent: "#B8943E",
+  accent: "#B89555",
   accentText: "#D4AF37",
   mutedText: "rgba(255,255,255,0.45)",
   dimText: "rgba(255,255,255,0.3)",
-  btnPrimary: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)",
+  btnPrimary: "linear-gradient(135deg, #B89555 0%, #9A7B2F 100%)",
   btnShadow: "0 4px 20px rgba(184,148,62,0.3)",
   btnDanger: "rgba(239,68,68,0.15)",
   btnDangerText: "#f87171",
@@ -866,7 +866,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back to Royal Tools Hub</span>
             </Link>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-              style={{ background: "#ede9fe", border: "1px solid #c4b5fd", color: "#6d28d9" }}>
+              style={{ background: "#EFE6D6", border: "1px solid rgba(184,149,85,0.4)", color: "#1A1A1A" }}>
               <Sparkles className="w-3 h-3" style={{ color: '#7c3aed' }} /> AI Powered
             </div>
           </div>
@@ -877,7 +877,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
         {/* Hero */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5"
-            style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${C.border}`, boxShadow: "0 0 32px rgba(184,148,62,0.2)" }}>
+            style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${C.border}`, boxShadow: "0 0 32px rgba(184,149,85,0.2)" }}>
             <Wand2 className="h-8 w-8" style={{ color: C.accentText }} />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">AI Background Studio</h1>
@@ -1296,14 +1296,14 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               {activeTab === 'generate' && (
                 <button onClick={handleAIGenerate} disabled={!consent || isLoading}
                   className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)", boxShadow: "0 4px 20px rgba(184,148,62,0.4)" }}>
+                  style={{ background: "linear-gradient(135deg, #B89555 0%, #9A7B2F 100%)", boxShadow: "0 4px 20px rgba(184,149,85,0.4)" }}>
                   {isGenerating ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Generating ${Math.round(progress)}%`}</> : <><Sparkles className="h-5 w-5" /> Generate AI Scene</>}
                 </button>
               )}
               {activeTab === 'video' && videoFile && (
                 <button onClick={handleVideoRemoveBackground} disabled={!consent || isVideoProcessing}
                   className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)", boxShadow: "0 4px 20px rgba(184,148,62,0.4)" }}>
+                  style={{ background: "linear-gradient(135deg, #B89555 0%, #9A7B2F 100%)", boxShadow: "0 4px 20px rgba(184,149,85,0.4)" }}>
                   {isVideoProcessing ? <><Loader2 className="h-5 w-5 animate-spin" /> {videoProgressLabel || `Processing ${videoProgress}%`}</> : <><Video className="h-5 w-5" /> Remove Video Background</>}
                 </button>
               )}

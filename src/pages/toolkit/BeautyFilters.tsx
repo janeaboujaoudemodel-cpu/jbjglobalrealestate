@@ -29,13 +29,13 @@ import { supabase } from '@/integrations/supabase/client';
 const I = {
   bg: "#0D0C08",
   surface: "rgba(184,148,62,0.06)",
-  border: "rgba(184,148,62,0.2)",
+  border: "rgba(184,149,85,0.2)",
   borderHover: "rgba(184,148,62,0.55)",
-  accent: "#B8943E",
+  accent: "#B89555",
   text: "#D4AF37",
   muted: "rgba(255,255,255,0.45)",
   dim: "rgba(255,255,255,0.28)",
-  btnGrad: "linear-gradient(135deg, #B8943E 0%, #9A7B2F 100%)",
+  btnGrad: "linear-gradient(135deg, #B89555 0%, #9A7B2F 100%)",
   btnShadow: "0 4px 20px rgba(184,148,62,0.3)",
 };
 
@@ -481,7 +481,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
           )}
           <button onClick={() => setShowBefore(v => !v)}
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all"
-            style={{ background: showBefore ? "rgba(184,148,62,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(184,148,62,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
+            style={{ background: showBefore ? "rgba(184,149,85,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${showBefore ? "rgba(184,148,62,0.5)" : "rgba(255,255,255,0.1)"}`, color: showBefore ? I.text : I.muted }}>
             <SplitSquareHorizontal className="h-3 w-3" />{showBefore ? 'Original' : 'B/A'}
           </button>
           <button onClick={() => { setImage(null); setImagePreview(null); setAdjustments({ ...DEFAULT_ADJ }); setSelectedPreset('none'); setFaceAdj({ ...DEFAULT_FACE }); setBodyAdj({ ...DEFAULT_BODY }); }}
@@ -533,7 +533,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
         {/* Title */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
-            style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}`, boxShadow: "0 0 32px rgba(184,148,62,0.2)" }}>
+            style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${I.border}`, boxShadow: "0 0 32px rgba(184,149,85,0.2)" }}>
             <Wand2 className="h-7 w-7" style={{ color: I.text }} />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Photo Studio <span style={{ color: "#D4AF37" }}>Pro</span></h1>
