@@ -8078,7 +8078,7 @@ html body [data-jj-utility-bar] {
 }
 /* keep the gold hairline at the header bottom — leave PASS 15/18 rules alone */
 
-/* 2) Footer — champagne band, BLACK text & dot */
+/* 2) Footer — champagne band, EMERALD text/links/dots */
 html body footer[data-jj-minimal-footer] {
   background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 50%, #F7F2EA 100%) !important;
   background-color: #F7F2EA !important;
@@ -8087,14 +8087,25 @@ html body footer[data-jj-minimal-footer] p,
 html body footer[data-jj-minimal-footer] p:last-child,
 html body footer[data-jj-minimal-footer] a,
 html body footer[data-jj-minimal-footer] a:visited,
+html body footer[data-jj-minimal-footer] span,
 html body footer[data-jj-minimal-footer] span[data-decorative="true"] {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  background: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+html body footer[data-jj-minimal-footer] svg,
+html body footer[data-jj-minimal-footer] svg * {
+  color: #047857 !important;
+  stroke: #047857 !important;
 }
 html body footer[data-jj-minimal-footer] a:hover {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  opacity: 0.7 !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  opacity: 0.85 !important;
 }
 
 /* 3) Sidebar bottom panel — champagne (kills white seam) */
