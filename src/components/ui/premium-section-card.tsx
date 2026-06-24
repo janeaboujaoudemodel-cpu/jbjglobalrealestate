@@ -46,10 +46,7 @@ const TONE: Record<NonNullable<Props["tone"]>, string> = {
 
 export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
   ({ padding = "md", tone, wrapperClassName = "", className = "", width = "full", children, ...rest }, ref) => {
-    const inner =
-      width === "contained"
-        ? "w-full max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8"
-        : "jj-fullbleed-band w-full";
+    const inner = "jj-section-strap jj-section-strap--transparent jj-section-strap--flush w-full";
 
     // Transparent wrapper: NEVER paints a background unless tone is explicit.
     // Kills the "white-pearl back layer" that was leaking past rounded child cards.
@@ -63,7 +60,7 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
       >
         <div className={inner}>
           <div
-            className={`${toneClass} ${PADDING[padding]} ${className}`}
+            className={`jj-content-track ${toneClass} ${PADDING[padding]} ${className}`}
           >
             {children}
           </div>
