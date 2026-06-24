@@ -22,8 +22,8 @@ interface Props extends HTMLAttributes<HTMLElement> {
   /** Outer wrapper extra classes (controls container width / vertical spacing). */
   wrapperClassName?: string;
   /**
-   * Width mode. Default "full" = card spans edge-to-edge with minimal gutter.
-   * "contained" = legacy centered max-w-7xl container.
+   * Width mode is kept for backwards compatibility. Both modes now inherit the
+   * same canonical jj-content-track so major sections cannot drift horizontally.
    */
   width?: "full" | "contained";
 }
@@ -59,15 +59,9 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
         {...rest}
       >
         <div className={inner} data-layout-width={width}>
-          {width === "full" ? (
-            <div className={`w-full ${toneClass} ${PADDING[padding]} ${className}`}>
-              {children}
-            </div>
-          ) : (
-            <div className={`jj-content-track ${toneClass} ${PADDING[padding]} ${className}`}>
-              {children}
-            </div>
-          )}
+          <div className={`jj-content-track ${toneClass} ${PADDING[padding]} ${className}`}>
+            {children}
+          </div>
         </div>
       </section>
     );
