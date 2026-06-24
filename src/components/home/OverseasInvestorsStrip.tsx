@@ -76,7 +76,7 @@ const OverseasInvestorsStrip = () => {
 
   return (
     <section
-      className="jj-fullbleed-band relative w-full overflow-hidden"
+      className="jj-fullbleed-band oi-band relative w-full overflow-hidden"
       data-fullbleed-band
       data-surface="dark"
       data-on-dark
