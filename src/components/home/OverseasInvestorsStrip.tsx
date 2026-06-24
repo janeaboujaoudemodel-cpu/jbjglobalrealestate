@@ -18,9 +18,10 @@ const microStats: Stat[] = [
 const OverseasInvestorsStrip = () => {
   return (
     <section
-      className="relative w-full overflow-hidden py-10 md:py-14 lg:py-16"
+      className="relative w-full overflow-hidden"
       style={{ background: "#FDFBF7" }}
     >
+
       <style>{`
         @keyframes oi-shimmer {
           0% { background-position: -200% 0; }
