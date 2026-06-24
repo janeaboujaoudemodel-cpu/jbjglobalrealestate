@@ -1,74 +1,79 @@
-## Global Emerald + White Contrast Lock — Final Pass
+I will implement this as a single global visual repair, not one-off patches.
 
-Root cause of the persistent failures: previous attempts added scoped overrides on individual components, but the cascade kept losing because (a) child elements set their own `text-*` / `bg-*` classes with higher specificity, (b) the dark metallic gradient was applied as `background-color` without overriding the inner gradient layers, and (c) Tailwind arbitrary `bg-[#0E8A66]` and component-level inline styles weren't all repainted. I'll fix it with one decisive global guard plus targeted component swaps, then validate every flagged area with screenshots.
+Tasks to complete one by one:
 
-### 1. Single global emerald lock (src/index.css)
+1. Lock the correct emerald source globally
+- Use the same dark emerald gradient already approved on EOI, handover date, Email / Call / Chat, and the horizontal header Search / Filter / Heart controls.
+- Remove the restricted lighter green from heart, shortlist, ad badge, payment-plan TBD, mortgage, report, brochure, presentation, and CTA surfaces.
+- Ensure normal state uses the darker approved emerald, and hover never switches to black text or restricted green.
+- Remove white borders/rings around emerald circles.
 
-Replace the prior layered overrides with one final `@layer utilities` block, scoped under `html body` for maximum specificity, that covers every selector currently rendering as flat green or with dark text on emerald:
+2. Fix favorite / shortlist / heart icons globally
+- Update all card favorite and shortlist controls to be rounded emerald circles with no border.
+- Force every heart, shortlist, check, and related SVG inside emerald surfaces to pure white at idle, hover, focus, active, and disabled states.
+- Include project cards, recently viewed / Continue Searching cards, homepage sections, properties grid, and project-detail recommendations if present.
 
-```css
-html body :is(
-  .jj-emerald-action, [data-emerald-action="true"],
-  .jj-official-emerald, .jj-pill-emerald-metallic,
-  .jj-cta-gold-metallic, .jj-cta-primary,
-  [data-cta="primary"][data-surface="emerald"],
-  [data-surface="emerald"][data-emerald-ok],
-  .bg-\[\#0E8A66\], .bg-\[\#0B6F52\], .bg-\[\#064E3B\]
-) {
-  background-image: linear-gradient(135deg,#0A6B53 0%,#064E3B 55%,#04231A 100%) !important;
-  background-color: #064E3B !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: transparent !important;
-}
-html body :is(<same selectors>) :where(*, svg, span, strong, p, h1,h2,h3,h4) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  fill: currentColor !important;
-  stroke: #FFFFFF !important;
-}
-html body :is(<same selectors>) :where(svg [fill]:not([fill="none"])) { fill: #FFFFFF !important; }
-```
+3. Fix Continue Searching section
+- Make the history circle before “Continue Searching for Your Dream Property” filled with the approved emerald.
+- Make the History icon pure white.
+- Make the heart icon in Continue Searching cards pure white on emerald.
 
-This single block kills: gold "Expert Consultation" badge, green country-picker pills, green "View All" / "Report Issue" / "Download Report" / "Request Mortgage Introduction" / mortgage Ask chat-send / mortgage icon tiles / Recommended Projects star tile / Noticed-Something-Incorrect tile / Pros header / Dubai Market Intelligence header icon + YTD growth arrow tile / Off-Plan-vs-Secondary + Cash-vs-Mortgage bars / Recommended Projects "From AED" + handover pills.
+4. Restyle project-detail hero CTAs
+- Download Brochure: approved emerald fill, white icon, white text, no restricted green.
+- Register Interest: approved emerald fill, white text/icon behavior.
+- Download branded presentation: remove the pill-like broken style and make it premium, clean, and contrast-safe.
+- Keep these visually consistent with the approved horizontal header emerald controls.
 
-### 2. Mark every flagged surface with the lock attribute
+5. Fix brochure and presentation checklist icons
+- In Project Brochure checklist: fill the tick circles with approved emerald and make ticks pure white.
+- In Generate Presentation checklist: same emerald circle + white tick treatment.
+- Fix the “Brochure” and “Generate Presentation” labels so their contrast is clean and not black-on-emerald or restricted green.
 
-Add `data-emerald-action="true"` (or swap to `.jj-emerald-action`) on:
+6. Fix Generate Presentation card
+- Repair the broken contrast of “Click to start”, “Generate Presentation”, and “Custom PDF deck · ~30 seconds”.
+- Restyle the card surface so it looks intentional and premium, not visually broken.
+- Use approved emerald only where the surface is emerald, with pure white foreground.
 
-- `src/components/project-detail/RecommendedProjects.tsx` — star header tile, View-All button, **and** each card's price + handover pill
-- `src/components/project-detail/PremiumBrochureCard.tsx` — Brochure label/star, "Generate Presentation" star icon
-- `src/components/project-detail/ProjectMarketContext.tsx` (or wherever "Dubai Proxy" / building/pin icons + "Noticed something incorrect" + "Report an Issue" live) — header icons + report button
-- `src/components/project-detail/CallToActionSection.tsx` — "Expert Consultation" pill (replace gold metallic with emerald metallic)
-- `src/components/PhoneInput*.tsx` / country code trigger used by ConsultationRequestForm + Request-Callback — `button[data-phone-code-trigger]` swap
-- `src/components/MortgageCalculator.tsx` — main calculator icon tile, Property/Down/Loan icon tiles, "Request Mortgage Introduction", "Ask" send button
-- `src/pages/PropertyEvaluator.tsx` — "Download Report" in Live Market Data, YTD market growth arrow tile, Pros header (thumbs-up + "Pros")
-- `src/components/market-intelligence/*` — Off-Plan-vs-Secondary + Cash-vs-Mortgage bars: convert active emerald segment to gradient and set the inline `%` label to `#FFFFFF`
+7. Fix Payment Plan TBD
+- Replace the restricted green on “Payment Plan (TBD)” with the approved emerald style.
+- Ensure icon and text are white where the tab/button is emerald.
 
-### 3. Developer logo regression (Recommended Projects cards)
+8. Fix Mortgage Calculator section
+- Replace all restricted green with approved emerald.
+- Fix mortgage icon tiles, title accents, cards, sliders/metrics, “Compared to bank rate”, and CTA surfaces.
+- Swap the current states for Request Mortgage Introduction / Prefer Mortgage Advisor style: darker approved emerald on normal load, lighter/softer state only on hover if needed.
+- Ensure title/text on emerald areas is white, not black.
 
-In `RecommendedProjects.tsx`, the card currently shows a building fallback icon for projects whose developer record was matched but whose `developer.logo_url` evaluated as falsy at card-build time. Restore the same resolver used elsewhere: pull from `developer_logo_url` / `developers.logo_url` and only fall back to the JBJ monogram tile when both are empty — never the building icon. No DB writes. No logo overrides.
+9. Fix Live Market Data / Dubai Market Intelligence
+- Make Download Report approved emerald with white text and icon.
+- Fix any black text on emerald in the market widget.
+- Repair the broken layout/overflow so it does not cross or collide with the vertical sidebar.
 
-### 4. Card alignment with collapsed sidebar
+10. Fix global project-page spacing and sticky bars
+- Repair the project page layout where cards/sections are touching screen edges.
+- Only the background layer can be full-width to the sidebar; cards/content must always have safe padding.
+- Fix both horizontal filter bars: Price / Payments / Handover / Property Type etc. and Details / Gallery / Progress / Developer / Location / Brochure / Payment Plan etc.
+- Ensure they stop correctly at the vertical sidebar and do not look glued together.
+- Apply this globally across desktop, tablet, and phone.
 
-In `src/components/project-detail/ProjectDetailLayout.tsx` (and the Recommended Projects section wrapper), replace the current `max-w` + asymmetric left padding with the standard `mx-auto px-6 md:px-10` container used by `/compare`. That removes the leftward shift when the sidebar collapses.
+11. Visual validation proof
+- Navigate as a user through:
+  - Homepage cards and Continue Searching
+  - Properties / All Projects cards
+  - The selected project detail page
+  - Brochure section
+  - Generate Presentation section
+  - Mortgage Calculator section
+  - Live Market Data section
+- Capture screenshots after the fix proving:
+  - heart/shortlist/history icons are white on emerald
+  - no restricted green is visible on the affected controls
+  - project cards and sections no longer touch borders
+  - sticky bars and market widget no longer cross the sidebar
+  - Download Brochure / Register Interest / Download branded presentation / Download Report have correct contrast
 
-### 5. Visual validation (mandatory)
-
-Run Playwright at 1280×1800 on `/project/distrikt-majid-al-futtaim-city-of-arabia` and capture screenshots for each flagged area, plus `/property-evaluator`, the mortgage calculator section, and the Request-a-Callback / Consultation forms. Save under `/tmp/browser/emerald-final/` and post them in the reply. If any single surface still renders flat green or non-white text/icon, iterate before responding.
-
-### Files to edit
-
-- `src/index.css` (final emerald lock + repaint of arbitrary green classes)
-- `src/components/project-detail/RecommendedProjects.tsx` (star, View All, price/handover pills, developer logo fallback)
-- `src/components/project-detail/PremiumBrochureCard.tsx`
-- `src/components/project-detail/CallToActionSection.tsx` (Expert Consultation pill)
-- `src/components/project-detail/ReportIssueButton.tsx` + the buyers-by-nationality header tiles
-- `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` (already partly done — verify pill swap)
-- `src/components/MortgageCalculator.tsx` (all icon tiles, Ask, Request Mortgage Introduction)
-- `src/pages/PropertyEvaluator.tsx` (Download Report, YTD arrow tile, Pros header)
-- Phone country picker primitive used by both forms
-- DLD bars component (Off-Plan vs Secondary / Cash vs Mortgage label color)
-- `src/components/project-detail/ProjectDetailLayout.tsx` (container alignment)
-
-No business logic, no DB, no logo overrides — pure visual contract fix.
+Technical approach:
+- Centralize the approved emerald styling in the global CSS terminal lock so later rules cannot repaint emerald icons black.
+- Add or normalize component data attributes/classes only where needed so the global emerald contract can detect affected controls.
+- Fix spacing at the project layout shell/container level instead of adding random per-card margins.
+- Validate with Playwright screenshots using desktop viewport first, then responsive checks for tablet/phone-safe padding.
