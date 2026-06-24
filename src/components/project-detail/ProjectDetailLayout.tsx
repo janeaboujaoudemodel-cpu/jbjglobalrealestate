@@ -95,7 +95,7 @@ import { useAreaUnit } from "@/hooks/useAreaUnit";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { getProjectStatus } from "@/utils/projectStatus";
-import OwnerVisitorToggle from "@/components/project-detail/OwnerVisitorToggle";
+// OwnerVisitorToggle removed — Mode switcher drives Owner/Visitor view
 // BrokerBrandedMaterialsCard removed — replaced by inline branded-presentation download
 import { useUserMode } from "@/hooks/useUserMode";
 import { useAuth } from "@/contexts/AuthContext";
