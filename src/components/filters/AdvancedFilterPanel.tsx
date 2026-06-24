@@ -11,7 +11,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { EMIRATES_OPTIONS, VIEWS_OPTIONS } from "@/constants/filterConfig";
-import { SafeImage } from "@/components/SafeImage";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import type { ShortcutFilterState } from "./FilterShortcutBar";
 import { defaultShortcutFilters } from "./FilterShortcutBar";
 
@@ -26,11 +27,11 @@ const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
 
 const STATUS_OPTIONS = [
-  { value: 'Announced', label: 'Announced', dotClass: 'bg-pink-400' },
+  { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
   { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-surface-emerald' },
-  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-blue-400' },
-  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-yellow-400' },
-  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-red-500' },
+  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
+  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
+  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
 ];
 
 const CONSTRUCTION_OPTIONS = [
@@ -72,11 +73,21 @@ const premiumRank = (name: string) => {
   const idx = PREMIUM_UAE_DEVELOPERS.findIndex((p) => n.includes(p));
   return idx === -1 ? 999 : idx;
 };
+const canonicalDeveloperKey = (name: string) => {
+  const n = name.toLowerCase();
+  const premium = PREMIUM_UAE_DEVELOPERS.find((p) => n.includes(p));
+  if (premium) return premium.replace(/[^a-z0-9]/g, '');
+  return n
+    .replace(/\b(properties|property|realty|real estate|developers?|developments?|holding|holdings|group|llc|pjsc|psc)\b/g, '')
+    .replace(/[^a-z0-9]/g, '');
+};
+const FORBIDDEN_DEVELOPER_NAME = /\b(bayut|dubizzle|property\s*finder)\b/i;
 
 
 interface DeveloperEntry {
   name: string;
   logo_url: string | null;
+  slug?: string | null;
 }
 
 interface AreaEntry {
@@ -101,16 +112,29 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     if (open) setLocalFilters(filters);
   }, [open, filters]);
 
-  // Fetch developers with logos from developers table
+  // Fetch canonical developer identities only. Logos must come from developers.logo_url;
+  // project photos or generated initials are never used as logo fallbacks.
   useEffect(() => {
     if (!open) return;
     supabase
       .from('developers')
-      .select('name, logo_url')
+      .select('name, slug, logo_url')
       .order('name')
       .then(({ data }) => {
         if (data) {
-          setDevelopers(data.map(d => ({ name: d.name, logo_url: d.logo_url })));
+          const byName = new Map<string, DeveloperEntry>();
+          for (const d of data) {
+            const name = String(d.name || '').trim();
+            if (!name) continue;
+            const logo = getDeveloperLogoUrl(d);
+            if (!logo || FORBIDDEN_DEVELOPER_NAME.test(name)) continue;
+            const key = canonicalDeveloperKey(name);
+            const existing = byName.get(key);
+            if (!existing || (!existing.logo_url && logo) || premiumRank(name) < premiumRank(existing.name)) {
+              byName.set(key, { name, slug: d.slug, logo_url: logo });
+            }
+          }
+          setDevelopers(Array.from(byName.values()));
         }
       });
   }, [open]);
@@ -206,6 +230,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
     "text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 " +
     "focus:outline-none focus:border-[color:var(--emerald-1)] focus:ring-2 focus:ring-[color:var(--emerald-1)]/25 transition-all";
+  const dropdownPanel =
+    "mt-2 rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
+  const optionRow =
+    "flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA]";
+  const selectedBox = "jj-surface-emerald border-0";
 
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
@@ -240,7 +269,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         style={{
           // Emerald slider override for this modal
           ['--slider-track-bg' as any]: '#E6DCC7',
-          ['--slider-range-bg' as any]: 'linear-gradient(90deg, #064E3B 0%, #0d7a5f 60%, #10b981 100%)',
+          ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
           ['--slider-thumb-bg' as any]: '#FFFFFF',
           ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
         }}
@@ -279,7 +308,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             <section>
               <h4 className={sectionTitle}>Location</h4>
               <button
-                onClick={() => setEmiratesOpen(!emiratesOpen)}
+                onClick={() => { setEmiratesOpen(!emiratesOpen); setAreasOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
                 <span className={localFilters.emirates.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
@@ -288,7 +317,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", emiratesOpen && "rotate-180")} />
               </button>
               {emiratesOpen && (
-                <div className="mt-2">
+                <div className={dropdownPanel}>
                   <input
                     type="text"
                     value={emirateSearch}
@@ -296,18 +325,18 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     placeholder="Search emirate..."
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
-                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto pr-1">
                     {filteredEmirates.map((em) => {
                       const isSelected = localFilters.emirates.includes(em.value);
                       return (
                         <button
                           key={em.value}
                           onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
-                          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
+                          className={optionRow}
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -324,7 +353,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             <section>
               <h4 className={sectionTitle}>By Area</h4>
               <button
-                onClick={() => setAreasOpen(!areasOpen)}
+                onClick={() => { setAreasOpen(!areasOpen); setEmiratesOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
                 <span className={localFilters.areas && localFilters.areas.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
@@ -335,7 +364,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", areasOpen && "rotate-180")} />
               </button>
               {areasOpen && (
-                <div className="mt-2">
+                <div className={dropdownPanel}>
                   <input
                     type="text"
                     value={areaSearch}
@@ -346,7 +375,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   {allAreas.length === 0 ? (
                     <div className="py-4 text-center text-xs text-[#1A1A1A]/70">Loading areas...</div>
                   ) : (
-                    <div className="space-y-3 max-h-72 overflow-y-auto">
+                    <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                       {Object.entries(areasGroupedByEmirate).sort(([a], [b]) => a.localeCompare(b)).map(([emirate, areaNames]) => (
                         <div key={emirate}>
                           <div className="flex items-center gap-2 mb-1 px-1">
@@ -354,18 +383,18 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                             <div className="flex-1 h-px bg-[#EFE6D6]/20" />
                             <span className="text-[10px] text-[#1A1A1A]/70">{areaNames.length}</span>
                           </div>
-                          <div className="space-y-0.5">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                             {areaNames.map(areaName => {
                               const isSelected = (localFilters.areas || []).includes(areaName);
                               return (
                                 <button
                                   key={areaName}
                                   onClick={() => update({ areas: toggleArray(localFilters.areas || [], areaName) })}
-                                  className="flex items-center gap-3 w-full px-3 py-1.5 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
+                                  className={optionRow}
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                                    isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                                    isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
                                   )}>
                                     {isSelected && <Check className="w-3 h-3 text-white" />}
                                   </div>
@@ -386,7 +415,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             <section>
               <h4 className={sectionTitle}>By Developer</h4>
               <button
-                onClick={() => setDevsOpen(!devsOpen)}
+                onClick={() => { setDevsOpen(!devsOpen); setEmiratesOpen(false); setAreasOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
                 <span className={localFilters.developers.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
@@ -395,7 +424,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", devsOpen && "rotate-180")} />
               </button>
               {devsOpen && (
-                <div className="mt-2">
+                <div className={dropdownPanel}>
                   <input
                     type="text"
                     value={devSearch}
@@ -403,43 +432,31 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     placeholder="Search developer..."
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
-                  <div className="space-y-1 max-h-56 overflow-y-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-64 overflow-y-auto pr-1">
                     {filteredDevs.map((dev) => {
                       const isSelected = localFilters.developers.includes(dev.name);
                       return (
                         <button
                           key={dev.name}
                           onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
-                          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
+                          className={optionRow}
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
-                          <div className="w-8 h-8 rounded-lg bg-[#FDFBF7] border border-[#B89555]/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm">
-                            {dev.logo_url ? (
-                              <img
-                                src={dev.logo_url}
-                                alt={dev.name}
-                                className="w-full h-full object-contain"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                  const parent = e.currentTarget.parentElement;
-                                  if (parent) {
-                                    parent.textContent = '';
-                                    const span = document.createElement('span');
-                                    span.style.cssText = 'font-size:9px;font-weight:700;color:rgba(0,0,0,0.4)';
-                                    span.textContent = dev.name.charAt(0);
-                                    parent.appendChild(span);
-                                  }
-                                }}
-                              />
-                            ) : (
-                              <span className="text-[9px] font-bold text-[#1A1A1A]/40">{dev.name.charAt(0)}</span>
-                            )}
-                          </div>
+                          {dev.logo_url && (
+                            <DeveloperLogo
+                              src={dev.logo_url}
+                              alt={dev.name}
+                              name={dev.name}
+                              variant="bare"
+                              className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
+                              renderFallback={false}
+                            />
+                          )}
                           <span className="text-sm text-[#1A1A1A] text-left truncate flex-1">{dev.name}</span>
                         </button>
                       );
@@ -626,7 +643,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
-                            ? "bg-[color:var(--emerald-1)] border border-[color:var(--emerald-1)] text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
+                            ? "jj-surface-emerald border-0 text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -653,7 +670,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
-                            ? "bg-[color:var(--emerald-1)] border border-[color:var(--emerald-1)] text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
+                            ? "jj-surface-emerald border-0 text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -695,7 +712,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         <div className="px-6 py-4 border-t border-[#B89555]/30 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <button
             onClick={handleClearAll}
-            className="px-5 py-2.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] text-xs font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]"
+            className="px-5 py-2.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] text-xs font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]"
           >
             Clear all
           </button>

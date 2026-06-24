@@ -51,39 +51,60 @@ const AIHF_RESULTS_STYLE = `
   .aihf-results .aihf-muted { color: rgba(26,26,26,0.70) !important; -webkit-text-fill-color: rgba(26,26,26,0.70) !important; }
   .aihf-results .aihf-tiffany { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
   .aihf-results .aihf-panel {
-    background: #F7F2EA !important;
-    border: 1px solid rgba(184,149,85,0.55) !important;
-    box-shadow: 0 1px 0 rgba(184,149,85,0.18) !important;
+    background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+    border: 1px solid rgba(184,149,85,0.60) !important;
+    box-shadow: 0 0 18px rgba(184,149,85,0.14), 0 18px 55px rgba(0,0,0,0.12) !important;
   }
   .aihf-results .aihf-tile {
     background: #EFE6D6 !important;
     border: 1px solid rgba(184,149,85,0.45) !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta:hover, .aihf-results .aihf-cta:focus-visible {
-    background: #0A0A0A !important;
-    border: 1px solid rgba(184,149,85,0.65) !important;
-    box-shadow: none !important;
+    background: var(--jj-emerald-ombre) !important;
+    background-image: var(--jj-emerald-ombre) !important;
+    border: 0 !important;
+    box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta *, .aihf-results .aihf-cta svg {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     stroke: #FFFFFF !important;
   }
-  .aihf-results .aihf-cta:hover { background: #1F1F1F !important; }
+  .aihf-results .aihf-cta:hover { background: var(--jj-emerald-ombre-hover) !important; background-image: var(--jj-emerald-ombre-hover) !important; transform: translateY(-1px); }
   .aihf-results .aihf-cta-glow {
-    background: #0A0A0A !important;
-    border: 1px solid rgba(184,149,85,0.85) !important;
-    box-shadow: none !important;
+    background: var(--jj-emerald-ombre) !important;
+    background-image: var(--jj-emerald-ombre) !important;
+    border: 0 !important;
+    box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
     transform: translateZ(0);
     transition: transform .25s ease, background-color .25s ease !important;
   }
   .aihf-results .aihf-cta-glow:hover {
-    background: #1F1F1F !important;
+    background: var(--jj-emerald-ombre-hover) !important;
+    background-image: var(--jj-emerald-ombre-hover) !important;
     transform: translateY(-1px);
   }
   .aihf-results .aihf-outline {
     background: #FDFBF7 !important;
     border: 1px solid rgba(184,149,85,0.55) !important;
+  }
+  .aihf-results .aihf-result-card {
+    border-radius: 1rem !important;
+    border: 1px solid rgba(184,149,85,0.60) !important;
+    background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+    box-shadow: 0 0 18px rgba(184,149,85,0.14), 0 18px 55px rgba(0,0,0,0.12) !important;
+  }
+  .aihf-results .aihf-action-icon {
+    background: var(--jj-emerald-ombre) !important;
+    background-image: var(--jj-emerald-ombre) !important;
+    border: 0 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+  .aihf-results .aihf-action-icon svg,
+  .aihf-results .aihf-action-icon svg * {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
   }
   /* Price pill — champagne+ink inside results */
   .aihf-results .price-pill-premium {
@@ -1709,7 +1730,7 @@ const QuizResults = () => {
         {projects && projects.length > 0 && (
 
           <div className="mb-12">
-            <div id="aihf-top-pick" className="aihf-panel relative backdrop-blur-sm rounded-3xl overflow-hidden scroll-mt-24">
+            <div id="aihf-top-pick" className="aihf-result-card relative backdrop-blur-sm rounded-3xl overflow-hidden scroll-mt-24">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
                 <div className="jj-pill-active text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
@@ -1795,7 +1816,7 @@ const QuizResults = () => {
                   
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link to={`/project/${projects[0].slug}`}>
-                      <Button className="aihf-cta w-full md:w-auto font-semibold hover:-translate-y-0.5 transition-all duration-300">
+                      <Button className="aihf-cta jj-pill-emerald-metallic w-full md:w-auto font-semibold hover:-translate-y-0.5 transition-all duration-300">
                         View Property
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -1803,7 +1824,7 @@ const QuizResults = () => {
                     <Button
                       type="button"
                       onClick={() => handleDownloadPropertyBrochure(projects[0], 0)}
-                      className="aihf-outline w-full md:w-auto font-semibold"
+                      className="aihf-cta jj-pill-emerald-metallic w-full md:w-auto font-semibold"
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download Brochure
@@ -1828,7 +1849,7 @@ const QuizResults = () => {
                     : `${project.bedrooms_min} - ${project.bedrooms_max} BR`
                   : "Bedroom mix on request";
                 return (
-                  <div key={project.id} className="aihf-panel relative group flex flex-col h-full rounded-2xl overflow-hidden min-h-[420px]">
+                  <div key={project.id} className="aihf-result-card relative group flex flex-col h-full rounded-2xl overflow-hidden min-h-[420px]">
                     <div className="absolute top-3 left-3 z-10 rounded-full jj-pill-active px-3 py-1">
                       <span className="text-sm font-bold">#{index + 2}</span>
                     </div>
@@ -1863,7 +1884,7 @@ const QuizResults = () => {
                         </div>
                       </div>
                       <Link to={`/project/${project.slug}`} className="mt-auto mb-3">
-                        <Button className="aihf-cta w-full font-semibold">
+                          <Button className="aihf-cta jj-pill-emerald-metallic w-full font-semibold">
                           View Property
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
@@ -1871,7 +1892,7 @@ const QuizResults = () => {
                       <Button
                         type="button"
                         onClick={() => handleDownloadPropertyBrochure(project, index + 1)}
-                        className="aihf-outline w-full font-semibold text-xs"
+                        className="aihf-cta jj-pill-emerald-metallic w-full font-semibold text-xs"
                       >
                         <Download className="w-3 h-3 mr-1" />
                         Download Brochure
@@ -1930,7 +1951,7 @@ const QuizResults = () => {
                 onClick={() => {
                   document.getElementById("aihf-top-pick")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
-                className="aihf-cta aihf-cta-glow font-bold px-8 py-5 text-base rounded-xl"
+                className="aihf-cta aihf-cta-glow jj-pill-emerald-metallic font-bold px-8 py-5 text-base rounded-xl"
               >
                 Back to property #1
                 <ChevronDown className="w-5 h-5 ml-2 rotate-180" />
@@ -1949,7 +1970,7 @@ const QuizResults = () => {
             {/* AI Comparison Card */}
             <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center">
+                <div className="aihf-action-icon w-12 h-12 rounded-full flex items-center justify-center">
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <div>
@@ -1961,7 +1982,7 @@ const QuizResults = () => {
                 Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
               </p>
               <Link to="/compare">
-                <Button className="aihf-cta w-full font-semibold">
+                  <Button className="aihf-cta jj-pill-emerald-metallic w-full font-semibold">
                   Compare with AI
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -1971,7 +1992,7 @@ const QuizResults = () => {
             {/* Professional Evaluation Card */}
             <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center">
+                <div className="aihf-action-icon w-12 h-12 rounded-full flex items-center justify-center">
                   <Users className="w-6 h-6" />
                 </div>
                 <div>
@@ -1983,7 +2004,7 @@ const QuizResults = () => {
                 Request a personalized evaluation from our property consultants with detailed market insights.
               </p>
               <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-                <Button className="aihf-cta w-full font-semibold flex items-center justify-center gap-2">
+                <Button className="aihf-cta jj-pill-emerald-metallic w-full font-semibold flex items-center justify-center gap-2">
                   <Users className="w-5 h-5" />
                   Request Evaluation
                   <ArrowRight className="w-4 h-4" />
@@ -1994,7 +2015,7 @@ const QuizResults = () => {
             {/* Regenerate / AI Finder Card */}
             <div className="aihf-tile rounded-2xl p-6 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 flex items-center justify-center">
+                <div className="aihf-action-icon w-12 h-12 rounded-full flex items-center justify-center">
                   <Brain className="w-6 h-6" />
                 </div>
                 <div>
@@ -2007,7 +2028,7 @@ const QuizResults = () => {
               </p>
               <Button
                 onClick={startNewMatch}
-                className="aihf-cta w-full font-semibold"
+                className="aihf-cta jj-pill-emerald-metallic w-full font-semibold"
               >
                 <Brain className="w-4 h-4 mr-2" />
                 Regenerate with AI
@@ -2019,10 +2040,10 @@ const QuizResults = () => {
         {/* Footer */}
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <Link to="/">
+            <Link to="/properties">
               <Button
                 data-no-contrast-guard
-                className="aihf-cta aihf-cta-glow font-bold px-10 py-6 text-base rounded-xl"
+                className="aihf-cta aihf-cta-glow jj-pill-emerald-metallic font-bold px-10 py-6 text-base rounded-xl"
               >
                 Browse All Properties
                 <ArrowRight className="w-5 h-5 ml-2" />

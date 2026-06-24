@@ -15,8 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
-import { toolThemes } from "@/components/tools/toolThemes";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
@@ -269,15 +267,27 @@ const AIHF_STYLE = `
     border-color: rgba(184,149,85,0.45) !important;
   }
   .aihf-root .aihf-option:hover, .aihf-root .aihf-option[aria-pressed="true"] {
-    background: #EFE6D6 !important;
-    border-color: rgba(184,149,85,0.85) !important;
-    box-shadow: none !important;
+    border-color: transparent !important;
+    box-shadow: 0 10px 24px -16px rgba(6,78,59,0.8) !important;
+  }
+  .aihf-root .aihf-option[aria-pressed="true"] {
+    background: var(--jj-emerald-ombre) !important;
+    background-image: var(--jj-emerald-ombre) !important;
+  }
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-option[aria-pressed="true"] *,
+  .aihf-root .aihf-option[aria-pressed="true"] svg,
+  .aihf-root .aihf-option[aria-pressed="true"] svg * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
   }
   .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
     min-width: 7rem;
-    background: #0A0A0A !important;
-    border: 1px solid rgba(184,149,85,0.65) !important;
-    box-shadow: none !important;
+    background: var(--jj-emerald-ombre) !important;
+    background-image: var(--jj-emerald-ombre) !important;
+    border: 0 !important;
+    box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   }
   .aihf-root .aihf-cta, .aihf-root .aihf-cta *, .aihf-root .aihf-cta svg {
     color: #FFFFFF !important;
@@ -285,7 +295,26 @@ const AIHF_STYLE = `
     stroke: #FFFFFF !important;
     opacity: 1 !important;
   }
-  .aihf-root .aihf-cta:hover { background: #1F1F1F !important; }
+  .aihf-root .aihf-cta:hover { background: var(--jj-emerald-ombre-hover) !important; background-image: var(--jj-emerald-ombre-hover) !important; }
+  .aihf-root .jj-surface-emerald,
+  .aihf-root .jj-pill-emerald-metallic,
+  .aihf-root .jj-emerald-metallic {
+    background: var(--jj-emerald-ombre) !important;
+    background-image: var(--jj-emerald-ombre) !important;
+    border: 0 !important;
+  }
+  .aihf-root .jj-surface-emerald,
+  .aihf-root .jj-surface-emerald *,
+  .aihf-root .jj-pill-emerald-metallic,
+  .aihf-root .jj-pill-emerald-metallic *,
+  .aihf-root .jj-emerald-metallic,
+  .aihf-root .jj-emerald-metallic *,
+  .aihf-root .jj-surface-emerald svg,
+  .aihf-root .jj-surface-emerald svg * {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+  }
   .aihf-root .aihf-input, .aihf-root input, .aihf-root [data-searchable-trigger] {
     background: #FDFBF7 !important;
     border: 1px solid rgba(184,149,85,0.55) !important;
@@ -868,11 +897,10 @@ const Quiz = () => {
   // Intro screen before starting — teal/cyan dark ombre (matches Property Measurement language)
   if (!started && currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
     return (
-      <ToolAnimatedFrame theme={toolThemes.teal}>
       <section
         data-allow-dark-cta
         data-no-contrast-guard
-        className="aihf-root min-h-screen flex flex-col"
+        className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col"
         style={{ background: "#FDFBF7" }}
       >
         <style>{AIHF_STYLE}</style>
@@ -898,19 +926,19 @@ const Quiz = () => {
         </div>
 
 
-        <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="flex-1 flex items-center justify-center px-4 py-6">
           <AIShellCard
             as="div"
             padding="lg"
-            className="w-full max-w-2xl text-center border border-[#B89555]/40 shadow-sm"
+            className="w-full max-w-2xl text-center border border-[#B89555]/60 shadow-[0_0_18px_rgba(184,149,85,0.14),0_18px_55px_rgba(0,0,0,0.12)]"
           >
             {/* Centered emerald identity tile */}
             <div
               data-surface="emerald"
               data-emerald-ok="icon"
-              className="jj-surface-emerald mx-auto mb-6 w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg"
+              className="jj-surface-emerald mx-auto mb-4 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
             >
-              <Wand2 className="w-10 h-10" />
+              <Wand2 className="w-8 h-8" />
             </div>
 
             {/* Label pill */}
@@ -931,7 +959,7 @@ const Quiz = () => {
             </p>
 
             {/* Vertical tick list */}
-            <ul className="text-left max-w-md mx-auto space-y-3 mb-8">
+            <ul className="text-left max-w-md mx-auto space-y-2.5 mb-6">
               {[
                 { label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
                 { label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
@@ -939,7 +967,7 @@ const Quiz = () => {
               ].map((f) => (
                 <li
                   key={f.label}
-                  className="flex items-start gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl"
+                  className="flex items-start gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/35 rounded-xl"
                 >
                   <div
                     data-surface="emerald"
@@ -957,7 +985,7 @@ const Quiz = () => {
             </ul>
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-6 text-[#1A1A1A]/70">
+            <div className="flex flex-wrap items-center justify-center gap-5 text-sm mb-5 text-[#1A1A1A]/70">
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
@@ -975,18 +1003,11 @@ const Quiz = () => {
             {/* Primary CTA */}
             <Button
               onClick={() => setStarted(true)}
-              data-surface="navy"
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="allow-white surface-navy font-semibold px-10 py-6 text-base rounded-xl"
-              style={{
-                background: "#0A0A0A",
-                border: "1px solid rgba(184,149,85,0.55)",
-                color: "#FFFFFF",
-              }}
+              data-surface="emerald"
+              className="aihf-cta jj-pill-emerald-metallic font-semibold px-10 py-6 text-base rounded-xl"
             >
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>Find My Property</span>
-              <ArrowUpRight className="w-5 h-5 ml-2 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span>Find My Property</span>
+              <ArrowUpRight className="w-5 h-5 ml-2" />
             </Button>
 
             <p className="text-xs mt-5 text-[#1A1A1A]/60">
@@ -995,7 +1016,6 @@ const Quiz = () => {
           </AIShellCard>
         </div>
       </section>
-      </ToolAnimatedFrame>
     );
   }
 
@@ -1102,11 +1122,7 @@ const Quiz = () => {
               <Button
                 onClick={handleSubmitForm}
                 disabled={!isFormValid() || isSubmitting}
-                className={`aihf-cta w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
-                  needsPayment
-                    ? "bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] border border-[#B89555]/60"
-                    : "bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] border border-[#B89555]/60"
-                }`}
+                className="aihf-cta jj-pill-emerald-metallic w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
@@ -1152,8 +1168,7 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <ToolAnimatedFrame theme={toolThemes.teal}>
-    <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
       {/* Header */}
       <div className="border-b border-[#B89555]/25 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
@@ -1171,10 +1186,10 @@ const Quiz = () => {
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
-          {/* Gold gradient progress bar */}
+          {/* Emerald progress bar */}
           <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div 
-              className="h-full rounded-full bg-[#B89555] transition-all duration-500 ease-out"
+              className="h-full rounded-full jj-surface-emerald transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -1183,10 +1198,10 @@ const Quiz = () => {
 
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
-        <div className="w-full max-w-4xl flex gap-8 justify-center">
+      <div className="flex-1 flex items-center justify-center px-4 py-6 md:py-8">
+        <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-6 items-start">
           {/* Main Question Area */}
-          <div className="flex-1 max-w-2xl mx-auto">
+          <div className="w-full max-w-2xl mx-auto">
             <h2
               className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
             >
@@ -1234,17 +1249,17 @@ const Quiz = () => {
                     onClick={() => handleAnswer(option.value)}
                     aria-pressed={isSelected}
                     data-no-contrast-guard
-                    className={`aihf-option relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
+                    className={`aihf-option relative p-4 md:p-5 rounded-xl border transition-all text-left group ${
                       isSelected
-                        ? "border-[#B89555] bg-[#EFE6D6]"
+                        ? "jj-surface-emerald border-transparent"
                         : "border-[#B89555]/45 bg-[#FDFBF7] hover:border-[#B89555]/85"
                     }`}
                   >
                     {currentQuestion.type === "multiple" && (
                       <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        isSelected ? "border-[#B89555] bg-[#B89555]" : "border-[#B89555]/45"
+                        isSelected ? "jj-surface-emerald border-transparent" : "border-[#B89555]/45"
                       }`}>
-                        {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
+                        {isSelected && <CheckCircle2 className="w-3 h-3" />}
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
@@ -1280,8 +1295,8 @@ const Quiz = () => {
           </div>
 
           {/* Preferences Summary Sidebar (desktop only) */}
-          <div className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-[color:var(--emerald-1)]/30 bg-[#F7F2EA] overflow-hidden shadow-[0_4px_18px_rgba(6,78,59,0.08)]">
+          <div className="hidden lg:block w-full shrink-0">
+            <div className="rounded-2xl border border-[#B89555]/45 bg-[#F7F2EA] overflow-hidden shadow-[0_8px_24px_rgba(6,78,59,0.08)]">
               <div className="jj-surface-emerald px-5 py-3 flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 <h3 className="text-sm font-bold">Your Preferences</h3>
@@ -1312,7 +1327,6 @@ const Quiz = () => {
         </div>
       </div>
     </section>
-    </ToolAnimatedFrame>
   );
 };
 
