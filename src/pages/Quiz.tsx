@@ -1126,11 +1126,7 @@ const Quiz = () => {
               <Button
                 onClick={handleSubmitForm}
                 disabled={!isFormValid() || isSubmitting}
-                className={`aihf-cta w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
-                  needsPayment
-                    ? "bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] border border-[#B89555]/60"
-                    : "bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] border border-[#B89555]/60"
-                }`}
+                className="aihf-cta jj-pill-emerald-metallic w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
@@ -1195,10 +1191,10 @@ const Quiz = () => {
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
-          {/* Gold gradient progress bar */}
+          {/* Emerald progress bar */}
           <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div 
-              className="h-full rounded-full bg-[#B89555] transition-all duration-500 ease-out"
+              className="h-full rounded-full jj-surface-emerald transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
