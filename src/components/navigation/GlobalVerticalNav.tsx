@@ -609,7 +609,7 @@ export default function GlobalVerticalNav() {
   }, [isDeveloperMode, isOwner, showBrokerSurfaces, showInvestorSurfaces]);
 
   // Collapsible sections state — accordion: only one open at a time
-  const [openSection, setOpenSection] = useState<SectionKey | null>('MY ACCOUNT');
+  const [openSection, setOpenSection] = useState<SectionKey | null>(null);
 
   // Data hooks for rich flyouts
   const { data: developers } = useDevelopers(false);
