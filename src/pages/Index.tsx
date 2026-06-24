@@ -378,11 +378,15 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* EXPLORE OUR GUIDES & REPORTS */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
-          <Suspense fallback={<SectionLoader />}>
-            <HomepageBookMarquee />
-          </Suspense>
+          <div className="jj-premium-shell">
+            <span aria-hidden className="jj-premium-shell__c-bl" />
+            <span aria-hidden className="jj-premium-shell__c-br" />
+            <Suspense fallback={<SectionLoader />}>
+              <HomepageBookMarquee />
+            </Suspense>
+          </div>
         </LazyVisible>
       </PremiumSectionCard>
 
@@ -403,9 +407,13 @@ const Index = () => {
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
         <LazyVisible minHeight={400}>
-          <Suspense fallback={<SectionLoader />}>
-            <AIComparisonWidget />
-          </Suspense>
+          <div className="jj-premium-shell">
+            <span aria-hidden className="jj-premium-shell__c-bl" />
+            <span aria-hidden className="jj-premium-shell__c-br" />
+            <Suspense fallback={<SectionLoader />}>
+              <AIComparisonWidget />
+            </Suspense>
+          </div>
         </LazyVisible>
       </PremiumSectionCard>
 
