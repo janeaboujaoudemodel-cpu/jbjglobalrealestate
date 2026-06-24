@@ -7686,14 +7686,17 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] {
 html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child {
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 60%, #F2EBDC 100%) !important;
 }
-/* Kill gold logo-strip hairlines */
+/* Restore premium gold hairlines on the sidebar logo strip (right edge + bottom). */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::before,
 html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::after {
-  background: linear-gradient(180deg, transparent 0%, rgba(4,120,87,0.30) 50%, transparent 100%) !important;
+  background: linear-gradient(180deg, transparent 0%, #B89555 50%, transparent 100%) !important;
 }
-/* Kill gold left-border on expanded subitem column */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] > div:first-child::after {
+  background: linear-gradient(90deg, transparent 0%, #B89555 50%, transparent 100%) !important;
+}
+/* Gold left-border on expanded subitem column */
 html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l {
-  border-left-color: rgba(4, 120, 87, 0.18) !important;
+  border-left-color: rgba(184, 149, 85, 0.45) !important;
 }
 
 /* ── Section header — IDLE (no [data-active]) ─────────────
