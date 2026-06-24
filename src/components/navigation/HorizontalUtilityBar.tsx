@@ -188,7 +188,10 @@ export default function HorizontalUtilityBar() {
               className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
               aria-label="Square feet"
-            ><span>sq ft</span></button>
+            >
+              <span aria-hidden="true" className="jj-sqtoggle-sweep" />
+              <span>sq ft</span>
+            </button>
             <span aria-hidden className="w-px h-4 bg-white/25" />
             <button
               data-no-contrast-guard
@@ -200,7 +203,10 @@ export default function HorizontalUtilityBar() {
               className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
               aria-label="Square meters"
-            ><span>sq m</span></button>
+            >
+              <span aria-hidden="true" className="jj-sqtoggle-sweep" />
+              <span>sq m</span>
+            </button>
 
           </div>
 

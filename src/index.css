@@ -13988,44 +13988,81 @@ html body footer[data-jj-minimal-footer] a:hover * {
   opacity: 0.9 !important;
 }
 
-/* ─── ACTIVE sq ft / sq m — continuous metallic shine sweep ─── */
-html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::after {
+/* ─── ACTIVE sq ft / sq m — unmistakable continuous metallic animation ───
+   No pause/blank phase: the selected segment always shows animated diagonal
+   metallic bands, plus a fast bright sweep crossing the pill. */
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:hover,
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]:focus-visible {
+  background-image:
+    repeating-linear-gradient(
+      112deg,
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.00) 13%,
+      rgba(255,255,255,0.22) 17%,
+      rgba(255,255,255,0.95) 20%,
+      rgba(255,255,255,0.28) 23%,
+      rgba(255,255,255,0.00) 29%,
+      rgba(255,255,255,0.00) 44%
+    ),
+    linear-gradient(135deg, #0A6B53 0%, #047857 44%, #031f16 100%) !important;
+  background-size: 180% 100%, 100% 100% !important;
+  background-position: 0 0, 0 0 !important;
+  animation: jj-sqtoggle-metallic-ribbons 0.95s linear infinite !important;
+}
+
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::after,
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
   content: "" !important;
   position: absolute !important;
-  top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+  inset: -18% auto -18% -68% !important;
+  width: 78% !important;
   pointer-events: none !important;
   z-index: 3 !important;
-  background-image: linear-gradient(
-    110deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0) 20%,
-    rgba(255,255,255,0.35) 40%,
-    rgba(255,255,255,1) 50%,
-    rgba(255,255,255,0.35) 60%,
-    rgba(255,255,255,0) 80%,
-    rgba(255,255,255,0) 100%
-  ) !important;
-  background-size: 200% 100% !important;
-  background-repeat: no-repeat !important;
-  background-position: 150% 0 !important;
-  mix-blend-mode: normal !important;
-  animation: jj-sqtoggle-metallic-shine 2.2s linear infinite !important;
-  border-radius: inherit !important;
-  opacity: 1 !important;
-  filter: blur(0.5px) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(
+      112deg,
+      rgba(255,255,255,0.00) 0%,
+      rgba(255,255,255,0.38) 28%,
+      rgba(255,255,255,1.00) 47%,
+      rgba(184,149,85,0.60) 51%,
+      rgba(255,255,255,0.95) 58%,
+      rgba(255,255,255,0.00) 100%
+    ) !important;
+  transform: translateX(0) skewX(-18deg) !important;
+  opacity: 0.92 !important;
+  filter: blur(0.2px) drop-shadow(0 0 7px rgba(255,255,255,0.65)) !important;
+  animation: jj-sqtoggle-metallic-shine 0.95s linear infinite !important;
 }
-html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] > span {
+
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] .jj-sqtoggle-sweep {
+  display: none !important;
+}
+
+html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] > span:not(.jj-sqtoggle-sweep) {
   position: relative !important;
   z-index: 4 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.42) !important;
 }
+
+@keyframes jj-sqtoggle-metallic-ribbons {
+  from { background-position: 0% 0, 0 0; }
+  to   { background-position: -180% 0, 0 0; }
+}
+
 @keyframes jj-sqtoggle-metallic-shine {
-  0%   { background-position: 150% 0; }
-  45%  { background-position: -50% 0; }
-  100% { background-position: -50% 0; }
+  from { transform: translateX(0) skewX(-18deg); }
+  to   { transform: translateX(238%) skewX(-18deg); }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::after {
-    animation: none !important;
+  html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"],
+  html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"]::after,
+  html body [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
+    animation-duration: 2.4s !important;
   }
 }
 
