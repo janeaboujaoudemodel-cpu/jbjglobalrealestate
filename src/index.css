@@ -14493,14 +14493,32 @@ html body #root main.jj-main-shell [data-content-gutter="1"] .jj-band,
 html body #root main.jj-main-shell [data-content-gutter="1"] > .jj-project-band,
 html body #root main.jj-main-shell [data-content-gutter="1"] .jj-project-band,
 html body #root main.jj-main-shell [data-content-gutter="1"] > .jj-project-hero,
-html body #root main.jj-main-shell [data-content-gutter="1"] .jj-project-hero,
-html body #root main.jj-main-shell [data-content-gutter="1"] .jj-fullbleed-band {
+html body #root main.jj-main-shell [data-content-gutter="1"] .jj-project-hero {
   margin-left: 0 !important;
   margin-right: 0 !important;
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
+
+/* Full-bleed bands: escape the main-shell sidebar offset and span the entire
+   viewport edge-to-edge. The inner content (ContentTrack) re-centers itself.
+   Parent is right-aligned to viewport (sidebar offsets it on the left only),
+   so margin-left = -(100vw - 100%) shifts the element to viewport x=0 and
+   width:100vw extends it to the right viewport edge. */
+html body #root main.jj-main-shell [data-content-gutter="1"] .jj-fullbleed-band,
+html body #root main.jj-main-shell .jj-fullbleed-band {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(-1 * (100vw - 100%)) !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+
 
 html body #root main.jj-main-shell :is(.jj-global-container, .jj-content-track, .jj-project-shell, .jj-track) {
   width: 100% !important;
