@@ -83,6 +83,14 @@ const canonicalDeveloperKey = (name: string) => {
 };
 const FORBIDDEN_DEVELOPER_NAME = /\b(bayut|dubizzle|property\s*finder)\b/i;
 
+// Short label — drops generic legal/suffix words so "Damac Properties" → "Damac",
+// "Arada Properties" → "Arada", "Ellington Properties" → "Ellington", etc.
+const DEV_SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
+const shortDeveloperName = (raw: string) => {
+  const cleaned = (raw || '').replace(DEV_SUFFIX, '').replace(/\s{2,}/g, ' ').trim();
+  return cleaned || (raw || '').split(/\s+/)[0] || raw || '';
+};
+
 
 interface DeveloperEntry {
   name: string;
