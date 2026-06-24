@@ -8,11 +8,17 @@ import { Link } from "react-router-dom";
 import { Globe, ArrowRight } from "lucide-react";
 import ContentTrack from "@/components/layout/ContentTrack";
 
-const microStats = [
-  { v: "0%", l: "Tax" },
-  { v: "10Y", l: "Golden Visa" },
-  { v: "#1", l: "Safety" },
-  { v: "200+", l: "Nationalities" },
+type Stat = {
+  v: string;
+  labels: string[];
+  effect?: "shimmer" | "pulse" | "plain";
+};
+
+const microStats: Stat[] = [
+  { v: "0%", labels: ["Income Tax", "Capital Gains", "Inheritance Tax"], effect: "shimmer" },
+  { v: "10Y", labels: ["Golden Visa", "Full Residency", "Family Sponsored"], effect: "pulse" },
+  { v: "#1", labels: ["Safest City", "Global Ranking", "Mercer Index"], effect: "shimmer" },
+  { v: "200+", labels: ["Nationalities", "Global Community", "Open Borders"], effect: "pulse" },
 ];
 
 const OverseasInvestorsStrip = () => {
