@@ -743,20 +743,17 @@ export default function GlobalVerticalNav() {
     return { highlightItems: highlights, sectionGroups: sections };
   }, [shouldShowItem]);
 
-  // Close mega menu and auto-expand active section on route change.
+  // Close mega menu on route change. Only auto-open a section if the
+  // current route matches a child item — never force "MY ACCOUNT" open
+  // by default on home. The user must click to expand.
   useEffect(() => {
     closeMegaMenu();
     setMobileOpen(false);
-    let matchedActiveSection = false;
     for (const [section, items] of Object.entries(sectionGroups)) {
       if (items.some(item => isRouteActive(item.href))) {
         setOpenSection(section as SectionKey);
-        matchedActiveSection = true;
-        break;
+        return;
       }
-    }
-    if (!matchedActiveSection && location.pathname === '/') {
-      setOpenSection('MY ACCOUNT');
     }
   }, [location.pathname, closeMegaMenu, sectionGroups]);
 
