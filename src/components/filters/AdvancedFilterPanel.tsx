@@ -61,6 +61,19 @@ const BEDROOM_OPTIONS = [
 // UAE-only emirates
 const UAE_EMIRATES = EMIRATES_OPTIONS.filter(e => e.country === 'UAE');
 
+// Premium UAE developers — surfaced first in the By Developer dropdown.
+const PREMIUM_UAE_DEVELOPERS = [
+  'emaar', 'damac', 'sobha', 'nakheel', 'aldar', 'meraas', 'dubai properties',
+  'select group', 'majid al futtaim', 'ellington', 'omniyat', 'bloom holding',
+  'mag', 'azizi', 'dar al arkan', 'binghatti', 'arada', 'object 1',
+];
+const premiumRank = (name: string) => {
+  const n = name.toLowerCase();
+  const idx = PREMIUM_UAE_DEVELOPERS.findIndex((p) => n.includes(p));
+  return idx === -1 ? 999 : idx;
+};
+
+
 interface DeveloperEntry {
   name: string;
   logo_url: string | null;
