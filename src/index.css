@@ -12083,8 +12083,8 @@ html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="tr
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]) *,
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]) * {
+html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]) *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -12099,8 +12099,8 @@ html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="tr
   transform: none !important;
   box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]):hover *,
-html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover * {
+html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;

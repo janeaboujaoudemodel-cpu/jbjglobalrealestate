@@ -53,20 +53,24 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
   }
 
   return (
-    <div className="px-2 pt-2 pb-1">
+    <div className="px-2 pt-2 pb-3">
       <Link
         to={cfg.href}
         data-no-contrast-guard
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}
         aria-current={active ? "page" : undefined}
-        className="group flex items-center gap-1.5 px-2 h-9 rounded-lg transition-all"
+        className="group flex items-center gap-2 px-2 h-9 rounded-lg transition-all"
       >
-        <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={2.2} />
+        <span data-emerald-icon-surface className="w-5 h-5 rounded-md flex items-center justify-center shrink-0">
+          <Icon className="w-3 h-3" strokeWidth={2.4} />
+        </span>
         <span className="flex-1 text-[10.5px] font-bold tracking-[0.04em] uppercase whitespace-nowrap">
           {cfg.label}
         </span>
-        <ArrowRight className="w-3 h-3 shrink-0" strokeWidth={2.5} />
+        <span data-emerald-icon-surface className="w-5 h-5 rounded-md flex items-center justify-center shrink-0">
+          <ArrowRight className="w-3 h-3" strokeWidth={2.6} />
+        </span>
       </Link>
     </div>
   );

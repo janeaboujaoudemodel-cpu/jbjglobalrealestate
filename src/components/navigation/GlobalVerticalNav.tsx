@@ -1194,7 +1194,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     aria-current={contactActive ? 'page' : undefined}
                     className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
                   >
-                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} />
+                    <span data-emerald-icon-surface className="w-5 h-5 rounded-md flex items-center justify-center">
+                      <Headphones className="w-3 h-3" strokeWidth={2.2} />
+                    </span>
                     <span>Contact</span>
                   </Link>
                   <Link
@@ -1205,7 +1207,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     aria-current={supportActive ? 'page' : undefined}
                     className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
                   >
-                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} />
+                    <span data-emerald-icon-surface className="w-5 h-5 rounded-md flex items-center justify-center">
+                      <Ticket className="w-3 h-3" strokeWidth={2.2} />
+                    </span>
                     <span>Support</span>
                   </Link>
                 </>
