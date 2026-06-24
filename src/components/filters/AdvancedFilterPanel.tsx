@@ -73,6 +73,15 @@ const premiumRank = (name: string) => {
   const idx = PREMIUM_UAE_DEVELOPERS.findIndex((p) => n.includes(p));
   return idx === -1 ? 999 : idx;
 };
+const canonicalDeveloperKey = (name: string) => {
+  const n = name.toLowerCase();
+  const premium = PREMIUM_UAE_DEVELOPERS.find((p) => n.includes(p));
+  if (premium) return premium.replace(/[^a-z0-9]/g, '');
+  return n
+    .replace(/\b(properties|property|realty|real estate|developers?|developments?|holding|holdings|group|llc|pjsc|psc)\b/g, '')
+    .replace(/[^a-z0-9]/g, '');
+};
+const FORBIDDEN_DEVELOPER_NAME = /\b(bayut|dubizzle|property\s*finder)\b/i;
 
 
 interface DeveloperEntry {
@@ -117,11 +126,9 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           for (const d of data) {
             const name = String(d.name || '').trim();
             if (!name) continue;
-            const key = name
-              .toLowerCase()
-              .replace(/\b(properties|property|realty|real estate|developers?|developments?|holding|holdings|group|llc|pjsc|psc)\b/g, '')
-              .replace(/[^a-z0-9]/g, '');
             const logo = getDeveloperLogoUrl(d);
+            if (!logo || FORBIDDEN_DEVELOPER_NAME.test(name)) continue;
+            const key = canonicalDeveloperKey(name);
             const existing = byName.get(key);
             if (!existing || (!existing.logo_url && logo) || premiumRank(name) < premiumRank(existing.name)) {
               byName.set(key, { name, slug: d.slug, logo_url: logo });
