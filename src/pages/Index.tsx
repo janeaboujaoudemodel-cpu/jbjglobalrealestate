@@ -139,6 +139,16 @@ const Index = () => {
     return [...baseHeroActions, ...extras];
   }, [mode, hasMadeInitialSelection]);
 
+  // Mark <body> while on homepage so the global alignment-normalization
+  // CSS rule (in src/index.css) skips this route. All other pages inherit
+  // the canonical container width automatically.
+  useEffect(() => {
+    document.body.setAttribute("data-homepage", "true");
+    return () => {
+      document.body.removeAttribute("data-homepage");
+    };
+  }, []);
+
 
 
 
