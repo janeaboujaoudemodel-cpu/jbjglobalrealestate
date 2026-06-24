@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SEOHead } from '@/components/SEOHead';
+import { AIShellCard } from '@/components/ui/ai-shell-card';
 import {
   allTools,
   categoryLabels,
