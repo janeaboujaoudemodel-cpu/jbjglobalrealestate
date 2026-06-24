@@ -330,7 +330,6 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
         </a>
       </div>
 
-      <div>
       <AIShellCard padding="lg">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-[#EFE6D6] border border-[#B89555]/45 mb-8">
