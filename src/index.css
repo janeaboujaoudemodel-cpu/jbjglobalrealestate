@@ -1065,22 +1065,157 @@ All colors MUST be HSL.
    Used by .jj-page, .jj-band, GlobalFilterBar, and any wrapper that
    needs to respect the fixed left nav AND the right Contact-Us rail. */
 :root {
-  --page-px-mobile: 16px;
-  --page-px-tablet: 24px;
-  --page-px-desktop: 32px;
-  --page-max-w: 1440px;
-  --rail-safe-right: 56px;        /* clearance for fixed right Contact-Us rail */
-  --section-gap-y: clamp(32px, 5vw, 64px);
+  --shell-px-mobile: 16px;
+  --shell-px-tablet: 24px;
+  --shell-px-desktop: 32px;
+  --shell-px-xl: 40px;
+  --shell-max-w: 1760px;
+  --shell-max-w-wide: 1760px;
+  --shell-max-w-narrow: 1040px;
+  --shell-rail-safe: 56px;        /* clearance for fixed right Contact-Us rail */
+  --section-gap-y: clamp(40px, 5vw, 72px);
+  --hero-min-h: clamp(420px, 70vh, 760px);
+  --page-px-mobile: var(--shell-px-mobile);
+  --page-px-tablet: var(--shell-px-tablet);
+  --page-px-desktop: var(--shell-px-desktop);
+  --page-max-w: var(--shell-max-w);
+  --rail-safe-right: var(--shell-rail-safe);
   /* Global content gutter — must mirror MainLayout <main>'s wrapper px-4 sm:px-6 lg:px-8.
      Full-bleed bands escape this gutter via negative margins so they stay edge-to-edge
      INSIDE <main> (post-sidebar) but never extend under the fixed vertical sidebar. */
-  --jj-content-gutter: 16px;
+  --jj-content-gutter: 0px;
 }
 @media (min-width: 640px) {
-  :root { --jj-content-gutter: 24px; }
+  :root { --jj-content-gutter: 0px; }
 }
 @media (min-width: 1024px) {
-  :root { --jj-content-gutter: 32px; }
+  :root { --jj-content-gutter: 0px; }
+}
+
+/* Canonical global layout primitives — the only approved width system. */
+.jj-page-shell {
+  width: 100%;
+  min-height: 100%;
+  background: #FDFBF7;
+}
+
+.jj-section-strap,
+.jj-band,
+.jj-fullbleed-band,
+.jj-project-band {
+  width: 100%;
+  max-width: none;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box;
+}
+
+.jj-section-strap {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--section-gap-y);
+}
+
+.jj-section-strap--flush {
+  padding-block: 0;
+}
+
+.jj-section-strap--page { background: #FDFBF7; }
+.jj-section-strap--surface { background: #F7F2EA; }
+.jj-section-strap--raised { background: #EFE6D6; }
+.jj-section-strap--emerald { background: var(--jj-emerald-ombre, linear-gradient(135deg, #042c1c 0%, #064E3B 55%, #0A0A0A 100%)); }
+.jj-section-strap--ink { background: #0A0A0A; }
+.jj-section-strap--transparent { background: transparent; }
+
+.jj-content-track,
+.jj-project-shell,
+.jj-track {
+  width: 100%;
+  max-width: var(--shell-max-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--shell-px-mobile) !important;
+  padding-right: var(--shell-px-mobile) !important;
+  box-sizing: border-box;
+}
+
+.jj-content-track--wide { max-width: var(--shell-max-w-wide) !important; }
+.jj-content-track--narrow { max-width: var(--shell-max-w-narrow) !important; }
+.jj-content-track--full { max-width: none !important; }
+
+@media (min-width: 768px) {
+  .jj-content-track,
+  .jj-project-shell,
+  .jj-track {
+    padding-left: var(--shell-px-tablet) !important;
+    padding-right: var(--shell-px-tablet) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .jj-content-track,
+  .jj-project-shell,
+  .jj-track {
+    padding-left: var(--shell-px-desktop) !important;
+    padding-right: calc(var(--shell-px-desktop) + var(--shell-rail-safe)) !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .jj-content-track,
+  .jj-project-shell,
+  .jj-track {
+    padding-left: var(--shell-px-xl) !important;
+    padding-right: calc(var(--shell-px-xl) + var(--shell-rail-safe)) !important;
+  }
+}
+
+.jj-hero-frame {
+  position: relative;
+  width: 100%;
+  min-height: var(--hero-min-h);
+  overflow: hidden;
+  background: #0A0A0A;
+  display: flex;
+  align-items: stretch;
+}
+
+.jj-hero-frame__media,
+.jj-hero-frame__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.jj-hero-frame__media :is(img, video, picture),
+.jj-hero-frame__media > :is(img, video) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jj-hero-frame__overlay {
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0.38), rgba(0,0,0,0.20));
+  z-index: 1;
+}
+
+.jj-hero-frame__content {
+  position: relative;
+  z-index: 2;
+}
+
+.jj-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 2vw, 28px);
+  align-items: stretch;
+}
+@media (min-width: 640px) {
+  .jj-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .jj-card-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .jj-card-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 /* Bands inside the gutter wrapper break out to the inner viewport edges
