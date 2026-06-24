@@ -59,11 +59,15 @@ export const PremiumSectionCard = forwardRef<HTMLElement, Props>(
         {...rest}
       >
         <div className={inner} data-layout-width={width}>
-          <div
-            className={`jj-content-track ${toneClass} ${PADDING[padding]} ${className}`}
-          >
-            {children}
-          </div>
+          {width === "full" ? (
+            <div className={`w-full ${toneClass} ${PADDING[padding]} ${className}`}>
+              {children}
+            </div>
+          ) : (
+            <div className={`jj-content-track ${toneClass} ${PADDING[padding]} ${className}`}>
+              {children}
+            </div>
+          )}
         </div>
       </section>
     );
