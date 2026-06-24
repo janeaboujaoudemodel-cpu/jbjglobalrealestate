@@ -1,8 +1,8 @@
 /**
- * OverseasInvestorsStrip — full-bleed navy band on the homepage.
- * Painted with the approved navy accent (#0A0A0A / hover #1F1F1F) — same
- * blue used on the "Get Verified / Join Benzini Community" banner.
- * White foreground, white/75 secondary, white/15 hairlines.
+ * OverseasInvestorsStrip — premium full-bleed ink band with gold detailing.
+ * Deep ink gradient base, dual gold hairlines, faint radial glow, refined
+ * typography hierarchy and gold-tinted micro-stat dividers. White foreground
+ * preserved by the global allow-white guard.
  */
 import { Link } from "react-router-dom";
 import { Globe, ArrowRight } from "lucide-react";
@@ -21,62 +21,87 @@ const OverseasInvestorsStrip = () => {
       data-surface="dark"
       data-on-dark
       data-no-contrast-guard
-      className="allow-white w-full bg-[#0A0A0A] border-y border-[#B89555]/40"
+      className="allow-white relative w-full overflow-hidden"
+      style={{
+        background:
+          "radial-gradient(900px 320px at 12% 50%, rgba(184,149,85,0.18), transparent 60%), radial-gradient(700px 280px at 88% 50%, rgba(184,149,85,0.12), transparent 65%), linear-gradient(180deg, #0B0B0B 0%, #141414 100%)",
+      }}
     >
+      {/* Double gold hairlines top/bottom */}
+      <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-[#B89555]/55" />
+      <span aria-hidden className="absolute inset-x-0 top-[3px] h-px bg-[#B89555]/20" />
+      <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-[#B89555]/55" />
+      <span aria-hidden className="absolute inset-x-0 bottom-[3px] h-px bg-[#B89555]/20" />
+
       <Link
         to="/overseas-investors"
         aria-label="Invest in Dubai from anywhere in the world — learn more"
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="overseas-investors-strip-link allow-white group block py-10 md:py-14 lg:py-16 text-white"
+        className="overseas-investors-strip-link allow-white group block py-12 md:py-16 lg:py-20 text-white relative"
       >
-        <ContentTrack className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 md:gap-8">
+        <ContentTrack className="flex flex-wrap xl:flex-nowrap items-center justify-between gap-6 md:gap-10">
 
-        {/* Left: globe + headline — full width below xl so it never gets crushed into one-char-per-line */}
-        <span className="allow-white flex items-center gap-3 min-w-0 basis-full xl:basis-auto xl:flex-1">
-          <Globe className="w-6 h-6 md:w-7 md:h-7 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-          <span
-            className="allow-white text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-tight tracking-tight break-normal"
-            style={{ color: "#FFFFFF" }}
-          >
-            Invest in Dubai from anywhere in the world
-          </span>
-        </span>
-
-        {/* Center micro-stats */}
-        <span className="allow-white flex items-center flex-wrap gap-x-4 gap-y-2 md:gap-x-6 divide-x divide-white/15 min-w-0">
-          {microStats.map((s, i) => (
+          {/* Left: globe medallion + headline */}
+          <span className="allow-white flex items-center gap-4 min-w-0 basis-full xl:basis-auto xl:flex-1">
             <span
-              key={s.l}
-              className={`allow-white flex items-baseline gap-1.5 whitespace-nowrap ${i === 0 ? "" : "pl-4 md:pl-6"}`}
+              aria-hidden
+              className="allow-white relative shrink-0 inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-[#B89555]/55 bg-gradient-to-b from-white/[0.06] to-transparent shadow-[0_4px_18px_rgba(184,149,85,0.18)]"
             >
+              <Globe className="w-6 h-6 md:w-7 md:h-7 allow-white" style={{ color: "#B89555", stroke: "#B89555" }} />
+            </span>
+            <span className="flex flex-col min-w-0">
               <span
-                className="allow-white text-lg sm:text-xl md:text-2xl font-bold tabular-nums"
-                style={{ color: "#FFFFFF" }}
+                className="allow-white text-[10px] md:text-[11px] uppercase tracking-[0.22em] mb-1"
+                style={{ color: "#B89555" }}
               >
-                {s.v}
+                Global Investors
               </span>
               <span
-                className="allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.14em]"
-                style={{ color: "rgba(255,255,255,0.75)" }}
+                className="allow-white text-xl sm:text-2xl md:text-3xl lg:text-[2rem] font-bold leading-[1.15] tracking-tight"
+                style={{ color: "#FFFFFF", fontFamily: "Inter, system-ui, sans-serif" }}
               >
-                {s.l}
+                Invest in Dubai from{" "}
+                <span style={{ color: "#B89555" }}>anywhere in the world</span>
               </span>
             </span>
-          ))}
-        </span>
+          </span>
 
-        {/* Right: CTA */}
-        <span
-          data-no-contrast-guard
-          className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/65 text-sm md:text-base font-bold shrink-0 whitespace-nowrap shadow-[0_6px_18px_-6px_rgba(0,0,0,0.45)] transition-all group-hover:bg-white/10 group-hover:border-white/85 group-hover:-translate-y-0.5"
-          style={{ color: "#FFFFFF" }}
-        >
-          <span className="allow-white" style={{ color: "#FFFFFF" }}>Learn more</span>
-          <ArrowRight className="allow-white w-4 h-4 transition-transform group-hover:translate-x-0.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-        </span>
+          {/* Center micro-stats with gold dividers */}
+          <span className="allow-white flex items-center flex-wrap gap-x-5 gap-y-2 md:gap-x-7 min-w-0">
+            {microStats.map((s, i) => (
+              <span key={s.l} className="allow-white flex items-center gap-x-5 md:gap-x-7">
+                {i > 0 && (
+                  <span aria-hidden className="hidden sm:inline-block h-8 w-px bg-gradient-to-b from-transparent via-[#B89555]/45 to-transparent" />
+                )}
+                <span className="allow-white flex flex-col items-start leading-tight whitespace-nowrap">
+                  <span
+                    className="allow-white text-xl sm:text-2xl md:text-[1.75rem] font-bold tabular-nums"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    {s.v}
+                  </span>
+                  <span
+                    className="allow-white text-[10px] sm:text-[11px] uppercase tracking-[0.18em] mt-0.5"
+                    style={{ color: "rgba(255,255,255,0.6)" }}
+                  >
+                    {s.l}
+                  </span>
+                </span>
+              </span>
+            ))}
+          </span>
 
+          {/* Right: premium CTA */}
+          <span
+            data-no-contrast-guard
+            className="allow-white inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#B89555]/70 bg-gradient-to-b from-[#B89555]/15 to-transparent text-sm md:text-base font-semibold tracking-wide shrink-0 whitespace-nowrap shadow-[0_8px_24px_-8px_rgba(184,149,85,0.5)] transition-all duration-300 group-hover:bg-[#B89555]/25 group-hover:border-[#B89555] group-hover:-translate-y-0.5"
+            style={{ color: "#FFFFFF" }}
+          >
+            <span className="allow-white" style={{ color: "#FFFFFF" }}>Discover the Opportunity</span>
+            <ArrowRight className="allow-white w-4 h-4 transition-transform group-hover:translate-x-1" style={{ color: "#B89555", stroke: "#B89555" }} />
+          </span>
 
         </ContentTrack>
       </Link>
