@@ -14527,9 +14527,9 @@ html body #root main.jj-main-shell .jj-fullbleed-band {
 @media (min-width: 640px) {
   html body #root main.jj-main-shell [data-content-gutter="1"] .jj-fullbleed-band,
   html body #root main.jj-main-shell .jj-fullbleed-band {
-    width: calc(100vw - var(--jj-content-gutter-l, 80px)) !important;
-    max-width: calc(100vw - var(--jj-content-gutter-l, 80px)) !important;
-    margin-left: calc(-1 * (100vw - 100%) + var(--jj-content-gutter-l, 80px)) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
     margin-right: 0 !important;
   }
 }
