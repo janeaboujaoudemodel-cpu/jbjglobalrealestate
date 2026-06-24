@@ -247,7 +247,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "mt-2 rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
   const optionRow =
     "flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA]";
-  const selectedBox = "jj-surface-emerald border-0";
+  const selectedBox = "jj-chip-emerald border-0";
 
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
