@@ -731,9 +731,9 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           </button>
           <button
             aria-label="Save to favourites"
-            className="jj-surface-emerald p-2.5 rounded-full border border-[color:var(--emerald-1)] hover:brightness-110 transition-all"
+            className="jj-chip-emerald p-2.5 rounded-full inline-flex items-center justify-center"
           >
-            <Heart className="w-4 h-4" />
+            <Heart className="w-4 h-4" fill="currentColor" />
           </button>
           <button
             onClick={handleApply}
