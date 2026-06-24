@@ -89,18 +89,14 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
             ) : (
               <div
                 data-keep-gold
-                className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-[10px]"
+                className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0"
               >
                 {isValidDeveloperLogoUrl(developer.logo_url) ? (
-                  <div
-                    className="jj-developer-logo-metallic-inner w-full h-full rounded-xl flex items-center justify-center overflow-hidden"
-                  >
-                    <img
-                      src={developer.logo_url as string}
-                      alt={`${developer.name} logo`}
-                      className="w-full h-full object-contain p-2"
-                    />
-                  </div>
+                  <img
+                    src={developer.logo_url as string}
+                    alt={`${developer.name} logo`}
+                    className="w-full h-full object-contain p-3"
+                  />
                 ) : (
                   <span className="text-[#3a2a08] font-bold text-base text-center px-2">
                     {developer.name}
