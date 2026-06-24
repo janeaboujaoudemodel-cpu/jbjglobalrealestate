@@ -70,15 +70,14 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
 
   return (
     <div className="w-full py-4 md:py-6 rounded-2xl">
-      <div className="container mx-auto px-4 md:px-8">
-        <div 
-          className="rounded-2xl border border-[#B89555]/35 p-5 md:p-7"
-          style={{
-            background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 62%, #EFE6D6 100%)',
-            boxShadow: '0 10px 32px rgba(184,149,85,0.18), inset 0 1px 2px rgba(255,255,255,0.42)',
-          }}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-[190px_minmax(0,1fr)] gap-6 md:gap-8 items-start">
+      <div
+        className="rounded-2xl border border-[#B89555]/35 p-5 md:p-7"
+        style={{
+          background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 62%, #EFE6D6 100%)',
+          boxShadow: '0 10px 32px rgba(184,149,85,0.18), inset 0 1px 2px rgba(255,255,255,0.42)',
+        }}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-[190px_minmax(0,1fr)] gap-6 md:gap-8 items-start">
             {/* Developer Logo (owner-editable) */}
             {editable && developer.id ? (
               <DeveloperLogoUploader
@@ -132,7 +131,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     className="text-2xl md:text-[32px] font-bold leading-tight"
                   />
                 )}
-                <Award className="w-6 h-6 text-[#1A1A1A]" />
+                <Award className="w-6 h-6 text-[#064E3B]" aria-hidden />
               </div>
 
 
