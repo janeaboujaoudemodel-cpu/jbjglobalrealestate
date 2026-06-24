@@ -66,9 +66,9 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
               whileTap={{ scale: 0.98 }}
               className="relative w-[380px] h-[260px] rounded-lg overflow-hidden cursor-pointer flex flex-col items-center justify-center gap-4 text-white"
               style={{
-                background: "linear-gradient(135deg, #0A0A0A 0%, #1F1F1F 60%, #0A0A0A 100%)",
-                border: "1px solid rgba(184,149,85,0.55)",
-                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.4)",
+                background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
+                border: "1px solid rgba(0,0,0,0.28)",
+                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12)",
               }}
               data-hero-dark
               data-surface="emerald"
@@ -76,9 +76,9 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
 
             >
               <div
-                className="absolute inset-0 opacity-30"
+                className="absolute inset-0 opacity-35"
                 style={{
-                  backgroundImage: "radial-gradient(circle at 30% 20%, rgba(184,149,85,0.35), transparent 60%)",
+                  backgroundImage: "linear-gradient(120deg, transparent 0%, rgba(0,0,0,0.34) 36%, rgba(6,78,59,0.20) 50%, rgba(0,0,0,0.38) 64%, transparent 100%)",
                 }}
               />
               <div

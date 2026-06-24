@@ -36,7 +36,7 @@ const ALL_SECTIONS: Array<{ key: DeckSectionKey; label: string }> = [
   { key: "contact", label: "Presenter contact" },
 ];
 
-const STEP_LABELS = ["Units", "Presenter", "Sections", "Export"] as const;
+const STEP_LABELS = ["Details", "Units", "Sections", "Export"] as const;
 
 export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange, project }) => {
   const [step, setStep] = React.useState(0);
@@ -87,15 +87,15 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
       prev.includes(id) ? prev.filter((x) => x !== id) : prev.length >= 5 ? prev : [...prev, id]
     );
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (field: "photoDataUrl" | "logoDataUrl") => (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      alert("Photo must be under 5 MB.");
+      alert("Image must be under 5 MB.");
       return;
     }
     const reader = new FileReader();
-    reader.onload = (ev) => setPresenter((p) => ({ ...p, photoDataUrl: ev.target?.result as string }));
+    reader.onload = (ev) => setPresenter((p) => ({ ...p, [field]: ev.target?.result as string }));
     reader.readAsDataURL(file);
   };
 
@@ -145,7 +145,7 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
           {STEP_LABELS.map((label, i) => (
             <div
               key={label}
-              className={`flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] ${
+              className={`flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] whitespace-nowrap ${
                 i === step ? "text-[#1A1A1A] font-semibold" : "text-[#1A1A1A]/50"
               }`}
             >
@@ -163,8 +163,106 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
         </div>
 
         <ScrollArea className="max-h-[55vh] pr-2">
-          {/* STEP 1 — Units */}
+          {/* STEP 1 — Brand, presenter and client details */}
           {step === 0 && (
+            <div className="space-y-4">
+              <p className="text-[13px] text-[#1A1A1A]/70">Review brand, presenter and client details. Empty fields are hidden in the export.</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="flex items-center gap-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/25 p-3">
+                    {presenter.logoDataUrl ? (
+                      <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-[#B89555]/50 bg-white">
+                        <img src={presenter.logoDataUrl} alt="" className="w-full h-full object-contain" />
+                        <button
+                          type="button"
+                          onClick={() => setPresenter((p) => ({ ...p, logoDataUrl: undefined }))}
+                          className="absolute -top-1 -right-1 bg-[#1A1A1A] text-white rounded-full w-5 h-5 inline-flex items-center justify-center"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="w-16 h-16 rounded-lg bg-white border border-dashed border-[#B89555]/50 flex flex-col items-center justify-center cursor-pointer">
+                        <Upload className="w-4 h-4 text-[#1A1A1A]/60" />
+                        <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload("logoDataUrl")} />
+                      </label>
+                    )}
+                    <div className="text-[12px] text-[#1A1A1A]/70">Company logo (optional)</div>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/25 p-3">
+                  {presenter.photoDataUrl ? (
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden border border-[#B89555]/50">
+                      <img src={presenter.photoDataUrl} alt="" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setPresenter((p) => ({ ...p, photoDataUrl: undefined }))}
+                        className="absolute -top-1 -right-1 bg-[#1A1A1A] text-white rounded-full w-5 h-5 inline-flex items-center justify-center"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="w-16 h-16 rounded-full bg-[#F7F2EA] border border-dashed border-[#B89555]/50 flex flex-col items-center justify-center cursor-pointer">
+                      <Upload className="w-4 h-4 text-[#1A1A1A]/60" />
+                      <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload("photoDataUrl")} />
+                    </label>
+                  )}
+                  <div className="text-[12px] text-[#1A1A1A]/70">Photo (optional, &lt;5MB)</div>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] text-[12px]">Full name</Label>
+                  <Input value={presenter.name ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, name: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] text-[12px]">Title / role</Label>
+                  <Input value={presenter.title ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, title: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] text-[12px]">Email</Label>
+                  <Input type="email" value={presenter.email ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, email: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] text-[12px]">Phone</Label>
+                  <Input value={presenter.phone ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, phone: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] text-[12px]">WhatsApp</Label>
+                  <Input value={presenter.whatsapp ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, whatsapp: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label className="text-[#1A1A1A] text-[12px]">Company</Label>
+                  <Input value={presenter.company ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, company: e.target.value }))} className="bg-white border-[#B89555]/30" placeholder="JBJ Global Real Estate" />
+                </div>
+                <div className="col-span-2 pt-2 border-t border-[#B89555]/20">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 font-semibold">Client details</p>
+                </div>
+                <div>
+                  <Label htmlFor="presentation-client-name" className="text-[#1A1A1A] text-[12px]">Client name</Label>
+                  <Input id="presentation-client-name" value={presenter.clientName ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, clientName: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label htmlFor="presentation-client-phone" className="text-[#1A1A1A] text-[12px]">Client phone</Label>
+                  <Input id="presentation-client-phone" value={presenter.clientPhone ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, clientPhone: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div className="col-span-2">
+                  <Label htmlFor="presentation-client-address" className="text-[#1A1A1A] text-[12px]">Client address</Label>
+                  <Input id="presentation-client-address" value={presenter.clientAddress ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, clientAddress: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label htmlFor="presentation-client-passport" className="text-[#1A1A1A] text-[12px]">Passport / ID</Label>
+                  <Input id="presentation-client-passport" value={presenter.clientPassport ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, clientPassport: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+                <div>
+                  <Label htmlFor="presentation-client-notes" className="text-[#1A1A1A] text-[12px]">Client notes</Label>
+                  <Input id="presentation-client-notes" value={presenter.clientNotes ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, clientNotes: e.target.value }))} className="bg-white border-[#B89555]/30" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2 — Units */}
+          {step === 1 && (
             <div className="space-y-3">
               <p className="text-[13px] text-[#1A1A1A]/70">Select up to 5 units to feature (optional).</p>
               {unitOptions.length === 0 ? (
@@ -200,59 +298,6 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
                   })}
                 </div>
               )}
-            </div>
-          )}
-
-          {/* STEP 2 — Presenter */}
-          {step === 1 && (
-            <div className="space-y-4">
-              <p className="text-[13px] text-[#1A1A1A]/70">All fields are optional. Anything left blank is hidden in the export.</p>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2 flex items-center gap-3">
-                  {presenter.photoDataUrl ? (
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden border border-[#B89555]/50">
-                      <img src={presenter.photoDataUrl} alt="" className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => setPresenter((p) => ({ ...p, photoDataUrl: undefined }))}
-                        className="absolute -top-1 -right-1 bg-[#1A1A1A] text-white rounded-full w-5 h-5 inline-flex items-center justify-center"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ) : (
-                    <label className="w-16 h-16 rounded-full bg-[#F7F2EA] border border-dashed border-[#B89555]/50 flex flex-col items-center justify-center cursor-pointer">
-                      <Upload className="w-4 h-4 text-[#1A1A1A]/60" />
-                      <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
-                    </label>
-                  )}
-                  <div className="text-[12px] text-[#1A1A1A]/70">Photo (optional, &lt;5MB)</div>
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A] text-[12px]">Full name</Label>
-                  <Input value={presenter.name ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, name: e.target.value }))} className="bg-white border-[#B89555]/30" />
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A] text-[12px]">Title / role</Label>
-                  <Input value={presenter.title ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, title: e.target.value }))} className="bg-white border-[#B89555]/30" />
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A] text-[12px]">Email</Label>
-                  <Input type="email" value={presenter.email ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, email: e.target.value }))} className="bg-white border-[#B89555]/30" />
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A] text-[12px]">Phone</Label>
-                  <Input value={presenter.phone ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, phone: e.target.value }))} className="bg-white border-[#B89555]/30" />
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A] text-[12px]">WhatsApp</Label>
-                  <Input value={presenter.whatsapp ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, whatsapp: e.target.value }))} className="bg-white border-[#B89555]/30" />
-                </div>
-                <div>
-                  <Label className="text-[#1A1A1A] text-[12px]">Company</Label>
-                  <Input value={presenter.company ?? ""} onChange={(e) => setPresenter((p) => ({ ...p, company: e.target.value }))} className="bg-white border-[#B89555]/30" placeholder="JBJ Global Real Estate" />
-                </div>
-              </div>
             </div>
           )}
 
@@ -295,6 +340,7 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
                   <li><strong>Project:</strong> {project.name}</li>
                   <li><strong>Selected units:</strong> {selectedUnits.length || "none"}</li>
                   <li><strong>Presenter:</strong> {presenter.name || "—"} {presenter.title ? `· ${presenter.title}` : ""}</li>
+                  <li><strong>Client:</strong> {presenter.clientName || "—"}</li>
                   <li><strong>Sections enabled:</strong> {Object.values(sections).filter(Boolean).length} / {ALL_SECTIONS.length}</li>
                 </ul>
               </div>
