@@ -950,7 +950,7 @@ export default function ProjectDetailLayout({
 
       {/* STICKY SUB-NAVIGATION - Two rows: Search + Shortcuts */}
       <div 
-        className={`fixed top-[88px] [body.jj-vertical-nav-collapsed_&]:top-[48px] left-0 right-0 z-[9990] backdrop-blur-md transition-all duration-300 sm:left-[48px] [body.jj-vertical-nav-active_&]:sm:left-[200px] [body.jj-vertical-nav-collapsed_&]:sm:left-[48px] ${
+        className={`jj-utility-shell fixed top-[88px] [body.jj-vertical-nav-collapsed_&]:top-[48px] right-0 z-[9990] backdrop-blur-md transition-all duration-300 ${
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >

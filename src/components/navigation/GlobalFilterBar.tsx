@@ -127,7 +127,7 @@ export default function GlobalFilterBar() {
   return (
     <div
       data-jj-filter-bar
-      className="fixed top-[48px] right-0 z-[9996] hidden md:block transition-[left] duration-100 ease-out bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] border-b border-[#B89555]/35 shadow-sm [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
+      className="jj-utility-shell fixed top-[48px] right-0 z-[9996] hidden md:block transition-[left] duration-100 ease-out bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] border-b border-[#B89555]/35 shadow-sm"
     >
 
       {/* pr clears the fixed right Contact-Us rail so the last chip
