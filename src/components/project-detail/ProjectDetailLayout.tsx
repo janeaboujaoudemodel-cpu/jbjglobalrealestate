@@ -687,11 +687,10 @@ export default function ProjectDetailLayout({
               <BrandedLoader text="Loading project..." />
             </div>
           )}
-          {/* Enhanced gradient overlay — strong bottom blackout so hero copy is always WHITE-readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/20 pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-[42%] bg-black/55 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-black/55 pointer-events-none" />
+          {/* Lighter overlay — only enough darken at the bottom to guarantee WHITE hero copy readability.
+              Side vignette removed so the photo itself stays bright and crisp. */}
+          <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black via-black/75 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[34%] bg-black/45 pointer-events-none" />
         </div>
 
         {/* Sold Out Badge - Top Right */}
