@@ -16,7 +16,7 @@ const tools = [
     icon: Stamp,
     href: "/toolkit/stamp-generator",
     badge: "AI",
-    accentColor: "#B8943E",
+    accentColor: "#B89555",
   },
   {
     id: "business-card",
@@ -128,10 +128,10 @@ export default function CorporateSuite() {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 50%, #EFE6D6 100%)" }}>
       {/* ── Hero Header ── */}
-      <div className="relative overflow-hidden" style={{ borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
+      <div className="relative overflow-hidden" style={{ borderBottom: "1px solid rgba(184,149,85,0.25)" }}>
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(184,148,62,0.08) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(184,149,85,0.08) 0%, transparent 70%)" }}
         />
         <AdaptiveHairline variant="accent" className="absolute bottom-0 left-0 right-0" />
 
@@ -149,8 +149,8 @@ export default function CorporateSuite() {
             <div
               className="w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-xl"
               style={{
-                background: "linear-gradient(135deg, #D8C7A6, #B8943E)",
-                boxShadow: "0 0 40px rgba(184,148,62,0.25)",
+                background: "linear-gradient(135deg, #D8C7A6, #B89555)",
+                boxShadow: "0 0 40px rgba(184,149,85,0.25)",
               }}
             >
               <Sparkles size={28} className="text-white" />
@@ -159,18 +159,18 @@ export default function CorporateSuite() {
             {/* Text */}
             <div>
               <div className="flex items-center gap-2.5 mb-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#B8943E" }}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#B89555" }}>
                   JBJ Toolkit
                 </p>
                 <span
                   className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold"
-                  style={{ background: "rgba(184,148,62,0.12)", border: "1px solid rgba(184,148,62,0.3)", color: "#B8943E" }}
+                  style={{ background: "rgba(184,149,85,0.12)", border: "1px solid rgba(184,149,85,0.3)", color: "#B89555" }}
                 >
                   Premium
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold leading-tight" style={{ color: "#1A1A1A" }}>
-                Corporate Premium <span style={{ color: "#B8943E" }}>Suite</span>
+                Corporate Premium <span style={{ color: "#B89555" }}>Suite</span>
               </h1>
               <p className="mt-2 text-sm max-w-2xl leading-relaxed" style={{ color: "rgba(0,0,0,0.5)" }}>
                 12 professional tools — stamps, business cards, CVs, logos, company profiles, e-signatures,
@@ -211,16 +211,16 @@ export default function CorporateSuite() {
                 style={{
                   background: "rgba(255,255,255,0.75)",
                   backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(184,148,62,0.18)",
-                  boxShadow: "0 2px 12px rgba(184,148,62,0.06)",
+                  border: "1px solid rgba(184,149,85,0.18)",
+                  boxShadow: "0 2px 12px rgba(184,149,85,0.06)",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px rgba(184,148,62,0.18)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,148,62,0.4)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px rgba(184,149,85,0.18)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,149,85,0.4)";
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(184,148,62,0.06)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,148,62,0.18)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(184,149,85,0.06)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,149,85,0.18)";
                 }}
               >
                 {/* Top accent bar */}
@@ -254,7 +254,7 @@ export default function CorporateSuite() {
                   <h3 className="font-bold text-[15px] leading-tight" style={{ color: "#1A1A1A" }}>
                     {tool.title}
                   </h3>
-                  <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#B8943E" }}>
+                  <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#B89555" }}>
                     {tool.subtitle}
                   </p>
                   <p className="text-xs leading-relaxed flex-1 min-h-[48px]" style={{ color: "rgba(0,0,0,0.5)" }}>
@@ -263,8 +263,8 @@ export default function CorporateSuite() {
 
                   {/* CTA — pinned to bottom */}
                   <div
-                    className="mt-5 flex items-center gap-1.5 text-xs font-semibold transition-colors group-hover:text-[#B8943E]"
-                    style={{ color: "rgba(184,148,62,0.6)" }}
+                    className="mt-5 flex items-center gap-1.5 text-xs font-semibold transition-colors group-hover:text-[#B89555]"
+                    style={{ color: "rgba(184,149,85,0.6)" }}
                   >
                     Open Tool
                     <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-200" />
@@ -277,7 +277,7 @@ export default function CorporateSuite() {
 
         {/* Footer note */}
         <div className="flex items-center justify-center gap-2 mt-10">
-          <Zap size={12} style={{ color: "rgba(184,148,62,0.35)" }} />
+          <Zap size={12} style={{ color: "rgba(184,149,85,0.35)" }} />
           <p className="text-center text-[11px]" style={{ color: "rgba(0,0,0,0.35)" }}>
             All tools run securely in your browser. Files are exported locally — nothing leaves your device.
           </p>
