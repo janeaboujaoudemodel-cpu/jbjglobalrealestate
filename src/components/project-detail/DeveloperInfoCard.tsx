@@ -129,7 +129,12 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     value={developer.name}
                     invalidateKeys={["project", "projects", "developer", "developers"]}
                   >
-                    <h3 className="text-2xl md:text-[32px] font-bold text-[#1A1A1A] leading-tight">{developer.name}</h3>
+                    <h3
+                      data-developer-gold
+                      className="developer-name-gold text-2xl md:text-[32px] font-bold leading-tight underline underline-offset-4 decoration-[#B89555]/60"
+                    >
+                      {developer.name}
+                    </h3>
                   </InlineEditable>
                 ) : (
                   <DeveloperLink

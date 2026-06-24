@@ -13515,6 +13515,35 @@ html body #root .jj-project-pros-panel .jj-project-pros-item :where(svg, [class*
   fill: none !important;
 }
 
+html body #root .jj-residency-chip[data-residency-active="true"],
+html body #root .jj-residency-chip.jj-residency-chip-active {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body #root .jj-residency-chip[data-residency-active="true"] *,
+html body #root .jj-residency-chip.jj-residency-chip-active * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body #root .jj-residency-chip[data-residency-active="false"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-developer-gold],
+html body #root .developer-name-gold,
+html body #root .developer-name-gold * {
+  color: #B89555 !important;
+  -webkit-text-fill-color: #B89555 !important;
+  text-decoration-color: rgba(184, 149, 85, 0.72) !important;
+  opacity: 1 !important;
+}
+
 /* =====================================================================
    🔒 BACK-OFFICE EMERALD + CONTRAST TERMINAL LOCK
    Matches the approved front-end collapsed-sidebar ombre exactly:

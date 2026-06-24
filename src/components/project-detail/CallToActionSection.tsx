@@ -89,7 +89,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
   const whatsappMessage = `Hi, I'm interested in ${projectName}. Please share more details and call me back.`;
 
   return (
-    <section className="py-16 md:py-20">
+    <section id="project-callback" className="py-16 md:py-20">
       <div className="jj-card-inner bg-gradient-to-br from-card via-card to-gold/5 border-2 border-[#B89555]/40 p-8 md:p-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           {/* Left: Text content */}

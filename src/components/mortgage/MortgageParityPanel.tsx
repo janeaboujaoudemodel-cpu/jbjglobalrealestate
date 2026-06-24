@@ -114,7 +114,8 @@ export default function MortgageParityPanel({
                 type="button"
                 onClick={() => setResidency(k)}
                 data-no-contrast-guard
-                className="px-3.5 py-1.5 rounded-full text-xs font-extrabold transition-all shadow-sm"
+                className={`jj-residency-chip px-3.5 py-1.5 rounded-full text-xs font-extrabold transition-all shadow-sm ${active ? "jj-residency-chip-active" : ""}`}
+                data-residency-active={active ? "true" : "false"}
                 style={{
                   background: active
                     ? "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)"
