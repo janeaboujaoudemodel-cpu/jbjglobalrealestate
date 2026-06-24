@@ -257,7 +257,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 data-surface="emerald"
                 data-emerald-icon-surface
                 data-no-contrast-guard
-                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 jj-official-emerald"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 jj-emerald-metallic"
                 style={{ color: "#FFFFFF" }}
               >
                 <Sparkles className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />

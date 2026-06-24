@@ -87,14 +87,19 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               />
             ) : (
               <div
-                className="jj-emerald-metallic w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+                className="jj-emerald-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-[10px]"
                 style={{
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  boxShadow: '0 8px 24px rgba(4,44,28,0.45), inset 0 1px 2px rgba(255,255,255,0.08)'
+                  boxShadow: '0 10px 28px rgba(4,44,28,0.5), inset 0 1px 2px rgba(255,255,255,0.18), inset 0 0 0 1px rgba(255,255,255,0.06)'
                 }}
               >
                 {isValidDeveloperLogoUrl(developer.logo_url) ? (
-                  <div className="w-[88%] h-[88%] rounded-lg bg-white flex items-center justify-center overflow-hidden">
+                  <div
+                    className="w-full h-full rounded-xl flex items-center justify-center overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 100%)',
+                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.4)'
+                    }}
+                  >
                     <img
                       src={developer.logo_url as string}
                       alt={`${developer.name} logo`}
@@ -264,15 +269,17 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               )}
 
 
-              {/* View Developer Button */}
+              {/* View Developer Button — compact balanced 2-line emerald pill */}
               {developer.slug && (
                 <Link
                   to={`/developer/${developer.slug}`}
                   data-emerald-action="true"
-                  className="jj-emerald-action inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold tracking-[0.02em] px-4 py-2 transition-colors shadow-sm"
+                  className="jj-emerald-action inline-flex max-w-[260px] items-center justify-center gap-2 rounded-lg text-[12px] font-semibold tracking-[0.02em] leading-tight text-center px-4 py-2.5 transition-colors shadow-sm"
                 >
-                  <span>View All Projects by {developer.name}</span>
-                  <ExternalLink strokeWidth={2.2} className="w-4 h-4" />
+                  <span className="block whitespace-normal break-words [text-wrap:balance]">
+                    View All Projects<br />by {developer.name}
+                  </span>
+                  <ExternalLink strokeWidth={2.2} className="w-3.5 h-3.5 shrink-0" />
                 </Link>
               )}
 

@@ -12478,6 +12478,16 @@ html body main section.jj-project-hero :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,s
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72) !important;
   opacity: 1 !important;
 }
+html body main section.jj-project-hero [data-no-contrast-guard],
+html body main section.jj-project-hero [data-no-contrast-guard] *,
+html body main section.jj-project-hero .text-white,
+html body main section.jj-project-hero .text-white *,
+html body main section.jj-project-hero [style*="#FFFFFF"],
+html body main section.jj-project-hero [style*="rgb(255,255,255)"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72) !important;
+}
 html body main section.jj-project-hero :is(svg, [class*="lucide"]),
 html body main section.jj-project-hero :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
@@ -13384,6 +13394,15 @@ html body #root :is(
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
   text-shadow: none !important;
+}
+
+html body #root section.jj-project-hero,
+html body #root section.jj-project-hero :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,time,dt,dd,button,div),
+html body #root section.jj-project-hero :where(.text-white, [class*="text-white/"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.72) !important;
 }
 
 html body #root input.mortgage-range-input[data-mortgage-slider] {

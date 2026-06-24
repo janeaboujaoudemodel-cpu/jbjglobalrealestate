@@ -153,14 +153,15 @@ export const ModeSelectionModal = () => {
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div
-                      className={cn(
-                        'w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 border',
-                        isSelected
-                          ? 'bg-[#EFE6D6] border-[#B89555]'
-                          : 'bg-[#EFE6D6]/40 border-[#B89555]/20'
-                      )}
+                      data-emerald-action="true"
+                      data-no-contrast-guard
+                      className="jj-emerald-metallic allow-white w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ boxShadow: '0 6px 16px rgba(4,44,28,0.35)' }}
                     >
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]" />
+                      <Icon
+                        className="w-5 h-5 sm:w-6 sm:h-6 allow-white"
+                        style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
