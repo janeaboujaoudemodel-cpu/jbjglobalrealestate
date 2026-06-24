@@ -1143,6 +1143,15 @@ All colors MUST be HSL.
 .jj-content-track--narrow { max-width: var(--shell-max-w-narrow) !important; }
 .jj-content-track--full { max-width: none !important; }
 
+/* Nested legacy wrappers must not compound gutters. */
+.jj-content-track .jj-content-track,
+.jj-content-track .jj-project-shell,
+.jj-project-shell .jj-content-track {
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 @media (min-width: 768px) {
   .jj-content-track,
   .jj-project-shell,
