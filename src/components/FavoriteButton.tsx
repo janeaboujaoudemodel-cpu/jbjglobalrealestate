@@ -62,7 +62,11 @@ const FavoriteButton = ({
     lg: "w-6 h-6",
   };
 
-  const actionClass = "jj-surface-emerald jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200";
+  const actionClass = "jj-surface-emerald jj-emerald-action jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200";
+  const emeraldIconStyle = {
+    color: "var(--ink-emerald-accent)",
+    stroke: "var(--ink-emerald-accent)",
+  } as const;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -101,6 +105,8 @@ const FavoriteButton = ({
           <button
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
             data-surface="emerald"
+            data-emerald="true"
+            data-emerald-action="true"
             data-emerald-ok="button"
             data-card-action="favorite"
             onClick={handleFavoriteClick}
@@ -108,8 +114,10 @@ const FavoriteButton = ({
             className={`${sizeClasses[size]} ${actionClass}`}
           >
             <Heart
-              className={`${iconSizes[size]} transition-all duration-200`}
-              fill={isFavorite ? "#FFFFFF" : "none"}
+              className={`${iconSizes[size]} allow-white transition-all duration-200`}
+              fill={isFavorite ? "var(--ink-emerald-accent)" : "none"}
+              stroke="var(--ink-emerald-accent)"
+              style={emeraldIconStyle}
             />
           </button>
         </TooltipTrigger>
@@ -124,6 +132,8 @@ const FavoriteButton = ({
             <button
               aria-label={isShortlisted ? "Remove from shortlist" : "Add to shortlist"}
               data-surface="emerald"
+              data-emerald="true"
+              data-emerald-action="true"
               data-emerald-ok="button"
               data-card-action="shortlist"
               onClick={handleShortlistClick}
@@ -131,9 +141,9 @@ const FavoriteButton = ({
               className={`${sizeClasses[size]} ${actionClass}`}
             >
               {isShortlisted ? (
-                <Check className={iconSizes[size]} />
+                <Check className={`${iconSizes[size]} allow-white`} stroke="var(--ink-emerald-accent)" style={emeraldIconStyle} />
               ) : (
-                <ListPlus className={iconSizes[size]} />
+                <ListPlus className={`${iconSizes[size]} allow-white`} stroke="var(--ink-emerald-accent)" style={emeraldIconStyle} />
               )}
             </button>
           </TooltipTrigger>
