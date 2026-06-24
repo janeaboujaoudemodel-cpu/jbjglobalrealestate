@@ -1341,17 +1341,10 @@ body:not([data-homepage]) main :is([data-hero-dark], [data-hero], .jj-fullbleed,
 .jj-fullbleed-band {
   position: relative;
   width: 100%;
+  max-width: 100%;
   margin-left: 0;
   margin-right: 0;
   box-sizing: border-box;
-}
-@media (min-width: 640px) {
-  .jj-fullbleed-band {
-    width: calc(100vw - var(--jj-content-gutter-l, 80px));
-    max-width: calc(100vw - var(--jj-content-gutter-l, 80px));
-    margin-left: calc(-1 * (100vw - 100%) + var(--jj-content-gutter-l, 80px));
-    margin-right: 0;
-  }
 }
 
 
