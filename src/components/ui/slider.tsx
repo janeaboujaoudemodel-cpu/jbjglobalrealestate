@@ -47,7 +47,7 @@ const Slider = React.forwardRef<
           className={cn(
             "block h-6 w-6 rounded-full bg-white",
             "ring-offset-background transition-all duration-150",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2",
             "disabled:pointer-events-none disabled:opacity-50",
             "touch-none cursor-grab active:cursor-grabbing",
             "shadow-[0_2px_8px_rgba(6,78,59,0.45),0_0_0_2px_#064E3B_inset]",
