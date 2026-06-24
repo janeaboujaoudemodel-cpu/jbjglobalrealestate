@@ -656,7 +656,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
-                            ? "jj-surface-emerald border-0 text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
+                            ? "jj-chip-emerald font-bold"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -683,7 +683,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
-                            ? "jj-surface-emerald border-0 text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
+                            ? "jj-chip-emerald font-bold"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
