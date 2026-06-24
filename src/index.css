@@ -14411,6 +14411,16 @@ html body #root main.jj-main-shell :is(.jj-hero-frame, .jj-project-hero, .jj-sec
   overflow-x: clip !important;
 }
 
+/* Final project hero contrast lock: the layout shell reflow must not let the
+   champagne/ink guards repaint dark hero copy. */
+html body #root main.jj-main-shell section.jj-project-hero[data-hero-dark][data-on-dark][data-no-contrast-guard],
+html body #root main.jj-main-shell section.jj-project-hero[data-hero-dark][data-on-dark][data-no-contrast-guard] :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,time,dt,dd,button,div):not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.72) !important;
+  opacity: 1 !important;
+}
+
 
 
 
