@@ -23,19 +23,19 @@ const Slider = React.forwardRef<
       step={step}
       disabled={disabled}
       className={cn(
-        "relative flex w-full select-none items-center touch-none min-h-[44px]",
+        "relative flex w-full select-none items-center touch-none min-h-[44px] px-3",
         className
       )}
       {...props}
     >
       <SliderPrimitive.Track
         className="relative h-2 w-full grow overflow-hidden rounded-full cursor-pointer"
-        style={{ background: "var(--slider-track-bg, #EFE6D6)" }}
+        style={{ background: "var(--slider-track-bg, #E6DCC7)" }}
       >
         <SliderPrimitive.Range
           className="absolute h-full rounded-full"
           style={{
-            background: "var(--slider-range-bg, linear-gradient(90deg, #ECE2D2 0%, #D8C28F 45%, #B89555 100%))",
+            background: "var(--slider-range-bg, linear-gradient(90deg, #064E3B 0%, #042c1c 58%, #000000 100%))",
             backgroundSize: "var(--slider-range-bg-size, auto)",
             animation: "var(--slider-range-animation, none)",
           }}
@@ -50,12 +50,12 @@ const Slider = React.forwardRef<
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2",
             "disabled:pointer-events-none disabled:opacity-50",
             "touch-none cursor-grab active:cursor-grabbing",
-            "shadow-[0_2px_8px_rgba(184,149,85,0.45),0_0_0_2px_#B89555_inset]",
+            "shadow-[0_2px_8px_rgba(6,78,59,0.45),0_0_0_2px_#064E3B_inset]",
             "hover:scale-110 active:scale-95"
           )}
           style={{
             background: "var(--slider-thumb-bg, #FFFFFF)",
-            boxShadow: "var(--slider-thumb-shadow, 0 2px 8px rgba(184,149,85,0.45), 0 0 0 2px #B89555 inset)",
+            boxShadow: "var(--slider-thumb-shadow, 0 2px 8px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset)",
           }}
         />
       ))}

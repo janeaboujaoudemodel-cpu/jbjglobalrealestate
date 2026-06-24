@@ -30,7 +30,7 @@ export const filterPillInactiveDark ="bg-[#FDFBF7]/95 border border-[#B89555]/70
 
 // Active (filter has a value). Solid ink, white label — the only state that uses
 // white text. Gold ring marks it as the brand-active state without harming contrast.
-export const filterPillActive ="bg-[#1A1A1A] text-white border border-[#1A1A1A] font-bold shadow-md" +"ring-1 ring-[#B89555] hover:bg-[#0d0d0d] hover:border-[#0d0d0d] hover:shadow-[0_6px_16px_rgba(0,0,0,0.30)]";
+export const filterPillActive ="jj-surface-emerald text-white border-0 font-bold shadow-md" +"hover:brightness-110 hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]";
 
 // Helper: pick the right inactive variant based on surrounding surface
 export function pillInactive(variant:"light" |"dark" ="light") {
@@ -43,7 +43,7 @@ export const togglePillBase ="inline-flex items-center gap-1.5 px-3 py-1.5 round
 
 export const togglePillOff ="border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
 
-export const togglePillOn ="border-[#1A1A1A] bg-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555]";
+export const togglePillOn ="jj-surface-emerald text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)]";
 
 // Popover surface
 export const filterPopoverSurface ="bg-[#FDFBF7] border border-[#B89555]/40 shadow-xl z-[10200]";
@@ -58,7 +58,7 @@ export const filterLabel ="text-[10px] font-semibold uppercase tracking-[0.12em]
 export const filterHelpText ="text-xs text-[#1A1A1A]/70";
 
 // Primary"Apply"-style button inside popovers
-export const filterPrimaryButton ="h-9 bg-[#1A1A1A] text-white font-bold text-xs rounded-lg hover:bg-[#0d0d0d]" +"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]";
+export const filterPrimaryButton ="h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg" +"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]";
 
 //"Reset" / secondary outline button inside popovers
 export const filterSecondaryButton ="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A]" +"hover:bg-[#F7F2EA] hover:border-[#B89555]";
@@ -74,11 +74,11 @@ export const filterSearchPillInput ="w-full py-1.5 bg-transparent text-xs text-[
 
 // Active-filter chip in summary rows (ActiveFilterIndicator and similar)
 export const activeChipBase ="group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full text-xs font-semibold" +"bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:border-[#B89555]";
-export const activeChipPrimary ="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full bg-[#1A1A1A] text-white text-xs font-semibold ring-1 ring-[#B89555]";
+export const activeChipPrimary ="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-surface-emerald text-white text-xs font-semibold";
 export const activeChipDismissDot ="ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#1A1A1A]/10 group-hover:bg-[#1A1A1A]/25 transition-colors";
 
 // Section dividers between groups of pills in the shortcut bar
 export const filterDivider ="w-px h-5 bg-[#B89555]/40 flex-shrink-0";
 
 //"Reset all" destructive pill (kept red for semantic meaning, stronger contrast)
-export const resetAllPill ="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" +"bg-[#FDECEC] border border-[#B91C1C]/60 text-[#B91C1C] hover:bg-[#FBD9D9] hover:border-[#B91C1C]" +"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B91C1C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]" +"transition-colors flex-shrink-0";
+export const resetAllPill ="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" +"bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]" +"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]" +"transition-colors flex-shrink-0";
