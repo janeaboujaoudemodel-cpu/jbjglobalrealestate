@@ -83,6 +83,14 @@ const canonicalDeveloperKey = (name: string) => {
 };
 const FORBIDDEN_DEVELOPER_NAME = /\b(bayut|dubizzle|property\s*finder)\b/i;
 
+// Short label — drops generic legal/suffix words so "Damac Properties" → "Damac",
+// "Arada Properties" → "Arada", "Ellington Properties" → "Ellington", etc.
+const DEV_SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
+const shortDeveloperName = (raw: string) => {
+  const cleaned = (raw || '').replace(DEV_SUFFIX, '').replace(/\s{2,}/g, ' ').trim();
+  return cleaned || (raw || '').split(/\s+/)[0] || raw || '';
+};
+
 
 interface DeveloperEntry {
   name: string;
@@ -455,12 +463,14 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           <DeveloperLogo
                             src={dev.logo_url}
                             alt={dev.name}
-                            name={dev.name}
+                            name={shortDeveloperName(dev.name)}
                             variant="bare"
-                            className="!w-8 !h-8 !rounded-lg !p-1 flex-shrink-0"
+                            className="!w-10 !h-10 !rounded-lg !p-[3px] flex-shrink-0"
                             renderFallback
                           />
-                          <span className="text-sm text-[#1A1A1A] text-left truncate flex-1">{dev.name}</span>
+                          <span className="text-sm text-[#1A1A1A] text-left truncate flex-1" title={dev.name}>
+                            {shortDeveloperName(dev.name)}
+                          </span>
                         </button>
                       );
                     })}
