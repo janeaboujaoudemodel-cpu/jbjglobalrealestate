@@ -899,58 +899,65 @@ const Quiz = () => {
 
 
         <div className="flex-1 flex items-center justify-center px-4 py-12">
-          <AIShellCard as="div" padding="lg" className="w-full max-w-3xl">
-            {/* Header — emerald pill (top-left) + emerald identity tile (top-right) */}
-            <div className="flex items-start justify-between gap-4 mb-8">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 jj-surface-emerald-soft">
-                  <Sparkles className="w-4 h-4" />
-                  <span className="text-xs font-medium uppercase tracking-wider">Completely Free</span>
-                </div>
-                <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-2">
-                  AI Home Finder
-                </h1>
-                <p className="text-[#1A1A1A]/70 max-w-md">
-                  Find your perfect home with our AI — it searches every project on JBJ and matches them to your exact requirements. Completely{" "}
-                  <span className="font-semibold text-[#1A1A1A]">FREE</span>.
-                </p>
-                <p className="text-[#1A1A1A]/70 text-sm mt-2">
-                  Powered by JBJ Global Real Estate
-                </p>
-              </div>
-              <div
-                data-surface="emerald"
-                data-emerald-ok="icon"
-                className="jj-surface-emerald hidden md:flex w-16 h-16 rounded-2xl items-center justify-center shadow-lg shrink-0"
-              >
-                <Wand2 className="w-8 h-8" />
-              </div>
+          <AIShellCard
+            as="div"
+            padding="lg"
+            className="w-full max-w-2xl text-center border border-[#B89555]/40 shadow-sm"
+          >
+            {/* Centered emerald identity tile */}
+            <div
+              data-surface="emerald"
+              data-emerald-ok="icon"
+              className="jj-surface-emerald mx-auto mb-6 w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg"
+            >
+              <Wand2 className="w-10 h-10" />
             </div>
 
-            {/* 3-column feature grid (matches AIComparisonWidget) */}
-            <div className="grid md:grid-cols-3 gap-4 mb-8">
+            {/* Label pill */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 jj-surface-emerald-soft">
+              <Sparkles className="w-4 h-4" />
+              <span className="text-xs font-medium uppercase tracking-wider">Completely Free</span>
+            </div>
+
+            <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              AI Home Finder
+            </h1>
+            <p className="text-[#1A1A1A]/70 max-w-lg mx-auto mb-2">
+              Find your perfect home with our AI — it searches every project on JBJ and matches them to your exact requirements. Completely{" "}
+              <span className="font-semibold text-[#1A1A1A]">FREE</span>.
+            </p>
+            <p className="text-[#1A1A1A]/60 text-sm mb-8">
+              Powered by JBJ Global Real Estate
+            </p>
+
+            {/* Vertical tick list */}
+            <ul className="text-left max-w-md mx-auto space-y-3 mb-8">
               {[
-                { icon: Target, label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
-                { icon: BarChart3, label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
-                { icon: FileText, label: "Download Excel Report", description: "Take your matches with you" },
-              ].map((f, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl shadow-sm"
+                { label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
+                { label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
+                { label: "Download Excel Report", description: "Take your matches with you" },
+              ].map((f) => (
+                <li
+                  key={f.label}
+                  className="flex items-start gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl"
                 >
-                  <div className="w-10 h-10 bg-[#EFE6D6]/60 rounded-lg flex items-center justify-center shrink-0">
-                    <f.icon className="w-5 h-5 text-[#1A1A1A]" />
+                  <div
+                    data-surface="emerald"
+                    data-emerald-ok="icon"
+                    className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                  >
+                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
                   </div>
                   <div>
                     <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
                     <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center gap-6 text-sm mb-6 text-[#1A1A1A]/70">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-6 text-[#1A1A1A]/70">
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
@@ -971,7 +978,7 @@ const Quiz = () => {
               data-surface="navy"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white surface-navy w-full sm:w-auto font-semibold px-10 py-6 text-base rounded-xl"
+              className="allow-white surface-navy font-semibold px-10 py-6 text-base rounded-xl"
               style={{
                 background: "#0A0A0A",
                 border: "1px solid rgba(184,149,85,0.55)",
