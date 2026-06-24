@@ -1,3 +1,4 @@
+
 I will implement this as a single global visual repair, not one-off patches.
 
 Tasks to complete one by one:
@@ -14,7 +15,7 @@ Tasks to complete one by one:
 - Include project cards, recently viewed / Continue Searching cards, homepage sections, properties grid, and project-detail recommendations if present.
 
 3. Fix Continue Searching section
-- Make the history circle before “Continue Searching for Your Dream Property” filled with the approved emerald.
+- Make the history circle before "Continue Searching for Your Dream Property" filled with the approved emerald.
 - Make the History icon pure white.
 - Make the heart icon in Continue Searching cards pure white on emerald.
 
@@ -27,20 +28,20 @@ Tasks to complete one by one:
 5. Fix brochure and presentation checklist icons
 - In Project Brochure checklist: fill the tick circles with approved emerald and make ticks pure white.
 - In Generate Presentation checklist: same emerald circle + white tick treatment.
-- Fix the “Brochure” and “Generate Presentation” labels so their contrast is clean and not black-on-emerald or restricted green.
+- Fix the "Brochure" and "Generate Presentation" labels so their contrast is clean and not black-on-emerald or restricted green.
 
 6. Fix Generate Presentation card
-- Repair the broken contrast of “Click to start”, “Generate Presentation”, and “Custom PDF deck · ~30 seconds”.
+- Repair the broken contrast of "Click to start", "Generate Presentation", and "Custom PDF deck · ~30 seconds".
 - Restyle the card surface so it looks intentional and premium, not visually broken.
 - Use approved emerald only where the surface is emerald, with pure white foreground.
 
 7. Fix Payment Plan TBD
-- Replace the restricted green on “Payment Plan (TBD)” with the approved emerald style.
+- Replace the restricted green on "Payment Plan (TBD)" with the approved emerald style.
 - Ensure icon and text are white where the tab/button is emerald.
 
 8. Fix Mortgage Calculator section
 - Replace all restricted green with approved emerald.
-- Fix mortgage icon tiles, title accents, cards, sliders/metrics, “Compared to bank rate”, and CTA surfaces.
+- Fix mortgage icon tiles, title accents, cards, sliders/metrics, "Compared to bank rate", and CTA surfaces.
 - Swap the current states for Request Mortgage Introduction / Prefer Mortgage Advisor style: darker approved emerald on normal load, lighter/softer state only on hover if needed.
 - Ensure title/text on emerald areas is white, not black.
 
