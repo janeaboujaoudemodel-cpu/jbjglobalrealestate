@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Globe, ArrowRight, ShieldCheck, Trophy, Users } from "lucide-react";
+import { Globe, ArrowRight, ShieldCheck, Trophy, Users, Users2 } from "lucide-react";
 
 type Stat = {
   prefix?: string;
@@ -16,6 +16,7 @@ const microStats: Stat[] = [
   { target: 10, suffix: "Y", label: "Golden Visa", icon: ShieldCheck },
   { prefix: "#", target: 1, label: "Safest City", icon: Trophy },
   { target: 200, suffix: "+", label: "Nationalities", icon: Users },
+  { target: 4, suffix: "×", label: "Co-Owners · 25% Each on Title Deed", icon: Users2 },
 ];
 
 const useCountUp = (target: number, start: boolean, duration = 1400) => {
