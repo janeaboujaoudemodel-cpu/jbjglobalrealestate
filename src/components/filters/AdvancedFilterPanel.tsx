@@ -61,6 +61,19 @@ const BEDROOM_OPTIONS = [
 // UAE-only emirates
 const UAE_EMIRATES = EMIRATES_OPTIONS.filter(e => e.country === 'UAE');
 
+// Premium UAE developers — surfaced first in the By Developer dropdown.
+const PREMIUM_UAE_DEVELOPERS = [
+  'emaar', 'damac', 'sobha', 'nakheel', 'aldar', 'meraas', 'dubai properties',
+  'select group', 'majid al futtaim', 'ellington', 'omniyat', 'bloom holding',
+  'mag', 'azizi', 'dar al arkan', 'binghatti', 'arada', 'object 1',
+];
+const premiumRank = (name: string) => {
+  const n = name.toLowerCase();
+  const idx = PREMIUM_UAE_DEVELOPERS.findIndex((p) => n.includes(p));
+  return idx === -1 ? 999 : idx;
+};
+
+
 interface DeveloperEntry {
   name: string;
   logo_url: string | null;
@@ -180,28 +193,34 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     setLocalFilters({ ...defaultShortcutFilters });
   };
 
-  // Tokens — match the canonical filter UI styling. Active state uses solid
-  // ink + white label with a gold ring (high contrast, on-brand).
+  // Tokens — selected state uses the locked Emerald system (white text/icons via global guard).
   const togglePillBase =
     "px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer " +
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]";
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]";
   const togglePillOff =
     "border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
   const togglePillOn =
-    "border border-[#1A1A1A] bg-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555]";
+    "jj-surface-emerald border border-[color:var(--emerald-1)] font-bold shadow-[0_2px_8px_rgba(6,78,59,0.25)]";
   const sectionTitle = "text-sm font-bold text-[#1A1A1A] mb-3 tracking-tight";
   const inputClass =
     "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
     "text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 " +
-    "focus:outline-none focus:border-[#1A1A1A] focus:ring-2 focus:ring-[#B89555]/30 transition-all";
+    "focus:outline-none focus:border-[color:var(--emerald-1)] focus:ring-2 focus:ring-[color:var(--emerald-1)]/25 transition-all";
+
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
     !emirateSearch || e.label.toLowerCase().includes(emirateSearch.toLowerCase())
   );
 
-  const filteredDevs = developers.filter(d =>
-    !devSearch || d.name.toLowerCase().includes(devSearch.toLowerCase())
-  );
+  const filteredDevs = developers
+    .filter(d => !devSearch || d.name.toLowerCase().includes(devSearch.toLowerCase()))
+    .sort((a, b) => {
+      const ra = premiumRank(a.name);
+      const rb = premiumRank(b.name);
+      if (ra !== rb) return ra - rb;
+      return a.name.localeCompare(b.name);
+    });
+
 
   // Filter areas by search, then group by emirate
   const filteredAreasList = allAreas.filter(a =>
@@ -218,7 +237,15 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-[#B89555]/50 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(200,167,102,0.2)]"
+        style={{
+          // Emerald slider override for this modal
+          ['--slider-track-bg' as any]: '#E6DCC7',
+          ['--slider-range-bg' as any]: 'linear-gradient(90deg, #064E3B 0%, #0d7a5f 60%, #10b981 100%)',
+          ['--slider-thumb-bg' as any]: '#FFFFFF',
+          ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
+        }}
       >
+
         {/* Header */}
         <div className="px-6 pt-6 pb-4 border-b border-[#B89555]/30 flex-shrink-0 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <div className="flex items-center justify-between mb-3">
@@ -280,7 +307,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -338,7 +365,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                                    isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                                    isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                                   )}>
                                     {isSelected && <Check className="w-3 h-3 text-white" />}
                                   </div>
@@ -387,7 +414,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? "border-[color:var(--emerald-1)] bg-[color:var(--emerald-1)]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -599,7 +626,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
-                            ? "bg-[#1A1A1A] border border-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555] shadow-sm"
+                            ? "bg-[color:var(--emerald-1)] border border-[color:var(--emerald-1)] text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -626,7 +653,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
-                            ? "bg-[#1A1A1A] border border-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555] shadow-sm"
+                            ? "bg-[color:var(--emerald-1)] border border-[color:var(--emerald-1)] text-white font-bold shadow-[0_2px_8px_rgba(6,78,59,0.3)]"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -672,15 +699,19 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           >
             Clear all
           </button>
-          <button className="p-2.5 rounded-full border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 hover:border-[#B89555]/60 transition-all">
-            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+          <button
+            aria-label="Save to favourites"
+            className="jj-surface-emerald p-2.5 rounded-full border border-[color:var(--emerald-1)] hover:brightness-110 transition-all"
+          >
+            <Heart className="w-4 h-4" />
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-3 rounded-full bg-[#1A1A1A] text-white font-bold text-sm ring-1 ring-[#B89555] hover:bg-[#0d0d0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] transition-all"
+            className="jj-pill-emerald-metallic flex-1 py-3 rounded-full font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] transition-all"
           >
             Show {projectCount !== null ? projectCount.toLocaleString() : '...'} projects
           </button>
+
         </div>
       </DialogContent>
     </Dialog>
