@@ -53,11 +53,11 @@ const FullscreenToolToggle = ({ defaultOn = false }: { defaultOn?: boolean }) =>
       title={label}
       className="group allow-white fixed z-[10000] top-24 right-4 md:top-28 md:right-6 inline-flex h-10 items-center justify-center rounded-full backdrop-blur-md transition-[width,padding,background] duration-200 ease-out hover:scale-[1.03] text-xs font-semibold w-10 hover:w-auto focus-visible:w-auto px-0 hover:px-3 focus-visible:px-3 gap-0 hover:gap-2 focus-visible:gap-2 overflow-hidden"
       style={{
-        background: "#0A0A0A",
+        background: "var(--jj-emerald-ombre)",
         border: "1px solid rgba(184,149,85,0.55)",
         color: "#FFFFFF",
         WebkitTextFillColor: "#FFFFFF",
-        boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
+        boxShadow: "0 8px 24px rgba(6,78,59,0.45), 0 0 0 1px rgba(16,194,133,0.18) inset",
       }}
     >
       {on ? (
