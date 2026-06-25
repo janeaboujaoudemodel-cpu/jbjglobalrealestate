@@ -509,18 +509,19 @@ export default function ReportPreviewModal({
 
         {/* Actions */}
         <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2 shrink-0" style={{ borderColor: C.goldHair, background: C.page }}>
-          <Button onClick={() => run("copy", () => onCopy())} disabled={!!busy} className="font-semibold" style={secondaryBtn}>
+          <Button onClick={() => run("copy", () => onCopy())} disabled={busy === "copy"} className="font-semibold" style={secondaryBtn}>
             <LinkIcon className="w-4 h-4 mr-2" /> Copy text
           </Button>
-          <Button onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={!!busy} className="font-semibold" style={secondaryBtn}>
+          <Button onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={busy === "wa"} className="font-semibold" style={secondaryBtn}>
             <MessageCircle className="w-4 h-4 mr-2" /> Share WhatsApp
           </Button>
-          <Button onClick={() => run("em", () => onShareEmail(branding))} disabled={!!busy} className="font-semibold" style={secondaryBtn}>
+          <Button onClick={() => run("em", () => onShareEmail(branding))} disabled={busy === "em"} className="font-semibold" style={secondaryBtn}>
             <Mail className="w-4 h-4 mr-2" /> Share Email
           </Button>
-          <Button data-aihf-primary-btn onClick={() => run("jbj", () => onSendToConsultant(branding))} disabled={!!busy} className="font-semibold allow-white" style={primaryBtn}>
+          <Button data-aihf-primary-btn onClick={() => run("jbj", () => onSendToConsultant(branding))} disabled={busy === "jbj"} className="font-semibold allow-white" style={primaryBtn}>
             <Send className="w-4 h-4 mr-2" /> Send to JBJ Consultant
           </Button>
+
           <Button data-aihf-primary-btn onClick={() => run("dl", () => onDownload(branding))} disabled={!!busy} className="font-semibold allow-white" style={primaryBtn}>
             <Download className="w-4 h-4 mr-2" /> {busy === "dl" ? "Generating…" : "Download PDF"}
           </Button>
