@@ -64,10 +64,12 @@ export default function IntegrationWidgets() {
   return (
     <div className="grid md:grid-cols-2 gap-4">
       {/* Upcoming Events */}
-      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+      <div data-surface="champagne" className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-blue-600" />
+            <span data-backend-icon-tile="emerald" className="allow-white w-7 h-7 rounded-md flex items-center justify-center">
+              <Calendar className="allow-white h-4 w-4 text-white" strokeWidth={2.1} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            </span>
             <h3 className="text-sm font-semibold text-[#1A1A1A]">Upcoming Events</h3>
           </div>
           <Button 
@@ -103,17 +105,21 @@ export default function IntegrationWidgets() {
           </div>
         ) : (
           <div className="text-center py-6">
-            <Calendar className="h-8 w-8 text-[#B89555]/40 mx-auto mb-2" />
+            <span data-backend-icon-tile="emerald" className="allow-white w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-2">
+              <Calendar className="allow-white h-5 w-5 text-white" strokeWidth={2.1} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            </span>
             <p className="text-xs text-[#1A1A1A]/70">No upcoming events</p>
           </div>
         )}
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+      <div data-surface="champagne" className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4 text-[#B89555]" />
+            <span data-backend-icon-tile="emerald" className="allow-white w-7 h-7 rounded-md flex items-center justify-center">
+              <Zap className="allow-white h-4 w-4 text-white" strokeWidth={2.1} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            </span>
             <h3 className="text-sm font-semibold text-[#1A1A1A]">Quick Actions</h3>
           </div>
         </div>
@@ -124,7 +130,7 @@ export default function IntegrationWidgets() {
             className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
             onClick={() => navigate('/owner/crm?entity=leads&view=tasks&action=new')}
           >
-            <Plus className="h-4 w-4 text-[color:var(--emerald-1)]" />
+            <Plus className="h-4 w-4 text-[#064E3B]" />
             <span className="text-sm">Add Quick Task</span>
           </Button>
           
@@ -133,7 +139,7 @@ export default function IntegrationWidgets() {
             className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
             onClick={() => navigate('/owner/crm?entity=leads&view=notes&action=new')}
           >
-            <FileText className="h-4 w-4 text-purple-600" />
+            <FileText className="h-4 w-4 text-[#064E3B]" />
             <span className="text-sm">Add Quick Note</span>
           </Button>
 
@@ -145,7 +151,7 @@ export default function IntegrationWidgets() {
               <div className="w-2 h-2 rounded-full jj-surface-emerald animate-pulse" />
               <span className="text-sm text-[#1A1A1A]/70">Active Automations</span>
             </div>
-            <span className="text-sm font-medium text-[#B89555]">
+            <span className="text-sm font-medium text-[#064E3B]">
               {loadingAutomations ? '...' : automationsCount}
             </span>
           </div>
