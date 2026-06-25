@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { 
-  ChevronLeft,
-  ChevronRight,
+  PanelLeftClose,
+  PanelLeftOpen,
   LogOut,
   Home,
   Shield,
