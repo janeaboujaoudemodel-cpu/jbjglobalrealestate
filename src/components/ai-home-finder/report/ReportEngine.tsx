@@ -61,7 +61,7 @@ export interface ReportEngineProps {
 }
 
 const WHITE = "#FFFFFF";
-const PRICE = "#B45309";
+const PRICE = T.gold;
 const BRAND_LINE = `${TRADE_LICENSE_BRAND} · Trade License ${TRADE_LICENSE_NUMBER}`;
 
 const escText = (value: unknown) => String(value ?? "").replace(/\s+/g, " ").trim();
@@ -638,8 +638,8 @@ function MatchedPropertiesPage({ branding, projects, pageIdPrefix, criteriaRows 
 
 const verdictCopy: Record<Verdict, { label: string; tone: string }> = {
   match: { label: "Match", tone: T.emerald },
-  close: { label: "Close", tone: PRICE },
-  miss: { label: "Miss", tone: "#B23A48" },
+  close: { label: "Close", tone: T.gold },
+  miss: { label: "Review", tone: T.muted },
 };
 
 function ComparisonPage({ branding, projects, pageIdPrefix, criteriaRows }: { branding: ReportBranding; projects: ReportProject[]; pageIdPrefix: string; criteriaRows: CriterionRow[] }) {
@@ -900,7 +900,24 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
   const criteriaRows = clientRequirements ? buildCriteriaRowsForExport(clientRequirements, safeProjects as any[]) : [];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    <div data-report-root data-no-contrast-guard style={{ display: "flex", flexDirection: "column", gap: 24, background: T.page, color: T.ink, WebkitTextFillColor: T.ink }}>
+      <style>{`
+        [data-report-root], [data-report-root] * { box-sizing: border-box; }
+        [data-report-root] [data-on-dark],
+        [data-report-root] [data-on-dark] * {
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        [data-report-root] [data-on-dark] svg,
+        [data-report-root] [data-on-dark] svg * {
+          stroke: #FFFFFF !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        [data-report-root] :where(table,thead,tbody,tr,td,th,p,span,div,h1,h2,h3,li,ol):not([data-on-dark]):not([data-on-dark] *) {
+          text-shadow: none !important;
+        }
+      `}</style>
       <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />
       <ClientRequirementsPage branding={branding} pageIdPrefix={pageIdPrefix} requirements={requirements} projects={safeProjects} />
       <MatchedPropertiesPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
