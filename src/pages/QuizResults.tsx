@@ -252,6 +252,7 @@ const QuizResults = () => {
   const [badges, setBadges] = useState<Record<string, 'top1' | 'top2' | 'top3' | null>>({});
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareTrigger, setShareTrigger] = useState<"share" | "post-download">("share");
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [showVipModal, setShowVipModal] = useState(false);
   const [sessionAnswers, setSessionAnswers] = useState<Record<string, string | string[]>>({});
   const [matchmakerFormData, setMatchmakerFormData] = useState<MatchmakerFormData | null>(null);
