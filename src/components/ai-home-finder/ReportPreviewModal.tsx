@@ -7,7 +7,7 @@ import { Download, MessageCircle, Mail, Link as LinkIcon, Send, Upload, User as 
 import { toast } from "sonner";
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 import { ReportEngine, type ReportProject } from "./report/ReportEngine";
-import { REPORT_PAGE_PX } from "./report/tokens";
+import { REPORT_PAGE_PX, PAGE_SEP_VAR } from "./report/tokens";
 
 
 export type ReportRole = "investor" | "broker" | "developer" | "owner" | "consultant";
