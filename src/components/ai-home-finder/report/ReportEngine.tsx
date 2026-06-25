@@ -478,8 +478,9 @@ function PageFooter({ branding }: { branding: ReportBranding }) {
   return (
     <footer
       style={{
-        height: 44,
-        padding: "9px 42px",
+        height: SP.footerH,
+        padding: "9px 44px",
+
         boxSizing: "border-box",
         flexShrink: 0,
         fontSize: 9.5,
