@@ -381,10 +381,10 @@ export default function OwnerInbox() {
           </div>
 
           {/* AI Category Filter */}
-          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin">
             <button
               onClick={() => setCategoryFilter('all')}
-              className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+              className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
  categoryFilter === 'all'
  ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]'
  : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
@@ -394,7 +394,7 @@ export default function OwnerInbox() {
               <button
                 key={key}
                 onClick={() => setCategoryFilter(key)}
-                className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+                className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
  categoryFilter === key
  ? meta.color + ' border-current'
  : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
