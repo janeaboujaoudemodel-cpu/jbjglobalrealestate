@@ -354,7 +354,7 @@ export default function JBJBrokerReports() {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    label={({ status, count }) => `${status}: ${count}`}
+                    label={(props: any) => `${props.status}: ${props.count}`}
                   >
                     {leadStatuses.map((entry, index) => (
                       <Cell
