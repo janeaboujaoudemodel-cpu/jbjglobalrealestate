@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Download, MessageCircle, Mail, Link as LinkIcon, Send, Upload, User as UserIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
-import jbjMonogram from "@/assets/jbj-logo-dark-transparent.png";
+// Official letterhead monogram (black JBJ on champagne with gold rules above/below the B)
+import jbjMonogram from "@/assets/jbj-monogram-letterhead.png";
 
 export type ReportRole = "broker" | "developer" | "owner" | "consultant";
 export type BrandingMode = "both" | "photo" | "logo" | "none";
