@@ -50,7 +50,7 @@ export const SP = {
   /** Single source for <main> padding on every page. */
   pageMain: "26px 44px 20px",
   headerH: 92,
-  footerH: 44,
+  footerH: 54,
 } as const;
 
 /** CSS var driving the gap between sheets — 0 in PDF host, 18px in preview only. */
