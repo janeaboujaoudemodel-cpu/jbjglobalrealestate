@@ -15,6 +15,11 @@ import jbjMonogram from "@/assets/jbj-monogram-letterhead.png";
 import { REPORT_TOKENS as T, REPORT_PAGE_PX, ROLE_LABELS } from "./tokens";
 import type { ReportBranding } from "../ReportPreviewModal";
 
+const APP_ASSET_URLS = import.meta.glob("../../../assets/**/*.{png,jpg,jpeg,webp,avif,gif,svg}", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
+
 export interface ReportProject {
   id: string;
   slug?: string;
@@ -35,7 +40,7 @@ export interface ReportProject {
 }
 
 export interface ReportEngineProps {
-  /** "preview" = first 2 pages only. "pdf" = full report with extended pages. */
+  /** Preview and PDF both render the full report. Kept only for call-site clarity. */
   mode: "preview" | "pdf";
   branding: ReportBranding;
   projects: ReportProject[];
@@ -83,6 +88,76 @@ const stripHtml = (s: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
+function unwrapNextImageProxy(src: string): string {
+  if (!src.includes("/_next/image")) return src;
+  try {
+    const parsed = new URL(src);
+    const inner = parsed.searchParams.get("url");
+    const decoded = inner ? decodeURIComponent(inner) : "";
+    return decoded.startsWith("http") ? decoded : src;
+  } catch {
+    return src;
+  }
+}
+
+function resolveReportImage(src?: string | null): string | undefined {
+  if (!src) return undefined;
+  const resolved = unwrapNextImageProxy(src);
+  if (resolved.startsWith("/src/assets/")) {
+    const key = "../../../assets" + resolved.slice("/src/assets".length);
+    return APP_ASSET_URLS[key] ?? resolved;
+  }
+  if (resolved.startsWith("src/assets/")) {
+    const key = "../../../assets" + resolved.slice("src/assets".length);
+    return APP_ASSET_URLS[key] ?? resolved;
+  }
+  return resolved;
+}
+
+const projectImage = (p: ReportProject) =>
+  resolveReportImage(p.cover_image_url || p.images?.find((img) => Boolean(img?.image_url))?.image_url || null);
+
+function NeutralImagePlaceholder() {
+  return (
+    <div
+      aria-label="Project image unavailable"
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: T.raised,
+        backgroundImage:
+          "linear-gradient(135deg, rgba(184,149,85,0.16) 0%, rgba(253,251,247,0.72) 45%, rgba(6,78,59,0.08) 100%), repeating-linear-gradient(45deg, rgba(184,149,85,0.10) 0 1px, transparent 1px 18px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: T.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        letterSpacing: "0.14em",
+        textTransform: "uppercase",
+      }}
+    >
+      Image pending
+    </div>
+  );
+}
+
+function PremiumImage({ src, alt }: { src?: string; alt: string }) {
+  const [failed, setFailed] = React.useState(false);
+  if (!src || failed) return <NeutralImagePlaceholder />;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      crossOrigin="anonymous"
+      loading="eager"
+      decoding="sync"
+      onError={() => setFailed(true)}
+      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+    />
+  );
+}
+
 
 // ---------- shared chrome ----------
 function PageFrame({
@@ -112,10 +187,11 @@ function PageFrame({
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
+        flexShrink: 0,
       }}
     >
       <PageHeader pageLabel={pageLabel} branding={branding} />
-      <div style={{ flex: 1, minHeight: 0, padding: "28px 40px", boxSizing: "border-box" }}>
+      <div style={{ flex: 1, minHeight: 0, padding: "24px 40px", boxSizing: "border-box" }}>
         {children}
       </div>
       <PageFooter branding={branding} />
@@ -131,7 +207,8 @@ function PageHeader({ pageLabel, branding }: { pageLabel: string; branding: Repo
       data-surface="emerald"
       data-on-dark
       style={{
-        padding: "20px 40px",
+        minHeight: 92,
+        padding: "14px 40px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -147,13 +224,15 @@ function PageHeader({ pageLabel, branding }: { pageLabel: string; branding: Repo
             src={branding.logoDataUrl}
             alt=""
             crossOrigin="anonymous"
-            style={{ height: 64, width: 64, borderRadius: 6, background: "#fff", objectFit: "contain", padding: 4 }}
+            loading="eager"
+            decoding="sync"
+            style={{ height: 62, width: 62, borderRadius: 6, background: "#fff", objectFit: "contain", padding: 4 }}
           />
         ) : (
           <div
             style={{
-              height: 64,
-              width: 64,
+              height: 62,
+              width: 62,
               borderRadius: 6,
               background: "#FFFFFF",
               border: `1px solid ${T.gold}`,
@@ -182,7 +261,8 @@ function PageFooter({ branding }: { branding: ReportBranding }) {
   return (
     <div
       style={{
-        padding: "12px 40px",
+        minHeight: 42,
+        padding: "10px 40px",
         fontSize: 10,
         display: "flex",
         alignItems: "center",
@@ -228,9 +308,9 @@ function CoverPage({
             display: "flex",
             alignItems: "center",
             gap: 16,
-            padding: "16px 0 18px 0",
+            padding: "12px 0 14px 0",
             borderBottom: `1px solid ${T.goldHair}`,
-            marginBottom: 18,
+            marginBottom: 16,
           }}
         >
           {showPhoto ? (
@@ -238,9 +318,11 @@ function CoverPage({
               src={branding.photoDataUrl}
               alt=""
               crossOrigin="anonymous"
+              loading="eager"
+              decoding="sync"
               style={{
-                height: 72,
-                width: 72,
+                height: 66,
+                width: 66,
                 borderRadius: "50%",
                 objectFit: "cover",
                 border: `2px solid ${T.gold}`,
@@ -250,8 +332,8 @@ function CoverPage({
           ) : (
             <div
               style={{
-                height: 72,
-                width: 72,
+                height: 66,
+                width: 66,
                 borderRadius: "50%",
                 background: T.raised,
                 border: `2px solid ${T.gold}`,
@@ -260,7 +342,7 @@ function CoverPage({
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: 800,
-                fontSize: 22,
+                fontSize: 21,
                 flexShrink: 0,
               }}
             >
@@ -293,9 +375,9 @@ function CoverPage({
           style={{
             display: "flex",
             gap: 14,
-            padding: "14px 0",
+            padding: "12px 0",
             borderBottom: `1px solid ${T.goldHair}`,
-            marginBottom: 18,
+            marginBottom: 16,
           }}
         >
           {showPhoto && (
@@ -303,6 +385,8 @@ function CoverPage({
               src={branding.photoDataUrl}
               alt=""
               crossOrigin="anonymous"
+              loading="eager"
+              decoding="sync"
               style={{
                 height: 60,
                 width: 60,
@@ -340,51 +424,91 @@ function CoverPage({
         </div>
       )}
 
-      <h2 style={{ fontSize: 22, fontWeight: 800, color: T.ink, margin: "0 0 14px 0" }}>
-        Your AI-Selected Properties
-      </h2>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1.15fr 0.85fr",
+          gap: 14,
+          marginBottom: 16,
+        }}
+      >
+        <div>
+          <h2 style={{ fontSize: 24, fontWeight: 800, color: T.ink, margin: "0 0 6px 0", lineHeight: 1.1 }}>
+            Your AI-Selected Properties
+          </h2>
+          <p style={{ fontSize: 12, lineHeight: 1.5, color: T.muted, margin: 0 }}>
+            Three purchase-focused options selected to match the brief while keeping off-plan value, developer
+            incentives, and long-term appreciation in focus.
+          </p>
+        </div>
+        <div
+          style={{
+            background: T.surface,
+            border: `1px solid ${T.goldHair}`,
+            borderRadius: 8,
+            padding: "12px 14px",
+            alignSelf: "stretch",
+          }}
+        >
+          <div style={{ fontSize: 9, color: T.emerald, fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase" }}>
+            Selection strategy
+          </div>
+          <div style={{ marginTop: 6, fontSize: 12, lineHeight: 1.45, color: T.ink, fontWeight: 600 }}>
+            Prioritize developer-direct off-plan inventory with clear payment flexibility and resale upside.
+          </div>
+        </div>
+      </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {projects.slice(0, 3).map((p, i) => (
           <div
             key={p.id}
             style={{
               display: "flex",
-              gap: 14,
-              padding: 10,
+              gap: 16,
+              padding: 12,
               borderRadius: 6,
               background: T.surface,
               border: `1px solid ${T.goldHair}`,
+              minHeight: 136,
             }}
           >
             <div
               style={{
-                width: 140,
-                height: 96,
+                width: 178,
+                height: 112,
                 borderRadius: 4,
                 background: T.raised,
                 flexShrink: 0,
                 overflow: "hidden",
               }}
             >
-              {(p.cover_image_url || p.images?.[0]?.image_url) && (
-                <img
-                  src={p.cover_image_url || p.images?.[0]?.image_url}
-                  alt=""
-                  crossOrigin="anonymous"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              )}
+              <PremiumImage src={projectImage(p)} alt={p.name} />
             </div>
             <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <div style={{ fontSize: 10, fontWeight: 800, color: T.gold, letterSpacing: 1 }}>
+              <div
+                style={{
+                  width: 74,
+                  height: 24,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 999,
+                  background: "#FFFFFF",
+                  border: `1px solid ${T.gold}`,
+                  fontSize: 9,
+                  fontWeight: 900,
+                  color: T.gold,
+                  letterSpacing: 0.8,
+                }}
+              >
                 RANK #{i + 1}
               </div>
               <div
                 style={{
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: 800,
                   color: T.ink,
-                  marginTop: 2,
+                  marginTop: 8,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -395,7 +519,7 @@ function CoverPage({
               <div style={{ fontSize: 12, color: T.muted, marginTop: 1 }}>
                 {[p.developer?.name, p.area].filter(Boolean).join(" • ")}
               </div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#B45309", marginTop: 4 }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#B45309", marginTop: 7 }}>
                 {fmtPrice(p)}
               </div>
             </div>
@@ -403,9 +527,16 @@ function CoverPage({
         ))}
       </div>
 
-      <p style={{ fontSize: 10, marginTop: 18, color: T.muted, fontStyle: "italic" }}>
-        The full report continues with a per-property comparison, deep analysis, and a closing summary.
-      </p>
+      <div style={{ marginTop: 18, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+        {["Options comparison", "Project deep dives", "Consultant next steps"].map((label) => (
+          <div key={label} style={{ padding: 12, borderRadius: 6, border: `1px solid ${T.goldHair}`, background: "#FFFFFF" }}>
+            <div style={{ fontSize: 10, color: T.emerald, fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              Included
+            </div>
+            <div style={{ fontSize: 12, color: T.ink, fontWeight: 800, marginTop: 4 }}>{label}</div>
+          </div>
+        ))}
+      </div>
     </PageFrame>
   );
 }
@@ -434,15 +565,51 @@ function ComparisonPage({
   return (
     <PageFrame
       id={`${pageIdPrefix}-page-2`}
-      pageLabel="Page 2 · Property Comparison"
+      pageLabel="Page 2 · Options Comparison"
       branding={branding}
     >
-      <h2 style={{ fontSize: 22, fontWeight: 800, color: T.ink, margin: "0 0 6px 0" }}>
-        How each property matches your requirements
+      <h2 style={{ fontSize: 24, fontWeight: 800, color: T.ink, margin: "0 0 6px 0" }}>
+        Options Comparison
       </h2>
       <p style={{ fontSize: 11, color: T.muted, margin: "0 0 16px 0" }}>
         Side-by-side comparison of the top three picks from your AI-curated shortlist.
       </p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 16 }}>
+        {top3.map((p, i) => (
+          <div key={p.id} style={{ background: T.surface, border: `1px solid ${T.goldHair}`, borderRadius: 8, overflow: "hidden" }}>
+            <div style={{ height: 88, background: T.raised }}>
+              <PremiumImage src={projectImage(p)} alt={p.name} />
+            </div>
+            <div style={{ padding: "9px 10px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
+                <span
+                  data-no-contrast-guard
+                  data-on-dark
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: "50%",
+                    backgroundImage: T.emeraldGradient,
+                    backgroundColor: T.emerald,
+                    color: "#FFFFFF",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 10,
+                    fontWeight: 900,
+                    flexShrink: 0,
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <strong style={{ fontSize: 12, lineHeight: 1.2, color: T.ink }}>{p.name}</strong>
+              </div>
+              <div style={{ fontSize: 10, color: T.muted }}>{fmtPrice(p)}</div>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <div style={{ overflow: "hidden", borderRadius: 8, border: `1px solid ${T.goldHair}` }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
@@ -510,7 +677,8 @@ function ComparisonPage({
                 style={{
                   padding: "12px",
                   fontWeight: 800,
-                  background: T.emerald,
+                  backgroundImage: T.emeraldGradient,
+                  backgroundColor: T.emerald,
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
                 }}
@@ -525,7 +693,8 @@ function ComparisonPage({
                   style={{
                     padding: "12px",
                     fontWeight: 800,
-                    background: T.emerald,
+                    backgroundImage: T.emeraldGradient,
+                    backgroundColor: T.emerald,
                     color: "#FFFFFF",
                     WebkitTextFillColor: "#FFFFFF",
                   }}
@@ -558,7 +727,7 @@ function PropertyDetailPage({
   index: number;
   pageIdPrefix: string;
 }) {
-  const cover = project.cover_image_url || project.images?.[0]?.image_url;
+  const cover = projectImage(project);
   const amenities = (project.amenities || []).filter(Boolean).slice(0, 12);
   const description = stripHtml(project.description || "");
 
@@ -570,10 +739,16 @@ function PropertyDetailPage({
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
         <span
+          data-no-contrast-guard
+          data-on-dark
           style={{
-            display: "inline-block",
-            padding: "4px 10px",
-            background: T.emerald,
+            width: 78,
+            height: 26,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundImage: T.emeraldGradient,
+            backgroundColor: T.emerald,
             color: "#FFFFFF",
             fontSize: 10,
             fontWeight: 800,
@@ -592,26 +767,19 @@ function PropertyDetailPage({
         {project.name}
       </h2>
 
-      {cover && (
-        <div
-          style={{
-            width: "100%",
-            height: 240,
-            borderRadius: 8,
-            overflow: "hidden",
-            background: T.raised,
-            marginBottom: 16,
-            border: `1px solid ${T.goldHair}`,
-          }}
-        >
-          <img
-            src={cover}
-            alt=""
-            crossOrigin="anonymous"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </div>
-      )}
+      <div
+        style={{
+          width: "100%",
+          height: 250,
+          borderRadius: 8,
+          overflow: "hidden",
+          background: T.raised,
+          marginBottom: 16,
+          border: `1px solid ${T.goldHair}`,
+        }}
+      >
+        <PremiumImage src={cover} alt={project.name} />
+      </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 16 }}>
         {[
@@ -655,6 +823,27 @@ function PropertyDetailPage({
           </p>
         </div>
       )}
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+        <div style={{ padding: 14, borderRadius: 8, background: "#FFFFFF", border: `1px solid ${T.goldHair}` }}>
+          <h3 style={{ fontSize: 12, fontWeight: 900, color: T.emerald, margin: "0 0 6px 0", letterSpacing: 0.5 }}>
+            WHY IT MATCHES
+          </h3>
+          <p style={{ fontSize: 11, color: T.ink, lineHeight: 1.55, margin: 0 }}>
+            This option balances ticket size, location, developer profile, and off-plan flexibility against the
+            client brief, making it suitable for a focused purchase shortlist.
+          </p>
+        </div>
+        <div style={{ padding: 14, borderRadius: 8, background: "#FFFFFF", border: `1px solid ${T.goldHair}` }}>
+          <h3 style={{ fontSize: 12, fontWeight: 900, color: T.emerald, margin: "0 0 6px 0", letterSpacing: 0.5 }}>
+            PAYMENT PLAN FOCUS
+          </h3>
+          <p style={{ fontSize: 11, color: T.ink, lineHeight: 1.55, margin: 0 }}>
+            Confirm the live developer payment schedule, launch incentives, unit availability, and premium view
+            options before reservation.
+          </p>
+        </div>
+      </div>
 
       {amenities.length > 0 && (
         <div style={{ marginBottom: 12 }}>
@@ -790,7 +979,9 @@ export function ReportEngine({
   pageIdPrefix = "report",
 }: ReportEngineProps) {
   const safeProjects = projects.slice(0, 3);
-  const showExtended = mode === "pdf";
+  // Preview and PDF must stay pixel-identical: render the same complete page set.
+  // The `mode` prop remains only to document which caller mounted the engine.
+  void mode;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -801,17 +992,16 @@ export function ReportEngine({
         pageIdPrefix={pageIdPrefix}
       />
       <ComparisonPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} />
-      {showExtended &&
-        safeProjects.map((p, i) => (
-          <PropertyDetailPage
-            key={p.id}
-            branding={branding}
-            project={p}
-            index={i}
-            pageIdPrefix={pageIdPrefix}
-          />
-        ))}
-      {showExtended && <ClosingPage branding={branding} pageIdPrefix={pageIdPrefix} />}
+      {safeProjects.map((p, i) => (
+        <PropertyDetailPage
+          key={p.id}
+          branding={branding}
+          project={p}
+          index={i}
+          pageIdPrefix={pageIdPrefix}
+        />
+      ))}
+      <ClosingPage branding={branding} pageIdPrefix={pageIdPrefix} />
     </div>
   );
 }
