@@ -1,105 +1,90 @@
 ## Goal
 
-One single source of truth for the AI Home Finder report. The Live Preview, the Downloaded PDF, the Print Preview, and the Email attachment must all render the **same React component**. Visual design (colors, gradients, typography, header, footer, logo, spacing, cards, badges) is shared; only the **content depth** changes between Preview (short) and PDF (long).
+Stop patching the report and fix the layout engine so the Live Preview is **pixel-identical** to the downloaded PDF, every page is a complete A4, headers/footers are locked, real property images load, and the visual quality matches McKinsey / CBRE / Savills.
 
-## Current state (why it's broken)
+## Root causes found in the current code
 
-- `src/pages/QuizResults.tsx` contains an ~880-line jsPDF script (`buildPdf`) that hand-draws the PDF using `doc.text`, `doc.rect`, custom palette arrays, custom gold ombré wordmark, etc. — totally independent layout.
-- `src/components/ai-home-finder/ReportPreviewModal.tsx` is a React component with its own JSX, palette `C`, emerald gradient header, champagne cards, JBJ monogram tile.
-- Two parallel systems → divergent header, colors, typography, spacing, footer.
+1. **Whitespace between pages in the preview** — `ReportEngine.tsx` wraps every `[data-report-page]` in a flex column with `gap: 24`. That 24px gap is rendered as champagne emptiness between pages, which reads as "footer detached", "header floating", "page ends halfway". The PDF capture loop ignores it, so preview and PDF diverge.
+2. **Off-by-one preview height** — `ReportPreviewModal.tsx` computes `pageCount = 6 + min(previewProjects.length, 3)` against `projects.slice(0, 6)`, while `ReportEngine` only renders `projects.slice(0, 3)`. When fewer than 3 (or more than 3) projects come in, the absolute-positioned scaled report under-reserves or over-reserves vertical space → blank gap at the bottom and/or clipped last page.
+3. **"PROJECT IMAGE PENDING" leaking to clients** — `PremiumImage` sets `crossOrigin="anonymous"` on every image. Any project image served without CORS headers (most CDN/dev URLs) triggers `onError` → the literal "Project image pending" copy renders. There is no second-chance fetch and no premium fallback.
+4. **html2canvas window sizing** — capture passes `windowWidth/windowHeight = 794×1123`, but the offscreen host is the full report height (≈9× that). Chromium clips layout to the window box → some pages render with partial content or wrong header alignment in the PDF.
+5. **Typography is ad-hoc** — heading sizes (29 / 30 / 32), eyebrow paddings, card paddings, and field-card min-heights are all hand-tuned per page. No single typography scale.
+6. **Emerald recommendation cards are cramped** — `padding: 14–18`, text sits flush against the gold border, eyebrow uses `marginBottom: 7`. Reads as "black on dark green" because the eyebrow + body collapse together.
+7. **Property cards on Matched / Comparison pages don't share a grid** — `224px 1fr` vs `1fr 252px` vs `repeat(3, 1fr)` with different inner paddings, so widths and right-rails visibly drift.
 
-## Target architecture
+## What this plan changes
 
-```
-src/components/ai-home-finder/report/
-  ReportEngine.tsx          ← single shared report component (pages array)
-  ReportPage.tsx            ← A4 page frame: header + footer + content
-  pages/
-    CoverPage.tsx           ← page 1: monogram + "JBJ GLOBAL REAL ESTATE" wordmark, salutation
-    PicksPage.tsx           ← Your AI-Selected Properties (RANK #1/#2/#3 cards)
-    ComparisonPage.tsx      ← criteria table + emerald Match summary row
-    PropertyDetailPage.tsx  ← (PDF-only) per-project deep dive — area, developer, ROI, payment plan, amenities, AI reasoning
-    ClosingPage.tsx         ← (PDF-only) market insights + CTA
-  tokens.ts                 ← single palette: emerald gradient, champagne, gold, ink, muted
-```
+### A. One layout engine, locked A4 page container
 
-`ReportEngine` accepts:
-- `mode: "preview" | "pdf"` — drives which pages render. Preview = Cover + Picks + Comparison. PDF = everything.
-- `projects`, `branding`, `matchmakerFormData`, `salutation`, etc.
+- In `ReportEngine.tsx`, remove the `gap: 24` from `[data-report-root]`. Pages render edge-to-edge. Add a `[data-report-page] + [data-report-page] { margin-top: var(--page-sep, 0px) }` rule so the **preview** can opt-in to a thin shadow separator without changing PDF capture.
+- Keep `PageFrame` as the only page primitive: fixed `794×1123`, `display: flex; flex-direction: column`, 90px header, 44px footer, `<main>` `flex: 1; overflow: hidden`. No page may exceed this — content that overflows is clamped, never spills.
+- Standardize page padding to a single token: `padding: 28px 44px 22px` for every `<main>`. Same on every page, every property.
 
-Visual primitives (header band, footer bar, page frame, card, badge, table) live in `ReportPage.tsx` and are **identical** in both modes. The only difference is which `<*Page>` children are mounted.
+### B. Pixel-parity preview
 
-## PDF export path
+- In `ReportPreviewModal.tsx`, compute `pageCount` from the **same source** the engine uses: `6 + safeProjects.length` where `safeProjects = projects.slice(0, 3)`. Use that for the scaled-container height.
+- Set `--page-sep: 18px` only inside the preview wrapper (via inline style on the scaled root), so previews show a faint shadowed gap between sheets but the offscreen PDF host stays at `--page-sep: 0`.
+- Replace the `position: absolute + transform: scale` trick with `transform-origin: top left; transform: scale(s)` on a normally-flowed child wrapped in a div whose height equals `naturalHeight * scale` — measured from the rendered DOM via a ref + ResizeObserver, not arithmetic. This eliminates the off-by-one whitespace at the bottom.
 
-Replace the entire `buildPdf` jsPDF script in `QuizResults.tsx` with a `renderReportToPdf` util:
+### C. Real property images, premium fallback, no "pending" copy
 
-```
-src/utils/renderReportToPdf.ts
-  - Mounts <ReportEngine mode="pdf" .../> into a hidden offscreen container (fixed width = A4 @ 96dpi = 794px, position: fixed; left: -10000px).
-  - Waits for fonts + images (Promise.all on <img>.complete and document.fonts.ready).
-  - For each [data-report-page] node:
-      - html2canvas(node, { scale: 2, useCORS: true, backgroundColor: null })
-      - pdf.addImage(...) at full A4 size, addPage() between
-  - Returns { blob, filename }
-```
+- Rewrite `PremiumImage`:
+  1. Build a candidate list: proxied URL → raw URL → first item in `project.images[]` → `null`.
+  2. Try them in order; only after all fail show the placeholder.
+  3. Drop `crossOrigin="anonymous"` in `mode === "preview"`. Apply it only in PDF mode, and only on the final accepted URL (re-fetched through `proxyAnyDownloadUrl`, which we control and serves CORS).
+  4. Premium fallback = champagne textured panel + centered JBJ monogram + small "Imagery on request" caption in muted ink. The phrase "Project image pending" is removed from the codebase.
+- Pass `mode` from `ReportEngine` down to `PremiumImage` via a tiny React context so the same component branches without prop drilling.
 
-`previewDownload(branding)` in `QuizResults.tsx` calls `renderReportToPdf({ projects, branding, salutation, matchmakerFormData })`. Same util is reused by the Send-to-Consultant / Email flows so the attached PDF is byte-identical to what the user previewed.
+### D. PDF capture parity
 
-`ReportPreviewModal` is refactored: its right-hand "LIVE PREVIEW" pane mounts `<ReportEngine mode="preview" .../>` instead of its current bespoke JSX. The form (branding inputs, salutation, role) stays in the modal's left pane; on change it updates the same `branding` prop both panes consume.
+- In `renderReportToPdf.ts`:
+  - Remove `windowWidth` / `windowHeight` from the `html2canvas` call (let it use the element's own box).
+  - Add `scrollX: 0, scrollY: 0` and `foreignObjectRendering: false`.
+  - Set `imageTimeout: 8000` so slow images don't get dropped mid-capture.
+  - Render the report at `--page-sep: 0` inside the offscreen host so each captured page is exactly `794×1123` with no extra gap above/below.
 
-## Tokens (single palette, used everywhere)
+### E. Unified typography + spacing tokens
 
-```ts
-export const REPORT_TOKENS = {
-  page: "#FDFBF7",
-  surface: "#F7F2EA",
-  raised: "#EFE6D6",
-  gold: "#B89555",
-  goldHair: "rgba(184,149,85,0.32)",
-  ink: "#1A1A1A",
-  muted: "#6B6B6B",
-  emerald: "#064E3B",
-  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%)",
-  fontHeading: '"Inter", system-ui, sans-serif',
-  fontBody: '"Inter", system-ui, sans-serif',
-};
-```
+- Extend `report/tokens.ts` with a single scale used by every page:
+  ```
+  type: {
+    h1: 34/1.08/900, h2: 24/1.12/900, h3: 16/1.2/900,
+    eyebrow: 9.5/1/900/0.18em-upper,
+    body: 11.5/1.55/500, meta: 10/1.4/700,
+    price: 15/1/900
+  }
+  spacing: { pad: 14, padLg: 20, gap: 12, gapLg: 16, radius: 9 }
+  ```
+- Every page swaps its hand-coded `fontSize: 29/30/32` for `TYPE.h1`. Eyebrows use one component. FieldCard, emerald block, property detail aside, contact aside all use the same `radius`, `pad`, `gap`.
 
-Pixel sizes are A4-based (794 × 1123 px @ 96dpi). Every page is rendered at exactly that size in both modes so html2canvas captures = preview screenshot.
+### F. Emerald recommendation card contrast + padding
 
-## Migration steps
+- Emerald blocks (`data-on-dark`) get `padding: 22 24`, `eyebrow marginBottom: 12`, body `lineHeight: 1.65`, and a 1px inner gold hairline (`box-shadow: inset 0 0 0 1px rgba(184,149,85,0.35)`) so text never touches the outer gold border. White-on-emerald already lives in the `<style>` block — keep it, add `letter-spacing: 0.005em` for legibility at PDF dpi.
 
-1. Create `src/components/ai-home-finder/report/tokens.ts` + `ReportPage.tsx` (header band, footer bar, page chrome).
-2. Create `CoverPage`, `PicksPage`, `ComparisonPage` — port the JSX out of `ReportPreviewModal.tsx`'s preview pane into shared components.
-3. Create PDF-only `PropertyDetailPage` + `ClosingPage` — port the *content* (not the jsPDF drawing) from `buildPdf`'s text/section logic. Re-implement as React using the shared primitives.
-4. Build `ReportEngine` that maps `mode` → ordered pages array.
-5. Refactor `ReportPreviewModal` preview pane to `<ReportEngine mode="preview" />`.
-6. Write `src/utils/renderReportToPdf.ts` (offscreen mount + html2canvas + jsPDF.addImage, A4 page-by-page).
-7. Replace `buildPdf` body in `QuizResults.tsx` with a thin wrapper that calls `renderReportToPdf`. Delete all jsPDF drawing helpers (`drawOmbreWordmark`, `drawPageBg`, `drawHeader`, etc.).
-8. Update Send-to-Consultant / WhatsApp / Email flows to use the same util.
-9. Typecheck.
+### G. Grid alignment
 
-## Validation
+- Matched Properties: lock the row to `grid-template-columns: 232px 1fr`, image rail `min-height: 188`, inner padding `16px 18px 16px 0`.
+- Comparison Page: lock the property strip to `grid-template-columns: repeat(3, 1fr)` with a shared `min-height: 116` image, identical inner padding.
+- Property Detail: lock the right rail to `260px` on every property page, with three stacked cards of identical width, padding `16`, gap `12`.
 
-Drive Playwright via shell:
-1. Open `/ai-home-finder-results?...`, click Generate Report → screenshot preview pages 1, 2.
-2. Click Download PDF → save the blob.
-3. Use `pdftoppm` to render each PDF page to PNG.
-4. Diff preview screenshots vs PDF pages with `PIL` (mean abs pixel diff < 2% on cover/picks/comparison sections, which are shared).
-5. Attach side-by-side strip to the response.
+### H. Header / footer lock
 
-## Out of scope (this turn)
+- Header height: `92` (was 90 — pixel rounded to match `<main>` flex residue). Footer: `44`. Both `flex-shrink: 0`. Border-bottom on header is a single 1px gold line; no double border.
+- Page label / date sit in a 1fr right cell; brand block in a 1fr left cell. Both vertically centered. This kills the "header detached" look on short pages.
 
-- Changing the **content** depth of the PDF (still includes area/developer/ROI sections — they're just rendered through the shared React primitives now).
-- Touching unrelated reports (Compare, Brochure, etc.).
-- Any backend changes.
+## Files touched
 
-## Risk notes
+- `src/components/ai-home-finder/report/tokens.ts` — add `TYPE`, `SP`, `RADIUS`, `SEP_VAR`.
+- `src/components/ai-home-finder/report/ReportEngine.tsx` — remove root gap, add page-sep CSS var, refactor every page to use `TYPE`/`SP`, lock grids, add premium image fallback context, tighten header/footer.
+- `src/components/ai-home-finder/ReportPreviewModal.tsx` — compute `pageCount` from `safeProjects`, measure scaled height with ref+ResizeObserver, set `--page-sep: 18px` only in preview.
+- `src/utils/renderReportToPdf.ts` — drop window box, add `imageTimeout`, set `--page-sep: 0` on host.
 
-- html2canvas + emerald CSS gradient: must use `backgroundImage` inline style (already in tokens) — html2canvas supports it. Fallback solid color set as `backgroundColor`.
-- Fonts: must wait on `document.fonts.ready` before capture, else PDF picks up fallback Times.
-- Images (developer logos, project covers): `useCORS: true` + `crossOrigin="anonymous"` on every `<img>`; preload via `Image()` before capture.
+## Out of scope (explicit)
 
-## Deliverable
+- No new pages, no new sections, no copy rewrites beyond removing the "Project image pending" string.
+- No changes to the global champagne/emerald contract or `src/index.css` — the report engine carries `data-no-contrast-guard` and remains immune.
+- No changes to the rest of AI Home Finder (Quiz, Results page, filter panel).
 
-After merge, opening the modal and clicking Download PDF produces a PDF whose first 2–3 pages are **pixel-equivalent** to the on-screen Live Preview (same header gradient, same gold hairlines, same monogram, same RANK cards, same emerald Match summary row). Subsequent pages append the extended content using the same chrome.
+## Verification
+
+- Playwright: open `/ai-home-finder-results?...&free=true`, click "Download report", screenshot the preview pane, then trigger `renderReportToPdf` and convert the resulting PDF to images with `pdftoppm`. Diff page-by-page that header height, footer position, image boxes, emerald cards, and right rails are pixel-aligned. Confirm zero "Project image pending" occurrences across all 9 pages with real and missing images.
