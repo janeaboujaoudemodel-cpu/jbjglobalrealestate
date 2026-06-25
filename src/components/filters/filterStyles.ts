@@ -30,7 +30,7 @@ export const filterPillInactiveDark ="bg-[#FDFBF7]/95 border border-[#B89555]/70
 
 // Active (filter has a value). Solid ink, white label — the only state that uses
 // white text. Gold ring marks it as the brand-active state without harming contrast.
-export const filterPillActive ="jj-filter-emerald-control jj-pill-emerald-metallic text-white border-0 font-bold shadow-md" +"hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]";
+export const filterPillActive ="allow-white jj-filter-emerald-control jj-pill-emerald-metallic text-white border-0 font-bold shadow-md" +"hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]";
 
 // Helper: pick the right inactive variant based on surrounding surface
 export function pillInactive(variant:"light" |"dark" ="light") {
@@ -43,7 +43,7 @@ export const togglePillBase ="inline-flex items-center gap-1.5 px-3 py-1.5 round
 
 export const togglePillOff ="border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
 
-export const togglePillOn ="jj-filter-emerald-control jj-chip-emerald text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)]";
+export const togglePillOn ="allow-white jj-filter-emerald-control jj-chip-emerald text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)]";
 
 // Popover surface
 export const filterPopoverSurface ="bg-[#FDFBF7] border border-[#B89555]/40 shadow-xl z-[10200]";
@@ -65,7 +65,7 @@ export const filterSecondaryButton ="h-9 px-3 text-xs rounded-lg border border-[
 
 // Checkbox box (used inside panel rows). Ink/gold instead of bg-[#EFE6D6]/20.
 export const filterCheckBox ="w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors";
-export const filterCheckBoxOn ="jj-filter-emerald-control jj-chip-emerald border-0";
+export const filterCheckBoxOn ="allow-white jj-filter-emerald-control jj-chip-emerald border-0";
 export const filterCheckBoxOff ="border-[#B89555]/60 bg-[#FDFBF7]";
 
 // Search input wrapper (pill-shaped row in shortcut bar)
@@ -74,7 +74,7 @@ export const filterSearchPillInput ="w-full py-1.5 bg-transparent text-xs text-[
 
 // Active-filter chip in summary rows (ActiveFilterIndicator and similar)
 export const activeChipBase ="group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full text-xs font-semibold" +"bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:border-[#B89555]";
-export const activeChipPrimary ="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-filter-emerald-control jj-chip-emerald text-white text-xs font-semibold";
+export const activeChipPrimary ="allow-white inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-filter-emerald-control jj-chip-emerald text-white text-xs font-semibold";
 export const activeChipDismissDot ="ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#1A1A1A]/10 group-hover:bg-[#1A1A1A]/25 transition-colors";
 
 // Section dividers between groups of pills in the shortcut bar
