@@ -37,6 +37,8 @@ import {
 } from "@/hooks/useMatchmakerSession";
 import { buildPropertyPresentationParagraphs, findAmenityPhotoUrl } from "@/utils/matchmakerProse";
 import ReportPreviewModal, { type ReportBranding } from "@/components/ai-home-finder/ReportPreviewModal";
+import { renderReportToPdf } from "@/utils/renderReportToPdf";
+import type { ReportProject as ReportEngineProject } from "@/components/ai-home-finder/report/ReportEngine";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
