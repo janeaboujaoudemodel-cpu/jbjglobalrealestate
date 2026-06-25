@@ -9,7 +9,7 @@ import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 // Official letterhead monogram (black JBJ on champagne with gold rules above/below the B)
 import jbjMonogram from "@/assets/jbj-monogram-letterhead.png";
 
-export type ReportRole = "broker" | "developer" | "owner" | "consultant";
+export type ReportRole = "investor" | "broker" | "developer" | "owner" | "consultant";
 export type BrandingMode = "both" | "photo" | "logo" | "none";
 
 export interface ReportBranding {
@@ -18,6 +18,7 @@ export interface ReportBranding {
   photoDataUrl?: string;
   logoDataUrl?: string;
   name?: string;
+  salutation?: "Mr." | "Ms." | "";
   companyName?: string;
   phone?: string;
   whatsapp?: string;
@@ -51,17 +52,20 @@ interface Props {
   onSendToConsultant: (b: ReportBranding) => Promise<void> | void;
 }
 
-const STORAGE_KEY = "jbj.reportBranding.v2";
+const STORAGE_KEY = "jbj.reportBranding.v3";
 
 const ROLE_LABELS: Record<ReportRole, string> = {
+  investor: "Investor",
   broker: "Broker",
   developer: "Developer",
   owner: "Owner",
   consultant: "JBJ Consultant",
 };
 
-/** Map active app mode → report role. Default unknown to JBJ Consultant. */
+/** Map active app mode → report role. Investor maps directly so the report is
+ *  addressed TO the investor (FROM JBJ), not prepared BY them. */
 const roleFromMode = (mode: UserMode | undefined): ReportRole => {
+  if (mode === "investor") return "investor";
   if (mode === "broker") return "broker";
   if (mode === "developer") return "developer";
   if (mode === "owner") return "owner";
@@ -127,6 +131,7 @@ export default function ReportPreviewModal({
       role: activeRole,
       mode: "both",
       name: "",
+      salutation: "Mr.",
       companyName: "JBJ Global Real Estate",
       phone: "",
       whatsapp: "",
@@ -214,7 +219,7 @@ export default function ReportPreviewModal({
       <DialogContent
         data-no-contrast-guard
         data-aihf-preview
-        className="sm:max-w-[1120px] max-h-[92vh] overflow-hidden p-0 border-0"
+        className="sm:max-w-[1120px] max-h-[92vh] h-[92vh] overflow-hidden p-0 border-0 flex flex-col"
         style={{ background: C.page, color: C.ink }}
       >
         {/* Scoped override — beats the global contrast guard inside the preview card only.
@@ -288,7 +293,7 @@ export default function ReportPreviewModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-[380px_1fr] gap-0 overflow-hidden" style={{ maxHeight: "calc(92vh - 180px)" }}>
+        <div className="grid md:grid-cols-[380px_1fr] gap-0 overflow-hidden flex-1 min-h-0">
           {/* LEFT — branding form */}
           <div className="overflow-y-auto px-5 py-4 border-r space-y-4" style={{ borderColor: C.goldHair, background: C.surface }}>
             {/* Auto-detected role chip (read-only, synced to active mode) */}
@@ -395,6 +400,29 @@ export default function ReportPreviewModal({
               </div>
             </div>
 
+            {activeRole === "investor" && (
+              <div>
+                <Label className="text-xs font-semibold" style={{ color: C.ink }}>Salutation</Label>
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  {(["Mr.", "Ms."] as const).map((s) => {
+                    const active = (branding.salutation || "Mr.") === s;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        data-aihf-include-btn
+                        data-active={active ? "true" : "false"}
+                        onClick={() => update({ salutation: s })}
+                        className={`text-xs font-semibold rounded-md px-3 py-2 transition ${active ? "allow-white" : ""}`}
+                        style={active ? primaryBtn : secondaryBtn}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             {[
               { k: "name", l: "Your name", ph: "Jane Doe" },
               { k: "companyName", l: "Company name", ph: "JBJ Global Real Estate" },
@@ -439,13 +467,13 @@ export default function ReportPreviewModal({
               >
                 <div className="flex items-center gap-3">
                   {showLogo ? (
-                    <img src={branding.logoDataUrl} alt="" className="h-11 w-11 rounded bg-white object-contain p-1" />
+                    <img src={branding.logoDataUrl} alt="" className="h-16 w-16 rounded bg-white object-contain p-1" />
                   ) : (
                     <div
-                      className="h-11 w-11 rounded flex items-center justify-center overflow-hidden"
+                      className="h-16 w-16 rounded flex items-center justify-center overflow-hidden"
                       style={{ background: "#FFFFFF", border: `1px solid ${C.gold}` }}
                     >
-                      <img src={jbjMonogram} alt="JBJ" className="h-9 w-9 object-contain" />
+                      <img src={jbjMonogram} alt="JBJ" className="h-[58px] w-[58px] object-contain" />
                     </div>
                   )}
                   <div>
@@ -458,8 +486,42 @@ export default function ReportPreviewModal({
                 </div>
               </div>
 
-              {/* Prepared-by strip */}
-              {branding.mode !== "none" && (
+              {/* Investor mode → addressed TO the client (FROM JBJ).
+                  All other modes → "Prepared by" branding strip. */}
+              {branding.mode !== "none" && branding.role === "investor" && (
+                <div
+                  className="px-5 py-4 flex items-center gap-3"
+                  style={{ background: C.surface, borderBottom: `1px solid ${C.goldHair}` }}
+                >
+                  {showPhoto ? (
+                    <img
+                      src={branding.photoDataUrl}
+                      alt=""
+                      className="h-16 w-16 rounded-full object-cover flex-shrink-0"
+                      style={{ border: `2px solid ${C.gold}` }}
+                    />
+                  ) : (
+                    <div
+                      className="h-16 w-16 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg"
+                      style={{ background: C.raised, border: `2px solid ${C.gold}`, color: C.ink }}
+                    >
+                      {(branding.name || "C").trim().charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="leading-tight">
+                    <p data-aihf-prepared-by className="text-[10px] uppercase tracking-[0.18em] font-semibold">
+                      Curated personally for
+                    </p>
+                    <p className="font-bold text-[16px]" style={{ color: C.ink }}>
+                      {`${branding.salutation || "Mr."} ${branding.name || "Valued Client"}`.trim()}
+                    </p>
+                    <p className="text-[10px] mt-0.5" style={{ color: C.muted }}>
+                      A bespoke selection presented by JBJ Global Real Estate
+                    </p>
+                  </div>
+                </div>
+              )}
+              {branding.mode !== "none" && branding.role !== "investor" && (
                 <div className="px-5 py-3 flex items-start gap-3" style={{ background: C.surface, borderBottom: `1px solid ${C.goldHair}` }}>
                   {showPhoto && (
                     <img src={branding.photoDataUrl} alt="" className="h-14 w-14 rounded-full object-cover flex-shrink-0" style={{ border: `2px solid ${C.gold}` }} />
@@ -526,11 +588,80 @@ export default function ReportPreviewModal({
                 <span data-aihf-website style={{ fontWeight: 600 }}>{branding.website || "www.jbj.ae"}</span>
               </div>
             </div>
+
+            {/* ============ PAGE 2 — PROPERTY COMPARISON (mirrors PDF) ============ */}
+            <div className="mx-auto mt-6 shadow-xl rounded overflow-hidden" style={{ background: C.page, color: C.ink, maxWidth: 580 }}>
+              <div
+                data-aihf-darkband
+                data-no-contrast-guard
+                className="px-5 py-3 flex items-center justify-between allow-white"
+                style={{ backgroundImage: C.emeraldGradient, backgroundColor: "#042c1c", borderBottom: `1px solid ${C.gold}` }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="h-9 w-9 rounded flex items-center justify-center" style={{ background: "#FFFFFF", border: `1px solid ${C.gold}` }}>
+                    <img src={jbjMonogram} alt="" className="h-8 w-8 object-contain" />
+                  </div>
+                  <p className="text-[11px] font-bold tracking-wider">PAGE 2 · PROPERTY COMPARISON</p>
+                </div>
+                <span className="text-[10px]" style={{ opacity: 0.85 }}>How each match fits your brief</span>
+              </div>
+              <div className="px-5 py-4">
+                <h3 className="text-base font-bold mb-3" style={{ color: C.ink }}>
+                  How each property matches your requirements
+                </h3>
+                <div className="overflow-hidden rounded border" style={{ borderColor: C.goldHair }}>
+                  <table className="w-full text-[11px]" style={{ borderCollapse: "collapse" }}>
+                    <thead>
+                      <tr style={{ background: C.raised }}>
+                        <th className="text-left px-2 py-2 font-bold" style={{ color: C.ink, borderBottom: `1px solid ${C.goldHair}` }}>Criteria</th>
+                        {previewProjects.slice(0, 3).map((p, i) => (
+                          <th key={p.id} className="text-left px-2 py-2 font-bold" style={{ color: C.ink, borderBottom: `1px solid ${C.goldHair}` }}>
+                            #{i + 1} {p.name.length > 14 ? p.name.slice(0, 13) + "…" : p.name}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { l: "Price", v: (p: PreviewProject) => fmtPrice(p) },
+                        { l: "Developer", v: (p: PreviewProject) => p.developer?.name || "—" },
+                        { l: "Area", v: (p: PreviewProject) => p.area || "—" },
+                        { l: "Type", v: () => "Off-Plan" },
+                      ].map((row, ri) => (
+                        <tr key={row.l} style={{ background: ri % 2 ? C.surface : "#FFFFFF" }}>
+                          <td className="px-2 py-2 font-semibold" style={{ color: C.ink, borderTop: `1px solid ${C.goldHair}` }}>{row.l}</td>
+                          {previewProjects.slice(0, 3).map((p) => (
+                            <td key={p.id} className="px-2 py-2" style={{ color: C.muted, borderTop: `1px solid ${C.goldHair}` }}>
+                              {row.v(p)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                      <tr style={{ background: "#064E3B" }}>
+                        <td className="px-2 py-2 font-bold text-white" style={{ color: "#fff" }}>Match summary</td>
+                        {previewProjects.slice(0, 3).map((p, i) => (
+                          <td key={p.id} className="px-2 py-2 font-bold text-white" style={{ color: "#fff" }}>
+                            {["Best", "Strong", "Good"][i] || "Fit"}
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-[10px] mt-3" style={{ color: C.muted, fontStyle: "italic" }}>
+                  The full exported PDF includes per-criterion verdicts (match / close / miss) for every project.
+                </p>
+              </div>
+              <div className="px-5 py-3 text-[10px] flex items-center justify-between" style={{ background: C.surface, color: C.ink, borderTop: `1px solid ${C.gold}` }}>
+                <span>Powered by JBJ Global Real Estate — Dubai, UAE</span>
+                <span data-aihf-website style={{ fontWeight: 600 }}>{branding.website || "www.jbj.ae"}</span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2" style={{ borderColor: C.goldHair, background: C.page }}>
+        <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2 shrink-0" style={{ borderColor: C.goldHair, background: C.page }}>
           <Button onClick={() => run("copy", () => onCopy())} disabled={!!busy} className="font-semibold" style={secondaryBtn}>
             <LinkIcon className="w-4 h-4 mr-2" /> Copy text
           </Button>

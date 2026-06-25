@@ -343,22 +343,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </CardBadge>
           )}
 
-          {/* Sold Out marker — placed at BOTTOM of the cover (never top),
-              styled as a refined emerald-frame pill that also hints at the
-              secondary-market alternative. Owner directive: sold inventory
-              must never be promoted aggressively at the top of a card. */}
-          {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
-            <div
-              data-surface="emerald"
-              data-emerald-ok="badge"
-              className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full jj-surface-emerald text-[10px] font-semibold uppercase tracking-[0.08em]"
-              title="Sold out with the developer — available on the secondary market"
-            >
-              <span>Sold Out</span>
-              <span className="opacity-70">·</span>
-              <span>Resale Available</span>
-            </div>
-          )}
+          {/* Owner rule: NEVER render a "Sold Out" badge on public cards.
+              Sold-out off-plan inventory remains discoverable on the secondary
+              market — surfacing a sold-out label kills conversion. The badge
+              is intentionally removed globally; sold-out off-plan rows are
+              still filtered out of recommendation lists upstream. */}
         </div>
 
 
