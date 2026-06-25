@@ -1,0 +1,12 @@
+import { chromium } from 'playwright';
+const browser=await chromium.launch({headless:true, executablePath:'/bin/chromium'}); const page=await browser.newPage({viewport:{width:1440,height:1000}});
+const sj=process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON, sk=process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY; if(sj&&sk) await page.addInitScript(({key,value})=>{localStorage.setItem(key,value);sessionStorage.setItem('owner_verified_once','1')},{key:sk,value:sj});
+await page.goto('http://127.0.0.1:8081/owner/crm?entity=leads&view=inbox',{waitUntil:'domcontentloaded'}); await page.waitForTimeout(2000);
+console.log(await page.evaluate(()=>{
+ const el=[...document.querySelectorAll('button')].find(x=>x.textContent?.trim().startsWith('All') && x.getAttribute('data-emerald-action')==='true');
+ function split(sel){const parts=[];let depth=0,cur='', quote=''; for(let i=0;i<sel.length;i++){const ch=sel[i]; if(quote){cur+=ch; if(ch===quote && sel[i-1] !== '\\') quote=''; continue;} if(ch==='"'||ch==="'"){quote=ch; cur+=ch; continue;} if(ch==='('||ch==='[') depth++; else if(ch===')'||ch===']') depth--; if(ch===','&&depth===0){parts.push(cur.trim()); cur=''} else cur+=ch;} if(cur.trim()) parts.push(cur.trim()); return parts;}
+ let out=[]; let order=0; function walk(rules){for(const r of [...rules]){order++; if(r.cssRules) walk(r.cssRules); else if(r.selectorText && r.style && (r.style.getPropertyValue('color')||r.style.getPropertyValue('-webkit-text-fill-color'))){for(const p of split(r.selectorText)){let m=false,e=''; try{m=el.matches(p)}catch(err){e=err.message} if(m){out.push({order,selector:p.slice(0,450),color:r.style.getPropertyValue('color'),cprio:r.style.getPropertyPriority('color'),fill:r.style.getPropertyValue('-webkit-text-fill-color'),fprio:r.style.getPropertyPriority('-webkit-text-fill-color')}); break;}}}}}
+ for(const ss of [...document.styleSheets]){try{walk(ss.cssRules)}catch{}}
+ return {computed:getComputedStyle(el).color, fill:getComputedStyle(el).webkitTextFillColor, count:out.length, out:out.slice(-30)};
+}));
+await browser.close();
