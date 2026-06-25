@@ -15531,3 +15531,316 @@ html body :is([data-action="download-brochure"], .jj-cta-download-brochure) :is(
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================
+   FINAL GLOBAL EMERALD + LAYOUT LOCK
+   Single source of truth: View All Projects / Start Exploring CTA.
+   - Bans restricted green/lime/teal/mint utilities sitewide.
+   - Forces approved emerald ombre on all emerald-keyed surfaces.
+   - White content (text/icon/arrow/tick/stroke) inside emerald.
+   - No white borders around any emerald circle/badge/CTA.
+   - Page gutter prevents card-to-edge collisions on every viewport.
+   ============================================================ */
+
+:root {
+  --page-gutter: clamp(16px, 4vw, 40px);
+}
+
+/* 1. Universal banned-green killer on accent surfaces ---------- */
+html body :is(
+  [class*="bg-green-"],
+  [class*="bg-emerald-3"], [class*="bg-emerald-4"], [class*="bg-emerald-5"],
+  [class*="bg-lime-"], [class*="bg-mint-"],
+  [class*="from-green-"], [class*="from-emerald-3"], [class*="from-emerald-4"], [class*="from-emerald-5"],
+  [class*="to-green-"], [class*="to-emerald-3"], [class*="to-emerald-4"], [class*="to-emerald-5"]
+):where(
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-chip,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-icon-tile-emerald,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-jj-emerald],
+  [data-favorite-pill],
+  [data-shortlist-pill],
+  [data-badge="ad"],
+  [data-badge="top"],
+  [data-cta="primary"]
+) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+}
+
+/* 2. Approved emerald surfaces: enforce white content + no border */
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-chip,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-icon-tile-emerald,
+  .jj-surface-emerald,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-jj-emerald]
+) {
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px -4px rgba(6,78,59,0.45), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-chip,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-icon-tile-emerald,
+  .jj-surface-emerald,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-jj-emerald]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  fill: none !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 3. Hover keeps content WHITE and uses approved darker hover */
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  [data-surface="emerald"],
+  [data-emerald="true"]
+):hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  color: #FFFFFF !important;
+}
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  [data-surface="emerald"],
+  [data-emerald="true"]
+):hover :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 4. Heart / Favorite / Shortlist icons → approved emerald circle, white icon */
+html body :is(
+  [data-favorite-button],
+  [data-shortlist-button],
+  .jj-favorite-pill,
+  .jj-shortlist-pill,
+  button[aria-label*="favorite" i],
+  button[aria-label*="shortlist" i],
+  button[aria-label*="wishlist" i]
+) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  color: #FFFFFF !important;
+}
+html body :is(
+  [data-favorite-button],
+  [data-shortlist-button],
+  .jj-favorite-pill,
+  .jj-shortlist-pill,
+  button[aria-label*="favorite" i],
+  button[aria-label*="shortlist" i],
+  button[aria-label*="wishlist" i]
+) :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: transparent !important;
+}
+html body :is(
+  [data-favorite-button][data-active="true"],
+  [data-shortlist-button][data-active="true"]
+) :is(svg, [class*="lucide"]) {
+  fill: #FFFFFF !important;
+}
+
+/* 5. Brochure-style checklist tick circles → emerald + white tick */
+html body :is(
+  [data-brochure-check],
+  .jj-brochure-check,
+  .jj-presentation-check
+) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  color: #FFFFFF !important;
+}
+html body :is(
+  [data-brochure-check],
+  .jj-brochure-check,
+  .jj-presentation-check
+) :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 6. Kill any white/cream/champagne ring around emerald containers */
+html body :is(
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-cta-emerald-metallic,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-chip,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-icon-tile-emerald,
+  .jj-surface-emerald,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-favorite-button],
+  [data-shortlist-button]
+) {
+  border-width: 0 !important;
+  outline: 0 !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+}
+
+/* 7. Page gutter — cards never touch viewport / sidebar edge */
+.jj-content-track,
+.jj-card-grid,
+.jj-page-gutter,
+[data-page-gutter] {
+  padding-left: var(--page-gutter) !important;
+  padding-right: var(--page-gutter) !important;
+}
+@media (max-width: 640px) {
+  .jj-content-track,
+  .jj-card-grid,
+  .jj-page-gutter,
+  [data-page-gutter] {
+    padding-left: max(16px, env(safe-area-inset-left)) !important;
+    padding-right: max(16px, env(safe-area-inset-right)) !important;
+  }
+}
+
+/* 8. Listing pages — clamp content inside the sidebar shell */
+[data-listing-shell],
+[data-projects-shell],
+[data-properties-shell] {
+  max-width: 100%;
+  padding-left: var(--page-gutter) !important;
+  padding-right: var(--page-gutter) !important;
+  box-sizing: border-box;
+}
+[data-listing-shell] > *,
+[data-projects-shell] > *,
+[data-properties-shell] > * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 9. Mortgage Calculator — kill light green, force emerald */
+html body :is(
+  [data-mortgage-panel],
+  [data-mortgage-card],
+  [data-mortgage-icon-tile],
+  [data-bank-parity-tile]
+) :is(
+  [class*="bg-green-"],
+  [class*="bg-emerald-3"], [class*="bg-emerald-4"], [class*="bg-emerald-5"],
+  [class*="from-green-"], [class*="to-green-"],
+  [class*="from-emerald-3"], [class*="from-emerald-4"], [class*="from-emerald-5"]
+) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+html body :is(
+  [data-mortgage-panel],
+  [data-bank-parity-tile]
+) :is([class*="text-green-"], [class*="text-emerald-3"], [class*="text-emerald-4"], [class*="text-emerald-5"]) {
+  color: #064E3B !important;
+}
+
+/* 10. Title contrast lock — never let dark text leak inside emerald surface */
+html body :is([data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-solid)
+  :is([class*="text-black"], [class*="text-slate-9"], [class*="text-zinc-9"], [class*="text-neutral-9"], [class*="text-[#1A1A1A]"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 11. Brochure/Presentation/Register-Interest CTAs — square premium emerald, no pill */
+html body :is(
+  [data-action="download-brochure"],
+  [data-action="register-interest"],
+  [data-action="download-branded-presentation"],
+  [data-action="download-report"]
+) {
+  border-radius: 12px !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  border: 0 !important;
+}
+html body :is(
+  [data-action="download-brochure"],
+  [data-action="register-interest"],
+  [data-action="download-branded-presentation"],
+  [data-action="download-report"]
+):hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  color: #FFFFFF !important;
+}
+html body :is(
+  [data-action="download-brochure"],
+  [data-action="register-interest"],
+  [data-action="download-branded-presentation"],
+  [data-action="download-report"]
+) :is(svg, [class*="lucide"], span, p, strong) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 12. Emerald accent labels (AI-Powered chip, status labels, CRM badges) */
+html body :is(.jj-label-emerald, [data-label="emerald"]) {
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  border: 0 !important;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-weight: 600;
+}
+html body :is(.jj-label-emerald, [data-label="emerald"]) :is(svg, [class*="lucide"], span) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* end FINAL GLOBAL EMERALD + LAYOUT LOCK */
