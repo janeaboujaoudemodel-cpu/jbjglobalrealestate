@@ -946,6 +946,7 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
   return (
     <ReportModeContext.Provider value={mode}>
       <div
+        id={`jbj-report-contrast-lock-${pageIdPrefix}`}
         data-report-root
         data-no-contrast-guard
         style={{
@@ -960,13 +961,18 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
       >
         <style>{`
           [data-report-root], [data-report-root] * { box-sizing: border-box; }
-          [data-report-root] [data-on-dark],
-          [data-report-root] [data-on-dark] * {
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark],
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] *,
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"],
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] * {
             color: #FFFFFF !important;
             -webkit-text-fill-color: #FFFFFF !important;
+            text-shadow: none !important;
           }
-          [data-report-root] [data-on-dark] svg,
-          [data-report-root] [data-on-dark] svg * {
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] svg,
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] svg *,
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] svg,
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] svg * {
             stroke: #FFFFFF !important;
             color: #FFFFFF !important;
             -webkit-text-fill-color: #FFFFFF !important;
