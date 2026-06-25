@@ -141,9 +141,9 @@ const FavoriteButton = ({
               className={`${sizeClasses[size]} ${actionClass}`}
             >
               {isShortlisted ? (
-                <Check className={`${iconSizes[size]} allow-white`} stroke="var(--ink-emerald-accent)" style={emeraldIconStyle} />
+                <Check className={`${iconSizes[size]} allow-white`} stroke="#FFFFFF" style={emeraldIconStyle} />
               ) : (
-                <ListPlus className={`${iconSizes[size]} allow-white`} stroke="var(--ink-emerald-accent)" style={emeraldIconStyle} />
+                <ListPlus className={`${iconSizes[size]} allow-white`} stroke="#FFFFFF" style={emeraldIconStyle} />
               )}
             </button>
           </TooltipTrigger>
