@@ -74,6 +74,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import { IconTile } from "@/components/ui/icon-tile";
 
 interface Lead {
   id: string;
@@ -510,29 +511,29 @@ const AdminLeads = () => {
       </PopoverTrigger>
       <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[10001]" align="start">
         <div className="space-y-1 max-h-72 overflow-y-auto">
-          <p className="text-xs font-semibold text-[color:var(--emerald-1)] px-2 py-1">Positive</p>
+          <p className="text-xs font-semibold text-[#064E3B] px-2 py-1">Positive</p>
           {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
-            <button key={status.value} onClick={() => onUpdate(status.value)}
-              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
+            <Button key={status.value} variant="outline" size="sm" onClick={() => onUpdate(status.value)}
+              className="h-8 w-full justify-start rounded-full">
               <span className={`w-2 h-2 rounded-full ${status.color}`} />
               <span className="text-sm text-[#1A1A1A]">{status.label}</span>
-            </button>
+            </Button>
           ))}
-          <p className="text-xs font-semibold text-blue-700 px-2 py-1 mt-2">Neutral</p>
+          <p className="text-xs font-semibold text-[#1A1A1A] px-2 py-1 mt-2">Neutral</p>
           {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
-            <button key={status.value} onClick={() => onUpdate(status.value)}
-              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
+            <Button key={status.value} variant="outline" size="sm" onClick={() => onUpdate(status.value)}
+              className="h-8 w-full justify-start rounded-full">
               <span className={`w-2 h-2 rounded-full ${status.color}`} />
               <span className="text-sm text-[#1A1A1A]">{status.label}</span>
-            </button>
+            </Button>
           ))}
-          <p className="text-xs font-semibold text-red-700 px-2 py-1 mt-2">Negative</p>
+          <p className="text-xs font-semibold text-[#1A1A1A] px-2 py-1 mt-2">Negative</p>
           {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
-            <button key={status.value} onClick={() => onUpdate(status.value)}
-              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
+            <Button key={status.value} variant="outline" size="sm" onClick={() => onUpdate(status.value)}
+              className="h-8 w-full justify-start rounded-full">
               <span className={`w-2 h-2 rounded-full ${status.color}`} />
               <span className="text-sm text-[#1A1A1A]">{status.label}</span>
-            </button>
+            </Button>
           ))}
         </div>
       </PopoverContent>
@@ -569,44 +570,44 @@ const AdminLeads = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/60 rounded-xl p-5 hover:shadow-lg hover:shadow-[#B89555]/20 transition-all">
+          <div className="jj-card p-5">
             <div className="flex items-center gap-3 mb-2">
-              <Users className="w-5 h-5 text-[#B89555]" />
+              <IconTile icon={Users} tone="emerald" size="sm" />
               <span className="text-[#1A1A1A]/60 text-sm">Total</span>
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{leads.length}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-purple-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
+          <div className="jj-card p-5">
             <div className="flex items-center gap-3 mb-2">
-              <MessageSquare className="w-5 h-5 text-purple-600" />
+              <IconTile icon={MessageSquare} tone="emerald" size="sm" />
               <span className="text-[#1A1A1A]/60 text-sm">Chats</span>
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{conversations.length}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-blue-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+          <div className="jj-card p-5">
             <div className="flex items-center gap-3 mb-2">
-              <Clock className="w-5 h-5 text-blue-600" />
+              <IconTile icon={Clock} tone="emerald" size="sm" />
               <span className="text-[#1A1A1A]/60 text-sm">New Today</span>
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{stats.newToday}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-amber-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
+          <div className="jj-card p-5">
             <div className="flex items-center gap-3 mb-2">
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
+              <IconTile icon={AlertTriangle} tone="emerald" size="sm" />
               <span className="text-[#1A1A1A]/60 text-sm">Needs Action</span>
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{stats.actionNeeded}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-yellow-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-yellow-500/20 transition-all">
+          <div className="jj-card p-5">
             <div className="flex items-center gap-3 mb-2">
-              <Star className="w-5 h-5 text-yellow-600" />
+              <IconTile icon={Star} tone="emerald" size="sm" />
               <span className="text-[#1A1A1A]/60 text-sm">VIP</span>
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{stats.vipCount}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[color:var(--emerald-1)]/30/40 rounded-xl p-5 hover:shadow-lg hover:shadow-green-500/20 transition-all">
+          <div className="jj-card p-5">
             <div className="flex items-center gap-3 mb-2">
-              <UserCheck className="w-5 h-5 text-[color:var(--emerald-1)]" />
+              <IconTile icon={UserCheck} tone="emerald" size="sm" />
               <span className="text-[#1A1A1A]/60 text-sm">Qualified</span>
             </div>
             <p className="text-[#1A1A1A] text-3xl font-bold">{stats.qualified}</p>
@@ -617,21 +618,21 @@ const AdminLeads = () => {
         <div className="flex gap-2 mb-6">
           <Button
             onClick={() => handleTabSwitch("leads")}
-            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "leads" ? "bg-[#B89555] text-[#1A1A1A] hover:bg-[#B89555]/90 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#B89555]/15"}`}
+            variant={activeTab === "leads" ? "primary" : "outline"}
           >
             <Users className="w-4 h-4 mr-2" />
             Leads ({leads.length})
           </Button>
           <Button
             onClick={() => handleTabSwitch("chats")}
-            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "chats" ? "bg-[#B89555] text-[#1A1A1A] hover:bg-[#B89555]/90 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#B89555]/15"}`}
+            variant={activeTab === "chats" ? "primary" : "outline"}
           >
             <MessageSquare className="w-4 h-4 mr-2" />
             AI Chat Sessions ({conversations.length})
           </Button>
           <Button
             onClick={() => handleTabSwitch("deleted")}
-            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "deleted" ? "bg-red-600 text-white hover:bg-red-700 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#B89555]/15"}`}
+            variant={activeTab === "deleted" ? "primary" : "outline"}
           >
             <Trash2 className="w-4 h-4 mr-2" />
             Recently Deleted ({deletedLeads.length})
@@ -646,24 +647,23 @@ const AdminLeads = () => {
               {selectedLeadIds.size} lead{selectedLeadIds.size > 1 ? 's' : ''} selected
             </p>
             <div className="flex items-center gap-2 flex-wrap">
-              <Button size="sm" onClick={() => bulkMarkVip(true)} disabled={bulkActionLoading}
-                className="bg-yellow-500 hover:bg-yellow-600 text-[#1A1A1A] font-semibold">
+              <Button size="sm" onClick={() => bulkMarkVip(true)} disabled={bulkActionLoading}>
                 <Star className="w-3 h-3 mr-1" /> Mark VIP
               </Button>
               <Button size="sm" onClick={() => bulkMarkVip(false)} disabled={bulkActionLoading}
-                className="bg-[#EFE6D6] hover:bg-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 font-semibold">
+                variant="outline">
                 <Star className="w-3 h-3 mr-1" /> Remove VIP
               </Button>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button size="sm" className="bg-[#B89555] hover:bg-[#B89555]/80 text-[#1A1A1A] font-semibold" disabled={bulkActionLoading}>
+                  <Button size="sm" disabled={bulkActionLoading}>
                     <Activity className="w-3 h-3 mr-1" /> Change Status
                     <ChevronDown className="w-3 h-3 ml-1" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[10001]" align="start">
                   <div className="space-y-1 max-h-72 overflow-y-auto">
-                    <p className="text-xs font-semibold text-[color:var(--emerald-1)] px-2 py-1">Positive</p>
+                    <p className="text-xs font-semibold text-[#064E3B] px-2 py-1">Positive</p>
                     {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
                       <button key={status.value} onClick={() => bulkUpdateStatus(status.value)}
                         className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
@@ -671,7 +671,7 @@ const AdminLeads = () => {
                         <span className="text-sm text-[#1A1A1A]">{status.label}</span>
                       </button>
                     ))}
-                    <p className="text-xs font-semibold text-blue-700 px-2 py-1 mt-2">Neutral</p>
+                    <p className="text-xs font-semibold text-[#1A1A1A] px-2 py-1 mt-2">Neutral</p>
                     {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
                       <button key={status.value} onClick={() => bulkUpdateStatus(status.value)}
                         className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
@@ -679,7 +679,7 @@ const AdminLeads = () => {
                         <span className="text-sm text-[#1A1A1A]">{status.label}</span>
                       </button>
                     ))}
-                    <p className="text-xs font-semibold text-red-700 px-2 py-1 mt-2">Negative</p>
+                    <p className="text-xs font-semibold text-[#1A1A1A] px-2 py-1 mt-2">Negative</p>
                     {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                       <button key={status.value} onClick={() => bulkUpdateStatus(status.value)}
                         className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
@@ -690,18 +690,17 @@ const AdminLeads = () => {
                   </div>
                 </PopoverContent>
               </Popover>
-              <Button size="sm" onClick={() => softDeleteLeads(Array.from(selectedLeadIds))} disabled={bulkActionLoading}
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold">
+              <Button size="sm" onClick={() => softDeleteLeads(Array.from(selectedLeadIds))} disabled={bulkActionLoading}>
                 <Trash2 className="w-3 h-3 mr-1" /> Delete
               </Button>
               <Button size="sm" onClick={bulkSendEmail} disabled={bulkActionLoading}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold">
+              >
                 <Send className="w-3 h-3 mr-1" /> Email All
               </Button>
               {aiBrokers.length > 0 && (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button size="sm" className="jj-surface-emerald jj-surface-emerald text-white font-semibold" disabled={bulkActionLoading}>
+                    <Button size="sm" disabled={bulkActionLoading}>
                       <UserPlus className="w-3 h-3 mr-1" /> Assign Broker
                       <ChevronDown className="w-3 h-3 ml-1" />
                     </Button>
@@ -711,7 +710,7 @@ const AdminLeads = () => {
                       {aiBrokers.map(broker => (
                         <button key={broker.id} onClick={() => toast.success(`Assigned ${selectedLeadIds.size} leads to ${broker.name}`)}
                           className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#B89555]/15 text-left transition-colors cursor-pointer">
-                          <Bot className="w-3 h-3 text-[color:var(--emerald-1)]" />
+                          <Bot className="w-3 h-3 text-[#064E3B]" />
                           <span className="text-sm text-[#1A1A1A]">{broker.name}</span>
                           <Badge variant="outline" className="ml-auto text-[9px] border-[#B89555]/40 text-[#1A1A1A]/60">{broker.status}</Badge>
                         </button>
@@ -736,29 +735,26 @@ const AdminLeads = () => {
                 ? leads.length
                 : leads.filter(l => l.contact_type === tab.contactType || (l.tags ?? []).includes(tab.key)).length;
               return (
-                <button
+                <Button
                   key={tab.key}
                   type="button"
+                  variant={isActive ? "primary" : "outline"}
+                  size="sm"
                   onClick={() => setCategoryFilter(tab.key)}
-                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border-2 text-[12px] font-bold transition-all"
-                  style={{
-                    backgroundColor: isActive ? tab.accent : tab.surface,
-                    borderColor: tab.accent,
-                    color: isActive ? '#FFFFFF' : '#1A1A1A',
-                  }}
+                  className="h-9 rounded-full px-3.5 text-[12px] font-bold"
                 >
                   {tab.label}
                   <span
                     className="inline-flex items-center justify-center min-w-[22px] h-[20px] px-1.5 rounded-full text-[10px] font-bold"
                     style={{
                       backgroundColor: isActive ? 'rgba(255,255,255,0.22)' : '#FFFFFF',
-                      color: isActive ? '#FFFFFF' : tab.accent,
-                      border: isActive ? '1px solid rgba(255,255,255,0.35)' : `1px solid ${tab.accent}`,
+                      color: isActive ? '#FFFFFF' : '#064E3B',
+                      border: isActive ? '1px solid rgba(255,255,255,0.35)' : '1px solid rgba(184,149,85,0.45)',
                     }}
                   >
                     {count}
                   </span>
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -784,7 +780,7 @@ const AdminLeads = () => {
                 </SelectTrigger>
                 <SelectContent className="max-h-80 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                   <SelectItem value="all" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">All Statuses</SelectItem>
-                  <div className="px-2 py-1 text-xs font-semibold text-[color:var(--emerald-1)] uppercase">Positive</div>
+                  <div className="px-2 py-1 text-xs font-semibold text-[#064E3B] uppercase">Positive</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
                     <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">
                       <div className="flex items-center gap-2">
@@ -793,7 +789,7 @@ const AdminLeads = () => {
                       </div>
                     </SelectItem>
                   ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-blue-700 uppercase mt-1">Neutral</div>
+                  <div className="px-2 py-1 text-xs font-semibold text-[#1A1A1A] uppercase mt-1">Neutral</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
                     <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">
                       <div className="flex items-center gap-2">
@@ -802,7 +798,7 @@ const AdminLeads = () => {
                       </div>
                     </SelectItem>
                   ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-red-700 uppercase mt-1">Negative</div>
+                  <div className="px-2 py-1 text-xs font-semibold text-[#1A1A1A] uppercase mt-1">Negative</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
                     <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">
                       <div className="flex items-center gap-2">
@@ -823,11 +819,11 @@ const AdminLeads = () => {
                   <SelectContent className="max-h-96 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                     <SelectItem value="all" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Filter className="w-3 h-3 text-[#B89555]" />All Sources</span></SelectItem>
                     <div className="px-2 py-1.5 text-xs font-bold text-[#B89555] uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Main Categories</div>
-                    <SelectItem value="chat" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><MessageSquare className="w-3 h-3 text-purple-600" />Chat Leads</span></SelectItem>
-                    <SelectItem value="website" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Globe className="w-3 h-3 text-[color:var(--emerald-1)]" />Website Leads</span></SelectItem>
-                    <SelectItem value="database" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Upload className="w-3 h-3 text-blue-600" />Database / Import</span></SelectItem>
-                    <SelectItem value="vip" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Star className="w-3 h-3 text-yellow-500" />VIP Only</span></SelectItem>
-                    <SelectItem value="needs_action" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><AlertTriangle className="w-3 h-3 text-amber-500" />Needs Action</span></SelectItem>
+                    <SelectItem value="chat" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><MessageSquare className="w-3 h-3 text-[#064E3B]" />Chat Leads</span></SelectItem>
+                    <SelectItem value="website" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Globe className="w-3 h-3 text-[#064E3B]" />Website Leads</span></SelectItem>
+                    <SelectItem value="database" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Upload className="w-3 h-3 text-[#064E3B]" />Database / Import</span></SelectItem>
+                    <SelectItem value="vip" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><Star className="w-3 h-3 text-[#064E3B]" />VIP Only</span></SelectItem>
+                    <SelectItem value="needs_action" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"><span className="flex items-center gap-2"><AlertTriangle className="w-3 h-3 text-[#064E3B]" />Needs Action</span></SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={sourceFilter} onValueChange={setSourceFilter}>
@@ -836,26 +832,26 @@ const AdminLeads = () => {
                   </SelectTrigger>
                   <SelectContent className="max-h-80 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                     <SelectItem value="all" className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">All Specific Sources</SelectItem>
-                    <div className="px-2 py-1.5 text-xs font-bold text-purple-700 uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Chat Sources</div>
+                    <div className="px-2 py-1.5 text-xs font-bold text-[#064E3B] uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Chat Sources</div>
                     {['ai_chat_support', 'chat_support', 'chat', 'live_chat'].map(s => {
                       const exists = uniqueSources.includes(s);
                       return (
                         <SelectItem key={s} value={s} className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">
                           <span className={`flex items-center gap-2 ${!exists ? 'opacity-50' : ''}`}>
-                            <MessageSquare className="w-3 h-3 text-purple-600" />
+                            <MessageSquare className="w-3 h-3 text-[#064E3B]" />
                             {getSourceDisplayName(s)}
                             {!exists && <span className="text-[10px] text-[#1A1A1A]/40 ml-1">(0)</span>}
                           </span>
                         </SelectItem>
                       );
                     })}
-                    <div className="px-2 py-1.5 text-xs font-bold text-[color:var(--emerald-1)] uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Website Sources</div>
+                    <div className="px-2 py-1.5 text-xs font-bold text-[#064E3B] uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Website Sources</div>
                     {['landing_page', 'popup', 'popup_main', 'contact_form', 'register_interest', 'inquiry_form', 'newsletter', 'property_inquiry', 'property_recommendation', 'ai_matchmaker', 'matchmaker', 'ai_phone', 'ai_tool', 'ai_hub', 'market_report', 'book', 'video', 'quiz', 'signup', 'login', 'lead_capture', 'website'].map(s => {
                       const exists = uniqueSources.includes(s);
                       return (
                         <SelectItem key={s} value={s} className="text-[#1A1A1A] focus:bg-[#B89555]/15 focus:text-[#1A1A1A]">
                           <span className={`flex items-center gap-2 ${!exists ? 'opacity-50' : ''}`}>
-                            <Globe className="w-3 h-3 text-[color:var(--emerald-1)]" />
+                            <Globe className="w-3 h-3 text-[#064E3B]" />
                             {getSourceDisplayName(s)}
                             {!exists && <span className="text-[10px] text-[#1A1A1A]/40 ml-1">(0)</span>}
                           </span>

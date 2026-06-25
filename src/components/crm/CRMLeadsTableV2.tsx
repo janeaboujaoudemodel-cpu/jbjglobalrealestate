@@ -459,23 +459,20 @@ export default function CRMLeadsTableV2({
               (c.stage && stageMulti.length === 1 && stageMulti[0] === c.stage) || (c.tag && tagFilter === c.tag);
             const Icon = c.icon;
             return (
-              <button
+              <Button
                 key={c.key}
                 type="button"
+                variant={active ? "primary" : "outline"}
+                size="sm"
                 onClick={() => {
                   if (c.stage) setStageMulti(active ? [] : [c.stage]);
                   if (c.tag) setTagFilter(active ? "" : c.tag);
                 }}
-                className={
-                  "inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold border transition-colors " +
-                  (active
-                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
-                    : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-[#B89555]/30 hover:bg-[#EFE6D6]")
-                }
+                className="h-8 rounded-full px-3 text-xs"
               >
                 <Icon className="h-3.5 w-3.5" />
                 {c.label}
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -527,27 +524,25 @@ export default function CRMLeadsTableV2({
               <span className="font-bold uppercase tracking-wider text-[#1A1A1A]/60">Distribution:</span>
               <span><b className="text-[#1A1A1A]">{total}</b> total</span>
               <span className="text-[#1A1A1A]/30">·</span>
-              <span><b className="text-[color:var(--emerald-1)]">{mine}</b> with me</span>
+              <span><b className="text-[#064E3B]">{mine}</b> with me</span>
               <span className="text-[#1A1A1A]/30">·</span>
-              <span><b className="text-blue-700">{assigned}</b> assigned</span>
+              <span><b className="text-[#1A1A1A]">{assigned}</b> assigned</span>
               <span className="text-[#1A1A1A]/30">·</span>
-              <span><b className="text-amber-700">{pool}</b> in pool</span>
+              <span><b className="text-[#B89555]">{pool}</b> in pool</span>
               {topBrokers.length > 0 && (
                 <>
                   <span className="text-[#1A1A1A]/30">|</span>
                   {topBrokers.map(([id, count]) => (
-                    <button
+                    <Button
                       key={id}
                       type="button"
+                      variant={assigneeFilter === id ? "primary" : "outline"}
+                      size="sm"
                       onClick={() => setAssigneeFilter(assigneeFilter === id ? "" : id)}
-                      className={`px-2 py-0.5 rounded-full border text-[11px] transition-colors ${
- assigneeFilter === id
- ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
- : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/75 hover:bg-[#EFE6D6]/70"
- }`}
+                      className="h-7 rounded-full px-3 text-[11px]"
                     >
                       {assignedNames[id] || id.slice(0, 6)} · <b>{count}</b>
-                    </button>
+                    </Button>
                   ))}
                 </>
               )}
@@ -756,13 +751,15 @@ export default function CRMLeadsTableV2({
                     <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell className="min-w-[220px] max-w-[320px]">
                       {lead.email_lower ? (
-                        <button
+                        <Button
                           onClick={() => handleEmail(lead)}
-                          className="block w-full truncate text-sm text-[#1A1A1A] hover:underline decoration-[#B89555]/60 underline-offset-2 font-medium text-left"
+                          variant="outline"
+                          size="sm"
+                          className="h-8 w-full justify-start truncate rounded-full border-[#B89555]/25 bg-[#FDFBF7] px-3 text-sm font-medium text-[#1A1A1A]"
                           title={lead.email_lower}
                         >
                           {lead.email_lower}
-                        </button>
+                        </Button>
                       ) : (
                         <span className="text-[#1A1A1A]/40">—</span>
                       )}
@@ -847,13 +844,15 @@ export default function CRMLeadsTableV2({
                                 }}
                               />
                               <div className="mt-2 pt-2 border-t border-[#B89555]/20">
-                                <button
+                                <Button
                                   type="button"
-                                  className="w-full text-left text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] px-2 py-1 rounded hover:bg-[#EFE6D6]"
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-8 w-full justify-start rounded-full text-xs"
                                   onClick={() => { setAssignLeadIds([lead.id]); setShowAssignModal(true); }}
                                 >
                                   Open full assign modal →
-                                </button>
+                                </Button>
                               </div>
                             </PopoverContent>
                           </Popover>
@@ -865,62 +864,74 @@ export default function CRMLeadsTableV2({
                         <LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} />
                         {/* Premium restrained action cluster — champagne + ink, gold hairline; red reserved for destructive */}
                         <div className="inline-flex items-center rounded-full border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden divide-x divide-[#B89555]/20 shadow-sm">
-                          <button
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="icon"
                             onClick={() => handleWhatsApp(lead)}
                             title="WhatsApp"
                             aria-label="WhatsApp"
-                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                            className="h-9 w-9 rounded-none border-0 bg-transparent shadow-none"
                           >
                             <MessageSquare className="h-4 w-4" />
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="icon"
                             onClick={() => handleCall(lead)}
                             title="Call"
                             aria-label="Call"
-                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                            className="h-9 w-9 rounded-none border-0 bg-transparent shadow-none"
                           >
                             <PhoneCall className="h-4 w-4" />
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="icon"
                             onClick={() => handleEmail(lead)}
                             title="Email"
                             aria-label="Email"
-                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                            className="h-9 w-9 rounded-none border-0 bg-transparent shadow-none"
                           >
                             <Mail className="h-4 w-4" />
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="icon"
                             onClick={() => setAgreementLead(lead)}
                             title="Send Agreement"
                             aria-label="Send Agreement"
-                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                            className="h-9 w-9 rounded-none border-0 bg-transparent shadow-none"
                           >
                             <FileSignature className="h-4 w-4" />
-                          </button>
+                          </Button>
                           {isOwner && (
-                            <button
+                            <Button
                               type="button"
+                              variant="outline"
+                              size="icon"
                               onClick={() => setAccessLead(lead)}
                               title="Manage broker access"
                               aria-label="Manage broker access"
-                              className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                              className="h-9 w-9 rounded-none border-0 bg-transparent shadow-none"
                             >
                               <Shield className="h-4 w-4" />
-                            </button>
+                            </Button>
                           )}
-                          <button
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="icon"
                             onClick={() => openDeleteDialog(lead)}
                             title="Delete"
                             aria-label="Delete"
-                            className="h-9 w-9 inline-flex items-center justify-center text-red-700 hover:bg-red-50 transition-colors"
+                            className="h-9 w-9 rounded-none border-0 bg-transparent shadow-none"
                           >
                             <Trash2 className="h-4 w-4" />
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </TableCell>

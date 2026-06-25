@@ -19,6 +19,7 @@ import {
   BarChart,
   Bar
 } from "recharts";
+import { IconTile } from "@/components/ui/icon-tile";
 
 interface EnhancedDashboardProps {
   userId: string;
@@ -43,14 +44,14 @@ interface Stats {
 }
 
 const PIPELINE_COLORS: Record<string, string> = {
-  new: "#3B82F6",
+  new: "#B89555",
   contacted: "#B89555",
-  interested: "#059669",
-  qualified: "#059669",
-  negotiation: "#F59E0B",
-  closed_won: "#22C55E",
+  interested: "#064E3B",
+  qualified: "#064E3B",
+  negotiation: "#042C1C",
+  closed_won: "#064E3B",
   closed_lost: "#DC2626",
-  junk: "#6B7280"
+  junk: "#1A1A1A"
 };
 
 const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps) => {
@@ -185,8 +186,6 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       value: stats.callsToday,
       subValue: `${stats.callsWeek} this week`,
       icon: Phone,
-      color: "text-green-500",
-      bgColor: "jj-surface-emerald-soft",
       trend: stats.callsToday > 0 ? "up" : "neutral"
     },
     {
@@ -194,8 +193,6 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       value: stats.whatsappToday,
       subValue: `${stats.whatsappWeek} this week`,
       icon: MessageSquare,
-      color: "text-emerald-500",
-      bgColor: "jj-surface-emerald-soft",
       trend: stats.whatsappToday > 0 ? "up" : "neutral"
     },
     {
@@ -203,8 +200,6 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       value: stats.totalLeads,
       subValue: `${stats.pipelineCounts['qualified'] || 0} qualified`,
       icon: Users,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
       trend: "up"
     },
     {
@@ -212,8 +207,6 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       value: `${stats.conversionRate}%`,
       subValue: "Won vs Lost",
       icon: Target,
-      color: "text-purple-500",
-      bgColor: "bg-purple-500/10",
       trend: stats.conversionRate > 50 ? "up" : "down"
     }
   ];
@@ -223,14 +216,12 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Primary Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-hidden">
         {primaryCards.map((card, index) => (
-          <Card key={index} className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
+          <Card key={index} className="overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-semibold text-[#1A1A1A]/70 truncate">
                 {card.title}
               </CardTitle>
-              <div className={`p-2 rounded-lg flex-shrink-0 ${card.bgColor}`}>
-                <card.icon className={`h-5 w-5 ${card.color}`} />
-              </div>
+              <IconTile icon={card.icon} tone="emerald" size="md" />
             </CardHeader>
             <CardContent>
               <div className="flex items-end justify-between">
@@ -243,10 +234,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                   </p>
                 </div>
                 {card.trend === "up" && (
-                  <ArrowUpRight className="h-5 w-5 text-green-500" />
+                  <ArrowUpRight className="h-5 w-5 text-[#064E3B]" />
                 )}
                 {card.trend === "down" && (
-                  <ArrowDownRight className="h-5 w-5 text-red-500" />
+                  <ArrowDownRight className="h-5 w-5 text-[#064E3B]" />
                 )}
               </div>
             </CardContent>
@@ -257,10 +248,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Activity Trend */}
-        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base font-semibold text-[#1A1A1A] flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-blue-500" />
+              <IconTile icon={TrendingUp} tone="emerald" size="sm" />
               Weekly Activity
               <span className="text-xs font-normal text-[#1A1A1A]/70 ml-2">Your weekly activity summary</span>
             </CardTitle>
@@ -271,8 +262,8 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                 <AreaChart data={stats.weeklyTrend}>
                   <defs>
                     <linearGradient id="callsGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#064E3B" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#064E3B" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="whatsappGradient" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#059669" stopOpacity={0.3}/>
@@ -283,16 +274,16 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                   <YAxis tick={{ fill: '#71717a', fontSize: 12 }} />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#ffffff', 
-                      border: '1px solid #e4e4e7',
-                      borderRadius: '8px',
-                      color: '#18181b'
+                      backgroundColor: '#FDFBF7', 
+                      border: '1px solid rgba(184,149,85,0.35)',
+                      borderRadius: '12px',
+                      color: '#1A1A1A'
                     }}
                   />
                   <Area 
                     type="monotone" 
                     dataKey="calls" 
-                    stroke="#3B82F6" 
+                    stroke="#064E3B" 
                     fill="url(#callsGradient)" 
                     name="Calls"
                   />
@@ -310,10 +301,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
         </Card>
 
         {/* Pipeline Distribution */}
-        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base font-semibold text-[#1A1A1A] flex items-center gap-2">
-              <Zap className="h-5 w-5 text-[#1A1A1A]" />
+              <IconTile icon={Zap} tone="emerald" size="sm" />
               Pipeline Distribution
             </CardTitle>
           </CardHeader>
@@ -330,10 +321,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#ffffff', 
-                      border: '1px solid #e4e4e7',
-                      borderRadius: '8px',
-                      color: '#18181b'
+                      backgroundColor: '#FDFBF7', 
+                      border: '1px solid rgba(184,149,85,0.35)',
+                      borderRadius: '12px',
+                      color: '#1A1A1A'
                     }}
                   />
                   <Bar dataKey="value" radius={[0, 4, 4, 0]}>
@@ -350,12 +341,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
 
       {/* Secondary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
+        <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/10">
-                <Clock className="h-5 w-5 text-amber-500" />
-              </div>
+              <IconTile icon={Clock} tone="emerald" size="md" />
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.avgResponseTime}h</p>
                 <p className="text-xs text-[#1A1A1A]/70">Avg Response</p>
@@ -363,12 +352,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             </div>
           </CardContent>
         </Card>
-        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
+        <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Calendar className="h-5 w-5 text-blue-500" />
-              </div>
+              <IconTile icon={Calendar} tone="emerald" size="md" />
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.followupsCreated}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Follow-ups</p>
@@ -376,12 +363,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             </div>
           </CardContent>
         </Card>
-        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
+        <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg jj-surface-emerald-soft">
-                <CheckCircle className="h-5 w-5 text-green-500" />
-              </div>
+              <IconTile icon={CheckCircle} tone="emerald" size="md" />
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.followupsCompleted}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Completed</p>
@@ -389,12 +374,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             </div>
           </CardContent>
         </Card>
-        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
+        <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/10">
-                <Award className="h-5 w-5 text-purple-500" />
-              </div>
+              <IconTile icon={Award} tone="emerald" size="md" />
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.pipelineCounts['closed_won'] || 0}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Deals Won</p>
