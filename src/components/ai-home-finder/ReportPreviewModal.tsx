@@ -293,7 +293,7 @@ export default function ReportPreviewModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-[380px_1fr] gap-0 overflow-hidden" style={{ maxHeight: "calc(92vh - 180px)" }}>
+        <div className="grid md:grid-cols-[380px_1fr] gap-0 overflow-hidden flex-1 min-h-0">
           {/* LEFT — branding form */}
           <div className="overflow-y-auto px-5 py-4 border-r space-y-4" style={{ borderColor: C.goldHair, background: C.surface }}>
             {/* Auto-detected role chip (read-only, synced to active mode) */}
