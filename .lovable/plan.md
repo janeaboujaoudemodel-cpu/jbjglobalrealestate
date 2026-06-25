@@ -1,60 +1,42 @@
 ## Goal
+Make the AI Home Finder "Download Report" experience production-ready: auto-role from active mode, complete branded PDF (all sections), preview that visually matches the PDF, JBJ design-system compliance, and verified manually via Playwright with screenshots.
 
-Make the AI Home Finder hero card visually identical in chrome to the homepage's AI Property Comparison widget, then apply the same chrome to similar hero/intro cards site-wide (homepage stays locked).
+## Scope (single component + exporter)
+Files to change:
+- `src/components/ai-home-finder/ReportPreviewModal.tsx` — remove role tabs, auto-bind to active user mode, add License/Website/Address fields, full profile auto-fill (user + company), Premium luxury header/footer, fix color/contrast violations, render preview as a true 1:1 of PDF pages.
+- `src/pages/QuizResults.tsx` — refactor `buildPdf(branding)` to emit the COMPLETE report: Cover, Prepared By, AI Summary, Comparison Table, Match Summary, per-property full pages (hero image, amenities, analysis, recommendation), footer on every page, closing page. High-DPI image embedding.
+- Use existing `useUserMode` for role sync, existing `BRAND` tokens, and the official JBJ monogram asset (no recreation).
 
-## Reference style (from `src/components/AIComparisonWidget.tsx`)
+## Design-system compliance
+- Primary CTA: `.jj-cta-emerald` (emerald metallic + WHITE text/icons).
+- Secondary: champagne bg + emerald text.
+- Header: ink-emerald gradient band with WHITE text + official monogram (no champagne-on-dark white text inside light areas).
+- Footer: champagne band with ink text, gold hairline above. No black-on-emerald, no white-on-champagne.
+- Use `<IconTile />` patterns and existing tokens — no hard-coded hexes outside BRAND constants.
 
-- **Outer shell**: `bg-[#F7F2EA] rounded-2xl p-8 md:p-10 relative overflow-hidden` + two champagne blur orbs. **No gold border.** Already encapsulated as `<AIShellCard>`.
-- **Label pill (top-left, not centered)**: emerald-soft pill — `jj-surface-emerald-soft` with `Sparkles` icon + uppercase tracked label (e.g. "AI Powered" / "Completely Free").
-- **Identity tile (top-right)**: emerald solid `jj-surface-emerald` 64×64 rounded-2xl with WHITE icon (`data-surface="emerald" data-emerald-ok="icon"`).
-- **Feature row**: 3 horizontal tiles in a `md:grid-cols-3` grid — each tile is `bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl`, icon in a soft champagne square `bg-[#EFE6D6]/20`, label + tiny description. **Replaces** the vertical gold-circle-tick list.
-- **CTA**: dark navy primary + champagne secondary (already standard).
+## PDF completeness (jspdf)
+For each selected project fetched from `unified_projects`:
+1. Cover (branded hero + Prepared By strip).
+2. AI Summary page (matchmaker prose).
+3. Comparison Table (price, handover, bedrooms, location, developer).
+4. Match Summary (why these 3).
+5. Property pages (1–2 pages each): hero image, key facts, amenities grid, analysis paragraph, recommendation callout.
+6. Closing page (next steps + contact block).
+Every page: branded header strip + footer with page N/total.
 
-## Fix Plan
+## Manual validation (Playwright)
+Drive the live preview at `localhost:8080`:
+1. Restore Supabase session, navigate to `/ai-home-finder-results?...` (current URL).
+2. Screenshot results page.
+3. Click "Download Report" → screenshot modal (verify NO role tabs, role chip shows active mode).
+4. Upload sample PNG photo + JPEG logo (generated in /tmp) → screenshot preview.
+5. Click "Download PDF" → capture downloaded file, render each page to JPEG via `pdftoppm`, view every page image, confirm: no overlaps, correct page breaks, branding present, all sections rendered.
+6. Test Share WhatsApp / Email / Copy text / Send to JBJ Consultant button states.
+7. Switch viewport to mobile (390×844), repeat modal screenshot.
+8. Repeat with role = Owner (toggle via mode picker) to prove auto-sync.
 
-### 1. AI Home Finder hero (`src/pages/Quiz.tsx`, intro block lines ~895-1005)
+Deliver screenshots inline as proof.
 
-Replace the current gold-bordered champagne card with the AIComparisonWidget chrome:
-
-- Drop the inline `border: "1px solid rgba(184,149,85,0.45)"` outer card → use `<AIShellCard>` (or its raw classes).
-- Replace centered gold-tinted "Completely Free" pill → top-left `jj-surface-emerald-soft` pill with `Sparkles` icon.
-- Replace the standalone wand circle → top-right emerald 64×64 tile with white `Wand2` icon.
-- Replace the "FREE Access" sub-card with 3 gold-checkmark list → 3-column feature grid matching AIComparisonWidget (Unlimited AI Home Matches / AI Comparison Reports / Download Excel Report), each with champagne icon tile + label + short description.
-- Keep the `~60 seconds / AI-Powered / 100% Free` meta row but restyle to inherit the same tile chrome (subtle, no gold border).
-- Keep the existing dark CTA "Find My Property" and trailing helper line.
-
-### 2. Sweep similar hero cards (excluding `src/pages/Index.tsx` and `src/components/home/**`)
-
-Audit the 6 files currently using `1px solid rgba(184,149,85,0.45)` or stronger as the outer card frame and re-chrome them to match:
-
-- `src/pages/QuizResults.tsx` — results hero card
-- `src/pages/RentalIndex.tsx` — top intro/landing card
-- `src/pages/Guides.tsx` — hub intro card
-- `src/pages/PropertyMeasurement.tsx` — tool intro card
-- `src/pages/DeveloperDashboard.tsx` — dashboard greeter card (only if it's a public/hero intro; skip if it's an internal CRM panel)
-
-For each: drop the gold outer border, wrap in `<AIShellCard>`, normalize the label pill to `jj-surface-emerald-soft + Sparkles`, normalize the identity tile to `jj-surface-emerald` with white icon, and convert any vertical "gold-circle checkmark" list into the 3-column feature grid pattern when there are 3 short bullets.
-
-### 3. Inner gold-bordered sub-cards
-
-Leave inner content boxes inside tool flows (form fields, result panels) untouched unless they are themselves a hero intro. Scope is hero/intro cards only this turn.
-
-### 4. Validation
-
-After edits, run Playwright over: `/ai-home-finder`, `/ai-home-finder/results` (if reachable without state), `/rental-index`, `/guides`, `/property-measurement`. Capture one screenshot per page and confirm:
-- No double-border / gold outline on the outer card
-- Emerald pill + emerald identity tile present
-- 3-column feature grid renders (where applicable)
-- Existing CTAs and copy unchanged
-
-## Out of Scope
-
-- Homepage (`src/pages/Index.tsx`, `src/components/home/**`) — locked.
-- Owner CRM, broker portal, developer hub internals — only public/tool hero cards in this batch.
-- Functional behavior — visual chrome only.
-
-## Technical Notes
-
-- Canonical primitives: `AIShellCard` (`src/components/ui/ai-shell-card.tsx`), `jj-surface-emerald` / `jj-surface-emerald-soft` (already in `index.css`).
-- Champagne palette only — `#F7F2EA`, `#EFE6D6`, `#FDFBF7`, `#B89555` hairline at `/20` for inner tiles, never as a full outer border on hero cards.
-- Preserve all `data-allow-dark-cta` / `data-no-contrast-guard` attributes on the dark primary CTA.
+## Out of scope
+- No backend schema changes. No new edge functions. No changes to other report flows (Compare/Evaluator).
+- Cross-browser beyond Chromium (sandbox limitation — will note).
