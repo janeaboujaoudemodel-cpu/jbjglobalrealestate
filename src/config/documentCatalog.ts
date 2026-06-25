@@ -672,6 +672,44 @@ STAFF.push(
 const CLIENT: DocumentTemplate[] = [
 
   {
+    id: "ai_home_finder_report",
+    audience: "client",
+    label: "AI Home Finder Report",
+    description: "Reusable premium JBJ proposal pack: cover, client brief, matched properties, comparison matrix, property pages, AI summary and consultant contact page.",
+    icon: Home,
+    needsClient: true,
+    emailSubject: "AI Home Finder Recommendation Report · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft concise client-facing copy for an AI Home Finder recommendation report. Keep the tone premium, consultant-led and proposal-grade. Do NOT create fake developer logos, fake images or alternate colors; the rendered report template supplies the locked JBJ palette, imagery, header/footer and property sections.",
+    fields: [
+      { key: "recipientName", label: "Client / Investor Name", type: "text", required: true, placeholder: "e.g., Mr. Ahmed Al Mansoori" },
+      { key: "searchBrief", label: "Client Requirements", type: "textarea", required: true, placeholder: "Budget, bedrooms, emirate, areas, lifestyle/investment purpose, timeline…" },
+      { key: "projectShortlist", label: "Matched Project Shortlist", type: "textarea", placeholder: "Project #1, Project #2, Project #3" },
+      { key: "recommendation", label: "Consultant Recommendation", type: "textarea", placeholder: "Why the lead option is recommended and what to verify next." },
+      { key: "nextSteps", label: "Next Steps", type: "textarea", placeholder: "Confirm availability, compare payment plans, reserve unit…" },
+    ],
+  },
+  {
+    id: "jbj_branded_proposal_letterhead",
+    audience: "client",
+    label: "JBJ Branded Proposal Letterhead",
+    description: "Company-profile style letterhead / branded proposal material using the locked champagne, emerald-black ombre and premium black palette.",
+    icon: FileText,
+    needsClient: true,
+    emailSubject: "JBJ Branded Proposal · JBJ GLOBAL REAL ESTATE",
+    aiInstructions:
+      "Draft a polished JBJ branded proposal letter body only. Maintain a premium UAE real-estate tone. The Document Studio shell supplies the official JBJ letterhead, monogram, footer, signature and locked palette; do not restate header/footer details or introduce random colors.",
+    fields: [
+      { key: "recipientName", label: "Recipient Name", type: "text", required: true, placeholder: "e.g., Ms. Sarah Khan" },
+      { key: "proposalTitle", label: "Proposal Title", type: "text", required: true, placeholder: "e.g., Off-Plan Investment Proposal" },
+      { key: "proposalPurpose", label: "Proposal Purpose", type: "textarea", required: true, placeholder: "Explain the proposal objective and client context." },
+      { key: "scope", label: "Scope / Services", type: "textarea", placeholder: "Advisory scope, property search, due diligence, negotiation support…" },
+      { key: "commercialNotes", label: "Commercial Notes", type: "textarea", placeholder: "Fees, timeline, assumptions, validity period…" },
+      { key: "nextSteps", label: "Next Steps", type: "textarea", placeholder: "What the client should approve or provide next." },
+    ],
+  },
+
+  {
     id: "paa",
     audience: "staff",
     label: "Property Advertising Agreement (PAA)",

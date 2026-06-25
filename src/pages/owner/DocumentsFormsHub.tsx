@@ -29,6 +29,8 @@ import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { AICommandPanel } from "@/components/owner/documents/AICommandPanel";
 
+const DocumentStudioLauncher = lazy(() => import("@/components/document-studio/DocumentStudioLauncher"));
+
 type Cat = "all" | "leasing" | "selling";
 type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
@@ -615,6 +617,14 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
 
           {/* TEMPLATES */}
           <TabsContent value="templates" className="mt-4">
+            <Suspense fallback={<div className="mb-6 rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] p-5 text-sm text-[#1A1A1A]/70">Loading company materials…</div>}>
+              <DocumentStudioLauncher
+                catalog="client"
+                presetTemplateId="ai_home_finder_report"
+                title="Company Materials · AI Proposal Packs"
+                subtitle="Reusable AI Home Finder report template plus JBJ branded proposal letterhead, locked to champagne gold, emerald-black ombre, premium black and pure white-on-emerald content."
+              />
+            </Suspense>
             <div className="flex gap-2 mb-4">
               {(["all","leasing","selling"] as Cat[]).map(c => (
                 <Button key={c} size="sm" variant={cat === c ? "gold" : "outline"} onClick={() => setCat(c)} className="capitalize">

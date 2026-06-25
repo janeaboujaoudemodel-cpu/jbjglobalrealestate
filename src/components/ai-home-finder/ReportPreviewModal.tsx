@@ -45,6 +45,8 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   projects: PreviewProject[];
+  clientName?: string;
+  clientRequirements?: Record<string, string | string[]>;
   defaults?: Partial<ReportBranding>;
   onDownload: (b: ReportBranding) => Promise<void> | void;
   onShareWhatsApp: (b: ReportBranding) => Promise<void> | void;
@@ -116,6 +118,8 @@ export default function ReportPreviewModal({
   open,
   onOpenChange,
   projects,
+  clientName,
+  clientRequirements,
   defaults,
   onDownload,
   onShareWhatsApp,
@@ -463,7 +467,9 @@ export default function ReportPreviewModal({
               // a second unscaled layout height (the source of the blank gaps).
               const previewWidth = 560;
               const scale = previewWidth / REPORT_PAGE_PX.width;
-              const pageCount = 3 + Math.min(previewProjects.length, 3); // cover + comparison + details + closing
+              // cover + requirements + matched properties + comparison +
+              // individual property pages + AI summary + contact.
+              const pageCount = 6 + Math.min(previewProjects.length, 3);
               const reportHeight = pageCount * REPORT_PAGE_PX.height + Math.max(0, pageCount - 1) * 24;
               return (
                 <div
@@ -488,6 +494,8 @@ export default function ReportPreviewModal({
                       mode="preview"
                       branding={branding}
                       projects={previewProjects as unknown as ReportProject[]}
+                      clientName={clientName}
+                      clientRequirements={clientRequirements}
                       pageIdPrefix="preview"
                     />
                   </div>
