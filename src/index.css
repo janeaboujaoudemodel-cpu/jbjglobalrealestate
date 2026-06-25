@@ -16201,8 +16201,8 @@ html body #root section.oi-band[data-fullbleed-band] {
   right: auto !important;
   width: 100vw !important;
   max-width: 100vw !important;
-  margin-left: calc(50% - 50vw) !important;
-  margin-right: calc(50% - 50vw) !important;
+  margin-left: calc(var(--jj-shell-main-w, 100vw) - 100vw) !important;
+  margin-right: 0 !important;
   box-sizing: border-box !important;
 }
 html body #root main.jj-main-shell section.oi-band > a,
