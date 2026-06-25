@@ -115,8 +115,8 @@ const FavoriteButton = ({
           >
             <Heart
               className={`${iconSizes[size]} allow-white transition-all duration-200`}
-              fill={isFavorite ? "var(--ink-emerald-accent)" : "none"}
-              stroke="var(--ink-emerald-accent)"
+              fill={isFavorite ? "#FFFFFF" : "none"}
+              stroke="#FFFFFF"
               style={emeraldIconStyle}
             />
           </button>
