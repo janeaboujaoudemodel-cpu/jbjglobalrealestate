@@ -5219,10 +5219,7 @@ button[data-phone-code-trigger]:focus :is(span, svg, [class*="lucide"]) {
 
 /* Light own-surfaces: champagne, cream, white, gold, muted/card/popover. */
 html body :is(
-  .jj-cta-champagne,
   .jj-cta-outline,
-  .jj-pill-active,
-  [data-cta="champagne"],
   [data-cta="outline"],
   .bg-white,
   [class~="bg-white"],
@@ -5273,10 +5270,7 @@ html body :is(
   [style*="background-color:#efe6d6" i]
 ):not([data-neon-page]):not(.tab-trigger-champagne):not(.jj-cta-primary):not([data-surface="emerald"]):not([data-cta="primary"]):not(.jj-cta-dark):not(.jj-navy-cta):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-side-tile):not(.jj-side-tile.is-active):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"]):not([class^="bg-[#0A0A0A]/"]):not([class*=" bg-[#0A0A0A]/"]):not([class^="bg-[#1A1A1A]/"]):not([class*=" bg-[#1A1A1A]/"]):not([class^="bg-black/"]):not([class*=" bg-black/"]),
 html body :is(
-  .jj-cta-champagne,
   .jj-cta-outline,
-  .jj-pill-active,
-  [data-cta="champagne"],
   [data-cta="outline"],
   .bg-white,
   [class~="bg-white"],
