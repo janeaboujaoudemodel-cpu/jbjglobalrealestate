@@ -1245,13 +1245,13 @@ const Properties = () => {
 
               {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
               {showSkeletons ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-4 sm:p-6 lg:p-8">
+                <div data-projects-shell data-page-gutter className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 py-6 sm:py-8">
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-[#B89555]/30" />
                   ))}
                 </div>
               ) : finalProjects.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-4 sm:p-6 lg:p-8">
+                <div data-projects-shell data-page-gutter className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 py-6 sm:py-8">
                   {visibleProjects.flatMap((project, index) => {
                     const adAfterIndex = [5, 11, 17];
                     const adIndex = adAfterIndex.indexOf(index);
