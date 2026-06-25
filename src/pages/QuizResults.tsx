@@ -36,6 +36,7 @@ import {
   clearMatchmakerSession,
 } from "@/hooks/useMatchmakerSession";
 import { buildPropertyPresentationParagraphs, findAmenityPhotoUrl } from "@/utils/matchmakerProse";
+import ReportPreviewModal, { type ReportBranding } from "@/components/ai-home-finder/ReportPreviewModal";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
@@ -251,6 +252,7 @@ const QuizResults = () => {
   const [badges, setBadges] = useState<Record<string, 'top1' | 'top2' | 'top3' | null>>({});
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareTrigger, setShareTrigger] = useState<"share" | "post-download">("share");
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [showVipModal, setShowVipModal] = useState(false);
   const [sessionAnswers, setSessionAnswers] = useState<Record<string, string | string[]>>({});
   const [matchmakerFormData, setMatchmakerFormData] = useState<MatchmakerFormData | null>(null);
@@ -458,7 +460,7 @@ const QuizResults = () => {
   };
 
   // Build a real, branded PDF report via jsPDF (Tiffany presentation report)
-  const buildPdf = async (): Promise<{ blob: Blob; filename: string } | null> => {
+  const buildPdf = async (branding?: ReportBranding): Promise<{ blob: Blob; filename: string } | null> => {
     if (!projects?.length) return null;
 
     const doc = new jsPDF({ unit: "pt", format: "a4" });
@@ -765,6 +767,78 @@ const QuizResults = () => {
       11
     );
     y += 14;
+
+    // ===== Prepared-by branding strip (page 1 only) =====
+    if (branding && branding.mode !== "none") {
+      const stripH = 86;
+      const stripY = y;
+      doc.setFillColor(247, 242, 234);
+      doc.setDrawColor(...tiffany);
+      doc.setLineWidth(0.6);
+      doc.roundedRect(M, stripY, pageW - 2 * M, stripH, 8, 8, "FD");
+
+      let bx = M + 12;
+      const by = stripY + 12;
+      const showPhoto = (branding.mode === "both" || branding.mode === "photo") && branding.photoDataUrl;
+      const showLogo = (branding.mode === "both" || branding.mode === "logo") && branding.logoDataUrl;
+
+      if (showPhoto) {
+        try {
+          doc.addImage(branding.photoDataUrl!, "PNG", bx, by, 62, 62);
+          bx += 74;
+        } catch { /* ignore */ }
+      }
+      if (showLogo) {
+        try {
+          doc.setFillColor(...white);
+          doc.roundedRect(bx, by, 70, 62, 4, 4, "F");
+          doc.addImage(branding.logoDataUrl!, "PNG", bx + 4, by + 4, 62, 54);
+          bx += 82;
+        } catch { /* ignore */ }
+      }
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.setTextColor(...tiffanyDeep);
+      const roleLabel = (
+        branding.role === "broker" ? "BROKER" :
+        branding.role === "developer" ? "DEVELOPER" :
+        branding.role === "owner" ? "OWNER" : "JBJ CONSULTANT"
+      );
+      doc.text(`PREPARED BY — ${roleLabel}`, bx, by + 10);
+
+      let ty = by + 24;
+      if (branding.name) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.setTextColor(...ink);
+        doc.text(branding.name, bx, ty);
+        ty += 13;
+      }
+      if (branding.companyName) {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9.5);
+        doc.setTextColor(60, 50, 40);
+        doc.text(branding.companyName, bx, ty);
+        ty += 11;
+      }
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(80, 70, 55);
+      const line1 = [branding.phone, branding.email].filter(Boolean).join("   •   ");
+      if (line1) { doc.text(line1, bx, ty); ty += 10; }
+      const line2 = [
+        branding.whatsapp ? `WhatsApp: ${branding.whatsapp}` : null,
+        branding.website,
+      ].filter(Boolean).join("   •   ");
+      if (line2) { doc.text(line2, bx, ty); ty += 10; }
+      if (branding.address) { doc.text(branding.address, bx, ty); ty += 10; }
+      if (branding.socials) { doc.text(branding.socials.slice(0, 80), bx, ty); }
+
+      y = stripY + stripH + 14;
+    }
+
+
 
     // Three rank cards
     const cardGap = 12;
@@ -1543,8 +1617,8 @@ const QuizResults = () => {
   // Cache the most recent generated PDF (blob + filename) so share handlers can attach it
   const [lastPdf, setLastPdf] = useState<{ blob: Blob; filename: string } | null>(null);
 
-  const generateAndCachePdf = async () => {
-    const built = await buildPdf();
+  const generateAndCachePdf = async (branding?: ReportBranding) => {
+    const built = await buildPdf(branding);
     if (!built) {
       toast.error("Could not generate the report yet.");
       return null;
@@ -1553,30 +1627,10 @@ const QuizResults = () => {
     return built;
   };
 
-  const handleDownloadReport = async () => {
-    const built = await generateAndCachePdf();
-    if (!built) return;
-    triggerDownload(built.blob, built.filename);
-    toast.success("Report downloaded!");
-    setShareTrigger("post-download");
-    setShareModalOpen(true);
-  };
+  // Old direct-download entrypoints — now open the Preview & Branding modal first.
+  const handleDownloadReport = () => setPreviewOpen(true);
+  const handleOpenShare = () => setPreviewOpen(true);
 
-  // "Share with Consultant" → generate PDF, auto-download, open share modal
-  const handleOpenShare = async () => {
-    const built = await generateAndCachePdf();
-    if (built) {
-      triggerDownload(built.blob, built.filename);
-      toast.success("Report ready — choose how to share");
-    }
-    setShareTrigger("post-download");
-    setShareModalOpen(true);
-  };
-
-
-
-  // Open a link synchronously inside the click gesture so popup blockers don't fire.
-  // PDF generation runs in the BACKGROUND after the link opens.
   const openLinkSync = (url: string) => {
     const a = document.createElement("a");
     a.href = url;
@@ -1588,33 +1642,32 @@ const QuizResults = () => {
     setTimeout(() => a.remove(), 0);
   };
 
-  const generatePdfInBackground = () => {
-    generateAndCachePdf()
-      .then((built) => {
-        if (built) triggerDownload(built.blob, built.filename);
-      })
-      .catch(() => {
-        /* silent — link already opened */
-      });
+  // From the preview modal — generate branded PDF, then act.
+  const previewDownload = async (branding: ReportBranding) => {
+    const built = await generateAndCachePdf(branding);
+    if (!built) return;
+    triggerDownload(built.blob, built.filename);
+    toast.success("Branded report downloaded!");
   };
 
-  // Channel handlers — synchronous open, then background PDF download.
-  const handleShareWhatsApp = () => {
+  const previewShareWhatsApp = async (branding: ReportBranding) => {
     const text = buildShareText();
-    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
-    generatePdfInBackground();
+    const built = await generateAndCachePdf(branding);
+    if (built) triggerDownload(built.blob, built.filename);
+    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(Branded PDF report downloaded — attach it from your downloads.)`)}`);
     toast.success("Opening WhatsApp — attach the downloaded PDF");
   };
 
-  const handleShareEmail = () => {
+  const previewShareEmail = async (branding: ReportBranding) => {
     const subject = "My JBJ AI Property Recommendations";
     const text = buildShareText();
-    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`)}`);
-    generatePdfInBackground();
+    const built = await generateAndCachePdf(branding);
+    if (built) triggerDownload(built.blob, built.filename);
+    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(Branded PDF report downloaded — attach it from your downloads.)`)}`);
     toast.success("Opening email — attach the downloaded PDF");
   };
 
-  const handleCopyLink = async () => {
+  const previewCopy = async () => {
     try {
       await navigator.clipboard.writeText(buildShareText());
       toast.success("Recommendations copied to clipboard");
@@ -1623,6 +1676,39 @@ const QuizResults = () => {
     }
   };
 
+  const previewSendToConsultant = async (branding: ReportBranding) => {
+    if (!projects?.length) return;
+    const subject = "AI Property Recommendations — Request Consultation";
+    const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
+    const built = await generateAndCachePdf(branding);
+    if (built) triggerDownload(built.blob, built.filename);
+    openLinkSync(`mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    toast.success("Opening email to JBJ — attach the downloaded PDF");
+  };
+
+  // Legacy share-modal handlers — kept so the existing post-action ShareModal still works.
+  const generatePdfInBackground = () => {
+    generateAndCachePdf()
+      .then((built) => { if (built) triggerDownload(built.blob, built.filename); })
+      .catch(() => { /* silent */ });
+  };
+  const handleShareWhatsApp = () => {
+    const text = buildShareText();
+    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening WhatsApp — attach the downloaded PDF");
+  };
+  const handleShareEmail = () => {
+    const subject = "My JBJ AI Property Recommendations";
+    const text = buildShareText();
+    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening email — attach the downloaded PDF");
+  };
+  const handleCopyLink = async () => {
+    try { await navigator.clipboard.writeText(buildShareText()); toast.success("Recommendations copied to clipboard"); }
+    catch { toast.error("Unable to copy"); }
+  };
   const handleShareToConsultant = () => {
     if (!projects?.length) return;
     const subject = "AI Property Recommendations — Request Consultation";
@@ -1631,13 +1717,13 @@ const QuizResults = () => {
     generatePdfInBackground();
     toast.success("Opening email to JBJ — attach the downloaded PDF");
   };
-
   const handleConsultantWhatsApp = () => {
     const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Home Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
     openLinkSync(`https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
     generatePdfInBackground();
     toast.success("Opening WhatsApp to JBJ — attach the downloaded PDF");
   };
+
 
 
 
@@ -2165,6 +2251,25 @@ const QuizResults = () => {
         }}
         mode="regenerate"
       />
+
+      {/* Report Preview & Branding Modal */}
+      <ReportPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        projects={(projects || []) as any}
+        defaults={{
+          name: matchmakerFormData?.fullName || "",
+          email: user?.email || "",
+          phone: matchmakerFormData?.phone || "",
+          whatsapp: matchmakerFormData?.phone || "",
+        }}
+        onDownload={previewDownload}
+        onShareWhatsApp={previewShareWhatsApp}
+        onShareEmail={previewShareEmail}
+        onCopy={previewCopy}
+        onSendToConsultant={previewSendToConsultant}
+      />
+
     </section>
   );
 };
