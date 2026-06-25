@@ -60,13 +60,13 @@ const channelIcons: Record<string, React.ReactNode> = {
 
 const channelTabs: { value: ChannelType | 'all'; label: string; icon: React.ReactNode }[] = [
   { value: 'all', label: 'All', icon: <MessageSquare className="h-4 w-4" /> },
-  { value: 'whatsapp', label: 'WhatsApp', icon: <MessageSquare className="h-4 w-4 text-green-500" /> },
-  { value: 'email_gmail', label: 'Gmail', icon: <Mail className="h-4 w-4 text-red-500" /> },
-  { value: 'email_hostinger', label: 'Hostinger', icon: <Mail className="h-4 w-4 text-blue-500" /> },
-  { value: 'instagram', label: 'Instagram', icon: <Instagram className="h-4 w-4 text-pink-500" /> },
-  { value: 'facebook', label: 'Facebook', icon: <Facebook className="h-4 w-4 text-blue-600" /> },
+  { value: 'whatsapp', label: 'WhatsApp', icon: <MessageSquare className="h-4 w-4" /> },
+  { value: 'email_gmail', label: 'Gmail', icon: <Mail className="h-4 w-4" /> },
+  { value: 'email_hostinger', label: 'Hostinger', icon: <Mail className="h-4 w-4" /> },
+  { value: 'instagram', label: 'Instagram', icon: <Instagram className="h-4 w-4" /> },
+  { value: 'facebook', label: 'Facebook', icon: <Facebook className="h-4 w-4" /> },
   { value: 'website_chat', label: 'Website', icon: <Globe className="h-4 w-4 text-[#1A1A1A]" /> },
-  { value: 'voice', label: 'Voice', icon: <Mic className="h-4 w-4 text-purple-500" /> },
+  { value: 'voice', label: 'Voice', icon: <Mic className="h-4 w-4" /> },
 ];
 
 const statusConfig: Record<ThreadStatus, { label: string; color: string; icon: React.ReactNode }> = {
@@ -342,9 +342,11 @@ export default function OwnerInbox() {
                 <button
                   key={`${tab.value}-${tabChannelId ?? 'all'}`}
                   onClick={() => handleChannelTabClick(tab.value, tabChannelId ?? 'all')}
+                  data-emerald-action={isActive ? "true" : undefined}
+                  data-emerald-ok={isActive ? "pill" : undefined}
                   className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg flex-shrink-0 ${
  isActive
- ? 'border-[#B89555] bg-[#EFE6D6]/40 text-[#1A1A1A] font-bold shadow-sm'
+ ? 'jj-emerald-action border-transparent text-white font-bold shadow-sm'
  : 'border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20'
  }`}
                 >
@@ -352,7 +354,7 @@ export default function OwnerInbox() {
                   <span>{tab.label}</span>
                   {unreadCount > 0 && (
                     <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
- isActive ? 'bg-[#1A1A1A] text-[#FDFBF7]' : 'bg-[#EFE6D6] text-[#1A1A1A]'
+ isActive ? 'bg-white/20 text-white border border-white/80' : 'bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/25'
  }`}>
                       {unreadCount}
                     </span>
@@ -384,9 +386,11 @@ export default function OwnerInbox() {
           <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin">
             <button
               onClick={() => setCategoryFilter('all')}
+              data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
+              data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
               className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
  categoryFilter === 'all'
- ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]'
+ ? 'jj-emerald-action text-white border-transparent'
  : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
  }`}
             >All categories</button>
@@ -394,9 +398,11 @@ export default function OwnerInbox() {
               <button
                 key={key}
                 onClick={() => setCategoryFilter(key)}
+                data-emerald-action={categoryFilter === key ? "true" : undefined}
+                data-emerald-ok={categoryFilter === key ? "pill" : undefined}
                 className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
  categoryFilter === key
- ? meta.color + ' border-current'
+ ? 'jj-emerald-action text-white border-transparent'
  : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
  }`}
               >{meta.label}</button>
