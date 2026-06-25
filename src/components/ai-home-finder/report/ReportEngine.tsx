@@ -560,7 +560,7 @@ function PropertyDetailPage({
 }) {
   const cover = project.cover_image_url || project.images?.[0]?.image_url;
   const amenities = (project.amenities || []).filter(Boolean).slice(0, 12);
-  const description = (project.description || "").trim();
+  const description = stripHtml(project.description || "");
 
   return (
     <PageFrame
