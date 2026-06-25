@@ -749,7 +749,17 @@ const Quiz = () => {
           ready: isReady(p),
         };
       })
-      .filter((x) => x.lt < 99);
+      .filter((x) => x.lt < 99)
+      .filter((x) => {
+        // Budget sanity: drop candidates priced absurdly below the user's
+        // requested band (likely deposit/rent/error rows).
+        if (!budgetRange) return true;
+        const price = (x.p as any).price_from;
+        if (typeof price !== "number" || price <= 0) return true;
+        const [lo] = budgetRange;
+        return price >= lo * 0.5;
+      });
+
 
     // Off-plan-first within location: only fall back to ready when no off-plan
     // candidate matches the user's location at all.
