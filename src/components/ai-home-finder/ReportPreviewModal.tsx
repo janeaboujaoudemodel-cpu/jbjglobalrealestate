@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Download, MessageCircle, Mail, Link as LinkIcon, Send, Upload, User as UserIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
-// Official letterhead monogram (black JBJ on champagne with gold rules above/below the B)
-import jbjMonogram from "@/assets/jbj-monogram-letterhead.png";
+import { ReportEngine, type ReportProject } from "./report/ReportEngine";
+import { REPORT_PAGE_PX } from "./report/tokens";
+
 
 export type ReportRole = "investor" | "broker" | "developer" | "owner" | "consultant";
 export type BrandingMode = "both" | "photo" | "logo" | "none";
@@ -448,217 +449,48 @@ export default function ReportPreviewModal({
             ))}
           </div>
 
-          {/* RIGHT — preview (mirrors PDF header/footer 1:1) */}
+          {/* RIGHT — LIVE PREVIEW.
+              Renders the SAME <ReportEngine /> that gets captured to PDF.
+              Pages are at real A4 pixel size (794×1123); we scale them down
+              with CSS transform so they fit the preview pane. The DOM size
+              and the PDF output stay byte-equivalent — there is no second
+              layout anywhere. */}
           <div className="overflow-y-auto p-5" style={{ background: C.raised }}>
             <p className="text-xs uppercase tracking-widest mb-3 font-semibold" style={{ color: C.muted }}>Live Preview</p>
-            <div className="mx-auto shadow-xl rounded overflow-hidden" style={{ background: C.page, color: C.ink, maxWidth: 580 }}>
-              {/* Header — ink-emerald gradient, white text (matches PDF cover) */}
-              <div
-                data-aihf-darkband
-                data-surface="dark"
-                data-no-contrast-guard
-                className="px-5 py-4 flex items-center justify-between allow-white"
-                style={{
-                  backgroundImage: C.emeraldGradient,
-                  backgroundColor: "#042c1c",
-                  borderBottom: `1px solid ${C.gold}`,
-                  color: "#FFFFFF",
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  {showLogo ? (
-                    <img src={branding.logoDataUrl} alt="" className="h-16 w-16 rounded bg-white object-contain p-1" />
-                  ) : (
-                    <div
-                      className="h-16 w-16 rounded flex items-center justify-center overflow-hidden"
-                      style={{ background: "#FFFFFF", border: `1px solid ${C.gold}` }}
-                    >
-                      <img src={jbjMonogram} alt="JBJ" className="h-[58px] w-[58px] object-contain" />
-                    </div>
-                  )}
-                  <div>
-                    <p className="text-[13px] font-bold tracking-wider">JBJ GLOBAL REAL ESTATE</p>
-                    <p data-tagline className="text-[10px]">AI Home Finder — Personalized Report</p>
-                  </div>
-                </div>
-                <div className="text-right text-[10px]" style={{ opacity: 0.92 }}>
-                  {new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
-                </div>
-              </div>
-
-              {/* Investor mode → addressed TO the client (FROM JBJ).
-                  All other modes → "Prepared by" branding strip. */}
-              {branding.mode !== "none" && branding.role === "investor" && (
+            {(() => {
+              // Scale the 794px-wide pages to fit the preview column.
+              const previewWidth = 560;
+              const scale = previewWidth / REPORT_PAGE_PX.width;
+              return (
                 <div
-                  className="px-5 py-4 flex items-center gap-3"
-                  style={{ background: C.surface, borderBottom: `1px solid ${C.goldHair}` }}
+                  className="mx-auto"
+                  style={{
+                    width: previewWidth,
+                    // height of one scaled page + spacer + second scaled page
+                    minHeight: REPORT_PAGE_PX.height * scale * 2 + 32,
+                  }}
                 >
-                  {showPhoto ? (
-                    <img
-                      src={branding.photoDataUrl}
-                      alt=""
-                      className="h-16 w-16 rounded-full object-cover flex-shrink-0"
-                      style={{ border: `2px solid ${C.gold}` }}
+                  <div
+                    style={{
+                      width: REPORT_PAGE_PX.width,
+                      transform: `scale(${scale})`,
+                      transformOrigin: "top left",
+                      filter: "drop-shadow(0 12px 30px rgba(0,0,0,0.18))",
+                    }}
+                  >
+                    <ReportEngine
+                      mode="preview"
+                      branding={branding}
+                      projects={previewProjects as unknown as ReportProject[]}
+                      pageIdPrefix="preview"
                     />
-                  ) : (
-                    <div
-                      className="h-16 w-16 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg"
-                      style={{ background: C.raised, border: `2px solid ${C.gold}`, color: C.ink }}
-                    >
-                      {(branding.name || "C").trim().charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <div className="leading-tight">
-                    <p data-aihf-prepared-by className="text-[10px] uppercase tracking-[0.18em] font-semibold">
-                      Curated personally for
-                    </p>
-                    <p className="font-bold text-[16px]" style={{ color: C.ink }}>
-                      {`${branding.salutation || "Mr."} ${branding.name || "Valued Client"}`.trim()}
-                    </p>
-                    <p className="text-[10px] mt-0.5" style={{ color: C.muted }}>
-                      A bespoke selection presented by JBJ Global Real Estate
-                    </p>
                   </div>
                 </div>
-              )}
-              {branding.mode !== "none" && branding.role !== "investor" && (
-                <div className="px-5 py-3 flex items-start gap-3" style={{ background: C.surface, borderBottom: `1px solid ${C.goldHair}` }}>
-                  {showPhoto && (
-                    <img src={branding.photoDataUrl} alt="" className="h-14 w-14 rounded-full object-cover flex-shrink-0" style={{ border: `2px solid ${C.gold}` }} />
-                  )}
-                  <div className="text-[11px] leading-tight">
-                    <p data-aihf-prepared-by className="text-[10px] uppercase tracking-wider font-semibold">
-                      Prepared by — {ROLE_LABELS[branding.role]}
-                    </p>
-                    {branding.name && <p className="font-bold text-[13px]" style={{ color: C.ink }}>{branding.name}</p>}
-                    {branding.companyName && <p style={{ color: C.ink }}>{branding.companyName}</p>}
-                    {(branding.phone || branding.email) && (
-                      <p style={{ color: C.muted }}>{[branding.phone, branding.email].filter(Boolean).join("  •  ")}</p>
-                    )}
-                    {(branding.whatsapp || branding.website) && (
-                      <p style={{ color: C.muted }}>
-                        {[branding.whatsapp && `WhatsApp: ${branding.whatsapp}`, branding.website].filter(Boolean).join("  •  ")}
-                      </p>
-                    )}
-                    {branding.address && <p style={{ color: C.muted }}>{branding.address}</p>}
-                    {branding.license && <p style={{ color: C.muted }}>{branding.license}</p>}
-                    {branding.socials && <p className="truncate" style={{ color: C.muted, maxWidth: 380 }}>{branding.socials}</p>}
-                  </div>
-                </div>
-              )}
-
-              {/* Body */}
-              <div className="px-5 py-4">
-                <h3 className="text-lg font-bold mb-3" style={{ color: C.ink }}>Your AI-Selected Properties</h3>
-                <div className="space-y-3">
-                  {previewProjects.map((p, i) => (
-                    <div key={p.id} className="flex gap-3 p-2 rounded" style={{ background: C.surface, border: `1px solid ${C.goldHair}` }}>
-                      <div className="h-16 w-20 rounded overflow-hidden flex-shrink-0" style={{ background: C.raised }}>
-                        {(p.cover_image_url || p.images?.[0]?.image_url) ? (
-                          <img src={p.cover_image_url || p.images?.[0]?.image_url} alt="" className="h-full w-full object-cover" />
-                        ) : null}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p data-aihf-rank className="text-[10px] font-bold">RANK #{i + 1}</p>
-                        <p className="text-sm font-bold truncate" style={{ color: C.ink }}>{p.name}</p>
-                        <p className="text-[11px] truncate" style={{ color: C.muted }}>
-                          {[p.developer?.name, p.area].filter(Boolean).join(" • ")}
-                        </p>
-                        <p data-aihf-price className="text-[11px] font-semibold">{fmtPrice(p)}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-[10px] mt-4" style={{ color: C.muted, fontStyle: "italic" }}>
-                  The exported PDF includes the cover, AI summary, comparison table, full property pages with amenities & analysis, and a closing page.
-                </p>
-              </div>
-
-              {/* Footer — champagne band, ink text, gold hairline */}
-              <div
-                className="px-5 py-3 text-[10px] flex items-center justify-between"
-                style={{
-                  background: C.surface,
-                  color: C.ink,
-                  borderTop: `1px solid ${C.gold}`,
-                }}
-              >
-                <span style={{ color: C.ink }}>Powered by JBJ Global Real Estate — Dubai, UAE</span>
-                <span data-aihf-website style={{ fontWeight: 600 }}>{branding.website || "www.jbj.ae"}</span>
-              </div>
-            </div>
-
-            {/* ============ PAGE 2 — PROPERTY COMPARISON (mirrors PDF) ============ */}
-            <div className="mx-auto mt-6 shadow-xl rounded overflow-hidden" style={{ background: C.page, color: C.ink, maxWidth: 580 }}>
-              <div
-                data-aihf-darkband
-                data-no-contrast-guard
-                className="px-5 py-3 flex items-center justify-between allow-white"
-                style={{ backgroundImage: C.emeraldGradient, backgroundColor: "#042c1c", borderBottom: `1px solid ${C.gold}` }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="h-9 w-9 rounded flex items-center justify-center" style={{ background: "#FFFFFF", border: `1px solid ${C.gold}` }}>
-                    <img src={jbjMonogram} alt="" className="h-8 w-8 object-contain" />
-                  </div>
-                  <p className="text-[11px] font-bold tracking-wider">PAGE 2 · PROPERTY COMPARISON</p>
-                </div>
-                <span className="text-[10px]" style={{ opacity: 0.85 }}>How each match fits your brief</span>
-              </div>
-              <div className="px-5 py-4">
-                <h3 className="text-base font-bold mb-3" style={{ color: C.ink }}>
-                  How each property matches your requirements
-                </h3>
-                <div className="overflow-hidden rounded border" style={{ borderColor: C.goldHair }}>
-                  <table className="w-full text-[11px]" style={{ borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr style={{ background: C.raised }}>
-                        <th className="text-left px-2 py-2 font-bold" style={{ color: C.ink, borderBottom: `1px solid ${C.goldHair}` }}>Criteria</th>
-                        {previewProjects.slice(0, 3).map((p, i) => (
-                          <th key={p.id} className="text-left px-2 py-2 font-bold" style={{ color: C.ink, borderBottom: `1px solid ${C.goldHair}` }}>
-                            #{i + 1} {p.name.length > 14 ? p.name.slice(0, 13) + "…" : p.name}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        { l: "Price", v: (p: PreviewProject) => fmtPrice(p) },
-                        { l: "Developer", v: (p: PreviewProject) => p.developer?.name || "—" },
-                        { l: "Area", v: (p: PreviewProject) => p.area || "—" },
-                        { l: "Type", v: () => "Off-Plan" },
-                      ].map((row, ri) => (
-                        <tr key={row.l} style={{ background: ri % 2 ? C.surface : "#FFFFFF" }}>
-                          <td className="px-2 py-2 font-semibold" style={{ color: C.ink, borderTop: `1px solid ${C.goldHair}` }}>{row.l}</td>
-                          {previewProjects.slice(0, 3).map((p) => (
-                            <td key={p.id} className="px-2 py-2" style={{ color: C.muted, borderTop: `1px solid ${C.goldHair}` }}>
-                              {row.v(p)}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                      <tr data-no-contrast-guard data-surface="emerald" data-on-dark>
-                        <td data-no-contrast-guard data-on-dark className="px-2 py-2 font-bold" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Match summary</td>
-                        {previewProjects.slice(0, 3).map((p, i) => (
-                          <td key={p.id} data-no-contrast-guard data-on-dark className="px-2 py-2 font-bold" style={{ background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-                            {["Best", "Strong", "Good"][i] || "Fit"}
-                          </td>
-                        ))}
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <p className="text-[10px] mt-3" style={{ color: C.muted, fontStyle: "italic" }}>
-                  The full exported PDF includes per-criterion verdicts (match / close / miss) for every project.
-                </p>
-              </div>
-              <div className="px-5 py-3 text-[10px] flex items-center justify-between" style={{ background: C.surface, color: C.ink, borderTop: `1px solid ${C.gold}` }}>
-                <span>Powered by JBJ Global Real Estate — Dubai, UAE</span>
-                <span data-aihf-website style={{ fontWeight: 600 }}>{branding.website || "www.jbj.ae"}</span>
-              </div>
-            </div>
+              );
+            })()}
           </div>
         </div>
+
 
         {/* Actions */}
         <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2 shrink-0" style={{ borderColor: C.goldHair, background: C.page }}>

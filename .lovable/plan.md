@@ -1,86 +1,105 @@
-This is a large, multi-system change. I'll deliver it as one coordinated workstream so branding, the report flow, and the document library stay in sync.
+## Goal
 
-## 1. Report Preview Modal — contrast & branding fixes
-File: `src/components/ai-home-finder/ReportPreviewModal.tsx`
-- "Include in Report" buttons:
-  - Selected → emerald metallic gradient (`.jj-cta-emerald` / `.jj-pill-emerald-metallic`), WHITE label + WHITE icon, no black text under any state.
-  - Unselected → white surface, charcoal `#1A1A1A` label, gold hairline border, emerald hover.
-  - Scoped CSS guard so global same-tone guard never flips emerald-fill labels to ink.
-- Profile/Role pill: keep auto-synced from `useUserMode`, lock white text/icon on emerald.
-- Replace inline monogram with the **official JBJ logo asset** (black "JBJ" on champagne with horizontal divider through the B). Used in preview header, preview footer, exported PDF header/footer, letterhead, and every document template.
+One single source of truth for the AI Home Finder report. The Live Preview, the Downloaded PDF, the Print Preview, and the Email attachment must all render the **same React component**. Visual design (colors, gradients, typography, header, footer, logo, spacing, cards, badges) is shared; only the **content depth** changes between Preview (short) and PDF (long).
 
-## 2. Official JBJ Logo as a shared asset
-- New component `src/components/brand/OfficialJbjLogo.tsx` that renders the approved monogram (champagne tile, black JBJ, gold rule above & below the B) at any size.
-- Promote it as the single source of truth — used by:
-  - `ReportPreviewModal` preview header
-  - PDF builder header/footer
-  - `CompanyLetterhead` template
-  - Documents & Forms templates
-- Add `data-no-contrast-guard` only where required so the black glyphs are preserved on champagne.
+## Current state (why it's broken)
 
-## 3. Multi-page branded PDF builder
-File: `src/pages/QuizResults.tsx` (extract builder into `src/lib/reports/aiHomeFinderReport.ts`)
-Every page shares:
-- Emerald→ink header band: official monogram (champagne tile) + "JBJ GLOBAL REAL ESTATE" wordmark + page subtitle + date.
-- Champagne footer: gold hairline, "Powered by JBJ Global Real Estate — Dubai, UAE", `www.jbj.ae`, page N/total.
+- `src/pages/QuizResults.tsx` contains an ~880-line jsPDF script (`buildPdf`) that hand-draws the PDF using `doc.text`, `doc.rect`, custom palette arrays, custom gold ombré wordmark, etc. — totally independent layout.
+- `src/components/ai-home-finder/ReportPreviewModal.tsx` is a React component with its own JSX, palette `C`, emerald gradient header, champagne cards, JBJ monogram tile.
+- Two parallel systems → divergent header, colors, typography, spacing, footer.
 
-Page sequence:
-1. **Cover** — title, AI summary intro, ranked match cards, "Prepared by" panel (ONLY on cover — never repeated).
-2. **Property Comparison** — comparison table (project, developer, price, beds, handover, area), ranking row, Pros/Cons lists, AI Match Summary block with Budget Match / Timeline Match / Area Match / Features Match progress rows. Matches the in-app AI comparison.
-3..N. **Per-property pages** — hero image, metadata grid, amenities, AI analysis, recommendation, links.
-N+1. **Closing page** — thank-you, contact strip, disclaimer.
+## Target architecture
 
-PDF rendered via `jspdf` + `jspdf-autotable`. High-DPI image embedding kept.
+```
+src/components/ai-home-finder/report/
+  ReportEngine.tsx          ← single shared report component (pages array)
+  ReportPage.tsx            ← A4 page frame: header + footer + content
+  pages/
+    CoverPage.tsx           ← page 1: monogram + "JBJ GLOBAL REAL ESTATE" wordmark, salutation
+    PicksPage.tsx           ← Your AI-Selected Properties (RANK #1/#2/#3 cards)
+    ComparisonPage.tsx      ← criteria table + emerald Match summary row
+    PropertyDetailPage.tsx  ← (PDF-only) per-project deep dive — area, developer, ROI, payment plan, amenities, AI reasoning
+    ClosingPage.tsx         ← (PDF-only) market insights + CTA
+  tokens.ts                 ← single palette: emerald gradient, champagne, gold, ink, muted
+```
 
-## 4. Canva-style Page Management
-In the preview modal, add a "Pages" rail (left of the live preview, collapsible on mobile):
-- Thumbnails for each page (Cover, Comparison, each property, Closing).
-- Per-page actions: include/exclude toggle, drag-to-reorder, delete.
-- "Export range" presets: All / Cover only / 1–2 / 2–N / Custom.
-- Live preview reflects the active order + inclusion set.
-- PDF builder accepts `{ order: PageId[], include: Set<PageId> }` and emits only the selected pages with correct page-N-of-total numbering.
+`ReportEngine` accepts:
+- `mode: "preview" | "pdf"` — drives which pages render. Preview = Cover + Picks + Comparison. PDF = everything.
+- `projects`, `branding`, `matchmakerFormData`, `salutation`, etc.
 
-## 5. Company Letterhead — official reusable template
-New: `src/lib/documents/companyLetterhead.tsx` + `src/components/documents/CompanyLetterheadFrame.tsx`
-- Branded header (official monogram + wordmark + RERA/ORN line).
-- Branded footer (address, phone, email, website, gold hairline).
-- Empty editable body with luxury margins (24mm sides, 32mm top, 28mm bottom).
-- Reusable as a shell — every other document inherits this frame.
-- Exposed in Documents & Forms as **"Company Letterhead"**.
+Visual primitives (header band, footer bar, page frame, card, badge, table) live in `ReportPage.tsx` and are **identical** in both modes. The only difference is which `<*Page>` children are mounted.
 
-## 6. Documents & Forms — restoration + Company Templates library
-Files: `src/pages/owner/DocumentsHub.tsx` (or current location), `src/lib/documents/templates/`
-- Audit current registry, restore previously-shipped templates if any are missing:
-  - Offer Letter, Employment Forms, Confirmation Forms, Warning Letters, HR Templates, Company Documents, Business Templates, RERA Form A/B/F/I, NOCs, Tenancy.
-- New **Company Templates** category containing:
-  - Official Company Letterhead
-  - Blank Letter
-  - Employment Offer
-  - Warning Letter
-  - Confirmation Letter
-  - Business Proposal
-  - Broker Agreement
-  - Referral Letter
-  - General Company Document
-- Every template auto-wraps in `CompanyLetterheadFrame` so header/footer/branding/typography/margins/numbering are automatic — no per-template setup.
+## PDF export path
 
-## 7. Global branding tokens for documents
-- Centralize palette + typography in `src/lib/documents/brandTokens.ts` (emerald gradient, champagne, gold hairline, Inter stack, margins, page-number format).
-- Letterhead frame + PDF builder + preview all read from this single source.
+Replace the entire `buildPdf` jsPDF script in `QuizResults.tsx` with a `renderReportToPdf` util:
 
-## 8. Validation (manual, visual, technical)
-- `tsgo` typecheck.
-- Drive Playwright against localhost:8080:
-  - Open AI Home Finder results → open Preview → screenshot Include-in-Report states (selected/unselected/hover).
-  - Toggle pages in the rail, reorder, export "Pages 2–N" → save PDF → rasterize with `pdftoppm` and inspect every page (header, footer, no overlap, no orphan "Prepared by", page numbers correct).
-  - Open Documents & Forms → screenshot library list incl. Company Templates → open Company Letterhead → export PDF → rasterize and inspect header/footer.
-  - Switch user mode Broker↔Owner↔Developer↔Consultant → confirm role label updates and report regenerates.
-  - Mobile viewport (390×844) repeat of preview modal.
-- Deliver screenshots: Include-in-Report states, Preview cover, Comparison page, Per-property page, Closing, Page manager, Documents library, Company Letterhead PDF, Final exported PDF (all pages).
+```
+src/utils/renderReportToPdf.ts
+  - Mounts <ReportEngine mode="pdf" .../> into a hidden offscreen container (fixed width = A4 @ 96dpi = 794px, position: fixed; left: -10000px).
+  - Waits for fonts + images (Promise.all on <img>.complete and document.fonts.ready).
+  - For each [data-report-page] node:
+      - html2canvas(node, { scale: 2, useCORS: true, backgroundColor: null })
+      - pdf.addImage(...) at full A4 size, addPage() between
+  - Returns { blob, filename }
+```
 
-## Out of scope
-- No backend schema changes.
-- No edits to other report flows (Compare Projects / Property Evaluator) — they keep their own builders this turn; the new shared `brandTokens` + `OfficialJbjLogo` are available for them in a later pass.
-- No new edge functions.
+`previewDownload(branding)` in `QuizResults.tsx` calls `renderReportToPdf({ projects, branding, salutation, matchmakerFormData })`. Same util is reused by the Send-to-Consultant / Email flows so the attached PDF is byte-identical to what the user previewed.
 
-Confirm and I'll execute end-to-end, including the Playwright validation pass.
+`ReportPreviewModal` is refactored: its right-hand "LIVE PREVIEW" pane mounts `<ReportEngine mode="preview" .../>` instead of its current bespoke JSX. The form (branding inputs, salutation, role) stays in the modal's left pane; on change it updates the same `branding` prop both panes consume.
+
+## Tokens (single palette, used everywhere)
+
+```ts
+export const REPORT_TOKENS = {
+  page: "#FDFBF7",
+  surface: "#F7F2EA",
+  raised: "#EFE6D6",
+  gold: "#B89555",
+  goldHair: "rgba(184,149,85,0.32)",
+  ink: "#1A1A1A",
+  muted: "#6B6B6B",
+  emerald: "#064E3B",
+  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%)",
+  fontHeading: '"Inter", system-ui, sans-serif',
+  fontBody: '"Inter", system-ui, sans-serif',
+};
+```
+
+Pixel sizes are A4-based (794 × 1123 px @ 96dpi). Every page is rendered at exactly that size in both modes so html2canvas captures = preview screenshot.
+
+## Migration steps
+
+1. Create `src/components/ai-home-finder/report/tokens.ts` + `ReportPage.tsx` (header band, footer bar, page chrome).
+2. Create `CoverPage`, `PicksPage`, `ComparisonPage` — port the JSX out of `ReportPreviewModal.tsx`'s preview pane into shared components.
+3. Create PDF-only `PropertyDetailPage` + `ClosingPage` — port the *content* (not the jsPDF drawing) from `buildPdf`'s text/section logic. Re-implement as React using the shared primitives.
+4. Build `ReportEngine` that maps `mode` → ordered pages array.
+5. Refactor `ReportPreviewModal` preview pane to `<ReportEngine mode="preview" />`.
+6. Write `src/utils/renderReportToPdf.ts` (offscreen mount + html2canvas + jsPDF.addImage, A4 page-by-page).
+7. Replace `buildPdf` body in `QuizResults.tsx` with a thin wrapper that calls `renderReportToPdf`. Delete all jsPDF drawing helpers (`drawOmbreWordmark`, `drawPageBg`, `drawHeader`, etc.).
+8. Update Send-to-Consultant / WhatsApp / Email flows to use the same util.
+9. Typecheck.
+
+## Validation
+
+Drive Playwright via shell:
+1. Open `/ai-home-finder-results?...`, click Generate Report → screenshot preview pages 1, 2.
+2. Click Download PDF → save the blob.
+3. Use `pdftoppm` to render each PDF page to PNG.
+4. Diff preview screenshots vs PDF pages with `PIL` (mean abs pixel diff < 2% on cover/picks/comparison sections, which are shared).
+5. Attach side-by-side strip to the response.
+
+## Out of scope (this turn)
+
+- Changing the **content** depth of the PDF (still includes area/developer/ROI sections — they're just rendered through the shared React primitives now).
+- Touching unrelated reports (Compare, Brochure, etc.).
+- Any backend changes.
+
+## Risk notes
+
+- html2canvas + emerald CSS gradient: must use `backgroundImage` inline style (already in tokens) — html2canvas supports it. Fallback solid color set as `backgroundColor`.
+- Fonts: must wait on `document.fonts.ready` before capture, else PDF picks up fallback Times.
+- Images (developer logos, project covers): `useCORS: true` + `crossOrigin="anonymous"` on every `<img>`; preload via `Image()` before capture.
+
+## Deliverable
+
+After merge, opening the modal and clicking Download PDF produces a PDF whose first 2–3 pages are **pixel-equivalent** to the on-screen Live Preview (same header gradient, same gold hairlines, same monogram, same RANK cards, same emerald Match summary row). Subsequent pages append the extended content using the same chrome.
