@@ -73,7 +73,7 @@ const DeveloperHubShell = () => {
       )}
 
       {!isMobile && (
-        <aside className="fixed left-0 top-[88px] h-[calc(100vh-88px)] w-64 border-r border-[#B89555]/40 z-40">
+        <aside data-backend-sidebar="developer" data-surface="champagne" className="fixed left-0 top-[88px] h-[calc(100vh-88px)] w-64 border-r border-[#B89555]/40 z-40">
           <SidebarContent />
         </aside>
       )}

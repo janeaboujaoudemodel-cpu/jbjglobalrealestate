@@ -72,12 +72,12 @@ function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) 
             )}
             <p className="text-sm text-[#1A1A1A]/70 mt-1 font-medium">{title}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/10 flex items-center justify-center border border-[#B89555]/20 shadow-sm">
+          <div data-backend-icon-tile="emerald-soft" className="w-12 h-12 rounded-xl bg-[#064E3B]/10 flex items-center justify-center border border-[#064E3B]/15 shadow-sm">
             {icon}
           </div>
         </div>
         {trend && (
-          <p className="text-xs text-[color:var(--emerald-1)] mt-3 flex items-center gap-1 font-medium">
+          <p className="text-xs text-[#064E3B] mt-3 flex items-center gap-1 font-medium">
             <TrendingUp className="h-3 w-3" /> {trend}
           </p>
         )}
@@ -106,8 +106,8 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
       onClick={() => onOpen(lead.id)}
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 rounded-full bg-[#B89555]/20 flex items-center justify-center flex-shrink-0">
-          <span className="text-[#B89555] font-semibold text-sm">
+        <div data-backend-icon-tile="emerald" className="allow-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+          <span className="allow-white text-white font-semibold text-sm" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
             {lead.full_name.charAt(0).toUpperCase()}
           </span>
         </div>
@@ -164,8 +164,8 @@ function ConversationRow({ conversation }: ConversationRowProps) {
   return (
     <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#B89555]/10">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-          <MessageSquare className="h-4 w-4 text-purple-600" />
+        <div data-backend-icon-tile="emerald-soft" className="w-8 h-8 rounded-full bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center flex-shrink-0">
+          <MessageSquare className="h-4 w-4 text-[#064E3B]" />
         </div>
         <div className="min-w-0">
           <p className="font-medium text-[#1A1A1A] text-sm truncate">
@@ -228,8 +228,8 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
             {item.status === 'completed' && <CheckSquare className="h-3 w-3 text-white" />}
           </button>
         ) : (
-          <div className="w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
-            <Clock className="h-3 w-3 text-amber-600" />
+          <div data-backend-icon-tile="emerald-soft" className="w-5 h-5 rounded-full bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center flex-shrink-0">
+            <Clock className="h-3 w-3 text-[#064E3B]" />
           </div>
         )}
         <div className="min-w-0">
@@ -480,28 +480,28 @@ export default function OwnerDashboardOverview() {
         <KPICard
           title="Total Leads"
           value={totalLeads ?? '—'}
-          icon={<Users className="h-6 w-6 text-[#B89555]" />}
+          icon={<Users className="h-6 w-6 text-[#064E3B]" />}
           loading={loadingLeads}
           onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="New This Week"
           value={newLeadsThisWeek ?? '—'}
-          icon={<UserPlus className="h-6 w-6 text-[color:var(--emerald-1)]" />}
+          icon={<UserPlus className="h-6 w-6 text-[#064E3B]" />}
           loading={loadingNewLeads}
           onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="Pending Tasks"
           value={pendingTasks ?? '—'}
-          icon={<CheckSquare className="h-6 w-6 text-amber-600" />}
+          icon={<CheckSquare className="h-6 w-6 text-[#064E3B]" />}
           loading={loadingTasks}
           onClick={() => navigate('/owner/crm/tasks')}
         />
         <KPICard
           title="Active Chats"
           value={activeConversations ?? '—'}
-          icon={<MessageSquare className="h-6 w-6 text-purple-600" />}
+          icon={<MessageSquare className="h-6 w-6 text-[#064E3B]" />}
           loading={loadingConversations}
           onClick={() => navigate('/owner/inbox')}
         />
@@ -628,7 +628,7 @@ export default function OwnerDashboardOverview() {
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-base text-[#1A1A1A] flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-amber-600" />
+                    <Clock className="h-5 w-5 text-[#064E3B]" />
                     Needs Follow-up
                   </CardTitle>
                   <CardDescription className="text-[#1A1A1A]/70 text-xs">Pending items</CardDescription>
@@ -670,7 +670,7 @@ export default function OwnerDashboardOverview() {
           <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                <Activity className="h-5 w-5 text-purple-600" />
+                    <Activity className="h-5 w-5 text-[#064E3B]" />
                 Recent Conversations
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">Website chat sessions</CardDescription>
@@ -690,7 +690,7 @@ export default function OwnerDashboardOverview() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
+                  <MessageSquare className="h-12 w-12 text-[#064E3B]/55 mx-auto mb-3" />
                   <p className="text-[#1A1A1A]/70">No conversations yet</p>
                   <p className="text-[#1A1A1A]/70 text-xs mt-1">Conversations from website visitors will appear here</p>
                 </div>
@@ -734,7 +734,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Flag className="h-5 w-5 text-red-500" />
+                  <Flag className="h-5 w-5 text-[#064E3B]" />
                   Flagged Leads
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">Leads requiring attention</CardDescription>
@@ -758,7 +758,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Crown className="h-5 w-5 text-[#B89555]" />
+                  <Crown className="h-5 w-5 text-[#064E3B]" />
                   VIP Leads
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">High-value contacts</CardDescription>
@@ -792,7 +792,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-blue-600" />
+                  <Briefcase className="h-5 w-5 text-[#064E3B]" />
                   Employees Hub
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">Team management</CardDescription>
@@ -811,14 +811,14 @@ export default function OwnerDashboardOverview() {
           <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                <Shield className="h-5 w-5 text-purple-600" />
+                <Shield className="h-5 w-5 text-[#064E3B]" />
                 Audit Logs
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">System activity tracking</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
-                <Shield className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
+                <Shield className="h-12 w-12 text-[#064E3B]/55 mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70 mb-4">View audit logs for all CRM activity</p>
                 <Button 
                   variant="secondary"

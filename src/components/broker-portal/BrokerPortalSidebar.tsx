@@ -105,20 +105,23 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               to={to}
               onClick={onNavigate}
               title={collapsed ? label : undefined}
-              data-no-contrast-guard={active ? "" : undefined}
               data-allow-dark-cta={active ? "" : undefined}
+              data-emerald={active ? "true" : undefined}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
+                "group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-all border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
                 active
                   ? "allow-white font-semibold border-[rgba(255,255,255,0.18)] shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
                   : "border-transparent text-[#1A1A1A]/85 hover:text-[#1A1A1A] hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
               )}
               style={active ? { backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" } : undefined}
             >
-              <Icon
-                className="h-4 w-4 shrink-0"
-                style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined}
-              />
+              <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-6 h-6 rounded-md flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
+                <Icon
+                  className="allow-white h-3.5 w-3.5 shrink-0 text-white"
+                  strokeWidth={2.1}
+                  style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+                />
+              </span>
               {!collapsed && (
                 <span className="truncate" style={active ? { color: "#FFFFFF" } : undefined}>
                   {label}

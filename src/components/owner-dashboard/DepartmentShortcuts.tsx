@@ -14,7 +14,6 @@ interface DepartmentCard {
   description: string;
   icon: React.ElementType;
   path: string;
-  color: string;
 }
 
 const DEPARTMENTS: DepartmentCard[] = [
@@ -23,42 +22,36 @@ const DEPARTMENTS: DepartmentCard[] = [
     description: "HR, IT, Support, All Departments", 
     icon: ShieldAlert, 
     path: "/owner/admin", 
-    color: "text-[#B89555]" 
   },
   { 
     label: "CRM Dashboard", 
     description: "Manage leads & deals", 
     icon: Users, 
     path: "/owner/crm", 
-    color: "text-[color:var(--emerald-1)]" 
   },
   { 
     label: "Relationship Hub", 
     description: "Investors, developers, brokers & agencies", 
     icon: Network, 
     path: "/owner/crm/relationship-hub", 
-    color: "text-purple-600" 
   },
   { 
     label: "Listing Admin", 
     description: "Property listings management", 
     icon: ClipboardList, 
     path: "/owner/listing-admin", 
-    color: "text-amber-600" 
   },
   { 
     label: "Developer Hub", 
     description: "Developer portal & change requests", 
     icon: Building, 
     path: "/developer-portal", 
-    color: "text-blue-600" 
   },
   { 
     label: "Security Console", 
     description: "Access & audit controls", 
     icon: ShieldAlert, 
     path: "/owner/safety", 
-    color: "text-red-600" 
   },
 ];
 
@@ -66,7 +59,7 @@ export default function DepartmentShortcuts() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+    <div data-surface="champagne" className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4">Departments & Admin</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         {DEPARTMENTS.map((dept) => (
@@ -80,11 +73,11 @@ export default function DepartmentShortcuts() {
               "transition-all duration-200 cursor-pointer group"
             )}
           >
-            <div className={cn(
-              "w-10 h-10 rounded-lg bg-[#B89555]/10 flex items-center justify-center flex-shrink-0",
-              "group-hover:bg-[#B89555]/20 transition-colors"
+            <div data-backend-icon-tile="emerald" className={cn(
+              "allow-white w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0",
+              "transition-colors"
             )}>
-              <dept.icon className={cn("h-5 w-5", dept.color)} />
+              <dept.icon className="allow-white h-5 w-5 text-white" strokeWidth={2.1} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-[#1A1A1A] group-hover:text-[#B89555] transition-colors">
