@@ -411,9 +411,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       onClick={() => handleSelect(s.route)}
                       className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-sm transition-all group"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
-                        <s.icon className="w-4 h-4 text-[#1A1A1A]" />
-                      </div>
+                      <IconTile icon={s.icon} tone="emerald" size="md" />
                       <span className="text-[11px] text-[#1A1A1A] font-medium text-center leading-tight">{s.label}</span>
                     </button>
                   ))}
