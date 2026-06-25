@@ -16271,3 +16271,32 @@ html body [data-surface="champagne"] [data-count-badge] {
   background-color: var(--jj-emerald-ombre, #064E3B) !important;
   color: #FFFFFF !important;
 }
+
+/* ============================================================
+ * PASS 50 — AUTHORITATIVE GUARD OVERRIDE (FINAL)
+ * The legacy ink rule at ~L8456 is missing `[data-no-contrast-guard]`
+ * and `[data-hero-dark]` in its :not() chain, so opt-out scopes still
+ * inherit ink. This block runs after every rule in the file and uses
+ * higher specificity (html body html-scoped + double attr) so any
+ * descendant of a hero-dark / no-contrast-guard / on-dark scope keeps
+ * white text + white SVG strokes, no matter what an earlier surface
+ * rule tried to force.
+ * ============================================================ */
+html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]):is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]),
+html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where(
+  h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time,
+  dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where(svg, [class*="lucide"]) {
+  stroke: currentColor !important;
+}
+/* Allow inline-styled colors to win inside these scopes (e.g. gold accents). */
+html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) [style*="color"] {
+  color: revert !important;
+  -webkit-text-fill-color: revert !important;
+}
