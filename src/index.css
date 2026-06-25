@@ -14958,19 +14958,24 @@ html body #root :is(
   [data-backend-icon-tile="emerald-soft"],
   .owner-dashboard-shell [data-backend-icon-tile="emerald-soft"]
 ) {
-  background: rgba(6, 78, 59, 0.10) !important;
-  border-color: rgba(6, 78, 59, 0.16) !important;
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4, 44, 28, 0.86),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
 
 html body #root :is(
   [data-backend-icon-tile="emerald-soft"],
   .owner-dashboard-shell [data-backend-icon-tile="emerald-soft"]
 ) :where(svg, [class*="lucide"], [data-lucide], svg *) {
-  color: #064E3B !important;
-  -webkit-text-fill-color: #064E3B !important;
-  stroke: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
 
