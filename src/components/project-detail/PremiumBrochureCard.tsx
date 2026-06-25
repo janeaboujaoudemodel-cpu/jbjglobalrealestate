@@ -301,9 +301,11 @@ const PremiumBrochureCard = ({
       <motion.button
         onClick={handleClick}
         data-emerald-action="true"
+        data-action="download-brochure"
+        data-emerald="true"
         className={cn(
-          "flex items-center gap-3 px-10 py-4 rounded-lg font-semibold text-base transition-all duration-300",
-          "jj-emerald-action",
+          "flex items-center gap-3 px-10 py-4 rounded-xl font-semibold text-base transition-all duration-300",
+          "jj-emerald-action jj-cta-emerald",
           "shadow-[0_10px_30px_rgba(4,44,28,0.35),0_6px_15px_rgba(0,0,0,0.18)]",
           "group"
         )}
