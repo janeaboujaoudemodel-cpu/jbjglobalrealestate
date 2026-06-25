@@ -14792,6 +14792,110 @@ html body #root :is(
   fill: #FFFFFF !important;
 }
 
+/* Radix dialogs/popovers render in body portals outside #root. This duplicate
+   portal-safe lock is intentionally last so New Off Plan selected chips/tabs
+   cannot be repainted black by light-surface text guards. */
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+),
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  outline-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4, 44, 28, 0.86),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+) :where(svg, [class*="lucide"], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
 
 
 
