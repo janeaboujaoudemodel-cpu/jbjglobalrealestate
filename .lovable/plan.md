@@ -1,71 +1,62 @@
-## Goal
-Eliminate every remaining "light green" usage site-wide and replace with the single approved Emerald token (the exact tone used on the homepage "View All Projects" / "Start Exploring" CTA). Remove white borders around emerald circles/pills. Fix page padding so cards never touch the sidebar/edge. Fix label color rules. Validate visually with screenshots.
+I will implement this as a global design-system correction, not isolated page patches.
 
-## Reference (locked) — single source of truth
-- Emerald CTA tone: same as homepage `View All Projects` and `Start Exploring` buttons (emerald ombre, white text, white icon, no border).
-- Emerald icon circle: same as header search / filter / heart circles (solid emerald fill, white glyph, NO white ring, NO border).
-- Label chips ("AI Powered", section eyebrows, CRM labels): emerald text/background per token, never raw green.
+Plan:
 
-## Scope of fixes (global, not per-page)
+1. Lock the approved Emerald source of truth
+- Use the existing approved emerald style shown on `View All Projects`, `Start exploring`, EOI, handover, Email/Call/Chat.
+- Replace restricted green/lime/mint/bright emerald usages with the approved dark emerald ombre.
+- Ensure every emerald-filled surface always has pure white text/icons/arrows/ticks at rest and hover.
+- Remove white borders around emerald circles, badges, icon holders, and CTA surfaces.
 
-### 1. Color token purge — remove every non-approved green
-Audit and replace across `src/index.css`, all `*.tsx`, tailwind config, inline styles:
-- Tailwind classes: `bg-green-*`, `text-green-*`, `border-green-*`, `from/to/via-green-*`, `ring-green-*`, `fill-green-*`, `stroke-green-*`
-- Hex/HSL greens that are NOT the approved emerald token (e.g. `#10B981`, `#22C55E`, `#16A34A`, `#34D399`, light-emerald shades, lime, mint)
-- Replace with the approved emerald token (`--jj-emerald-ombre` / `jj-cta-emerald` / `.jj-chip-emerald`) — the SAME tone as `View All Projects`.
+2. Standardize global emerald primitives
+- Add/repair reusable classes for:
+  - emerald CTA button
+  - emerald rectangular CTA, not pill-style
+  - emerald icon circle
+  - emerald label/badge
+  - emerald checklist/tick circle
+- Make these primitives win over conflicting CSS guards so champagne/light-surface rules cannot turn emerald text black.
 
-Specifically confirmed offenders to fix:
-- Heart / Shortlist icon circle (`FavoriteButton`)
-- "AD" / sponsored badge
-- "Payment plan to be decided" pill
-- "Compare to bank rates" chip (Mortgage)
-- "Try our Mortgage Calculator" CTA
-- Mortgage page tool icon + card accents
-- "Generate Presentation" card + progress styling
-- Live Market Data → "Download Report" button (currently black text → must be white on emerald)
-- Project detail document tick circles (Brochure / Floor Plan / Specs / Payment Plan)
-- Auto + Amenities selector ticks
-- Any remaining `text-emerald-300/400/500` light variants → force the locked dark emerald
+3. Fix project cards and project page spacing globally
+- Fix Project Cards, New Off Plan Projects, Dubai/Jebel Ali listing grids, favorites, search results, related projects, and comparison thumbnails to use the same image/card behavior.
+- Add safe content padding so cards never touch phone, iPad, desktop, or 4K viewport borders.
+- Keep only background bands full-width; cards and filter/header content stay inside the content track and never cross the vertical sidebar.
 
-### 2. Emerald circle / pill border lock
-Global CSS rule (in `src/index.css`) to strip white/light borders from any emerald-filled circular or pill container:
-- Targets: `.jj-chip-emerald`, `.jj-cta-emerald`, `[data-emerald-ok]`, `rounded-full` + emerald bg.
-- Removes: `border`, `ring`, `box-shadow` white halos.
-- Keeps: clean solid emerald fill + white content.
+4. Fix project-card actions and badges
+- Heart, shortlist, shortlist badge, ad/top badge, EOI/handover, payment-plan status, and all overlay badges use approved emerald only.
+- Any icon inside those circles/badges is pure white.
+- Remove restricted green and border artifacts.
 
-### 3. Pill-stripping on three specific CTAs
-Render as flat premium white style (no emerald pill background) — text + icon only, premium underline-on-hover treatment:
-- "Download Brochure"  → KEEP emerald per user's later instruction (filled emerald, white icon+text, idle+hover).
-- "Register Interest"  → premium white style (no pill).
-- "Download Branded Presentation" → premium white style (no pill).
+5. Fix brochure / interest / branded presentation surfaces
+- `Download Brochure`, `Register Interest`, and `Download Branded Presentation` become rectangular premium emerald CTAs with white icon/text, not pill-style.
+- Brochure labels, Generate Presentation labels, Project Brochure / floor plan / layout / specification / payment-plan checklist ticks become emerald circles with white ticks/icons.
+- Fix the Generate Presentation card contrast, label contrast, box color, and broken text hierarchy.
 
-(Will confirm in Q1 below — user gave conflicting direction mid-message.)
+6. Fix AI Home Finder result/report entry surfaces
+- Replace any remaining restricted greens in recommendation cards, badges, ranking chips, brochure actions, and presentation actions.
+- Ensure selected chips, labels, CTA buttons, and icon circles use the same approved emerald + pure white content.
 
-### 4. Page padding / sidebar overflow
-Global container rule for content shell (everything inside the L-frame, right of the 88px sidebar):
-- Add consistent horizontal page padding (e.g. `px-6 md:px-8 xl:px-10`) on the main content wrapper used by Projects, Project Detail, Market Intelligence, Mortgage, etc.
-- Cards/grids never reach `0px` from the sidebar edge or viewport edge — only the full-bleed `.jj-band` background may.
-- Fix horizontal filter strap on Projects + Project Detail (price/payment/handover row, location/brochure/payment row) so it sits inside the padded container and does not visually merge into the sidebar.
+7. Fix Mortgage Calculator globally
+- Replace light green in mortgage calculator, compared-to-bank-rate indicators, calculator icon cards, labels, and related CTA surfaces with approved emerald.
+- `Request Mortgage Introduction` uses the darker emerald as normal state and the current lighter state only as hover if needed.
+- Force title/text/icon inside that emerald CTA to pure white at rest and hover.
 
-### 5. Label color rule (global)
-All "label" eyebrows (e.g. "AI Powered", section kickers, CRM field labels): emerald token text (or emerald chip when on light surface). Never raw gray, never green-400, never black on emerald.
+8. Fix Dubai Market Intelligence / Live Market Data
+- `Download Report` buttons use approved emerald with pure white text/icon.
+- Repair section/container layout so content does not cross or collide with the vertical sidebar and does not appear glued edge-to-edge.
 
-### 6. Hover/idle inversion for Mortgage advisor CTAs
-- "Prefer Mortgage Advisor" / "Request Mortgage Introduction": title must be WHITE at idle; idle = the DARKER emerald (currently shown on hover); hover = the lighter approved emerald. Swap states.
+9. Fix labels across public site and CRM
+- Labels like `AI Powered`, CRM badges/labels, filter labels, tool labels, status labels, and metric labels use approved emerald styling when they are accent labels.
+- White text/icons only when the label is emerald-filled.
 
-### 7. Validation
-Playwright pass with screenshots at desktop (1280), iPad (1024), iPhone (390) on:
-Home, Projects list, Project detail, AI Home Finder, Mortgage Calculator, Market Intelligence, Generate Presentation, Owner CRM.
-Automated audit script that scans rendered DOM for any computed color in the banned-green set and reports zero offenders. Save contact sheet to `/mnt/documents/`.
-
-## Out of scope
-- No business-logic changes, no new features, no data model changes.
-
----
-
-## Clarifying question before I implement
-Q1. "Download Brochure" button style — your message says two different things in the same paragraph:
-  a) "The button of Download Brochure also should be in the emerald style, filled with white icon and text on normal load and hover" (= emerald pill)
-  b) "for the download brochure, register interest, download branded presentation… keep them without pills" (= flat white premium)
-
-Which one is correct for "Download Brochure"? I'll plan as: Download Brochure = EMERALD PILL (white text+icon, idle+hover), Register Interest + Download Branded Presentation = FLAT WHITE PREMIUM (no pill). Confirm or correct before I build.
+10. Visual validation before completion
+- Manually navigate as a user after implementation.
+- Capture screenshot proof for the affected areas:
+  - Home CTA reference and featured cards
+  - Projects/New Off Plan grid
+  - Project detail brochure/presentation/payment-plan areas
+  - AI Home Finder results
+  - Mortgage Calculator
+  - Dubai Market Intelligence / Live Market Data
+  - CRM label/badge surfaces
+- Validate desktop, tablet, and mobile breakpoints for no broken contrast, no edge-touching cards, no sidebar overlap, no horizontal scroll, and no restricted green remnants.
