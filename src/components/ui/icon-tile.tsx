@@ -25,19 +25,21 @@ export type IconTileTone =
 
 export type IconTileSize = "sm" | "md" | "lg" | "xl";
 
+const EMERALD_TILE = { tile: "jj-icon-tile-emerald", icon: "text-white" };
+
 const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
-  // CHAMPAGNE TILE + EMERALD GLYPH — the global "light surface" tone.
-  // Maps the legacy "gold" tone to the system rule:
-  // Champagne background = dark text + Emerald icon/accent.
-  gold:    { tile: "bg-[color:var(--emerald-soft-bg)] ring-1 ring-[color:var(--emerald-1)]/30", icon: "text-[color:var(--emerald-1)]" },
-  emerald: { tile: "jj-icon-tile-emerald", icon: "text-white" },
-  red:     { tile: "bg-red-500/10 ring-1 ring-red-500/30",         icon: "text-red-600" },
-  blue:    { tile: "bg-blue-500/10 ring-1 ring-blue-500/30",       icon: "text-blue-600" },
-  amber:   { tile: "bg-amber-500/10 ring-1 ring-amber-500/30",     icon: "text-amber-600" },
-  purple:  { tile: "bg-purple-500/10 ring-1 ring-purple-500/30",   icon: "text-purple-600" },
-  rose:    { tile: "bg-rose-500/10 ring-1 ring-rose-500/30",       icon: "text-rose-600" },
-  navy:    { tile: "surface-navy bg-[#0A0A0A] ring-1 ring-[#B89555]", icon: "text-white" },
-  ink:     { tile: "surface-ink bg-[#1A1A1A] ring-1 ring-[#1A1A1A]", icon: "text-white" },
+  // Global UI contract: every IconTile uses the approved JBJ emerald → black
+  // ombre container with pure white Lucide glyphs. Legacy tone names remain so
+  // older call sites inherit the locked style automatically instead of forking.
+  gold: EMERALD_TILE,
+  emerald: EMERALD_TILE,
+  red: EMERALD_TILE,
+  blue: EMERALD_TILE,
+  amber: EMERALD_TILE,
+  purple: EMERALD_TILE,
+  rose: EMERALD_TILE,
+  navy: EMERALD_TILE,
+  ink: EMERALD_TILE,
 };
 
 const SIZE: Record<IconTileSize, { box: string; icon: string }> = {
@@ -59,13 +61,12 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
   ({ icon: Icon, tone = "emerald", size = "md", className, iconClassName, ...rest }, ref) => {
     const t = TONE[tone];
     const s = SIZE[size];
-    const isDark = tone === "ink" || tone === "navy" || tone === "emerald";
-    const isChampagne = tone === "gold";
+    const isDark = true;
 
     // Force the glyph color with !important via inline style so it beats the
     // long :not() descendant repaint sweeps in index.css. This is the only way
     // to guarantee "Emerald tile = white icon" across every nested ancestor.
-    const glyphColor = isDark ? "#FFFFFF" : isChampagne ? "var(--emerald-1)" : undefined;
+    const glyphColor = "#FFFFFF";
     const setGlyphStyle = React.useCallback(
       (el: SVGSVGElement | null) => {
         if (!el || !glyphColor) return;
@@ -95,8 +96,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         ref={ref}
         data-icon-tile=""
         data-icon-tile-tone={tone}
-        data-surface={tone === "emerald" ? "emerald" : isDark ? tone : "raised"}
-        data-no-contrast-guard={isDark ? "" : undefined}
+        data-surface="emerald"
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0",
           s.box,
@@ -109,6 +109,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         <Icon
           ref={setGlyphStyle as unknown as React.Ref<SVGSVGElement>}
           className={cn(s.icon, t.icon, isDark && "allow-white", iconClassName)}
+          strokeWidth={2}
         />
       </div>
     );

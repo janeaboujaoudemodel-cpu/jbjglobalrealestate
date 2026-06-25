@@ -10,68 +10,66 @@ export interface PipelineStatus {
   category: 'positive' | 'neutral' | 'negative';
 }
 
-// Status groups for organized dropdowns - standardized colors
-// POSITIVE = Green, NEUTRAL = Blue, NEGATIVE = Red
+const EMERALD = '#064E3B';
+const GOLD = '#B89555';
+const INK = '#1A1A1A';
+
+// Status groups for organized dropdowns - locked to the JBJ Emerald/Gold system.
 export const STATUS_GROUPS = {
   positive: {
     label: 'POSITIVE',
-    color: 'text-emerald-400',
-    bgColor: 'jj-surface-emerald-soft',
-    dotColor: '#22C55E', // Green
+    color: 'text-[#064E3B]',
+    bgColor: 'bg-[#FDFBF7]',
+    dotColor: EMERALD,
   },
   neutral: {
     label: 'NEUTRAL',
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/20',
-    dotColor: '#3B82F6', // Blue
+    color: 'text-[#1A1A1A]',
+    bgColor: 'bg-[#FDFBF7]',
+    dotColor: GOLD,
   },
   negative: {
     label: 'NEGATIVE',
-    color: 'text-red-400',
-    bgColor: 'bg-red-500/20',
-    dotColor: '#DC2626', // Red
+    color: 'text-[#1A1A1A]',
+    bgColor: 'bg-[#FDFBF7]',
+    dotColor: INK,
   },
 } as const;
 
 // GLOBAL STATUS LIST - These EXACT statuses must be used everywhere
 // No alternative lists, no shortened versions, no duplicates
 export const PIPELINE_STATUSES: PipelineStatus[] = [
-  // HOT — orange (high-temperature lead)
-  { value: "hot", label: "Hot", color: "bg-orange-500", bgColor: "bg-orange-500/15", textColor: "text-orange-700", dotColor: "#F97316", category: "positive" },
-  // VIP — yellow/amber (premium tier)
-  { value: "vip", label: "VIP", color: "bg-amber-400", bgColor: "bg-amber-400/25", textColor: "text-amber-800", dotColor: "#F59E0B", category: "positive" },
+  { value: "hot", label: "Hot", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: GOLD, category: "positive" },
+  { value: "vip", label: "VIP", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: GOLD, category: "positive" },
   // POSITIVE (green) - Deal progression
-  { value: "interested", label: "Interested", color: "jj-surface-emerald", bgColor: "jj-surface-emerald/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
-  { value: "qualified", label: "Qualified", color: "jj-surface-emerald", bgColor: "jj-surface-emerald/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
-  { value: "viewing", label: "Viewing Scheduled", color: "jj-surface-emerald", bgColor: "jj-surface-emerald/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#059669", category: "positive" },
-  { value: "viewing_done", label: "Viewing Done", color: "jj-surface-emerald", bgColor: "jj-surface-emerald/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#059669", category: "positive" },
-  { value: "negotiation", label: "Negotiation", color: "jj-surface-emerald", bgColor: "jj-surface-emerald/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
-  { value: "offer_sent", label: "Offer Sent", color: "jj-surface-emerald", bgColor: "jj-surface-emerald/15", textColor: "text-[color:var(--emerald-1)]", dotColor: "#10B981", category: "positive" },
-  { value: "closed_won", label: "Closed Won", color: "jj-surface-emerald", bgColor: "jj-surface-emerald-soft", textColor: "text-[color:var(--emerald-1)]", dotColor: "#047857", category: "positive" },
-  // ALREADY BOUGHT — blue
-  { value: "already_bought", label: "Already Bought", color: "bg-blue-500", bgColor: "bg-blue-500/15", textColor: "text-blue-700", dotColor: "#2563EB", category: "neutral" },
+  { value: "interested", label: "Interested", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "qualified", label: "Qualified", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "viewing", label: "Viewing Scheduled", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "viewing_done", label: "Viewing Done", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "negotiation", label: "Negotiation", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "offer_sent", label: "Offer Sent", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "closed_won", label: "Closed Won", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "already_bought", label: "Already Bought", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
 
   // NEUTRAL (blue) - New / Follow-up / Pending
-  { value: "new", label: "New", color: "bg-blue-500", bgColor: "bg-blue-500/15", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
-  { value: "contacted", label: "Contacted", color: "bg-blue-400", bgColor: "bg-blue-400/15", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
-  { value: "followup", label: "Follow-up", color: "bg-blue-500", bgColor: "bg-blue-500/15", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
-  { value: "callback", label: "Call Back", color: "bg-blue-400", bgColor: "bg-blue-400/15", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
-  // NO RESPONSE — dark red
-  { value: "no_answer", label: "No Response", color: "bg-rose-800", bgColor: "bg-rose-800/15", textColor: "text-rose-900", dotColor: "#9F1239", category: "negative" },
-  { value: "on_hold", label: "On Hold", color: "bg-blue-300", bgColor: "bg-blue-300/15", textColor: "text-blue-700", dotColor: "#60A5FA", category: "neutral" },
+  { value: "new", label: "New", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "contacted", label: "Contacted", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "followup", label: "Follow-up", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "callback", label: "Call Back", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "no_answer", label: "No Response", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
+  { value: "on_hold", label: "On Hold", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
 
   // NEUTRAL - Lifecycle states
-  { value: "assigned", label: "Assigned", color: "bg-blue-500", bgColor: "bg-blue-500/15", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
-  { value: "archived", label: "Archived", color: "bg-[#F7F2EA]", bgColor: "bg-[#F7F2EA]/15", textColor: "text-[#1A1A1A]/80", dotColor: "#94A3B8", category: "neutral" },
+  { value: "assigned", label: "Assigned", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "archived", label: "Archived", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
 
   // NEGATIVE (red) - Lost / DNC / Invalid / Deleted
-  { value: "not_interested", label: "Not Interested", color: "bg-red-500", bgColor: "bg-red-500/15", textColor: "text-red-700", dotColor: "#DC2626", category: "negative" },
-  { value: "closed_lost", label: "Lost", color: "bg-red-500", bgColor: "bg-red-500/15", textColor: "text-red-700", dotColor: "#DC2626", category: "negative" },
-  { value: "do_not_contact", label: "Do Not Contact", color: "bg-red-600", bgColor: "bg-red-600/15", textColor: "text-red-800", dotColor: "#B91C1C", category: "negative" },
-  // JUNK — red
-  { value: "junk", label: "Invalid Lead", color: "bg-red-500", bgColor: "bg-red-500/15", textColor: "text-red-700", dotColor: "#DC2626", category: "negative" },
-  { value: "deleted", label: "Deleted", color: "bg-red-700", bgColor: "bg-red-700/15", textColor: "text-red-800", dotColor: "#B91C1C", category: "negative" },
-  { value: "permanently_erased", label: "Permanently Erased", color: "bg-red-900", bgColor: "bg-red-900/15", textColor: "text-red-900", dotColor: "#7F1D1D", category: "negative" },
+  { value: "not_interested", label: "Not Interested", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
+  { value: "closed_lost", label: "Lost", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
+  { value: "do_not_contact", label: "Do Not Contact", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
+  { value: "junk", label: "Invalid Lead", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
+  { value: "deleted", label: "Deleted", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
+  { value: "permanently_erased", label: "Permanently Erased", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
 ];
 
 export const getStatusInfo = (status: string | undefined): PipelineStatus => {
@@ -101,8 +99,10 @@ const LeadStatusBadge = ({
     lg: "px-4 py-2 text-sm"
   };
 
-  // Special styling for "New" status - blue neutral theme
-  const isNew = status === 'new' || !status;
+  const toneClass =
+    statusInfo.category === 'positive'
+      ? 'bg-[#FDFBF7] text-[#064E3B] border-[#064E3B]/30'
+      : 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/35';
   
   const Component = onClick ? 'button' : 'span';
   
@@ -111,12 +111,10 @@ const LeadStatusBadge = ({
       onClick={onClick}
       disabled={onClick ? false : undefined}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-full font-bold transition-all whitespace-nowrap",
+        "inline-flex items-center justify-center gap-1.5 rounded-full border font-bold transition-all whitespace-nowrap",
         sizeClasses[size],
-        isNew
-          ? "bg-blue-500/15 text-blue-700 border border-blue-400/40"
-          : cn(statusInfo.bgColor, statusInfo.textColor, "border border-current/25"),
-        onClick && "hover:shadow-sm cursor-pointer",
+        toneClass,
+        onClick && "jj-hover-emerald hover:shadow-sm cursor-pointer",
         !onClick && "cursor-default",
         className,
       )}

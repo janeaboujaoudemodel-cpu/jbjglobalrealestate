@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin, MessageCircle, Mail, LifeBuoy, Compass, TrendingUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useQuery } from "@tanstack/react-query";
@@ -273,7 +274,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false }: { item: DbResult; route: string; fallbackIcon: import("lucide-react").LucideIcon; isFirst?: boolean }) => (
     <button
       onClick={() => handleSelect(route)}
-      className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${isFirst ? 'bg-[#1A1A1A]/10 border border-[#B89555]/40' : 'hover:bg-[#1A1A1A]/5'}`}
+      className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left jj-hover-emerald ${isFirst ? 'bg-[#FDFBF7] border-[#B89555]/55 shadow-sm' : 'bg-[#FDFBF7]/70 border-[#B89555]/20 hover:border-[#B89555]/55'}`}
     >
       {item.image ? (
         <div className="w-9 h-9 rounded-lg overflow-hidden border border-[#B89555]/40 bg-white flex items-center justify-center flex-shrink-0">
@@ -285,7 +286,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.name}</p>
       </div>
-      <ArrowRight className="w-3 h-3 text-[#1A1A1A]/70 flex-shrink-0" />
+      <ArrowRight className="w-4 h-4 text-[#064E3B] flex-shrink-0" />
     </button>
   );
 
@@ -334,14 +335,14 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       <div className="flex flex-col" style={{ maxHeight: '500px' }}>
         {/* Search Input */}
         <div className="relative flex-shrink-0">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]" />
+          <IconTile icon={Search} tone="emerald" size="sm" className="absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search projects, developers, tools & more..."
-            className="w-full h-12 pl-12 pr-4 bg-[#FDFBF7]/80 border border-[#B89555]/30 rounded-xl text-[#1A1A1A] text-base placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all duration-200"
+            className="w-full h-12 pl-14 pr-4 bg-[#FDFBF7]/90 border border-[#B89555]/35 rounded-xl text-[#1A1A1A] text-base placeholder:text-[#1A1A1A]/60 focus:outline-none focus:ring-2 focus:ring-[#064E3B]/30 transition-all duration-200"
           />
         </div>
         {/* Content */}
@@ -359,14 +360,14 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       <button
                         key={`${item.id}-${idx}`}
                         onClick={() => handleSelect(item.route)}
-                        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
+                          className="w-full flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/20 hover:border-[#B89555]/55 transition-all text-left group jj-hover-emerald"
                       >
                         {item.icon && <IconTile icon={item.icon} tone="emerald" size="sm" />}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
                           {item.category && <p className="text-xs text-[#1A1A1A]">{item.category}</p>}
                         </div>
-                        <ArrowRight className="w-3 h-3 text-[#1A1A1A]/70" />
+                        <ArrowRight className="w-4 h-4 text-[#064E3B]" />
                       </button>
                     ))}
                   </div>
@@ -384,13 +385,13 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                         <button
                           key={`${item.id}-near-${idx}`}
                           onClick={() => handleSelect(item.route)}
-                          className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1A1A]/5 transition-all text-left"
+                          className="w-full flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/20 hover:border-[#B89555]/55 transition-all text-left jj-hover-emerald"
                         >
                           {item.icon && <IconTile icon={item.icon} tone="emerald" size="sm" />}
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
                           </div>
-                          <ArrowRight className="w-3 h-3 text-[#1A1A1A]/70" />
+                          <ArrowRight className="w-4 h-4 text-[#064E3B]" />
                         </button>
                       ))}
                     </div>
@@ -409,7 +410,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <button
                       key={s.route + s.label}
                       onClick={() => handleSelect(s.route)}
-                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-sm transition-all group"
+                      className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-sm transition-all group jj-hover-emerald"
                     >
                       <IconTile icon={s.icon} tone="emerald" size="md" />
                       <span className="text-[11px] text-[#1A1A1A] font-medium text-center leading-tight">{s.label}</span>
@@ -424,7 +425,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <button
                       key={page.route}
                       onClick={() => handleSelect(page.route)}
-                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
+                      className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all text-left group jj-hover-emerald"
                     >
                       <IconTile icon={page.icon} tone="emerald" size="sm" />
                       <span className="text-xs text-[#1A1A1A] font-medium">{page.label}</span>
@@ -437,16 +438,16 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Recent Searches</p>
-                    <button onClick={handleClearRecent} className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">Clear</button>
+                    <Button onClick={handleClearRecent} variant="secondary" size="sm" className="h-8 px-3 text-xs">Clear</Button>
                   </div>
                   <div className="space-y-1">
                     {recentSearches.map((search, i) => (
                       <button
                         key={i}
                         onClick={() => handleRecentSearchClick(search)}
-                        className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
+                        className="w-full flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all text-left group jj-hover-emerald"
                       >
-                        <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                        <IconTile icon={Clock} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
                         <span className="text-xs text-[#1A1A1A] font-medium">{search}</span>
                       </button>
                     ))}
@@ -485,18 +486,18 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-[#B89555]/30 flex-shrink-0">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-[#1A1A1A]" />
+                <IconTile icon={Search} tone="emerald" size="sm" className="absolute left-4 top-1/2 -translate-y-1/2" />
                 <Input
                   ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search by keyword... Search anything"
-                  className="w-full h-16 pl-14 pr-14 bg-transparent border-0 text-[#1A1A1A] text-xl placeholder:text-[#1A1A1A]/70 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="w-full h-16 pl-16 pr-14 bg-transparent border-0 text-[#1A1A1A] text-xl placeholder:text-[#1A1A1A]/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
                 <button
                   onClick={onClose}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/80 hover:border-[#B89555]/60 hover:bg-[#EFE6D6] transition-colors"
                 >
                   <X className="w-6 h-6 text-[#1A1A1A]" />
                 </button>
@@ -521,10 +522,10 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             <button
                               key={`${item.id}-${idx}`}
                               onClick={() => handleSelect(item.route)}
-                              className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
+                              className={`w-full flex items-center gap-4 p-3 rounded-xl border transition-all text-left jj-hover-emerald ${
  !hasDbResults && idx === 0
- ? "bg-[#1A1A1A]/10 border border-[#B89555]/40" 
- : "hover:bg-[#EFE6D6]/10"
+ ? "bg-[#FDFBF7] border-[#B89555]/55 shadow-sm" 
+ : "bg-[#FDFBF7]/70 border-[#B89555]/20 hover:border-[#B89555]/55"
  }`}
                             >
                               {item.icon && <IconTile icon={item.icon} tone="emerald" size="md" />}
@@ -532,7 +533,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                                 <p className="font-semibold text-[#1A1A1A]">{item.label}</p>
                                 <p className="text-[#1A1A1A] text-sm truncate">{item.description}</p>
                               </div>
-                              <ArrowRight className="w-5 h-5 flex-shrink-0 text-[#1A1A1A]" />
+                              <ArrowRight className="w-5 h-5 flex-shrink-0 text-[#064E3B]" />
                             </button>
                           ))}
                         </div>
@@ -553,14 +554,14 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               <button
                                 key={`${item.id}-near-${idx}`}
                                 onClick={() => handleSelect(item.route)}
-                                className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-[#EFE6D6]/40 transition-all text-left"
+                                className="w-full flex items-center gap-4 p-3 rounded-xl border border-[#B89555]/20 bg-[#FDFBF7]/70 hover:border-[#B89555]/55 transition-all text-left jj-hover-emerald"
                               >
                                 {item.icon && <IconTile icon={item.icon} tone="emerald" size="md" />}
                                 <div className="flex-1 min-w-0">
                                   <p className="font-semibold text-[#1A1A1A] truncate">{item.label}</p>
                                   <p className="text-[#1A1A1A]/70 text-sm truncate">{item.description}</p>
                                 </div>
-                                <ArrowRight className="w-5 h-5 text-[#1A1A1A]/70 flex-shrink-0" />
+                                <ArrowRight className="w-5 h-5 text-[#064E3B] flex-shrink-0" />
                               </button>
                             ))}
                           </div>
@@ -581,14 +582,14 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     {/* Role-aware shortcuts */}
                     <div>
                       <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
-                        <Compass className="w-3.5 h-3.5 text-[#B89555]" /> For {roleLabel}s
+                        <IconTile icon={Compass} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" /> For {roleLabel}s
                       </p>
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                         {roleShortcuts.map((shortcut) => (
                           <button
                             key={shortcut.route + shortcut.label}
                             onClick={() => handleSelect(shortcut.route)}
-                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group"
+                              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group jj-hover-emerald"
                           >
                             <IconTile icon={shortcut.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
                             <span className="text-xs font-medium text-[#1A1A1A] text-center leading-tight">{shortcut.label}</span>
@@ -607,7 +608,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <button
                             key={shortcut.route}
                             onClick={() => handleSelect(shortcut.route)}
-                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 hover:shadow-md transition-all group"
+                              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 hover:shadow-md transition-all group jj-hover-emerald"
                           >
                             <IconTile icon={shortcut.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
                             <span className="text-xs font-medium text-[#1A1A1A] text-center">{shortcut.label}</span>
@@ -626,7 +627,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <button
                             key={page.route}
                             onClick={() => handleSelect(page.route)}
-                            className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/50 border border-[#B89555]/10 hover:bg-[#FDFBF7] hover:border-[#B89555]/30 transition-all"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all jj-hover-emerald"
                           >
                             <IconTile icon={page.icon} tone="emerald" size="sm" />
                             <span className="text-sm font-medium text-[#1A1A1A]">{page.label}</span>
@@ -638,20 +639,20 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     {/* Your Pinned Shortcuts */}
                     {shortcuts.length > 0 && (
                       <div>
-                        <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-1.5">
-                          <Pin className="w-3.5 h-3.5" /> Your Shortcuts
+                        <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
+                          <IconTile icon={Pin} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" /> Your Shortcuts
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {shortcuts.map((search, i) => (
                             <div
                               key={`sc-${i}`}
-                              className="group/sc flex items-center gap-1 pl-3 pr-1 py-1 rounded-xl bg-gradient-to-r from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/40 hover:border-[#B89555] transition-all"
+                              className="group/sc flex items-center gap-1 pl-3 pr-1 py-1 rounded-xl bg-[#FDFBF7] border border-[#B89555]/40 hover:border-[#B89555] transition-all jj-hover-emerald"
                             >
                               <button
                                 onClick={() => handleRecentSearchClick(search)}
                                 className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]"
                               >
-                                <Star className="w-3.5 h-3.5 text-[#B89555] fill-[#B89555]" />
+                                <Star className="w-3.5 h-3.5 text-[#064E3B] fill-[#064E3B]" />
                                 {search}
                               </button>
                               <button
@@ -676,7 +677,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           </p>
                           <button
                             onClick={handleClearRecent}
-                            className="flex items-center gap-1 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
+                            className="flex items-center gap-1 text-xs text-[#064E3B] hover:text-[#042C1C] font-semibold transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                             Clear
@@ -688,13 +689,13 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             return (
                               <div
                                 key={i}
-                                className="group/r flex items-center gap-1 pl-3 pr-1 py-1.5 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all"
+                                className="group/r flex items-center gap-1 pl-3 pr-1 py-1.5 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all jj-hover-emerald"
                               >
                                 <button
                                   onClick={() => handleRecentSearchClick(search)}
                                   className="flex items-center gap-2 text-sm font-medium text-[#1A1A1A]"
                                 >
-                                  <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                                  <Clock className="w-3.5 h-3.5 text-[#064E3B]" />
                                   {search}
                                 </button>
                                 <button
@@ -703,7 +704,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                                   title={pinned ? "Unpin shortcut" : "Pin as shortcut"}
                                   className="ml-1 p-1 rounded-full opacity-60 hover:opacity-100 hover:bg-[#1A1A1A]/10"
                                 >
-                                  <Star className={`w-3.5 h-3.5 ${pinned ? "text-[#B89555] fill-[#B89555]" : "text-[#1A1A1A]/60"}`} />
+                                  <Star className={`w-3.5 h-3.5 ${pinned ? "text-[#064E3B] fill-[#064E3B]" : "text-[#064E3B]/75"}`} />
                                 </button>
                               </div>
                             );
@@ -722,27 +723,27 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           {isOwner && (
                             <button
                               onClick={() => handleSelect('/owner')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-gold/20 to-amber-100 border border-[#B89555]/30 hover:shadow-md transition-all"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
                             >
-                              <LayoutDashboard className="w-5 h-5 text-[#1A1A1A]" />
+                              <IconTile icon={LayoutDashboard} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">Owner</span>
                             </button>
                           )}
                           {isOwner && (
                             <button
                               onClick={() => handleSelect('/admin')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-purple-100 to-purple-50 border border-purple-300 hover:shadow-md transition-all"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
                             >
-                              <Briefcase className="w-5 h-5 text-purple-600" />
+                              <IconTile icon={Briefcase} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
                             </button>
                           )}
                           {(hasCRMAccess || isOwner) && (
                             <button
                               onClick={() => handleSelect('/crm')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-300 hover:shadow-md transition-all"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
                             >
-                              <Users className="w-5 h-5 text-blue-600" />
+                              <IconTile icon={Users} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">CRM</span>
                             </button>
                           )}
@@ -753,7 +754,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               data-emerald-ok="button"
                               className="jj-surface-emerald flex items-center gap-3 p-3 rounded-xl hover:shadow-md transition-all"
                             >
-                              <Building2 className="w-5 h-5" />
+                              <IconTile icon={Building2} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold">Listings</span>
                             </button>
                           )}
@@ -769,18 +770,18 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <p className="text-sm font-semibold text-[#1A1A1A]">Can't find what you're looking for?</p>
                           <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Our JBJ team is one click away — we'll guide you personally.</p>
                           <div className="flex flex-wrap gap-2 mt-3">
-                            <button onClick={() => handleSelect('/contact')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90 transition" data-no-contrast-guard>
+                            <Button onClick={() => handleSelect('/contact')} size="sm" className="h-9 px-3 text-xs">
                               <Phone className="w-3.5 h-3.5" /> Contact JBJ Team
-                            </button>
-                            <button onClick={() => handleSelect('/book')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                            </Button>
+                            <Button onClick={() => handleSelect('/book')} variant="secondary" size="sm" className="h-9 px-3 text-xs">
                               <MessageCircle className="w-3.5 h-3.5" /> Book a Call
-                            </button>
-                            <button onClick={() => handleSelect('/support')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                            </Button>
+                            <Button onClick={() => handleSelect('/support')} variant="secondary" size="sm" className="h-9 px-3 text-xs">
                               <HelpCircle className="w-3.5 h-3.5" /> Support
-                            </button>
-                            <button onClick={() => handleSelect('/faq')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 hover:border-[#B89555] transition">
+                            </Button>
+                            <Button onClick={() => handleSelect('/faq')} variant="secondary" size="sm" className="h-9 px-3 text-xs">
                               <BookOpen className="w-3.5 h-3.5" /> FAQ
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       </div>

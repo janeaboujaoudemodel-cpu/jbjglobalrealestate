@@ -15,12 +15,12 @@ import { cn } from "@/lib/utils";
  * ============================================================ */
 
 const cardVariants = cva(
-  "rounded-lg border border-border bg-card text-card-foreground transition-all duration-300",
+  "rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] shadow-sm transition-all duration-300",
   {
     variants: {
       surface: {
-        default: "jj-card bg-card text-card-foreground hover:border-[color:var(--emerald-1)]/35",
-        light: "jj-card surface-light bg-card text-card-foreground hover:border-[color:var(--emerald-1)]/35",
+        default: "jj-card hover:border-[#B89555]/60 hover:shadow-[0_12px_34px_-22px_rgba(26,26,26,0.28)]",
+        light: "jj-card surface-light hover:border-[#B89555]/60 hover:shadow-[0_12px_34px_-22px_rgba(26,26,26,0.28)]",
         dark: "surface-dark bg-card text-card-foreground",
         emerald: "jj-card-emerald text-white border-transparent",
       },
@@ -40,6 +40,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(cardVariants({ surface }), className)}
+      data-jbj-card=""
       {...props}
     />
   ),
