@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { searchItems, nearestSearchItems } from "@/config/globalSearchIndex";
 import type { SearchItem } from "@/config/globalSearchIndex";
 import { SafeImage } from "@/components/SafeImage";
+import { IconTile } from "@/components/ui/icon-tile";
 import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
 
 interface GlobalSearchModalProps {
@@ -269,18 +270,18 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   };
 
   // Reusable DB result row
-  const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false }: { item: DbResult; route: string; fallbackIcon: React.ElementType; isFirst?: boolean }) => (
+  const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false }: { item: DbResult; route: string; fallbackIcon: import("lucide-react").LucideIcon; isFirst?: boolean }) => (
     <button
       onClick={() => handleSelect(route)}
       className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${isFirst ? 'bg-[#1A1A1A]/10 border border-[#B89555]/40' : 'hover:bg-[#1A1A1A]/5'}`}
     >
-      <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center flex-shrink-0">
-        {item.image ? (
+      {item.image ? (
+        <div className="w-9 h-9 rounded-lg overflow-hidden border border-[#B89555]/40 bg-white flex items-center justify-center flex-shrink-0">
           <SafeImage src={item.image} alt={item.name} className="w-full h-full object-cover" />
-        ) : (
-          <FallbackIcon className="w-4 h-4 text-[#1A1A1A]" />
-        )}
-      </div>
+        </div>
+      ) : (
+        <IconTile icon={FallbackIcon} tone="emerald" size="sm" />
+      )}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.name}</p>
       </div>
@@ -360,9 +361,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                         onClick={() => handleSelect(item.route)}
                         className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
                       >
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A]">
-                          {item.icon && <item.icon className="w-4 h-4" />}
-                        </div>
+                        {item.icon && <IconTile icon={item.icon} tone="emerald" size="sm" />}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
                           {item.category && <p className="text-xs text-[#1A1A1A]">{item.category}</p>}
@@ -387,9 +386,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           onClick={() => handleSelect(item.route)}
                           className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1A1A]/5 transition-all text-left"
                         >
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A]">
-                            {item.icon && <item.icon className="w-4 h-4" />}
-                          </div>
+                          {item.icon && <IconTile icon={item.icon} tone="emerald" size="sm" />}
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
                           </div>
@@ -414,9 +411,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       onClick={() => handleSelect(s.route)}
                       className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-sm transition-all group"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
-                        <s.icon className="w-4 h-4 text-[#1A1A1A]" />
-                      </div>
+                      <IconTile icon={s.icon} tone="emerald" size="md" />
                       <span className="text-[11px] text-[#1A1A1A] font-medium text-center leading-tight">{s.label}</span>
                     </button>
                   ))}
@@ -431,9 +426,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       onClick={() => handleSelect(page.route)}
                       className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
                     >
-                      <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center text-[#1A1A1A]">
-                        <page.icon className="w-3.5 h-3.5" />
-                      </div>
+                      <IconTile icon={page.icon} tone="emerald" size="sm" />
                       <span className="text-xs text-[#1A1A1A] font-medium">{page.label}</span>
                     </button>
                   ))}
@@ -534,13 +527,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
  : "hover:bg-[#EFE6D6]/10"
  }`}
                             >
-                              <div className={`w-11 h-11 rounded-lg flex items-center justify-center border ${
- !hasDbResults && idx === 0
- ? "bg-[#1A1A1A] text-white border-[#B89555]/50" 
- : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
- }`}>
-                                {item.icon && <item.icon className="w-5 h-5" />}
-                              </div>
+                              {item.icon && <IconTile icon={item.icon} tone="emerald" size="md" />}
                               <div className="flex-1 text-left">
                                 <p className="font-semibold text-[#1A1A1A]">{item.label}</p>
                                 <p className="text-[#1A1A1A] text-sm truncate">{item.description}</p>
@@ -568,9 +555,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                                 onClick={() => handleSelect(item.route)}
                                 className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-[#EFE6D6]/40 transition-all text-left"
                               >
-                                <div className="w-11 h-11 rounded-lg flex items-center justify-center border bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
-                                  {item.icon && <item.icon className="w-5 h-5" />}
-                                </div>
+                                {item.icon && <IconTile icon={item.icon} tone="emerald" size="md" />}
                                 <div className="flex-1 min-w-0">
                                   <p className="font-semibold text-[#1A1A1A] truncate">{item.label}</p>
                                   <p className="text-[#1A1A1A]/70 text-sm truncate">{item.description}</p>
@@ -605,9 +590,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             onClick={() => handleSelect(shortcut.route)}
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group"
                           >
-                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center group-hover:scale-105 transition-transform">
-                              <shortcut.icon className="w-5 h-5 text-[#1A1A1A]" />
-                            </div>
+                            <IconTile icon={shortcut.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
                             <span className="text-xs font-medium text-[#1A1A1A] text-center leading-tight">{shortcut.label}</span>
                           </button>
                         ))}
@@ -626,9 +609,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             onClick={() => handleSelect(shortcut.route)}
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 hover:shadow-md transition-all group"
                           >
-                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/35 flex items-center justify-center group-hover:scale-105 transition-transform">
-                              <shortcut.icon className="w-5 h-5 text-[#1A1A1A]" />
-                            </div>
+                            <IconTile icon={shortcut.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
                             <span className="text-xs font-medium text-[#1A1A1A] text-center">{shortcut.label}</span>
                           </button>
                         ))}
@@ -647,9 +628,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             onClick={() => handleSelect(page.route)}
                             className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/50 border border-[#B89555]/10 hover:bg-[#FDFBF7] hover:border-[#B89555]/30 transition-all"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center text-[#1A1A1A]">
-                              <page.icon className="w-4 h-4" />
-                            </div>
+                            <IconTile icon={page.icon} tone="emerald" size="sm" />
                             <span className="text-sm font-medium text-[#1A1A1A]">{page.label}</span>
                           </button>
                         ))}
@@ -785,9 +764,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     {/* Always-on: Need help? — premium contact panel */}
                     <div className="rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-5">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/45 flex items-center justify-center flex-shrink-0">
-                          <LifeBuoy className="w-5 h-5 text-[#1A1A1A]" />
-                        </div>
+                        <IconTile icon={LifeBuoy} tone="emerald" size="md" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-[#1A1A1A]">Can't find what you're looking for?</p>
                           <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Our JBJ team is one click away — we'll guide you personally.</p>
