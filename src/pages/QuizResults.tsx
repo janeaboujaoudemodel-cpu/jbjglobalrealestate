@@ -42,12 +42,13 @@ const JBJ_CONSULTANT_EMAIL = "CONTACT@JBJ.AE";
 const JBJ_CONSULTANT_WHATSAPP = "971501234567"; // International format, no + or spaces
 
 const AIHF_RESULTS_STYLE = `
-  .aihf-results, .aihf-results :is(h1,h2,h3,h4,p,span,a,button,div), .aihf-results svg {
+  .aihf-results, .aihf-results :is(h1,h2,h3,h4,p,span,a,button,div):not(.aihf-cta):not(.aihf-cta *):not(.aihf-action-icon):not(.aihf-action-icon *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not([data-emerald-action="true"]):not([data-emerald-action="true"] *), .aihf-results svg:not(.aihf-cta svg):not(.aihf-action-icon svg):not(.jj-pill-emerald-metallic svg):not(.jj-surface-emerald svg):not([data-emerald-action="true"] svg) {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
     opacity: 1 !important;
   }
-  .aihf-results svg, .aihf-results svg * { stroke: #1A1A1A !important; }
+  .aihf-results svg:not(.aihf-cta svg):not(.aihf-action-icon svg):not(.jj-pill-emerald-metallic svg):not(.jj-surface-emerald svg):not([data-emerald-action="true"] svg),
+  .aihf-results svg:not(.aihf-cta svg):not(.aihf-action-icon svg):not(.jj-pill-emerald-metallic svg):not(.jj-surface-emerald svg):not([data-emerald-action="true"] svg) * { stroke: #1A1A1A !important; }
   .aihf-results .aihf-muted { color: rgba(26,26,26,0.70) !important; -webkit-text-fill-color: rgba(26,26,26,0.70) !important; }
   .aihf-results .aihf-tiffany { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
   .aihf-results .aihf-panel {
@@ -69,7 +70,9 @@ const AIHF_RESULTS_STYLE = `
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     stroke: #FFFFFF !important;
+    opacity: 1 !important;
   }
+  .aihf-results .aihf-cta svg *, .aihf-results .aihf-cta :is(path,line,polyline,polygon,rect,circle,ellipse) { stroke: #FFFFFF !important; color: #FFFFFF !important; }
   .aihf-results .aihf-cta:hover { background: var(--jj-emerald-ombre-hover) !important; background-image: var(--jj-emerald-ombre-hover) !important; transform: translateY(-1px); }
   .aihf-results .aihf-cta-glow {
     background: var(--jj-emerald-ombre) !important;
@@ -102,9 +105,12 @@ const AIHF_RESULTS_STYLE = `
     -webkit-text-fill-color: #FFFFFF !important;
   }
   .aihf-results .aihf-action-icon svg,
-  .aihf-results .aihf-action-icon svg * {
+  .aihf-results .aihf-action-icon svg *,
+  .aihf-results .aihf-action-icon :is(path,line,polyline,polygon,rect,circle,ellipse) {
     color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
     stroke: #FFFFFF !important;
+    opacity: 1 !important;
   }
   /* Price pill — champagne+ink inside results */
   .aihf-results .price-pill-premium {
