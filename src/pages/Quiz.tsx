@@ -587,7 +587,14 @@ const Quiz = () => {
       return ptKeywords.some((k) => blob.includes(k));
     };
 
-    // Sold-out / cancelled + property-type exclusion.
+    // Sold-out / cancelled + property-type exclusion + sanity price floor.
+    // Hard floor: UAE purchase off-plan never starts below ~AED 400K. Anything
+    // lower is almost always a data error, a deposit/booking amount, or a
+    // rental figure that slipped into the sale catalogue — never show those
+    // to a buyer. We also exclude prices that are wildly below the user's
+    // budget band (< 50% of the low bound) so a 1M–3M brief never returns
+    // a 299K "match".
+    const PURCHASE_PRICE_FLOOR = 400_000;
     const baseAvailable = allProjects.filter((project) => {
       if (project.is_sold_out) return false;
       const s = (project.sale_status || "").toLowerCase().replace(/[\s-]+/g, "_");
@@ -600,8 +607,11 @@ const Quiz = () => {
       const cs = ((project as any).construction_status || "").toLowerCase();
       if (cs.includes("cancel")) return false;
       if (!matchesPropertyType(project)) return false;
+      const pf = (project as any).price_from;
+      if (typeof pf === "number" && pf > 0 && pf < PURCHASE_PRICE_FLOOR) return false;
       return true;
     });
+
 
     const isReady = (p: any) => {
       const h = (p.handover_date || "").toLowerCase();
@@ -739,7 +749,17 @@ const Quiz = () => {
           ready: isReady(p),
         };
       })
-      .filter((x) => x.lt < 99);
+      .filter((x) => x.lt < 99)
+      .filter((x) => {
+        // Budget sanity: drop candidates priced absurdly below the user's
+        // requested band (likely deposit/rent/error rows).
+        if (!budgetRange) return true;
+        const price = (x.p as any).price_from;
+        if (typeof price !== "number" || price <= 0) return true;
+        const [lo] = budgetRange;
+        return price >= lo * 0.5;
+      });
+
 
     // Off-plan-first within location: only fall back to ready when no off-plan
     // candidate matches the user's location at all.
