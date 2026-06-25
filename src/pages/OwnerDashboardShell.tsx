@@ -79,40 +79,87 @@ const OwnerDashboardShell = () => {
 
       {/* Bottom Actions */}
       <div data-no-contrast-guard className="owner-shell-surface p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
+        {/* Return to Site — collapsed: emerald highlight tile; expanded: bordered to match Sign Out */}
         <button
           onClick={() => { navigate("/"); setMobileOpen(false); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40 text-primary bg-secondary"
+          data-no-contrast-guard
+          {...(collapsed ? { "data-allow-dark-cta": true } : {})}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40",
+            collapsed
+              ? "justify-center allow-white"
+              : "border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#B89555]/10 hover:border-[#B89555]"
+          )}
+          style={collapsed ? {
+            background: "var(--jj-emerald-ombre)",
+            color: "#FFFFFF",
+            border: "1px solid rgba(255,255,255,0.22)",
+            boxShadow: "0 10px 24px -12px rgba(4,44,28,0.86), inset 0 1px 0 rgba(255,255,255,0.16)",
+          } : undefined}
           aria-label="Return to main site"
+          title="Return to Site"
         >
-          <Home className="w-5 h-5 flex-shrink-0 text-primary" />
-          {!collapsed && <span className="text-primary truncate">Return to Site</span>}
+          <Home
+            className={cn("w-5 h-5 flex-shrink-0", collapsed ? "allow-white" : "text-[#1A1A1A]")}
+            style={collapsed ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined}
+          />
+          {!collapsed && <span className="text-[#1A1A1A] truncate">Return to Site</span>}
         </button>
+
+        {/* Sign Out */}
         <button
           onClick={handleSignOut}
           data-signout-action
           data-no-contrast-guard
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border border-[#B89555]/40 bg-[#FDFBF7] text-[#DC2626] hover:bg-[#FEE2E2] hover:border-[#DC2626] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border border-[#B89555]/40 bg-[#FDFBF7] text-[#DC2626] hover:bg-[#FEE2E2] hover:border-[#DC2626] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40",
+            collapsed && "justify-center"
+          )}
           aria-label="Sign out"
+          title="Sign Out"
         >
           <LogOut data-signout-icon className="w-5 h-5 flex-shrink-0 jj-signout-icon text-[#DC2626]" />
           {!collapsed && <span data-signout-label className="text-[#DC2626]">Sign Out</span>}
         </button>
+
+        {/* Collapse / Expand — matches front-end vertical sidebar emerald pill */}
         {!isMobile && (
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
+            type="button"
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             data-no-contrast-guard
-            style={{ color: "#1A1A1A" }}
-            className={cn(
-              "h-9 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:ring-2 focus:ring-[#B89555]/40",
-              collapsed ? "w-10 mx-auto" : "w-full"
-            )}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            data-on-dark
+            data-allow-dark-cta
+            aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+            title={collapsed ? "Expand" : "Collapse"}
+            className="allow-white group mt-1.5 flex items-center justify-center gap-2 w-full px-3 py-[7px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
+            style={{
+              color: "#FFFFFF",
+              background: "var(--jj-emerald-ombre)",
+              border: "1px solid rgba(255,255,255,0.22)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--jj-emerald-ombre-hover)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.32)";
+              e.currentTarget.style.boxShadow = "0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), 0 0 12px rgba(52,211,153,0.30)";
+              e.currentTarget.style.transform = "perspective(700px) rotateX(2deg) translateY(-2px) scale(1.02)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--jj-emerald-ombre)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.22)";
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.transform = "none";
+            }}
           >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </Button>
+            {collapsed ? (
+              <PanelLeftOpen className="allow-white w-3.5 h-3.5" strokeWidth={2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            ) : (
+              <PanelLeftClose className="allow-white w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            )}
+            {!collapsed && (
+              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Collapse</span>
+            )}
+          </button>
         )}
       </div>
     </>
