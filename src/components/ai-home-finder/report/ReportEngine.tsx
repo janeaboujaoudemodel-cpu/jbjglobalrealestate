@@ -281,41 +281,59 @@ function PlainText({ children, style }: { children: React.ReactNode; style?: Rea
   return <span style={{ color: T.ink, WebkitTextFillColor: T.ink, ...style }}>{children}</span>;
 }
 
-function PremiumImage({ src, alt }: { src?: string; alt: string }) {
-  const [failed, setFailed] = React.useState(false);
-  if (!src || failed) {
-    return (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          background: T.raised,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: T.muted,
-          fontSize: 10,
-          fontWeight: 800,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-        }}
-      >
-        Project image pending
-      </div>
-    );
-  }
+/** Premium fallback panel — champagne texture + JBJ monogram. NEVER says "pending". */
+function ImageFallback({ alt }: { alt: string }) {
+  return (
+    <div
+      aria-label={alt}
+      style={{
+        width: "100%",
+        height: "100%",
+        background: `linear-gradient(135deg, ${T.surface} 0%, ${T.raised} 100%)`,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+        color: T.muted,
+        WebkitTextFillColor: T.muted,
+        boxShadow: `inset 0 0 0 1px ${T.goldHair}`,
+      }}
+    >
+      <img src={jbjMonogram} alt="" aria-hidden style={{ width: 44, height: 44, objectFit: "contain", opacity: 0.55 }} />
+      <span style={{ ...TYPE.micro, color: T.mutedSoft, WebkitTextFillColor: T.mutedSoft }}>Imagery on request</span>
+    </div>
+  );
+}
+
+/** Walks a candidate URL list until one loads. CORS only in PDF mode (html2canvas needs it). */
+function PremiumImage(props: { src?: string; srcList?: string[]; alt: string }) {
+  const mode = React.useContext(ReportModeContext);
+  const list = React.useMemo(() => {
+    const raw = props.srcList && props.srcList.length ? props.srcList : (props.src ? [props.src] : []);
+    return raw.filter(Boolean);
+  }, [props.src, props.srcList]);
+  const [idx, setIdx] = React.useState(0);
+  React.useEffect(() => { setIdx(0); }, [list.join("|")]);
+
+  if (!list.length || idx >= list.length) return <ImageFallback alt={props.alt} />;
+
+  const src = list[idx];
+  const useCors = mode === "pdf";
   return (
     <img
+      key={`${idx}-${src}`}
       src={src}
-      alt={alt}
-      crossOrigin="anonymous"
+      alt={props.alt}
+      {...(useCors ? { crossOrigin: "anonymous" as const } : {})}
       loading="eager"
       decoding="sync"
-      onError={() => setFailed(true)}
+      onError={() => setIdx((n) => n + 1)}
       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
     />
   );
 }
+
 
 function OfficialDeveloperLogo({ project, size = 52 }: { project: ReportProject; size?: number }) {
   const logo = developerLogo(project);
