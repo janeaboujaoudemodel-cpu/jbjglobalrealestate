@@ -535,6 +535,7 @@ export default function UnifiedCRM() {
                 key={it.id}
                 role="tab"
                 aria-selected={active}
+                data-state={active ? "active" : "inactive"}
                 onClick={() => setEntity(it.id)}
                 className={[
                   "shrink-0 inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
@@ -553,7 +554,7 @@ export default function UnifiedCRM() {
                     className={[
                       "ml-1 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-semibold tabular-nums",
                       active
-                        ? "bg-white/10 text-white border border-white/60"
+                        ? "bg-white/20 text-white border border-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
                         : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
                     ].join(" ")}
                   >
@@ -592,6 +593,7 @@ export default function UnifiedCRM() {
                     key={t.id}
                     role="tab"
                     aria-selected={active}
+                    data-state={active ? "active" : "inactive"}
                     onClick={() => setView(t.id)}
                     className={[
                       "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border",
@@ -608,7 +610,7 @@ export default function UnifiedCRM() {
                         className={[
                           "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-semibold tabular-nums",
                           active
-                            ? "bg-white/10 text-white border border-white/60"
+                            ? "bg-white/20 text-white border border-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
                             : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
                         ].join(" ")}
                       >
