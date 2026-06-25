@@ -329,8 +329,10 @@ export default function ReportPreviewModal({
                     <button
                       key={opt.v}
                       type="button"
+                      data-aihf-include-btn
+                      data-active={active ? "true" : "false"}
                       onClick={() => update({ mode: opt.v })}
-                      className="text-xs font-semibold rounded-md px-3 py-2 transition"
+                      className={`text-xs font-semibold rounded-md px-3 py-2 transition ${active ? "allow-white" : ""}`}
                       style={active ? primaryBtn : secondaryBtn}
                     >
                       {opt.l}
