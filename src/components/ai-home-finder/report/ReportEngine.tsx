@@ -481,7 +481,7 @@ function PageHeader({ pageLabel, section, branding }: { pageLabel: string; secti
 }
 
 function PageFooter({ branding }: { branding: ReportBranding }) {
-  const contact = [branding.phone || COMPANY_CONTACT.phone, branding.email || COMPANY_CONTACT.email, branding.website || COMPANY_CONTACT.website].filter(Boolean).join(" · ");
+  const contact = [branding.phone || COMPANY_CONTACT.phone, branding.email || COMPANY_CONTACT.email, formatWebsite(branding.website || COMPANY_CONTACT.website)].filter(Boolean).join(" · ");
   return (
     <footer
       style={{
