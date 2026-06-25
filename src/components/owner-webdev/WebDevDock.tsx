@@ -102,7 +102,10 @@ export default function WebDevDock() {
 
   // Strict desktop-only owner gate. Fails closed: phones, anonymous visitors,
   // public users, and non-owner/admin legacy roles never see the star.
-  const allowed = isDesktop && !!user && isOwnerEmail(user.email) && authIsOwner && roleIsOwner;
+  const { mode } = useUserMode();
+  // Strict desktop + owner-mode gate. Fails closed: phones, anonymous visitors,
+  // public users, non-owner/admin legacy roles, and any non-owner mode never see the star.
+  const allowed = isDesktop && !!user && isOwnerEmail(user.email) && authIsOwner && roleIsOwner && mode === "owner";
   const gateLoading = authLoading || ownerLoading || roleLoading;
 
 
