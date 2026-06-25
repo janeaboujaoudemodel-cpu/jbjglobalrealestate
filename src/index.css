@@ -16295,8 +16295,5 @@ html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where
 html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where(svg, [class*="lucide"]) {
   stroke: currentColor !important;
 }
-/* Allow inline-styled colors to win inside these scopes (e.g. gold accents). */
-html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) [style*="color"] {
-  color: revert !important;
-  -webkit-text-fill-color: revert !important;
-}
+/* Inline-styled colors win on their own via [style*="color"] specificity;
+   no revert override needed (revert would fall back to UA black). */
