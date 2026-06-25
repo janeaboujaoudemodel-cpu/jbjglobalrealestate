@@ -458,21 +458,27 @@ export default function ReportPreviewModal({
           <div className="overflow-y-auto p-5" style={{ background: C.raised }}>
             <p className="text-xs uppercase tracking-widest mb-3 font-semibold" style={{ color: C.muted }}>Live Preview</p>
             {(() => {
-              // Scale the 794px-wide pages to fit the preview column.
+              // Scale the real A4 pages to fit the preview column. The inner
+              // report is absolutely positioned so CSS transform does NOT add
+              // a second unscaled layout height (the source of the blank gaps).
               const previewWidth = 560;
               const scale = previewWidth / REPORT_PAGE_PX.width;
+              const pageCount = 3 + Math.min(previewProjects.length, 3); // cover + comparison + details + closing
+              const reportHeight = pageCount * REPORT_PAGE_PX.height + Math.max(0, pageCount - 1) * 24;
               return (
                 <div
                   className="mx-auto"
                   style={{
                     width: previewWidth,
-                    // height of one scaled page + spacer + second scaled page
-                    minHeight: REPORT_PAGE_PX.height * scale * 2 + 32,
+                    height: reportHeight * scale,
+                    position: "relative",
                   }}
                 >
                   <div
                     style={{
                       width: REPORT_PAGE_PX.width,
+                      position: "absolute",
+                      inset: "0 auto auto 0",
                       transform: `scale(${scale})`,
                       transformOrigin: "top left",
                       filter: "drop-shadow(0 12px 30px rgba(0,0,0,0.18))",
