@@ -1617,8 +1617,8 @@ const QuizResults = () => {
   // Cache the most recent generated PDF (blob + filename) so share handlers can attach it
   const [lastPdf, setLastPdf] = useState<{ blob: Blob; filename: string } | null>(null);
 
-  const generateAndCachePdf = async () => {
-    const built = await buildPdf();
+  const generateAndCachePdf = async (branding?: ReportBranding) => {
+    const built = await buildPdf(branding);
     if (!built) {
       toast.error("Could not generate the report yet.");
       return null;
@@ -1627,30 +1627,10 @@ const QuizResults = () => {
     return built;
   };
 
-  const handleDownloadReport = async () => {
-    const built = await generateAndCachePdf();
-    if (!built) return;
-    triggerDownload(built.blob, built.filename);
-    toast.success("Report downloaded!");
-    setShareTrigger("post-download");
-    setShareModalOpen(true);
-  };
+  // Old direct-download entrypoints — now open the Preview & Branding modal first.
+  const handleDownloadReport = () => setPreviewOpen(true);
+  const handleOpenShare = () => setPreviewOpen(true);
 
-  // "Share with Consultant" → generate PDF, auto-download, open share modal
-  const handleOpenShare = async () => {
-    const built = await generateAndCachePdf();
-    if (built) {
-      triggerDownload(built.blob, built.filename);
-      toast.success("Report ready — choose how to share");
-    }
-    setShareTrigger("post-download");
-    setShareModalOpen(true);
-  };
-
-
-
-  // Open a link synchronously inside the click gesture so popup blockers don't fire.
-  // PDF generation runs in the BACKGROUND after the link opens.
   const openLinkSync = (url: string) => {
     const a = document.createElement("a");
     a.href = url;
@@ -1662,33 +1642,32 @@ const QuizResults = () => {
     setTimeout(() => a.remove(), 0);
   };
 
-  const generatePdfInBackground = () => {
-    generateAndCachePdf()
-      .then((built) => {
-        if (built) triggerDownload(built.blob, built.filename);
-      })
-      .catch(() => {
-        /* silent — link already opened */
-      });
+  // From the preview modal — generate branded PDF, then act.
+  const previewDownload = async (branding: ReportBranding) => {
+    const built = await generateAndCachePdf(branding);
+    if (!built) return;
+    triggerDownload(built.blob, built.filename);
+    toast.success("Branded report downloaded!");
   };
 
-  // Channel handlers — synchronous open, then background PDF download.
-  const handleShareWhatsApp = () => {
+  const previewShareWhatsApp = async (branding: ReportBranding) => {
     const text = buildShareText();
-    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
-    generatePdfInBackground();
+    const built = await generateAndCachePdf(branding);
+    if (built) triggerDownload(built.blob, built.filename);
+    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(Branded PDF report downloaded — attach it from your downloads.)`)}`);
     toast.success("Opening WhatsApp — attach the downloaded PDF");
   };
 
-  const handleShareEmail = () => {
+  const previewShareEmail = async (branding: ReportBranding) => {
     const subject = "My JBJ AI Property Recommendations";
     const text = buildShareText();
-    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`)}`);
-    generatePdfInBackground();
+    const built = await generateAndCachePdf(branding);
+    if (built) triggerDownload(built.blob, built.filename);
+    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(Branded PDF report downloaded — attach it from your downloads.)`)}`);
     toast.success("Opening email — attach the downloaded PDF");
   };
 
-  const handleCopyLink = async () => {
+  const previewCopy = async () => {
     try {
       await navigator.clipboard.writeText(buildShareText());
       toast.success("Recommendations copied to clipboard");
@@ -1697,6 +1676,39 @@ const QuizResults = () => {
     }
   };
 
+  const previewSendToConsultant = async (branding: ReportBranding) => {
+    if (!projects?.length) return;
+    const subject = "AI Property Recommendations — Request Consultation";
+    const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
+    const built = await generateAndCachePdf(branding);
+    if (built) triggerDownload(built.blob, built.filename);
+    openLinkSync(`mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    toast.success("Opening email to JBJ — attach the downloaded PDF");
+  };
+
+  // Legacy share-modal handlers — kept so the existing post-action ShareModal still works.
+  const generatePdfInBackground = () => {
+    generateAndCachePdf()
+      .then((built) => { if (built) triggerDownload(built.blob, built.filename); })
+      .catch(() => { /* silent */ });
+  };
+  const handleShareWhatsApp = () => {
+    const text = buildShareText();
+    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening WhatsApp — attach the downloaded PDF");
+  };
+  const handleShareEmail = () => {
+    const subject = "My JBJ AI Property Recommendations";
+    const text = buildShareText();
+    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it to this email from your downloads.)`)}`);
+    generatePdfInBackground();
+    toast.success("Opening email — attach the downloaded PDF");
+  };
+  const handleCopyLink = async () => {
+    try { await navigator.clipboard.writeText(buildShareText()); toast.success("Recommendations copied to clipboard"); }
+    catch { toast.error("Unable to copy"); }
+  };
   const handleShareToConsultant = () => {
     if (!projects?.length) return;
     const subject = "AI Property Recommendations — Request Consultation";
@@ -1705,13 +1717,13 @@ const QuizResults = () => {
     generatePdfInBackground();
     toast.success("Opening email to JBJ — attach the downloaded PDF");
   };
-
   const handleConsultantWhatsApp = () => {
     const text = `Hello JBJ Global Real Estate,\n\nI just completed the AI Home Finder and would like a consultation on these recommendations:\n\n${buildShareText(false)}`;
     openLinkSync(`https://wa.me/${JBJ_CONSULTANT_WHATSAPP}?text=${encodeURIComponent(`${text}\n\n(PDF report downloaded — attach it from your downloads.)`)}`);
     generatePdfInBackground();
     toast.success("Opening WhatsApp to JBJ — attach the downloaded PDF");
   };
+
 
 
 
