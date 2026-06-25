@@ -571,7 +571,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ height: 350, borderRadius: 9, overflow: "hidden", border: `1px solid ${T.gold}`, background: T.raised }}>
-            <PremiumImage src={hero ? projectImage(hero) : undefined} alt={hero?.name || "JBJ selected property"} />
+            <PremiumImage srcList={hero ? projectImageCandidates(hero) : []} alt={hero?.name || "JBJ selected property"} />
           </div>
           <div style={{ padding: 14, borderRadius: 9, background: T.surface, border: `1px solid ${T.goldHair}` }}>
             <SectionEyebrow>Lead recommendation</SectionEyebrow>
@@ -582,7 +582,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 7 }}>
             {projects.slice(0, 3).map((p, i) => (
               <div key={p.id} style={{ height: 76, borderRadius: 7, overflow: "hidden", position: "relative", border: `1px solid ${T.goldHair}` }}>
-                <PremiumImage src={projectImage(p)} alt={p.name} />
+                <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
                 <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 6, top: 6, width: 22, height: 22, borderRadius: 999, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900 }}>{i + 1}</div>
               </div>
             ))}
@@ -649,7 +649,7 @@ function MatchedPropertiesPage({ branding, projects, pageIdPrefix, criteriaRows 
           return (
             <div key={p.id} style={{ display: "grid", gridTemplateColumns: "224px 1fr", gap: 16, borderRadius: 10, overflow: "hidden", border: `1px solid ${T.goldHair}`, background: T.surface, minHeight: 178 }}>
               <div style={{ position: "relative", background: T.raised }}>
-                <PremiumImage src={projectImage(p)} alt={p.name} />
+                <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
                 <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 12, top: 12, minWidth: 72, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{i + 1}</div>
               </div>
               <div style={{ padding: "16px 16px 14px 0", minWidth: 0 }}>
@@ -705,7 +705,7 @@ function ComparisonPage({ branding, projects, pageIdPrefix, criteriaRows }: { br
         {top3.map((p, i) => (
           <div key={p.id} style={{ background: T.surface, border: `1px solid ${T.goldHair}`, borderRadius: 8, overflow: "hidden" }}>
             <div style={{ height: 92, background: T.raised, position: "relative" }}>
-              <PremiumImage src={projectImage(p)} alt={p.name} />
+              <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
               <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 8, top: 8, width: 26, height: 26, borderRadius: 999, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900 }}>{i + 1}</div>
             </div>
             <div style={{ padding: "9px 10px" }}>
@@ -768,7 +768,7 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
           </div>
           <h2 style={{ fontSize: 30, lineHeight: 1.08, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 12px" }}>{project.name}</h2>
           <div style={{ height: 246, borderRadius: 9, overflow: "hidden", background: T.raised, border: `1px solid ${T.goldHair}`, marginBottom: 13 }}>
-            <PremiumImage src={projectImage(project)} alt={project.name} />
+            <PremiumImage srcList={projectImageCandidates(project)} alt={project.name} />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 13 }}>
             <FieldCard label="Price" value={fmtPrice(project)} accent />
@@ -848,7 +848,7 @@ function AiRecommendationSummaryPage({ branding, projects, pageIdPrefix, criteri
           const verdict = recommendationVerdict(criteriaRows, i);
           return (
             <div key={p.id} style={{ borderRadius: 9, background: T.surface, border: `1px solid ${T.goldHair}`, overflow: "hidden" }}>
-              <div style={{ height: 120, background: T.raised }}><PremiumImage src={projectImage(p)} alt={p.name} /></div>
+              <div style={{ height: 120, background: T.raised }}><PremiumImage srcList={projectImageCandidates(p)} alt={p.name} /></div>
               <div style={{ padding: 12 }}>
                 <div style={{ fontSize: 9, color: T.emerald, WebkitTextFillColor: T.emerald, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.14em" }}>Option #{i + 1}</div>
                 <div style={{ marginTop: 5, fontSize: 14.5, lineHeight: 1.2, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{p.name}</div>
