@@ -188,17 +188,9 @@ const OwnerDashboardShell = () => {
                 <Menu className="w-5 h-5" />
               </Button>
             )}
-            <div className="flex items-center gap-2.5 min-w-0">
-              <img
-                src={jbjMonogramNobuffer}
-                alt="JBJ"
-                className="object-contain flex-shrink-0"
-                style={{ width: 42, height: 42 }}
-              />
-              <div className="min-w-0 flex flex-col justify-center leading-none">
-                <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate leading-none">Founder &amp; CEO</h1>
-                <p className="text-[#1A1A1A]/70 text-[11px] mt-1 hidden md:block whitespace-nowrap leading-none">Jane Bou Jaoude — Executive Command Center</p>
-              </div>
+            <div className="min-w-0 flex flex-col justify-center leading-none">
+              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate leading-none">Founder &amp; CEO</h1>
+              <p className="text-[#1A1A1A]/70 text-[11px] mt-1 hidden md:block whitespace-nowrap leading-none">Jane Bou Jaoude — Executive Command Center</p>
             </div>
           </div>
           
