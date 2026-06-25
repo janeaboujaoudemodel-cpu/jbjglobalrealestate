@@ -16057,3 +16057,135 @@ html body [data-section="payment"] .h-6.rounded-full > div:first-child:not([styl
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
 }
+
+/* ============================================================
+   PASS 47 — GLOBAL CONTRAST WINNING RULES (final tier)
+   Two non-negotiable contracts applied last so they outrank
+   every earlier pass and any inline Tailwind utility:
+     A) Emerald / dark-emerald surface  → pure WHITE content
+     B) Champagne / gold surface         → INK (#1A1A1A) content
+   Scope: site-wide except the homepage (data-no-contrast-guard
+   subtrees and explicitly opted-out nodes).
+   ============================================================ */
+
+/* (A) EMERALD SURFACE → WHITE CONTENT
+       Matches anything painted with the emerald ombre token,
+       any [data-surface="emerald"] node, the .jj-emerald-*
+       primitives, and any element whose background is the
+       deep-emerald hex range we use across the system. */
+html body :where(
+  [data-surface="emerald"],
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-cta-emerald,
+  .jj-pill-emerald-metallic,
+  [data-emerald="true"],
+  [data-on-dark]
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *),
+html body :where(
+  [data-surface="emerald"],
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-cta-emerald,
+  .jj-pill-emerald-metallic,
+  [data-emerald="true"],
+  [data-on-dark]
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *)
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, button, label, li, td, th, strong, em, small, time, dt, dd, bdi, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  fill: currentColor;
+  stroke: #FFFFFF;
+}
+html body :where(
+  [data-surface="emerald"],
+  .jj-emerald-metallic,
+  .jj-emerald-ombre,
+  .jj-cta-emerald,
+  .jj-pill-emerald-metallic,
+  [data-emerald="true"],
+  [data-on-dark]
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* (B) CHAMPAGNE / GOLD SURFACE → INK CONTENT
+       White text on light champagne is unreadable. Force ink
+       on anything tagged as a champagne surface, anything using
+       the page/raised champagne hexes as background, and on
+       elements painted with the gold metallic primitive. */
+html body :where(
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  .jj-surface-champagne,
+  .jj-gold-metallic
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *)
+  :is(h1, h2, h3, h4, h5, h6, p, span, a:not(:hover), button, label, li, td, th, strong, em, small, time, dt, dd, bdi) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body :where(
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  .jj-surface-champagne,
+  .jj-gold-metallic
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) svg:not([data-keep-color]) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* PASS 47b — Slider thumb: remove the inner emerald oval ring.
+   Every previous override pinned `0 0 0 2px #064E3B inset` which
+   rendered as a small line inside the white knob. Drop the inset
+   so only the outer halo remains, on all mortgage range inputs. */
+html body input.mortgage-range-input {
+  --mortgage-range-thumb: #FFFFFF !important;
+  --mortgage-range-thumb-shadow:
+    0 0 0 1px rgba(255,255,255,0.85),
+    0 2px 6px rgba(4,44,28,0.35),
+    0 0 14px rgba(6,78,59,0.45) !important;
+}
+html body input.mortgage-range-input::-webkit-slider-thumb {
+  background: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.85),
+    0 2px 6px rgba(4,44,28,0.35),
+    0 0 14px rgba(6,78,59,0.45) !important;
+  cursor: grab !important;
+}
+html body input.mortgage-range-input::-moz-range-thumb {
+  background: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.85),
+    0 2px 6px rgba(4,44,28,0.35),
+    0 0 14px rgba(6,78,59,0.45) !important;
+  cursor: grab !important;
+}
+html body input.mortgage-range-input:active::-webkit-slider-thumb,
+html body input.mortgage-range-input:active::-moz-range-thumb {
+  cursor: grabbing !important;
+}
+
+/* PASS 47c — Radix slider thumb (shadcn Slider): same treatment.
+   Remove the 2px inset emerald ring so the white knob is clean. */
+html body [data-radix-collection-item][role="slider"],
+html body span[role="slider"] {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.85),
+    0 2px 6px rgba(4,44,28,0.35),
+    0 0 14px rgba(6,78,59,0.45) !important;
+  background: #FFFFFF !important;
+  cursor: grab !important;
+}
+html body [data-radix-collection-item][role="slider"]:active,
+html body span[role="slider"]:active { cursor: grabbing !important; }
+
+/* PASS 47d — Mortgage compare card border = emerald (no cheap green).
+   Always use the approved emerald hairline regardless of surface. */
+html body .mortgage-compare-card {
+  border: 1px solid rgba(6,78,59,0.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(4,78,59,0.30),
+    0 12px 34px -24px rgba(6,78,59,0.55) !important;
+}
