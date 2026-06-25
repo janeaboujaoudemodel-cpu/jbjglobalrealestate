@@ -278,6 +278,7 @@ export default function ReportPreviewModal({
             color: #064E3B !important;
             -webkit-text-fill-color: #064E3B !important;
           }
+        `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
           <DialogTitle className="text-xl font-bold" style={{ color: C.ink }}>
             Report Preview & Branding
