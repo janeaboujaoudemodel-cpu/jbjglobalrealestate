@@ -590,9 +590,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                             onClick={() => handleSelect(shortcut.route)}
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group"
                           >
-                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center group-hover:scale-105 transition-transform">
-                              <shortcut.icon className="w-5 h-5 text-[#1A1A1A]" />
-                            </div>
+                            <IconTile icon={shortcut.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
                             <span className="text-xs font-medium text-[#1A1A1A] text-center leading-tight">{shortcut.label}</span>
                           </button>
                         ))}
