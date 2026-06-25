@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
@@ -91,14 +90,7 @@ export function DeveloperLogo({
       if (!renderFallback && !(name || alt)) return null;
       // Always keep the identical square container and place the dev name inside.
       if (name || alt) return renderNameLabel(cn(UNIFIED_PLATE, className));
-      return (
-        <div
-          className={cn(UNIFIED_PLATE, className)}
-          aria-label={`${alt} (logo unavailable)`}
-        >
-          <Building2 className="w-4 h-4 text-[#1A1A1A]/70" />
-        </div>
-      );
+      return renderNameLabel(cn(UNIFIED_PLATE, className));
     }
     return (
       <div className={cn(UNIFIED_PLATE, className)}>
@@ -140,11 +132,7 @@ export function DeveloperLogo({
           </div>
         );
       }
-      return (
-        <div className={cardContainer} aria-label={`${alt} (logo unavailable)`}>
-          <Building2 className="w-12 h-12 text-[#1A1A1A]/50" />
-        </div>
-      );
+      return renderNameLabel(cardContainer, "text-[#1A1A1A]");
     }
     return (
       <div className={cardContainer}>
@@ -171,11 +159,7 @@ export function DeveloperLogo({
   if (!valid) {
     if (!renderFallback && !(name || alt)) return null;
     if (name || alt) return renderNameLabel(tileContainer);
-    return (
-      <div className={tileContainer} aria-label={`${alt} (logo unavailable)`}>
-        <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
-      </div>
-    );
+    return renderNameLabel(tileContainer);
   }
 
   return (
