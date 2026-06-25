@@ -237,7 +237,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const togglePillOff =
     "border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
   const togglePillOn =
-    "jj-chip-emerald font-bold";
+    "jj-filter-emerald-control jj-chip-emerald font-bold";
   const sectionTitle = "text-sm font-bold text-[#1A1A1A] mb-3 tracking-tight";
   const inputClass =
     "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
@@ -247,7 +247,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "mt-2 rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
   const optionRow =
     "flex items-center gap-3 w-full rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA]";
-  const selectedBox = "jj-chip-emerald border-0";
+  const selectedBox = "jj-filter-emerald-control jj-chip-emerald border-0";
 
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
@@ -581,6 +581,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <button
                     key={opt.value}
                     onClick={() => update({ constructionStatuses: toggleArray(localFilters.constructionStatuses, opt.value) })}
+                            data-filter-selected={localFilters.constructionStatuses.includes(opt.value) ? "true" : undefined}
                     className={cn(togglePillBase, localFilters.constructionStatuses.includes(opt.value) ? togglePillOn : togglePillOff)}
                   >
                     {opt.label}
@@ -597,6 +598,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <button
                     key={opt.value}
                     onClick={() => update({ propertyTypes: toggleArray(localFilters.propertyTypes, opt.value) })}
+                            data-filter-selected={localFilters.propertyTypes.includes(opt.value) ? "true" : undefined}
                     className={cn(togglePillBase, localFilters.propertyTypes.includes(opt.value) ? togglePillOn : togglePillOff)}
                   >
                     {opt.label}
@@ -613,6 +615,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <button
                     key={opt.value}
                     onClick={() => update({ bedrooms: toggleArray(localFilters.bedrooms, opt.value) })}
+                            data-filter-selected={localFilters.bedrooms.includes(opt.value) ? "true" : undefined}
                     className={cn(togglePillBase, localFilters.bedrooms.includes(opt.value) ? togglePillOn : togglePillOff)}
                   >
                     {opt.label}
@@ -629,6 +632,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <button
                     key={opt.value}
                     onClick={() => update({ statuses: toggleArray(localFilters.statuses, opt.value) })}
+                            data-filter-selected={localFilters.statuses.includes(opt.value) ? "true" : undefined}
                     className={cn(
                       togglePillBase,
                       localFilters.statuses.includes(opt.value) ? togglePillOn : togglePillOff,
@@ -656,7 +660,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
-                            ? "jj-chip-emerald font-bold"
+                            ? "jj-filter-emerald-control jj-chip-emerald font-bold"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -683,7 +687,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
-                            ? "jj-chip-emerald font-bold"
+                            ? "jj-filter-emerald-control jj-chip-emerald font-bold"
                             : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
@@ -711,6 +715,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <button
                     key={opt.value}
                     onClick={() => update({ views: toggleArray(localFilters.views || [], opt.value) })}
+                          data-filter-selected={(localFilters.views || []).includes(opt.value) ? "true" : undefined}
                     className={cn(togglePillBase, (localFilters.views || []).includes(opt.value) ? togglePillOn : togglePillOff)}
                   >
                     {opt.label}
@@ -731,7 +736,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           </button>
           <button
             aria-label="Save to favourites"
-            className="jj-chip-emerald p-2.5 rounded-full inline-flex items-center justify-center"
+            data-emerald-ok="icon"
+            className="jj-filter-emerald-control jj-chip-emerald p-2.5 rounded-full inline-flex items-center justify-center"
           >
             <Heart className="w-4 h-4" fill="currentColor" />
           </button>
