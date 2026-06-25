@@ -28,7 +28,7 @@ const BRAND_TERTIARY =
 
 // GOLD: cream champagne tile with thin gold border (debranded fill)
 const BRAND_GOLD =
-  "jj-cta-champagne shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
+  BRAND_PRIMARY;
 
 // HERO: transparent with white border on dark images (dark hero overlays)
 const BRAND_HERO =
@@ -51,7 +51,7 @@ const DARK_SURFACE_VARIANTS = new Set(["hero", "media", "dark", "dark-ghost", "d
 const LIGHT_CTA_VARIANTS = new Set(["primary", "secondary", "tertiary", "gold", "default", "destructive", "outline", "ghost", "link"]);
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap [word-break:keep-all] rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",
+  "inline-flex items-center justify-center text-center gap-2 whitespace-nowrap [word-break:keep-all] rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em] overflow-hidden min-w-0",
   {
     variants: {
       variant: {
@@ -121,7 +121,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const effectiveVariant = variant ?? "primary";
-    const isPrimaryCta = effectiveVariant === "primary" || effectiveVariant === "default" || effectiveVariant === "destructive" || effectiveVariant.startsWith("ai-");
+    const isPrimaryCta = effectiveVariant === "primary" || effectiveVariant === "default" || effectiveVariant === "destructive" || effectiveVariant === "gold" || effectiveVariant.startsWith("ai-");
     const surface = DARK_SURFACE_VARIANTS.has(effectiveVariant) ? "dark" : isPrimaryCta ? "emerald" : "champagne";
     const cta = DARK_SURFACE_VARIANTS.has(effectiveVariant)
       ? "dark"

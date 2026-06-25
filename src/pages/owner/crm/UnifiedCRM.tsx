@@ -94,7 +94,6 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
 
 // --- Lazy section content -------------------------------------------------
 const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
-const LeadSourcesPanel    = lazy(() => import("@/components/owner/LeadSourcesPanel"));
 const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
@@ -342,12 +341,7 @@ export default function UnifiedCRM() {
             <CRMEnhancedDashboard userId={userId} hasOwnerAccess />
           </div>
         );
-        case "all":           return (
-          <div className="space-y-6">
-            <LeadSourcesPanel />
-            <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />
-          </div>
-        );
+        case "all":           return <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />;
         // "shared" view removed — falls through to "all"
         case "flagged":       return <FlaggedLeadsView userId={userId} onRefresh={() => {}} />;
         case "vip":           return <CRMLeadsTableV2 userId={userId} filterType="vip" onRefresh={() => {}} isOwner />;
@@ -468,7 +462,7 @@ export default function UnifiedCRM() {
               onClick={() => setAddLeadOpen(true)}
               data-surface="emerald"
               data-emerald-ok="button"
-              className="jj-surface-emerald shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
+              className="jj-surface-emerald shrink-0 inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold shadow-[0_10px_24px_-14px_rgba(4,44,28,0.86)] transition-transform hover:-translate-y-0.5"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Lead</span>
@@ -476,7 +470,9 @@ export default function UnifiedCRM() {
             <button
               type="button"
               onClick={() => setAddBrokerOpen(true)}
-              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#EFE6D6]/80 transition-colors"
+              data-surface="emerald"
+              data-emerald-ok="button"
+              className="jj-surface-emerald shrink-0 inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold shadow-[0_10px_24px_-14px_rgba(4,44,28,0.86)] transition-transform hover:-translate-y-0.5"
             >
               <UserPlus className="h-3.5 w-3.5" />
               Add Broker
@@ -499,10 +495,12 @@ export default function UnifiedCRM() {
               type="button"
               onClick={() => setInsightsOpen(o => !o)}
               aria-expanded={insightsOpen}
+              data-surface={insightsOpen ? "emerald" : undefined}
+              data-emerald-ok={insightsOpen ? "button" : undefined}
               className={[
-                "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold border transition-colors",
+                "shrink-0 inline-flex h-10 min-w-[126px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold border transition-transform hover:-translate-y-0.5",
                 insightsOpen
-                  ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                  ? "jj-surface-emerald border-transparent"
                   : "bg-transparent text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
               ].join(" ")}
             >
@@ -608,9 +606,9 @@ export default function UnifiedCRM() {
                     {c !== null && c > 0 && (
                       <span
                         className={[
-                          "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-semibold tabular-nums",
+                           "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-semibold tabular-nums",
                           active
-                            ? "bg-white/20 text-white border border-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
+                            ? "!bg-white/20 !text-white !border !border-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
                             : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
                         ].join(" ")}
                       >

@@ -100,23 +100,25 @@ export default function CRMFloatingInsightsWidget({ flaggedCount, onOpenFlagged 
         onClick={() => setOpen(o => !o)}
         aria-expanded={open}
         aria-label="Toggle flagged leads insights"
-        className={[
-          "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold",
-          "border transition-colors shadow-sm",
+          data-surface="emerald"
+          data-emerald-ok="button"
+          className={[
+            "jj-surface-emerald inline-flex h-10 min-w-[148px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold",
+            "border-transparent transition-transform hover:-translate-y-0.5 shadow-sm",
           open
-            ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+              ? ""
             : hasFlags
-              ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/60 hover:bg-[#EFE6D6]/60"
-              : "bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#B89555]/30 hover:bg-[#EFE6D6]/40",
+                ? ""
+                : "",
         ].join(" ")}
       >
-        <AlertTriangle className={`h-3.5 w-3.5 ${hasFlags ? "text-[#B89555]" : "text-[#1A1A1A]/50"}`} />
+        <AlertTriangle className="h-3.5 w-3.5" />
         <span>Flagged Insights</span>
         <span
           className={[
             "inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] tabular-nums",
             hasFlags
-              ? "bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555]"
+              ? "bg-white/20 text-white border border-white/70"
               : "bg-[#EFE6D6] text-[#1A1A1A]/70 border border-[#B89555]/30",
           ].join(" ")}
         >

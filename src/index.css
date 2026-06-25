@@ -14958,6 +14958,92 @@ html body #root :is(
   mix-blend-mode: normal !important;
 }
 
+/* =====================================================================
+   BACKEND PREMIUM BALANCE LOCK — buttons centered, fields contained,
+   emerald buttons/tabs/checkmarks always pure white.
+   ===================================================================== */
+html body #root button,
+html body #root a[role="button"],
+html body #root .jj-button,
+html body #root [data-slot="button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+  vertical-align: middle;
+  min-width: 0;
+}
+
+html body #root button > span,
+html body #root a[role="button"] > span,
+html body #root [data-slot="button"] > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html body #root :where(input, textarea, select, [data-jbj-field], .jbj-form-field) {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+html body #root textarea,
+html body #root .jbj-form-field:is(textarea) {
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+html body #root :is(
+  [data-emerald-ok="checkbox"],
+  [data-emerald-ok="checkbox"][data-state="checked"],
+  [data-state="checked"][role="checkbox"],
+  button.jj-cta-primary,
+  button.jj-cta-emerald,
+  button.jj-surface-emerald,
+  a.jj-cta-primary,
+  a.jj-cta-emerald,
+  a.jj-surface-emerald
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+
+html body #root :is(
+  [data-emerald-ok="checkbox"],
+  [data-emerald-ok="checkbox"][data-state="checked"],
+  [data-state="checked"][role="checkbox"],
+  button.jj-cta-primary,
+  button.jj-cta-emerald,
+  button.jj-surface-emerald,
+  a.jj-cta-primary,
+  a.jj-cta-emerald,
+  a.jj-surface-emerald
+) :where(*, span, svg, [class*="lucide"], [data-lucide], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-state="checked"][role="switch"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+}
+
+html body #root [data-radix-popper-content-wrapper] [data-radix-select-content],
+html body #root [data-radix-popper-content-wrapper] [data-radix-popover-content] {
+  animation-duration: 80ms !important;
+}
+
 html body #root :is(
   [data-backend-icon-tile="emerald-soft"],
   .owner-dashboard-shell [data-backend-icon-tile="emerald-soft"]

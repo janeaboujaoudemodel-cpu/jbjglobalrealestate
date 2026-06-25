@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
-import { Search, Building2, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { supabase } from '@/integrations/supabase/client';
-import { SafeImage } from '@/components/SafeImage';
+import { DeveloperLogo } from '@/components/ui/DeveloperLogo';
 
 interface DeveloperSelectDropdownProps {
   value: string;
@@ -82,42 +82,42 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
     }
   }, [open]);
 
-  const getLogoUrl = (dev: LightDev) => dev.logo_url || null;
-
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button
           type="button"
-          className={`flex items-center gap-3 w-full h-12 px-4 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,95%)] to-[hsl(36,28%,91%)] text-left hover:border-[#B89555] transition-colors ${className}`}
+          className={`flex items-center gap-3 w-full h-12 px-3 rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] text-left hover:border-[#B89555] transition-colors overflow-hidden ${className}`}
         >
           {selectedDev ? (
             <>
-              <div className="w-7 h-7 rounded-md bg-[#FDFBF7] border border-[#B89555]/20 flex items-center justify-center overflow-hidden shrink-0">
-                {getLogoUrl(selectedDev) ? (
-                  <SafeImage
-                    src={getLogoUrl(selectedDev)!}
-                    alt={selectedDev.name}
-                    className="w-6 h-6 object-contain"
-                  />
-                ) : (
-                  <Building2 className="w-4 h-4 text-muted-foreground" />
-                )}
-              </div>
+              <DeveloperLogo
+                src={selectedDev.logo_url}
+                alt={selectedDev.name}
+                name={selectedDev.name}
+                variant="bare"
+                renderFallback
+                className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
+              />
               <span className="text-sm font-medium text-foreground truncate flex-1">{selectedDev.name}</span>
             </>
           ) : (
             <>
-              <Building2 className="w-5 h-5 text-muted-foreground shrink-0" />
-              <span className="text-sm text-muted-foreground flex-1">{placeholder}</span>
+              <DeveloperLogo
+                alt={placeholder}
+                name={placeholder}
+                variant="bare"
+                renderFallback
+                className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
+              />
+              <span className="text-sm text-[#1A1A1A]/70 flex-1 truncate">{placeholder}</span>
             </>
           )}
-          <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+          <ChevronDown className="w-4 h-4 text-[#064E3B] shrink-0" />
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[var(--radix-popover-trigger-width)] p-0 border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,95%)] to-[hsl(36,28%,91%)]"
+        className="w-[var(--radix-popover-trigger-width)] p-0 border border-[#B89555]/35 bg-[#FDFBF7] overflow-hidden shadow-xl"
         align="start"
         sideOffset={4}
       >
@@ -142,8 +142,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
           ) : filtered.length === 0 ? (
             <div className="p-4 text-center text-sm text-muted-foreground">No developers found</div>
           ) : (
-            filtered.map(dev => {
-              const logo = getLogoUrl(dev);
+            filtered.slice(0, 120).map(dev => {
               const isSelected = dev.name === value;
               return (
                 <button
@@ -153,27 +152,27 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                     onChange(dev.name);
                     setOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[#EFE6D6]/10 ${
-                    isSelected ? 'bg-[#EFE6D6]/15 border-l-2 border-[#B89555]' : ''
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[#EFE6D6]/60 overflow-hidden ${
+                    isSelected ? 'bg-[#EFE6D6]/50 border-l-2 border-[#B89555]' : 'border-l-2 border-transparent'
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-md bg-[#FDFBF7] border border-[#B89555]/20 flex items-center justify-center overflow-hidden shrink-0">
-                    {logo ? (
-                      <SafeImage
-                        src={logo}
-                        alt={dev.name}
-                        className="w-6 h-6 object-contain"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <Building2 className="w-4 h-4 text-muted-foreground" />
-                    )}
-                  </div>
+                  <DeveloperLogo
+                    src={dev.logo_url}
+                    alt={dev.name}
+                    name={dev.name}
+                    variant="bare"
+                    renderFallback
+                    className="!w-9 !h-9 !min-w-9 !min-h-9 !rounded-md !p-[3px]"
+                  />
                   <span className="text-sm font-medium text-foreground truncate">{dev.name}</span>
                 </button>
               );
             })
+          )}
+          {!isLoading && filtered.length > 120 && (
+            <div className="px-4 py-2 text-[11px] text-[#1A1A1A]/55 border-t border-[#B89555]/20">
+              Showing first 120 developers — type to narrow instantly.
+            </div>
           )}
         </div>
       </PopoverContent>

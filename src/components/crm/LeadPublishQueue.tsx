@@ -111,11 +111,13 @@ export default function LeadPublishQueue() {
               key={m}
               onClick={() => setFilter(m)}
               className={
-                "px-2 py-1 rounded-md text-[11px] border transition-colors " +
+                "inline-flex min-h-7 min-w-[58px] items-center justify-center px-2.5 py-1 rounded-full text-[11px] font-semibold border transition-colors " +
                 (filter === m
-                  ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                  ? "jj-surface-emerald border-transparent !text-white"
                   : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#F7F2EA]")
               }
+              data-surface={filter === m ? "emerald" : undefined}
+              data-emerald-ok={filter === m ? "pill" : undefined}
             >{m === "7d" ? "Last 7d" : m === "30d" ? "Last 30d" : m === "all" ? "All" : m === "today" ? "Today" : "Yesterday"}</button>
           ))}
           <span className="mx-1 h-4 w-px bg-[#B89555]/30" />
@@ -123,7 +125,7 @@ export default function LeadPublishQueue() {
             size="sm"
             disabled={busy || selected.size === 0}
             onClick={() => publish([...selected])}
-            className="h-7 bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] text-[11px]"
+            className="h-8 min-w-[132px] text-[11px]"
           >
             {busy ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <Send className="h-3 w-3 mr-1" />}
             Publish selected
@@ -133,7 +135,7 @@ export default function LeadPublishQueue() {
             variant="outline"
             disabled={busy || selected.size === 0}
             onClick={() => discard([...selected])}
-            className="h-7 border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] text-[11px]"
+            className="h-8 min-w-[92px] border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] text-[11px]"
           >
             <X className="h-3 w-3 mr-1" /> Discard
           </Button>

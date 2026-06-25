@@ -140,11 +140,11 @@ export default function DatabasesHub() {
             </SelectContent>
           </Select>
         </div>
-        <Button variant="outline" onClick={load} className="border-[#B89555]/40 text-[#1A1A1A] shrink-0">
+        <Button variant="outline" onClick={load} className="border-[#B89555]/40 text-[#1A1A1A] shrink-0 h-10 min-w-10">
           <RefreshCw className="h-4 w-4 lg:mr-2" />
           <span className="toolbar-label hidden lg:inline">Refresh</span>
         </Button>
-        <Button onClick={() => setUploadOpen(true)} className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] shrink-0">
+        <Button onClick={() => setUploadOpen(true)} className="shrink-0 h-10">
           <Upload className="h-4 w-4 lg:mr-2" />
           <span className="toolbar-label hidden lg:inline">Upload Database</span>
         </Button>
@@ -160,7 +160,7 @@ export default function DatabasesHub() {
             <Database className="h-10 w-10 mx-auto text-[#1A1A1A]/40 mb-3" />
             <div className="text-sm text-[#1A1A1A] font-medium">No databases yet</div>
             <div className="text-xs text-[#1A1A1A]/60 mb-4">Upload a CSV or Excel file to get started.</div>
-            <Button onClick={() => setUploadOpen(true)} className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555]">
+            <Button onClick={() => setUploadOpen(true)}>
               <Upload className="h-4 w-4 mr-2" /> Upload Database
             </Button>
           </div>
@@ -195,7 +195,9 @@ export default function DatabasesHub() {
                     <button
                       type="button"
                       onClick={() => setManageTarget(r)}
-                      className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E7DCC7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/40"
+                      data-surface="emerald"
+                      data-emerald-ok="pill"
+                      className="px-2.5 py-1 rounded-full text-[10px] font-semibold border border-transparent jj-surface-emerald focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/40"
                       title="Manage broker access"
                     >
                       {(grantsByDb[r.id]?.count ?? 0)} {(grantsByDb[r.id]?.count ?? 0) === 1 ? "broker" : "brokers"}
@@ -207,22 +209,22 @@ export default function DatabasesHub() {
                       {formatDate(r.uploaded_at)}
                     </span>
                     <Button
-                      size="sm" variant="outline" onClick={() => setGrantTarget(r)}
-                      className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2" title="Give Access"
+                      size="sm" onClick={() => setGrantTarget(r)}
+                      className="h-9 px-3 min-w-[106px]" title="Give Access"
                     >
                       <ShieldCheck className="h-3.5 w-3.5 lg:mr-1" />
                       <span className="hidden lg:inline">Give Access</span>
                     </Button>
                     <Button
-                      size="sm" variant="outline" onClick={() => setManageTarget(r)}
-                      className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2" title="Manage"
+                      size="sm" onClick={() => setManageTarget(r)}
+                      className="h-9 px-3 min-w-[92px]" title="Manage"
                     >
                       <Settings2 className="h-3.5 w-3.5 lg:mr-1" />
                       <span className="hidden lg:inline">Manage</span>
                     </Button>
                     <Button
-                      size="sm" variant="outline" onClick={() => download(r)}
-                      className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2" title="Download"
+                      size="sm" onClick={() => download(r)}
+                      className="h-9 px-3 min-w-[104px]" title="Download"
                     >
                       <Download className="h-3.5 w-3.5 lg:mr-1" />
                       <span className="hidden lg:inline">Download</span>
