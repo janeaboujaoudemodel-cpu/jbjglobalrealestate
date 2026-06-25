@@ -57,18 +57,23 @@ const OwnerDashboardShell = () => {
         <button
           type="button"
           onClick={() => { navigate("/owner"); setMobileOpen(false); }}
-          className={cn("flex items-center min-w-0", collapsed ? "justify-center flex-1" : "justify-start gap-2.5 flex-1")}
+          className={cn(
+            "flex items-center min-w-0 w-full",
+            collapsed ? "justify-center" : "justify-start gap-2.5"
+          )}
           aria-label="JBJ Global Real Estate owner dashboard"
         >
           <img
             src={jbjMonogramNobuffer}
             alt="JBJ"
             className="object-contain flex-shrink-0"
-            style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
+            style={{ width: collapsed ? 34 : 38, height: collapsed ? 34 : 38 }}
           />
           {!collapsed && (
-            <span className="min-w-0 text-[10px] uppercase tracking-[0.13em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate">
-              JBJ Global Real Estate L.L.C S.O.C.
+            <span
+              className="min-w-0 flex-1 text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate"
+            >
+              JBJ GLOBAL REAL ESTATE
             </span>
           )}
         </button>
