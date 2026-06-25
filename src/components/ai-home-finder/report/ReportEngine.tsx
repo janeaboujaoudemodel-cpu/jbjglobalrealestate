@@ -118,17 +118,38 @@ function resolveReportAsset(src?: string | null): string | undefined {
   return resolved;
 }
 
-const projectImage = (p: ReportProject) => {
+/** Returns a prioritized candidate list. PremiumImage walks it until one loads. */
+const projectImageCandidates = (p: ReportProject): string[] => {
   const ordered = [...(p.images || [])].sort((a, b) => (a.display_order ?? 999) - (b.display_order ?? 999));
-  return resolveReportAsset(
-    p.cover_image_url ||
-      ordered.find((img) => Boolean(img?.image_url))?.image_url ||
-      p.hero_image_url ||
-      p.card_image_url ||
-      p.feature_image_url ||
-      null
-  );
+  const raw: (string | null | undefined)[] = [
+    p.cover_image_url,
+    ordered[0]?.image_url,
+    ordered[1]?.image_url,
+    p.hero_image_url,
+    p.card_image_url,
+    p.feature_image_url,
+  ];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const r of raw) {
+    if (!r) continue;
+    const resolved = resolveReportAsset(r);
+    if (!resolved || seen.has(resolved)) continue;
+    seen.add(resolved);
+    out.push(resolved);
+    // Also try the raw URL (un-proxied) as a fallback for CDNs that send proper CORS.
+    const unwrapped = unwrapNextImageProxy(String(r).trim());
+    if (unwrapped && /^https?:\/\//i.test(unwrapped) && !seen.has(unwrapped)) {
+      seen.add(unwrapped);
+      out.push(unwrapped);
+    }
+  }
+  return out;
 };
+
+/** Legacy single-URL helper for places that still just need one src (e.g. cover hero meta). */
+const projectImage = (p: ReportProject) => projectImageCandidates(p)[0];
+
 
 const developerName = (p: ReportProject) => escText(p.developer?.name || p.developer_name || "Developer on request");
 const developerLogo = (p: ReportProject) => {
