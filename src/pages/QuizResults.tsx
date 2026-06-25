@@ -1763,15 +1763,16 @@ const QuizResults = () => {
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6 text-xs font-semibold"
               style={{
-                background: "rgba(245,158,11,0.18)",
-                border: "1px solid rgba(245,158,11,0.55)",
-                color: "#FBBF24",
+                background: "rgba(16,122,87,0.14)",
+                border: "1px solid rgba(16,122,87,0.55)",
+                color: "#0E5B41",
               }}
             >
-              <Sparkles className="w-3.5 h-3.5" style={{ color: "#FBBF24", stroke: "#FBBF24" }} />
+              <Sparkles className="w-3.5 h-3.5" style={{ color: "#107A57", stroke: "#107A57" }} />
               Closest matches — see the table below for what each property ticks
             </div>
           )}
+
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3">
