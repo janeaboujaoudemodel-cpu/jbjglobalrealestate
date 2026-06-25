@@ -36,6 +36,7 @@ import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { isOwnerEmail } from "@/config/ownerEmails";
+import { useUserMode } from "@/hooks/useUserMode";
 
 
 type ChangeRequest = {
