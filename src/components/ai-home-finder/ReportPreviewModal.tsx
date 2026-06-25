@@ -219,7 +219,7 @@ export default function ReportPreviewModal({
       <DialogContent
         data-no-contrast-guard
         data-aihf-preview
-        className="sm:max-w-[1120px] max-h-[92vh] overflow-hidden p-0 border-0"
+        className="sm:max-w-[1120px] max-h-[92vh] h-[92vh] overflow-hidden p-0 border-0 flex flex-col"
         style={{ background: C.page, color: C.ink }}
       >
         {/* Scoped override — beats the global contrast guard inside the preview card only.
