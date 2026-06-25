@@ -249,12 +249,13 @@ const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
 
 const AIHF_STYLE = `
-  .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div), .aihf-root svg {
+  .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div):not(.aihf-cta):not(.aihf-cta *):not(.aihf-option[aria-pressed="true"]):not(.aihf-option[aria-pressed="true"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-emerald-action="true"]):not([data-emerald-action="true"] *), .aihf-root svg:not(.aihf-cta svg):not(.aihf-option[aria-pressed="true"] svg):not(.jj-surface-emerald svg):not(.jj-pill-emerald-metallic svg):not([data-emerald-action="true"] svg) {
     color: #1A1A1A !important;
     -webkit-text-fill-color: #1A1A1A !important;
     opacity: 1 !important;
   }
-  .aihf-root svg, .aihf-root svg * { stroke: #1A1A1A !important; }
+  .aihf-root svg:not(.aihf-cta svg):not(.aihf-option[aria-pressed="true"] svg):not(.jj-surface-emerald svg):not(.jj-pill-emerald-metallic svg):not([data-emerald-action="true"] svg),
+  .aihf-root svg:not(.aihf-cta svg):not(.aihf-option[aria-pressed="true"] svg):not(.jj-surface-emerald svg):not(.jj-pill-emerald-metallic svg):not([data-emerald-action="true"] svg) * { stroke: #1A1A1A !important; }
   .aihf-root .aihf-muted { color: rgba(26,26,26,0.70) !important; -webkit-text-fill-color: rgba(26,26,26,0.70) !important; }
   .aihf-root .aihf-tiffany { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
   .aihf-root .aihf-card {
@@ -295,6 +296,7 @@ const AIHF_STYLE = `
     stroke: #FFFFFF !important;
     opacity: 1 !important;
   }
+  .aihf-root .aihf-cta svg *, .aihf-root .aihf-cta :is(path,line,polyline,polygon,rect,circle,ellipse) { stroke: #FFFFFF !important; color: #FFFFFF !important; }
   .aihf-root .aihf-cta:hover { background: var(--jj-emerald-ombre-hover) !important; background-image: var(--jj-emerald-ombre-hover) !important; }
   .aihf-root .jj-surface-emerald,
   .aihf-root .jj-pill-emerald-metallic,

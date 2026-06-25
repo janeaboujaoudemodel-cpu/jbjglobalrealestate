@@ -6766,10 +6766,8 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   -webkit-text-fill-color: #064E3B !important;
 }
 
-/* Flat emerald for small chips/pills/segmented options.
-   The standard `jj-surface-emerald` uses a 135° ombre that fades to near-black,
-   which on a small rounded-full chip reads as "half black / half emerald".
-   Small selected chips must read as a single solid emerald wash. */
+/* Filter selected chip lock — same emerald → black ombre as the approved CTA.
+   Never use the rejected flat green chip again. */
 .jj-chip-emerald,
 .jj-chip-emerald * {
   color: #FFFFFF !important;
@@ -6777,17 +6775,24 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   stroke: #FFFFFF !important;
 }
 .jj-chip-emerald {
-  background: #064E3B !important;
-  background-image: none !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-color: transparent !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 6px 14px -10px rgba(6, 78, 59, 0.75) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 8px 18px -12px rgba(4, 44, 28, 0.86) !important;
 }
 .jj-chip-emerald:hover {
-  background: #053F31 !important;
-  background-color: #053F31 !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+}
+.jj-chip-emerald :where(svg, [class*="lucide"], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
 }
 .jj-surface-emerald :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,svg,[class*="lucide"]),
 .jj-official-emerald :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,svg,[class*="lucide"]),
@@ -14665,6 +14670,230 @@ html body #root main.jj-main-shell section.jj-project-hero[data-hero-dark][data-
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 2px 10px rgba(0,0,0,0.72) !important;
   opacity: 1 !important;
+}
+
+/* =====================================================================
+   ABSOLUTE FILTER + AIHF EMERALD CONTRACT
+   Applies to New Off Plan filter panels, shortcut popovers, selected chips,
+   favorite hearts, Show projects CTA, and AI Home Finder action cards.
+   Rejected flat green is banned; every own-emerald control uses the locked
+   emerald→black ombre with pure white text/icons in rest, hover and active.
+   ===================================================================== */
+html body #root :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+),
+html body #root :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  outline-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4, 44, 28, 0.86),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+html body #root :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
+html body #root :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+) :where(svg, [class*="lucide"], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald-metallic,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="icon"],
+  .aihf-results .aihf-action-icon
+) :where(svg [fill]:not([fill="none"]), .fill-current) {
+  fill: #FFFFFF !important;
+}
+
+/* Radix dialogs/popovers render in body portals outside #root. This duplicate
+   portal-safe lock is intentionally last so New Off Plan selected chips/tabs
+   cannot be repainted black by light-surface text guards. */
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+),
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+):is(:hover, :focus, :focus-visible, :active, :disabled) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  outline-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4, 44, 28, 0.86),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
+html body :is(
+  .jj-filter-emerald-control,
+  .jj-chip-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  .aihf-root .aihf-option[aria-pressed="true"],
+  .aihf-root .aihf-cta,
+  .aihf-results .aihf-cta,
+  .aihf-results .aihf-cta-glow,
+  .aihf-results .aihf-action-icon
+) :where(svg, [class*="lucide"], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
 }
 
 
