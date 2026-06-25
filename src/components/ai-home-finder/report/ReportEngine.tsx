@@ -413,7 +413,8 @@ function PageHeader({ pageLabel, section, branding }: { pageLabel: string; secti
       data-surface="emerald"
       data-on-dark
       style={{
-        height: 90,
+        height: SP.headerH,
+
         padding: "13px 42px",
         boxSizing: "border-box",
         flexShrink: 0,
