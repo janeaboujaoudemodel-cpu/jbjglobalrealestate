@@ -53,7 +53,7 @@ export function useUpdateChannelToneSettings() {
 
       const { data, error } = await supabase
         .from("owner_comm_channels")
-        .update(patch)
+        .update(patch as any)
         .eq("id", args.channelId)
         .select("id, auto_reply_enabled, tone_profile_id")
         .single();

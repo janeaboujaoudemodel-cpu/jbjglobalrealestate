@@ -65,7 +65,7 @@ const DeveloperTrustPanel = () => {
         patch.approved_at = new Date().toISOString();
         patch.approved_by = user?.id;
       }
-      const { error } = await supabase.from("developers").update(patch).eq("id", id);
+      const { error } = await supabase.from("developers").update(patch as any).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

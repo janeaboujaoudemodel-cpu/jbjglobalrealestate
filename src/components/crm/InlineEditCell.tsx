@@ -66,7 +66,7 @@ const InlineEditCell = ({
 
       const { error } = await supabase
         .from("crm_leads")
-        .update(updateData)
+        .update(updateData as any)
         .eq("id", leadId);
 
       if (error) throw error;

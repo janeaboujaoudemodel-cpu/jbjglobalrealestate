@@ -76,7 +76,7 @@ export function NewProjectDetector() {
       // Publish the project
       const { error } = await supabase
         .from("projects")
-        .update({ is_published: true, published_at: new Date().toISOString() })
+        .update({ is_published: true, published_at: new Date().toISOString() } as any)
         .eq("id", project.id);
 
       if (error) throw error;

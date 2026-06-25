@@ -150,7 +150,7 @@ export default function OwnerCommSettings() {
       if (settings?.id) {
         const { error } = await supabase
           .from('owner_comm_settings')
-          .update(newSettings)
+          .update(newSettings as any)
           .eq('id', settings.id);
         if (error) throw error;
       } else {
@@ -172,7 +172,7 @@ export default function OwnerCommSettings() {
       if (toneProfile?.id) {
         const { error } = await supabase
           .from('owner_comm_tone_profiles')
-          .update(newProfile)
+          .update(newProfile as any)
           .eq('id', toneProfile.id);
         if (error) throw error;
       } else {

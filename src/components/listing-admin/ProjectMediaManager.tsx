@@ -149,7 +149,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
           image_url: urlData.publicUrl,
           is_primary: false,
           display_order: images.length + successCount,
-        });
+        } as any);
         if (!dbError) successCount++;
       }
 

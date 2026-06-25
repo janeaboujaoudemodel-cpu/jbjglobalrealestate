@@ -214,7 +214,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
         }
 
         if (update.listing_table === "projects") {
-          const { error } = await supabase.from("projects").update(updateData).eq("id", update.listing_id!);
+          const { error } = await supabase.from("projects").update(updateData as any).eq("id", update.listing_id!);
           if (error) throw error;
         }
       }

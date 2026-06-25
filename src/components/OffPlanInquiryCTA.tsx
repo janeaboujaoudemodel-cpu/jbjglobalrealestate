@@ -43,7 +43,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
         source_page: sourcePage,
         status: "new",
         interest_level: "medium",
-      });
+      } as any);
 
       if (error) throw error;
 

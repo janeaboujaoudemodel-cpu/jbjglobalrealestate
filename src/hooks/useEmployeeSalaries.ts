@@ -148,7 +148,7 @@ export function useEmployeeSalaries() {
     try {
       const { error } = await supabase
         .from('employee_commissions')
-        .update({ status: 'paid', paid_at: new Date().toISOString() })
+        .update({ status: 'paid', paid_at: new Date().toISOString() } as any)
         .eq('id', commissionId);
 
       if (error) throw error;

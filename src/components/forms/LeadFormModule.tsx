@@ -175,7 +175,7 @@ const LeadFormModule = ({
           utm_source: leadData.utm_source,
           utm_medium: leadData.utm_medium,
           utm_campaign: leadData.utm_campaign,
-        }]);
+        }] as any);
 
       if (error) throw error;
 

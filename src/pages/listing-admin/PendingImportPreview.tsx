@@ -448,7 +448,7 @@ const PendingImportPreview = () => {
       if (Object.keys(updateData).length > 0) {
         await supabase
           .from("projects")
-          .update(updateData)
+          .update(updateData as any)
           .eq("id", pendingImport.matched_project_id);
       }
 

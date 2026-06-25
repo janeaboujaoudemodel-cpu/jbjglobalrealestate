@@ -190,12 +190,13 @@ async function tierBrowsingHistory(): Promise<Project[]> {
 
   if (devNames.length === 0 && areas.length === 0) return [];
 
-  let query = supabase
+  let query: any = supabase
     .from("projects")
     .select(SELECT)
     .eq("is_published", true)
     .not("cover_image_url", "is", null)
     .neq("cover_image_url", "");
+
 
   if (viewedSlugs.length > 0) {
     query = query.not("slug", "in", `(${viewedSlugs.map((s) => `"${s}"`).join(",")})`);

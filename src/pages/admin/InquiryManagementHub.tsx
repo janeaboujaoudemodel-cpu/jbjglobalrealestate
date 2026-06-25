@@ -98,7 +98,7 @@ const InquiryManagementHub: React.FC = () => {
       const update: Record<string, unknown> = { status, updated_at: new Date().toISOString() };
       if (notes !== undefined) update.admin_notes = notes;
       if (status === 'completed') update.resolved_at = new Date().toISOString();
-      const { error } = await supabase.from('inquiries').update(update).eq('id', id);
+      const { error } = await supabase.from('inquiries').update(update as any).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -117,7 +117,7 @@ const InquiryManagementHub: React.FC = () => {
         status: 'new',
         notes: `Inquiry: ${inquiry.subject}\n${inquiry.message || ''}`,
         property_interest: inquiry.property_name,
-      }).select('id').single();
+      } as any).select('id').single();
       if (error) throw error;
       await supabase.from('inquiries').update({ crm_lead_id: data.id }).eq('id', inquiry.id);
       return data;

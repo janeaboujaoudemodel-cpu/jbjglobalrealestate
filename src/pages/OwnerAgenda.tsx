@@ -160,7 +160,7 @@ export default function OwnerAgenda() {
       // Try owner_comm_tasks first
       const { error } = await supabase
         .from('owner_comm_tasks')
-        .update({ status: 'completed', completed_at: new Date().toISOString() })
+        .update({ status: 'completed', completed_at: new Date().toISOString() } as any)
         .eq('id', taskId);
       
       if (error) {

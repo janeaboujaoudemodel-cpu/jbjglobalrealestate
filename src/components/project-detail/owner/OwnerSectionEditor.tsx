@@ -123,7 +123,7 @@ export default function OwnerSectionEditor({
 
     try {
       if (Object.keys(projectPatch).length > 0) {
-        const { error } = await supabase.from("projects").update(projectPatch).eq("id", projectId);
+        const { error } = await supabase.from("projects").update(projectPatch as any).eq("id", projectId);
         if (error) throw error;
       }
       if (Object.keys(devPatch).length > 0) {

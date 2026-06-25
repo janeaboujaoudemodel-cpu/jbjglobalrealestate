@@ -161,7 +161,7 @@ export const useHRApprovals = () => {
 
       const { error } = await supabase
         .from('hr_approval_requests')
-        .update(updateData)
+        .update(updateData as any)
         .eq('id', requestId);
 
       if (error) throw error;
