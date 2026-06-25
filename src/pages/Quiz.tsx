@@ -772,6 +772,62 @@ const Quiz = () => {
       return { items: [], tier: "fallback" };
     }
 
+    // ---- BUDGET-TIERED SELECTION ----
+    // Instead of returning the top-3 by raw score (which can cluster all three
+    // around the same price point or, worse, leave a 2 M gap between picks),
+    // spread the top-of-pool across the user's budget band so the client sees
+    // what their money buys at the LOW, MID and HIGH end of their range.
+    // The strict location/property-type/bedroom hard filters above are kept;
+    // we only diversify on the soft "budget closeness" axis.
+    const pickBudgetSpread = (candidates: any[]): any[] => {
+      if (!budgetRange || candidates.length <= 3) return candidates.slice(0, 3);
+      const [lo, hi] = budgetRange;
+      const priced = candidates.filter((p) => typeof p.price_from === "number" && p.price_from > 0);
+      const inRange = priced
+        .filter((p) => p.price_from >= lo && p.price_from <= hi)
+        .sort((a, b) => a.price_from - b.price_from);
+
+      // Anchor prices: low / mid / high of the requested range.
+      const anchors = [lo + (hi - lo) * 0.15, (lo + hi) / 2, lo + (hi - lo) * 0.85];
+
+      const closestTo = (anchor: number, pool: any[], used: Set<string>) => {
+        let best: any = null;
+        let bestGap = Infinity;
+        for (const p of pool) {
+          if (used.has(p.id)) continue;
+          const gap = Math.abs(p.price_from - anchor);
+          if (gap < bestGap) { bestGap = gap; best = p; }
+        }
+        return best;
+      };
+
+      const used = new Set<string>();
+      const picks: any[] = [];
+
+      // Prefer in-range picks for every anchor first.
+      for (const a of anchors) {
+        const pick = closestTo(a, inRange, used);
+        if (pick) { used.add(pick.id); picks.push(pick); }
+      }
+
+      // Top up from the broader ranked candidate list (closest-by-rank) if any anchor was empty.
+      for (const p of candidates) {
+        if (picks.length >= 3) break;
+        if (!used.has(p.id)) { used.add(p.id); picks.push(p); }
+      }
+
+      // Return ascending by price so the UI displays a clear "what each tier buys" story.
+      return picks
+        .slice(0, 3)
+        .sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
+    };
+
+    const spread = pickBudgetSpread(items);
+    const orderedItems = [
+      ...spread,
+      ...items.filter((p) => !spread.some((s) => s.id === p.id)),
+    ];
+
     // Classify tier by the top result's closeness (drives the results-page copy).
     const top = pool[0];
     const tier: "exact" | "close" | "nearest" =
@@ -781,7 +837,7 @@ const Quiz = () => {
         ? "close"
         : "nearest";
 
-    return { items, tier };
+    return { items: orderedItems, tier };
   };
 
 
