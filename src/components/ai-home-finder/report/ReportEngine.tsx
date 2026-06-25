@@ -209,6 +209,8 @@ function PageHeader({ pageLabel, branding }: { pageLabel: string; branding: Repo
       style={{
         minHeight: 92,
         padding: "14px 40px",
+        boxSizing: "border-box",
+        flexShrink: 0,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -263,6 +265,8 @@ function PageFooter({ branding }: { branding: ReportBranding }) {
       style={{
         minHeight: 42,
         padding: "10px 40px",
+        boxSizing: "border-box",
+        flexShrink: 0,
         fontSize: 10,
         display: "flex",
         alignItems: "center",
