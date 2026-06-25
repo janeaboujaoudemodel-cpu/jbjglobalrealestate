@@ -543,7 +543,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
             {greeting}. A focused shortlist of developer-direct property options prepared as a premium JBJ business proposal.
           </p>
 
-          <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 9, border: `1px solid ${T.gold}`, padding: 18, color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 18 }}>
+          <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 9, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 18 }}>
             <SectionEyebrow light>Report scope</SectionEyebrow>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12 }}>
               {["Client requirements", "Matched properties", "Comparison matrix", "Consultant next steps"].map((item) => (
@@ -611,7 +611,7 @@ function ClientRequirementsPage({ branding, pageIdPrefix, requirements, projects
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, marginBottom: 18 }}>
         {requirementSet.slice(0, 10).map((r) => <FieldCard key={r.label} label={r.label} value={r.value} />)}
       </div>
-      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: 18, color: WHITE, WebkitTextFillColor: WHITE }}>
+      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE }}>
         <SectionEyebrow light>JBJ selection method</SectionEyebrow>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
           {[
@@ -804,7 +804,7 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
               </div>
             </div>
           </div>
-          <div data-no-contrast-guard data-on-dark style={{ borderRadius: 9, backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, border: `1px solid ${T.gold}`, padding: 15, color: WHITE, WebkitTextFillColor: WHITE }}>
+          <div data-no-contrast-guard data-on-dark style={{ borderRadius: 9, backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, border: `1px solid ${T.gold}`, padding: "20px 22px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE }}>
             <SectionEyebrow light>AI recommendation</SectionEyebrow>
             <div style={{ fontSize: 18, lineHeight: 1.15, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{verdict.label}</div>
             <p style={{ margin: "8px 0 0", fontSize: 11, lineHeight: 1.55, color: WHITE, WebkitTextFillColor: WHITE }}>{verdict.detail}. JBJ should verify final unit mix and pricing before reservation.</p>
@@ -838,7 +838,7 @@ function AiRecommendationSummaryPage({ branding, projects, pageIdPrefix, criteri
     <PageFrame id={`${pageIdPrefix}-ai-summary`} pageLabel="AI summary" section="Recommendation" branding={branding}>
       <SectionEyebrow>AI recommendation summary</SectionEyebrow>
       <h2 style={{ fontSize: 30, lineHeight: 1.1, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 14px" }}>Recommended route for the client</h2>
-      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: 20, color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 16 }}>
+      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 16 }}>
         <SectionEyebrow light>Lead recommendation</SectionEyebrow>
         <div style={{ fontSize: 25, lineHeight: 1.12, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{lead?.name || "Top matched option"}</div>
         <p style={{ margin: "10px 0 0", fontSize: 12.4, lineHeight: 1.6, color: WHITE, WebkitTextFillColor: WHITE, maxWidth: 620 }}>
