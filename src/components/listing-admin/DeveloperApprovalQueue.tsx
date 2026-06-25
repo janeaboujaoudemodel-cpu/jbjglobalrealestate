@@ -141,7 +141,7 @@ export const DeveloperApprovalQueue = () => {
         if (Object.keys(updateData).length > 0) {
           const { error: updateError } = await supabase
             .from("developers")
-            .update(updateData)
+            .update(updateData as any)
             .eq("id", existingMatch.id);
 
           if (updateError) throw updateError;

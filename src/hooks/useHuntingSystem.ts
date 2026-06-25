@@ -290,7 +290,7 @@ export function useHuntingSystem() {
       
       const { data, error } = await supabase
         .from('hunt_prospects')
-        .update(updates)
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();

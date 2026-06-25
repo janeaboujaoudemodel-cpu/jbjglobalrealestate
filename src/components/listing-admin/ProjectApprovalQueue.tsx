@@ -926,7 +926,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       if (Object.keys(updateData).length > 0) {
         await supabase
           .from("projects")
-          .update(updateData)
+          .update(updateData as any)
           .eq("id", importData.matched_project_id);
       }
 

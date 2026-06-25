@@ -132,7 +132,7 @@ export default function AIEnrichDialog({
 
       const { error: updErr } = await supabase
         .from("projects")
-        .update(patch)
+        .update(patch as any)
         .eq("id", projectId);
       if (updErr) throw updErr;
 

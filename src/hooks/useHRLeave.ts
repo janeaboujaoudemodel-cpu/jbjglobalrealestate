@@ -221,7 +221,7 @@ export const useHRLeave = () => {
 
       const { error } = await supabase
         .from('hr_leave_requests')
-        .update(updateData)
+        .update(updateData as any)
         .eq('id', requestId);
 
       if (error) throw error;

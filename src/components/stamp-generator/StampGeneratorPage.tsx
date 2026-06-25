@@ -452,7 +452,7 @@ export default function StampGeneratorPage() {
           lastSaved: new Date().toISOString(),
         };
       }
-      await supabase.from('stamp_projects').update(updateData).eq('id', projectId);
+      await supabase.from('stamp_projects').update(updateData as any).eq('id', projectId);
       setLastSaved(new Date());
       // Clear auto-save after successful DB save
       localStorage.removeItem(`stamp-autosave-${projectId}`);

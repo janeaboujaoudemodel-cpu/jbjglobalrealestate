@@ -253,7 +253,7 @@ export default function CRMLeadsTableV2({
         updateData.vip_tagged_at = null;
         updateData.vip_tagged_by = null;
       }
-      const { error } = await supabase.from("crm_leads").update(updateData).eq("id", leadId);
+      const { error } = await supabase.from("crm_leads").update(updateData as any).eq("id", leadId);
       if (error) {
         setLeads((prev) => prev.map((l) => l.id === leadId ? { ...l, vip: currentVIP } : l));
         toast.error(`VIP update failed: ${error.message}`);

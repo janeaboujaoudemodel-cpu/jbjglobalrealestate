@@ -267,7 +267,7 @@ export function ProjectInquiryForm({
         notes: composedNotes,
         status: "new",
         lead_score: 80 // High intent lead from project page
-      });
+      } as any);
 
       if (error) throw error;
 

@@ -133,7 +133,7 @@ const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProp
         .update({ 
           unassigned_at: new Date().toISOString(),
           unassigned_reason: 'broker_inactivity'
-        })
+        } as any)
         .eq("assigned_to_user_id", broker.userId)
         .is("unassigned_at", null);
 

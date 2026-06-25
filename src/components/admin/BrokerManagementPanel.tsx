@@ -74,7 +74,7 @@ export function BrokerManagementPanel() {
   const updateField = async (id: string, field: string, value: any) => {
     const { error } = await supabase
       .from("broker_profiles")
-      .update({ [field]: value })
+      .update({ [field]: value } as any)
       .eq("id", id);
 
     if (error) {
