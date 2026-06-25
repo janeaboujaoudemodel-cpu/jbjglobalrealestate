@@ -238,8 +238,8 @@ export default function ReportPreviewModal({
             -webkit-text-fill-color: #FFFFFF !important;
           }
           html body [data-aihf-preview] [data-aihf-darkband] [data-tagline] {
-            color: #A7F3D0 !important;
-            -webkit-text-fill-color: #A7F3D0 !important;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
           }
           html body [data-aihf-preview] [data-aihf-prepared-by] {
             color: #064E3B !important;
@@ -250,8 +250,8 @@ export default function ReportPreviewModal({
             -webkit-text-fill-color: #064E3B !important;
           }
           html body [data-aihf-preview] [data-aihf-price] {
-            color: #B45309 !important;
-            -webkit-text-fill-color: #B45309 !important;
+            color: #B89555 !important;
+            -webkit-text-fill-color: #B89555 !important;
           }
           html body [data-aihf-preview] [data-aihf-rank] {
             color: #B89555 !important;
@@ -311,7 +311,7 @@ export default function ReportPreviewModal({
                 aria-label={`Active role: ${ROLE_LABELS[activeRole]}`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: "#6EE7B7" }} />
+                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: C.gold }} />
                   <span className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
                     {ROLE_LABELS[activeRole]}
                   </span>
