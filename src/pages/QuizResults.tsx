@@ -768,6 +768,78 @@ const QuizResults = () => {
     );
     y += 14;
 
+    // ===== Prepared-by branding strip (page 1 only) =====
+    if (branding && branding.mode !== "none") {
+      const stripH = 86;
+      const stripY = y;
+      doc.setFillColor(247, 242, 234);
+      doc.setDrawColor(...tiffany);
+      doc.setLineWidth(0.6);
+      doc.roundedRect(M, stripY, pageW - 2 * M, stripH, 8, 8, "FD");
+
+      let bx = M + 12;
+      const by = stripY + 12;
+      const showPhoto = (branding.mode === "both" || branding.mode === "photo") && branding.photoDataUrl;
+      const showLogo = (branding.mode === "both" || branding.mode === "logo") && branding.logoDataUrl;
+
+      if (showPhoto) {
+        try {
+          doc.addImage(branding.photoDataUrl!, "PNG", bx, by, 62, 62);
+          bx += 74;
+        } catch { /* ignore */ }
+      }
+      if (showLogo) {
+        try {
+          doc.setFillColor(...white);
+          doc.roundedRect(bx, by, 70, 62, 4, 4, "F");
+          doc.addImage(branding.logoDataUrl!, "PNG", bx + 4, by + 4, 62, 54);
+          bx += 82;
+        } catch { /* ignore */ }
+      }
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.setTextColor(...tiffanyDeep);
+      const roleLabel = (
+        branding.role === "broker" ? "BROKER" :
+        branding.role === "developer" ? "DEVELOPER" :
+        branding.role === "owner" ? "OWNER" : "JBJ CONSULTANT"
+      );
+      doc.text(`PREPARED BY — ${roleLabel}`, bx, by + 10);
+
+      let ty = by + 24;
+      if (branding.name) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.setTextColor(...ink);
+        doc.text(branding.name, bx, ty);
+        ty += 13;
+      }
+      if (branding.companyName) {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9.5);
+        doc.setTextColor(60, 50, 40);
+        doc.text(branding.companyName, bx, ty);
+        ty += 11;
+      }
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(80, 70, 55);
+      const line1 = [branding.phone, branding.email].filter(Boolean).join("   •   ");
+      if (line1) { doc.text(line1, bx, ty); ty += 10; }
+      const line2 = [
+        branding.whatsapp ? `WhatsApp: ${branding.whatsapp}` : null,
+        branding.website,
+      ].filter(Boolean).join("   •   ");
+      if (line2) { doc.text(line2, bx, ty); ty += 10; }
+      if (branding.address) { doc.text(branding.address, bx, ty); ty += 10; }
+      if (branding.socials) { doc.text(branding.socials.slice(0, 80), bx, ty); }
+
+      y = stripY + stripH + 14;
+    }
+
+
+
     // Three rank cards
     const cardGap = 12;
     const cardW = (pageW - 2 * M - 2 * cardGap) / 3;
