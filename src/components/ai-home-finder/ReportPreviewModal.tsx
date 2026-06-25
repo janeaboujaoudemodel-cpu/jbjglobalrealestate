@@ -565,11 +565,80 @@ export default function ReportPreviewModal({
                 <span data-aihf-website style={{ fontWeight: 600 }}>{branding.website || "www.jbj.ae"}</span>
               </div>
             </div>
+
+            {/* ============ PAGE 2 — PROPERTY COMPARISON (mirrors PDF) ============ */}
+            <div className="mx-auto mt-6 shadow-xl rounded overflow-hidden" style={{ background: C.page, color: C.ink, maxWidth: 580 }}>
+              <div
+                data-aihf-darkband
+                data-no-contrast-guard
+                className="px-5 py-3 flex items-center justify-between allow-white"
+                style={{ backgroundImage: C.emeraldGradient, backgroundColor: "#042c1c", borderBottom: `1px solid ${C.gold}` }}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="h-9 w-9 rounded flex items-center justify-center" style={{ background: "#FFFFFF", border: `1px solid ${C.gold}` }}>
+                    <img src={jbjMonogram} alt="" className="h-8 w-8 object-contain" />
+                  </div>
+                  <p className="text-[11px] font-bold tracking-wider">PAGE 2 · PROPERTY COMPARISON</p>
+                </div>
+                <span className="text-[10px]" style={{ opacity: 0.85 }}>How each match fits your brief</span>
+              </div>
+              <div className="px-5 py-4">
+                <h3 className="text-base font-bold mb-3" style={{ color: C.ink }}>
+                  How each property matches your requirements
+                </h3>
+                <div className="overflow-hidden rounded border" style={{ borderColor: C.goldHair }}>
+                  <table className="w-full text-[11px]" style={{ borderCollapse: "collapse" }}>
+                    <thead>
+                      <tr style={{ background: C.raised }}>
+                        <th className="text-left px-2 py-2 font-bold" style={{ color: C.ink, borderBottom: `1px solid ${C.goldHair}` }}>Criteria</th>
+                        {previewProjects.slice(0, 3).map((p, i) => (
+                          <th key={p.id} className="text-left px-2 py-2 font-bold" style={{ color: C.ink, borderBottom: `1px solid ${C.goldHair}` }}>
+                            #{i + 1} {p.name.length > 14 ? p.name.slice(0, 13) + "…" : p.name}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { l: "Price", v: (p: PreviewProject) => fmtPrice(p) },
+                        { l: "Developer", v: (p: PreviewProject) => p.developer?.name || "—" },
+                        { l: "Area", v: (p: PreviewProject) => p.area || "—" },
+                        { l: "Type", v: () => "Off-Plan" },
+                      ].map((row, ri) => (
+                        <tr key={row.l} style={{ background: ri % 2 ? C.surface : "#FFFFFF" }}>
+                          <td className="px-2 py-2 font-semibold" style={{ color: C.ink, borderTop: `1px solid ${C.goldHair}` }}>{row.l}</td>
+                          {previewProjects.slice(0, 3).map((p) => (
+                            <td key={p.id} className="px-2 py-2" style={{ color: C.muted, borderTop: `1px solid ${C.goldHair}` }}>
+                              {row.v(p)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                      <tr style={{ background: "#064E3B" }}>
+                        <td className="px-2 py-2 font-bold text-white" style={{ color: "#fff" }}>Match summary</td>
+                        {previewProjects.slice(0, 3).map((p, i) => (
+                          <td key={p.id} className="px-2 py-2 font-bold text-white" style={{ color: "#fff" }}>
+                            {["Best", "Strong", "Good"][i] || "Fit"}
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-[10px] mt-3" style={{ color: C.muted, fontStyle: "italic" }}>
+                  The full exported PDF includes per-criterion verdicts (match / close / miss) for every project.
+                </p>
+              </div>
+              <div className="px-5 py-3 text-[10px] flex items-center justify-between" style={{ background: C.surface, color: C.ink, borderTop: `1px solid ${C.gold}` }}>
+                <span>Powered by JBJ Global Real Estate — Dubai, UAE</span>
+                <span data-aihf-website style={{ fontWeight: 600 }}>{branding.website || "www.jbj.ae"}</span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2" style={{ borderColor: C.goldHair, background: C.page }}>
+        <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2 shrink-0" style={{ borderColor: C.goldHair, background: C.page }}>
           <Button onClick={() => run("copy", () => onCopy())} disabled={!!busy} className="font-semibold" style={secondaryBtn}>
             <LinkIcon className="w-4 h-4 mr-2" /> Copy text
           </Button>
