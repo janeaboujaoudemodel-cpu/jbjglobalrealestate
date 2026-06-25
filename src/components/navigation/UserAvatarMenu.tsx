@@ -123,7 +123,17 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           {label}
         </span>
         {badge && badge > 0 ? (
-          <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#1A1A1A] text-white text-[10px] font-bold flex items-center justify-center">
+          <span
+            data-on-dark
+            data-no-contrast-guard
+            className="min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold flex items-center justify-center"
+            style={{
+              background: "var(--jj-emerald-ombre, linear-gradient(135deg, #042c1c 0%, #0b5132 100%))",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              textShadow: "none",
+            }}
+          >
             {badge > 9 ? "9+" : badge}
           </span>
         ) : null}
