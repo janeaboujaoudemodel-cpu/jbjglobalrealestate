@@ -258,7 +258,26 @@ export default function ReportPreviewModal({
             -webkit-text-fill-color: #FFFFFF !important;
             stroke: #FFFFFF !important;
           }
-        `}</style>
+          /* Include-in-report toggle group — lock contrast at every state */
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="true"],
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="true"] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            stroke: #FFFFFF !important;
+          }
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"],
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"] * {
+            color: #1A1A1A !important;
+            -webkit-text-fill-color: #1A1A1A !important;
+          }
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover {
+            border-color: #064E3B !important;
+            color: #064E3B !important;
+          }
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover * {
+            color: #064E3B !important;
+            -webkit-text-fill-color: #064E3B !important;
+          }
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
           <DialogTitle className="text-xl font-bold" style={{ color: C.ink }}>
             Report Preview & Branding
