@@ -131,6 +131,7 @@ export default function ReportPreviewModal({
       role: activeRole,
       mode: "both",
       name: "",
+      salutation: "Mr.",
       companyName: "JBJ Global Real Estate",
       phone: "",
       whatsapp: "",
