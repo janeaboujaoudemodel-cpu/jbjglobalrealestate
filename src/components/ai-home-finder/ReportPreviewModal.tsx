@@ -7,7 +7,7 @@ import { Download, MessageCircle, Mail, Link as LinkIcon, Send, Upload, User as 
 import { toast } from "sonner";
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 import { ReportEngine, type ReportProject } from "./report/ReportEngine";
-import { REPORT_PAGE_PX } from "./report/tokens";
+import { REPORT_PAGE_PX, PAGE_SEP_VAR } from "./report/tokens";
 
 
 export type ReportRole = "investor" | "broker" | "developer" | "owner" | "consultant";
@@ -462,15 +462,12 @@ export default function ReportPreviewModal({
           <div className="overflow-y-auto p-5" style={{ background: C.raised }}>
             <p className="text-xs uppercase tracking-widest mb-3 font-semibold" style={{ color: C.muted }}>Live Preview</p>
             {(() => {
-              // Scale the real A4 pages to fit the preview column. The inner
-              // report is absolutely positioned so CSS transform does NOT add
-              // a second unscaled layout height (the source of the blank gaps).
               const previewWidth = 560;
               const scale = previewWidth / REPORT_PAGE_PX.width;
-              // cover + requirements + matched properties + comparison +
-              // individual property pages + AI summary + contact.
+              // Engine renders exactly 6 fixed pages + N matched property detail pages (max 3).
               const pageCount = 6 + Math.min(previewProjects.length, 3);
-              const reportHeight = pageCount * REPORT_PAGE_PX.height + Math.max(0, pageCount - 1) * 24;
+              const pageSepPx = 18; // visible separator BETWEEN pages in preview only
+              const reportHeight = pageCount * REPORT_PAGE_PX.height + Math.max(0, pageCount - 1) * pageSepPx;
               return (
                 <div
                   className="mx-auto"
@@ -487,8 +484,11 @@ export default function ReportPreviewModal({
                       inset: "0 auto auto 0",
                       transform: `scale(${scale})`,
                       transformOrigin: "top left",
-                      filter: "drop-shadow(0 12px 30px rgba(0,0,0,0.18))",
-                    }}
+                      // Separator + drop-shadow live on every page sheet, not on the
+                      // root, so PDF capture (which sets the var to 0) stays seamless.
+                      [PAGE_SEP_VAR as any]: `${pageSepPx}px`,
+                      ["--jbj-report-page-shadow" as any]: "0 12px 30px rgba(0,0,0,0.18)",
+                    } as React.CSSProperties}
                   >
                     <ReportEngine
                       mode="preview"
@@ -502,6 +502,7 @@ export default function ReportPreviewModal({
                 </div>
               );
             })()}
+
           </div>
         </div>
 

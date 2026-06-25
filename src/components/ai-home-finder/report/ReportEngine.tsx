@@ -11,8 +11,12 @@ import { COMPANY_CONTACT, TRADE_LICENSE_BRAND, TRADE_LICENSE_NUMBER, TRADE_LICEN
 import { getDeveloperLogoUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 import { buildCriteriaRowsForExport, computeMatchTotals, type CriterionRow, type Verdict } from "@/components/matchmaker/MatchCriteriaTable";
-import { REPORT_TOKENS as T, REPORT_PAGE_PX, ROLE_LABELS } from "./tokens";
+import { REPORT_TOKENS as T, REPORT_PAGE_PX, TYPE, SP, PAGE_SEP_VAR, ROLE_LABELS } from "./tokens";
 import type { ReportBranding } from "../ReportPreviewModal";
+
+/** Render-mode context: lets PremiumImage opt-in to CORS only when capturing to PDF. */
+const ReportModeContext = React.createContext<"preview" | "pdf">("preview");
+
 
 const APP_ASSET_URLS = import.meta.glob("../../../assets/**/*.{png,jpg,jpeg,webp,avif,gif,svg}", {
   eager: true,
@@ -114,17 +118,38 @@ function resolveReportAsset(src?: string | null): string | undefined {
   return resolved;
 }
 
-const projectImage = (p: ReportProject) => {
+/** Returns a prioritized candidate list. PremiumImage walks it until one loads. */
+const projectImageCandidates = (p: ReportProject): string[] => {
   const ordered = [...(p.images || [])].sort((a, b) => (a.display_order ?? 999) - (b.display_order ?? 999));
-  return resolveReportAsset(
-    p.cover_image_url ||
-      ordered.find((img) => Boolean(img?.image_url))?.image_url ||
-      p.hero_image_url ||
-      p.card_image_url ||
-      p.feature_image_url ||
-      null
-  );
+  const raw: (string | null | undefined)[] = [
+    p.cover_image_url,
+    ordered[0]?.image_url,
+    ordered[1]?.image_url,
+    p.hero_image_url,
+    p.card_image_url,
+    p.feature_image_url,
+  ];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const r of raw) {
+    if (!r) continue;
+    const resolved = resolveReportAsset(r);
+    if (!resolved || seen.has(resolved)) continue;
+    seen.add(resolved);
+    out.push(resolved);
+    // Also try the raw URL (un-proxied) as a fallback for CDNs that send proper CORS.
+    const unwrapped = unwrapNextImageProxy(String(r).trim());
+    if (unwrapped && /^https?:\/\//i.test(unwrapped) && !seen.has(unwrapped)) {
+      seen.add(unwrapped);
+      out.push(unwrapped);
+    }
+  }
+  return out;
 };
+
+/** Legacy single-URL helper for places that still just need one src (e.g. cover hero meta). */
+const projectImage = (p: ReportProject) => projectImageCandidates(p)[0];
+
 
 const developerName = (p: ReportProject) => escText(p.developer?.name || p.developer_name || "Developer on request");
 const developerLogo = (p: ReportProject) => {
@@ -256,41 +281,59 @@ function PlainText({ children, style }: { children: React.ReactNode; style?: Rea
   return <span style={{ color: T.ink, WebkitTextFillColor: T.ink, ...style }}>{children}</span>;
 }
 
-function PremiumImage({ src, alt }: { src?: string; alt: string }) {
-  const [failed, setFailed] = React.useState(false);
-  if (!src || failed) {
-    return (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          background: T.raised,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: T.muted,
-          fontSize: 10,
-          fontWeight: 800,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-        }}
-      >
-        Project image pending
-      </div>
-    );
-  }
+/** Premium fallback panel — champagne texture + JBJ monogram. NEVER says "pending". */
+function ImageFallback({ alt }: { alt: string }) {
+  return (
+    <div
+      aria-label={alt}
+      style={{
+        width: "100%",
+        height: "100%",
+        background: `linear-gradient(135deg, ${T.surface} 0%, ${T.raised} 100%)`,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+        color: T.muted,
+        WebkitTextFillColor: T.muted,
+        boxShadow: `inset 0 0 0 1px ${T.goldHair}`,
+      }}
+    >
+      <img src={jbjMonogram} alt="" aria-hidden style={{ width: 44, height: 44, objectFit: "contain", opacity: 0.55 }} />
+      <span style={{ ...TYPE.micro, color: T.mutedSoft, WebkitTextFillColor: T.mutedSoft }}>Imagery on request</span>
+    </div>
+  );
+}
+
+/** Walks a candidate URL list until one loads. CORS only in PDF mode (html2canvas needs it). */
+function PremiumImage(props: { src?: string; srcList?: string[]; alt: string }) {
+  const mode = React.useContext(ReportModeContext);
+  const list = React.useMemo(() => {
+    const raw = props.srcList && props.srcList.length ? props.srcList : (props.src ? [props.src] : []);
+    return raw.filter(Boolean);
+  }, [props.src, props.srcList]);
+  const [idx, setIdx] = React.useState(0);
+  React.useEffect(() => { setIdx(0); }, [list.join("|")]);
+
+  if (!list.length || idx >= list.length) return <ImageFallback alt={props.alt} />;
+
+  const src = list[idx];
+  const useCors = mode === "pdf";
   return (
     <img
+      key={`${idx}-${src}`}
       src={src}
-      alt={alt}
-      crossOrigin="anonymous"
+      alt={props.alt}
+      {...(useCors ? { crossOrigin: "anonymous" as const } : {})}
       loading="eager"
       decoding="sync"
-      onError={() => setFailed(true)}
+      onError={() => setIdx((n) => n + 1)}
       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
     />
   );
 }
+
 
 function OfficialDeveloperLogo({ project, size = 52 }: { project: ReportProject; size?: number }) {
   const logo = developerLogo(project);
@@ -356,7 +399,7 @@ function PageFrame({
       }}
     >
       <PageHeader pageLabel={pageLabel} section={section} branding={branding} />
-      <main style={{ flex: 1, minHeight: 0, padding: "24px 42px 18px", boxSizing: "border-box", overflow: "hidden" }}>{children}</main>
+      <main style={{ flex: 1, minHeight: 0, padding: SP.pageMain, boxSizing: "border-box", overflow: "hidden" }}>{children}</main>
       <PageFooter branding={branding} />
     </div>
   );
@@ -370,7 +413,8 @@ function PageHeader({ pageLabel, section, branding }: { pageLabel: string; secti
       data-surface="emerald"
       data-on-dark
       style={{
-        height: 90,
+        height: SP.headerH,
+
         padding: "13px 42px",
         boxSizing: "border-box",
         flexShrink: 0,
@@ -434,8 +478,9 @@ function PageFooter({ branding }: { branding: ReportBranding }) {
   return (
     <footer
       style={{
-        height: 44,
-        padding: "9px 42px",
+        height: SP.footerH,
+        padding: "9px 44px",
+
         boxSizing: "border-box",
         flexShrink: 0,
         fontSize: 9.5,
@@ -498,7 +543,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
             {greeting}. A focused shortlist of developer-direct property options prepared as a premium JBJ business proposal.
           </p>
 
-          <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 9, border: `1px solid ${T.gold}`, padding: 18, color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 18 }}>
+          <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 9, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 18 }}>
             <SectionEyebrow light>Report scope</SectionEyebrow>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12 }}>
               {["Client requirements", "Matched properties", "Comparison matrix", "Consultant next steps"].map((item) => (
@@ -528,7 +573,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ height: 350, borderRadius: 9, overflow: "hidden", border: `1px solid ${T.gold}`, background: T.raised }}>
-            <PremiumImage src={hero ? projectImage(hero) : undefined} alt={hero?.name || "JBJ selected property"} />
+            <PremiumImage srcList={hero ? projectImageCandidates(hero) : []} alt={hero?.name || "JBJ selected property"} />
           </div>
           <div style={{ padding: 14, borderRadius: 9, background: T.surface, border: `1px solid ${T.goldHair}` }}>
             <SectionEyebrow>Lead recommendation</SectionEyebrow>
@@ -539,7 +584,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 7 }}>
             {projects.slice(0, 3).map((p, i) => (
               <div key={p.id} style={{ height: 76, borderRadius: 7, overflow: "hidden", position: "relative", border: `1px solid ${T.goldHair}` }}>
-                <PremiumImage src={projectImage(p)} alt={p.name} />
+                <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
                 <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 6, top: 6, width: 22, height: 22, borderRadius: 999, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900 }}>{i + 1}</div>
               </div>
             ))}
@@ -566,7 +611,7 @@ function ClientRequirementsPage({ branding, pageIdPrefix, requirements, projects
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, marginBottom: 18 }}>
         {requirementSet.slice(0, 10).map((r) => <FieldCard key={r.label} label={r.label} value={r.value} />)}
       </div>
-      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: 18, color: WHITE, WebkitTextFillColor: WHITE }}>
+      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE }}>
         <SectionEyebrow light>JBJ selection method</SectionEyebrow>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
           {[
@@ -606,7 +651,7 @@ function MatchedPropertiesPage({ branding, projects, pageIdPrefix, criteriaRows 
           return (
             <div key={p.id} style={{ display: "grid", gridTemplateColumns: "224px 1fr", gap: 16, borderRadius: 10, overflow: "hidden", border: `1px solid ${T.goldHair}`, background: T.surface, minHeight: 178 }}>
               <div style={{ position: "relative", background: T.raised }}>
-                <PremiumImage src={projectImage(p)} alt={p.name} />
+                <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
                 <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 12, top: 12, minWidth: 72, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{i + 1}</div>
               </div>
               <div style={{ padding: "16px 16px 14px 0", minWidth: 0 }}>
@@ -662,7 +707,7 @@ function ComparisonPage({ branding, projects, pageIdPrefix, criteriaRows }: { br
         {top3.map((p, i) => (
           <div key={p.id} style={{ background: T.surface, border: `1px solid ${T.goldHair}`, borderRadius: 8, overflow: "hidden" }}>
             <div style={{ height: 92, background: T.raised, position: "relative" }}>
-              <PremiumImage src={projectImage(p)} alt={p.name} />
+              <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
               <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 8, top: 8, width: 26, height: 26, borderRadius: 999, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900 }}>{i + 1}</div>
             </div>
             <div style={{ padding: "9px 10px" }}>
@@ -725,7 +770,7 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
           </div>
           <h2 style={{ fontSize: 30, lineHeight: 1.08, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 12px" }}>{project.name}</h2>
           <div style={{ height: 246, borderRadius: 9, overflow: "hidden", background: T.raised, border: `1px solid ${T.goldHair}`, marginBottom: 13 }}>
-            <PremiumImage src={projectImage(project)} alt={project.name} />
+            <PremiumImage srcList={projectImageCandidates(project)} alt={project.name} />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 13 }}>
             <FieldCard label="Price" value={fmtPrice(project)} accent />
@@ -759,7 +804,7 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
               </div>
             </div>
           </div>
-          <div data-no-contrast-guard data-on-dark style={{ borderRadius: 9, backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, border: `1px solid ${T.gold}`, padding: 15, color: WHITE, WebkitTextFillColor: WHITE }}>
+          <div data-no-contrast-guard data-on-dark style={{ borderRadius: 9, backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, border: `1px solid ${T.gold}`, padding: "20px 22px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE }}>
             <SectionEyebrow light>AI recommendation</SectionEyebrow>
             <div style={{ fontSize: 18, lineHeight: 1.15, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{verdict.label}</div>
             <p style={{ margin: "8px 0 0", fontSize: 11, lineHeight: 1.55, color: WHITE, WebkitTextFillColor: WHITE }}>{verdict.detail}. JBJ should verify final unit mix and pricing before reservation.</p>
@@ -793,7 +838,7 @@ function AiRecommendationSummaryPage({ branding, projects, pageIdPrefix, criteri
     <PageFrame id={`${pageIdPrefix}-ai-summary`} pageLabel="AI summary" section="Recommendation" branding={branding}>
       <SectionEyebrow>AI recommendation summary</SectionEyebrow>
       <h2 style={{ fontSize: 30, lineHeight: 1.1, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 14px" }}>Recommended route for the client</h2>
-      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: 20, color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 16 }}>
+      <div data-no-contrast-guard data-on-dark style={{ backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "inset 0 0 0 1px rgba(184,149,85,0.30)", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 16 }}>
         <SectionEyebrow light>Lead recommendation</SectionEyebrow>
         <div style={{ fontSize: 25, lineHeight: 1.12, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{lead?.name || "Top matched option"}</div>
         <p style={{ margin: "10px 0 0", fontSize: 12.4, lineHeight: 1.6, color: WHITE, WebkitTextFillColor: WHITE, maxWidth: 620 }}>
@@ -805,7 +850,7 @@ function AiRecommendationSummaryPage({ branding, projects, pageIdPrefix, criteri
           const verdict = recommendationVerdict(criteriaRows, i);
           return (
             <div key={p.id} style={{ borderRadius: 9, background: T.surface, border: `1px solid ${T.goldHair}`, overflow: "hidden" }}>
-              <div style={{ height: 120, background: T.raised }}><PremiumImage src={projectImage(p)} alt={p.name} /></div>
+              <div style={{ height: 120, background: T.raised }}><PremiumImage srcList={projectImageCandidates(p)} alt={p.name} /></div>
               <div style={{ padding: 12 }}>
                 <div style={{ fontSize: 9, color: T.emerald, WebkitTextFillColor: T.emerald, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.14em" }}>Option #{i + 1}</div>
                 <div style={{ marginTop: 5, fontSize: 14.5, lineHeight: 1.2, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{p.name}</div>
@@ -894,39 +939,56 @@ function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pag
 }
 
 export function ReportEngine({ mode, branding, projects, clientName, clientRequirements, pageIdPrefix = "report" }: ReportEngineProps) {
-  void mode;
   const safeProjects = projects.slice(0, 3);
   const requirements = buildRequirementItems(clientRequirements);
   const criteriaRows = clientRequirements ? buildCriteriaRowsForExport(clientRequirements, safeProjects as any[]) : [];
 
   return (
-    <div data-report-root data-no-contrast-guard style={{ display: "flex", flexDirection: "column", gap: 24, background: T.page, color: T.ink, WebkitTextFillColor: T.ink }}>
-      <style>{`
-        [data-report-root], [data-report-root] * { box-sizing: border-box; }
-        [data-report-root] [data-on-dark],
-        [data-report-root] [data-on-dark] * {
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
-        }
-        [data-report-root] [data-on-dark] svg,
-        [data-report-root] [data-on-dark] svg * {
-          stroke: #FFFFFF !important;
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
-        }
-        [data-report-root] :where(table,thead,tbody,tr,td,th,p,span,div,h1,h2,h3,li,ol):not([data-on-dark]):not([data-on-dark] *) {
-          text-shadow: none !important;
-        }
-      `}</style>
-      <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />
-      <ClientRequirementsPage branding={branding} pageIdPrefix={pageIdPrefix} requirements={requirements} projects={safeProjects} />
-      <MatchedPropertiesPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
-      <ComparisonPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
-      {safeProjects.map((p, i) => <PropertyDetailPage key={p.id} branding={branding} project={p} index={i} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />)}
-      <AiRecommendationSummaryPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
-      <ContactPage branding={branding} pageIdPrefix={pageIdPrefix} />
-    </div>
+    <ReportModeContext.Provider value={mode}>
+      <div
+        data-report-root
+        data-no-contrast-guard
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          // Sheets render edge-to-edge; preview overrides the var to 18px for visible separators.
+          gap: `var(${PAGE_SEP_VAR}, 0px)`,
+          background: "transparent",
+          color: T.ink,
+          WebkitTextFillColor: T.ink,
+        }}
+      >
+        <style>{`
+          [data-report-root], [data-report-root] * { box-sizing: border-box; }
+          [data-report-root] [data-on-dark],
+          [data-report-root] [data-on-dark] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-report-root] [data-on-dark] svg,
+          [data-report-root] [data-on-dark] svg * {
+            stroke: #FFFFFF !important;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-report-root] :where(table,thead,tbody,tr,td,th,p,span,div,h1,h2,h3,li,ol):not([data-on-dark]):not([data-on-dark] *) {
+            text-shadow: none !important;
+          }
+          [data-report-root] [data-report-page] {
+            box-shadow: var(--jbj-report-page-shadow, none);
+          }
+        `}</style>
+        <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />
+        <ClientRequirementsPage branding={branding} pageIdPrefix={pageIdPrefix} requirements={requirements} projects={safeProjects} />
+        <MatchedPropertiesPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
+        <ComparisonPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
+        {safeProjects.map((p, i) => <PropertyDetailPage key={p.id} branding={branding} project={p} index={i} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />)}
+        <AiRecommendationSummaryPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
+        <ContactPage branding={branding} pageIdPrefix={pageIdPrefix} />
+      </div>
+    </ReportModeContext.Provider>
   );
 }
+
 
 export default ReportEngine;
