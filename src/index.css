@@ -14728,6 +14728,8 @@ html body #root :is(
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: none !important;
   opacity: 1 !important;
+  transition: none !important;
+  animation: none !important;
   box-shadow:
     0 10px 24px -12px rgba(4, 44, 28, 0.86),
     inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
@@ -14778,6 +14780,8 @@ html body #root :is(
   stroke: #FFFFFF !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 html body #root :is(
@@ -15044,6 +15048,101 @@ html body #root :is(
   [data-backend-icon-tile="emerald"],
   [data-backend-icon-tile="emerald-soft"]
 ) :where(*, span, strong, svg, [class*="lucide"], [data-lucide], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* =====================================================================
+   SITEWIDE RENDERED CONTRAST PATCH — final production guard.
+   The regressions were caused by custom tab buttons using `aria-selected`
+   without Radix `data-state`, plus Tailwind arbitrary hex utilities whose
+   generated class names do not match `[class~="bg-[#064E3B]"]`. This block
+   targets the rendered semantics and the escaped class substrings, so active
+   CRM tabs, selected inbox chips, badges, CTAs and backend nav surfaces are
+   always emerald/black with pure white content.
+   ===================================================================== */
+html body #root :is(
+  [role="tab"][aria-selected="true"],
+  button[aria-selected="true"],
+  [data-emerald-ok="tab"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"],
+  [data-emerald-ok="button"],
+  [data-emerald-action="true"],
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-badge-emerald,
+  .jj-badge-dark,
+  .jj-sidebar-item-active,
+  [class*="bg-\\[\\#064E3B\\]"],
+  [class*="bg-\\[\\#064e3b\\]"],
+  [class*="bg-\\[\\#047857\\]"],
+  [class*="bg-\\[\\#022C22\\]"],
+  [class*="bg-\\[\\#022c22\\]"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4, 44, 28, 0.86),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+html body #root :is(
+  [role="tab"][aria-selected="true"],
+  button[aria-selected="true"],
+  [data-emerald-ok="tab"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"],
+  [data-emerald-ok="button"],
+  [data-emerald-action="true"],
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-badge-emerald,
+  .jj-badge-dark,
+  .jj-sidebar-item-active,
+  [class*="bg-\\[\\#064E3B\\]"],
+  [class*="bg-\\[\\#064e3b\\]"],
+  [class*="bg-\\[\\#047857\\]"],
+  [class*="bg-\\[\\#022C22\\]"],
+  [class*="bg-\\[\\#022c22\\]"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
+html body #root :is(
+  [role="tab"][aria-selected="true"],
+  button[aria-selected="true"],
+  [data-emerald-ok="tab"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="badge"],
+  [data-emerald-ok="button"],
+  [data-emerald-action="true"],
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-badge-emerald,
+  .jj-badge-dark,
+  .jj-sidebar-item-active,
+  [class*="bg-\\[\\#064E3B\\]"],
+  [class*="bg-\\[\\#064e3b\\]"],
+  [class*="bg-\\[\\#047857\\]"],
+  [class*="bg-\\[\\#022C22\\]"],
+  [class*="bg-\\[\\#022c22\\]"]
+):not([data-no-contrast-guard]):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :where(svg, [class*="lucide"], [data-lucide], svg *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
