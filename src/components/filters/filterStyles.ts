@@ -58,7 +58,7 @@ export const filterLabel ="text-[10px] font-semibold uppercase tracking-[0.12em]
 export const filterHelpText ="text-xs text-[#1A1A1A]/70";
 
 // Primary"Apply"-style button inside popovers
-export const filterPrimaryButton ="h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg" +"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]";
+export const filterPrimaryButton ="allow-white h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg" +"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]";
 
 //"Reset" / secondary outline button inside popovers
 export const filterSecondaryButton ="h-9 px-3 text-xs rounded-lg border border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A]" +"hover:bg-[#F7F2EA] hover:border-[#B89555]";
