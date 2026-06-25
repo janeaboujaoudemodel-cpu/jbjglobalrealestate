@@ -5333,8 +5333,8 @@ html body :is(
 
 /* Descendant text/icons of light own-surface get the full webkit fill + stroke ink, but only when no opt-out is present. */
 html body :is(
-  .jj-cta-champagne, .jj-cta-outline, .jj-pill-active,
-  [data-cta="champagne"], [data-cta="outline"],
+  .jj-cta-outline,
+  [data-cta="outline"],
   .bg-white, [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
   [class~="bg-[#FDFBF7]"], [class~="bg-[#FAF5EC]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F5F0E6]"],
   [class~="bg-[#F2EADB]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#EADFC8]"], [class~="bg-[#E8DCC4]"],
