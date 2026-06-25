@@ -62,10 +62,10 @@ const FavoriteButton = ({
     lg: "w-6 h-6",
   };
 
-  const actionClass = "jj-surface-emerald jj-emerald-action jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200 hover:brightness-110";
+  const actionClass = "jj-surface-emerald jj-emerald-action jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-none";
   const emeraldIconStyle = {
-    color: "var(--ink-emerald-accent)",
-    stroke: "var(--ink-emerald-accent)",
+    color: "#FFFFFF",
+    stroke: "#FFFFFF",
   } as const;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -115,8 +115,8 @@ const FavoriteButton = ({
           >
             <Heart
               className={`${iconSizes[size]} allow-white transition-all duration-200`}
-              fill={isFavorite ? "var(--ink-emerald-accent)" : "none"}
-              stroke="var(--ink-emerald-accent)"
+              fill={isFavorite ? "#FFFFFF" : "none"}
+              stroke="#FFFFFF"
               style={emeraldIconStyle}
             />
           </button>
@@ -141,9 +141,9 @@ const FavoriteButton = ({
               className={`${sizeClasses[size]} ${actionClass}`}
             >
               {isShortlisted ? (
-                <Check className={`${iconSizes[size]} allow-white`} stroke="var(--ink-emerald-accent)" style={emeraldIconStyle} />
+                <Check className={`${iconSizes[size]} allow-white`} stroke="#FFFFFF" style={emeraldIconStyle} />
               ) : (
-                <ListPlus className={`${iconSizes[size]} allow-white`} stroke="var(--ink-emerald-accent)" style={emeraldIconStyle} />
+                <ListPlus className={`${iconSizes[size]} allow-white`} stroke="#FFFFFF" style={emeraldIconStyle} />
               )}
             </button>
           </TooltipTrigger>

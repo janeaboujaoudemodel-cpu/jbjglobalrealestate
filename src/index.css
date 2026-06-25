@@ -15395,3 +15395,139 @@ html body :is(
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================================
+   FINAL EMERALD UNIFICATION & PADDING LOCK (appended)
+   - One approved emerald: var(--jj-emerald-ombre) (matches "View All Projects"
+     and "Start Exploring" homepage CTAs)
+   - Banned: green-300..900, lime, mint, emerald-300..600 (light variants)
+   - No white borders / rings on emerald circles or pills
+   - Page content never touches sidebar/viewport edges
+   - Pure-white content inside every emerald-filled element
+   ============================================================================ */
+
+/* 1) Map all banned bright greens / light emeralds to approved emerald fill */
+html body :is(
+  [class*="bg-green-3"], [class*="bg-green-4"], [class*="bg-green-5"],
+  [class*="bg-green-6"], [class*="bg-green-7"], [class*="bg-green-8"], [class*="bg-green-9"],
+  [class*="bg-emerald-3"], [class*="bg-emerald-4"], [class*="bg-emerald-5"], [class*="bg-emerald-6"],
+  [class*="bg-lime-"], [class*="bg-mint-"],
+  [class*="from-green-"], [class*="to-green-"], [class*="via-green-"],
+  [class*="from-emerald-3"], [class*="from-emerald-4"], [class*="from-emerald-5"], [class*="from-emerald-6"],
+  [class*="to-emerald-3"], [class*="to-emerald-4"], [class*="to-emerald-5"], [class*="to-emerald-6"],
+  [class*="from-lime-"], [class*="to-lime-"]
+):not([data-no-contrast-guard]):not([data-allow-green]) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* 2) Light green text on light surfaces → approved deep emerald ink */
+html body :is(
+  [class*="text-green-3"], [class*="text-green-4"], [class*="text-green-5"],
+  [class*="text-green-6"], [class*="text-green-7"],
+  [class*="text-emerald-3"], [class*="text-emerald-4"], [class*="text-emerald-5"],
+  [class*="text-lime-"], [class*="text-mint-"]
+):not([data-no-contrast-guard]):not([data-allow-green]) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+/* 3) Green borders → approved emerald border */
+html body :is(
+  [class*="border-green-"],
+  [class*="border-emerald-3"], [class*="border-emerald-4"], [class*="border-emerald-5"],
+  [class*="border-lime-"]
+):not([data-no-contrast-guard]):not([data-allow-green]) {
+  border-color: #064E3B !important;
+}
+
+/* 4) Strip white halos/borders/rings from emerald-filled circles & pills */
+html body :is(
+  .jj-cta-emerald, .jj-chip-emerald, .jj-pill-emerald, .jj-pill-active,
+  .jj-surface-emerald, .jj-emerald-action, .jj-favorite-trigger,
+  .jj-icon-tile-emerald, .jj-cta-emerald-metallic, .jj-pill-emerald-metallic,
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-ok="button"],
+  [data-emerald-action="true"]
+) {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-color: transparent !important;
+}
+
+/* 4b) Pure white content inside every emerald-filled element (icons + text) */
+html body :is(
+  .jj-cta-emerald, .jj-chip-emerald, .jj-pill-emerald, .jj-pill-active,
+  .jj-surface-emerald, .jj-emerald-action, .jj-favorite-trigger,
+  .jj-icon-tile-emerald, .jj-cta-emerald-metallic, .jj-pill-emerald-metallic,
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-ok="button"],
+  [data-emerald-action="true"]
+) :is(svg, [class*="lucide"], span, p, strong, em, small, label, h1, h2, h3, h4, h5, h6) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: currentColor;
+}
+html body :is(
+  .jj-cta-emerald, .jj-chip-emerald, .jj-pill-emerald, .jj-pill-active,
+  .jj-surface-emerald, .jj-emerald-action, .jj-favorite-trigger,
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-ok="button"]
+) svg[fill]:not([fill="none"]) {
+  fill: #FFFFFF !important;
+}
+
+/* 5) GLOBAL PAGE PADDING — cards never touch the viewport / sidebar edge.
+   Background bleeds (jj-band, jj-section-strap) remain full-bleed; only
+   their inner content gets gutter. */
+html body .jj-page-shell > * {
+  box-sizing: border-box;
+}
+html body :is(.jj-page-shell, main) :is(.jj-section-strap, .jj-band, .jj-fullbleed-band, .jj-project-band) > :not(.jj-bleed-allow) {
+  padding-left: max(var(--page-gutter, 24px), env(safe-area-inset-left));
+  padding-right: max(var(--page-gutter, 24px), env(safe-area-inset-right));
+}
+:root { --page-gutter: 24px; }
+@media (min-width: 768px)  { :root { --page-gutter: 32px; } }
+@media (min-width: 1280px) { :root { --page-gutter: 40px; } }
+
+/* Project listings / detail strap rows must respect the gutter too */
+html body :is(.jj-project-shell, .jj-content-track, .jj-global-container, .jj-track) {
+  padding-left: max(var(--page-gutter, 24px), env(safe-area-inset-left));
+  padding-right: max(var(--page-gutter, 24px), env(safe-area-inset-right));
+  box-sizing: border-box;
+}
+
+/* 6) Hard-block any lingering raw bright green named colors via inline style.
+   Catches inline style="background: #22c55e" / #10b981 etc. */
+html body [style*="#22c55e"], html body [style*="#22C55E"],
+html body [style*="#16a34a"], html body [style*="#16A34A"],
+html body [style*="#10b981"], html body [style*="#10B981"],
+html body [style*="#34d399"], html body [style*="#34D399"],
+html body [style*="#4ade80"], html body [style*="#4ADE80"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+}
+
+/* 7) "Download Brochure" emerald lock — pill stays emerald, white text+icon
+   at idle AND hover (per latest confirmation) */
+html body :is([data-action="download-brochure"], .jj-cta-download-brochure) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  border: 0 !important;
+}
+html body :is([data-action="download-brochure"], .jj-cta-download-brochure):hover {
+  background-image: var(--jj-emerald-ombre-hover) !important;
+}
+html body :is([data-action="download-brochure"], .jj-cta-download-brochure) :is(svg, span, p) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
