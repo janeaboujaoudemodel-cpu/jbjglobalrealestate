@@ -1,4 +1,4 @@
-import { useMemo, useState, lazy, Suspense } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,9 +12,7 @@ import { AgreementUploadDrawer } from "@/components/owner/contracts/AgreementUpl
 import { AgreementEditDrawer } from "@/components/owner/contracts/AgreementEditDrawer";
 import { openAgreement } from "@/lib/contracts/agreementUrl";
 import { toast } from "sonner";
-
-// Lazy-load the heavy developer combobox so the page renders instantly
-const DeveloperSelectDropdown = lazy(() => import("@/components/developer-portal/DeveloperSelectDropdown"));
+import DeveloperSelectDropdown from "@/components/developer-portal/DeveloperSelectDropdown";
 
 interface SignedRow {
   signed_document_id: string;
@@ -301,17 +299,11 @@ export default function ContractVault() {
               </div>
               {showDeveloperPicker && (
                 <div className="min-w-[260px]">
-                  <Suspense fallback={
-                    <div className="h-10 px-3 flex items-center text-sm text-[#1A1A1A]/60 bg-[#FDFBF7] border border-[#B89555]/25 rounded-md">
-                      Loading developers…
-                    </div>
-                  }>
-                    <DeveloperSelectDropdown
-                      value={developerName}
-                      onChange={setDeveloperName}
-                      placeholder="All developers"
-                    />
-                  </Suspense>
+                  <DeveloperSelectDropdown
+                    value={developerName}
+                    onChange={setDeveloperName}
+                    placeholder="All developers"
+                  />
                 </div>
               )}
               {developerName && (
