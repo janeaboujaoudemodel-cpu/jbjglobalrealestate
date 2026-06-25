@@ -62,33 +62,6 @@ const NAV_SECTIONS: NavSection[] = [
         label: "CRM",
         icon: Users,
         path: "/owner/crm",
-        children: [
-          { label: "Relationship Hub",              icon: Network,    path: "/owner/crm/relationship-hub" },
-          {
-            label: "Leads",
-            icon: Users,
-            path: "/owner/crm?entity=leads&view=all",
-            children: [
-              { label: "All Leads",     icon: Users,      path: "/owner/crm?entity=leads&view=all" },
-              { label: "Flagged",       icon: Flag,       path: "/owner/crm?entity=leads&view=flagged" },
-              { label: "VIP",           icon: Star,       path: "/owner/crm?entity=leads&view=vip" },
-              { label: "Management",    icon: Briefcase,  path: "/owner/crm?entity=leads&view=management" },
-              { label: "Tasks",         icon: CheckSquare,path: "/owner/crm?entity=leads&view=tasks" },
-              { label: "Notes",         icon: FileText,   path: "/owner/crm?entity=leads&view=notes" },
-              { label: "Inbox",         icon: Mail,       path: "/owner/crm?entity=leads&view=inbox" },
-              { label: "Notifications", icon: Bot,        path: "/owner/crm?entity=leads&view=notifications" },
-              { label: "Contracts",     icon: FileText,   path: "/owner/crm?entity=leads&view=contracts" },
-              { label: "Campaigns",     icon: Megaphone,  path: "/owner/crm?entity=leads&view=campaigns" },
-              { label: "Automation",    icon: Zap,        path: "/owner/crm?entity=leads&view=automation" },
-            ],
-          },
-          { label: "Brokers",                       icon: UserCheck,  path: "/owner/crm?entity=brokers&view=directory" },
-          { label: "Brokerage Agencies",            icon: Network,    path: "/owner/crm?entity=agencies&view=directory" },
-          { label: "Developers",                    icon: Building2,  path: "/owner/crm?entity=developers&view=registry" },
-          { label: "Developer Sales Representatives", icon: UserCheck, path: "/owner/crm?entity=sales-reps&view=directory" },
-          { label: "Employees",                     icon: UserCheck,  path: "/owner/crm?entity=employees&view=roster" },
-          { label: "Investors",                     icon: Crown,      path: "/owner/crm?entity=investors&view=directory" },
-        ],
       },
     ],
   },
@@ -193,7 +166,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
     }
     // Plain /owner/crm should only highlight when no CRM section is selected
     if (pathOnly === "/owner/crm") {
-      return location.pathname.startsWith("/owner/crm") && !location.search;
+      return location.pathname.startsWith("/owner/crm");
     }
     return location.pathname.startsWith(pathOnly);
   };
