@@ -68,6 +68,13 @@ const WHITE = "#FFFFFF";
 const PRICE = T.gold;
 const BRAND_LINE = `${TRADE_LICENSE_BRAND} · Trade License ${TRADE_LICENSE_NUMBER}`;
 
+/** Render the JBJ website label in uppercase wherever it appears on the report. */
+function formatWebsite(value?: string | null): string {
+  const raw = (value || "").trim();
+  if (!raw) return "";
+  return /jbj\.ae/i.test(raw) ? raw.toUpperCase() : raw;
+}
+
 const escText = (value: unknown) => String(value ?? "").replace(/\s+/g, " ").trim();
 const titleCase = (value: string) => value.replace(/[-_]+/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
 
@@ -474,7 +481,7 @@ function PageHeader({ pageLabel, section, branding }: { pageLabel: string; secti
 }
 
 function PageFooter({ branding }: { branding: ReportBranding }) {
-  const contact = [branding.phone || COMPANY_CONTACT.phone, branding.email || COMPANY_CONTACT.email, branding.website || COMPANY_CONTACT.website].filter(Boolean).join(" · ");
+  const contact = [branding.phone || COMPANY_CONTACT.phone, branding.email || COMPANY_CONTACT.email, formatWebsite(branding.website || COMPANY_CONTACT.website)].filter(Boolean).join(" · ");
   return (
     <footer
       style={{
@@ -876,63 +883,82 @@ function AiRecommendationSummaryPage({ branding, projects, pageIdPrefix, criteri
 
 function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pageIdPrefix: string }) {
   const showPhoto = (branding.mode === "both" || branding.mode === "photo") && branding.photoDataUrl;
-  const profileRows = [
-    ["Name", branding.name || TRADE_LICENSE_BRAND],
-    ["Company", branding.companyName || TRADE_LICENSE_BRAND],
-    ["Role", ROLE_LABELS[branding.role]],
-    ["Phone", branding.phone || COMPANY_CONTACT.phone],
-    ["WhatsApp", branding.whatsapp || branding.phone || COMPANY_CONTACT.phone],
-    ["Email", branding.email || COMPANY_CONTACT.email],
-    ["Website", branding.website || COMPANY_CONTACT.website],
-    ["License", branding.license || `Trade License ${TRADE_LICENSE_NUMBER}`],
-    ["Office", branding.address || TRADE_LICENSE_OFFICE],
-    ["Social", branding.socials || "JBJ official channels"],
+  const preparedName = branding.name || TRADE_LICENSE_BRAND;
+  const preparedRole = ROLE_LABELS[branding.role];
+  const preparedCompany = branding.companyName || TRADE_LICENSE_BRAND;
+  const preparedPhone = branding.phone || COMPANY_CONTACT.phone;
+  const preparedWhatsApp = branding.whatsapp || branding.phone || COMPANY_CONTACT.phone;
+  const preparedEmail = branding.email || COMPANY_CONTACT.email;
+  const preparedWebsite = formatWebsite(branding.website || COMPANY_CONTACT.website);
+  const preparedLicense = branding.license || `Trade License ${TRADE_LICENSE_NUMBER}`;
+  const preparedOffice = branding.address || TRADE_LICENSE_OFFICE;
+
+  const infoColumns: Array<Array<[string, string]>> = [
+    [["Name", preparedName], ["Company", preparedCompany], ["Role", preparedRole]],
+    [["Phone", preparedPhone], ["WhatsApp", preparedWhatsApp]],
+    [["Email", preparedEmail], ["Website", preparedWebsite]],
+    [["License", preparedLicense], ["Office", preparedOffice]],
   ];
+
   return (
     <PageFrame id={`${pageIdPrefix}-contact`} pageLabel="Contact" section="Next Steps" branding={branding}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 270px", gap: 20, height: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16, height: "100%" }}>
         <div>
           <SectionEyebrow>Contact / consultant page</SectionEyebrow>
-          <h2 style={{ fontSize: 32, lineHeight: 1.08, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 14px" }}>Move from shortlist to verified opportunity</h2>
-          <p style={{ fontSize: 12.5, lineHeight: 1.65, color: T.muted, WebkitTextFillColor: T.muted, margin: "0 0 18px" }}>The next stage is consultant-led due diligence: confirm official stock, compare live payment plans, inspect views/floor premiums, and reserve only after the client approves the final commercial terms.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
-            {[
-              ["1", "Confirm availability", "Request current developer inventory and pricing."],
-              ["2", "Shortlist units", "Compare size, floor, view and premium."],
-              ["3", "Model cashflow", "Review payment plan and mortgage path."],
-              ["4", "Reserve", "Proceed only after signed client approval."],
-            ].map(([n, h, d]) => (
-              <div key={n} style={{ padding: 14, borderRadius: 9, background: T.surface, border: `1px solid ${T.goldHair}` }}>
-                <div style={{ width: 28, height: 28, borderRadius: 999, background: T.raised, border: `1px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{n}</div>
-                <div style={{ marginTop: 9, fontSize: 13.5, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{h}</div>
-                <div style={{ marginTop: 4, fontSize: 10.8, lineHeight: 1.45, color: T.muted, WebkitTextFillColor: T.muted }}>{d}</div>
+          <h2 style={{ fontSize: 30, lineHeight: 1.08, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 10px" }}>Move from shortlist to verified opportunity</h2>
+          <p style={{ fontSize: 12.5, lineHeight: 1.6, color: T.muted, WebkitTextFillColor: T.muted, margin: 0, maxWidth: 760 }}>The next stage is consultant-led due diligence: confirm official stock, compare live payment plans, inspect views/floor premiums, and reserve only after the client approves the final commercial terms.</p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+          {[
+            ["1", "Confirm availability", "Request current developer inventory and pricing."],
+            ["2", "Shortlist units", "Compare size, floor, view and premium."],
+            ["3", "Model cashflow", "Review payment plan and mortgage path."],
+            ["4", "Reserve", "Proceed only after signed client approval."],
+          ].map(([n, h, d]) => (
+            <div key={n} style={{ padding: 13, borderRadius: 9, background: T.surface, border: `1px solid ${T.goldHair}` }}>
+              <div style={{ width: 26, height: 26, borderRadius: 999, background: T.raised, border: `1px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{n}</div>
+              <div style={{ marginTop: 8, fontSize: 13, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{h}</div>
+              <div style={{ marginTop: 3, fontSize: 10.6, lineHeight: 1.45, color: T.muted, WebkitTextFillColor: T.muted }}>{d}</div>
+            </div>
+          ))}
+        </div>
+
+        <section style={{ borderRadius: 10, background: T.surface, border: `1px solid ${T.goldHair}`, padding: 18 }}>
+          <SectionEyebrow>Prepared by</SectionEyebrow>
+          <div style={{ display: "grid", gridTemplateColumns: "96px repeat(4, 1fr)", gap: 18, alignItems: "stretch" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {showPhoto ? (
+                <img src={branding.photoDataUrl} alt="Prepared by" crossOrigin="anonymous" loading="eager" decoding="sync" style={{ width: 84, height: 84, borderRadius: 999, objectFit: "cover", border: `2px solid ${T.gold}` }} />
+              ) : (
+                <div style={{ width: 84, height: 84, borderRadius: 999, background: T.raised, border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <img src={jbjMonogram} alt="JBJ" style={{ width: 70, height: 70, objectFit: "contain" }} />
+                </div>
+              )}
+            </div>
+            {infoColumns.map((col, idx) => (
+              <div key={idx} style={{ display: "flex", flexDirection: "column", gap: 8, borderLeft: idx === 0 ? `1px solid ${T.goldHair}` : "none", paddingLeft: idx === 0 ? 16 : 0 }}>
+                {col.map(([label, value]) => (
+                  <div key={label}>
+                    <div style={{ fontSize: 8.5, textTransform: "uppercase", letterSpacing: "0.13em", color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 900 }}>{label}</div>
+                    <div style={{ marginTop: 2, fontSize: 11.4, lineHeight: 1.35, color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 700, wordBreak: "break-word" }}>{value}</div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
-          <div data-no-contrast-guard data-on-dark style={{ borderRadius: 10, backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, border: `1px solid ${T.gold}`, padding: 18, color: WHITE, WebkitTextFillColor: WHITE }}>
+        </section>
+
+        <div data-no-contrast-guard data-on-dark style={{ marginTop: "auto", borderRadius: 10, backgroundImage: T.emeraldGradient, backgroundColor: T.emeraldDeep, border: `1px solid ${T.gold}`, padding: "18px 22px", color: WHITE, WebkitTextFillColor: WHITE, display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 18 }}>
+          <div>
             <SectionEyebrow light>JBJ Global Real Estate</SectionEyebrow>
             <div style={{ fontSize: 22, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{COMPANY_CONTACT.email}</div>
-            <div style={{ marginTop: 6, fontSize: 12, color: WHITE, WebkitTextFillColor: WHITE }}>{COMPANY_CONTACT.phone} · {COMPANY_CONTACT.website}</div>
+          </div>
+          <div style={{ textAlign: "right", fontSize: 12, fontWeight: 800, color: WHITE, WebkitTextFillColor: WHITE, lineHeight: 1.55 }}>
+            <div>{COMPANY_CONTACT.phone}</div>
+            <div>{formatWebsite(COMPANY_CONTACT.website)}</div>
           </div>
         </div>
-        <aside style={{ borderRadius: 10, background: T.surface, border: `1px solid ${T.goldHair}`, padding: 16, alignSelf: "start" }}>
-          <SectionEyebrow>Prepared by</SectionEyebrow>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-            {showPhoto ? <img src={branding.photoDataUrl} alt="Prepared by" crossOrigin="anonymous" loading="eager" decoding="sync" style={{ width: 68, height: 68, borderRadius: 999, objectFit: "cover", border: `2px solid ${T.gold}` }} /> : <div style={{ width: 68, height: 68, borderRadius: 999, background: T.raised, border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center" }}><img src={jbjMonogram} alt="JBJ" style={{ width: 58, height: 58, objectFit: "contain" }} /></div>}
-            <div>
-              <div style={{ fontSize: 15, lineHeight: 1.2, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{branding.name || TRADE_LICENSE_BRAND}</div>
-              <div style={{ marginTop: 4, fontSize: 10.5, color: T.muted, WebkitTextFillColor: T.muted }}>{ROLE_LABELS[branding.role]}</div>
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {profileRows.map(([label, value]) => (
-              <div key={label} style={{ paddingBottom: 7, borderBottom: `1px solid ${T.goldHair}` }}>
-                <div style={{ fontSize: 8.5, textTransform: "uppercase", letterSpacing: "0.13em", color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 900 }}>{label}</div>
-                <div style={{ marginTop: 3, fontSize: 11.2, lineHeight: 1.35, color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 700, wordBreak: "break-word" }}>{value}</div>
-              </div>
-            ))}
-          </div>
-        </aside>
       </div>
     </PageFrame>
   );

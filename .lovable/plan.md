@@ -1,73 +1,54 @@
-## Plan: AI Home Finder Report Contrast + Preview/PDF QA
+## Scope
+Fix the AI Home Finder report — preview + PDF (single source of truth, `ReportEngine.tsx`). No other surfaces touched.
 
-### Goal
-Fix the remaining unreadable text inside every emerald/dark report block, then prove the live preview and downloaded PDF match through a real user download flow with screenshots.
+## 1. Website casing (global, report only per user wording: "rendering as www.jbj.ae in small letters")
+Render the website as `WWW.JBJ.AE` (uppercase) wherever it appears in the report engine and footer:
+- `PageFooter` website slot
+- Contact page emerald CTA strip line (`COMPANY_CONTACT.phone · COMPANY_CONTACT.website`)
+- "Prepared by" sidebar Website row
+- Cover meta strip
 
-### Step 1 — Reproduce and isolate the broken contrast
-- Open the exact AI Home Finder results route currently shown.
-- Click `Download Report` / `Download PDF` as a user.
-- Inspect the report preview modal page-by-page, focusing on:
-  - Cover `Report scope` emerald box
-  - Client requirements `JBJ selection method` emerald box
-  - Matched properties `RANK #` pills
-  - Comparison matrix `Match summary` row
-  - Property detail `AI recommendation` cards
-  - AI summary `Lead recommendation` emerald box
-  - Contact page emerald contact panel
-- Before changing anything, capture screenshot proof of the current failing sections and collect computed CSS color / `-webkit-text-fill-color` values for text inside `[data-on-dark]` surfaces.
+Implementation: small `formatWebsite()` helper in `ReportEngine.tsx` that uppercases any value matching `*.jbj.ae`. Brand display data in `companyLegal.ts` / `companyNAP.ts` stays lowercase for SEO/links — only the rendered label is uppercased.
 
-### Step 2 — Fix the source of truth, not a single screenshot
-- Update only the shared report rendering source used by both preview and PDF: `ReportEngine` and its report tokens/style layer.
-- Add a single high-specificity report contrast contract scoped to the report root:
-  - Every `[data-on-dark]` and `[data-surface="emerald"]` descendant uses pure white text.
-  - SVG/icon stroke/fill is pure white on emerald/dark.
-  - Local report styles beat global champagne/ink guards.
-  - The rule applies in both `mode="preview"` and `mode="pdf"`.
-- Avoid scattered one-off component patches unless a specific report element is missing the shared dark-surface marker.
+## 2. Last page ("Contact / Move from shortlist to verified opportunity") layout rebuild
+Current layout is a 2-column grid (`1fr 270px`) where the right "Prepared by" rail is a tall vertical card, leaving a large empty band at the bottom of the page (red-boxed in screenshots).
 
-### Step 3 — Validate the first fixed section before moving on
-- Reopen the preview modal.
-- Validate the cover page first:
-  - Screenshot the full modal.
-  - Programmatically scan visible dark-surface descendants for non-white computed text fill.
-  - If cover still fails, fix it before checking later pages.
+New layout — full-width horizontal flow that fills the A4 page:
 
-### Step 4 — Validate each report section in order
-For each page/section, scroll like a real user and capture screenshot proof before proceeding:
-1. Cover page
-2. Client requirements page
-3. Matched properties page
-4. Comparison matrix page
-5. Property #1 detail
-6. Property #2 detail
-7. Property #3 detail
-8. AI summary page
-9. Contact page
+```text
+┌───────────────────────────────────────────────────────────────┐
+│ EYEBROW: Contact / consultant page                            │
+│ H2: Move from shortlist to verified opportunity               │
+│ Lead paragraph (full width)                                   │
+├───────────────────────────────────────────────────────────────┤
+│ 4-up step cards: 1 Confirm · 2 Shortlist · 3 Model · 4 Reserve│
+├───────────────────────────────────────────────────────────────┤
+│ PREPARED BY — horizontal rectangular card (full width)        │
+│ ┌──────┬─────────────┬─────────────┬─────────────┬──────────┐ │
+│ │ Photo│ Name / Role │ Phone /     │ Email /     │ License /│ │
+│ │ 84px │ Company     │ WhatsApp    │ Website     │ Office   │ │
+│ └──────┴─────────────┴─────────────┴─────────────┴──────────┘ │
+├───────────────────────────────────────────────────────────────┤
+│ EMERALD CTA STRIP (full width): Contact@JBJ.AE  ·  phone  ·  │
+│ WWW.JBJ.AE                                                    │
+└───────────────────────────────────────────────────────────────┘
+```
 
-For every section:
-- Confirm no unreadable emerald/dark cards.
-- Confirm rank chips and match-summary row are white-on-emerald.
-- Confirm header/footer remain consistent.
-- Confirm page content is not cropped or split incorrectly.
+Specifics:
+- Replace `gridTemplateColumns: "1fr 270px"` wrapper with a vertical flex column, `gap: 18px`, `height: 100%`.
+- Headline + intro: full width (no longer cramped in left half).
+- Step cards: keep emerald-on-champagne styling, 4 columns (`repeat(4, 1fr)`), tighter padding so the row stays compact.
+- "Prepared by" becomes a horizontal rectangle: photo/monogram 84×84 on left, then 4 equal info columns (Identity, Phone/WhatsApp, Email/Website, License/Office). Single gold hairline border, champagne surface. Eliminates vertical empty space.
+- Emerald CTA strip stays at the bottom, full width, with `WWW.JBJ.AE` uppercase.
 
-### Step 5 — Validate real download behavior
-- Click `Download PDF` from the preview modal.
-- Save the generated PDF.
-- Convert all PDF pages to images.
-- Confirm the PDF has exactly 9 pages.
-- Compare the rendered PDF pages visually against the preview screenshots.
-- Scan the PDF-rendered page images manually for the same contrast issues flagged in the user screenshots.
+## 3. Verify
+Run the existing Playwright QA script against `/ai-home-finder-results`, open Report Preview, scroll to last page, screenshot. Click Download PDF, render the last PDF page, screenshot. Confirm:
+- No empty band on the contact page.
+- "Prepared by" is rectangular/horizontal.
+- Website renders as `WWW.JBJ.AE`.
+- Preview and downloaded PDF are pixel-identical (same `ReportEngine`).
 
-### Step 6 — Deliver proof artifacts
-- Provide screenshot proof from the live preview.
-- Provide a contact sheet of all 9 rendered PDF pages.
-- Provide the downloaded PDF artifact.
-- Include the technical validation result: number of contrast offenders found after the fix, and page count.
+## Files touched
+- `src/components/ai-home-finder/report/ReportEngine.tsx` — `ContactPage` rebuild + `formatWebsite` helper applied in footer, cover meta, contact strip, prepared-by sidebar.
 
-### Acceptance criteria
-- Zero black/dark text inside emerald/dark report boxes in preview.
-- Zero black/dark text inside emerald/dark report boxes in downloaded PDF render.
-- Preview and PDF use the same `ReportEngine` layout.
-- Download does not bypass the preview modal.
-- PDF renders exactly 9 pages.
-- Screenshot proof is produced after the final fix, not assumed from code.
+No other files, no design-token changes, no business-logic changes.
