@@ -106,8 +106,8 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
       onClick={() => onOpen(lead.id)}
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 rounded-full bg-[#B89555]/20 flex items-center justify-center flex-shrink-0">
-          <span className="text-[#B89555] font-semibold text-sm">
+        <div data-backend-icon-tile="emerald" className="allow-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+          <span className="allow-white text-white font-semibold text-sm" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
             {lead.full_name.charAt(0).toUpperCase()}
           </span>
         </div>
@@ -670,7 +670,7 @@ export default function OwnerDashboardOverview() {
           <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                <Activity className="h-5 w-5 text-purple-600" />
+                    <Activity className="h-5 w-5 text-[#064E3B]" />
                 Recent Conversations
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">Website chat sessions</CardDescription>
@@ -690,7 +690,7 @@ export default function OwnerDashboardOverview() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
+                  <MessageSquare className="h-12 w-12 text-[#064E3B]/55 mx-auto mb-3" />
                   <p className="text-[#1A1A1A]/70">No conversations yet</p>
                   <p className="text-[#1A1A1A]/70 text-xs mt-1">Conversations from website visitors will appear here</p>
                 </div>
@@ -734,7 +734,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Flag className="h-5 w-5 text-red-500" />
+                  <Flag className="h-5 w-5 text-[#064E3B]" />
                   Flagged Leads
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">Leads requiring attention</CardDescription>
@@ -758,7 +758,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Crown className="h-5 w-5 text-[#B89555]" />
+                  <Crown className="h-5 w-5 text-[#064E3B]" />
                   VIP Leads
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">High-value contacts</CardDescription>
@@ -792,7 +792,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-blue-600" />
+                  <Briefcase className="h-5 w-5 text-[#064E3B]" />
                   Employees Hub
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">Team management</CardDescription>
@@ -811,14 +811,14 @@ export default function OwnerDashboardOverview() {
           <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                <Shield className="h-5 w-5 text-purple-600" />
+                <Shield className="h-5 w-5 text-[#064E3B]" />
                 Audit Logs
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">System activity tracking</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
-                <Shield className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
+                <Shield className="h-12 w-12 text-[#064E3B]/55 mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70 mb-4">View audit logs for all CRM activity</p>
                 <Button 
                   variant="secondary"
