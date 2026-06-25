@@ -169,7 +169,9 @@ const AreaGuides = () => {
       {/* ─── HERO SECTION ─── */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1A1A1A]"
+        data-hero-dark
+        data-no-contrast-guard
+        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0A1020]"
       >
         {/* Background — UAE aerial */}
         <div
@@ -181,12 +183,13 @@ const AreaGuides = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/85" />
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto" data-no-contrast-guard>
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-[hsl(var(--gold))] text-xs uppercase tracking-[0.35em] mb-6 block font-medium"
+            className="text-xs uppercase tracking-[0.35em] mb-6 block font-medium"
+            style={{ color: "#D4B062" }}
           >
             Explore UAE
           </motion.span>
@@ -194,8 +197,8 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-white text-5xl md:text-7xl font-bold mb-6 leading-tight"
-            style={{ fontFamily: "Playfair Display, serif" }}
+            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+            style={{ fontFamily: "Playfair Display, serif", color: "#FFFFFF" }}
           >
             UAE Communities
           </motion.h1>
@@ -203,7 +206,8 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-[#1A1A1A]/70 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            className="text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            style={{ color: "rgba(255,255,255,0.85)" }}
           >
             Discover the UAE's most prestigious communities across all seven emirates
           </motion.p>
@@ -212,7 +216,8 @@ const AreaGuides = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             onClick={scrollToGrid}
-            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-[#B89555] text-[#1A1A1A] font-medium rounded-xl hover:bg-[#EFE6D6] hover:text-[#1A1A1A] transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 border-2 font-medium rounded-xl transition-all"
+            style={{ borderColor: "#B89555", color: "#FFFFFF", background: "rgba(255,255,255,0.06)" }}
           >
             Explore Areas
             <ChevronDown className="w-5 h-5" />
