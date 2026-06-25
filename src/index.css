@@ -16210,3 +16210,64 @@ html body #root section.oi-band[data-fullbleed-band] > a {
   width: 100% !important;
   max-width: 100vw !important;
 }
+
+/* ============================================================
+   PASS 49 — GLOBAL DROPDOWN/POPOVER & BADGE CONTRAST LOCK
+   - Radix Select / Dropdown / Popover content opening over the app
+     must always render readable ink text on champagne, never the
+     transparent/faded look caused by inherited dark/emerald rules.
+   - Pill badges (notification counts, "0" markers) with gold or
+     champagne fill must use ink #1A1A1A text. Emerald-fill badges
+     must use white #FFFFFF text.
+   ============================================================ */
+
+/* Radix dropdown surfaces — solid champagne, ink content */
+html body [data-radix-popper-content-wrapper] [role="listbox"],
+html body [data-radix-popper-content-wrapper] [role="menu"],
+html body [data-radix-select-content],
+html body [data-radix-dropdown-menu-content],
+html body [data-radix-popover-content]:not([data-on-dark]):not([data-surface="emerald"]) {
+  background-color: #FDFBF7 !important;
+  color: #1A1A1A !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 1 !important;
+}
+html body [data-radix-popper-content-wrapper] [role="option"],
+html body [data-radix-popper-content-wrapper] [role="menuitem"],
+html body [data-radix-popper-content-wrapper] [role="menuitemcheckbox"],
+html body [data-radix-popper-content-wrapper] [role="menuitemradio"] {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body [data-radix-popper-content-wrapper] [role="option"] *,
+html body [data-radix-popper-content-wrapper] [role="menuitem"] * {
+  color: inherit;
+}
+html body [data-radix-popper-content-wrapper] [role="option"][data-disabled],
+html body [data-radix-popper-content-wrapper] [role="menuitem"][data-disabled] {
+  opacity: 0.55 !important;
+}
+
+/* Notification / count badges — champagne or gold fill = ink text */
+html body [data-badge="count"][data-tone="gold"],
+html body [data-badge="count"][data-tone="champagne"],
+html body .jj-count-pill[data-tone="gold"],
+html body .jj-count-pill[data-tone="champagne"] {
+  background: linear-gradient(135deg, #064E3B 0%, #022c1c 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(184,149,85,0.45) !important;
+}
+html body [data-badge="count"][data-tone="gold"] *,
+html body [data-badge="count"][data-tone="champagne"] *,
+html body .jj-count-pill[data-tone="gold"] *,
+html body .jj-count-pill[data-tone="champagne"] * { color: #FFFFFF !important; }
+
+/* Any small numeric chip rendered on a champagne/gold surface must
+   render ink. Scope to obvious badge primitives so we don't catch
+   text columns. */
+html body [data-surface="champagne"] .badge-count,
+html body [data-surface="champagne"] [data-count-badge] {
+  background-color: var(--jj-emerald-ombre, #064E3B) !important;
+  color: #FFFFFF !important;
+}
