@@ -101,8 +101,12 @@ const LeadStatusBadge = ({
     lg: "px-4 py-2 text-sm"
   };
 
-  // Special styling for "New" status - blue neutral theme
-  const isNew = status === 'new' || !status;
+  const toneClass =
+    statusInfo.category === 'positive'
+      ? 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30'
+      : statusInfo.category === 'negative'
+        ? 'bg-red-50 text-red-800 border-red-200'
+        : 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/35';
   
   const Component = onClick ? 'button' : 'span';
   
@@ -113,9 +117,7 @@ const LeadStatusBadge = ({
       className={cn(
         "inline-flex items-center justify-center gap-1.5 rounded-full font-bold transition-all whitespace-nowrap",
         sizeClasses[size],
-        isNew
-          ? "bg-blue-500/15 text-blue-700 border border-blue-400/40"
-          : cn(statusInfo.bgColor, statusInfo.textColor, "border border-current/25"),
+        toneClass,
         onClick && "hover:shadow-sm cursor-pointer",
         !onClick && "cursor-default",
         className,

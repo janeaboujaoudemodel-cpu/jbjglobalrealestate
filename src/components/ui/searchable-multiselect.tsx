@@ -87,9 +87,10 @@ export function SearchableMultiSelect({
           type="button"
           aria-label={ariaLabel ?? label}
           className={[
-            "inline-flex items-center gap-2 px-3 h-9 rounded-lg",
-            "border border-[#B89555]/40 bg-[#FDFBF7] text-sm text-[#1A1A1A]",
-            "hover:bg-[#F7F2EA]",
+            "inline-flex items-center gap-2 px-3 h-10 rounded-lg text-sm font-semibold transition-all",
+            selected.length > 0
+              ? "jj-chip-emerald allow-white border-transparent"
+              : "border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA]",
             className,
           ].join(" ")}
         >
@@ -108,13 +109,13 @@ export function SearchableMultiSelect({
                   clearAll();
                 }
               }}
-              className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+              className={selected.length > 0 ? "text-white hover:text-white" : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"}
               aria-label="Clear selection"
             >
               <X className="h-3.5 w-3.5" />
             </span>
           )}
-          <ChevronDown className="h-3.5 w-3.5 text-[#1A1A1A]/60" />
+          <ChevronDown className={selected.length > 0 ? "h-3.5 w-3.5 text-white" : "h-3.5 w-3.5 text-[#1A1A1A]/60"} />
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -189,7 +190,7 @@ export function SearchableMultiSelect({
                       className={[
                         "inline-flex items-center justify-center w-4 h-4 rounded border",
                         checked
-                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                          ? "jj-chip-emerald allow-white border-transparent text-white"
                           : "bg-[#FDFBF7] border-[#B89555]/40",
                       ].join(" ")}
                     >

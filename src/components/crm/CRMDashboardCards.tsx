@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Phone, MessageSquare, Calendar, Users, TrendingUp, CheckCircle, Clock, Target, AlertTriangle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { IconTile } from "@/components/ui/icon-tile";
 
 interface CRMDashboardCardsProps {
   userId: string;
@@ -166,7 +167,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.callsToday,
       subValue: `${stats.callsWeek} this week`,
       icon: Phone,
-      color: "text-green-500",
       tooltip: "Only counts calls with recorded duration"
     },
     {
@@ -174,7 +174,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.whatsappSent,
       subValue: `${stats.whatsappWeek} this week`,
       icon: MessageSquare,
-      color: "text-emerald-500",
       tooltip: "Only counts messages actually sent"
     },
     {
@@ -182,7 +181,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.followupsCreated,
       subValue: `${stats.followupsCompleted} completed`,
       icon: Calendar,
-      color: "text-blue-500",
       tooltip: "Tasks created and completed"
     },
     {
@@ -190,7 +188,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.totalLeads,
       subValue: `${stats.pipelineCounts['qualified'] || 0} qualified`,
       icon: Users,
-      color: "text-purple-500",
       tooltip: "All leads in pipeline"
     },
     {
@@ -198,7 +195,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.hotLeads,
       subValue: "High engagement",
       icon: Target,
-      color: "text-red-500",
       tooltip: "Interested, Qualified, Negotiation stages"
     },
     {
@@ -206,7 +202,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.warmLeads,
       subValue: "Follow-up needed",
       icon: TrendingUp,
-      color: "text-amber-500",
       tooltip: "Contacted, Callback, Follow-up stages"
     },
     {
@@ -214,7 +209,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.coldLeads,
       subValue: "New or no answer",
       icon: Clock,
-      color: "text-blue-400",
       tooltip: "New leads or no response yet"
     },
     {
@@ -222,7 +216,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: stats.staleLeads,
       subValue: "No contact 7+ days",
       icon: AlertTriangle,
-      color: "text-orange-500",
       tooltip: "Leads with no activity for 7+ days"
     }
   ];
@@ -234,7 +227,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: `${stats.conversionRate.toFixed(1)}%`,
       subValue: "Won vs Lost",
       icon: CheckCircle,
-      color: "text-green-400",
       tooltip: "Percentage of closed deals that were won"
     },
     {
@@ -242,7 +234,6 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
       value: `${stats.responseRate.toFixed(1)}%`,
       subValue: "After first contact",
       icon: TrendingUp,
-      color: "text-cyan-400",
       tooltip: "Leads that responded after initial contact"
     }
   ];
@@ -260,7 +251,7 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
                     <CardTitle className="text-xs font-semibold text-[#1A1A1A] whitespace-nowrap">
                       {card.title}
                     </CardTitle>
-                    <card.icon className={`h-4 w-4 ${card.color} flex-shrink-0`} />
+                    <IconTile icon={card.icon} tone="emerald" size="sm" />
                   </CardHeader>
                   <CardContent className="px-3 pb-3">
                     <div className="text-xl font-bold text-[#1A1A1A]">
@@ -289,7 +280,7 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
                     <CardTitle className="text-xs font-semibold text-[#1A1A1A] whitespace-nowrap">
                       {card.title}
                     </CardTitle>
-                    <card.icon className={`h-4 w-4 ${card.color}`} />
+                    <IconTile icon={card.icon} tone="emerald" size="sm" />
                   </CardHeader>
                   <CardContent className="px-3 pb-3">
                     <div className="text-xl font-bold text-[#1A1A1A]">

@@ -40,6 +40,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(cardVariants({ surface }), className)}
+      data-jbj-card=""
       {...props}
     />
   ),
