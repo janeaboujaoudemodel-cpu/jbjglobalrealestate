@@ -3,7 +3,7 @@
  * Single inbox merging all communication channels
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DeveloperActionsRail from "@/components/owner-inbox/DeveloperActionsRail";
 import { supabase } from "@/integrations/supabase/client";
@@ -348,7 +348,7 @@ export default function OwnerInbox() {
                     color: '#FFFFFF',
                     WebkitTextFillColor: '#FFFFFF',
                     transitionProperty: 'background, background-color, border-color, box-shadow, transform',
-                  } as React.CSSProperties : undefined}
+                  } as CSSProperties : undefined}
                   className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap duration-200 border-b-2 -mb-[2px] rounded-t-lg flex-shrink-0 ${
  isActive
  ? 'jj-emerald-action border-transparent !text-white font-bold shadow-sm [&_*]:!text-white'
@@ -356,9 +356,9 @@ export default function OwnerInbox() {
  }`}
                 >
                   {tab.icon}
-                  <span style={isActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties : undefined}>{tab.label}</span>
+                  <span style={isActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as CSSProperties : undefined}>{tab.label}</span>
                   {unreadCount > 0 && (
-                    <span style={isActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties : undefined} className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
+                    <span style={isActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as CSSProperties : undefined} className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
  isActive ? 'bg-white/20 !text-white border border-white/80' : 'bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/25'
  }`}>
                       {unreadCount}
@@ -393,7 +393,7 @@ export default function OwnerInbox() {
               onClick={() => setCategoryFilter('all')}
               data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
               data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
-              style={categoryFilter === 'all' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as React.CSSProperties : undefined}
+              style={categoryFilter === 'all' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties : undefined}
               className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === 'all'
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
@@ -406,7 +406,7 @@ export default function OwnerInbox() {
                 onClick={() => setCategoryFilter(key)}
                 data-emerald-action={categoryFilter === key ? "true" : undefined}
                 data-emerald-ok={categoryFilter === key ? "pill" : undefined}
-                style={categoryFilter === key ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as React.CSSProperties : undefined}
+                style={categoryFilter === key ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties : undefined}
                 className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === key
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
