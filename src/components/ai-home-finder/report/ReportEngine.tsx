@@ -942,7 +942,7 @@ function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pag
                 {col.map(([label, value]) => (
                   <div key={label}>
                     <div style={{ fontSize: 8.5, textTransform: "uppercase", letterSpacing: "0.13em", color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 900 }}>{label}</div>
-                    <div style={{ marginTop: 2, fontSize: 11.4, lineHeight: 1.35, color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 700, wordBreak: "break-word" }}>{value}</div>
+                    <div style={{ marginTop: 2, fontSize: 11.4, lineHeight: 1.35, color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 700, wordBreak: "break-word", overflowWrap: "anywhere" }}>{value}</div>
                   </div>
                 ))}
               </div>
@@ -1009,6 +1009,17 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           }
           [data-report-root] [data-report-page] {
             box-shadow: var(--jbj-report-page-shadow, none);
+          }
+          /* html2canvas word-collision fix: a tiny letter-spacing forces per-glyph
+             measurement so words never visually concatenate ("Topoptionsselected"). */
+          [data-report-root] :where(h1,h2,h3,h4) {
+            letter-spacing: 0.005em !important;
+            word-spacing: 0.06em !important;
+          }
+          /* Ensure emerald gradients render with a stable solid fallback in html2canvas */
+          [data-report-root] [data-surface="emerald"],
+          [data-report-root] [data-on-dark] {
+            background-color: #042c1c !important;
           }
         `}</style>
         <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />
