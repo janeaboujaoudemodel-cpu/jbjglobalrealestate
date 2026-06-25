@@ -399,7 +399,7 @@ function PageFrame({
       }}
     >
       <PageHeader pageLabel={pageLabel} section={section} branding={branding} />
-      <main style={{ flex: 1, minHeight: 0, padding: "24px 42px 18px", boxSizing: "border-box", overflow: "hidden" }}>{children}</main>
+      <main style={{ flex: 1, minHeight: 0, padding: SP.pageMain, boxSizing: "border-box", overflow: "hidden" }}>{children}</main>
       <PageFooter branding={branding} />
     </div>
   );
