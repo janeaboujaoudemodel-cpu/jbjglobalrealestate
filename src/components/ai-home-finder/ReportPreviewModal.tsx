@@ -28,6 +28,10 @@ export interface ReportBranding {
   website?: string;
   license?: string;
   socials?: string;
+  /** Owner-only toggle. When false (default) the trade-license office line
+   *  is hidden from the cover, header, footer and contact page of every
+   *  generated document. Owner can opt-in to include it. */
+  showOfficeAddress?: boolean;
 }
 
 interface PreviewProject {
@@ -351,6 +355,40 @@ export default function ReportPreviewModal({
                 })}
               </div>
             </div>
+
+            {activeRole === "owner" && (
+              <div>
+                <Label className="text-xs font-semibold uppercase tracking-wide" style={{ color: C.ink }}>Office address</Label>
+                <div className="mt-2 flex items-center justify-between gap-3 rounded-md px-3 py-2.5"
+                     style={{ background: "#FFFFFF", border: `1px solid ${C.goldSoft}` }}>
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold" style={{ color: C.ink }}>Include office address</div>
+                    <div className="text-[10px]" style={{ color: C.muted }}>
+                      Off by default. When on, the trade-license office line is added to the cover, footer and contact page.
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={!!branding.showOfficeAddress}
+                    onClick={() => update({ showOfficeAddress: !branding.showOfficeAddress })}
+                    className="relative shrink-0 inline-flex h-6 w-11 items-center rounded-full transition"
+                    style={{
+                      backgroundImage: branding.showOfficeAddress ? C.emeraldGradient : undefined,
+                      backgroundColor: branding.showOfficeAddress ? "#064E3B" : "#E5DCC8",
+                      border: `1px solid ${branding.showOfficeAddress ? "#064E3B" : C.goldSoft}`,
+                    }}
+                  >
+                    <span
+                      className="inline-block h-4 w-4 transform rounded-full bg-white transition"
+                      style={{ transform: `translateX(${branding.showOfficeAddress ? 22 : 4}px)` }}
+                    />
+                  </button>
+                </div>
+              </div>
+            )}
+
+
 
             <div className="grid grid-cols-2 gap-3">
               <div>

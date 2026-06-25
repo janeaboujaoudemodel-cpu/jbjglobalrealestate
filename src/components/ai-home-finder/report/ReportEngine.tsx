@@ -572,11 +572,13 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
             ]).map((r) => <FieldCard key={r.label} label={r.label} value={r.value} />)}
           </div>
 
-          <div style={{ marginTop: "auto", paddingTop: 12, borderTop: `1px solid ${T.goldHair}` }}>
-            <div style={{ fontSize: 10, color: T.muted, WebkitTextFillColor: T.muted, lineHeight: 1.6 }}>
-              {TRADE_LICENSE_OFFICE} · {COMPANY_CONTACT.phone} · {COMPANY_CONTACT.email}
+          {branding.showOfficeAddress ? (
+            <div style={{ marginTop: "auto", paddingTop: 12, borderTop: `1px solid ${T.goldHair}` }}>
+              <div style={{ fontSize: 10, color: T.muted, WebkitTextFillColor: T.muted, lineHeight: 1.6 }}>
+                {TRADE_LICENSE_OFFICE} · {COMPANY_CONTACT.phone} · {COMPANY_CONTACT.email}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -898,7 +900,9 @@ function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pag
     [["Name", preparedName], ["Company", preparedCompany], ["Role", preparedRole]],
     [["Phone", preparedPhone], ["WhatsApp", preparedWhatsApp]],
     [["Email", preparedEmail], ["Website", preparedWebsite]],
-    [["License", preparedLicense], ["Office", preparedOffice]],
+    branding.showOfficeAddress
+      ? [["License", preparedLicense], ["Office", preparedOffice]]
+      : [["License", preparedLicense]],
   ];
 
   return (
