@@ -406,7 +406,7 @@ export default function ReportPreviewModal({
                 data-aihf-darkband
                 data-surface="dark"
                 data-no-contrast-guard
-                className="px-5 py-4 flex items-center justify-between"
+                className="px-5 py-4 flex items-center justify-between allow-white"
                 style={{
                   backgroundImage: C.emeraldGradient,
                   backgroundColor: "#042c1c",
