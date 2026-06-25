@@ -5,20 +5,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
 
-    <!-- Critical: dark emerald boot bg (no white/champagne flash) -->
+    <!-- Critical: champagne app bg (matches design system, no dark-emerald page leak) -->
     <style>
-      html, body, #root { background-color: #042c1c; margin: 0; padding: 0; min-height: 100dvh; }
-      #root { min-height: 100vh; }
+      html, body { background-color: #FDFBF7; margin: 0; padding: 0; min-height: 100dvh; }
+      #root { min-height: 100vh; background-color: #FDFBF7; }
       /* JBJ splash — covers viewport until React hydrates, then fades out */
       #jbj-splash{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
         background:radial-gradient(120% 80% at 50% 40%, #064E3B 0%, #042c1c 55%, #000 100%);
-        transition:opacity .55s ease;opacity:1;pointer-events:none}
+        transition:opacity .45s ease;opacity:1;pointer-events:none}
       #jbj-splash.jbj-splash-hide{opacity:0}
-      #jbj-splash img{width:84px;height:84px;object-fit:contain;
+      #jbj-splash img{width:160px;height:160px;object-fit:contain;
         animation:jbjSplashPulse 1.6s ease-in-out infinite;
-        filter:drop-shadow(0 6px 18px rgba(52,211,153,.35))}
-      @keyframes jbjSplashPulse{0%,100%{opacity:.55;transform:scale(.96)}50%{opacity:1;transform:scale(1)}}
+        filter:drop-shadow(0 8px 24px rgba(184,149,85,.45))}
+      @media (max-width: 640px){ #jbj-splash img{width:120px;height:120px} }
+      @keyframes jbjSplashPulse{0%,100%{opacity:.65;transform:scale(.96)}50%{opacity:1;transform:scale(1.02)}}
     </style>
+
 
 
     <!-- DNS Prefetch & Preconnect for external services -->

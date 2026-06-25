@@ -65,42 +65,45 @@ export default function InlineStatusSelect({
       <SelectContent 
         position="popper"
         side="bottom"
-        align="start"
+        align="end"
         sideOffset={6}
-        avoidCollisions={false}
-        className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 shadow-xl max-h-96 rounded-xl"
+        collisionPadding={12}
+        className="border border-[#B89555]/40 shadow-2xl max-h-96 rounded-xl p-1.5 z-[200] min-w-[220px]"
+        style={{ backgroundColor: '#FDFBF7', color: '#1A1A1A' }}
         onClick={(e) => e.stopPropagation()}
       >
+
         {(['positive','neutral','negative'] as const).map((cat) => {
-          const headerClass =
-            cat === 'positive' ? 'text-[color:var(--emerald-1)]'
-            : cat === 'negative' ? 'text-red-700'
-            : 'text-blue-700';
-          const headerDot =
-            cat === 'positive' ? 'jj-surface-emerald'
-            : cat === 'negative' ? 'bg-red-500'
-            : 'bg-blue-500';
+          const headerColor = cat === 'positive' ? '#064E3B' : cat === 'negative' ? '#7F1D1D' : '#1A1A1A';
+          const headerDotColor = cat === 'positive' ? '#064E3B' : cat === 'negative' ? '#7F1D1D' : '#B89555';
           const label = cat[0].toUpperCase() + cat.slice(1);
           const items = PIPELINE_STATUSES.filter(s => s.category === cat);
           if (!items.length) return null;
           return (
             <div key={cat}>
-              <div className={`px-2 py-1.5 text-xs font-bold uppercase tracking-wide mt-1 flex items-center gap-2 ${headerClass}`}>
-                <span className={`w-2 h-2 rounded-full ${headerDot}`} />
+              <div
+                className="px-2 py-1.5 text-[11px] font-bold uppercase tracking-wide mt-1 flex items-center gap-2"
+                style={{ color: headerColor }}
+              >
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: headerDotColor }} />
                 {label}
               </div>
               {items.map(status => (
                 <SelectItem
                   key={status.value}
                   value={status.value}
-                  className="pl-3 pr-3 py-1.5 focus:bg-[#B89555]/10 hover:bg-[#B89555]/10 cursor-pointer rounded-md [&>span:first-child]:hidden"
+                  className="pl-3 pr-8 py-1.5 focus:bg-[#B89555]/15 hover:bg-[#B89555]/15 cursor-pointer rounded-md"
+                  style={{ color: '#1A1A1A' }}
                 >
-                  <span className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wide text-[#1A1A1A]">
+                  <span
+                    className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wide"
+                    style={{ color: '#1A1A1A' }}
+                  >
                     <span
                       className="w-2 h-2 rounded-full flex-shrink-0"
                       style={{ backgroundColor: status.dotColor }}
                     />
-                    {status.label}
+                    <span style={{ color: '#1A1A1A' }}>{status.label}</span>
                   </span>
                 </SelectItem>
               ))}
@@ -108,6 +111,7 @@ export default function InlineStatusSelect({
           );
         })}
       </SelectContent>
+
     </Select>
   );
 }
