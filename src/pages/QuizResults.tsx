@@ -2251,6 +2251,25 @@ const QuizResults = () => {
         }}
         mode="regenerate"
       />
+
+      {/* Report Preview & Branding Modal */}
+      <ReportPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        projects={(projects || []) as any}
+        defaults={{
+          name: matchmakerFormData?.fullName || "",
+          email: user?.email || "",
+          phone: matchmakerFormData?.phone || "",
+          whatsapp: matchmakerFormData?.phone || "",
+        }}
+        onDownload={previewDownload}
+        onShareWhatsApp={previewShareWhatsApp}
+        onShareEmail={previewShareEmail}
+        onCopy={previewCopy}
+        onSendToConsultant={previewSendToConsultant}
+      />
+
     </section>
   );
 };
