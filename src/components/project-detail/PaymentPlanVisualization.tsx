@@ -142,31 +142,43 @@ export default function PaymentPlanVisualization({
   const total = bookingPct + constructionPct + handoverPct;
 
   return (
-    <div className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 p-6 md:p-8 shadow-sm">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-h3-sm font-medium text-[#1A1A1A] flex items-center gap-2">
-          <CreditCard className="w-5 h-5 text-[#1A1A1A]" />
+    <div className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm overflow-hidden">
+      {/* Emerald header band — approved palette, pure white title + icon */}
+      <div
+        data-surface="emerald"
+        data-emerald="true"
+        data-no-contrast-guard
+        className="jj-cta-emerald flex flex-wrap items-center justify-between gap-3 px-6 md:px-8 py-4"
+        style={{ backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF' }}
+      >
+        <h3
+          className="text-lg md:text-xl font-semibold flex items-center gap-2"
+          style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+        >
+          <CreditCard className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           Payment Plan
         </h3>
         {paymentPlanVerified ? (
           <span
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 border border-white/40"
+            style={{ color: '#FFFFFF' }}
             title={paymentPlanVerifiedAt ? `Verified ${new Date(paymentPlanVerifiedAt).toLocaleDateString()}` : "Verified by JBJ"}
           >
-            <ShieldCheck className="w-3.5 h-3.5" />
+            <ShieldCheck className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             Verified by JBJ
           </span>
         ) : (
           <span
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold jj-emerald-soft text-[color:var(--emerald-1)] border border-[color:var(--emerald-1)]/30"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 border border-white/40"
+            style={{ color: '#FFFFFF' }}
             title="Confirm the official milestone breakdown with our team before signing."
           >
-            <ShieldAlert className="w-3.5 h-3.5" />
+            <ShieldAlert className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             Pending verification — confirm with our team
           </span>
         )}
-
       </div>
+      <div className="p-6 md:p-8">
 
 
       <Tabs defaultValue="installment" className="w-full">
@@ -235,45 +247,45 @@ export default function PaymentPlanVisualization({
             <div className="mb-8">
               <div className="h-6 rounded-full bg-[#F7F2EA] overflow-hidden flex shadow-inner relative">
                 {bookingPct > 0 && (
-                  <div 
-                    className="h-full bg-gradient-to-r transition-all flex items-center justify-center"
-                    style={{ width: `${(bookingPct / total) * 100}%` }}
+                  <div
+                    data-emerald="true" data-no-contrast-guard className="h-full transition-all flex items-center justify-center"
+                    style={{ width: `${(bookingPct / total) * 100}%`, backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }}
                   >
-                    <span className="text-[10px] font-bold text-white drop-shadow-sm">{bookingPct}%</span>
+                    <span className="text-[10px] font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{bookingPct}%</span>
                   </div>
                 )}
                 {constructionPct > 0 && (
-                  <div 
-                    className="h-full bg-gradient-to-r from-amber-500 to-amber-400 transition-all flex items-center justify-center"
-                    style={{ width: `${(constructionPct / total) * 100}%` }}
+                  <div
+                    data-emerald="true" data-no-contrast-guard className="h-full transition-all flex items-center justify-center"
+                    style={{ width: `${(constructionPct / total) * 100}%`, backgroundImage: 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)' }}
                   >
-                    <span className="text-[10px] font-bold text-white drop-shadow-sm">{constructionPct}%</span>
+                    <span className="text-[10px] font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{constructionPct}%</span>
                   </div>
                 )}
                 {handoverPct > 0 && (
-                  <div 
-                    className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all flex items-center justify-center"
-                    style={{ width: `${(handoverPct / total) * 100}%` }}
+                  <div
+                    data-emerald="true" data-no-contrast-guard className="h-full transition-all flex items-center justify-center"
+                    style={{ width: `${(handoverPct / total) * 100}%`, backgroundImage: 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)' }}
                   >
-                    <span className="text-[10px] font-bold text-white drop-shadow-sm">{handoverPct}%</span>
+                    <span className="text-[10px] font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{handoverPct}%</span>
                   </div>
                 )}
               </div>
               
               {/* Timeline Dots */}
               <div className="relative mt-4">
-                <div className="absolute top-3 left-0 right-0 h-0.5 bg-gradient-to-r via-amber-500 to-blue-500" />
+                <div className="absolute top-3 left-0 right-0 h-0.5" style={{ backgroundImage: 'linear-gradient(90deg,#064E3B 0%,#0B6E4F 50%,#0E8A63 100%)' }} />
                 <div className="flex justify-between relative">
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full jj-surface-emerald border-4 border-white shadow-lg z-10" />
+                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }} />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">On Booking</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-amber-500 border-4 border-white shadow-lg z-10" />
+                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)' }} />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">During Construction</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-lg z-10" />
+                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)' }} />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">
                       On Handover{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}
                     </span>
@@ -287,17 +299,20 @@ export default function PaymentPlanVisualization({
           {milestones.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {milestones.map((milestone, idx) => (
-                <div 
+                <div
                   key={idx}
-                  className={cn("p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/30 hover:shadow-md transition-all text-center", milestone.lightBg)}
+                  className="p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] hover:shadow-md transition-all text-center"
                 >
-                  <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ring-4", milestone.lightBg, milestone.ringColor)}>
-                    <span className={cn("text-xl font-bold", milestone.color)}>
+                  <div
+                    data-emerald="true" data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ring-4 ring-white/60"
+                    style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }}
+                  >
+                    <span className="text-xl font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                       {getPercentageValue(milestone.value)}%
                     </span>
                   </div>
-                  <milestone.icon className={cn("w-5 h-5 mx-auto mb-2", milestone.color)} />
-                  <p className="text-sm font-medium text-[#1A1A1A]/70">{milestone.label}</p>
+                  <milestone.icon className="w-5 h-5 mx-auto mb-2 text-[#064E3B]" />
+                  <p className="text-sm font-medium text-[#1A1A1A]/80">{milestone.label}</p>
                 </div>
               ))}
             </div>
@@ -389,6 +404,7 @@ export default function PaymentPlanVisualization({
           )}
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }
