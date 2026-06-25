@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { searchItems, nearestSearchItems } from "@/config/globalSearchIndex";
 import type { SearchItem } from "@/config/globalSearchIndex";
 import { SafeImage } from "@/components/SafeImage";
+import { IconTile } from "@/components/ui/icon-tile";
 import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
 
 interface GlobalSearchModalProps {
