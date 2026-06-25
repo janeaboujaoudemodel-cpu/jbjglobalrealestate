@@ -279,13 +279,15 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
                 type="button"
                 onClick={() => toggleInArray(fkey, o)}
                 className={
-                  "text-[11px] px-2 py-0.5 rounded border transition " +
+                  "inline-flex items-center justify-center text-center min-h-7 max-w-full overflow-hidden text-[11px] px-2.5 py-1 rounded-full border transition " +
                   (on
-                    ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                    ? "jj-surface-emerald border-transparent !text-white"
                     : "bg-transparent border-[#B89555]/40 text-[#1A1A1A]/70 hover:border-[#B89555]")
                 }
+                data-surface={on ? "emerald" : undefined}
+                data-emerald-ok={on ? "pill" : undefined}
               >
-                {o}
+                <span className="truncate">{o}</span>
               </button>
             );
           })}
@@ -295,7 +297,7 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_360px] gap-5 items-start">
       {/* Composer */}
       <Card className="lg:col-span-2 p-5 space-y-4">
         <div className="space-y-2">
@@ -344,10 +346,10 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 pt-2 border-t border-[#B89555]/40">
+        <div className="rounded-2xl border border-[#B89555]/35 bg-[#F7F2EA]/70 p-3 flex flex-col sm:flex-row sm:items-center gap-3 pt-3">
           <Input placeholder="test@example.com" value={testRecipient}
-            onChange={(e) => setTestRecipient(e.target.value)} className="max-w-xs" />
-          <Button variant="outline" onClick={sendTest} disabled={sending}>
+            onChange={(e) => setTestRecipient(e.target.value)} className="min-w-0 flex-1" />
+          <Button onClick={sendTest} disabled={sending} className="sm:w-[150px] shrink-0">
             {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Eye className="w-4 h-4 mr-1" />}
             Send test
           </Button>
@@ -361,7 +363,7 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
             <h3 className="font-semibold text-[#1A1A1A]">Audience</h3>
             <p className="text-xs text-[#1A1A1A]/60">From <code>crm_leads</code></p>
           </div>
-          <Button size="sm" variant="outline" onClick={saveAsSegment} disabled={savingSegment}>
+          <Button size="sm" onClick={saveAsSegment} disabled={savingSegment} className="shrink-0">
             {savingSegment ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
             Save segment
           </Button>
