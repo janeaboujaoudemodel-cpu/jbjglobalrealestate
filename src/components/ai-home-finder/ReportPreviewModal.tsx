@@ -9,7 +9,7 @@ import { useUserMode, type UserMode } from "@/hooks/useUserMode";
 // Official letterhead monogram (black JBJ on champagne with gold rules above/below the B)
 import jbjMonogram from "@/assets/jbj-monogram-letterhead.png";
 
-export type ReportRole = "broker" | "developer" | "owner" | "consultant";
+export type ReportRole = "investor" | "broker" | "developer" | "owner" | "consultant";
 export type BrandingMode = "both" | "photo" | "logo" | "none";
 
 export interface ReportBranding {
@@ -18,6 +18,7 @@ export interface ReportBranding {
   photoDataUrl?: string;
   logoDataUrl?: string;
   name?: string;
+  salutation?: "Mr." | "Ms." | "";
   companyName?: string;
   phone?: string;
   whatsapp?: string;
@@ -51,17 +52,20 @@ interface Props {
   onSendToConsultant: (b: ReportBranding) => Promise<void> | void;
 }
 
-const STORAGE_KEY = "jbj.reportBranding.v2";
+const STORAGE_KEY = "jbj.reportBranding.v3";
 
 const ROLE_LABELS: Record<ReportRole, string> = {
+  investor: "Investor",
   broker: "Broker",
   developer: "Developer",
   owner: "Owner",
   consultant: "JBJ Consultant",
 };
 
-/** Map active app mode → report role. Default unknown to JBJ Consultant. */
+/** Map active app mode → report role. Investor maps directly so the report is
+ *  addressed TO the investor (FROM JBJ), not prepared BY them. */
 const roleFromMode = (mode: UserMode | undefined): ReportRole => {
+  if (mode === "investor") return "investor";
   if (mode === "broker") return "broker";
   if (mode === "developer") return "developer";
   if (mode === "owner") return "owner";
