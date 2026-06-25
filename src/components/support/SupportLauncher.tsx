@@ -192,31 +192,43 @@ export default function SupportLauncher() {
               />
               <motion.div
                 key="orbs"
-                className="absolute bottom-12 right-0 flex max-h-[calc(100dvh-7rem)] w-[260px] flex-col gap-2 overflow-y-auto rounded-2xl p-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
+                className="absolute bottom-12 right-0 flex max-h-[calc(100dvh-7rem)] w-[280px] flex-col gap-2 overflow-hidden rounded-2xl p-3"
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                style={{
+                  background: "linear-gradient(180deg, rgba(247,242,234,0.96) 0%, rgba(239,230,214,0.94) 100%)",
+                  backdropFilter: "blur(18px) saturate(160%)",
+                  WebkitBackdropFilter: "blur(18px) saturate(160%)",
+                  border: "1px solid rgba(184,149,85,0.45)",
+                  boxShadow: "0 24px 60px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.55)",
+                }}
               >
-                <div className="flex items-center justify-between px-1 mb-1">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#FDFBF7] allow-white">
-                    <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
-                    Free agent call
-                  </span>
+                <div className="flex items-center justify-between gap-2 pb-2 mb-1 border-b border-[#B89555]/25">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg jj-surface-emerald text-white shrink-0">
+                      <Sparkles className="h-3.5 w-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    </span>
+                    <span className="text-[13px] font-semibold tracking-tight text-[#1A1A1A] whitespace-nowrap truncate">JBJ Concierge</span>
+                  </div>
                   <button
                     onClick={close}
                     aria-label="Close"
-                    className="h-7 w-7 inline-flex items-center justify-center rounded-full border border-[#D4B896]/45 bg-[#1A1A1A]/70 text-[#E2C9A0]"
+                    className="h-7 w-7 shrink-0 inline-flex items-center justify-center rounded-full border border-[#B89555]/45 bg-white/60 text-[#1A1A1A]"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                {channels.map((c) => (
-                  <div key={c.id} className="rounded-xl">
-                    <ChannelCard channel={c} compact onActivate={close} />
-                  </div>
-                ))}
-
+                <div className="flex flex-col gap-2 overflow-y-auto pr-0.5">
+                  {channels.map((c) => (
+                    <div key={c.id} className="rounded-xl">
+                      <ChannelCard channel={c} compact onActivate={close} />
+                    </div>
+                  ))}
+                </div>
               </motion.div>
+
             </>
           )}
         </AnimatePresence>
