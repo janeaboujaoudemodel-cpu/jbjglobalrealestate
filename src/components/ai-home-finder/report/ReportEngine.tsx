@@ -68,6 +68,22 @@ const fmtHandover = (p: ReportProject) => {
 const todayStr = () =>
   new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 
+/** Strip HTML tags + decode common entities for safe plain-text rendering inside the PDF. */
+const stripHtml = (s: string) =>
+  s
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<\/p>/gi, " ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+
+
 // ---------- shared chrome ----------
 function PageFrame({
   id,
