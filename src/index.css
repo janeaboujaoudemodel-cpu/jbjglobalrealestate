@@ -14728,7 +14728,8 @@ html body #root :is(
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: none !important;
   opacity: 1 !important;
-  transition-property: background, background-color, background-image, border-color, box-shadow, transform, opacity !important;
+  transition: none !important;
+  animation: none !important;
   box-shadow:
     0 10px 24px -12px rgba(4, 44, 28, 0.86),
     inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
@@ -14779,7 +14780,8 @@ html body #root :is(
   stroke: #FFFFFF !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
-  transition-property: opacity, transform !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 html body #root :is(
