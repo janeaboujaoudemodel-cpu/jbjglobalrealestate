@@ -67,7 +67,19 @@ export const installWhatsAppGuard = (): void => {
   if (installed || typeof window === "undefined") return;
   installed = true;
 
-  // 1) Patch window.open — rewrites WhatsApp URLs opened programmatically.
+  const inFrame = (() => {
+    try { return window.top !== window.self; } catch { return true; }
+  })();
+
+  const needsTopEscape = (url: string): boolean => {
+    if (!url) return false;
+    return /^mailto:/i.test(url) || WA_HOSTS.test(url);
+  };
+
+  // 1) Patch window.open — rewrites WhatsApp URLs opened programmatically AND
+  //    forces mailto:/wa.me to navigate the top frame so the Lovable preview
+  //    iframe doesn't try to load mail.google.com / web.whatsapp.com inline
+  //    (which fail with ERR_BLOCKED_BY_RESPONSE / X-Frame-Options).
   const origOpen = window.open?.bind(window);
   if (origOpen) {
     window.open = function (
@@ -76,17 +88,24 @@ export const installWhatsAppGuard = (): void => {
       features?: string,
     ): Window | null {
       let safe: string | URL | undefined = url;
-      if (typeof url === "string") {
-        safe = normalizeWhatsAppUrl(url);
-      } else if (url instanceof URL) {
-        safe = normalizeWhatsAppUrl(url.toString());
+      const raw = typeof url === "string" ? url : url instanceof URL ? url.toString() : "";
+      if (typeof url === "string") safe = normalizeWhatsAppUrl(url);
+      else if (url instanceof URL) safe = normalizeWhatsAppUrl(url.toString());
+
+      if (inFrame && needsTopEscape(raw)) {
+        const finalUrl = typeof safe === "string" ? safe : safe?.toString() ?? raw;
+        if (/^mailto:/i.test(finalUrl)) {
+          try { if (window.top) { window.top.location.href = finalUrl; return null; } }
+          catch { /* fall through */ }
+        }
+        return origOpen(safe as any, "_top", features);
       }
       return origOpen(safe as any, target, features);
     } as typeof window.open;
   }
 
-  // 2) Click delegation — rewrites <a href="…whatsapp…"> at click time,
-  //    capture phase so it runs before the default navigation.
+  // 2) Click delegation — rewrites <a href="…whatsapp…"> at click time and
+  //    forces mailto/wa.me anchors to target=_top inside the preview iframe.
   document.addEventListener(
     "click",
     (e) => {
@@ -96,10 +115,15 @@ export const installWhatsAppGuard = (): void => {
       ) as HTMLAnchorElement | undefined;
       if (!anchor) return;
       const href = anchor.getAttribute("href");
-      if (!href || !WA_HOSTS.test(href)) return;
-      const safe = normalizeWhatsAppUrl(href);
-      if (safe !== href) {
-        anchor.setAttribute("href", safe);
+      if (!href) return;
+
+      if (WA_HOSTS.test(href)) {
+        const safe = normalizeWhatsAppUrl(href);
+        if (safe !== href) anchor.setAttribute("href", safe);
+      }
+
+      if (inFrame && needsTopEscape(href) && anchor.getAttribute("target") !== "_top") {
+        anchor.setAttribute("target", "_top");
       }
     },
     true,
