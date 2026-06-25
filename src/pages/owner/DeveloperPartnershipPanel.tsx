@@ -200,7 +200,7 @@ const DeveloperPartnershipPanel = () => {
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const patch: Record<string, unknown> = { status };
       if (status === "suspended") patch.suspended_at = new Date().toISOString();
-      const { error } = await supabase.from("developer_representatives").update(patch).eq("id", id);
+      const { error } = await supabase.from("developer_representatives").update(patch as any).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

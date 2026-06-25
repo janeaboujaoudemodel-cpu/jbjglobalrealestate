@@ -98,7 +98,7 @@ export default function InvestorDashboard() {
       full_name: profileForm.full_name,
       nationality: profileForm.nationality,
       phone_number: profileForm.phone_number,
-    }).eq("id", user.id);
+    } as any).eq("id", user.id);
     if (error) toast.error("Failed to save profile");
     else toast.success("Profile updated");
     setSavingProfile(false);

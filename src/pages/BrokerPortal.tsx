@@ -205,7 +205,7 @@ function DocumentVerificationSection() {
     const updateData: Record<string, any> = {};
     if (docType === "rera") updateData.rera_card_url = urlData.publicUrl;
     else updateData.id_document_url = urlData.publicUrl;
-    const { error: dbError } = await supabase.from("broker_profiles").update(updateData).eq("id", profile.id);
+    const { error: dbError } = await supabase.from("broker_profiles").update(updateData as any).eq("id", profile.id);
     if (dbError) { toast.error("Failed to save document info"); return; }
     toast.success(`${docType === "rera" ? "RERA Card" : "Emirates ID"} uploaded successfully`);
   };

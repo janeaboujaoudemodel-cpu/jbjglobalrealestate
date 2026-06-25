@@ -109,7 +109,7 @@ const OwnerRecommendations = () => {
       const updates: Record<string, any> = { status, updated_at: new Date().toISOString() };
       if (status === "applied") updates.applied_at = new Date().toISOString();
       if (status === "reverted") updates.reverted_at = new Date().toISOString();
-      const { error } = await supabase.from("ai_recommendations").update(updates).eq("id", id);
+      const { error } = await supabase.from("ai_recommendations").update(updates as any).eq("id", id);
       if (error) throw error;
       setRecs(prev => prev.map(r => r.id === id ? { ...r, ...updates } : r));
       toast.success(`Recommendation ${status}`);

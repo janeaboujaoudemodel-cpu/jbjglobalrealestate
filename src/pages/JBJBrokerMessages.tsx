@@ -188,7 +188,7 @@ export default function JBJBrokerMessages() {
         actor: brokerProfile.name,
         action: `Sent ${activeChannel} message`,
         target: selectedLead.id,
-      });
+      } as any);
 
       setMessages([...messages, data]);
       setNewMessage("");

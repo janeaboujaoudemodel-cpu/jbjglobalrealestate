@@ -132,7 +132,7 @@ export default function JBJBrokerDashboard() {
       actor: user?.email || "Unknown",
       action,
       target: leadId,
-    });
+    } as any);
 
     toast.success(`Action logged: ${action}`);
   };
