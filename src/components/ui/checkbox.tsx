@@ -10,15 +10,14 @@ const Checkbox = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CheckboxPrimitive.Root
     ref={ref}
-    data-no-contrast-guard
+    data-emerald-ok="checkbox"
     className={cn(
       "peer h-5 w-5 shrink-0 rounded-[5px] border-[1.5px] border-[#B89555] bg-[#FDFBF7] ring-offset-background transition-all",
       // 3D resting state — subtle inner highlight + soft drop shadow
       "shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(184,149,85,0.18)]",
-      // Checked: animated metallic gold gradient + stronger 3D pop
-      "data-[state=checked]:border-[rgba(184,149,85,0.85)]",
-      "data-[state=checked]:bg-[linear-gradient(120deg,#d8b86a_0%,#f4e3a8_25%,#b89555_50%,#f4e3a8_75%,#d8b86a_100%)]",
-      "data-[state=checked]:shadow-[inset_0_1px_0_rgba(255,244,210,0.7),inset_0_-1px_2px_rgba(0,0,0,0.18),0_3px_8px_rgba(184,149,85,0.45)]",
+      // Checked: locked emerald → black gradient with pure white tick.
+      "data-[state=checked]:border-[#064E3B] data-[state=checked]:bg-[image:var(--jj-emerald-ombre)]",
+      "data-[state=checked]:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_3px_8px_rgba(6,78,59,0.45)]",
       "hover:border-[#B89555] focus:border-[#B89555]",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/40 focus-visible:ring-offset-2",
       "disabled:cursor-not-allowed disabled:opacity-50",
