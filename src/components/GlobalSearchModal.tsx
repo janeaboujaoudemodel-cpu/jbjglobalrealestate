@@ -275,13 +275,13 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       onClick={() => handleSelect(route)}
       className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${isFirst ? 'bg-[#1A1A1A]/10 border border-[#B89555]/40' : 'hover:bg-[#1A1A1A]/5'}`}
     >
-      <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center flex-shrink-0">
-        {item.image ? (
+      {item.image ? (
+        <div className="w-9 h-9 rounded-lg overflow-hidden border border-[#B89555]/40 bg-white flex items-center justify-center flex-shrink-0">
           <SafeImage src={item.image} alt={item.name} className="w-full h-full object-cover" />
-        ) : (
-          <FallbackIcon className="w-4 h-4 text-[#1A1A1A]" />
-        )}
-      </div>
+        </div>
+      ) : (
+        <IconTile icon={FallbackIcon} tone="emerald" size="sm" />
+      )}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.name}</p>
       </div>
