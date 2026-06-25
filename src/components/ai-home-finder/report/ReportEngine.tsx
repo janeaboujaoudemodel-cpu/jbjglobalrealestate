@@ -987,7 +987,7 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
         }}
       >
         <style>{`
-          [data-report-root], [data-report-root] * { box-sizing: border-box; }
+          [data-report-root], [data-report-root] * { box-sizing: border-box; font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark],
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] *,
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"],
