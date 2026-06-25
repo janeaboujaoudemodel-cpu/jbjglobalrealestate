@@ -344,17 +344,22 @@ export default function OwnerInbox() {
                   onClick={() => handleChannelTabClick(tab.value, tabChannelId ?? 'all')}
                   data-emerald-action={isActive ? "true" : undefined}
                   data-emerald-ok={isActive ? "pill" : undefined}
-                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg flex-shrink-0 ${
+                  style={isActive ? {
+                    color: '#FFFFFF',
+                    WebkitTextFillColor: '#FFFFFF',
+                    transitionProperty: 'background, background-color, border-color, box-shadow, transform',
+                  } as React.CSSProperties : undefined}
+                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap duration-200 border-b-2 -mb-[2px] rounded-t-lg flex-shrink-0 ${
  isActive
- ? 'jj-emerald-action border-transparent text-white font-bold shadow-sm'
- : 'border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20'
+ ? 'jj-emerald-action border-transparent !text-white font-bold shadow-sm [&_*]:!text-white'
+ : 'transition-all border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20'
  }`}
                 >
                   {tab.icon}
-                  <span>{tab.label}</span>
+                  <span style={isActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties : undefined}>{tab.label}</span>
                   {unreadCount > 0 && (
-                    <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
- isActive ? 'bg-white/20 text-white border border-white/80' : 'bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/25'
+                    <span style={isActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties : undefined} className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
+ isActive ? 'bg-white/20 !text-white border border-white/80' : 'bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/25'
  }`}>
                       {unreadCount}
                     </span>
@@ -388,10 +393,11 @@ export default function OwnerInbox() {
               onClick={() => setCategoryFilter('all')}
               data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
               data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
-              className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+              style={categoryFilter === 'all' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as React.CSSProperties : undefined}
+              className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === 'all'
- ? 'jj-emerald-action text-white border-transparent'
- : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+ ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
+ : 'transition bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
  }`}
             >All categories</button>
             {Object.entries(CATEGORY_META).map(([key, meta]) => (
@@ -400,10 +406,11 @@ export default function OwnerInbox() {
                 onClick={() => setCategoryFilter(key)}
                 data-emerald-action={categoryFilter === key ? "true" : undefined}
                 data-emerald-ok={categoryFilter === key ? "pill" : undefined}
-                className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+                style={categoryFilter === key ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as React.CSSProperties : undefined}
+                className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === key
- ? 'jj-emerald-action text-white border-transparent'
- : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+ ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
+ : 'transition bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
  }`}
               >{meta.label}</button>
             ))}
