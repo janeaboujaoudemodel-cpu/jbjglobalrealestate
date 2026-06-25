@@ -460,7 +460,7 @@ const QuizResults = () => {
   };
 
   // Build a real, branded PDF report via jsPDF (Tiffany presentation report)
-  const buildPdf = async (): Promise<{ blob: Blob; filename: string } | null> => {
+  const buildPdf = async (branding?: ReportBranding): Promise<{ blob: Blob; filename: string } | null> => {
     if (!projects?.length) return null;
 
     const doc = new jsPDF({ unit: "pt", format: "a4" });
