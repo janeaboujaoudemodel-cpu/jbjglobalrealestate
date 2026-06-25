@@ -764,9 +764,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     {/* Always-on: Need help? — premium contact panel */}
                     <div className="rounded-2xl border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-5">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/45 flex items-center justify-center flex-shrink-0">
-                          <LifeBuoy className="w-5 h-5 text-[#1A1A1A]" />
-                        </div>
+                        <IconTile icon={LifeBuoy} tone="emerald" size="md" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-[#1A1A1A]">Can't find what you're looking for?</p>
                           <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Our JBJ team is one click away — we'll guide you personally.</p>
