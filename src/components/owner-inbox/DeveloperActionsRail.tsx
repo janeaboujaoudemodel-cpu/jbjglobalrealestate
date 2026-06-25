@@ -158,8 +158,8 @@ export default function DeveloperActionsRail() {
                 ) : (
                   <Button
                     size="sm"
-                    variant="gold"
-                    className="h-7 text-xs"
+                    variant="default"
+                    className="jj-cta-emerald h-7 px-3 text-xs !text-white [&_svg]:!text-white"
                     disabled={!matchedLink || !item.developer_email || sendReply.isPending}
                     onClick={() =>
                       sendReply.mutate({
