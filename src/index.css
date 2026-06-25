@@ -8462,7 +8462,7 @@ html body :is(
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
 ):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-surface="black"]):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.surface-black):not(.jj-cta-dark):not(.jj-navy-cta):not(.jj-cta-champagne):not(.jj-cta-primary):not([data-cta="dark"]):not([data-cta="primary"]):not([data-allow-dark-cta]):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-metallic):not(.jj-emerald-card):not(.jj-tab-active-metallic):not(.jj-emerald-fill):not(.jj-bg-emerald):not(.jj-side-tile):not(.careers-card-navy):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#1A1A1A]"]):not([class~="bg-black"])
-  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.allow-white):not(.allow-white *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-surface="black"]):not([data-surface="black"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.surface-black):not(.surface-black *):not([data-emerald]):not([data-emerald] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-jj-emerald]):not([data-jj-emerald] *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-emerald-chip):not(.jj-emerald-chip *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-card):not(.jj-emerald-card *):not(.jj-tab-active-metallic):not(.jj-tab-active-metallic *):not(.jj-emerald-fill):not(.jj-emerald-fill *):not(.jj-bg-emerald):not(.jj-bg-emerald *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([role="tab"][data-state="active"]):not([role="tab"][aria-selected="true"]):not([data-jj-segmented-trigger][data-state="active"]):not([data-chrome="sidebar"] [data-active="true"]):not([data-chrome="sidebar"] [data-active="true"] *):not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *):not([data-icon-tile-tone="emerald"]):not([data-icon-tile-tone="emerald"] *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-icon-tile][data-surface="emerald"] *) {
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button):not(.tab-trigger-champagne):not(.tab-trigger-champagne *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-primary):not(.jj-cta-primary *):not(.allow-white):not(.allow-white *):not([data-on-dark]):not([data-on-dark] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-dark):not(.jj-cta-dark *):not(.jj-navy-cta):not(.jj-navy-cta *):not([data-cta="dark"]):not([data-cta="dark"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-surface="black"]):not([data-surface="black"] *):not(.surface-dark):not(.surface-dark *):not(.surface-ink):not(.surface-ink *):not(.surface-navy):not(.surface-navy *):not(.surface-black):not(.surface-black *):not([data-emerald]):not([data-emerald] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-jj-emerald]):not([data-jj-emerald] *):not(.jj-pill-emerald):not(.jj-pill-emerald *):not(.jj-emerald-chip):not(.jj-emerald-chip *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-card):not(.jj-emerald-card *):not(.jj-tab-active-metallic):not(.jj-tab-active-metallic *):not(.jj-emerald-fill):not(.jj-emerald-fill *):not(.jj-bg-emerald):not(.jj-bg-emerald *):not(.jj-side-tile):not(.jj-side-tile *):not(.careers-card-navy):not(.careers-card-navy *):not([class~="bg-[#0A0A0A]"]):not([class~="bg-[#0A0A0A]"] *):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#1A1A1A]"] *):not([class~="bg-black"]):not([class~="bg-black"] *):not([role="tab"][data-state="active"]):not([role="tab"][aria-selected="true"]):not([data-jj-segmented-trigger][data-state="active"]):not([data-chrome="sidebar"] [data-active="true"]):not([data-chrome="sidebar"] [data-active="true"] *):not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *):not([data-icon-tile-tone="emerald"]):not([data-icon-tile-tone="emerald"] *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-icon-tile][data-surface="emerald"] *):not([data-hero-dark]):not([data-hero-dark] *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
@@ -16271,3 +16271,29 @@ html body [data-surface="champagne"] [data-count-badge] {
   background-color: var(--jj-emerald-ombre, #064E3B) !important;
   color: #FFFFFF !important;
 }
+
+/* ============================================================
+ * PASS 50 — AUTHORITATIVE GUARD OVERRIDE (FINAL)
+ * The legacy ink rule at ~L8456 is missing `[data-no-contrast-guard]`
+ * and `[data-hero-dark]` in its :not() chain, so opt-out scopes still
+ * inherit ink. This block runs after every rule in the file and uses
+ * higher specificity (html body html-scoped + double attr) so any
+ * descendant of a hero-dark / no-contrast-guard / on-dark scope keeps
+ * white text + white SVG strokes, no matter what an earlier surface
+ * rule tried to force.
+ * ============================================================ */
+html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]):is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]),
+html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where(
+  h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time,
+  dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where(svg, [class*="lucide"]) {
+  stroke: currentColor !important;
+}
+/* Inline-styled colors win on their own via [style*="color"] specificity;
+   no revert override needed (revert would fall back to UA black). */

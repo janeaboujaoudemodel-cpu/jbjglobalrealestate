@@ -169,7 +169,9 @@ const AreaGuides = () => {
       {/* ─── HERO SECTION ─── */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1A1A1A]"
+        data-hero-dark
+        data-no-contrast-guard
+        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0A1020]"
       >
         {/* Background — UAE aerial */}
         <div
@@ -181,12 +183,13 @@ const AreaGuides = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/85" />
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto" data-no-contrast-guard>
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-[hsl(var(--gold))] text-xs uppercase tracking-[0.35em] mb-6 block font-medium"
+            className="text-xs uppercase tracking-[0.35em] mb-6 block font-medium"
+            style={{ color: "#D4B062" }}
           >
             Explore UAE
           </motion.span>
@@ -194,8 +197,8 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-white text-5xl md:text-7xl font-bold mb-6 leading-tight"
-            style={{ fontFamily: "Playfair Display, serif" }}
+            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+            style={{ fontFamily: "Playfair Display, serif", color: "#FFFFFF" }}
           >
             UAE Communities
           </motion.h1>
@@ -203,7 +206,8 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-[#1A1A1A]/70 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            className="text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            style={{ color: "rgba(255,255,255,0.85)" }}
           >
             Discover the UAE's most prestigious communities across all seven emirates
           </motion.p>
@@ -212,7 +216,8 @@ const AreaGuides = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             onClick={scrollToGrid}
-            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-[#B89555] text-[#1A1A1A] font-medium rounded-xl hover:bg-[#EFE6D6] hover:text-[#1A1A1A] transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 border-2 font-medium rounded-xl transition-all"
+            style={{ borderColor: "#B89555", color: "#FFFFFF", background: "rgba(255,255,255,0.06)" }}
           >
             Explore Areas
             <ChevronDown className="w-5 h-5" />
@@ -225,6 +230,7 @@ const AreaGuides = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
           className="absolute bottom-10 left-0 right-0 flex justify-center flex-wrap gap-3 px-4"
+          data-no-contrast-guard
         >
           {heroEmiratesOrder.map(emirate => {
             const count = emirateCounts[emirate];
@@ -236,11 +242,12 @@ const AreaGuides = () => {
                   setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
                   scrollToGrid();
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-[#EFE6D6]/20 hover:border-[#B89555]/50 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full transition-all cursor-pointer"
+                style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.22)" }}
               >
-                <MapPin className="w-3 h-3 text-[hsl(var(--gold))]" />
-                <span className="text-white text-xs font-medium">{emirate}</span>
-                <span className="text-[hsl(var(--gold))] text-xs font-bold">{count}</span>
+                <MapPin className="w-3 h-3" style={{ color: "#D4B062" }} />
+                <span className="text-xs font-medium" style={{ color: "#FFFFFF" }}>{emirate}</span>
+                <span className="text-xs font-bold" style={{ color: "#D4B062" }}>{count}</span>
               </button>
             );
           })}
