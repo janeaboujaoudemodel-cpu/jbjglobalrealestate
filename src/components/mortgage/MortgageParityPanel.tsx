@@ -249,19 +249,73 @@ export default function MortgageParityPanel({
 
       {/* Comparison */}
       <Card title="Compare to Bank Rates" className="mortgage-compare-card">
+        {/* Bank pickers — explicit dropdowns of UAE banks with starting rates */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          {([
+            { label: "Bank A", value: bankAId, set: setBankAId, exclude: bankBId },
+            { label: "Bank B", value: bankBId, set: setBankBId, exclude: bankAId },
+          ] as const).map((picker) => (
+            <label key={picker.label} className="block">
+              <span className={`flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider mb-1.5 ${subClass}`}>
+                <Building2 className="w-3.5 h-3.5" />
+                {picker.label}
+              </span>
+              <div
+                className="relative rounded-lg"
+                style={{
+                  background: isNavy ? "rgba(255,255,255,0.06)" : "#FFFFFF",
+                  border: isNavy ? "1px solid rgba(147,197,253,0.35)" : "1px solid rgba(184,149,85,0.40)",
+                }}
+              >
+                <select
+                  value={picker.value}
+                  onChange={(e) => picker.set(e.target.value)}
+                  data-no-contrast-guard
+                  aria-label={`${picker.label} — choose UAE bank`}
+                  className="allow-white w-full appearance-none bg-transparent rounded-lg px-3 py-2.5 pr-9 text-sm font-semibold cursor-pointer outline-none"
+                  style={{
+                    color: isNavy ? "#FFFFFF" : "#1A1A1A",
+                    WebkitTextFillColor: isNavy ? "#FFFFFF" : "#1A1A1A",
+                  }}
+                >
+                  {UAE_BANKS.map((b) => (
+                    <option
+                      key={b.id}
+                      value={b.id}
+                      disabled={b.id === picker.exclude}
+                      style={{ color: "#1A1A1A", background: "#FFFFFF" }}
+                    >
+                      {b.name} — {b.rate.toFixed(2)}%
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                  style={{ color: isNavy ? "#FFFFFF" : "#064E3B" }}
+                />
+              </div>
+            </label>
+          ))}
+        </div>
+
         <div className={`grid grid-cols-2 gap-3 text-sm ${inkClass}`}>
           <div>
-            <p className={`text-xs ${subClass}`}>Bank A — {interestRate}%</p>
-            <p className="font-bold text-lg tabular-nums mt-1">{aed(monthlyPayment)}</p>
+            <p className={`text-xs ${subClass}`}>{bankA.name} — {bankA.rate.toFixed(2)}%</p>
+            <p className="font-bold text-lg tabular-nums mt-1">{aed(bankAMonthly)}</p>
             <p className={`text-[11px] ${subClass}`}>per month</p>
           </div>
           <div>
-            <p className={`text-xs ${subClass}`}>Bank B — {compareRate.toFixed(2)}%</p>
+            <p className={`text-xs ${subClass}`}>{bankB.name} — {compareRate.toFixed(2)}%</p>
             <p className="font-bold text-lg tabular-nums mt-1">{aed(compareMonthly)}</p>
             <p className={`text-[11px] ${subClass}`}>per month</p>
           </div>
         </div>
-        <div className="mt-3 py-1">
+
+        <div className="mt-4">
+          <div className={`flex items-center justify-between text-[11px] mb-1.5 ${subClass}`}>
+            <span className="font-semibold uppercase tracking-wider">Fine-tune {bankB.name} rate</span>
+            <span className="font-bold tabular-nums" style={{ color: isNavy ? "#FFFFFF" : "#064E3B" }}>{compareRate.toFixed(2)}%</span>
+          </div>
           {(() => {
             const minR = compareMinRate;
             const maxR = compareMaxRate;
@@ -286,22 +340,28 @@ export default function MortgageParityPanel({
                   ["--mortgage-range-fill" as any]: fill,
                   ["--mortgage-range-track" as any]: track,
                   boxShadow: isNavy ? 'inset 0 0 0 1px rgba(255,255,255,0.08)' : 'inset 0 0 0 1px rgba(6,78,59,0.14)',
-                  ["--mortgage-range-thumb" as any]:
-                    "#FFFFFF",
+                  ["--mortgage-range-thumb" as any]: "#FFFFFF",
                   ["--mortgage-range-thumb-shadow" as any]:
                     "0 0 0 1px rgba(255,255,255,0.72), 0 0 18px rgba(6,78,59,0.65), 0 4px 14px rgba(4,44,28,0.45)",
                 }}
               />
             );
-
           })()}
+          <div className={`flex justify-between text-[10px] mt-1 ${subClass}`}>
+            <span>{compareMinRate.toFixed(1)}%</span>
+            <span>{compareMaxRate.toFixed(1)}%</span>
+          </div>
         </div>
 
-        <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
+        <div className="mt-3 flex items-center gap-2 text-xs" style={{ color: isNavy ? "#FFFFFF" : "#1A1A1A" }}>
           <Scale className="w-3.5 h-3.5" />
-          <span>Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(monthlyPayment - compareMonthly))}</span> ({(monthlyPayment > compareMonthly ? "save" : "extra")} on Bank B)</span>
+          <span>
+            Monthly difference: <span className="font-bold tabular-nums">{aed(Math.abs(bankAMonthly - compareMonthly))}</span>
+            {" "}({bankAMonthly > compareMonthly ? "save" : "extra"} on {bankB.name})
+          </span>
         </div>
       </Card>
+
 
       {/* Amortization */}
       <div className="lg:col-span-2">
