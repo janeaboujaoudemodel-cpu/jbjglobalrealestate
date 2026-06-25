@@ -743,7 +743,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           </button>
           <button
             onClick={handleApply}
-            className="jj-pill-emerald-metallic flex-1 py-3 rounded-full font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] transition-all"
+            className="allow-white jj-pill-emerald-metallic flex-1 py-3 rounded-full font-bold text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] transition-all"
           >
             Show {projectCount !== null ? projectCount.toLocaleString() : '...'} projects
           </button>
