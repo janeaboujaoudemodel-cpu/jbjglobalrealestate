@@ -92,7 +92,7 @@ export default function InlineStatusSelect({
                 <SelectItem
                   key={status.value}
                   value={status.value}
-                  className="pl-3 pr-3 py-1.5 focus:bg-[#B89555]/15 hover:bg-[#B89555]/15 cursor-pointer rounded-md [&>span:first-child]:hidden"
+                  className="pl-3 pr-8 py-1.5 focus:bg-[#B89555]/15 hover:bg-[#B89555]/15 cursor-pointer rounded-md"
                   style={{ color: '#1A1A1A' }}
                 >
                   <span
