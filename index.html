@@ -139,6 +139,30 @@
 
     <div id="root"></div>
 
+    <!-- JBJ Splash: dark emerald with monogram, fades out once React mounts -->
+    <div id="jbj-splash" aria-hidden="true">
+      <img src="/jbj-monogram-light-on-dark.png" alt="" />
+    </div>
+    <script>
+      (function(){
+        var splash=document.getElementById('jbj-splash');
+        if(!splash)return;
+        var hidden=false;
+        function hide(){if(hidden)return;hidden=true;splash.classList.add('jbj-splash-hide');
+          setTimeout(function(){splash&&splash.parentNode&&splash.parentNode.removeChild(splash);
+            try{document.documentElement.style.backgroundColor='';document.body.style.backgroundColor='';}catch(e){}
+          },650);}
+        var tries=0;
+        var iv=setInterval(function(){
+          tries++;
+          if(window.__APP_MOUNTED__||document.querySelector('#root>*')){clearInterval(iv);hide();}
+          else if(tries>120){clearInterval(iv);hide();}
+        },80);
+        window.addEventListener('load',function(){setTimeout(hide,1200);});
+      })();
+    </script>
+
+
     <!-- Boot diagnostic overlay - catches errors ONLY before React mounts -->
     <script>
       (function() {
