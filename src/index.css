@@ -3802,6 +3802,56 @@ a[class*="bg-red-"]:hover {
 }
 
 /* =====================================================================
+   COOKIE BANNER — RESPONSIVE LAYOUT LOCK (sidebar-aware + mobile compact)
+   - Offsets the banner past the vertical sidebar (48px collapsed / 200px expanded)
+     so "We value your privacy" never sits under the rail.
+   - Compacts the popup on phones so it does not consume half the screen.
+   ===================================================================== */
+[data-chrome="cookie-banner"] {
+  padding-left: max(0.75rem, env(safe-area-inset-left)) !important;
+  padding-right: max(0.75rem, env(safe-area-inset-right)) !important;
+  transition: padding-left 180ms ease;
+}
+@media (min-width: 640px) {
+  body.jj-vertical-nav-collapsed [data-chrome="cookie-banner"] {
+    padding-left: calc(48px + 1rem) !important;
+    padding-right: 1rem !important;
+  }
+  body.jj-vertical-nav-active [data-chrome="cookie-banner"] {
+    padding-left: calc(200px + 1.25rem) !important;
+    padding-right: 1.25rem !important;
+  }
+}
+/* Mobile: compact popup — never wider than ~360px, sit above safe area, tighter padding */
+@media (max-width: 639px) {
+  [data-chrome="cookie-banner"] {
+    padding: 0.5rem !important;
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom)) !important;
+  }
+  [data-chrome="cookie-banner"] > div {
+    max-width: min(360px, calc(100vw - 1rem)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border-radius: 1rem !important;
+    max-height: 70vh !important;
+  }
+  [data-chrome="cookie-banner"] > div > div { padding: 0.875rem !important; }
+  [data-chrome="cookie-banner"] h3 { font-size: 0.95rem !important; margin-bottom: 0.25rem !important; }
+  [data-chrome="cookie-banner"] p { font-size: 0.72rem !important; line-height: 1.35 !important; }
+  [data-chrome="cookie-banner"] button {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    height: 2.25rem !important;
+    font-size: 0.78rem !important;
+  }
+  [data-chrome="cookie-banner"] .w-10,
+  [data-chrome="cookie-banner"] .sm\:w-12 {
+    width: 2rem !important; height: 2rem !important;
+  }
+}
+
+
+/* =====================================================================
    LEGACY HOVER / ALPHA / URGENT CONTRAST RULES — NEUTRALIZED
    Removed broad text/icon repaint blocks. Final two-rule contract owns
    dark-on-light and white-on-dark outcomes.
