@@ -21,6 +21,7 @@ export interface RenderReportOptions {
   branding: ReportBranding;
   projects: ReportProject[];
   clientName?: string;
+  clientRequirements?: Record<string, string | string[]>;
   filename?: string;
 }
 
@@ -82,6 +83,7 @@ export async function renderReportToPdf(
         branding: opts.branding,
         projects: opts.projects,
         clientName: opts.clientName,
+        clientRequirements: opts.clientRequirements,
         pageIdPrefix: "pdf",
       } as ReportEngineProps)
     );

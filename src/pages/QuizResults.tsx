@@ -482,6 +482,7 @@ const QuizResults = () => {
       branding: resolvedBranding,
       projects: projects as unknown as ReportEngineProject[],
       clientName: matchmakerFormData?.fullName || undefined,
+      clientRequirements: sessionAnswers,
     });
   };
 
@@ -1401,6 +1402,8 @@ const QuizResults = () => {
         open={previewOpen}
         onOpenChange={setPreviewOpen}
         projects={(projects || []) as any}
+        clientName={matchmakerFormData?.fullName || undefined}
+        clientRequirements={sessionAnswers}
         defaults={{
           name: matchmakerFormData?.fullName || "",
           email: user?.email || "",
