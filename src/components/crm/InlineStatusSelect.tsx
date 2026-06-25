@@ -65,13 +65,14 @@ export default function InlineStatusSelect({
       <SelectContent 
         position="popper"
         side="bottom"
-        align="start"
+        align="end"
         sideOffset={6}
-        avoidCollisions={false}
-        className="border border-[#B89555]/40 shadow-2xl max-h-96 rounded-xl p-1.5 z-[200] min-w-[200px]"
+        collisionPadding={12}
+        className="border border-[#B89555]/40 shadow-2xl max-h-96 rounded-xl p-1.5 z-[200] min-w-[220px]"
         style={{ backgroundColor: '#FDFBF7', color: '#1A1A1A' }}
         onClick={(e) => e.stopPropagation()}
       >
+
         {(['positive','neutral','negative'] as const).map((cat) => {
           const headerColor = cat === 'positive' ? '#064E3B' : cat === 'negative' ? '#7F1D1D' : '#1A1A1A';
           const headerDotColor = cat === 'positive' ? '#064E3B' : cat === 'negative' ? '#7F1D1D' : '#B89555';
