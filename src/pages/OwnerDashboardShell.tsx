@@ -72,23 +72,6 @@ const OwnerDashboardShell = () => {
             </span>
           )}
         </button>
-        {!isMobile && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            data-no-contrast-guard
-            style={{ color: "#1A1A1A" }}
-            className="hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:ring-2 focus:ring-[#B89555]/40"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? (
-              <ChevronRight className="w-4 h-4" />
-            ) : (
-              <ChevronLeft className="w-4 h-4" />
-            )}
-          </Button>
-        )}
       </div>
 
       {/* Sidebar Navigation */}
@@ -96,14 +79,30 @@ const OwnerDashboardShell = () => {
 
       {/* Bottom Actions */}
       <div data-no-contrast-guard className="owner-shell-surface p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
-        <button
-          onClick={() => { navigate("/"); setMobileOpen(false); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40 text-primary bg-secondary"
-          aria-label="Return to main site"
-        >
-          <Home className="w-5 h-5 flex-shrink-0 text-primary" />
-          {!collapsed && <span className="text-primary">Return to Site</span>}
-        </button>
+        <div className={cn("flex items-center gap-2", collapsed && "flex-col")}>
+          <button
+            onClick={() => { navigate("/"); setMobileOpen(false); }}
+            className="flex-1 min-w-0 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40 text-primary bg-secondary"
+            aria-label="Return to main site"
+          >
+            <Home className="w-5 h-5 flex-shrink-0 text-primary" />
+            {!collapsed && <span className="text-primary truncate">Return to Site</span>}
+          </button>
+          {!isMobile && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              data-no-contrast-guard
+              style={{ color: "#1A1A1A" }}
+              className="flex-shrink-0 h-10 w-10 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:ring-2 focus:ring-[#B89555]/40"
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </Button>
+          )}
+        </div>
         <button
           onClick={handleSignOut}
           data-signout-action
@@ -189,9 +188,17 @@ const OwnerDashboardShell = () => {
                 <Menu className="w-5 h-5" />
               </Button>
             )}
-            <div className="min-w-0 flex flex-col justify-center leading-tight">
-              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate leading-tight">Founder & CEO</h1>
-              <p className="text-[#1A1A1A]/70 text-xs hidden md:block whitespace-nowrap leading-tight">Jane Bou Jaoude — Executive Command Center</p>
+            <div className="flex items-center gap-2.5 min-w-0">
+              <img
+                src={jbjMonogramNobuffer}
+                alt="JBJ"
+                className="object-contain flex-shrink-0"
+                style={{ width: 42, height: 42 }}
+              />
+              <div className="min-w-0 flex flex-col justify-center leading-none">
+                <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate leading-none">Founder &amp; CEO</h1>
+                <p className="text-[#1A1A1A]/70 text-[11px] mt-1 hidden md:block whitespace-nowrap leading-none">Jane Bou Jaoude — Executive Command Center</p>
+              </div>
             </div>
           </div>
           
