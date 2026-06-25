@@ -925,7 +925,7 @@ function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pag
           ))}
         </div>
 
-        <section style={{ borderRadius: 10, background: T.surface, border: `1px solid ${T.goldHair}`, padding: 18 }}>
+        <section style={{ borderRadius: 10, background: T.surface, border: `1px solid ${T.goldHair}`, padding: 18, fontFamily: T.font }}>
           <SectionEyebrow>Prepared by</SectionEyebrow>
           <div style={{ display: "grid", gridTemplateColumns: "96px repeat(4, 1fr)", gap: 18, alignItems: "stretch" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
