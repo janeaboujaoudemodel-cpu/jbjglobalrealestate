@@ -400,6 +400,29 @@ export default function ReportPreviewModal({
               </div>
             </div>
 
+            {activeRole === "investor" && (
+              <div>
+                <Label className="text-xs font-semibold" style={{ color: C.ink }}>Salutation</Label>
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  {(["Mr.", "Ms."] as const).map((s) => {
+                    const active = (branding.salutation || "Mr.") === s;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        data-aihf-include-btn
+                        data-active={active ? "true" : "false"}
+                        onClick={() => update({ salutation: s })}
+                        className={`text-xs font-semibold rounded-md px-3 py-2 transition ${active ? "allow-white" : ""}`}
+                        style={active ? primaryBtn : secondaryBtn}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             {[
               { k: "name", l: "Your name", ph: "Jane Doe" },
               { k: "companyName", l: "Company name", ph: "JBJ Global Real Estate" },
