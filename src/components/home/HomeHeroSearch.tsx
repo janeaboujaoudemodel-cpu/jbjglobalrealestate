@@ -208,13 +208,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             )}
           </button>
 
-          {/* FREE CONSULTATION — same emerald system, no gold */}
+          {/* FREE CONSULTATION — visible on ALL viewports (compact label on mobile) */}
           <button
             type="button"
             onClick={openBooking}
             aria-label="Book your free consultation now"
             data-no-contrast-guard
-            className="allow-white jj-hero-search-action hidden md:flex items-center justify-center self-stretch h-full px-5 lg:px-6 text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
+            className="allow-white jj-hero-search-action flex items-center justify-center gap-1.5 self-stretch h-full px-3 sm:px-5 lg:px-6 text-[12.5px] sm:text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
@@ -223,39 +223,18 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
             }}
           >
-            <span className="whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <CalendarCheck className="w-4 h-4 sm:hidden" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />
+            <span className="whitespace-nowrap hidden sm:inline" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               Free Consultation
+            </span>
+            <span className="whitespace-nowrap sm:hidden" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+              Consult
             </span>
           </button>
 
         </div>
         </div>
 
-
-
-        {/* Mobile-only stacked CTAs — champagne mother-of-pearl fiberglass */}
-        <div className="mt-3 flex sm:hidden gap-2">
-          <button
-            type="button"
-            onClick={openBooking}
-            data-hero-consultation-lock
-            aria-label="Book your free consultation now"
-            className="flex-1 inline-flex items-center justify-center gap-1.5 h-11 rounded-xl px-3
-              text-[13px] font-semibold whitespace-nowrap text-[#1A1A1A]
-              border border-[#B89555]/55
-              transition-colors duration-200"
-            style={{
-              color: "#1A1A1A",
-              background: "linear-gradient(180deg, rgba(247,242,234,0.82) 0%, rgba(239,230,214,0.74) 100%)",
-              backdropFilter: "blur(16px) saturate(150%)",
-              WebkitBackdropFilter: "blur(16px) saturate(150%)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35), 0 8px 22px rgba(26,26,26,0.18)",
-            }}
-          >
-            <CalendarCheck className="w-4 h-4" strokeWidth={2.2} style={{ color: "#1A1A1A" }} />
-            <span style={{ color: "#1A1A1A" }}>Free Consultation</span>
-          </button>
-        </div>
 
 
       </motion.div>
