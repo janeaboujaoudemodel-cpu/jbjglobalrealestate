@@ -444,13 +444,13 @@ export default function ReportPreviewModal({
               >
                 <div className="flex items-center gap-3">
                   {showLogo ? (
-                    <img src={branding.logoDataUrl} alt="" className="h-11 w-11 rounded bg-white object-contain p-1" />
+                    <img src={branding.logoDataUrl} alt="" className="h-16 w-16 rounded bg-white object-contain p-1" />
                   ) : (
                     <div
-                      className="h-11 w-11 rounded flex items-center justify-center overflow-hidden"
+                      className="h-16 w-16 rounded flex items-center justify-center overflow-hidden"
                       style={{ background: "#FFFFFF", border: `1px solid ${C.gold}` }}
                     >
-                      <img src={jbjMonogram} alt="JBJ" className="h-9 w-9 object-contain" />
+                      <img src={jbjMonogram} alt="JBJ" className="h-[58px] w-[58px] object-contain" />
                     </div>
                   )}
                   <div>
@@ -463,8 +463,42 @@ export default function ReportPreviewModal({
                 </div>
               </div>
 
-              {/* Prepared-by strip */}
-              {branding.mode !== "none" && (
+              {/* Investor mode → addressed TO the client (FROM JBJ).
+                  All other modes → "Prepared by" branding strip. */}
+              {branding.mode !== "none" && branding.role === "investor" && (
+                <div
+                  className="px-5 py-4 flex items-center gap-3"
+                  style={{ background: C.surface, borderBottom: `1px solid ${C.goldHair}` }}
+                >
+                  {showPhoto ? (
+                    <img
+                      src={branding.photoDataUrl}
+                      alt=""
+                      className="h-16 w-16 rounded-full object-cover flex-shrink-0"
+                      style={{ border: `2px solid ${C.gold}` }}
+                    />
+                  ) : (
+                    <div
+                      className="h-16 w-16 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-lg"
+                      style={{ background: C.raised, border: `2px solid ${C.gold}`, color: C.ink }}
+                    >
+                      {(branding.name || "C").trim().charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="leading-tight">
+                    <p data-aihf-prepared-by className="text-[10px] uppercase tracking-[0.18em] font-semibold">
+                      Curated personally for
+                    </p>
+                    <p className="font-bold text-[16px]" style={{ color: C.ink }}>
+                      {`${branding.salutation || "Mr."} ${branding.name || "Valued Client"}`.trim()}
+                    </p>
+                    <p className="text-[10px] mt-0.5" style={{ color: C.muted }}>
+                      A bespoke selection presented by JBJ Global Real Estate
+                    </p>
+                  </div>
+                </div>
+              )}
+              {branding.mode !== "none" && branding.role !== "investor" && (
                 <div className="px-5 py-3 flex items-start gap-3" style={{ background: C.surface, borderBottom: `1px solid ${C.goldHair}` }}>
                   {showPhoto && (
                     <img src={branding.photoDataUrl} alt="" className="h-14 w-14 rounded-full object-cover flex-shrink-0" style={{ border: `2px solid ${C.gold}` }} />
