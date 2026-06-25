@@ -15291,3 +15291,113 @@ html body :is(
   fill: none !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+ * ABSOLUTE EMERALD CTA CONTRACT — PURE WHITE CONTENT ONLY
+ * Final guard after every light/champagne contrast rule. If a
+ * surface is rendered as emerald/dark, its text, labels, numbers,
+ * and icons must be #FFFFFF — no inherited ink, no currentColor
+ * leaks, no champagne guard overrides.
+ * ============================================================ */
+html body :is(
+  button.jj-cta-dark.jj-cta-dark.jj-cta-dark,
+  a.jj-cta-dark.jj-cta-dark.jj-cta-dark,
+  .jj-cta-dark.jj-cta-dark.jj-cta-dark,
+  button.jj-navy-cta.jj-navy-cta.jj-navy-cta,
+  a.jj-navy-cta.jj-navy-cta.jj-navy-cta,
+  .jj-navy-cta.jj-navy-cta.jj-navy-cta,
+  button.jj-cta-primary.jj-cta-primary.jj-cta-primary,
+  a.jj-cta-primary.jj-cta-primary.jj-cta-primary,
+  .jj-cta-primary.jj-cta-primary.jj-cta-primary,
+  button.jj-cta-champagne.jj-cta-champagne.jj-cta-champagne,
+  a.jj-cta-champagne.jj-cta-champagne.jj-cta-champagne,
+  .jj-cta-champagne.jj-cta-champagne.jj-cta-champagne,
+  [data-cta="dark"][data-cta="dark"],
+  [data-cta="primary"][data-cta="primary"],
+  [data-surface="emerald"][data-surface="emerald"],
+  [data-emerald="true"][data-emerald="true"],
+  [data-jj-emerald][data-jj-emerald],
+  .jj-emerald-solid.jj-emerald-solid,
+  .jj-emerald-metallic.jj-emerald-metallic,
+  .jj-emerald-fill.jj-emerald-fill,
+  .jj-bg-emerald.jj-bg-emerald,
+  .jj-pill-emerald.jj-pill-emerald,
+  .jj-pill-active.jj-pill-active,
+  .jj-badge-dark.jj-badge-dark,
+  .jj-icon-tile-emerald.jj-icon-tile-emerald,
+  .jj-card-emerald.jj-card-emerald,
+  .jj-sidebar-item-active.jj-sidebar-item-active,
+  [data-sidebar-subitem][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"]
+):not([data-allow-ink]):not([data-no-contrast-guard]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body :is(
+  .jj-cta-dark.jj-cta-dark.jj-cta-dark,
+  .jj-navy-cta.jj-navy-cta.jj-navy-cta,
+  .jj-cta-primary.jj-cta-primary.jj-cta-primary,
+  .jj-cta-champagne.jj-cta-champagne.jj-cta-champagne,
+  [data-cta="dark"][data-cta="dark"],
+  [data-cta="primary"][data-cta="primary"],
+  [data-surface="emerald"][data-surface="emerald"],
+  [data-emerald="true"][data-emerald="true"],
+  [data-jj-emerald][data-jj-emerald],
+  .jj-emerald-solid.jj-emerald-solid,
+  .jj-emerald-metallic.jj-emerald-metallic,
+  .jj-emerald-fill.jj-emerald-fill,
+  .jj-bg-emerald.jj-bg-emerald,
+  .jj-pill-emerald.jj-pill-emerald,
+  .jj-pill-active.jj-pill-active,
+  .jj-badge-dark.jj-badge-dark,
+  .jj-icon-tile-emerald.jj-icon-tile-emerald,
+  .jj-card-emerald.jj-card-emerald,
+  .jj-sidebar-item-active.jj-sidebar-item-active,
+  [data-sidebar-subitem][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"]
+):not([data-allow-ink]):not([data-no-contrast-guard]) :is(span, p, strong, small, em, b, a, button, label, div, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body :is(
+  .jj-cta-dark.jj-cta-dark.jj-cta-dark,
+  .jj-navy-cta.jj-navy-cta.jj-navy-cta,
+  .jj-cta-primary.jj-cta-primary.jj-cta-primary,
+  .jj-cta-champagne.jj-cta-champagne.jj-cta-champagne,
+  [data-cta="dark"][data-cta="dark"],
+  [data-cta="primary"][data-cta="primary"],
+  [data-surface="emerald"][data-surface="emerald"],
+  [data-emerald="true"][data-emerald="true"],
+  [data-jj-emerald][data-jj-emerald],
+  .jj-emerald-solid.jj-emerald-solid,
+  .jj-emerald-metallic.jj-emerald-metallic,
+  .jj-emerald-fill.jj-emerald-fill,
+  .jj-bg-emerald.jj-bg-emerald,
+  .jj-pill-emerald.jj-pill-emerald,
+  .jj-pill-active.jj-pill-active,
+  .jj-badge-dark.jj-badge-dark,
+  .jj-icon-tile-emerald.jj-icon-tile-emerald,
+  .jj-card-emerald.jj-card-emerald,
+  .jj-sidebar-item-active.jj-sidebar-item-active,
+  [data-sidebar-subitem][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"]
+):not([data-allow-ink]):not([data-no-contrast-guard]) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
