@@ -776,9 +776,24 @@ const QuizResults = () => {
   const handleOpenShare = () => setPreviewOpen(true);
 
   const openLinkSync = (url: string) => {
+    // mailto: and wa.me MUST escape the Lovable preview iframe — otherwise the
+    // browser-configured mailto handler (e.g. mail.google.com) and WhatsApp Web
+    // load inside the iframe and are refused by X-Frame-Options
+    // (ERR_BLOCKED_BY_RESPONSE). Use _top to break out of the frame.
+    const isMail = /^mailto:/i.test(url);
+    const isWa = /^https?:\/\/(?:wa\.me|api\.whatsapp\.com|web\.whatsapp\.com)\b/i.test(url);
+    const inFrame = typeof window !== "undefined" && window.top !== window.self;
+    if (isMail) {
+      // Most reliable across browsers: navigate top frame directly.
+      try {
+        if (inFrame && window.top) { window.top.location.href = url; return; }
+      } catch { /* cross-origin top — fall through to anchor */ }
+      window.location.href = url;
+      return;
+    }
     const a = document.createElement("a");
     a.href = url;
-    a.target = "_blank";
+    a.target = isWa || inFrame ? "_top" : "_blank";
     a.rel = "noopener noreferrer";
     a.style.display = "none";
     document.body.appendChild(a);
