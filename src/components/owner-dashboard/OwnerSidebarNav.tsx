@@ -261,21 +261,28 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             }
           }}
           className={cn(
-            "group w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
+            "group w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border relative",
             active
               ? "jj-emerald-metallic allow-white !text-white border-transparent font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
-              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-l-[#B89555]/60 hover:!text-[#064E3B] hover:bg-[#EFE6D6]/55",
+              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-[#B89555]/50 hover:!text-[#064E3B] hover:bg-[#EFE6D6]/55",
           )}
           style={depth > 0 ? { paddingLeft: `${12 + depth * 14}px` } : undefined}
           title={collapsed ? item.label : undefined}
         >
-          <item.icon
+          <span
+            data-backend-sidebar-icon-tile
+            data-surface="emerald"
             className={cn(
-              "w-4 h-4 flex-shrink-0 transition-colors duration-200",
-              active ? "text-white" : "text-[#064E3B]",
-              item.premium && !active && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]"
+              "allow-white w-6 h-6 rounded-md flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]",
+              item.premium && !active && "shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),0_0_8px_rgba(184,149,85,0.25),inset_0_1px_0_rgba(255,255,255,0.18)]"
             )}
-          />
+          >
+            <item.icon
+              className="allow-white w-3.5 h-3.5 flex-shrink-0 text-white transition-colors duration-200"
+              strokeWidth={2.1}
+              style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+            />
+          </span>
           {!collapsed && (
             <>
               <span

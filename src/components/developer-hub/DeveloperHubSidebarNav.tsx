@@ -42,16 +42,20 @@ export default function DeveloperHubSidebarNav({ collapsed, onNavigate }: Props)
             <button
               key={item.path}
               onClick={() => { navigate(item.path); onNavigate(); }}
+              data-backend-nav-item
+              data-emerald={isActive ? "true" : undefined}
               className={cn(
-                "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors text-left",
+                "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all text-left border",
                 isActive
-                  ? "bg-[#EFE6D6] text-[#1A1A1A] font-semibold border border-[#B89555]/60"
-                  : "text-[#1A1A1A]/75 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/60 border border-transparent"
+                  ? "jj-emerald-metallic allow-white text-white font-semibold border-transparent shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
+                  : "text-[#1A1A1A]/85 hover:text-[#064E3B] hover:bg-[#EFE6D6]/60 border-transparent hover:border-[#B89555]/40"
               )}
               title={collapsed ? item.label : undefined}
             >
-              <item.icon className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} />
-              {!collapsed && <span className="truncate">{item.label}</span>}
+              <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-6 h-6 rounded-md flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
+                <item.icon className="allow-white w-3.5 h-3.5 flex-shrink-0 text-white" strokeWidth={2.1} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              </span>
+              {!collapsed && <span className={cn("truncate", isActive ? "text-white" : "text-[#1A1A1A]")}>{item.label}</span>}
             </button>
           );
         })}

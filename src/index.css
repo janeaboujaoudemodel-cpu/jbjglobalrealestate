@@ -14896,6 +14896,129 @@ html body :is(
   mix-blend-mode: normal !important;
 }
 
+/* =====================================================================
+   BACK-END TERMINAL CONTRAST LOCK — Owner / Broker / Developer portals.
+   - Emerald-black gradient surfaces: pure white text and icons only.
+   - Champagne/gold/light surfaces: dark ink only, never white.
+   - Sidebar icon tiles match the approved front-end vertical sidebar.
+   ===================================================================== */
+html body #root :is(
+  [data-backend-sidebar] [data-backend-sidebar-icon-tile],
+  [data-backend-icon-tile="emerald"],
+  .owner-dashboard-shell [data-backend-sidebar-icon-tile],
+  [data-backend-sidebar] [data-surface="emerald"],
+  [data-backend-sidebar] [data-emerald="true"],
+  [data-backend-sidebar] [data-allow-dark-cta],
+  [data-backend-nav-item][data-emerald="true"],
+  .owner-dashboard-shell [role="tab"][data-state="active"],
+  .owner-dashboard-shell [data-jj-segmented-trigger][data-state="active"]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4, 44, 28, 0.86),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root :is(
+  [data-backend-sidebar] [data-backend-sidebar-icon-tile],
+  [data-backend-icon-tile="emerald"],
+  .owner-dashboard-shell [data-backend-sidebar-icon-tile],
+  [data-backend-sidebar] [data-surface="emerald"],
+  [data-backend-sidebar] [data-emerald="true"],
+  [data-backend-sidebar] [data-allow-dark-cta],
+  [data-backend-nav-item][data-emerald="true"],
+  .owner-dashboard-shell [role="tab"][data-state="active"],
+  .owner-dashboard-shell [data-jj-segmented-trigger][data-state="active"]
+) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, a, small, em, b, label, button, div, li),
+html body #root :is(
+  [data-backend-sidebar] [data-backend-sidebar-icon-tile],
+  [data-backend-icon-tile="emerald"],
+  .owner-dashboard-shell [data-backend-sidebar-icon-tile],
+  [data-backend-sidebar] [data-surface="emerald"],
+  [data-backend-sidebar] [data-emerald="true"],
+  [data-backend-sidebar] [data-allow-dark-cta],
+  [data-backend-nav-item][data-emerald="true"],
+  .owner-dashboard-shell [role="tab"][data-state="active"],
+  .owner-dashboard-shell [data-jj-segmented-trigger][data-state="active"]
+) :where(svg, [class*="lucide"], [data-lucide], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(
+  [data-backend-icon-tile="emerald-soft"],
+  .owner-dashboard-shell [data-backend-icon-tile="emerald-soft"]
+) {
+  background: rgba(6, 78, 59, 0.10) !important;
+  border-color: rgba(6, 78, 59, 0.16) !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+html body #root :is(
+  [data-backend-icon-tile="emerald-soft"],
+  .owner-dashboard-shell [data-backend-icon-tile="emerald-soft"]
+) :where(svg, [class*="lucide"], [data-lucide], svg *) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+  opacity: 1 !important;
+}
+
+html body #root :is(
+  .owner-dashboard-shell,
+  [data-backend-sidebar],
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="raised"],
+  [data-surface="page"],
+  [data-surface="gold"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-raised,
+  .surface-gold,
+  .owner-shell-surface
+) :where(.text-white, [class*="text-white/"], .allow-white):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-emerald-action="true"]):not([data-emerald-action="true"] *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([role="tab"][data-state="active"]):not([role="tab"][data-state="active"] *):not([data-jj-segmented-trigger][data-state="active"]):not([data-jj-segmented-trigger][data-state="active"] *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-action):not(.jj-emerald-action *):not(.jj-pill-emerald):not(.jj-pill-emerald *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+
+html body #root :is(
+  .owner-dashboard-shell,
+  [data-backend-sidebar],
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="raised"],
+  [data-surface="page"],
+  [data-surface="gold"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-raised,
+  .surface-gold,
+  .owner-shell-surface
+) :where(svg.text-white, svg[class*="text-white/"], .text-white svg, [class*="text-white/"] svg):not([data-emerald="true"] *):not([data-emerald-action="true"] *):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not([data-allow-dark-cta] *):not([role="tab"][data-state="active"] *):not([data-jj-segmented-trigger][data-state="active"] *):not(.jj-emerald-metallic *):not(.jj-emerald-action *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body #root .owner-dashboard-shell :where([role="tab"], [data-jj-segmented-trigger]):not([data-state="active"]),
+html body #root .owner-dashboard-shell :where([role="tab"], [data-jj-segmented-trigger]):not([data-state="active"]) :where(*, span, svg, [class*="lucide"], svg *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
 
 
 
