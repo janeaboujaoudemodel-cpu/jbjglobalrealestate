@@ -10339,7 +10339,7 @@ html body :is(
   .jj-dual-cta-secondary, [data-cta="champagne"],
   [data-surface="gold"], [data-surface="champagne"], [data-surface="cream"], [data-surface="raised"], [data-surface="page"], [data-surface="light"],
   .surface-gold, .surface-champagne, .surface-cream, .surface-raised, .surface-page, .surface-light
-):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.allow-white):not(.jj-side-tile):not(.careers-card-navy):not([data-on-dark]):not([data-no-contrast-guard]),
+):not([data-emerald]):not([data-emerald="true"]):not([data-jj-emerald]):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-emerald-chip):not(.jj-emerald-card):not(.jj-emerald-fill):not(.jj-bg-emerald):not(.jj-cta-primary):not(.jj-cta-dark):not(.jj-navy-cta):not(.jj-cta-champagne):not([data-cta="primary"]):not([data-cta="dark"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not(.allow-white):not(.jj-side-tile):not(.careers-card-navy):not([data-on-dark]):not([data-no-contrast-guard]),
 html body :is(
   [class~="bg-[#B89555]"], [class~="bg-[#EFE6D6]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#FDFBF7]"],
   .jj-dual-cta-secondary, [data-cta="champagne"],
