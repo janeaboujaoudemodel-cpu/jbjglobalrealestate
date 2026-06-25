@@ -6,7 +6,7 @@ const password = process.env.OWNER_PASSWORD || process.env.E2E_PASSWORD || proce
 const sessionJson = process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON;
 const storageKey = process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY;
 fs.mkdirSync('/mnt/documents/contrast-proof', { recursive: true });
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || '/bin/chromium' });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
 if (sessionJson && storageKey) {
   await page.addInitScript(({ key, value }) => {
