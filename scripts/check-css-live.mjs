@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const base=process.env.BASE_URL||'http://127.0.0.1:8081';
+const base=process.env.BASE_URL||'http://127.0.0.1:8080';
 const browser=await chromium.launch({headless:true, executablePath:'/bin/chromium'});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});
 const sessionJson=process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON; const storageKey=process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY;
