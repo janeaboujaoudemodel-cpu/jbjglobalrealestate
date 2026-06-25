@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Download, MessageCircle, Mail, Link as LinkIcon, Send, Upload, User as UserIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { useUserMode, type UserMode } from "@/hooks/useUserMode";
-import jbjMonogram from "@/assets/jbj-logo-dark-transparent.png";
+// Official letterhead monogram (black JBJ on champagne with gold rules above/below the B)
+import jbjMonogram from "@/assets/jbj-monogram-letterhead.png";
 
 export type ReportRole = "broker" | "developer" | "owner" | "consultant";
 export type BrandingMode = "both" | "photo" | "logo" | "none";
@@ -257,6 +258,26 @@ export default function ReportPreviewModal({
             -webkit-text-fill-color: #FFFFFF !important;
             stroke: #FFFFFF !important;
           }
+          /* Include-in-report toggle group — lock contrast at every state */
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="true"],
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="true"] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            stroke: #FFFFFF !important;
+          }
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"],
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"] * {
+            color: #1A1A1A !important;
+            -webkit-text-fill-color: #1A1A1A !important;
+          }
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover {
+            border-color: #064E3B !important;
+            color: #064E3B !important;
+          }
+          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover * {
+            color: #064E3B !important;
+            -webkit-text-fill-color: #064E3B !important;
+          }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
           <DialogTitle className="text-xl font-bold" style={{ color: C.ink }}>
@@ -308,8 +329,10 @@ export default function ReportPreviewModal({
                     <button
                       key={opt.v}
                       type="button"
+                      data-aihf-include-btn
+                      data-active={active ? "true" : "false"}
                       onClick={() => update({ mode: opt.v })}
-                      className="text-xs font-semibold rounded-md px-3 py-2 transition"
+                      className={`text-xs font-semibold rounded-md px-3 py-2 transition ${active ? "allow-white" : ""}`}
                       style={active ? primaryBtn : secondaryBtn}
                     >
                       {opt.l}
