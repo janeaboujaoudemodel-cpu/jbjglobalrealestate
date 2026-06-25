@@ -248,7 +248,7 @@ export default function PaymentPlanVisualization({
               <div className="h-6 rounded-full bg-[#F7F2EA] overflow-hidden flex shadow-inner relative">
                 {bookingPct > 0 && (
                   <div
-                    className="h-full transition-all flex items-center justify-center"
+                    data-emerald="true" data-no-contrast-guard className="h-full transition-all flex items-center justify-center"
                     style={{ width: `${(bookingPct / total) * 100}%`, backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }}
                   >
                     <span className="text-[10px] font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{bookingPct}%</span>
@@ -256,7 +256,7 @@ export default function PaymentPlanVisualization({
                 )}
                 {constructionPct > 0 && (
                   <div
-                    className="h-full transition-all flex items-center justify-center"
+                    data-emerald="true" data-no-contrast-guard className="h-full transition-all flex items-center justify-center"
                     style={{ width: `${(constructionPct / total) * 100}%`, backgroundImage: 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)' }}
                   >
                     <span className="text-[10px] font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{constructionPct}%</span>
@@ -264,7 +264,7 @@ export default function PaymentPlanVisualization({
                 )}
                 {handoverPct > 0 && (
                   <div
-                    className="h-full transition-all flex items-center justify-center"
+                    data-emerald="true" data-no-contrast-guard className="h-full transition-all flex items-center justify-center"
                     style={{ width: `${(handoverPct / total) * 100}%`, backgroundImage: 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)' }}
                   >
                     <span className="text-[10px] font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{handoverPct}%</span>
@@ -277,15 +277,15 @@ export default function PaymentPlanVisualization({
                 <div className="absolute top-3 left-0 right-0 h-0.5" style={{ backgroundImage: 'linear-gradient(90deg,#064E3B 0%,#0B6E4F 50%,#0E8A63 100%)' }} />
                 <div className="flex justify-between relative">
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }} />
+                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }} />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">On Booking</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)' }} />
+                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)' }} />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">During Construction</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)' }} />
+                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)' }} />
                     <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">
                       On Handover{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}
                     </span>
@@ -304,7 +304,7 @@ export default function PaymentPlanVisualization({
                   className="p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] hover:shadow-md transition-all text-center"
                 >
                   <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ring-4 ring-white/60"
+                    data-emerald="true" data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ring-4 ring-white/60"
                     style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }}
                   >
                     <span className="text-xl font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
