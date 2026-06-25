@@ -637,10 +637,10 @@ export default function ReportPreviewModal({
                           ))}
                         </tr>
                       ))}
-                      <tr style={{ background: "#064E3B" }}>
-                        <td className="px-2 py-2 font-bold text-white" style={{ color: "#fff" }}>Match summary</td>
+                      <tr data-no-contrast-guard style={{ backgroundImage: C.emeraldGradient, backgroundColor: "#064E3B" }}>
+                        <td className="px-2 py-2 font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Match summary</td>
                         {previewProjects.slice(0, 3).map((p, i) => (
-                          <td key={p.id} className="px-2 py-2 font-bold text-white" style={{ color: "#fff" }}>
+                          <td key={p.id} className="px-2 py-2 font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                             {["Best", "Strong", "Good"][i] || "Fit"}
                           </td>
                         ))}
