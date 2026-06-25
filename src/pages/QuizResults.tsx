@@ -786,7 +786,21 @@ const QuizResults = () => {
     setTimeout(() => a.remove(), 0);
   };
 
-  // From the preview modal — generate branded PDF, then act.
+  // Background PDF generation that doesn't block the user gesture.
+  // Share/Send/Copy buttons open their link IMMEDIATELY (preserves user gesture so
+  // popup/mailto/whatsapp aren't blocked) and the branded PDF downloads when ready.
+  const generatePdfInBackgroundAndDownload = (branding?: ReportBranding) => {
+    generateAndCachePdf(branding)
+      .then((built) => {
+        if (built) {
+          triggerDownload(built.blob, built.filename);
+          toast.success("Branded PDF downloaded — attach it to your message.");
+        }
+      })
+      .catch(() => { /* silent — toast already shown on failure */ });
+  };
+
+  // Explicit Download button — still awaits so the spinner reflects real progress.
   const previewDownload = async (branding: ReportBranding) => {
     const built = await generateAndCachePdf(branding);
     if (!built) return;
@@ -794,21 +808,20 @@ const QuizResults = () => {
     toast.success("Branded report downloaded!");
   };
 
-  const previewShareWhatsApp = async (branding: ReportBranding) => {
+  const previewShareWhatsApp = (branding: ReportBranding) => {
     const text = buildShareText();
-    const built = await generateAndCachePdf(branding);
-    if (built) triggerDownload(built.blob, built.filename);
-    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(Branded PDF report downloaded — attach it from your downloads.)`)}`);
-    toast.success("Opening WhatsApp — attach the downloaded PDF");
+    // Open WhatsApp first, inside the user gesture — never blocked.
+    openLinkSync(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n(Branded PDF report attached from your downloads.)`)}`);
+    toast.success("Opening WhatsApp — PDF is downloading in the background");
+    generatePdfInBackgroundAndDownload(branding);
   };
 
-  const previewShareEmail = async (branding: ReportBranding) => {
+  const previewShareEmail = (branding: ReportBranding) => {
     const subject = "My JBJ AI Property Recommendations";
     const text = buildShareText();
-    const built = await generateAndCachePdf(branding);
-    if (built) triggerDownload(built.blob, built.filename);
-    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(Branded PDF report downloaded — attach it from your downloads.)`)}`);
-    toast.success("Opening email — attach the downloaded PDF");
+    openLinkSync(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${text}\n\n(Branded PDF report attached from your downloads.)`)}`);
+    toast.success("Opening email — PDF is downloading in the background");
+    generatePdfInBackgroundAndDownload(branding);
   };
 
   const previewCopy = async () => {
@@ -820,15 +833,16 @@ const QuizResults = () => {
     }
   };
 
-  const previewSendToConsultant = async (branding: ReportBranding) => {
+  const previewSendToConsultant = (branding: ReportBranding) => {
     if (!projects?.length) return;
     const subject = "AI Property Recommendations — Request Consultation";
     const body = `Dear JBJ Global Real Estate Team,\n\nI have completed the AI Property Assessment and would like a consultation on the following recommendations:\n\n${buildShareText(false)}\n\nThe branded PDF report has been downloaded to my device and I will attach it to this email.\n\nBest regards`;
-    const built = await generateAndCachePdf(branding);
-    if (built) triggerDownload(built.blob, built.filename);
+    // Mailto MUST be triggered synchronously inside the click — never after an await.
     openLinkSync(`mailto:${JBJ_CONSULTANT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-    toast.success("Opening email to JBJ — attach the downloaded PDF");
+    toast.success("Opening email to JBJ — PDF is downloading in the background");
+    generatePdfInBackgroundAndDownload(branding);
   };
+
 
   // Legacy share-modal handlers — kept so the existing post-action ShareModal still works.
   const generatePdfInBackground = () => {
