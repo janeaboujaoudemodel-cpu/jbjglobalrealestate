@@ -11,8 +11,12 @@ import { COMPANY_CONTACT, TRADE_LICENSE_BRAND, TRADE_LICENSE_NUMBER, TRADE_LICEN
 import { getDeveloperLogoUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 import { buildCriteriaRowsForExport, computeMatchTotals, type CriterionRow, type Verdict } from "@/components/matchmaker/MatchCriteriaTable";
-import { REPORT_TOKENS as T, REPORT_PAGE_PX, ROLE_LABELS } from "./tokens";
+import { REPORT_TOKENS as T, REPORT_PAGE_PX, TYPE, SP, PAGE_SEP_VAR, ROLE_LABELS } from "./tokens";
 import type { ReportBranding } from "../ReportPreviewModal";
+
+/** Render-mode context: lets PremiumImage opt-in to CORS only when capturing to PDF. */
+const ReportModeContext = React.createContext<"preview" | "pdf">("preview");
+
 
 const APP_ASSET_URLS = import.meta.glob("../../../assets/**/*.{png,jpg,jpeg,webp,avif,gif,svg}", {
   eager: true,
