@@ -270,7 +270,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   };
 
   // Reusable DB result row
-  const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false }: { item: DbResult; route: string; fallbackIcon: React.ElementType; isFirst?: boolean }) => (
+  const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false }: { item: DbResult; route: string; fallbackIcon: import("lucide-react").LucideIcon; isFirst?: boolean }) => (
     <button
       onClick={() => handleSelect(route)}
       className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${isFirst ? 'bg-[#1A1A1A]/10 border border-[#B89555]/40' : 'hover:bg-[#1A1A1A]/5'}`}
