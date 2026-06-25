@@ -637,7 +637,7 @@ export default function ReportPreviewModal({
                           ))}
                         </tr>
                       ))}
-                      <tr data-no-contrast-guard data-surface="emerald" data-on-dark style={{ backgroundImage: C.emeraldGradient, backgroundColor: "#064E3B" }}>
+                      <tr data-no-contrast-guard data-surface="emerald" data-on-dark style={{ background: "#064E3B" }}>
                         <td data-no-contrast-guard data-on-dark className="px-2 py-2 font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Match summary</td>
                         {previewProjects.slice(0, 3).map((p, i) => (
                           <td key={p.id} data-no-contrast-guard data-on-dark className="px-2 py-2 font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
