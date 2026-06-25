@@ -68,6 +68,13 @@ const WHITE = "#FFFFFF";
 const PRICE = T.gold;
 const BRAND_LINE = `${TRADE_LICENSE_BRAND} · Trade License ${TRADE_LICENSE_NUMBER}`;
 
+/** Render the JBJ website label in uppercase wherever it appears on the report. */
+function formatWebsite(value?: string | null): string {
+  const raw = (value || "").trim();
+  if (!raw) return "";
+  return /jbj\.ae/i.test(raw) ? raw.toUpperCase() : raw;
+}
+
 const escText = (value: unknown) => String(value ?? "").replace(/\s+/g, " ").trim();
 const titleCase = (value: string) => value.replace(/[-_]+/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
 
