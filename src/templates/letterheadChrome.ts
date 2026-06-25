@@ -97,7 +97,14 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
     </div>`;
 }
 
-export function buildLetterheadFooter(): string {
+export interface LetterheadFooterOpts {
+  /** Owner-only opt-in. When false (default) the trade-license office line
+   *  is omitted from the footer middle cell across every letterhead doc. */
+  showOffice?: boolean;
+}
+
+export function buildLetterheadFooter(opts: LetterheadFooterOpts = {}): string {
+  const officeCell = opts.showOffice && TRADE_LICENSE_OFFICE ? esc(TRADE_LICENSE_OFFICE) : "";
   return `
     <style>
       @media (max-width:520px){
@@ -112,7 +119,7 @@ export function buildLetterheadFooter(): string {
             <div style="margin-top:3px;"><a href="${telHref(COMPANY_CONTACT.phone)}" style="color:${GOLD};text-decoration:none;font-weight:600;">${esc(COMPANY_CONTACT.phone)}</a></div>
           </td>
           <td class="jbj-lf-cell" style="vertical-align:top;text-align:center;width:38%;padding:0 8px;color:${INK};opacity:.85;">
-            ${TRADE_LICENSE_OFFICE ? esc(TRADE_LICENSE_OFFICE) : ""}
+            ${officeCell}
           </td>
           <td class="jbj-lf-cell" style="vertical-align:top;text-align:right;width:30%;padding-left:10px;">
             <div><a href="${mailHref(COMPANY_CONTACT.email)}" style="color:${GOLD};text-decoration:none;font-weight:600;">${esc(COMPANY_CONTACT.email)}</a></div>
