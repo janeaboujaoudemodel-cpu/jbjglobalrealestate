@@ -273,7 +273,7 @@ export default function SupportLauncher() {
           <Sparkles className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           {/* Label hidden on portrait tablet & phone — icon only there.
               Visible from large landscape tablet / desktop up. */}
-          <span className="hidden md:inline allow-white text-[11px] font-semibold uppercase tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Asima</span>
+          <span className="hidden md:inline allow-white text-[11px] font-semibold uppercase tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Us</span>
           <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
         </button>
 
