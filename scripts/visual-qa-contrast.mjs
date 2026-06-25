@@ -3,10 +3,17 @@ import fs from 'fs';
 const base = process.env.BASE_URL || 'http://127.0.0.1:8081';
 const email = process.env.OWNER_EMAIL || process.env.E2E_EMAIL || process.env.TEST_EMAIL || process.env.PLAYWRIGHT_EMAIL;
 const password = process.env.OWNER_PASSWORD || process.env.E2E_PASSWORD || process.env.TEST_PASSWORD || process.env.PLAYWRIGHT_PASSWORD;
-if (!email || !password) throw new Error('Missing login credentials');
+const sessionJson = process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON;
+const storageKey = process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY;
 fs.mkdirSync('/mnt/documents/contrast-proof', { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+if (sessionJson && storageKey) {
+  await page.addInitScript(({ key, value }) => {
+    window.localStorage.setItem(key, value);
+    window.sessionStorage.setItem('owner_verified_once', '1');
+  }, { key: storageKey, value: sessionJson });
+}
 page.on('console', msg => { if (msg.type() === 'error') console.log('[browser error]', msg.text()); });
 page.on('pageerror', err => console.log('[pageerror]', err.message));
 async function waitReady() { await page.waitForLoadState('domcontentloaded'); await page.waitForTimeout(1600); }
@@ -14,7 +21,7 @@ async function login() {
   await page.goto(`${base}/auth?redirect=${encodeURIComponent('/owner/crm?entity=leads&view=inbox')}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await waitReady();
   const emailBox = page.locator('input[type="email"], input[name="email"], input[placeholder*="email" i]').first();
-  if (await emailBox.count()) {
+  if (await emailBox.count() && email && password) {
     await emailBox.fill(email);
     await page.locator('input[type="password"], input[name="password"], input[placeholder*="password" i]').first().fill(password);
     await Promise.race([
