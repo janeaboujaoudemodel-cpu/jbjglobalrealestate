@@ -15844,3 +15844,166 @@ html body :is(.jj-label-emerald, [data-label="emerald"]) :is(svg, [class*="lucid
   stroke: #FFFFFF !important;
 }
 /* end FINAL GLOBAL EMERALD + LAYOUT LOCK */
+
+/* ════════════════════════════════════════════════════════════════════
+   PROJECT DETAIL — GLOBAL LAYOUT + CONTRAST FINAL LOCK (v3)
+   Single source of truth for /project/:slug
+   - Cards never touch viewport edge or vertical sidebar (open or collapsed)
+   - DLD widget, Project Documents, Register Interest, Recommended, CTA
+     all share the same shell gutters as the rest of the page
+   - Hero copy/CTAs/breadcrumbs render pure white, no stray white line
+   - Payment Plan title bar = approved emerald with white title/icon
+   - Project Brochure / Generate Presentation eyebrows = ink (not gold)
+   ════════════════════════════════════════════════════════════════════ */
+
+/* 1. Normalise the project shell. Every direct content wrapper we use on
+   the project page (jj-project-shell + nested band) gets identical, sidebar-
+   safe gutters; backgrounds stay full-bleed via jj-fullbleed-band. */
+:root {
+  --project-shell-px: clamp(20px, 4vw, 40px);
+}
+html body main .jj-project-band > .jj-project-shell,
+html body main .jj-project-band > div > .jj-project-shell {
+  width: 100% !important;
+  max-width: var(--shell-max-w, 1440px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--project-shell-px) !important;
+  padding-right: var(--project-shell-px) !important;
+  box-sizing: border-box !important;
+}
+/* Nested band (DLD widget, etc.) inherits same gutters and never overflows */
+html body main .jj-project-nested-band,
+html body main .jj-project-nested-band > section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow-x: clip !important;
+}
+html body main .jj-project-nested-band section > div[class*="px-"],
+html body main .jj-project-nested-band section > div.w-full {
+  padding-left: var(--project-shell-px) !important;
+  padding-right: var(--project-shell-px) !important;
+  max-width: var(--shell-max-w, 1440px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* 2. Hero — strengthen the bottom darken so copy never disappears
+   on bright photos, and remove the underline that renders as a white line
+   between Download Brochure and Register Interest. */
+html body section.jj-project-hero > div.absolute.inset-0 > div:last-child {
+  background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0) 100%) !important;
+  height: 75% !important;
+}
+html body section.jj-project-hero a:hover,
+html body section.jj-project-hero button:hover {
+  text-decoration: none !important;
+}
+html body section.jj-project-hero .jj-hero-ghost-cta,
+html body section.jj-project-hero .jj-hero-ghost-cta * {
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}
+
+/* 3. Payment Plan — approved emerald header band + white title/icon */
+html body [data-section="payment"] > .relative > .rounded-2xl,
+html body [data-section="payment"] .rounded-2xl.bg-\[\#FDFBF7\] {
+  /* keep card surface light, but lift the header into emerald */
+}
+html body [data-section="payment"] h3 svg.lucide-credit-card,
+html body [data-section="payment"] h3.text-h3-sm {
+  /* handled inline via component, ensure consistent ink contrast */
+}
+/* Force any amber/blue accents inside payment plan onto the approved
+   emerald palette so the section stops shipping unapproved greens/blues. */
+html body [data-section="payment"] [class*="bg-amber-"],
+html body [data-section="payment"] [class*="bg-blue-"],
+html body [data-section="payment"] [class*="from-amber-"],
+html body [data-section="payment"] [class*="to-amber-"],
+html body [data-section="payment"] [class*="from-blue-"],
+html body [data-section="payment"] [class*="to-blue-"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+}
+html body [data-section="payment"] [class*="text-amber-"],
+html body [data-section="payment"] [class*="text-blue-"] {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+/* Booking/Construction/Handover circles → solid emerald with pure white % */
+html body [data-section="payment"] .rounded-full.bg-amber-500,
+html body [data-section="payment"] .rounded-full.bg-blue-500,
+html body [data-section="payment"] .w-6.h-6.rounded-full,
+html body [data-section="payment"] .w-16.h-16.rounded-full {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.92) !important;
+  color: #FFFFFF !important;
+}
+html body [data-section="payment"] .w-6.h-6.rounded-full *,
+html body [data-section="payment"] .w-16.h-16.rounded-full * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 4. Project Brochure + Generate Presentation eyebrows — kill stray
+   gold text color; keep ink and the gold hairline accent only. */
+html body #brochure p.text-\[10px\].uppercase,
+html body .jj-card-inner [id^="jj-genpres-"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+/* Re-allow the locked white text inside the dark Generate Presentation
+   button after the line above (id ones above are inside the button). */
+html body button[data-hero-dark] #jj-genpres-eyebrow,
+html body button[data-hero-dark] #jj-genpres-title,
+html body button[data-hero-dark] #jj-genpres-sub {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body button[data-hero-dark] #jj-genpres-sub {
+  color: rgba(255,255,255,0.88) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.88) !important;
+}
+
+/* 5. Stop any nested element on the project page from breaking out of the
+   shell horizontally (eliminates "card crosses the sidebar" reports). */
+html body main .jj-project-band img,
+html body main .jj-project-band canvas,
+html body main .jj-project-band iframe,
+html body main .jj-project-band .jj-card-inner {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+html body main .jj-project-band { overflow-x: clip; }
+/* end PROJECT DETAIL — GLOBAL LAYOUT + CONTRAST FINAL LOCK (v3) */
+
+/* Force milestone % digits inside Payment Plan emerald circles to pure white,
+   beating the text-amber/text-blue normalization above. */
+html body [data-section="payment"] .w-16.h-16.rounded-full,
+html body [data-section="payment"] .w-16.h-16.rounded-full * ,
+html body [data-section="payment"] .w-16.h-16.rounded-full span,
+html body [data-section="payment"] .w-6.h-6.rounded-full,
+html body [data-section="payment"] .w-6.h-6.rounded-full * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Payment Plan progress bar segments — keep % white regardless of tone guards */
+html body [data-section="payment"] .h-6.rounded-full > div > span,
+html body [data-section="payment"] .h-6.rounded-full span.text-white {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.45) !important;
+}
+/* Ensure first progress segment has emerald fill (not transparent gradient) */
+html body [data-section="payment"] .h-6.rounded-full > div:first-child:not([style*="width: 0"]) {
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+}
