@@ -939,39 +939,56 @@ function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pag
 }
 
 export function ReportEngine({ mode, branding, projects, clientName, clientRequirements, pageIdPrefix = "report" }: ReportEngineProps) {
-  void mode;
   const safeProjects = projects.slice(0, 3);
   const requirements = buildRequirementItems(clientRequirements);
   const criteriaRows = clientRequirements ? buildCriteriaRowsForExport(clientRequirements, safeProjects as any[]) : [];
 
   return (
-    <div data-report-root data-no-contrast-guard style={{ display: "flex", flexDirection: "column", gap: 24, background: T.page, color: T.ink, WebkitTextFillColor: T.ink }}>
-      <style>{`
-        [data-report-root], [data-report-root] * { box-sizing: border-box; }
-        [data-report-root] [data-on-dark],
-        [data-report-root] [data-on-dark] * {
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
-        }
-        [data-report-root] [data-on-dark] svg,
-        [data-report-root] [data-on-dark] svg * {
-          stroke: #FFFFFF !important;
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
-        }
-        [data-report-root] :where(table,thead,tbody,tr,td,th,p,span,div,h1,h2,h3,li,ol):not([data-on-dark]):not([data-on-dark] *) {
-          text-shadow: none !important;
-        }
-      `}</style>
-      <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />
-      <ClientRequirementsPage branding={branding} pageIdPrefix={pageIdPrefix} requirements={requirements} projects={safeProjects} />
-      <MatchedPropertiesPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
-      <ComparisonPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
-      {safeProjects.map((p, i) => <PropertyDetailPage key={p.id} branding={branding} project={p} index={i} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />)}
-      <AiRecommendationSummaryPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
-      <ContactPage branding={branding} pageIdPrefix={pageIdPrefix} />
-    </div>
+    <ReportModeContext.Provider value={mode}>
+      <div
+        data-report-root
+        data-no-contrast-guard
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          // Sheets render edge-to-edge; preview overrides the var to 18px for visible separators.
+          gap: `var(${PAGE_SEP_VAR}, 0px)`,
+          background: "transparent",
+          color: T.ink,
+          WebkitTextFillColor: T.ink,
+        }}
+      >
+        <style>{`
+          [data-report-root], [data-report-root] * { box-sizing: border-box; }
+          [data-report-root] [data-on-dark],
+          [data-report-root] [data-on-dark] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-report-root] [data-on-dark] svg,
+          [data-report-root] [data-on-dark] svg * {
+            stroke: #FFFFFF !important;
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          [data-report-root] :where(table,thead,tbody,tr,td,th,p,span,div,h1,h2,h3,li,ol):not([data-on-dark]):not([data-on-dark] *) {
+            text-shadow: none !important;
+          }
+          [data-report-root] [data-report-page] {
+            box-shadow: var(--jbj-report-page-shadow, none);
+          }
+        `}</style>
+        <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />
+        <ClientRequirementsPage branding={branding} pageIdPrefix={pageIdPrefix} requirements={requirements} projects={safeProjects} />
+        <MatchedPropertiesPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
+        <ComparisonPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
+        {safeProjects.map((p, i) => <PropertyDetailPage key={p.id} branding={branding} project={p} index={i} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />)}
+        <AiRecommendationSummaryPage branding={branding} projects={safeProjects} pageIdPrefix={pageIdPrefix} criteriaRows={criteriaRows} />
+        <ContactPage branding={branding} pageIdPrefix={pageIdPrefix} />
+      </div>
+    </ReportModeContext.Provider>
   );
 }
+
 
 export default ReportEngine;
