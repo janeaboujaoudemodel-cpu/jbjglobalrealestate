@@ -126,7 +126,7 @@ const SelectContent = React.forwardRef<
       ref={ref}
       data-surface="light"
       className={cn(
-        "jbj-form-popover relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl w-[max(var(--radix-select-trigger-width),20rem)] max-w-[calc(100vw-2rem)]",
+        "jbj-form-popover relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl max-w-[calc(100vw-2rem)]",
         "text-[#0A0A0A]",
         "shadow-[0_10px_40px_rgba(0,0,0,0.12),0_4px_15px_rgba(0,0,0,0.08)]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
