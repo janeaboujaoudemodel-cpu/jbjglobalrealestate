@@ -116,7 +116,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                     </div>
 
                     {property.developer_name && (
-                      <p className="text-sm text-[#1A1A1A] truncate">by {property.developer_name}</p>
+                      <p data-developer-name className="text-sm text-[#1A1A1A] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">by {property.developer_name}</p>
                     )}
 
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-[#1A1A1A]/70">

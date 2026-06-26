@@ -845,7 +845,11 @@ const Properties = () => {
                             <SelectContent className="max-h-72">
                               <SelectItem value="all">All Developers</SelectItem>
                               {allDevelopersSorted?.map((dev) => (
-                                <SelectItem key={dev.id} value={dev.id}>{dev.name}</SelectItem>
+                                <SelectItem key={dev.id} value={dev.id}>
+                                  <span data-developer-name className="block min-w-0 max-w-full whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
+                                    {dev.name}
+                                  </span>
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>

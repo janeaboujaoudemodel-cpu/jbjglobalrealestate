@@ -445,10 +445,11 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
                       <button
                         key={d.id}
                         type="button"
+                        data-developer-option
                         onClick={() => { setDeveloperId(d.id); setDeveloperNameInput(d.name); setDevOptions([]); }}
-                        className="block w-full text-left px-3 py-1.5 text-sm text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                        className="flex w-full items-start text-left px-3 py-2 text-sm text-[#1A1A1A] hover:bg-[#F7F2EA] overflow-visible"
                       >
-                        {d.name}
+                        <span data-developer-name className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{d.name}</span>
                       </button>
                     ))}
                   </div>

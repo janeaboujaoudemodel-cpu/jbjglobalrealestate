@@ -100,7 +100,7 @@ export default function ProjectPicker({ value, onChange }: Props) {
             <button
               key={p.id}
               onClick={() => { onChange(p); setOpen(false); setQ(""); }}
-              className="w-full flex items-center gap-3 p-3 text-left hover:bg-[#EFE6D6] border-b border-[#B89555]/15 last:border-b-0"
+              className="w-full flex items-start gap-3 p-3 text-left hover:bg-[#EFE6D6] border-b border-[#B89555]/15 last:border-b-0 overflow-visible"
               data-no-contrast-guard
             >
               {p.developer?.logo_url ? (
@@ -112,7 +112,7 @@ export default function ProjectPicker({ value, onChange }: Props) {
               )}
               <div className="flex-1 min-w-0">
                 <div className="text-[#1A1A1A] text-sm font-medium truncate">{p.name}</div>
-                <div className="text-[#1A1A1A]/65 text-xs truncate">{p.developer?.name || "—"}{p.location ? ` · ${p.location}` : ""}</div>
+                <div data-developer-name className="text-[#1A1A1A]/65 text-xs whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{p.developer?.name || "—"}{p.location ? ` · ${p.location}` : ""}</div>
               </div>
             </button>
           ))}

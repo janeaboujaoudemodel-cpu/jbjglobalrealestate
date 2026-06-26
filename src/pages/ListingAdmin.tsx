@@ -955,7 +955,7 @@ const ListingAdmin = () => {
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
                             <h3 className="text-foreground font-medium truncate">{project.name}</h3>
-                            <p className="text-muted-foreground text-sm truncate">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
+                            <p data-developer-name className="text-muted-foreground text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
                             {project.emirate && <p className="text-muted-foreground/70 text-xs">{project.emirate}</p>}
                             {project.price_from && (
                               <p className="text-price-orange font-bold text-sm mt-1">
@@ -1166,10 +1166,12 @@ const ListingAdmin = () => {
                           <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1">
                             <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="w-[340px] max-h-72">
                             {developers?.map((dev) => (
                               <SelectItem key={dev.id} value={dev.id}>
-                                {dev.name}
+                                <span data-developer-name className="block min-w-0 max-w-full whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
+                                  {dev.name}
+                                </span>
                               </SelectItem>
                             ))}
                           </SelectContent>

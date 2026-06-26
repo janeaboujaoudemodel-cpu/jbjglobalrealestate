@@ -338,7 +338,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
               <span className="text-[#B89555] font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[#0A0A0A] font-semibold text-sm truncate">{dev.name}</p>
+              <p data-developer-name className="text-[#0A0A0A] font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</p>
               {dev.projects && (
                 <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}

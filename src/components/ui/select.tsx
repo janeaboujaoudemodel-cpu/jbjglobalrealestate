@@ -215,7 +215,7 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "jbj-form-option relative flex min-h-10 w-full min-w-0 cursor-pointer select-none items-center rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150",
+      "jbj-form-option relative flex min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-[color:var(--emerald-1)] hover:text-white",
       "focus:bg-[color:var(--emerald-1)] focus:text-white",
@@ -226,7 +226,7 @@ const SelectItem = React.forwardRef<
     )}
     {...props}
   >
-    <SelectPrimitive.ItemText className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">
+    <SelectPrimitive.ItemText className="min-w-0 w-full flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug text-left overflow-visible">
       {children}
     </SelectPrimitive.ItemText>
     <span className="absolute right-2 flex h-4 w-4 items-center justify-center">
@@ -246,7 +246,7 @@ const SelectItemDark = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex min-h-10 w-full min-w-0 cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm outline-none transition-all duration-200",
+      "relative flex min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-8 pr-3 text-sm outline-none transition-all duration-200 whitespace-normal overflow-visible",
       "text-white",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-[#1A1A1A] hover:text-white",
@@ -262,7 +262,7 @@ const SelectItemDark = React.forwardRef<
       </SelectPrimitive.ItemIndicator>
     </span>
 
-    <SelectPrimitive.ItemText className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">
+    <SelectPrimitive.ItemText className="min-w-0 w-full flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug text-left overflow-visible">
       {children}
     </SelectPrimitive.ItemText>
   </SelectPrimitive.Item>

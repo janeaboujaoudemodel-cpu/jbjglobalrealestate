@@ -1194,7 +1194,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 <SelectItem value="all">All Developers</SelectItem>
                 {distinctDevelopers.map(dev => (
                   <SelectItem key={dev} value={dev}>
-                    <span className="flex items-center gap-2"><Building2 className="h-3.5 w-3.5 text-muted-foreground" /> {dev}</span>
+                    <span data-developer-option className="flex min-w-0 items-start gap-2 overflow-visible"><Building2 className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5" /> <span data-developer-name className="min-w-0 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev}</span></span>
                   </SelectItem>
                 ))}
               </SelectContent>

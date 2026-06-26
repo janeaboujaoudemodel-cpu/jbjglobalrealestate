@@ -394,7 +394,7 @@ const PropertyMap = () => {
                 )}
                 <div className="p-2">
                   <h4 className="font-semibold text-xs truncate">{hoveredProject.name}</h4>
-                  <p className="text-[10px] text-muted-foreground truncate">{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
+                  <p data-developer-name className="text-[10px] text-muted-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
                   <p className="text-xs font-bold text-foreground mt-1">{formatPrice(hoveredProject.price_from)}</p>
                 </div>
               </CardContent>
@@ -504,7 +504,7 @@ const PropertyMap = () => {
                   </div>
                   <div className="p-2.5">
                     <h3 className="font-semibold text-xs truncate">{project.name}</h3>
-                    <p className="text-[11px] text-muted-foreground truncate">{project.developer_name}</p>
+                    <p data-developer-name className="text-[11px] text-muted-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer_name}</p>
                     <p className="text-[11px] text-muted-foreground truncate">{project.area_name || project.location}</p>
                     <div className="flex items-center gap-1.5 mt-1.5">
                       <span className="text-sm font-bold text-foreground">{formatPrice(project.price_from)}</span>

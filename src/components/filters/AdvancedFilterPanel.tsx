@@ -246,7 +246,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const dropdownPanel =
     "mt-2 rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
   const optionRow =
-    "flex items-center gap-3 w-full min-h-12 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA]";
+    "flex items-start gap-3 w-full min-h-12 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA] overflow-visible";
   const selectedBox = "allow-white jj-filter-emerald-control jj-chip-emerald border-0";
 
 
@@ -451,6 +451,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       return (
                         <button
                           key={dev.name}
+                          data-developer-option
                           onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
                           className={optionRow}
                         >
@@ -465,10 +466,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                             alt={dev.name}
                             name={dev.name}
                             variant="bare"
-                            className="!w-10 !h-10 !rounded-lg !p-[3px] flex-shrink-0"
+                            className="!w-12 !h-12 !rounded-lg !p-[3px] flex-shrink-0"
                             renderFallback
                           />
-                          <span className="text-sm leading-snug text-[#1A1A1A] text-left whitespace-normal break-words [overflow-wrap:anywhere] flex-1 min-w-0" title={dev.name}>
+                          <span data-developer-name className="text-sm leading-snug text-[#1A1A1A] text-left whitespace-normal break-words [overflow-wrap:anywhere] flex-1 min-w-0 overflow-visible" title={dev.name}>
                             {dev.name}
                           </span>
                         </button>

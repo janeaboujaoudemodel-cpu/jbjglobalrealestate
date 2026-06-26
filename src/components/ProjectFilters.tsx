@@ -351,7 +351,7 @@ const ProjectFilters = ({
               <SelectItem value="all">All Developers</SelectItem>
               {developers && developers.map((developer) => (
                 <SelectItem key={developer.id} value={developer.id}>
-                    <div className="flex w-full min-w-0 items-center gap-2.5 py-0.5">
+                    <div data-developer-option className="flex w-full min-w-0 items-start gap-2.5 py-0.5 overflow-visible">
                       <DeveloperLogo
                         src={developer.logo_url}
                         alt={developer.name}
@@ -360,7 +360,7 @@ const ProjectFilters = ({
                         renderFallback
                         className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
                       />
-                      <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">
+                      <span data-developer-name className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
                         {developer.name}
                       </span>
                     </div>

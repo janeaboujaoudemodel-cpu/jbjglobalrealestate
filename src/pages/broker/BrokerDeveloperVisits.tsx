@@ -217,7 +217,7 @@ export default function BrokerDeveloperVisits() {
                   {picked.name.slice(0, 2).toUpperCase()}
                 </div>
               )}
-              <div className="text-sm font-medium text-[#1A1A1A] truncate flex-1">{picked.name}</div>
+              <div data-developer-name className="text-sm font-medium text-[#1A1A1A] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug flex-1 min-w-0">{picked.name}</div>
               <button
                 type="button"
                 onClick={() => { setPicked(null); setDevQuery(""); }}
@@ -251,8 +251,9 @@ export default function BrokerDeveloperVisits() {
                     <button
                       key={d.id}
                       type="button"
+                      data-developer-option
                       onClick={() => { setPicked(d); setOpen(false); }}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-[#EFE6D6]/70 border-b last:border-b-0 border-[#B89555]/15"
+                      className="w-full flex items-start gap-3 px-3 py-2 text-left hover:bg-[#EFE6D6]/70 border-b last:border-b-0 border-[#B89555]/15 overflow-visible"
                     >
                       {d.logo_url ? (
                         <img src={d.logo_url} alt={d.name} className="h-7 w-7 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0" />
@@ -261,7 +262,7 @@ export default function BrokerDeveloperVisits() {
                           {d.name.slice(0, 2).toUpperCase()}
                         </div>
                       )}
-                      <span className="text-sm text-[#1A1A1A] truncate">{d.name}</span>
+                      <span data-developer-name className="text-sm text-[#1A1A1A] min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{d.name}</span>
                     </button>
                   ))}
                 </div>
@@ -431,7 +432,7 @@ export default function BrokerDeveloperVisits() {
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-semibold text-[#1A1A1A] truncate">{v.developer?.name ?? "Unknown developer"}</span>
+                    <span data-developer-name className="text-sm font-semibold text-[#1A1A1A] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{v.developer?.name ?? "Unknown developer"}</span>
                     <span className="text-[11px] text-[#1A1A1A]/60 tabular-nums">
                       {formatDisplayDate(v.visit_date)}{v.visit_time ? ` · ${v.visit_time.slice(0, 5)}` : ""}
                     </span>

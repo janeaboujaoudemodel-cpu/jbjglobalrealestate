@@ -451,7 +451,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                             </h4>
 
                             {parsed.developer && (
-                              <p className="text-sm text-[#1A1A1A] truncate">by {parsed.developer}</p>
+                              <p data-developer-name className="text-sm text-[#1A1A1A] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">by {parsed.developer}</p>
                             )}
 
                             <div className="flex items-center gap-3 text-sm text-muted-foreground">

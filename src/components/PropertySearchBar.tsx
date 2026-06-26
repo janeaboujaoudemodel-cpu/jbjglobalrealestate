@@ -31,9 +31,9 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-2 w-[230px] min-h-12 px-3 bg-[#FDFBF7]/80 border border-[#1A1A1A]/50 text-white rounded-lg text-sm hover:border-[#B89555] transition-colors">
+        <button data-developer-option className="flex items-start gap-2 w-[260px] min-h-12 px-3 py-2 bg-[#FDFBF7]/80 border border-[#1A1A1A]/50 text-white rounded-lg text-sm hover:border-[#B89555] transition-colors overflow-visible">
           <Building2 className="w-4 h-4 text-white/90 flex-shrink-0" />
-          <span className="min-w-0 flex-1 text-left text-sm leading-snug whitespace-normal break-words [overflow-wrap:anywhere]">
+          <span data-developer-name className="min-w-0 flex-1 text-left text-sm leading-snug whitespace-normal break-words [overflow-wrap:anywhere] overflow-visible">
             {selectedDev ? selectedDev.name : "Developer / Project"}
           </span>
           <ChevronDown className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
@@ -56,15 +56,16 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
         <div className="max-h-64 overflow-y-auto p-1">
           <button
             onClick={() => { onChange(null); setOpen(false); setSearch(""); }}
-            className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", !value ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
+            className={cn("w-full flex items-start gap-2 px-3 py-2 rounded-lg text-sm transition-colors overflow-visible", !value ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
           >
             All Developers
           </button>
           {filtered.map(dev => (
             <button
               key={dev.id}
+              data-developer-option
               onClick={() => { onChange(dev.id); setOpen(false); setSearch(""); }}
-              className={cn("w-full min-h-11 flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
+              className={cn("w-full min-h-11 flex items-start gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors overflow-visible", value === dev.id ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
             >
               <DeveloperLogo
                 src={dev.logo_url}
@@ -72,9 +73,9 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
                 name={dev.name}
                 variant="bare"
                 renderFallback
-                className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
+                className="!w-10 !h-10 !min-w-10 !min-h-10 !rounded-md !p-[3px]"
               />
-              <span className="min-w-0 flex-1 text-left leading-snug whitespace-normal break-words [overflow-wrap:anywhere]">{dev.name}</span>
+              <span data-developer-name className="min-w-0 flex-1 text-left leading-snug whitespace-normal break-words [overflow-wrap:anywhere] overflow-visible">{dev.name}</span>
               {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-[#1A1A1A] flex-shrink-0" />}
             </button>
           ))}

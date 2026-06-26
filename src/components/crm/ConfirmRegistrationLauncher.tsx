@@ -249,10 +249,11 @@ export function ConfirmRegistrationLauncher({
                       type="button"
                       key={d.id}
                       onClick={() => toggle(d.id)}
-                      className="w-full px-3 py-2 flex items-center justify-between gap-3 hover:bg-amber-50 text-left"
+                      className="w-full px-3 py-2 flex items-start justify-between gap-3 hover:bg-amber-50 text-left overflow-visible"
+                      data-developer-option
                     >
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold text-[#1A1A1A] truncate">
+                      <div className="min-w-0 flex-1 overflow-visible">
+                        <div data-developer-name className="text-sm font-semibold text-[#1A1A1A] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
                           {d.developer_name}
                         </div>
                         <div className="text-[11px] text-[#1A1A1A]/60 truncate">{d.developer_email}</div>

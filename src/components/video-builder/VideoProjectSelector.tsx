@@ -132,7 +132,7 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
               <button
                 key={p.id}
                 onClick={() => handleSelectProject(p)}
-                className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5 transition-colors text-left"
+                className="w-full flex items-start gap-3 p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5 transition-colors text-left overflow-visible"
               >
                 <div className="w-12 h-12 rounded bg-muted flex-shrink-0 overflow-hidden">
                   {p.images?.[0]?.image_url ? (
@@ -143,7 +143,7 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm truncate">{p.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{p.developer?.name || p.location}</p>
+                  <p data-developer-name className="text-xs text-muted-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{p.developer?.name || p.location}</p>
                   <div className="flex items-center gap-2 mt-1">
                     {p.price_from && (
                       <span className="text-xs font-medium text-primary" data-price data-price-size="sm">

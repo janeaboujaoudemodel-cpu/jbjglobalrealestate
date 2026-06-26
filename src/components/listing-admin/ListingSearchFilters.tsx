@@ -111,7 +111,9 @@ const ListingSearchFilters = ({
                 <SelectItem value="all">{t('listingAdmin.allDevelopers')}</SelectItem>
                 {developers?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id}>
-                    {dev.name}
+                    <span data-developer-name className="block min-w-0 max-w-full whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
+                      {dev.name}
+                    </span>
                   </SelectItem>
                 ))}
               </SelectContent>

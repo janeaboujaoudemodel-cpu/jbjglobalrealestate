@@ -545,17 +545,19 @@ export function ProjectInquiryForm({
                           value={dev.value}
                           onSelect={() => handleDeveloperSelect(dev.value)}
                           className={cn(
-                            "cursor-pointer",
+                            "cursor-pointer items-start",
                             dev.isSpecial && "font-semibold text-[#1A1A1A]"
                           )}
                         >
                           <Check
                             className={cn(
-                              "mr-2 h-4 w-4",
+                              "mr-2 mt-0.5 h-4 w-4 flex-shrink-0",
                               formData.preferredDeveloper === dev.label ? "opacity-100" : "opacity-0"
                             )}
                           />
-                          {dev.label}
+                          <span data-developer-name className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
+                            {dev.label}
+                          </span>
                         </CommandItem>
                       ))}
                     </CommandGroup>
