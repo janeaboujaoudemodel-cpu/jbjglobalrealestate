@@ -15,10 +15,19 @@ export function useOnboardingTour() {
   const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
-    // Check if the device is a tablet (768px - 1366px viewport width)
+    // Check if the device is a *real* tablet: viewport in tablet range AND
+    // a coarse (touch) primary pointer. Without the pointer check, laptops
+    // at 1180–1366 wide were being treated as tablets and the auto-tour
+    // overlay was hijacking page scroll on the homepage.
     const checkDevice = () => {
+      if (typeof window === "undefined") return false;
       const width = window.innerWidth;
-      return width >= 768 && width <= 1366;
+      const inRange = width >= 768 && width <= 1366;
+      const isTouch =
+        typeof window.matchMedia === "function" &&
+        (window.matchMedia("(pointer: coarse)").matches ||
+          window.matchMedia("(hover: none)").matches);
+      return inRange && isTouch;
     };
 
     setIsTablet(checkDevice());
@@ -39,6 +48,7 @@ export function useOnboardingTour() {
 
       return () => clearTimeout(timer);
     }
+
 
 
     // Also listen for resize events
