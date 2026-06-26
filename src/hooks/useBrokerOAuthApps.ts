@@ -22,13 +22,10 @@ export function useBrokerOAuthApps() {
     queryKey: ["broker-oauth-apps", user?.id],
     enabled: !!user?.id,
     queryFn: async () => {
-      // SECURITY: client_secret is intentionally NOT selected. It is write-only at
-      // the API layer and only readable inside server-side SECURITY DEFINER
-      // functions (e.g. public.get_broker_oauth_app) during the OAuth flow.
-      const { data, error } = await supabase
-        .from("broker_email_oauth_apps")
-        .select("id, provider, client_id, label, is_active, created_at, updated_at")
-        .order("provider");
+      // SECURITY: read through a SECURITY DEFINER RPC that returns only safe
+      // metadata columns. The table itself revokes SELECT entirely so
+      // `client_secret` cannot leak even if the policy is misconfigured.
+      const { data, error } = await supabase.rpc("list_my_broker_oauth_apps");
       if (error) throw error;
       return (data ?? []) as BrokerOAuthApp[];
     },
