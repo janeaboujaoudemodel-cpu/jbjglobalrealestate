@@ -496,14 +496,21 @@ export function signatureBlock(opts: {
   // stamp layer, not duplicated inside this static signature block.
   const stampOverlay = "";
 
-  // Each cell heading carries ONE 1px gold hairline underline (single
-  // underline rule). No further underlines under Name/Title/Date.
+  // Premium bordered signature box (mirrors institutional NDA layout):
+  // gold-hairline frame with an uppercase header strip, a tall open signing
+  // area sized for handwritten signature + company stamp side-by-side, and
+  // Name/Title/Date rows pinned to the bottom of the box.
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
-    <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
-      <div style="height:66px;display:flex;align-items:flex-start;padding-top:12px;padding-bottom:0;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
-      <div style="padding-top:10px;position:relative;min-height:126px;overflow:visible;">
-        ${lines}
-        ${withStamp ? stampOverlay : ""}
+    <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 14px;position:relative;">
+      <div style="border:1px solid ${GOLD};border-radius:6px;background:#FDFBF7;overflow:hidden;">
+        <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
+        <div style="position:relative;min-height:130px;padding:10px 14px 6px;">
+          <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
+          ${withStamp ? stampOverlay : ""}
+        </div>
+        <div style="padding:8px 14px 12px;border-top:1px dashed ${GOLD}80;">
+          ${lines}
+        </div>
       </div>
     </td>`;
   const gapCell = `<td style="width:12%;"></td>`;
