@@ -30,7 +30,8 @@ import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { AICommandPanel } from "@/components/owner/documents/AICommandPanel";
 import { getCatalogByAudience, type DocumentTemplate } from "@/config/documentCatalog";
 
-const DocumentStudio = lazy(() => import("@/components/document-studio/DocumentStudio"));
+const loadDocumentStudio = () => import("@/components/document-studio/DocumentStudio");
+const DocumentStudio = lazy(loadDocumentStudio);
 
 type Cat = "all" | "leasing" | "selling";
 type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer" | "finance";
@@ -219,6 +220,20 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const sigFileRef = useRef<HTMLInputElement>(null);
   const stampFileRef = useRef<HTMLInputElement>(null);
 
+  // Warm the editor chunk while the hub is visible. Clicking Offer Letter (or
+  // any template) should open the editor immediately, not flash the full app
+  // loader and feel like the backend kicked the user back to the hub.
+  useEffect(() => {
+    const preload = () => { void loadDocumentStudio(); };
+    const idle = typeof window !== "undefined" && "requestIdleCallback" in window
+      ? (window as any).requestIdleCallback(preload, { timeout: 1200 })
+      : window.setTimeout(preload, 350);
+    return () => {
+      if (typeof idle === "number") window.clearTimeout(idle);
+      else if (typeof window !== "undefined" && "cancelIdleCallback" in window) (window as any).cancelIdleCallback(idle);
+    };
+  }, []);
+
   // Hide DB blank-letter rows from the templates grid — the studio is opened by routing.
   const isBlankLetterKey = (k: string) => k === "jbj-blank-letter" || k === "jbj-letterhead-blank";
   const blankLetterTemplate = templates.find(t => isBlankLetterKey(t.key)) || null;
@@ -366,9 +381,12 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   };
 
   const openStudioTemplate = (template: DocumentTemplate) => {
-    setSelectedStudioTemplate(template);
+    // Close the template picker first, then mount the already-preloaded studio
+    // on the next frame. This avoids Radix Dialog focus teardown racing the
+    // full-screen portal and causing the brief loader/back-to-hub flash.
     setNewEnvelopeOpen(false);
-    setStudioOpen(true);
+    setSelectedStudioTemplate(template);
+    requestAnimationFrame(() => setStudioOpen(true));
   };
 
   const showCategory = (key: TemplateCategoryKey) => {
@@ -1220,7 +1238,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
 
       {/* Singleton Document Studio — prevents the slow/reloading page caused by mounting every editor at once. */}
       {selectedStudioTemplate && (
-        <Suspense fallback={<div className="fixed inset-0 z-[2147483000] bg-black/40 flex items-center justify-center text-white">Loading Document Studio…</div>}>
+        <Suspense fallback={<div className="fixed inset-0 z-[2147483000] bg-[#FDFBF7] pointer-events-none" aria-label="Opening Document Studio" />}>
           <DocumentStudio
             key={`${selectedStudioTemplate.audience}:${selectedStudioTemplate.id}`}
             catalog={selectedStudioTemplate.audience}
