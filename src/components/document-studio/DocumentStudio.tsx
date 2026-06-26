@@ -1979,6 +1979,31 @@ function StudioShell({
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
         <div className="studio-action-row studio-top-primary-actions justify-start">
+          {/* Pinned template quick-switch — Offer ↔ NDA are always sent together
+              and share the same applicant identity store, so they live side by
+              side in the toolbar for one-click switching. */}
+          <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Pinned templates" data-surface="champagne">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={templateId === "job_offer"}
+              onClick={() => setTemplateId("job_offer")}
+              className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${templateId === "job_offer" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"}`}
+              title="Open Offer Letter (auto-synced identity)"
+            >
+              Offer
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={templateId === "nda"}
+              onClick={() => setTemplateId("nda")}
+              className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${templateId === "nda" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"}`}
+              title="Open the NDA pre-filled with the same applicant identity"
+            >
+              NDA
+            </button>
+          </div>
           {/* Theme switcher — Champagne / Emerald letterhead */}
           <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme" data-surface="champagne">
             <button

@@ -7,11 +7,11 @@
  *   - "emerald"    → dark emerald bg, WHITE monogram, WHITE wordmark
  *
  * Locked invariants:
- *   - Monogram 280×96 (large, premium)
- *   - 8px gutter between monogram and wordmark (tight, balanced)
+ *   - Monogram + wordmark VERTICALLY centered inside the chrome band
+ *   - Monogram renders full asset (top + bottom dividers around the gold B)
+ *   - "B going inside" 3D engraved effect via stacked shadow/highlight masks
  *   - Wordmark "L.L.C S.O.C" suffix non-breaking via &nbsp; + whiteSpace:nowrap
  *   - Footer: single hairline divider, charcoal body, no duplicate legal name
- *   - The word "Document" never appears in chrome
  */
 
 import { JBJ_BRAND, JBJ_GOLD, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
@@ -26,15 +26,21 @@ const tokens = (theme: LetterheadTheme) =>
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
 
 /**
- * Monogram layering — the asset is a single "JBJ" PNG. The two outer J
- * glyphs are painted in BLACK (or white on emerald) and the middle B is
- * painted in GOLD. We achieve this by stacking three identical masked
- * layers and clip-pathing each to the column that contains its letter.
- * Bounds were measured from /src/assets/jbj-monogram-cropped.png
- * (356×458, letters at x≈24-88 / 140-222 / 271-331), then mapped to a
- * 118×118 rendered box with `mask-size: contain` (centered).
+ * Single masked layer of the JBJ monogram. `clip` restricts the painted
+ * area to one column (outer J / dividers+B / outer J). `filter` is used
+ * for the engraved drop-shadow / highlight stack on the middle B.
  */
-function MaskedMonogramLayer({ color, clip }: { color: string; clip: string }) {
+function MaskedMonogramLayer({
+  color,
+  clip,
+  filter,
+  blendMode,
+}: {
+  color: string;
+  clip?: string;
+  filter?: string;
+  blendMode?: React.CSSProperties["mixBlendMode"];
+}) {
   return (
     <div
       aria-hidden="true"
@@ -50,8 +56,9 @@ function MaskedMonogramLayer({ color, clip }: { color: string; clip: string }) {
         maskPosition: "center",
         WebkitMaskSize: "contain",
         maskSize: "contain",
-        clipPath: clip,
-        WebkitClipPath: clip,
+        ...(clip ? { clipPath: clip, WebkitClipPath: clip } : null),
+        ...(filter ? { filter } : null),
+        ...(blendMode ? { mixBlendMode: blendMode } : null),
       }}
     />
   );
@@ -59,6 +66,19 @@ function MaskedMonogramLayer({ color, clip }: { color: string; clip: string }) {
 
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
+  // Widened middle clip so the slim vertical dividers above AND below the
+  // gold B remain fully visible (previous 30%/30% clip cropped the bars).
+  const bClip = "inset(0% 26% 0% 26%)";
+  // Engraved B: dark shadow pushed DOWN-RIGHT to read as recessed, a soft
+  // highlight UP-LEFT (screen-blended on champagne, plain on emerald),
+  // body champagne/white on top.
+  const bShadow = theme === "emerald"
+    ? "drop-shadow(0 0.5px 0 rgba(0,0,0,.55)) drop-shadow(0 1.5px 1.8px rgba(0,0,0,.45))"
+    : "drop-shadow(0.5px 1px 0 rgba(60,40,10,.55)) drop-shadow(0 2px 2.2px rgba(60,40,10,.35))";
+  const bHighlight = theme === "emerald"
+    ? "drop-shadow(0 -0.5px 0 rgba(255,255,255,.6))"
+    : "drop-shadow(-0.5px -0.5px 0 rgba(255,255,255,.85))";
+
   return (
     <header
       className="relative w-full"
@@ -66,34 +86,58 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "4px 24px 16px",
+        // Equal top/bottom padding so the letterhead chrome is vertically
+        // centered around its 118px monogram height.
+        padding: "12px 24px",
         boxSizing: "border-box",
       }}
     >
       <div
-        className="grid items-start min-w-0"
-        style={{ gridTemplateColumns: "132px minmax(0,1fr)", columnGap: 14, minHeight: 118 }}
+        className="grid items-center min-w-0"
+        style={{ gridTemplateColumns: "128px minmax(0,1fr)", columnGap: 8, minHeight: 118 }}
       >
-          <div
-            aria-label="JBJ"
-            role="img"
-            style={{
-              position: "relative",
-              width: 118,
-              height: 118,
-              marginTop: -6,
-              justifySelf: "center",
-            }}
-          >
-            {/* Middle B stays gold (champagne) or white (emerald) */}
-            <MaskedMonogramLayer color={t.bColor} clip="inset(0% 30% 0% 30%)" />
-            {/* Outer J letters painted black (or white on emerald) */}
-            <MaskedMonogramLayer color={t.jColor} clip="inset(0% 69.5% 0% 13%)" />
-            <MaskedMonogramLayer color={t.jColor} clip="inset(0% 13% 0% 69.5%)" />
-          </div>
+        <div
+          aria-label="JBJ"
+          role="img"
+          style={{
+            position: "relative",
+            width: 118,
+            height: 118,
+            justifySelf: "center",
+          }}
+        >
+          {/* Outer J letters — painted black (or white on emerald) */}
+          <MaskedMonogramLayer color={t.jColor} clip="inset(0% 69.5% 0% 13%)" />
+          <MaskedMonogramLayer color={t.jColor} clip="inset(0% 13% 0% 69.5%)" />
+          {/* Engraved B — three stacked passes: dark recess, light edge, body */}
+          <MaskedMonogramLayer
+            color={theme === "emerald" ? "#03281D" : "#5C3F18"}
+            clip={bClip}
+            filter={bShadow}
+          />
+          <MaskedMonogramLayer
+            color={theme === "emerald" ? "#0E6B52" : "#F2DFAA"}
+            clip={bClip}
+            filter={bHighlight}
+            blendMode={theme === "champagne" ? "screen" : undefined}
+          />
+          <MaskedMonogramLayer color={t.bColor} clip={bClip} />
+        </div>
 
-        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "flex-start", justifyContent: "stretch", paddingRight: 56, paddingTop: 14, lineHeight: 1, overflow: "visible" }}>
-
+        <div
+          className="min-w-0 text-left"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            paddingLeft: 4,
+            // Pull the wordmark back ~1cm from the right edge so it doesn't
+            // stretch flush against the page border.
+            paddingRight: 64,
+            lineHeight: 1,
+            overflow: "visible",
+          }}
+        >
           <div
             className="font-bold"
             style={{
@@ -102,18 +146,24 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
               fontSize: 26,
               fontWeight: 900,
               color: t.fg,
-              // Open the wordmark so it occupies the full right column —
-              // previous tight tracking left a visible empty band on the
-              // right edge of the letterhead.
-              letterSpacing: "0.08em",
+              letterSpacing: "0.06em",
               lineHeight: 1,
               whiteSpace: "nowrap",
-              transform: "scaleX(1.12)",
+              transform: "scaleX(1.02)",
               transformOrigin: "left center",
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
-            <span style={{ letterSpacing: "0.12em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
+            <span
+              style={{
+                letterSpacing: "0.1em",
+                whiteSpace: "nowrap",
+                color: t.fg,
+                WebkitTextFillColor: t.fg,
+              }}
+            >
+              {JBJ_BRAND.legalSuffix}
+            </span>
           </div>
         </div>
       </div>
@@ -147,7 +197,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
               {JBJ_BRAND.address}
             </td>
             <td style={{ verticalAlign: "middle", width: "22%", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700, lineHeight: 1.35 }}>
-              {(JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone]).map((p, i) => (
+              {(JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone]).map((p) => (
                 <div key={p} style={{ whiteSpace: "nowrap" }}>{p}</div>
               ))}
             </td>
