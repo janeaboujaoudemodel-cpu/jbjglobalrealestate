@@ -103,18 +103,30 @@ Do not invent missing values. Keep unknown fields omitted.
 Source/template: ${body?.templateId || "unknown"}.
 User/source text: ${userPrompt || "Attached file only"}`;
 
-      const userContent = attachment?.dataUrl && String(attachment?.type || "").startsWith("image/")
+      const attType = String(attachment?.type || "");
+      const isImage = attachment?.dataUrl && attType.startsWith("image/");
+      const isPdf = attachment?.dataUrl && (attType === "application/pdf" || /\.pdf$/i.test(String(attachment?.name || "")));
+
+      const userContent = isImage
         ? [
             { type: "text", text: extractionText },
             { type: "image_url", image_url: { url: attachment.dataUrl } },
           ]
+        : isPdf
+        ? [
+            { type: "text", text: extractionText },
+            { type: "file", file: { filename: attachment.name || "document.pdf", file_data: attachment.dataUrl } },
+          ]
         : extractionText + (attachment?.name ? `\nAttachment filename: ${attachment.name}` : "");
+
+      // Use Gemini for vision OCR (reliable multimodal); fall back to GPT for text-only
+      const ocrModel = (isImage || isPdf) ? "google/gemini-3-flash-preview" : "openai/gpt-5.5";
 
       const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${LOVABLE_API_KEY}` },
         body: JSON.stringify({
-          model: "openai/gpt-5.5",
+          model: ocrModel,
           messages: [
             { role: "system", content: "You are a secure OCR and legal document field extraction engine for UAE real estate and HR documents. Return JSON only." },
             { role: "user", content: userContent },
@@ -122,6 +134,7 @@ User/source text: ${userPrompt || "Attached file only"}`;
           response_format: { type: "json_object" },
         }),
       });
+
       if (!response.ok) {
         const t = await response.text().catch(() => "");
         return new Response(JSON.stringify({ error: `AI gateway ${response.status}: ${t.slice(0, 200)}` }), {
