@@ -25,9 +25,9 @@ export function useBrokerOAuthApps() {
       // SECURITY: read through a SECURITY DEFINER RPC that returns only safe
       // metadata columns. The table itself revokes SELECT entirely so
       // `client_secret` cannot leak even if the policy is misconfigured.
-      const { data, error } = await supabase.rpc("list_my_broker_oauth_apps");
+      const { data, error } = await (supabase.rpc as any)("list_my_broker_oauth_apps");
       if (error) throw error;
-      return (data ?? []) as BrokerOAuthApp[];
+      return ((data ?? []) as unknown) as BrokerOAuthApp[];
     },
   });
 }
