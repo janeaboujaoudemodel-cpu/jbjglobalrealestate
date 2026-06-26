@@ -436,9 +436,29 @@ function StudioShell({
       return j;
     } catch { return null; }
   };
+  const snapContentScore = (s: any) => {
+    if (!s) return -1;
+    const bodyLen = typeof s.bodyHtml === "string" ? s.bodyHtml.replace(/<[^>]*>/g, "").trim().length : 0;
+    const meaningfulFields = s.fields && typeof s.fields === "object"
+      ? Object.values(s.fields).filter((v) => {
+          const text = String(v || "").trim();
+          return text && !/^\[[^\]]+\]$/.test(text) && !/^not applicable/i.test(text);
+        }).length
+      : 0;
+    return (bodyLen > 80 ? 100 : bodyLen > 0 ? 25 : 0)
+      + (s.userEdited ? 60 : 0)
+      + Math.min(45, meaningfulFields * 5)
+      + (Array.isArray(s.commissionRows) && s.commissionRows.length >= 3 ? 15 : 0);
+  };
   const newerSnap = (a: any, b: any) => {
     if (!a) return b || null;
     if (!b) return a;
+    const aScore = snapContentScore(a);
+    const bScore = snapContentScore(b);
+    // Protect an owner's filled contract from being overwritten by a newer blank
+    // snapshot produced during reload/hydration. Intentional "New submission"
+    // clears the per-template key, so this only guards accidental loss.
+    if (Math.abs(aScore - bScore) >= 60) return aScore > bScore ? a : b;
     return new Date(b.savedAt || 0).getTime() > new Date(a.savedAt || 0).getTime() ? b : a;
   };
   const readSnapshot = (): any => {
