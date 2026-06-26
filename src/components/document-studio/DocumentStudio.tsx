@@ -1026,26 +1026,12 @@ function StudioShell({
     if (hydratedRef.current) return;
     hydratedRef.current = true;
 
-    // Offer (don't auto-apply) the previous draft when a snapshot exists.
+    // Always auto-restore the previous draft. The owner explicitly asked that
+    // refresh / close / route changes resume exactly where they left off unless
+    // they intentionally start a new submission or submit/send.
     if (snap && !restoredOnce.current) {
       restoredOnce.current = true;
-      const tplName = (snap.templateId && getTemplateById(snap.templateId)?.label) || "previous document";
-      const when = snap.savedAt ? new Date(snap.savedAt).toLocaleString() : "earlier";
-      toast(`Resume previous draft?`, {
-        description: `${tplName} — last saved ${when}`,
-        duration: 12000,
-        action: {
-          label: "Resume",
-          onClick: () => applySnapshot(snap),
-        },
-        cancel: {
-          label: "Discard",
-          onClick: () => {
-            try { localStorage.removeItem(SESSION_KEY); } catch {}
-            toast.success("Draft discarded");
-          },
-        },
-      });
+      applySnapshot(snap);
     }
 
     // ── One-shot prefill from an external bridge.
@@ -1094,11 +1080,20 @@ function StudioShell({
     const flush = () => {
       try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
     };
+    const onVisibility = () => { if (document.visibilityState === "hidden") flush(); };
     window.addEventListener("beforeunload", flush);
-    return () => { clearTimeout(handle); window.removeEventListener("beforeunload", flush); };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      clearTimeout(handle);
+      flush();
+      window.removeEventListener("beforeunload", flush);
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [step, templateId, fields, bodyHtml, userEdited, ownerName, ownerTitle, applicantDate,
       extraSignatories, hiddenFieldKeys, fieldLabelOverrides, hiddenSections,
-      customFields, commissionRows, docLanguage, marks, emailTo, SESSION_KEY]);
+      customFields, commissionRows, docLanguage, chromeTheme, marks, emailTo, SESSION_KEY]);
 
 
   useEffect(() => {
