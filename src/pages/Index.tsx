@@ -258,7 +258,7 @@ const Index = () => {
             }}
             onLoadedData={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
             onCanPlay={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            onError={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
           {/* Lighter overlay: video visibility prioritized, headline still legible via its own text-shadow */}
