@@ -202,15 +202,14 @@ serve(async (req: Request): Promise<Response> => {
       }
     }
 
-    const requiresDetails = !isKnownUser && !data.full_name && !data.phone;
-
+    // SECURITY: response is intentionally uniform regardless of whether the
+    // email was already known. Returning `isKnownUser` or a derived
+    // `requiresDetails` flag would enable user-enumeration against the
+    // subscriber list from anonymous traffic.
     return new Response(
       JSON.stringify({
         success: true,
         message: "Subscribed successfully",
-        isKnownUser,
-        requiresDetails,
-        email: normalizedEmail,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
