@@ -3053,6 +3053,32 @@ function StudioShell({
                                     }}
                                     contentEditable
                                     suppressContentEditableWarning
+                                    onClick={(e) => {
+                                      const target = e.target as HTMLElement | null;
+                                      const deleteButton = target?.closest?.('[data-field-delete-control]') as HTMLElement | null;
+                                      if (!deleteButton) return;
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      const row = deleteButton.closest('[data-removable-field]') as HTMLElement | null;
+                                      const fieldKey = deleteButton.dataset.fieldKey || row?.dataset.fieldKey || "";
+                                      if (!row) return;
+                                      row.remove();
+                                      const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
+                                      const rebuilt = wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
+                                      liveEditedBodyHtmlRef.current = rebuilt;
+                                      userEditedRef.current = true;
+                                      setUserEdited(true);
+                                      setAutoPageGroups(null);
+                                      setBodyHtml(rebuilt);
+                                      if (fieldKey && template?.fields.some((f) => f.key === fieldKey)) {
+                                        setHiddenFieldKeys((keys) => {
+                                          const nextKeys = new Set(keys);
+                                          nextKeys.add(fieldKey);
+                                          return nextKeys;
+                                        });
+                                      }
+                                      toast.success("Field removed from contract");
+                                    }}
                                     onInput={(e) => {
                                       // Keep a live copy of direct page edits so
                                       // export/save/send uses the contract exactly
