@@ -1104,7 +1104,8 @@ function StudioShell({
     signatureB?: { url: string; width: number };
     showDate?: boolean;
     showSigB?: boolean;
-  }>(() => ({ showDate: false, showSigB: true, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
+    stampLocked?: boolean;
+  }>(() => ({ showDate: false, showSigB: true, stampLocked: false, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
