@@ -85,13 +85,14 @@ const STAFF: DocumentTemplate[] = [
     needsPosition: true,
     emailSubject: "Your Offer of Employment — JBJ GLOBAL REAL ESTATE",
     aiInstructions:
-      "Draft a formal, warm job offer letter. Open with congratulations, state the offered position, start date, salary/package, probation terms, and reporting line. Include a clear acceptance instruction. Do NOT include letterhead or signature blocks.",
+      "Draft a formal, warm job offer letter. Open with congratulations, state the offered position, start date, salary/package, probation terms, reporting line, and working hours. DEFAULT working hours are 10:00 AM to 7:00 PM, Monday to Saturday, unless the user explicitly provides different hours. Include a clear acceptance instruction. Do NOT include letterhead or signature blocks.",
     fields: [
       RECIPIENT_NAME,
       { key: "jobTitle", label: "Offered Position", type: "text", placeholder: "e.g., Senior Sales Manager", required: true },
       START_DATE,
       { key: "salary", label: "Salary / Package", type: "text", placeholder: "AED 25,000 per month" },
       { key: "commission", label: "Commission Structure", type: "text", placeholder: "e.g., 30% of net commission" },
+      { key: "workingHours", label: "Working Hours", type: "text", placeholder: "10:00 AM – 7:00 PM, Monday to Saturday", default: "10:00 AM – 7:00 PM, Monday to Saturday" },
       { key: "notes", label: "Additional Instructions", type: "textarea", placeholder: "Relocation, benefits, probation length…" },
     ],
   },
