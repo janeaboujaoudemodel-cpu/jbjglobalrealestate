@@ -50,29 +50,29 @@ export function DeveloperLogo({
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
     const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim();
     const label = (cleaned || raw.split(/\s+/)[0] || "—").toUpperCase();
+    const len = label.length;
     const sizeClass =
-      label.length <= 4
-        ? "text-[11px]"
-        : label.length <= 6
-        ? "text-[10px]"
-        : label.length <= 8
-        ? "text-[9px]"
-        : label.length <= 11
-        ? "text-[8px]"
-        : "text-[7px]";
+      len <= 4 ? "text-[11px]"
+      : len <= 6 ? "text-[10px]"
+      : len <= 8 ? "text-[9px]"
+      : len <= 11 ? "text-[8px]"
+      : len <= 14 ? "text-[7px]"
+      : "text-[6px]";
     return (
       <div
-        className={cn(containerClass)}
+        className={cn(containerClass, "px-[2px]")}
         aria-label={raw}
         title={raw}
         data-developer-nameplate
       >
         <span
           className={cn(
-            "font-bold tracking-tight leading-none text-center whitespace-nowrap",
+            "font-bold tracking-tight leading-[1.05] text-center block w-full",
+            "break-words hyphens-auto",
             textTone,
             sizeClass,
           )}
+          style={{ wordBreak: "break-word", overflowWrap: "anywhere", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}
         >
           {label}
         </span>
