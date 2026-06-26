@@ -99,7 +99,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                 renderFallback
                 className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
               />
-              <span className="text-sm font-medium text-foreground truncate flex-1">{selectedDev.name}</span>
+              <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground whitespace-normal break-words [overflow-wrap:anywhere]">{selectedDev.name}</span>
             </>
           ) : (
             <>
@@ -110,7 +110,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                 renderFallback
                 className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
               />
-              <span className="text-sm text-[#1A1A1A]/70 flex-1 truncate">{placeholder}</span>
+              <span className="min-w-0 flex-1 text-sm leading-snug text-[#1A1A1A]/70 whitespace-normal break-words [overflow-wrap:anywhere]">{placeholder}</span>
             </>
           )}
           <ChevronDown className="w-4 h-4 text-[#064E3B] shrink-0" />
@@ -152,7 +152,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                     onChange(dev.name);
                     setOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[#EFE6D6]/60 overflow-hidden ${
+                  className={`w-full min-h-12 flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[#EFE6D6]/60 overflow-hidden ${
                     isSelected ? 'bg-[#EFE6D6]/50 border-l-2 border-[#B89555]' : 'border-l-2 border-transparent'
                   }`}
                 >
@@ -164,7 +164,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                     renderFallback
                     className="!w-9 !h-9 !min-w-9 !min-h-9 !rounded-md !p-[3px]"
                   />
-                  <span className="text-sm font-medium text-foreground truncate">{dev.name}</span>
+                  <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground whitespace-normal break-words [overflow-wrap:anywhere]">{dev.name}</span>
                 </button>
               );
             })
