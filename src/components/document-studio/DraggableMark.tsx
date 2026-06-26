@@ -6,7 +6,7 @@
  * Position is stored in pixel coordinates relative to the containing body.
  */
 import { useEffect, useRef, useState } from "react";
-import { X, Pencil, Maximize2 } from "lucide-react";
+import { X, Pencil, Maximize2, Lock, Unlock } from "lucide-react";
 
 export interface DraggableMarkProps {
   x: number;
@@ -19,12 +19,15 @@ export interface DraggableMarkProps {
   children: React.ReactNode;
   ariaLabel?: string;
   hint?: string;
+  locked?: boolean;
+  onToggleLock?: () => void;
 }
 
 const CLICK_THRESHOLD_PX = 6;
 
 export default function DraggableMark({
   x, y, onChange, onRemove, onClick, onResize, zIndex = 5, children, ariaLabel, hint,
+  locked = false, onToggleLock,
 }: DraggableMarkProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [drag, setDrag] = useState<null | { dx: number; dy: number; sx: number; sy: number; moved: boolean }>(null);
@@ -64,9 +67,10 @@ export default function DraggableMark({
       role="group"
       aria-label={ariaLabel}
       className="group absolute select-none"
-      style={{ left: x, top: y, zIndex, cursor: drag?.moved ? "grabbing" : (onClick ? "pointer" : "grab"), touchAction: "none" }}
+      style={{ left: x, top: y, zIndex, cursor: locked ? "default" : (drag?.moved ? "grabbing" : (onClick ? "pointer" : "grab")), touchAction: "none" }}
       onPointerDown={(e) => {
         if ((e.target as HTMLElement).closest?.("[data-mark-action]")) return;
+        if (locked) return;
         const r = ref.current!.getBoundingClientRect();
         (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
         setDrag({ dx: e.clientX - r.left, dy: e.clientY - r.top, sx: e.clientX, sy: e.clientY, moved: false });
@@ -115,6 +119,21 @@ export default function DraggableMark({
             className="h-5 w-5 rounded-full bg-white border border-[#B89555]/40 flex items-center justify-center shadow-sm hover:bg-[#F7F2EA]"
           >
             <Pencil className="w-3 h-3 text-[#1A1A1A]" />
+          </button>
+        )}
+        {onToggleLock && (
+          <button
+            type="button"
+            data-mark-action="lock"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); onToggleLock(); }}
+            title={locked ? "Unlock to drag" : "Lock position"}
+            aria-label={locked ? "Unlock mark" : "Lock mark"}
+            className="h-5 w-5 rounded-full bg-white border border-[#B89555]/40 flex items-center justify-center shadow-sm hover:bg-[#F7F2EA]"
+          >
+            {locked
+              ? <Lock className="w-3 h-3 text-[#064E3B]" />
+              : <Unlock className="w-3 h-3 text-[#1A1A1A]" />}
           </button>
         )}
         {onResize && (

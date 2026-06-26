@@ -44,7 +44,7 @@ import {
  DocumentAudience, DocumentScope, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
-import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
+import { stripChromeArtifacts, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
@@ -538,7 +538,38 @@ function StudioShell({
   const [deptDraft, setDeptDraft] = useState("");
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
-  const [fields, setFields] = useState<Record<string, string>>(() => snap?.fields || getTemplateDefaultFields(initialId));
+  // Shared identity store: identity fields (name, ID, passport, contact) are
+  // mirrored across every template so once the owner fills the Offer Letter
+  // for a candidate, opening the NDA (or any contract) for the same person
+  // auto-prefills those same fields. The composer-specific defaults remain.
+  const SHARED_IDENTITY_KEY = "jbj:doc-studio:shared-identity";
+  const readSharedIdentity = (): Record<string, string> => {
+    try {
+      const raw = localStorage.getItem(SHARED_IDENTITY_KEY);
+      const j = raw ? JSON.parse(raw) : null;
+      return j && typeof j === "object" ? j : {};
+    } catch { return {}; }
+  };
+  const [fields, setFields] = useState<Record<string, string>>(() => {
+    const base = getTemplateDefaultFields(initialId);
+    const shared = readSharedIdentity();
+    const merged = { ...base, ...shared };
+    return snap?.fields ? { ...merged, ...snap.fields } : merged;
+  });
+  // Mirror identity fields to the shared store whenever they change.
+  useEffect(() => {
+    try {
+      const out: Record<string, string> = {};
+      for (const k of IDENTITY_FIELD_KEYS) {
+        const v = (fields[k] || "").toString().trim();
+        if (v && !/^\[[^\]]+\]$/.test(v)) out[k] = v;
+      }
+      if (Object.keys(out).length) {
+        const merged = { ...readSharedIdentity(), ...out };
+        localStorage.setItem(SHARED_IDENTITY_KEY, JSON.stringify(merged));
+      }
+    } catch {}
+  }, [fields]);
   const [bodyHtml, setBodyHtml] = useState<string>(() => snap?.bodyHtml || "");
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
@@ -1104,7 +1135,8 @@ function StudioShell({
     signatureB?: { url: string; width: number };
     showDate?: boolean;
     showSigB?: boolean;
-  }>(() => ({ showDate: false, showSigB: true, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
+    stampLocked?: boolean;
+  }>(() => ({ showDate: false, showSigB: true, stampLocked: false, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -3080,9 +3112,10 @@ function StudioShell({
                 // page when the document is processed for signature. Reserve a
                 // safe band on every page so the stamp never overlays content.
                 const FIRST_TOP = 46;
-                // GLOBAL: equal interior top/bottom on inner pages. Safe band
-                // and footer reserve are handled separately.
-                const NEXT_TOP = 64;
+                // GLOBAL: tighten the top of inner pages — the colored band
+                // above body on pages 2+ was removed, so content sits closer
+                // to the paper edge for a premium contract feel.
+                const NEXT_TOP = 24;
                 const STANDARD_BOTTOM_PAD = 40;
                 const LAST_BOTTOM_PAD = 48;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
@@ -3138,11 +3171,12 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
-                              {/* DocuSign envelope-ID safe band — colored
-                                  champagne (same as header/footer) on EVERY
-                                  page so it never reads as a white crop above
-                                  the colored chrome. Global rule. */}
-                              {!noChrome && (
+                              {/* DocuSign envelope-ID safe band — ONLY on
+                                  page 1 (under the letterhead chrome). On
+                                  inner pages we removed the colored stripe
+                                  entirely so the paper reads as one solid
+                                  premium tone, top-to-bottom. */}
+                              {!noChrome && isFirst && (
                                 <div
                                   aria-hidden
                                   style={{
@@ -3155,6 +3189,28 @@ function StudioShell({
                                     zIndex: 1,
                                   }}
                                 />
+                              )}
+                              {/* Engraved JBJ monogram watermark — centered
+                                  on every page, very faint, behind content. */}
+                              {!noChrome && (
+                                <div
+                                  aria-hidden
+                                  style={{
+                                    position: "absolute",
+                                    inset: 0,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    pointerEvents: "none",
+                                    zIndex: 0,
+                                  }}
+                                >
+                                  <img
+                                    src={jbjMonogramSrc}
+                                    alt=""
+                                    style={{ width: 360, height: 360, opacity: 0.05, filter: "grayscale(1)" }}
+                                  />
+                                </div>
                               )}
                               {/* Document generation date — top-right corner of EVERY page (above
                                   letterhead on page 1, above body on pages 2+). Distinct from the
@@ -3306,7 +3362,9 @@ function StudioShell({
                                       return m.stamp ? { ...m, stamp: { ...m.stamp, width: next } } : m;
                                     })}
                                     ariaLabel="Stamp"
-                                    hint="Click to change · Drag to move"
+                                    locked={!!marks.stampLocked}
+                                    onToggleLock={() => setMarks((m) => ({ ...m, stampLocked: !m.stampLocked }))}
+                                    hint={marks.stampLocked ? "Locked · click 🔒 to unlock" : "Drag to move · click 🔒 to lock"}
                                   >
                                     <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 220, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, background: "transparent" }} className="block pointer-events-none" />
                                   </DraggableMark>

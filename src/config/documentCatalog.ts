@@ -144,6 +144,7 @@ const STAFF: DocumentTemplate[] = [
       { key: "jobTitle", label: "Offered Position", type: "text", placeholder: "e.g., Senior Sales Manager", required: true },
       { key: "reportingLine", label: "Reporting Line", type: "text", placeholder: "e.g., Sales Director" },
       START_DATE,
+      { key: "leadsReceivedFrom", label: "Leads / Confidential Data Received From (Backdated Effective Date)", type: "date", placeholder: "Date the candidate first received Company leads, if earlier than signing date" },
       { key: "salary", label: "Basic Salary", type: "text", placeholder: "Not applicable — fixed commission basis" },
       { key: "commission", label: "Commission Structure", type: "text", placeholder: "65% direct / 55% company-sourced / 70% approved premium tier" },
       { key: "allowances", label: "Allowances", type: "text", placeholder: "Transport, phone, etc." },
