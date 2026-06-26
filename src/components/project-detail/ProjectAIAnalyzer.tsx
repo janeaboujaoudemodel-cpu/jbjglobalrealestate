@@ -339,15 +339,15 @@ export const ProjectAIAnalyzer = ({
                   color: "#FFFFFF",
                 }}
               >
-                <Star className="w-9 h-9 mb-2 relative z-10 allow-white" style={{ fill: "#B89555", color: "#B89555" }} />
+                <Star className="w-9 h-9 mb-2 relative z-10 allow-white" style={{ fill: "#FFFFFF", color: "#FFFFFF" }} />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
                       <span className="text-6xl font-extrabold allow-white" style={{ color: "#FFFFFF", textShadow: "0 2px 12px rgba(0,0,0,0.45)" }}>{ratingScore}</span>
                     </div>
-                    <div className="text-sm font-bold tracking-wide uppercase mt-1 relative z-10" style={{ color: "#D4B062" }}>/10 Investment Rating</div>
+                    <div className="text-sm font-bold tracking-wide uppercase mt-1 relative z-10 allow-white" style={{ color: "#FFFFFF" }}>/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
-                      <span className="inline-block w-2 h-2 rounded-full animate-pulse" style={{ background: "#D4B062" }} />
+                      <span className="inline-block w-2 h-2 rounded-full animate-pulse" style={{ background: "#FFFFFF" }} />
                       <span className="text-[10px] font-semibold uppercase tracking-widest allow-white" style={{ color: "#FFFFFF" }}>Strong Buy Signal</span>
                     </div>
                     {sections?.rating && (
@@ -368,12 +368,17 @@ export const ProjectAIAnalyzer = ({
               {/* Price Per Sqft */}
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <BarChart3 className="w-5 h-5 text-[color:var(--emerald-1)]" />
+                  <BarChart3 className="w-5 h-5" style={{ color: "#064E3B" }} />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
                   {yoyChange !== null && (
-                    <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
- yoyChange >= 0 ? "jj-emerald-soft text-[color:var(--emerald-1)]" : "bg-red-100 text-red-600"
- }`}>
+                    <span
+                      className="ml-auto text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={
+                        yoyChange >= 0
+                          ? { background: "rgba(6,78,59,0.10)", color: "#064E3B" }
+                          : { background: "rgba(220,38,38,0.10)", color: "#B91C1C" }
+                      }
+                    >
                       {yoyChange >= 0 ? "+" : ""}{yoyChange}% YoY
                     </span>
                   )}
@@ -383,11 +388,12 @@ export const ProjectAIAnalyzer = ({
                   <>
                     {/* Large price stat */}
                     <div className="mb-4">
-                      <div className="text-3xl font-bold text-[color:var(--emerald-1)]">
+                      <div className="text-3xl font-bold" style={{ color: "#064E3B" }}>
                         AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-[#1A1A1A]">/sqft</span>
                       </div>
                       <div className="text-xs text-[#1A1A1A]/90 font-semibold mt-0.5">{areaName} average</div>
                     </div>
+
 
                     {/* Bar chart */}
                     <div className="h-28 w-full">
