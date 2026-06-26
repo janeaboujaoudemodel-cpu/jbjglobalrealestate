@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText, Banknote } from "lucide-react";
 import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
@@ -33,7 +33,7 @@ import { getCatalogByAudience, type DocumentTemplate } from "@/config/documentCa
 const DocumentStudio = lazy(() => import("@/components/document-studio/DocumentStudio"));
 
 type Cat = "all" | "leasing" | "selling";
-type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer";
+type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer" | "finance";
 type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
@@ -60,18 +60,20 @@ const FEATURED_STUDIO_TEMPLATE_IDS = [
   "developer_commission_invoice",
   "developer_payment_request",
   "developer_closing_notice",
+  "commission_invoice",
   "ai_home_finder_report",
 ];
 
 const TEMPLATE_CATEGORIES: Array<{ key: TemplateCategoryKey; label: string; description: string; icon: typeof FileText; ids?: string[] }> = [
   { key: "all", label: "All Forms", description: "Full JBJ library", icon: FileText },
-  { key: "employees", label: "Employees", description: "Offer, contract, warning, termination, HR letters", icon: Briefcase, ids: ["job_offer", "employment_contract", "warning_letter", "termination_letter", "nda", "commission_agreement", "commission_invoice", "internship_agreement", "hr_letter", "partnership_referral", "custom_staff"] },
+  { key: "employees", label: "Employees", description: "Offer, contract, warning, termination, HR letters", icon: Briefcase, ids: ["job_offer", "employment_contract", "warning_letter", "termination_letter", "nda", "commission_agreement", "internship_agreement", "hr_letter", "partnership_referral", "custom_staff"] },
   { key: "client", label: "Client", description: "Client letters, proposals, NOC, reservations", icon: Crown, ids: ["ai_home_finder_report", "jbj_branded_proposal_letterhead", "custom_client", "mou", "property_reservation", "noc", "tenancy_addendum"] },
   { key: "forms", label: "Forms & Agreements", description: "RERA Forms A/B/F/I/U, A-to-A and agreements", icon: Stamp, ids: ["form_a", "form_b", "form_f", "form_i", "form_u", "broker_referral", "paa", "mou", "ejari_tenancy"] },
   { key: "leasing", label: "Leasing", description: "PAA, tenancy, holiday home and addenda", icon: FileSignature, ids: ["paa", "ejari_tenancy", "tenancy_addendum", "holiday_home_agreement"] },
   { key: "selling", label: "Selling", description: "Listing, buyer, MOU, cancellation and reservation", icon: Scale, ids: ["form_a", "form_b", "form_f", "form_i", "form_u", "broker_referral", "mou", "property_reservation"] },
   { key: "after_sale", label: "After-Sale", description: "Maintenance, interior, bills and quotations", icon: ReceiptText, ids: ["facility_management_agreement", "maintenance_request", "interior_design_quotation", "service_bill", "client_quotation"] },
   { key: "developer", label: "Developer", description: "Developer invoices, commission claims and closing notices", icon: Building2, ids: ["developer_commission_invoice", "developer_payment_request", "developer_closing_notice"] },
+  { key: "finance", label: "Finance", description: "Broker & developer invoices, bills, quotations, commission claims", icon: Banknote, ids: ["commission_invoice", "developer_commission_invoice", "developer_payment_request", "developer_closing_notice", "service_bill", "client_quotation", "interior_design_quotation"] },
 ];
 
 const templateFamilyLabel = (template: DocumentTemplate) => {
@@ -1105,7 +1107,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
 
       {/* Generate Document — category/search picker */}
       <Dialog open={newEnvelopeOpen} onOpenChange={setNewEnvelopeOpen}>
-          <DialogContent className="bg-[#FDFBF7] max-w-5xl max-h-[86vh] overflow-y-auto">
+          <DialogContent className="bg-[#FDFBF7] w-[min(96vw,1280px)] max-w-[1280px] max-h-[90vh] overflow-y-auto sm:!max-w-[1280px]">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">Generate Document</DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/70">Search or choose a category. Only matching templates open here.</DialogDescription>
@@ -1120,7 +1122,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                 className="pl-9 bg-[#FDFBF7]"
               />
             </div>
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5">
               {TEMPLATE_CATEGORIES.map((item) => {
                 const Icon = item.icon;
                 const active = activeTemplateCategory === item.key;
@@ -1132,10 +1134,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                     data-surface={active ? "emerald" : "champagne"}
                     className={["text-left rounded-lg border px-3 py-2.5 transition min-w-0", active ? "border-transparent bg-[var(--jj-emerald-ombre)]" : "border-[#B89555]/35 bg-[#F7F2EA] hover:bg-[#EFE6D6]"].join(" ")}
                   >
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-start gap-2 min-w-0">
                       <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />
-                      <div className="min-w-0">
-                        <div className={active ? "text-xs font-semibold text-[#FFFFFF]" : "text-xs font-semibold text-[#1A1A1A]"}>{item.label}</div>
+                      <div className="min-w-0 flex-1">
+                        <div className={active ? "text-xs font-semibold text-[#FFFFFF] whitespace-nowrap truncate" : "text-xs font-semibold text-[#1A1A1A] whitespace-nowrap truncate"}>{item.label}</div>
                         <div className={active ? "text-[10px] text-[#FFFFFF]/85 line-clamp-1" : "text-[10px] text-[#1A1A1A]/65 line-clamp-1"}>{item.description}</div>
                       </div>
                     </div>
@@ -1144,7 +1146,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               })}
             </div>
           </div>
-          <div className="grid gap-3 mt-4" data-studio-card-grid>
+          <div className="grid gap-3 mt-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-studio-card-grid>
+
             {categoryFilteredStudioTemplates.map((template) => {
               const Icon = template.icon;
               return (

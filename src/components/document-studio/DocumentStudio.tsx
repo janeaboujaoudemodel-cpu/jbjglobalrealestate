@@ -1512,7 +1512,9 @@ function StudioShell({
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
         [data-document-studio-overlay] .studio-scroll-x { overflow-x:hidden; }
         [data-document-studio-overlay] .studio-action-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-width:0; }
-        [data-document-studio-overlay] .studio-action-row > * { flex:0 1 auto; }
+        [data-document-studio-overlay] .studio-action-row > * { flex:0 0 auto; }
+        [data-document-studio-overlay] .studio-action-row button { white-space:nowrap; }
+        [data-document-studio-overlay] .studio-action-row button > span { white-space:nowrap; }
         [data-document-studio-overlay] .studio-sidebar { min-width:0; }
         [data-document-studio-overlay] .studio-template-card { min-width:0; overflow:hidden; }
         [data-document-studio-overlay] .studio-template-card * { overflow-wrap:anywhere; }
