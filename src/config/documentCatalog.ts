@@ -100,7 +100,7 @@ const STAFF: DocumentTemplate[] = [
       "",
       "We are pleased to offer you the position of [Job Title] with [Company Legal Name], subject to the terms set out below and to your signing of the Company’s Employment Agreement, Non-Disclosure Agreement, Company Policies, Data Protection Policy, and any other required company documents.",
       "",
-      "RENDERING RULES — Render TWO tables before the numbered clauses: (a) a 'Terms of Employment' table with rows for Job Title, Start / Joining Date, Place of Work, Working Hours, Attendance, Probation Period, Reporting Line; (b) a 'Compensation & Commission Structure' table with rows for Basic Salary, Commission Structure, Allowances, Payment Cycle. The numbered clauses MUST mirror these values in clean prose — never use slash separators like 'A / B / C' and never leave bracketed placeholders inside the prose. If a value is empty, omit it gracefully.",
+      "RENDERING RULES — Render TWO tables before the numbered clauses: (a) a 'Terms of Employment' table with rows for Job Title, Start / Joining Date, Place of Work, Working Hours, Probation Period, Reporting Line; do NOT render a separate Attendance row because Working Hours already includes Saturday timing; (b) a 'Compensation & Commission Structure' table with rows for Basic Salary, Allowances, Payment Cycle and the detailed commission tiers. The numbered clauses MUST mirror these values in clean prose — never use slash separators like 'A / B / C' and never leave bracketed placeholders inside the prose. If a value is empty, omit it gracefully.",
       "1. Position — Your position will be [Job Title], reporting to [Reporting Line].",
       "2. Start Date — Your expected start date is [Start Date], as also reflected in the Terms of Employment table above.",
       "3. Place of Work — Your place of work will be the location designated by the Company from time to time (no fixed permanent worksite), together with field visits and remote work where approved. The Company may relocate or reassign your worksite at its sole discretion. Your standard working hours are [Working Hours], consistent with the Terms of Employment table above.",
@@ -130,7 +130,7 @@ const STAFF: DocumentTemplate[] = [
       "",
       "Date: ______________________________",
       "",
-      "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. Place of Work for Offer Letters = the location designated by the Company from time to time — DO NOT print the trade-licence office address (Office SM1-195, Port Saeed) on Offer Letters; that address is reserved for NDA and corporate documents only. Default working hours when not specified = 10:00 AM – 7:00 PM, Monday to Saturday. Default probation = up to six (6) months. Use clean HTML: <h2> for numbered titles, <p> for paragraphs, no inline color. SURGICAL PATCH MODE — never rewrite this structure or import clauses from the Employment Agreement or NDA; only fill placeholders.",
+      "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. Place of Work for Offer Letters = the location designated by the Company from time to time — DO NOT print the trade-licence office address (Office SM1-195, Port Saeed) on Offer Letters; that address is reserved for NDA and corporate documents only. Default working hours when not specified = Monday to Friday: 10:00 AM – 7:00 PM, then a new line for Saturday: 11:00 AM – 4:00 PM. Default probation = up to six (6) months. Use clean HTML: <h2> for numbered titles, <p> for paragraphs, no inline color. SURGICAL PATCH MODE — never rewrite this structure or import clauses from the Employment Agreement or NDA; only fill placeholders.",
     ].join("\n"),
     fields: [
       { key: "letterDate", label: "Letter Date", type: "date" },
@@ -151,7 +151,7 @@ const STAFF: DocumentTemplate[] = [
       { key: "paymentCycle", label: "Payment Cycle", type: "text", placeholder: "Monthly / upon company receipt of commission" },
       { key: "benefits", label: "Benefits", type: "textarea", placeholder: "Annual leave, medical insurance, visa, gratuity…" },
       { key: "probationPeriod", label: "Probation Period", type: "text", placeholder: "Up to six (6) months", default: "Up to six (6) months" },
-      { key: "workingHours", label: "Working Hours", type: "text", placeholder: "10:00 AM – 7:00 PM, Monday to Saturday", default: "10:00 AM – 7:00 PM, Monday to Saturday" },
+      { key: "workingHours", label: "Working Hours", type: "textarea", placeholder: "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM", default: "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM" },
     ],
   },
   {
