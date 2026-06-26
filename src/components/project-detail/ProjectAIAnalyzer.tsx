@@ -339,15 +339,15 @@ export const ProjectAIAnalyzer = ({
                   color: "#FFFFFF",
                 }}
               >
-                <Star className="w-9 h-9 mb-2 relative z-10 allow-white" style={{ fill: "#B89555", color: "#B89555" }} />
+                <Star className="w-9 h-9 mb-2 relative z-10 allow-white" style={{ fill: "#FFFFFF", color: "#FFFFFF" }} />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
                       <span className="text-6xl font-extrabold allow-white" style={{ color: "#FFFFFF", textShadow: "0 2px 12px rgba(0,0,0,0.45)" }}>{ratingScore}</span>
                     </div>
-                    <div className="text-sm font-bold tracking-wide uppercase mt-1 relative z-10" style={{ color: "#D4B062" }}>/10 Investment Rating</div>
+                    <div className="text-sm font-bold tracking-wide uppercase mt-1 relative z-10 allow-white" style={{ color: "#FFFFFF" }}>/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
-                      <span className="inline-block w-2 h-2 rounded-full animate-pulse" style={{ background: "#D4B062" }} />
+                      <span className="inline-block w-2 h-2 rounded-full animate-pulse" style={{ background: "#FFFFFF" }} />
                       <span className="text-[10px] font-semibold uppercase tracking-widest allow-white" style={{ color: "#FFFFFF" }}>Strong Buy Signal</span>
                     </div>
                     {sections?.rating && (
