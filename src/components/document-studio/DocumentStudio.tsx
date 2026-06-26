@@ -1295,6 +1295,7 @@ function StudioShell({
     <div
       data-no-contrast-guard
       data-document-studio-overlay
+      data-studio-surface="champagne"
       className="fixed inset-0 bg-[#FDFBF7] flex flex-col"
       style={{
         fontFamily: "Inter, system-ui, sans-serif",
