@@ -105,7 +105,7 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   const today = todayIso();
   switch (templateId) {
     case "job_offer":
-      return { recipientName: "[Employee Name]", jobTitle: "[Position]", startDate: today, probation: "6 months", workingHours: "Monday to Friday, 9:00 AM to 6:00 PM", annualLeave: "30 calendar days", noticePeriod: "30 calendar days", reportingTo: "Management", salary: "AED [amount] per month" };
+      return { recipientName: "[Employee Name]", jobTitle: "[Position]", startDate: today, probation: "6 months", workingHours: "10:00 AM – 7:00 PM, Monday to Saturday", annualLeave: "30 calendar days", noticePeriod: "30 calendar days", reportingTo: "Management", salary: "AED [amount] per month" };
     case "warning_letter":
       return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
     case "termination_letter":
