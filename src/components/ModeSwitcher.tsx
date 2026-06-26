@@ -115,6 +115,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredMode, setHoveredMode] = useState<UserMode | null>(null);
 
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Hide the badge only when no selection has been made AND the placement
   // hasn't opted in to the unselected/"Select your mode" CTA.
@@ -127,6 +129,27 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
     toast.success(`Switched to ${MODE_CONFIG[newMode].label}`, {
       description: MODE_CONFIG[newMode].description,
     });
+
+    // Route to the correct portal for the selected mode. Owner mode must
+    // ALWAYS land in the Owner Command Center — never the broker portal.
+    // Other modes only auto-route when the user is currently sitting on a
+    // portal that doesn't match the new mode (so casual page browsing isn't
+    // hijacked).
+    const path = location.pathname;
+    const onBrokerPortal = path.startsWith('/broker');
+    const onOwnerPortal = path.startsWith('/owner') || path.startsWith('/admin');
+    const onDeveloperPortal = path.startsWith('/developers-portal') || path.startsWith('/developer');
+
+    if (newMode === 'owner' && !onOwnerPortal) {
+      navigate('/owner');
+    } else if (newMode === 'broker' && onOwnerPortal) {
+      navigate('/broker-dashboard');
+    } else if (newMode === 'investor' && (onBrokerPortal || onOwnerPortal || onDeveloperPortal)) {
+      navigate('/my-dashboard');
+    } else if (newMode === 'developer' && !onDeveloperPortal) {
+      navigate('/developers-portal');
+    }
+
     setTimeout(() => setIsOpen(false), 400);
   };
 
