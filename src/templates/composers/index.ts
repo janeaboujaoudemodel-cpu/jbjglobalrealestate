@@ -143,7 +143,7 @@ const offerClause = (n: number, heading: string, body: string) => `
 
 /* ───────────── Shared building blocks ───────────── */
 
-export function termsTable(rows: Array<[string, string | undefined]>): string {
+export function termsTable(rows: Array<[string, string | undefined]>, title = "Terms of Employment"): string {
   const visible = rows.filter(([, v]) => (v || "").trim());
   if (visible.length === 0) return "";
   const body = visible
@@ -160,7 +160,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
       <thead>
         <tr>
           <th colspan="2" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
-            Terms of Employment
+            ${esc(title)}
           </th>
         </tr>
       </thead>
@@ -168,6 +168,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
     </table>`;
 
 }
+
 
 export function identityTable(_rows: Array<[string, string | undefined]>): string {
   // 🔒 Deprecated as of 2026-06: identity is now woven inline via
