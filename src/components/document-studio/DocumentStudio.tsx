@@ -3121,7 +3121,35 @@ function StudioShell({
               currentBody={bodyHtml}
               language={docLanguage}
               aiInstructions={template?.aiInstructions || ""}
-              onApply={(next) => {
+              onApply={(next, sourceText) => {
+                if (template?.id === "job_offer") {
+                  const extracted = normalizeExtractedDocumentFields({}, [sourceText, next].filter(Boolean).join("\n"));
+                  const nextFields = { ...fields, ...extracted };
+                  const visibleFields: Record<string, string> = {};
+                  for (const [k, v] of Object.entries(nextFields)) {
+                    if (!hiddenFieldKeys.has(k)) visibleFields[k] = v;
+                  }
+                  const lockedOfferBody = renderStandardBody({
+                    templateId: template.id,
+                    fields: visibleFields,
+                    department: template.needsPosition ? department : undefined,
+                    commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
+                    customFields: hiddenSections.has("custom") ? [] : customFields,
+                    ownerName,
+                    ownerTitle,
+                    ownerDate,
+                    applicantDate,
+                    hideLetterDate: true,
+                    extraSignatories,
+                  });
+                  setFields(nextFields);
+                  autoBodyRef.current = lockedOfferBody;
+                  userEditedRef.current = false;
+                  setUserEdited(false);
+                  setBodyHtml(lockedOfferBody);
+                  toast.success("Offer Letter values applied into the locked 11-clause template");
+                  return;
+                }
                 userEditedRef.current = true;
                 setUserEdited(true);
                 setBodyHtml(next);
