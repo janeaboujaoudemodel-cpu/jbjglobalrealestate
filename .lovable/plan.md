@@ -1,106 +1,76 @@
+# Document Studio — Production Hardening Plan
 
-# Document Studio — Enterprise Rebuild Plan
-
-Per your answers: **Shell first → Full legal copy for 35+ templates → Full-screen `/owner/documents/new` wizard**. Shipped in three sequential phases so each one is verifiable on its own and nothing regresses behind the next.
-
----
-
-## Phase 1 — Shell, Toolbar, Buttons, Chrome, Contrast (items 1–4, 7–12)
-
-Rebuild the Documents & Forms workspace and the editor chrome as real primitives, not CSS patches.
-
-### 1.1 Workspace layout (`/owner/documents/forms`)
-- New file `src/components/document-studio/DocumentWorkspace.tsx` replacing the current page body.
-- 12-column CSS grid with three rows: page header strip (64px), filters/search bar (56px), document grid (auto). `min-width:0` everywhere, `container-type: inline-size` on every card so nothing rotates or overflows.
-- Card grid uses `grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))` — never collapses to a single vertical column above 480px.
-- Empty state, loading skeleton, and "Recently Deleted" tab share the same shell.
-
-### 1.2 Toolbar primitive
-- New `src/components/document-studio/StudioToolbar.tsx` exporting `<StudioToolbar>` and `<StudioToolbarGroup>`.
-- Every control passes through one `<StudioButton size="md">` primitive: 40px height, 14px horizontal padding, 13px/600 Inter, 10px radius, identical hover lift, identical focus ring.
-- Sign / Stamp / Theme / Language / Save / Send / Download / Print / AI all rebuilt on this primitive. No `<button>` inside the studio bypasses it.
-- Toolbar splits into 3 zones: left (file ops), center (formatting), right (theme/lang/AI). Wraps onto a second row at <960px instead of compressing.
-
-### 1.3 New Envelope button
-- Replaced with `<StudioButton variant="primary" size="md">` — same height/padding/radius as every other primary CTA on the page. Centered icon + label with `inline-flex items-center justify-center gap-2`.
-
-### 1.4 Header / Footer / Monogram (locked chrome)
-- `LockedLetterhead`: monogram 220×72 → **280×96**, gutter between monogram and wordmark reduced from 14px → 8px, vertical divider 52 → 64. Header padding 8px → 6px top/bottom. "L.L.C S.O.C" rendered as inseparable `<span style="white-space:nowrap">` so it never disappears.
-- The literal word "Document" is removed from every chrome surface (audit `jbjLockedChrome.ts`, `LockedLetterhead.tsx`, `DocumentStudio.tsx`).
-- Generated date moved to a single right-aligned 9px stamp under the divider line on page 1 only, never repeating across pages.
-- Footer: single hairline divider, charcoal `#1A1A1A` body (was opacity white), height capped at 28px, no legal-name duplication.
-
-### 1.5 Contrast audit & lock
-- New `[data-studio-surface]` scope in `index.css` that forces:
-  - champagne surface → ink `#1A1A1A` text/icons (no white-on-cream anywhere)
-  - emerald surface → pure white text/icons
-  - dropdown menus, popovers, theme picker, language picker inherit the scope's tokens
-- "Live Document Editor" title, helper text, and English/AR toggle re-rendered with explicit tokens; no opacity-based fades.
-- AiEditChatPanel header re-themed to ink-on-champagne.
-
-### 1.6 Responsive contract
-- All studio surfaces wrapped in a single `.studio-shell` with `container-type: inline-size`.
-- Breakpoints handled with `@container` queries (not `@media`) so the editor behaves correctly inside the owner sidebar's variable width.
+This is a large, multi-area change. I'll execute in 6 sequenced phases and validate each with Playwright screenshots before moving on. No template/UI surface will be exposed unless its composer is wired end-to-end.
 
 ---
 
-## Phase 2 — Full Template Library (item 5)
+## Phase 1 — Shared Client Profile (single source of truth)
 
-Build the complete UAE/Dubai real estate document catalog with full legal copy. Each template ships as **Ready** (pre-filled boilerplate clauses) + **Blank** (empty editable shell).
+- New table `public.client_profiles` (per owner): `id, owner_id, full_name, passport_no, emirates_id, nationality, email, phone, address, position, salary, start_date, leads_from_date, extra jsonb, updated_at`.
+- RLS: owner-only (`auth.uid() = owner_id`) + GRANTs for `authenticated` / `service_role`.
+- New hook `useClientProfile(profileId)` — read/write, cached via React Query.
+- DocumentStudio: when a template opens, fields hydrate from the linked `client_profile_id`. Editing any field writes back to the profile (debounced) so Offer / NDA / Employment / Warning / Commission / Termination all stay in sync.
+- A "Client" picker at the top of Studio lets the user pick an existing profile or create one. Legacy per-template snapshots remain as a per-document override layer.
 
-### 2.1 Catalog structure
-```
-src/templates/library/
-├── sales/        offer-letter, reservation-form, spa, buyer-agreement, seller-agreement
-├── leasing/      ejari, lease-agreement, renewal, addendum, notice-to-vacate
-├── legal/        form-a, form-b, form-f, form-i, warning-letter, legal-notice, noc, authority-letter
-├── hr/           employment-contract, hr-offer-letter, nda, hr-warning, salary-certificate, experience-letter, termination-letter
-├── brokerage/    agent-to-agent, referral, commission, co-brokerage
-└── company/      letterhead, blank-letterhead, internal-memo, proposal, client-letter
-```
-Each file exports `{ id, category, title, ready: { html, fields }, blank: { html, fields }, mergeFields: [...] }`.
+## Phase 2 — Auto-Companion NDA
 
-### 2.2 Registry
-- `src/templates/library/index.ts` aggregates all 35 templates into one `TEMPLATE_LIBRARY` array.
-- `documentCatalog.ts` updated to consume the registry — the existing PAA template stays, everything else is added alongside it.
+- After a Job Offer is generated, auto-create a sibling NDA document bound to the same `client_profile_id`, pre-filled from the shared profile (Name, Passport, EID, Nationality, Email, Phone, Address, Position, Salary, Start Date, Leads-From Date).
+- NDA composer (`case "nda"`) is upgraded from `composeGeneric` to a full structured composer matching offer chrome (header, watermark, signature block, working hours where relevant).
+- "Offer / NDA" toggle in Studio already exists — wire it to the companion document id so switching is instant and edits in the shared profile reflect in both.
+- Any template whose composer is still `composeGeneric`-stub will be hidden from the picker until it's promoted to a real composer.
 
-### 2.3 Content depth
-Every template gets real clauses written to UAE/RERA convention: parties block, recitals, term, consideration, obligations, default, governing law (Dubai/DIFC where applicable), signatures, official stamps placeholders. Form A/B/F/I follow the actual RERA cell layout already used by PAA.
+## Phase 3 — Preview = PDF = Print parity
 
----
+- Extract one render function `renderDocumentPages(snapshot): HTMLElement[]` used by:
+  - Live preview iframe
+  - PDF exporter (html2pdf/print-to-pdf path)
+  - Browser print stylesheet (`@media print`)
+- Lock A4 metrics in CSS variables (`--page-w:210mm; --page-h:297mm; --page-pad-*`); preview uses the same `mm` units, no `transform: scale` drift in export.
+- Fonts: self-host Inter (woff2) and inline `@font-face` in the export HTML so PDF rendering matches preview exactly.
+- Pagination: move from CSS column flow to an explicit per-page DOM (already partly there) so page breaks are byte-identical between preview and PDF.
 
-## Phase 3 — Generate Document Wizard (item 6)
+## Phase 4 — Pre-export validation gate
 
-### 3.1 Route
-- New full-screen route `/owner/documents/new` registered in `OwnerRoutes`.
-- File: `src/pages/owner/DocumentGenerateWizard.tsx`.
-- Replaces the current "Generate" entry point — old buttons redirect here.
+New `validateDocument(snapshot): Issue[]` covers: overflow per page, cropped text (scrollHeight > pageHeight), empty placeholders (`[…]` / `{{…}}`), missing logo / monogram / footer, missing signature, missing stamp (when required), unfilled required vars, image load failures.
 
-### 3.2 Step sequence
-```
-1 Category    → 6 horizontal category tiles (Sales/Leasing/Legal/HR/Brokerage/Company)
-2 Template    → grid of templates in that category, each card shows Ready/Blank toggle
-3 Theme       → Champagne | Emerald preview side-by-side
-4 AI Autofill → optional: pulls from selected lead/property, shows diff before applying
-5 Preview     → renders inside ReportEngine using the locked chrome
-6 Edit        → opens DocumentStudio in-place with the populated draft
-7 Sign        → existing signature flow
-8 Export      → PDF / email / WhatsApp / link (existing pipeline)
-```
-- Persistent left rail shows the 8 steps; right rail shows live mini-preview from step 2 onward.
-- Each step is its own component under `src/components/document-studio/wizard/`.
+- "Download PDF" and "Print" buttons run validation first.
+- Issues open a blocking dialog with jump-to-field links; export disabled until clean (or user clicks "Export anyway" with a warning, logged).
 
----
+## Phase 5 — Print parity test harness
 
-## Technical Notes
+- Playwright script that, for every wired template:
+  1. Opens preview, screenshots each page.
+  2. Triggers PDF export, rasterises pages with pdftoppm, screenshots.
+  3. Triggers browser print-to-PDF, rasterises, screenshots.
+  4. Pixel-diffs Preview vs PDF vs Print; fails on >1% diff.
+- Screenshots saved to `/tmp/doc-parity/` and surfaced in the final reply.
 
-- All work is presentational + new template content. No DB schema changes — templates live in code, not in `crm_documents`.
-- `crm_documents.template_id` already accepts arbitrary string ids, so new templates plug in via `useSaveDocument({ template_id })`.
-- The locked emerald/champagne tokens already exist in `index.css` — Phase 1 consumes them via a new scoped data-attribute, no new color tokens introduced.
-- Contrast verified via Playwright after each phase (screenshots at 1440px / 1180px / 768px / 390px), attached to the closing message of each phase.
+## Phase 6 — Template audit & UI hiding
+
+- Inventory every `case` in `compose()` and classify as Real / Stub.
+- Stubs (currently: anything that falls through to `composeGeneric` with only a title) are hidden from `DocumentStudioLauncher` until promoted.
+- Required real-estate + HR set verified present:
+  - HR: Job Offer, NDA, Employment Contract, Warning, Termination, Commission Agreement, Commission Invoice, Internship, HR Letter
+  - RE: Form A, B, F, I, U, PAA, Tenancy Addendum, Holiday Home, Facility Mgmt
+  - Partners: Referral, Marketing, Investor, Strategic, Custom
+- Any missing template needed for production is added in this phase or explicitly listed as "not built — hidden".
 
 ---
 
-## Delivery
+## Technical notes
 
-I'll ship Phase 1 in the next response (single batch of file writes + edits + Playwright screenshot proof), then pause for your sign-off before starting Phase 2. Phase 2 is the largest by file count (35 template files with full legal copy) and Phase 3 is the most architectural (new route + 8-step wizard) — they each deserve their own review cycle.
+- New file: `supabase/migrations/<ts>_client_profiles.sql`
+- New file: `src/hooks/useClientProfile.ts`
+- New file: `src/lib/document-studio/validateDocument.ts`
+- New file: `src/lib/document-studio/renderPages.ts` (shared render)
+- New file: `src/templates/composers/nda.ts` (full NDA composer)
+- Edits: `DocumentStudio.tsx`, `DocumentStudioLauncher.tsx`, `composers/index.ts`, export pipeline in `document-studio/export/`
+
+## Out of scope
+
+- E-signature / DocuSign flow changes (already a separate system).
+- Visual restyle of templates — chrome, watermark, signature block, working hours all stay locked to current standard.
+
+## Validation deliverable
+
+At the end of each phase I'll attach Playwright screenshots (preview vs PDF vs print) for at least Job Offer + NDA + Employment Contract + Commission Agreement, plus the validation-gate dialog firing on a deliberately broken document.
