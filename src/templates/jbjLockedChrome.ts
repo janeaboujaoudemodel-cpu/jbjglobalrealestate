@@ -83,9 +83,7 @@ const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
   const monoMask = `-webkit-mask-image:url(${monogramSrc});mask-image:url(${monogramSrc});-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;`;
-  const monogram = theme === "emerald"
-    ? `<div aria-label="JBJ" role="img" style="width:126px;height:126px;background:${t.jColor};${monoMask}filter:drop-shadow(0 1px 0 rgba(0,0,0,.45));"></div>`
-    : `<img src="${monogramSrc}" alt="JBJ" style="width:126px;height:126px;object-fit:contain;display:block;filter:contrast(1.08) saturate(1.05) drop-shadow(0 1.4px 1.8px rgba(60,40,10,.18));" />`;
+  const monogram = `<div aria-label="JBJ" role="img" style="width:132px;height:132px;background:${t.jColor};${monoMask}filter:drop-shadow(.7px 0 0 ${t.jColor}) drop-shadow(-.7px 0 0 ${t.jColor}) drop-shadow(0 1.4px 1.4px rgba(60,40,10,.2));"></div>`;
   return `
   <header style="
     width:100%;
@@ -96,14 +94,14 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:142px minmax(0,1fr);align-items:center;column-gap:10px;min-height:138px;">
-      <div style="height:138px;width:138px;display:flex;align-items:center;justify-content:center;justify-self:center;align-self:center;">
+    <div style="display:grid;grid-template-columns:148px minmax(0,1fr);align-items:center;column-gap:12px;min-height:138px;">
+      <div style="height:142px;width:142px;display:flex;align-items:center;justify-content:center;justify-self:center;align-self:center;">
         ${monogram}
       </div>
 
-      <div style="height:138px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:2px;padding-right:48px;overflow:visible;">
-        <div style="display:block;width:100%;font-size:26px;font-weight:900;letter-spacing:0.075em;color:${t.fg};white-space:nowrap;transform:scaleX(1.01);transform-origin:left center;">
-          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.115em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
+      <div style="height:142px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:36px;overflow:visible;">
+        <div style="display:block;width:100%;font-size:25.5px;font-weight:900;letter-spacing:0.085em;color:${t.fg};white-space:nowrap;transform:scaleX(.99);transform-origin:left center;">
+          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.125em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
     </div>
