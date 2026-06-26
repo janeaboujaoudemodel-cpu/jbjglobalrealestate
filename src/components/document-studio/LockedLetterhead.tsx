@@ -3,8 +3,15 @@
  * Mirrors jbjHeaderHtml / jbjFooterHtml so preview === export.
  *
  * Themes:
- *   - "champagne"  → champagne bg, BLACK monogram, BLACK wordmark (default)
+ *   - "champagne"  → champagne bg, BLACK monogram, INK wordmark (default)
  *   - "emerald"    → dark emerald bg, WHITE monogram, WHITE wordmark
+ *
+ * Locked invariants:
+ *   - Monogram 280×96 (large, premium)
+ *   - 8px gutter between monogram and wordmark (tight, balanced)
+ *   - Wordmark "L.L.C S.O.C" suffix non-breaking via &nbsp; + whiteSpace:nowrap
+ *   - Footer: single hairline divider, charcoal body, no duplicate legal name
+ *   - The word "Document" never appears in chrome
  */
 
 import { JBJ_BRAND, JBJ_GOLD, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
@@ -14,7 +21,7 @@ export type LetterheadTheme = "champagne" | "emerald";
 const tokens = (theme: LetterheadTheme) =>
   theme === "emerald"
     ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
-    : { bg: JBJ_CHAMPAGNE, fg: "#000000", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
+    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
 
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
@@ -25,32 +32,34 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "8px 32px 8px 24px",
+        padding: "10px 32px 10px 24px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "240px 1px minmax(0,1fr)", columnGap: 14, minHeight: 72 }}
+        style={{ gridTemplateColumns: "280px 1px minmax(0,1fr)", columnGap: 8, minHeight: 96 }}
       >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block object-contain"
-          style={{ width: 220, height: 72, background: "transparent", filter: t.monoFilter }}
+          style={{ width: 280, height: 96, background: "transparent", filter: t.monoFilter }}
         />
-        <div aria-hidden style={{ width: 1, height: 52, background: t.hairline, opacity: theme === "emerald" ? 0.5 : 0.55 }} />
+        <div aria-hidden style={{ width: 1, height: 64, background: t.hairline, opacity: theme === "emerald" ? 0.5 : 0.55 }} />
         <div className="leading-tight min-w-0 text-center" style={{ paddingRight: 18 }}>
           <div
-            className="font-bold whitespace-nowrap"
+            className="font-bold"
             style={{
-              fontSize: 19,
+              fontSize: 20,
               color: t.fg,
               letterSpacing: "0.045em",
-              lineHeight: 1.1,
+              lineHeight: 1.15,
+              whiteSpace: "nowrap",
             }}
           >
-            {JBJ_BRAND.legalName} <span style={{ letterSpacing: "0.12em" }}>{JBJ_BRAND.legalSuffix}</span>
+            {JBJ_BRAND.legalName}&nbsp;
+            <span style={{ letterSpacing: "0.12em", whiteSpace: "nowrap" }}>{JBJ_BRAND.legalSuffix}</span>
           </div>
         </div>
       </div>
@@ -59,8 +68,8 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
 }
 
 /**
- * Ultra-compact footer — single divider, single info row.
- * No duplicated legal name. ~80% smaller than the previous version.
+ * Ultra-compact footer — single divider, charcoal body, single info row.
+ * No duplicated legal name. Height capped via padding.
  */
 export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
@@ -72,14 +81,14 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         borderTop: `1px solid ${t.hairline}`,
         color: t.fg,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "6px 32px",
+        padding: "5px 32px",
         boxSizing: "border-box",
       }}
     >
       <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
         <tbody>
           <tr>
-            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 10, lineHeight: 1.5, color: t.fg, opacity: 0.92, paddingRight: 14 }}>
+            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 10, lineHeight: 1.45, color: t.fg, paddingRight: 14 }}>
               {JBJ_BRAND.address}
             </td>
             <td style={{ verticalAlign: "middle", width: "22%", fontSize: 11, color: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700 }}>

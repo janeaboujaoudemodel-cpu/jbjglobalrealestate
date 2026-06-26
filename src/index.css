@@ -2,6 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =====================================================================
+   PASS 55 — DOCUMENT STUDIO SURFACE CONTRACT (scoped)
+   Anything wrapped in [data-studio-surface="champagne"] forces ink
+   foreground; [data-studio-surface="emerald"] forces white foreground.
+   Replaces every ad-hoc opacity/gray on Studio chrome, toolbar, editor.
+   Dropdowns and popovers triggered from inside inherit champagne ink.
+   ===================================================================== */
+[data-studio-surface="champagne"],
+[data-studio-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,span,label,div,a,button,li,dt,dd,th,td,input,textarea,select) {
+  color: #1A1A1A !important;
+}
+[data-studio-surface="champagne"] :is(svg, [data-lucide]) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+[data-studio-surface="champagne"] :is(.text-white, .text-white\/70, .text-white\/80, .text-white\/90, [class*="text-white/"]) {
+  color: #1A1A1A !important;
+}
+[data-studio-surface="emerald"],
+[data-studio-surface="emerald"] :is(h1,h2,h3,h4,h5,h6,p,span,label,div,a,button,li,dt,dd,th,td) {
+  color: #FFFFFF !important;
+}
+[data-studio-surface="emerald"] :is(svg, [data-lucide]) {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+/* CTA primitives keep their own foreground (emerald-fill buttons stay white). */
+[data-studio-surface] [data-jbj-button][data-surface="emerald"],
+[data-studio-surface] [data-jbj-button][data-surface="emerald"] * {
+  color: #FFFFFF !important;
+}
+
+/* =====================================================================
+   PASS 55 — DOCUMENT STUDIO RESPONSIVE WORKSPACE CONTRACT
+   Card grid never collapses to a vertical single column above 480px.
+   Every studio card contains its own content (no rotation, no overflow).
+   ===================================================================== */
+[data-studio-workspace] {
+  container-type: inline-size;
+  min-width: 0;
+}
+[data-studio-workspace] [data-studio-card-grid] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  min-width: 0;
+}
+@container (max-width: 480px) {
+  [data-studio-workspace] [data-studio-card-grid] {
+    grid-template-columns: 1fr;
+  }
+}
+[data-studio-workspace] [data-studio-card],
+[data-studio-workspace] [data-card] {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  container-type: inline-size;
+}
+[data-studio-workspace] [data-studio-card] :is(h1,h2,h3,h4,h5,p,span,div,a,button) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+
 /* ════════════════════════════════════════════════════════════════
    GLOBAL PAINT BASELINE
    html/body/#root all painted champagne *before* any component
