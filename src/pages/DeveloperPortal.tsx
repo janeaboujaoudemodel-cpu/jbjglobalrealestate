@@ -898,7 +898,7 @@ const DeveloperPortal = () => {
   return (
     <>
       <SEOHead title="Developer Portal | JBJ Global Real Estate" description="Submit projects, briefings, and marketing materials to JBJ GLOBAL REAL ESTATE." />
-      <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
+      <div data-backend-portal="developer" className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
         {/* Owner Mode Banner */}
         {isOwner && !isDeveloperMode && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">

@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
-const TAB_STYLE = "text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[hsl(36,40%,70%)]/40 rounded-lg";
+const TAB_STYLE = "text-[10px] md:text-xs font-semibold data-[state=active]:bg-[image:var(--jj-emerald-ombre)] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-transparent rounded-lg";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 16 },
@@ -115,7 +115,7 @@ export default function InvestorDashboard() {
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "Investor";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,28%,94%)] to-[hsl(36,22%,88%)]">
+    <div data-backend-portal="investor" className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,28%,94%)] to-[hsl(36,22%,88%)]">
       {/* Tabs */}
       <div className="max-w-6xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -149,16 +149,16 @@ export default function InvestorDashboard() {
               {/* KPI Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: "Watchlist", value: stats.watchlist, icon: Heart, color: "text-rose-500", bg: "bg-rose-500/10" },
-                  { label: "Saved Searches", value: stats.savedSearches, icon: Search, color: "text-blue-500", bg: "bg-blue-500/10" },
-                  { label: "Reports", value: stats.reports, icon: FileText, color: "text-purple-500", bg: "bg-purple-500/10" },
-                  { label: "Active Requests", value: stats.requests, icon: ListChecks, color: "text-amber-500", bg: "bg-amber-500/10" },
+                  { label: "Watchlist", value: stats.watchlist, icon: Heart },
+                  { label: "Saved Searches", value: stats.savedSearches, icon: Search },
+                  { label: "Reports", value: stats.reports, icon: FileText },
+                  { label: "Active Requests", value: stats.requests, icon: ListChecks },
                 ].map((kpi) => (
                   <Card key={kpi.label} className="border-[hsl(36,40%,70%)]/20 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,28%,93%)]">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${kpi.bg}`}>
-                          <kpi.icon className={`w-5 h-5 ${kpi.color}`} />
+                        <div data-backend-icon-tile="emerald" className="allow-white w-10 h-10 rounded-xl flex items-center justify-center">
+                          <kpi.icon className="w-5 h-5 text-white" />
                         </div>
                         <div>
                           <p className="text-xl font-bold text-foreground">{kpi.value}</p>
@@ -185,8 +185,8 @@ export default function InvestorDashboard() {
                     <Link key={a.label} to={a.href}>
                       <Card className="border-[hsl(36,40%,70%)]/20 hover:border-[hsl(36,40%,70%)]/50 transition-all cursor-pointer group h-full">
                         <CardContent className="p-4 flex flex-col items-center gap-2 text-center">
-                          <div className="w-10 h-10 rounded-xl bg-[hsl(36,40%,70%)]/10 flex items-center justify-center group-hover:bg-[hsl(36,40%,70%)]/20 transition-colors">
-                            <a.icon className="w-5 h-5 text-[hsl(36,40%,70%)]" />
+                          <div data-backend-icon-tile="emerald" className="allow-white w-10 h-10 rounded-xl flex items-center justify-center transition-colors">
+                            <a.icon className="w-5 h-5 text-white" />
                           </div>
                           <span className="text-xs font-semibold text-foreground">{a.label}</span>
                         </CardContent>
