@@ -1122,7 +1122,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                 className="pl-9 bg-[#FDFBF7]"
               />
             </div>
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5">
               {TEMPLATE_CATEGORIES.map((item) => {
                 const Icon = item.icon;
                 const active = activeTemplateCategory === item.key;
@@ -1134,10 +1134,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                     data-surface={active ? "emerald" : "champagne"}
                     className={["text-left rounded-lg border px-3 py-2.5 transition min-w-0", active ? "border-transparent bg-[var(--jj-emerald-ombre)]" : "border-[#B89555]/35 bg-[#F7F2EA] hover:bg-[#EFE6D6]"].join(" ")}
                   >
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-start gap-2 min-w-0">
                       <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />
-                      <div className="min-w-0">
-                        <div className={active ? "text-xs font-semibold text-[#FFFFFF]" : "text-xs font-semibold text-[#1A1A1A]"}>{item.label}</div>
+                      <div className="min-w-0 flex-1">
+                        <div className={active ? "text-xs font-semibold text-[#FFFFFF] whitespace-nowrap truncate" : "text-xs font-semibold text-[#1A1A1A] whitespace-nowrap truncate"}>{item.label}</div>
                         <div className={active ? "text-[10px] text-[#FFFFFF]/85 line-clamp-1" : "text-[10px] text-[#1A1A1A]/65 line-clamp-1"}>{item.description}</div>
                       </div>
                     </div>
@@ -1146,7 +1146,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               })}
             </div>
           </div>
-          <div className="grid gap-3 mt-4" data-studio-card-grid>
+          <div className="grid gap-3 mt-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-studio-card-grid>
+
             {categoryFilteredStudioTemplates.map((template) => {
               const Icon = template.icon;
               return (
