@@ -3328,8 +3328,8 @@ function StudioShell({
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 460,
-                                      height: 460,
+                                      width: 640,
+                                      height: 640,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
                                     }}
