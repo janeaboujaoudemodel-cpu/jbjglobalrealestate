@@ -140,7 +140,7 @@ export default function BrokerPortalLayout() {
               </button>
             )}
             <div className="hidden sm:flex items-center gap-1.5 bg-[#EFE6D6] border border-[#B89555] rounded-md px-2.5 py-1 text-xs font-bold text-[#1A1A1A] tracking-wide">
-              <Shield className="h-3.5 w-3.5" /> Broker
+              <ModeIcon className="h-3.5 w-3.5" /> {modeLabel}
             </div>
             {/* Mother-of-pearl circular avatar dropdown — same as front-end header */}
             <UserAvatarMenu />
