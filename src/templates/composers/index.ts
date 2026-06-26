@@ -880,6 +880,72 @@ function composeGeneric(input: ComposerInput, subject: string): string {
   ].join("");
 }
 
+/* ───────────── Non-Disclosure Agreement (mutual, structured) ───────────── */
+
+function composeNda(input: ComposerInput): string {
+  const f = input.fields;
+  const id = offerIdentity(f);
+  const candidateName = esc(filledOr(id.name || f.recipientName, "[Counterparty Name]"));
+  const address = esc(filledOr(id.address, "[Address]"));
+  const email = esc(filledOr(id.email, "[Email]"));
+  const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
+  const emiratesId = esc(filledOr(id.emiratesId, "[Emirates ID Number]"));
+  const passport = esc(filledOr(id.passport, "[Passport Number]"));
+  const nationality = esc(filledOr(id.nationality, "[Nationality]"));
+  const position = esc(filledOr(f.jobTitle || f.position, "Real Estate Broker"));
+  const startDate = esc(filledOr(f.startDate || f.leadsFromDate, ""));
+
+  const licenceNotice = paragraph(
+    `<strong>${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</strong> (the "<strong>Company</strong>"), a UAE real estate brokerage operating under Trade Licence No. <strong>${JBJ_BRAND.tradeLicense}</strong> and ORN <strong>41486</strong>, and the Counterparty identified below (the "<strong>Recipient</strong>") agree to the confidentiality terms set out in this Non-Disclosure Agreement (this "<strong>Agreement</strong>").`
+  );
+
+  const identityTable = termsTable(
+    [
+      ["Full Legal Name", filledOr(candidateName, ""), "recipientName"],
+      ["Nationality", filledOr(nationality, ""), "nationality"],
+      ["Emirates ID", filledOr(emiratesId, ""), "emiratesId"],
+      ["Passport Number", filledOr(passport, ""), "passportNumber"],
+      ["Residential Address", filledOr(address, ""), "homeAddress"],
+      ["Email", filledOr(email, ""), "recipientEmail"],
+      ["Phone / WhatsApp", filledOr(phone, ""), "recipientPhone"],
+      ["Position / Role", filledOr(position, ""), "jobTitle"],
+      ["Effective Date", filledOr(startDate, ""), "startDate"],
+    ],
+    "Counterparty Identification"
+  );
+
+  const clauses = [
+    offerClause(1, "Definition of Confidential Information", `"<strong>Confidential Information</strong>" means any non-public information disclosed by the Company to the Recipient, in any form, including without limitation: client and investor lists, lead data, owner/developer contacts, CRM exports, WhatsApp conversations, sales pipelines, payment plans, commission structures, listing material, pricing, photographs, marketing material, business plans, financial information, internal procedures, software, trade secrets, and any data marked or reasonably understood to be confidential.`),
+    offerClause(2, "Obligation of Confidentiality", `The Recipient shall (a) hold all Confidential Information in strict confidence, (b) use it solely for the purpose of performing services for or with the Company, (c) not disclose it to any third party without the Company's prior written consent, and (d) protect it with at least the same degree of care used to protect their own confidential information, but in no event less than reasonable care.`),
+    offerClause(3, "Non-Circumvention & Lead Ownership", `The Recipient shall not, directly or indirectly, contact, solicit, transact with, or refer to any third party any lead, client, investor, developer, landlord, tenant, owner or contact introduced by, sourced through, or recorded in the Company's systems, save through the Company and on terms approved by the Company in writing. All such leads and contacts are and remain the exclusive property of the Company.`),
+    offerClause(4, "Return or Destruction", `Upon the Company's request or upon the end of the Recipient's engagement, the Recipient shall promptly return or, at the Company's option, securely destroy all Confidential Information in their possession or control, including copies, derivatives and backups, and shall certify such destruction in writing if requested.`),
+    offerClause(5, "Term & Survival", `This Agreement is effective from the Effective Date stated above and shall continue in force throughout the Recipient's engagement with the Company and for a period of <strong>three (3) years</strong> thereafter. Confidentiality obligations relating to trade secrets shall survive indefinitely.`),
+    offerClause(6, "Remedies", `The Recipient acknowledges that any breach of this Agreement may cause irreparable harm for which monetary damages would be inadequate. The Company is entitled to seek injunctive relief, specific performance and any other remedy available at law or equity, in addition to recovery of legal costs.`),
+    offerClause(7, "Data Protection", `The Recipient shall comply with UAE Federal Decree-Law No. 45 of 2021 (Personal Data Protection Law) and all applicable data-protection laws when handling personal data shared by the Company.`),
+    offerClause(8, "Governing Law & Jurisdiction", `This Agreement is governed by the laws of the United Arab Emirates as applied in the Emirate of Dubai. The Parties submit to the exclusive jurisdiction of the Dubai Courts.`),
+  ].join("");
+
+  return [
+    recipientBlock(f),
+    subjectLine("Non-Disclosure Agreement"),
+    licenceNotice,
+    identityTable,
+    paragraphs(input.aiIntro),
+    clauses,
+    paragraphs(input.aiClosing),
+    signatureBlock({
+      ownerName: input.ownerName,
+      ownerTitle: input.ownerTitle,
+      ownerDate: input.ownerDate,
+      applicantName: candidateName,
+      applicantTitle: position,
+      applicantDate: input.applicantDate,
+      applicantLabel: "Recipient Signature",
+      extraSignatories: input.extraSignatories,
+    }),
+  ].join("");
+}
+
 function labelize(key: string): string {
   return key.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase()).trim();
 }
