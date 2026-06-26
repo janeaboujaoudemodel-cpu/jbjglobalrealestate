@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import {
   Sheet,
   SheetContent,
@@ -346,23 +347,23 @@ const ProjectFilters = ({
               <Building2 className="w-4 h-4 mr-1 text-[#1A1A1A] shrink-0" />
               <SelectValue placeholder="All Developers" />
             </SelectTrigger>
-            <SelectContent className="max-h-72 w-[260px]">
+              <SelectContent className="max-h-72 w-[320px]">
               <SelectItem value="all">All Developers</SelectItem>
               {developers && developers.map((developer) => (
                 <SelectItem key={developer.id} value={developer.id}>
-                  <div className="flex items-center gap-2">
-                    {developer.logo_url ? (
-                      <img
+                    <div className="flex w-full min-w-0 items-center gap-2.5 py-0.5">
+                      <DeveloperLogo
                         src={developer.logo_url}
                         alt={developer.name}
-                        className="w-5 h-5 object-contain rounded shrink-0"
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        name={developer.name}
+                        variant="bare"
+                        renderFallback
+                        className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
                       />
-                    ) : (
-                      <Building2 className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" />
-                    )}
-                    <span className="truncate">{developer.name}</span>
-                  </div>
+                      <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">
+                        {developer.name}
+                      </span>
+                    </div>
                 </SelectItem>
               ))}
             </SelectContent>

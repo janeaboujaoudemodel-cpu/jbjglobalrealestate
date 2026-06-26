@@ -43,41 +43,41 @@ export function DeveloperLogo({
   const override = getDeveloperLogoOverride(name ?? alt);
   const valid = isValidDeveloperLogoUrl(src) && !error;
 
-  // Shared label renderer — when a logo is missing, we ALWAYS keep the
-  // identical square container and place readable INITIALS inside so the
-  // name is never cropped. The full name appears next to the plate in
-  // every dropdown / list, so initials are the correct fallback here.
-  const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]") => {
+  // Shared label renderer — when a logo is missing, keep the identical
+  // champagne container but scale/wrap the actual developer wordmark so it
+  // fits inside the plate without cropping in every dropdown/list.
+  const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]", scale: "compact" | "card" = "compact") => {
     const raw = (name || alt || "Developer").trim();
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
     const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim() || raw;
-    // Build initials: first char of each meaningful token, max 3.
-    const tokens = cleaned.split(/\s+/).filter(Boolean);
-    let initials = tokens.map((t) => t[0]).join("").slice(0, 3).toUpperCase();
-    // Single-token names (e.g. "EMAAR", "DAMAC") → use up to 4 leading chars.
-    if (tokens.length === 1) {
-      initials = tokens[0].slice(0, 4).toUpperCase();
-    }
-    if (!initials) initials = "—";
-    const sizeClass =
-      initials.length <= 2 ? "text-[15px]"
-      : initials.length === 3 ? "text-[12px]"
-      : "text-[10px]";
+    const displayName = cleaned.toUpperCase();
+    const compactLength = displayName.replace(/\s+/g, "").length;
+    const sizeClass = scale === "card"
+      ? compactLength <= 6 ? "text-4xl"
+        : compactLength <= 10 ? "text-3xl"
+        : compactLength <= 16 ? "text-2xl"
+        : compactLength <= 24 ? "text-xl"
+        : "text-lg"
+      : compactLength <= 4 ? "text-[12px]"
+        : compactLength <= 6 ? "text-[10px]"
+        : compactLength <= 9 ? "text-[8px]"
+        : compactLength <= 14 ? "text-[7px]"
+        : "text-[6px]";
     return (
       <div
-        className={cn(containerClass)}
+        className={cn(containerClass, "[container-type:size]")}
         aria-label={raw}
         title={raw}
         data-developer-nameplate
       >
         <span
           className={cn(
-            "font-bold tracking-tight leading-none text-center whitespace-nowrap",
+            "block max-w-full max-h-full font-bold tracking-normal leading-[0.9] text-center uppercase whitespace-normal break-words [overflow-wrap:anywhere]",
             textTone,
             sizeClass,
           )}
         >
-          {initials}
+          {displayName}
         </span>
       </div>
     );
@@ -91,7 +91,7 @@ export function DeveloperLogo({
   if (variant === "bare") {
     if (!valid) {
       if (!renderFallback && !(name || alt)) return null;
-      // Always keep the identical square container and place the dev name inside.
+        // Always keep the identical square container and fit the dev name inside.
       if (name || alt) return renderNameLabel(cn(UNIFIED_PLATE, className));
       return renderNameLabel(cn(UNIFIED_PLATE, className));
     }
@@ -125,15 +125,7 @@ export function DeveloperLogo({
     );
     if (!valid) {
       if (name || alt) {
-        // Use a slightly larger label inside the big card container.
-        const raw = (name || alt || "Developer").trim();
-        return (
-          <div className={cardContainer} aria-label={raw} title={raw} data-developer-nameplate>
-            <span className="font-bold tracking-tight leading-none text-center text-[#1A1A1A] text-2xl uppercase truncate">
-              {raw}
-            </span>
-          </div>
-        );
+        return renderNameLabel(cardContainer, "text-[#1A1A1A]", "card");
       }
       return renderNameLabel(cardContainer, "text-[#1A1A1A]");
     }
