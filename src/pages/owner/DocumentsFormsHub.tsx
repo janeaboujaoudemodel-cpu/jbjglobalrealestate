@@ -547,8 +547,13 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] p-6 lg:p-10">
+    <div
+      data-studio-surface="champagne"
+      data-studio-workspace
+      className="min-h-screen bg-[#FDFBF7] p-6 lg:p-10"
+    >
       <div className="max-w-[1400px] mx-auto">
+
         <header className="mb-6 flex items-end justify-between gap-4">
           <div>
             <div className="text-xs uppercase tracking-[0.18em] text-[#1A1A1A]/60">Owner</div>
