@@ -92,14 +92,14 @@ serve(async (req) => {
       .from('security_events')
       .insert({
         event_type: 'unauthorized_access',
-        severity: violation_count >= 3 ? 'high' : 'medium',
+        severity: vc >= 3 ? 'high' : 'medium',
         description: `Security violation: ${violation_type}`,
         metadata: {
           ip_address: ip,
           fingerprint,
-          user_agent,
+          user_agent: ua,
           violation_type,
-          violation_count,
+          violation_count: vc,
           timestamp: new Date().toISOString()
         }
       });
@@ -109,7 +109,7 @@ serve(async (req) => {
     }
 
     // After 5 violations from same fingerprint, block it (but NEVER block Lovable preview/dev)
-    if (!isLovablePreviewRequest && fingerprint && typeof violation_count === 'number' && violation_count >= 5) {
+    if (!isLovablePreviewRequest && fingerprint && vc >= 5) {
       await supabase
         .from('scraping_blocks')
         .insert({
