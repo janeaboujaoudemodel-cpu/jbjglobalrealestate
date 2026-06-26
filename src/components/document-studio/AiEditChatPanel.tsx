@@ -318,7 +318,7 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
             ref={fileRef}
             type="file"
             multiple
-            accept="image/*,application/pdf,.doc,.docx,.txt"
+            accept="image/*,application/pdf,.doc,.docx,.txt,.rtf,.xls,.xlsx,.csv,.heic,.heif"
             onChange={onFilesSelected}
             className="hidden"
           />
