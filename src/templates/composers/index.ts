@@ -476,7 +476,7 @@ export function signatureBlock(opts: {
   // underline rule). No further underlines under Name/Title/Date.
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
-      <div style="height:78px;display:flex;align-items:flex-end;padding-bottom:8px;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
+      <div style="height:96px;display:flex;align-items:flex-start;padding-top:10px;padding-bottom:0;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
       <div style="padding-top:10px;position:relative;min-height:126px;overflow:visible;">
         ${lines}
         ${withStamp ? stampOverlay : ""}
