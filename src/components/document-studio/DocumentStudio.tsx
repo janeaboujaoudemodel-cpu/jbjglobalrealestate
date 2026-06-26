@@ -31,7 +31,7 @@ import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
-  PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus, Globe,
+  PenLine, ChevronDown, ChevronUp, Trash2, Maximize2, Minimize2, Plus, Globe,
   Copy, Upload,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -129,6 +129,48 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
     default:
       return {};
   }
+}
+
+const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "homeAddress", "recipientEmail", "recipientPhone"];
+
+function cleanIdentityNotes(value?: string) {
+  if (!value) return value;
+  const parts = value.split(/[;\n]+/).map((p) => p.trim()).filter(Boolean);
+  const keep = parts.filter((p) => !/^(emirates\s*id|eid|passport|full\s*name|name\s*as\s*per\s*id|home\s*address|residential\s*address|address|email|phone|mobile|date\s*of\s*birth|dob|nationality|state\s*of|issuing\s*date|issue\s*date|expiry\s*date|id\s*expiry|sex)\b/i.test(p));
+  return keep.join("; ");
+}
+
+function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source = ""): Record<string, string> {
+  const out: Record<string, string> = {};
+  const all = { ...raw } as Record<string, any>;
+  const text = [source, Object.entries(raw).map(([k, v]) => `${k}: ${v}`).join("\n")].join("\n");
+  const pick = (...keys: string[]) => keys.map((k) => all[k]).find((v) => typeof v === "string" && v.trim());
+  const set = (k: string, v?: any) => { if (typeof v === "string" && v.trim()) out[k] = v.trim(); };
+
+  set("recipientName", pick("recipientName", "fullNameAsPerId", "fullName", "nameAsPerId", "name", "applicantName"));
+  set("emiratesId", pick("emiratesId", "emiratesID", "emirates_id", "eid", "idNumber", "id_number", "eidNumber"));
+  set("passportNumber", pick("passportNumber", "passportNo", "passport_no", "passport", "passport_number"));
+  set("homeAddress", pick("homeAddress", "residentialAddress", "residential_address", "address", "home_address"));
+  set("recipientEmail", pick("recipientEmail", "email", "emailAddress", "email_address"));
+  set("recipientPhone", pick("recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"));
+
+  set("recipientEmail", out.recipientEmail || text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]);
+  set("emiratesId", out.emiratesId || text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-"));
+  set("recipientPhone", out.recipientPhone || text.match(/(?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,}/)?.[0]);
+  set("passportNumber", out.passportNumber || text.match(/passport(?:\s*(?:number|no\.?))?\s*[:#-]\s*([A-Z0-9]{5,})/i)?.[1]);
+  set("homeAddress", out.homeAddress || text.match(/(?:home|residential)\s+address\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
+  set("recipientName", out.recipientName || text.match(/(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
+
+  Object.entries(all).forEach(([k, v]) => {
+    if (/expiry|expire|dateOfBirth|dob|birthDate|issueDate|issuingDate|nationality|sex/i.test(k)) return;
+    if (IDENTITY_FIELD_KEYS.includes(k)) return;
+    if (typeof v === "string" && v.trim()) out[k] = v.trim();
+  });
+  if (out.notes) {
+    const cleaned = cleanIdentityNotes(out.notes);
+    if (cleaned) out.notes = cleaned; else delete out.notes;
+  }
+  return out;
 }
 
 /**
@@ -308,8 +350,11 @@ function StudioShell({
     } catch { return null; }
   };
   // Opening a specific template from the hub must NEVER be hijacked by an
-  // unrelated previous draft. Resume is offered only for the generic Studio.
-  const snap = initialId ? null : readSnapshot();
+  // unrelated previous draft. It may resume only that exact template.
+  const storedSnap = readSnapshot();
+  const snap = initialId
+    ? (storedSnap?.templateId === initialId ? storedSnap : null)
+    : storedSnap;
 
   const [step, setStep] = useState<Step>(snap?.templateId ? (snap.step ?? 2) : (initialId ? 2 : 1));
   const [templateId, setTemplateId] = useState<string>(snap?.templateId || initialId);
@@ -333,8 +378,8 @@ function StudioShell({
   const [deptDraft, setDeptDraft] = useState("");
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
-  const [fields, setFields] = useState<Record<string, string>>(() => getTemplateDefaultFields(initialId));
-  const [bodyHtml, setBodyHtml] = useState<string>("");
+  const [fields, setFields] = useState<Record<string, string>>(() => snap?.fields || getTemplateDefaultFields(initialId));
+  const [bodyHtml, setBodyHtml] = useState<string>(snap?.bodyHtml || "");
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
   const [addPageAfterIndex, setAddPageAfterIndex] = useState<number | null>(null);
@@ -348,12 +393,15 @@ function StudioShell({
       template.id === "employment_contract" ||
       template.id === "partnership_referral");
   const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(DEFAULT_BROKER_COMMISSIONS);
-  const [customFields, setCustomFields] = useState<CustomField[]>([]);
+  const [customFields, setCustomFields] = useState<CustomField[]>(snap?.customFields || []);
 
   const [emailTo, setEmailTo] = useState("");
   const [sending, setSending] = useState(false);
 
   const [zoom, setZoom] = useState(100);
+  const [setupChromeCollapsed, setSetupChromeCollapsed] = useState(true);
+  const [actionChromeCollapsed, setActionChromeCollapsed] = useState(true);
+  const [detailsPanelCollapsed, setDetailsPanelCollapsed] = useState(true);
   // Keep the Live Document Editor as the premium sparkle launcher by default.
   // It expands only when requested, so the A4 preview stays centered and fast.
   const [aiOpen, setAiOpen] = useState(false);
@@ -388,7 +436,7 @@ function StudioShell({
   const [sheetH, setSheetH] = useState(0);
   const [chromeHeights, setChromeHeights] = useState({ header: 180, footer: 86 });
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
-  const [manualPages, setManualPages] = useState<number>(0);
+  const [manualPages, setManualPages] = useState<number>(snap?.manualPages || 0);
   // GLOBAL pagination rule: any composed document body is auto-split into
   // as many A4 pages as needed so content (esp. signatures) never collides
   // with the footer. Footer renders ONLY on the last page.
@@ -612,15 +660,15 @@ function StudioShell({
 
 
   // Owner-side signature defaults (editable from the left rail).
-  const [ownerName, setOwnerName] = useState<string>("Jane Bou Jaoude");
-  const [ownerTitle, setOwnerTitle] = useState<string>("Founder & CEO");
-  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [applicantDate, setApplicantDate] = useState<string>(""); // blank by design
+  const [ownerName, setOwnerName] = useState<string>(snap?.ownerName || "Jane Bou Jaoude");
+  const [ownerTitle, setOwnerTitle] = useState<string>(snap?.ownerTitle || "Founder & CEO");
+  const [ownerDate, setOwnerDate] = useState<string>(snap?.ownerDate || new Date().toISOString().slice(0, 10));
+  const [applicantDate, setApplicantDate] = useState<string>(snap?.applicantDate || ""); // blank by design
 
   // Additional signatories (beyond the default Owner + Counterparty).
   type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
   const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "" });
-  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([]);
+  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>(snap?.extraSignatories || []);
   const updateSig = (id: string, patch: Partial<ExtraSig>) =>
     setExtraSignatories((p) => p.map((s) => (s.id === id ? { ...s, ...patch } : s)));
   const removeSig = (id: string) => setExtraSignatories((p) => p.filter((s) => s.id !== id));
@@ -649,13 +697,13 @@ function StudioShell({
   };
 
   // Hide / restore the "Commission" and "Custom fields" rail cards.
-  const [hiddenSections, setHiddenSections] = useState<Set<string>>(new Set());
+  const [hiddenSections, setHiddenSections] = useState<Set<string>>(() => new Set(snap?.hiddenSections || []));
   const toggleSection = (id: string) =>
     setHiddenSections((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   // Per-field hide + rename for the template fields panel.
-  const [hiddenFieldKeys, setHiddenFieldKeys] = useState<Set<string>>(new Set());
-  const [fieldLabelOverrides, setFieldLabelOverrides] = useState<Record<string, string>>({});
+  const [hiddenFieldKeys, setHiddenFieldKeys] = useState<Set<string>>(() => new Set(snap?.hiddenFieldKeys || []));
+  const [fieldLabelOverrides, setFieldLabelOverrides] = useState<Record<string, string>>(snap?.fieldLabelOverrides || {});
   const [editingFieldKey, setEditingFieldKey] = useState<string | null>(null);
   const hideField = (k: string) => setHiddenFieldKeys((s) => { const n = new Set(s); n.add(k); return n; });
   const restoreAllFields = () => setHiddenFieldKeys(new Set());
@@ -849,8 +897,8 @@ function StudioShell({
   const autoFillFileRef = useRef<HTMLInputElement>(null);
 
   // Document language (drives translation + AI replies + STT).
-  const [docLanguage, setDocLanguage] = useState<string>("English");
-  const [chromeTheme, setChromeTheme] = useState<"champagne" | "emerald">("champagne");
+  const [docLanguage, setDocLanguage] = useState<string>(snap?.docLanguage || "English");
+  const [chromeTheme, setChromeTheme] = useState<"champagne" | "emerald">(snap?.chromeTheme || "champagne");
 
   // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
@@ -863,7 +911,7 @@ function StudioShell({
     signatureB?: { url: string; width: number };
     showDate?: boolean;
     showSigB?: boolean;
-  }>({ showDate: false, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
+  }>(() => ({ showDate: false, showSigB: true, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -1001,7 +1049,9 @@ function StudioShell({
       if (Array.isArray(s.customFields)) setCustomFields(s.customFields);
       if (Array.isArray(s.commissionRows)) setCommissionRows(s.commissionRows);
       if (typeof s.docLanguage === "string") setDocLanguage(s.docLanguage);
+      if (s.chromeTheme === "champagne" || s.chromeTheme === "emerald") setChromeTheme(s.chromeTheme);
       if (s.marks && typeof s.marks === "object") setMarks((m) => ({ ...m, ...s.marks }));
+      if (typeof s.manualPages === "number") setManualPages(Math.max(0, s.manualPages));
       if (typeof s.emailTo === "string") setEmailTo(s.emailTo);
       toast.success("Draft restored", {
         description: s.savedAt
@@ -1020,26 +1070,12 @@ function StudioShell({
     if (hydratedRef.current) return;
     hydratedRef.current = true;
 
-    // Offer (don't auto-apply) the previous draft when a snapshot exists.
+    // Always auto-restore the previous draft. The owner explicitly asked that
+    // refresh / close / route changes resume exactly where they left off unless
+    // they intentionally start a new submission or submit/send.
     if (snap && !restoredOnce.current) {
       restoredOnce.current = true;
-      const tplName = (snap.templateId && getTemplateById(snap.templateId)?.label) || "previous document";
-      const when = snap.savedAt ? new Date(snap.savedAt).toLocaleString() : "earlier";
-      toast(`Resume previous draft?`, {
-        description: `${tplName} — last saved ${when}`,
-        duration: 12000,
-        action: {
-          label: "Resume",
-          onClick: () => applySnapshot(snap),
-        },
-        cancel: {
-          label: "Discard",
-          onClick: () => {
-            try { localStorage.removeItem(SESSION_KEY); } catch {}
-            toast.success("Draft discarded");
-          },
-        },
-      });
+      applySnapshot(snap);
     }
 
     // ── One-shot prefill from an external bridge.
@@ -1080,7 +1116,7 @@ function StudioShell({
       fieldLabelOverrides,
       hiddenSections: Array.from(hiddenSections),
       customFields, commissionRows, docLanguage,
-      marks, emailTo,
+      chromeTheme, marks, emailTo, manualPages,
     };
     const handle = setTimeout(() => {
       try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
@@ -1088,11 +1124,20 @@ function StudioShell({
     const flush = () => {
       try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
     };
+    const onVisibility = () => { if (document.visibilityState === "hidden") flush(); };
     window.addEventListener("beforeunload", flush);
-    return () => { clearTimeout(handle); window.removeEventListener("beforeunload", flush); };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      clearTimeout(handle);
+      flush();
+      window.removeEventListener("beforeunload", flush);
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [step, templateId, fields, bodyHtml, userEdited, ownerName, ownerTitle, applicantDate,
       extraSignatories, hiddenFieldKeys, fieldLabelOverrides, hiddenSections,
-      customFields, commissionRows, docLanguage, marks, emailTo, SESSION_KEY]);
+      customFields, commissionRows, docLanguage, chromeTheme, marks, emailTo, manualPages, SESSION_KEY]);
 
 
   useEffect(() => {
@@ -1134,6 +1179,28 @@ function StudioShell({
     userEditedRef.current = false;
     setUserEdited(false);
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
+  };
+
+  const startNewSubmission = () => {
+    clearSession();
+    const targetId = templateId || initialId;
+    setCurrentDocId(null);
+    setFields(getTemplateDefaultFields(targetId));
+    setCustomFields([]);
+    setCommissionRows(DEFAULT_BROKER_COMMISSIONS);
+    setExtraSignatories([]);
+    setHiddenFieldKeys(new Set());
+    setFieldLabelOverrides({});
+    setHiddenSections(new Set());
+    setManualPages(0);
+    setApplicantDate("");
+    setEmailTo("");
+    setMarks((m) => ({ ...m, dateXY: undefined, signatureXY: undefined, stampXY: undefined }));
+    userEditedRef.current = false;
+    setUserEdited(false);
+    setBodyHtml("");
+    setStep(targetId ? 2 : 1);
+    toast.success("Started a new submission");
   };
 
   const handleSelectTemplate = async (id: string) => {
@@ -1575,18 +1642,47 @@ function StudioShell({
       `}</style>
       {/* ─── Topbar ─── */}
       <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 lg:px-5">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
-            <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
-          </div>
-          <div className="leading-tight min-w-0">
-            <div className="text-[13px] font-semibold text-[#1A1A1A]">Live Editor</div>
-            <div className="studio-brand-subtitle text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
-              {catalog === "staff" ? "Careers · Staff" : catalog === "client" ? "Client · Real Estate" : "All templates"}
+        <div className="flex items-center justify-between gap-3 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
             </div>
+            <div className="leading-tight min-w-0">
+              <div className="text-[13px] font-semibold text-[#1A1A1A]">Live Editor</div>
+              <div className="studio-brand-subtitle text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
+                {catalog === "staff" ? "Careers · Staff" : catalog === "client" ? "Client · Real Estate" : "All templates"}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            {setupChromeCollapsed && (
+              <>
+                <Button variant="outline" size="sm" onClick={() => autoFillFileRef.current?.click()} title="Attach Emirates ID, passport or document" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
+                  <Upload className="w-4 h-4 mr-1.5" />
+                  <span>Attach ID</span>
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"} className="h-10 hover:bg-[#EFE6D6]">
+                  {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
+                  <span>AI</span>
+                </Button>
+              </>
+            )}
+            <Button variant="outline" size="sm" onClick={() => setSetupChromeCollapsed((v) => !v)} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title={setupChromeCollapsed ? "Expand editor tools" : "Minimize editor tools"}>
+              {setupChromeCollapsed ? <ChevronDown className="w-4 h-4 mr-1.5" /> : <ChevronUp className="w-4 h-4 mr-1.5" />}
+              <span>{setupChromeCollapsed ? "Tools" : "Minimize"}</span>
+            </Button>
+            <button
+              onClick={onClose}
+              data-surface="champagne" className="h-10 w-10 shrink-0 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
+        {!setupChromeCollapsed && (
+          <>
         <Stepper step={step} setStep={(s) => {
           if (s === 2 && !templateId) return;
           if (s === 3 && !bodyHtml) return;
@@ -1704,6 +1800,8 @@ function StudioShell({
             <X className="w-4 h-4" />
           </button>
         </div>
+          </>
+        )}
       </div>
 
       <AssetLibraryDialog
@@ -1791,10 +1889,11 @@ function StudioShell({
       {/* ─── Top toolbar (visible on step ≥ 2) — Reset / Print / Export / Send ─── */}
       {step === 2 && template && (
         <div
-          className="sticky top-0 z-30 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
+          className="sticky top-0 z-30 flex flex-col gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
           data-document-studio-toolbar="1"
         >
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center justify-between gap-3 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
             <button
               onClick={() => setStep(1)}
               className="h-8 px-2 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center gap-1.5 text-[12px] text-[#1A1A1A]"
@@ -1807,9 +1906,26 @@ function StudioShell({
               <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 leading-none">Template</div>
               <div className="text-[12px] font-semibold text-[#1A1A1A] truncate leading-tight">{template.label}</div>
             </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Button variant="outline" size="sm" onClick={() => setActionChromeCollapsed((v) => !v)} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title={actionChromeCollapsed ? "Expand document actions" : "Minimize document actions"}>
+                {actionChromeCollapsed ? <ChevronDown className="w-4 h-4 mr-1.5" /> : <ChevronUp className="w-4 h-4 mr-1.5" />}
+                <span>{actionChromeCollapsed ? "Actions" : "Minimize"}</span>
+              </Button>
+            </div>
           </div>
+          {!actionChromeCollapsed && (
           <div className="studio-toolbar-scroll w-full 2xl:w-auto">
             <div className="studio-action-row sm:justify-end">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={startNewSubmission}
+                title="Clear the current draft and start fresh"
+                className="h-10"
+              >
+                <Plus className="w-4 h-4 mr-1.5" /> Start New
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -1869,6 +1985,7 @@ function StudioShell({
               </div>
             </div>
           </div>
+          )}
         </div>
       )}
 
@@ -1876,7 +1993,7 @@ function StudioShell({
       <div className="studio-body flex-1 min-h-0 flex flex-col lg:flex-row overflow-hidden">
 
         {/* LEFT RAIL */}
-        <aside className="studio-sidebar w-full lg:w-[330px] xl:w-[360px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[38vh] lg:max-h-none">
+        <aside className={`studio-sidebar w-full ${step === 2 && detailsPanelCollapsed ? "lg:w-[72px] xl:w-[72px]" : "lg:w-[330px] xl:w-[360px]"} shrink-0 border-b lg:border-b-0 lg:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[38vh] lg:max-h-none transition-[width] duration-200`}>
           {step === 1 && (
             <>
               <div className="p-4 border-b border-[#B89555]/20">
@@ -1928,7 +2045,8 @@ function StudioShell({
 
           {step === 2 && template && (
             <>
-              <div className="p-4 border-b border-[#B89555]/20 flex items-center gap-2">
+              <div className="p-4 border-b border-[#B89555]/20 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                 <button
                   onClick={() => setStep(1)}
                   className="h-7 w-7 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center"
@@ -1936,11 +2054,23 @@ function StudioShell({
                 >
                   <ChevronLeft className="w-4 h-4 text-[#1A1A1A]" />
                 </button>
-                <div className="min-w-0">
+                {!detailsPanelCollapsed && <div className="min-w-0">
                   <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">Step 2 — Details</div>
                   <div className="text-[13px] font-semibold text-[#1A1A1A] truncate">{template.label}</div>
+                </div>}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setDetailsPanelCollapsed((v) => !v)}
+                  className="h-8 w-8 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] shrink-0"
+                  title={detailsPanelCollapsed ? "Expand details" : "Minimize details"}
+                  aria-label={detailsPanelCollapsed ? "Expand details" : "Minimize details"}
+                >
+                  {detailsPanelCollapsed ? <PanelRightOpen className="w-4 h-4" /> : <PanelRightClose className="w-4 h-4" />}
+                </button>
               </div>
+              {!detailsPanelCollapsed && (
+              <>
               <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4">
                 {template.needsPosition && (
                   <Field label="Department">
@@ -2360,14 +2490,14 @@ function StudioShell({
                             body: {
                               mode: "extract-fields",
                               templateId: template.id,
-                              fieldKeys: template.fields.map((f) => f.key),
+                              fieldKeys: Array.from(new Set([...template.fields.map((f) => f.key), ...IDENTITY_FIELD_KEYS])),
                               source: autoFillText,
                             },
                           });
                           if (error) throw error;
                           const parsed = (data as any)?.fields || {};
                           if (parsed && typeof parsed === "object") {
-                            setFields((p) => ({ ...p, ...parsed }));
+                            setFields((p) => ({ ...p, ...normalizeExtractedDocumentFields(parsed, autoFillText) }));
                             toast.success("Fields filled from your text");
                           } else {
                             toast.info("Nothing extractable found");
@@ -2396,36 +2526,41 @@ function StudioShell({
                       ref={autoFillFileRef}
                       type="file"
                       accept=".pdf,.doc,.docx,.txt,image/*"
+                      multiple
                       className="hidden"
                       onChange={async (e) => {
-                        const file = e.target.files?.[0];
+                        const files = Array.from(e.target.files || []);
                         e.target.value = "";
-                        if (!file || !template) return;
-                        if (file.size > 8 * 1024 * 1024) { toast.error("Max 8MB"); return; }
+                        if (!files.length || !template) return;
+                        if (files.some((file) => file.size > 8 * 1024 * 1024)) { toast.error("Max 8MB per file"); return; }
                         setAutoFillBusy(true);
                         try {
-                          const b64 = await new Promise<string>((res, rej) => {
-                            const r = new FileReader();
-                            r.onload = () => res(String(r.result || ""));
-                            r.onerror = rej;
-                            r.readAsDataURL(file);
-                          });
-                          const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
-                            body: {
-                              mode: "extract-fields",
-                              templateId: template.id,
-                              fieldKeys: template.fields.map((f) => f.key),
-                              source: `Extract contract fields from attached identity/document image: ${file.name}`,
-                              attachment: { name: file.name, type: file.type, dataUrl: b64 },
-                            },
-                          });
-                          if (error) throw error;
-                          const parsed = (data as any)?.fields || {};
-                          if (parsed && typeof parsed === "object") {
-                            setFields((p) => ({ ...p, ...parsed }));
-                            toast.success(`Fields filled from ${file.name}`);
+                          const merged: Record<string, string> = {};
+                          for (const file of files) {
+                            const b64 = await new Promise<string>((res, rej) => {
+                              const r = new FileReader();
+                              r.onload = () => res(String(r.result || ""));
+                              r.onerror = rej;
+                              r.readAsDataURL(file);
+                            });
+                            const source = `Extract ONLY contract identity/contact fields from attached Emirates ID, passport, or document: ${file.name}. Include full name as per ID, Emirates ID number, passport number, home address, email, and phone if visible. Exclude ID expiry, birth date, issuing date, nationality, and sex.`;
+                            const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
+                              body: {
+                                mode: "extract-fields",
+                                templateId: template.id,
+                                fieldKeys: Array.from(new Set([...template.fields.map((f) => f.key), ...IDENTITY_FIELD_KEYS])),
+                                source,
+                                attachment: { name: file.name, type: file.type, dataUrl: b64 },
+                              },
+                            });
+                            if (error) throw error;
+                            Object.assign(merged, normalizeExtractedDocumentFields((data as any)?.fields || {}, source));
+                          }
+                          if (Object.keys(merged).length) {
+                            setFields((p) => ({ ...p, ...merged }));
+                            toast.success(`Fields filled from ${files.length} attachment${files.length > 1 ? "s" : ""}`);
                           } else {
-                            toast.info("Nothing extractable found in attachment");
+                            toast.info("Nothing extractable found in attachments");
                           }
                         } catch (err: any) {
                           toast.error(err?.message || "Attachment processing failed");
@@ -2584,6 +2719,8 @@ function StudioShell({
                   Tip: Generate drafts the AI body. You can also type directly into the page or use the AI assistant on the right.
                 </p>
               </div>
+              </>
+              )}
             </>
           )}
 

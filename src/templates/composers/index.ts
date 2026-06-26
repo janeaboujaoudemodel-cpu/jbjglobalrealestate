@@ -116,6 +116,32 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
 
 }
 
+export function identityTable(rows: Array<[string, string | undefined]>): string {
+  const visible = rows.filter(([, v]) => (v || "").trim());
+  if (visible.length === 0) return "";
+  const body = visible
+    .map(
+      ([k, v], i) => `
+      <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+        <td style="padding:8px 12px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:34%;font-size:11.5px;vertical-align:top;">${esc(k)}</td>
+        <td style="padding:8px 12px;border:1px solid ${GOLD}33;color:${INK};font-size:11.5px;vertical-align:top;">${esc(v)}</td>
+      </tr>`,
+    )
+    .join("");
+  return `
+    <table data-pdf-section="identity" style="border-collapse:collapse;width:100%;margin:10px 0 16px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <thead>
+        <tr>
+          <th colspan="2" style="text-align:left;padding:9px 12px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
+            Applicant Identity & Contact Details
+          </th>
+        </tr>
+      </thead>
+      <tbody>${body}</tbody>
+    </table>`;
+
+}
+
 export function commissionTable(rows: CommissionRow[]): string {
   const visible = (rows || []).filter(
     (r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim(),
@@ -360,11 +386,21 @@ function composeJobOffer(input: ComposerInput): string {
     ...customRows,
   ];
 
+  const identityRows: Array<[string, string | undefined]> = [
+    ["Full Name as per ID", f.recipientName],
+    ["Emirates ID Number", f.emiratesId || f.idNumber || f.emirates_id || f.eid_number],
+    ["Passport Number", f.passportNumber || f.passport_number || f.passportNo || f.passport],
+    ["Home Address", f.homeAddress || f.address || f.home_address || f.residentialAddress],
+    ["Email Address", f.recipientEmail || f.email || f.email_address],
+    ["Phone / WhatsApp", f.recipientPhone || f.phone || f.mobile || f.mobile_number],
+  ];
+
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     recipientBlock(f, { greeting: true }),
     subjectLine(`Offer of Employment${f.jobTitle ? ` — ${f.jobTitle}` : ""}`),
     paragraphs(input.aiIntro),
+    identityTable(identityRows),
     termsTable(termsRows),
     commissionTable(input.commissionRows || []),
     paragraphs(input.aiClosing),
@@ -448,18 +484,28 @@ function composeTerminationLetter(input: ComposerInput): string {
 
 function composeGeneric(input: ComposerInput, subject: string): string {
   const f = input.fields;
+  const identityKeys = new Set(["emiratesId", "passportNumber", "homeAddress", "recipientEmail", "recipientPhone", "idNumber", "emirates_id", "eid_number", "passport_number", "passportNo", "passport", "address", "home_address", "residentialAddress", "email", "email_address", "phone", "mobile", "mobile_number"]);
+  const identityRows: Array<[string, string | undefined]> = [
+    ["Full Name as per ID", f.recipientName],
+    ["Emirates ID Number", f.emiratesId || f.idNumber || f.emirates_id || f.eid_number],
+    ["Passport Number", f.passportNumber || f.passport_number || f.passportNo || f.passport],
+    ["Home Address", f.homeAddress || f.address || f.home_address || f.residentialAddress],
+    ["Email Address", f.recipientEmail || f.email || f.email_address],
+    ["Phone / WhatsApp", f.recipientPhone || f.phone || f.mobile || f.mobile_number],
+  ];
   const rows: Array<[string, string | undefined]> = [
     ...Object.entries(f).map(([k, v]) => [labelize(k), v] as [string, string | undefined]),
     ...(input.customFields || [])
       .filter((c) => (c.label || "").trim() && (c.value || "").trim())
       .map((c) => [c.label, c.value] as [string, string | undefined]),
-  ].filter(([k]) => !["recipientName", "idNumber", "notes"].includes(unlabelize(k)));
+  ].filter(([k]) => !["recipientName", "notes"].includes(unlabelize(k)) && !identityKeys.has(unlabelize(k)));
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     recipientBlock(f),
     subjectLine(subject),
     paragraphs(input.aiIntro),
+    identityTable(identityRows),
     termsTable(rows),
     commissionTable(input.commissionRows || []),
     paragraphs(input.aiClosing),

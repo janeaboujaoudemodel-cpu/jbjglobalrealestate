@@ -34,34 +34,38 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "8px 28px 8px 22px",
+        padding: "14px 24px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "142px minmax(0,1fr)", columnGap: 14, minHeight: 126 }}
+        style={{ gridTemplateColumns: "132px minmax(0,1fr)", columnGap: 14, minHeight: 132 }}
       >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block object-contain"
-          style={{ width: 126, height: 126, background: "transparent", filter: t.monoFilter }}
+          style={{ width: 118, height: 118, background: "transparent", filter: t.monoFilter, margin: "auto", alignSelf: "center", justifySelf: "center" }}
         />
-        <div className="leading-tight min-w-0 text-left" style={{ paddingRight: 10 }}>
+        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingRight: 0, lineHeight: 1, overflow: "visible" }}>
           <div
             className="font-bold"
             style={{
-              fontSize: 20,
-              fontWeight: 850,
+              display: "block",
+              width: "100%",
+              fontSize: 26,
+              fontWeight: 900,
               color: t.fg,
-              letterSpacing: "0.025em",
-              lineHeight: 1.12,
+              letterSpacing: "-0.015em",
+              lineHeight: 1,
               whiteSpace: "nowrap",
+              transform: "scaleX(1.04)",
+              transformOrigin: "left center",
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
-            <span style={{ letterSpacing: "0.12em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
+            <span style={{ letterSpacing: "0.03em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
           </div>
         </div>
       </div>
