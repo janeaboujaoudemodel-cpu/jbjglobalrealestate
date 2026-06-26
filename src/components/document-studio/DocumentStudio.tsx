@@ -44,7 +44,7 @@ import {
  DocumentAudience, DocumentScope, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
-import { stripChromeArtifacts } from "@/templates/jbjLockedChrome";
+import { stripChromeArtifacts, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
