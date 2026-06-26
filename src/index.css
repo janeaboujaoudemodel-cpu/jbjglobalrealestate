@@ -16931,3 +16931,22 @@ html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
