@@ -3319,66 +3319,27 @@ function StudioShell({
                                     zIndex: 0,
                                   }}
                                 >
-                                  {/* Engraved 3D effect — stack three mask
-                                      layers: a dark "shadow" pushed down-right,
-                                      a bright "highlight" pushed up-left, and
-                                      the champagne fill in the middle. The eye
-                                      reads the offset light/dark pair as a
-                                      bevel pressed INTO the paper. */}
+                                  {/* Premium gold-only monogram watermark.
+                                      Large, centered, soft champagne-gold tint
+                                      sitting BEHIND content — visible but
+                                      never competing with text. Tables remain
+                                      opaque so the watermark only reads on
+                                      the paper, not through grids. */}
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 190,
-                                      height: 190,
-                                      transform: "scaleX(0.9)",
+                                      width: 460,
+                                      height: 460,
+                                      transform: "scaleX(0.92)",
                                       transformOrigin: "center",
                                     }}
                                   >
-                                    {/* Drop-shadow layer (dark) */}
-                                    <div
-                                      style={{
-                                        position: "absolute",
-                                        inset: 0,
-                                        transform: "translate(1.2px, 1.6px)",
-                                        background: "#6F5526",
-                                        opacity: 0.025,
-                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
-                                        maskImage: `url(${jbjMonogramSrc})`,
-                                        WebkitMaskRepeat: "no-repeat",
-                                        maskRepeat: "no-repeat",
-                                        WebkitMaskPosition: "center",
-                                        maskPosition: "center",
-                                        WebkitMaskSize: "contain",
-                                        maskSize: "contain",
-                                        filter: "blur(0.3px)",
-                                      }}
-                                    />
-                                    {/* Highlight layer (light) — sells the bevel */}
-                                    <div
-                                      style={{
-                                        position: "absolute",
-                                        inset: 0,
-                                        transform: "translate(-1px, -1.2px)",
-                                        background: "#FFFFFF",
-                                        opacity: 0.22,
-                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
-                                        maskImage: `url(${jbjMonogramSrc})`,
-                                        WebkitMaskRepeat: "no-repeat",
-                                        maskRepeat: "no-repeat",
-                                        WebkitMaskPosition: "center",
-                                        maskPosition: "center",
-                                        WebkitMaskSize: "contain",
-                                        maskSize: "contain",
-                                        mixBlendMode: "screen",
-                                      }}
-                                    />
-                                    {/* Champagne body */}
                                     <div
                                       style={{
                                         position: "absolute",
                                         inset: 0,
                                         background: "#B89555",
-                                        opacity: 0.045,
+                                        opacity: 0.11,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3390,6 +3351,7 @@ function StudioShell({
                                       }}
                                     />
                                   </div>
+
                                 </div>
                               )}
                               {/* Document generation date — top-right corner of EVERY page (above

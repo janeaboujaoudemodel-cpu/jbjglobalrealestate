@@ -184,6 +184,17 @@ const identityValue = (fields: Record<string, string>, keys: string[], source: s
   return (parsed || cleaned).replace(/^\s*[^:]{1,28}:\s*/, (prefix) => /number|no\.?|id|passport|nationality|address|email|phone|mobile|name/i.test(prefix) ? "" : prefix).trim();
 };
 
+const normalizeNationality = (value: string): string => {
+  // UN/ISO country lists return inverted names like "Palestine, State of",
+  // "Korea, Republic of", "Iran, Islamic Republic of". Strip the trailing
+  // ", State of / Republic of / Kingdom of / …" tail so the document reads
+  // cleanly as just the nationality/country name.
+  return (value || "")
+    .replace(/\s*,?\s*(state|republic|kingdom|sultanate|federation|union|emirate|principality|commonwealth|grand\s+duchy|democratic\s+republic|islamic\s+republic|people'?s\s+republic|plurinational\s+state|bolivarian\s+republic)\s+of\b\.?\s*$/i, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+};
+
 const offerIdentity = (fields: Record<string, string>) => {
   // Build a free-text "source" haystack ONLY from real values. Excluding bracketed
   // placeholder text like "[Employee Address]" or "[Nationality]" prevents the
@@ -197,7 +208,7 @@ const offerIdentity = (fields: Record<string, string>) => {
     name: bestLegalName(fields, source),
     emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
     passport: identityValue(fields, ["passportNumber", "passport_number", "passportNo", "passport"], source, /passport(?:\s*(?:number|no\.?))?\s*(?:is|:|-)?\s*([A-Z0-9]{5,})/i),
-    nationality: identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    nationality: normalizeNationality(identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-)?\s*([^;\n]+)/i)),
     address: identityValue(fields, ["homeAddress", "address", "home_address", "residentialAddress"], source, /(?:home|residential)?\s*address\s*(?:is|:|-)?\s*([^;\n]+)/i),
     email: identityValue(fields, ["recipientEmail", "email", "emailAddress", "email_address"], source, /([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/i),
     phone: safePhoneDisplay(rawPhone),
