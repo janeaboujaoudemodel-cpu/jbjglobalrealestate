@@ -447,7 +447,12 @@ export const AdminOverviewDashboard = () => {
                       animate={{ opacity: 1, x: 0 }}
                       className="flex items-start gap-3 p-4 hover:bg-[#F7F2EA] transition-colors"
                     >
-                      <div className={`p-2 rounded-lg ${getSeverityColor(activity.severity)}`}>
+                      <div
+                        className={`inline-flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0 ${getSeverityColor(activity.severity)}`}
+                        data-surface="emerald"
+                        data-icon-tile=""
+                        data-icon-tile-tone="emerald"
+                      >
                         {getActivityIcon(activity.type)}
                       </div>
                       <div className="flex-1 min-w-0">
