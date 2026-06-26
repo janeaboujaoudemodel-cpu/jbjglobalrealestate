@@ -103,9 +103,9 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
         ${monogram}
       </div>
 
-      <div style="height:210px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:30px;overflow:visible;">
-        <div style="display:block;width:100%;font-size:34px;font-weight:900;letter-spacing:0.104em;color:${t.fg};white-space:nowrap;transform:scaleX(.985);transform-origin:left center;">
-          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.125em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
+      <div style="height:210px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:16px;overflow:visible;">
+        <div style="display:block;width:100%;font-size:28px;font-weight:900;letter-spacing:0.092em;color:${t.fg};white-space:nowrap;transform:scaleX(.95);transform-origin:left center;">
+          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.11em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
     </div>
