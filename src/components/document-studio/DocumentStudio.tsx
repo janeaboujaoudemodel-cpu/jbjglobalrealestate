@@ -106,18 +106,21 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   switch (templateId) {
     case "job_offer":
       return {
-        letterDate: today,
+        letterDate: "2026-06-20",
         recipientName: "[Employee Name]",
         jobTitle: "[Position]",
-        startDate: today,
+        startDate: "2026-06-20",
         probation: "6 months",
-        workingHours: "10:00 AM – 7:00 PM, Monday to Saturday",
+        workingHours: "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM",
         annualLeave: "30 calendar days",
         noticePeriod: "30 calendar days",
         reportingTo: "Management",
         salary: "Not applicable — fixed commission basis",
-        commission: "65% on own direct deals; 55% on Company-sourced deals; 70% only where separately approved in writing by the Company",
+        commission: "65% on own direct deals; 55% on Company-sourced deals; 70% Company-approved premium tier only after AED 10,000,000 Company-recognised sales in one year and written management approval",
         paymentCycle: "Upon the Company's receipt of cleared commission",
+        leadsReceivedFrom: "2026-06-20",
+        signingDate: "2026-06-26",
+        leadsCountAtSigning: "approximately 310",
       };
     case "warning_letter":
       return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
@@ -748,12 +751,12 @@ function StudioShell({
         const footerH = chromeHeights.footer;
         // DocuSign auto-stamps the envelope ID in the top ~0.4in of every page.
         // Reserve a 42px safe band on every page so it never overlays content.
-        const FIRST_TOP = 46;
+        const FIRST_TOP = 28;
         // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
-        const NEXT_TOP = 64;
-        const BOTTOM_PAD = 40;
+        const NEXT_TOP = 24;
+        const BOTTOM_PAD = 30;
         // Tentative single-page cap: assume page 1 IS the last page so the
         // footer height is reserved. If everything fits here, the official
         // signature block stays with the body on a single sheet (no orphan
@@ -761,7 +764,7 @@ function StudioShell({
         // reserve the per-page signature strip on page 1.
         const singlePageCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
         const page0Cap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - headerH - FIRST_TOP - BOTTOM_PAD - PAGE_SIGNATURE_RESERVE);
-        const otherCap = Math.max(200, PAGE_H - DOCUSIGN_TOP_RESERVE - NEXT_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
+        const otherCap = Math.max(200, PAGE_H - NEXT_TOP - BOTTOM_PAD - Math.max(PAGE_SIGNATURE_RESERVE, footerH));
 
         // Flatten: if composer wrapped content in <section data-pdf-page>,
         // unwrap those so we re-split based on real measured heights.
@@ -837,11 +840,12 @@ function StudioShell({
         const beforeLast = pages[pages.length - 2];
         if (pages.length > 1 && last && beforeLast && beforeLast.length > 1) {
           const lastIsOrphan = last.length === 1 && last.some((it) => it.isSignature);
-          const lastTooSmall = pageHeight(last) < otherCap * 0.36;
-          while ((lastIsOrphan || lastTooSmall) && beforeLast.length > 1 && pageHeight(last) < otherCap * 0.55) {
+          let lastTooSmall = pageHeight(last) < otherCap * 0.62;
+          while ((lastIsOrphan || lastTooSmall) && beforeLast.length > 1 && pageHeight(last) < otherCap * 0.74) {
             const moved = beforeLast.pop();
             if (!moved) break;
             last.unshift(moved);
+            lastTooSmall = pageHeight(last) < otherCap * 0.62;
           }
         }
         const groups = pages.map((p) => p.map((it) => it.html).join(""));
@@ -3345,7 +3349,7 @@ function StudioShell({
                               <div
                                 style={{
                                   position: "absolute",
-                                  top: noChrome ? 0 : (isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : DOCUSIGN_TOP_RESERVE),
+                                  top: noChrome ? 0 : (isFirst ? (chromeHeights.header + DOCUSIGN_TOP_RESERVE) : 0),
                                   left: 0,
                                   right: 0,
                                   bottom: noChrome ? 0 : (isLast ? chromeHeights.footer : 0),

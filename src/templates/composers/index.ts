@@ -13,7 +13,7 @@
  * wraps that automatically.
  */
 
-import { jbjCompanyStampSrc, JBJ_BRAND } from "@/templates/jbjLockedChrome";
+import { JBJ_BRAND } from "@/templates/jbjLockedChrome";
 import {
   composeFormA,
   composeFormB,
@@ -77,6 +77,9 @@ const MUTED = "rgba(26,26,26,0.65)";
 
 const todayLong = () =>
   new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+
+const WALEED_EFFECTIVE_DATE = "2026-06-20";
+const WALEED_SIGNING_DATE = "2026-06-26";
 
 const formatHumanDate = (raw?: string): string => {
   if (!raw) return "";
@@ -410,25 +413,28 @@ export function signatureBlock(opts: {
       ${value ? `<span style="position:absolute;left:6px;bottom:1px;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:156px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
     </span>`;
 
+  const linedRow = (label: string, value?: string) => `
+    <div style="display:grid;grid-template-columns:54px 1fr;align-items:end;column-gap:8px;font-size:11px;color:${INK};margin-top:8px;line-height:1.2;">
+      <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
+      <span style="display:block;border-bottom:1px solid ${INK};height:20px;position:relative;min-width:0;">
+        ${value ? `<span style="position:absolute;left:6px;bottom:1px;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:210px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
+      </span>
+    </div>`;
+
   const row = (label: string, value: string, fallbackDots = true) => `
     <div style="font-size:11px;color:${INK};margin-top:4px;">
       <strong style="font-weight:600;">${label}:</strong>
       ${value ? `<span style="margin-left:4px;">${value}</span>` : (fallbackDots ? shortLine() : "")}
     </div>`;
 
-  // Stamp — stretched larger (was 150×150, now 180×180) so seal text reads
-  // clearly without looking squeezed. Anchored well below + right of the
-  // signature box so it never overlaps any heading/label text above.
-  const stampOverlay = `
-    <img src="${jbjCompanyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
-      style="position:absolute;right:-70px;bottom:-32px;width:220px;height:185px;
-             object-fit:contain;opacity:0.95;mix-blend-mode:multiply;background:transparent;
-             transform:rotate(-7deg);pointer-events:none;user-select:none;" />`;
+  // The company stamp is controlled by DocumentStudio's draggable/lockable
+  // stamp layer, not duplicated inside this static signature block.
+  const stampOverlay = "";
 
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
-      <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:36px;font-weight:600;">${heading}</div>
-      <div style="border-top:1px solid ${INK};padding-top:10px;position:relative;min-height:120px;overflow:visible;">
+      <div style="height:46px;display:flex;align-items:flex-start;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
+      <div style="border-top:1px solid ${INK};padding-top:10px;position:relative;min-height:126px;overflow:visible;">
         ${lines}
         ${withStamp ? stampOverlay : ""}
       </div>
@@ -436,9 +442,9 @@ export function signatureBlock(opts: {
   const gapCell = `<td style="width:12%;"></td>`;
 
   const ownerLines = [
-    row("Name", oName),
-    row("Title", oTitle),
-    row("Date", oDate),
+    linedRow("Name", oName),
+    linedRow("Title", oTitle),
+    linedRow("Date", oDate),
   ].join("");
 
   // Recipient cell: the cell's top border IS the signature line (user signs
@@ -450,8 +456,8 @@ export function signatureBlock(opts: {
     .map(([label, value]) => row(label, esc(value || ""), false))
     .join("");
   const applicantLines = `
-    <div style="font-size:11px;color:${INK};margin-top:4px;"><strong style="font-weight:600;">Name:</strong>${shortLine(aName)}</div>
-    <div style="font-size:11px;color:${INK};margin-top:8px;"><strong style="font-weight:600;">Date:</strong>${shortLine(aDate)}</div>
+    ${linedRow("Name", aName)}
+    ${linedRow("Date", aDate)}
     ${applicantMeta}
   `;
 
@@ -476,7 +482,7 @@ export function signatureBlock(opts: {
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
-            ${cell("owner", "Authorised Signatory", ownerLines, true)}
+            ${cell("owner", "Authorised Signatory", ownerLines, false)}
             ${gapCell}
             ${cell("recipient", aLabel, applicantLines)}
           </tr>
@@ -595,8 +601,10 @@ function composeJobOffer(input: ComposerInput): string {
   // licence office (Office SM1-195, Port Saeed) is only used on NDA / corporate
   // documents where a registered address is legally required.
   const placeOfWork = filledOr(f.placeOfWork || f.officeAddress, "To be designated by the Company");
-  const startDate = esc(formatHumanDate(f.startDate) || f.startDate || "[Start Date]");
-  const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"));
+  const offerEffectiveIso = f.leadsReceivedFrom || f.letterDate || input.letterDate || WALEED_EFFECTIVE_DATE;
+  const offerSigningIso = f.signingDate || WALEED_SIGNING_DATE;
+  const startDate = esc(formatHumanDate(f.startDate || WALEED_EFFECTIVE_DATE) || f.startDate || "20 June 2026");
+  const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM"));
 
   const candidateIdentity = paragraph(
     `Candidate identity for this offer: <strong>${candidateName}</strong>, holding Passport No. <strong>${passport}</strong>, holding Emirates ID No. <strong>${emiratesId}</strong>, with nationality recorded as <strong>${nationality}</strong>, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone at <strong>${phone}</strong>.`,
@@ -607,8 +615,8 @@ function composeJobOffer(input: ComposerInput): string {
       ["Job Title", filledOr(f.jobTitle, ""), "jobTitle"],
       ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate, "startDate"],
       ["Place of Work", placeOfWork, "placeOfWork"],
-      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"), "workingHours"],
-      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits"), "attendance"],
+      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM"), "workingHours"],
+      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits; Saturday hours are 11:00 AM – 4:00 PM"), "attendance"],
       ["Probation Period", filledOr(f.probationPeriod || f.probation, "Up to six (6) months"), "probationPeriod"],
       ["Reporting Line", filledOr(f.reportingLine || f.reportingManager, ""), "reportingLine"],
     ],
@@ -645,8 +653,8 @@ function composeJobOffer(input: ComposerInput): string {
   // When the candidate began receiving Company leads or confidential
   // information BEFORE the formal signing date, the obligations apply
   // retroactively from that earlier date — not from the signing date.
-  const leadsFromHuman = formatHumanDate(f.leadsReceivedFrom) || f.leadsReceivedFrom || "";
-  const signingHuman = formatHumanDate(input.letterDate) || input.letterDate || "";
+  const leadsFromHuman = formatHumanDate(f.leadsReceivedFrom || WALEED_EFFECTIVE_DATE) || f.leadsReceivedFrom || "20 June 2026";
+  const signingHuman = formatHumanDate(offerSigningIso) || offerSigningIso || "26 June 2026";
   const leadsCount = (f.leadsCountAtSigning || f.leadsCount || "approximately 310").toString().trim() || "approximately 310";
   const backdatedClause = leadsFromHuman
     ? `The Parties expressly acknowledge that, although this offer is being formally signed on <strong>${esc(signingHuman || "the date stated above")}</strong>, the Candidate has already been receiving Company leads, prospects, client data, owner/developer contacts, WhatsApp conversations, CRM access, listing material, marketing material, and confidential information from <strong>${esc(leadsFromHuman)}</strong> — including, without limitation, <strong>${esc(leadsCount)} leads</strong> and all related data, documents, contacts, communications, and materials shared with the Candidate from that date onwards. Accordingly, the Candidate's confidentiality, non-circumvention, data-protection, lead-ownership, non-solicitation, indemnity, and full-responsibility obligations under this offer (and under the related Non-Disclosure Agreement and Employment Agreement) shall apply <strong>retroactively from ${esc(leadsFromHuman)}</strong> — not from the signing date — and the Candidate is fully and personally responsible for the safekeeping, lawful use, and non-disclosure of every lead, contact, file, message, document, and piece of information received from ${esc(leadsFromHuman)} onwards. These obligations shall continue in full force from <strong>${esc(leadsFromHuman)}</strong> until written notice from the Company expressly releases the Candidate, and any leads, data, files, messages, or materials received by the Candidate from that date onwards shall be treated as Company property and governed by the protections set out in this offer and the NDA.`
@@ -657,6 +665,7 @@ function composeJobOffer(input: ComposerInput): string {
     offerClause(2, "Start Date", `Your expected start date is <strong>${startDate}</strong>, as also reflected in the Terms of Employment table above.`),
     offerClause(3, "Place of Work", `Your place of work shall be <strong>the location designated by the Company from time to time</strong>, together with such field visits, developer offices, client meetings, property viewings, and remote work as the Company may approve. The Company is not obliged to fix a single permanent worksite and may relocate, reassign, or rotate your worksite at its sole discretion in line with operational needs. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy, consistent with the Terms of Employment table above.`),
     offerClause(4, "Compensation & Commission Uplift", `${commissionProse} No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents and to UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
+    offerClause(4.1, "Company-Approved Premium Tier", `The <strong>Company-approved premium tier</strong> is not automatic. It applies only to the Employee's own direct deals after the Employee achieves at least <strong>AED 10,000,000</strong> in Company-recognised sales volume within one (1) calendar year, and only after written management approval. Once approved, eligible own direct deals may be paid at <strong>70%</strong> of the net commission actually received by the Company, calculated only on cleared funds received by the Company from the relevant developer, seller, landlord, buyer, client, or third party, after any lawful deductions, chargebacks, cancellations, reversals, taxes, portal/referral costs, or agreed transaction expenses. Company-sourced leads remain governed by the Company-sourced tier unless the Company expressly approves otherwise in writing.`),
     offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || f.probationPeriod || "up to six (6) months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract, as also reflected in the Terms of Employment table above.`),
     offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, photographs, videos, listing material, floor plans, brochures, documents, contracts, business methods, and internal policies.`),
     offerClause(7, "Leads and Clients", `All leads, inquiries, clients, prospects, contacts, databases, property owners, developers, landlords, sellers, buyers, tenants, and investors introduced, generated, received, accessed, assigned, or handled during your work are the exclusive business assets of the Company. You may not use, transfer, sell, leak, copy, export, screenshot, close, redirect, or complete any transaction involving Company leads or clients outside the Company, during or after employment.`),
@@ -680,7 +689,7 @@ function composeJobOffer(input: ComposerInput): string {
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
-    paragraph(`<strong>Date:</strong> ${esc(formatHumanDate(input.letterDate) || input.letterDate || "[Date]")}`),
+    paragraph(`<strong>Date:</strong> ${esc(formatHumanDate(offerEffectiveIso) || "20 June 2026")}`),
     paragraph(`<strong>Candidate Name:</strong> ${candidateName}<br/><strong>Address:</strong> ${address}<br/><strong>Email:</strong> ${email}<br/><strong>Phone / WhatsApp:</strong> ${phone}`),
     subjectLine(`Employment Offer – ${jobTitle}`),
     paragraph(`Dear ${candidateName},`),
@@ -694,9 +703,9 @@ function composeJobOffer(input: ComposerInput): string {
     signatureBlock({
       ownerName: input.ownerName,
       ownerTitle: input.ownerTitle,
-      ownerDate: input.ownerDate,
+      ownerDate: offerSigningIso,
       applicantName: id.name || f.recipientName,
-      applicantDate: input.applicantDate,
+      applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
       extraSignatories: input.extraSignatories,
     }),
@@ -787,11 +796,15 @@ function composeGeneric(input: ComposerInput, subject: string): string {
       .filter((c) => (c.label || "").trim() && (c.value || "").trim())
       .map((c) => [c.label, c.value] as [string, string | undefined]),
   ].filter(([k]) => !["recipientName", "notes"].includes(unlabelize(k)) && !identityKeys.has(unlabelize(k)));
+  const companyLicenceNotice = ["employment_contract", "nda", "commission_agreement", "internship_agreement", "hr_letter"].includes(input.templateId)
+    ? paragraph(`<strong>${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}</strong> is a UAE real estate agency operating under Trade Licence No. <strong>${JBJ_BRAND.tradeLicense}</strong> and ORN <strong>41486</strong>.`)
+    : "";
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     recipientBlock(f),
     subjectLine(subject),
+    companyLicenceNotice,
     paragraphs(input.aiIntro),
     inlineIdentitySentence(f),
     termsTable(rows),
@@ -1358,7 +1371,7 @@ export function compose(input: ComposerInput): string {
 export const DEFAULT_BROKER_COMMISSIONS: CommissionRow[] = [
   { label: "Direct deals", rate: "65%", trigger: "Own direct deals, paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "Enhanced while HR, admin and assistant duties are performed" },
   { label: "Company-sourced leads", rate: "55%", trigger: "Company source leads, paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "Enhanced while HR, admin and assistant duties are performed" },
-  { label: "Company-approved premium tier", rate: "70%", trigger: "Only where separately approved in writing by the Company for a qualifying transaction", notes: "Not automatic; subject to written management approval" },
+  { label: "Company-approved premium tier · direct deals", rate: "70%", trigger: "Eligible own direct deals only after AED 10,000,000 Company-recognised sales in one year, written management approval, and JBJ receipt of cleared net commission", notes: "Not automatic; calculated on cleared net commission actually received by JBJ after lawful deductions, reversals and transaction costs" },
 ];
 
 function normalizeOfferCommissionRows(rows: CommissionRow[]): CommissionRow[] {
@@ -1370,6 +1383,13 @@ function normalizeOfferCommissionRows(rows: CommissionRow[]): CommissionRow[] {
   return [
     { ...DEFAULT_BROKER_COMMISSIONS[0], ...direct, rate: direct.rate || DEFAULT_BROKER_COMMISSIONS[0].rate },
     { ...DEFAULT_BROKER_COMMISSIONS[1], ...company, rate: company.rate || DEFAULT_BROKER_COMMISSIONS[1].rate },
-    { ...DEFAULT_BROKER_COMMISSIONS[2], ...premium, rate: premium.rate || DEFAULT_BROKER_COMMISSIONS[2].rate },
+    {
+      ...DEFAULT_BROKER_COMMISSIONS[2],
+      ...premium,
+      label: DEFAULT_BROKER_COMMISSIONS[2].label,
+      rate: premium.rate || DEFAULT_BROKER_COMMISSIONS[2].rate,
+      trigger: /10,?000,?000|ten\s+million/i.test(premium.trigger || "") ? premium.trigger : DEFAULT_BROKER_COMMISSIONS[2].trigger,
+      notes: DEFAULT_BROKER_COMMISSIONS[2].notes,
+    },
   ];
 }
