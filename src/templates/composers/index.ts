@@ -13,7 +13,7 @@
  * wraps that automatically.
  */
 
-import { jbjCompanyStampSrc } from "@/templates/jbjLockedChrome";
+import { jbjCompanyStampSrc, JBJ_BRAND } from "@/templates/jbjLockedChrome";
 import {
   composeFormA,
   composeFormB,
