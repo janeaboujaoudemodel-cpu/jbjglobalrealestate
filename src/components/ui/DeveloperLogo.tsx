@@ -77,7 +77,7 @@ export function DeveloperLogo({
       >
         <span
           className={cn(
-            "block w-full max-w-full max-h-full overflow-visible font-bold tracking-normal leading-[0.9] text-center uppercase whitespace-normal break-words [overflow-wrap:anywhere] [word-break:break-word] [hyphens:auto] [text-wrap:balance]",
+            "block w-full max-w-full max-h-full overflow-hidden font-bold tracking-[-0.02em] leading-[0.86] text-center uppercase whitespace-normal break-words [overflow-wrap:anywhere] [word-break:break-word] [hyphens:auto] [text-wrap:balance]",
             textTone,
             sizeClass,
           )}

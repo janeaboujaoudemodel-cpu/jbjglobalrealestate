@@ -343,7 +343,7 @@ const ProjectFilters = ({
               updateFilter("developerId", value === "all" ? null : value)
             }
           >
-            <SelectTrigger className="h-11 w-[180px] rounded-xl flex-shrink-0 snap-start">
+            <SelectTrigger className="h-auto min-h-11 w-[220px] rounded-xl flex-shrink-0 snap-start">
               <Building2 className="w-4 h-4 mr-1 text-[#1A1A1A] shrink-0" />
               <SelectValue placeholder="All Developers" />
             </SelectTrigger>

@@ -774,7 +774,7 @@ const Properties = () => {
                         <div>
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Intent</label>
                           <Select value={intentValue} onValueChange={setIntent}>
-                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <SelectTrigger className="w-full h-auto min-h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>

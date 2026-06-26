@@ -16759,9 +16759,19 @@ html body [data-developer-nameplate] > span {
   max-width: 100% !important;
   max-height: 100% !important;
   white-space: normal !important;
+  overflow: hidden !important;
+  text-align: center !important;
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
   hyphens: auto !important;
+}
+html body [data-radix-select-content] {
+  width: max(var(--radix-select-trigger-width), 20rem) !important;
+  max-width: calc(100vw - 2rem) !important;
+}
+html body [data-radix-select-trigger] {
+  height: auto !important;
+  min-height: 2.5rem !important;
 }
 html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-radix-collection-item]) :is(span,p,div) {
   min-width: 0;
