@@ -683,7 +683,7 @@ function composeJobOffer(input: ComposerInput): string {
     paragraph(`<strong>Candidate Name:</strong> ${candidateName}<br/><strong>Address:</strong> ${address}<br/><strong>Email:</strong> ${email}<br/><strong>Phone / WhatsApp:</strong> ${phone}`),
     subjectLine(`Employment Offer – ${jobTitle}`),
     paragraph(`Dear ${candidateName},`),
-    paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency, subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
+    paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency (Trade Licence No. <strong>${JBJ_BRAND.tradeLicense}</strong>, ORN 41486), subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
     candidateIdentity,
     employmentTerms,
     compensationTerms,
