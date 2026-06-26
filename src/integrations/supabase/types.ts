@@ -5522,6 +5522,63 @@ export type Database = {
           },
         ]
       }
+      client_profiles: {
+        Row: {
+          address: string
+          created_at: string
+          email: string
+          emirates_id: string
+          extra: Json
+          full_name: string
+          id: string
+          leads_from_date: string
+          nationality: string
+          owner_id: string
+          passport_no: string
+          phone: string
+          position: string
+          salary: string
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string
+          created_at?: string
+          email?: string
+          emirates_id?: string
+          extra?: Json
+          full_name?: string
+          id?: string
+          leads_from_date?: string
+          nationality?: string
+          owner_id: string
+          passport_no?: string
+          phone?: string
+          position?: string
+          salary?: string
+          start_date?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          email?: string
+          emirates_id?: string
+          extra?: Json
+          full_name?: string
+          id?: string
+          leads_from_date?: string
+          nationality?: string
+          owner_id?: string
+          passport_no?: string
+          phone?: string
+          position?: string
+          salary?: string
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       commission_rates: {
         Row: {
           created_at: string | null
