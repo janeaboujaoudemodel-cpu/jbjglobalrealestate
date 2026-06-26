@@ -2496,14 +2496,14 @@ function StudioShell({
                             body: {
                               mode: "extract-fields",
                               templateId: template.id,
-                              fieldKeys: template.fields.map((f) => f.key),
+                              fieldKeys: Array.from(new Set([...template.fields.map((f) => f.key), ...IDENTITY_FIELD_KEYS])),
                               source: autoFillText,
                             },
                           });
                           if (error) throw error;
                           const parsed = (data as any)?.fields || {};
                           if (parsed && typeof parsed === "object") {
-                            setFields((p) => ({ ...p, ...parsed }));
+                            setFields((p) => ({ ...p, ...normalizeExtractedDocumentFields(parsed, autoFillText) }));
                             toast.success("Fields filled from your text");
                           } else {
                             toast.info("Nothing extractable found");
@@ -2532,36 +2532,41 @@ function StudioShell({
                       ref={autoFillFileRef}
                       type="file"
                       accept=".pdf,.doc,.docx,.txt,image/*"
+                      multiple
                       className="hidden"
                       onChange={async (e) => {
-                        const file = e.target.files?.[0];
+                        const files = Array.from(e.target.files || []);
                         e.target.value = "";
-                        if (!file || !template) return;
-                        if (file.size > 8 * 1024 * 1024) { toast.error("Max 8MB"); return; }
+                        if (!files.length || !template) return;
+                        if (files.some((file) => file.size > 8 * 1024 * 1024)) { toast.error("Max 8MB per file"); return; }
                         setAutoFillBusy(true);
                         try {
-                          const b64 = await new Promise<string>((res, rej) => {
-                            const r = new FileReader();
-                            r.onload = () => res(String(r.result || ""));
-                            r.onerror = rej;
-                            r.readAsDataURL(file);
-                          });
-                          const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
-                            body: {
-                              mode: "extract-fields",
-                              templateId: template.id,
-                              fieldKeys: template.fields.map((f) => f.key),
-                              source: `Extract contract fields from attached identity/document image: ${file.name}`,
-                              attachment: { name: file.name, type: file.type, dataUrl: b64 },
-                            },
-                          });
-                          if (error) throw error;
-                          const parsed = (data as any)?.fields || {};
-                          if (parsed && typeof parsed === "object") {
-                            setFields((p) => ({ ...p, ...parsed }));
-                            toast.success(`Fields filled from ${file.name}`);
+                          const merged: Record<string, string> = {};
+                          for (const file of files) {
+                            const b64 = await new Promise<string>((res, rej) => {
+                              const r = new FileReader();
+                              r.onload = () => res(String(r.result || ""));
+                              r.onerror = rej;
+                              r.readAsDataURL(file);
+                            });
+                            const source = `Extract ONLY contract identity/contact fields from attached Emirates ID, passport, or document: ${file.name}. Include full name as per ID, Emirates ID number, passport number, home address, email, and phone if visible. Exclude ID expiry, birth date, issuing date, nationality, and sex.`;
+                            const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
+                              body: {
+                                mode: "extract-fields",
+                                templateId: template.id,
+                                fieldKeys: Array.from(new Set([...template.fields.map((f) => f.key), ...IDENTITY_FIELD_KEYS])),
+                                source,
+                                attachment: { name: file.name, type: file.type, dataUrl: b64 },
+                              },
+                            });
+                            if (error) throw error;
+                            Object.assign(merged, normalizeExtractedDocumentFields((data as any)?.fields || {}, source));
+                          }
+                          if (Object.keys(merged).length) {
+                            setFields((p) => ({ ...p, ...merged }));
+                            toast.success(`Fields filled from ${files.length} attachment${files.length > 1 ? "s" : ""}`);
                           } else {
-                            toast.info("Nothing extractable found in attachment");
+                            toast.info("Nothing extractable found in attachments");
                           }
                         } catch (err: any) {
                           toast.error(err?.message || "Attachment processing failed");
