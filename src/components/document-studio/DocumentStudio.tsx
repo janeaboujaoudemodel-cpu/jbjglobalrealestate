@@ -467,6 +467,7 @@ function StudioShell({
 
   const [zoom, setZoom] = useState(100);
   const [setupChromeCollapsed, setSetupChromeCollapsed] = useState(true);
+  const [studioMinimized, setStudioMinimized] = useState(false);
   const [actionChromeCollapsed, setActionChromeCollapsed] = useState(true);
   const [detailsPanelCollapsed, setDetailsPanelCollapsed] = useState(true);
   // Keep the Live Document Editor as the premium sparkle launcher by default.
@@ -1792,6 +1793,15 @@ function StudioShell({
               {setupChromeCollapsed ? <ChevronDown className="w-4 h-4 mr-1.5" /> : <ChevronUp className="w-4 h-4 mr-1.5" />}
               <span>{setupChromeCollapsed ? "Tools" : "Minimize"}</span>
             </Button>
+            <button
+              onClick={() => setStudioMinimized(true)}
+              data-surface="champagne"
+              className="h-10 w-10 shrink-0 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
+              aria-label="Minimize Studio"
+              title="Minimize"
+            >
+              <Minimize2 className="w-4 h-4" />
+            </button>
             <button
               onClick={onClose}
               data-surface="champagne" className="h-10 w-10 shrink-0 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
@@ -3344,7 +3354,24 @@ function StudioShell({
   );
 
 
-  return createPortal(overlay, document.body);
+  const minimizedPill = (
+    <button
+      type="button"
+      onClick={() => setStudioMinimized(false)}
+      data-surface="emerald"
+      data-no-contrast-guard
+      className="fixed bottom-5 right-5 z-[2147483600] h-14 px-5 rounded-full inline-flex items-center gap-2.5 text-sm font-semibold text-white shadow-2xl border border-[#B89555]/70 hover:scale-[1.03] transition-transform"
+      style={{ background: "var(--jj-emerald-ombre, linear-gradient(135deg,#064E3B,#000))" }}
+      aria-label="Restore Document Studio"
+      title="Restore Document Studio"
+    >
+      <Sparkles className="w-5 h-5" />
+      <span>Document Studio</span>
+      <Maximize2 className="w-4 h-4 opacity-90" />
+    </button>
+  );
+
+  return createPortal(studioMinimized ? minimizedPill : overlay, document.body);
 }
 
 /* ───────────────────────── Sub-components ───────────────────────── */
