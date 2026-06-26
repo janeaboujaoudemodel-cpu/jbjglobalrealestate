@@ -1513,12 +1513,20 @@ function StudioShell({
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; }
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
         [data-document-studio-overlay] .studio-scroll-x { overflow-x:hidden; }
-        [data-document-studio-overlay] .studio-action-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-width:0; }
+        [data-document-studio-overlay] .studio-action-row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; min-width:0; }
         [data-document-studio-overlay] .studio-action-row > * { flex:0 0 auto; }
-        [data-document-studio-overlay] .studio-action-row button { white-space:nowrap; min-height:40px; min-width:42px; padding-left:12px; padding-right:12px; }
-        [data-document-studio-overlay] .studio-action-row button > span { white-space:nowrap; }
-        [data-document-studio-overlay] [data-document-studio-toolbar] .studio-action-row { justify-content:flex-end; }
+        [data-document-studio-overlay] .studio-action-row button { white-space:nowrap; min-height:42px; min-width:46px; padding-left:14px; padding-right:14px; overflow:visible; text-overflow:clip; }
+        [data-document-studio-overlay] .studio-action-row button > span { white-space:nowrap; display:inline-flex; max-width:none; overflow:visible; }
+        [data-document-studio-overlay] [data-document-studio-toolbar] .studio-action-row { justify-content:flex-end; width:100%; }
         [data-document-studio-overlay] [data-document-studio-toolbar] button { min-height:40px; }
+        [data-document-studio-overlay] .studio-toolbar-scroll { overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
+        [data-document-studio-overlay] .studio-toolbar-scroll::-webkit-scrollbar { height:6px; }
+        [data-document-studio-overlay] .studio-toolbar-scroll::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
+        [data-document-studio-overlay] .studio-top-primary-actions { width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:2px; justify-content:flex-start !important; }
+        [data-document-studio-overlay] .studio-top-primary-actions > * { flex:0 0 auto; }
+        [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar { height:6px; }
+        [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
+        [data-document-studio-overlay] .studio-top-primary-actions button { height:42px; }
         [data-document-studio-overlay] .studio-preview-shell { width:100%; }
         [data-document-studio-overlay] .studio-sidebar { min-width:0; }
         [data-document-studio-overlay] .studio-template-card { min-width:0; overflow:hidden; }
@@ -1538,7 +1546,7 @@ function StudioShell({
             box-shadow:0 28px 90px -28px rgba(0,0,0,.42) !important;
           }
           [data-document-studio-overlay] [data-document-studio-toolbar] { align-items:flex-start !important; }
-          [data-document-studio-overlay] [data-document-studio-toolbar] .studio-action-row { width:100%; justify-content:flex-start; }
+          [data-document-studio-overlay] [data-document-studio-toolbar] .studio-action-row { width:max-content; min-width:100%; justify-content:flex-start; flex-wrap:nowrap; }
         }
         @media (max-width: 767px) {
           [data-document-studio-overlay] .studio-topbar { padding:10px 12px !important; }
@@ -1549,7 +1557,7 @@ function StudioShell({
 
       `}</style>
       {/* ─── Topbar ─── */}
-      <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 lg:flex-row lg:items-center lg:px-5">
+      <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 lg:px-5">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
             <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
@@ -1568,7 +1576,7 @@ function StudioShell({
           setStep(s);
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
-        <div className="studio-action-row lg:ml-auto justify-start lg:justify-end">
+        <div className="studio-action-row studio-top-primary-actions justify-start">
           {/* Theme switcher — Champagne / Emerald letterhead */}
           <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme" data-surface="champagne">
             <button
@@ -1606,16 +1614,16 @@ function StudioShell({
             </Select>
           </div>
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")} title="Signature" className="border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
-            <PenLine className="w-4 h-4 lg:mr-1.5" />
-            <span className="hidden lg:inline">Signature</span>
+            <PenLine className="w-4 h-4 mr-1.5" />
+            <span>Signature</span>
           </Button>
           <Button variant="outline" size="sm" onClick={() => autoFillFileRef.current?.click()} title="Attach Emirates ID, passport or document to auto-fill fields" className="border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
-            <Upload className="w-4 h-4 lg:mr-1.5" />
-            <span className="hidden lg:inline">Attach ID</span>
+            <Upload className="w-4 h-4 mr-1.5" />
+            <span>Attach ID</span>
           </Button>
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")} title="Stamp" className="border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
-            <Stamp className="w-4 h-4 lg:mr-1.5" />
-            <span className="hidden lg:inline">Stamp</span>
+            <Stamp className="w-4 h-4 mr-1.5" />
+            <span>Stamp</span>
           </Button>
           {template && userEdited && (
             <Button
@@ -1625,8 +1633,8 @@ function StudioShell({
               title="Discard edits and re-render from template"
               className="hover:bg-[#EFE6D6]"
             >
-              <X className="w-4 h-4 lg:mr-1.5" />
-              <span className="hidden lg:inline">Reset</span>
+              <X className="w-4 h-4 mr-1.5" />
+              <span>Reset</span>
             </Button>
           )}
           {template && (
@@ -1637,8 +1645,8 @@ function StudioShell({
               title="Save current edits as a reusable template"
               className="border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
             >
-              <Check className="w-4 h-4 lg:mr-1.5" />
-              <span className="hidden lg:inline">Save Template</span>
+              <Check className="w-4 h-4 mr-1.5" />
+              <span>Save Template</span>
             </Button>
           )}
           {template && (
@@ -1651,9 +1659,9 @@ function StudioShell({
               className=""
             >
               {saveDocMutation.isPending
-                ? <Loader2 className="w-4 h-4 lg:mr-1.5 animate-spin" />
-                : <FileText className="w-4 h-4 lg:mr-1.5" />}
-              <span className="hidden lg:inline">{currentDocId ? "Update" : "Save Document"}</span>
+                ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                : <FileText className="w-4 h-4 mr-1.5" />}
+              <span>{currentDocId ? "Update" : "Save Document"}</span>
             </Button>
           )}
           <Button
@@ -1663,12 +1671,12 @@ function StudioShell({
             title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
             className="hover:bg-[#EFE6D6]"
           >
-            {isFullscreen ? <Minimize2 className="w-4 h-4 lg:mr-1.5" /> : <Maximize2 className="w-4 h-4 lg:mr-1.5" />}
-            <span className="hidden lg:inline">{isFullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
+            {isFullscreen ? <Minimize2 className="w-4 h-4 mr-1.5" /> : <Maximize2 className="w-4 h-4 mr-1.5" />}
+            <span>{isFullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"} className="hover:bg-[#EFE6D6]">
-            {aiOpen ? <PanelRightClose className="w-4 h-4 lg:mr-1.5" /> : <PanelRightOpen className="w-4 h-4 lg:mr-1.5" />}
-            <span className="hidden lg:inline">{aiOpen ? "Hide AI" : "Show AI"}</span>
+            {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
+            <span>{aiOpen ? "Hide AI" : "Show AI"}</span>
           </Button>
 
           <button
@@ -1766,7 +1774,7 @@ function StudioShell({
       {/* ─── Top toolbar (visible on step ≥ 2) — Reset / Print / Export / Send ─── */}
       {step === 2 && template && (
         <div
-          className="sticky top-0 z-30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
+          className="sticky top-0 z-30 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
           data-document-studio-toolbar="1"
         >
           <div className="flex items-center gap-2 min-w-0">
@@ -1783,63 +1791,65 @@ function StudioShell({
               <div className="text-[12px] font-semibold text-[#1A1A1A] truncate leading-tight">{template.label}</div>
             </div>
           </div>
-          <div className="studio-action-row sm:justify-end">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={resetToTemplate}
-              disabled={!bodyHtml}
-              title="Reset edits to template"
-              className="h-8"
-            >
-              <Wand2 className="w-3.5 h-3.5 mr-1.5" /> Reset
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handlePrint}
-              disabled={!bodyHtml}
-              title="Print"
-              className="h-8"
-            >
-              <Printer className="w-3.5 h-3.5 mr-1.5" /> Print
-            </Button>
-            <div className="flex">
+          <div className="studio-toolbar-scroll w-full xl:w-auto">
+            <div className="studio-action-row sm:justify-end">
               <Button
                 variant="outline"
                 size="sm"
-                disabled={!bodyHtml || !!exporting}
-                onClick={() => handleExport("pdf")}
-                title="Download PDF"
-                className="h-8 rounded-r-none border-r-0"
+                onClick={resetToTemplate}
+                disabled={!bodyHtml}
+                title="Reset edits to template"
+                className="h-10"
               >
-                {exporting === "pdf" ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Download className="w-3.5 h-3.5 mr-1.5" />}
-                Export PDF
+                <Wand2 className="w-4 h-4 mr-1.5" /> Reset
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-8 rounded-l-none px-2" disabled={!bodyHtml || !!exporting} title="More export formats">
-                    <ChevronDown className="w-3.5 h-3.5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-[#FDFBF7] z-[2147483647]">
-                  <DropdownMenuItem onClick={() => handleExport("pdf")}>
-                    <FileText className="w-4 h-4 mr-2" /> Download PDF
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport("png")}>
-                    <FileText className="w-4 h-4 mr-2" /> Download Image (PNG)
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport("docx")}>
-                    <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport("both")}>
-                    <FileText className="w-4 h-4 mr-2" /> Download PDF + PNG
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handlePrint}>
-                    <Printer className="w-4 h-4 mr-2" /> Print
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrint}
+                disabled={!bodyHtml}
+                title="Print"
+                className="h-10"
+              >
+                <Printer className="w-4 h-4 mr-1.5" /> Print
+              </Button>
+              <div className="flex shrink-0">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!bodyHtml || !!exporting}
+                  onClick={() => handleExport("pdf")}
+                  title="Download PDF"
+                  className="h-10 rounded-r-none border-r-0"
+                >
+                  {exporting === "pdf" ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
+                  Export PDF
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-10 rounded-l-none px-3" disabled={!bodyHtml || !!exporting} title="More export formats">
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-[#FDFBF7] z-[2147483647]">
+                    <DropdownMenuItem onClick={() => handleExport("pdf")}>
+                      <FileText className="w-4 h-4 mr-2" /> Download PDF
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleExport("png")}>
+                      <FileText className="w-4 h-4 mr-2" /> Download Image (PNG)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleExport("docx")}>
+                      <FileText className="w-4 h-4 mr-2" /> Download Word (.docx)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleExport("both")}>
+                      <FileText className="w-4 h-4 mr-2" /> Download PDF + PNG
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handlePrint}>
+                      <Printer className="w-4 h-4 mr-2" /> Print
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </div>
         </div>
@@ -2318,12 +2328,12 @@ function StudioShell({
                     rows={3}
                     className="bg-[#FDFBF7] resize-none text-[12px]"
                   />
-                  <div className="flex gap-2">
+                  <div className="grid grid-cols-1 gap-2">
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="flex-1 h-8 text-[11px]"
+                  className="w-full min-h-10 px-3 text-[12px] whitespace-normal leading-tight justify-center"
                       disabled={autoFillBusy || (!autoFillText.trim())}
                       onClick={async () => {
                         if (!template) return;
@@ -2352,18 +2362,18 @@ function StudioShell({
                         }
                       }}
                     >
-                      {autoFillBusy ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Sparkles className="w-3 h-3 mr-1" />}
+                      {autoFillBusy ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin shrink-0" /> : <Sparkles className="w-4 h-4 mr-1.5 shrink-0" />}
                       Auto-fill fields
                     </Button>
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="h-8 text-[11px]"
+                  className="w-full min-h-10 px-3 text-[12px] whitespace-normal leading-tight justify-center"
                       onClick={() => autoFillFileRef.current?.click()}
                       disabled={autoFillBusy}
                     >
-                      <Upload className="w-3 h-3 mr-1" /> Attach ID / passport
+                  <Upload className="w-4 h-4 mr-1.5 shrink-0" /> Attach ID / Passport
                     </Button>
                     <input
                       ref={autoFillFileRef}
@@ -2948,6 +2958,7 @@ function StudioShell({
               language={docLanguage}
               aiInstructions={template?.aiInstructions || ""}
               onApply={(next) => setBodyHtml(next)}
+              onClose={() => setAiOpen(false)}
             />
           </aside>
         )}
@@ -2957,12 +2968,13 @@ function StudioShell({
           <button
           type="button"
           onClick={() => setAiOpen(true)}
-          className="fixed bottom-5 right-5 z-[2147483200] h-14 w-14 rounded-full bg-[var(--jj-emerald-ombre)] text-sm font-semibold text-white shadow-2xl border border-[#B89555]/70 inline-flex items-center justify-center hover:scale-105 transition-transform"
+          className="fixed bottom-5 right-5 z-[2147483200] h-16 min-w-16 rounded-full bg-[var(--jj-emerald-ombre)] px-5 text-sm font-semibold text-white shadow-2xl border border-[#B89555]/70 inline-flex items-center justify-center gap-2 hover:scale-[1.03] transition-transform"
           data-surface="emerald"
           aria-label="Open Live Document Editor"
           title="Open Live Document Editor"
         >
           <Sparkles className="w-6 h-6" />
+          <span>AI Assistant</span>
         </button>
       )}
 
