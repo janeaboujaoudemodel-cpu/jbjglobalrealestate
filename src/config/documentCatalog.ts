@@ -31,6 +31,7 @@ export interface DocumentField {
   required?: boolean;
   helpText?: string;
   group?: string;
+  default?: string;
 }
 
 export interface DocumentTemplate {
