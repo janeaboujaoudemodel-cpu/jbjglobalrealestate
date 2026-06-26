@@ -64,72 +64,74 @@ export function jbjStampOverlayHtml(): string {
 }
 
 /**
- * Compact letterhead — half the previous height. Bigger monogram, gold
- * hairline pulled closer (12px gap instead of 26px), single-line wordmark.
- * The "Generated DD Month YYYY" date is rendered OUTSIDE this header by
- * DocumentStudio (top-right corner under the DocuSign safe band) — never
- * inside the chrome. Global rule, locked.
+ * Compact letterhead. Theme switchable: "champagne" (default, black mono +
+ * black wordmark on champagne) or "emerald" (white mono + white wordmark
+ * on dark emerald). Generated-date stamp is rendered OUTSIDE the chrome
+ * by DocumentStudio — never inside.
  */
-export const jbjHeaderHtml = (): string => `
+export type JbjChromeTheme = "champagne" | "emerald";
+
+const themeTokens = (theme: JbjChromeTheme) =>
+  theme === "emerald"
+    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
+    : { bg: JBJ_CHAMPAGNE, fg: "#000000", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
+
+export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
+  const t = themeTokens(theme);
+  return `
   <header style="
     width:100%;
-    background:${JBJ_CHAMPAGNE};
-    border-bottom:1px solid ${JBJ_GOLD};
-    padding:10px 32px 10px 24px;
+    background:${t.bg};
+    border-bottom:1px solid ${t.hairline};
+    padding:6px 32px 6px 24px;
     font-family:Inter, system-ui, sans-serif;
-    color:${JBJ_INK};
+    color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:210px 1px 1fr;align-items:center;gap:12px;min-height:92px;">
+    <div style="display:grid;grid-template-columns:240px 1px 1fr;align-items:center;gap:14px;min-height:64px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:200px;height:200px;display:block;object-fit:contain;background:transparent;margin:0;" />
-      <div aria-hidden="true" style="width:1px;height:68px;background:${JBJ_GOLD};opacity:.55;"></div>
+        style="width:220px;height:64px;display:block;object-fit:contain;background:transparent;margin:0;filter:${t.monoFilter};" />
+      <div aria-hidden="true" style="width:1px;height:46px;background:${t.hairline};opacity:${theme === "emerald" ? 0.5 : 0.55};"></div>
       <div style="line-height:1.1;text-align:center;min-width:0;padding-right:24px;">
-        <div style="font-size:20px;font-weight:700;letter-spacing:0.045em;color:${JBJ_INK};white-space:nowrap;">
+        <div style="font-size:18px;font-weight:700;letter-spacing:0.045em;color:${t.fg};white-space:nowrap;">
           ${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}
         </div>
       </div>
     </div>
-  </header>
-`;
+  </header>`;
+};
 
-export const jbjFooterHtml = (): string => `
+export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
+  const t = themeTokens(theme);
+  return `
   <footer style="
     width:100%;
-    background:${JBJ_CHAMPAGNE};
-    border-top:1px solid ${JBJ_GOLD};
-    padding:16px 32px 18px;
+    background:${t.bg};
+    border-top:1px solid ${t.hairline};
+    padding:6px 32px 6px;
     font-family:Inter, system-ui, sans-serif;
     font-size:10px;
-    line-height:1.6;
-    color:${JBJ_INK};
+    line-height:1.5;
+    color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="text-align:center;font-size:11.5px;line-height:1.35;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:${JBJ_INK};white-space:nowrap;">
-      ${JBJ_BRAND.legalName} ${JBJ_BRAND.legalSuffix}
-    </div>
-    <div aria-hidden="true" style="height:1px;background:${JBJ_GOLD};opacity:.45;margin:10px 0 12px;"></div>
     <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
       <tr>
-        <td style="vertical-align:top;width:44%;padding-right:14px;color:${JBJ_INK};opacity:.88;">
-          <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.65;margin-bottom:2px;">Office</div>
+        <td style="vertical-align:middle;width:44%;padding-right:14px;color:${t.fg};opacity:.92;font-size:10px;">
           ${JBJ_BRAND.address}
         </td>
-        <td style="vertical-align:top;width:22%;text-align:center;padding:0 8px;color:${JBJ_INK};">
-          <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.65;margin-bottom:2px;">Phone</div>
-          <div style="font-size:11px;font-weight:700;">${JBJ_BRAND.phone}</div>
+        <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};font-size:11px;font-weight:700;">
+          ${JBJ_BRAND.phone}
         </td>
-        <td style="vertical-align:top;width:34%;text-align:right;padding-left:14px;color:${JBJ_INK};">
-          <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.65;margin-bottom:2px;">Contact</div>
-          <a href="mailto:${JBJ_BRAND.email}" style="color:${JBJ_GOLD};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
-          <span style="color:${JBJ_INK};opacity:.4;margin:0 6px;">·</span>
-          <a href="https://${JBJ_BRAND.website}" style="color:${JBJ_GOLD};text-decoration:none;font-weight:700;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
-          <div style="font-size:9.5px;color:${JBJ_INK};opacity:.6;margin-top:3px;">Trade Licence ${JBJ_BRAND.tradeLicense}</div>
+        <td style="vertical-align:middle;width:34%;text-align:right;padding-left:14px;color:${t.fg};font-size:10px;">
+          <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
+          <span style="color:${t.fg};opacity:.5;margin:0 6px;">·</span>
+          <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};text-decoration:none;font-weight:700;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
         </td>
       </tr>
     </table>
-  </footer>
-`;
+  </footer>`;
+};
 
 /**
  * Wrap an AI-generated body in the locked chrome. Used for print, PDF
