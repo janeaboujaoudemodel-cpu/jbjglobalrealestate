@@ -108,6 +108,56 @@ const stripForbiddenIdentityFragments = (value?: string): string => {
     .trim();
 };
 
+const cleanLegalName = (value?: string): string =>
+  stripForbiddenIdentityFragments(value)
+    .replace(/^\s*(?:full\s+name\s+(?:as\s+per\s+(?:id|passport)|on\s+passport)|candidate\s+name|name)\s*(?:is|:|-)?\s*/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const isInitialOnlyName = (value?: string): boolean => /\b[A-Z]\.?\b(?:\s*[A-Z]\.?\b)+/i.test(value || "");
+
+const mrzName = (value?: string): string => {
+  const line = (value || "").split(/\n/).find((part) => /^P<|^[A-Z0-9<]{20,}$/.test(part.trim()))?.trim() || "";
+  const match = line.match(/P<[A-Z]{3}([A-Z<]+)<<([A-Z<]+)/i) || line.match(/^([A-Z<]+)<<([A-Z<]+)/i);
+  if (!match) return "";
+  const surname = match[1].replace(/<+/g, " ").trim();
+  const given = match[2].replace(/<+/g, " ").trim();
+  return cleanLegalName(`${given} ${surname}`);
+};
+
+const bestLegalName = (fields: Record<string, string>, source: string): string => {
+  const candidates = [
+    fields.fullNameAsPerPassport,
+    fields.passportFullName,
+    fields.passport_name,
+    fields.nameOnPassport,
+    fields.fullNameAsPerId,
+    fields.fullNameAsPerID,
+    fields.idFullName,
+    fields.emiratesIdFullName,
+    fields.fullName,
+    fields.nameAsPerId,
+    fields.nameAsPerID,
+    fields.candidateName,
+    fields.recipientName,
+    fields.surname && fields.givenNames ? `${fields.givenNames} ${fields.surname}` : "",
+    fields.lastName && fields.firstName ? `${fields.firstName} ${fields.middleName || ""} ${fields.lastName}` : "",
+    mrzName(source),
+    firstMatch(source, /(?:full\s+name\s+as\s+per\s+passport|name\s+on\s+passport|passport\s+full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    firstMatch(source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
+  ]
+    .map(cleanLegalName)
+    .filter(Boolean)
+    .filter((name) => !/^\d+$/.test(name));
+
+  candidates.sort((a, b) => {
+    const aScore = (isInitialOnlyName(a) ? 0 : 1000) + Math.min(a.length, 120) + (a.split(/\s+/).length >= 3 ? 100 : 0);
+    const bScore = (isInitialOnlyName(b) ? 0 : 1000) + Math.min(b.length, 120) + (b.split(/\s+/).length >= 3 ? 100 : 0);
+    return bScore - aScore;
+  });
+  return candidates[0] || "";
+};
+
 const identityValue = (fields: Record<string, string>, keys: string[], source: string, ...patterns: RegExp[]) => {
   const direct = keys.map((key) => fields[key]).find((value) => typeof value === "string" && value.trim()) || "";
   const cleaned = stripForbiddenIdentityFragments(direct);
@@ -118,7 +168,7 @@ const identityValue = (fields: Record<string, string>, keys: string[], source: s
 const offerIdentity = (fields: Record<string, string>) => {
   const source = Object.values(fields).filter(Boolean).join("\n");
   return {
-    name: identityValue(fields, ["recipientName", "candidateName", "fullName", "fullNameAsPerId", "nameAsPerId"], source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name|name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    name: bestLegalName(fields, source),
     emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
     passport: identityValue(fields, ["passportNumber", "passport_number", "passportNo", "passport"], source, /passport(?:\s*(?:number|no\.?))?\s*(?:is|:|-)?\s*([A-Z0-9]{5,})/i),
     nationality: identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-)?\s*([^;\n]+)/i),
@@ -143,15 +193,18 @@ const offerClause = (n: number, heading: string, body: string) => `
 
 /* ───────────── Shared building blocks ───────────── */
 
-export function termsTable(rows: Array<[string, string | undefined]>, title = "Terms of Employment"): string {
+export function termsTable(rows: Array<[string, string | undefined, string?]>, title = "Terms of Employment"): string {
   const visible = rows.filter(([, v]) => (v || "").trim());
   if (visible.length === 0) return "";
   const body = visible
     .map(
-      ([k, v], i) => `
-      <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
-        <td style="padding:9px 14px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:38%;font-size:12px;">${esc(k)}</td>
-        <td style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v)}</td>
+      ([k, v, fieldKey], i) => `
+      <tr data-removable-field="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+        <td style="position:relative;padding:9px 38px 9px 14px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:38%;font-size:12px;">
+          ${esc(k)}
+          <button type="button" contenteditable="false" aria-label="Remove field" data-field-delete-control="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:1px solid ${GOLD}66;border-radius:999px;background:#FDFBF7;color:${INK};font-size:13px;line-height:16px;font-weight:700;opacity:0;cursor:pointer;">×</button>
+        </td>
+        <td data-field-value-cell="1" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v)}</td>
       </tr>`,
     )
     .join("");
@@ -224,8 +277,8 @@ export function commissionTable(rows: CommissionRow[]): string {
   const body = visible
     .map(
       (r, i) => `
-      <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
-        <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}</td>
+      <tr data-removable-field="1" data-field-key="commission" style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+        <td style="position:relative;padding:9px 34px 9px 12px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}<button type="button" contenteditable="false" aria-label="Remove field" data-field-delete-control="1" data-field-key="commission" style="position:absolute;right:7px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:1px solid ${GOLD}66;border-radius:999px;background:#FDFBF7;color:${INK};font-size:13px;line-height:16px;font-weight:700;opacity:0;cursor:pointer;">×</button></td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};white-space:nowrap;">${esc(r.rate) || "—"}</td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};">${esc(r.trigger) || "—"}</td>
       </tr>`,
@@ -248,10 +301,20 @@ export function commissionTable(rows: CommissionRow[]): string {
       <tbody>${body}</tbody>
     </table>
     <div data-pdf-section="commission-note" style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;page-break-inside:avoid;break-inside:avoid;">
-      Commissions are released once the brokerage has actually received the cleared funds from the buyer or developer.
+      Commission entitlement and payment timing are subject to the signed employment documents, UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations, and actual receipt of cleared funds by the Company from the buyer, seller, landlord, developer, client, or relevant third party.
     </div>`;
 
 }
+
+const formatMonthlySalary = (value?: string): string => {
+  const raw = filledOr(value, "");
+  if (!raw) return "";
+  if (/\b(aed|per\s+month|monthly|not\s+applicable|n\/?a)\b/i.test(raw)) return raw;
+  return `AED ${raw} per month`;
+};
+
+const compensationStructureTable = (rows: Array<[string, string | undefined, string?]>): string =>
+  termsTable(rows, "Compensation & Commission Structure");
 
 export function signatureBlock(opts: {
   ownerName?: string;
@@ -459,13 +522,7 @@ function composeJobOffer(input: ComposerInput): string {
   const companyName = "J B J GLOBAL REAL ESTATE L.L.C S.O.C";
   const officeAddress = "Office SM1-195, Port Saeed, Deira, Dubai, UAE";
   const startDate = esc(formatHumanDate(f.startDate) || f.startDate || "[Start Date]");
-  const salary = esc(filledOr(f.salary, "[Amount]"));
-  const commission = esc(filledOr(f.commission, "[Commission structure]"));
-  const allowances = esc(filledOr(f.allowances, "[If any]"));
-  const paymentCycle = esc(filledOr(f.paymentCycle, "Monthly / upon company receipt of commission / other"));
   const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"));
-  const authorizedSignatory = esc(input.ownerName || "Jane Bou Jaoude");
-  const authorizedTitle = esc(input.ownerTitle || "Founder & CEO");
 
   const candidateIdentity = paragraph(
     `Candidate identity for this offer: <strong>${candidateName}</strong>, holding Passport No. <strong>${passport}</strong>, holding Emirates ID No. <strong>${emiratesId}</strong>, with nationality recorded as <strong>${nationality}</strong>, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone at <strong>${phone}</strong>.`,
@@ -473,26 +530,31 @@ function composeJobOffer(input: ComposerInput): string {
 
   const employmentTerms = termsTable(
     [
-      ["Job Title", filledOr(f.jobTitle, "")],
-      ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate],
-      ["Place of Work", officeAddress],
-      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday")],
-      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits")],
-      ["Basic Salary", f.salary ? `AED ${f.salary} per month` : ""],
-      ["Commission Structure", filledOr(f.commission, "")],
-      ["Allowances", filledOr(f.allowances, "")],
-      ["Payment Cycle", filledOr(f.paymentCycle, "")],
-      ["Probation Period", filledOr(f.probation, "Up to six (6) months")],
-      ["Reporting Manager", filledOr(f.reportingManager, "")],
+      ["Job Title", filledOr(f.jobTitle, ""), "jobTitle"],
+      ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate, "startDate"],
+      ["Place of Work", officeAddress, "officeAddress"],
+      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"), "workingHours"],
+      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits"), "attendance"],
+      ["Probation Period", filledOr(f.probationPeriod || f.probation, "Up to six (6) months"), "probationPeriod"],
+      ["Reporting Line", filledOr(f.reportingLine || f.reportingManager, ""), "reportingLine"],
     ],
     "Terms of Employment",
   );
+
+  const compensationTerms = compensationStructureTable([
+    ["Basic Salary", formatMonthlySalary(f.salary), "salary"],
+    ["Commission Structure", filledOr(f.commission, ""), "commission"],
+    ["Allowances", filledOr(f.allowances, ""), "allowances"],
+    ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
+  ]);
+
+  const commissionRowsTable = commissionTable(input.commissionRows || []);
 
   const clauses = [
     offerClause(1, "Position", `Your position will be <strong>${jobTitle}</strong>. Your duties include, but are not limited to, real estate sales/leasing, lead handling, client follow-up, developer coordination, CRM updates, property presentations, marketing support, and any other duties reasonably assigned by the Company.`),
     offerClause(2, "Start Date", `Your expected start date is <strong>${startDate}</strong>.`),
     offerClause(3, "Place of Work", `Your primary place of work will be <strong>${officeAddress}</strong>, with field visits, developer offices, client meetings, property viewings, and remote work where approved by the Company. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy.`),
-    offerClause(4, "Compensation", `Your compensation shall be:<br/>Basic Salary: AED <strong>${salary}</strong> per month / Commission-only structure: <strong>${commission}</strong><br/>Commission: <strong>${commission}</strong><br/>Allowances: <strong>${allowances}</strong><br/>Payment Cycle: <strong>${paymentCycle}</strong><br/>No commission is earned unless and until the Company receives the relevant commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing.`),
+    offerClause(4, "Compensation", `The compensation, allowance, payment-cycle and commission details are set out in the tables above. No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents, UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
     offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || "up to six months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract.`),
     offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, documents, contracts, business methods, and internal policies.`),
     offerClause(7, "Leads and Clients", `All leads, inquiries, clients, prospects, contacts, databases, property owners, developers, landlords, sellers, buyers, tenants, and investors introduced, generated, received, accessed, assigned, or handled during your work are the exclusive business assets of the Company. You may not use, transfer, sell, leak, copy, export, screenshot, close, redirect, or complete any transaction involving Company leads or clients outside the Company, during or after employment.`),
@@ -520,6 +582,8 @@ function composeJobOffer(input: ComposerInput): string {
     paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency, subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
     candidateIdentity,
     employmentTerms,
+    compensationTerms,
+    commissionRowsTable,
     clauses,
     closing,
     signatureBlock({
