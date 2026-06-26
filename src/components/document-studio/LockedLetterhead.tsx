@@ -34,34 +34,36 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "8px 28px 8px 22px",
+        padding: "10px 32px 10px 24px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "142px minmax(0,1fr)", columnGap: 14, minHeight: 126 }}
+        style={{ gridTemplateColumns: "142px minmax(0,1fr)", columnGap: 18, minHeight: 126 }}
       >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block object-contain"
-          style={{ width: 126, height: 126, background: "transparent", filter: t.monoFilter }}
+          style={{ width: 126, height: 126, background: "transparent", filter: t.monoFilter, margin: "auto 0", alignSelf: "center" }}
         />
-        <div className="leading-tight min-w-0 text-left" style={{ paddingRight: 10 }}>
+        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", paddingRight: 0, lineHeight: 1.05 }}>
           <div
             className="font-bold"
             style={{
-              fontSize: 20,
+              display: "block",
+              width: "100%",
+              fontSize: 24,
               fontWeight: 850,
               color: t.fg,
-              letterSpacing: "0.025em",
-              lineHeight: 1.12,
+              letterSpacing: 0,
+              lineHeight: 1.05,
               whiteSpace: "nowrap",
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
-            <span style={{ letterSpacing: "0.12em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
+            <span style={{ letterSpacing: "0.03em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
           </div>
         </div>
       </div>
