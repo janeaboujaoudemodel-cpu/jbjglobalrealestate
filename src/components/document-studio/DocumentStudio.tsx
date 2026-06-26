@@ -207,7 +207,7 @@ const renderPerPageUserSignature = (name?: string) => {
   return `
     <div data-rendered-page-signature="1" data-locked-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <div style="color:#1A1A1A;min-width:330px;max-width:360px;">
-        <div style="font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1.2;margin-bottom:8px;">Accepted by Candidate: <span style="letter-spacing:0;text-transform:none;font-size:11px;font-weight:600;">${legalName}</span></div>
+        <div style="font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1.2;margin-bottom:34px;">Accepted by Candidate: <span style="letter-spacing:0;text-transform:none;font-size:11px;font-weight:600;">${legalName}</span></div>
         <div style="display:flex;align-items:flex-end;gap:10px;">
           <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
           <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
