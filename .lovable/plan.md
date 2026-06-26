@@ -1,91 +1,72 @@
 
-## What's actually broken
+# Phase 2 — Global Design System Unification
 
-Two separate symptoms, one root cause:
+Goal: collapse every page in the Website and Owner Portal onto one enforceable design system so nothing looks "designed at a different time." The work is split into one foundation pass (tokens + primitives) and targeted refactors that consume them. No business logic changes.
 
-1. **"Registered at Hostinger" parking page** → `jbj.ae` A record at Hostinger still points to Hostinger's parking/hosting IP (something in the `84.32.x` / `145.223.x` range), not to Lovable's `185.158.133.1`.
-2. **`ERR_SSL_PROTOCOL_ERROR` on `https://jbj.ae`** → the server answering on port 443 has no valid TLS certificate for `jbj.ae`. That happens when:
-   - DNS is proxied through Cloudflare (orange cloud) without a valid edge cert, OR
-   - DNS points to a host that doesn't have an SSL cert issued for `jbj.ae` (Hostinger parking), OR
-   - Both an old A record and the new Lovable A record exist, and DNS is returning the wrong one.
+## 1. Lock the foundation (single source of truth)
 
-The Lovable side is fine — `www.jbj.ae` is listed as Active in your project URLs, so the apex (`jbj.ae`) is the one still misconfigured / conflicting.
+Edit `src/index.css` and the design-token layer only — every later step consumes these.
 
-## Why this happened
+- **Color contract** (CSS variables + utility classes, all `!important`-scoped to `[data-surface]`):
+  - `--surface-emerald` → fg pure white `#FFFFFF` (text + svg + borders on emerald)
+  - `--surface-champagne` / `--surface-pearl` / `--surface-white` → fg charcoal `#1A1A1A` (or dark emerald `#064E3B` for headings)
+  - `--surface-ink` → fg white
+  - Kill switch: any descendant `text-black`, `text-white`, `bg-black` inside the wrong surface is overridden by `[data-surface="emerald"] *` / `[data-surface="champagne"] *` rules.
+- **Active/Selected/Focus**: introduce `--state-active: var(--jj-emerald-ombre)`. Replace every `data-[state=active]:bg-black`, `aria-selected:bg-black`, `:focus { outline: black }` via a global selector sweep in `index.css`. Black is banned as an interactive state color.
+- **Elevation + radius tokens**: `--radius-card: 16px`, `--radius-pill: 999px`, `--shadow-card`, `--shadow-card-hover`, `--ring-focus: 0 0 0 2px var(--jj-emerald)`.
+- **Spacing scale**: confirm `--card-px: 20px`, `--card-py: 20px`, `--card-gap: 16px`, `--grid-gap: 24px`.
 
-- The domain is **registered at Hostinger**, so Hostinger's nameservers (`ns1.dns-parking.com` / `ns2.dns-parking.com`, or `ns1.hostinger.com` family) are authoritative for DNS.
-- When you "connected" `jbj.ae` in Lovable, Lovable showed you the records to add (A → `185.158.133.1`, TXT `_lovable`) — but the registrar **didn't actually replace** the original parking A record. Either:
-  - The old parking A record was never deleted, so DNS still resolves to Hostinger's parking server, **or**
-  - You added the records under a Cloudflare layer (orange-cloud proxy) without disabling proxy mode in Lovable's Advanced settings — Cloudflare then terminates TLS with no cert for `jbj.ae`, producing `ERR_SSL_PROTOCOL_ERROR`.
-- Lovable will report the domain as "Verified" as soon as the `_lovable` TXT record is seen once, even if the live A record is still wrong. Verified ≠ Active.
+## 2. Promote 3 primitives to mandatory
 
-## Fix (action plan — you do this at Hostinger, ~10 minutes + propagation)
+- **`MetricCard`** (new canonical at `src/components/ui/MetricCard.tsx`): one layout — IconTile (top-left, 40×40 emerald) · Number (display, 32px, charcoal) · Title (14px medium) · Subtitle (12px muted). Fixed min-height `140px`, identical paddings. All dashboard tiles (Employees, Active Positions, Pending Approvals, Payroll, AI Recruiting, CRM KPIs) must import this — delete inline variants.
+- **`ActionStrip`** (new at `src/components/ui/ActionStrip.tsx`): horizontal container, gap `8px`, height `40px`. Children = `<Button variant="primary">` (emerald/white) or `<Button variant="secondary">` (champagne/charcoal). Removes faded/borderless top strips on Document Studio, CRM, Leads, HR.
+- **`IconTile`** already exists — enforce single source by adding an ESLint rule (or simple `rg` guard in `scripts/contrast/`) that fails the build if a raw `<div class="… rounded-lg bg-…"><Icon/></div>` is added outside the primitive.
 
-### Step 1 — Decide DNS path
+## 3. Document Studio redesign
 
-Pick **A** (simplest, recommended) or **B** (only if you specifically need Cloudflare):
+File: `src/pages/owner/DocumentStudio.tsx` (and child grid components).
 
-- **A. Direct DNS at Hostinger → Lovable** (recommended). No proxy, fastest setup, Lovable manages SSL.
-- **B. Cloudflare in front of Lovable**. Requires switching Lovable into "Domain uses Cloudflare or a similar proxy" mode (CNAME-based verification) — and you accept that Cookiebot/region scans will see Cloudflare edges, not Lovable.
+- Replace bespoke page wrapper with `<PageShell>` + `.jj-page` grid.
+- 12-col responsive grid (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3`), `gap-6`.
+- Header row: title (display) · subtitle · right-aligned `<ActionStrip>` (primary = "New Document" emerald, secondary = "Templates" champagne).
+- Each document card: champagne surface, gold hairline, IconTile, title, meta, footer actions. Identical heights via `MetricCard`-style template (or sister `DocCard` primitive that shares tokens).
+- Remove all unused whitespace by capping `max-w-[var(--page-max-w)]` and using `--section-gap-y`.
 
-### Step 2 — Clean DNS at Hostinger (Path A)
+## 4. Page sweep (consume foundation)
 
-In **hPanel → Domains → jbj.ae → DNS / Nameservers → DNS Zone**:
+For each route below: replace inline state colors, swap to primitives, verify `data-surface` is set on the wrapper. No content/logic changes.
 
-1. **Delete** every existing record for:
-   - Type `A`, Name `@` (and any duplicates)
-   - Type `A`, Name `www`
-   - Type `CNAME`, Name `www` (if present)
-   - Type `AAAA`, Name `@` or `www` (IPv6 parking records cause the same problem)
-   - Any old `TXT _lovable` rows with stale values
-2. **Add** exactly:
-   | Type | Name | Value | TTL |
-   |------|------|-------|-----|
-   | A | @ | 185.158.133.1 | 3600 |
-   | A | www | 185.158.133.1 | 3600 |
-   | TXT | _lovable | *(paste the exact `lovable_verify=…` string shown in Project Settings → Domains → jbj.ae → Configure)* | 3600 |
-3. **Keep** your MX / SPF / DKIM / DMARC records untouched (those are for email, separate from web hosting).
-4. **Confirm nameservers** are Hostinger's defaults (`ns1.dns-parking.com` + `ns2.dns-parking.com`, or `ns1.hostinger.com` + `ns2.hostinger.com`). If they were changed to Cloudflare or anything else, either switch them back **or** manage DNS at that provider instead — never split.
+- **Owner Portal**: `OwnerDashboard`, `OwnerCRM` (pipeline + leads), `HR` (Employees, Positions, Approvals, Payroll, AI Recruiting), `DocumentStudio`, `Inbox`, `Calendar`, `Tasks`, `Notes`, `MarketingHub`, `Reports`.
+- **Website**: `Home`, `AIHomeFinder`, `Projects`, `ProjectDetail`, `Developers`, `Areas`, `MarketIntelligence`, `Compare`, `Mortgage`, `News`, `Guides`, `FAQ`, `Search overlay`.
+- **Active state sweep**: ripgrep for `data-[state=active]:bg-black`, `bg-black text-white`, `aria-selected:bg-black`, `border-black`, replace with emerald state classes.
 
-### Step 3 — If Cloudflare is in the path (Path B only)
+## 5. Contrast audit + verification
 
-1. In Cloudflare DNS, set both `@` and `www` records to **DNS-only (grey cloud)**, not proxied (orange cloud), at least until Lovable shows Active.
-2. In Lovable → Project Settings → Domains → `jbj.ae` → **Configure → Advanced**, check **"Domain uses Cloudflare or a similar proxy"**. This switches Lovable to CNAME verification, which is what Cloudflare needs.
-3. Only after Lovable shows **Active**, you may turn the orange cloud back on. Cloudflare must have "Full (strict)" SSL mode, not "Flexible" (Flexible is what causes `ERR_SSL_PROTOCOL_ERROR` loops).
+- Run existing `scripts/contrast/check-rendered.mjs` and `check-same-tone.mjs` against the full route list; fix every offender.
+- Playwright pass at 1280×1800 over: `/owner/dashboard`, `/owner/crm`, `/owner/hr`, `/owner/documents`, `/owner/inbox`, `/`, `/ai-home-finder`, `/projects`, `/developers`, `/market-intelligence`. Screenshots saved to `/tmp/browser/phase2/` as proof.
+- Add a CI guard (`scripts/contrast/check-banned-states.mjs`) that fails on `bg-black` in interactive state selectors and on `text-white` inside `[data-surface="champagne"]`.
 
-### Step 4 — Re-verify in Lovable
+## Technical details
 
-1. Project Settings → Domains → `jbj.ae` → **⋯ → Verify / Retry**.
-2. Wait for status to move: `Verifying` → `Setting up` → **Active**. SSL is provisioned automatically by Lovable once DNS is clean (Let's Encrypt; takes 2–15 min typically, up to 72 h worst case).
-3. Set `jbj.ae` (or `www.jbj.ae`, whichever you prefer as canonical) as **Primary** so the other one 301-redirects to it.
+```text
+src/
+├─ index.css                 # tokens, surface contracts, banned-state overrides
+├─ components/ui/
+│  ├─ MetricCard.tsx         # NEW — single dashboard tile
+│  ├─ ActionStrip.tsx        # NEW — top action row primitive
+│  ├─ button.tsx             # ensure variants map to data-surface/data-cta
+│  └─ icon-tile.tsx          # already canonical, enforce via lint
+├─ pages/owner/
+│  ├─ DocumentStudio.tsx     # full layout rebuild on PageShell + grid
+│  ├─ Dashboard.tsx          # swap tiles → MetricCard
+│  ├─ HR/*.tsx               # swap tiles → MetricCard
+│  └─ CRM/*.tsx              # ActionStrip + MetricCard, kill black states
+└─ scripts/contrast/
+   └─ check-banned-states.mjs  # NEW lint guard
+```
 
-### Step 5 — Validate
+Out of scope: data model changes, new features, copy edits, animation work beyond existing hover transitions.
 
-From any machine:
-- `dig jbj.ae +short` → must return **only** `185.158.133.1`
-- `dig www.jbj.ae +short` → must return `185.158.133.1`
-- `curl -sI https://jbj.ae` → must return `HTTP/2 200` with a Let's Encrypt cert
-- Browser hard-refresh (Cmd/Ctrl-Shift-R), clear HSTS for `jbj.ae` if Chrome still cached the SSL error (chrome://net-internals/#hsts → Delete domain).
+## Deliverable
 
-## Long-term recommendations to prevent recurrence
-
-1. **One DNS authority, always.** Either Hostinger DNS *or* Cloudflare DNS — never both partially. Mixed authority is the #1 cause of "verified but offline" domains.
-2. **Add `www` AND apex explicitly** in Lovable. Pick one as Primary; the other redirects. Don't rely on the registrar's "www redirect" toggle — it conflicts with Lovable's own A record.
-3. **CAA record (optional, recommended).** Add `CAA @ 0 issue "letsencrypt.org"` so SSL re-issuance never fails. If you have a restrictive CAA from a previous host, Let's Encrypt is blocked silently.
-4. **Lower TTL to 300 before any future DNS change**, then raise back to 3600 after. Makes rollbacks instant.
-5. **Don't park the domain anywhere else.** Hostinger auto-attaches parking when a domain isn't assigned to a hosting plan — that's what reintroduced the wrong A record. In hPanel, ensure the domain is **not assigned to any Hostinger hosting plan / website builder** (Websites → Remove `jbj.ae` from any plan).
-6. **Monitoring.** Set up a free uptime check (UptimeRobot / BetterStack) on `https://jbj.ae` so the next time DNS drifts you get an alert in minutes, not days.
-7. **Document the canonical config** somewhere in your team's runbook: registrar = Hostinger, DNS host = Hostinger, web host = Lovable, A `@` and A `www` = `185.158.133.1`, SSL = Lovable-managed Let's Encrypt.
-
-## What I will do in build mode
-
-Nothing in code — this is a registrar-side fix. After you apply Steps 2–4 at Hostinger and Lovable shows the domain as **Active**, ping me and I will:
-- Verify both URLs (`https://jbj.ae`, `https://www.jbj.ae`) return the live app from inside the sandbox (curl + Playwright screenshot).
-- Confirm the apex/www redirect direction matches your Primary choice.
-- Save a project memory note locking the canonical DNS config so future agents don't re-suggest a Cloudflare or Vercel swap.
-
-## Open question before you proceed
-
-Are you currently using **Cloudflare** in front of `jbj.ae` (i.e. did you point Hostinger's nameservers to Cloudflare at any point)? Answer changes Step 2 vs Step 3:
-- **No / not sure** → follow Path A (direct Hostinger → Lovable).
-- **Yes** → follow Path B (keep Cloudflare, grey-cloud it, enable Lovable's proxy mode).
+One PR-style change set + Playwright screenshots of all audited routes showing: emerald-only active states, identical metric-card layouts, redesigned Document Studio, contrast-clean top strips. Each screenshot attached in the final reply as visual proof.
