@@ -522,13 +522,7 @@ function composeJobOffer(input: ComposerInput): string {
   const companyName = "J B J GLOBAL REAL ESTATE L.L.C S.O.C";
   const officeAddress = "Office SM1-195, Port Saeed, Deira, Dubai, UAE";
   const startDate = esc(formatHumanDate(f.startDate) || f.startDate || "[Start Date]");
-  const salary = esc(filledOr(f.salary, "[Amount]"));
-  const commission = esc(filledOr(f.commission, "[Commission structure]"));
-  const allowances = esc(filledOr(f.allowances, "[If any]"));
-  const paymentCycle = esc(filledOr(f.paymentCycle, "Monthly / upon company receipt of commission / other"));
   const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"));
-  const authorizedSignatory = esc(input.ownerName || "Jane Bou Jaoude");
-  const authorizedTitle = esc(input.ownerTitle || "Founder & CEO");
 
   const candidateIdentity = paragraph(
     `Candidate identity for this offer: <strong>${candidateName}</strong>, holding Passport No. <strong>${passport}</strong>, holding Emirates ID No. <strong>${emiratesId}</strong>, with nationality recorded as <strong>${nationality}</strong>, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone at <strong>${phone}</strong>.`,
@@ -536,26 +530,31 @@ function composeJobOffer(input: ComposerInput): string {
 
   const employmentTerms = termsTable(
     [
-      ["Job Title", filledOr(f.jobTitle, "")],
-      ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate],
-      ["Place of Work", officeAddress],
-      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday")],
-      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits")],
-      ["Basic Salary", f.salary ? `AED ${f.salary} per month` : ""],
-      ["Commission Structure", filledOr(f.commission, "")],
-      ["Allowances", filledOr(f.allowances, "")],
-      ["Payment Cycle", filledOr(f.paymentCycle, "")],
-      ["Probation Period", filledOr(f.probation, "Up to six (6) months")],
-      ["Reporting Manager", filledOr(f.reportingManager, "")],
+      ["Job Title", filledOr(f.jobTitle, ""), "jobTitle"],
+      ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate, "startDate"],
+      ["Place of Work", officeAddress, "officeAddress"],
+      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"), "workingHours"],
+      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits"), "attendance"],
+      ["Probation Period", filledOr(f.probationPeriod || f.probation, "Up to six (6) months"), "probationPeriod"],
+      ["Reporting Line", filledOr(f.reportingLine || f.reportingManager, ""), "reportingLine"],
     ],
     "Terms of Employment",
   );
+
+  const compensationTerms = compensationStructureTable([
+    ["Basic Salary", formatMonthlySalary(f.salary), "salary"],
+    ["Commission Structure", filledOr(f.commission, ""), "commission"],
+    ["Allowances", filledOr(f.allowances, ""), "allowances"],
+    ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
+  ]);
+
+  const commissionRowsTable = commissionTable(input.commissionRows || []);
 
   const clauses = [
     offerClause(1, "Position", `Your position will be <strong>${jobTitle}</strong>. Your duties include, but are not limited to, real estate sales/leasing, lead handling, client follow-up, developer coordination, CRM updates, property presentations, marketing support, and any other duties reasonably assigned by the Company.`),
     offerClause(2, "Start Date", `Your expected start date is <strong>${startDate}</strong>.`),
     offerClause(3, "Place of Work", `Your primary place of work will be <strong>${officeAddress}</strong>, with field visits, developer offices, client meetings, property viewings, and remote work where approved by the Company. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy.`),
-    offerClause(4, "Compensation", `Your compensation shall be:<br/>Basic Salary: AED <strong>${salary}</strong> per month / Commission-only structure: <strong>${commission}</strong><br/>Commission: <strong>${commission}</strong><br/>Allowances: <strong>${allowances}</strong><br/>Payment Cycle: <strong>${paymentCycle}</strong><br/>No commission is earned unless and until the Company receives the relevant commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing.`),
+    offerClause(4, "Compensation", `The compensation, allowance, payment-cycle and commission details are set out in the tables above. No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents, UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
     offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || "up to six months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract.`),
     offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, documents, contracts, business methods, and internal policies.`),
     offerClause(7, "Leads and Clients", `All leads, inquiries, clients, prospects, contacts, databases, property owners, developers, landlords, sellers, buyers, tenants, and investors introduced, generated, received, accessed, assigned, or handled during your work are the exclusive business assets of the Company. You may not use, transfer, sell, leak, copy, export, screenshot, close, redirect, or complete any transaction involving Company leads or clients outside the Company, during or after employment.`),
@@ -583,6 +582,8 @@ function composeJobOffer(input: ComposerInput): string {
     paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency, subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
     candidateIdentity,
     employmentTerms,
+    compensationTerms,
+    commissionRowsTable,
     clauses,
     closing,
     signatureBlock({
