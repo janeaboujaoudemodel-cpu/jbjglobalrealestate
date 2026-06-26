@@ -46,18 +46,23 @@ export function DeveloperLogo({
   // Shared label renderer — when a logo is missing, keep the identical
   // champagne container but scale/wrap the actual developer wordmark so it
   // fits inside the plate without cropping in every dropdown/list.
-  const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]") => {
+  const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]", scale: "compact" | "card" = "compact") => {
     const raw = (name || alt || "Developer").trim();
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
     const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim() || raw;
     const displayName = cleaned.toUpperCase();
     const compactLength = displayName.replace(/\s+/g, "").length;
-    const sizeClass =
-      compactLength <= 4 ? "text-[12px]"
-      : compactLength <= 6 ? "text-[10px]"
-      : compactLength <= 9 ? "text-[8px]"
-      : compactLength <= 14 ? "text-[7px]"
-      : "text-[6px]";
+    const sizeClass = scale === "card"
+      ? compactLength <= 6 ? "text-4xl"
+        : compactLength <= 10 ? "text-3xl"
+        : compactLength <= 16 ? "text-2xl"
+        : compactLength <= 24 ? "text-xl"
+        : "text-lg"
+      : compactLength <= 4 ? "text-[12px]"
+        : compactLength <= 6 ? "text-[10px]"
+        : compactLength <= 9 ? "text-[8px]"
+        : compactLength <= 14 ? "text-[7px]"
+        : "text-[6px]";
     return (
       <div
         className={cn(containerClass, "[container-type:size]")}
@@ -120,15 +125,7 @@ export function DeveloperLogo({
     );
     if (!valid) {
       if (name || alt) {
-        // Use a slightly larger label inside the big card container.
-        const raw = (name || alt || "Developer").trim();
-        return (
-          <div className={cardContainer} aria-label={raw} title={raw} data-developer-nameplate>
-            <span className="font-bold tracking-normal leading-tight text-center text-[#1A1A1A] text-2xl uppercase whitespace-normal break-words [overflow-wrap:anywhere]">
-              {raw}
-            </span>
-          </div>
-        );
+        return renderNameLabel(cardContainer, "text-[#1A1A1A]", "card");
       }
       return renderNameLabel(cardContainer, "text-[#1A1A1A]");
     }
