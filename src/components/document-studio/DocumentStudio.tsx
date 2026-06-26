@@ -147,7 +147,26 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   const pick = (...keys: string[]) => keys.map((k) => all[k]).find((v) => typeof v === "string" && v.trim());
   const set = (k: string, v?: any) => { if (typeof v === "string" && v.trim()) out[k] = v.trim(); };
 
-  set("recipientName", pick("recipientName", "fullNameAsPerId", "fullName", "nameAsPerId", "name", "applicantName"));
+  const cleanName = (value?: string) => (value || "")
+    .replace(/^\s*(?:full\s+name\s+(?:as\s+per\s+(?:id|passport)|on\s+passport)|candidate\s+name|name)\s*(?:is|:|-)?\s*/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  const mrzLine = text.split(/\n/).find((line) => /^P<|^[A-Z0-9<]{20,}$/.test(line.trim()))?.trim() || "";
+  const mrzMatch = mrzLine.match(/P<[A-Z]{3}([A-Z<]+)<<([A-Z<]+)/i) || mrzLine.match(/^([A-Z<]+)<<([A-Z<]+)/i);
+  const mrzFullName = mrzMatch ? cleanName(`${mrzMatch[2].replace(/<+/g, " ")} ${mrzMatch[1].replace(/<+/g, " ")}`) : "";
+  const nameCandidates = [
+    pick("fullNameAsPerPassport", "passportFullName", "passport_name", "nameOnPassport"),
+    pick("fullNameAsPerId", "fullNameAsPerID", "idFullName", "emiratesIdFullName"),
+    pick("recipientName", "fullName", "nameAsPerId", "name", "applicantName"),
+    mrzFullName,
+    text.match(/(?:full\s+name\s+as\s+per\s+passport|name\s+on\s+passport|passport\s+full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1],
+    text.match(/(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1],
+  ].map(cleanName).filter(Boolean);
+  nameCandidates.sort((a, b) => {
+    const score = (name: string) => (/\b[A-Z]\.?\b(?:\s*[A-Z]\.?\b)+/i.test(name) ? 0 : 1000) + name.length + (name.split(/\s+/).length >= 3 ? 100 : 0);
+    return score(b) - score(a);
+  });
+  set("recipientName", nameCandidates[0]);
   set("emiratesId", pick("emiratesId", "emiratesID", "emirates_id", "eid", "idNumber", "id_number", "eidNumber"));
   set("passportNumber", pick("passportNumber", "passportNo", "passport_no", "passport", "passport_number"));
   set("homeAddress", pick("homeAddress", "residentialAddress", "residential_address", "address", "home_address"));
