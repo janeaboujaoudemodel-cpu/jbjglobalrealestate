@@ -198,8 +198,8 @@ export const ProjectAIAnalyzer = ({
   const yoyChange = sections?.pricePerSqft ? extractYoY(sections.pricePerSqft) : null;
   const priceChartData = areaPriceSqft
     ? [
-        { name: areaName, value: areaPriceSqft, fill: "#10B981" },
-        { name: "Dubai Avg", value: DUBAI_AVG, fill: "#3B82F6" },
+        { name: areaName, value: areaPriceSqft, fill: "#064E3B" },
+        { name: "Dubai Avg", value: DUBAI_AVG, fill: "#B89555" },
       ]
     : null;
 
@@ -328,28 +328,39 @@ export const ProjectAIAnalyzer = ({
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
               </div>
-              <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-6 shadow-sm border border-[color:var(--emerald-1)]/30 flex flex-col items-center justify-center text-center">
-                <Star className="w-9 h-9 fill-gold text-[#1A1A1A] mb-2 drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] relative z-10" />
+              <div
+                data-surface="emerald"
+                data-no-contrast-guard
+                className="relative overflow-hidden rounded-2xl p-6 shadow-md flex flex-col items-center justify-center text-center"
+                style={{
+                  backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+                  border: "1px solid rgba(184,149,85,0.45)",
+                  boxShadow: "0 12px 28px -10px rgba(6,78,59,0.55), 0 0 0 1px rgba(184,149,85,0.20)",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Star className="w-9 h-9 mb-2 relative z-10 allow-white" style={{ fill: "#B89555", color: "#B89555" }} />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
-                      <span className="text-6xl font-extrabold bg-gradient-to-br to-blue-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.4)]">{ratingScore}</span>
+                      <span className="text-6xl font-extrabold allow-white" style={{ color: "#FFFFFF", textShadow: "0 2px 12px rgba(0,0,0,0.45)" }}>{ratingScore}</span>
                     </div>
-                    <div className="text-[color:var(--emerald-1)] text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
+                    <div className="text-sm font-bold tracking-wide uppercase mt-1 relative z-10" style={{ color: "#D4B062" }}>/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
-                      <span className="inline-block w-2 h-2 rounded-full jj-surface-emerald animate-pulse" />
-                      <span className="text-[color:var(--emerald-1)] text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
+                      <span className="inline-block w-2 h-2 rounded-full animate-pulse" style={{ background: "#D4B062" }} />
+                      <span className="text-[10px] font-semibold uppercase tracking-widest allow-white" style={{ color: "#FFFFFF" }}>Strong Buy Signal</span>
                     </div>
                     {sections?.rating && (
-                      <p className="text-foreground/80 text-xs mt-3 leading-relaxed font-medium relative z-10">
+                      <p className="text-xs mt-3 leading-relaxed font-medium relative z-10 allow-white" style={{ color: "rgba(255,255,255,0.92)" }}>
                         — {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="text-red-600 text-xs font-medium relative z-10">Issue: Rating not available.</p>
+                  <p className="text-red-300 text-xs font-medium relative z-10">Issue: Rating not available.</p>
                 )}
               </div>
+
             </div>
 
             {/* Row 2: Price Per Sqft (with chart) + Supply vs Demand (with progress) */}
@@ -388,7 +399,7 @@ export const ProjectAIAnalyzer = ({
                             formatter={(v: number) => [`AED ${v.toLocaleString()}/sqft`, ""]}
                             contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e5e7eb" }}
                           />
-                          <ReferenceLine x={DUBAI_AVG} stroke="#3B82F6" strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: "#3B82F6" }} />
+                          <ReferenceLine x={DUBAI_AVG} stroke="#B89555" strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: "#B89555" }} />
                           <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={28}>
                             {priceChartData.map((entry, i) => (
                               <Cell key={i} fill={entry.fill} />
@@ -415,7 +426,7 @@ export const ProjectAIAnalyzer = ({
               {/* Supply vs Demand */}
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                  <TrendingUp className="w-5 h-5" style={{ color: "#064E3B" }} />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
                 </div>
 
@@ -423,13 +434,13 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="mb-3">
                       <div className="flex items-end gap-1 mb-1">
-                        <span className="text-3xl font-bold text-blue-600">{absorptionRate}%</span>
+                        <span className="text-3xl font-bold" style={{ color: "#064E3B" }}>{absorptionRate}%</span>
                         <span className="text-sm text-[#1A1A1A] font-semibold mb-0.5">absorption rate</span>
                       </div>
-                      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
+                      <div className="relative h-2.5 w-full overflow-hidden rounded-full" style={{ background: "#EFE6D6" }}>
                         <div
                           className="h-full rounded-full transition-all"
-                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #3B82F6, #10B981)` }}
+                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #B89555, #064E3B)` }}
                         />
                       </div>
                       <div className="flex justify-between text-[10px] text-[#1A1A1A]/90 font-semibold mt-1">
@@ -464,15 +475,21 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-gradient-to-br from-blue-50 via-white to-indigo-50/60 rounded-xl p-5 text-center border border-blue-200/80 shadow-[0_4px_20px_rgba(184,149,85,0.15)]">
-                          <div className="text-4xl font-extrabold bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(184,149,85,0.3)]">{rentalYield}%</div>
-                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
+                        <div
+                          className="rounded-xl p-5 text-center shadow-sm"
+                          style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.35)" }}
+                        >
+                          <div className="text-4xl font-extrabold" style={{ color: "#B89555" }}>{rentalYield}%</div>
+                          <div className="text-[#1A1A1A] text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 rounded-xl p-5 text-center border border-[color:var(--emerald-1)]/30/80 shadow-[0_4px_20px_rgba(16,185,129,0.12)]">
-                          <div className="text-4xl font-extrabold bg-gradient-to-br bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.35)]">{appreciation}%</div>
-                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
+                        <div
+                          className="rounded-xl p-5 text-center shadow-sm"
+                          style={{ background: "#F7F2EA", border: "1px solid rgba(6,78,59,0.30)" }}
+                        >
+                          <div className="text-4xl font-extrabold" style={{ color: "#064E3B" }}>{appreciation}%</div>
+                          <div className="text-[#1A1A1A] text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
                     </div>
