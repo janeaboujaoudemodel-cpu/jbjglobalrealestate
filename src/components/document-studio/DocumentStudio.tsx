@@ -1007,7 +1007,9 @@ function StudioShell({
       if (Array.isArray(s.customFields)) setCustomFields(s.customFields);
       if (Array.isArray(s.commissionRows)) setCommissionRows(s.commissionRows);
       if (typeof s.docLanguage === "string") setDocLanguage(s.docLanguage);
+      if (s.chromeTheme === "champagne" || s.chromeTheme === "emerald") setChromeTheme(s.chromeTheme);
       if (s.marks && typeof s.marks === "object") setMarks((m) => ({ ...m, ...s.marks }));
+      if (typeof s.manualPages === "number") setManualPages(Math.max(0, s.manualPages));
       if (typeof s.emailTo === "string") setEmailTo(s.emailTo);
       toast.success("Draft restored", {
         description: s.savedAt
