@@ -266,14 +266,9 @@ export const AdminOverviewDashboard = () => {
     }
   };
 
-  const getSeverityColor = (severity?: RecentActivity["severity"]) => {
-    switch (severity) {
-      case "success": return "text-emerald-500 jj-surface-emerald-soft";
-      case "warning": return "text-amber-500 bg-amber-500/10";
-      case "error": return "text-red-500 bg-red-500/10";
-      default: return "text-blue-500 bg-blue-500/10";
-    }
-  };
+  // Locked emerald-on-dark tone for ALL backend activity icons (white glyph).
+  const getSeverityColor = (_severity?: RecentActivity["severity"]) =>
+    "jj-icon-tile-emerald text-white [&_svg]:text-white allow-white";
 
   if (loading) {
     return (
@@ -362,7 +357,7 @@ export const AdminOverviewDashboard = () => {
             >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 rounded-lg bg-[#EFE6D6]/10 text-[#1A1A1A] group-hover:bg-[#EFE6D6] group-hover:text-[#1A1A1A] transition-colors">
+                  <div className="jj-icon-tile-emerald allow-white inline-flex items-center justify-center w-10 h-10 rounded-xl text-white [&_svg]:text-white" data-surface="emerald" data-icon-tile="" data-icon-tile-tone="emerald">
                     {stat.icon}
                   </div>
                   {stat.trend && stat.change && (
@@ -412,7 +407,12 @@ export const AdminOverviewDashboard = () => {
                   className="justify-start h-auto py-3 px-3 min-w-0 overflow-hidden"
                   onClick={() => navigate(action.href)}
                 >
-                  <span className="p-1.5 rounded bg-[#EFE6D6]/10 text-[#1A1A1A] mr-2 flex-shrink-0">
+                  <span
+                    className="jj-icon-tile-emerald allow-white inline-flex items-center justify-center w-8 h-8 rounded-lg text-white [&_svg]:text-white mr-2 flex-shrink-0"
+                    data-surface="emerald"
+                    data-icon-tile=""
+                    data-icon-tile-tone="emerald"
+                  >
                     {action.icon}
                   </span>
                   <span className="text-sm font-medium truncate">{action.label}</span>
@@ -447,7 +447,12 @@ export const AdminOverviewDashboard = () => {
                       animate={{ opacity: 1, x: 0 }}
                       className="flex items-start gap-3 p-4 hover:bg-[#F7F2EA] transition-colors"
                     >
-                      <div className={`p-2 rounded-lg ${getSeverityColor(activity.severity)}`}>
+                      <div
+                        className={`inline-flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0 ${getSeverityColor(activity.severity)}`}
+                        data-surface="emerald"
+                        data-icon-tile=""
+                        data-icon-tile-tone="emerald"
+                      >
                         {getActivityIcon(activity.type)}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -472,18 +477,23 @@ export const AdminOverviewDashboard = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="bg-amber-50 border-2 border-amber-200">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/40">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-amber-500/20">
-                    <AlertTriangle className="w-5 h-5 text-amber-600" />
+                  <div
+                    className="jj-icon-tile-emerald allow-white inline-flex items-center justify-center w-10 h-10 rounded-xl text-white [&_svg]:text-white"
+                    data-surface="emerald"
+                    data-icon-tile=""
+                    data-icon-tile-tone="emerald"
+                  >
+                    <AlertTriangle className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-semibold text-amber-800">
+                    <p className="font-semibold text-[#1A1A1A]">
                       {stats.pendingApprovals} Pending Approval{stats.pendingApprovals > 1 ? "s" : ""}
                     </p>
-                    <p className="text-sm text-amber-600">
+                    <p className="text-sm text-[#1A1A1A]/70">
                       New project imports and listings awaiting media verification require your review
                     </p>
                   </div>
