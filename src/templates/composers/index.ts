@@ -185,7 +185,13 @@ const identityValue = (fields: Record<string, string>, keys: string[], source: s
 };
 
 const offerIdentity = (fields: Record<string, string>) => {
-  const source = Object.values(fields).filter(Boolean).join("\n");
+  // Build a free-text "source" haystack ONLY from real values. Excluding bracketed
+  // placeholder text like "[Employee Address]" or "[Nationality]" prevents the
+  // identity regexes from capturing the trailing "]" and rendering "Address: ]".
+  const source = Object.values(fields)
+    .filter((value): value is string => typeof value === "string" && !!value.trim())
+    .filter((value) => !/^\[[^\]]+\]$/.test(value.trim()))
+    .join("\n");
   const rawPhone = identityValue(fields, ["recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"], source, /(?:phone|mobile|whatsapp)\s*(?:is|:|-)?\s*((?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,})/i);
   return {
     name: bestLegalName(fields, source),

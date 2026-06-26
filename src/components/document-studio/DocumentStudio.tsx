@@ -294,15 +294,14 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
  */
 const renderPerPageUserSignature = (name?: string) => {
   const legalName = escapeSignatureHtml((name || "[Candidate Name]").trim());
-  // 🔒 LOCKED markup — see block comment above.
+  // Inner pages render a compact INITIALS strip only. The full
+  // "Accepted by Candidate / Signature" block and the authorised signatory
+  // appear ONLY on the final page (via composer signatureBlock).
   return `
-    <div data-rendered-page-signature="1" data-locked-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="color:#1A1A1A;min-width:330px;max-width:360px;">
-        <div style="font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1.2;margin-bottom:34px;">Accepted by Candidate: <span style="letter-spacing:0;text-transform:none;font-size:11px;font-weight:600;">${legalName}</span></div>
-        <div style="display:flex;align-items:flex-end;gap:10px;">
-          <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
-          <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
-        </div>
+    <div data-rendered-page-signature="1" data-locked-signature="1" data-initials-strip="1" style="margin-top:auto;padding:14px 0 8px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <div style="color:#1A1A1A;min-width:230px;max-width:280px;display:flex;align-items:flex-end;gap:10px;">
+        <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:9.5px;line-height:1;padding-bottom:2px;" title="${legalName}">Candidate Initials:</div>
+        <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;min-width:120px;"></div>
       </div>
     </div>
     <div data-rendered-page-divider="1" data-locked-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:10px 0 0;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
@@ -462,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 7;
+  const DOCUMENT_FIX_VERSION = 8;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
