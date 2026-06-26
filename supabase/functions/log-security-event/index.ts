@@ -1,16 +1,33 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const ALLOWED_VIOLATION_TYPES = new Set([
+  "devtools_open", "right_click", "view_source", "copy_attempt",
+  "screenshot_attempt", "automation_detected", "rapid_navigation",
+  "scraping_pattern", "console_access", "iframe_breakout",
+]);
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // SECURITY: aggressive per-IP rate limit so an attacker can't spam this
+  // unauthenticated endpoint to fill security_events / scraping_blocks.
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "log-security-event", maxRequests: 30, windowMinutes: 5, keyType: "ip" },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
+
 
   try {
     // In Lovable preview/dev, resize + iframe behavior can trigger false positives.
