@@ -3331,7 +3331,9 @@ function StudioShell({
                                       return m.stamp ? { ...m, stamp: { ...m.stamp, width: next } } : m;
                                     })}
                                     ariaLabel="Stamp"
-                                    hint="Click to change · Drag to move"
+                                    locked={!!marks.stampLocked}
+                                    onToggleLock={() => setMarks((m) => ({ ...m, stampLocked: !m.stampLocked }))}
+                                    hint={marks.stampLocked ? "Locked · click 🔒 to unlock" : "Drag to move · click 🔒 to lock"}
                                   >
                                     <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 220, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, background: "transparent" }} className="block pointer-events-none" />
                                   </DraggableMark>
