@@ -298,7 +298,7 @@ function StudioShell({
   const [sending, setSending] = useState(false);
 
   const [zoom, setZoom] = useState(100);
-  const [aiOpen, setAiOpen] = useState(true);
+  const [aiOpen, setAiOpen] = useState(false);
   const [search, setSearch] = useState("");
 
   // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
@@ -1355,7 +1355,7 @@ function StudioShell({
 
       `}</style>
       {/* ─── Topbar ─── */}
-      <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 xl:flex-row xl:items-center xl:px-5">
+      <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 lg:flex-row lg:items-center lg:px-5">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
             <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
@@ -1374,7 +1374,7 @@ function StudioShell({
           setStep(s);
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
-        <div className="studio-action-row xl:ml-auto justify-start xl:justify-end">
+        <div className="studio-action-row lg:ml-auto justify-start lg:justify-end">
           {/* Theme switcher — Champagne / Emerald letterhead */}
           <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme" data-surface="champagne">
             <button

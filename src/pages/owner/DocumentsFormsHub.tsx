@@ -761,11 +761,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           {/* DOCUMENT EDITOR */}
           <TabsContent value="documents" className="mt-4">
             <Card className="p-6 bg-[#F7F2EA] border-[#B89555]/30">
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col sm:flex-row items-start gap-4 min-w-0">
                 <div className="shrink-0 w-12 h-12 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
                   <FileEdit className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="font-semibold text-[#1A1A1A]">Premium Document Editor</div>
                   <p className="text-sm text-[#1A1A1A]/70 mt-1">
                     Full-page rich editor with templates (Offer Letter, MOU, NOC, Tenancy, Invoice, Handover…),
@@ -1081,7 +1081,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           <div className="border-t border-[#B89555]/20 mt-4 pt-3">
             <button
               type="button"
-              onClick={() => { setNewEnvelopeOpen(false); navigate("/e-signature/upload"); }}
+              onClick={() => { setNewEnvelopeOpen(false); navigate("/owner/documents/forms/create"); }}
               className="w-full text-left p-3 rounded-lg border border-dashed border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] hover:bg-[#F7F2EA] transition flex items-center gap-3"
             >
               <Upload className="w-4 h-4 text-[#1A1A1A]/70" />
