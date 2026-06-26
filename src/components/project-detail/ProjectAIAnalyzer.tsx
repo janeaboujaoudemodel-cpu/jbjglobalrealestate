@@ -368,12 +368,17 @@ export const ProjectAIAnalyzer = ({
               {/* Price Per Sqft */}
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <BarChart3 className="w-5 h-5 text-[color:var(--emerald-1)]" />
+                  <BarChart3 className="w-5 h-5" style={{ color: "#064E3B" }} />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
                   {yoyChange !== null && (
-                    <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
- yoyChange >= 0 ? "jj-emerald-soft text-[color:var(--emerald-1)]" : "bg-red-100 text-red-600"
- }`}>
+                    <span
+                      className="ml-auto text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={
+                        yoyChange >= 0
+                          ? { background: "rgba(6,78,59,0.10)", color: "#064E3B" }
+                          : { background: "rgba(220,38,38,0.10)", color: "#B91C1C" }
+                      }
+                    >
                       {yoyChange >= 0 ? "+" : ""}{yoyChange}% YoY
                     </span>
                   )}
@@ -383,11 +388,12 @@ export const ProjectAIAnalyzer = ({
                   <>
                     {/* Large price stat */}
                     <div className="mb-4">
-                      <div className="text-3xl font-bold text-[color:var(--emerald-1)]">
+                      <div className="text-3xl font-bold" style={{ color: "#064E3B" }}>
                         AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-[#1A1A1A]">/sqft</span>
                       </div>
                       <div className="text-xs text-[#1A1A1A]/90 font-semibold mt-0.5">{areaName} average</div>
                     </div>
+
 
                     {/* Bar chart */}
                     <div className="h-28 w-full">
