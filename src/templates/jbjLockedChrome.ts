@@ -62,7 +62,7 @@ export function jbjStampOverlayHtml(): string {
   return `<img src="${companyStampSrc}" alt="JBJ Company Stamp" aria-hidden="true"
     style="position:absolute;right:8px;bottom:4px;width:140px;height:140px;
            object-fit:contain;opacity:0.94;mix-blend-mode:multiply;
-           transform:rotate(-8deg);pointer-events:none;user-select:none;" />`;
+            transform:rotate(0deg);pointer-events:none;user-select:none;" />`;
 }
 
 /**
