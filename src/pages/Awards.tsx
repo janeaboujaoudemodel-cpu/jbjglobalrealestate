@@ -2,7 +2,8 @@ import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS, CONTACT_INFO } from "@/constants/stats";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { Trophy, Award as AwardIcon, ArrowUpRight } from "lucide-react";
-import awardsHeroVideo from "@/assets/videos/services-hero.mp4";
+import awardsHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json";
+const awardsHeroVideo = awardsHeroVideoAsset.url;
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 
 // Award images

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Building2, Eye } from 'lucide-react';
 import menuCorporateOffice from '@/assets/menu-corporate-office.jpg';
-import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
+import dubaiLandmarksVideoAsset from '@/assets/videos/dubai-landmarks-hero.mp4.asset.json';
+const dubaiLandmarksVideo = dubaiLandmarksVideoAsset.url;
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
 import { useDevelopers } from '@/hooks/useProjects';
 

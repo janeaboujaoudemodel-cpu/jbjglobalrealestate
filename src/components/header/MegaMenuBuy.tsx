@@ -1,7 +1,8 @@
 import React from 'react';
 import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Calculator, Wrench, Star } from 'lucide-react';
 import menuLuxuryPenthouse from '@/assets/menu-luxury-penthouse.jpg';
-import dubaiBuyingVideo from '@/assets/videos/dubai-buying-hero.mp4';
+import dubaiBuyingVideoAsset from '@/assets/videos/dubai-buying-hero.mp4.asset.json';
+const dubaiBuyingVideo = dubaiBuyingVideoAsset.url;
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuBuyProps {

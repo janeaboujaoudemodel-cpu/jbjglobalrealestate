@@ -21,7 +21,8 @@ import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import VideoBackground from "@/components/VideoBackground";
 import { IconTile } from "@/components/ui/icon-tile";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
-import marketIntelligenceVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
+import marketIntelligenceVideoAsset from "@/assets/videos/burj-khalifa-day-to-night.mp4.asset.json";
+const marketIntelligenceVideo = marketIntelligenceVideoAsset.url;
 
 
 const fadeInUp = {

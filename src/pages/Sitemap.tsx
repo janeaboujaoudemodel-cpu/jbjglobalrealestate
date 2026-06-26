@@ -10,7 +10,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import { SEOHead } from "@/components/SEOHead";
-import sitemapHeroVideo from "@/assets/videos/sitemap-hero.mp4";
+import sitemapHeroVideoAsset from "@/assets/videos/sitemap-hero.mp4.asset.json";
+const sitemapHeroVideo = sitemapHeroVideoAsset.url;
 import CTABand from "@/components/home/CTABand";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

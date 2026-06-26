@@ -9,7 +9,8 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
-import servicesHeroVideo from "@/assets/videos/services-hero.mp4";
+import servicesHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json";
+const servicesHeroVideo = servicesHeroVideoAsset.url;
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },

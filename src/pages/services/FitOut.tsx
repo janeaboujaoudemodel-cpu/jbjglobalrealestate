@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_INFO } from "@/constants/stats";
-import fitOutHeroVideo from "@/assets/videos/fit-out-hero.mp4";
+import fitOutHeroVideoAsset from "@/assets/videos/fit-out-hero.mp4.asset.json";
+const fitOutHeroVideo = fitOutHeroVideoAsset.url;
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },

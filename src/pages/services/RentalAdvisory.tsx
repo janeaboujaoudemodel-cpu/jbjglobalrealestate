@@ -29,7 +29,8 @@ import {
 import { SEOHead } from "@/components/SEOHead";
 
 // Import hero video
-import rentalAdvisoryHeroVideo from "@/assets/videos/dubai-rental-hero.mp4";
+import rentalAdvisoryHeroVideoAsset from "@/assets/videos/dubai-rental-hero.mp4.asset.json";
+const rentalAdvisoryHeroVideo = rentalAdvisoryHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 
 const fadeInUp = {

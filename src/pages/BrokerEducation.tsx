@@ -5,7 +5,8 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import brokerEducationHeroVideo from "@/assets/videos/broker-education-hero.mp4";
+import brokerEducationHeroVideoAsset from "@/assets/videos/broker-education-hero.mp4.asset.json";
+const brokerEducationHeroVideo = brokerEducationHeroVideoAsset.url;
 import { 
   GraduationCap, 
   BookOpen, 
