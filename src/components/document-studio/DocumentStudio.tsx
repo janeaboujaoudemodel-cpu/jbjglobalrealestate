@@ -1935,6 +1935,13 @@ function StudioShell({
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body,
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; }
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
+        [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(table, thead, tbody, tr, th, td) {
+          background-clip: padding-box !important;
+        }
+        [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body table {
+          background:#FDFBF7 !important;
+          isolation:isolate !important;
+        }
         [data-document-studio-overlay] :is(.studio-topbar, [data-document-studio-toolbar], .studio-action-row) [data-surface="champagne"][class*="rounded"],
         [data-document-studio-overlay] :is(.studio-topbar, [data-document-studio-toolbar], .studio-action-row) [data-jbj-button] {
           container-type: normal !important;
@@ -3294,8 +3301,9 @@ function StudioShell({
                               {/* Engraved JBJ monogram watermark — centered on
                                   every page, champagne-gold tint, fully visible
                                   (no cropping), tight letter spacing. Painted
-                                  via CSS mask so the color matches the letter-
-                                  head accent exactly. */}
+                                  via CSS mask. It is behind all body text and
+                                  tables remain opaque so it never bleeds through
+                                  grid/table content. */}
                               {!noChrome && (
                                 <div
                                   aria-hidden
@@ -3331,7 +3339,7 @@ function StudioShell({
                                         inset: 0,
                                         transform: "translate(1.2px, 1.6px)",
                                         background: "#6F5526",
-                                        opacity: 0.07,
+                                        opacity: 0.025,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3350,7 +3358,7 @@ function StudioShell({
                                         inset: 0,
                                         transform: "translate(-1px, -1.2px)",
                                         background: "#FFFFFF",
-                                        opacity: 0.42,
+                                        opacity: 0.22,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3368,7 +3376,7 @@ function StudioShell({
                                         position: "absolute",
                                         inset: 0,
                                         background: "#B89555",
-                                        opacity: 0.12,
+                                        opacity: 0.045,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3521,8 +3529,8 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 248}
-                                    y={marks.stampXY?.y ?? Math.max(500, Math.min(720, PAGE_H - (isFirst ? chromeHeights.header : 0) - (isLast ? chromeHeights.footer : 0) - 360))}
+                                    x={marks.stampXY?.x ?? 168}
+                                    y={marks.stampXY?.y ?? Math.max(660, Math.min(820, PAGE_H - (isLast ? chromeHeights.footer : 0) - 300))}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
