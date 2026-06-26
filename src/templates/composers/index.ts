@@ -108,6 +108,56 @@ const stripForbiddenIdentityFragments = (value?: string): string => {
     .trim();
 };
 
+const cleanLegalName = (value?: string): string =>
+  stripForbiddenIdentityFragments(value)
+    .replace(/^\s*(?:full\s+name\s+(?:as\s+per\s+(?:id|passport)|on\s+passport)|candidate\s+name|name)\s*(?:is|:|-)?\s*/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const isInitialOnlyName = (value?: string): boolean => /\b[A-Z]\.?\b(?:\s*[A-Z]\.?\b)+/i.test(value || "");
+
+const mrzName = (value?: string): string => {
+  const line = (value || "").split(/\n/).find((part) => /^P<|^[A-Z0-9<]{20,}$/.test(part.trim()))?.trim() || "";
+  const match = line.match(/P<[A-Z]{3}([A-Z<]+)<<([A-Z<]+)/i) || line.match(/^([A-Z<]+)<<([A-Z<]+)/i);
+  if (!match) return "";
+  const surname = match[1].replace(/<+/g, " ").trim();
+  const given = match[2].replace(/<+/g, " ").trim();
+  return cleanLegalName(`${given} ${surname}`);
+};
+
+const bestLegalName = (fields: Record<string, string>, source: string): string => {
+  const candidates = [
+    fields.fullNameAsPerPassport,
+    fields.passportFullName,
+    fields.passport_name,
+    fields.nameOnPassport,
+    fields.fullNameAsPerId,
+    fields.fullNameAsPerID,
+    fields.idFullName,
+    fields.emiratesIdFullName,
+    fields.fullName,
+    fields.nameAsPerId,
+    fields.nameAsPerID,
+    fields.candidateName,
+    fields.recipientName,
+    fields.surname && fields.givenNames ? `${fields.givenNames} ${fields.surname}` : "",
+    fields.lastName && fields.firstName ? `${fields.firstName} ${fields.middleName || ""} ${fields.lastName}` : "",
+    mrzName(source),
+    firstMatch(source, /(?:full\s+name\s+as\s+per\s+passport|name\s+on\s+passport|passport\s+full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    firstMatch(source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
+  ]
+    .map(cleanLegalName)
+    .filter(Boolean)
+    .filter((name) => !/^\d+$/.test(name));
+
+  candidates.sort((a, b) => {
+    const aScore = (isInitialOnlyName(a) ? 0 : 1000) + Math.min(a.length, 120) + (a.split(/\s+/).length >= 3 ? 100 : 0);
+    const bScore = (isInitialOnlyName(b) ? 0 : 1000) + Math.min(b.length, 120) + (b.split(/\s+/).length >= 3 ? 100 : 0);
+    return bScore - aScore;
+  });
+  return candidates[0] || "";
+};
+
 const identityValue = (fields: Record<string, string>, keys: string[], source: string, ...patterns: RegExp[]) => {
   const direct = keys.map((key) => fields[key]).find((value) => typeof value === "string" && value.trim()) || "";
   const cleaned = stripForbiddenIdentityFragments(direct);
@@ -118,7 +168,7 @@ const identityValue = (fields: Record<string, string>, keys: string[], source: s
 const offerIdentity = (fields: Record<string, string>) => {
   const source = Object.values(fields).filter(Boolean).join("\n");
   return {
-    name: identityValue(fields, ["recipientName", "candidateName", "fullName", "fullNameAsPerId", "nameAsPerId"], source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name|name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    name: bestLegalName(fields, source),
     emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
     passport: identityValue(fields, ["passportNumber", "passport_number", "passportNo", "passport"], source, /passport(?:\s*(?:number|no\.?))?\s*(?:is|:|-)?\s*([A-Z0-9]{5,})/i),
     nationality: identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-)?\s*([^;\n]+)/i),
@@ -143,15 +193,18 @@ const offerClause = (n: number, heading: string, body: string) => `
 
 /* ───────────── Shared building blocks ───────────── */
 
-export function termsTable(rows: Array<[string, string | undefined]>, title = "Terms of Employment"): string {
+export function termsTable(rows: Array<[string, string | undefined, string?]>, title = "Terms of Employment"): string {
   const visible = rows.filter(([, v]) => (v || "").trim());
   if (visible.length === 0) return "";
   const body = visible
     .map(
-      ([k, v], i) => `
-      <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
-        <td style="padding:9px 14px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:38%;font-size:12px;">${esc(k)}</td>
-        <td style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v)}</td>
+      ([k, v, fieldKey], i) => `
+      <tr data-removable-field="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+        <td style="position:relative;padding:9px 38px 9px 14px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:38%;font-size:12px;">
+          ${esc(k)}
+          <button type="button" contenteditable="false" aria-label="Remove field" data-field-delete-control="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:1px solid ${GOLD}66;border-radius:999px;background:#FDFBF7;color:${INK};font-size:13px;line-height:16px;font-weight:700;opacity:0;cursor:pointer;">×</button>
+        </td>
+        <td data-field-value-cell="1" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v)}</td>
       </tr>`,
     )
     .join("");
@@ -224,8 +277,8 @@ export function commissionTable(rows: CommissionRow[]): string {
   const body = visible
     .map(
       (r, i) => `
-      <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
-        <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}</td>
+      <tr data-removable-field="1" data-field-key="commission" style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+        <td style="position:relative;padding:9px 34px 9px 12px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}<button type="button" contenteditable="false" aria-label="Remove field" data-field-delete-control="1" data-field-key="commission" style="position:absolute;right:7px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:1px solid ${GOLD}66;border-radius:999px;background:#FDFBF7;color:${INK};font-size:13px;line-height:16px;font-weight:700;opacity:0;cursor:pointer;">×</button></td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};white-space:nowrap;">${esc(r.rate) || "—"}</td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};">${esc(r.trigger) || "—"}</td>
       </tr>`,
@@ -248,10 +301,20 @@ export function commissionTable(rows: CommissionRow[]): string {
       <tbody>${body}</tbody>
     </table>
     <div data-pdf-section="commission-note" style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;page-break-inside:avoid;break-inside:avoid;">
-      Commissions are released once the brokerage has actually received the cleared funds from the buyer or developer.
+      Commission entitlement and payment timing are subject to the signed employment documents, UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations, and actual receipt of cleared funds by the Company from the buyer, seller, landlord, developer, client, or relevant third party.
     </div>`;
 
 }
+
+const formatMonthlySalary = (value?: string): string => {
+  const raw = filledOr(value, "");
+  if (!raw) return "";
+  if (/\b(aed|per\s+month|monthly|not\s+applicable|n\/?a)\b/i.test(raw)) return raw;
+  return `AED ${raw} per month`;
+};
+
+const compensationStructureTable = (rows: Array<[string, string | undefined, string?]>): string =>
+  termsTable(rows, "Compensation & Commission Structure");
 
 export function signatureBlock(opts: {
   ownerName?: string;
