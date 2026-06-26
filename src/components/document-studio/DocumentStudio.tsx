@@ -664,7 +664,7 @@ function StudioShell({
   const footerRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
   const [sheetH, setSheetH] = useState(0);
-  const [chromeHeights, setChromeHeights] = useState({ header: 180, footer: 86 });
+  const [chromeHeights, setChromeHeights] = useState({ header: 210, footer: 86 });
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
   const [manualPages, setManualPages] = useState<number>(snap?.manualPages || 0);
   // GLOBAL pagination rule: any composed document body is auto-split into
