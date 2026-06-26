@@ -34,32 +34,34 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "10px 32px 10px 24px",
+        padding: "14px 24px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "142px minmax(0,1fr)", columnGap: 18, minHeight: 126 }}
+        style={{ gridTemplateColumns: "132px minmax(0,1fr)", columnGap: 14, minHeight: 132 }}
       >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block object-contain"
-          style={{ width: 126, height: 126, background: "transparent", filter: t.monoFilter, margin: "auto 0", alignSelf: "center" }}
+          style={{ width: 118, height: 118, background: "transparent", filter: t.monoFilter, margin: "auto", alignSelf: "center", justifySelf: "center" }}
         />
-        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", paddingRight: 0, lineHeight: 1.05 }}>
+        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingRight: 0, lineHeight: 1, overflow: "visible" }}>
           <div
             className="font-bold"
             style={{
               display: "block",
               width: "100%",
-              fontSize: 24,
-              fontWeight: 850,
+              fontSize: 26,
+              fontWeight: 900,
               color: t.fg,
-              letterSpacing: 0,
-              lineHeight: 1.05,
+              letterSpacing: "-0.015em",
+              lineHeight: 1,
               whiteSpace: "nowrap",
+              transform: "scaleX(1.04)",
+              transformOrigin: "left center",
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
