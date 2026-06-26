@@ -520,15 +520,18 @@ All colors MUST be HSL.
     transition: background-color 5000s ease-in-out 0s;
   }
 
-  /* Prevent content from overflowing card containers on any language */
+  /* Prevent content from overflowing card containers on any language.
+     Use `break-word` (not `anywhere`) so short uppercase labels with
+     letter-spacing don't break per-letter into vertical strips. */
   .card,
   [class*="rounded-xl"],
   [class*="rounded-2xl"],
   [class*="rounded-lg"] {
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
     min-width: 0;
   }
+
 
   /* Flex children must not push parents wider than viewport */
   .flex > *,
