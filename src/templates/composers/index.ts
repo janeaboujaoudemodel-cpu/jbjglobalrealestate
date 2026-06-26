@@ -615,14 +615,20 @@ function composeJobOffer(input: ComposerInput): string {
     "Terms of Employment",
   );
 
-  const compensationTerms = compensationStructureTable([
-    ["Basic Salary", filledOr(formatMonthlySalary(f.salary), "Not applicable — fixed commission basis"), "salary"],
-    ["Commission Structure", filledOr(f.commission, "65% on Employee's own direct deals · 55% on Company-sourced deals (enhanced rate, conditional on continued HR/Admin/Assistant duties — see Clause 4)"), "commission"],
-    ["Allowances", filledOr(f.allowances, ""), "allowances"],
-    ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
-  ]);
+  // ONE unified table for compensation + commission tiers. Empty rows
+  // (e.g. Allowances / Payment Cycle when blank) are auto-filtered. The
+  // "Commission Structure" summary row is intentionally omitted because
+  // the tier breakdown below renders the same data with greater clarity.
+  const compensationTerms = compensationAndCommissionTable(
+    [
+      ["Basic Salary", filledOr(formatMonthlySalary(f.salary), "Not applicable — fixed commission basis"), "salary"],
+      ["Allowances", filledOr(f.allowances, ""), "allowances"],
+      ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
+    ],
+    input.commissionRows || [],
+  );
+  const commissionRowsTable = ""; // merged into compensationTerms above
 
-  const commissionRowsTable = commissionTable(input.commissionRows || []);
 
   // Premium prose mirror of the commission structure with the conditional
   // HR/Admin uplift and the automatic fallback to 50/50 if those duties stop.
