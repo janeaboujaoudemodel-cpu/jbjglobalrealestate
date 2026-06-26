@@ -3280,7 +3280,7 @@ function StudioShell({
                                     alignItems: "center",
                                     justifyContent: "center",
                                     pointerEvents: "none",
-                                    zIndex: 0,
+                                    zIndex: 3,
                                   }}
                                 >
                                   {/* Engraved 3D effect — stack three mask
@@ -3292,9 +3292,9 @@ function StudioShell({
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 260,
-                                      height: 260,
-                                      transform: "scaleX(0.86)",
+                                      width: 232,
+                                      height: 232,
+                                      transform: "scaleX(0.9)",
                                       transformOrigin: "center",
                                     }}
                                   >
@@ -3303,9 +3303,9 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                        transform: "translate(1.5px, 2px)",
+                                        transform: "translate(1.8px, 2.4px)",
                                         background: "#3A2A12",
-                                        opacity: 0.18,
+                                        opacity: 0.24,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3314,7 +3314,7 @@ function StudioShell({
                                         maskPosition: "center",
                                         WebkitMaskSize: "contain",
                                         maskSize: "contain",
-                                        filter: "blur(0.4px)",
+                                        filter: "blur(0.3px)",
                                       }}
                                     />
                                     {/* Highlight layer (light) — sells the bevel */}
@@ -3322,9 +3322,9 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                        transform: "translate(-1px, -1.5px)",
+                                        transform: "translate(-1.2px, -1.6px)",
                                         background: "#FFFFFF",
-                                        opacity: 0.55,
+                                        opacity: 0.62,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3342,7 +3342,7 @@ function StudioShell({
                                         position: "absolute",
                                         inset: 0,
                                         background: "#B89555",
-                                        opacity: 0.16,
+                                        opacity: 0.24,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3387,6 +3387,7 @@ function StudioShell({
                                   display: "flex",
                                   flexDirection: "column",
                                   justifyContent: "flex-start",
+                                  zIndex: 2,
                                 }}
                               >
                                 {groupHtmlWithSignature ? (
