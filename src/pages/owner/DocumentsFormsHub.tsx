@@ -11,10 +11,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText, Banknote } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText, Banknote } from "lucide-react";
 import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
@@ -215,7 +215,6 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const [showDetails, setShowDetails] = useState(false);
   const [includeJbjBlock, setIncludeJbjBlock] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [newEnvelopeOpen, setNewEnvelopeOpen] = useState(false);
   const [templateSearch, setTemplateSearch] = useState("");
   const [activeTemplateCategory, setActiveTemplateCategory] = useState<TemplateCategoryKey>("all");
   const [selectedStudioTemplate, setSelectedStudioTemplate] = useState<DocumentTemplate | null>(null);
@@ -383,14 +382,12 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     }
     setPicker(t);
     setClient({ name: "", email: "", phone: "" });
-    setNewEnvelopeOpen(false);
   };
 
   const openStudioTemplate = (template: DocumentTemplate) => {
     // Close the template picker first, then mount the already-preloaded studio
     // on the next frame. This avoids Radix Dialog focus teardown racing the
     // full-screen portal and causing the brief loader/back-to-hub flash.
-    setNewEnvelopeOpen(false);
     setSelectedStudioTemplate(template);
     requestAnimationFrame(() => setStudioOpen(true));
   };
