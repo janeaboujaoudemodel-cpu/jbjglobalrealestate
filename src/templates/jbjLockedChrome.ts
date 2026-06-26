@@ -5,8 +5,8 @@
  * export, print, and branded emails.
  */
 
-import monogramSrc from "@/assets/jbj-monogram-nobuffer.png";
-import companyStampSrc from "@/assets/jbj-company-stamp.png?inline";
+import monogramSrc from "@/assets/jbj-monogram-letterhead.png";
+import companyStampSrc from "@/assets/jbj-company-stamp-transparent.png?inline";
 import {
   TRADE_LICENSE_OFFICE,
   TRADE_LICENSE_NUMBER,
