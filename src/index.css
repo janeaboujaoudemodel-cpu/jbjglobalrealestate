@@ -16722,3 +16722,27 @@ html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role=
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* DEVELOPER DROPDOWN NAME FIT LOCK — no cropped/truncated developer names globally */
+html body [data-developer-nameplate],
+html body [data-developer-nameplate] * {
+  text-overflow: clip !important;
+}
+html body [data-developer-nameplate] > span {
+  display: block !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  hyphens: auto !important;
+}
+html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-radix-collection-item]) :is(span,p,div) {
+  min-width: 0;
+}
+html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-radix-collection-item]) :is([title]) {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  text-overflow: clip !important;
+}
