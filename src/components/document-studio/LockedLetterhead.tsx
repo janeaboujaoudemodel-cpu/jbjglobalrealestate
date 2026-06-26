@@ -93,7 +93,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             <MaskedMonogramLayer color={t.jColor} clip="inset(0% 13% 0% 69.5%)" />
           </div>
 
-        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingRight: 0, lineHeight: 1, overflow: "visible" }}>
+        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "stretch", paddingRight: 18, lineHeight: 1, overflow: "visible" }}>
           <div
             className="font-bold"
             style={{
@@ -102,15 +102,18 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
               fontSize: 26,
               fontWeight: 900,
               color: t.fg,
-              letterSpacing: "-0.015em",
+              // Open the wordmark so it occupies the full right column —
+              // previous tight tracking left a visible empty band on the
+              // right edge of the letterhead.
+              letterSpacing: "0.08em",
               lineHeight: 1,
               whiteSpace: "nowrap",
-              transform: "scaleX(1.04)",
+              transform: "scaleX(1.12)",
               transformOrigin: "left center",
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
-            <span style={{ letterSpacing: "0.03em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
+            <span style={{ letterSpacing: "0.12em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
           </div>
         </div>
       </div>
