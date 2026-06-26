@@ -23,6 +23,8 @@ const tokens = (theme: LetterheadTheme) =>
     ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
     : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
 
+const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
+
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
   return (
@@ -32,29 +34,28 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "10px 32px 10px 24px",
+        padding: "8px 28px 8px 16px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "280px 1px minmax(0,1fr)", columnGap: 8, minHeight: 96 }}
+        style={{ gridTemplateColumns: "340px minmax(0,1fr)", columnGap: 2, minHeight: 108 }}
       >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
           className="block object-contain"
-          style={{ width: 280, height: 96, background: "transparent", filter: t.monoFilter }}
+          style={{ width: 340, height: 108, background: "transparent", filter: t.monoFilter }}
         />
-        <div aria-hidden style={{ width: 1, height: 64, background: t.hairline, opacity: theme === "emerald" ? 0.5 : 0.55 }} />
-        <div className="leading-tight min-w-0 text-center" style={{ paddingRight: 18 }}>
+        <div className="leading-tight min-w-0 text-left" style={{ paddingRight: 10 }}>
           <div
             className="font-bold"
             style={{
-              fontSize: 20,
+              fontSize: 21,
               color: t.fg,
-              letterSpacing: "0.045em",
-              lineHeight: 1.15,
+              letterSpacing: "0.035em",
+              lineHeight: 1.12,
               whiteSpace: "nowrap",
             }}
           >
@@ -72,7 +73,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
  * No duplicated legal name. Height capped via padding.
  */
 export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
-  const t = tokens(theme);
+  const t = footerTokens();
   return (
     <footer
       className="w-full"

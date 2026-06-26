@@ -76,6 +76,8 @@ const themeTokens = (theme: JbjChromeTheme) =>
     ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
     : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
 
+const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
+
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
   return `
@@ -83,17 +85,16 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
     width:100%;
     background:${t.bg};
     border-bottom:1px solid ${t.hairline};
-    padding:10px 32px 10px 24px;
+    padding:8px 28px 8px 16px;
     font-family:Inter, system-ui, sans-serif;
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:280px 1px 1fr;align-items:center;gap:8px;min-height:96px;">
+    <div style="display:grid;grid-template-columns:340px 1fr;align-items:center;gap:2px;min-height:108px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:280px;height:96px;display:block;object-fit:contain;background:transparent;margin:0;filter:${t.monoFilter};" />
-      <div aria-hidden="true" style="width:1px;height:64px;background:${t.hairline};opacity:${theme === "emerald" ? 0.5 : 0.55};"></div>
-      <div style="line-height:1.15;text-align:center;min-width:0;padding-right:18px;">
-        <div style="font-size:20px;font-weight:700;letter-spacing:0.045em;color:${t.fg};white-space:nowrap;">
+        style="width:340px;height:108px;display:block;object-fit:contain;background:transparent;margin:0;filter:${t.monoFilter};" />
+      <div style="line-height:1.12;text-align:left;min-width:0;padding-right:10px;">
+        <div style="font-size:21px;font-weight:800;letter-spacing:0.035em;color:${t.fg};white-space:nowrap;">
           ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.12em;white-space:nowrap;">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
@@ -102,7 +103,7 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
 };
 
 export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
-  const t = themeTokens(theme);
+  const t = footerTokens();
   return `
   <footer style="
     width:100%;
