@@ -2544,7 +2544,7 @@ function StudioShell({
                               r.onerror = rej;
                               r.readAsDataURL(file);
                             });
-                            const source = `Extract ONLY contract identity/contact fields from attached Emirates ID, passport, or document: ${file.name}. Include full name as per ID, Emirates ID number, passport number, home address, email, and phone if visible. Exclude ID expiry, birth date, issuing date, nationality, and sex.`;
+                            const source = `Extract ONLY contract identity/contact fields from attached Emirates ID, passport, or document: ${file.name}. Include full name as per ID, Emirates ID number, passport number, nationality, home address, email, and phone if visible. Exclude ID expiry, birth date, issuing date, and sex.`;
                             const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
                               body: {
                                 mode: "extract-fields",
