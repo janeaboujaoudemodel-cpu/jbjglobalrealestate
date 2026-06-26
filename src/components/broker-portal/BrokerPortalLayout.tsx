@@ -23,8 +23,18 @@ export default function BrokerPortalLayout() {
   const { isOwner } = useUserRole();
   const { user } = useAuth();
   const isMobile = useIsMobile();
+  const { mode } = useUserMode();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const ModeIcon = mode === "developer" ? Building2 : mode === "investor" ? User : Briefcase;
+  const modeLabel = isOwner
+    ? "Owner"
+    : mode === "developer"
+    ? "Developer"
+    : mode === "investor"
+    ? "Investor"
+    : "Broker";
 
   // If an owner lands on /broker without explicit preview flag, the
   // OwnerRedirectGuard already routes them away. Defensive: clear any
