@@ -80,6 +80,8 @@ const todayLong = () =>
 
 const WALEED_EFFECTIVE_DATE = "2026-06-20";
 const WALEED_SIGNING_DATE = "2026-06-26";
+const WALEED_DIRECT_PHONES = "+971 50 999 3839 · +971 54 366 2223";
+const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
 const formatHumanDate = (raw?: string): string => {
   if (!raw) return "";
@@ -99,6 +101,20 @@ const firstMatch = (source: string, ...patterns: RegExp[]): string => {
   }
   return "";
 };
+
+const isEmiratesIdLike = (value?: string): boolean => {
+  const digits = (value || "").replace(/\D+/g, "");
+  return /^784\d{12}$/.test(digits);
+};
+
+const sanitizePhoneContact = (value?: string, fallback = ""): string => {
+  const cleaned = (value || "").trim();
+  if (!cleaned || isEmiratesIdLike(cleaned) || /\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/.test(cleaned)) return fallback;
+  return cleaned;
+};
+
+const safePhoneDisplay = (value?: string, fallback = WALEED_DIRECT_PHONES): string =>
+  sanitizePhoneContact(value, fallback);
 
 const stripForbiddenIdentityFragments = (value?: string): string => {
   if (!value) return "";
@@ -170,6 +186,7 @@ const identityValue = (fields: Record<string, string>, keys: string[], source: s
 
 const offerIdentity = (fields: Record<string, string>) => {
   const source = Object.values(fields).filter(Boolean).join("\n");
+  const rawPhone = identityValue(fields, ["recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"], source, /(?:phone|mobile|whatsapp)\s*(?:is|:|-)?\s*((?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,})/i);
   return {
     name: bestLegalName(fields, source),
     emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
@@ -177,7 +194,7 @@ const offerIdentity = (fields: Record<string, string>) => {
     nationality: identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-)?\s*([^;\n]+)/i),
     address: identityValue(fields, ["homeAddress", "address", "home_address", "residentialAddress"], source, /(?:home|residential)?\s*address\s*(?:is|:|-)?\s*([^;\n]+)/i),
     email: identityValue(fields, ["recipientEmail", "email", "emailAddress", "email_address"], source, /([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/i),
-    phone: identityValue(fields, ["recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"], source, /(?:phone|mobile|whatsapp)\s*(?:is|:|-)?\s*((?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,})/i),
+    phone: safePhoneDisplay(rawPhone),
   };
 };
 
@@ -211,7 +228,7 @@ export function termsTable(rows: Array<[string, string | undefined, string?]>, t
           ${esc(k)}
           ${deleteBtn(fieldKey)}
         </td>
-        <td data-field-value-cell="1" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v)}</td>
+        <td data-field-value-cell="1" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;white-space:pre-line;line-height:1.45;">${esc(v)}</td>
       </tr>`,
     )
     .join("");
@@ -348,7 +365,7 @@ function compensationAndCommissionTable(
           ${esc(k)}
           ${deleteBtn(fieldKey)}
         </td>
-        <td data-field-value-cell="1" colspan="2" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v || "")}</td>
+        <td data-field-value-cell="1" colspan="2" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;white-space:pre-line;line-height:1.45;">${esc(v || "")}</td>
       </tr>`,
     )
     .join("");
@@ -590,7 +607,7 @@ function composeJobOffer(input: ComposerInput): string {
   const candidateName = esc(filledOr(id.name || f.recipientName, "[Candidate Name]"));
   const address = esc(filledOr(id.address, "[Address]"));
   const email = esc(filledOr(id.email, "[Email]"));
-  const phone = esc(filledOr(id.phone, "[Phone Number]"));
+  const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
   const emiratesId = esc(filledOr(id.emiratesId, "[Emirates ID Number]"));
   const passport = esc(filledOr(id.passport, "[Passport Number]"));
   const nationality = esc(filledOr(id.nationality, "[Nationality]"));
@@ -604,7 +621,11 @@ function composeJobOffer(input: ComposerInput): string {
   const offerEffectiveIso = WALEED_EFFECTIVE_DATE;
   const offerSigningIso = WALEED_SIGNING_DATE;
   const startDate = esc(formatHumanDate(f.startDate || WALEED_EFFECTIVE_DATE) || f.startDate || "20 June 2026");
-  const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM"));
+  const workingHoursRaw = filledOr(f.workingHours, JOB_OFFER_WORKING_HOURS)
+    .replace(/\s*;\s*/g, "\n")
+    .replace(/(7:00\s*PM)\s+(Saturday)/i, "$1\n$2")
+    .replace(/Monday\s+to\s+Saturday:\s*10:00\s*AM\s*[–-]\s*7:00\s*PM/i, JOB_OFFER_WORKING_HOURS);
+  const workingHours = esc(workingHoursRaw).replace(/\n/g, "<br/>");
 
   const candidateIdentity = paragraph(
     `Candidate identity for this offer: <strong>${candidateName}</strong>, holding Passport No. <strong>${passport}</strong>, holding Emirates ID No. <strong>${emiratesId}</strong>, with nationality recorded as <strong>${nationality}</strong>, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone at <strong>${phone}</strong>.`,
@@ -615,8 +636,7 @@ function composeJobOffer(input: ComposerInput): string {
       ["Job Title", filledOr(f.jobTitle, ""), "jobTitle"],
       ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate, "startDate"],
       ["Place of Work", placeOfWork, "placeOfWork"],
-      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM"), "workingHours"],
-      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits; Saturday hours are 11:00 AM – 4:00 PM"), "attendance"],
+      ["Working Hours", workingHoursRaw, "workingHours"],
       ["Probation Period", filledOr(f.probationPeriod || f.probation, "Up to six (6) months"), "probationPeriod"],
       ["Reporting Line", filledOr(f.reportingLine || f.reportingManager, ""), "reportingLine"],
     ],
@@ -787,7 +807,7 @@ function composeGeneric(input: ComposerInput, subject: string): string {
     ["Passport Number", f.passportNumber || f.passport_number || f.passportNo || f.passport],
     ["Home Address", f.homeAddress || f.address || f.home_address || f.residentialAddress],
     ["Email Address", f.recipientEmail || f.email || f.email_address],
-    ["Phone / WhatsApp", f.recipientPhone || f.phone || f.mobile || f.mobile_number],
+    ["Phone / WhatsApp", safePhoneDisplay(f.recipientPhone || f.phone || f.mobile || f.mobile_number)],
   ];
   const rows: Array<[string, string | undefined]> = [
     ...Object.entries(f).map(([k, v]) => [labelize(k), v] as [string, string | undefined]),
@@ -934,7 +954,7 @@ function composeHolidayHome(input: ComposerInput): string {
     ["Unit Type", f.roomType],
     ["Unit Size", f.unitSize ? `${f.unitSize} sq ft` : undefined],
     ["Guest Name", f.recipientName],
-    ["Phone / WhatsApp", f.guestPhone],
+    ["Phone / WhatsApp", safePhoneDisplay(f.guestPhone)],
     ["Number of Guests", f.guestsCount],
   ];
 
@@ -1042,7 +1062,7 @@ function composeHolidayHome(input: ComposerInput): string {
               ["ID Type", idType],
               ["ID Number", idNumber],
               ["Nationality", nationality],
-              ["Phone / WhatsApp", f.guestPhone || "—"],
+              ["Phone / WhatsApp", safePhoneDisplay(f.guestPhone, "—") || "—"],
               ["Date of Booking", bookingDateStr],
               ["Property / Unit", [f.propertyName, f.roomType].filter(Boolean).join(" — ") || "—"],
               ["Check-in", checkIn || "—"],
@@ -1222,7 +1242,7 @@ function composeCandidateCv(input: ComposerInput): string {
   const position = esc(f.positionApplied || "");
   const contactBits = [
     f.email && `<a href="mailto:${esc(f.email)}" style="color:${INK};text-decoration:none;">${esc(f.email)}</a>`,
-    f.phoneE164 && esc(f.phoneE164),
+    f.phoneE164 && esc(safePhoneDisplay(f.phoneE164)),
     f.location && esc(f.location),
     f.nationality && esc(f.nationality),
   ].filter(Boolean).join(' &nbsp;·&nbsp; ');

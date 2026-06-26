@@ -25,59 +25,8 @@ const tokens = (theme: LetterheadTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
 
-/**
- * Single masked layer of the JBJ monogram. `clip` restricts the painted
- * area to one column (outer J / dividers+B / outer J). `filter` is used
- * for the engraved drop-shadow / highlight stack on the middle B.
- */
-function MaskedMonogramLayer({
-  color,
-  clip,
-  filter,
-  blendMode,
-}: {
-  color: string;
-  clip?: string;
-  filter?: string;
-  blendMode?: React.CSSProperties["mixBlendMode"];
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: color,
-        WebkitMaskImage: `url(${jbjMonogramSrc})`,
-        maskImage: `url(${jbjMonogramSrc})`,
-        WebkitMaskRepeat: "no-repeat",
-        maskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-        maskPosition: "center",
-        WebkitMaskSize: "contain",
-        maskSize: "contain",
-        ...(clip ? { clipPath: clip, WebkitClipPath: clip } : null),
-        ...(filter ? { filter } : null),
-        ...(blendMode ? { mixBlendMode: blendMode } : null),
-      }}
-    />
-  );
-}
-
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
-  // Widened middle clip so the slim vertical dividers above AND below the
-  // gold B remain fully visible (previous 30%/30% clip cropped the bars).
-  const bClip = "inset(0% 26% 0% 26%)";
-  // Engraved B: dark shadow pushed DOWN-RIGHT to read as recessed, a soft
-  // highlight UP-LEFT (screen-blended on champagne, plain on emerald),
-  // body champagne/white on top.
-  const bShadow = theme === "emerald"
-    ? "drop-shadow(0 0.5px 0 rgba(0,0,0,.55)) drop-shadow(0 1.5px 1.8px rgba(0,0,0,.45))"
-    : "drop-shadow(0.5px 1px 0 rgba(60,40,10,.55)) drop-shadow(0 2px 2.2px rgba(60,40,10,.35))";
-  const bHighlight = theme === "emerald"
-    ? "drop-shadow(0 -0.5px 0 rgba(255,255,255,.6))"
-    : "drop-shadow(-0.5px -0.5px 0 rgba(255,255,255,.85))";
 
   return (
     <header
@@ -86,42 +35,45 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        // Equal top/bottom padding so the letterhead chrome is vertically
-        // centered around its 118px monogram height.
-        padding: "12px 24px",
+        // Equal top/bottom padding so the monogram and wordmark are vertically centered.
+        padding: "10px 22px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "128px minmax(0,1fr)", columnGap: 8, minHeight: 118 }}
+        style={{ gridTemplateColumns: "148px minmax(0,1fr)", columnGap: 12, minHeight: 138 }}
       >
         <div
-          aria-label="JBJ"
-          role="img"
           style={{
-            position: "relative",
-            width: 118,
-            height: 118,
+            width: 142,
+            height: 142,
             justifySelf: "center",
+            alignSelf: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          {/* Outer J letters — painted black (or white on emerald) */}
-          <MaskedMonogramLayer color={t.jColor} clip="inset(0% 69.5% 0% 13%)" />
-          <MaskedMonogramLayer color={t.jColor} clip="inset(0% 13% 0% 69.5%)" />
-          {/* Engraved B — three stacked passes: dark recess, light edge, body */}
-          <MaskedMonogramLayer
-            color={theme === "emerald" ? "#03281D" : "#5C3F18"}
-            clip={bClip}
-            filter={bShadow}
+          <div
+            aria-label="JBJ"
+            role="img"
+            style={{
+              width: 132,
+              height: 132,
+              position: "relative",
+              background: t.jColor,
+              WebkitMaskImage: `url(${jbjMonogramSrc})`,
+              maskImage: `url(${jbjMonogramSrc})`,
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+              filter: `drop-shadow(.7px 0 0 ${t.jColor}) drop-shadow(-.7px 0 0 ${t.jColor}) drop-shadow(0 1.4px 1.4px rgba(60,40,10,.2))`,
+            }}
           />
-          <MaskedMonogramLayer
-            color={theme === "emerald" ? "#0E6B52" : "#F2DFAA"}
-            clip={bClip}
-            filter={bHighlight}
-            blendMode={theme === "champagne" ? "screen" : undefined}
-          />
-          <MaskedMonogramLayer color={t.bColor} clip={bClip} />
         </div>
 
         <div
@@ -130,10 +82,9 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            paddingLeft: 4,
-            // Pull the wordmark back ~1cm from the right edge so it doesn't
-            // stretch flush against the page border.
-            paddingRight: 64,
+            height: 142,
+            paddingLeft: 0,
+            paddingRight: 36,
             lineHeight: 1,
             overflow: "visible",
           }}
@@ -143,20 +94,20 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             style={{
               display: "block",
               width: "100%",
-              fontSize: 26,
+              fontSize: 25.5,
               fontWeight: 900,
               color: t.fg,
-              letterSpacing: "0.06em",
+              letterSpacing: "0.085em",
               lineHeight: 1,
               whiteSpace: "nowrap",
-              transform: "scaleX(1.02)",
+              transform: "scaleX(.99)",
               transformOrigin: "left center",
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
             <span
               style={{
-                letterSpacing: "0.1em",
+                letterSpacing: "0.125em",
                 whiteSpace: "nowrap",
                 color: t.fg,
                 WebkitTextFillColor: t.fg,

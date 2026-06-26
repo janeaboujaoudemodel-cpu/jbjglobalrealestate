@@ -44,7 +44,7 @@ import {
  DocumentAudience, DocumentScope, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
-import { stripChromeArtifacts, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
+import { stripChromeArtifacts, jbjMonogramSrc, jbjCompanyStampSrc } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
@@ -87,6 +87,7 @@ const escapeSignatureHtml = (value?: string) =>
   (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
+const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
 const UAE_DEVELOPERS = [
   { name: "Emaar Properties", email: "brokerrelations@emaar.ae", phone: "+971 4 366 1688" },
@@ -111,7 +112,7 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         jobTitle: "[Position]",
         startDate: "2026-06-20",
         probation: "6 months",
-        workingHours: "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM",
+        workingHours: JOB_OFFER_WORKING_HOURS,
         annualLeave: "30 calendar days",
         noticePeriod: "30 calendar days",
         reportingTo: "Management",
@@ -429,7 +430,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 2;
+  const DOCUMENT_FIX_VERSION = 4;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -752,12 +753,12 @@ function StudioShell({
         const footerH = chromeHeights.footer;
         // DocuSign auto-stamps the envelope ID in the top ~0.4in of every page.
         // Reserve a 42px safe band on every page so it never overlays content.
-        const FIRST_TOP = 28;
+        const FIRST_TOP = 30;
         // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
-        const NEXT_TOP = 24;
-        const BOTTOM_PAD = 30;
+        const NEXT_TOP = 34;
+        const BOTTOM_PAD = 50;
         // Tentative single-page cap: assume page 1 IS the last page so the
         // footer height is reserved. If everything fits here, the official
         // signature block stays with the body on a single sheet (no orphan
@@ -806,7 +807,10 @@ function StudioShell({
         // bottom-anchoring spacer/signature never tricks a short contract into
         // becoming two pages. Job Offer and similar compact documents must stay
         // on page 1 unless their real content cannot fit.
-        const contentHeight = items.reduce((sum, it) => sum + it.height, 0);
+        const contentHeight = Math.max(
+          items.reduce((sum, it) => sum + it.height, 0),
+          Math.ceil(b.scrollHeight || 0),
+        );
         const interBlockGaps = Math.max(0, items.length - 1) * 8;
         const fitsSinglePage = contentHeight + interBlockGaps <= singlePageCap;
 
@@ -1204,8 +1208,9 @@ function StudioShell({
         if (!next.signature && defaultSignature?.signedUrl) {
           next.signature = { url: defaultSignature.signedUrl, width: 200 };
         }
-        if (!next.stamp && stampUrl) {
-          next.stamp = { url: stampUrl, width: 180, rotation: -8 };
+        if (!next.stamp) {
+          const url = stampUrl || jbjCompanyStampSrc;
+          if (url) next.stamp = { url, width: 180, rotation: -8 };
         }
         return next;
       });
@@ -3184,13 +3189,13 @@ function StudioShell({
                 // DocuSign stamps the envelope ID in the top ~0.4in of every
                 // page when the document is processed for signature. Reserve a
                 // safe band on every page so the stamp never overlays content.
-                const FIRST_TOP = 46;
+                const FIRST_TOP = 30;
                 // GLOBAL: tighten the top of inner pages — the colored band
                 // above body on pages 2+ was removed, so content sits closer
                 // to the paper edge for a premium contract feel.
-                const NEXT_TOP = 24;
-                const STANDARD_BOTTOM_PAD = 40;
-                const LAST_BOTTOM_PAD = 48;
+                const NEXT_TOP = 34;
+                const STANDARD_BOTTOM_PAD = 50;
+                const LAST_BOTTOM_PAD = 58;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
 
                 // Prefer measured auto-pagination (global rule). Fall back
@@ -3278,7 +3283,7 @@ function StudioShell({
                                     alignItems: "center",
                                     justifyContent: "center",
                                     pointerEvents: "none",
-                                    zIndex: 0,
+                                    zIndex: 4,
                                   }}
                                 >
                                   {/* Engraved 3D effect — stack three mask
@@ -3290,9 +3295,9 @@ function StudioShell({
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 260,
-                                      height: 260,
-                                      transform: "scaleX(0.86)",
+                                      width: 218,
+                                      height: 218,
+                                      transform: "scaleX(0.9)",
                                       transformOrigin: "center",
                                     }}
                                   >
@@ -3301,9 +3306,9 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                        transform: "translate(1.5px, 2px)",
+                                        transform: "translate(1.8px, 2.4px)",
                                         background: "#3A2A12",
-                                        opacity: 0.18,
+                                         opacity: 0.28,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3312,7 +3317,7 @@ function StudioShell({
                                         maskPosition: "center",
                                         WebkitMaskSize: "contain",
                                         maskSize: "contain",
-                                        filter: "blur(0.4px)",
+                                        filter: "blur(0.3px)",
                                       }}
                                     />
                                     {/* Highlight layer (light) — sells the bevel */}
@@ -3320,9 +3325,9 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                        transform: "translate(-1px, -1.5px)",
+                                        transform: "translate(-1.2px, -1.6px)",
                                         background: "#FFFFFF",
-                                        opacity: 0.55,
+                                         opacity: 0.7,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3339,8 +3344,8 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                        background: "#B89555",
-                                        opacity: 0.16,
+                                         background: "#C8A96A",
+                                         opacity: 0.32,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3361,7 +3366,7 @@ function StudioShell({
 
                               {/* Header — only on page 1, sits directly under the safe band */}
                               {isFirst && !noChrome && (
-                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 0 }}>
+                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 6 }}>
                                   <LockedLetterhead theme={chromeTheme} />
                                 </div>
                               )}
@@ -3385,6 +3390,7 @@ function StudioShell({
                                   display: "flex",
                                   flexDirection: "column",
                                   justifyContent: "flex-start",
+                                  zIndex: 2,
                                 }}
                               >
                                 {groupHtmlWithSignature ? (
