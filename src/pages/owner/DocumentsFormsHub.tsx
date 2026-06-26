@@ -586,23 +586,23 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     <div
       data-studio-surface="champagne"
       data-studio-workspace
-      className="min-h-screen bg-[#FDFBF7] p-6 lg:p-10"
+      className="min-h-screen bg-[#FDFBF7] px-4 py-5 sm:px-6 lg:p-10 overflow-x-hidden"
     >
-      <div className="max-w-[1400px] mx-auto">
+      <div className="max-w-[1440px] mx-auto min-w-0">
 
-        <header className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <header className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between min-w-0">
           <div className="min-w-0">
             <div className="text-xs uppercase tracking-[0.18em] text-[#1A1A1A]/60">Owner</div>
             <h1 className="text-2xl font-semibold text-[#1A1A1A]">Documents & Forms</h1>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">Unified hub — templates, document editor, e-signature, agreements, signatures & stamps. All in one place.</p>
           </div>
-          <Button variant="primary" onClick={() => setNewEnvelopeOpen(true)} className="h-11 px-5 self-start lg:self-auto">
+          <Button variant="primary" onClick={() => setNewEnvelopeOpen(true)} className="h-11 px-5 w-full sm:w-auto self-stretch sm:self-start lg:self-auto shrink-0">
             <Plus className="w-4 h-4 mr-2" /> New Envelope
           </Button>
         </header>
 
         {/* Quick actions */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6" data-studio-card-grid>
+        <div className="grid gap-3 mb-6" data-studio-card-grid>
           <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => { setCat("leasing"); setTab("templates"); }}>
             <div className="flex items-start gap-3">
               <FileText className="w-5 h-5 text-[#B89555]" />
@@ -642,9 +642,9 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
         </div>
 
         <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
-          <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1">
+          <TabsList className="w-full justify-start bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1 overflow-x-auto">
             <TabsTrigger value="templates"><FileText className="w-4 h-4 mr-2" />Templates</TabsTrigger>
-            <TabsTrigger value="documents"><FileEdit className="w-4 h-4 mr-2" />Document Editor</TabsTrigger>
+            <TabsTrigger value="documents"><FileEdit className="w-4 h-4 mr-2" />Live Editor</TabsTrigger>
             <TabsTrigger value="esign"><FileSignature className="w-4 h-4 mr-2" />E-signature</TabsTrigger>
             <TabsTrigger value="drafts"><FileEdit className="w-4 h-4 mr-2" />Drafts ({buckets.drafts.length})</TabsTrigger>
             <TabsTrigger value="generated"><Clock className="w-4 h-4 mr-2" />Generated ({buckets.generated.length})</TabsTrigger>
@@ -660,10 +660,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           <TabsContent value="templates" className="mt-4">
             <Suspense fallback={<div className="mb-6 rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] p-5 text-sm text-[#1A1A1A]/70">Loading company materials…</div>}>
               <DocumentStudioLauncher
-                catalog="client"
+                catalog="all"
                 presetTemplateId="ai_home_finder_report"
-                title="Company Materials · AI Proposal Packs"
-                subtitle="Reusable AI Home Finder report template plus JBJ branded proposal letterhead, locked to champagne gold, emerald-black ombre, premium black and pure white-on-emerald content."
+                title="Live Editor · Full JBJ Template Library"
+                subtitle="Open the editor directly with the complete real-estate, HR, brokerage and branded proposal library — locked champagne, emerald, gold and premium-black JBJ design system."
               />
             </Suspense>
             <div className="mb-5 grid gap-3 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4">
@@ -674,11 +674,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                 </div>
                 <div className="text-xs font-semibold text-[#1A1A1A]/70">{studioTemplates.length} templates</div>
               </div>
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3" data-studio-card-grid>
+              <div className="grid gap-3" data-studio-card-grid>
                 {studioTemplates.map((template) => {
                   const Icon = template.icon;
                   return (
-                    <Card key={template.id} data-studio-card className="p-4 bg-[#FDFBF7] border-[#B89555]/35 flex flex-col gap-3 min-h-[178px]">
+                    <Card key={template.id} data-studio-card className="p-4 bg-[#FDFBF7] border-[#B89555]/35 flex flex-col gap-3 min-h-[178px] overflow-hidden">
                       <div className="flex items-start gap-3 min-w-0">
                         <div className="shrink-0 w-10 h-10 rounded-lg border border-[#B89555]/40 bg-[#EFE6D6] flex items-center justify-center">
                           <Icon className="w-5 h-5 text-[#1A1A1A]" />
@@ -696,7 +696,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                         <DocumentStudio
                           catalog={template.audience}
                           presetTemplateId={template.id}
-                          trigger={<Button size="sm" variant="primary" className="w-full">Open in Editor</Button>}
+                          trigger={<Button size="sm" variant="primary" className="w-full min-w-0">Open in Editor</Button>}
                         />
                       </Suspense>
                     </Card>
@@ -713,10 +713,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               ))}
             </div>
             {tplLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" data-studio-card-grid>
+              <div className="grid gap-4" data-studio-card-grid>
                 {/* Standard JBJ Letterhead — always first, opens the branded letter studio */}
                 {(cat === "all" || cat === "leasing" || cat === "selling") && (
-                  <Card data-studio-card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                  <Card data-studio-card className="p-5 bg-[#F7F2EA] border-[#B89555]/30 overflow-hidden">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">JBJ Standard</div>
@@ -736,7 +736,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                 )}
 
                 {filteredTemplates.map(t => (
-                  <Card key={t.id} data-studio-card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                  <Card key={t.id} data-studio-card className="p-5 bg-[#F7F2EA] border-[#B89555]/30 overflow-hidden">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">{t.category}</div>
@@ -847,7 +847,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                 const fileRef = kind === "signature" ? sigFileRef : stampFileRef;
                 const title = kind === "signature" ? "Saved Signatures" : "Saved Stamps";
                 return (
-                  <Card key={kind} className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                  <Card key={kind} className="p-5 bg-[#F7F2EA] border-[#B89555]/30 overflow-hidden">
                     <div className="flex items-center justify-between mb-3">
                       <div className="font-semibold text-[#1A1A1A] flex items-center gap-2"><Icon className="w-4 h-4" /> {title}</div>
                       <div className="flex gap-2">
@@ -1025,8 +1025,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <DialogTitle className="text-[#1A1A1A]">New Envelope</DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/70">Pick a template, or upload your own document to sign.</DialogDescription>
           </DialogHeader>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-2">
-            {studioTemplates.slice(0, 15).map((template) => {
+          <div className="grid gap-3 mt-2" data-studio-card-grid>
+            {studioTemplates.map((template) => {
               const Icon = template.icon;
               return (
                 <Suspense key={template.id} fallback={null}>
@@ -1037,10 +1037,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       <button
                         type="button"
                         onClick={() => setNewEnvelopeOpen(false)}
-                        className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition min-h-[132px] w-full"
+                        className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition min-h-[132px] w-full overflow-hidden"
                       >
                         <Icon className="w-5 h-5 text-[#1A1A1A] mb-2" />
-                        <div className="font-medium text-[#1A1A1A] text-sm leading-tight">{template.label}</div>
+                        <div className="font-medium text-[#1A1A1A] text-sm leading-tight break-words">{template.label}</div>
                         <div className="text-xs text-[#1A1A1A]/70 mt-1 line-clamp-2">{template.description}</div>
                       </button>
                     }
@@ -1051,7 +1051,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <button
               type="button"
               onClick={() => { setNewEnvelopeOpen(false); navigate("/owner/documents/forms/blank-letter"); }}
-              className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition"
+              className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition overflow-hidden"
             >
               <FileText className="w-5 h-5 text-[#B89555] mb-2" />
               <div className="font-medium text-[#1A1A1A] text-sm">{standardLetterheadName}</div>
@@ -1069,7 +1069,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                   key={catKey}
                   type="button"
                   onClick={() => openTemplate(tpl)}
-                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition"
+                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition overflow-hidden"
                 >
                   <Scale className="w-5 h-5 text-[#B89555] mb-2" />
                   <div className="font-medium text-[#1A1A1A] text-sm">{tpl.name || label}</div>

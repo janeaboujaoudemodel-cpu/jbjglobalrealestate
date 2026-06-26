@@ -783,7 +783,7 @@ function StudioShell({
     signatureB?: { url: string; width: number };
     showDate?: boolean;
     showSigB?: boolean;
-  }>({ showDate: true, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
+  }>({ showDate: false, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -1296,7 +1296,7 @@ function StudioShell({
       data-no-contrast-guard
       data-document-studio-overlay
       data-studio-surface="champagne"
-      className="fixed inset-0 bg-[#FDFBF7] flex flex-col"
+      className="fixed inset-0 bg-[#FDFBF7] flex flex-col overflow-hidden"
       style={{
         fontFamily: "Inter, system-ui, sans-serif",
         zIndex: 2147483000,
@@ -1327,16 +1327,42 @@ function StudioShell({
         [data-document-studio-overlay] [data-document-page="true"] {
           border-color: rgba(184, 149, 85, 0.42) !important;
         }
+        [data-document-studio-overlay],
+        [data-document-studio-overlay] * { box-sizing: border-box; }
+        [data-document-studio-overlay] { --studio-ink:#1A1A1A; --studio-gold:#B89555; --studio-champagne:#F7F2EA; --studio-paper:#FDFBF7; }
+        [data-document-studio-overlay] :is(button,[role="button"], [data-jbj-button]) { min-width: 0; max-width: 100%; }
+        [data-document-studio-overlay] [data-surface="emerald"],
+        [data-document-studio-overlay] [data-surface="emerald"] * { color:#FFFFFF !important; -webkit-text-fill-color:#FFFFFF !important; stroke:#FFFFFF !important; }
+        [data-document-studio-overlay] [data-surface="champagne"],
+        [data-document-studio-overlay] [data-surface="champagne"] * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; stroke:currentColor !important; }
+        [data-document-studio-overlay] .studio-scroll-x { overflow-x:hidden; }
+        [data-document-studio-overlay] .studio-action-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-width:0; }
+        [data-document-studio-overlay] .studio-action-row > * { flex:0 1 auto; }
+        [data-document-studio-overlay] .studio-sidebar { min-width:0; }
+        [data-document-studio-overlay] .studio-template-card { min-width:0; overflow:hidden; }
+        [data-document-studio-overlay] .studio-template-card * { overflow-wrap:anywhere; }
+        @media (max-width: 1279px) {
+          [data-document-studio-overlay] .studio-body { overflow:auto; }
+          [data-document-studio-overlay] .studio-sidebar { max-height:none !important; }
+          [data-document-studio-overlay] .studio-ai-panel { max-height:none !important; }
+        }
+        @media (max-width: 767px) {
+          [data-document-studio-overlay] .studio-topbar { padding:10px 12px !important; }
+          [data-document-studio-overlay] .studio-brand-subtitle { display:none !important; }
+          [data-document-studio-overlay] .studio-action-row [data-jbj-button] { min-height:38px; padding-inline:12px; }
+          [data-document-studio-overlay] .studio-preview-shell { padding:18px 10px !important; }
+        }
+
       `}</style>
       {/* ─── Topbar ─── */}
-      <div className="shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 xl:flex-row xl:items-center xl:px-5">
+      <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 xl:flex-row xl:items-center xl:px-5">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
             <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
           </div>
-          <div className="leading-tight">
-            <div className="text-[13px] font-semibold text-[#1A1A1A]">Document Studio</div>
-            <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
+          <div className="leading-tight min-w-0">
+            <div className="text-[13px] font-semibold text-[#1A1A1A]">Live Editor</div>
+            <div className="studio-brand-subtitle text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
               {catalog === "staff" ? "Careers · Staff" : catalog === "client" ? "Client · Real Estate" : "All templates"}
             </div>
           </div>
@@ -1348,9 +1374,9 @@ function StudioShell({
           setStep(s);
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
-        <div className="xl:ml-auto flex min-w-0 items-center justify-start xl:justify-end gap-2 flex-wrap">
+        <div className="studio-action-row xl:ml-auto justify-start xl:justify-end">
           {/* Theme switcher — Champagne / Emerald letterhead */}
-          <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme">
+          <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme" data-surface="champagne">
             <button
               type="button"
               role="tab"
@@ -1372,7 +1398,7 @@ function StudioShell({
               Emerald
             </button>
           </div>
-          <div className="flex h-10 items-center gap-1.5 text-[11px] text-[#1A1A1A] border border-[#B89555]/70 bg-[#F7F2EA] rounded-md pl-2.5 pr-1.5 focus-within:ring-1 focus-within:ring-[#B89555] shrink-0">
+          <div data-surface="champagne" className="flex h-10 items-center gap-1.5 text-[11px] text-[#1A1A1A] border border-[#B89555]/70 bg-[#F7F2EA] rounded-md pl-2.5 pr-1.5 focus-within:ring-1 focus-within:ring-[#B89555] shrink-0">
             <Globe className="w-3.5 h-3.5 text-[#064E3B]" />
             <Select value={docLanguage} onValueChange={setDocLanguage}>
               <SelectTrigger className="h-7 w-[116px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 focus:border-transparent shadow-none">
@@ -1449,7 +1475,7 @@ function StudioShell({
 
           <button
             onClick={onClose}
-            className="h-9 w-9 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
+            data-surface="champagne" className="h-10 w-10 shrink-0 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -1542,7 +1568,7 @@ function StudioShell({
       {/* ─── Top toolbar (visible on step ≥ 2) — Reset / Print / Export / Send ─── */}
       {step === 2 && template && (
         <div
-          className="sticky top-0 z-30 flex items-center justify-between gap-3 px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
+          className="sticky top-0 z-30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
           data-document-studio-toolbar="1"
         >
           <div className="flex items-center gap-2 min-w-0">
@@ -1559,7 +1585,7 @@ function StudioShell({
               <div className="text-[12px] font-semibold text-[#1A1A1A] truncate leading-tight">{template.label}</div>
             </div>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="studio-action-row sm:justify-end">
             <Button
               variant="outline"
               size="sm"
@@ -1622,10 +1648,10 @@ function StudioShell({
       )}
 
       {/* ─── Body ─── */}
-      <div className="flex-1 min-h-0 flex flex-col xl:flex-row overflow-hidden">
+      <div className="studio-body flex-1 min-h-0 flex flex-col lg:flex-row overflow-hidden">
 
         {/* LEFT RAIL */}
-        <aside className="w-full xl:w-[360px] shrink-0 border-b xl:border-b-0 xl:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[42vh] xl:max-h-none">
+        <aside className="studio-sidebar w-full lg:w-[330px] xl:w-[360px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[38vh] lg:max-h-none">
           {step === 1 && (
             <>
               <div className="p-4 border-b border-[#B89555]/20">
@@ -1642,7 +1668,7 @@ function StudioShell({
                   />
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto p-3 space-y-2">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-2">
                 {filteredTemplates.map((t) => {
                   const Icon = t.icon;
                   const selected = t.id === templateId;
@@ -1652,7 +1678,7 @@ function StudioShell({
                       key={t.id}
                       onClick={() => handleSelectTemplate(t.id)}
                       className={[
-                        "w-full text-left rounded-xl border px-3 py-3 transition-all flex gap-3 items-start",
+                        "studio-template-card w-full text-left rounded-xl border px-3 py-3 transition-all flex gap-3 items-start",
                         selected
                           ? "border-[#B89555] bg-[#EFE6D6]"
                           : "border-[#B89555]/25 bg-[#F7F2EA] hover:bg-[#EFE6D6]/60",
@@ -1690,7 +1716,7 @@ function StudioShell({
                   <div className="text-[13px] font-semibold text-[#1A1A1A] truncate">{template.label}</div>
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4">
                 {template.needsPosition && (
                   <Field label="Department">
                     <div className="space-y-1.5">
@@ -2350,7 +2376,7 @@ function StudioShell({
                   <div className="text-[13px] font-semibold text-[#1A1A1A]">{template.label}</div>
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4">
                 <Field label="Subject">
                   <Input value={template.emailSubject} readOnly className="bg-[#F7F2EA]" />
                 </Field>
@@ -2424,8 +2450,8 @@ function StudioShell({
         </aside>
 
         {/* CENTER — A4 PREVIEW (fixed A4 sheets, smart-cropped) */}
-        <main ref={previewWrapRef} className="flex-1 min-w-0 min-h-[48vh] bg-[#EFE6D6] overflow-auto relative border-y xl:border-y-0 xl:border-x border-[#B89555]/35">
-          <div className="min-h-full flex justify-center py-10 px-4">
+        <main ref={previewWrapRef} className="flex-1 min-w-0 min-h-[52vh] lg:min-h-0 bg-[#EFE6D6] overflow-auto relative border-y lg:border-y-0 lg:border-x border-[#B89555]/35">
+          <div className="studio-preview-shell min-h-full flex justify-center py-10 px-4">
             {template ? (
               (() => {
                 const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
@@ -2708,7 +2734,7 @@ function StudioShell({
 
         {/* RIGHT — AI ASSISTANT */}
         {aiOpen && (
-          <aside className="w-full xl:w-[392px] shrink-0 border-t xl:border-t-0 xl:border-l border-[#B89555]/55 bg-[#FDFBF7] p-4 max-h-[34vh] xl:max-h-none overflow-auto">
+          <aside className="studio-ai-panel w-full lg:w-[330px] xl:w-[392px] shrink-0 border-t lg:border-t-0 lg:border-l border-[#B89555]/55 bg-[#FDFBF7] p-4 max-h-[34vh] lg:max-h-none overflow-auto">
             <AiEditChatPanel
               currentBody={bodyHtml}
               language={docLanguage}
