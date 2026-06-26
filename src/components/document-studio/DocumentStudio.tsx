@@ -131,6 +131,48 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   }
 }
 
+const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "homeAddress", "recipientEmail", "recipientPhone"];
+
+function cleanIdentityNotes(value?: string) {
+  if (!value) return value;
+  const parts = value.split(/[;\n]+/).map((p) => p.trim()).filter(Boolean);
+  const keep = parts.filter((p) => !/^(emirates\s*id|eid|passport|full\s*name|name\s*as\s*per\s*id|home\s*address|residential\s*address|address|email|phone|mobile|date\s*of\s*birth|dob|nationality|state\s*of|issuing\s*date|issue\s*date|expiry\s*date|id\s*expiry|sex)\b/i.test(p));
+  return keep.join("; ");
+}
+
+function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source = ""): Record<string, string> {
+  const out: Record<string, string> = {};
+  const all = { ...raw } as Record<string, any>;
+  const text = [source, Object.entries(raw).map(([k, v]) => `${k}: ${v}`).join("\n")].join("\n");
+  const pick = (...keys: string[]) => keys.map((k) => all[k]).find((v) => typeof v === "string" && v.trim());
+  const set = (k: string, v?: any) => { if (typeof v === "string" && v.trim()) out[k] = v.trim(); };
+
+  set("recipientName", pick("recipientName", "fullNameAsPerId", "fullName", "nameAsPerId", "name", "applicantName"));
+  set("emiratesId", pick("emiratesId", "emiratesID", "emirates_id", "eid", "idNumber", "id_number", "eidNumber"));
+  set("passportNumber", pick("passportNumber", "passportNo", "passport_no", "passport", "passport_number"));
+  set("homeAddress", pick("homeAddress", "residentialAddress", "residential_address", "address", "home_address"));
+  set("recipientEmail", pick("recipientEmail", "email", "emailAddress", "email_address"));
+  set("recipientPhone", pick("recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"));
+
+  set("recipientEmail", out.recipientEmail || text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]);
+  set("emiratesId", out.emiratesId || text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-"));
+  set("recipientPhone", out.recipientPhone || text.match(/(?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,}/)?.[0]);
+  set("passportNumber", out.passportNumber || text.match(/passport(?:\s*(?:number|no\.?))?\s*[:#-]\s*([A-Z0-9]{5,})/i)?.[1]);
+  set("homeAddress", out.homeAddress || text.match(/(?:home|residential)\s+address\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
+  set("recipientName", out.recipientName || text.match(/(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
+
+  Object.entries(all).forEach(([k, v]) => {
+    if (/expiry|expire|dateOfBirth|dob|birthDate|issueDate|issuingDate|nationality|sex/i.test(k)) return;
+    if (IDENTITY_FIELD_KEYS.includes(k)) return;
+    if (typeof v === "string" && v.trim()) out[k] = v.trim();
+  });
+  if (out.notes) {
+    const cleaned = cleanIdentityNotes(out.notes);
+    if (cleaned) out.notes = cleaned; else delete out.notes;
+  }
+  return out;
+}
+
 /**
  * GLOBAL per-page signature strip (locked, v3):
  * Inner pages render ONLY a single short signature line — no Name, no Date
