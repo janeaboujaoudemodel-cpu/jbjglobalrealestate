@@ -146,8 +146,10 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
             <td style={{ verticalAlign: "middle", width: "44%", fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg, paddingRight: 14 }}>
               {JBJ_BRAND.address}
             </td>
-            <td style={{ verticalAlign: "middle", width: "22%", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700 }}>
-              {JBJ_BRAND.phone}
+            <td style={{ verticalAlign: "middle", width: "22%", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700, lineHeight: 1.35 }}>
+              {(JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone]).map((p, i) => (
+                <div key={p} style={{ whiteSpace: "nowrap" }}>{p}</div>
+              ))}
             </td>
             <td style={{ verticalAlign: "middle", width: "34%", fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", paddingLeft: 14 }}>
               <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700 }}>
