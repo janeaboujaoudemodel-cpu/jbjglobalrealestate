@@ -130,6 +130,17 @@
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
 }
+[data-document-studio-overlay] [data-document-page="true"] :is(footer, footer *, .jbj-doc-footer, .jbj-doc-footer *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+[data-document-studio-overlay] :is([class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-white"], [style*="background:#FDFBF7"], [style*="background: #FDFBF7"], [style*="background:#F7F2EA"], [style*="background: #F7F2EA"])
+  :is(.text-white, .text-white\/70, .text-white\/80, .text-white\/90, [class*="text-white"], label, input, textarea, select) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
 [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]),
 [data-studio-workspace] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]) {
   color: #1A1A1A !important;

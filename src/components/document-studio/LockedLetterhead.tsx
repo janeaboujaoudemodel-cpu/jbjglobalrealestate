@@ -61,7 +61,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
-            <span style={{ letterSpacing: "0.12em", whiteSpace: "nowrap" }}>{JBJ_BRAND.legalSuffix}</span>
+            <span style={{ letterSpacing: "0.12em", whiteSpace: "nowrap", color: t.fg, WebkitTextFillColor: t.fg }}>{JBJ_BRAND.legalSuffix}</span>
           </div>
         </div>
       </div>
@@ -83,25 +83,26 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         borderTop: `1px solid ${t.hairline}`,
         color: t.fg,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "2px 28px",
+        padding: "12px 28px",
         boxSizing: "border-box",
+        minHeight: 46,
       }}
     >
       <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
         <tbody>
           <tr>
-            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 8.5, lineHeight: 1.15, color: t.fg, paddingRight: 14 }}>
+            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg, paddingRight: 14 }}>
               {JBJ_BRAND.address}
             </td>
-            <td style={{ verticalAlign: "middle", width: "22%", fontSize: 9, color: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700 }}>
+            <td style={{ verticalAlign: "middle", width: "22%", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700 }}>
               {JBJ_BRAND.phone}
             </td>
-            <td style={{ verticalAlign: "middle", width: "34%", fontSize: 8.5, color: t.fg, textAlign: "right", paddingLeft: 14 }}>
-              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, textDecoration: "none", fontWeight: 700 }}>
+            <td style={{ verticalAlign: "middle", width: "34%", fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", paddingLeft: 14 }}>
+              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700 }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
-              <span style={{ color: t.fg, opacity: 0.5, margin: "0 6px" }}>·</span>
-              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em" }}>
+              <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, margin: "0 6px" }}>·</span>
+              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
             </td>

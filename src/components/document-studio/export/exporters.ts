@@ -136,7 +136,7 @@ async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
 export async function exportPdf(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
   sourceElement?: HTMLElement | null,
-): Promise<void> {
+): Promise<Blob> {
   const { default: jsPDF } = await import("jspdf");
 
   const livePages = sourceElement
@@ -155,8 +155,9 @@ export async function exportPdf(
       pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H);
     }
 
+    const blob = pdf.output("blob");
     pdf.save(fileName(template, "pdf"));
-    return;
+    return blob;
   }
 
   // Collect logical block boundaries from the live DOM BEFORE rasterising,
@@ -218,7 +219,9 @@ export async function exportPdf(
     first = false;
     yOffset = cut;
   }
+  const blob = pdf.output("blob");
   pdf.save(fileName(template, "pdf"));
+  return blob;
 }
 
 
