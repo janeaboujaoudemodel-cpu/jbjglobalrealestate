@@ -13,7 +13,6 @@
 
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
 import PropertyRecommendationPopup from "@/components/PropertyRecommendationPopup";
-import ModeSelectionModal from "@/components/ModeSelectionModal";
 import { UserTasksPopupAlert } from "@/components/notifications/UserTasksPopupAlert";
 import { usePrintMode } from "@/hooks/usePrintMode";
 
@@ -25,7 +24,6 @@ const PopupLayer = () => {
     <>
       <CookiesConsentBanner />
       <PropertyRecommendationPopup />
-      <ModeSelectionModal />
       <UserTasksPopupAlert />
     </>
   );

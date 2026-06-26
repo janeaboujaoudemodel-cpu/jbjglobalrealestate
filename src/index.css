@@ -16461,12 +16461,12 @@ html body [data-surface="champagne"] [data-count-badge] {
  * and `[data-hero-dark]` in its :not() chain, so opt-out scopes still
  * inherit ink. This block runs after every rule in the file and uses
  * higher specificity (html body html-scoped + double attr) so any
- * descendant of a hero-dark / no-contrast-guard / on-dark scope keeps
+ * descendant of a hero-dark / on-dark scope keeps
  * white text + white SVG strokes, no matter what an earlier surface
  * rule tried to force.
  * ============================================================ */
-html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]):is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]),
-html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where(
+html body :is([data-hero-dark], [data-on-dark]):is([data-hero-dark], [data-on-dark]),
+html body :is([data-hero-dark], [data-on-dark]) :where(
   h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time,
   dt, dd, th, td, figcaption, blockquote, button, svg, [class*="lucide"]
 ) {
@@ -16475,11 +16475,11 @@ html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where
   text-shadow: none !important;
   opacity: 1 !important;
 }
-html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where(svg, [class*="lucide"]) {
+html body :is([data-hero-dark], [data-on-dark]) :where(svg, [class*="lucide"]) {
   stroke: currentColor !important;
 }
-/* Inline-styled colors win on their own via [style*="color"] specificity;
-   no revert override needed (revert would fall back to UA black). */
+/* data-no-contrast-guard is an opt-out only; it must never repaint light
+   champagne/mother-of-pearl controls to white. */
 
 /* ─────────────────────────────────────────────────────────────────
    PASS 51 — CHAT / MESSAGE LAYOUT: HORIZONTAL CONTENT ADAPT
@@ -16949,4 +16949,83 @@ html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [da
   stroke-opacity: 1 !important;
   fill-opacity: 1 !important;
   mix-blend-mode: normal !important;
+}
+
+/* PASS 57 — FINAL LIGHT-SURFACE INK LOCK
+   Winning correction for champagne / mother-of-pearl / bright-gold controls:
+   bright own-background = ink text + ink icons. Emerald/dark own-backgrounds
+   remain pure white through their explicit surface contracts above. */
+html body :is(
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  [data-surface="page"],
+  [data-surface="light"],
+  .jj-surface-champagne,
+  .surface-champagne,
+  .surface-page,
+  .surface-light,
+  .jj-gold-metallic,
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-white"],
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [style*="#FDFBF7"],
+  [style*="#F7F2EA"],
+  [style*="#EFE6D6"],
+  [style*="background-color: white"],
+  [style*="background-color:#fff"],
+  [style*="background: white"],
+  [style*="background:#fff"]
+):not([data-surface="emerald"]):not([data-on-dark]):not([data-hero-dark])
+  :is(.text-white, [class*="text-white"], [style*="color: rgb(255, 255, 255)"], [style*="color:#fff"], [style*="color: #fff"], svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse)
+  :not(:is([data-surface="emerald"], [data-emerald="true"], [data-emerald-ok], [data-emerald-action="true"], [data-on-dark], [data-hero-dark], .jj-emerald-metallic, .jj-cta-emerald, .jj-cta-primary, .jj-surface-emerald, .jj-icon-tile-emerald, .jj-pill-emerald, .jj-pill-emerald-metallic) *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body :is(
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  [data-surface="page"],
+  [data-surface="light"],
+  .jj-surface-champagne,
+  .surface-champagne,
+  .surface-page,
+  .surface-light,
+  .jj-gold-metallic,
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-white"],
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [style*="#FDFBF7"],
+  [style*="#F7F2EA"],
+  [style*="#EFE6D6"],
+  [style*="background-color: white"],
+  [style*="background-color:#fff"],
+  [style*="background: white"],
+  [style*="background:#fff"]
+):is(.text-white, [class*="text-white"]):not([data-surface="emerald"]):not([data-on-dark]):not([data-hero-dark]):not(.jj-emerald-metallic):not(.jj-cta-emerald):not(.jj-cta-primary):not(.jj-surface-emerald) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+
+html body [data-signout-action],
+html body [data-signout-action]:hover,
+html body [data-signout-action] :is([data-signout-label], [data-signout-icon], svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse),
+html body [data-signout-action]:hover :is([data-signout-label], [data-signout-icon], svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
 }
