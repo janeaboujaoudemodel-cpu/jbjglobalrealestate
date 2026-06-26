@@ -525,7 +525,7 @@ function composeGeneric(input: ComposerInput, subject: string): string {
     recipientBlock(f),
     subjectLine(subject),
     paragraphs(input.aiIntro),
-    identityTable(identityRows),
+    inlineIdentitySentence(f),
     termsTable(rows),
     commissionTable(input.commissionRows || []),
     paragraphs(input.aiClosing),
