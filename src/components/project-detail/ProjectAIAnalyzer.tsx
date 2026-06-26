@@ -426,7 +426,7 @@ export const ProjectAIAnalyzer = ({
               {/* Supply vs Demand */}
               <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                  <TrendingUp className="w-5 h-5" style={{ color: "#064E3B" }} />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
                 </div>
 
@@ -434,13 +434,13 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="mb-3">
                       <div className="flex items-end gap-1 mb-1">
-                        <span className="text-3xl font-bold text-blue-600">{absorptionRate}%</span>
+                        <span className="text-3xl font-bold" style={{ color: "#064E3B" }}>{absorptionRate}%</span>
                         <span className="text-sm text-[#1A1A1A] font-semibold mb-0.5">absorption rate</span>
                       </div>
-                      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
+                      <div className="relative h-2.5 w-full overflow-hidden rounded-full" style={{ background: "#EFE6D6" }}>
                         <div
                           className="h-full rounded-full transition-all"
-                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #3B82F6, #10B981)` }}
+                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #B89555, #064E3B)` }}
                         />
                       </div>
                       <div className="flex justify-between text-[10px] text-[#1A1A1A]/90 font-semibold mt-1">
