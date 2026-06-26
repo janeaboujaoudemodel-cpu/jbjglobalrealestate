@@ -1452,7 +1452,7 @@ function StudioShell({
       else if (kind === "png") await exportPng(currentBody, marks, template, src);
       else if (kind === "both") {
         pdfBlob = await exportPdf(currentBody, marks, template, src);
-        await exportPng(bodyHtml, marks, template, src);
+        await exportPng(currentBody, marks, template, src);
       }
       if (pdfBlob) {
         try {
