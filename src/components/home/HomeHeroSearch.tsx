@@ -208,13 +208,15 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             )}
           </button>
 
-          {/* FREE CONSULTATION — visible on ALL viewports (compact label on mobile) */}
+          {/* FREE CONSULTATION — IN-BAR on desktop (lg+) only.
+              On phone/iPad portrait the button drops to its own row below
+              so the search input + Search button have full breathing room. */}
           <button
             type="button"
             onClick={openBooking}
             aria-label="Book your free consultation now"
             data-no-contrast-guard
-            className="allow-white jj-hero-search-action flex items-center justify-center gap-1.5 self-stretch h-full px-3 sm:px-5 lg:px-6 text-[12.5px] sm:text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-110"
+            className="allow-white jj-hero-search-action hidden lg:flex items-center justify-center gap-1.5 self-stretch h-full px-3 sm:px-5 lg:px-6 text-[12.5px] sm:text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
@@ -223,17 +225,38 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
             }}
           >
-            <CalendarCheck className="w-4 h-4 sm:hidden" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />
-            <span className="whitespace-nowrap hidden sm:inline" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <CalendarCheck className="w-4 h-4" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />
+            <span className="whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               Free Consultation
-            </span>
-            <span className="whitespace-nowrap sm:hidden" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-              Consult
             </span>
           </button>
 
         </div>
         </div>
+
+        {/* SECOND-ROW Free Consultation — phone + iPad portrait only (below lg).
+            Full-width emerald pill matching the bar surface for visual cohesion. */}
+        <button
+          type="button"
+          onClick={openBooking}
+          aria-label="Book your free consultation now"
+          data-no-contrast-guard
+          data-surface="dark"
+          className="allow-white lg:hidden mt-3 w-full flex items-center justify-center gap-2 h-12 sm:h-[52px] rounded-2xl text-[14px] sm:text-[14.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
+          style={{
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            backgroundImage: "var(--jj-emerald-ombre)",
+            boxShadow:
+              "0 10px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.10)",
+          }}
+        >
+          <CalendarCheck className="w-4 h-4" strokeWidth={2.2} style={{ color: "#FFFFFF" }} />
+          <span className="whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            Book a Free Consultation
+          </span>
+        </button>
+
 
 
 
