@@ -4,7 +4,8 @@
  */
 
 import { motion } from "framer-motion";
-import propertiesHeroVideo from "@/assets/properties-hero-video.mp4";
+import propertiesHeroVideoAsset from "@/assets/properties-hero-video.mp4.asset.json";
+const propertiesHeroVideo = propertiesHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 
 interface PropertiesHeroVideoProps {
