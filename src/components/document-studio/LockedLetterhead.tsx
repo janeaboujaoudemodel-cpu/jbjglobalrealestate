@@ -66,13 +66,13 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "14px 24px",
+        padding: "4px 24px 16px",
         boxSizing: "border-box",
       }}
     >
       <div
-        className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "132px minmax(0,1fr)", columnGap: 14, minHeight: 132 }}
+        className="grid items-start min-w-0"
+        style={{ gridTemplateColumns: "132px minmax(0,1fr)", columnGap: 14, minHeight: 118 }}
       >
           <div
             aria-label="JBJ"
@@ -81,8 +81,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
               position: "relative",
               width: 118,
               height: 118,
-              margin: "auto",
-              alignSelf: "center",
+              marginTop: -6,
               justifySelf: "center",
             }}
           >
@@ -93,7 +92,8 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             <MaskedMonogramLayer color={t.jColor} clip="inset(0% 13% 0% 69.5%)" />
           </div>
 
-        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "stretch", paddingRight: 18, lineHeight: 1, overflow: "visible" }}>
+        <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "flex-start", justifyContent: "stretch", paddingRight: 56, paddingTop: 14, lineHeight: 1, overflow: "visible" }}>
+
           <div
             className="font-bold"
             style={{
