@@ -16901,3 +16901,33 @@ html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-rad
   word-break: break-word !important;
   text-overflow: clip !important;
 }
+
+/* PASS 56B — final EOF backend icon glyph lock. This intentionally sits
+   after every legacy contrast sweep/dropdown rule so no portal can repaint an
+   emerald icon tile back to black. */
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) :is(svg, [class*="lucide"], [data-lucide], svg *, path, circle, rect, line, polyline, polygon, ellipse),
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-surface="emerald"], [data-emerald-ok], .jj-surface-emerald, .jj-cta-emerald, .jj-cta-primary, [role="tab"][data-state="active"]) :is(svg, [class*="lucide"], [data-lucide], svg *, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[aria-label*="Scroll"],
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[title*="Scroll"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[aria-label*="Scroll"] :is(svg, [class*="lucide"], svg *),
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[title*="Scroll"] :is(svg, [class*="lucide"], svg *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
