@@ -75,6 +75,8 @@ interface Props {
   catalog: DocumentScope;
   trigger?: React.ReactNode;
   presetTemplateId?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 type Step = 1 | 2 | 3;
@@ -83,6 +85,51 @@ const DOCUSIGN_TOP_RESERVE = 42;
 const PAGE_SIGNATURE_RESERVE = 132;
 const escapeSignatureHtml = (value?: string) =>
   (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
+
+const todayIso = () => new Date().toISOString().slice(0, 10);
+
+const UAE_DEVELOPERS = [
+  { name: "Emaar Properties", email: "brokerrelations@emaar.ae", phone: "+971 4 366 1688" },
+  { name: "DAMAC Properties", email: "broker.support@damacgroup.com", phone: "+971 4 373 1000" },
+  { name: "Nakheel", email: "sales@nakheel.com", phone: "+971 4 390 3333" },
+  { name: "Sobha Realty", email: "channelpartners@sobharealty.com", phone: "+971 4 423 8064" },
+  { name: "Meraas", email: "sales@meraas.com", phone: "+971 800 637227" },
+  { name: "Dubai Properties", email: "sales@dp.ae", phone: "+971 800 3787" },
+  { name: "Aldar Properties", email: "brokerrelations@aldar.com", phone: "+971 2 810 5555" },
+  { name: "Azizi Developments", email: "sales@azizidevelopments.com", phone: "+971 4 359 6673" },
+  { name: "Ellington Properties", email: "sales@ellingtongroup.com", phone: "+971 4 278 0888" },
+  { name: "Binghatti", email: "sales@binghatti.com", phone: "+971 4 512 4444" },
+];
+
+function getTemplateDefaultFields(templateId?: string): Record<string, string> {
+  const today = todayIso();
+  switch (templateId) {
+    case "job_offer":
+      return { recipientName: "[Employee Name]", jobTitle: "[Position]", startDate: today, probation: "6 months", workingHours: "Monday to Friday, 9:00 AM to 6:00 PM", annualLeave: "30 calendar days", noticePeriod: "30 calendar days", reportingTo: "Management", salary: "AED [amount] per month" };
+    case "warning_letter":
+      return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
+    case "termination_letter":
+      return { recipientName: "[Employee Name]", jobTitle: "[Position]", terminationDate: today, lastWorkingDay: today, noticePeriod: "As per UAE Labour Law / employment contract", reason: "business_requirements", returnOfProperty: "Laptop, access cards, keys, documents and all company property", finalSettlement: "Final settlement to be processed after clearance." };
+    case "developer_commission_invoice":
+      return { developerName: "Emaar Properties", developerContact: "brokerrelations@emaar.ae · +971 4 366 1688", closingDate: today, commissionRate: "2%", paymentTerms: "Net 7 days from invoice date" };
+    case "developer_payment_request":
+      return { developerName: "Emaar Properties", accountsEmail: "brokerrelations@emaar.ae", requestedPaymentDate: today, dueReason: "Closed deal — commission payable after SPA / booking confirmation." };
+    case "developer_closing_notice":
+      return { developerName: "Emaar Properties", closingDate: today, commissionRate: "2%", brokerName: "JBJ GLOBAL REAL ESTATE" };
+    case "maintenance_request":
+      return { requestDate: today, priority: "normal", serviceRequired: "General maintenance inspection and required rectification works." };
+    case "interior_design_quotation":
+      return { quotationTitle: "Interior Design Quotation", scope: "Design consultation, concept direction, sourcing and execution coordination.", timeline: "4–6 weeks", validUntil: today };
+    case "service_bill":
+      return { invoiceNumber: `JBJ-BILL-${new Date().getFullYear()}-001`, serviceDescription: "After-sale service / maintenance coordination", paymentTerms: "Net 7 days", dueDate: today };
+    case "client_quotation":
+      return { quotationNumber: `JBJ-QTN-${new Date().getFullYear()}-001`, quotationTitle: "After-Sale Service Quotation", scope: "Scope, deliverables and service assumptions to be confirmed.", validUntil: today };
+    case "paa":
+      return { recipientName: "[Owner Name]", propertyRef: "[Property / Unit]" };
+    default:
+      return {};
+  }
+}
 
 /**
  * GLOBAL per-page signature strip (locked, v3):
@@ -177,8 +224,13 @@ const anchorSignatureArtifacts = (html: string): string => {
 };
 
 
-export default function DocumentStudio({ catalog, trigger, presetTemplateId }: Props) {
-  const [open, setOpen] = useState(false);
+export default function DocumentStudio({ catalog, trigger, presetTemplateId, open: controlledOpen, onOpenChange }: Props) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = useCallback((next: boolean) => {
+    if (controlledOpen === undefined) setInternalOpen(next);
+    onOpenChange?.(next);
+  }, [controlledOpen, onOpenChange]);
 
   // Auto-open when a one-shot prefill payload was dropped in sessionStorage
   // by an external bridge (e.g. CV Center "Open in Document Studio").
@@ -187,18 +239,20 @@ export default function DocumentStudio({ catalog, trigger, presetTemplateId }: P
       const key = `jbj:doc-studio:prefill:${catalog}`;
       if (sessionStorage.getItem(key)) setOpen(true);
     } catch {}
-  }, [catalog]);
+  }, [catalog, setOpen]);
 
   return (
     <>
-      <span onClick={() => setOpen(true)} className="contents">
-        {trigger || (
+      {trigger !== null && (
+        <span onClick={() => setOpen(true)} className="contents">
+          {trigger || (
           <Button variant="primary">
             <Wand2 className="w-4 h-4 mr-2" />
             Generate Document
           </Button>
-        )}
-      </span>
+          )}
+        </span>
+      )}
       {open && (
         <StudioShell
           catalog={catalog}
@@ -253,7 +307,9 @@ function StudioShell({
       return j;
     } catch { return null; }
   };
-  const snap = readSnapshot();
+  // Opening a specific template from the hub must NEVER be hijacked by an
+  // unrelated previous draft. Resume is offered only for the generic Studio.
+  const snap = initialId ? null : readSnapshot();
 
   const [step, setStep] = useState<Step>(snap?.templateId ? (snap.step ?? 2) : (initialId ? 2 : 1));
   const [templateId, setTemplateId] = useState<string>(snap?.templateId || initialId);
@@ -277,7 +333,7 @@ function StudioShell({
   const [deptDraft, setDeptDraft] = useState("");
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
-  const [fields, setFields] = useState<Record<string, string>>({});
+  const [fields, setFields] = useState<Record<string, string>>(() => getTemplateDefaultFields(initialId));
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
@@ -881,6 +937,16 @@ function StudioShell({
   }, [onClose]);
 
   const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
+  const applyDeveloperDetails = (developerName: string) => {
+    const dev = UAE_DEVELOPERS.find((d) => d.name.toLowerCase() === developerName.trim().toLowerCase());
+    if (!dev) return;
+    setFields((p) => ({
+      ...p,
+      developerName: dev.name,
+      developerContact: `${dev.email} · ${dev.phone}`,
+      accountsEmail: dev.email,
+    }));
+  };
 
   // Auto-render locked standard body whenever template / fields / commissions /
   // owner-signature state change. We force-rerender every time UNLESS the user
@@ -900,7 +966,7 @@ function StudioShell({
         if (s.userEdited) { userEditedRef.current = true; setUserEdited(true); }
       }
       if (typeof s.templateId === "string" && s.templateId) setTemplateId(s.templateId);
-      if (typeof s.step === "number") setStep(s.step as Step);
+      setStep(typeof s.step === "number" ? (s.step as Step) : 2);
       if (typeof s.ownerName === "string") setOwnerName(s.ownerName);
       if (typeof s.ownerTitle === "string") setOwnerTitle(s.ownerTitle);
       if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
@@ -917,6 +983,9 @@ function StudioShell({
         description: s.savedAt
           ? `Recovered from ${new Date(s.savedAt).toLocaleString()}`
           : "Your previous work was recovered.",
+      });
+      requestAnimationFrame(() => {
+        previewWrapRef.current?.scrollTo({ top: 0, behavior: "smooth" });
       });
     } catch {
       toast.error("Could not restore draft");
@@ -1047,7 +1116,7 @@ function StudioShell({
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
-    setFields({});
+    setFields(getTemplateDefaultFields(id));
     setExtraSignatories([]);
     autoBodyRef.current = "";
     userEditedRef.current = false;
@@ -1250,6 +1319,7 @@ function StudioShell({
   const renderTemplateField = (f: DocumentTemplate["fields"][number]) => {
     const label = fieldLabelOverrides[f.key] ?? f.label;
     const isEditing = editingFieldKey === f.key;
+    const isDeveloperName = f.key === "developerName";
     return (
       <div key={f.key}>
         <div className="flex items-center gap-1 mb-1.5 group">
@@ -1284,6 +1354,32 @@ function StudioShell({
               {f.options?.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
             </SelectContent>
           </Select>
+        ) : isDeveloperName ? (
+          <div className="space-y-1.5">
+            <Input
+              list="jbj-developer-picker"
+              value={fields[f.key] || ""}
+              onChange={(e) => { setField(f.key, e.target.value); applyDeveloperDetails(e.target.value); }}
+              onBlur={(e) => applyDeveloperDetails(e.target.value)}
+              placeholder={f.placeholder || "Search developer or type manually"}
+              className="bg-[#FDFBF7]"
+            />
+            <datalist id="jbj-developer-picker">
+              {UAE_DEVELOPERS.map((d) => <option key={d.name} value={d.name} />)}
+            </datalist>
+            <div className="flex flex-wrap gap-1.5">
+              {UAE_DEVELOPERS.slice(0, 6).map((d) => (
+                <button
+                  key={d.name}
+                  type="button"
+                  onClick={() => applyDeveloperDetails(d.name)}
+                  className="rounded-full border border-[#B89555]/35 bg-[#FDFBF7] px-2 py-1 text-[10px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  {d.name}
+                </button>
+              ))}
+            </div>
+          </div>
         ) : (
           <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={fields[f.key] || ""} onChange={(e) => setField(f.key, e.target.value)} placeholder={f.placeholder} className="bg-[#FDFBF7]" />
         )}
@@ -1335,6 +1431,9 @@ function StudioShell({
         [data-document-studio-overlay] [data-surface="emerald"] * { color:#FFFFFF !important; -webkit-text-fill-color:#FFFFFF !important; stroke:#FFFFFF !important; }
         [data-document-studio-overlay] [data-surface="champagne"],
         [data-document-studio-overlay] [data-surface="champagne"] * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; stroke:currentColor !important; }
+        [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body,
+        [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; }
+        [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
         [data-document-studio-overlay] .studio-scroll-x { overflow-x:hidden; }
         [data-document-studio-overlay] .studio-action-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-width:0; }
         [data-document-studio-overlay] .studio-action-row > * { flex:0 1 auto; }

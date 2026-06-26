@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText } from "lucide-react";
 import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
@@ -30,10 +30,10 @@ import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { AICommandPanel } from "@/components/owner/documents/AICommandPanel";
 import { getCatalogByAudience, type DocumentTemplate } from "@/config/documentCatalog";
 
-const DocumentStudioLauncher = lazy(() => import("@/components/document-studio/DocumentStudioLauncher"));
 const DocumentStudio = lazy(() => import("@/components/document-studio/DocumentStudio"));
 
 type Cat = "all" | "leasing" | "selling";
+type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer";
 type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
@@ -52,7 +52,26 @@ const FEATURED_STUDIO_TEMPLATE_IDS = [
   "ejari_tenancy",
   "custom_client",
   "jbj_branded_proposal_letterhead",
+  "facility_management_agreement",
+  "maintenance_request",
+  "interior_design_quotation",
+  "service_bill",
+  "client_quotation",
+  "developer_commission_invoice",
+  "developer_payment_request",
+  "developer_closing_notice",
   "ai_home_finder_report",
+];
+
+const TEMPLATE_CATEGORIES: Array<{ key: TemplateCategoryKey; label: string; description: string; icon: typeof FileText; ids?: string[] }> = [
+  { key: "all", label: "All Forms", description: "Full JBJ library", icon: FileText },
+  { key: "employees", label: "Employees", description: "Offer, contract, warning, termination, HR letters", icon: Briefcase, ids: ["job_offer", "employment_contract", "warning_letter", "termination_letter", "nda", "commission_agreement", "commission_invoice", "internship_agreement", "hr_letter", "partnership_referral", "custom_staff"] },
+  { key: "client", label: "Client", description: "Client letters, proposals, NOC, reservations", icon: Crown, ids: ["ai_home_finder_report", "jbj_branded_proposal_letterhead", "custom_client", "mou", "property_reservation", "noc", "tenancy_addendum"] },
+  { key: "forms", label: "Forms & Agreements", description: "RERA Forms A/B/F/I/U, A-to-A and agreements", icon: Stamp, ids: ["form_a", "form_b", "form_f", "form_i", "form_u", "broker_referral", "paa", "mou", "ejari_tenancy"] },
+  { key: "leasing", label: "Leasing", description: "PAA, tenancy, holiday home and addenda", icon: FileSignature, ids: ["paa", "ejari_tenancy", "tenancy_addendum", "holiday_home_agreement"] },
+  { key: "selling", label: "Selling", description: "Listing, buyer, MOU, cancellation and reservation", icon: Scale, ids: ["form_a", "form_b", "form_f", "form_i", "form_u", "broker_referral", "mou", "property_reservation"] },
+  { key: "after_sale", label: "After-Sale", description: "Maintenance, interior, bills and quotations", icon: ReceiptText, ids: ["facility_management_agreement", "maintenance_request", "interior_design_quotation", "service_bill", "client_quotation"] },
+  { key: "developer", label: "Developer", description: "Developer invoices, commission claims and closing notices", icon: Building2, ids: ["developer_commission_invoice", "developer_payment_request", "developer_closing_notice"] },
 ];
 
 const templateFamilyLabel = (template: DocumentTemplate) => {
@@ -183,6 +202,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const [includeJbjBlock, setIncludeJbjBlock] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [newEnvelopeOpen, setNewEnvelopeOpen] = useState(false);
+  const [templateSearch, setTemplateSearch] = useState("");
+  const [activeTemplateCategory, setActiveTemplateCategory] = useState<TemplateCategoryKey>("all");
+  const [selectedStudioTemplate, setSelectedStudioTemplate] = useState<DocumentTemplate | null>(null);
+  const [studioOpen, setStudioOpen] = useState(false);
   const [manageKind, setManageKind] = useState<"signature" | "stamp" | null>(null);
   const sigFileRef = useRef<HTMLInputElement>(null);
   const stampFileRef = useRef<HTMLInputElement>(null);
@@ -191,6 +214,28 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const isBlankLetterKey = (k: string) => k === "jbj-blank-letter" || k === "jbj-letterhead-blank";
   const blankLetterTemplate = templates.find(t => isBlankLetterKey(t.key)) || null;
   const standardLetterheadName = blankLetterTemplate?.name || "Standard JBJ Letterhead";
+
+  const categoryFilteredStudioTemplates = useMemo(() => {
+    const q = templateSearch.trim().toLowerCase();
+    const category = TEMPLATE_CATEGORIES.find((item) => item.key === activeTemplateCategory);
+    return studioTemplates.filter((template) => {
+      const inCategory = !category?.ids || category.ids.includes(template.id);
+      const matchesSearch = !q || [template.label, template.description, templateFamilyLabel(template), template.audience]
+        .join(" ")
+        .toLowerCase()
+        .includes(q);
+      return inCategory && matchesSearch;
+    });
+  }, [activeTemplateCategory, studioTemplates, templateSearch]);
+
+  const categorizedEsignTemplates = useMemo(() => {
+    const q = templateSearch.trim().toLowerCase();
+    const matches = (t: EsignTemplate) => !q || [t.name, t.category, t.key].join(" ").toLowerCase().includes(q);
+    if (activeTemplateCategory === "leasing") return templates.filter((t) => !isBlankLetterKey(t.key) && t.category === "leasing" && matches(t));
+    if (activeTemplateCategory === "selling") return templates.filter((t) => !isBlankLetterKey(t.key) && t.category === "selling" && matches(t));
+    if (activeTemplateCategory === "all" || activeTemplateCategory === "forms") return templates.filter((t) => !isBlankLetterKey(t.key) && matches(t));
+    return [];
+  }, [activeTemplateCategory, templateSearch, templates]);
 
   // Bucket envelopes.
   // RULE: an envelope that has a client filled in is ALWAYS a "Forms Generated"
@@ -302,6 +347,19 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     setPicker(t);
     setClient({ name: "", email: "", phone: "" });
     setNewEnvelopeOpen(false);
+  };
+
+  const openStudioTemplate = (template: DocumentTemplate) => {
+    setSelectedStudioTemplate(template);
+    setNewEnvelopeOpen(false);
+    setStudioOpen(true);
+  };
+
+  const showCategory = (key: TemplateCategoryKey) => {
+    setActiveTemplateCategory(key);
+    setCat(key === "leasing" || key === "selling" ? key : "all");
+    setTab("templates");
+    requestAnimationFrame(() => document.getElementById("jj-template-library")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
   // Bulk actions on the visible bucket
@@ -590,20 +648,20 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     >
       <div className="max-w-[1440px] mx-auto min-w-0">
 
-        <header className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between min-w-0">
-          <div className="min-w-0">
+        <header className="mb-6 rounded-xl border border-[#B89555]/25 bg-[#F7F2EA] px-5 py-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between min-w-0 overflow-hidden">
+          <div className="min-w-0 flex-1">
             <div className="text-xs uppercase tracking-[0.18em] text-[#1A1A1A]/60">Owner</div>
             <h1 className="text-2xl font-semibold text-[#1A1A1A]">Documents & Forms</h1>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">Unified hub — templates, document editor, e-signature, agreements, signatures & stamps. All in one place.</p>
           </div>
           <Button variant="primary" onClick={() => setNewEnvelopeOpen(true)} className="h-11 px-5 w-full sm:w-auto self-stretch sm:self-start lg:self-auto shrink-0">
-            <Plus className="w-4 h-4 mr-2" /> New Envelope
+            <Sparkles className="w-4 h-4 mr-2" /> Generate Document
           </Button>
         </header>
 
         {/* Quick actions */}
         <div className="grid gap-3 mb-6" data-studio-card-grid>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => { setCat("leasing"); setTab("templates"); }}>
+          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("leasing")}>
             <div className="flex items-start gap-3">
               <FileText className="w-5 h-5 text-[#B89555]" />
               <div>
@@ -612,7 +670,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               </div>
             </div>
           </Card>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => { setCat("selling"); setTab("templates"); }}>
+          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("selling")}>
             <div className="flex items-start gap-3">
               <FileText className="w-5 h-5 text-[#B89555]" />
               <div>
@@ -639,43 +697,88 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               </div>
             </div>
           </Card>
+          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("after_sale")}>
+            <div className="flex items-start gap-3">
+              <ReceiptText className="w-5 h-5 text-[#B89555]" />
+              <div>
+                <div className="font-medium text-[#1A1A1A] text-sm">After-Sale</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">Maintenance, bills, quotations</div>
+              </div>
+            </div>
+          </Card>
+          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("developer")}>
+            <div className="flex items-start gap-3">
+              <Building2 className="w-5 h-5 text-[#B89555]" />
+              <div>
+                <div className="font-medium text-[#1A1A1A] text-sm">Developer</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">Commission claims, invoices</div>
+              </div>
+            </div>
+          </Card>
         </div>
 
         <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
           <TabsList className="w-full justify-start bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1 overflow-x-auto">
-            <TabsTrigger value="templates"><FileText className="w-4 h-4 mr-2" />Templates</TabsTrigger>
-            <TabsTrigger value="documents"><FileEdit className="w-4 h-4 mr-2" />Live Editor</TabsTrigger>
-            <TabsTrigger value="esign"><FileSignature className="w-4 h-4 mr-2" />E-signature</TabsTrigger>
-            <TabsTrigger value="drafts"><FileEdit className="w-4 h-4 mr-2" />Drafts ({buckets.drafts.length})</TabsTrigger>
-            <TabsTrigger value="generated"><Clock className="w-4 h-4 mr-2" />Generated ({buckets.generated.length})</TabsTrigger>
-            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending ({buckets.sent.length})</TabsTrigger>
-            <TabsTrigger value="submitted"><Clock className="w-4 h-4 mr-2" />Review ({buckets.submitted.length})</TabsTrigger>
-            <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({buckets.signed.length})</TabsTrigger>
-            <TabsTrigger value="vault"><Stamp className="w-4 h-4 mr-2" />Contract Vault</TabsTrigger>
-            <TabsTrigger value="deleted"><Trash2 className="w-4 h-4 mr-2" />Deleted ({buckets.deleted.length})</TabsTrigger>
-            <TabsTrigger value="assets"><PenTool className="w-4 h-4 mr-2" />Stamps & Signatures</TabsTrigger>
+            <TabsTrigger value="templates">Templates</TabsTrigger>
+            <TabsTrigger value="documents">Live Editor</TabsTrigger>
+            <TabsTrigger value="esign">E-signature</TabsTrigger>
+            <TabsTrigger value="drafts">Drafts ({buckets.drafts.length})</TabsTrigger>
+            <TabsTrigger value="generated">Generated ({buckets.generated.length})</TabsTrigger>
+            <TabsTrigger value="sent">Pending ({buckets.sent.length})</TabsTrigger>
+            <TabsTrigger value="submitted">Review ({buckets.submitted.length})</TabsTrigger>
+            <TabsTrigger value="signed">Signed ({buckets.signed.length})</TabsTrigger>
+            <TabsTrigger value="vault">Contract Vault</TabsTrigger>
+            <TabsTrigger value="deleted">Deleted ({buckets.deleted.length})</TabsTrigger>
+            <TabsTrigger value="assets">Stamps & Signatures</TabsTrigger>
           </TabsList>
 
           {/* TEMPLATES */}
           <TabsContent value="templates" className="mt-4">
-            <Suspense fallback={<div className="mb-6 rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] p-5 text-sm text-[#1A1A1A]/70">Loading company materials…</div>}>
-              <DocumentStudioLauncher
-                catalog="all"
-                presetTemplateId="ai_home_finder_report"
-                title="Live Editor · Full JBJ Template Library"
-                subtitle="Open the editor directly with the complete real-estate, HR, brokerage and branded proposal library — locked champagne, emerald, gold and premium-black JBJ design system."
-              />
-            </Suspense>
-            <div className="mb-5 grid gap-3 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4">
+            <div id="jj-template-library" className="mb-5 grid gap-3 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4 scroll-mt-6">
               <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
                 <div className="min-w-0">
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A]/60">Real estate template library</div>
-                  <h2 className="text-lg font-semibold text-[#1A1A1A]">Ready + blank JBJ documents</h2>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A]/60">Document Studio</div>
+                  <h2 className="text-lg font-semibold text-[#1A1A1A]">Generate document library</h2>
                 </div>
-                <div className="text-xs font-semibold text-[#1A1A1A]/70">{studioTemplates.length} templates</div>
+                <div className="text-xs font-semibold text-[#1A1A1A]/70">{categoryFilteredStudioTemplates.length + categorizedEsignTemplates.length} visible · {studioTemplates.length + filteredTemplates.length} total</div>
               </div>
+
+              <div className="relative">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/55" />
+                <Input
+                  value={templateSearch}
+                  onChange={(e) => setTemplateSearch(e.target.value)}
+                  placeholder="Search any template, form, employee letter, developer invoice…"
+                  className="pl-9 bg-[#FDFBF7]"
+                />
+              </div>
+
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                {TEMPLATE_CATEGORIES.map((item) => {
+                  const Icon = item.icon;
+                  const active = activeTemplateCategory === item.key;
+                  return (
+                    <button
+                      key={item.key}
+                      type="button"
+                      onClick={() => showCategory(item.key)}
+                      data-surface={active ? "emerald" : "champagne"}
+                      className={["text-left rounded-lg border px-3 py-3 transition min-w-0", active ? "border-transparent bg-[var(--jj-emerald-ombre)] shadow-lg" : "border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#EFE6D6]"].join(" ")}
+                    >
+                      <div className="flex items-start gap-2 min-w-0">
+                        <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />
+                        <div className="min-w-0">
+                          <div className={active ? "text-sm font-semibold text-[#FFFFFF]" : "text-sm font-semibold text-[#1A1A1A]"}>{item.label}</div>
+                          <div className={active ? "text-[11px] text-[#FFFFFF]/85 leading-tight mt-0.5" : "text-[11px] text-[#1A1A1A]/65 leading-tight mt-0.5"}>{item.description}</div>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
               <div className="grid gap-3" data-studio-card-grid>
-                {studioTemplates.map((template) => {
+                {categoryFilteredStudioTemplates.map((template) => {
                   const Icon = template.icon;
                   return (
                     <Card key={template.id} data-studio-card className="p-4 bg-[#FDFBF7] border-[#B89555]/35 flex flex-col gap-3 min-h-[178px] overflow-hidden">
@@ -692,30 +795,13 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                         </div>
                       </div>
                       <p className="text-xs text-[#1A1A1A]/70 leading-relaxed line-clamp-3 flex-1">{template.description}</p>
-                      <Suspense fallback={<Button size="sm" disabled className="w-full">Loading…</Button>}>
-                        <DocumentStudio
-                          catalog={template.audience}
-                          presetTemplateId={template.id}
-                          trigger={<Button size="sm" variant="primary" className="w-full min-w-0">Open in Editor</Button>}
-                        />
-                      </Suspense>
+                      <Button size="sm" variant="primary" className="w-full min-w-0" onClick={() => openStudioTemplate(template)}>Open in Editor</Button>
                     </Card>
                   );
                 })}
-              </div>
-            </div>
 
-            <div className="flex gap-2 mb-4 flex-wrap">
-              {(["all","leasing","selling"] as Cat[]).map(c => (
-                <Button key={c} size="sm" variant={cat === c ? "primary" : "outline"} onClick={() => setCat(c)} className="capitalize">
-                  {c}
-                </Button>
-              ))}
-            </div>
-            {tplLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-              <div className="grid gap-4" data-studio-card-grid>
                 {/* Standard JBJ Letterhead — always first, opens the branded letter studio */}
-                {(cat === "all" || cat === "leasing" || cat === "selling") && (
+                {(activeTemplateCategory === "all" || activeTemplateCategory === "client") && (
                   <Card data-studio-card className="p-5 bg-[#F7F2EA] border-[#B89555]/30 overflow-hidden">
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -735,27 +821,26 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                   </Card>
                 )}
 
-                {filteredTemplates.map(t => (
-                  <Card key={t.id} data-studio-card className="p-5 bg-[#F7F2EA] border-[#B89555]/30 overflow-hidden">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">{t.category}</div>
-                        <div className="font-semibold text-[#1A1A1A] mt-1">{t.name}</div>
+                {tplLoading ? <div className="text-sm text-[#1A1A1A]/70 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Loading signature templates…</div> : categorizedEsignTemplates.map(t => (
+                    <Card key={t.id} data-studio-card className="p-5 bg-[#F7F2EA] border-[#B89555]/30 overflow-hidden flex flex-col gap-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">{t.category}</div>
+                          <div className="font-semibold text-[#1A1A1A] mt-1">{t.name}</div>
+                        </div>
+                        {t.is_system && <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>}
                       </div>
-                      {t.is_system && <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>}
-                    </div>
-                    <p className="text-xs text-[#1A1A1A]/70 mt-2">
-                      {(t as any).description || "Pre-built JBJ template — opens with your client details and brand."}
-                    </p>
-                    <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="primary" onClick={() => openTemplate(t)}>
-                        Use template
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
+                      <p className="text-xs text-[#1A1A1A]/70 flex-1">
+                        {(t as any).description || "Pre-built JBJ signature template — opens with client details and brand."}
+                      </p>
+                      <Button size="sm" variant="primary" onClick={() => openTemplate(t)}>Use template</Button>
+                    </Card>
+                  ))}
+                {categoryFilteredStudioTemplates.length === 0 && categorizedEsignTemplates.length === 0 && !tplLoading && (
+                  <div className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-5 text-sm text-[#1A1A1A]/70">No templates match this category/search.</div>
+                )}
               </div>
-            )}
+            </div>
           </TabsContent>
 
           {/* DOCUMENT EDITOR */}
@@ -1018,65 +1103,86 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
         </DialogContent>
       </Dialog>
 
-      {/* + New Envelope — template picker */}
+      {/* Generate Document — category/search picker */}
       <Dialog open={newEnvelopeOpen} onOpenChange={setNewEnvelopeOpen}>
           <DialogContent className="bg-[#FDFBF7] max-w-5xl max-h-[86vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">New Envelope</DialogTitle>
-            <DialogDescription className="text-[#1A1A1A]/70">Pick a template, or upload your own document to sign.</DialogDescription>
+            <DialogTitle className="text-[#1A1A1A]">Generate Document</DialogTitle>
+            <DialogDescription className="text-[#1A1A1A]/70">Search or choose a category. Only matching templates open here.</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-3 mt-2" data-studio-card-grid>
-            {studioTemplates.map((template) => {
+          <div className="space-y-3 mt-2">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/55" />
+              <Input
+                value={templateSearch}
+                onChange={(e) => setTemplateSearch(e.target.value)}
+                placeholder="Search templates anytime…"
+                className="pl-9 bg-[#FDFBF7]"
+              />
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {TEMPLATE_CATEGORIES.map((item) => {
+                const Icon = item.icon;
+                const active = activeTemplateCategory === item.key;
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => showCategory(item.key)}
+                    data-surface={active ? "emerald" : "champagne"}
+                    className={["text-left rounded-lg border px-3 py-2.5 transition min-w-0", active ? "border-transparent bg-[var(--jj-emerald-ombre)]" : "border-[#B89555]/35 bg-[#F7F2EA] hover:bg-[#EFE6D6]"].join(" ")}
+                  >
+                    <div className="flex items-start gap-2">
+                      <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />
+                      <div className="min-w-0">
+                        <div className={active ? "text-xs font-semibold text-[#FFFFFF]" : "text-xs font-semibold text-[#1A1A1A]"}>{item.label}</div>
+                        <div className={active ? "text-[10px] text-[#FFFFFF]/85 line-clamp-1" : "text-[10px] text-[#1A1A1A]/65 line-clamp-1"}>{item.description}</div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="grid gap-3 mt-4" data-studio-card-grid>
+            {categoryFilteredStudioTemplates.map((template) => {
               const Icon = template.icon;
               return (
-                <Suspense key={template.id} fallback={null}>
-                  <DocumentStudio
-                    catalog={template.audience}
-                    presetTemplateId={template.id}
-                    trigger={
-                      <button
-                        type="button"
-                        onClick={() => setNewEnvelopeOpen(false)}
-                        className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition min-h-[132px] w-full overflow-hidden"
-                      >
-                        <Icon className="w-5 h-5 text-[#1A1A1A] mb-2" />
-                        <div className="font-medium text-[#1A1A1A] text-sm leading-tight break-words">{template.label}</div>
-                        <div className="text-xs text-[#1A1A1A]/70 mt-1 line-clamp-2">{template.description}</div>
-                      </button>
-                    }
-                  />
-                </Suspense>
-              );
-            })}
-            <button
-              type="button"
-              onClick={() => { setNewEnvelopeOpen(false); navigate("/owner/documents/forms/blank-letter"); }}
-              className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition overflow-hidden"
-            >
-              <FileText className="w-5 h-5 text-[#B89555] mb-2" />
-              <div className="font-medium text-[#1A1A1A] text-sm">{standardLetterheadName}</div>
-              <div className="text-xs text-[#1A1A1A]/70 mt-1">Blank JBJ letterhead — write any letter on official stationery.</div>
-            </button>
-            {(["leasing","selling"] as const).map((catKey) => {
-              const tpl = templates.find(t => !isBlankLetterKey(t.key) && t.category === catKey);
-              if (!tpl) return null;
-              const label = catKey === "leasing" ? "JBJ PAA Leasing" : "JBJ PAA Selling";
-              const desc = catKey === "leasing"
-                ? "Property Advertising Agreement — leasing." 
-                : "Listing Authorisation — selling.";
-              return (
                 <button
-                  key={catKey}
+                  key={template.id}
                   type="button"
-                  onClick={() => openTemplate(tpl)}
-                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition overflow-hidden"
+                  onClick={() => openStudioTemplate(template)}
+                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] hover:border-[#B89555] hover:bg-[#EFE6D6] transition min-h-[132px] w-full overflow-hidden"
                 >
-                  <Scale className="w-5 h-5 text-[#B89555] mb-2" />
-                  <div className="font-medium text-[#1A1A1A] text-sm">{tpl.name || label}</div>
-                  <div className="text-xs text-[#1A1A1A]/70 mt-1">{desc}</div>
+                  <Icon className="w-5 h-5 text-[#1A1A1A] mb-2" />
+                  <div className="font-medium text-[#1A1A1A] text-sm leading-tight break-words">{template.label}</div>
+                  <div className="text-xs text-[#1A1A1A]/70 mt-1 line-clamp-2">{template.description}</div>
                 </button>
               );
             })}
+            {(activeTemplateCategory === "all" || activeTemplateCategory === "client") && (
+                <button
+                  type="button"
+                  onClick={() => { setNewEnvelopeOpen(false); navigate("/owner/documents/forms/blank-letter"); }}
+                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] hover:border-[#B89555] hover:bg-[#EFE6D6] transition overflow-hidden"
+                >
+                  <FileText className="w-5 h-5 text-[#B89555] mb-2" />
+                  <div className="font-medium text-[#1A1A1A] text-sm">{standardLetterheadName}</div>
+                  <div className="text-xs text-[#1A1A1A]/70 mt-1">Blank JBJ letterhead — write any letter on official stationery.</div>
+                </button>
+            )}
+            {categorizedEsignTemplates.map((tpl) => (
+                <button
+                  key={tpl.id}
+                  type="button"
+                  onClick={() => openTemplate(tpl)}
+                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] hover:border-[#B89555] hover:bg-[#EFE6D6] transition overflow-hidden"
+                >
+                  <Scale className="w-5 h-5 text-[#B89555] mb-2" />
+                  <div className="font-medium text-[#1A1A1A] text-sm">{tpl.name}</div>
+                  <div className="text-xs text-[#1A1A1A]/70 mt-1">{tpl.category === "leasing" ? "Property Advertising Agreement — leasing." : tpl.category === "selling" ? "Listing Authorisation — selling." : "JBJ signature template."}</div>
+                </button>
+            ))}
           </div>
           <div className="border-t border-[#B89555]/20 mt-4 pt-3">
             <button
@@ -1094,6 +1200,23 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Singleton Document Studio — prevents the slow/reloading page caused by mounting every editor at once. */}
+      {selectedStudioTemplate && (
+        <Suspense fallback={<div className="fixed inset-0 z-[2147483000] bg-black/40 flex items-center justify-center text-white">Loading Document Studio…</div>}>
+          <DocumentStudio
+            key={`${selectedStudioTemplate.audience}:${selectedStudioTemplate.id}`}
+            catalog={selectedStudioTemplate.audience}
+            presetTemplateId={selectedStudioTemplate.id}
+            trigger={null}
+            open={studioOpen}
+            onOpenChange={(open) => {
+              setStudioOpen(open);
+              if (!open) window.setTimeout(() => setSelectedStudioTemplate(null), 250);
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Manage Sheet — full asset list with per-row actions */}
       <Sheet open={!!manageKind} onOpenChange={(o) => !o && setManageKind(null)}>
