@@ -156,7 +156,8 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   set("nationality", pick("nationality", "nationalityName", "country", "countryOfNationality"));
 
   set("recipientEmail", out.recipientEmail || text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]);
-  set("emiratesId", out.emiratesId || text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-"));
+  set("emiratesId", text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-") || out.emiratesId);
+  set("nationality", out.nationality || text.match(/nationality\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
   set("recipientPhone", out.recipientPhone || text.match(/(?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,}/)?.[0]);
   set("passportNumber", out.passportNumber || text.match(/passport(?:\s*(?:number|no\.?))?\s*[:#-]\s*([A-Z0-9]{5,})/i)?.[1]);
   set("homeAddress", out.homeAddress || text.match(/(?:home|residential)\s+address\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
