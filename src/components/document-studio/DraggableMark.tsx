@@ -136,6 +136,7 @@ export default function DraggableMark({
               : <Unlock className="w-3 h-3 text-[#1A1A1A]" />}
           </button>
         )}
+        {onResize && (
           <button
             type="button"
             data-mark-action="resize"
