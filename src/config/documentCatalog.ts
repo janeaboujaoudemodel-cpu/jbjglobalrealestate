@@ -114,6 +114,11 @@ const STAFF: DocumentTemplate[] = [
       "Draft a contract-grade employment agreement. Include: parties, position, duties, term, working hours, compensation, leave, confidentiality, termination, governing law (UAE). Numbered clauses.",
     fields: [
       RECIPIENT_NAME,
+      { key: "emiratesId", label: "Emirates ID Number", type: "text", placeholder: "e.g., 784-1988-6468692-2" },
+      { key: "passportNumber", label: "Passport Number", type: "text", placeholder: "Passport number only" },
+      { key: "homeAddress", label: "Home Address", type: "textarea", placeholder: "Applicant residential address" },
+      { key: "recipientEmail", label: "Email Address", type: "text", placeholder: "applicant@example.com" },
+      { key: "recipientPhone", label: "Phone / WhatsApp", type: "text", placeholder: "+971 ..." },
       { key: "jobTitle", label: "Position", type: "text", required: true },
       START_DATE,
       { key: "salary", label: "Monthly Compensation", type: "text" },

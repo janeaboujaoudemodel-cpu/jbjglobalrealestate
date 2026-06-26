@@ -1137,7 +1137,7 @@ function StudioShell({
     };
   }, [step, templateId, fields, bodyHtml, userEdited, ownerName, ownerTitle, applicantDate,
       extraSignatories, hiddenFieldKeys, fieldLabelOverrides, hiddenSections,
-      customFields, commissionRows, docLanguage, chromeTheme, marks, emailTo, SESSION_KEY]);
+      customFields, commissionRows, docLanguage, chromeTheme, marks, emailTo, manualPages, SESSION_KEY]);
 
 
   useEffect(() => {
@@ -1908,12 +1908,6 @@ function StudioShell({
             </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              {actionChromeCollapsed && (
-                <Button variant="outline" size="sm" onClick={() => handleExport("pdf")} disabled={!bodyHtml || !!exporting} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
-                  {exporting === "pdf" ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
-                  <span>PDF</span>
-                </Button>
-              )}
               <Button variant="outline" size="sm" onClick={() => setActionChromeCollapsed((v) => !v)} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title={actionChromeCollapsed ? "Expand document actions" : "Minimize document actions"}>
                 {actionChromeCollapsed ? <ChevronDown className="w-4 h-4 mr-1.5" /> : <ChevronUp className="w-4 h-4 mr-1.5" />}
                 <span>{actionChromeCollapsed ? "Actions" : "Minimize"}</span>

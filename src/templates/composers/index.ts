@@ -484,18 +484,28 @@ function composeTerminationLetter(input: ComposerInput): string {
 
 function composeGeneric(input: ComposerInput, subject: string): string {
   const f = input.fields;
+  const identityKeys = new Set(["emiratesId", "passportNumber", "homeAddress", "recipientEmail", "recipientPhone", "idNumber", "emirates_id", "eid_number", "passport_number", "passportNo", "passport", "address", "home_address", "residentialAddress", "email", "email_address", "phone", "mobile", "mobile_number"]);
+  const identityRows: Array<[string, string | undefined]> = [
+    ["Full Name as per ID", f.recipientName],
+    ["Emirates ID Number", f.emiratesId || f.idNumber || f.emirates_id || f.eid_number],
+    ["Passport Number", f.passportNumber || f.passport_number || f.passportNo || f.passport],
+    ["Home Address", f.homeAddress || f.address || f.home_address || f.residentialAddress],
+    ["Email Address", f.recipientEmail || f.email || f.email_address],
+    ["Phone / WhatsApp", f.recipientPhone || f.phone || f.mobile || f.mobile_number],
+  ];
   const rows: Array<[string, string | undefined]> = [
     ...Object.entries(f).map(([k, v]) => [labelize(k), v] as [string, string | undefined]),
     ...(input.customFields || [])
       .filter((c) => (c.label || "").trim() && (c.value || "").trim())
       .map((c) => [c.label, c.value] as [string, string | undefined]),
-  ].filter(([k]) => !["recipientName", "idNumber", "notes"].includes(unlabelize(k)));
+  ].filter(([k]) => !["recipientName", "notes"].includes(unlabelize(k)) && !identityKeys.has(unlabelize(k)));
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     recipientBlock(f),
     subjectLine(subject),
     paragraphs(input.aiIntro),
+    identityTable(identityRows),
     termsTable(rows),
     commissionTable(input.commissionRows || []),
     paragraphs(input.aiClosing),
