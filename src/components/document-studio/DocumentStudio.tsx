@@ -1539,7 +1539,7 @@ function StudioShell({
         [data-document-studio-overlay] .studio-toolbar-scroll { overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
         [data-document-studio-overlay] .studio-toolbar-scroll::-webkit-scrollbar { height:6px; }
         [data-document-studio-overlay] .studio-toolbar-scroll::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
-        [data-document-studio-overlay] .studio-top-primary-actions { width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:2px; justify-content:flex-start !important; flex-wrap:nowrap !important; }
+        [data-document-studio-overlay] .studio-top-primary-actions { width:100%; overflow:visible !important; padding-bottom:2px; justify-content:flex-start !important; flex-wrap:wrap !important; }
         [data-document-studio-overlay] .studio-top-primary-actions > * { flex:0 0 auto; }
         [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar { height:6px; }
         [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
@@ -1791,7 +1791,7 @@ function StudioShell({
       {/* ─── Top toolbar (visible on step ≥ 2) — Reset / Print / Export / Send ─── */}
       {step === 2 && template && (
         <div
-          className="sticky top-0 z-30 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
+          className="sticky top-0 z-30 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
           data-document-studio-toolbar="1"
         >
           <div className="flex items-center gap-2 min-w-0">
@@ -1808,7 +1808,7 @@ function StudioShell({
               <div className="text-[12px] font-semibold text-[#1A1A1A] truncate leading-tight">{template.label}</div>
             </div>
           </div>
-          <div className="studio-toolbar-scroll w-full xl:w-auto">
+          <div className="studio-toolbar-scroll w-full 2xl:w-auto">
             <div className="studio-action-row sm:justify-end">
               <Button
                 variant="outline"
