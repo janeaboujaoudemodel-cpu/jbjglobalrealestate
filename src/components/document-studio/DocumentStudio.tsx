@@ -333,7 +333,7 @@ function StudioShell({
   const [deptDraft, setDeptDraft] = useState("");
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
-  const [fields, setFields] = useState<Record<string, string>>({});
+  const [fields, setFields] = useState<Record<string, string>>(() => getTemplateDefaultFields(initialId));
   const [bodyHtml, setBodyHtml] = useState<string>("");
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
@@ -937,6 +937,16 @@ function StudioShell({
   }, [onClose]);
 
   const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
+  const applyDeveloperDetails = (developerName: string) => {
+    const dev = UAE_DEVELOPERS.find((d) => d.name.toLowerCase() === developerName.trim().toLowerCase());
+    if (!dev) return;
+    setFields((p) => ({
+      ...p,
+      developerName: dev.name,
+      developerContact: p.developerContact || `${dev.email} · ${dev.phone}`,
+      accountsEmail: p.accountsEmail || dev.email,
+    }));
+  };
 
   // Auto-render locked standard body whenever template / fields / commissions /
   // owner-signature state change. We force-rerender every time UNLESS the user
@@ -1106,7 +1116,7 @@ function StudioShell({
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
-    setFields({});
+    setFields(getTemplateDefaultFields(id));
     setExtraSignatories([]);
     autoBodyRef.current = "";
     userEditedRef.current = false;
@@ -1309,6 +1319,7 @@ function StudioShell({
   const renderTemplateField = (f: DocumentTemplate["fields"][number]) => {
     const label = fieldLabelOverrides[f.key] ?? f.label;
     const isEditing = editingFieldKey === f.key;
+    const isDeveloperName = f.key === "developerName";
     return (
       <div key={f.key}>
         <div className="flex items-center gap-1 mb-1.5 group">
@@ -1343,6 +1354,32 @@ function StudioShell({
               {f.options?.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
             </SelectContent>
           </Select>
+        ) : isDeveloperName ? (
+          <div className="space-y-1.5">
+            <Input
+              list="jbj-developer-picker"
+              value={fields[f.key] || ""}
+              onChange={(e) => { setField(f.key, e.target.value); applyDeveloperDetails(e.target.value); }}
+              onBlur={(e) => applyDeveloperDetails(e.target.value)}
+              placeholder={f.placeholder || "Search developer or type manually"}
+              className="bg-[#FDFBF7]"
+            />
+            <datalist id="jbj-developer-picker">
+              {UAE_DEVELOPERS.map((d) => <option key={d.name} value={d.name} />)}
+            </datalist>
+            <div className="flex flex-wrap gap-1.5">
+              {UAE_DEVELOPERS.slice(0, 6).map((d) => (
+                <button
+                  key={d.name}
+                  type="button"
+                  onClick={() => applyDeveloperDetails(d.name)}
+                  className="rounded-full border border-[#B89555]/35 bg-[#FDFBF7] px-2 py-1 text-[10px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  {d.name}
+                </button>
+              ))}
+            </div>
+          </div>
         ) : (
           <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={fields[f.key] || ""} onChange={(e) => setField(f.key, e.target.value)} placeholder={f.placeholder} className="bg-[#FDFBF7]" />
         )}
