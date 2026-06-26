@@ -17031,42 +17031,10 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
 }
 
 /* =====================================================================
-   PASS 58 — HOMEPAGE HERO DESKTOP/TABLET LOCK
-   - Tablet/desktop homepage starts BELOW the horizontal utility header,
-     never behind it.
-   - The video owns the full visible hero area under the header.
-   - The hero search remains one line on tablet + desktop; only phones
-     move Free Consultation to line two.
-   - Search-bar wheel gestures always continue page scrolling.
+   PASS 58R — HOMEPAGE HERO RESTORE + PHONE-ONLY CTA LOCK
+   Desktop/tablet hero layout must use the original hero spacing from
+   Index.tsx. Only compact phones move Free Consultation to line two.
    ===================================================================== */
-@media (min-width: 640px) {
-  html body #root .jj-home-hero.jj-hero-fullscreen {
-    margin-top: 48px !important;
-    height: calc(100vh - 48px) !important;
-    min-height: calc(100vh - 48px) !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-
-  @supports (height: 100dvh) {
-    html body #root .jj-home-hero.jj-hero-fullscreen {
-      height: calc(100dvh - 48px) !important;
-      min-height: calc(100dvh - 48px) !important;
-    }
-  }
-
-  html body #root .jj-home-hero .jj-home-hero-content {
-    height: 100% !important;
-    min-height: 100% !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-
-  html body #root .jj-home-hero .jj-home-hero-stack {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-}
 
 @media (max-width: 639.98px) {
   html body #root .jj-home-hero .jj-hero-search-action.hidden.sm\:flex {
@@ -17079,6 +17047,10 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
 }
 
 @media (min-width: 640px) {
+  html body #root .jj-home-hero.jj-hero-fullscreen {
+    margin-top: 0 !important;
+  }
+
   html body #root .jj-home-hero .jj-hero-search-action.hidden.sm\:flex {
     display: flex !important;
   }
