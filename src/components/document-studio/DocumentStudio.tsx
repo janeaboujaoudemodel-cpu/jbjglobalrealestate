@@ -354,7 +354,9 @@ function StudioShell({
   const [sending, setSending] = useState(false);
 
   const [zoom, setZoom] = useState(100);
-  const [aiOpen, setAiOpen] = useState(true);
+  // Keep the Live Document Editor as the premium sparkle launcher by default.
+  // It expands only when requested, so the A4 preview stays centered and fast.
+  const [aiOpen, setAiOpen] = useState(false);
   const [search, setSearch] = useState("");
 
   // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
@@ -1513,15 +1515,30 @@ function StudioShell({
         [data-document-studio-overlay] .studio-scroll-x { overflow-x:hidden; }
         [data-document-studio-overlay] .studio-action-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; min-width:0; }
         [data-document-studio-overlay] .studio-action-row > * { flex:0 0 auto; }
-        [data-document-studio-overlay] .studio-action-row button { white-space:nowrap; }
+        [data-document-studio-overlay] .studio-action-row button { white-space:nowrap; min-height:40px; min-width:42px; padding-left:12px; padding-right:12px; }
         [data-document-studio-overlay] .studio-action-row button > span { white-space:nowrap; }
+        [data-document-studio-overlay] [data-document-studio-toolbar] .studio-action-row { justify-content:flex-end; }
+        [data-document-studio-overlay] [data-document-studio-toolbar] button { min-height:40px; }
+        [data-document-studio-overlay] .studio-preview-shell { width:100%; }
         [data-document-studio-overlay] .studio-sidebar { min-width:0; }
         [data-document-studio-overlay] .studio-template-card { min-width:0; overflow:hidden; }
         [data-document-studio-overlay] .studio-template-card * { overflow-wrap:anywhere; }
         @media (max-width: 1279px) {
           [data-document-studio-overlay] .studio-body { overflow:auto; }
           [data-document-studio-overlay] .studio-sidebar { max-height:none !important; }
-          [data-document-studio-overlay] .studio-ai-panel { max-height:none !important; }
+          [data-document-studio-overlay] .studio-ai-panel {
+            position:fixed !important;
+            right:16px !important;
+            bottom:16px !important;
+            top:96px !important;
+            width:min(430px, calc(100vw - 32px)) !important;
+            max-height:none !important;
+            z-index:2147483210 !important;
+            border-radius:18px !important;
+            box-shadow:0 28px 90px -28px rgba(0,0,0,.42) !important;
+          }
+          [data-document-studio-overlay] [data-document-studio-toolbar] { align-items:flex-start !important; }
+          [data-document-studio-overlay] [data-document-studio-toolbar] .studio-action-row { width:100%; justify-content:flex-start; }
         }
         @media (max-width: 767px) {
           [data-document-studio-overlay] .studio-topbar { padding:10px 12px !important; }
@@ -2633,7 +2650,7 @@ function StudioShell({
 
         {/* CENTER — A4 PREVIEW (fixed A4 sheets, smart-cropped) */}
         <main ref={previewWrapRef} className="flex-1 min-w-0 min-h-[52vh] lg:min-h-0 bg-[#EFE6D6] overflow-auto relative border-y lg:border-y-0 lg:border-x border-[#B89555]/35">
-          <div className="studio-preview-shell min-h-full flex justify-center py-10 px-4">
+          <div className="studio-preview-shell min-h-full py-10 px-6">
             {template ? (
               (() => {
                 const noChrome = /data-no-chrome=["']1["']/.test(bodyHtml || "");
@@ -2664,7 +2681,7 @@ function StudioShell({
                 // pill, and the per-page signature strip; render a single page
                 // with the body using the full A4 height.
                 return (
-                  <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
+                  <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0, margin: "0 auto" }}>
                     <div ref={pageRef} className="flex flex-col gap-7" data-document-pages="true">
                       <div aria-hidden className="fixed left-[-10000px] top-0 pointer-events-none opacity-0" style={{ width: PAGE_W }}>
                         <div ref={headerRef}><LockedLetterhead theme={chromeTheme} /></div>
@@ -2937,14 +2954,15 @@ function StudioShell({
       </div>
 
       {!aiOpen && (
-        <button
+          <button
           type="button"
           onClick={() => setAiOpen(true)}
-          className="fixed bottom-5 right-5 z-[2147483200] rounded-full bg-[var(--jj-emerald-ombre)] px-4 py-3 text-sm font-semibold text-white shadow-2xl border border-[#B89555]/70 inline-flex items-center gap-2"
+          className="fixed bottom-5 right-5 z-[2147483200] h-14 w-14 rounded-full bg-[var(--jj-emerald-ombre)] text-sm font-semibold text-white shadow-2xl border border-[#B89555]/70 inline-flex items-center justify-center hover:scale-105 transition-transform"
           data-surface="emerald"
-          aria-label="Open AI Assistant"
+          aria-label="Open Live Document Editor"
+          title="Open Live Document Editor"
         >
-          <Sparkles className="w-4 h-4" /> AI Assistant
+          <Sparkles className="w-6 h-6" />
         </button>
       )}
 
