@@ -126,12 +126,13 @@ function Kpi({
         )}
       </div>
       <div className="mt-5 text-[2rem] md:text-[2.4rem] font-display font-semibold tabular-nums tracking-tight text-[#1A1A1A] leading-none">
-        {loading ? (
+        {loading && (value === undefined || value === null || value === "") ? (
           <span className="inline-block h-8 w-12 bg-[#EFE6D6] rounded animate-pulse" />
         ) : (
           value
         )}
       </div>
+
       <div className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A]/65 mt-2.5 font-semibold">
         {label}
       </div>

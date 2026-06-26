@@ -520,15 +520,18 @@ All colors MUST be HSL.
     transition: background-color 5000s ease-in-out 0s;
   }
 
-  /* Prevent content from overflowing card containers on any language */
+  /* Prevent content from overflowing card containers on any language.
+     Use `break-word` (not `anywhere`) so short uppercase labels with
+     letter-spacing don't break per-letter into vertical strips. */
   .card,
   [class*="rounded-xl"],
   [class*="rounded-2xl"],
   [class*="rounded-lg"] {
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
     min-width: 0;
   }
+
 
   /* Flex children must not push parents wider than viewport */
   .flex > *,
@@ -11177,14 +11180,15 @@ html body [data-surface="emerald"][data-cta="primary"] :is(span, svg, [class*="l
   box-shadow: 0 14px 30px -18px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.18) !important;
   transform: translateY(-1px);
 }
-.jj-hover-emerald:hover :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
-.jj-hover-emerald:focus-visible :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
-.jj-hover-emerald[data-active="true"] :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]) {
+.jj-hover-emerald:hover :is(div, span, p, h1, h2, h3, h4, h5, h6, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
+.jj-hover-emerald:focus-visible :is(div, span, p, h1, h2, h3, h4, h5, h6, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
+.jj-hover-emerald[data-active="true"] :is(div, span, p, h1, h2, h3, h4, h5, h6, strong, small, em, b, a, button, label, svg, [class*="lucide"]) {
   color: var(--emerald-on) !important;
   -webkit-text-fill-color: var(--emerald-on) !important;
   stroke: var(--emerald-on) !important;
   opacity: 1 !important;
 }
+
 .jj-hover-emerald:hover [data-icon-tile],
 .jj-hover-emerald:focus-visible [data-icon-tile],
 .jj-hover-emerald[data-active="true"] [data-icon-tile] {
