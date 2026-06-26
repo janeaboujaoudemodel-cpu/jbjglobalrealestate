@@ -69,6 +69,41 @@
   text-orientation: mixed !important;
 }
 
+/* =====================================================================
+   PASS 55 — STUDIO BUTTON + TOOLBAR PRIMITIVE
+   Enforces uniform 40px height, centered content, no width drift on
+   every button rendered inside the Document Studio overlay or the
+   Documents & Forms workspace. Replaces ad-hoc h-9/h-10/sm sizes.
+   ===================================================================== */
+[data-document-studio-overlay] button:not([data-no-studio-normalize]):not([role="tab"]):not([role="combobox"]):not([aria-haspopup]),
+[data-studio-workspace] button:not([data-no-studio-normalize]):not([role="tab"]):not([role="combobox"]):not([aria-haspopup]) {
+  min-height: 40px;
+  height: 40px;
+  padding-inline: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: 10px;
+  line-height: 1;
+}
+[data-document-studio-overlay] button[data-icon-only],
+[data-studio-workspace] button[data-icon-only] {
+  width: 40px;
+  padding-inline: 0;
+}
+/* Toolbar row inside the studio: prevent jitter & let it wrap cleanly */
+[data-document-studio-overlay] .shrink-0.min-h-16 {
+  min-height: 64px;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  padding-block: 8px;
+}
+
+
+
 
 /* ════════════════════════════════════════════════════════════════
    GLOBAL PAINT BASELINE
