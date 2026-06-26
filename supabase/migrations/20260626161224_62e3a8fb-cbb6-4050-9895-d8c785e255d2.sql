@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Service role can manage reelly_dictionaries" ON public.reelly_dictionaries;
