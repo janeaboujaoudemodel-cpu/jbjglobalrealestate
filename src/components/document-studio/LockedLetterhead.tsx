@@ -25,45 +25,6 @@ const tokens = (theme: LetterheadTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
 
-/**
- * Single masked layer of the JBJ monogram. `clip` restricts the painted
- * area to one column (outer J / dividers+B / outer J). `filter` is used
- * for the engraved drop-shadow / highlight stack on the middle B.
- */
-function MaskedMonogramLayer({
-  color,
-  clip,
-  filter,
-  blendMode,
-}: {
-  color: string;
-  clip?: string;
-  filter?: string;
-  blendMode?: React.CSSProperties["mixBlendMode"];
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: color,
-        WebkitMaskImage: `url(${jbjMonogramSrc})`,
-        maskImage: `url(${jbjMonogramSrc})`,
-        WebkitMaskRepeat: "no-repeat",
-        maskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-        maskPosition: "center",
-        WebkitMaskSize: "contain",
-        maskSize: "contain",
-        ...(clip ? { clipPath: clip, WebkitClipPath: clip } : null),
-        ...(filter ? { filter } : null),
-        ...(blendMode ? { mixBlendMode: blendMode } : null),
-      }}
-    />
-  );
-}
-
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
 
