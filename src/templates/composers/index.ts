@@ -184,6 +184,17 @@ const identityValue = (fields: Record<string, string>, keys: string[], source: s
   return (parsed || cleaned).replace(/^\s*[^:]{1,28}:\s*/, (prefix) => /number|no\.?|id|passport|nationality|address|email|phone|mobile|name/i.test(prefix) ? "" : prefix).trim();
 };
 
+const normalizeNationality = (value: string): string => {
+  // UN/ISO country lists return inverted names like "Palestine, State of",
+  // "Korea, Republic of", "Iran, Islamic Republic of". Strip the trailing
+  // ", State of / Republic of / Kingdom of / …" tail so the document reads
+  // cleanly as just the nationality/country name.
+  return (value || "")
+    .replace(/\s*,?\s*(state|republic|kingdom|sultanate|federation|union|emirate|principality|commonwealth|grand\s+duchy|democratic\s+republic|islamic\s+republic|people'?s\s+republic|plurinational\s+state|bolivarian\s+republic)\s+of\b\.?\s*$/i, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+};
+
 const offerIdentity = (fields: Record<string, string>) => {
   // Build a free-text "source" haystack ONLY from real values. Excluding bracketed
   // placeholder text like "[Employee Address]" or "[Nationality]" prevents the
