@@ -47,13 +47,24 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const body = await req.json().catch(() => ({}));
-    const { 
-      event_type, 
-      violation_type, 
-      fingerprint, 
+    const {
+      violation_type,
+      fingerprint,
       user_agent,
-      violation_count 
-    } = body;
+      violation_count,
+    } = body ?? {};
+
+    // Strict payload validation
+    if (typeof violation_type !== "string" || !ALLOWED_VIOLATION_TYPES.has(violation_type)) {
+      return new Response(JSON.stringify({ error: "Invalid violation_type" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    if (fingerprint && (typeof fingerprint !== "string" || fingerprint.length > 128)) {
+      return new Response(JSON.stringify({ error: "Invalid fingerprint" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    const ua = typeof user_agent === "string" ? user_agent.slice(0, 512) : null;
+    const vc = typeof violation_count === "number" && violation_count >= 0 ? Math.min(violation_count, 1000) : 0;
 
     // Get IP from headers
     const forwarded = req.headers.get('x-forwarded-for');
