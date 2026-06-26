@@ -448,7 +448,7 @@ export function signatureBlock(opts: {
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
       <div style="height:46px;display:flex;align-items:flex-start;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
-      <div style="border-top:1px solid ${INK};padding-top:10px;position:relative;min-height:126px;overflow:visible;">
+      <div style="padding-top:10px;position:relative;min-height:126px;overflow:visible;">
         ${lines}
         ${withStamp ? stampOverlay : ""}
       </div>

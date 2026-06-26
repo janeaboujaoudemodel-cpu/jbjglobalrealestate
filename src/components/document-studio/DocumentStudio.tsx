@@ -343,7 +343,7 @@ const cleanDocumentFieldRows = (html: string): string => {
   tpl.content.querySelectorAll<HTMLTableElement>("table").forEach((table) => {
     if (table.querySelectorAll("tbody tr").length === 0) table.remove();
   });
-  if (!tpl.content.querySelector('[data-pdf-section="commission"]')) {
+  if (!tpl.content.querySelector('[data-pdf-section="commission"],[data-pdf-section="comp-commission"]')) {
     tpl.content.querySelectorAll('[data-pdf-section="commission-note"]').forEach((el) => el.remove());
   }
 

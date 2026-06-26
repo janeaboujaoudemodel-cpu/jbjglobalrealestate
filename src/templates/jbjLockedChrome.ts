@@ -81,13 +81,13 @@ const themeTokens = (theme: JbjChromeTheme) =>
 const monogramImgStyle = (theme: JbjChromeTheme) =>
   theme === "emerald"
     ? "filter:brightness(0) invert(1) drop-shadow(0 1px 1px rgba(0,0,0,.18));"
-    : "filter:drop-shadow(0 1px 0 rgba(255,255,255,.78)) drop-shadow(0 1.2px 1.2px rgba(72,48,15,.2));";
+    : "filter:saturate(1.12) contrast(1.06) drop-shadow(0 1px 0 rgba(255,255,255,.82)) drop-shadow(0 1.4px 1.4px rgba(72,48,15,.18));";
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
-  const monogram = `<img src="${monogramSrc}" alt="JBJ" aria-label="JBJ" role="img" style="width:132px;height:132px;object-fit:contain;display:block;${monogramImgStyle(theme)}" />`;
+  const monogram = `<img src="${monogramSrc}" alt="JBJ" aria-label="JBJ" role="img" style="width:126px;height:126px;object-fit:contain;display:block;${monogramImgStyle(theme)}" />`;
   return `
   <header style="
     width:100%;
@@ -98,13 +98,13 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:148px minmax(0,1fr);align-items:center;column-gap:13px;min-height:148px;">
+    <div style="display:grid;grid-template-columns:148px minmax(0,1fr);align-items:center;column-gap:13px;min-height:148px;height:148px;">
       <div style="height:148px;width:142px;display:flex;align-items:center;justify-content:center;justify-self:center;align-self:center;">
         ${monogram}
       </div>
 
       <div style="height:148px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:30px;overflow:visible;">
-        <div style="display:block;width:100%;font-size:25.5px;font-weight:900;letter-spacing:0.092em;color:${t.fg};white-space:nowrap;transform:scaleX(.985);transform-origin:left center;">
+        <div style="display:block;width:100%;font-size:25.5px;font-weight:900;letter-spacing:0.104em;color:${t.fg};white-space:nowrap;transform:scaleX(.985);transform-origin:left center;">
           ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.125em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
