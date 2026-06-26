@@ -594,6 +594,7 @@ function StudioShell({
   const [studioMinimized, setStudioMinimized] = useState(false);
   const [actionChromeCollapsed, setActionChromeCollapsed] = useState(true);
   const [detailsPanelCollapsed, setDetailsPanelCollapsed] = useState(true);
+  const [templatePanelCollapsed, setTemplatePanelCollapsed] = useState(false);
   // Keep the Live Document Editor as the premium sparkle launcher by default.
   // It expands only when requested, so the A4 preview stays centered and fast.
   const [aiOpen, setAiOpen] = useState(false);
