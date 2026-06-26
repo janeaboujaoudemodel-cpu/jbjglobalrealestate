@@ -5,15 +5,12 @@
  * Issues a single-use realtime-STT token for the browser. The
  * ELEVENLABS_API_KEY never leaves the edge runtime.
  *
- * No JWT verification — token is short-lived (15min) and not personal data.
+ * SECURITY: Requires an authenticated Supabase session AND enforces
+ * per-user rate limits so anonymous traffic cannot burn ElevenLabs credits.
  */
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+import { corsHeaders, requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -21,6 +18,19 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const auth = await requireAuthenticatedUser(req);
+    if (!auth.authenticated || !auth.userId) {
+      return unauthorizedResponse(auth.error || "Authentication required");
+    }
+
+    const rl = await enforceRateLimit(
+      req,
+      { functionName: "elevenlabs-scribe-token", maxRequests: 20, windowMinutes: 60, keyType: "user" },
+      corsHeaders,
+      auth.userId,
+    );
+    if (rl.response) return rl.response;
+
     const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
     if (!apiKey) {
       return new Response(
