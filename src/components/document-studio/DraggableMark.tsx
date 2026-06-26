@@ -27,6 +27,7 @@ const CLICK_THRESHOLD_PX = 6;
 
 export default function DraggableMark({
   x, y, onChange, onRemove, onClick, onResize, zIndex = 5, children, ariaLabel, hint,
+  locked = false, onToggleLock,
 }: DraggableMarkProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [drag, setDrag] = useState<null | { dx: number; dy: number; sx: number; sy: number; moved: boolean }>(null);
