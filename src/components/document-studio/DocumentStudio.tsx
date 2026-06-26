@@ -3190,8 +3190,11 @@ function StudioShell({
                                   }}
                                 />
                               )}
-                              {/* Engraved JBJ monogram watermark — centered
-                                  on every page, very faint, behind content. */}
+                              {/* Engraved JBJ monogram watermark — centered on
+                                  every page, champagne-gold tint, fully visible
+                                  (no cropping), tight letter spacing. Painted
+                                  via CSS mask so the color matches the letter-
+                                  head accent exactly. */}
                               {!noChrome && (
                                 <div
                                   aria-hidden
@@ -3205,10 +3208,26 @@ function StudioShell({
                                     zIndex: 0,
                                   }}
                                 >
-                                  <img
-                                    src={jbjMonogramSrc}
-                                    alt=""
-                                    style={{ width: 360, height: 360, opacity: 0.05, filter: "grayscale(1)" }}
+                                  <div
+                                    style={{
+                                      width: 260,
+                                      height: 260,
+                                      // Slight horizontal squeeze tightens the
+                                      // gap between the three letters without
+                                      // cropping the middle B.
+                                      transform: "scaleX(0.86)",
+                                      transformOrigin: "center",
+                                      background: "#B89555",
+                                      opacity: 0.14,
+                                      WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                      maskImage: `url(${jbjMonogramSrc})`,
+                                      WebkitMaskRepeat: "no-repeat",
+                                      maskRepeat: "no-repeat",
+                                      WebkitMaskPosition: "center",
+                                      maskPosition: "center",
+                                      WebkitMaskSize: "contain",
+                                      maskSize: "contain",
+                                    }}
                                   />
                                 </div>
                               )}
