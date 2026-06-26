@@ -1,72 +1,69 @@
+## Scope
 
-# Phase 2 — Global Design System Unification
+Three related fixes across the Owner/Broker Portal and website:
 
-Goal: collapse every page in the Website and Owner Portal onto one enforceable design system so nothing looks "designed at a different time." The work is split into one foundation pass (tokens + primitives) and targeted refactors that consume them. No business logic changes.
+1. **CRM selected-row green tint** — remove the emerald row highlight when leads are selected (keep only the checkbox state).
+2. **Swipe-back / overscroll hijack** — horizontal two-finger swipe inside scrollable panels currently triggers browser back-navigation. Lock this on all internal scroll containers site-wide.
+3. **Responsive card overflow** — cards in CRM Pipeline, Careers Dashboard, Document Studio, KPI strips, etc. let content escape horizontally at narrower viewports. Enforce a global contain-and-adapt contract.
 
-## 1. Lock the foundation (single source of truth)
+## Implementation
 
-Edit `src/index.css` and the design-token layer only — every later step consumes these.
+### 1. CRM row selection (no green fill)
+- Audit `src/components/crm/LeadTable.tsx` (and any sibling `OwnerLeads`/`CrmLeadRow`) for `data-state=selected` / `aria-selected` styles applying `bg-emerald*` or `--state-active`.
+- Replace selected-row background with `transparent` (keep checkbox emerald, keep hover hairline). Selection is communicated by the checkbox only.
 
-- **Color contract** (CSS variables + utility classes, all `!important`-scoped to `[data-surface]`):
-  - `--surface-emerald` → fg pure white `#FFFFFF` (text + svg + borders on emerald)
-  - `--surface-champagne` / `--surface-pearl` / `--surface-white` → fg charcoal `#1A1A1A` (or dark emerald `#064E3B` for headings)
-  - `--surface-ink` → fg white
-  - Kill switch: any descendant `text-black`, `text-white`, `bg-black` inside the wrong surface is overridden by `[data-surface="emerald"] *` / `[data-surface="champagne"] *` rules.
-- **Active/Selected/Focus**: introduce `--state-active: var(--jj-emerald-ombre)`. Replace every `data-[state=active]:bg-black`, `aria-selected:bg-black`, `:focus { outline: black }` via a global selector sweep in `index.css`. Black is banned as an interactive state color.
-- **Elevation + radius tokens**: `--radius-card: 16px`, `--radius-pill: 999px`, `--shadow-card`, `--shadow-card-hover`, `--ring-focus: 0 0 0 2px var(--jj-emerald)`.
-- **Spacing scale**: confirm `--card-px: 20px`, `--card-py: 20px`, `--card-gap: 16px`, `--grid-gap: 24px`.
-
-## 2. Promote 3 primitives to mandatory
-
-- **`MetricCard`** (new canonical at `src/components/ui/MetricCard.tsx`): one layout — IconTile (top-left, 40×40 emerald) · Number (display, 32px, charcoal) · Title (14px medium) · Subtitle (12px muted). Fixed min-height `140px`, identical paddings. All dashboard tiles (Employees, Active Positions, Pending Approvals, Payroll, AI Recruiting, CRM KPIs) must import this — delete inline variants.
-- **`ActionStrip`** (new at `src/components/ui/ActionStrip.tsx`): horizontal container, gap `8px`, height `40px`. Children = `<Button variant="primary">` (emerald/white) or `<Button variant="secondary">` (champagne/charcoal). Removes faded/borderless top strips on Document Studio, CRM, Leads, HR.
-- **`IconTile`** already exists — enforce single source by adding an ESLint rule (or simple `rg` guard in `scripts/contrast/`) that fails the build if a raw `<div class="… rounded-lg bg-…"><Icon/></div>` is added outside the primitive.
-
-## 3. Document Studio redesign
-
-File: `src/pages/owner/DocumentStudio.tsx` (and child grid components).
-
-- Replace bespoke page wrapper with `<PageShell>` + `.jj-page` grid.
-- 12-col responsive grid (`grid-cols-1 md:grid-cols-2 xl:grid-cols-3`), `gap-6`.
-- Header row: title (display) · subtitle · right-aligned `<ActionStrip>` (primary = "New Document" emerald, secondary = "Templates" champagne).
-- Each document card: champagne surface, gold hairline, IconTile, title, meta, footer actions. Identical heights via `MetricCard`-style template (or sister `DocCard` primitive that shares tokens).
-- Remove all unused whitespace by capping `max-w-[var(--page-max-w)]` and using `--section-gap-y`.
-
-## 4. Page sweep (consume foundation)
-
-For each route below: replace inline state colors, swap to primitives, verify `data-surface` is set on the wrapper. No content/logic changes.
-
-- **Owner Portal**: `OwnerDashboard`, `OwnerCRM` (pipeline + leads), `HR` (Employees, Positions, Approvals, Payroll, AI Recruiting), `DocumentStudio`, `Inbox`, `Calendar`, `Tasks`, `Notes`, `MarketingHub`, `Reports`.
-- **Website**: `Home`, `AIHomeFinder`, `Projects`, `ProjectDetail`, `Developers`, `Areas`, `MarketIntelligence`, `Compare`, `Mortgage`, `News`, `Guides`, `FAQ`, `Search overlay`.
-- **Active state sweep**: ripgrep for `data-[state=active]:bg-black`, `bg-black text-white`, `aria-selected:bg-black`, `border-black`, replace with emerald state classes.
-
-## 5. Contrast audit + verification
-
-- Run existing `scripts/contrast/check-rendered.mjs` and `check-same-tone.mjs` against the full route list; fix every offender.
-- Playwright pass at 1280×1800 over: `/owner/dashboard`, `/owner/crm`, `/owner/hr`, `/owner/documents`, `/owner/inbox`, `/`, `/ai-home-finder`, `/projects`, `/developers`, `/market-intelligence`. Screenshots saved to `/tmp/browser/phase2/` as proof.
-- Add a CI guard (`scripts/contrast/check-banned-states.mjs`) that fails on `bg-black` in interactive state selectors and on `text-white` inside `[data-surface="champagne"]`.
-
-## Technical details
-
-```text
-src/
-├─ index.css                 # tokens, surface contracts, banned-state overrides
-├─ components/ui/
-│  ├─ MetricCard.tsx         # NEW — single dashboard tile
-│  ├─ ActionStrip.tsx        # NEW — top action row primitive
-│  ├─ button.tsx             # ensure variants map to data-surface/data-cta
-│  └─ icon-tile.tsx          # already canonical, enforce via lint
-├─ pages/owner/
-│  ├─ DocumentStudio.tsx     # full layout rebuild on PageShell + grid
-│  ├─ Dashboard.tsx          # swap tiles → MetricCard
-│  ├─ HR/*.tsx               # swap tiles → MetricCard
-│  └─ CRM/*.tsx              # ActionStrip + MetricCard, kill black states
-└─ scripts/contrast/
-   └─ check-banned-states.mjs  # NEW lint guard
+### 2. Global swipe/scroll containment
+Add to `src/index.css` under a new `PASS 53 — SCROLL CONTAINMENT`:
+```css
+html, body { overscroll-behavior-x: none; }
+[data-scroll-x], .overflow-x-auto, .overflow-x-scroll,
+[role="region"][aria-label*="table" i], .jj-card, .jj-page-shell {
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
+}
 ```
+- Apply `overscroll-behavior: contain` to the main shell scroll container in `OwnerDashboardShell.tsx` / `BrokerPortalLayout.tsx` so two-finger trackpad swipe stays inside the panel and never triggers history back.
 
-Out of scope: data model changes, new features, copy edits, animation work beyond existing hover transitions.
+### 3. Responsive card contract (site-wide)
+Add to `src/index.css` `PASS 54 — CARD OVERFLOW CONTRACT`:
+```css
+.jj-card, [data-card], .metric-card {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;            /* clip escapes */
+  display: flex; flex-direction: column;
+  container-type: inline-size;
+}
+.jj-card > *, [data-card] > * { min-width: 0; max-width: 100%; }
+.jj-card :is(h1,h2,h3,h4,p,span,div) { overflow-wrap: anywhere; }
 
-## Deliverable
+/* KPI tiles: auto-stack when narrow */
+@container (max-width: 220px) {
+  .metric-card { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .metric-card [data-metric-icon] { margin-bottom: 4px; }
+  .metric-card [data-metric-label] { white-space: normal; }
+}
 
-One PR-style change set + Playwright screenshots of all audited routes showing: emerald-only active states, identical metric-card layouts, redesigned Document Studio, contrast-clean top strips. Each screenshot attached in the final reply as visual proof.
+/* Action rows */
+.jj-action-strip { flex-wrap: wrap; gap: 8px; }
+@media (max-width: 640px) {
+  .jj-action-strip > * { flex: 1 1 100%; }
+}
+
+/* Adaptive KPI grid */
+.jj-kpi-grid { display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px,100%), 1fr)); }
+```
+- Update `MetricCard.tsx` to wrap icon+value+label with `data-metric-*` attrs and remove any fixed widths; switch its container to flex with `min-width:0`.
+- Update CRM KPI strip in `BrokerDashboardLanding`/`CRMPipeline` to use `.jj-kpi-grid` (replacing fixed 6-col grids).
+- Update `ActionStrip.tsx` to use `.jj-action-strip` (already wraps; just ensure full-width on mobile).
+- Update `DocumentStudio.tsx`, `CareersDashboard`, pipeline-by-stage chips to use `.jj-card` + adaptive grid.
+- Replace `whitespace-nowrap` on long labels inside cards with normal wrap.
+
+### 4. QA — Playwright visual sweep
+Script `/tmp/browser/responsive-audit/run.py` captures `/owner`, `/owner/crm`, `/broker/crm`, `/owner/document-studio`, `/owner/careers`, `/` at widths 1920, 1440, 1280, 1024, 820, 768, 430, 390, 360, 320. Assert no element extends past its parent `.jj-card`. Save screenshots; report any remaining offenders.
+
+## Out of scope
+- Functional changes to selection, scrolling logic, or card data.
+- New components beyond the existing `MetricCard`/`ActionStrip` primitives.
+- Visual restyle beyond what these contracts enforce.

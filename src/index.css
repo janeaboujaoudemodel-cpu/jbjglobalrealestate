@@ -16392,3 +16392,104 @@ html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where
   min-height: 40px;
 }
 
+
+/* =====================================================================
+   PASS 53 — SCROLL CONTAINMENT (no swipe-back hijack)
+   Two-finger horizontal swipe inside scrollable panels must scroll the
+   panel, never trigger browser history back/forward.
+   ===================================================================== */
+html, body {
+  overscroll-behavior-x: none;
+}
+.jj-page-shell,
+[data-owner-shell],
+[data-broker-shell],
+main,
+.overflow-x-auto,
+.overflow-x-scroll,
+.overflow-auto,
+.overflow-scroll,
+[data-scroll-x] {
+  overscroll-behavior: contain;
+}
+
+/* =====================================================================
+   PASS 54 — RESPONSIVE CARD OVERFLOW CONTRACT (site-wide)
+   Cards must contain their content. No horizontal escape, no clipping
+   outside, no overflow into neighbours. Cards grow vertically instead.
+   ===================================================================== */
+.jj-card,
+[data-jj-metric-card],
+[data-card],
+[data-surface="champagne"][class*="rounded"] {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  container-type: inline-size;
+}
+.jj-card > *,
+[data-jj-metric-card] > *,
+[data-card] > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.jj-card :is(h1, h2, h3, h4, h5, p, span, div, a, button) {
+  min-width: 0;
+}
+.jj-card :is(h1, h2, h3, h4, h5, p, span, label, dt, dd) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* MetricCard auto-stack when narrow */
+@container (max-width: 220px) {
+  [data-jj-metric-card] {
+    padding: 14px !important;
+  }
+  [data-jj-metric-card] > div:first-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  [data-jj-metric-card] [class*="text-[32px]"] {
+    font-size: 24px !important;
+  }
+}
+
+/* ActionStrip: full-width stacked buttons on mobile */
+@media (max-width: 640px) {
+  [data-jj-action-strip] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  [data-jj-action-strip] > * {
+    width: 100%;
+  }
+}
+
+/* Adaptive KPI grid utility — drop-in replacement for fixed grid-cols-N
+   used on dashboard KPI strips. Fills with auto-fit, min 180px. */
+.jj-kpi-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+}
+
+/* Prevent inline-flex rows of pills/chips from forcing horizontal overflow */
+.jj-card [class*="flex"]:not([class*="flex-col"]) {
+  flex-wrap: wrap;
+}
+
+/* Tables inside cards: allow internal horizontal scroll, never bleed out */
+.jj-card table,
+[data-jj-metric-card] table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Long labels with letter-spacing/uppercase should not push out of card */
+.jj-card [class*="tracking-"],
+[data-jj-metric-card] [class*="tracking-"] {
+  letter-spacing: normal;
+}
