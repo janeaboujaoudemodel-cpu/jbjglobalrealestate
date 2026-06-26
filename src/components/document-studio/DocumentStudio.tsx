@@ -1453,13 +1453,13 @@ function StudioShell({
   };
 
   const handlePrint = () => {
-    const currentBody = getCurrentBodyHtml();
+    const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody) return;
     printDocument(currentBody, marks);
   };
 
   const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
-    const currentBody = getCurrentBodyHtml();
+    const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) { toast.error("Nothing to export yet"); return; }
     setExporting(kind);
     try {
