@@ -84,29 +84,10 @@ export default function DraggableMark({
         <>
           <div data-drag-guide="true" style={{ position: "absolute", left: 0, top: -9999, bottom: -9999, width: 1, background: "#B89555", opacity: 0.55, pointerEvents: "none", zIndex: 9999 }} />
           <div data-drag-guide="true" style={{ position: "absolute", top: 0, left: -9999, right: -9999, height: 1, background: "#B89555", opacity: 0.55, pointerEvents: "none", zIndex: 9999 }} />
-          <div data-drag-guide="true" style={{ position: "absolute", top: -22, left: 0, padding: "2px 6px", borderRadius: 4, background: "#1A1A1A", color: "#FDFBF7", fontSize: 10, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap", pointerEvents: "none", zIndex: 10000 }}>
-            x {Math.round(x)} · y {Math.round(y)}
-          </div>
         </>
       )}
 
-      {/* Hover affordance — hint chip + action bar (Change / Resize / Remove) */}
-      {!drag?.moved && (hint || onClick || onResize) && (
-        <div
-          className="absolute -top-7 left-0 hidden group-hover:flex items-center gap-1 pointer-events-none"
-          style={{ zIndex: 9998 }}
-        >
-          {hint && (
-            <span
-              className="px-1.5 py-0.5 rounded text-[10px] tracking-wide pointer-events-none"
-              style={{ background: "#1A1A1A", color: "#FDFBF7", whiteSpace: "nowrap" }}
-            >
-              {hint}
-            </span>
-          )}
-        </div>
-      )}
-
+      {/* Hover affordance — action circles only; no dark label rectangle. */}
       <div
         className="absolute -top-2 -right-2 hidden group-hover:flex items-center gap-1"
         style={{ zIndex: 9999 }}
