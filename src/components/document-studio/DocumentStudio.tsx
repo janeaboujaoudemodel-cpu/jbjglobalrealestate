@@ -1260,12 +1260,15 @@ function StudioShell({
       customFields, commissionRows, docLanguage,
       chromeTheme, marks, emailTo, manualPages,
     };
-    const handle = setTimeout(() => {
+    const writeAll = () => {
       try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
-    }, 400);
-    const flush = () => {
-      try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
+      if (payload.templateId) {
+        try { localStorage.setItem(TEMPLATE_KEY(payload.templateId), JSON.stringify(payload)); } catch {}
+      }
     };
+    const handle = setTimeout(writeAll, 400);
+    const flush = writeAll;
+
     const onVisibility = () => { if (document.visibilityState === "hidden") flush(); };
     window.addEventListener("beforeunload", flush);
     window.addEventListener("pagehide", flush);
