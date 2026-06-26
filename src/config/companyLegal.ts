@@ -53,10 +53,10 @@ export const TRADE_LICENSE_ACTIVITIES = [
 
 export const COMPANY_CONTACT = {
   phone: "+971 54 716 7107",
-  // Letterhead / contract chrome — two-line direct dial. Kept separate from
-  // `phone` (which feeds tel: links, schema, and WhatsApp deep links) so
-  // changing the letterhead does not break click-to-call elsewhere.
-  letterheadPhones: ["+971 50 999 3839", "+971 54 366 2223"] as const,
+  // Letterhead / contract chrome — official company phone ONLY.
+  // The "Waleed" numbers (+971 50 999 3839 / +971 54 366 2223) belong to the
+  // job applicant, NOT to JBJ. They must never appear in the company footer.
+  letterheadPhones: ["+971 54 716 7107"] as const,
   email: "Contact@JBJ.AE",
   website: "www.jbj.ae",
 } as const;

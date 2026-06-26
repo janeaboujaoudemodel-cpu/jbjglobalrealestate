@@ -594,6 +594,7 @@ function StudioShell({
   const [studioMinimized, setStudioMinimized] = useState(false);
   const [actionChromeCollapsed, setActionChromeCollapsed] = useState(true);
   const [detailsPanelCollapsed, setDetailsPanelCollapsed] = useState(true);
+  const [templatePanelCollapsed, setTemplatePanelCollapsed] = useState(false);
   // Keep the Live Document Editor as the premium sparkle launcher by default.
   // It expands only when requested, so the A4 preview stays centered and fast.
   const [aiOpen, setAiOpen] = useState(false);
@@ -2281,53 +2282,70 @@ function StudioShell({
       <div className="studio-body flex-1 min-h-0 flex flex-col lg:flex-row overflow-hidden">
 
         {/* LEFT RAIL */}
-        <aside className={`studio-sidebar w-full ${step === 2 && detailsPanelCollapsed ? "lg:w-[72px] xl:w-[72px]" : "lg:w-[330px] xl:w-[360px]"} shrink-0 border-b lg:border-b-0 lg:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[38vh] lg:max-h-none transition-[width] duration-200`}>
+        <aside className={`studio-sidebar w-full ${step === 1 && templatePanelCollapsed ? "lg:w-[56px] xl:w-[56px]" : step === 2 && detailsPanelCollapsed ? "lg:w-[72px] xl:w-[72px]" : "lg:w-[330px] xl:w-[360px]"} shrink-0 border-b lg:border-b-0 lg:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[38vh] lg:max-h-none transition-[width] duration-200`}>
           {step === 1 && (
             <>
-              <div className="p-4 border-b border-[#B89555]/20">
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 mb-2">
-                  Step 1 — Choose a template
-                </div>
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/50" />
-                  <Input
-                    placeholder="Search templates…"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="pl-9 bg-[#FDFBF7]"
-                  />
-                </div>
-              </div>
-              <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-2">
-                {filteredTemplates.map((t) => {
-                  const Icon = t.icon;
-                  const selected = t.id === templateId;
-                  return (
-                      <button
-                        data-no-studio-normalize
-                      key={t.id}
-                      onClick={() => handleSelectTemplate(t.id)}
-                      className={[
-                        "studio-template-card w-full text-left rounded-xl border px-3 py-3 transition-all flex gap-3 items-start",
-                        selected
-                          ? "border-[#B89555] bg-[#EFE6D6]"
-                          : "border-[#B89555]/25 bg-[#F7F2EA] hover:bg-[#EFE6D6]/60",
-                      ].join(" ")}
-                    >
-                      <div className="w-8 h-8 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] flex items-center justify-center shrink-0">
-                        <Icon className="w-4 h-4 text-[#1A1A1A]" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-[13px] font-semibold text-[#1A1A1A] leading-tight">{t.label}</div>
-                        <div className="text-[11px] text-[#1A1A1A]/65 mt-0.5 line-clamp-2">{t.description}</div>
-                      </div>
-                    </button>
-                  );
-                })}
-                {filteredTemplates.length === 0 && (
-                  <div className="text-center text-xs text-[#1A1A1A]/55 py-8">No templates match.</div>
+              <div className="p-3 border-b border-[#B89555]/20 flex items-center justify-between gap-2">
+                {!templatePanelCollapsed && (
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 min-w-0 truncate">
+                    Step 1 — Choose a template
+                  </div>
                 )}
+                <button
+                  type="button"
+                  onClick={() => setTemplatePanelCollapsed((v) => !v)}
+                  className="h-8 w-8 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] shrink-0"
+                  title={templatePanelCollapsed ? "Expand templates" : "Minimize templates"}
+                  aria-label={templatePanelCollapsed ? "Expand templates" : "Minimize templates"}
+                >
+                  {templatePanelCollapsed ? <PanelRightOpen className="w-4 h-4" /> : <PanelRightClose className="w-4 h-4" />}
+                </button>
               </div>
+              {!templatePanelCollapsed && (
+                <>
+                  <div className="px-4 pt-3 pb-2">
+                    <div className="relative">
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/50" />
+                      <Input
+                        placeholder="Search templates…"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="pl-9 bg-[#FDFBF7]"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-2">
+                    {filteredTemplates.map((t) => {
+                      const Icon = t.icon;
+                      const selected = t.id === templateId;
+                      return (
+                          <button
+                            data-no-studio-normalize
+                          key={t.id}
+                          onClick={() => handleSelectTemplate(t.id)}
+                          className={[
+                            "studio-template-card w-full text-left rounded-xl border px-3 py-3 transition-all flex gap-3 items-start",
+                            selected
+                              ? "border-[#B89555] bg-[#EFE6D6]"
+                              : "border-[#B89555]/25 bg-[#F7F2EA] hover:bg-[#EFE6D6]/60",
+                          ].join(" ")}
+                        >
+                          <div className="w-8 h-8 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] flex items-center justify-center shrink-0">
+                            <Icon className="w-4 h-4 text-[#1A1A1A]" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-[13px] font-semibold text-[#1A1A1A] leading-tight">{t.label}</div>
+                            <div className="text-[11px] text-[#1A1A1A]/65 mt-0.5 line-clamp-2">{t.description}</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                    {filteredTemplates.length === 0 && (
+                      <div className="text-center text-xs text-[#1A1A1A]/55 py-8">No templates match.</div>
+                    )}
+                  </div>
+                </>
+              )}
             </>
           )}
 
@@ -3208,27 +3226,77 @@ function StudioShell({
                                     zIndex: 0,
                                   }}
                                 >
+                                  {/* Engraved 3D effect — stack three mask
+                                      layers: a dark "shadow" pushed down-right,
+                                      a bright "highlight" pushed up-left, and
+                                      the champagne fill in the middle. The eye
+                                      reads the offset light/dark pair as a
+                                      bevel pressed INTO the paper. */}
                                   <div
                                     style={{
+                                      position: "relative",
                                       width: 260,
                                       height: 260,
-                                      // Slight horizontal squeeze tightens the
-                                      // gap between the three letters without
-                                      // cropping the middle B.
                                       transform: "scaleX(0.86)",
                                       transformOrigin: "center",
-                                      background: "#B89555",
-                                      opacity: 0.14,
-                                      WebkitMaskImage: `url(${jbjMonogramSrc})`,
-                                      maskImage: `url(${jbjMonogramSrc})`,
-                                      WebkitMaskRepeat: "no-repeat",
-                                      maskRepeat: "no-repeat",
-                                      WebkitMaskPosition: "center",
-                                      maskPosition: "center",
-                                      WebkitMaskSize: "contain",
-                                      maskSize: "contain",
                                     }}
-                                  />
+                                  >
+                                    {/* Drop-shadow layer (dark) */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        transform: "translate(1.5px, 2px)",
+                                        background: "#3A2A12",
+                                        opacity: 0.18,
+                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                        maskImage: `url(${jbjMonogramSrc})`,
+                                        WebkitMaskRepeat: "no-repeat",
+                                        maskRepeat: "no-repeat",
+                                        WebkitMaskPosition: "center",
+                                        maskPosition: "center",
+                                        WebkitMaskSize: "contain",
+                                        maskSize: "contain",
+                                        filter: "blur(0.4px)",
+                                      }}
+                                    />
+                                    {/* Highlight layer (light) — sells the bevel */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        transform: "translate(-1px, -1.5px)",
+                                        background: "#FFFFFF",
+                                        opacity: 0.55,
+                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                        maskImage: `url(${jbjMonogramSrc})`,
+                                        WebkitMaskRepeat: "no-repeat",
+                                        maskRepeat: "no-repeat",
+                                        WebkitMaskPosition: "center",
+                                        maskPosition: "center",
+                                        WebkitMaskSize: "contain",
+                                        maskSize: "contain",
+                                        mixBlendMode: "screen",
+                                      }}
+                                    />
+                                    {/* Champagne body */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        background: "#B89555",
+                                        opacity: 0.16,
+                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                        maskImage: `url(${jbjMonogramSrc})`,
+                                        WebkitMaskRepeat: "no-repeat",
+                                        maskRepeat: "no-repeat",
+                                        WebkitMaskPosition: "center",
+                                        maskPosition: "center",
+                                        WebkitMaskSize: "contain",
+                                        maskSize: "contain",
+                                      }}
+                                    />
+                                  </div>
                                 </div>
                               )}
                               {/* Document generation date — top-right corner of EVERY page (above
