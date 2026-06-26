@@ -536,7 +536,7 @@ function composeJobOffer(input: ComposerInput): string {
     [
       ["Job Title", filledOr(f.jobTitle, ""), "jobTitle"],
       ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate, "startDate"],
-      ["Place of Work", officeAddress, "officeAddress"],
+      ["Place of Work", placeOfWork, "placeOfWork"],
       ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"), "workingHours"],
       ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits"), "attendance"],
       ["Probation Period", filledOr(f.probationPeriod || f.probation, "Up to six (6) months"), "probationPeriod"],
