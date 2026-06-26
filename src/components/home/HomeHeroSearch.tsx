@@ -13,7 +13,7 @@
  *   (#1A1A1A) to elevate the label — never fade or hide it.
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { CalendarCheck, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +36,7 @@ interface HomeHeroSearchProps {
 
 export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchProps) {
   const navigate = useNavigate();
+  const scrollGuardRef = useRef<HTMLDivElement | null>(null);
   const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -112,13 +113,53 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
     else window.dispatchEvent(new CustomEvent("jbj:open-inquiry"));
   };
 
+  const keepPageScrollAlive = useCallback((event: React.WheelEvent) => {
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+
+    event.preventDefault();
+    window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
+  }, []);
+
+  useEffect(() => {
+    const node = scrollGuardRef.current;
+    if (!node) return;
+
+    const scrollFromWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
+    };
+
+    const keepScrollAliveNative = (event: WheelEvent) => scrollFromWheel(event);
+    const keepScrollAliveDocument = (event: WheelEvent) => {
+      const target = event.target as Element | null;
+      if (target?.closest?.(".jj-hero-search-premium, .jj-hero-search-input, .jj-hero-search-action")) {
+        scrollFromWheel(event);
+      }
+    };
+
+    const scrollNodes = [
+      node,
+      ...Array.from(node.querySelectorAll<HTMLElement>("input, button, .jj-hero-search-bar, .jj-hero-search-premium")),
+    ];
+
+    scrollNodes.forEach((el) => el.addEventListener("wheel", keepScrollAliveNative, { capture: true, passive: false }));
+    document.addEventListener("wheel", keepScrollAliveDocument, { capture: true, passive: false });
+    return () => {
+      scrollNodes.forEach((el) => el.removeEventListener("wheel", keepScrollAliveNative, { capture: true }));
+      document.removeEventListener("wheel", keepScrollAliveDocument, { capture: true });
+    };
+  }, []);
+
   return (
     <>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6 }}
+        ref={scrollGuardRef}
         className="w-full max-w-4xl mx-auto"
+        onWheelCapture={keepPageScrollAlive}
       >
         {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
             the SAME emerald/black gradient surface — NO color split between segments.
@@ -208,15 +249,14 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             )}
           </button>
 
-          {/* FREE CONSULTATION — IN-BAR on desktop (lg+) only.
-              On phone/iPad portrait the button drops to its own row below
-              so the search input + Search button have full breathing room. */}
+          {/* FREE CONSULTATION — IN-BAR on tablet + desktop.
+              Only compact phones drop this CTA to the second row. */}
           <button
             type="button"
             onClick={openBooking}
             aria-label="Book your free consultation now"
             data-no-contrast-guard
-            className="allow-white jj-hero-search-action hidden lg:flex items-center justify-center gap-1.5 self-stretch h-full px-3 sm:px-5 lg:px-6 text-[12.5px] sm:text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-110"
+            className="allow-white jj-hero-search-action hidden sm:flex items-center justify-center gap-1.5 self-stretch h-full px-3 sm:px-5 lg:px-6 text-[12.5px] sm:text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-110"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
@@ -234,7 +274,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
         </div>
         </div>
 
-        {/* SECOND-ROW Free Consultation — phone + iPad portrait only (below lg).
+        {/* SECOND-ROW Free Consultation — compact phones only (<640px).
             Full-width emerald pill matching the bar surface for visual cohesion. */}
         <button
           type="button"
@@ -242,7 +282,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
           aria-label="Book your free consultation now"
           data-no-contrast-guard
           data-surface="dark"
-          className="allow-white lg:hidden mt-3 w-full flex items-center justify-center gap-2 h-12 sm:h-[52px] rounded-2xl text-[14px] sm:text-[14.5px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
+          className="allow-white sm:hidden mt-3 w-full flex items-center justify-center gap-2 h-12 rounded-2xl text-[14px] font-semibold tracking-[-0.005em] transition-all duration-200 hover:brightness-110"
           style={{
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
