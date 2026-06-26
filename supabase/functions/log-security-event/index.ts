@@ -1,16 +1,33 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const ALLOWED_VIOLATION_TYPES = new Set([
+  "devtools_open", "right_click", "view_source", "copy_attempt",
+  "screenshot_attempt", "automation_detected", "rapid_navigation",
+  "scraping_pattern", "console_access", "iframe_breakout",
+]);
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // SECURITY: aggressive per-IP rate limit so an attacker can't spam this
+  // unauthenticated endpoint to fill security_events / scraping_blocks.
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "log-security-event", maxRequests: 30, windowMinutes: 5, keyType: "ip" },
+    corsHeaders,
+  );
+  if (rl.response) return rl.response;
+
 
   try {
     // In Lovable preview/dev, resize + iframe behavior can trigger false positives.
@@ -30,13 +47,24 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const body = await req.json().catch(() => ({}));
-    const { 
-      event_type, 
-      violation_type, 
-      fingerprint, 
+    const {
+      violation_type,
+      fingerprint,
       user_agent,
-      violation_count 
-    } = body;
+      violation_count,
+    } = body ?? {};
+
+    // Strict payload validation
+    if (typeof violation_type !== "string" || !ALLOWED_VIOLATION_TYPES.has(violation_type)) {
+      return new Response(JSON.stringify({ error: "Invalid violation_type" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    if (fingerprint && (typeof fingerprint !== "string" || fingerprint.length > 128)) {
+      return new Response(JSON.stringify({ error: "Invalid fingerprint" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    const ua = typeof user_agent === "string" ? user_agent.slice(0, 512) : null;
+    const vc = typeof violation_count === "number" && violation_count >= 0 ? Math.min(violation_count, 1000) : 0;
 
     // Get IP from headers
     const forwarded = req.headers.get('x-forwarded-for');
@@ -64,14 +92,14 @@ serve(async (req) => {
       .from('security_events')
       .insert({
         event_type: 'unauthorized_access',
-        severity: violation_count >= 3 ? 'high' : 'medium',
+        severity: vc >= 3 ? 'high' : 'medium',
         description: `Security violation: ${violation_type}`,
         metadata: {
           ip_address: ip,
           fingerprint,
-          user_agent,
+          user_agent: ua,
           violation_type,
-          violation_count,
+          violation_count: vc,
           timestamp: new Date().toISOString()
         }
       });
@@ -81,7 +109,7 @@ serve(async (req) => {
     }
 
     // After 5 violations from same fingerprint, block it (but NEVER block Lovable preview/dev)
-    if (!isLovablePreviewRequest && fingerprint && typeof violation_count === 'number' && violation_count >= 5) {
+    if (!isLovablePreviewRequest && fingerprint && vc >= 5) {
       await supabase
         .from('scraping_blocks')
         .insert({

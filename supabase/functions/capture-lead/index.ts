@@ -348,12 +348,13 @@ serve(async (req: Request): Promise<Response> => {
       console.log('Created new CRM lead:', newLead?.id);
     }
 
+    // SECURITY: do NOT return leadId or any internal identifier. Returning
+    // a server-issued lead UUID would allow correlation/enumeration attacks
+    // from anonymous form submissions.
     return new Response(
       JSON.stringify({
         success: true,
         message: "Lead captured successfully",
-        email: normalizedEmail,
-        leadId: resolvedLeadId,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

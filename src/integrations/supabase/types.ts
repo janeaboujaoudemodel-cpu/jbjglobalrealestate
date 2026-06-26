@@ -39579,6 +39579,18 @@ export type Database = {
       }
       is_valid_image_url: { Args: { u: string }; Returns: boolean }
       link_broker_entity_by_email: { Args: never; Returns: string }
+      list_my_broker_oauth_apps: {
+        Args: never
+        Returns: {
+          client_id: string
+          created_at: string
+          id: string
+          is_active: boolean
+          label: string
+          provider: string
+          updated_at: string
+        }[]
+      }
       log_chat_message: {
         Args: {
           p_message: string

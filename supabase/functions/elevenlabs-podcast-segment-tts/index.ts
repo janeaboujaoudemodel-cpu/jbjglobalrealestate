@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -104,6 +106,20 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Authenticated session required to prevent anonymous credit burn
+  const auth = await requireAuthenticatedUser(req);
+  if (!auth.authenticated || !auth.userId) {
+    return unauthorizedResponse(auth.error || "Authentication required");
+  }
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "elevenlabs-podcast-segment-tts", maxRequests: 60, windowMinutes: 60, keyType: "user" },
+    corsHeaders,
+    auth.userId,
+  );
+  if (rl.response) return rl.response;
+
 
   try {
     const body = (await req.json().catch(() => ({}))) as {

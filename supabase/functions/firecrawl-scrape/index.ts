@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { requireAuthenticatedUser, unauthorizedResponse } from "../_shared/auth-utils.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -9,6 +11,22 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // SECURITY: require authenticated session — anonymous traffic must not be
+  // able to burn Firecrawl credits or scrape via our infra.
+  const auth = await requireAuthenticatedUser(req);
+  if (!auth.authenticated || !auth.userId) {
+    return unauthorizedResponse(auth.error || "Authentication required");
+  }
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "firecrawl-scrape", maxRequests: 30, windowMinutes: 60, keyType: "user" },
+    corsHeaders,
+    auth.userId,
+  );
+  if (rl.response) return rl.response;
+
+
 
   try {
     const { url, options } = await req.json();

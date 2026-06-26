@@ -133,6 +133,28 @@ export async function validateEmployeeAuth(req: Request): Promise<AuthResult> {
 }
 
 /**
+ * Lightweight JWT verification — confirms the caller has a valid Supabase user
+ * session, without requiring employee/role membership. Use for endpoints that
+ * burn third-party API credits or must not be hit by anonymous traffic.
+ */
+export async function requireAuthenticatedUser(req: Request): Promise<AuthResult> {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return { authenticated: false, error: "Missing or invalid Authorization header" };
+  }
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+  const client = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+  const { data, error } = await client.auth.getUser();
+  if (error || !data?.user) {
+    return { authenticated: false, error: "Invalid or expired token" };
+  }
+  return { authenticated: true, userId: data.user.id, email: data.user.email ?? "" };
+}
+
+/**
  * Returns a 401 Unauthorized response with CORS headers
  */
 export function unauthorizedResponse(message: string = "Unauthorized", origin?: string | null): Response {
