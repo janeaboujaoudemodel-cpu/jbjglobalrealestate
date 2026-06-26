@@ -88,6 +88,59 @@ const formatHumanDate = (raw?: string): string => {
 const esc = (s?: string) =>
   (s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
+const firstMatch = (source: string, ...patterns: RegExp[]): string => {
+  for (const pattern of patterns) {
+    const match = source.match(pattern);
+    const value = (match?.[1] || match?.[0] || "").trim();
+    if (value) return value.replace(/[;,]\s*$/g, "").trim();
+  }
+  return "";
+};
+
+const stripForbiddenIdentityFragments = (value?: string): string => {
+  if (!value) return "";
+  return value
+    .split(/[;\n]+/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .filter((part) => !/^(date\s*of\s*birth|dob|birth\s*date|issuing\s*date|issue\s*date|expiry\s*date|id\s*expiry|passport\s*expiry|sex)\b/i.test(part))
+    .join("; ")
+    .trim();
+};
+
+const identityValue = (fields: Record<string, string>, keys: string[], source: string, ...patterns: RegExp[]) => {
+  const direct = keys.map((key) => fields[key]).find((value) => typeof value === "string" && value.trim()) || "";
+  const cleaned = stripForbiddenIdentityFragments(direct);
+  const parsed = firstMatch([direct, source].filter(Boolean).join("\n"), ...patterns);
+  return (parsed || cleaned).replace(/^\s*[^:]{1,28}:\s*/, (prefix) => /number|no\.?|id|passport|nationality|address|email|phone|mobile|name/i.test(prefix) ? "" : prefix).trim();
+};
+
+const offerIdentity = (fields: Record<string, string>) => {
+  const source = Object.values(fields).filter(Boolean).join("\n");
+  return {
+    name: identityValue(fields, ["recipientName", "candidateName", "fullName", "fullNameAsPerId", "nameAsPerId"], source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name|name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
+    passport: identityValue(fields, ["passportNumber", "passport_number", "passportNo", "passport"], source, /passport(?:\s*(?:number|no\.?))?\s*(?:is|:|-)?\s*([A-Z0-9]{5,})/i),
+    nationality: identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    address: identityValue(fields, ["homeAddress", "address", "home_address", "residentialAddress"], source, /(?:home|residential)?\s*address\s*(?:is|:|-)?\s*([^;\n]+)/i),
+    email: identityValue(fields, ["recipientEmail", "email", "emailAddress", "email_address"], source, /([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/i),
+    phone: identityValue(fields, ["recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"], source, /(?:phone|mobile|whatsapp)\s*(?:is|:|-)?\s*((?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,})/i),
+  };
+};
+
+const filledOr = (value: string | undefined, fallback: string) => {
+  const cleaned = stripForbiddenIdentityFragments(value);
+  return cleaned || fallback;
+};
+
+const paragraph = (html: string) => `<p style="margin:0 0 12px;line-height:1.65;font-size:12.5px;color:${INK};">${html}</p>`;
+
+const offerClause = (n: number, heading: string, body: string) => `
+  <section data-pdf-section="offer-clause-${n}" style="margin:0 0 13px;page-break-inside:avoid;break-inside:avoid;">
+    <h2 style="margin:0 0 5px;font-size:13px;line-height:1.35;color:${INK};font-weight:700;">${n}. ${esc(heading)}</h2>
+    <p style="margin:0;line-height:1.62;font-size:12.35px;color:${INK};">${body}</p>
+  </section>`;
+
 /* ───────────── Shared building blocks ───────────── */
 
 export function termsTable(rows: Array<[string, string | undefined]>): string {
@@ -131,18 +184,18 @@ export function identityTable(_rows: Array<[string, string | undefined]>): strin
  * missing. No expiry dates, no DOB, no sex.
  */
 export function inlineIdentitySentence(fields: Record<string, string>): string {
-  const f = fields;
-  const passport = (f.passportNumber || f.passport_number || f.passportNo || f.passport || "").trim();
-  const eid = (f.emiratesId || f.idNumber || f.emirates_id || f.eid_number || "").trim();
-  const nationality = (f.nationality || "").trim();
-  const address = (f.homeAddress || f.address || f.home_address || f.residentialAddress || "").trim();
-  const email = (f.recipientEmail || f.email || f.email_address || "").trim();
-  const phone = (f.recipientPhone || f.phone || f.mobile || f.mobile_number || "").trim();
+  const id = offerIdentity(fields);
+  const passport = id.passport;
+  const eid = id.emiratesId;
+  const nationality = id.nationality;
+  const address = id.address;
+  const email = id.email;
+  const phone = id.phone;
 
   const clauses: string[] = [];
   if (passport) clauses.push(`holding Passport No. <strong>${esc(passport)}</strong>`);
-  if (eid) clauses.push(`Emirates ID No. <strong>${esc(eid)}</strong>`);
-  if (nationality) clauses.push(`of <strong>${esc(nationality)}</strong> nationality`);
+  if (eid) clauses.push(`holding Emirates ID No. <strong>${esc(eid)}</strong>`);
+  if (nationality) clauses.push(`with nationality recorded as <strong>${esc(nationality)}</strong>`);
   if (address) clauses.push(`residing at <strong>${esc(address)}</strong>`);
 
   const contactBits: string[] = [];
@@ -206,6 +259,7 @@ export function signatureBlock(opts: {
   applicantName?: string;
   applicantDate?: string;
   applicantLabel?: string;
+  applicantMetaRows?: Array<[string, string | undefined]>;
   extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }): string {
   const oName = esc(opts.ownerName || "Jane Bou Jaoude");
@@ -257,9 +311,14 @@ export function signatureBlock(opts: {
   // ON it). Below it we only print Name (typed legal name) and Date — the
   // literal "Signature:" row was removed to avoid a duplicate signature
   // request inside the cell.
+  const applicantMeta = (opts.applicantMetaRows || [])
+    .filter(([, value]) => (value || "").trim())
+    .map(([label, value]) => row(label, esc(value || ""), false))
+    .join("");
   const applicantLines = `
     <div style="font-size:11px;color:${INK};margin-top:4px;"><strong style="font-weight:600;">Name:</strong>${shortLine(aName)}</div>
     <div style="font-size:11px;color:${INK};margin-top:8px;"><strong style="font-weight:600;">Date:</strong>${shortLine(aDate)}</div>
+    ${applicantMeta}
   `;
 
   const extras = (opts.extraSignatories || []).filter(
@@ -387,50 +446,79 @@ export function paragraphs(text?: string): string {
 
 function composeJobOffer(input: ComposerInput): string {
   const f = input.fields;
-  const customRows: Array<[string, string | undefined]> = (input.customFields || [])
-    .filter((c) => (c.label || "").trim() && (c.value || "").trim())
-    .map((c) => [c.label, c.value]);
+  const id = offerIdentity(f);
+  const candidateName = esc(filledOr(id.name || f.recipientName, "[Candidate Name]"));
+  const address = esc(filledOr(id.address, "[Address]"));
+  const email = esc(filledOr(id.email, "[Email]"));
+  const phone = esc(filledOr(id.phone, "[Phone Number]"));
+  const emiratesId = esc(filledOr(id.emiratesId, "[Emirates ID Number]"));
+  const passport = esc(filledOr(id.passport, "[Passport Number]"));
+  const nationality = esc(filledOr(id.nationality, "[Nationality]"));
+  const jobTitle = esc(filledOr(f.jobTitle, "[Job Title]"));
+  const companyName = "J B J GLOBAL REAL ESTATE L.L.C S.O.C";
+  const officeAddress = "Office SM1-195, Port Saeed, Deira, Dubai, UAE";
+  const startDate = esc(formatHumanDate(f.startDate) || f.startDate || "[Start Date]");
+  const salary = esc(filledOr(f.salary, "[Amount]"));
+  const commission = esc(filledOr(f.commission, "[Commission structure]"));
+  const allowances = esc(filledOr(f.allowances, "[If any]"));
+  const paymentCycle = esc(filledOr(f.paymentCycle, "Monthly / upon company receipt of commission / other"));
+  const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"));
+  const authorizedSignatory = esc(input.ownerName || "Jane Bou Jaoude");
+  const authorizedTitle = esc(input.ownerTitle || "Founder & CEO");
 
-  const termsRows: Array<[string, string | undefined]> = [
-    ["Position", f.jobTitle],
-    ["Department", input.department],
-    ["Reporting To", f.reportingTo],
-    ["Start Date", formatHumanDate(f.startDate) || f.startDate],
-    ["Probation Period", f.probation],
-    ["Working Hours", f.workingHours],
-    ["Annual Leave", f.annualLeave],
-    ["Notice Period", f.noticePeriod],
-    ["Base Salary", f.salary],
-    ["Allowances", f.allowances],
-    ["Benefits", f.benefits],
-    ...customRows,
-  ];
+  const candidateIdentity = paragraph(
+    `Candidate identity for this offer: <strong>${candidateName}</strong>, holding Passport No. <strong>${passport}</strong>, holding Emirates ID No. <strong>${emiratesId}</strong>, with nationality recorded as <strong>${nationality}</strong>, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone at <strong>${phone}</strong>.`,
+  );
 
-  const identityRows: Array<[string, string | undefined]> = [
-    ["Full Name as per ID", f.recipientName],
-    ["Emirates ID Number", f.emiratesId || f.idNumber || f.emirates_id || f.eid_number],
-    ["Passport Number", f.passportNumber || f.passport_number || f.passportNo || f.passport],
-    ["Home Address", f.homeAddress || f.address || f.home_address || f.residentialAddress],
-    ["Email Address", f.recipientEmail || f.email || f.email_address],
-    ["Phone / WhatsApp", f.recipientPhone || f.phone || f.mobile || f.mobile_number],
-  ];
+  const notes = stripForbiddenIdentityFragments(f.notes);
+  const optionalNotes = notes
+    ? `<section data-pdf-section="offer-notes" style="margin:0 0 13px;page-break-inside:avoid;break-inside:avoid;"><h2 style="margin:0 0 5px;font-size:13px;line-height:1.35;color:${INK};font-weight:700;">Additional Instructions</h2>${paragraph(esc(notes))}</section>`
+    : "";
+
+  const clauses = [
+    offerClause(1, "Position", `Your position will be <strong>${jobTitle}</strong>. Your duties include, but are not limited to, real estate sales/leasing, lead handling, client follow-up, developer coordination, CRM updates, property presentations, marketing support, and any other duties reasonably assigned by the Company.`),
+    offerClause(2, "Start Date", `Your expected start date is <strong>${startDate}</strong>.`),
+    offerClause(3, "Place of Work", `Your primary place of work will be <strong>${officeAddress}</strong>, with field visits, developer offices, client meetings, property viewings, and remote work where approved by the Company. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy.`),
+    offerClause(4, "Compensation", `Your compensation shall be:<br/>Basic Salary: AED <strong>${salary}</strong> per month / Commission-only structure: <strong>${commission}</strong><br/>Commission: <strong>${commission}</strong><br/>Allowances: <strong>${allowances}</strong><br/>Payment Cycle: <strong>${paymentCycle}</strong><br/>No commission is earned unless and until the Company receives the relevant commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing.`),
+    offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || "up to six months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract.`),
+    offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, documents, contracts, business methods, and internal policies.`),
+    offerClause(7, "Leads and Clients", `All leads, inquiries, clients, prospects, contacts, databases, property owners, developers, landlords, sellers, buyers, tenants, and investors introduced, generated, received, accessed, assigned, or handled during your work are the exclusive business assets of the Company. You may not use, transfer, sell, leak, copy, export, screenshot, close, redirect, or complete any transaction involving Company leads or clients outside the Company, during or after employment.`),
+    offerClause(8, "Conflict of Interest", `You must not work with, represent, assist, advise, own, manage, or financially participate in any competing real estate business, brokerage, marketing agency, holiday-home operator, property management company, or commission-based arrangement without the Company’s prior written approval.`),
+    offerClause(9, "Non-Solicitation and Non-Circumvention", `You must not solicit, approach, divert, or deal directly or indirectly with the Company’s clients, leads, developers, owners, suppliers, consultants, employees, brokers, or partners for personal benefit or for any third party.`),
+    offerClause(10, "Training and Onboarding Reimbursement During Probation", `If you resign during the probation period, you agree, where legally enforceable and subject to UAE law, to reimburse the Company for reasonable, documented, and proportionate costs incurred for your onboarding, training, education, company time investment, tools, materials, and Company-provided data or leads, excluding any costs that cannot legally be recovered from an employee. After completing six months of employment, you shall not owe reimbursement for ordinary onboarding or training costs unless a separate written agreement applies.`),
+    offerClause(11, "Conditional Offer", `This offer is conditional upon satisfactory completion of documentation, background verification where applicable, visa/work permit requirements where applicable, and signing all Company documents.`),
+  ].join("");
+
+  const closing = `
+    ${paragraph("Please confirm your acceptance by signing below.")}
+    <div data-pdf-section="offer-closing" style="margin:16px 0 18px;page-break-inside:avoid;break-inside:avoid;color:${INK};font-size:12.5px;line-height:1.65;">
+      <p style="margin:0 0 10px;">Sincerely,<br/>For and on behalf of ${companyName}</p>
+      <p style="margin:0;">Name: ${authorizedSignatory}<br/>Title: ${authorizedTitle}<br/>Signature: ___________________</p>
+    </div>`;
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
-    recipientBlock(f, { greeting: true }),
-    subjectLine(`Offer of Employment${f.jobTitle ? ` — ${f.jobTitle}` : ""}`),
-    paragraphs(input.aiIntro),
-    inlineIdentitySentence(f),
-    termsTable(termsRows),
-    commissionTable(input.commissionRows || []),
-    paragraphs(input.aiClosing),
+    paragraph(`<strong>Date:</strong> ${esc(formatHumanDate(input.letterDate) || input.letterDate || "[Date]")}`),
+    paragraph(`<strong>Candidate Name:</strong> ${candidateName}<br/><strong>Address:</strong> ${address}<br/><strong>Email:</strong> ${email}`),
+    subjectLine(`Employment Offer – ${jobTitle}`),
+    paragraph(`Dear ${candidateName},`),
+    paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency, subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
+    candidateIdentity,
+    clauses,
+    optionalNotes,
+    closing,
     signatureBlock({
       ownerName: input.ownerName,
       ownerTitle: input.ownerTitle,
       ownerDate: input.ownerDate,
-      applicantName: f.recipientName,
+      applicantName: id.name || f.recipientName,
       applicantDate: input.applicantDate,
-      applicantLabel: "Accepted by Applicant",
+      applicantLabel: "Accepted by Candidate",
+      applicantMetaRows: [
+        ["Emirates ID No.", id.emiratesId],
+        ["Passport No.", id.passport],
+        ["Nationality", id.nationality],
+      ],
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
