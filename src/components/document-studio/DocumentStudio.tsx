@@ -3080,9 +3080,10 @@ function StudioShell({
                 // page when the document is processed for signature. Reserve a
                 // safe band on every page so the stamp never overlays content.
                 const FIRST_TOP = 46;
-                // GLOBAL: equal interior top/bottom on inner pages. Safe band
-                // and footer reserve are handled separately.
-                const NEXT_TOP = 64;
+                // GLOBAL: tighten the top of inner pages — the colored band
+                // above body on pages 2+ was removed, so content sits closer
+                // to the paper edge for a premium contract feel.
+                const NEXT_TOP = 24;
                 const STANDARD_BOTTOM_PAD = 40;
                 const LAST_BOTTOM_PAD = 48;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
