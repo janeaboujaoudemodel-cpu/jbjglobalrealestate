@@ -85,17 +85,17 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
     width:100%;
     background:${t.bg};
     border-bottom:1px solid ${t.hairline};
-    padding:8px 28px 8px 22px;
+    padding:10px 32px 10px 24px;
     font-family:Inter, system-ui, sans-serif;
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:142px 1fr;align-items:center;gap:14px;min-height:126px;">
+    <div style="display:grid;grid-template-columns:142px minmax(0,1fr);align-items:center;gap:18px;min-height:126px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:126px;height:126px;display:block;object-fit:contain;background:transparent;margin:0;filter:${t.monoFilter};" />
-      <div style="line-height:1.12;text-align:left;min-width:0;padding-right:10px;">
-        <div style="font-size:20px;font-weight:850;letter-spacing:0.025em;color:${t.fg};white-space:nowrap;">
-          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.12em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
+        style="width:126px;height:126px;display:block;object-fit:contain;background:transparent;margin:auto 0;filter:${t.monoFilter};align-self:center;" />
+      <div style="height:100%;display:flex;align-items:center;line-height:1.05;text-align:left;min-width:0;padding-right:0;">
+        <div style="display:block;width:100%;font-size:24px;font-weight:850;letter-spacing:0;color:${t.fg};white-space:nowrap;">
+          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.03em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
     </div>
