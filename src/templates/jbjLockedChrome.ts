@@ -19,6 +19,8 @@ export const JBJ_BRAND = {
   shortName: "JBJ GLOBAL REAL ESTATE",
   address: TRADE_LICENSE_OFFICE,
   phone: COMPANY_CONTACT.phone,
+  // Two-line direct dial shown in the locked letterhead/footer only.
+  letterheadPhones: COMPANY_CONTACT.letterheadPhones as readonly string[],
   email: COMPANY_CONTACT.email.toLowerCase(),
   website: COMPANY_CONTACT.website,
   tradeLicense: TRADE_LICENSE_NUMBER,
