@@ -1512,6 +1512,12 @@ function StudioShell({
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body,
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; }
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
+        [data-document-studio-overlay] :is(.studio-topbar, [data-document-studio-toolbar], .studio-action-row) [data-surface="champagne"][class*="rounded"],
+        [data-document-studio-overlay] :is(.studio-topbar, [data-document-studio-toolbar], .studio-action-row) [data-jbj-button] {
+          container-type: normal !important;
+          contain: none !important;
+          overflow: visible !important;
+        }
         [data-document-studio-overlay] .studio-scroll-x { overflow-x:hidden; }
         [data-document-studio-overlay] .studio-action-row { display:flex !important; flex-wrap:wrap !important; gap:10px !important; align-items:center !important; min-width:0; }
         [data-document-studio-overlay] .studio-action-row > * { flex:0 0 auto !important; max-width:none !important; }
