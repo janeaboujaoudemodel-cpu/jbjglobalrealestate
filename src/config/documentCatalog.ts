@@ -91,6 +91,7 @@ const STAFF: DocumentTemplate[] = [
       RECIPIENT_NAME,
       { key: "emiratesId", label: "Emirates ID Number", type: "text", placeholder: "e.g., 784-1988-6468692-2" },
       { key: "passportNumber", label: "Passport Number", type: "text", placeholder: "Passport number only" },
+      { key: "nationality", label: "Nationality", type: "text", placeholder: "e.g., Lebanese" },
       { key: "homeAddress", label: "Home Address", type: "textarea", placeholder: "Applicant residential address" },
       { key: "recipientEmail", label: "Email Address", type: "text", placeholder: "applicant@example.com" },
       { key: "recipientPhone", label: "Phone / WhatsApp", type: "text", placeholder: "+971 ..." },
