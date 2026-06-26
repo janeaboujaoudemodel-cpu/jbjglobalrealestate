@@ -220,7 +220,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const categoryFilteredStudioTemplates = useMemo(() => {
     const q = templateSearch.trim().toLowerCase();
     const category = TEMPLATE_CATEGORIES.find((item) => item.key === activeTemplateCategory);
-    return studioTemplates.filter((template) => {
+    const filtered = studioTemplates.filter((template) => {
       const inCategory = !category?.ids || category.ids.includes(template.id);
       const matchesSearch = !q || [template.label, template.description, templateFamilyLabel(template), template.audience]
         .join(" ")
@@ -228,6 +228,13 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
         .includes(q);
       return inCategory && matchesSearch;
     });
+    // Preserve the curated order declared in TEMPLATE_CATEGORIES.ids
+    // (e.g. HR/Employees → job_offer FIRST, then warning_letter, etc.)
+    if (category?.ids?.length) {
+      const order = new Map(category.ids.map((id, idx) => [id, idx]));
+      filtered.sort((a, b) => (order.get(a.id) ?? 999) - (order.get(b.id) ?? 999));
+    }
+    return filtered;
   }, [activeTemplateCategory, studioTemplates, templateSearch]);
 
   const categorizedEsignTemplates = useMemo(() => {
