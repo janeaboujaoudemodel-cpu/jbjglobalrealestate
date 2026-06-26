@@ -476,7 +476,7 @@ export function signatureBlock(opts: {
   // underline rule). No further underlines under Name/Title/Date.
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
-      <div style="height:96px;display:flex;align-items:flex-start;padding-top:10px;padding-bottom:0;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
+      <div style="height:132px;display:flex;align-items:flex-start;padding-top:12px;padding-bottom:0;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
       <div style="padding-top:10px;position:relative;min-height:126px;overflow:visible;">
         ${lines}
         ${withStamp ? stampOverlay : ""}
@@ -522,7 +522,7 @@ export function signatureBlock(opts: {
   // Owner heading is the signatory ROLE (e.g. "Authorised Signatory"),
   // NEVER the company name — the company is already in the header/footer.
   return `
-    <div data-signature-block="1" data-pdf-section="signature" style="margin-top:auto;padding-top:36px;page-break-inside:avoid;break-inside:avoid;">
+    <div data-signature-block="1" data-pdf-section="signature" style="margin-top:auto;padding-top:22px;page-break-inside:avoid;break-inside:avoid;">
       <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
         <tbody>
           <tr>
