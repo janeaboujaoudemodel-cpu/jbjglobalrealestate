@@ -420,7 +420,7 @@ function composeJobOffer(input: ComposerInput): string {
     recipientBlock(f, { greeting: true }),
     subjectLine(`Offer of Employment${f.jobTitle ? ` — ${f.jobTitle}` : ""}`),
     paragraphs(input.aiIntro),
-    identityTable(identityRows),
+    inlineIdentitySentence(f),
     termsTable(termsRows),
     commissionTable(input.commissionRows || []),
     paragraphs(input.aiClosing),
