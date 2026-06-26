@@ -279,7 +279,7 @@ export const AdminOverviewDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+      <div className="space-y-6" data-backend-portal="admin">
       {/* Header with refresh */}
       <div className="flex items-center justify-between">
         <div>
@@ -385,7 +385,9 @@ export const AdminOverviewDashboard = () => {
         <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 shadow-lg">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Zap className="w-5 h-5 text-[#1A1A1A]" />
+              <span className="jj-icon-tile-emerald allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg text-white [&_svg]:text-white" data-surface="emerald" data-icon-tile="" data-icon-tile-tone="emerald">
+                <Zap className="w-4 h-4" />
+              </span>
               Quick Actions
             </CardTitle>
           </CardHeader>
@@ -404,7 +406,9 @@ export const AdminOverviewDashboard = () => {
                 <Button
                   key={action.label}
                   variant="secondary"
-                  className="justify-start h-auto py-3 px-3 min-w-0 overflow-hidden"
+                  data-surface="emerald"
+                  data-emerald-ok="button"
+                  className="jj-surface-emerald allow-white justify-start h-auto py-3 px-3 min-w-0 overflow-hidden text-white [&_svg]:text-white"
                   onClick={() => navigate(action.href)}
                 >
                   <span
@@ -415,8 +419,8 @@ export const AdminOverviewDashboard = () => {
                   >
                     {action.icon}
                   </span>
-                  <span className="text-sm font-medium truncate">{action.label}</span>
-                  <ExternalLink className="w-3 h-3 ml-auto opacity-50 flex-shrink-0" />
+                  <span className="text-sm font-medium truncate text-white">{action.label}</span>
+                  <ExternalLink className="w-3 h-3 ml-auto opacity-80 flex-shrink-0 text-white" />
                 </Button>
               ))}
             </div>
@@ -427,7 +431,9 @@ export const AdminOverviewDashboard = () => {
         <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 shadow-lg">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Activity className="w-5 h-5 text-[#1A1A1A]" />
+              <span className="jj-icon-tile-emerald allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg text-white [&_svg]:text-white" data-surface="emerald" data-icon-tile="" data-icon-tile-tone="emerald">
+                <Activity className="w-4 h-4" />
+              </span>
               Recent Activity
             </CardTitle>
           </CardHeader>
@@ -477,7 +483,7 @@ export const AdminOverviewDashboard = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/40">
+          <Card className="jj-surface-emerald allow-white border-transparent text-white" data-surface="emerald">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -490,10 +496,10 @@ export const AdminOverviewDashboard = () => {
                     <AlertTriangle className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-semibold text-[#1A1A1A]">
+                    <p className="font-semibold text-white">
                       {stats.pendingApprovals} Pending Approval{stats.pendingApprovals > 1 ? "s" : ""}
                     </p>
-                    <p className="text-sm text-[#1A1A1A]/70">
+                    <p className="text-sm text-white/85">
                       New project imports and listings awaiting media verification require your review
                     </p>
                   </div>

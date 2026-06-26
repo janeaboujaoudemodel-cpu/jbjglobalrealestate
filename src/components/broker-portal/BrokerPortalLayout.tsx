@@ -53,6 +53,8 @@ export default function BrokerPortalLayout() {
   return (
     <div
       data-surface="champagne"
+      data-backend-portal="broker"
+      data-broker-shell
       className="min-h-screen w-full bg-[#FDFBF7] relative"
     >
       {/* Mobile sidebar */}

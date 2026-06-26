@@ -495,14 +495,9 @@ export default function UnifiedCRM() {
               type="button"
               onClick={() => setInsightsOpen(o => !o)}
               aria-expanded={insightsOpen}
-              data-surface={insightsOpen ? "emerald" : undefined}
-              data-emerald-ok={insightsOpen ? "button" : undefined}
-              className={[
-                "shrink-0 inline-flex h-10 min-w-[126px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold border transition-transform hover:-translate-y-0.5",
-                insightsOpen
-                  ? "jj-surface-emerald border-transparent"
-                  : "bg-transparent text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
-              ].join(" ")}
+              data-surface="emerald"
+              data-emerald-ok="button"
+              className="jj-surface-emerald allow-white shrink-0 inline-flex h-10 min-w-[126px] items-center justify-center gap-2 rounded-xl border-transparent px-4 text-xs font-semibold text-white transition-transform hover:-translate-y-0.5 [&_svg]:text-white"
             >
               <BarChart3 className="h-3.5 w-3.5" />
               Insights

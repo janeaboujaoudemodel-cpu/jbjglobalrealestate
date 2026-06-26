@@ -16620,6 +16620,107 @@ main,
   word-break: normal;
 }
 
+/* =====================================================================
+   PASS 56 — UNIVERSAL BACK-END EMERALD/WHITE BRAND LOCK
+   Applies to every authenticated portal shell: owner, admin, broker,
+   investor and developer. Any icon tile, active tab, primary action,
+   status badge, marked control, or rounded icon container inside a backend
+   portal renders as emerald-black ombré with pure white text/glyphs.
+   ===================================================================== */
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is(
+  [data-backend-icon-tile],
+  [data-backend-sidebar-icon-tile],
+  [data-icon-tile],
+  [data-icon-tile-tone],
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-ok],
+  [data-emerald-action="true"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"],
+  .jj-surface-emerald,
+  .jj-icon-tile-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  button[class*="bg-amber"],
+  button[class*="bg-blue"],
+  button[class*="bg-rose"],
+  button[class*="bg-purple"],
+  .rounded-xl[class*="bg-amber"],
+  .rounded-xl[class*="bg-blue"],
+  .rounded-xl[class*="bg-rose"],
+  .rounded-xl[class*="bg-purple"],
+  .rounded-lg[class*="bg-amber"],
+  .rounded-lg[class*="bg-blue"],
+  .rounded-lg[class*="bg-rose"],
+  .rounded-lg[class*="bg-purple"],
+  .rounded-full[class*="bg-amber"],
+  .rounded-full[class*="bg-blue"],
+  .rounded-full[class*="bg-rose"],
+  .rounded-full[class*="bg-purple"]
+):not([data-no-contrast-guard]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="page"]):not([data-surface="raised"]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 10px 24px -12px rgba(4,44,28,0.86),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is(
+  [data-backend-icon-tile],
+  [data-backend-sidebar-icon-tile],
+  [data-icon-tile],
+  [data-icon-tile-tone],
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-ok],
+  [data-emerald-action="true"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"],
+  .jj-surface-emerald,
+  .jj-icon-tile-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  button[class*="bg-amber"],
+  button[class*="bg-blue"],
+  button[class*="bg-rose"],
+  button[class*="bg-purple"],
+  .rounded-xl[class*="bg-amber"],
+  .rounded-xl[class*="bg-blue"],
+  .rounded-xl[class*="bg-rose"],
+  .rounded-xl[class*="bg-purple"],
+  .rounded-lg[class*="bg-amber"],
+  .rounded-lg[class*="bg-blue"],
+  .rounded-lg[class*="bg-rose"],
+  .rounded-lg[class*="bg-purple"],
+  .rounded-full[class*="bg-amber"],
+  .rounded-full[class*="bg-blue"],
+  .rounded-full[class*="bg-rose"],
+  .rounded-full[class*="bg-purple"]
+):not([data-no-contrast-guard]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="page"]):not([data-surface="raised"]) :where(*, span, strong, p, h1, h2, h3, h4, h5, h6, small, em, b, label, button, div, li, svg, [class*="lucide"], [data-lucide], svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal]) :is(.jj-surface-emerald, [data-surface="emerald"]) :is(.bg-\[\#EFE6D6\], .bg-\[\#FDFBF7\], [class*="bg-white"], [class*="text-\[\#1A1A1A\]"]) {
+  background: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.28) !important;
+}
+
 /* MetricCard auto-stack when narrow */
 @container (max-width: 220px) {
   [data-jj-metric-card] {
@@ -16799,4 +16900,53 @@ html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-rad
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
   text-overflow: clip !important;
+}
+
+/* PASS 56B — final EOF backend icon glyph lock. This intentionally sits
+   after every legacy contrast sweep/dropdown rule so no portal can repaint an
+   emerald icon tile back to black. */
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) :is(svg, [class*="lucide"], [data-lucide], svg *, path, circle, rect, line, polyline, polygon, ellipse),
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-surface="emerald"], [data-emerald-ok], .jj-surface-emerald, .jj-cta-emerald, .jj-cta-primary, [role="tab"][data-state="active"]) :is(svg, [class*="lucide"], [data-lucide], svg *, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[aria-label*="Scroll"],
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[title*="Scroll"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[aria-label*="Scroll"] :is(svg, [class*="lucide"], svg *),
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) button[title*="Scroll"] :is(svg, [class*="lucide"], svg *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  mix-blend-mode: normal !important;
 }
