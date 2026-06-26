@@ -538,7 +538,38 @@ function StudioShell({
   const [deptDraft, setDeptDraft] = useState("");
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
-  const [fields, setFields] = useState<Record<string, string>>(() => snap?.fields || getTemplateDefaultFields(initialId));
+  // Shared identity store: identity fields (name, ID, passport, contact) are
+  // mirrored across every template so once the owner fills the Offer Letter
+  // for a candidate, opening the NDA (or any contract) for the same person
+  // auto-prefills those same fields. The composer-specific defaults remain.
+  const SHARED_IDENTITY_KEY = "jbj:doc-studio:shared-identity";
+  const readSharedIdentity = (): Record<string, string> => {
+    try {
+      const raw = localStorage.getItem(SHARED_IDENTITY_KEY);
+      const j = raw ? JSON.parse(raw) : null;
+      return j && typeof j === "object" ? j : {};
+    } catch { return {}; }
+  };
+  const [fields, setFields] = useState<Record<string, string>>(() => {
+    const base = getTemplateDefaultFields(initialId);
+    const shared = readSharedIdentity();
+    const merged = { ...base, ...shared };
+    return snap?.fields ? { ...merged, ...snap.fields } : merged;
+  });
+  // Mirror identity fields to the shared store whenever they change.
+  useEffect(() => {
+    try {
+      const out: Record<string, string> = {};
+      for (const k of IDENTITY_FIELD_KEYS) {
+        const v = (fields[k] || "").toString().trim();
+        if (v && !/^\[[^\]]+\]$/.test(v)) out[k] = v;
+      }
+      if (Object.keys(out).length) {
+        const merged = { ...readSharedIdentity(), ...out };
+        localStorage.setItem(SHARED_IDENTITY_KEY, JSON.stringify(merged));
+      }
+    } catch {}
+  }, [fields]);
   const [bodyHtml, setBodyHtml] = useState<string>(() => snap?.bodyHtml || "");
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
