@@ -44,37 +44,40 @@ export function DeveloperLogo({
   const valid = isValidDeveloperLogoUrl(src) && !error;
 
   // Shared label renderer — when a logo is missing, we ALWAYS keep the
-  // identical square container and place the developer name/initials inside.
+  // identical square container and place readable INITIALS inside so the
+  // name is never cropped. The full name appears next to the plate in
+  // every dropdown / list, so initials are the correct fallback here.
   const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]") => {
     const raw = (name || alt || "Developer").trim();
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
-    const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim();
-    const label = (cleaned || raw.split(/\s+/)[0] || "—").toUpperCase();
-    const len = label.length;
+    const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim() || raw;
+    // Build initials: first char of each meaningful token, max 3.
+    const tokens = cleaned.split(/\s+/).filter(Boolean);
+    let initials = tokens.map((t) => t[0]).join("").slice(0, 3).toUpperCase();
+    // Single-token names (e.g. "EMAAR", "DAMAC") → use up to 4 leading chars.
+    if (tokens.length === 1) {
+      initials = tokens[0].slice(0, 4).toUpperCase();
+    }
+    if (!initials) initials = "—";
     const sizeClass =
-      len <= 4 ? "text-[11px]"
-      : len <= 6 ? "text-[10px]"
-      : len <= 8 ? "text-[9px]"
-      : len <= 11 ? "text-[8px]"
-      : len <= 14 ? "text-[7px]"
-      : "text-[6px]";
+      initials.length <= 2 ? "text-[15px]"
+      : initials.length === 3 ? "text-[12px]"
+      : "text-[10px]";
     return (
       <div
-        className={cn(containerClass, "px-[2px]")}
+        className={cn(containerClass)}
         aria-label={raw}
         title={raw}
         data-developer-nameplate
       >
         <span
           className={cn(
-            "font-bold tracking-tight leading-[1.05] text-center block w-full",
-            "break-words hyphens-auto",
+            "font-bold tracking-tight leading-none text-center whitespace-nowrap",
             textTone,
             sizeClass,
           )}
-          style={{ wordBreak: "break-word", overflowWrap: "anywhere", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}
         >
-          {label}
+          {initials}
         </span>
       </div>
     );
