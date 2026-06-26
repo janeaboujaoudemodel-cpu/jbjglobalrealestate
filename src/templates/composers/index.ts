@@ -625,7 +625,7 @@ function composeJobOffer(input: ComposerInput): string {
       ["Allowances", filledOr(f.allowances, ""), "allowances"],
       ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
     ],
-    input.commissionRows || [],
+    normalizeOfferCommissionRows(input.commissionRows || []),
   );
   const commissionRowsTable = ""; // merged into compensationTerms above
 
@@ -647,13 +647,14 @@ function composeJobOffer(input: ComposerInput): string {
     offerClause(3, "Place of Work", `Your place of work shall be <strong>the location designated by the Company from time to time</strong>, together with such field visits, developer offices, client meetings, property viewings, and remote work as the Company may approve. The Company is not obliged to fix a single permanent worksite and may relocate, reassign, or rotate your worksite at its sole discretion in line with operational needs. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy, consistent with the Terms of Employment table above.`),
     offerClause(4, "Compensation & Commission Uplift", `${commissionProse} No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents and to UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
     offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || f.probationPeriod || "up to six (6) months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract, as also reflected in the Terms of Employment table above.`),
-    offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, documents, contracts, business methods, and internal policies.`),
+    offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, photographs, videos, listing material, floor plans, brochures, documents, contracts, business methods, and internal policies.`),
     offerClause(7, "Leads and Clients", `All leads, inquiries, clients, prospects, contacts, databases, property owners, developers, landlords, sellers, buyers, tenants, and investors introduced, generated, received, accessed, assigned, or handled during your work are the exclusive business assets of the Company. You may not use, transfer, sell, leak, copy, export, screenshot, close, redirect, or complete any transaction involving Company leads or clients outside the Company, during or after employment.`),
     offerClause(8, "Conflict of Interest", `You must not work with, represent, assist, advise, own, manage, or financially participate in any competing real estate business, brokerage, marketing agency, holiday-home operator, property management company, or commission-based arrangement without the Company's prior written approval.`),
     offerClause(9, "Non-Solicitation and Non-Circumvention", `You must not solicit, approach, divert, or deal directly or indirectly with the Company's clients, leads, developers, owners, suppliers, consultants, employees, brokers, or partners for personal benefit or for any third party.`),
-    offerClause(10, "Training and Onboarding Reimbursement During Probation", `If you resign during the probation period, you agree, where legally enforceable and subject to UAE law, to reimburse the Company for reasonable, documented, and proportionate costs incurred for your onboarding, training, education, company time investment, tools, materials, and Company-provided data or leads, excluding any costs that cannot legally be recovered from an employee. After completing six months of employment, you shall not owe reimbursement for ordinary onboarding or training costs unless a separate written agreement applies.`),
-    offerClause(11, "Separation & Post-Termination Commission", `Upon resignation or termination, and throughout any notice or run-off period, the enhanced 65/55 commission uplift described in Clause 4 shall <strong>cease to apply</strong> and the commission split shall <strong>revert to the standard 50/50</strong> on both direct and Company-sourced deals. Pipeline deals that close after the effective end of employment shall be remunerated, if at all, at the standard 50/50 split and only where the Company has actually received cleared commission, in each case subject to UAE Federal Decree-Law No. 33 of 2021, its Executive Regulations, and any separate written agreement signed by the Parties.`),
-    offerClause(12, "Conditional Offer", `This offer is conditional upon satisfactory completion of documentation, background verification where applicable, visa/work permit requirements where applicable, and signing all Company documents.`),
+    offerClause(10, "Training, Onboarding and Early-Exit Reimbursement", `If you resign, abandon work, or otherwise leave the Company before completing six (6) months of continuous service, you agree, to the fullest extent permitted by applicable UAE law, to reimburse the Company for reasonable and proportionate financial costs incurred for your onboarding, training, education, mentorship, administrative setup, marketing setup, Company time investment, tools, subscriptions, materials, and Company-provided data, leads, or learning resources. The amount shall be assessed by the Company in good faith and in a fair and reasonable manner, by reference to the Company's actual expenditure, time invested, resources allocated, and the benefit already received by the Employee, excluding any amounts that cannot lawfully be recovered from an employee. After completing six (6) months of employment, ordinary onboarding or training reimbursement shall not apply unless a separate written agreement expressly provides otherwise.`),
+    offerClause(11, "Misuse, Theft or Unauthorised Use of Company Information", `Any theft, copying, export, screenshotting, transfer, disclosure, diversion, deletion, concealment, unauthorised retention, or personal use of Company data, client numbers, leads, owner/developer contacts, photographs, videos, listing content, marketing material, confidential documents, CRM information, WhatsApp conversations, email records, passwords, or any other Company material is a serious breach of trust and confidentiality. If such breach causes loss, reputational harm, lost commission, regulatory exposure, client diversion, or other damage to the Company, the Employee shall be liable, to the extent permitted under UAE law, to compensate and indemnify the Company for the resulting loss, damages, costs, expenses, and lost business opportunity, with the value assessed by the Company in good faith by reference to the actual or reasonably estimated loss and the seriousness of the breach.`),
+    offerClause(12, "Separation & Post-Termination Commission", `Upon resignation or termination, and throughout any notice or run-off period, the enhanced 65/55 commission uplift described in Clause 4 shall <strong>cease to apply</strong> and the commission split shall <strong>revert to the standard 50/50</strong> on both direct and Company-sourced deals. Pipeline deals that close after the effective end of employment shall be remunerated, if at all, at the standard 50/50 split and only where the Company has actually received cleared commission, in each case subject to UAE Federal Decree-Law No. 33 of 2021, its Executive Regulations, and any separate written agreement signed by the Parties.`),
+    offerClause(13, "Conditional Offer", `This offer is conditional upon satisfactory completion of documentation, background verification where applicable, visa/work permit requirements where applicable, and signing all Company documents.`),
   ].join("");
 
   // Closing: greeting + "Sincerely, for and on behalf of …" ONLY.
@@ -668,7 +669,7 @@ function composeJobOffer(input: ComposerInput): string {
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
     paragraph(`<strong>Date:</strong> ${esc(formatHumanDate(input.letterDate) || input.letterDate || "[Date]")}`),
-    paragraph(`<strong>Candidate Name:</strong> ${candidateName}<br/><strong>Address:</strong> ${address}<br/><strong>Email:</strong> ${email}`),
+    paragraph(`<strong>Candidate Name:</strong> ${candidateName}<br/><strong>Address:</strong> ${address}<br/><strong>Email:</strong> ${email}<br/><strong>Phone / WhatsApp:</strong> ${phone}`),
     subjectLine(`Employment Offer – ${jobTitle}`),
     paragraph(`Dear ${candidateName},`),
     paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency, subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
@@ -1343,6 +1344,20 @@ export function compose(input: ComposerInput): string {
 
 /** Pre-seeded commission rows for HR/broker offers. */
 export const DEFAULT_BROKER_COMMISSIONS: CommissionRow[] = [
-  { label: "Direct deals", rate: "", trigger: "Paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "" },
-  { label: "Company-sourced leads", rate: "", trigger: "Paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "" },
+  { label: "Direct deals", rate: "65%", trigger: "Own direct deals, paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "Enhanced while HR, admin and assistant duties are performed" },
+  { label: "Company-sourced leads", rate: "55%", trigger: "Company source leads, paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "Enhanced while HR, admin and assistant duties are performed" },
+  { label: "Company-approved premium tier", rate: "70%", trigger: "Only where separately approved in writing by the Company for a qualifying transaction", notes: "Not automatic; subject to written management approval" },
 ];
+
+function normalizeOfferCommissionRows(rows: CommissionRow[]): CommissionRow[] {
+  const visible = (rows || []).filter((r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim());
+  const byLabel = (needle: string) => visible.find((r) => (r.label || "").toLowerCase().includes(needle));
+  const direct = byLabel("direct") || DEFAULT_BROKER_COMMISSIONS[0];
+  const company = byLabel("company") || byLabel("source") || DEFAULT_BROKER_COMMISSIONS[1];
+  const premium = byLabel("premium") || byLabel("70") || DEFAULT_BROKER_COMMISSIONS[2];
+  return [
+    { ...DEFAULT_BROKER_COMMISSIONS[0], ...direct, rate: direct.rate || DEFAULT_BROKER_COMMISSIONS[0].rate },
+    { ...DEFAULT_BROKER_COMMISSIONS[1], ...company, rate: company.rate || DEFAULT_BROKER_COMMISSIONS[1].rate },
+    { ...DEFAULT_BROKER_COMMISSIONS[2], ...premium, rate: premium.rate || DEFAULT_BROKER_COMMISSIONS[2].rate },
+  ];
+}

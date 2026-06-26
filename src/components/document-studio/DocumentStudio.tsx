@@ -105,7 +105,20 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   const today = todayIso();
   switch (templateId) {
     case "job_offer":
-      return { recipientName: "[Employee Name]", jobTitle: "[Position]", startDate: today, probation: "6 months", workingHours: "10:00 AM – 7:00 PM, Monday to Saturday", annualLeave: "30 calendar days", noticePeriod: "30 calendar days", reportingTo: "Management", salary: "AED [amount] per month" };
+      return {
+        letterDate: today,
+        recipientName: "[Employee Name]",
+        jobTitle: "[Position]",
+        startDate: today,
+        probation: "6 months",
+        workingHours: "10:00 AM – 7:00 PM, Monday to Saturday",
+        annualLeave: "30 calendar days",
+        noticePeriod: "30 calendar days",
+        reportingTo: "Management",
+        salary: "Not applicable — fixed commission basis",
+        commission: "65% on own direct deals; 55% on Company-sourced deals; 70% only where separately approved in writing by the Company",
+        paymentCycle: "Upon the Company's receipt of cleared commission",
+      };
     case "warning_letter":
       return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
     case "termination_letter":
@@ -130,6 +143,20 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
       return {};
   }
 }
+
+const restoreOfferCommissionRows = (templateId?: string, rows?: CommissionRow[]): CommissionRow[] => {
+  if (templateId !== "job_offer") return rows?.length ? rows : DEFAULT_BROKER_COMMISSIONS;
+  const visible = (rows || []).filter((r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim());
+  const byLabel = (needle: string) => visible.find((r) => `${r.label || ""} ${r.rate || ""}`.toLowerCase().includes(needle));
+  const direct = byLabel("direct") || DEFAULT_BROKER_COMMISSIONS[0];
+  const company = byLabel("company") || byLabel("source") || DEFAULT_BROKER_COMMISSIONS[1];
+  const premium = byLabel("premium") || byLabel("70") || DEFAULT_BROKER_COMMISSIONS[2];
+  return [
+    { ...DEFAULT_BROKER_COMMISSIONS[0], ...direct, rate: direct.rate || DEFAULT_BROKER_COMMISSIONS[0].rate },
+    { ...DEFAULT_BROKER_COMMISSIONS[1], ...company, rate: company.rate || DEFAULT_BROKER_COMMISSIONS[1].rate },
+    { ...DEFAULT_BROKER_COMMISSIONS[2], ...premium, rate: premium.rate || DEFAULT_BROKER_COMMISSIONS[2].rate },
+  ];
+};
 
 const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
 
@@ -409,6 +436,31 @@ function StudioShell({
       return j;
     } catch { return null; }
   };
+  const snapContentScore = (s: any) => {
+    if (!s) return -1;
+    const bodyLen = typeof s.bodyHtml === "string" ? s.bodyHtml.replace(/<[^>]*>/g, "").trim().length : 0;
+    const meaningfulFields = s.fields && typeof s.fields === "object"
+      ? Object.values(s.fields).filter((v) => {
+          const text = String(v || "").trim();
+          return text && !/^\[[^\]]+\]$/.test(text) && !/^not applicable/i.test(text);
+        }).length
+      : 0;
+    return (bodyLen > 80 ? 100 : bodyLen > 0 ? 25 : 0)
+      + (s.userEdited ? 60 : 0)
+      + Math.min(45, meaningfulFields * 5)
+      + (Array.isArray(s.commissionRows) && s.commissionRows.length >= 3 ? 15 : 0);
+  };
+  const newerSnap = (a: any, b: any) => {
+    if (!a) return b || null;
+    if (!b) return a;
+    const aScore = snapContentScore(a);
+    const bScore = snapContentScore(b);
+    // Protect an owner's filled contract from being overwritten by a newer blank
+    // snapshot produced during reload/hydration. Intentional "New submission"
+    // clears the per-template key, so this only guards accidental loss.
+    if (Math.abs(aScore - bScore) >= 60) return aScore > bScore ? a : b;
+    return new Date(b.savedAt || 0).getTime() > new Date(a.savedAt || 0).getTime() ? b : a;
+  };
   const readSnapshot = (): any => {
     try {
       const j = parseSnap(localStorage.getItem(SESSION_KEY));
@@ -429,14 +481,27 @@ function StudioShell({
   const readTemplateSnapshot = (tid: string): any => {
     try {
       const direct = parseSnap(localStorage.getItem(TEMPLATE_KEY(tid)));
-      if (direct && direct.templateId === tid) return direct;
-      let best: any = null;
+      let best: any = direct && direct.templateId === tid ? direct : null;
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
         if (!k || !k.startsWith("jbj:doc-studio:session:")) continue;
         const cand = parseSnap(localStorage.getItem(k));
         if (cand && cand.templateId === tid) {
-          if (!best || new Date(cand.savedAt) > new Date(best.savedAt)) best = cand;
+          best = newerSnap(best, cand);
+        }
+      }
+      return best;
+    } catch { return null; }
+  };
+  const readLatestSnapshot = (): any => {
+    try {
+      let best: any = null;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || (!k.startsWith("jbj:doc-studio:session:") && !k.startsWith("jbj:doc-studio:template:"))) continue;
+        const cand = parseSnap(localStorage.getItem(k));
+        if (cand?.templateId && isValidCatalogTemplate(cand.templateId)) {
+          best = newerSnap(best, cand);
         }
       }
       return best;
@@ -446,8 +511,8 @@ function StudioShell({
   // unrelated previous draft. It may resume only that exact template.
   const storedSnap = readSnapshot();
   const snap = initialId
-    ? (storedSnap?.templateId === initialId ? storedSnap : readTemplateSnapshot(initialId))
-    : storedSnap;
+    ? newerSnap(storedSnap?.templateId === initialId ? storedSnap : null, readTemplateSnapshot(initialId))
+    : newerSnap(storedSnap, readLatestSnapshot());
 
 
 
@@ -474,7 +539,7 @@ function StudioShell({
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
   const [fields, setFields] = useState<Record<string, string>>(() => snap?.fields || getTemplateDefaultFields(initialId));
-  const [bodyHtml, setBodyHtml] = useState<string>(() => (snap?.templateId === "job_offer" ? "" : snap?.bodyHtml || ""));
+  const [bodyHtml, setBodyHtml] = useState<string>(() => snap?.bodyHtml || "");
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
   const [addPageAfterIndex, setAddPageAfterIndex] = useState<number | null>(null);
@@ -487,7 +552,7 @@ function StudioShell({
       template.id === "commission_agreement" ||
       template.id === "employment_contract" ||
       template.id === "partnership_referral");
-  const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(DEFAULT_BROKER_COMMISSIONS);
+  const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(restoreOfferCommissionRows(snap?.templateId || initialId, snap?.commissionRows));
   const [customFields, setCustomFields] = useState<CustomField[]>(snap?.customFields || []);
 
   const [emailTo, setEmailTo] = useState("");
@@ -976,9 +1041,15 @@ function StudioShell({
     }
   };
 
-  const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string }) => {
+  const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string; rendered_html?: string | null }) => {
     setTemplateId(d.template_id);
     setSyncedFields(d.field_values || {});
+    if (d.rendered_html) {
+      userEditedRef.current = true;
+      setUserEdited(true);
+      setBodyHtml(d.rendered_html);
+      liveEditedBodyHtmlRef.current = d.rendered_html;
+    }
     setCurrentDocId(d.id);
     setStep(2);
     toast.success(`Loaded "${d.title}"`);
@@ -1038,7 +1109,12 @@ function StudioShell({
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch {} };
+  const clearSession = (templateToClear?: string) => {
+    try { localStorage.removeItem(SESSION_KEY); } catch {}
+    if (templateToClear) {
+      try { localStorage.removeItem(TEMPLATE_KEY(templateToClear)); } catch {}
+    }
+  };
 
   const toggleFullscreen = async () => {
     try {
@@ -1170,26 +1246,28 @@ function StudioShell({
   const applySnapshot = useCallback((s: any) => {
     try {
       if (s.fields && typeof s.fields === "object") setFields(s.fields);
-      const shouldForceCurrentOfferTemplate = s.templateId === "job_offer";
-      if (typeof s.bodyHtml === "string" && s.bodyHtml && !shouldForceCurrentOfferTemplate) {
+      if (typeof s.bodyHtml === "string" && s.bodyHtml) {
         setBodyHtml(s.bodyHtml);
-        if (s.userEdited) { userEditedRef.current = true; setUserEdited(true); }
-      } else if (shouldForceCurrentOfferTemplate) {
-        userEditedRef.current = false;
-        setUserEdited(false);
-        setBodyHtml("");
+        if (s.userEdited) {
+          // Hand-edited contracts must reopen exactly where the owner left them.
+          // Structured/generated drafts rebuild from restored fields so new legal
+          // clauses and the three commission tiers are not lost.
+          userEditedRef.current = true;
+          setUserEdited(true);
+        }
       }
       if (typeof s.templateId === "string" && s.templateId) setTemplateId(s.templateId);
       setStep(typeof s.step === "number" ? (s.step as Step) : 2);
       if (typeof s.ownerName === "string") setOwnerName(s.ownerName);
       if (typeof s.ownerTitle === "string") setOwnerTitle(s.ownerTitle);
+      if (typeof s.ownerDate === "string") setOwnerDate(s.ownerDate);
       if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
       if (Array.isArray(s.extraSignatories)) setExtraSignatories(s.extraSignatories);
       if (Array.isArray(s.hiddenFieldKeys)) setHiddenFieldKeys(new Set(s.hiddenFieldKeys));
       if (s.fieldLabelOverrides && typeof s.fieldLabelOverrides === "object") setFieldLabelOverrides(s.fieldLabelOverrides);
       if (Array.isArray(s.hiddenSections)) setHiddenSections(new Set(s.hiddenSections));
       if (Array.isArray(s.customFields)) setCustomFields(s.customFields);
-      if (Array.isArray(s.commissionRows)) setCommissionRows(s.commissionRows);
+      if (Array.isArray(s.commissionRows)) setCommissionRows(restoreOfferCommissionRows(s.templateId, s.commissionRows));
       if (typeof s.docLanguage === "string") setDocLanguage(s.docLanguage);
       if (s.chromeTheme === "champagne" || s.chromeTheme === "emerald") setChromeTheme(s.chromeTheme);
       if (s.marks && typeof s.marks === "object") setMarks((m) => ({ ...m, ...s.marks }));
@@ -1249,18 +1327,31 @@ function StudioShell({
   // ── Auto-save snapshot (debounced) to survive refresh / accidental close / logout.
   useEffect(() => {
     if (!hydratedRef.current) return;
-    const payload = {
+    const buildPayload = () => ({
       savedAt: new Date().toISOString(),
-      step, templateId, fields, bodyHtml, userEdited,
-      ownerName, ownerTitle, applicantDate,
+      step,
+      templateId,
+      fields,
+      bodyHtml: getCurrentBodyHtml(),
+      userEdited: userEdited || !!liveEditedBodyHtmlRef.current,
+      ownerName,
+      ownerTitle,
+      ownerDate,
+      applicantDate,
       extraSignatories,
       hiddenFieldKeys: Array.from(hiddenFieldKeys),
       fieldLabelOverrides,
       hiddenSections: Array.from(hiddenSections),
-      customFields, commissionRows, docLanguage,
-      chromeTheme, marks, emailTo, manualPages,
-    };
+      customFields,
+      commissionRows,
+      docLanguage,
+      chromeTheme,
+      marks,
+      emailTo,
+      manualPages,
+    });
     const writeAll = () => {
+      const payload = buildPayload();
       try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
       if (payload.templateId) {
         try { localStorage.setItem(TEMPLATE_KEY(payload.templateId), JSON.stringify(payload)); } catch {}
@@ -1280,9 +1371,9 @@ function StudioShell({
       window.removeEventListener("pagehide", flush);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [step, templateId, fields, bodyHtml, userEdited, ownerName, ownerTitle, applicantDate,
+  }, [step, templateId, fields, bodyHtml, userEdited, ownerName, ownerTitle, ownerDate, applicantDate,
       extraSignatories, hiddenFieldKeys, fieldLabelOverrides, hiddenSections,
-      customFields, commissionRows, docLanguage, chromeTheme, marks, emailTo, manualPages, SESSION_KEY]);
+      customFields, commissionRows, docLanguage, chromeTheme, marks, emailTo, manualPages, SESSION_KEY, getCurrentBodyHtml]);
 
 
   useEffect(() => {
@@ -1301,6 +1392,7 @@ function StudioShell({
       ownerName,
       ownerTitle,
       ownerDate,
+      letterDate: visibleFields.letterDate || ownerDate,
       applicantDate,
       hideLetterDate: true,
       extraSignatories,
@@ -1332,8 +1424,8 @@ function StudioShell({
   };
 
   const startNewSubmission = () => {
-    clearSession();
     const targetId = templateId || initialId;
+    clearSession(targetId);
     setCurrentDocId(null);
     setSyncedFields(getTemplateDefaultFields(targetId));
     setCustomFields([]);
@@ -1433,6 +1525,8 @@ function StudioShell({
         aiClosing,
         ownerName,
         ownerTitle,
+        ownerDate,
+        letterDate: fields.letterDate || ownerDate,
         commissionRows: usesCommission ? commissionRows : undefined,
         customFields,
         extraSignatories,
@@ -3332,6 +3426,7 @@ function StudioShell({
                     ownerName,
                     ownerTitle,
                     ownerDate,
+                    letterDate: nextFields.letterDate || ownerDate,
                     applicantDate,
                     hideLetterDate: true,
                     extraSignatories,
@@ -3341,7 +3436,7 @@ function StudioShell({
                   userEditedRef.current = false;
                   setUserEdited(false);
                   setBodyHtml(lockedOfferBody);
-                  toast.success("Offer Letter values applied into the locked 11-clause template");
+                  toast.success("Offer Letter values applied into the locked legal template");
                   return;
                 }
                 userEditedRef.current = true;
