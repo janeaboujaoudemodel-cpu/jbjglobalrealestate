@@ -241,7 +241,7 @@ const stripGeneratedPageArtifacts = (html: string): string => {
   const tpl = document.createElement("template");
   tpl.innerHTML = html;
   tpl.content
-    .querySelectorAll("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider],[data-signature-spacer],[data-field-delete-control]")
+    .querySelectorAll("[data-client-signature-strip],[data-page-divider],[data-rendered-page-signature],[data-rendered-page-divider],[data-signature-spacer]")
     .forEach((el) => el.remove());
   return tpl.innerHTML;
 };
@@ -250,6 +250,7 @@ const cleanDocumentFieldRows = (html: string): string => {
   if (!html || typeof window === "undefined") return html;
   const tpl = document.createElement("template");
   tpl.innerHTML = stripGeneratedPageArtifacts(html);
+  tpl.content.querySelectorAll("[data-field-delete-control]").forEach((el) => el.remove());
 
   tpl.content.querySelectorAll<HTMLElement>("[data-removable-field]").forEach((row) => {
     const valueCell = row.querySelector<HTMLElement>("[data-field-value-cell]");
