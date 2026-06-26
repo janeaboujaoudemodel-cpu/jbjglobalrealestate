@@ -601,8 +601,8 @@ function composeJobOffer(input: ComposerInput): string {
   // licence office (Office SM1-195, Port Saeed) is only used on NDA / corporate
   // documents where a registered address is legally required.
   const placeOfWork = filledOr(f.placeOfWork || f.officeAddress, "To be designated by the Company");
-  const offerEffectiveIso = f.leadsReceivedFrom || f.letterDate || input.letterDate || WALEED_EFFECTIVE_DATE;
-  const offerSigningIso = f.signingDate || WALEED_SIGNING_DATE;
+  const offerEffectiveIso = WALEED_EFFECTIVE_DATE;
+  const offerSigningIso = WALEED_SIGNING_DATE;
   const startDate = esc(formatHumanDate(f.startDate || WALEED_EFFECTIVE_DATE) || f.startDate || "20 June 2026");
   const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM"));
 
