@@ -32,7 +32,7 @@ import {
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
   PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus, Globe,
-  Copy,
+  Copy, Upload,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { removeWhiteBackground } from "@/lib/removeWhiteBackground";
@@ -354,7 +354,7 @@ function StudioShell({
   const [sending, setSending] = useState(false);
 
   const [zoom, setZoom] = useState(100);
-  const [aiOpen, setAiOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(true);
   const [search, setSearch] = useState("");
 
   // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
@@ -745,8 +745,26 @@ function StudioShell({
     [allDocs, template],
   );
 
+  const getProfileValues = (source: Record<string, string>) => {
+    const pick = (...keys: string[]) => keys.map((key) => (source[key] || "").trim()).find(Boolean) || "";
+    const developerName = pick("developerName", "developer_name", "developer", "developer_company");
+    const clientName = pick(
+      "recipientName", "employeeName", "employee_name", "guest_name", "client_name", "full_name",
+      "landlord_name", "tenant_name", "buyer_name", "seller_name", "applicant_name", "customer_name",
+    );
+    return {
+      clientName: clientName || developerName || "",
+      clientEmail: pick("recipientEmail", "employeeEmail", "guest_email", "client_email", "email", "email_address", "developerEmail"),
+      clientPhone: pick("recipientPhone", "employeePhone", "guest_phone", "client_phone", "mobile", "mobile_number", "phone", "developerPhone"),
+      profileType: developerName ? "developer" : "client",
+      developerName,
+      emiratesId: pick("emirates_id", "emiratesId", "eid_number", "id_number", "idNumber"),
+      passportNumber: pick("passport_number", "passportNo", "passport", "passportNumber"),
+    };
+  };
+
   const handleSaveDocument = async () => {
-    if (!template) { toast.error("Pick a template first"); return; }
+    if (!template) { toast.error("Pick a template first"); return undefined; }
     // Derive booking id (chained, server-side) if not already in field_values.
     let booking_id = (fields.booking_id || fields.bookingRef || "").trim();
     if (!booking_id) {
@@ -761,10 +779,11 @@ function StudioShell({
       } catch { /* fall back to client gen below */ }
       if (!booking_id) booking_id = `${"JBJ-DOC"}-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
     }
-    const nextFields = { ...fields, booking_id };
+    const profile = getProfileValues(fields);
+    const nextFields = { ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName };
     setFields(nextFields);
     const title =
-      (fields.guest_name || fields.client_name || fields.full_name || "Untitled") +
+      (profile.clientName || "Untitled") +
       ` — ${template.label} (${booking_id})`;
     try {
       const saved = await saveDocMutation.mutateAsync({
@@ -772,13 +791,16 @@ function StudioShell({
         template_id: template.id,
         title,
         field_values: nextFields,
-        client_name: fields.guest_name || fields.client_name || null,
-        client_email: fields.guest_email || fields.client_email || null,
-        client_phone: fields.guest_phone || fields.client_phone || null,
+        rendered_html: bodyHtml || null,
+        client_name: profile.clientName || null,
+        client_email: profile.clientEmail || null,
+        client_phone: profile.clientPhone || null,
       });
       setCurrentDocId(saved.id);
+      return saved;
     } catch (e: any) {
       // toast already shown by hook
+      return undefined;
     }
   };
 
@@ -1223,6 +1245,23 @@ function StudioShell({
     toast.success("Blank page added");
   };
 
+  const handleDeletePage = (pageIndex: number) => {
+    const groups = parseDocumentPageGroups((autoPageGroups && autoPageGroups.length) ? wrapDocumentPageGroups(autoPageGroups) : (bodyHtml || ""));
+    if (!groups.length) return;
+    userEditedRef.current = true;
+    setUserEdited(true);
+    setAutoPageGroups(null);
+    if (groups.length === 1) {
+      setBodyHtml("");
+      toast.success("Page cleared");
+      return;
+    }
+    const nextGroups = groups.filter((_, index) => index !== pageIndex);
+    setBodyHtml(wrapDocumentPageGroups(nextGroups));
+    setManualPages((n) => Math.max(0, n - 1));
+    toast.success(`Page ${pageIndex + 1} deleted`);
+  };
+
   const handleGenerateAiPage = async () => {
     if (addPageAfterIndex === null || !addPagePrompt.trim()) return;
     setAiPageBusy(true);
@@ -1259,14 +1298,46 @@ function StudioShell({
     setExporting(kind);
     try {
       const src = pageRef.current;
-      if (kind === "pdf") await exportPdf(bodyHtml, marks, template, src);
+      let pdfBlob: Blob | null = null;
+      if (kind === "pdf") pdfBlob = await exportPdf(bodyHtml, marks, template, src);
       else if (kind === "docx") await exportDocx(bodyHtml, marks, template);
       else if (kind === "png") await exportPng(bodyHtml, marks, template, src);
       else if (kind === "both") {
-        await exportPdf(bodyHtml, marks, template, src);
+        pdfBlob = await exportPdf(bodyHtml, marks, template, src);
         await exportPng(bodyHtml, marks, template, src);
       }
-      toast.success(`${kind.toUpperCase()} downloaded`);
+      if (pdfBlob) {
+        try {
+          const saved = await handleSaveDocument();
+          const docId = saved?.id || currentDocId;
+          const { data: { user } } = await supabase.auth.getUser();
+          if (docId && user) {
+            const profile = getProfileValues(fields);
+            const owner = (profile.clientName || profile.developerName || "unassigned")
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "") || "unassigned";
+            const profileFolder = profile.profileType === "developer" ? "developers" : "clients";
+            const pdfPath = `${user.id}/${profileFolder}/${owner}/${docId}/${Date.now()}-${template.id}.pdf`;
+            const { error: uploadError } = await supabase.storage
+              .from("crm-documents")
+              .upload(pdfPath, pdfBlob, { contentType: "application/pdf", upsert: true });
+            if (uploadError) throw uploadError;
+            await (supabase.from("crm_documents" as any) as any)
+              .update({ pdf_path: pdfPath, rendered_html: bodyHtml || null, field_values: { ...fields, profile_type: profile.profileType } })
+              .eq("id", docId);
+            toast.success("PDF downloaded and saved to the profile file");
+          } else {
+            toast.success(`${kind.toUpperCase()} downloaded`);
+          }
+        } catch (saveError: any) {
+          console.warn("[DocumentStudio] profile save failed", saveError);
+          toast.success(`${kind.toUpperCase()} downloaded`);
+          toast.warning(saveError?.message || "Downloaded, but profile save needs attention");
+        }
+      } else {
+        toast.success(`${kind.toUpperCase()} downloaded`);
+      }
     } catch (e: any) {
       console.error("[DocumentStudio] export failed", kind, e);
       toast.error(e?.message || `${kind.toUpperCase()} export failed`);
@@ -1431,6 +1502,11 @@ function StudioShell({
         [data-document-studio-overlay] [data-surface="emerald"] * { color:#FFFFFF !important; -webkit-text-fill-color:#FFFFFF !important; stroke:#FFFFFF !important; }
         [data-document-studio-overlay] [data-surface="champagne"],
         [data-document-studio-overlay] [data-surface="champagne"] * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; stroke:currentColor !important; }
+        [data-document-studio-overlay] :is([class*="bg-[#FDFBF7]"],[class*="bg-[#F7F2EA]"],[class*="bg-white"],[style*="background:#FDFBF7"],[style*="background: #FDFBF7"],[style*="background:#F7F2EA"],[style*="background: #F7F2EA"]) :is(.text-white,[class*="text-white"],label,span,p,div,button,input,textarea,select) {
+          color:#1A1A1A !important;
+          -webkit-text-fill-color:#1A1A1A !important;
+          text-shadow:none !important;
+        }
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body,
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; }
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
@@ -1513,6 +1589,10 @@ function StudioShell({
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")} title="Signature" className="border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
             <PenLine className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Signature</span>
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => autoFillFileRef.current?.click()} title="Attach Emirates ID, passport or document to auto-fill fields" className="border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
+            <Upload className="w-4 h-4 lg:mr-1.5" />
+            <span className="hidden lg:inline">Attach ID</span>
           </Button>
           <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")} title="Stamp" className="border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
             <Stamp className="w-4 h-4 lg:mr-1.5" />
@@ -2264,7 +2344,7 @@ function StudioShell({
                       onClick={() => autoFillFileRef.current?.click()}
                       disabled={autoFillBusy}
                     >
-                      <FileText className="w-3 h-3 mr-1" /> Attach
+                      <Upload className="w-3 h-3 mr-1" /> Attach ID / passport
                     </Button>
                     <input
                       ref={autoFillFileRef}
@@ -2289,6 +2369,7 @@ function StudioShell({
                               mode: "extract-fields",
                               templateId: template.id,
                               fieldKeys: template.fields.map((f) => f.key),
+                              source: `Extract contract fields from attached identity/document image: ${file.name}`,
                               attachment: { name: file.name, type: file.type, dataUrl: b64 },
                             },
                           });
@@ -2761,6 +2842,15 @@ function StudioShell({
                           </div>
                           {/* Controls in the champagne gap BETWEEN sheets, never on the paper */}
                           <div className="flex items-center justify-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleDeletePage(pageIndex)}
+                              className="h-8 w-8 rounded-full border border-red-200 bg-white text-red-600 hover:bg-red-50 flex items-center justify-center shadow-sm"
+                              title="Delete current page"
+                              aria-label={`Delete page ${pageIndex + 1}`}
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                             {!isLast && (
                               <div aria-hidden className="text-[10px] font-semibold uppercase pointer-events-none select-none" style={{ color: "#1A1A1A", opacity: 0.55, letterSpacing: "0.22em" }}>
                                 Page {pageIndex + 1} of {pageCount}
@@ -2833,7 +2923,7 @@ function StudioShell({
 
         {/* RIGHT — AI ASSISTANT */}
         {aiOpen && (
-          <aside className="studio-ai-panel w-full lg:w-[330px] xl:w-[392px] shrink-0 border-t lg:border-t-0 lg:border-l border-[#B89555]/55 bg-[#FDFBF7] p-4 max-h-[34vh] lg:max-h-none overflow-auto">
+          <aside className="studio-ai-panel w-full lg:w-[330px] xl:w-[392px] shrink-0 border-t lg:border-t-0 lg:border-l border-[#B89555]/55 bg-[#FDFBF7] p-4 max-h-[46vh] lg:max-h-none overflow-auto">
             <AiEditChatPanel
               currentBody={bodyHtml}
               language={docLanguage}
@@ -2843,6 +2933,18 @@ function StudioShell({
           </aside>
         )}
       </div>
+
+      {!aiOpen && (
+        <button
+          type="button"
+          onClick={() => setAiOpen(true)}
+          className="fixed bottom-5 right-5 z-[2147483200] rounded-full bg-[var(--jj-emerald-ombre)] px-4 py-3 text-sm font-semibold text-white shadow-2xl border border-[#B89555]/70 inline-flex items-center gap-2"
+          data-surface="emerald"
+          aria-label="Open AI Assistant"
+        >
+          <Sparkles className="w-4 h-4" /> AI Assistant
+        </button>
+      )}
 
       <DocumentActionSheet
         open={!!pickerDoc}

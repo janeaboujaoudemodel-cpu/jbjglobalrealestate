@@ -79,11 +79,66 @@ Deno.serve(async (req) => {
 
 
     const body = await req.json().catch(() => ({}));
-    const userPrompt: string = String(body?.prompt || "").trim();
+    const userPrompt: string = String(body?.prompt || body?.source || "").trim();
     const mode: string = String(body?.mode || "letter").trim();
     const tone: string = String(body?.tone || "formal");
     const recipientHint: string = String(body?.recipient || "").trim();
     const language: string = String(body?.language || "English");
+
+    if (mode === "extract-fields") {
+      const fieldKeys = Array.isArray(body?.fieldKeys) ? body.fieldKeys.map((x: unknown) => String(x)).filter(Boolean) : [];
+      const attachment = body?.attachment;
+      if (!userPrompt && !attachment?.dataUrl) {
+        return new Response(JSON.stringify({ error: "source or attachment is required" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const extractionText = `Return strict JSON only: {"fields":{}}.
+Extract and map values into these exact document field keys where possible: ${fieldKeys.join(", ")}.
+If the attachment is an Emirates ID, passport, visa, CV, letter, contract, or scan, OCR it first.
+Prefer legal full name, Emirates ID number, passport number, nationality, date of birth, expiry dates, email, mobile, address, job title, salary, developer/company details, unit number, property details, dates, and monetary amounts.
+Do not invent missing values. Keep unknown fields omitted.
+Source/template: ${body?.templateId || "unknown"}.
+User/source text: ${userPrompt || "Attached file only"}`;
+
+      const userContent = attachment?.dataUrl && String(attachment?.type || "").startsWith("image/")
+        ? [
+            { type: "text", text: extractionText },
+            { type: "image_url", image_url: { url: attachment.dataUrl } },
+          ]
+        : extractionText + (attachment?.name ? `\nAttachment filename: ${attachment.name}` : "");
+
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${LOVABLE_API_KEY}` },
+        body: JSON.stringify({
+          model: "openai/gpt-5.5",
+          messages: [
+            { role: "system", content: "You are a secure OCR and legal document field extraction engine for UAE real estate and HR documents. Return JSON only." },
+            { role: "user", content: userContent },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0,
+        }),
+      });
+      if (!response.ok) {
+        const t = await response.text().catch(() => "");
+        return new Response(JSON.stringify({ error: `AI gateway ${response.status}: ${t.slice(0, 200)}` }), {
+          status: response.status === 429 || response.status === 402 ? response.status : 502,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const json = await response.json();
+      const content = json?.choices?.[0]?.message?.content || "{}";
+      let parsed: any = {};
+      try { parsed = JSON.parse(content); } catch { const m = /\{[\s\S]*\}/.exec(content); if (m) try { parsed = JSON.parse(m[0]); } catch {} }
+      return new Response(JSON.stringify({ fields: parsed?.fields && typeof parsed.fields === "object" ? parsed.fields : {} }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     if (!userPrompt) {
       return new Response(JSON.stringify({ error: "prompt is required" }), {

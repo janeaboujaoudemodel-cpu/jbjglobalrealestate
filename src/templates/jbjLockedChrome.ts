@@ -95,7 +95,7 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
         style="width:126px;height:126px;display:block;object-fit:contain;background:transparent;margin:0;filter:${t.monoFilter};" />
       <div style="line-height:1.12;text-align:left;min-width:0;padding-right:10px;">
         <div style="font-size:20px;font-weight:850;letter-spacing:0.025em;color:${t.fg};white-space:nowrap;">
-          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.12em;white-space:nowrap;">${JBJ_BRAND.legalSuffix}</span>
+          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.12em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
     </div>
@@ -109,7 +109,8 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
     width:100%;
     background:${t.bg};
     border-top:1px solid ${t.hairline};
-    padding:2px 28px;
+    padding:12px 28px;
+    min-height:46px;
     font-family:Inter, system-ui, sans-serif;
     font-size:8.5px;
     line-height:1.15;
@@ -118,16 +119,16 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   ">
     <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
       <tr>
-        <td style="vertical-align:middle;width:44%;padding-right:14px;color:${t.fg};opacity:.92;font-size:8.5px;">
+        <td style="vertical-align:middle;width:44%;padding-right:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.92;font-size:8.5px;line-height:1.25;">
           ${JBJ_BRAND.address}
         </td>
-        <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};font-size:9px;font-weight:700;">
+        <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:9px;font-weight:700;">
           ${JBJ_BRAND.phone}
         </td>
-        <td style="vertical-align:middle;width:34%;text-align:right;padding-left:14px;color:${t.fg};font-size:8.5px;">
-          <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
-          <span style="color:${t.fg};opacity:.5;margin:0 6px;">·</span>
-          <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};text-decoration:none;font-weight:700;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
+        <td style="vertical-align:middle;width:34%;text-align:right;padding-left:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:8.5px;">
+          <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
+          <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;margin:0 6px;">·</span>
+          <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
         </td>
       </tr>
     </table>

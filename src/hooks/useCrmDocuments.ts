@@ -121,6 +121,7 @@ export function useSaveDocument() {
       template_id?: string;
       title: string;
       field_values: Record<string, string>;
+      rendered_html?: string | null;
       client_lead_id?: string | null;
       client_name?: string | null;
       client_email?: string | null;
@@ -129,9 +130,9 @@ export function useSaveDocument() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
       const template_id = vars.template_id ?? JBJ_PAA_TEMPLATE_ID;
-      const rendered_html = template_id === JBJ_PAA_TEMPLATE_ID
+      const rendered_html = vars.rendered_html ?? (template_id === JBJ_PAA_TEMPLATE_ID
         ? buildPAAHtml(vars.field_values as Partial<Record<PAAFieldKey, string>>)
-        : null;
+        : null);
       if (vars.id) {
         const { data, error } = await supabase
           .from("crm_documents" as any)
