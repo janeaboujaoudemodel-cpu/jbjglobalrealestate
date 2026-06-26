@@ -1794,6 +1794,15 @@ function StudioShell({
               <span>{setupChromeCollapsed ? "Tools" : "Minimize"}</span>
             </Button>
             <button
+              onClick={() => setStudioMinimized(true)}
+              data-surface="champagne"
+              className="h-10 w-10 shrink-0 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
+              aria-label="Minimize Studio"
+              title="Minimize"
+            >
+              <Minimize2 className="w-4 h-4" />
+            </button>
+            <button
               onClick={onClose}
               data-surface="champagne" className="h-10 w-10 shrink-0 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
               aria-label="Close"
