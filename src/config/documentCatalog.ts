@@ -185,7 +185,7 @@ const STAFF: DocumentTemplate[] = [
       "18. Breach, Damages and Indemnity — If either Party breaches this Agreement, that Party shall be liable for all direct losses, damages, costs, expenses, legal fees (where recoverable), and other losses suffered by the non-breaching Party arising directly from such breach, to the extent permitted under applicable UAE law. The breaching Party shall compensate the non-breaching Party for such proven losses within the period specified by the Company in its written demand, which shall not exceed thirty (30) calendar days from the date of the written notice, unless otherwise required by applicable law or agreed in writing.",
       "19. Severability and Governing Law — If any clause is found invalid, excessive or unenforceable, it shall be reduced to the maximum extent permitted by UAE law and the remaining clauses shall remain valid and enforceable. This Agreement is governed by the laws of the United Arab Emirates and the applicable laws of [Emirate].",
       "",
-      "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. [Office Address] = Office SM1-195, Port Saeed, Deira, Dubai, UAE. Default working hours = 10:00 AM – 7:00 PM, Monday to Saturday. Default Restriction Period = 12 months. Default Geographic Scope = Dubai, UAE. Default Emirate = Dubai. Use clean HTML, no inline color. SURGICAL PATCH MODE — only fill placeholders.",
+      "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. [Office Address] = Office SM1-195, Port Saeed, Deira, Dubai, UAE. Default working hours = Monday to Friday: 10:00 AM – 7:00 PM, then a new line for Saturday: 11:00 AM – 4:00 PM. Default Restriction Period = 12 months. Default Geographic Scope = Dubai, UAE. Default Emirate = Dubai. Use clean HTML, no inline color. SURGICAL PATCH MODE — only fill placeholders.",
     ].join("\n"),
     fields: [
       RECIPIENT_NAME,
@@ -201,7 +201,7 @@ const STAFF: DocumentTemplate[] = [
       { key: "salary", label: "Monthly Compensation", type: "text" },
       { key: "commission", label: "Commission Structure", type: "text" },
       { key: "duration", label: "Contract Duration", type: "text", placeholder: "2 years / Unlimited" },
-      { key: "workingHours", label: "Working Hours", type: "text", default: "10:00 AM – 7:00 PM, Monday to Saturday" },
+      { key: "workingHours", label: "Working Hours", type: "textarea", default: "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM" },
       { key: "restrictionPeriod", label: "Non-Solicit Restriction Period", type: "text", default: "12 months" },
       { key: "geographicScope", label: "Geographic Scope (Non-Compete)", type: "text", default: "Dubai, UAE" },
       { key: "emirate", label: "Governing Emirate", type: "text", default: "Dubai" },
