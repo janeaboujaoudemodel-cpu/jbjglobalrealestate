@@ -943,8 +943,8 @@ function StudioShell({
     setFields((p) => ({
       ...p,
       developerName: dev.name,
-      developerContact: p.developerContact || `${dev.email} · ${dev.phone}`,
-      accountsEmail: p.accountsEmail || dev.email,
+      developerContact: `${dev.email} · ${dev.phone}`,
+      accountsEmail: dev.email,
     }));
   };
 
