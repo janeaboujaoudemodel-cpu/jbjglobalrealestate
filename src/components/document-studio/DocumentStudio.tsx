@@ -336,8 +336,8 @@ function StudioShell({
   const [deptDraft, setDeptDraft] = useState("");
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
-  const [fields, setFields] = useState<Record<string, string>>(() => getTemplateDefaultFields(initialId));
-  const [bodyHtml, setBodyHtml] = useState<string>("");
+  const [fields, setFields] = useState<Record<string, string>>(() => snap?.fields || getTemplateDefaultFields(initialId));
+  const [bodyHtml, setBodyHtml] = useState<string>(snap?.bodyHtml || "");
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
   const [addPageAfterIndex, setAddPageAfterIndex] = useState<number | null>(null);
@@ -351,7 +351,7 @@ function StudioShell({
       template.id === "employment_contract" ||
       template.id === "partnership_referral");
   const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(DEFAULT_BROKER_COMMISSIONS);
-  const [customFields, setCustomFields] = useState<CustomField[]>([]);
+  const [customFields, setCustomFields] = useState<CustomField[]>(snap?.customFields || []);
 
   const [emailTo, setEmailTo] = useState("");
   const [sending, setSending] = useState(false);
