@@ -11,10 +11,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText, Banknote } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText, Banknote } from "lucide-react";
 import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
@@ -215,7 +215,6 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const [showDetails, setShowDetails] = useState(false);
   const [includeJbjBlock, setIncludeJbjBlock] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [newEnvelopeOpen, setNewEnvelopeOpen] = useState(false);
   const [templateSearch, setTemplateSearch] = useState("");
   const [activeTemplateCategory, setActiveTemplateCategory] = useState<TemplateCategoryKey>("all");
   const [selectedStudioTemplate, setSelectedStudioTemplate] = useState<DocumentTemplate | null>(null);
@@ -383,14 +382,12 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     }
     setPicker(t);
     setClient({ name: "", email: "", phone: "" });
-    setNewEnvelopeOpen(false);
   };
 
   const openStudioTemplate = (template: DocumentTemplate) => {
     // Close the template picker first, then mount the already-preloaded studio
     // on the next frame. This avoids Radix Dialog focus teardown racing the
     // full-screen portal and causing the brief loader/back-to-hub flash.
-    setNewEnvelopeOpen(false);
     setSelectedStudioTemplate(template);
     requestAnimationFrame(() => setStudioOpen(true));
   };
@@ -694,68 +691,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <h1 className="text-2xl font-semibold text-[#1A1A1A]">Documents & Forms</h1>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">Unified hub — templates, document editor, e-signature, agreements, signatures & stamps. All in one place.</p>
           </div>
-          <Button variant="primary" onClick={() => setNewEnvelopeOpen(true)} className="h-11 px-5 w-full sm:w-auto self-stretch sm:self-start lg:self-auto shrink-0">
+          <Button variant="primary" onClick={() => showCategory("all")} className="h-11 px-5 w-full sm:w-auto self-stretch sm:self-start lg:self-auto shrink-0">
             <Sparkles className="w-4 h-4 mr-2" /> Generate Document
           </Button>
         </header>
-
-        {/* Quick actions */}
-        <div className="grid gap-3 mb-6" data-studio-card-grid>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("leasing")}>
-            <div className="flex items-start gap-3">
-              <FileText className="w-5 h-5 text-[#B89555]" />
-              <div>
-                <div className="font-medium text-[#1A1A1A] text-sm">Leasing Template</div>
-                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">JBJ Property Advertising Agreement</div>
-              </div>
-            </div>
-          </Card>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("selling")}>
-            <div className="flex items-start gap-3">
-              <FileText className="w-5 h-5 text-[#B89555]" />
-              <div>
-                <div className="font-medium text-[#1A1A1A] text-sm">Selling Template</div>
-                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">JBJ Listing Authorisation</div>
-              </div>
-            </div>
-          </Card>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/owner/documents/forms/create")}>
-            <div className="flex items-start gap-3">
-              <Upload className="w-5 h-5 text-[#B89555]" />
-              <div>
-                <div className="font-medium text-[#1A1A1A] text-sm">Upload Contract</div>
-                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">PDF, photos, text — auto-converted</div>
-              </div>
-            </div>
-          </Card>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/owner/documents/forms/contract-review")}>
-            <div className="flex items-start gap-3">
-              <Scale className="w-5 h-5 text-[#B89555]" />
-              <div>
-                <div className="font-medium text-[#1A1A1A] text-sm">AI Contract Review</div>
-                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">Lawyer-grade risk analysis</div>
-              </div>
-            </div>
-          </Card>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("after_sale")}>
-            <div className="flex items-start gap-3">
-              <ReceiptText className="w-5 h-5 text-[#B89555]" />
-              <div>
-                <div className="font-medium text-[#1A1A1A] text-sm">After-Sale</div>
-                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">Maintenance, bills, quotations</div>
-              </div>
-            </div>
-          </Card>
-          <Card data-studio-card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => showCategory("developer")}>
-            <div className="flex items-start gap-3">
-              <Building2 className="w-5 h-5 text-[#B89555]" />
-              <div>
-                <div className="font-medium text-[#1A1A1A] text-sm">Developer</div>
-                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">Commission claims, invoices</div>
-              </div>
-            </div>
-          </Card>
-        </div>
 
         <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
           <TabsList className="w-full justify-start bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1 overflow-x-auto">
@@ -1140,105 +1079,6 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               Create Envelope
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Generate Document — category/search picker */}
-      <Dialog open={newEnvelopeOpen} onOpenChange={setNewEnvelopeOpen}>
-          <DialogContent className="bg-[#FDFBF7] w-[min(96vw,1280px)] max-w-[1280px] max-h-[90vh] overflow-y-auto sm:!max-w-[1280px]">
-          <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">Generate Document</DialogTitle>
-            <DialogDescription className="text-[#1A1A1A]/70">Search or choose a category. Only matching templates open here.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 mt-2">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/55" />
-              <Input
-                value={templateSearch}
-                onChange={(e) => setTemplateSearch(e.target.value)}
-                placeholder="Search templates anytime…"
-                className="pl-9 bg-[#FDFBF7]"
-              />
-            </div>
-            <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5">
-              {TEMPLATE_CATEGORIES.map((item) => {
-                const Icon = item.icon;
-                const active = activeTemplateCategory === item.key;
-                return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => showCategory(item.key)}
-                    data-surface={active ? "emerald" : "champagne"}
-                    className={["text-left rounded-lg border px-3 py-2.5 transition min-w-0", active ? "border-transparent bg-[var(--jj-emerald-ombre)]" : "border-[#B89555]/35 bg-[#F7F2EA] hover:bg-[#EFE6D6]"].join(" ")}
-                  >
-                    <div className="flex items-start gap-2 min-w-0">
-                      <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />
-                      <div className="min-w-0 flex-1">
-                        <div className={active ? "text-xs font-semibold text-[#FFFFFF] whitespace-nowrap truncate" : "text-xs font-semibold text-[#1A1A1A] whitespace-nowrap truncate"}>{item.label}</div>
-                        <div className={active ? "text-[10px] text-[#FFFFFF]/85 line-clamp-1" : "text-[10px] text-[#1A1A1A]/65 line-clamp-1"}>{item.description}</div>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-          <div className="grid gap-3 mt-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-studio-card-grid>
-
-            {categoryFilteredStudioTemplates.map((template) => {
-              const Icon = template.icon;
-              return (
-                <button
-                  key={template.id}
-                  type="button"
-                  onClick={() => openStudioTemplate(template)}
-                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] hover:border-[#B89555] hover:bg-[#EFE6D6] transition min-h-[132px] w-full overflow-hidden"
-                >
-                  <Icon className="w-5 h-5 text-[#1A1A1A] mb-2" />
-                  <div className="font-medium text-[#1A1A1A] text-sm leading-tight break-words">{template.label}</div>
-                  <div className="text-xs text-[#1A1A1A]/70 mt-1 line-clamp-2">{template.description}</div>
-                </button>
-              );
-            })}
-            {(activeTemplateCategory === "all" || activeTemplateCategory === "client") && (
-                <button
-                  type="button"
-                  onClick={() => { setNewEnvelopeOpen(false); navigate("/owner/documents/forms/blank-letter"); }}
-                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] hover:border-[#B89555] hover:bg-[#EFE6D6] transition overflow-hidden"
-                >
-                  <FileText className="w-5 h-5 text-[#B89555] mb-2" />
-                  <div className="font-medium text-[#1A1A1A] text-sm">{standardLetterheadName}</div>
-                  <div className="text-xs text-[#1A1A1A]/70 mt-1">Blank JBJ letterhead — write any letter on official stationery.</div>
-                </button>
-            )}
-            {categorizedEsignTemplates.map((tpl) => (
-                <button
-                  key={tpl.id}
-                  type="button"
-                  onClick={() => openTemplate(tpl)}
-                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] hover:border-[#B89555] hover:bg-[#EFE6D6] transition overflow-hidden"
-                >
-                  <Scale className="w-5 h-5 text-[#B89555] mb-2" />
-                  <div className="font-medium text-[#1A1A1A] text-sm">{tpl.name}</div>
-                  <div className="text-xs text-[#1A1A1A]/70 mt-1">{tpl.category === "leasing" ? "Property Advertising Agreement — leasing." : tpl.category === "selling" ? "Listing Authorisation — selling." : "JBJ signature template."}</div>
-                </button>
-            ))}
-          </div>
-          <div className="border-t border-[#B89555]/20 mt-4 pt-3">
-            <button
-              type="button"
-              onClick={() => { setNewEnvelopeOpen(false); navigate("/owner/documents/forms/create"); }}
-              className="w-full text-left p-3 rounded-lg border border-dashed border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] hover:bg-[#F7F2EA] transition flex items-center gap-3"
-            >
-              <Upload className="w-4 h-4 text-[#1A1A1A]/70" />
-              <div className="flex-1">
-                <div className="text-sm font-medium text-[#1A1A1A]">Upload PDF / image to sign</div>
-                <div className="text-xs text-[#1A1A1A]/60">Use any external document — drag in fields, then send.</div>
-              </div>
-              <ExternalLink className="w-3.5 h-3.5 text-[#1A1A1A]/60" />
-            </button>
-          </div>
         </DialogContent>
       </Dialog>
 
