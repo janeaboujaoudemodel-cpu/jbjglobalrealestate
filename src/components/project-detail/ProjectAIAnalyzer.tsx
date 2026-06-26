@@ -328,28 +328,39 @@ export const ProjectAIAnalyzer = ({
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
               </div>
-              <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-6 shadow-sm border border-[color:var(--emerald-1)]/30 flex flex-col items-center justify-center text-center">
-                <Star className="w-9 h-9 fill-gold text-[#1A1A1A] mb-2 drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] relative z-10" />
+              <div
+                data-surface="emerald"
+                data-no-contrast-guard
+                className="relative overflow-hidden rounded-2xl p-6 shadow-md flex flex-col items-center justify-center text-center"
+                style={{
+                  backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+                  border: "1px solid rgba(184,149,85,0.45)",
+                  boxShadow: "0 12px 28px -10px rgba(6,78,59,0.55), 0 0 0 1px rgba(184,149,85,0.20)",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Star className="w-9 h-9 mb-2 relative z-10 allow-white" style={{ fill: "#B89555", color: "#B89555" }} />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
-                      <span className="text-6xl font-extrabold bg-gradient-to-br to-blue-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.4)]">{ratingScore}</span>
+                      <span className="text-6xl font-extrabold allow-white" style={{ color: "#FFFFFF", textShadow: "0 2px 12px rgba(0,0,0,0.45)" }}>{ratingScore}</span>
                     </div>
-                    <div className="text-[color:var(--emerald-1)] text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
+                    <div className="text-sm font-bold tracking-wide uppercase mt-1 relative z-10" style={{ color: "#D4B062" }}>/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
-                      <span className="inline-block w-2 h-2 rounded-full jj-surface-emerald animate-pulse" />
-                      <span className="text-[color:var(--emerald-1)] text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
+                      <span className="inline-block w-2 h-2 rounded-full animate-pulse" style={{ background: "#D4B062" }} />
+                      <span className="text-[10px] font-semibold uppercase tracking-widest allow-white" style={{ color: "#FFFFFF" }}>Strong Buy Signal</span>
                     </div>
                     {sections?.rating && (
-                      <p className="text-foreground/80 text-xs mt-3 leading-relaxed font-medium relative z-10">
+                      <p className="text-xs mt-3 leading-relaxed font-medium relative z-10 allow-white" style={{ color: "rgba(255,255,255,0.92)" }}>
                         — {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="text-red-600 text-xs font-medium relative z-10">Issue: Rating not available.</p>
+                  <p className="text-red-300 text-xs font-medium relative z-10">Issue: Rating not available.</p>
                 )}
               </div>
+
             </div>
 
             {/* Row 2: Price Per Sqft (with chart) + Supply vs Demand (with progress) */}
