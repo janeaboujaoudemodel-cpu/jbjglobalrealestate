@@ -14,7 +14,7 @@
  * to mount it without modification.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -259,6 +259,13 @@ const parseDocumentPageGroups = (html: string): string[] => {
 const wrapDocumentPageGroups = (groups: string[]): string =>
   groups.map((group, index) => `<section data-pdf-page="${index + 1}">${group}</section>`).join("");
 
+const normalizeEditableFragment = (html: string): string =>
+  stripGeneratedPageArtifacts(html || "")
+    .replace(/\scontenteditable=("true"|'true'|true)/gi, "")
+    .replace(/\sdata-page-index=("\d+"|'\d+'|\d+)/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const anchorSignatureArtifacts = (html: string): string => {
   if (!html || typeof window === "undefined") return html;
   const tpl = document.createElement("template");
@@ -460,6 +467,14 @@ function StudioShell({
   // as many A4 pages as needed so content (esp. signatures) never collides
   // with the footer. Footer renders ONLY on the last page.
   const [autoPageGroups, setAutoPageGroups] = useState<string[] | null>(null);
+  const autoPageGroupsSourceRef = useRef<string>("");
+  const committedBodyHtmlRef = useRef<string>(bodyHtml || "");
+  const liveEditedBodyHtmlRef = useRef<string | null>(null);
+  useEffect(() => {
+    committedBodyHtmlRef.current = bodyHtml || "";
+    liveEditedBodyHtmlRef.current = null;
+  }, [bodyHtml]);
+  const getCurrentBodyHtml = useCallback(() => liveEditedBodyHtmlRef.current ?? committedBodyHtmlRef.current ?? "", []);
   useEffect(() => {
     const wrap = previewWrapRef.current;
     if (!wrap) return;
@@ -539,6 +554,7 @@ function StudioShell({
     if (!open || !template) return;
     const body = bodyRef.current;
     if (!body || !bodyHtml) {
+      autoPageGroupsSourceRef.current = "";
       setAutoPageGroups(null);
       return;
     }
@@ -546,6 +562,7 @@ function StudioShell({
     // page form-style templates) must NEVER be re-paginated. They are
     // self-contained A4 layouts and any split corrupts the table.
     if (/data-no-chrome=["']1["']/.test(bodyHtml) || /data-single-page=["']1["']/.test(bodyHtml) || /data-locked-pages=["']1["']/.test(bodyHtml)) {
+      autoPageGroupsSourceRef.current = "";
       setAutoPageGroups(null);
       return;
     }
@@ -556,6 +573,7 @@ function StudioShell({
         const b = bodyRef.current;
         if (!b) return;
         if (b.querySelector("[data-pdf-page]") && /data-manual-added-page=["']1["']/.test(bodyHtml)) {
+          autoPageGroupsSourceRef.current = "";
           setAutoPageGroups(null);
           return;
         }
@@ -596,6 +614,7 @@ function StudioShell({
           }
         });
         if (!sourceChildren.length) {
+          autoPageGroupsSourceRef.current = "";
           setAutoPageGroups(null);
           return;
         }
@@ -622,6 +641,7 @@ function StudioShell({
 
         if (fitsSinglePage) {
           const singleGroup = items.map((it) => it.html).join("");
+          autoPageGroupsSourceRef.current = bodyHtml || "";
           setAutoPageGroups((prev) => (prev && prev.length === 1 && prev[0] === singleGroup ? prev : [singleGroup]));
           return;
         }
@@ -658,6 +678,7 @@ function StudioShell({
           }
         }
         const groups = pages.map((p) => p.map((it) => it.html).join(""));
+        autoPageGroupsSourceRef.current = bodyHtml || "";
         setAutoPageGroups((prev) => {
           if (prev && prev.length === groups.length && prev.every((g, i) => g === groups[i])) return prev;
           return groups;
@@ -688,11 +709,17 @@ function StudioShell({
   type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
   const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "" });
   const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>(snap?.extraSignatories || []);
-  const updateSig = (id: string, patch: Partial<ExtraSig>) =>
+  const updateSig = (id: string, patch: Partial<ExtraSig>) => {
+    resumeStructuredSync();
     setExtraSignatories((p) => p.map((s) => (s.id === id ? { ...s, ...patch } : s)));
-  const removeSig = (id: string) => setExtraSignatories((p) => p.filter((s) => s.id !== id));
+  };
+  const removeSig = (id: string) => {
+    resumeStructuredSync();
+    setExtraSignatories((p) => p.filter((s) => s.id !== id));
+  };
   const duplicateSig = (id: string) =>
     setExtraSignatories((p) => {
+      resumeStructuredSync();
       const i = p.findIndex((s) => s.id === id);
       if (i < 0) return p;
       const copy = { ...p[i], id: Math.random().toString(36).slice(2, 9) };
@@ -718,14 +745,14 @@ function StudioShell({
   // Hide / restore the "Commission" and "Custom fields" rail cards.
   const [hiddenSections, setHiddenSections] = useState<Set<string>>(() => new Set(snap?.hiddenSections || []));
   const toggleSection = (id: string) =>
-    setHiddenSections((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+    setHiddenSections((s) => { resumeStructuredSync(); const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   // Per-field hide + rename for the template fields panel.
   const [hiddenFieldKeys, setHiddenFieldKeys] = useState<Set<string>>(() => new Set(snap?.hiddenFieldKeys || []));
   const [fieldLabelOverrides, setFieldLabelOverrides] = useState<Record<string, string>>(snap?.fieldLabelOverrides || {});
   const [editingFieldKey, setEditingFieldKey] = useState<string | null>(null);
-  const hideField = (k: string) => setHiddenFieldKeys((s) => { const n = new Set(s); n.add(k); return n; });
-  const restoreAllFields = () => setHiddenFieldKeys(new Set());
+  const hideField = (k: string) => setHiddenFieldKeys((s) => { resumeStructuredSync(); const n = new Set(s); n.add(k); return n; });
+  const restoreAllFields = () => { resumeStructuredSync(); setHiddenFieldKeys(new Set()); };
 
   // Save-as-Template state.
   const [savingTemplate, setSavingTemplate] = useState(false);
@@ -749,7 +776,8 @@ function StudioShell({
   const applySavedTemplate = (s: SavedTpl) => {
     const p = s.payload || {};
     setTemplateId(s.base_template_id);
-    if (p.fields) setFields(p.fields);
+    resumeStructuredSync();
+    if (p.fields) setSyncedFields(p.fields);
     if (p.department) setDepartment(p.department);
     if (p.commissionRows) setCommissionRows(p.commissionRows);
     if (p.customFields) setCustomFields(p.customFields);
@@ -850,7 +878,12 @@ function StudioShell({
     }
     const profile = getProfileValues(fields);
     const nextFields = { ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName };
-    setFields(nextFields);
+    // Saving/exporting must never wipe manual edits made directly in the live
+    // A4 review. Field-only updates can stay structured; edited contract HTML
+    // keeps the preview body as the source of truth.
+    if (userEditedRef.current || liveEditedBodyHtmlRef.current) setFields(nextFields);
+    else setSyncedFields(nextFields);
+    const currentBody = getCurrentBodyHtml();
     const title =
       (profile.clientName || "Untitled") +
       ` — ${template.label} (${booking_id})`;
@@ -860,7 +893,7 @@ function StudioShell({
         template_id: template.id,
         title,
         field_values: nextFields,
-        rendered_html: bodyHtml || null,
+        rendered_html: currentBody || null,
         client_name: profile.clientName || null,
         client_email: profile.clientEmail || null,
         client_phone: profile.clientPhone || null,
@@ -875,7 +908,7 @@ function StudioShell({
 
   const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string }) => {
     setTemplateId(d.template_id);
-    setFields(d.field_values || {});
+    setSyncedFields(d.field_values || {});
     setCurrentDocId(d.id);
     setStep(2);
     toast.success(`Loaded "${d.title}"`);
@@ -1027,10 +1060,15 @@ function StudioShell({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
+  const setField = (k: string, v: string) => {
+    resumeStructuredSync();
+    setFields((p) => ({ ...p, [k]: v }));
+  };
   const applyDeveloperDetails = (developerName: string) => {
     const dev = UAE_DEVELOPERS.find((d) => d.name.toLowerCase() === developerName.trim().toLowerCase());
     if (!dev) return;
+    userEditedRef.current = false;
+    setUserEdited(false);
     setFields((p) => ({
       ...p,
       developerName: dev.name,
@@ -1047,6 +1085,16 @@ function StudioShell({
   const autoBodyRef = useRef<string>("");
   const userEditedRef = useRef<boolean>(false);
   const [userEdited, setUserEdited] = useState(false);
+
+  const resumeStructuredSync = useCallback(() => {
+    userEditedRef.current = false;
+    setUserEdited(false);
+  }, []);
+
+  const setSyncedFields = useCallback((updater: SetStateAction<Record<string, string>>) => {
+    resumeStructuredSync();
+    setFields(updater);
+  }, [resumeStructuredSync]);
 
   // ── Apply a previously saved snapshot — only when the user explicitly resumes.
   const applySnapshot = useCallback((s: any) => {
@@ -1114,7 +1162,7 @@ function StudioShell({
         if (validPrefillTemplate) {
           setTemplateId(p.templateId);
           if (p?.fields && typeof p.fields === "object") {
-            setFields((cur) => ({ ...cur, ...p.fields }));
+            setSyncedFields((cur) => ({ ...cur, ...p.fields }));
           }
           setStep(2);
           toast.success("Applicant loaded", { description: "Details pre-filled in the Studio." });
@@ -1185,6 +1233,12 @@ function StudioShell({
       extraSignatories,
     });
     autoBodyRef.current = next;
+    setAutoPageGroups(null);
+    autoPageGroupsSourceRef.current = "";
+    // The sidebar/detail fields are the source of truth. Previously, simply
+    // clicking into the editable preview and blurring it marked the document as
+    // "manual edited", permanently blocking field → contract updates. Keep the
+    // locked template live-synced unless the body was genuinely edited.
     if (!userEditedRef.current) setBodyHtml(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -1200,8 +1254,7 @@ function StudioShell({
   ]);
 
   const resetToTemplate = () => {
-    userEditedRef.current = false;
-    setUserEdited(false);
+    resumeStructuredSync();
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
   };
 
@@ -1209,7 +1262,7 @@ function StudioShell({
     clearSession();
     const targetId = templateId || initialId;
     setCurrentDocId(null);
-    setFields(getTemplateDefaultFields(targetId));
+    setSyncedFields(getTemplateDefaultFields(targetId));
     setCustomFields([]);
     setCommissionRows(DEFAULT_BROKER_COMMISSIONS);
     setExtraSignatories([]);
@@ -1220,8 +1273,7 @@ function StudioShell({
     setApplicantDate("");
     setEmailTo("");
     setMarks((m) => ({ ...m, dateXY: undefined, signatureXY: undefined, stampXY: undefined }));
-    userEditedRef.current = false;
-    setUserEdited(false);
+    resumeStructuredSync();
     setBodyHtml("");
     setStep(targetId ? 2 : 1);
     toast.success("Started a new submission");
@@ -1231,11 +1283,10 @@ function StudioShell({
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
-    setFields(getTemplateDefaultFields(id));
+    setSyncedFields(getTemplateDefaultFields(id));
     setExtraSignatories([]);
     autoBodyRef.current = "";
-    userEditedRef.current = false;
-    setUserEdited(false);
+    resumeStructuredSync();
     setBodyHtml("");
     // Reset draggable mark positions so a new template starts clean
     // (prevents the date drifting onto the footer after a previous drag).
@@ -1258,7 +1309,7 @@ function StudioShell({
         "JBJ-DOC";
       const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
       if (!error && data) {
-        setFields((p) => ({ ...p, bookingRef: String(data), booking_id: String(data) }));
+        setSyncedFields((p) => ({ ...p, bookingRef: String(data), booking_id: String(data) }));
       }
     } catch { /* ignore — composer will generate a local id */ }
   };
@@ -1313,6 +1364,7 @@ function StudioShell({
         customFields,
         extraSignatories,
       });
+      resumeStructuredSync();
       setBodyHtml(html);
       toast.success("Document generated");
     } catch (e: any) {
@@ -1339,7 +1391,8 @@ function StudioShell({
   };
 
   const handleDeletePage = (pageIndex: number) => {
-    const groups = parseDocumentPageGroups((autoPageGroups && autoPageGroups.length) ? wrapDocumentPageGroups(autoPageGroups) : (bodyHtml || ""));
+    const hasFreshAutoPages = !!autoPageGroups?.length && autoPageGroupsSourceRef.current === (bodyHtml || "");
+    const groups = parseDocumentPageGroups(hasFreshAutoPages ? wrapDocumentPageGroups(autoPageGroups) : (bodyHtml || ""));
     if (!groups.length) return;
     userEditedRef.current = true;
     setUserEdited(true);
@@ -1382,22 +1435,24 @@ function StudioShell({
   };
 
   const handlePrint = () => {
-    if (!bodyHtml) return;
-    printDocument(bodyHtml, marks);
+    const currentBody = getCurrentBodyHtml();
+    if (!currentBody) return;
+    printDocument(currentBody, marks);
   };
 
   const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
-    if (!bodyHtml || !template) { toast.error("Nothing to export yet"); return; }
+    const currentBody = getCurrentBodyHtml();
+    if (!currentBody || !template) { toast.error("Nothing to export yet"); return; }
     setExporting(kind);
     try {
       const src = pageRef.current;
       let pdfBlob: Blob | null = null;
-      if (kind === "pdf") pdfBlob = await exportPdf(bodyHtml, marks, template, src);
-      else if (kind === "docx") await exportDocx(bodyHtml, marks, template);
-      else if (kind === "png") await exportPng(bodyHtml, marks, template, src);
+      if (kind === "pdf") pdfBlob = await exportPdf(currentBody, marks, template, src);
+      else if (kind === "docx") await exportDocx(currentBody, marks, template);
+      else if (kind === "png") await exportPng(currentBody, marks, template, src);
       else if (kind === "both") {
-        pdfBlob = await exportPdf(bodyHtml, marks, template, src);
-        await exportPng(bodyHtml, marks, template, src);
+        pdfBlob = await exportPdf(currentBody, marks, template, src);
+        await exportPng(currentBody, marks, template, src);
       }
       if (pdfBlob) {
         try {
@@ -1417,7 +1472,7 @@ function StudioShell({
               .upload(pdfPath, pdfBlob, { contentType: "application/pdf", upsert: true });
             if (uploadError) throw uploadError;
             await (supabase.from("crm_documents" as any) as any)
-              .update({ pdf_path: pdfPath, rendered_html: bodyHtml || null, field_values: { ...fields, profile_type: profile.profileType } })
+              .update({ pdf_path: pdfPath, rendered_html: currentBody || null, field_values: { ...fields, profile_type: profile.profileType } })
               .eq("id", docId);
             toast.success("PDF downloaded and saved to the profile file");
           } else {
@@ -1440,13 +1495,14 @@ function StudioShell({
   };
 
   const handleSend = async (recipientOverride?: string) => {
-    if (!bodyHtml || !template) return;
+    const currentBody = getCurrentBodyHtml();
+    if (!currentBody || !template) return;
     const to = (recipientOverride || emailTo).trim();
     if (!to) { toast.error("Enter a recipient email"); return; }
     setSending(true);
     try {
       const { buildPrintableHtml } = await import("./export/exporters");
-      const fullHtml = buildPrintableHtml(bodyHtml, marks);
+      const fullHtml = buildPrintableHtml(currentBody, marks);
       const { data, error } = await supabase.functions.invoke("email-send-gateway", {
         body: {
           from: "JBJ Global Real Estate <contact@jbj.ae>",
@@ -2521,7 +2577,7 @@ function StudioShell({
                           if (error) throw error;
                           const parsed = (data as any)?.fields || {};
                           if (parsed && typeof parsed === "object") {
-                            setFields((p) => ({ ...p, ...normalizeExtractedDocumentFields(parsed, autoFillText) }));
+                            setSyncedFields((p) => ({ ...p, ...normalizeExtractedDocumentFields(parsed, autoFillText) }));
                             toast.success("Fields filled from your text");
                           } else {
                             toast.info("Nothing extractable found");
@@ -2581,7 +2637,7 @@ function StudioShell({
                             Object.assign(merged, normalizeExtractedDocumentFields((data as any)?.fields || {}, source));
                           }
                           if (Object.keys(merged).length) {
-                            setFields((p) => ({ ...p, ...merged }));
+                            setSyncedFields((p) => ({ ...p, ...merged }));
                             toast.success(`Fields filled from ${files.length} attachment${files.length > 1 ? "s" : ""}`);
                           } else {
                             toast.info("Nothing extractable found in attachments");
@@ -2858,7 +2914,8 @@ function StudioShell({
                 // Prefer measured auto-pagination (global rule). Fall back
                 // to composer-emitted [data-pdf-page] groups before the
                 // measurement runs, so first paint is still sensible.
-                const pageGroups = (autoPageGroups && autoPageGroups.length)
+                const hasFreshAutoPages = !!autoPageGroups?.length && autoPageGroupsSourceRef.current === (bodyHtml || "");
+                const pageGroups = hasFreshAutoPages
                   ? autoPageGroups
                   : parseDocumentPageGroups(bodyHtml);
                 const pageCount = Math.max(1, pageGroups.length);
@@ -2974,11 +3031,26 @@ function StudioShell({
                                     }}
                                     contentEditable
                                     suppressContentEditableWarning
+                                    onInput={(e) => {
+                                      // Keep a live copy of direct page edits so
+                                      // export/save/send uses the contract exactly
+                                      // as typed, even before React's state commit
+                                      // on blur. Do not set state here: rerendering
+                                      // a contentEditable while the user types can
+                                      // wipe the caret or restore stale HTML.
+                                      const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
+                                      liveEditedBodyHtmlRef.current = wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
+                                      userEditedRef.current = true;
+                                    }}
                                     onBlur={(e) => {
                                       // WYSIWYG: every page is editable. On blur, reassemble
                                       // the full bodyHtml by replacing this page group only.
                                       const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
-                                      const rebuilt = wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
+                                      const previous = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
+                                      if (normalizeEditableFragment(next) === normalizeEditableFragment(previous)) {
+                                        return;
+                                      }
+                                      const rebuilt = liveEditedBodyHtmlRef.current || wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
                                       userEditedRef.current = true;
                                       setUserEdited(true);
                                       setBodyHtml(rebuilt);
@@ -3156,7 +3228,7 @@ function StudioShell({
                     hideLetterDate: true,
                     extraSignatories,
                   });
-                  setFields(nextFields);
+                  setSyncedFields(nextFields);
                   autoBodyRef.current = lockedOfferBody;
                   userEditedRef.current = false;
                   setUserEdited(false);
