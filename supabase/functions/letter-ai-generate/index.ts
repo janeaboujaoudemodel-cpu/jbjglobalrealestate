@@ -120,7 +120,6 @@ User/source text: ${userPrompt || "Attached file only"}`;
             { role: "user", content: userContent },
           ],
           response_format: { type: "json_object" },
-          temperature: 0,
         }),
       });
       if (!response.ok) {
@@ -164,7 +163,6 @@ User/source text: ${userPrompt || "Attached file only"}`;
             { role: "user", content: `Language: ${language}. Tone: ${tone}. Page request:\n${userPrompt}` },
           ],
           response_format: { type: "json_object" },
-          temperature: 0.25,
         }),
       });
       if (!response.ok) {
@@ -206,7 +204,6 @@ User/source text: ${userPrompt || "Attached file only"}`;
           { role: "user", content: userMessage },
         ],
         response_format: { type: "json_object" },
-        temperature: 0.3,
       }),
     });
 
