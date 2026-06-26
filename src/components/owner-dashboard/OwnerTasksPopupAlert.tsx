@@ -22,6 +22,7 @@ const DISMISS_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 // surfaces the user actively complained about).
 const SUPPRESS_PATTERNS: RegExp[] = [
   /^\/owner\/crm(\/|$|\?)/i,
+  /^\/owner\/documents(\/|$|\?)/i,
   /^\/owner\/inbox(\/|$|\?)/i,
   /^\/sign\//i,
   /^\/e-signature(\/|$)/i,

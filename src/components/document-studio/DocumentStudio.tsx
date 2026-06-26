@@ -156,7 +156,8 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   set("nationality", pick("nationality", "nationalityName", "country", "countryOfNationality"));
 
   set("recipientEmail", out.recipientEmail || text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]);
-  set("emiratesId", out.emiratesId || text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-"));
+  set("emiratesId", text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-") || out.emiratesId);
+  set("nationality", out.nationality || text.match(/nationality\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
   set("recipientPhone", out.recipientPhone || text.match(/(?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,}/)?.[0]);
   set("passportNumber", out.passportNumber || text.match(/passport(?:\s*(?:number|no\.?))?\s*[:#-]\s*([A-Z0-9]{5,})/i)?.[1]);
   set("homeAddress", out.homeAddress || text.match(/(?:home|residential)\s+address\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
@@ -200,13 +201,17 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
  * See mem://documents/signature-and-gold-divider-lock for the standard.
  * ============================================================================
  */
-const renderPerPageUserSignature = (_name?: string) => {
+const renderPerPageUserSignature = (name?: string) => {
+  const legalName = escapeSignatureHtml((name || "[Candidate Name]").trim());
   // 🔒 LOCKED markup — see block comment above.
   return `
     <div data-rendered-page-signature="1" data-locked-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <div style="display:flex;align-items:flex-end;gap:10px;color:#1A1A1A;min-width:300px;">
-        <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
-        <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
+      <div style="color:#1A1A1A;min-width:330px;max-width:360px;">
+        <div style="font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1.2;margin-bottom:8px;">Accepted by Candidate: <span style="letter-spacing:0;text-transform:none;font-size:11px;font-weight:600;">${legalName}</span></div>
+        <div style="display:flex;align-items:flex-end;gap:10px;">
+          <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
+          <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
+        </div>
       </div>
     </div>
     <div data-rendered-page-divider="1" data-locked-divider="1" style="border-top:1px solid rgba(184,149,85,.55);height:0;margin:10px 0 0;flex:0 0 auto;page-break-inside:avoid;break-inside:avoid;"></div>`;
@@ -380,7 +385,7 @@ function StudioShell({
   const [addingOtherDept, setAddingOtherDept] = useState(false);
   const [otherDeptDraft, setOtherDeptDraft] = useState("");
   const [fields, setFields] = useState<Record<string, string>>(() => snap?.fields || getTemplateDefaultFields(initialId));
-  const [bodyHtml, setBodyHtml] = useState<string>(snap?.bodyHtml || "");
+  const [bodyHtml, setBodyHtml] = useState<string>(() => (snap?.templateId === "job_offer" ? "" : snap?.bodyHtml || ""));
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
   const [addPageAfterIndex, setAddPageAfterIndex] = useState<number | null>(null);
@@ -1034,9 +1039,14 @@ function StudioShell({
   const applySnapshot = useCallback((s: any) => {
     try {
       if (s.fields && typeof s.fields === "object") setFields(s.fields);
-      if (typeof s.bodyHtml === "string" && s.bodyHtml) {
+      const shouldForceCurrentOfferTemplate = s.templateId === "job_offer";
+      if (typeof s.bodyHtml === "string" && s.bodyHtml && !shouldForceCurrentOfferTemplate) {
         setBodyHtml(s.bodyHtml);
         if (s.userEdited) { userEditedRef.current = true; setUserEdited(true); }
+      } else if (shouldForceCurrentOfferTemplate) {
+        userEditedRef.current = false;
+        setUserEdited(false);
+        setBodyHtml("");
       }
       if (typeof s.templateId === "string" && s.templateId) setTemplateId(s.templateId);
       setStep(typeof s.step === "number" ? (s.step as Step) : 2);
@@ -3112,7 +3122,39 @@ function StudioShell({
               currentBody={bodyHtml}
               language={docLanguage}
               aiInstructions={template?.aiInstructions || ""}
-              onApply={(next) => setBodyHtml(next)}
+              onApply={(next, sourceText) => {
+                if (template?.id === "job_offer") {
+                  const extracted = normalizeExtractedDocumentFields({}, [sourceText, next].filter(Boolean).join("\n"));
+                  const nextFields = { ...fields, ...extracted };
+                  const visibleFields: Record<string, string> = {};
+                  for (const [k, v] of Object.entries(nextFields)) {
+                    if (!hiddenFieldKeys.has(k)) visibleFields[k] = v;
+                  }
+                  const lockedOfferBody = renderStandardBody({
+                    templateId: template.id,
+                    fields: visibleFields,
+                    department: template.needsPosition ? department : undefined,
+                    commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
+                    customFields: hiddenSections.has("custom") ? [] : customFields,
+                    ownerName,
+                    ownerTitle,
+                    ownerDate,
+                    applicantDate,
+                    hideLetterDate: true,
+                    extraSignatories,
+                  });
+                  setFields(nextFields);
+                  autoBodyRef.current = lockedOfferBody;
+                  userEditedRef.current = false;
+                  setUserEdited(false);
+                  setBodyHtml(lockedOfferBody);
+                  toast.success("Offer Letter values applied into the locked 11-clause template");
+                  return;
+                }
+                userEditedRef.current = true;
+                setUserEdited(true);
+                setBodyHtml(next);
+              }}
               onClose={() => setAiOpen(false)}
             />
           </aside>
