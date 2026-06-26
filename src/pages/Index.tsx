@@ -213,7 +213,7 @@ const Index = () => {
   }, []);
 
   return (
-    <PageShell data-home-page className="relative w-full min-h-screen bg-[#F7F2EA] overflow-hidden">
+    <PageShell data-home-page className="relative w-full min-h-screen bg-[#F7F2EA] overflow-x-hidden">
 
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />

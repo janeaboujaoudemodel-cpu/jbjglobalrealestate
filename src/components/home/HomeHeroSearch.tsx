@@ -13,7 +13,7 @@
  *   (#1A1A1A) to elevate the label — never fade or hide it.
  */
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback } from "react";
 import { CalendarCheck, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,6 @@ interface HomeHeroSearchProps {
 
 export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchProps) {
   const navigate = useNavigate();
-  const scrollGuardRef = useRef<HTMLDivElement | null>(null);
   const [draft, setDraft] = useState("");
   const [searching, setSearching] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -113,53 +112,13 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
     else window.dispatchEvent(new CustomEvent("jbj:open-inquiry"));
   };
 
-  const keepPageScrollAlive = useCallback((event: React.WheelEvent) => {
-    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-
-    event.preventDefault();
-    window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
-  }, []);
-
-  useEffect(() => {
-    const node = scrollGuardRef.current;
-    if (!node) return;
-
-    const scrollFromWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      event.preventDefault();
-      window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
-    };
-
-    const keepScrollAliveNative = (event: WheelEvent) => scrollFromWheel(event);
-    const keepScrollAliveDocument = (event: WheelEvent) => {
-      const target = event.target as Element | null;
-      if (target?.closest?.(".jj-hero-search-premium, .jj-hero-search-input, .jj-hero-search-action")) {
-        scrollFromWheel(event);
-      }
-    };
-
-    const scrollNodes = [
-      node,
-      ...Array.from(node.querySelectorAll<HTMLElement>("input, button, .jj-hero-search-bar, .jj-hero-search-premium")),
-    ];
-
-    scrollNodes.forEach((el) => el.addEventListener("wheel", keepScrollAliveNative, { capture: true, passive: false }));
-    document.addEventListener("wheel", keepScrollAliveDocument, { capture: true, passive: false });
-    return () => {
-      scrollNodes.forEach((el) => el.removeEventListener("wheel", keepScrollAliveNative, { capture: true }));
-      document.removeEventListener("wheel", keepScrollAliveDocument, { capture: true });
-    };
-  }, []);
-
   return (
     <>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6 }}
-        ref={scrollGuardRef}
         className="w-full max-w-4xl mx-auto"
-        onWheelCapture={keepPageScrollAlive}
       >
         {/* Unified emerald-ombre search bar: input + Search + Free Consultation all share
             the SAME emerald/black gradient surface — NO color split between segments.
