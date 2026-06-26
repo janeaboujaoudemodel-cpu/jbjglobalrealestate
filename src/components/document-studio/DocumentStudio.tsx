@@ -153,6 +153,7 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   set("homeAddress", pick("homeAddress", "residentialAddress", "residential_address", "address", "home_address"));
   set("recipientEmail", pick("recipientEmail", "email", "emailAddress", "email_address"));
   set("recipientPhone", pick("recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"));
+  set("nationality", pick("nationality", "nationalityName", "country", "countryOfNationality"));
 
   set("recipientEmail", out.recipientEmail || text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]);
   set("emiratesId", out.emiratesId || text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-"));
