@@ -1371,8 +1371,11 @@ function StudioShell({
         setMarks((m) => ({
           ...m,
           ...s.marks,
-          stamp: s.marks?.stamp ? { ...s.marks.stamp, width: Math.min(s.marks.stamp.width || 142, 160), rotation: 0 } : m.stamp,
+          stamp: forceTemplateResync && s.templateId === "job_offer"
+            ? { url: jbjCompanyStampSrc, width: 142, rotation: 0 }
+            : (s.marks?.stamp ? { ...s.marks.stamp, width: Math.min(s.marks.stamp.width || 142, 160), rotation: 0 } : m.stamp),
           stampXY: forceTemplateResync && s.templateId === "job_offer" ? undefined : s.marks.stampXY,
+          stampLocked: forceTemplateResync && s.templateId === "job_offer" ? false : s.marks.stampLocked,
         }));
       }
       if (typeof s.manualPages === "number") setManualPages(Math.max(0, s.manualPages));
