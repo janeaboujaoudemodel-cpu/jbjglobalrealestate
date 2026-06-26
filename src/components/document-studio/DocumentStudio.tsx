@@ -770,6 +770,7 @@ function StudioShell({
 
   // Document language (drives translation + AI replies + STT).
   const [docLanguage, setDocLanguage] = useState<string>("English");
+  const [chromeTheme, setChromeTheme] = useState<"champagne" | "emerald">("champagne");
 
   // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
