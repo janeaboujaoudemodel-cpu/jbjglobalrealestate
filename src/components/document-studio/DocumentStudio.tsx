@@ -2089,12 +2089,25 @@ function StudioShell({
               type="button"
               role="tab"
               aria-selected={templateId === "nda"}
-              onClick={() => setTemplateId("nda")}
+              onClick={() => {
+                // Companion entry: switching from Offer → NDA inside the same
+                // Studio session pre-fills NDA identity from the current Offer
+                // fields (shared identity store). Opening NDA directly from
+                // the launcher stays blank — see fields useState above.
+                setTemplateId("nda");
+                if (templateId === "job_offer") {
+                  const shared = readSharedIdentity();
+                  if (Object.keys(shared).length) {
+                    setFields((prev) => ({ ...prev, ...shared }));
+                  }
+                }
+              }}
               className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${templateId === "nda" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"}`}
-              title="Open the NDA pre-filled with the same applicant identity"
+              title="Open the NDA — pre-fills from the Offer Letter when switched from Offer; blank when opened directly"
             >
               NDA
             </button>
+
           </div>
           {/* Theme switcher — Champagne / Emerald letterhead */}
           <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme" data-surface="champagne">
