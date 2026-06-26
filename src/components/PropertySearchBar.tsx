@@ -13,7 +13,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useDevelopers } from "@/hooks/useProjects";
 import { cn } from "@/lib/utils";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface Developer {
   id: string;
@@ -31,15 +31,15 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-2 w-[190px] h-12 px-3 bg-[#FDFBF7]/80 border border-[#1A1A1A]/50 text-white rounded-lg text-sm hover:border-[#B89555] transition-colors">
+        <button className="flex items-center gap-2 w-[230px] min-h-12 px-3 bg-[#FDFBF7]/80 border border-[#1A1A1A]/50 text-white rounded-lg text-sm hover:border-[#B89555] transition-colors">
           <Building2 className="w-4 h-4 text-white/90 flex-shrink-0" />
-          <span className="truncate flex-1 text-left text-sm">
+          <span className="min-w-0 flex-1 text-left text-sm leading-snug whitespace-normal break-words [overflow-wrap:anywhere]">
             {selectedDev ? selectedDev.name : "Developer / Project"}
           </span>
           <ChevronDown className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A] z-[10200]" side="bottom" align="start" sideOffset={4}>
+      <PopoverContent className="w-[340px] p-0 bg-[#FDFBF7] border border-[#1A1A1A] z-[10200]" side="bottom" align="start" sideOffset={4}>
         <div className="p-2 border-b border-[#1A1A1A]">
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/90" />
@@ -64,14 +64,17 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
             <button
               key={dev.id}
               onClick={() => { onChange(dev.id); setOpen(false); setSearch(""); }}
-              className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
+              className={cn("w-full min-h-11 flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
             >
-              {isValidDeveloperLogoUrl(dev.logo_url) ? (
-                <img src={dev.logo_url as string} alt={dev.name} className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-[#FDFBF7]" />
-              ) : (
-                <Building2 className="w-5 h-5 text-white/85 flex-shrink-0" />
-              )}
-              <span className="truncate">{dev.name}</span>
+              <DeveloperLogo
+                src={dev.logo_url}
+                alt={dev.name}
+                name={dev.name}
+                variant="bare"
+                renderFallback
+                className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px]"
+              />
+              <span className="min-w-0 flex-1 text-left leading-snug whitespace-normal break-words [overflow-wrap:anywhere]">{dev.name}</span>
               {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-[#1A1A1A] flex-shrink-0" />}
             </button>
           ))}
