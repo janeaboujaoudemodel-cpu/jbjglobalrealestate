@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 12;
+  const DOCUMENT_FIX_VERSION = 13;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -1374,7 +1374,7 @@ function StudioShell({
             ? { url: jbjCompanyStampSrc, width: 142, rotation: 0 }
             : (s.marks?.stamp ? { ...s.marks.stamp, width: Math.min(s.marks.stamp.width || 142, 160), rotation: 0 } : m.stamp),
           stampXY: forceTemplateResync && s.templateId === "job_offer" ? undefined : s.marks.stampXY,
-          stampLocked: forceTemplateResync && s.templateId === "job_offer" ? false : s.marks.stampLocked,
+          stampLocked: forceTemplateResync && s.templateId === "job_offer" ? true : s.marks.stampLocked,
         }));
       }
       if (typeof s.manualPages === "number") setManualPages(Math.max(0, s.manualPages));
@@ -3328,8 +3328,8 @@ function StudioShell({
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 500,
-                                      height: 500,
+                                      width: 540,
+                                      height: 540,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
                                     }}
@@ -3493,8 +3493,8 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 220}
-                                    y={marks.stampXY?.y ?? Math.max(540, PAGE_H - (isLast ? chromeHeights.footer : 0) - 330)}
+                                    x={marks.stampXY?.x ?? 270}
+                                    y={marks.stampXY?.y ?? Math.max(720, PAGE_H - (isLast ? chromeHeights.footer : 0) - 250)}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
