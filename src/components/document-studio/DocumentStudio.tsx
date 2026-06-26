@@ -298,7 +298,7 @@ const renderPerPageUserSignature = (name?: string) => {
   // "Accepted by Candidate / Signature" block and the authorised signatory
   // appear ONLY on the final page (via composer signatureBlock).
   return `
-    <div data-rendered-page-signature="1" data-locked-signature="1" data-initials-strip="1" style="margin-top:auto;padding:14px 0 8px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+    <div data-rendered-page-signature="1" data-locked-signature="1" data-initials-strip="1" style="margin-top:auto;padding:14px 0 46px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <div style="color:#1A1A1A;min-width:230px;max-width:280px;display:flex;align-items:flex-end;gap:10px;">
         <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:9.5px;line-height:1;padding-bottom:2px;" title="${legalName}">Candidate Initials:</div>
         <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;min-width:120px;"></div>
@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 11;
+  const DOCUMENT_FIX_VERSION = 12;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -3328,8 +3328,8 @@ function StudioShell({
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 640,
-                                      height: 640,
+                                      width: 500,
+                                      height: 500,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
                                     }}
