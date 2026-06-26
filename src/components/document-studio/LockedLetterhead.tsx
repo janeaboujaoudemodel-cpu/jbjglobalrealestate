@@ -20,10 +20,42 @@ export type LetterheadTheme = "champagne" | "emerald";
 
 const tokens = (theme: LetterheadTheme) =>
   theme === "emerald"
-    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoColor: "#FFFFFF" }
-    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoColor: JBJ_GOLD };
+    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", jColor: "#FFFFFF", bColor: "#FFFFFF" }
+    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, jColor: "#1A1A1A", bColor: JBJ_GOLD };
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
+
+/**
+ * Monogram layering — the asset is a single "JBJ" PNG. The two outer J
+ * glyphs are painted in BLACK (or white on emerald) and the middle B is
+ * painted in GOLD. We achieve this by stacking three identical masked
+ * layers and clip-pathing each to the column that contains its letter.
+ * Bounds were measured from /src/assets/jbj-monogram-cropped.png
+ * (356×458, letters at x≈24-88 / 140-222 / 271-331), then mapped to a
+ * 118×118 rendered box with `mask-size: contain` (centered).
+ */
+function MaskedMonogramLayer({ color, clip }: { color: string; clip: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: color,
+        WebkitMaskImage: `url(${jbjMonogramSrc})`,
+        maskImage: `url(${jbjMonogramSrc})`,
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+        maskPosition: "center",
+        WebkitMaskSize: "contain",
+        maskSize: "contain",
+        clipPath: clip,
+        WebkitClipPath: clip,
+      }}
+    />
+  );
+}
 
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
@@ -42,26 +74,24 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         className="grid items-center min-w-0"
         style={{ gridTemplateColumns: "132px minmax(0,1fr)", columnGap: 14, minHeight: 132 }}
       >
-        <div
-          aria-label="JBJ"
-          role="img"
-          style={{
-            width: 118,
-            height: 118,
-            background: t.monoColor,
-            WebkitMaskImage: `url(${jbjMonogramSrc})`,
-            maskImage: `url(${jbjMonogramSrc})`,
-            WebkitMaskRepeat: "no-repeat",
-            maskRepeat: "no-repeat",
-            WebkitMaskPosition: "center",
-            maskPosition: "center",
-            WebkitMaskSize: "contain",
-            maskSize: "contain",
-            margin: "auto",
-            alignSelf: "center",
-            justifySelf: "center",
-          }}
-        />
+          <div
+            aria-label="JBJ"
+            role="img"
+            style={{
+              position: "relative",
+              width: 118,
+              height: 118,
+              margin: "auto",
+              alignSelf: "center",
+              justifySelf: "center",
+            }}
+          >
+            {/* Middle B stays gold (champagne) or white (emerald) */}
+            <MaskedMonogramLayer color={t.bColor} clip="inset(0% 30% 0% 30%)" />
+            {/* Outer J letters painted black (or white on emerald) */}
+            <MaskedMonogramLayer color={t.jColor} clip="inset(0% 69.5% 0% 13%)" />
+            <MaskedMonogramLayer color={t.jColor} clip="inset(0% 13% 0% 69.5%)" />
+          </div>
 
         <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingRight: 0, lineHeight: 1, overflow: "visible" }}>
           <div
