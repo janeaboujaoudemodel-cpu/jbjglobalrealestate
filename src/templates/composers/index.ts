@@ -467,10 +467,9 @@ export function signatureBlock(opts: {
   // "[Position]" so the Title row never shows a literal placeholder token.
   const rawATitle = (opts.applicantTitle || "").trim();
   const cleanedATitle = /^\[.*\]$/.test(rawATitle) ? "" : rawATitle;
-  // Default applicant Title when neither the form nor the prior value
-  // supplied one — pre-fills the role at the brokerage so the signature
-  // block is never blank on a delivered offer letter.
-  const aTitle = esc(cleanedATitle || "Real Estate Broker");
+  // No hard-coded fallback title — mirror EXACTLY what the offer/source
+  // document carries. If blank, leave blank rather than fabricating a role.
+  const aTitle = esc(cleanedATitle);
   const aDate = esc(formatHumanDate(opts.applicantDate));
   // Recipient cell title is template-aware (Second Party / Client / Guest /
   // Counterparty …) — NEVER the literal word "Recipient" and NEVER the
