@@ -67,9 +67,10 @@ export default function DraggableMark({
       role="group"
       aria-label={ariaLabel}
       className="group absolute select-none"
-      style={{ left: x, top: y, zIndex, cursor: drag?.moved ? "grabbing" : (onClick ? "pointer" : "grab"), touchAction: "none" }}
+      style={{ left: x, top: y, zIndex, cursor: locked ? "default" : (drag?.moved ? "grabbing" : (onClick ? "pointer" : "grab")), touchAction: "none" }}
       onPointerDown={(e) => {
         if ((e.target as HTMLElement).closest?.("[data-mark-action]")) return;
+        if (locked) return;
         const r = ref.current!.getBoundingClientRect();
         (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
         setDrag({ dx: e.clientX - r.left, dy: e.clientY - r.top, sx: e.clientX, sy: e.clientY, moved: false });
