@@ -3208,27 +3208,77 @@ function StudioShell({
                                     zIndex: 0,
                                   }}
                                 >
+                                  {/* Engraved 3D effect — stack three mask
+                                      layers: a dark "shadow" pushed down-right,
+                                      a bright "highlight" pushed up-left, and
+                                      the champagne fill in the middle. The eye
+                                      reads the offset light/dark pair as a
+                                      bevel pressed INTO the paper. */}
                                   <div
                                     style={{
+                                      position: "relative",
                                       width: 260,
                                       height: 260,
-                                      // Slight horizontal squeeze tightens the
-                                      // gap between the three letters without
-                                      // cropping the middle B.
                                       transform: "scaleX(0.86)",
                                       transformOrigin: "center",
-                                      background: "#B89555",
-                                      opacity: 0.14,
-                                      WebkitMaskImage: `url(${jbjMonogramSrc})`,
-                                      maskImage: `url(${jbjMonogramSrc})`,
-                                      WebkitMaskRepeat: "no-repeat",
-                                      maskRepeat: "no-repeat",
-                                      WebkitMaskPosition: "center",
-                                      maskPosition: "center",
-                                      WebkitMaskSize: "contain",
-                                      maskSize: "contain",
                                     }}
-                                  />
+                                  >
+                                    {/* Drop-shadow layer (dark) */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        transform: "translate(1.5px, 2px)",
+                                        background: "#3A2A12",
+                                        opacity: 0.18,
+                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                        maskImage: `url(${jbjMonogramSrc})`,
+                                        WebkitMaskRepeat: "no-repeat",
+                                        maskRepeat: "no-repeat",
+                                        WebkitMaskPosition: "center",
+                                        maskPosition: "center",
+                                        WebkitMaskSize: "contain",
+                                        maskSize: "contain",
+                                        filter: "blur(0.4px)",
+                                      }}
+                                    />
+                                    {/* Highlight layer (light) — sells the bevel */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        transform: "translate(-1px, -1.5px)",
+                                        background: "#FFFFFF",
+                                        opacity: 0.55,
+                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                        maskImage: `url(${jbjMonogramSrc})`,
+                                        WebkitMaskRepeat: "no-repeat",
+                                        maskRepeat: "no-repeat",
+                                        WebkitMaskPosition: "center",
+                                        maskPosition: "center",
+                                        WebkitMaskSize: "contain",
+                                        maskSize: "contain",
+                                        mixBlendMode: "screen",
+                                      }}
+                                    />
+                                    {/* Champagne body */}
+                                    <div
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        background: "#B89555",
+                                        opacity: 0.16,
+                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                        maskImage: `url(${jbjMonogramSrc})`,
+                                        WebkitMaskRepeat: "no-repeat",
+                                        maskRepeat: "no-repeat",
+                                        WebkitMaskPosition: "center",
+                                        maskPosition: "center",
+                                        WebkitMaskSize: "contain",
+                                        maskSize: "contain",
+                                      }}
+                                    />
+                                  </div>
                                 </div>
                               )}
                               {/* Document generation date — top-right corner of EVERY page (above
