@@ -3139,11 +3139,12 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
-                              {/* DocuSign envelope-ID safe band — colored
-                                  champagne (same as header/footer) on EVERY
-                                  page so it never reads as a white crop above
-                                  the colored chrome. Global rule. */}
-                              {!noChrome && (
+                              {/* DocuSign envelope-ID safe band — ONLY on
+                                  page 1 (under the letterhead chrome). On
+                                  inner pages we removed the colored stripe
+                                  entirely so the paper reads as one solid
+                                  premium tone, top-to-bottom. */}
+                              {!noChrome && isFirst && (
                                 <div
                                   aria-hidden
                                   style={{
@@ -3156,6 +3157,28 @@ function StudioShell({
                                     zIndex: 1,
                                   }}
                                 />
+                              )}
+                              {/* Engraved JBJ monogram watermark — centered
+                                  on every page, very faint, behind content. */}
+                              {!noChrome && (
+                                <div
+                                  aria-hidden
+                                  style={{
+                                    position: "absolute",
+                                    inset: 0,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    pointerEvents: "none",
+                                    zIndex: 0,
+                                  }}
+                                >
+                                  <img
+                                    src={jbjMonogramSrc}
+                                    alt=""
+                                    style={{ width: 360, height: 360, opacity: 0.05, filter: "grayscale(1)" }}
+                                  />
+                                </div>
                               )}
                               {/* Document generation date — top-right corner of EVERY page (above
                                   letterhead on page 1, above body on pages 2+). Distinct from the
