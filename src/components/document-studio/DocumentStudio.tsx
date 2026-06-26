@@ -3494,7 +3494,7 @@ function StudioShell({
                                 {isLast && marks.stamp && (
                                   <DraggableMark
                                     x={marks.stampXY?.x ?? 140}
-                                    y={marks.stampXY?.y ?? Math.max(560, PAGE_H - (isLast ? chromeHeights.footer : 0) - 360)}
+                                    y={marks.stampXY?.y ?? Math.max(560, PAGE_H - (isLast ? chromeHeights.footer : 0) - 230)}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
