@@ -193,6 +193,10 @@ const offerClause = (n: number, heading: string, body: string) => `
 
 /* ───────────── Shared building blocks ───────────── */
 
+// X button — visible at idle (0.55 opacity), full on hover. Stripped on export.
+const deleteBtn = (fieldKey?: string) =>
+  `<button type="button" contenteditable="false" aria-label="Remove field" data-field-delete-control="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="position:absolute;right:7px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:1px solid ${GOLD}66;border-radius:999px;background:#FDFBF7;color:${INK};font-size:13px;line-height:16px;font-weight:700;opacity:0.55;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;">×</button>`;
+
 export function termsTable(rows: Array<[string, string | undefined, string?]>, title = "Terms of Employment"): string {
   const visible = rows.filter(([, v]) => (v || "").trim());
   if (visible.length === 0) return "";
@@ -202,7 +206,7 @@ export function termsTable(rows: Array<[string, string | undefined, string?]>, t
       <tr data-removable-field="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
         <td style="position:relative;padding:9px 38px 9px 14px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:38%;font-size:12px;">
           ${esc(k)}
-          <button type="button" contenteditable="false" aria-label="Remove field" data-field-delete-control="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:1px solid ${GOLD}66;border-radius:999px;background:#FDFBF7;color:${INK};font-size:13px;line-height:16px;font-weight:700;opacity:0;cursor:pointer;">×</button>
+          ${deleteBtn(fieldKey)}
         </td>
         <td data-field-value-cell="1" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v)}</td>
       </tr>`,
@@ -270,6 +274,9 @@ export function inlineIdentitySentence(fields: Record<string, string>): string {
 
 
 export function commissionTable(rows: CommissionRow[]): string {
+  // Standalone tier table — only used by non-offer composers. The Offer
+  // Letter now renders tiers INSIDE the combined compensation table via
+  // `compensationAndCommissionTable` below.
   const visible = (rows || []).filter(
     (r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim(),
   );
@@ -278,7 +285,7 @@ export function commissionTable(rows: CommissionRow[]): string {
     .map(
       (r, i) => `
       <tr data-removable-field="1" data-field-key="commission" style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
-        <td style="position:relative;padding:9px 34px 9px 12px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}<button type="button" contenteditable="false" aria-label="Remove field" data-field-delete-control="1" data-field-key="commission" style="position:absolute;right:7px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:1px solid ${GOLD}66;border-radius:999px;background:#FDFBF7;color:${INK};font-size:13px;line-height:16px;font-weight:700;opacity:0;cursor:pointer;">×</button></td>
+        <td style="position:relative;padding:9px 34px 9px 12px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}${deleteBtn("commission")}</td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};white-space:nowrap;">${esc(r.rate) || "—"}</td>
         <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};">${esc(r.trigger) || "—"}</td>
       </tr>`,
@@ -313,8 +320,71 @@ const formatMonthlySalary = (value?: string): string => {
   return `AED ${raw} per month`;
 };
 
-const compensationStructureTable = (rows: Array<[string, string | undefined, string?]>): string =>
-  termsTable(rows, "Compensation & Commission Structure");
+/**
+ * Unified Compensation & Commission table — ONE table for the Offer Letter.
+ * - Top rows: compensation terms (Basic Salary, Allowances, Payment Cycle…);
+ *   empty rows are filtered out, each surviving row has its own delete X.
+ * - Sub-header "Commission Tiers" followed by tier rows (Tier · Rate · When
+ *   Paid). Each tier row deletable. Legal note rendered below the table.
+ */
+function compensationAndCommissionTable(
+  termsRows: Array<[string, string | undefined, string?]>,
+  tierRows: CommissionRow[],
+): string {
+  const terms = termsRows.filter(([, v]) => (v || "").trim());
+  const tiers = (tierRows || []).filter(
+    (r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim(),
+  );
+  if (terms.length === 0 && tiers.length === 0) return "";
+
+  const termsBody = terms
+    .map(
+      ([k, v, fieldKey], i) => `
+      <tr data-removable-field="1"${fieldKey ? ` data-field-key="${esc(fieldKey)}"` : ""} style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+        <td style="position:relative;padding:9px 38px 9px 14px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:38%;font-size:12px;">
+          ${esc(k)}
+          ${deleteBtn(fieldKey)}
+        </td>
+        <td data-field-value-cell="1" colspan="2" style="padding:9px 14px;border:1px solid ${GOLD}33;color:${INK};font-size:12px;">${esc(v || "")}</td>
+      </tr>`,
+    )
+    .join("");
+
+  const tierHeader = tiers.length
+    ? `<tr><th colspan="3" style="text-align:left;padding:9px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">Commission Tiers</th></tr>
+       <tr style="background:${CHAMPAGNE};">
+         <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;width:38%;">Tier</th>
+         <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;width:14%;">Rate</th>
+         <th style="padding:7px 12px;border:1px solid ${GOLD}33;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:${INK};text-align:left;">When Paid</th>
+       </tr>`
+    : "";
+
+  const tierBody = tiers
+    .map(
+      (r, i) => `
+      <tr data-removable-field="1" data-field-key="commission" style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
+        <td style="position:relative;padding:9px 34px 9px 14px;border:1px solid ${GOLD}33;font-size:12px;font-weight:600;color:${INK};">${esc(r.label) || "—"}${deleteBtn("commission")}</td>
+        <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};white-space:nowrap;">${esc(r.rate) || "—"}</td>
+        <td style="padding:9px 12px;border:1px solid ${GOLD}33;font-size:12px;color:${INK};">${esc(r.trigger) || "—"}</td>
+      </tr>`,
+    )
+    .join("");
+
+  return `
+    <table data-pdf-section="comp-commission" style="border-collapse:collapse;width:100%;margin:14px 0 10px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
+      <thead>
+        <tr>
+          <th colspan="3" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
+            Compensation &amp; Commission Structure
+          </th>
+        </tr>
+      </thead>
+      <tbody>${termsBody}${tierHeader}${tierBody}</tbody>
+    </table>
+    ${tiers.length ? `<div data-pdf-section="commission-note" style="font-size:10.5px;color:${MUTED};margin:0 0 18px;font-style:italic;page-break-inside:avoid;break-inside:avoid;">
+      Commission entitlement and payment timing are subject to the signed employment documents, UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations, and actual receipt of cleared funds by the Company from the buyer, seller, landlord, developer, client, or relevant third party.
+    </div>` : ""}`;
+}
 
 export function signatureBlock(opts: {
   ownerName?: string;
@@ -545,14 +615,20 @@ function composeJobOffer(input: ComposerInput): string {
     "Terms of Employment",
   );
 
-  const compensationTerms = compensationStructureTable([
-    ["Basic Salary", filledOr(formatMonthlySalary(f.salary), "Not applicable — fixed commission basis"), "salary"],
-    ["Commission Structure", filledOr(f.commission, "65% on Employee's own direct deals · 55% on Company-sourced deals (enhanced rate, conditional on continued HR/Admin/Assistant duties — see Clause 4)"), "commission"],
-    ["Allowances", filledOr(f.allowances, ""), "allowances"],
-    ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
-  ]);
+  // ONE unified table for compensation + commission tiers. Empty rows
+  // (e.g. Allowances / Payment Cycle when blank) are auto-filtered. The
+  // "Commission Structure" summary row is intentionally omitted because
+  // the tier breakdown below renders the same data with greater clarity.
+  const compensationTerms = compensationAndCommissionTable(
+    [
+      ["Basic Salary", filledOr(formatMonthlySalary(f.salary), "Not applicable — fixed commission basis"), "salary"],
+      ["Allowances", filledOr(f.allowances, ""), "allowances"],
+      ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
+    ],
+    input.commissionRows || [],
+  );
+  const commissionRowsTable = ""; // merged into compensationTerms above
 
-  const commissionRowsTable = commissionTable(input.commissionRows || []);
 
   // Premium prose mirror of the commission structure with the conditional
   // HR/Admin uplift and the automatic fallback to 50/50 if those duties stop.
