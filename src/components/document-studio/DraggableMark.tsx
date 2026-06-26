@@ -6,7 +6,7 @@
  * Position is stored in pixel coordinates relative to the containing body.
  */
 import { useEffect, useRef, useState } from "react";
-import { X, Pencil, Maximize2 } from "lucide-react";
+import { X, Pencil, Maximize2, Lock, Unlock } from "lucide-react";
 
 export interface DraggableMarkProps {
   x: number;
@@ -19,6 +19,8 @@ export interface DraggableMarkProps {
   children: React.ReactNode;
   ariaLabel?: string;
   hint?: string;
+  locked?: boolean;
+  onToggleLock?: () => void;
 }
 
 const CLICK_THRESHOLD_PX = 6;
