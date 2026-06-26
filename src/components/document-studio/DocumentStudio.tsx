@@ -394,7 +394,7 @@ function StudioShell({
   const [sheetH, setSheetH] = useState(0);
   const [chromeHeights, setChromeHeights] = useState({ header: 180, footer: 86 });
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
-  const [manualPages, setManualPages] = useState<number>(0);
+  const [manualPages, setManualPages] = useState<number>(snap?.manualPages || 0);
   // GLOBAL pagination rule: any composed document body is auto-split into
   // as many A4 pages as needed so content (esp. signatures) never collides
   // with the footer. Footer renders ONLY on the last page.
@@ -618,15 +618,15 @@ function StudioShell({
 
 
   // Owner-side signature defaults (editable from the left rail).
-  const [ownerName, setOwnerName] = useState<string>("Jane Bou Jaoude");
-  const [ownerTitle, setOwnerTitle] = useState<string>("Founder & CEO");
-  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [applicantDate, setApplicantDate] = useState<string>(""); // blank by design
+  const [ownerName, setOwnerName] = useState<string>(snap?.ownerName || "Jane Bou Jaoude");
+  const [ownerTitle, setOwnerTitle] = useState<string>(snap?.ownerTitle || "Founder & CEO");
+  const [ownerDate, setOwnerDate] = useState<string>(snap?.ownerDate || new Date().toISOString().slice(0, 10));
+  const [applicantDate, setApplicantDate] = useState<string>(snap?.applicantDate || ""); // blank by design
 
   // Additional signatories (beyond the default Owner + Counterparty).
   type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
   const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "" });
-  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>([]);
+  const [extraSignatories, setExtraSignatories] = useState<ExtraSig[]>(snap?.extraSignatories || []);
   const updateSig = (id: string, patch: Partial<ExtraSig>) =>
     setExtraSignatories((p) => p.map((s) => (s.id === id ? { ...s, ...patch } : s)));
   const removeSig = (id: string) => setExtraSignatories((p) => p.filter((s) => s.id !== id));
@@ -655,13 +655,13 @@ function StudioShell({
   };
 
   // Hide / restore the "Commission" and "Custom fields" rail cards.
-  const [hiddenSections, setHiddenSections] = useState<Set<string>>(new Set());
+  const [hiddenSections, setHiddenSections] = useState<Set<string>>(() => new Set(snap?.hiddenSections || []));
   const toggleSection = (id: string) =>
     setHiddenSections((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   // Per-field hide + rename for the template fields panel.
-  const [hiddenFieldKeys, setHiddenFieldKeys] = useState<Set<string>>(new Set());
-  const [fieldLabelOverrides, setFieldLabelOverrides] = useState<Record<string, string>>({});
+  const [hiddenFieldKeys, setHiddenFieldKeys] = useState<Set<string>>(() => new Set(snap?.hiddenFieldKeys || []));
+  const [fieldLabelOverrides, setFieldLabelOverrides] = useState<Record<string, string>>(snap?.fieldLabelOverrides || {});
   const [editingFieldKey, setEditingFieldKey] = useState<string | null>(null);
   const hideField = (k: string) => setHiddenFieldKeys((s) => { const n = new Set(s); n.add(k); return n; });
   const restoreAllFields = () => setHiddenFieldKeys(new Set());
