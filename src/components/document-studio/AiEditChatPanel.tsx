@@ -26,7 +26,7 @@ interface Attachment { name: string; type: string; dataUrl: string }
 interface Props {
   currentBody: string;
   aiInstructions: string;
-  onApply: (nextBody: string) => void;
+  onApply: (nextBody: string, sourceText?: string) => void;
   language?: string;
   onClose?: () => void;
 }
@@ -229,7 +229,7 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
         .map((p) => `<p style="margin:0 0 14px;line-height:1.65;">${p.replace(/\n/g, "<br/>")}</p>`)
         .join("");
 
-      onApply(html);
+      onApply(html, [instruction, newBodyText].filter(Boolean).join("\n\n"));
       setAttachments([]);
       setMessages((m) => [...m, { role: "assistant", content: "Done — the document has been updated. Anything else?" }]);
     } catch (e: any) {
