@@ -1847,10 +1847,11 @@ function StudioShell({
       {/* ─── Top toolbar (visible on step ≥ 2) — Reset / Print / Export / Send ─── */}
       {step === 2 && template && (
         <div
-          className="sticky top-0 z-30 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
+          className="sticky top-0 z-30 flex flex-col gap-2 px-3 sm:px-4 py-2 bg-[#FDFBF7] border-b border-[#B89555]/30"
           data-document-studio-toolbar="1"
         >
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center justify-between gap-3 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
             <button
               onClick={() => setStep(1)}
               className="h-8 px-2 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center gap-1.5 text-[12px] text-[#1A1A1A]"
@@ -1863,9 +1864,32 @@ function StudioShell({
               <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 leading-none">Template</div>
               <div className="text-[12px] font-semibold text-[#1A1A1A] truncate leading-tight">{template.label}</div>
             </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {actionChromeCollapsed && (
+                <Button variant="outline" size="sm" onClick={() => handleExport("pdf")} disabled={!bodyHtml || !!exporting} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
+                  {exporting === "pdf" ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
+                  <span>PDF</span>
+                </Button>
+              )}
+              <Button variant="outline" size="sm" onClick={() => setActionChromeCollapsed((v) => !v)} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title={actionChromeCollapsed ? "Expand document actions" : "Minimize document actions"}>
+                {actionChromeCollapsed ? <ChevronDown className="w-4 h-4 mr-1.5" /> : <ChevronUp className="w-4 h-4 mr-1.5" />}
+                <span>{actionChromeCollapsed ? "Actions" : "Minimize"}</span>
+              </Button>
+            </div>
           </div>
+          {!actionChromeCollapsed && (
           <div className="studio-toolbar-scroll w-full 2xl:w-auto">
             <div className="studio-action-row sm:justify-end">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={startNewSubmission}
+                title="Clear the current draft and start fresh"
+                className="h-10"
+              >
+                <Plus className="w-4 h-4 mr-1.5" /> Start New
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -1925,6 +1949,7 @@ function StudioShell({
               </div>
             </div>
           </div>
+          )}
         </div>
       )}
 
