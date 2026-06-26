@@ -167,6 +167,31 @@ const restoreOfferCommissionRows = (templateId?: string, rows?: CommissionRow[])
 
 const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
 
+const isMeaningfulDocumentValue = (value?: any): value is string => {
+  const text = String(value || "").trim();
+  return !!text && !/^\[[^\]]+\]$/.test(text);
+};
+
+const pickMeaningful = (...values: any[]): string =>
+  values.map((v) => String(v || "").trim()).find((v) => isMeaningfulDocumentValue(v)) || "";
+
+const normalizeJobOfferIdentityFields = (raw: Record<string, string> = {}, shared: Record<string, string> = {}) => {
+  const base = getTemplateDefaultFields("job_offer");
+  const next = { ...base, ...shared, ...raw };
+  const from = (keys: string[]) => pickMeaningful(...keys.map((k) => raw[k]), ...keys.map((k) => shared[k]), ...keys.map((k) => next[k]));
+  const name = from(["recipientName", "employeeName", "employee_name", "fullName", "full_name", "candidateName", "client_name", "guest_name", "name"]);
+  const address = from(["homeAddress", "employeeAddress", "employee_address", "address", "home_address", "residentialAddress", "residential_address"]);
+  const email = from(["recipientEmail", "employeeEmail", "employee_email", "email", "emailAddress", "email_address"]);
+  const phone = from(["recipientPhone", "employeePhone", "employee_phone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"]);
+  const title = from(["jobTitle", "position", "employeeTitle", "employee_title", "title"]);
+  if (name) next.recipientName = name;
+  if (address) next.homeAddress = address;
+  if (email) next.recipientEmail = email;
+  if (phone) next.recipientPhone = phone;
+  if (title) next.jobTitle = title;
+  return next;
+};
+
 function cleanIdentityNotes(value?: string) {
   if (!value) return value;
   const parts = value.split(/[;\n]+/).map((p) => p.trim()).filter(Boolean);
@@ -437,7 +462,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 6;
+  const DOCUMENT_FIX_VERSION = 7;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -563,10 +588,11 @@ function StudioShell({
     } catch { return {}; }
   };
   const [fields, setFields] = useState<Record<string, string>>(() => {
-    const base = getTemplateDefaultFields(initialId);
+    const baseTemplateId = snap?.templateId || initialId;
+    const base = getTemplateDefaultFields(baseTemplateId);
     const shared = readSharedIdentity();
-    const merged = { ...base, ...shared };
-    return snap?.fields ? { ...merged, ...snap.fields } : merged;
+    const merged = { ...base, ...shared, ...(snap?.fields || {}) };
+    return baseTemplateId === "job_offer" ? normalizeJobOfferIdentityFields(snap?.fields || {}, shared) : merged;
   });
   // Mirror identity fields to the shared store whenever they change.
   useEffect(() => {
@@ -1301,9 +1327,10 @@ function StudioShell({
     try {
       const forceTemplateResync = s.templateId === "job_offer" && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
       if (s.fields && typeof s.fields === "object") {
+        const shared = readSharedIdentity();
         setFields(forceTemplateResync
-          ? { ...getTemplateDefaultFields("job_offer"), ...s.fields }
-          : s.fields);
+          ? normalizeJobOfferIdentityFields(s.fields, shared)
+          : (s.templateId === "job_offer" ? normalizeJobOfferIdentityFields(s.fields, shared) : s.fields));
       }
       if (forceTemplateResync) {
         userEditedRef.current = false;
