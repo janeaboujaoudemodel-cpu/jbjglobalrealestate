@@ -1331,7 +1331,7 @@ function StudioShell({
   // ── Apply a previously saved snapshot — only when the user explicitly resumes.
   const applySnapshot = useCallback((s: any) => {
     try {
-      const forceTemplateResync = s.templateId === "job_offer" && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
+      const forceTemplateResync = (s.templateId === "job_offer" || s.templateId === "nda") && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
       if (s.fields && typeof s.fields === "object") {
         const shared = readSharedIdentity();
         setFields(forceTemplateResync
