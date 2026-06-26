@@ -901,7 +901,7 @@ function StudioShell({
     // keeps the preview body as the source of truth.
     if (userEditedRef.current || liveEditedBodyHtmlRef.current) setFields(nextFields);
     else setSyncedFields(nextFields);
-    const currentBody = getCurrentBodyHtml();
+    const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     const title =
       (profile.clientName || "Untitled") +
       ` — ${template.label} (${booking_id})`;
@@ -1513,7 +1513,7 @@ function StudioShell({
   };
 
   const handleSend = async (recipientOverride?: string) => {
-    const currentBody = getCurrentBodyHtml();
+    const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) return;
     const to = (recipientOverride || emailTo).trim();
     if (!to) { toast.error("Enter a recipient email"); return; }
