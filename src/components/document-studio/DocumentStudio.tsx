@@ -1600,18 +1600,47 @@ function StudioShell({
       `}</style>
       {/* ─── Topbar ─── */}
       <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 lg:px-5">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
-            <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
-          </div>
-          <div className="leading-tight min-w-0">
-            <div className="text-[13px] font-semibold text-[#1A1A1A]">Live Editor</div>
-            <div className="studio-brand-subtitle text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
-              {catalog === "staff" ? "Careers · Staff" : catalog === "client" ? "Client · Real Estate" : "All templates"}
+        <div className="flex items-center justify-between gap-3 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
             </div>
+            <div className="leading-tight min-w-0">
+              <div className="text-[13px] font-semibold text-[#1A1A1A]">Live Editor</div>
+              <div className="studio-brand-subtitle text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">
+                {catalog === "staff" ? "Careers · Staff" : catalog === "client" ? "Client · Real Estate" : "All templates"}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            {setupChromeCollapsed && (
+              <>
+                <Button variant="outline" size="sm" onClick={() => autoFillFileRef.current?.click()} title="Attach Emirates ID, passport or document" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
+                  <Upload className="w-4 h-4 mr-1.5" />
+                  <span>Attach ID</span>
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"} className="h-10 hover:bg-[#EFE6D6]">
+                  {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
+                  <span>AI</span>
+                </Button>
+              </>
+            )}
+            <Button variant="outline" size="sm" onClick={() => setSetupChromeCollapsed((v) => !v)} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title={setupChromeCollapsed ? "Expand editor tools" : "Minimize editor tools"}>
+              {setupChromeCollapsed ? <ChevronDown className="w-4 h-4 mr-1.5" /> : <ChevronUp className="w-4 h-4 mr-1.5" />}
+              <span>{setupChromeCollapsed ? "Tools" : "Minimize"}</span>
+            </Button>
+            <button
+              onClick={onClose}
+              data-surface="champagne" className="h-10 w-10 shrink-0 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
+        {!setupChromeCollapsed && (
+          <>
         <Stepper step={step} setStep={(s) => {
           if (s === 2 && !templateId) return;
           if (s === 3 && !bodyHtml) return;
@@ -1729,6 +1758,8 @@ function StudioShell({
             <X className="w-4 h-4" />
           </button>
         </div>
+          </>
+        )}
       </div>
 
       <AssetLibraryDialog
