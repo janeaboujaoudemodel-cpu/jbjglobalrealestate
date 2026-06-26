@@ -1,44 +1,51 @@
 /**
  * Locked premium letterhead + footer rendered as React components.
- * Mirrors `jbjFooterHtml()` byte-for-byte so preview === export.
+ * Mirrors jbjHeaderHtml / jbjFooterHtml so preview === export.
+ *
+ * Themes:
+ *   - "champagne"  → champagne bg, BLACK monogram, BLACK wordmark (default)
+ *   - "emerald"    → dark emerald bg, WHITE monogram, WHITE wordmark
  */
 
-import { JBJ_BRAND, JBJ_GOLD, JBJ_INK, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
+import { JBJ_BRAND, JBJ_GOLD, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
 
-export function LockedLetterhead() {
+export type LetterheadTheme = "champagne" | "emerald";
+
+const tokens = (theme: LetterheadTheme) =>
+  theme === "emerald"
+    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
+    : { bg: JBJ_CHAMPAGNE, fg: "#000000", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
+
+export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
+  const t = tokens(theme);
   return (
     <header
-      className="relative w-full py-6"
+      className="relative w-full"
       style={{
-        background: JBJ_CHAMPAGNE,
-        borderBottom: `1px solid ${JBJ_GOLD}`,
+        background: t.bg,
+        borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        paddingLeft: 32,
-        paddingRight: 42,
+        padding: "8px 32px 8px 24px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "184px 1px minmax(0,1fr)", columnGap: 26, minHeight: 152 }}
+        style={{ gridTemplateColumns: "240px 1px minmax(0,1fr)", columnGap: 14, minHeight: 72 }}
       >
         <img
           src={jbjMonogramSrc}
           alt="JBJ"
-          className="block object-contain mx-auto"
-          style={{ width: 160, height: 160, background: "transparent" }}
+          className="block object-contain"
+          style={{ width: 220, height: 72, background: "transparent", filter: t.monoFilter }}
         />
-        {/* Vertical gold hairline divider between monogram and wordmark */}
-        <div
-          aria-hidden
-          style={{ width: 1, height: 112, background: JBJ_GOLD, opacity: 0.55 }}
-        />
-        <div className="leading-tight min-w-0 text-center">
+        <div aria-hidden style={{ width: 1, height: 52, background: t.hairline, opacity: theme === "emerald" ? 0.5 : 0.55 }} />
+        <div className="leading-tight min-w-0 text-center" style={{ paddingRight: 18 }}>
           <div
-            className="font-semibold whitespace-nowrap"
+            className="font-bold whitespace-nowrap"
             style={{
-              fontSize: 24,
-              color: JBJ_INK,
+              fontSize: 19,
+              color: t.fg,
               letterSpacing: "0.045em",
               lineHeight: 1.1,
             }}
@@ -47,115 +54,45 @@ export function LockedLetterhead() {
           </div>
         </div>
       </div>
-
     </header>
   );
 }
 
 /**
- * Full-bleed premium footer — edge-to-edge, same vertical rhythm as the
- * header. Company legal name on a single centered line; second row
- * redistributes office / phone / email+website across the full width.
+ * Ultra-compact footer — single divider, single info row.
+ * No duplicated legal name. ~80% smaller than the previous version.
  */
-export function LockedFooter() {
+export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
+  const t = tokens(theme);
   return (
     <footer
       className="w-full"
       style={{
-        background: JBJ_CHAMPAGNE,
-        borderTop: `1px solid ${JBJ_GOLD}`,
-        color: JBJ_INK,
+        background: t.bg,
+        borderTop: `1px solid ${t.hairline}`,
+        color: t.fg,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "18px 32px 20px",
+        padding: "6px 32px",
         boxSizing: "border-box",
       }}
     >
-      {/* Row 1 — Company full legal name, single centered line */}
-      <div
-        style={{
-          textAlign: "center",
-          fontSize: 13,
-          fontWeight: 700,
-          letterSpacing: "0.22em",
-          textTransform: "uppercase",
-          color: JBJ_INK,
-          whiteSpace: "nowrap",
-          overflow: "visible",
-        }}
-      >
-        {JBJ_BRAND.legalName} {JBJ_BRAND.legalSuffix}
-      </div>
-
-      {/* Hairline gold separator */}
-      <div
-        aria-hidden
-        style={{
-          height: 1,
-          background: JBJ_GOLD,
-          opacity: 0.45,
-          margin: "10px 0 12px",
-        }}
-      />
-
-      {/* Row 2 — Office · Phone · Email + Website redistributed full width */}
       <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
         <tbody>
           <tr>
-            <td
-              style={{
-                verticalAlign: "top",
-                width: "44%",
-                fontSize: 10.5,
-                lineHeight: 1.55,
-                color: JBJ_INK,
-                opacity: 0.88,
-                paddingRight: 14,
-              }}
-            >
-              <div style={{ fontSize: 9.5, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65, marginBottom: 2 }}>Office</div>
+            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 10, lineHeight: 1.5, color: t.fg, opacity: 0.92, paddingRight: 14 }}>
               {JBJ_BRAND.address}
             </td>
-            <td
-              style={{
-                verticalAlign: "top",
-                width: "22%",
-                fontSize: 11,
-                color: JBJ_INK,
-                textAlign: "center",
-                paddingLeft: 8,
-                paddingRight: 8,
-              }}
-            >
-              <div style={{ fontSize: 9.5, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65, marginBottom: 2 }}>Phone</div>
-              <div style={{ fontWeight: 700 }}>{JBJ_BRAND.phone}</div>
+            <td style={{ verticalAlign: "middle", width: "22%", fontSize: 11, color: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700 }}>
+              {JBJ_BRAND.phone}
             </td>
-            <td
-              style={{
-                verticalAlign: "top",
-                width: "34%",
-                fontSize: 11,
-                color: JBJ_INK,
-                textAlign: "right",
-                paddingLeft: 14,
-              }}
-            >
-              <div style={{ fontSize: 9.5, letterSpacing: "0.18em", textTransform: "uppercase", opacity: 0.65, marginBottom: 2 }}>Contact</div>
-              <a
-                href={`mailto:${JBJ_BRAND.email}`}
-                style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 700 }}
-              >
+            <td style={{ verticalAlign: "middle", width: "34%", fontSize: 10, color: t.fg, textAlign: "right", paddingLeft: 14 }}>
+              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, textDecoration: "none", fontWeight: 700 }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
-              <span style={{ color: JBJ_INK, opacity: 0.4, margin: "0 6px" }}>·</span>
-              <a
-                href={`https://${JBJ_BRAND.website}`}
-                style={{ color: JBJ_GOLD, textDecoration: "none", fontWeight: 700, letterSpacing: "0.04em" }}
-              >
+              <span style={{ color: t.fg, opacity: 0.5, margin: "0 6px" }}>·</span>
+              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, textDecoration: "none", fontWeight: 700, letterSpacing: "0.04em" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
-              <div style={{ fontSize: 9.5, color: JBJ_INK, opacity: 0.6, marginTop: 3 }}>
-                Trade Licence {JBJ_BRAND.tradeLicense}
-              </div>
             </td>
           </tr>
         </tbody>
