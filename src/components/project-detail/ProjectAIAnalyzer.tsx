@@ -475,15 +475,21 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-gradient-to-br from-blue-50 via-white to-indigo-50/60 rounded-xl p-5 text-center border border-blue-200/80 shadow-[0_4px_20px_rgba(184,149,85,0.15)]">
-                          <div className="text-4xl font-extrabold bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(184,149,85,0.3)]">{rentalYield}%</div>
-                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
+                        <div
+                          className="rounded-xl p-5 text-center shadow-sm"
+                          style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.35)" }}
+                        >
+                          <div className="text-4xl font-extrabold" style={{ color: "#B89555" }}>{rentalYield}%</div>
+                          <div className="text-[#1A1A1A] text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 rounded-xl p-5 text-center border border-[color:var(--emerald-1)]/30/80 shadow-[0_4px_20px_rgba(16,185,129,0.12)]">
-                          <div className="text-4xl font-extrabold bg-gradient-to-br bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.35)]">{appreciation}%</div>
-                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
+                        <div
+                          className="rounded-xl p-5 text-center shadow-sm"
+                          style={{ background: "#F7F2EA", border: "1px solid rgba(6,78,59,0.30)" }}
+                        >
+                          <div className="text-4xl font-extrabold" style={{ color: "#064E3B" }}>{appreciation}%</div>
+                          <div className="text-[#1A1A1A] text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
                     </div>
