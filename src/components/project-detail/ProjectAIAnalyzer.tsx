@@ -399,7 +399,7 @@ export const ProjectAIAnalyzer = ({
                             formatter={(v: number) => [`AED ${v.toLocaleString()}/sqft`, ""]}
                             contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e5e7eb" }}
                           />
-                          <ReferenceLine x={DUBAI_AVG} stroke="#3B82F6" strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: "#3B82F6" }} />
+                          <ReferenceLine x={DUBAI_AVG} stroke="#B89555" strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: "#B89555" }} />
                           <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={28}>
                             {priceChartData.map((entry, i) => (
                               <Cell key={i} fill={entry.fill} />
