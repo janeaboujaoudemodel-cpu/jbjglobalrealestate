@@ -229,7 +229,7 @@ const Index = () => {
           MERGED HERO: Video Background + Gateway Tagline + CTA Pills
           Single fullscreen section — no separate IntroHeroSection
          ═══════════════════════════════════════════════════════════ */}
-      <div data-surface="dark" data-hero-dark className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div data-surface="dark" data-hero-dark className="jj-hero-fullscreen jj-home-hero relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Video Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
           {/* Branded fallback — renders instantly, unmounts after video loads */}
@@ -262,18 +262,18 @@ const Index = () => {
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
           {/* Lighter overlay: video visibility prioritized, headline still legible via its own text-shadow */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/45 z-[3]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-[3]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/45 z-[3] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-[3] pointer-events-none" />
         </div>
         
         {/* MERGED HERO CONTENT — tagline + CTAs + pillars */}
         <motion.div 
-          className="jj-content-track relative z-10 w-full flex flex-col items-center justify-center text-center"
+          className="jj-content-track jj-home-hero-content relative z-10 w-full flex flex-col items-center justify-center text-center"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-5xl mx-auto text-center pt-[max(18vh,160px)] sm:pt-[24vh] md:pt-[32vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-4 md:space-y-5">
+          <div className="jj-home-hero-stack w-full max-w-5xl mx-auto text-center pt-[max(18vh,160px)] sm:pt-[24vh] md:pt-[32vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-4 md:space-y-5">
             {/* Eyebrow tagline removed per owner directive — keep hero copy minimal */}
 
             {/* Headline — exact copy from reference photo */}
