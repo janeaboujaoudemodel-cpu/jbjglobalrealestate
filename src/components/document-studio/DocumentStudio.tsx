@@ -2455,9 +2455,9 @@ function StudioShell({
                   <div className="flex flex-col items-center gap-4" style={{ width: PAGE_W * effectiveScale, flexShrink: 0 }}>
                     <div ref={pageRef} className="flex flex-col gap-7" data-document-pages="true">
                       <div aria-hidden className="fixed left-[-10000px] top-0 pointer-events-none opacity-0" style={{ width: PAGE_W }}>
-                        <div ref={headerRef}><LockedLetterhead /></div>
+                        <div ref={headerRef}><LockedLetterhead theme={chromeTheme} /></div>
                         <div ref={bodyRef} className="prose prose-sm max-w-none text-[#1A1A1A]" style={{ width: bodyWidth, fontFamily: "Inter, system-ui, sans-serif", lineHeight: 1.7, fontSize: 14 }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(bodyHtml || "") }} />
-                        <div ref={footerRef}><LockedFooter /></div>
+                        <div ref={footerRef}><LockedFooter theme={chromeTheme} /></div>
                       </div>
 
                       {Array.from({ length: pageCount }).map((_, pageIndex) => {
@@ -2514,7 +2514,7 @@ function StudioShell({
                               {/* Header — only on page 1, sits directly under the safe band */}
                               {isFirst && !noChrome && (
                                 <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 0 }}>
-                                  <LockedLetterhead />
+                                  <LockedLetterhead theme={chromeTheme} />
                                 </div>
                               )}
 
@@ -2625,7 +2625,7 @@ function StudioShell({
                               {/* Footer — ONLY on the last page, absolute flush-bottom, edge-to-edge */}
                               {isLast && !noChrome && (
                                 <div style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
-                                  <LockedFooter />
+                                  <LockedFooter theme={chromeTheme} />
                                 </div>
                               )}
                             </div>
