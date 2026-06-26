@@ -28,6 +28,7 @@ interface Props {
   aiInstructions: string;
   onApply: (nextBody: string) => void;
   language?: string;
+  onClose?: () => void;
 }
 
 export const LANGUAGES: Array<{ code: string; label: string; bcp47: string }> = [
@@ -44,7 +45,7 @@ export const LANGUAGES: Array<{ code: string; label: string; bcp47: string }> = 
   { code: "Chinese",    label: "中文",        bcp47: "zh-CN" },
 ];
 
-export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, language: languageProp }: Props) {
+export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, language: languageProp, onClose }: Props) {
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
@@ -211,13 +212,23 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
   };
 
   return (
-    <div data-no-contrast-guard className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden">
+    <div data-no-contrast-guard className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden shadow-sm">
       <div className="px-4 py-3 border-b border-[#B89555]/45 flex items-center gap-2 bg-[#F7F2EA]">
-        <Sparkles className="w-4 h-4" style={{ color: "#064E3B" }} />
-        <span className="text-sm font-semibold" style={{ color: "#1A1A1A" }}>Live Document Editor</span>
-        <span className="ml-auto text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: "#1A1A1A" }}>
+        <Sparkles className="w-4 h-4 shrink-0" style={{ color: "#064E3B" }} />
+        <span className="text-sm font-semibold leading-tight min-w-0" style={{ color: "#1A1A1A" }}>AI Document Assistant</span>
+        <span className="ml-auto text-[10px] uppercase tracking-[0.14em] font-semibold shrink-0" style={{ color: "#1A1A1A" }}>
           {language}
         </span>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close AI Assistant"
+            className="h-9 w-9 rounded-md border border-[#B89555]/45 bg-[#FDFBF7] text-[#1A1A1A] inline-flex items-center justify-center hover:bg-[#EFE6D6] shrink-0"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
 
@@ -269,7 +280,7 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
             if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
           }}
         />
-        <div className="flex items-center gap-1.5">
+        <div className="grid grid-cols-2 gap-2">
           <input
             ref={fileRef}
             type="file"
@@ -278,8 +289,9 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
             onChange={onFilesSelected}
             className="hidden"
           />
-          <Button type="button" variant="outline" size="sm" onClick={onPickFiles} title="Attach files">
-            <Paperclip className="w-4 h-4" />
+          <Button type="button" variant="outline" size="sm" onClick={onPickFiles} title="Attach files" className="h-10 px-3 w-full justify-center">
+            <Paperclip className="w-4 h-4 mr-2" />
+            Attach Files
           </Button>
           <Button
             type="button"
@@ -287,13 +299,15 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
             size="sm"
             onClick={listening ? stopMic : startMic}
             title={listening ? "Stop dictation" : "Start dictation"}
+            className="h-10 px-3 w-full justify-center"
           >
-            {listening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            {listening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+            {listening ? "Stop" : "Dictate"}
           </Button>
           <Button
             onClick={send}
             disabled={busy || (!input.trim() && attachments.length === 0)}
-            className="flex-1"
+            className="h-10 px-3 col-span-2 w-full justify-center"
             size="sm"
           >
             <Send className="w-4 h-4 mr-2" /> Apply with AI
