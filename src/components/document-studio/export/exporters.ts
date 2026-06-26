@@ -78,10 +78,26 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
     borderRadius: el.style.borderRadius,
   };
   const hidden: { node: HTMLElement; prevDisplay: string }[] = [];
+  const hideNode = (node: HTMLElement) => {
+    if (hidden.some((entry) => entry.node === node)) return;
+    hidden.push({ node, prevDisplay: node.style.display });
+    node.style.display = "none";
+  };
   el.querySelectorAll<HTMLElement>('[aria-label="Remove field"],[data-drag-guide="true"]').forEach((n) => {
-    hidden.push({ node: n, prevDisplay: n.style.display });
-    n.style.display = "none";
+    hideNode(n);
   });
+  el.querySelectorAll<HTMLElement>("[data-removable-field]").forEach((row) => {
+    const valueCell = row.querySelector<HTMLElement>("[data-field-value-cell]");
+    const hasValue = (valueCell?.textContent || "").replace(/\u00a0/g, " ").trim().length > 0;
+    if (!hasValue) hideNode(row);
+  });
+  el.querySelectorAll<HTMLTableElement>("table").forEach((table) => {
+    const visibleRows = Array.from(table.querySelectorAll<HTMLElement>("tbody tr")).filter((row) => row.style.display !== "none");
+    if (visibleRows.length === 0 && table.querySelector("tbody")) hideNode(table);
+  });
+  if (!el.querySelector('[data-pdf-section="commission"]:not([style*="display: none"])')) {
+    el.querySelectorAll<HTMLElement>('[data-pdf-section="commission-note"]').forEach(hideNode);
+  }
 
   el.style.transform = "none";
   el.style.transformOrigin = "top left";
