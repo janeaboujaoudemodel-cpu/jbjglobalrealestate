@@ -35,19 +35,19 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         background: t.bg,
         borderBottom: `1px solid ${t.hairline}`,
         fontFamily: "Inter, system-ui, sans-serif",
-        // Equal top/bottom padding so the monogram and wordmark are vertically centered.
-        padding: "10px 22px",
+        // Header band runs from page top to the gold divider; content is centered in that full height.
+        padding: "0 22px",
         boxSizing: "border-box",
       }}
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "148px minmax(0,1fr)", columnGap: 12, minHeight: 138 }}
+      style={{ gridTemplateColumns: "148px minmax(0,1fr)", columnGap: 13, minHeight: 148, height: 148 }}
       >
         <div
           style={{
             width: 142,
-            height: 142,
+            height: 148,
             justifySelf: "center",
             alignSelf: "center",
             display: "flex",
@@ -55,23 +55,19 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             justifyContent: "center",
           }}
         >
-          <div
+          <img
+            src={jbjMonogramSrc}
+            alt="JBJ"
             aria-label="JBJ"
             role="img"
             style={{
-              width: 132,
-              height: 132,
-              position: "relative",
-              background: t.jColor,
-              WebkitMaskImage: `url(${jbjMonogramSrc})`,
-              maskImage: `url(${jbjMonogramSrc})`,
-              WebkitMaskRepeat: "no-repeat",
-              maskRepeat: "no-repeat",
-              WebkitMaskPosition: "center",
-              maskPosition: "center",
-              WebkitMaskSize: "contain",
-              maskSize: "contain",
-              filter: `drop-shadow(.7px 0 0 ${t.jColor}) drop-shadow(-.7px 0 0 ${t.jColor}) drop-shadow(0 1.4px 1.4px rgba(60,40,10,.2))`,
+              width: 126,
+              height: 126,
+              objectFit: "contain",
+              display: "block",
+              filter: theme === "emerald"
+                ? "brightness(0) invert(1) drop-shadow(0 1px 1px rgba(0,0,0,.18))"
+                : "saturate(1.12) contrast(1.06) drop-shadow(0 1px 0 rgba(255,255,255,.82)) drop-shadow(0 1.4px 1.4px rgba(72,48,15,.18))",
             }}
           />
         </div>
@@ -82,9 +78,9 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            height: 142,
+            height: 148,
             paddingLeft: 0,
-            paddingRight: 36,
+            paddingRight: 30,
             lineHeight: 1,
             overflow: "visible",
           }}
@@ -97,10 +93,10 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
               fontSize: 25.5,
               fontWeight: 900,
               color: t.fg,
-              letterSpacing: "0.085em",
+              letterSpacing: "0.104em",
               lineHeight: 1,
               whiteSpace: "nowrap",
-              transform: "scaleX(.99)",
+              transform: "scaleX(.985)",
               transformOrigin: "left center",
             }}
           >
@@ -136,15 +132,15 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         borderTop: `1px solid ${t.hairline}`,
         color: t.fg,
         fontFamily: "Inter, system-ui, sans-serif",
-        padding: "12px 28px",
+        padding: "0 28px",
         boxSizing: "border-box",
-        minHeight: 46,
+        minHeight: 58,
       }}
     >
-      <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+      <table style={{ width: "100%", height: 58, borderCollapse: "collapse", tableLayout: "fixed" }}>
         <tbody>
           <tr>
-            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg, paddingRight: 14 }}>
+            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg, padding: "0 14px 0 0" }}>
               {JBJ_BRAND.address}
             </td>
             <td style={{ verticalAlign: "middle", width: "22%", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700, lineHeight: 1.35 }}>
@@ -152,7 +148,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
                 <div key={p} style={{ whiteSpace: "nowrap" }}>{p}</div>
               ))}
             </td>
-            <td style={{ verticalAlign: "middle", width: "34%", fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", paddingLeft: 14 }}>
+            <td style={{ verticalAlign: "middle", width: "34%", fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", padding: "0 0 0 14px" }}>
               <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700 }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>

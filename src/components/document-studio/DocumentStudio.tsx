@@ -81,7 +81,7 @@ interface Props {
 
 type Step = 1 | 2 | 3;
 const OWNER_TEST_EMAIL = "infoo.jane@gmail.com";
-const DOCUSIGN_TOP_RESERVE = 42;
+const DOCUSIGN_TOP_RESERVE = 0;
 const PAGE_SIGNATURE_RESERVE = 132;
 const escapeSignatureHtml = (value?: string) =>
   (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
@@ -109,6 +109,9 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
       return {
         letterDate: "2026-06-20",
         recipientName: "[Employee Name]",
+        homeAddress: "[Employee Address]",
+        recipientEmail: "[Employee Email]",
+        recipientPhone: "[Employee Phone / WhatsApp]",
         jobTitle: "[Position]",
         startDate: "2026-06-20",
         probation: "6 months",
@@ -163,6 +166,31 @@ const restoreOfferCommissionRows = (templateId?: string, rows?: CommissionRow[])
 };
 
 const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
+
+const isMeaningfulDocumentValue = (value?: any): value is string => {
+  const text = String(value || "").trim();
+  return !!text && !/^\[[^\]]+\]$/.test(text);
+};
+
+const pickMeaningful = (...values: any[]): string =>
+  values.map((v) => String(v || "").trim()).find((v) => isMeaningfulDocumentValue(v)) || "";
+
+const normalizeJobOfferIdentityFields = (raw: Record<string, string> = {}, shared: Record<string, string> = {}) => {
+  const base = getTemplateDefaultFields("job_offer");
+  const next = { ...base, ...shared, ...raw };
+  const from = (keys: string[]) => pickMeaningful(...keys.map((k) => raw[k]), ...keys.map((k) => shared[k]), ...keys.map((k) => next[k]));
+  const name = from(["recipientName", "employeeName", "employee_name", "fullName", "full_name", "candidateName", "client_name", "guest_name", "name"]);
+  const address = from(["homeAddress", "employeeAddress", "employee_address", "address", "home_address", "residentialAddress", "residential_address"]);
+  const email = from(["recipientEmail", "employeeEmail", "employee_email", "email", "emailAddress", "email_address"]);
+  const phone = from(["recipientPhone", "employeePhone", "employee_phone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"]);
+  const title = from(["jobTitle", "position", "employeeTitle", "employee_title", "title"]);
+  if (name) next.recipientName = name;
+  if (address) next.homeAddress = address;
+  if (email) next.recipientEmail = email;
+  if (phone) next.recipientPhone = phone;
+  if (title) next.jobTitle = title;
+  return next;
+};
 
 function cleanIdentityNotes(value?: string) {
   if (!value) return value;
@@ -304,14 +332,18 @@ const cleanDocumentFieldRows = (html: string): string => {
 
   tpl.content.querySelectorAll<HTMLElement>("[data-removable-field]").forEach((row) => {
     const valueCell = row.querySelector<HTMLElement>("[data-field-value-cell]");
-    const hasValue = (valueCell?.textContent || "").replace(/\u00a0/g, " ").trim().length > 0;
+    const probe = valueCell || row;
+    const hasValue = (probe.textContent || "")
+      .replace(/×/g, "")
+      .replace(/\u00a0/g, " ")
+      .trim().length > 0;
     if (!hasValue) row.remove();
   });
 
   tpl.content.querySelectorAll<HTMLTableElement>("table").forEach((table) => {
     if (table.querySelectorAll("tbody tr").length === 0) table.remove();
   });
-  if (!tpl.content.querySelector('[data-pdf-section="commission"]')) {
+  if (!tpl.content.querySelector('[data-pdf-section="commission"],[data-pdf-section="comp-commission"]')) {
     tpl.content.querySelectorAll('[data-pdf-section="commission-note"]').forEach((el) => el.remove());
   }
 
@@ -430,7 +462,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 4;
+  const DOCUMENT_FIX_VERSION = 7;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -556,10 +588,11 @@ function StudioShell({
     } catch { return {}; }
   };
   const [fields, setFields] = useState<Record<string, string>>(() => {
-    const base = getTemplateDefaultFields(initialId);
+    const baseTemplateId = snap?.templateId || initialId;
+    const base = getTemplateDefaultFields(baseTemplateId);
     const shared = readSharedIdentity();
-    const merged = { ...base, ...shared };
-    return snap?.fields ? { ...merged, ...snap.fields } : merged;
+    const merged = { ...base, ...shared, ...(snap?.fields || {}) };
+    return baseTemplateId === "job_offer" ? normalizeJobOfferIdentityFields(snap?.fields || {}, shared) : merged;
   });
   // Mirror identity fields to the shared store whenever they change.
   useEffect(() => {
@@ -1188,7 +1221,7 @@ function StudioShell({
   // Stamp is stripped of any white background so it overlays cleanly.
   useEffect(() => {
     (async () => {
-      let stampUrl = defaultStamp?.signedUrl;
+      let stampUrl = defaultStamp?.signedUrl || jbjCompanyStampSrc;
       if (stampUrl) {
         try {
           // Fetch → dataURL → strip white → use stripped version
@@ -1208,10 +1241,8 @@ function StudioShell({
         if (!next.signature && defaultSignature?.signedUrl) {
           next.signature = { url: defaultSignature.signedUrl, width: 200 };
         }
-        if (!next.stamp) {
-          const url = stampUrl || jbjCompanyStampSrc;
-          if (url) next.stamp = { url, width: 180, rotation: -8 };
-        }
+        if (!next.stamp && stampUrl) next.stamp = { url: stampUrl, width: 142, rotation: 0 };
+        else if (next.stamp) next.stamp = { ...next.stamp, width: Math.min(next.stamp.width || 142, 160), rotation: 0 };
         return next;
       });
     })();
@@ -1228,7 +1259,7 @@ function StudioShell({
     if (asset.kind === "signature") {
       setMarks((m) => ({ ...m, signature: { url: asset.signedUrl!, width: m.signature?.width || 200 } }));
     } else {
-      setMarks((m) => ({ ...m, stamp: { url: asset.signedUrl!, width: m.stamp?.width || 130, rotation: m.stamp?.rotation ?? -8 } }));
+      setMarks((m) => ({ ...m, stamp: { url: asset.signedUrl!, width: m.stamp?.width || 142, rotation: 0 } }));
     }
     toast.success(`${asset.kind === "signature" ? "Signature" : "Stamp"} placed`);
   };
@@ -1296,9 +1327,10 @@ function StudioShell({
     try {
       const forceTemplateResync = s.templateId === "job_offer" && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
       if (s.fields && typeof s.fields === "object") {
+        const shared = readSharedIdentity();
         setFields(forceTemplateResync
-          ? { ...s.fields, ...getTemplateDefaultFields("job_offer") }
-          : s.fields);
+          ? normalizeJobOfferIdentityFields(s.fields, shared)
+          : (s.templateId === "job_offer" ? normalizeJobOfferIdentityFields(s.fields, shared) : s.fields));
       }
       if (forceTemplateResync) {
         userEditedRef.current = false;
@@ -1326,14 +1358,26 @@ function StudioShell({
         if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
       }
       if (Array.isArray(s.extraSignatories)) setExtraSignatories(s.extraSignatories);
-      if (Array.isArray(s.hiddenFieldKeys)) setHiddenFieldKeys(new Set(s.hiddenFieldKeys));
+      if (forceTemplateResync && s.templateId === "job_offer") setHiddenFieldKeys(new Set());
+      else if (Array.isArray(s.hiddenFieldKeys)) setHiddenFieldKeys(new Set(s.hiddenFieldKeys));
       if (s.fieldLabelOverrides && typeof s.fieldLabelOverrides === "object") setFieldLabelOverrides(s.fieldLabelOverrides);
-      if (Array.isArray(s.hiddenSections)) setHiddenSections(new Set(s.hiddenSections));
+      if (forceTemplateResync && s.templateId === "job_offer") setHiddenSections(new Set());
+      else if (Array.isArray(s.hiddenSections)) setHiddenSections(new Set(s.hiddenSections));
       if (Array.isArray(s.customFields)) setCustomFields(s.customFields);
       if (Array.isArray(s.commissionRows)) setCommissionRows(restoreOfferCommissionRows(s.templateId, s.commissionRows));
       if (typeof s.docLanguage === "string") setDocLanguage(s.docLanguage);
       if (s.chromeTheme === "champagne" || s.chromeTheme === "emerald") setChromeTheme(s.chromeTheme);
-      if (s.marks && typeof s.marks === "object") setMarks((m) => ({ ...m, ...s.marks }));
+      if (s.marks && typeof s.marks === "object") {
+        setMarks((m) => ({
+          ...m,
+          ...s.marks,
+          stamp: forceTemplateResync && s.templateId === "job_offer"
+            ? { url: jbjCompanyStampSrc, width: 142, rotation: 0 }
+            : (s.marks?.stamp ? { ...s.marks.stamp, width: Math.min(s.marks.stamp.width || 142, 160), rotation: 0 } : m.stamp),
+          stampXY: forceTemplateResync && s.templateId === "job_offer" ? undefined : s.marks.stampXY,
+          stampLocked: forceTemplateResync && s.templateId === "job_offer" ? false : s.marks.stampLocked,
+        }));
+      }
       if (typeof s.manualPages === "number") setManualPages(Math.max(0, s.manualPages));
       if (typeof s.emailTo === "string") setEmailTo(s.emailTo);
       toast.success("Draft restored", {
@@ -1894,6 +1938,13 @@ function StudioShell({
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body,
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; }
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
+        [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(table, thead, tbody, tr, th, td) {
+          background-clip: padding-box !important;
+        }
+        [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body table {
+          background:#FDFBF7 !important;
+          isolation:isolate !important;
+        }
         [data-document-studio-overlay] :is(.studio-topbar, [data-document-studio-toolbar], .studio-action-row) [data-surface="champagne"][class*="rounded"],
         [data-document-studio-overlay] :is(.studio-topbar, [data-document-studio-toolbar], .studio-action-row) [data-jbj-button] {
           container-type: normal !important;
@@ -3249,30 +3300,13 @@ function StudioShell({
                                 background: "#FDFBF7",
                               }}
                             >
-                              {/* DocuSign envelope-ID safe band — ONLY on
-                                  page 1 (under the letterhead chrome). On
-                                  inner pages we removed the colored stripe
-                                  entirely so the paper reads as one solid
-                                  premium tone, top-to-bottom. */}
-                              {!noChrome && isFirst && (
-                                <div
-                                  aria-hidden
-                                  style={{
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    height: DOCUSIGN_TOP_RESERVE,
-                                    background: "#F7F2EA",
-                                    zIndex: 1,
-                                  }}
-                                />
-                              )}
+                              {/* Header chrome starts at the page top; no separate top champagne strip. */}
                               {/* Engraved JBJ monogram watermark — centered on
                                   every page, champagne-gold tint, fully visible
                                   (no cropping), tight letter spacing. Painted
-                                  via CSS mask so the color matches the letter-
-                                  head accent exactly. */}
+                                  via CSS mask. It is behind all body text and
+                                  tables remain opaque so it never bleeds through
+                                  grid/table content. */}
                               {!noChrome && (
                                 <div
                                   aria-hidden
@@ -3283,7 +3317,7 @@ function StudioShell({
                                     alignItems: "center",
                                     justifyContent: "center",
                                     pointerEvents: "none",
-                                    zIndex: 4,
+                                    zIndex: 0,
                                   }}
                                 >
                                   {/* Engraved 3D effect — stack three mask
@@ -3295,8 +3329,8 @@ function StudioShell({
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 218,
-                                      height: 218,
+                                      width: 190,
+                                      height: 190,
                                       transform: "scaleX(0.9)",
                                       transformOrigin: "center",
                                     }}
@@ -3306,9 +3340,9 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                        transform: "translate(1.8px, 2.4px)",
-                                        background: "#3A2A12",
-                                         opacity: 0.28,
+                                        transform: "translate(1.2px, 1.6px)",
+                                        background: "#6F5526",
+                                        opacity: 0.025,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3325,9 +3359,9 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                        transform: "translate(-1.2px, -1.6px)",
+                                        transform: "translate(-1px, -1.2px)",
                                         background: "#FFFFFF",
-                                         opacity: 0.7,
+                                        opacity: 0.22,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3344,8 +3378,8 @@ function StudioShell({
                                       style={{
                                         position: "absolute",
                                         inset: 0,
-                                         background: "#C8A96A",
-                                         opacity: 0.32,
+                                        background: "#B89555",
+                                        opacity: 0.045,
                                         WebkitMaskImage: `url(${jbjMonogramSrc})`,
                                         maskImage: `url(${jbjMonogramSrc})`,
                                         WebkitMaskRepeat: "no-repeat",
@@ -3364,9 +3398,9 @@ function StudioShell({
                                   per-page signature date, which sits next to the signature below. */}
                               {/* Generated-date stamp removed per spec — keep template header clean */}
 
-                              {/* Header — only on page 1, sits directly under the safe band */}
+                              {/* Header — only on page 1, merged with the top paper edge */}
                               {isFirst && !noChrome && (
-                                <div style={{ paddingTop: DOCUSIGN_TOP_RESERVE, position: "relative", zIndex: 6 }}>
+                                <div style={{ position: "relative", zIndex: 6 }}>
                                   <LockedLetterhead theme={chromeTheme} />
                                 </div>
                               )}
@@ -3498,23 +3532,22 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 320}
-                                    y={marks.stampXY?.y ?? 320}
+                                    x={marks.stampXY?.x ?? 168}
+                                    y={marks.stampXY?.y ?? Math.max(660, Math.min(820, PAGE_H - (isLast ? chromeHeights.footer : 0) - 300))}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
                                     onResize={() => setMarks((m) => {
-                                      const widths = [160, 200, 240, 300];
-                                      const cur = m.stamp?.width ?? 200;
+                                      const widths = [128, 142, 160, 180];
+                                      const cur = m.stamp?.width ?? 142;
                                       const next = widths[(widths.indexOf(cur) + 1 + widths.length) % widths.length] || widths[0];
-                                      return m.stamp ? { ...m, stamp: { ...m.stamp, width: next } } : m;
+                                      return m.stamp ? { ...m, stamp: { ...m.stamp, width: next, rotation: 0 } } : m;
                                     })}
                                     ariaLabel="Stamp"
                                     locked={!!marks.stampLocked}
                                     onToggleLock={() => setMarks((m) => ({ ...m, stampLocked: !m.stampLocked }))}
-                                    hint={marks.stampLocked ? "Locked · click 🔒 to unlock" : "Drag to move · click 🔒 to lock"}
                                   >
-                                    <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 220, transform: `rotate(${marks.stamp.rotation ?? -8}deg)`, background: "transparent" }} className="block pointer-events-none" />
+                                    <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: "rotate(0deg)", background: "transparent", mixBlendMode: "multiply" }} className="block pointer-events-none" />
                                   </DraggableMark>
                                 )}
                               </div>

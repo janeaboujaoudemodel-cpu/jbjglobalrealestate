@@ -42,8 +42,11 @@ export default function DraggableMark({
       const dyMoved = Math.abs(e.clientY - drag.sy);
       if (!drag.moved && (dxMoved < CLICK_THRESHOLD_PX && dyMoved < CLICK_THRESHOLD_PX)) return;
       if (!drag.moved) setDrag({ ...drag, moved: true });
-      const nx = Math.max(0, Math.min(r.width  - 20, e.clientX - r.left - drag.dx));
-      const ny = Math.max(0, Math.min(r.height - 20, e.clientY - r.top  - drag.dy));
+      const rawX = e.clientX - r.left - drag.dx;
+      const rawY = e.clientY - r.top - drag.dy;
+      const axisLocked = e.shiftKey;
+      const nx = Math.max(0, Math.min(r.width - 20, axisLocked && dxMoved < dyMoved ? x : rawX));
+      const ny = Math.max(0, Math.min(r.height - 20, axisLocked && dxMoved >= dyMoved ? y : rawY));
       onChange(nx, ny);
     };
     const onUp = (e: PointerEvent) => {
@@ -59,7 +62,7 @@ export default function DraggableMark({
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
     };
-  }, [drag, onChange, onClick]);
+  }, [drag, onChange, onClick, x, y]);
 
   return (
     <div
@@ -81,29 +84,10 @@ export default function DraggableMark({
         <>
           <div data-drag-guide="true" style={{ position: "absolute", left: 0, top: -9999, bottom: -9999, width: 1, background: "#B89555", opacity: 0.55, pointerEvents: "none", zIndex: 9999 }} />
           <div data-drag-guide="true" style={{ position: "absolute", top: 0, left: -9999, right: -9999, height: 1, background: "#B89555", opacity: 0.55, pointerEvents: "none", zIndex: 9999 }} />
-          <div data-drag-guide="true" style={{ position: "absolute", top: -22, left: 0, padding: "2px 6px", borderRadius: 4, background: "#1A1A1A", color: "#FDFBF7", fontSize: 10, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap", pointerEvents: "none", zIndex: 10000 }}>
-            x {Math.round(x)} · y {Math.round(y)}
-          </div>
         </>
       )}
 
-      {/* Hover affordance — hint chip + action bar (Change / Resize / Remove) */}
-      {!drag?.moved && (hint || onClick || onResize) && (
-        <div
-          className="absolute -top-7 left-0 hidden group-hover:flex items-center gap-1 pointer-events-none"
-          style={{ zIndex: 9998 }}
-        >
-          {hint && (
-            <span
-              className="px-1.5 py-0.5 rounded text-[10px] tracking-wide pointer-events-none"
-              style={{ background: "#1A1A1A", color: "#FDFBF7", whiteSpace: "nowrap" }}
-            >
-              {hint}
-            </span>
-          )}
-        </div>
-      )}
-
+      {/* Hover affordance — action circles only; no dark label rectangle. */}
       <div
         className="absolute -top-2 -right-2 hidden group-hover:flex items-center gap-1"
         style={{ zIndex: 9999 }}
@@ -129,11 +113,12 @@ export default function DraggableMark({
             onClick={(e) => { e.stopPropagation(); onToggleLock(); }}
             title={locked ? "Unlock to drag" : "Lock position"}
             aria-label={locked ? "Unlock mark" : "Lock mark"}
-            className="h-5 w-5 rounded-full bg-white border border-[#B89555]/40 flex items-center justify-center shadow-sm hover:bg-[#F7F2EA]"
+            className="h-6 w-6 rounded-full flex items-center justify-center shadow-sm hover:brightness-95"
+            style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,.45)" }}
           >
             {locked
-              ? <Lock className="w-3 h-3 text-[#064E3B]" />
-              : <Unlock className="w-3 h-3 text-[#1A1A1A]" />}
+              ? <Lock className="w-3 h-3 text-[#B89555]" />
+              : <Unlock className="w-3 h-3 text-[#B89555]" />}
           </button>
         )}
         {onResize && (
