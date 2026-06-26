@@ -33,7 +33,7 @@ import { getCatalogByAudience, type DocumentTemplate } from "@/config/documentCa
 const DocumentStudio = lazy(() => import("@/components/document-studio/DocumentStudio"));
 
 type Cat = "all" | "leasing" | "selling";
-type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer";
+type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer" | "finance";
 type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
@@ -60,18 +60,20 @@ const FEATURED_STUDIO_TEMPLATE_IDS = [
   "developer_commission_invoice",
   "developer_payment_request",
   "developer_closing_notice",
+  "commission_invoice",
   "ai_home_finder_report",
 ];
 
 const TEMPLATE_CATEGORIES: Array<{ key: TemplateCategoryKey; label: string; description: string; icon: typeof FileText; ids?: string[] }> = [
   { key: "all", label: "All Forms", description: "Full JBJ library", icon: FileText },
-  { key: "employees", label: "Employees", description: "Offer, contract, warning, termination, HR letters", icon: Briefcase, ids: ["job_offer", "employment_contract", "warning_letter", "termination_letter", "nda", "commission_agreement", "commission_invoice", "internship_agreement", "hr_letter", "partnership_referral", "custom_staff"] },
+  { key: "employees", label: "Employees", description: "Offer, contract, warning, termination, HR letters", icon: Briefcase, ids: ["job_offer", "employment_contract", "warning_letter", "termination_letter", "nda", "commission_agreement", "internship_agreement", "hr_letter", "partnership_referral", "custom_staff"] },
   { key: "client", label: "Client", description: "Client letters, proposals, NOC, reservations", icon: Crown, ids: ["ai_home_finder_report", "jbj_branded_proposal_letterhead", "custom_client", "mou", "property_reservation", "noc", "tenancy_addendum"] },
   { key: "forms", label: "Forms & Agreements", description: "RERA Forms A/B/F/I/U, A-to-A and agreements", icon: Stamp, ids: ["form_a", "form_b", "form_f", "form_i", "form_u", "broker_referral", "paa", "mou", "ejari_tenancy"] },
   { key: "leasing", label: "Leasing", description: "PAA, tenancy, holiday home and addenda", icon: FileSignature, ids: ["paa", "ejari_tenancy", "tenancy_addendum", "holiday_home_agreement"] },
   { key: "selling", label: "Selling", description: "Listing, buyer, MOU, cancellation and reservation", icon: Scale, ids: ["form_a", "form_b", "form_f", "form_i", "form_u", "broker_referral", "mou", "property_reservation"] },
   { key: "after_sale", label: "After-Sale", description: "Maintenance, interior, bills and quotations", icon: ReceiptText, ids: ["facility_management_agreement", "maintenance_request", "interior_design_quotation", "service_bill", "client_quotation"] },
   { key: "developer", label: "Developer", description: "Developer invoices, commission claims and closing notices", icon: Building2, ids: ["developer_commission_invoice", "developer_payment_request", "developer_closing_notice"] },
+  { key: "finance", label: "Finance", description: "Broker & developer invoices, bills, quotations, commission claims", icon: Banknote, ids: ["commission_invoice", "developer_commission_invoice", "developer_payment_request", "developer_closing_notice", "service_bill", "client_quotation", "interior_design_quotation"] },
 ];
 
 const templateFamilyLabel = (template: DocumentTemplate) => {
