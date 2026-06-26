@@ -156,10 +156,12 @@ export function AICommandPanel(props: AICommandPanelProps) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[linear-gradient(135deg,#092C24_0%,#041512_55%,#1A1A1A_100%)] px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white shadow-[0_18px_45px_rgba(0,0,0,0.35)] transition hover:scale-[1.02] hover:border-[#E4C675]"
+        data-surface="emerald"
+        className="jj-cta-emerald fixed bottom-6 right-6 z-40 inline-flex min-h-12 min-w-[176px] items-center justify-center gap-2 rounded-full px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] shadow-[0_18px_45px_rgba(0,0,0,0.35)] transition hover:scale-[1.02]"
         aria-label="Open AI commands"
       >
-        <Sparkles className="w-4 h-4 text-[#E4C675]" /> AI Assistant
+        <Sparkles className="w-4 h-4" />
+        <span>AI Assistant</span>
       </button>
     );
   }
