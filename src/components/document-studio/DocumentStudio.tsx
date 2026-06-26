@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 14;
+  const DOCUMENT_FIX_VERSION = 15;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -789,7 +789,7 @@ function StudioShell({
         // GLOBAL RULE: inner pages must have EQUAL top/bottom interior padding
         // (the DocuSign safe band + footer reserve are fixed/locked, applied
         // separately). NEXT_TOP is the interior top padding only.
-        const NEXT_TOP = 34;
+        const NEXT_TOP = 53;
         const BOTTOM_PAD = 50;
         // Tentative single-page cap: assume page 1 IS the last page so the
         // footer height is reserved. If everything fits here, the official
@@ -3243,7 +3243,7 @@ function StudioShell({
                 // GLOBAL: tighten the top of inner pages — the colored band
                 // above body on pages 2+ was removed, so content sits closer
                 // to the paper edge for a premium contract feel.
-                const NEXT_TOP = 34;
+                const NEXT_TOP = 53;
                 const STANDARD_BOTTOM_PAD = 50;
                 const LAST_BOTTOM_PAD = 58;
                 const bodyWidth = PAGE_W - BODY_PAD_X * 2;
@@ -3493,8 +3493,8 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 270}
-                                    y={marks.stampXY?.y ?? Math.max(810, PAGE_H - (isLast ? chromeHeights.footer : 0) - 160)}
+                                    x={marks.stampXY?.x ?? 235}
+                                    y={marks.stampXY?.y ?? Math.max(792, PAGE_H - (isLast ? chromeHeights.footer : 0) - 178)}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
