@@ -24,7 +24,8 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 import SupportTicketBox from "@/components/SupportTicketBox";
 import { IconTile } from "@/components/ui/icon-tile";
-import contactHeroVideo from "@/assets/videos/services-hero.mp4";
+import contactHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json";
+const contactHeroVideo = contactHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 
 const consultationSchema = z.object({

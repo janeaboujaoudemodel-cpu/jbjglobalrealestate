@@ -4,7 +4,8 @@ import {
   BarChart3, Calculator, PieChart
 } from 'lucide-react';
 import menuDubaiSkyline from '@/assets/menu-dubai-skyline.jpg';
-import dubaiInvestmentVideo from '@/assets/videos/dubai-investment-hero.mp4';
+import dubaiInvestmentVideoAsset from '@/assets/videos/dubai-investment-hero.mp4.asset.json';
+const dubaiInvestmentVideo = dubaiInvestmentVideoAsset.url;
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuInvestorHubProps {

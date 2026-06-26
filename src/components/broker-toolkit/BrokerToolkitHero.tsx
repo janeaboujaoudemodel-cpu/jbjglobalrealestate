@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
-import brokerHero from "@/assets/videos/broker-dashboard-hero.mp4";
+import brokerHeroAsset from "@/assets/videos/broker-dashboard-hero.mp4.asset.json";
+const brokerHero = brokerHeroAsset.url;
 import brokerHeroPoster from "@/assets/broker-hub-hero.jpg";
 
 export function BrokerToolkitHero() {

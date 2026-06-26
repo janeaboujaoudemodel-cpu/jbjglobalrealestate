@@ -1,7 +1,8 @@
 import React from 'react';
 import { ArrowRight, FileText, DollarSign, TrendingUp, ClipboardCheck } from 'lucide-react';
 import sellPropertyBg from '@/assets/services/sell-property-bg.jpg';
-import dubaiSellingVideo from '@/assets/videos/dubai-selling-hero.mp4';
+import dubaiSellingVideoAsset from '@/assets/videos/dubai-selling-hero.mp4.asset.json';
+const dubaiSellingVideo = dubaiSellingVideoAsset.url;
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuSellProps {

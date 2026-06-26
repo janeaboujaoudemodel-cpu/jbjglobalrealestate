@@ -18,7 +18,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
-import brokerResourcesHeroVideo from "@/assets/videos/broker-resources-hero.mp4";
+import brokerResourcesHeroVideoAsset from "@/assets/videos/broker-resources-hero.mp4.asset.json";
+const brokerResourcesHeroVideo = brokerResourcesHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 
 const fadeInUp = {

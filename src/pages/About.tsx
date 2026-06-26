@@ -13,7 +13,8 @@ import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import luxuryVilla2 from "@/assets/luxury-villa-2.jpeg";
-import aboutHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
+import aboutHeroVideoAsset from "@/assets/videos/dubai-landmarks-hero.mp4.asset.json";
+const aboutHeroVideo = aboutHeroVideoAsset.url;
 import { FounderPhotoEditOverlay } from "@/components/founder/FounderPhotoEditOverlay";
 import { useFounderPhoto } from "@/hooks/useFounderPhoto";
 const fadeInUp = {

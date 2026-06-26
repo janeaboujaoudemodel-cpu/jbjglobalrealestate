@@ -35,7 +35,8 @@ import {
 } from "@/components/ui/accordion";
 
 // Import hero video
-import buyingAdvisoryHeroVideo from "@/assets/videos/dubai-buying-hero.mp4";
+import buyingAdvisoryHeroVideoAsset from "@/assets/videos/dubai-buying-hero.mp4.asset.json";
+const buyingAdvisoryHeroVideo = buyingAdvisoryHeroVideoAsset.url;
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },

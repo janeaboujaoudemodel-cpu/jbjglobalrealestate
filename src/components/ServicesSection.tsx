@@ -1,7 +1,8 @@
 import { ChevronRight, Play, Volume2, VolumeX, Check, Sparkles } from "lucide-react";
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import servicesHeroVideo from "@/assets/videos/services-hero.mp4";
+import servicesHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json";
+const servicesHeroVideo = servicesHeroVideoAsset.url;
 import { CONTACT_INFO } from "@/constants/stats";
 
 const INQUIRY_FORM_URL = "https://jbj.ae/contact";

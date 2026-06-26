@@ -1,7 +1,8 @@
 import React from 'react';
 import { MapPin, Eye, BookOpen } from 'lucide-react';
 import menuDowntownSkyline from '@/assets/menu-downtown-dubai-skyline.jpg';
-import dubaiDowntownVideo from '@/assets/videos/why-dubai-downtown-burj-khalifa.mp4';
+import dubaiDowntownVideoAsset from '@/assets/videos/why-dubai-downtown-burj-khalifa.mp4.asset.json';
+const dubaiDowntownVideo = dubaiDowntownVideoAsset.url;
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
 import { useAreas } from '@/hooks/useAreas';
 

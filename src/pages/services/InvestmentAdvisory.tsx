@@ -24,7 +24,8 @@ import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { SEOHead } from "@/components/SEOHead";
 
 // Import hero video
-import investmentAdvisoryHeroVideo from "@/assets/videos/dubai-investment-hero.mp4";
+import investmentAdvisoryHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
+const investmentAdvisoryHeroVideo = investmentAdvisoryHeroVideoAsset.url;
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
