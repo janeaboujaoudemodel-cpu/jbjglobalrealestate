@@ -20,8 +20,8 @@ export type LetterheadTheme = "champagne" | "emerald";
 
 const tokens = (theme: LetterheadTheme) =>
   theme === "emerald"
-    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
-    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
+    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoColor: "#FFFFFF" }
+    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoColor: JBJ_GOLD };
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
 
@@ -42,12 +42,27 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
         className="grid items-center min-w-0"
         style={{ gridTemplateColumns: "132px minmax(0,1fr)", columnGap: 14, minHeight: 132 }}
       >
-        <img
-          src={jbjMonogramSrc}
-          alt="JBJ"
-          className="block object-contain"
-          style={{ width: 118, height: 118, background: "transparent", filter: t.monoFilter, margin: "auto", alignSelf: "center", justifySelf: "center" }}
+        <div
+          aria-label="JBJ"
+          role="img"
+          style={{
+            width: 118,
+            height: 118,
+            background: t.monoColor,
+            WebkitMaskImage: `url(${jbjMonogramSrc})`,
+            maskImage: `url(${jbjMonogramSrc})`,
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+            margin: "auto",
+            alignSelf: "center",
+            justifySelf: "center",
+          }}
         />
+
         <div className="min-w-0 text-left" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "flex-start", paddingRight: 0, lineHeight: 1, overflow: "visible" }}>
           <div
             className="font-bold"

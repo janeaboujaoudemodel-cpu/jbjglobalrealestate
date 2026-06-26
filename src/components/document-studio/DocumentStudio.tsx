@@ -398,30 +398,58 @@ function StudioShell({
 
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
+  const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
+  const parseSnap = (raw: string | null): any => {
+    if (!raw) return null;
+    try {
+      const j = JSON.parse(raw);
+      if (!j?.savedAt || (Date.now() - new Date(j.savedAt).getTime()) > 30 * 86400_000) return null;
+      return j;
+    } catch { return null; }
+  };
   const readSnapshot = (): any => {
     try {
-      const raw = localStorage.getItem(SESSION_KEY);
-      if (!raw) return null;
-      const j = JSON.parse(raw);
-      // Expire after 30 days.
-      if (!j?.savedAt || (Date.now() - new Date(j.savedAt).getTime()) > 30 * 86400_000) return null;
-      // If an old removed template (for example candidate_cv) was saved,
-      // ignore that snapshot so the template sidebar opens normally.
-      if (j.templateId && !isValidCatalogTemplate(j.templateId)) {
-        localStorage.removeItem(SESSION_KEY);
-        return null;
+      const j = parseSnap(localStorage.getItem(SESSION_KEY));
+      if (j) {
+        if (j.templateId && !isValidCatalogTemplate(j.templateId)) {
+          localStorage.removeItem(SESSION_KEY);
+          return null;
+        }
+        return j;
       }
-      return j;
+      return null;
+    } catch { return null; }
+  };
+  // Per-template fallback: if user previously filled "job_offer" inside another
+  // catalog (e.g. "all") and now opens it via the staff hub, still resume that
+  // draft. Looks up jbj:doc-studio:template:<tid> first, then any catalog key
+  // whose snapshot matches the requested templateId.
+  const readTemplateSnapshot = (tid: string): any => {
+    try {
+      const direct = parseSnap(localStorage.getItem(TEMPLATE_KEY(tid)));
+      if (direct && direct.templateId === tid) return direct;
+      let best: any = null;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || !k.startsWith("jbj:doc-studio:session:")) continue;
+        const cand = parseSnap(localStorage.getItem(k));
+        if (cand && cand.templateId === tid) {
+          if (!best || new Date(cand.savedAt) > new Date(best.savedAt)) best = cand;
+        }
+      }
+      return best;
     } catch { return null; }
   };
   // Opening a specific template from the hub must NEVER be hijacked by an
   // unrelated previous draft. It may resume only that exact template.
   const storedSnap = readSnapshot();
   const snap = initialId
-    ? (storedSnap?.templateId === initialId ? storedSnap : null)
+    ? (storedSnap?.templateId === initialId ? storedSnap : readTemplateSnapshot(initialId))
     : storedSnap;
+
+
 
   const [step, setStep] = useState<Step>(snap?.templateId ? (snap.step ?? 2) : (initialId ? 2 : 1));
   const [templateId, setTemplateId] = useState<string>(snap?.templateId || initialId);
@@ -1232,12 +1260,15 @@ function StudioShell({
       customFields, commissionRows, docLanguage,
       chromeTheme, marks, emailTo, manualPages,
     };
-    const handle = setTimeout(() => {
+    const writeAll = () => {
       try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
-    }, 400);
-    const flush = () => {
-      try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
+      if (payload.templateId) {
+        try { localStorage.setItem(TEMPLATE_KEY(payload.templateId), JSON.stringify(payload)); } catch {}
+      }
     };
+    const handle = setTimeout(writeAll, 400);
+    const flush = writeAll;
+
     const onVisibility = () => { if (document.visibilityState === "hidden") flush(); };
     window.addEventListener("beforeunload", flush);
     window.addEventListener("pagehide", flush);

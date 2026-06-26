@@ -73,8 +73,8 @@ export type JbjChromeTheme = "champagne" | "emerald";
 
 const themeTokens = (theme: JbjChromeTheme) =>
   theme === "emerald"
-    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
-    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
+    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoColor: "#FFFFFF" }
+    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoColor: JBJ_GOLD };
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
@@ -91,8 +91,9 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
     box-sizing:border-box;
   ">
     <div style="display:grid;grid-template-columns:132px minmax(0,1fr);align-items:center;gap:14px;min-height:132px;">
-      <img src="${monogramSrc}" alt="JBJ"
-        style="width:118px;height:118px;display:block;object-fit:contain;background:transparent;margin:auto;filter:${t.monoFilter};align-self:center;justify-self:center;" />
+      <div aria-label="JBJ" role="img"
+        style="width:118px;height:118px;background:${t.monoColor};-webkit-mask-image:url(${monogramSrc});mask-image:url(${monogramSrc});-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;margin:auto;align-self:center;justify-self:center;"></div>
+
       <div style="height:100%;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-right:0;overflow:visible;">
         <div style="display:block;width:100%;font-size:26px;font-weight:900;letter-spacing:-0.015em;color:${t.fg};white-space:nowrap;transform:scaleX(1.04);transform-origin:left center;">
           ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.03em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
