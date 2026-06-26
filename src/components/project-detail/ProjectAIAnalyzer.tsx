@@ -198,8 +198,8 @@ export const ProjectAIAnalyzer = ({
   const yoyChange = sections?.pricePerSqft ? extractYoY(sections.pricePerSqft) : null;
   const priceChartData = areaPriceSqft
     ? [
-        { name: areaName, value: areaPriceSqft, fill: "#10B981" },
-        { name: "Dubai Avg", value: DUBAI_AVG, fill: "#3B82F6" },
+        { name: areaName, value: areaPriceSqft, fill: "#064E3B" },
+        { name: "Dubai Avg", value: DUBAI_AVG, fill: "#B89555" },
       ]
     : null;
 
