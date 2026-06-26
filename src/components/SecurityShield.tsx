@@ -77,9 +77,27 @@ const SecurityShield = () => {
   const logViolation = useCallback(async (type: string) => {
     violationCountRef.current += 1;
     const fingerprint = getFingerprint();
-    
+
     console.warn(`[JBJ Security] Violation #${violationCountRef.current}: ${type}`);
-    
+
+    // Map granular client labels to the server's canonical allowlist.
+    const VIOLATION_MAP: Record<string, string> = {
+      context_menu: "right_click",
+      devtools_f12: "devtools_open",
+      devtools_ctrl_shift_i: "devtools_open",
+      devtools_console: "console_access",
+      devtools_element_picker: "devtools_open",
+      devtools_mac: "devtools_open",
+      devtools_opened: "devtools_open",
+      console_mac: "console_access",
+      view_source: "view_source",
+      view_source_mac: "view_source",
+      headless_browser: "automation_detected",
+      automation_detected: "automation_detected",
+      right_click: "right_click",
+    };
+    const canonicalType = VIOLATION_MAP[type] ?? "automation_detected";
+
     // Log to backend via function (best-effort). Skip in Lovable preview/dev.
     if (!isLovablePreviewOrDev()) {
       try {
@@ -87,7 +105,7 @@ const SecurityShield = () => {
           .invoke('log-security-event', {
             body: {
               event_type: 'security_violation',
-              violation_type: type,
+              violation_type: canonicalType,
               fingerprint,
               user_agent: navigator.userAgent,
               violation_count: violationCountRef.current,
@@ -98,6 +116,7 @@ const SecurityShield = () => {
         // Silent fail
       }
     }
+
     
     // IMPORTANT: Never block/overlay the public site.
     // We only log violations (best-effort) so visitors and crawlers can still access pages.
