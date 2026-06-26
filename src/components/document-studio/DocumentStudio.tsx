@@ -1504,6 +1504,10 @@ function StudioShell({
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
     setSyncedFields(getTemplateDefaultFields(id));
+    if (id === "job_offer") {
+      setOwnerDate("2026-06-26");
+      setApplicantDate("2026-06-26");
+    }
     setExtraSignatories([]);
     autoBodyRef.current = "";
     resumeStructuredSync();
