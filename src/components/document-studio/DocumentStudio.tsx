@@ -3031,6 +3031,17 @@ function StudioShell({
                                     }}
                                     contentEditable
                                     suppressContentEditableWarning
+                                    onInput={(e) => {
+                                      // Keep a live copy of direct page edits so
+                                      // export/save/send uses the contract exactly
+                                      // as typed, even before React's state commit
+                                      // on blur. Do not set state here: rerendering
+                                      // a contentEditable while the user types can
+                                      // wipe the caret or restore stale HTML.
+                                      const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
+                                      liveEditedBodyHtmlRef.current = wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
+                                      userEditedRef.current = true;
+                                    }}
                                     onBlur={(e) => {
                                       // WYSIWYG: every page is editable. On blur, reassemble
                                       // the full bodyHtml by replacing this page group only.
@@ -3039,7 +3050,7 @@ function StudioShell({
                                       if (normalizeEditableFragment(next) === normalizeEditableFragment(previous)) {
                                         return;
                                       }
-                                      const rebuilt = wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
+                                      const rebuilt = liveEditedBodyHtmlRef.current || wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
                                       userEditedRef.current = true;
                                       setUserEdited(true);
                                       setBodyHtml(rebuilt);
