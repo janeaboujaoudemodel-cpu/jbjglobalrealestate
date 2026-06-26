@@ -542,36 +542,38 @@ function composeJobOffer(input: ComposerInput): string {
   );
 
   const compensationTerms = compensationStructureTable([
-    ["Basic Salary", formatMonthlySalary(f.salary), "salary"],
-    ["Commission Structure", filledOr(f.commission, ""), "commission"],
+    ["Basic Salary", filledOr(formatMonthlySalary(f.salary), "Not applicable — fixed commission basis"), "salary"],
+    ["Commission Structure", filledOr(f.commission, "65% on Employee's own direct deals · 55% on Company-sourced deals (enhanced rate, conditional on continued HR/Admin/Assistant duties — see Clause 4)"), "commission"],
     ["Allowances", filledOr(f.allowances, ""), "allowances"],
     ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
   ]);
 
   const commissionRowsTable = commissionTable(input.commissionRows || []);
 
-  // Premium prose mirror of the commission structure (no slashes, no brackets).
+  // Premium prose mirror of the commission structure with the conditional
+  // HR/Admin uplift and the automatic fallback to 50/50 if those duties stop.
   const commissionProse = (() => {
     const raw = (f.commission || "").trim();
-    if (!raw) {
-      return `Your commission entitlement is set out in the Compensation &amp; Commission Structure table above and, where applicable, in the Commission Structure schedule that follows.`;
-    }
-    const cleaned = esc(raw).replace(/\s*\/\s*/g, "; ");
-    return `Your commission entitlement is structured as follows: <strong>${cleaned}</strong>, as further detailed in the Compensation &amp; Commission Structure table above.`;
+    const cleaned = raw ? esc(raw).replace(/\s*\/\s*/g, "; ") : "";
+    const intro = raw
+      ? `Your commission entitlement is structured as follows: <strong>${cleaned}</strong>.`
+      : `Your remuneration is on a <strong>fixed commission basis</strong>, with no fixed monthly base salary unless otherwise expressly agreed in writing.`;
+    return `${intro} In recognition of the additional HR, administrative, and executive-assistant responsibilities the Employee will perform alongside the core sales role, the Company has agreed to an <strong>enhanced commission structure of 65% on the Employee's own direct deals and 55% on Company-sourced deals</strong>. This enhanced split is expressly conditional on the Employee continuing to discharge those HR, administrative, and assistant duties to the Company's reasonable satisfaction. Should the Employee elect to discontinue or materially reduce those additional duties, or fail to perform them, the commission split shall <strong>automatically revert to the standard 50% on direct deals and 50% on Company-sourced deals</strong>, with effect from the start of the calendar month following written notice by either party. The standard 50/50 split shall likewise apply throughout any notice or run-off period following resignation or termination, and to any deal that closes after the effective end of employment, save where the Parties have agreed otherwise in writing.`;
   })();
 
   const clauses = [
     offerClause(1, "Position", `Your position will be <strong>${jobTitle}</strong>. Your duties include, but are not limited to, real estate sales/leasing, lead handling, client follow-up, developer coordination, CRM updates, property presentations, marketing support, and any other duties reasonably assigned by the Company.`),
     offerClause(2, "Start Date", `Your expected start date is <strong>${startDate}</strong>, as also reflected in the Terms of Employment table above.`),
-    offerClause(3, "Place of Work", `Your primary place of work will be <strong>${officeAddress}</strong>, with field visits, developer offices, client meetings, property viewings, and remote work where approved by the Company. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy, consistent with the Terms of Employment table above.`),
-    offerClause(4, "Compensation", `${commissionProse} No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents and to UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
+    offerClause(3, "Place of Work", `Your place of work shall be the location designated by the Company from time to time — currently <strong>${officeAddress}</strong> — together with such field visits, developer offices, client meetings, property viewings, and remote work as the Company may approve. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy, consistent with the Terms of Employment table above.`),
+    offerClause(4, "Compensation & Commission Uplift", `${commissionProse} No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents and to UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
     offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || f.probationPeriod || "up to six (6) months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract, as also reflected in the Terms of Employment table above.`),
     offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, documents, contracts, business methods, and internal policies.`),
     offerClause(7, "Leads and Clients", `All leads, inquiries, clients, prospects, contacts, databases, property owners, developers, landlords, sellers, buyers, tenants, and investors introduced, generated, received, accessed, assigned, or handled during your work are the exclusive business assets of the Company. You may not use, transfer, sell, leak, copy, export, screenshot, close, redirect, or complete any transaction involving Company leads or clients outside the Company, during or after employment.`),
-    offerClause(8, "Conflict of Interest", `You must not work with, represent, assist, advise, own, manage, or financially participate in any competing real estate business, brokerage, marketing agency, holiday-home operator, property management company, or commission-based arrangement without the Company’s prior written approval.`),
-    offerClause(9, "Non-Solicitation and Non-Circumvention", `You must not solicit, approach, divert, or deal directly or indirectly with the Company’s clients, leads, developers, owners, suppliers, consultants, employees, brokers, or partners for personal benefit or for any third party.`),
+    offerClause(8, "Conflict of Interest", `You must not work with, represent, assist, advise, own, manage, or financially participate in any competing real estate business, brokerage, marketing agency, holiday-home operator, property management company, or commission-based arrangement without the Company's prior written approval.`),
+    offerClause(9, "Non-Solicitation and Non-Circumvention", `You must not solicit, approach, divert, or deal directly or indirectly with the Company's clients, leads, developers, owners, suppliers, consultants, employees, brokers, or partners for personal benefit or for any third party.`),
     offerClause(10, "Training and Onboarding Reimbursement During Probation", `If you resign during the probation period, you agree, where legally enforceable and subject to UAE law, to reimburse the Company for reasonable, documented, and proportionate costs incurred for your onboarding, training, education, company time investment, tools, materials, and Company-provided data or leads, excluding any costs that cannot legally be recovered from an employee. After completing six months of employment, you shall not owe reimbursement for ordinary onboarding or training costs unless a separate written agreement applies.`),
-    offerClause(11, "Conditional Offer", `This offer is conditional upon satisfactory completion of documentation, background verification where applicable, visa/work permit requirements where applicable, and signing all Company documents.`),
+    offerClause(11, "Separation & Post-Termination Commission", `Upon resignation or termination, and throughout any notice or run-off period, the enhanced 65/55 commission uplift described in Clause 4 shall <strong>cease to apply</strong> and the commission split shall <strong>revert to the standard 50/50</strong> on both direct and Company-sourced deals. Pipeline deals that close after the effective end of employment shall be remunerated, if at all, at the standard 50/50 split and only where the Company has actually received cleared commission, in each case subject to UAE Federal Decree-Law No. 33 of 2021, its Executive Regulations, and any separate written agreement signed by the Parties.`),
+    offerClause(12, "Conditional Offer", `This offer is conditional upon satisfactory completion of documentation, background verification where applicable, visa/work permit requirements where applicable, and signing all Company documents.`),
   ].join("");
 
   // Closing: greeting + "Sincerely, for and on behalf of …" ONLY.

@@ -37,10 +37,37 @@
 /* Document Studio: every generated table row can be removed from the
    live contract; delete controls are visible on hover only and are
    stripped from print/export/save output. */
+[data-document-studio-overlay] .jbj-doc-body [data-removable-field] {
+  position: relative;
+}
 [data-document-studio-overlay] .jbj-doc-body [data-removable-field] [data-field-delete-control] {
   opacity: 0 !important;
   pointer-events: none;
-  transition: opacity 140ms ease, background-color 140ms ease, border-color 140ms ease;
+  transition: opacity 140ms ease, background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  font-family: Inter, system-ui, sans-serif !important;
+}
+/* The X button is anchored to the END of the full row (not just the label
+   cell) so the entire row is the delete target and hovering anywhere on
+   the row reveals the control. */
+[data-document-studio-overlay] .jbj-doc-body tr[data-removable-field] [data-field-delete-control] {
+  position: absolute !important;
+  right: 10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  left: auto !important;
+}
+[data-document-studio-overlay] .jbj-doc-body tr[data-removable-field] > td:last-child {
+  position: relative;
+  padding-right: 40px !important;
+}
+[data-document-studio-overlay] .jbj-doc-body tr[data-removable-field] > td:first-child [data-field-delete-control] {
+  display: none !important;
 }
 [data-document-studio-overlay] .jbj-doc-body [data-removable-field]:hover [data-field-delete-control],
 [data-document-studio-overlay] .jbj-doc-body [data-removable-field]:focus-within [data-field-delete-control] {
@@ -48,9 +75,15 @@
   pointer-events: auto;
 }
 [data-document-studio-overlay] .jbj-doc-body [data-field-delete-control]:hover {
-  background: #0B3D2E !important;
-  border-color: #0B3D2E !important;
+  background: #064E3B !important;
+  border-color: #064E3B !important;
   color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-document-studio-overlay] .jbj-doc-body [data-field-delete-control]:hover svg {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 
 /* =====================================================================
