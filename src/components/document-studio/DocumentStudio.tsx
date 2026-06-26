@@ -131,7 +131,7 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   }
 }
 
-const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "homeAddress", "recipientEmail", "recipientPhone"];
+const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
 
 function cleanIdentityNotes(value?: string) {
   if (!value) return value;
