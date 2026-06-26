@@ -923,7 +923,9 @@ function composeNda(input: ComposerInput): string {
   const emiratesId = esc(filledOr(id.emiratesId, "[Emirates ID Number]"));
   const passport = esc(filledOr(id.passport, "[Passport Number]"));
   const nationality = esc(filledOr(id.nationality, "[Nationality]"));
-  const position = esc(filledOr(f.jobTitle || f.position, "Real Estate Broker"));
+  // Mirror EXACTLY the position recorded on the source document (offer
+  // letter / shared identity). Do not fabricate a default role.
+  const position = esc(filledOr(f.jobTitle || f.position, ""));
   const startDate = esc(filledOr(f.startDate || f.leadsFromDate, ""));
 
   const licenceNotice = paragraph(
