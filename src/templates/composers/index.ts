@@ -184,16 +184,41 @@ const identityValue = (fields: Record<string, string>, keys: string[], source: s
   return (parsed || cleaned).replace(/^\s*[^:]{1,28}:\s*/, (prefix) => /number|no\.?|id|passport|nationality|address|email|phone|mobile|name/i.test(prefix) ? "" : prefix).trim();
 };
 
+const COUNTRY_TO_DEMONYM: Record<string, string> = {
+  palestine: "Palestinian", lebanon: "Lebanese", syria: "Syrian", jordan: "Jordanian",
+  egypt: "Egyptian", morocco: "Moroccan", tunisia: "Tunisian", algeria: "Algerian",
+  iraq: "Iraqi", iran: "Iranian", india: "Indian", pakistan: "Pakistani",
+  bangladesh: "Bangladeshi", "sri lanka": "Sri Lankan", philippines: "Filipino",
+  "united kingdom": "British", "great britain": "British", england: "British",
+  "united states": "American", usa: "American", russia: "Russian", ukraine: "Ukrainian",
+  france: "French", germany: "German", italy: "Italian", spain: "Spanish",
+  portugal: "Portuguese", greece: "Greek", turkey: "Turkish", china: "Chinese",
+  japan: "Japanese", korea: "Korean", "south korea": "Korean",
+  "saudi arabia": "Saudi", "united arab emirates": "Emirati", uae: "Emirati",
+  qatar: "Qatari", kuwait: "Kuwaiti", bahrain: "Bahraini", oman: "Omani", yemen: "Yemeni",
+  sudan: "Sudanese", libya: "Libyan",
+};
+
 const normalizeNationality = (value: string): string => {
   // UN/ISO country lists return inverted names like "Palestine, State of",
   // "Korea, Republic of", "Iran, Islamic Republic of". Strip the trailing
   // ", State of / Republic of / Kingdom of / …" tail so the document reads
   // cleanly as just the nationality/country name.
-  return (value || "")
+  let v = (value || "")
     .replace(/\s*,?\s*(state|republic|kingdom|sultanate|federation|union|emirate|principality|commonwealth|grand\s+duchy|democratic\s+republic|islamic\s+republic|people'?s\s+republic|plurinational\s+state|bolivarian\s+republic)\s+of\b\.?\s*$/i, "")
     .replace(/\s{2,}/g, " ")
     .trim();
+  // Reject obvious bleed from identity sentences ("recorded as Palestine, residing at …").
+  if (/@|residing|reachable|apartment|building|street|email|phone|whatsapp|emirates\s+id|passport/i.test(v) || /\d{3,}/.test(v)) {
+    // Try to salvage just the country name from "recorded as <Country>".
+    const m = v.match(/(?:recorded\s+as|nationality\s*[:-]?)\s*([A-Za-z][A-Za-z\s]{2,30}?)(?=[,.;]|\s+(?:residing|reachable|apartment|building|street|email|phone|and|with)\b|$)/i);
+    v = m ? m[1].trim() : "";
+  }
+  if (!v) return "";
+  const key = v.toLowerCase();
+  return COUNTRY_TO_DEMONYM[key] || v;
 };
+
 
 const offerIdentity = (fields: Record<string, string>) => {
   // Build a free-text "source" haystack ONLY from real values. Excluding bracketed
