@@ -1375,7 +1375,7 @@ export function compose(input: ComposerInput): string {
     case "termination_letter":
       return composeTerminationLetter(input);
     case "nda":
-      return composeGeneric(input, `Non-Disclosure Agreement`);
+      return composeNda(input);
     case "commission_agreement":
       return composeGeneric(input, `Commission Agreement — ${input.fields.recipientName || ""}`);
     case "commission_invoice":
