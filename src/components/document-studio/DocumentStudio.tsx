@@ -877,6 +877,12 @@ function StudioShell({
   const [ownerDate, setOwnerDate] = useState<string>(snap?.ownerDate || new Date().toISOString().slice(0, 10));
   const [applicantDate, setApplicantDate] = useState<string>(snap?.applicantDate || ""); // blank by design
 
+  useEffect(() => {
+    if (template?.id !== "job_offer") return;
+    setOwnerDate("2026-06-26");
+    setApplicantDate("2026-06-26");
+  }, [template?.id]);
+
   // Additional signatories (beyond the default Owner + Counterparty).
   type ExtraSig = { id: string; name: string; title: string; date: string; label: string };
   const newSig = (): ExtraSig => ({ id: Math.random().toString(36).slice(2, 9), name: "", title: "", date: "", label: "" });
@@ -1303,8 +1309,13 @@ function StudioShell({
       setStep(typeof s.step === "number" ? (s.step as Step) : 2);
       if (typeof s.ownerName === "string") setOwnerName(s.ownerName);
       if (typeof s.ownerTitle === "string") setOwnerTitle(s.ownerTitle);
-      if (typeof s.ownerDate === "string") setOwnerDate(s.ownerDate);
-      if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
+      if (forceTemplateResync && s.templateId === "job_offer") {
+        setOwnerDate("2026-06-26");
+        setApplicantDate("2026-06-26");
+      } else {
+        if (typeof s.ownerDate === "string") setOwnerDate(s.ownerDate);
+        if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
+      }
       if (Array.isArray(s.extraSignatories)) setExtraSignatories(s.extraSignatories);
       if (Array.isArray(s.hiddenFieldKeys)) setHiddenFieldKeys(new Set(s.hiddenFieldKeys));
       if (s.fieldLabelOverrides && typeof s.fieldLabelOverrides === "object") setFieldLabelOverrides(s.fieldLabelOverrides);
