@@ -36,6 +36,7 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useDevelopers, useCommunities, useAreas } from "@/hooks/useProjects";
 import { cn } from "@/lib/utils";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 // Bedroom options - now up to 7+
 const bedroomOptions = [
@@ -863,7 +864,7 @@ const HeroSearchBar = () => {
               </button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-52 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[9999] max-h-72 overflow-y-auto jj-scrollbar-gold"
+              className="w-[340px] max-w-[calc(100vw-2rem)] p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[9999] max-h-72 overflow-y-auto jj-scrollbar-gold"
               side="bottom"
               align="start"
               sideOffset={4}
@@ -893,18 +894,19 @@ const HeroSearchBar = () => {
                     key={dev.id}
                     onClick={() => setDeveloperId(dev.id)}
                     className={cn(
-                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
+                    "w-full min-h-12 text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
                       developerId === dev.id ? "bg-[#EFE6D6]/20 text-[#1A1A1A] font-semibold border border-[#B89555]/40" : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                     )}
                   >
-                    {dev.logo_url ? (
-                      <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-[#FDFBF7] flex-shrink-0" />
-                    ) : (
-                      <span className="w-5 h-5 rounded-sm bg-[#EFE6D6]/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-[#1A1A1A]">
-                        {dev.name?.charAt(0)}
-                      </span>
-                    )}
-                    <span className="truncate">{dev.name}</span>
+                    <DeveloperLogo
+                      src={dev.logo_url}
+                      alt={dev.name}
+                      name={dev.name}
+                      variant="bare"
+                      renderFallback
+                      className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px] flex-shrink-0"
+                    />
+                    <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">{dev.name}</span>
                   </button>
                 ))}
             </PopoverContent>
@@ -1141,14 +1143,17 @@ const HeroSearchBar = () => {
                       <button
                         key={dev.id}
                         onClick={() => setDeveloperId(dev.id)}
-                        className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === dev.id ? "bg-[#EFE6D6]/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-[#EFE6D6]/10")}
+                        className={cn("w-full min-h-12 text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === dev.id ? "bg-[#EFE6D6]/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-[#EFE6D6]/10")}
                       >
-                        {dev.logo_url ? (
-                          <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-[#FDFBF7] flex-shrink-0" />
-                        ) : (
-                          <span className="w-5 h-5 rounded-sm bg-[#EFE6D6]/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-[#1A1A1A]">{dev.name?.charAt(0)}</span>
-                        )}
-                        <span className="truncate">{dev.name}</span>
+                        <DeveloperLogo
+                          src={dev.logo_url}
+                          alt={dev.name}
+                          name={dev.name}
+                          variant="bare"
+                          renderFallback
+                          className="!w-8 !h-8 !min-w-8 !min-h-8 !rounded-md !p-[3px] flex-shrink-0"
+                        />
+                        <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">{dev.name}</span>
                       </button>
                     ))}
                   </div>
