@@ -80,7 +80,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             justifyContent: "flex-start",
             height: 210,
             paddingLeft: 0,
-            paddingRight: 16,
+            paddingRight: 28,
             lineHeight: 1,
             overflow: "visible",
           }}
@@ -90,13 +90,13 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             style={{
               display: "block",
               width: "100%",
-              fontSize: 28,
+              fontSize: 25,
               fontWeight: 900,
               color: t.fg,
-              letterSpacing: "0.092em",
+              letterSpacing: "0.072em",
               lineHeight: 1,
               whiteSpace: "nowrap",
-              transform: "scaleX(.95)",
+              transform: "scaleX(.94)",
               transformOrigin: "left center",
             }}
           >
