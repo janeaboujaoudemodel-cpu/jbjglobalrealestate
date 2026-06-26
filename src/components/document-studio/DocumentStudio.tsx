@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 15;
+  const DOCUMENT_FIX_VERSION = 16;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -590,9 +590,16 @@ function StudioShell({
     const baseTemplateId = snap?.templateId || initialId;
     const base = getTemplateDefaultFields(baseTemplateId);
     const shared = readSharedIdentity();
+    // NDA opened directly from the template launcher must be BLANK — it only
+    // pre-fills when entered via the Offer → NDA companion toggle (handled
+    // below). Existing NDA drafts keep their saved fields.
+    if (baseTemplateId === "nda" && !snap) {
+      return { ...base };
+    }
     const merged = { ...base, ...shared, ...(snap?.fields || {}) };
     return baseTemplateId === "job_offer" ? normalizeJobOfferIdentityFields(snap?.fields || {}, shared) : merged;
   });
+
   // Mirror identity fields to the shared store whenever they change.
   useEffect(() => {
     try {
@@ -1324,7 +1331,7 @@ function StudioShell({
   // ── Apply a previously saved snapshot — only when the user explicitly resumes.
   const applySnapshot = useCallback((s: any) => {
     try {
-      const forceTemplateResync = s.templateId === "job_offer" && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
+      const forceTemplateResync = (s.templateId === "job_offer" || s.templateId === "nda") && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
       if (s.fields && typeof s.fields === "object") {
         const shared = readSharedIdentity();
         setFields(forceTemplateResync
@@ -2082,12 +2089,25 @@ function StudioShell({
               type="button"
               role="tab"
               aria-selected={templateId === "nda"}
-              onClick={() => setTemplateId("nda")}
+              onClick={() => {
+                // Companion entry: switching from Offer → NDA inside the same
+                // Studio session pre-fills NDA identity from the current Offer
+                // fields (shared identity store). Opening NDA directly from
+                // the launcher stays blank — see fields useState above.
+                setTemplateId("nda");
+                if (templateId === "job_offer") {
+                  const shared = readSharedIdentity();
+                  if (Object.keys(shared).length) {
+                    setFields((prev) => ({ ...prev, ...shared }));
+                  }
+                }
+              }}
               className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${templateId === "nda" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"}`}
-              title="Open the NDA pre-filled with the same applicant identity"
+              title="Open the NDA — pre-fills from the Offer Letter when switched from Offer; blank when opened directly"
             >
               NDA
             </button>
+
           </div>
           {/* Theme switcher — Champagne / Emerald letterhead */}
           <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme" data-surface="champagne">
