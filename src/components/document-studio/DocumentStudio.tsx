@@ -1513,16 +1513,27 @@ function StudioShell({
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body * { color:#1A1A1A !important; -webkit-text-fill-color:#1A1A1A !important; }
         [data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[class*="lucide"]) { color:#1A1A1A !important; stroke:#1A1A1A !important; }
         [data-document-studio-overlay] .studio-scroll-x { overflow-x:hidden; }
-        [data-document-studio-overlay] .studio-action-row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; min-width:0; }
-        [data-document-studio-overlay] .studio-action-row > * { flex:0 0 auto; }
-        [data-document-studio-overlay] .studio-action-row button { white-space:nowrap; min-height:42px; min-width:46px; padding-left:14px; padding-right:14px; overflow:visible; text-overflow:clip; }
-        [data-document-studio-overlay] .studio-action-row button > span { white-space:nowrap; display:inline-flex; max-width:none; overflow:visible; }
+        [data-document-studio-overlay] .studio-action-row { display:flex !important; flex-wrap:wrap !important; gap:10px !important; align-items:center !important; min-width:0; }
+        [data-document-studio-overlay] .studio-action-row > * { flex:0 0 auto !important; max-width:none !important; }
+        [data-document-studio-overlay] .studio-action-row :is(button,[data-jbj-button]) {
+          width:auto !important;
+          min-width:max-content !important;
+          max-width:none !important;
+          flex:0 0 auto !important;
+          white-space:nowrap !important;
+          min-height:42px !important;
+          padding-left:14px !important;
+          padding-right:14px !important;
+          overflow:visible !important;
+          text-overflow:clip !important;
+        }
+        [data-document-studio-overlay] .studio-action-row :is(button,[data-jbj-button]) > span { white-space:nowrap !important; display:inline-flex !important; max-width:none !important; overflow:visible !important; }
         [data-document-studio-overlay] [data-document-studio-toolbar] .studio-action-row { justify-content:flex-end; width:100%; }
         [data-document-studio-overlay] [data-document-studio-toolbar] button { min-height:40px; }
         [data-document-studio-overlay] .studio-toolbar-scroll { overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
         [data-document-studio-overlay] .studio-toolbar-scroll::-webkit-scrollbar { height:6px; }
         [data-document-studio-overlay] .studio-toolbar-scroll::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
-        [data-document-studio-overlay] .studio-top-primary-actions { width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:2px; justify-content:flex-start !important; }
+        [data-document-studio-overlay] .studio-top-primary-actions { width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:2px; justify-content:flex-start !important; flex-wrap:nowrap !important; }
         [data-document-studio-overlay] .studio-top-primary-actions > * { flex:0 0 auto; }
         [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar { height:6px; }
         [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
