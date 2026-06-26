@@ -42,12 +42,12 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
     >
       <div
         className="grid items-center min-w-0"
-      style={{ gridTemplateColumns: "148px minmax(0,1fr)", columnGap: 13, minHeight: 148, height: 148 }}
+      style={{ gridTemplateColumns: "210px minmax(0,1fr)", columnGap: 16, minHeight: 210, height: 210 }}
       >
         <div
           style={{
-            width: 142,
-            height: 148,
+            width: 200,
+            height: 210,
             justifySelf: "center",
             alignSelf: "center",
             display: "flex",
@@ -61,8 +61,8 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             aria-label="JBJ"
             role="img"
             style={{
-              width: 126,
-              height: 126,
+              width: 184,
+              height: 184,
               objectFit: "contain",
               display: "block",
               filter: theme === "emerald"
@@ -78,7 +78,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            height: 148,
+            height: 210,
             paddingLeft: 0,
             paddingRight: 30,
             lineHeight: 1,
@@ -90,7 +90,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             style={{
               display: "block",
               width: "100%",
-              fontSize: 25.5,
+              fontSize: 34,
               fontWeight: 900,
               color: t.fg,
               letterSpacing: "0.104em",
