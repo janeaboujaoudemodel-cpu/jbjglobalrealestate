@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
-import { Crown, ArrowLeft, Menu, X, Shield, Home } from "lucide-react";
+import { Crown, ArrowLeft, Menu, X, Shield, Home, User, Briefcase, Building2 } from "lucide-react";
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
 import PageLoader from "@/components/PageLoader";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -9,6 +9,7 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
+import { useUserMode } from "@/hooks/useUserMode";
 
 /**
  * Broker Portal shell — mirrors the structural pattern of OwnerDashboardShell:
@@ -22,8 +23,18 @@ export default function BrokerPortalLayout() {
   const { isOwner } = useUserRole();
   const { user } = useAuth();
   const isMobile = useIsMobile();
+  const { mode } = useUserMode();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const ModeIcon = mode === "developer" ? Building2 : mode === "investor" ? User : Briefcase;
+  const modeLabel = isOwner
+    ? "Owner"
+    : mode === "developer"
+    ? "Developer"
+    : mode === "investor"
+    ? "Investor"
+    : "Broker";
 
   // If an owner lands on /broker without explicit preview flag, the
   // OwnerRedirectGuard already routes them away. Defensive: clear any
@@ -129,7 +140,7 @@ export default function BrokerPortalLayout() {
               </button>
             )}
             <div className="hidden sm:flex items-center gap-1.5 bg-[#EFE6D6] border border-[#B89555] rounded-md px-2.5 py-1 text-xs font-bold text-[#1A1A1A] tracking-wide">
-              <Shield className="h-3.5 w-3.5" /> Broker
+              <ModeIcon className="h-3.5 w-3.5" /> {modeLabel}
             </div>
             {/* Mother-of-pearl circular avatar dropdown — same as front-end header */}
             <UserAvatarMenu />

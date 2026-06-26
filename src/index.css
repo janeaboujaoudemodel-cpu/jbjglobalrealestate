@@ -16301,3 +16301,28 @@ html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where
 }
 /* Inline-styled colors win on their own via [style*="color"] specificity;
    no revert override needed (revert would fall back to UA black). */
+
+/* ─────────────────────────────────────────────────────────────────
+   PASS 51 — CHAT / MESSAGE LAYOUT: HORIZONTAL CONTENT ADAPT
+   Prevents bubbles, message rows, and CRM/AI chat surfaces from
+   collapsing into single-letter vertical strips when the parent
+   is a flex/grid column with no min-width.
+   ───────────────────────────────────────────────────────────── */
+[data-jbj-chat-open],
+[data-jbj-chat-open] *,
+[data-chat-surface],
+[data-chat-surface] * {
+  min-width: 0;
+}
+[data-jbj-chat-open] [data-message-bubble],
+[data-chat-surface] [data-message-bubble],
+[data-jbj-chat-open] .chat-message,
+[data-chat-surface] .chat-message {
+  max-width: min(100%, 78ch);
+  width: fit-content;
+  word-break: normal;
+  overflow-wrap: break-word;
+  white-space: normal;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
