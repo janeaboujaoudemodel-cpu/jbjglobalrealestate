@@ -1289,8 +1289,12 @@ function StudioShell({
   // ── Apply a previously saved snapshot — only when the user explicitly resumes.
   const applySnapshot = useCallback((s: any) => {
     try {
-      if (s.fields && typeof s.fields === "object") setFields(s.fields);
       const forceTemplateResync = s.templateId === "job_offer" && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
+      if (s.fields && typeof s.fields === "object") {
+        setFields(forceTemplateResync
+          ? { ...s.fields, ...getTemplateDefaultFields("job_offer") }
+          : s.fields);
+      }
       if (forceTemplateResync) {
         userEditedRef.current = false;
         setUserEdited(false);
