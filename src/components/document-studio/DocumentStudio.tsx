@@ -1072,7 +1072,7 @@ function StudioShell({
       fieldLabelOverrides,
       hiddenSections: Array.from(hiddenSections),
       customFields, commissionRows, docLanguage,
-      marks, emailTo,
+      chromeTheme, marks, emailTo, manualPages,
     };
     const handle = setTimeout(() => {
       try { localStorage.setItem(SESSION_KEY, JSON.stringify(payload)); } catch {}
