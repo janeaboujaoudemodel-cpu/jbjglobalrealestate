@@ -14,7 +14,7 @@
  * to mount it without modification.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -258,6 +258,13 @@ const parseDocumentPageGroups = (html: string): string[] => {
 
 const wrapDocumentPageGroups = (groups: string[]): string =>
   groups.map((group, index) => `<section data-pdf-page="${index + 1}">${group}</section>`).join("");
+
+const normalizeEditableFragment = (html: string): string =>
+  stripGeneratedPageArtifacts(html || "")
+    .replace(/\scontenteditable=("true"|'true'|true)/gi, "")
+    .replace(/\sdata-page-index=("\d+"|'\d+'|\d+)/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const anchorSignatureArtifacts = (html: string): string => {
   if (!html || typeof window === "undefined") return html;
@@ -749,7 +756,8 @@ function StudioShell({
   const applySavedTemplate = (s: SavedTpl) => {
     const p = s.payload || {};
     setTemplateId(s.base_template_id);
-    if (p.fields) setFields(p.fields);
+    resumeStructuredSync();
+    if (p.fields) setSyncedFields(p.fields);
     if (p.department) setDepartment(p.department);
     if (p.commissionRows) setCommissionRows(p.commissionRows);
     if (p.customFields) setCustomFields(p.customFields);
@@ -850,7 +858,7 @@ function StudioShell({
     }
     const profile = getProfileValues(fields);
     const nextFields = { ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName };
-    setFields(nextFields);
+    setSyncedFields(nextFields);
     const title =
       (profile.clientName || "Untitled") +
       ` — ${template.label} (${booking_id})`;
@@ -875,7 +883,7 @@ function StudioShell({
 
   const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string }) => {
     setTemplateId(d.template_id);
-    setFields(d.field_values || {});
+    setSyncedFields(d.field_values || {});
     setCurrentDocId(d.id);
     setStep(2);
     toast.success(`Loaded "${d.title}"`);
@@ -1027,10 +1035,15 @@ function StudioShell({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const setField = (k: string, v: string) => setFields((p) => ({ ...p, [k]: v }));
+  const setField = (k: string, v: string) => {
+    resumeStructuredSync();
+    setFields((p) => ({ ...p, [k]: v }));
+  };
   const applyDeveloperDetails = (developerName: string) => {
     const dev = UAE_DEVELOPERS.find((d) => d.name.toLowerCase() === developerName.trim().toLowerCase());
     if (!dev) return;
+    userEditedRef.current = false;
+    setUserEdited(false);
     setFields((p) => ({
       ...p,
       developerName: dev.name,
@@ -1047,6 +1060,16 @@ function StudioShell({
   const autoBodyRef = useRef<string>("");
   const userEditedRef = useRef<boolean>(false);
   const [userEdited, setUserEdited] = useState(false);
+
+  const resumeStructuredSync = useCallback(() => {
+    userEditedRef.current = false;
+    setUserEdited(false);
+  }, []);
+
+  const setSyncedFields = useCallback((updater: SetStateAction<Record<string, string>>) => {
+    resumeStructuredSync();
+    setFields(updater);
+  }, [resumeStructuredSync]);
 
   // ── Apply a previously saved snapshot — only when the user explicitly resumes.
   const applySnapshot = useCallback((s: any) => {
@@ -1114,7 +1137,7 @@ function StudioShell({
         if (validPrefillTemplate) {
           setTemplateId(p.templateId);
           if (p?.fields && typeof p.fields === "object") {
-            setFields((cur) => ({ ...cur, ...p.fields }));
+            setSyncedFields((cur) => ({ ...cur, ...p.fields }));
           }
           setStep(2);
           toast.success("Applicant loaded", { description: "Details pre-filled in the Studio." });
@@ -1185,6 +1208,10 @@ function StudioShell({
       extraSignatories,
     });
     autoBodyRef.current = next;
+    // The sidebar/detail fields are the source of truth. Previously, simply
+    // clicking into the editable preview and blurring it marked the document as
+    // "manual edited", permanently blocking field → contract updates. Keep the
+    // locked template live-synced unless the body was genuinely edited.
     if (!userEditedRef.current) setBodyHtml(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -1200,8 +1227,7 @@ function StudioShell({
   ]);
 
   const resetToTemplate = () => {
-    userEditedRef.current = false;
-    setUserEdited(false);
+    resumeStructuredSync();
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
   };
 
@@ -1209,7 +1235,7 @@ function StudioShell({
     clearSession();
     const targetId = templateId || initialId;
     setCurrentDocId(null);
-    setFields(getTemplateDefaultFields(targetId));
+    setSyncedFields(getTemplateDefaultFields(targetId));
     setCustomFields([]);
     setCommissionRows(DEFAULT_BROKER_COMMISSIONS);
     setExtraSignatories([]);
@@ -1220,8 +1246,7 @@ function StudioShell({
     setApplicantDate("");
     setEmailTo("");
     setMarks((m) => ({ ...m, dateXY: undefined, signatureXY: undefined, stampXY: undefined }));
-    userEditedRef.current = false;
-    setUserEdited(false);
+    resumeStructuredSync();
     setBodyHtml("");
     setStep(targetId ? 2 : 1);
     toast.success("Started a new submission");
@@ -1231,11 +1256,10 @@ function StudioShell({
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
-    setFields(getTemplateDefaultFields(id));
+    setSyncedFields(getTemplateDefaultFields(id));
     setExtraSignatories([]);
     autoBodyRef.current = "";
-    userEditedRef.current = false;
-    setUserEdited(false);
+    resumeStructuredSync();
     setBodyHtml("");
     // Reset draggable mark positions so a new template starts clean
     // (prevents the date drifting onto the footer after a previous drag).
@@ -1258,7 +1282,7 @@ function StudioShell({
         "JBJ-DOC";
       const { data, error } = await (supabase as any).rpc("next_booking_id", { prefix });
       if (!error && data) {
-        setFields((p) => ({ ...p, bookingRef: String(data), booking_id: String(data) }));
+        setSyncedFields((p) => ({ ...p, bookingRef: String(data), booking_id: String(data) }));
       }
     } catch { /* ignore — composer will generate a local id */ }
   };
@@ -1313,6 +1337,7 @@ function StudioShell({
         customFields,
         extraSignatories,
       });
+      resumeStructuredSync();
       setBodyHtml(html);
       toast.success("Document generated");
     } catch (e: any) {
@@ -2521,7 +2546,7 @@ function StudioShell({
                           if (error) throw error;
                           const parsed = (data as any)?.fields || {};
                           if (parsed && typeof parsed === "object") {
-                            setFields((p) => ({ ...p, ...normalizeExtractedDocumentFields(parsed, autoFillText) }));
+                            setSyncedFields((p) => ({ ...p, ...normalizeExtractedDocumentFields(parsed, autoFillText) }));
                             toast.success("Fields filled from your text");
                           } else {
                             toast.info("Nothing extractable found");
@@ -2581,7 +2606,7 @@ function StudioShell({
                             Object.assign(merged, normalizeExtractedDocumentFields((data as any)?.fields || {}, source));
                           }
                           if (Object.keys(merged).length) {
-                            setFields((p) => ({ ...p, ...merged }));
+                            setSyncedFields((p) => ({ ...p, ...merged }));
                             toast.success(`Fields filled from ${files.length} attachment${files.length > 1 ? "s" : ""}`);
                           } else {
                             toast.info("Nothing extractable found in attachments");
@@ -2978,6 +3003,10 @@ function StudioShell({
                                       // WYSIWYG: every page is editable. On blur, reassemble
                                       // the full bodyHtml by replacing this page group only.
                                       const next = stripGeneratedPageArtifacts(e.currentTarget.innerHTML);
+                                      const previous = stripGeneratedPageArtifacts(pageGroups[pageIndex] ?? "");
+                                      if (normalizeEditableFragment(next) === normalizeEditableFragment(previous)) {
+                                        return;
+                                      }
                                       const rebuilt = wrapDocumentPageGroups(pageGroups.map((g, i) => (i === pageIndex ? next : g)));
                                       userEditedRef.current = true;
                                       setUserEdited(true);
@@ -3156,7 +3185,7 @@ function StudioShell({
                     hideLetterDate: true,
                     extraSignatories,
                   });
-                  setFields(nextFields);
+                  setSyncedFields(nextFields);
                   autoBodyRef.current = lockedOfferBody;
                   userEditedRef.current = false;
                   setUserEdited(false);
