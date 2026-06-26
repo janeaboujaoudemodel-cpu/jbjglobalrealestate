@@ -143,7 +143,7 @@ const offerClause = (n: number, heading: string, body: string) => `
 
 /* ───────────── Shared building blocks ───────────── */
 
-export function termsTable(rows: Array<[string, string | undefined]>): string {
+export function termsTable(rows: Array<[string, string | undefined]>, title = "Terms of Employment"): string {
   const visible = rows.filter(([, v]) => (v || "").trim());
   if (visible.length === 0) return "";
   const body = visible
@@ -160,7 +160,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
       <thead>
         <tr>
           <th colspan="2" style="text-align:left;padding:10px 14px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
-            Terms of Employment
+            ${esc(title)}
           </th>
         </tr>
       </thead>
@@ -168,6 +168,7 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
     </table>`;
 
 }
+
 
 export function identityTable(_rows: Array<[string, string | undefined]>): string {
   // 🔒 Deprecated as of 2026-06: identity is now woven inline via
@@ -470,10 +471,22 @@ function composeJobOffer(input: ComposerInput): string {
     `Candidate identity for this offer: <strong>${candidateName}</strong>, holding Passport No. <strong>${passport}</strong>, holding Emirates ID No. <strong>${emiratesId}</strong>, with nationality recorded as <strong>${nationality}</strong>, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone at <strong>${phone}</strong>.`,
   );
 
-  const notes = stripForbiddenIdentityFragments(f.notes);
-  const optionalNotes = notes
-    ? `<section data-pdf-section="offer-notes" style="margin:0 0 13px;page-break-inside:avoid;break-inside:avoid;"><h2 style="margin:0 0 5px;font-size:13px;line-height:1.35;color:${INK};font-weight:700;">Additional Instructions</h2>${paragraph(esc(notes))}</section>`
-    : "";
+  const employmentTerms = termsTable(
+    [
+      ["Job Title", filledOr(f.jobTitle, "")],
+      ["Start / Joining Date", formatHumanDate(f.startDate) || f.startDate],
+      ["Place of Work", officeAddress],
+      ["Working Hours", filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday")],
+      ["Attendance", filledOr(f.attendance, "Monday to Saturday, on-site with approved field visits")],
+      ["Basic Salary", f.salary ? `AED ${f.salary} per month` : ""],
+      ["Commission Structure", filledOr(f.commission, "")],
+      ["Allowances", filledOr(f.allowances, "")],
+      ["Payment Cycle", filledOr(f.paymentCycle, "")],
+      ["Probation Period", filledOr(f.probation, "Up to six (6) months")],
+      ["Reporting Manager", filledOr(f.reportingManager, "")],
+    ],
+    "Terms of Employment",
+  );
 
   const clauses = [
     offerClause(1, "Position", `Your position will be <strong>${jobTitle}</strong>. Your duties include, but are not limited to, real estate sales/leasing, lead handling, client follow-up, developer coordination, CRM updates, property presentations, marketing support, and any other duties reasonably assigned by the Company.`),
@@ -489,11 +502,13 @@ function composeJobOffer(input: ComposerInput): string {
     offerClause(11, "Conditional Offer", `This offer is conditional upon satisfactory completion of documentation, background verification where applicable, visa/work permit requirements where applicable, and signing all Company documents.`),
   ].join("");
 
+  // Closing: greeting + "Sincerely, for and on behalf of …" ONLY.
+  // The signatory Name / Title / Signature row is rendered once by
+  // `signatureBlock` below — never duplicated here.
   const closing = `
     ${paragraph("Please confirm your acceptance by signing below.")}
     <div data-pdf-section="offer-closing" style="margin:16px 0 18px;page-break-inside:avoid;break-inside:avoid;color:${INK};font-size:12.5px;line-height:1.65;">
-      <p style="margin:0 0 10px;">Sincerely,<br/>For and on behalf of ${companyName}</p>
-      <p style="margin:0;">Name: ${authorizedSignatory}<br/>Title: ${authorizedTitle}<br/>Signature: ___________________</p>
+      <p style="margin:0;">Sincerely,<br/>For and on behalf of ${companyName}</p>
     </div>`;
 
   return [
@@ -504,8 +519,8 @@ function composeJobOffer(input: ComposerInput): string {
     paragraph(`Dear ${candidateName},`),
     paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency, subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
     candidateIdentity,
+    employmentTerms,
     clauses,
-    optionalNotes,
     closing,
     signatureBlock({
       ownerName: input.ownerName,
@@ -514,15 +529,11 @@ function composeJobOffer(input: ComposerInput): string {
       applicantName: id.name || f.recipientName,
       applicantDate: input.applicantDate,
       applicantLabel: "Accepted by Candidate",
-      applicantMetaRows: [
-        ["Emirates ID No.", id.emiratesId],
-        ["Passport No.", id.passport],
-        ["Nationality", id.nationality],
-      ],
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
 }
+
 
 /* ───────────── Termination Letter ───────────── */
 
