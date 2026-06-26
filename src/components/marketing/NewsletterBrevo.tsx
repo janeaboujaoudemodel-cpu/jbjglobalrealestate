@@ -76,11 +76,14 @@ export const NewsletterBrevo = ({
         },
       }).catch(err => console.warn('Lead capture warning:', err));
 
-      const { data, error } = await subscribePromise;
+      const { error } = await subscribePromise;
 
       if (error) throw error;
 
-      if (data?.requiresDetails) {
+      // SECURITY: the API no longer tells us whether the email already
+      // existed. Decide locally whether we still need to collect name/phone.
+      const needsDetails = !name || name.trim().length === 0;
+      if (needsDetails) {
         setShowDetailModal(true);
       } else {
         setIsSuccess(true);
