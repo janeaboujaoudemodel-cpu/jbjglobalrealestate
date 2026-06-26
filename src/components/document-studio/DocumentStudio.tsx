@@ -1139,6 +1139,28 @@ function StudioShell({
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
   };
 
+  const startNewSubmission = () => {
+    clearSession();
+    const targetId = templateId || initialId;
+    setCurrentDocId(null);
+    setFields(getTemplateDefaultFields(targetId));
+    setCustomFields([]);
+    setCommissionRows(DEFAULT_BROKER_COMMISSIONS);
+    setExtraSignatories([]);
+    setHiddenFieldKeys(new Set());
+    setFieldLabelOverrides({});
+    setHiddenSections(new Set());
+    setManualPages(0);
+    setApplicantDate("");
+    setEmailTo("");
+    setMarks((m) => ({ ...m, dateXY: undefined, signatureXY: undefined, stampXY: undefined }));
+    userEditedRef.current = false;
+    setUserEdited(false);
+    setBodyHtml("");
+    setStep(targetId ? 2 : 1);
+    toast.success("Started a new submission");
+  };
+
   const handleSelectTemplate = async (id: string) => {
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
