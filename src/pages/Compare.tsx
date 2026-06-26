@@ -875,7 +875,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                               />
                             </div>
                             <h3 className="text-white font-semibold">{project.name}</h3>
-                            <p className="text-white/90 text-sm truncate">{project.developer?.name}</p>
+                            <p data-developer-name className="text-white/90 text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer?.name}</p>
                         </div>
                       </th>
                     );

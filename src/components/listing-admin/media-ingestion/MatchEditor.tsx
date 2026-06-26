@@ -81,11 +81,12 @@ export function MatchEditor({ developerId, projectId, docType, onApply }: MatchE
             setDev(e.target.value || null);
             setProj(null);
           }}
-          className="w-full rounded border border-[#B89555]/30 bg-white p-1.5 text-sm text-foreground"
+          className="w-full min-h-10 rounded border border-[#B89555]/30 bg-white p-2 text-sm text-foreground whitespace-normal [overflow-wrap:anywhere]"
+          data-developer-option
         >
           <option value="">— None —</option>
           {developers.map((d) => (
-            <option key={d.id} value={d.id}>
+            <option key={d.id} value={d.id} title={d.name}>
               {d.name}
             </option>
           ))}

@@ -774,7 +774,7 @@ const Properties = () => {
                         <div>
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Intent</label>
                           <Select value={intentValue} onValueChange={setIntent}>
-                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <SelectTrigger className="w-full h-auto min-h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -845,7 +845,11 @@ const Properties = () => {
                             <SelectContent className="max-h-72">
                               <SelectItem value="all">All Developers</SelectItem>
                               {allDevelopersSorted?.map((dev) => (
-                                <SelectItem key={dev.id} value={dev.id}>{dev.name}</SelectItem>
+                                <SelectItem key={dev.id} value={dev.id}>
+                                  <span data-developer-name className="block min-w-0 max-w-full whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
+                                    {dev.name}
+                                  </span>
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>

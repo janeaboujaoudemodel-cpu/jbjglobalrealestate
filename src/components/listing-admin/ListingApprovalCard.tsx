@@ -180,7 +180,7 @@ export function ListingApprovalCard({
           {project.developer_name && (
             <div className="flex items-center gap-2 text-[#1A1A1A]/70">
               <Building2 className="w-4 h-4 text-[#1A1A1A]/70" />
-              <span className="truncate">{project.developer_name}</span>
+              <span data-developer-name className="min-w-0 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer_name}</span>
             </div>
           )}
           

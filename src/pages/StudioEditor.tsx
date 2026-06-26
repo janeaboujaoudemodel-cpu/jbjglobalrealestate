@@ -709,7 +709,7 @@ export default function StudioEditor() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-foreground font-medium truncate">{property.name}</h4>
-                          <p className="text-xs text-muted-foreground truncate">{property.developer_name}</p>
+                          <p data-developer-name className="text-xs text-muted-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{property.developer_name}</p>
                           <div className="flex items-center gap-2 mt-2">
                             <span className="text-xs text-price-orange">{formatPrice(property.price_from)}</span>
                             {property.area_name && (

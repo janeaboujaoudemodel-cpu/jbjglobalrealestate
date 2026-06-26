@@ -178,10 +178,12 @@ export const BrokerageDealModal = ({
                 <SelectTrigger className="bg-[#FDFBF7] text-[#1A1A1A]">
                   <SelectValue placeholder="Pick a developer" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#FDFBF7] text-[#1A1A1A] max-h-72">
+                <SelectContent className="bg-[#FDFBF7] text-[#1A1A1A] max-h-72 w-[340px]">
                   {developers.map((d: any) => (
                     <SelectItem key={d.id} value={d.id}>
-                      {d.name}
+                      <span data-developer-name className="block min-w-0 max-w-full whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
+                        {d.name}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>

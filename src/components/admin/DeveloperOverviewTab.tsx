@@ -180,7 +180,7 @@ export default function DeveloperOverviewTab() {
                   key={stat.developer_name}
                   className="grid grid-cols-[1fr_80px_120px_180px_140px] gap-2 px-3 py-2.5 text-sm items-center hover:bg-muted/50 rounded-md transition-colors"
                 >
-                  <span className="font-medium truncate">{stat.developer_name || "Unknown"}</span>
+                  <span data-developer-name className="font-medium min-w-0 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{stat.developer_name || "Unknown"}</span>
                   <span className="text-center">
                     <Badge variant="secondary" className="text-xs">{stat.project_count}</Badge>
                   </span>

@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "jbj-form-field flex min-h-10 w-full cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:whitespace-normal [&>span]:break-words [&>span]:[overflow-wrap:anywhere] [&>span]:leading-snug",
+      "jbj-form-field flex min-h-10 w-full cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:whitespace-normal [&>span]:break-words [&>span]:[overflow-wrap:anywhere] [&>span]:leading-snug [&>span]:text-left",
       "touch-action-manipulation",
       className,
     )}
@@ -41,10 +41,10 @@ const SelectTriggerDark = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border",
+      "flex min-h-10 w-full cursor-pointer items-center justify-between rounded-lg border",
       "bg-[#1A1A1A] border-[#1A1A1A] text-white",
       "hover:border-[#1A1A1A] focus:ring-2 focus:ring-[#B89555]/50 focus:ring-offset-2 focus:ring-offset-gray-900",
-      "disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:whitespace-normal [&>span]:break-words [&>span]:[overflow-wrap:anywhere] [&>span]:leading-snug",
+      "disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0 [&>span]:whitespace-normal [&>span]:break-words [&>span]:[overflow-wrap:anywhere] [&>span]:leading-snug [&>span]:text-left",
       "px-3 py-2 text-sm ring-offset-background",
       className,
     )}
@@ -126,7 +126,7 @@ const SelectContent = React.forwardRef<
       ref={ref}
       data-surface="light"
       className={cn(
-        "jbj-form-popover relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl",
+        "jbj-form-popover relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl max-w-[calc(100vw-2rem)]",
         "text-[#0A0A0A]",
         "shadow-[0_10px_40px_rgba(0,0,0,0.12),0_4px_15px_rgba(0,0,0,0.08)]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
@@ -215,7 +215,7 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "jbj-form-option relative flex min-h-10 w-full min-w-0 cursor-pointer select-none items-center rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150",
+      "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-[color:var(--emerald-1)] hover:text-white",
       "focus:bg-[color:var(--emerald-1)] focus:text-white",
@@ -226,7 +226,7 @@ const SelectItem = React.forwardRef<
     )}
     {...props}
   >
-    <SelectPrimitive.ItemText className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">
+    <SelectPrimitive.ItemText className="min-w-0 w-full flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug text-left overflow-visible">
       {children}
     </SelectPrimitive.ItemText>
     <span className="absolute right-2 flex h-4 w-4 items-center justify-center">
@@ -246,7 +246,7 @@ const SelectItemDark = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex min-h-10 w-full min-w-0 cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm outline-none transition-all duration-200",
+      "relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-8 pr-3 text-sm outline-none transition-all duration-200 whitespace-normal overflow-visible",
       "text-white",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-[#1A1A1A] hover:text-white",
@@ -262,7 +262,7 @@ const SelectItemDark = React.forwardRef<
       </SelectPrimitive.ItemIndicator>
     </span>
 
-    <SelectPrimitive.ItemText className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug">
+    <SelectPrimitive.ItemText className="min-w-0 w-full flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug text-left overflow-visible">
       {children}
     </SelectPrimitive.ItemText>
   </SelectPrimitive.Item>

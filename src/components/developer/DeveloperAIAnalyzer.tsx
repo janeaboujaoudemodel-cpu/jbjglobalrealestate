@@ -277,7 +277,7 @@ function PortfolioStrengthCard({ text }: { text: string }) {
               <span className="text-[#1A1A1A] font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[#1A1A1A] font-semibold text-sm truncate">{dev.name}</p>
+              <p data-developer-name className="text-[#1A1A1A] font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</p>
               {dev.projects && <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>}
             </div>
             <ArrowUpRight className="w-3.5 h-3.5 text-[#1A1A1A]/70 flex-shrink-0 mt-1" />

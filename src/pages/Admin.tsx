@@ -271,7 +271,7 @@ const Admin = () => {
                             <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center overflow-hidden flex-shrink-0">
                               {dev.logo_url ? <img src={dev.logo_url} alt={dev.name} className="w-full h-full object-contain" /> : <Building2 className="w-5 h-5 text-[#1A1A1A]" />}
                             </div>
-                            <div className="min-w-0"><p className="font-semibold text-[#1A1A1A] truncate">{dev.name}</p><p className="text-xs text-[#1A1A1A]/70">{dev.slug}</p></div>
+                            <div className="min-w-0 overflow-visible"><p data-developer-name className="font-semibold text-[#1A1A1A] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</p><p className="text-xs text-[#1A1A1A]/70">{dev.slug}</p></div>
                           </div>
                           <Button variant="ghost" size="sm" onClick={() => window.open(`/developers/${dev.slug}`, '_blank')}><ExternalLink className="w-4 h-4" /></Button>
                         </div>

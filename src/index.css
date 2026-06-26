@@ -16743,6 +16743,13 @@ html body :is([role="option"],[role="menuitem"],[role="menuitemcheckbox"],[role=
 }
 
 /* DEVELOPER DROPDOWN NAME FIT LOCK — no cropped/truncated developer names globally */
+html body [data-developer-option] {
+  height: auto !important;
+  min-height: 40px !important;
+  align-items: flex-start !important;
+  white-space: normal !important;
+  overflow: visible !important;
+}
 html body [data-developer-nameplate],
 html body [data-developer-nameplate] * {
   text-overflow: clip !important;
@@ -16752,12 +16759,40 @@ html body [data-developer-nameplate] > span {
   max-width: 100% !important;
   max-height: 100% !important;
   white-space: normal !important;
+  overflow: hidden !important;
+  text-align: center !important;
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
   hyphens: auto !important;
 }
+html body .jbj-form-popover:has([data-developer-name]),
+html body [data-developer-option] [data-radix-select-content] {
+  width: max(var(--radix-select-trigger-width), 20rem) !important;
+  max-width: calc(100vw - 2rem) !important;
+}
+html body .jbj-form-field:has([data-developer-name]) {
+  height: auto !important;
+  min-height: 2.5rem !important;
+}
 html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-radix-collection-item]) :is(span,p,div) {
   min-width: 0;
+}
+html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-radix-collection-item]) :is(.truncate,[class*="truncate"]) {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+html body [data-developer-name] {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  hyphens: auto !important;
+  line-height: 1.18 !important;
 }
 html body :is([role="option"],[role="menuitem"],[cmdk-item],.cmdk-item,[data-radix-collection-item]) :is([title]) {
   white-space: normal !important;

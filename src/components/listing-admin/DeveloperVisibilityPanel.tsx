@@ -197,7 +197,7 @@ export function DeveloperVisibilityPanel() {
                 ) : (
                   <Eye className="w-4 h-4 text-[color:var(--emerald-1)] shrink-0" />
                 )}
-                <span className="text-sm font-medium truncate">{dev.name}</span>
+                <span data-developer-name className="text-sm font-medium min-w-0 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</span>
                 {(dev as any).updated_at && (
                   <span className="text-[10px] text-muted-foreground ml-1 shrink-0 hidden sm:inline">
                     <Clock className="w-2.5 h-2.5 inline mr-0.5" />{formatRelativeTime((dev as any).updated_at)}

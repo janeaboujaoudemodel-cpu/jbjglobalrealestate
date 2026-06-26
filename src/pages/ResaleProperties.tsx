@@ -365,14 +365,18 @@ const ResaleProperties = () => {
 
               {/* Developer */}
               <Select value={developerFilter} onValueChange={setDeveloperFilter}>
-                <SelectTrigger className={cn(filterPillBase, developerFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-8 max-w-[200px] [&>svg:last-child]:hidden")}>
+                <SelectTrigger className={cn(filterPillBase, developerFilter !== "all" ? filterPillActive : filterPillInactiveLight, "h-auto min-h-8 max-w-[260px] [&>svg:last-child]:hidden")}>
                   <Users className="w-3.5 h-3.5 flex-shrink-0" />
-                  <span className="truncate">{developerFilter === "all" ? "Developer" : developerFilter}</span>
+                  <span data-developer-name className="min-w-0 whitespace-normal break-words [overflow-wrap:anywhere] leading-tight text-left">{developerFilter === "all" ? "Developer" : developerFilter}</span>
                 </SelectTrigger>
-                <SelectContent className="max-h-60">
+                <SelectContent className="max-h-60 w-[320px]">
                   <SelectItem value="all">All Developers</SelectItem>
                   {(developers || []).map((dev) => (
-                    <SelectItem key={dev} value={dev}>{dev}</SelectItem>
+                    <SelectItem key={dev} value={dev}>
+                      <span data-developer-name className="block min-w-0 max-w-full whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">
+                        {dev}
+                      </span>
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

@@ -51,6 +51,10 @@ export function DeveloperLogo({
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
     const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim() || raw;
     const displayName = cleaned.toUpperCase();
+    const displayText = displayName
+      .split(/\s+/)
+      .map((part) => part.length > 8 ? part.replace(/(.{4})(?=.)/g, "$1\u200B") : part)
+      .join(" ");
     const compactLength = displayName.replace(/\s+/g, "").length;
     const sizeClass = scale === "card"
       ? compactLength <= 6 ? "text-4xl"
@@ -58,11 +62,12 @@ export function DeveloperLogo({
         : compactLength <= 16 ? "text-2xl"
         : compactLength <= 24 ? "text-xl"
         : "text-lg"
-      : compactLength <= 4 ? "text-[12px]"
-        : compactLength <= 6 ? "text-[10px]"
-        : compactLength <= 9 ? "text-[8px]"
-        : compactLength <= 14 ? "text-[7px]"
-        : "text-[6px]";
+      : compactLength <= 4 ? "text-[11px]"
+        : compactLength <= 6 ? "text-[9.5px]"
+        : compactLength <= 9 ? "text-[7.5px]"
+        : compactLength <= 14 ? "text-[6.25px]"
+        : compactLength <= 20 ? "text-[5.5px]"
+        : "text-[5px]";
     return (
       <div
         className={cn(containerClass, "[container-type:size]")}
@@ -72,12 +77,13 @@ export function DeveloperLogo({
       >
         <span
           className={cn(
-            "block max-w-full max-h-full font-bold tracking-normal leading-[0.9] text-center uppercase whitespace-normal break-words [overflow-wrap:anywhere]",
+            "block w-full max-w-full max-h-full overflow-hidden font-bold tracking-[-0.02em] leading-[0.86] text-center uppercase whitespace-normal break-words [overflow-wrap:anywhere] [word-break:break-word] [hyphens:auto] [text-wrap:balance]",
             textTone,
             sizeClass,
           )}
+          data-developer-name
         >
-          {displayName}
+          {displayText}
         </span>
       </div>
     );
