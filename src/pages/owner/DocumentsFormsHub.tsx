@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download, Search, Briefcase, Building2, ReceiptText, Banknote } from "lucide-react";
 import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
