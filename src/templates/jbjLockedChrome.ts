@@ -75,30 +75,43 @@ export type JbjChromeTheme = "champagne" | "emerald";
 
 const themeTokens = (theme: JbjChromeTheme) =>
   theme === "emerald"
-    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoColor: "#FFFFFF" }
-    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoColor: JBJ_GOLD };
+    ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", jColor: "#FFFFFF", bColor: "#FFFFFF" }
+    : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, jColor: "#1A1A1A", bColor: JBJ_GOLD };
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
+  const bClip = "inset(0% 26% 0% 26%)";
+  const bShadow = theme === "emerald"
+    ? "drop-shadow(0 0.5px 0 rgba(0,0,0,.55)) drop-shadow(0 1.5px 1.8px rgba(0,0,0,.45))"
+    : "drop-shadow(0.5px 1px 0 rgba(60,40,10,.55)) drop-shadow(0 2px 2.2px rgba(60,40,10,.35))";
+  const bHighlight = theme === "emerald"
+    ? "drop-shadow(0 -0.5px 0 rgba(255,255,255,.6))"
+    : "drop-shadow(-0.5px -0.5px 0 rgba(255,255,255,.85))";
+  const mask = `position:absolute;inset:0;-webkit-mask-image:url(${monogramSrc});mask-image:url(${monogramSrc});-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;`;
   return `
   <header style="
     width:100%;
     background:${t.bg};
     border-bottom:1px solid ${t.hairline};
-    padding:14px 24px;
+    padding:12px 24px;
     font-family:Inter, system-ui, sans-serif;
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:132px minmax(0,1fr);align-items:center;gap:14px;min-height:132px;">
-      <div aria-label="JBJ" role="img"
-        style="width:118px;height:118px;background:${t.monoColor};-webkit-mask-image:url(${monogramSrc});mask-image:url(${monogramSrc});-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;margin:auto;align-self:center;justify-self:center;"></div>
+    <div style="display:grid;grid-template-columns:128px minmax(0,1fr);align-items:center;column-gap:8px;min-height:118px;">
+      <div aria-label="JBJ" role="img" style="position:relative;width:118px;height:118px;justify-self:center;align-self:center;">
+        <div style="${mask}background:${t.jColor};clip-path:inset(0% 69.5% 0% 13%);-webkit-clip-path:inset(0% 69.5% 0% 13%);"></div>
+        <div style="${mask}background:${t.jColor};clip-path:inset(0% 13% 0% 69.5%);-webkit-clip-path:inset(0% 13% 0% 69.5%);"></div>
+        <div style="${mask}background:${theme === "emerald" ? "#03281D" : "#5C3F18"};clip-path:${bClip};-webkit-clip-path:${bClip};filter:${bShadow};"></div>
+        <div style="${mask}background:${theme === "emerald" ? "#0E6B52" : "#F2DFAA"};clip-path:${bClip};-webkit-clip-path:${bClip};filter:${bHighlight};${theme === "champagne" ? "mix-blend-mode:screen;" : ""}"></div>
+        <div style="${mask}background:${t.bColor};clip-path:${bClip};-webkit-clip-path:${bClip};"></div>
+      </div>
 
-      <div style="height:100%;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-right:0;overflow:visible;">
-        <div style="display:block;width:100%;font-size:26px;font-weight:900;letter-spacing:-0.015em;color:${t.fg};white-space:nowrap;transform:scaleX(1.04);transform-origin:left center;">
-          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.03em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
+      <div style="height:100%;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:4px;padding-right:64px;overflow:visible;">
+        <div style="display:block;width:100%;font-size:26px;font-weight:900;letter-spacing:0.06em;color:${t.fg};white-space:nowrap;transform:scaleX(1.02);transform-origin:left center;">
+          ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.1em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
     </div>
