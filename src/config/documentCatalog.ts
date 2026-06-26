@@ -125,7 +125,7 @@ const STAFF: DocumentTemplate[] = [
       "",
       "Date: ______________________________",
       "",
-      "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. [Office Address] = Office SM1-195, Port Saeed, Deira, Dubai, UAE. Default working hours when not specified = 10:00 AM – 7:00 PM, Monday to Saturday. Default probation = up to six (6) months. Use clean HTML: <h2> for numbered titles, <p> for paragraphs, no inline color. SURGICAL PATCH MODE — never rewrite this structure or import clauses from the Employment Agreement or NDA; only fill placeholders.",
+      "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. Place of Work for Offer Letters = the location designated by the Company from time to time — DO NOT print the trade-licence office address (Office SM1-195, Port Saeed) on Offer Letters; that address is reserved for NDA and corporate documents only. Default working hours when not specified = 10:00 AM – 7:00 PM, Monday to Saturday. Default probation = up to six (6) months. Use clean HTML: <h2> for numbered titles, <p> for paragraphs, no inline color. SURGICAL PATCH MODE — never rewrite this structure or import clauses from the Employment Agreement or NDA; only fill placeholders.",
     ].join("\n"),
     fields: [
       RECIPIENT_NAME,
