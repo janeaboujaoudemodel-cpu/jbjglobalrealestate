@@ -224,14 +224,15 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   // any template) should open the editor immediately, not flash the full app
   // loader and feel like the backend kicked the user back to the hub.
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof globalThis === "undefined") return;
     const preload = () => { void loadDocumentStudio(); };
-    const idle = "requestIdleCallback" in window
-      ? (window as any).requestIdleCallback(preload, { timeout: 1200 })
-      : window.setTimeout(preload, 350);
+    const host = globalThis as any;
+    const idle = typeof host.requestIdleCallback === "function"
+      ? host.requestIdleCallback(preload, { timeout: 1200 })
+      : host.setTimeout(preload, 350);
     return () => {
-      if (typeof idle === "number") window.clearTimeout(idle);
-      else if ("cancelIdleCallback" in window) (window as any).cancelIdleCallback(idle);
+      if (typeof idle === "number") host.clearTimeout(idle);
+      else if (typeof host.cancelIdleCallback === "function") host.cancelIdleCallback(idle);
     };
   }, []);
 
