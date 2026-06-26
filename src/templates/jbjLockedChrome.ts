@@ -5,7 +5,7 @@
  * export, print, and branded emails.
  */
 
-import monogramSrc from "@/assets/jbj-monogram-cropped.png";
+import monogramSrc from "@/assets/jbj-monogram-nobuffer.png";
 import companyStampSrc from "@/assets/jbj-company-stamp.png?inline";
 import {
   TRADE_LICENSE_OFFICE,
@@ -78,29 +78,33 @@ const themeTokens = (theme: JbjChromeTheme) =>
     ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", jColor: "#FFFFFF", bColor: "#FFFFFF" }
     : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, jColor: "#1A1A1A", bColor: JBJ_GOLD };
 
+const monogramImgStyle = (theme: JbjChromeTheme) =>
+  theme === "emerald"
+    ? "filter:brightness(0) invert(1) drop-shadow(0 1px 1px rgba(0,0,0,.18));"
+    : "filter:drop-shadow(0 1px 0 rgba(255,255,255,.78)) drop-shadow(0 1.2px 1.2px rgba(72,48,15,.2));";
+
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
-  const monoMask = `-webkit-mask-image:url(${monogramSrc});mask-image:url(${monogramSrc});-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;`;
-  const monogram = `<div aria-label="JBJ" role="img" style="width:132px;height:132px;background:${t.jColor};${monoMask}filter:drop-shadow(.7px 0 0 ${t.jColor}) drop-shadow(-.7px 0 0 ${t.jColor}) drop-shadow(0 1.4px 1.4px rgba(60,40,10,.2));"></div>`;
+  const monogram = `<img src="${monogramSrc}" alt="JBJ" aria-label="JBJ" role="img" style="width:132px;height:132px;object-fit:contain;display:block;${monogramImgStyle(theme)}" />`;
   return `
   <header style="
     width:100%;
     background:${t.bg};
     border-bottom:1px solid ${t.hairline};
-    padding:10px 22px;
+    padding:0 22px;
     font-family:Inter, system-ui, sans-serif;
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:148px minmax(0,1fr);align-items:center;column-gap:12px;min-height:138px;">
-      <div style="height:142px;width:142px;display:flex;align-items:center;justify-content:center;justify-self:center;align-self:center;">
+    <div style="display:grid;grid-template-columns:148px minmax(0,1fr);align-items:center;column-gap:13px;min-height:148px;">
+      <div style="height:148px;width:142px;display:flex;align-items:center;justify-content:center;justify-self:center;align-self:center;">
         ${monogram}
       </div>
 
-      <div style="height:142px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:36px;overflow:visible;">
-        <div style="display:block;width:100%;font-size:25.5px;font-weight:900;letter-spacing:0.085em;color:${t.fg};white-space:nowrap;transform:scaleX(.99);transform-origin:left center;">
+      <div style="height:148px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:30px;overflow:visible;">
+        <div style="display:block;width:100%;font-size:25.5px;font-weight:900;letter-spacing:0.092em;color:${t.fg};white-space:nowrap;transform:scaleX(.985);transform-origin:left center;">
           ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.125em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
@@ -115,23 +119,23 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
     width:100%;
     background:${t.bg};
     border-top:1px solid ${t.hairline};
-    padding:12px 28px;
-    min-height:46px;
+    padding:0 28px;
+    min-height:58px;
     font-family:Inter, system-ui, sans-serif;
     font-size:8.5px;
-    line-height:1.15;
+    line-height:1.25;
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+    <table style="width:100%;height:58px;border-collapse:collapse;table-layout:fixed;">
       <tr>
-        <td style="vertical-align:middle;width:44%;padding-right:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.92;font-size:8.5px;line-height:1.25;">
+        <td style="vertical-align:middle;width:44%;padding:0 14px 0 0;color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.92;font-size:8.5px;line-height:1.25;">
           ${JBJ_BRAND.address}
         </td>
         <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:9px;font-weight:700;line-height:1.35;">
           ${(JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone]).map(p => `<div style="white-space:nowrap;">${p}</div>`).join("")}
         </td>
-        <td style="vertical-align:middle;width:34%;text-align:right;padding-left:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:8.5px;">
+        <td style="vertical-align:middle;width:34%;text-align:right;padding:0 0 0 14px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:8.5px;">
           <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
           <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;margin:0 6px;">·</span>
           <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>

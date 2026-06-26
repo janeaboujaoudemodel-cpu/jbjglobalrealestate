@@ -411,6 +411,7 @@ export function signatureBlock(opts: {
   ownerTitle?: string;
   ownerDate?: string;
   applicantName?: string;
+  applicantTitle?: string;
   applicantDate?: string;
   applicantLabel?: string;
   applicantMetaRows?: Array<[string, string | undefined]>;
@@ -420,28 +421,24 @@ export function signatureBlock(opts: {
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
+  const aTitle = esc(opts.applicantTitle || "");
   const aDate = esc(formatHumanDate(opts.applicantDate));
   // Recipient cell title is template-aware (Second Party / Client / Guest /
   // Counterparty …) — NEVER the literal word "Recipient" and NEVER the
   // recipient's own name (the name already prints inside the cell).
   const aLabel = esc(opts.applicantLabel || "Second Party");
-  const shortLine = (value?: string) => `
-    <span style="display:inline-block;vertical-align:baseline;width:168px;border-bottom:1px solid ${INK};min-height:18px;position:relative;margin-left:6px;">
-      ${value ? `<span style="position:absolute;left:6px;bottom:1px;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:156px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
-    </span>`;
-
   const linedRow = (label: string, value?: string) => `
-    <div style="display:grid;grid-template-columns:54px 1fr;align-items:end;column-gap:8px;font-size:11px;color:${INK};margin-top:8px;line-height:1.2;">
+    <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:8px;line-height:1.3;min-height:18px;">
       <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
-      <span style="display:block;border-bottom:1px solid ${INK};height:20px;position:relative;min-width:0;">
-        ${value ? `<span style="position:absolute;left:6px;bottom:1px;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:210px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
+      <span style="display:block;min-height:18px;position:relative;min-width:0;">
+        ${value ? `<span style="display:block;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
       </span>
     </div>`;
 
-  const row = (label: string, value: string, fallbackDots = true) => `
+  const row = (label: string, value: string) => `
     <div style="font-size:11px;color:${INK};margin-top:4px;">
       <strong style="font-weight:600;">${label}:</strong>
-      ${value ? `<span style="margin-left:4px;">${value}</span>` : (fallbackDots ? shortLine() : "")}
+      ${value ? `<span style="margin-left:4px;">${value}</span>` : ""}
     </div>`;
 
   // The company stamp is controlled by DocumentStudio's draggable/lockable
@@ -470,10 +467,11 @@ export function signatureBlock(opts: {
   // request inside the cell.
   const applicantMeta = (opts.applicantMetaRows || [])
     .filter(([, value]) => (value || "").trim())
-    .map(([label, value]) => row(label, esc(value || ""), false))
+    .map(([label, value]) => row(label, esc(value || "")))
     .join("");
   const applicantLines = `
     ${linedRow("Name", aName)}
+    ${linedRow("Title", aTitle)}
     ${linedRow("Date", aDate)}
     ${applicantMeta}
   `;
@@ -707,9 +705,20 @@ function composeJobOffer(input: ComposerInput): string {
       <p style="margin:0;">Sincerely,<br/>For and on behalf of ${companyName}</p>
     </div>`;
 
+  const offerHeaderDetails = `
+    <div data-pdf-section="candidate-header" style="margin:0 0 14px;padding:0 0 10px;border-bottom:1px solid ${GOLD};font-size:12px;line-height:1.55;color:${INK};page-break-inside:avoid;break-inside:avoid;">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:16px;margin-bottom:6px;">
+        <div><strong>Candidate Name:</strong> ${candidateName}</div>
+        <div style="text-align:right;white-space:nowrap;"><strong>Date:</strong> ${esc(signingHuman)}</div>
+      </div>
+      <div><strong>Address:</strong> ${address}</div>
+      <div><strong>Email:</strong> ${email}</div>
+      <div><strong>Phone / WhatsApp:</strong> ${phone}</div>
+    </div>`;
+
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
-    paragraph(`<strong>Candidate Name:</strong> ${candidateName}<br/><strong>Address:</strong> ${address}<br/><strong>Email:</strong> ${email}<br/><strong>Phone / WhatsApp:</strong> ${phone}`),
+    offerHeaderDetails,
     subjectLine(`Employment Offer – ${jobTitle}`),
     paragraph(`Dear ${candidateName},`),
     paragraph(`We are pleased to offer you the position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency (Trade Licence No. <strong>${JBJ_BRAND.tradeLicense}</strong>, ORN 41486), subject to the terms below and the signing of the Company’s employment contract, confidentiality agreement, policies, and any required UAE employment documentation.`),
@@ -724,6 +733,7 @@ function composeJobOffer(input: ComposerInput): string {
       ownerTitle: input.ownerTitle,
       ownerDate: offerSigningIso,
       applicantName: id.name || f.recipientName,
+      applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
       extraSignatories: input.extraSignatories,
