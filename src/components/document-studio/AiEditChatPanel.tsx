@@ -211,14 +211,15 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden">
+    <div data-no-contrast-guard className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden">
       <div className="px-4 py-3 border-b border-[#B89555]/45 flex items-center gap-2 bg-[#F7F2EA]">
-        <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
-        <span className="text-sm font-semibold text-[#1A1A1A]">Live Document Editor</span>
-        <span className="ml-auto text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/50">
+        <Sparkles className="w-4 h-4" style={{ color: "#064E3B" }} />
+        <span className="text-sm font-semibold" style={{ color: "#1A1A1A" }}>Live Document Editor</span>
+        <span className="ml-auto text-[10px] uppercase tracking-[0.14em] font-semibold" style={{ color: "#1A1A1A" }}>
           {language}
         </span>
       </div>
+
 
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-[240px]">
         {messages.map((m, i) => (
