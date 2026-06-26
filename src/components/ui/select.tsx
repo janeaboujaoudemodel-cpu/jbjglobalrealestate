@@ -217,9 +217,10 @@ const SelectItem = React.forwardRef<
     className={cn(
       "jbj-form-option relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)]",
-      "focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)]",
-      "data-[highlighted]:bg-[color:var(--emerald-soft-bg)] data-[highlighted]:text-[color:var(--emerald-1)]",
+      "hover:bg-[color:var(--emerald-1)] hover:text-white",
+      "focus:bg-[color:var(--emerald-1)] focus:text-white",
+      "data-[highlighted]:bg-[color:var(--emerald-1)] data-[highlighted]:text-white",
+      "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
       "data-[state=checked]:text-[color:var(--emerald-1)] data-[state=checked]:font-semibold",
       className,
     )}

@@ -1708,8 +1708,8 @@ function StudioShell({
               role="tab"
               aria-selected={chromeTheme === "champagne"}
               onClick={() => setChromeTheme("champagne")}
-              data-surface="champagne"
-              className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${chromeTheme === "champagne" ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+              data-surface={chromeTheme === "champagne" ? "emerald" : "champagne"}
+              className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${chromeTheme === "champagne" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
             >
               Champagne
             </button>
