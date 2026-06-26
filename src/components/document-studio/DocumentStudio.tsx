@@ -855,8 +855,8 @@ function StudioShell({
   const autoFillFileRef = useRef<HTMLInputElement>(null);
 
   // Document language (drives translation + AI replies + STT).
-  const [docLanguage, setDocLanguage] = useState<string>("English");
-  const [chromeTheme, setChromeTheme] = useState<"champagne" | "emerald">("champagne");
+  const [docLanguage, setDocLanguage] = useState<string>(snap?.docLanguage || "English");
+  const [chromeTheme, setChromeTheme] = useState<"champagne" | "emerald">(snap?.chromeTheme || "champagne");
 
   // Signature + stamp placement (with x/y positions for free dragging)
   const { defaultSignature, defaultStamp } = useOwnerAssets();
@@ -869,7 +869,7 @@ function StudioShell({
     signatureB?: { url: string; width: number };
     showDate?: boolean;
     showSigB?: boolean;
-  }>({ showDate: false, showSigB: true, dateValue: new Date().toISOString().slice(0, 10) });
+  }>(() => ({ showDate: false, showSigB: true, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
