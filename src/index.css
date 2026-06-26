@@ -16982,7 +16982,7 @@ html body :is(
   [style*="background:#fff"]
 ):not([data-surface="emerald"]):not([data-on-dark]):not([data-hero-dark])
   :is(.text-white, [class*="text-white"], [style*="color: rgb(255, 255, 255)"], [style*="color:#fff"], [style*="color: #fff"], svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse)
-  :not(:is([data-surface="emerald"], [data-emerald="true"], [data-emerald-ok], [data-emerald-action="true"], [data-on-dark], [data-hero-dark], .jj-emerald-metallic, .jj-cta-emerald, .jj-cta-primary, .jj-surface-emerald, .jj-icon-tile-emerald, .jj-pill-emerald, .jj-pill-emerald-metallic) *) {
+  :not(:is([data-surface="emerald"], [data-emerald="true"], [data-emerald-ok], [data-emerald-action="true"], [data-emerald-icon-surface], [data-on-dark], [data-hero-dark], .jj-emerald-metallic, .jj-cta-emerald, .jj-cta-primary, .jj-surface-emerald, .jj-icon-tile-emerald, .jj-pill-emerald, .jj-pill-emerald-metallic) *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
