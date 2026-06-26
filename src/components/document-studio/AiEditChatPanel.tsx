@@ -120,22 +120,40 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
   useEffect(() => () => { try { recognitionRef.current?.stop(); } catch { /* noop */ } }, []);
 
   /* ───── Attachments ───── */
+  const [dragOver, setDragOver] = useState(false);
   const onPickFiles = () => fileRef.current?.click();
-  const onFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    e.target.value = "";
+  const ingestFiles = useCallback(async (files: File[]) => {
+    if (!files.length) return;
     const next: Attachment[] = [];
     for (const f of files) {
       if (f.size > 8 * 1024 * 1024) { toast.error(`${f.name} too large (max 8MB)`); continue; }
-      const dataUrl: string = await new Promise((res, rej) => {
-        const r = new FileReader();
-        r.onload = () => res(String(r.result));
-        r.onerror = () => rej(r.error);
-        r.readAsDataURL(f);
-      });
-      next.push({ name: f.name, type: f.type, dataUrl });
+      try {
+        const dataUrl: string = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(String(r.result));
+          r.onerror = () => rej(r.error);
+          r.readAsDataURL(f);
+        });
+        next.push({ name: f.name, type: f.type, dataUrl });
+      } catch {
+        toast.error(`Could not read ${f.name}`);
+      }
     }
-    if (next.length) setAttachments((a) => [...a, ...next]);
+    if (next.length) {
+      setAttachments((a) => [...a, ...next]);
+      toast.success(`${next.length} file${next.length > 1 ? "s" : ""} attached`);
+    }
+  }, []);
+  const onFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    await ingestFiles(files);
+  };
+  const onDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const files = Array.from(e.dataTransfer.files || []);
+    await ingestFiles(files);
   };
   const removeAttachment = (i: number) =>
     setAttachments((a) => a.filter((_, idx) => idx !== i));
@@ -212,7 +230,22 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
   };
 
   return (
-    <div data-no-contrast-guard className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden shadow-sm">
+    <div
+      data-no-contrast-guard
+      onDragOver={(e) => { e.preventDefault(); if (!dragOver) setDragOver(true); }}
+      onDragLeave={(e) => { if (e.currentTarget === e.target) setDragOver(false); }}
+      onDrop={onDrop}
+      className="relative flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden shadow-sm"
+    >
+      {dragOver && (
+        <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center bg-[#FDFBF7]/95 border-2 border-dashed border-[#064E3B] rounded-xl">
+          <div className="text-center px-6">
+            <Paperclip className="w-8 h-8 mx-auto mb-2 text-[#064E3B]" />
+            <p className="text-sm font-semibold text-[#1A1A1A]">Drop files to attach</p>
+            <p className="text-xs text-[#1A1A1A]/60 mt-1">Images, PDF, DOC, DOCX, TXT · up to 8MB each · multiple files OK</p>
+          </div>
+        </div>
+      )}
       <div className="px-4 py-3 border-b border-[#B89555]/45 flex items-center gap-2 bg-[#F7F2EA]">
         <Sparkles className="w-4 h-4 shrink-0" style={{ color: "#064E3B" }} />
         <span className="text-sm font-semibold leading-tight min-w-0" style={{ color: "#1A1A1A" }}>AI Document Assistant</span>
@@ -285,7 +318,7 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
             ref={fileRef}
             type="file"
             multiple
-            accept="image/*,application/pdf,.doc,.docx,.txt"
+            accept="image/*,application/pdf,.doc,.docx,.txt,.rtf,.xls,.xlsx,.csv,.heic,.heif"
             onChange={onFilesSelected}
             className="hidden"
           />
