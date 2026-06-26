@@ -1,4 +1,5 @@
 import { useState, CSSProperties } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2, Crown } from "lucide-react";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useUserModeContext, UserMode } from "@/contexts/UserModeContext";
