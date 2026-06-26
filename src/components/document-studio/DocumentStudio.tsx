@@ -131,7 +131,7 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   }
 }
 
-const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "homeAddress", "recipientEmail", "recipientPhone"];
+const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
 
 function cleanIdentityNotes(value?: string) {
   if (!value) return value;
@@ -153,6 +153,7 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   set("homeAddress", pick("homeAddress", "residentialAddress", "residential_address", "address", "home_address"));
   set("recipientEmail", pick("recipientEmail", "email", "emailAddress", "email_address"));
   set("recipientPhone", pick("recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"));
+  set("nationality", pick("nationality", "nationalityName", "country", "countryOfNationality"));
 
   set("recipientEmail", out.recipientEmail || text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]);
   set("emiratesId", out.emiratesId || text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-"));
@@ -162,7 +163,7 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   set("recipientName", out.recipientName || text.match(/(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
 
   Object.entries(all).forEach(([k, v]) => {
-    if (/expiry|expire|dateOfBirth|dob|birthDate|issueDate|issuingDate|nationality|sex/i.test(k)) return;
+    if (/expiry|expire|dateOfBirth|dob|birthDate|issueDate|issuingDate|sex/i.test(k)) return;
     if (IDENTITY_FIELD_KEYS.includes(k)) return;
     if (typeof v === "string" && v.trim()) out[k] = v.trim();
   });
@@ -2543,7 +2544,7 @@ function StudioShell({
                               r.onerror = rej;
                               r.readAsDataURL(file);
                             });
-                            const source = `Extract ONLY contract identity/contact fields from attached Emirates ID, passport, or document: ${file.name}. Include full name as per ID, Emirates ID number, passport number, home address, email, and phone if visible. Exclude ID expiry, birth date, issuing date, nationality, and sex.`;
+                            const source = `Extract ONLY contract identity/contact fields from attached Emirates ID, passport, or document: ${file.name}. Include full name as per ID, Emirates ID number, passport number, nationality, home address, email, and phone if visible. Exclude ID expiry, birth date, issuing date, and sex.`;
                             const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
                               body: {
                                 mode: "extract-fields",
