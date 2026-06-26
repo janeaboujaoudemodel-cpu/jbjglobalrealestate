@@ -87,7 +87,7 @@ const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
-  const monogram = `<img src="${monogramSrc}" alt="JBJ" aria-label="JBJ" role="img" style="width:126px;height:126px;object-fit:contain;display:block;${monogramImgStyle(theme)}" />`;
+  const monogram = `<img src="${monogramSrc}" alt="JBJ" aria-label="JBJ" role="img" style="width:184px;height:184px;object-fit:contain;display:block;${monogramImgStyle(theme)}" />`;
   return `
   <header style="
     width:100%;
@@ -98,13 +98,13 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:148px minmax(0,1fr);align-items:center;column-gap:13px;min-height:148px;height:148px;">
-      <div style="height:148px;width:142px;display:flex;align-items:center;justify-content:center;justify-self:center;align-self:center;">
+    <div style="display:grid;grid-template-columns:210px minmax(0,1fr);align-items:center;column-gap:16px;min-height:210px;height:210px;">
+      <div style="height:210px;width:200px;display:flex;align-items:center;justify-content:center;justify-self:center;align-self:center;">
         ${monogram}
       </div>
 
-      <div style="height:148px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:30px;overflow:visible;">
-        <div style="display:block;width:100%;font-size:25.5px;font-weight:900;letter-spacing:0.104em;color:${t.fg};white-space:nowrap;transform:scaleX(.985);transform-origin:left center;">
+      <div style="height:210px;display:flex;align-items:center;justify-content:flex-start;line-height:1;text-align:left;min-width:0;padding-left:0;padding-right:30px;overflow:visible;">
+        <div style="display:block;width:100%;font-size:34px;font-weight:900;letter-spacing:0.104em;color:${t.fg};white-space:nowrap;transform:scaleX(.985);transform-origin:left center;">
           ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.125em;white-space:nowrap;color:${t.fg};-webkit-text-fill-color:${t.fg};">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
