@@ -1957,7 +1957,7 @@ function StudioShell({
       <div className="studio-body flex-1 min-h-0 flex flex-col lg:flex-row overflow-hidden">
 
         {/* LEFT RAIL */}
-        <aside className="studio-sidebar w-full lg:w-[330px] xl:w-[360px] shrink-0 border-b lg:border-b-0 lg:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[38vh] lg:max-h-none">
+        <aside className={`studio-sidebar w-full ${step === 2 && detailsPanelCollapsed ? "lg:w-[72px] xl:w-[72px]" : "lg:w-[330px] xl:w-[360px]"} shrink-0 border-b lg:border-b-0 lg:border-r border-[#B89555]/55 bg-[#FDFBF7] flex flex-col max-h-[38vh] lg:max-h-none transition-[width] duration-200`}>
           {step === 1 && (
             <>
               <div className="p-4 border-b border-[#B89555]/20">
@@ -2009,7 +2009,8 @@ function StudioShell({
 
           {step === 2 && template && (
             <>
-              <div className="p-4 border-b border-[#B89555]/20 flex items-center gap-2">
+              <div className="p-4 border-b border-[#B89555]/20 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                 <button
                   onClick={() => setStep(1)}
                   className="h-7 w-7 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center"
@@ -2017,11 +2018,23 @@ function StudioShell({
                 >
                   <ChevronLeft className="w-4 h-4 text-[#1A1A1A]" />
                 </button>
-                <div className="min-w-0">
+                {!detailsPanelCollapsed && <div className="min-w-0">
                   <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55">Step 2 — Details</div>
                   <div className="text-[13px] font-semibold text-[#1A1A1A] truncate">{template.label}</div>
+                </div>}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setDetailsPanelCollapsed((v) => !v)}
+                  className="h-8 w-8 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] shrink-0"
+                  title={detailsPanelCollapsed ? "Expand details" : "Minimize details"}
+                  aria-label={detailsPanelCollapsed ? "Expand details" : "Minimize details"}
+                >
+                  {detailsPanelCollapsed ? <PanelRightOpen className="w-4 h-4" /> : <PanelRightClose className="w-4 h-4" />}
+                </button>
               </div>
+              {!detailsPanelCollapsed && (
+              <>
               <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4">
                 {template.needsPosition && (
                   <Field label="Department">
@@ -2665,6 +2678,8 @@ function StudioShell({
                   Tip: Generate drafts the AI body. You can also type directly into the page or use the AI assistant on the right.
                 </p>
               </div>
+              </>
+              )}
             </>
           )}
 
