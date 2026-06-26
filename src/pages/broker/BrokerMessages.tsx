@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DOMPurify from "dompurify";
 import { useHRAnnouncements, useMarkAnnouncementRead } from "@/hooks/useHRAnnouncements";
 import { Megaphone, Hash, Pin, Inbox } from "lucide-react";
 import TeamDirectory from "@/components/team/TeamDirectory";
