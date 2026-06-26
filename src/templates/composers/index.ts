@@ -438,12 +438,18 @@ export function signatureBlock(opts: {
   const oTitle = esc(opts.ownerTitle || "Founder & CEO");
   const oDate = esc(formatHumanDate(opts.ownerDate) || todayLong());
   const aName = esc(opts.applicantName || "");
-  const aTitle = esc(opts.applicantTitle || "");
+  // Pre-fill applicant Title: strip bracketed template placeholders like
+  // "[Position]" so the Title row never shows a literal placeholder token.
+  const rawATitle = (opts.applicantTitle || "").trim();
+  const aTitle = esc(/^\[.*\]$/.test(rawATitle) ? "" : rawATitle);
   const aDate = esc(formatHumanDate(opts.applicantDate));
   // Recipient cell title is template-aware (Second Party / Client / Guest /
   // Counterparty …) — NEVER the literal word "Recipient" and NEVER the
   // recipient's own name (the name already prints inside the cell).
   const aLabel = esc(opts.applicantLabel || "Second Party");
+  // Identical row geometry on both sides — the 54px label column guarantees
+  // the colons (Name: / Title: / Date:) align on the same vertical line
+  // across the two signature cells.
   const linedRow = (label: string, value?: string) => `
     <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:8px;line-height:1.3;min-height:18px;">
       <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
@@ -462,9 +468,11 @@ export function signatureBlock(opts: {
   // stamp layer, not duplicated inside this static signature block.
   const stampOverlay = "";
 
+  // Each cell heading carries ONE 1px gold hairline underline (single
+  // underline rule). No further underlines under Name/Title/Date.
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
-      <div style="height:46px;display:flex;align-items:flex-start;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
+      <div style="height:46px;display:flex;align-items:flex-end;padding-bottom:8px;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
       <div style="padding-top:10px;position:relative;min-height:126px;overflow:visible;">
         ${lines}
         ${withStamp ? stampOverlay : ""}
