@@ -5,7 +5,7 @@
  * export, print, and branded emails.
  */
 
-import monogramSrc from "@/assets/jbj-monogram-transparent.png";
+import monogramSrc from "@/assets/jbj-monogram-cropped.png";
 import companyStampSrc from "@/assets/jbj-company-stamp.png?inline";
 import {
   TRADE_LICENSE_OFFICE,
@@ -76,6 +76,8 @@ const themeTokens = (theme: JbjChromeTheme) =>
     ? { bg: "#064E3B", fg: "#FFFFFF", hairline: "#FFFFFF", monoFilter: "brightness(0) invert(1)" }
     : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, monoFilter: "brightness(0)" };
 
+const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
+
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
   return `
@@ -83,17 +85,16 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
     width:100%;
     background:${t.bg};
     border-bottom:1px solid ${t.hairline};
-    padding:10px 32px 10px 24px;
+    padding:8px 28px 8px 22px;
     font-family:Inter, system-ui, sans-serif;
     color:${t.fg};
     box-sizing:border-box;
   ">
-    <div style="display:grid;grid-template-columns:280px 1px 1fr;align-items:center;gap:8px;min-height:96px;">
+    <div style="display:grid;grid-template-columns:142px 1fr;align-items:center;gap:14px;min-height:126px;">
       <img src="${monogramSrc}" alt="JBJ"
-        style="width:280px;height:96px;display:block;object-fit:contain;background:transparent;margin:0;filter:${t.monoFilter};" />
-      <div aria-hidden="true" style="width:1px;height:64px;background:${t.hairline};opacity:${theme === "emerald" ? 0.5 : 0.55};"></div>
-      <div style="line-height:1.15;text-align:center;min-width:0;padding-right:18px;">
-        <div style="font-size:20px;font-weight:700;letter-spacing:0.045em;color:${t.fg};white-space:nowrap;">
+        style="width:126px;height:126px;display:block;object-fit:contain;background:transparent;margin:0;filter:${t.monoFilter};" />
+      <div style="line-height:1.12;text-align:left;min-width:0;padding-right:10px;">
+        <div style="font-size:20px;font-weight:850;letter-spacing:0.025em;color:${t.fg};white-space:nowrap;">
           ${JBJ_BRAND.legalName}&nbsp;<span style="letter-spacing:0.12em;white-space:nowrap;">${JBJ_BRAND.legalSuffix}</span>
         </div>
       </div>
@@ -102,28 +103,28 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
 };
 
 export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
-  const t = themeTokens(theme);
+  const t = footerTokens();
   return `
   <footer style="
     width:100%;
     background:${t.bg};
     border-top:1px solid ${t.hairline};
-    padding:5px 32px;
+    padding:2px 28px;
     font-family:Inter, system-ui, sans-serif;
-    font-size:10px;
-    line-height:1.45;
+    font-size:8.5px;
+    line-height:1.15;
     color:${t.fg};
     box-sizing:border-box;
   ">
     <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
       <tr>
-        <td style="vertical-align:middle;width:44%;padding-right:14px;color:${t.fg};opacity:.92;font-size:10px;">
+        <td style="vertical-align:middle;width:44%;padding-right:14px;color:${t.fg};opacity:.92;font-size:8.5px;">
           ${JBJ_BRAND.address}
         </td>
-        <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};font-size:11px;font-weight:700;">
+        <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};font-size:9px;font-weight:700;">
           ${JBJ_BRAND.phone}
         </td>
-        <td style="vertical-align:middle;width:34%;text-align:right;padding-left:14px;color:${t.fg};font-size:10px;">
+        <td style="vertical-align:middle;width:34%;text-align:right;padding-left:14px;color:${t.fg};font-size:8.5px;">
           <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
           <span style="color:${t.fg};opacity:.5;margin:0 6px;">·</span>
           <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};text-decoration:none;font-weight:700;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
@@ -138,7 +139,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
  * export, and email attachments.
  */
 export function wrapWithJbjChrome(bodyHtml: string): string {
-  return `<!doctype html><html><head><meta charset="utf-8" /><title>JBJ Document</title>
+  return `<!doctype html><html><head><meta charset="utf-8" /><title>JBJ</title>
 <style>
   @page { size: A4; margin: 0; }
   html, body { margin:0; padding:0; }

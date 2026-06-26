@@ -1,0 +1,11 @@
+import { chromium } from '@playwright/test';
+const browser=await chromium.launch({headless:true, executablePath:'/bin/chromium', args:['--no-sandbox']});
+const page=await browser.newPage({viewport:{width:1440,height:1100}});
+const sj=process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON, sk=process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY;
+if(sj&&sk) await page.addInitScript(({key,value})=>{localStorage.setItem(key,value);sessionStorage.setItem('owner_verified_once','1');try{const p=JSON.parse(value);const uid=p?.currentSession?.user?.id||p?.session?.user?.id||p?.user?.id;if(uid)localStorage.setItem(`owner_v2_${uid}`,JSON.stringify({ok:true,ts:Date.now()}));}catch{}},{key:sk,value:sj});
+await page.goto('http://127.0.0.1:5173/owner/documents/forms',{waitUntil:'domcontentloaded'});
+await page.waitForTimeout(3000);
+await page.evaluate(()=>document.querySelectorAll('[aria-labelledby="pending-tasks-title"]').forEach(e=>e.remove()));
+const btns=await page.locator('button').evaluateAll(bs=>bs.map((b,i)=>({i,text:(b.textContent||'').trim(),cls:b.className,visible:!!(b.offsetWidth||b.offsetHeight||b.getClientRects().length)})).filter(x=>x.visible).slice(0,100));
+console.log(JSON.stringify(btns,null,2));
+await browser.close();

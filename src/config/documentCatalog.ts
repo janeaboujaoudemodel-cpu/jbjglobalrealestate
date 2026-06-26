@@ -79,7 +79,7 @@ const STAFF: DocumentTemplate[] = [
   {
     id: "job_offer",
     audience: "staff",
-    label: "Job Offer",
+    label: "Offer Letter",
     description: "Formal employment offer with title, salary and start date.",
     icon: Briefcase,
     needsPosition: true,
@@ -98,7 +98,7 @@ const STAFF: DocumentTemplate[] = [
   {
     id: "employment_contract",
     audience: "staff",
-    label: "Employment Contract",
+    label: "Contract",
     description: "Full employment agreement with clauses and obligations.",
     icon: FileSignature,
     needsPosition: true,
@@ -507,7 +507,7 @@ STAFF.push(
   {
     id: "broker_referral",
     audience: "staff",
-    label: "Broker-to-Broker Referral Letter",
+    label: "Agent-to-Agent Agreement",
     description: "Internal commercial referral between two RERA brokerages. Not a RERA-issued form.",
     icon: Handshake,
     needsClient: true,
@@ -692,7 +692,7 @@ const CLIENT: DocumentTemplate[] = [
   {
     id: "jbj_branded_proposal_letterhead",
     audience: "client",
-    label: "JBJ Branded Proposal Letterhead",
+    label: "JBJ Letterhead",
     description: "Company-profile style letterhead / branded proposal material using the locked champagne, emerald-black ombre and premium black palette.",
     icon: FileText,
     needsClient: true,

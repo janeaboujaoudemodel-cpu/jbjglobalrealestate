@@ -75,10 +75,12 @@
    every button rendered inside the Document Studio overlay or the
    Documents & Forms workspace. Replaces ad-hoc h-9/h-10/sm sizes.
    ===================================================================== */
-[data-document-studio-overlay] button:not([data-no-studio-normalize]):not([role="tab"]):not([role="combobox"]):not([aria-haspopup]),
-[data-studio-workspace] button:not([data-no-studio-normalize]):not([role="tab"]):not([role="combobox"]):not([aria-haspopup]) {
+[data-document-studio-overlay] [data-studio-button],
+[data-studio-workspace] [data-studio-button],
+[data-document-studio-overlay] [data-jbj-button],
+[data-studio-workspace] [data-jbj-button] {
   min-height: 40px;
-  height: 40px;
+  height: auto;
   padding-inline: 16px;
   display: inline-flex;
   align-items: center;
@@ -88,6 +90,31 @@
   white-space: nowrap;
   border-radius: 10px;
   line-height: 1;
+}
+[data-document-studio-overlay] [data-jbj-button][data-surface="emerald"],
+[data-document-studio-overlay] [data-jbj-button][data-surface="emerald"] *,
+[data-studio-workspace] [data-jbj-button][data-surface="emerald"],
+[data-studio-workspace] [data-jbj-button][data-surface="emerald"] *,
+[data-document-studio-overlay] [data-surface="emerald"],
+[data-document-studio-overlay] [data-surface="emerald"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+[data-document-studio-overlay] [data-surface="champagne"],
+[data-document-studio-overlay] [data-surface="champagne"] *,
+[data-studio-workspace] [data-surface="champagne"],
+[data-studio-workspace] [data-surface="champagne"] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+[data-studio-workspace] [role="tab"][data-state="active"],
+[data-studio-workspace] [role="tab"][data-state="active"] * {
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 [data-document-studio-overlay] button[data-icon-only],
 [data-studio-workspace] button[data-icon-only] {
