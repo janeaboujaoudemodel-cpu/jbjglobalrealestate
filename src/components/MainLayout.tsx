@@ -35,9 +35,9 @@ const AuditorFeedbackButton = lazy(() => import("@/components/auditor/AuditorFee
 
 // Lazy-load non-critical components to reduce initial bundle
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
-import AIChatWidget from "@/components/AIChatWidget";
+const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
 import PageNavigation from "@/components/PageNavigation";
-import GlobalSupportMount from "@/components/support/GlobalSupportMount";
+const GlobalSupportMount = lazy(() => import("@/components/support/GlobalSupportMount"));
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
 const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-root"));
@@ -121,11 +121,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     }
   }, [isMobile]);
   const [layoutDebugSnapshot, setLayoutDebugSnapshot] = useState<ServiceLayoutSnapshot | null>(null);
-  // Defer non-critical shell components by 1s (reduced from 2s for faster perceived load)
+  // Defer non-critical shell components briefly so homepage/sidebar/search paint first.
   const [shellReady, setShellReady] = useState(false);
 
   useEffect(() => {
-    const t = window.setTimeout(() => setShellReady(true), 1000);
+    const t = window.setTimeout(() => setShellReady(true), 250);
     return () => window.clearTimeout(t);
   }, []);
 
