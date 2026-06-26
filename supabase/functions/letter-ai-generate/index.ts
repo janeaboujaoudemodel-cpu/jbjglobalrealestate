@@ -98,7 +98,8 @@ Deno.serve(async (req) => {
       const extractionText = `Return strict JSON only: {"fields":{}}.
 Extract and map values into these exact document field keys where possible: ${fieldKeys.join(", ")}.
 If the attachment is an Emirates ID, passport, visa, CV, letter, contract, or scan, OCR it first.
-Prefer legal full name, Emirates ID number, passport number, nationality, date of birth, expiry dates, email, mobile, address, job title, salary, developer/company details, unit number, property details, dates, and monetary amounts.
+For offer letters and employment templates, always map identity/contact data to these keys when present: recipientName (full name as per ID), emiratesId (Emirates ID number only), passportNumber (passport number only), homeAddress, recipientEmail, recipientPhone. Do not return Emirates ID expiry date unless the requested field list explicitly contains an expiry field.
+Prefer legal full name, Emirates ID number, passport number, email, mobile/phone, home/residential address, job title, salary, developer/company details, unit number, property details, dates, and monetary amounts.
 Do not invent missing values. Keep unknown fields omitted.
 Source/template: ${body?.templateId || "unknown"}.
 User/source text: ${userPrompt || "Attached file only"}`;
@@ -146,7 +147,13 @@ User/source text: ${userPrompt || "Attached file only"}`;
       const content = json?.choices?.[0]?.message?.content || "{}";
       let parsed: any = {};
       try { parsed = JSON.parse(content); } catch { const m = /\{[\s\S]*\}/.exec(content); if (m) try { parsed = JSON.parse(m[0]); } catch {} }
-      return new Response(JSON.stringify({ fields: parsed?.fields && typeof parsed.fields === "object" ? parsed.fields : {} }), {
+      const extractedFields = parsed?.fields && typeof parsed.fields === "object" ? { ...parsed.fields } : {};
+      delete extractedFields.emiratesIdExpiry;
+      delete extractedFields.emirates_id_expiry;
+      delete extractedFields.idExpiry;
+      delete extractedFields.expiryDate;
+      delete extractedFields.expiry_date;
+      return new Response(JSON.stringify({ fields: extractedFields }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
