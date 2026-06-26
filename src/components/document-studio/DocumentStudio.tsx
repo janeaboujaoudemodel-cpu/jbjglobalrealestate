@@ -44,7 +44,7 @@ import {
  DocumentAudience, DocumentScope, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
-import { stripChromeArtifacts, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
+import { stripChromeArtifacts, jbjMonogramSrc, jbjCompanyStampSrc } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
@@ -87,6 +87,7 @@ const escapeSignatureHtml = (value?: string) =>
   (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
+const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
 const UAE_DEVELOPERS = [
   { name: "Emaar Properties", email: "brokerrelations@emaar.ae", phone: "+971 4 366 1688" },
@@ -111,7 +112,7 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         jobTitle: "[Position]",
         startDate: "2026-06-20",
         probation: "6 months",
-        workingHours: "10:00 AM – 7:00 PM, Monday to Friday; Saturday 11:00 AM – 4:00 PM",
+        workingHours: JOB_OFFER_WORKING_HOURS,
         annualLeave: "30 calendar days",
         noticePeriod: "30 calendar days",
         reportingTo: "Management",
@@ -429,7 +430,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 2;
+  const DOCUMENT_FIX_VERSION = 3;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -1204,8 +1205,9 @@ function StudioShell({
         if (!next.signature && defaultSignature?.signedUrl) {
           next.signature = { url: defaultSignature.signedUrl, width: 200 };
         }
-        if (!next.stamp && stampUrl) {
-          next.stamp = { url: stampUrl, width: 180, rotation: -8 };
+        if (!next.stamp) {
+          const url = stampUrl || jbjCompanyStampSrc;
+          if (url) next.stamp = { url, width: 180, rotation: -8 };
         }
         return next;
       });
