@@ -520,7 +520,11 @@ function composeJobOffer(input: ComposerInput): string {
   const nationality = esc(filledOr(id.nationality, "[Nationality]"));
   const jobTitle = esc(filledOr(f.jobTitle, "[Job Title]"));
   const companyName = "J B J GLOBAL REAL ESTATE L.L.C S.O.C";
-  const officeAddress = "Office SM1-195, Port Saeed, Deira, Dubai, UAE";
+  // For Offer Letters, the place of work is intentionally NOT a fixed address.
+  // It is the location designated by the Company from time to time. The trade-
+  // licence office (Office SM1-195, Port Saeed) is only used on NDA / corporate
+  // documents where a registered address is legally required.
+  const placeOfWork = filledOr(f.placeOfWork || f.officeAddress, "To be designated by the Company");
   const startDate = esc(formatHumanDate(f.startDate) || f.startDate || "[Start Date]");
   const workingHours = esc(filledOr(f.workingHours, "10:00 AM – 7:00 PM, Monday to Saturday"));
 
