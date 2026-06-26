@@ -144,6 +144,20 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   }
 }
 
+const restoreOfferCommissionRows = (templateId?: string, rows?: CommissionRow[]): CommissionRow[] => {
+  if (templateId !== "job_offer") return rows?.length ? rows : DEFAULT_BROKER_COMMISSIONS;
+  const visible = (rows || []).filter((r) => (r.label || "").trim() || (r.rate || "").trim() || (r.trigger || "").trim());
+  const byLabel = (needle: string) => visible.find((r) => `${r.label || ""} ${r.rate || ""}`.toLowerCase().includes(needle));
+  const direct = byLabel("direct") || DEFAULT_BROKER_COMMISSIONS[0];
+  const company = byLabel("company") || byLabel("source") || DEFAULT_BROKER_COMMISSIONS[1];
+  const premium = byLabel("premium") || byLabel("70") || DEFAULT_BROKER_COMMISSIONS[2];
+  return [
+    { ...DEFAULT_BROKER_COMMISSIONS[0], ...direct, rate: direct.rate || DEFAULT_BROKER_COMMISSIONS[0].rate },
+    { ...DEFAULT_BROKER_COMMISSIONS[1], ...company, rate: company.rate || DEFAULT_BROKER_COMMISSIONS[1].rate },
+    { ...DEFAULT_BROKER_COMMISSIONS[2], ...premium, rate: premium.rate || DEFAULT_BROKER_COMMISSIONS[2].rate },
+  ];
+};
+
 const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
 
 function cleanIdentityNotes(value?: string) {
@@ -518,7 +532,7 @@ function StudioShell({
       template.id === "commission_agreement" ||
       template.id === "employment_contract" ||
       template.id === "partnership_referral");
-  const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(snap?.commissionRows || DEFAULT_BROKER_COMMISSIONS);
+  const [commissionRows, setCommissionRows] = useState<CommissionRow[]>(restoreOfferCommissionRows(snap?.templateId || initialId, snap?.commissionRows));
   const [customFields, setCustomFields] = useState<CustomField[]>(snap?.customFields || []);
 
   const [emailTo, setEmailTo] = useState("");
@@ -1214,11 +1228,13 @@ function StudioShell({
       if (s.fields && typeof s.fields === "object") setFields(s.fields);
       if (typeof s.bodyHtml === "string" && s.bodyHtml) {
         setBodyHtml(s.bodyHtml);
-        // Any restored rendered HTML represents the exact latest contract body
-        // the owner reached. Preserve it on load; sidebar edits can still resume
-        // structured sync via setSyncedFields().
-        userEditedRef.current = true;
-        setUserEdited(true);
+        if (s.userEdited) {
+          // Hand-edited contracts must reopen exactly where the owner left them.
+          // Structured/generated drafts rebuild from restored fields so new legal
+          // clauses and the three commission tiers are not lost.
+          userEditedRef.current = true;
+          setUserEdited(true);
+        }
       }
       if (typeof s.templateId === "string" && s.templateId) setTemplateId(s.templateId);
       setStep(typeof s.step === "number" ? (s.step as Step) : 2);
@@ -1231,7 +1247,7 @@ function StudioShell({
       if (s.fieldLabelOverrides && typeof s.fieldLabelOverrides === "object") setFieldLabelOverrides(s.fieldLabelOverrides);
       if (Array.isArray(s.hiddenSections)) setHiddenSections(new Set(s.hiddenSections));
       if (Array.isArray(s.customFields)) setCustomFields(s.customFields);
-      if (Array.isArray(s.commissionRows)) setCommissionRows(s.commissionRows);
+      if (Array.isArray(s.commissionRows)) setCommissionRows(restoreOfferCommissionRows(s.templateId, s.commissionRows));
       if (typeof s.docLanguage === "string") setDocLanguage(s.docLanguage);
       if (s.chromeTheme === "champagne" || s.chromeTheme === "emerald") setChromeTheme(s.chromeTheme);
       if (s.marks && typeof s.marks === "object") setMarks((m) => ({ ...m, ...s.marks }));
