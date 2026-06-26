@@ -1346,9 +1346,30 @@ function StudioShell({
           setStep(s);
         }} hasTemplate={!!templateId} hasBody={!!bodyHtml} />
 
-        <div className="ml-auto flex min-w-0 items-center justify-end gap-2 flex-wrap py-2">
-          <div className="flex h-10 items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md pl-2.5 pr-1.5 focus-within:ring-1 focus-within:ring-[#B89555] shrink-0">
-            <Globe className="w-3.5 h-3.5 text-[#B89555]" />
+        <div className="ml-auto flex min-w-0 items-center justify-end gap-2 flex-wrap py-2 [&_button]:!text-[#1A1A1A]">
+          {/* Theme switcher — Champagne / Emerald letterhead */}
+          <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Document theme">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={chromeTheme === "champagne"}
+              onClick={() => setChromeTheme("champagne")}
+              className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${chromeTheme === "champagne" ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+            >
+              Champagne
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={chromeTheme === "emerald"}
+              onClick={() => setChromeTheme("emerald")}
+              className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${chromeTheme === "emerald" ? "bg-[#064E3B] text-white" : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+            >
+              Emerald
+            </button>
+          </div>
+          <div className="flex h-10 items-center gap-1.5 text-[11px] text-[#1A1A1A] border border-[#B89555]/70 bg-[#F7F2EA] rounded-md pl-2.5 pr-1.5 focus-within:ring-1 focus-within:ring-[#B89555] shrink-0">
+            <Globe className="w-3.5 h-3.5 text-[#064E3B]" />
             <Select value={docLanguage} onValueChange={setDocLanguage}>
               <SelectTrigger className="h-7 w-[116px] border-0 bg-transparent px-1.5 text-[12px] font-semibold text-[#1A1A1A] focus:ring-0 focus:ring-offset-0 focus:border-transparent shadow-none">
                 <SelectValue />
@@ -1360,11 +1381,11 @@ function StudioShell({
               </SelectContent>
             </Select>
           </div>
-          <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")} title="Signature">
+          <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")} title="Signature" className="!text-[#1A1A1A] border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
             <PenLine className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Signature</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")} title="Stamp">
+          <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")} title="Stamp" className="!text-[#1A1A1A] border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
             <Stamp className="w-4 h-4 lg:mr-1.5" />
             <span className="hidden lg:inline">Stamp</span>
           </Button>
@@ -1374,6 +1395,7 @@ function StudioShell({
               size="sm"
               onClick={resetToTemplate}
               title="Discard edits and re-render from template"
+              className="!text-[#1A1A1A] hover:bg-[#EFE6D6]"
             >
               <X className="w-4 h-4 lg:mr-1.5" />
               <span className="hidden lg:inline">Reset</span>
@@ -1385,6 +1407,7 @@ function StudioShell({
               size="sm"
               onClick={() => { setSaveName(`${template.label} — Custom`); setSaveDialogOpen(true); }}
               title="Save current edits as a reusable template"
+              className="!text-[#1A1A1A] border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
             >
               <Check className="w-4 h-4 lg:mr-1.5" />
               <span className="hidden lg:inline">Save Template</span>
@@ -1397,6 +1420,7 @@ function StudioShell({
               onClick={handleSaveDocument}
               disabled={saveDocMutation.isPending}
               title="Save this filled document to My Documents"
+              className="!text-white"
             >
               {saveDocMutation.isPending
                 ? <Loader2 className="w-4 h-4 lg:mr-1.5 animate-spin" />
@@ -1409,14 +1433,16 @@ function StudioShell({
             size="sm"
             onClick={toggleFullscreen}
             title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            className="!text-[#1A1A1A] hover:bg-[#EFE6D6]"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4 lg:mr-1.5" /> : <Maximize2 className="w-4 h-4 lg:mr-1.5" />}
             <span className="hidden lg:inline">{isFullscreen ? "Exit fullscreen" : "Fullscreen"}</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"}>
+          <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"} className="!text-[#1A1A1A] hover:bg-[#EFE6D6]">
             {aiOpen ? <PanelRightClose className="w-4 h-4 lg:mr-1.5" /> : <PanelRightOpen className="w-4 h-4 lg:mr-1.5" />}
             <span className="hidden lg:inline">{aiOpen ? "Hide AI" : "Show AI"}</span>
           </Button>
+
           <button
             onClick={onClose}
             className="h-9 w-9 rounded-md border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]"
