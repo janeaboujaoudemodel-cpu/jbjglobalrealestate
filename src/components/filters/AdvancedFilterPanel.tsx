@@ -445,7 +445,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     placeholder="Search developer..."
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-64 overflow-y-auto pr-1">
+                  <div className="grid grid-cols-1 gap-1 max-h-64 overflow-y-auto pr-1">
                     {filteredDevs.map((dev) => {
                       const isSelected = localFilters.developers.includes(dev.name);
                       return (
