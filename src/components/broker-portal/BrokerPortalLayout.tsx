@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
-import { Crown, ArrowLeft, Menu, X, Shield, Home } from "lucide-react";
+import { Crown, ArrowLeft, Menu, X, Shield, Home, User, Briefcase, Building2 } from "lucide-react";
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
 import PageLoader from "@/components/PageLoader";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -9,6 +9,7 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
+import { useUserMode } from "@/hooks/useUserMode";
 
 /**
  * Broker Portal shell — mirrors the structural pattern of OwnerDashboardShell:
