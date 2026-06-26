@@ -689,7 +689,6 @@ function composeJobOffer(input: ComposerInput): string {
 
   return [
     input.hideLetterDate ? "" : dateLine(input.letterDate),
-    paragraph(`<strong>Date:</strong> ${esc(formatHumanDate(offerEffectiveIso) || "20 June 2026")}`),
     paragraph(`<strong>Candidate Name:</strong> ${candidateName}<br/><strong>Address:</strong> ${address}<br/><strong>Email:</strong> ${email}<br/><strong>Phone / WhatsApp:</strong> ${phone}`),
     subjectLine(`Employment Offer – ${jobTitle}`),
     paragraph(`Dear ${candidateName},`),
