@@ -7,7 +7,7 @@ const sizes = [
   ['ipad', 1024, 1366],
   ['mobile', 390, 1000],
 ];
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', args: ['--no-sandbox'] });
 for (const [name, width, height] of sizes) {
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
   if (sessionJson && storageKey) {
