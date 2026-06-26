@@ -550,12 +550,22 @@ function composeJobOffer(input: ComposerInput): string {
 
   const commissionRowsTable = commissionTable(input.commissionRows || []);
 
+  // Premium prose mirror of the commission structure (no slashes, no brackets).
+  const commissionProse = (() => {
+    const raw = (f.commission || "").trim();
+    if (!raw) {
+      return `Your commission entitlement is set out in the Compensation &amp; Commission Structure table above and, where applicable, in the Commission Structure schedule that follows.`;
+    }
+    const cleaned = esc(raw).replace(/\s*\/\s*/g, "; ");
+    return `Your commission entitlement is structured as follows: <strong>${cleaned}</strong>, as further detailed in the Compensation &amp; Commission Structure table above.`;
+  })();
+
   const clauses = [
     offerClause(1, "Position", `Your position will be <strong>${jobTitle}</strong>. Your duties include, but are not limited to, real estate sales/leasing, lead handling, client follow-up, developer coordination, CRM updates, property presentations, marketing support, and any other duties reasonably assigned by the Company.`),
-    offerClause(2, "Start Date", `Your expected start date is <strong>${startDate}</strong>.`),
-    offerClause(3, "Place of Work", `Your primary place of work will be <strong>${officeAddress}</strong>, with field visits, developer offices, client meetings, property viewings, and remote work where approved by the Company. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy.`),
-    offerClause(4, "Compensation", `The compensation, allowance, payment-cycle and commission details are set out in the tables above. No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents, UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
-    offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || "up to six months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract.`),
+    offerClause(2, "Start Date", `Your expected start date is <strong>${startDate}</strong>, as also reflected in the Terms of Employment table above.`),
+    offerClause(3, "Place of Work", `Your primary place of work will be <strong>${officeAddress}</strong>, with field visits, developer offices, client meetings, property viewings, and remote work where approved by the Company. Your standard working hours are <strong>${workingHours}</strong>, subject to UAE law and Company policy, consistent with the Terms of Employment table above.`),
+    offerClause(4, "Compensation", `${commissionProse} No commission is earned unless and until the Company receives the relevant cleared commission from the developer, landlord, seller, buyer, client, or third party, unless otherwise agreed in writing. Commission entitlement is subject to the signed employment documents and to UAE Federal Decree-Law No. 33 of 2021 and its Executive Regulations.`),
+    offerClause(5, "Probation Period", `Your employment will be subject to a probation period of <strong>${esc(f.probation || f.probationPeriod || "up to six (6) months")}</strong>, during which either party may terminate the employment in accordance with UAE law and the employment contract, as also reflected in the Terms of Employment table above.`),
     offerClause(6, "Confidentiality and Company Data", `You must keep confidential all Company information, including leads, client data, owner data, buyer data, seller data, tenant data, landlord data, developer contacts, prices, commission structures, marketing strategies, CRM data, WhatsApp leads, call recordings, email communications, documents, contracts, business methods, and internal policies.`),
     offerClause(7, "Leads and Clients", `All leads, inquiries, clients, prospects, contacts, databases, property owners, developers, landlords, sellers, buyers, tenants, and investors introduced, generated, received, accessed, assigned, or handled during your work are the exclusive business assets of the Company. You may not use, transfer, sell, leak, copy, export, screenshot, close, redirect, or complete any transaction involving Company leads or clients outside the Company, during or after employment.`),
     offerClause(8, "Conflict of Interest", `You must not work with, represent, assist, advise, own, manage, or financially participate in any competing real estate business, brokerage, marketing agency, holiday-home operator, property management company, or commission-based arrangement without the Company’s prior written approval.`),
