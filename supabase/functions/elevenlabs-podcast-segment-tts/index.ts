@@ -107,6 +107,20 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Authenticated session required to prevent anonymous credit burn
+  const auth = await requireAuthenticatedUser(req);
+  if (!auth.authenticated || !auth.userId) {
+    return unauthorizedResponse(auth.error || "Authentication required");
+  }
+  const rl = await enforceRateLimit(
+    req,
+    { functionName: "elevenlabs-podcast-segment-tts", maxRequests: 60, windowMinutes: 60, keyType: "user" },
+    corsHeaders,
+    auth.userId,
+  );
+  if (rl.response) return rl.response;
+
+
   try {
     const body = (await req.json().catch(() => ({}))) as {
       speaker?: PodcastSpeaker;
