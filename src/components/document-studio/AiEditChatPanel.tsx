@@ -174,15 +174,23 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
 
     try {
       const promptParts = [
-        `ROLE: You are a UAE-licensed HR Director and corporate lawyer drafting on behalf of JBJ GLOBAL REAL ESTATE (Dubai). You write offers, contracts, warnings, NDAs, commission and tenancy documents that comply with UAE Federal Decree-Law No. 33 of 2021 (Labour Law) and its Executive Regulations, RERA / DLD Forms (A, F, I, U), and the UAE Civil Code. You are precise, formal, defensible in court, and never invent figures.`,
-        `STYLE: Inter, single-page A4, no markdown asterisks, no emoji. Tight clauses. Currency = AED unless stated. Dates DD Month YYYY. Never expose private contact info. Cite article numbers ONLY when the user asks.`,
-        `RULES: Do not fabricate names, salaries, IDs, or dates that aren't already in the body or instruction. If a value is missing, leave a clean blank line — NEVER a placeholder like "[NAME]". Preserve every existing field value unless the instruction explicitly changes it.`,
+        `ROLE: You are a UAE-licensed HR Director and corporate lawyer drafting on behalf of JBJ GLOBAL REAL ESTATE (Dubai). You write offers, contracts, warnings, NDAs, commission and tenancy documents that comply with UAE Federal Decree-Law No. 33 of 2021 (Labour Law), RERA / DLD Forms, and the UAE Civil Code.`,
+        `STYLE: Inter, single-page A4, no markdown asterisks, no emoji. Tight clauses. Currency = AED unless stated. Dates DD Month YYYY. Never expose private contact info.`,
         ``,
-        `Steering: ${aiInstructions}`,
+        `🔒 SURGICAL PATCH MODE — STRICTLY ENFORCED 🔒`,
+        `You are NOT rewriting the document. You are a lawyer FILLING IN BLANKS on an existing, approved template.`,
+        `HARD RULES:`,
+        `  1. PRESERVE the existing template wording, clause order, structure, headings, and formatting EXACTLY. Do not paraphrase, reword, shorten, expand, restructure, retitle, or "improve" any sentence the user did not explicitly ask you to change.`,
+        `  2. Treat the user's instruction as a set of VALUES (name, email, address, position, salary, date, location, phone, etc.). Insert each value ONLY where it is contextually applicable in the template (e.g. address goes next to "Address:", email next to "Email:", position next to the role line). If the template has no slot for a value, leave the value out — do NOT invent a new paragraph for it.`,
+        `  3. If a value is NOT provided in the instruction, leave the existing template text untouched. NEVER add empty fields like "Home Address: " or "[Address]" if the user didn't supply one.`,
+        `  4. NEVER replace, rewrite, or regenerate the whole template. The only time you may restructure is if the user literally says "rewrite the template", "replace the template", or "generate a new template".`,
+        `  5. Return the FULL current body with ONLY the surgical edits applied. Every untouched byte must come back identical.`,
+        `  6. Never fabricate names, salaries, IDs, dates, or clauses that aren't in the body or instruction.`,
         ``,
+        `Template steering (for tone reference only — do not regenerate): ${aiInstructions}`,
         `Reply in ${language}.`,
         ``,
-        `Current body (plain text):`,
+        `CURRENT DOCUMENT BODY (this is the source of truth — patch, do not replace):`,
         `"""`,
         stripChromeArtifacts(currentBody)
           .replace(/<br\s*\/?>/gi, "\n")
@@ -193,12 +201,15 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
         `"""`,
         ``,
         attachments.length
-          ? `Attached files (consider their content): ${attachments.map((a) => `${a.name} (${a.type || "file"})`).join(", ")}`
+          ? `Attached files (extract values to slot into the template — do NOT add new sections): ${attachments.map((a) => `${a.name} (${a.type || "file"})`).join(", ")}`
           : ``,
         ``,
-        `Apply this instruction and return the FULL revised body:`,
-        instruction || "(use attachments to fill the document)",
+        `USER INSTRUCTION (extract values and slot them into matching template fields only):`,
+        instruction || "(use attachments to fill matching template fields only)",
+        ``,
+        `Return the FULL revised body with surgical edits ONLY.`,
       ].filter(Boolean).join("\n");
+
 
       const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
         body: {
