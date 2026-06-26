@@ -103,7 +103,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             {JBJ_BRAND.legalName}&nbsp;
             <span
               style={{
-                letterSpacing: "0.125em",
+                letterSpacing: "0.095em",
                 whiteSpace: "nowrap",
                 color: t.fg,
                 WebkitTextFillColor: t.fg,
