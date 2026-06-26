@@ -1107,7 +1107,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
 
       {/* Generate Document — category/search picker */}
       <Dialog open={newEnvelopeOpen} onOpenChange={setNewEnvelopeOpen}>
-          <DialogContent className="bg-[#FDFBF7] max-w-5xl max-h-[86vh] overflow-y-auto">
+          <DialogContent className="bg-[#FDFBF7] w-[min(96vw,1280px)] max-w-[1280px] max-h-[90vh] overflow-y-auto sm:!max-w-[1280px]">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">Generate Document</DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/70">Search or choose a category. Only matching templates open here.</DialogDescription>
