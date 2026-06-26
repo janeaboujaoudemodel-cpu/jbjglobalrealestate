@@ -16326,3 +16326,69 @@ html body :is([data-hero-dark], [data-no-contrast-guard], [data-on-dark]) :where
   writing-mode: horizontal-tb !important;
   text-orientation: mixed !important;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   PASS 52 — PHASE 2 FOUNDATION
+   Single source of truth for radii, elevation, focus ring, and the
+   "no-black-as-active" + "no-white-on-bright" hard guards. Every
+   page consumes these tokens; primitives (MetricCard, ActionStrip,
+   IconTile, Button, Tabs) inherit them.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --radius-card: 16px;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgba(26, 26, 26, 0.04);
+  --shadow-card-hover: 0 10px 28px -14px rgba(6, 78, 59, 0.28);
+  --ring-focus: 0 0 0 2px #064E3B;
+  --state-active: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%));
+}
+
+/* Active / Selected / Focus — emerald only, never flat black. */
+[role="tab"][data-state="active"]:not([data-no-contrast-guard]),
+[data-jj-segmented-trigger][data-state="active"]:not([data-no-contrast-guard]),
+[role="option"][aria-selected="true"]:not([data-no-contrast-guard]),
+[data-state="on"][data-jj-toggle]:not([data-no-contrast-guard]) {
+  background: var(--state-active) !important;
+  color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+[role="tab"][data-state="active"]:not([data-no-contrast-guard]) svg,
+[data-jj-segmented-trigger][data-state="active"]:not([data-no-contrast-guard]) svg,
+[role="option"][aria-selected="true"]:not([data-no-contrast-guard]) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Bright-background contract — white text on champagne/pearl/page is banned. */
+[data-surface="champagne"]:not([data-no-contrast-guard]) > .text-white,
+[data-surface="champagne"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-jbj-chat-open] *),
+[data-surface="page"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]),
+[data-surface="pearl"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* Emerald-background contract — black text on emerald is banned. */
+[data-surface="emerald"]:not([data-no-contrast-guard]) .text-black,
+[data-surface="emerald"]:not([data-no-contrast-guard]) [class*="text-[#1A1A1A]"],
+[data-surface="emerald"]:not([data-no-contrast-guard]) [class*="text-[#0A0A0A]"],
+[data-cta="primary"][data-surface="emerald"] .text-black,
+[data-cta="primary"][data-surface="emerald"] [class*="text-[#1A1A1A]"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-surface="emerald"]:not([data-no-contrast-guard]) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* MetricCard + ActionStrip primitives — locked elevation + focus ring. */
+[data-jj-metric-card]:focus-visible,
+[data-jj-action-strip] button:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus) !important;
+}
+[data-jj-action-strip] > button {
+  min-height: 40px;
+}
+
