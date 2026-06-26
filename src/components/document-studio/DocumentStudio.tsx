@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 9;
+  const DOCUMENT_FIX_VERSION = 11;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -664,7 +664,7 @@ function StudioShell({
   const footerRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
   const [sheetH, setSheetH] = useState(0);
-  const [chromeHeights, setChromeHeights] = useState({ header: 180, footer: 86 });
+  const [chromeHeights, setChromeHeights] = useState({ header: 210, footer: 86 });
   const [smartBreaks, setSmartBreaks] = useState<number[]>([]);
   const [manualPages, setManualPages] = useState<number>(snap?.manualPages || 0);
   // GLOBAL pagination rule: any composed document body is auto-split into
@@ -3328,8 +3328,8 @@ function StudioShell({
                                   <div
                                     style={{
                                       position: "relative",
-                                      width: 460,
-                                      height: 460,
+                                      width: 640,
+                                      height: 640,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
                                     }}
@@ -3493,8 +3493,8 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 140}
-                                    y={marks.stampXY?.y ?? Math.max(560, PAGE_H - (isLast ? chromeHeights.footer : 0) - 360)}
+                                    x={marks.stampXY?.x ?? 220}
+                                    y={marks.stampXY?.y ?? Math.max(540, PAGE_H - (isLast ? chromeHeights.footer : 0) - 330)}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}

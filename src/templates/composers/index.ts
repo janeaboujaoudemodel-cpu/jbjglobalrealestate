@@ -441,7 +441,11 @@ export function signatureBlock(opts: {
   // Pre-fill applicant Title: strip bracketed template placeholders like
   // "[Position]" so the Title row never shows a literal placeholder token.
   const rawATitle = (opts.applicantTitle || "").trim();
-  const aTitle = esc(/^\[.*\]$/.test(rawATitle) ? "" : rawATitle);
+  const cleanedATitle = /^\[.*\]$/.test(rawATitle) ? "" : rawATitle;
+  // Default applicant Title when neither the form nor the prior value
+  // supplied one — pre-fills the role at the brokerage so the signature
+  // block is never blank on a delivered offer letter.
+  const aTitle = esc(cleanedATitle || "Real Estate Broker");
   const aDate = esc(formatHumanDate(opts.applicantDate));
   // Recipient cell title is template-aware (Second Party / Client / Guest /
   // Counterparty …) — NEVER the literal word "Recipient" and NEVER the
@@ -472,7 +476,7 @@ export function signatureBlock(opts: {
   // underline rule). No further underlines under Name/Title/Date.
   const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
     <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 28px;position:relative;">
-      <div style="height:46px;display:flex;align-items:flex-end;padding-bottom:8px;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
+      <div style="height:78px;display:flex;align-items:flex-end;padding-bottom:8px;margin-bottom:2px;border-bottom:1px solid ${GOLD};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;">${heading}</div>
       <div style="padding-top:10px;position:relative;min-height:126px;overflow:visible;">
         ${lines}
         ${withStamp ? stampOverlay : ""}
