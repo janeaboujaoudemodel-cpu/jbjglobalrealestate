@@ -38,25 +38,32 @@ type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "se
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
 const FEATURED_STUDIO_TEMPLATE_IDS = [
+  // HR — offer letter FIRST (highest-use), then contract, then disciplinary.
+  "job_offer",
+  "employment_contract",
   "warning_letter",
+  "termination_letter",
+  "hr_letter",
+  // RERA & brokerage
   "form_a",
   "form_b",
   "form_f",
   "form_i",
   "broker_referral",
-  "job_offer",
-  "employment_contract",
+  // Client & company
   "noc",
   "property_reservation",
   "mou",
   "ejari_tenancy",
   "custom_client",
   "jbj_branded_proposal_letterhead",
+  // After-sale
   "facility_management_agreement",
   "maintenance_request",
   "interior_design_quotation",
   "service_bill",
   "client_quotation",
+  // Developer & finance
   "developer_commission_invoice",
   "developer_payment_request",
   "developer_closing_notice",
