@@ -158,7 +158,20 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   set("recipientEmail", out.recipientEmail || text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]);
   set("emiratesId", text.match(/\b784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d\b/)?.[0]?.replace(/\s+/g, "-") || out.emiratesId);
   set("nationality", out.nationality || text.match(/nationality\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
-  set("recipientPhone", out.recipientPhone || text.match(/(?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,}/)?.[0]);
+  if (!out.recipientPhone) {
+    // Phone must look like a phone — require explicit phone label OR a +971/00971 prefix,
+    // OR a local 0[2-9] number with at least 8 trailing digits.
+    // NEVER fall back to a bare 7-prefixed number — that collides with Emirates IDs (784-…).
+    const labeled = text.match(/(?:phone|mobile|whatsapp|tel|contact)\s*(?:number|no\.?|#)?\s*[:#-]?\s*((?:\+?971|00971|0)?[\s-]?\d[\d\s-]{6,})/i)?.[1];
+    const intl = text.match(/(?:\+971|00971)[\s-]?\d[\d\s-]{6,}/)?.[0];
+    const local = text.match(/(?<!\d)0(?:5\d|[2-46-9])[\s-]?\d[\d\s-]{5,}(?!\d)/)?.[0];
+    const candidate = (labeled || intl || local || "").replace(/\s+/g, " ").trim();
+    const eidDigits = (out.emiratesId || "").replace(/\D+/g, "");
+    const candDigits = candidate.replace(/\D+/g, "");
+    if (candidate && candDigits && candDigits !== eidDigits && !(eidDigits && eidDigits.includes(candDigits))) {
+      set("recipientPhone", candidate);
+    }
+  }
   set("passportNumber", out.passportNumber || text.match(/passport(?:\s*(?:number|no\.?))?\s*[:#-]\s*([A-Z0-9]{5,})/i)?.[1]);
   set("homeAddress", out.homeAddress || text.match(/(?:home|residential)\s+address\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
   set("recipientName", out.recipientName || text.match(/(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
@@ -207,7 +220,7 @@ const renderPerPageUserSignature = (name?: string) => {
   return `
     <div data-rendered-page-signature="1" data-locked-signature="1" style="margin-top:auto;padding:14px 0 10px;display:flex;justify-content:flex-end;align-items:flex-end;flex:0 0 auto;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
       <div style="color:#1A1A1A;min-width:330px;max-width:360px;">
-        <div style="font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1.2;margin-bottom:8px;">Accepted by Candidate: <span style="letter-spacing:0;text-transform:none;font-size:11px;font-weight:600;">${legalName}</span></div>
+        <div style="font-weight:700;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1.2;margin-bottom:34px;">Accepted by Candidate: <span style="letter-spacing:0;text-transform:none;font-size:11px;font-weight:600;">${legalName}</span></div>
         <div style="display:flex;align-items:flex-end;gap:10px;">
           <div style="font-weight:700;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;font-size:10px;line-height:1;padding-bottom:2px;">Signature:</div>
           <div style="flex:1;border-bottom:1px solid #1A1A1A;height:1px;"></div>
