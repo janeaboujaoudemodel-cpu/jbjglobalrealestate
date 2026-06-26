@@ -121,7 +121,21 @@ export default function DraggableMark({
             <Pencil className="w-3 h-3 text-[#1A1A1A]" />
           </button>
         )}
-        {onResize && (
+        {onToggleLock && (
+          <button
+            type="button"
+            data-mark-action="lock"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); onToggleLock(); }}
+            title={locked ? "Unlock to drag" : "Lock position"}
+            aria-label={locked ? "Unlock mark" : "Lock mark"}
+            className="h-5 w-5 rounded-full bg-white border border-[#B89555]/40 flex items-center justify-center shadow-sm hover:bg-[#F7F2EA]"
+          >
+            {locked
+              ? <Lock className="w-3 h-3 text-[#064E3B]" />
+              : <Unlock className="w-3 h-3 text-[#1A1A1A]" />}
+          </button>
+        )}
           <button
             type="button"
             data-mark-action="resize"
