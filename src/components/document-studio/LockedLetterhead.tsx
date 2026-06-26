@@ -42,12 +42,12 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
     >
       <div
         className="grid items-center min-w-0"
-        style={{ gridTemplateColumns: "142px minmax(0,1fr)", columnGap: 10, minHeight: 138 }}
+        style={{ gridTemplateColumns: "148px minmax(0,1fr)", columnGap: 12, minHeight: 138 }}
       >
         <div
           style={{
-            width: 138,
-            height: 138,
+            width: 142,
+            height: 142,
             justifySelf: "center",
             alignSelf: "center",
             display: "flex",
@@ -55,39 +55,25 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             justifyContent: "center",
           }}
         >
-          {theme === "emerald" ? (
-            <div
-              aria-label="JBJ"
-              role="img"
-              style={{
-                width: 126,
-                height: 126,
-                position: "relative",
-                background: t.jColor,
-                WebkitMaskImage: `url(${jbjMonogramSrc})`,
-                maskImage: `url(${jbjMonogramSrc})`,
-                WebkitMaskRepeat: "no-repeat",
-                maskRepeat: "no-repeat",
-                WebkitMaskPosition: "center",
-                maskPosition: "center",
-                WebkitMaskSize: "contain",
-                maskSize: "contain",
-                filter: "drop-shadow(0 1px 0 rgba(0,0,0,.45))",
-              }}
-            />
-          ) : (
-            <img
-              src={jbjMonogramSrc}
-              alt="JBJ"
-              style={{
-                width: 126,
-                height: 126,
-                objectFit: "contain",
-                display: "block",
-                filter: "contrast(1.08) saturate(1.05) drop-shadow(0 1.4px 1.8px rgba(60,40,10,.18))",
-              }}
-            />
-          )}
+          <div
+            aria-label="JBJ"
+            role="img"
+            style={{
+              width: 132,
+              height: 132,
+              position: "relative",
+              background: t.jColor,
+              WebkitMaskImage: `url(${jbjMonogramSrc})`,
+              maskImage: `url(${jbjMonogramSrc})`,
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+              filter: `drop-shadow(.7px 0 0 ${t.jColor}) drop-shadow(-.7px 0 0 ${t.jColor}) drop-shadow(0 1.4px 1.4px rgba(60,40,10,.2))`,
+            }}
+          />
         </div>
 
         <div
@@ -96,9 +82,9 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            height: 138,
-            paddingLeft: 2,
-            paddingRight: 48,
+            height: 142,
+            paddingLeft: 0,
+            paddingRight: 36,
             lineHeight: 1,
             overflow: "visible",
           }}
@@ -108,20 +94,20 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
             style={{
               display: "block",
               width: "100%",
-              fontSize: 26,
+              fontSize: 25.5,
               fontWeight: 900,
               color: t.fg,
-              letterSpacing: "0.075em",
+              letterSpacing: "0.085em",
               lineHeight: 1,
               whiteSpace: "nowrap",
-              transform: "scaleX(1.01)",
+              transform: "scaleX(.99)",
               transformOrigin: "left center",
             }}
           >
             {JBJ_BRAND.legalName}&nbsp;
             <span
               style={{
-                letterSpacing: "0.115em",
+                letterSpacing: "0.125em",
                 whiteSpace: "nowrap",
                 color: t.fg,
                 WebkitTextFillColor: t.fg,
