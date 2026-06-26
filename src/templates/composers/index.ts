@@ -116,31 +116,51 @@ export function termsTable(rows: Array<[string, string | undefined]>): string {
 
 }
 
-export function identityTable(rows: Array<[string, string | undefined]>): string {
-  const visible = rows.filter(([, v]) => (v || "").trim());
-  if (visible.length === 0) return "";
-  const body = visible
-    .map(
-      ([k, v], i) => `
-      <tr style="background:${i % 2 ? "#FDFBF7" : CHAMPAGNE};">
-        <td style="padding:8px 12px;border:1px solid ${GOLD}33;font-weight:600;color:${INK};width:34%;font-size:11.5px;vertical-align:top;">${esc(k)}</td>
-        <td style="padding:8px 12px;border:1px solid ${GOLD}33;color:${INK};font-size:11.5px;vertical-align:top;">${esc(v)}</td>
-      </tr>`,
-    )
-    .join("");
-  return `
-    <table data-pdf-section="identity" style="border-collapse:collapse;width:100%;margin:10px 0 16px;font-family:Inter,system-ui,sans-serif;page-break-inside:avoid;break-inside:avoid;">
-      <thead>
-        <tr>
-          <th colspan="2" style="text-align:left;padding:9px 12px;background:${CHAMPAGNE};border:1px solid ${GOLD};color:${INK};font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
-            Applicant Identity & Contact Details
-          </th>
-        </tr>
-      </thead>
-      <tbody>${body}</tbody>
-    </table>`;
-
+export function identityTable(_rows: Array<[string, string | undefined]>): string {
+  // 🔒 Deprecated as of 2026-06: identity is now woven inline via
+  // `inlineIdentitySentence` directly under the greeting (contract-style
+  // prose). Kept as a no-op for backwards compatibility with older
+  // composers that still call it.
+  return "";
 }
+
+/**
+ * Contract-grade inline identity sentence. Renders fields contextually
+ * ("holding Passport No. …, Emirates ID No. …, of Lebanese nationality,
+ * residing at …, reachable at …") and OMITS any clause whose value is
+ * missing. No expiry dates, no DOB, no sex.
+ */
+export function inlineIdentitySentence(fields: Record<string, string>): string {
+  const f = fields;
+  const passport = (f.passportNumber || f.passport_number || f.passportNo || f.passport || "").trim();
+  const eid = (f.emiratesId || f.idNumber || f.emirates_id || f.eid_number || "").trim();
+  const nationality = (f.nationality || "").trim();
+  const address = (f.homeAddress || f.address || f.home_address || f.residentialAddress || "").trim();
+  const email = (f.recipientEmail || f.email || f.email_address || "").trim();
+  const phone = (f.recipientPhone || f.phone || f.mobile || f.mobile_number || "").trim();
+
+  const clauses: string[] = [];
+  if (passport) clauses.push(`holding Passport No. <strong>${esc(passport)}</strong>`);
+  if (eid) clauses.push(`Emirates ID No. <strong>${esc(eid)}</strong>`);
+  if (nationality) clauses.push(`of <strong>${esc(nationality)}</strong> nationality`);
+  if (address) clauses.push(`residing at <strong>${esc(address)}</strong>`);
+
+  const contactBits: string[] = [];
+  if (email) contactBits.push(esc(email));
+  if (phone) contactBits.push(esc(phone));
+
+  if (clauses.length === 0 && contactBits.length === 0) return "";
+
+  const main = clauses.length
+    ? `${clauses.join(", ")}${contactBits.length ? "" : "."}`
+    : "";
+  const contact = contactBits.length
+    ? `${clauses.length ? ", reachable at " : "Reachable at "}${contactBits.join(" · ")}.`
+    : "";
+
+  return `<p style="margin:0 0 14px;line-height:1.65;font-size:12.5px;color:${INK};">${main}${contact}</p>`;
+}
+
 
 export function commissionTable(rows: CommissionRow[]): string {
   const visible = (rows || []).filter(
