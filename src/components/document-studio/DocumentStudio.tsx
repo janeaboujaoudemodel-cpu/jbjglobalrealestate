@@ -163,7 +163,7 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   set("recipientName", out.recipientName || text.match(/(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1]);
 
   Object.entries(all).forEach(([k, v]) => {
-    if (/expiry|expire|dateOfBirth|dob|birthDate|issueDate|issuingDate|nationality|sex/i.test(k)) return;
+    if (/expiry|expire|dateOfBirth|dob|birthDate|issueDate|issuingDate|sex/i.test(k)) return;
     if (IDENTITY_FIELD_KEYS.includes(k)) return;
     if (typeof v === "string" && v.trim()) out[k] = v.trim();
   });
