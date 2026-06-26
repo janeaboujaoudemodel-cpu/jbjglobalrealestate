@@ -230,7 +230,22 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
   };
 
   return (
-    <div data-no-contrast-guard className="flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden shadow-sm">
+    <div
+      data-no-contrast-guard
+      onDragOver={(e) => { e.preventDefault(); if (!dragOver) setDragOver(true); }}
+      onDragLeave={(e) => { if (e.currentTarget === e.target) setDragOver(false); }}
+      onDrop={onDrop}
+      className="relative flex flex-col h-full bg-[#FDFBF7] border border-[#B89555]/55 rounded-xl overflow-hidden shadow-sm"
+    >
+      {dragOver && (
+        <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center bg-[#FDFBF7]/95 border-2 border-dashed border-[#064E3B] rounded-xl">
+          <div className="text-center px-6">
+            <Paperclip className="w-8 h-8 mx-auto mb-2 text-[#064E3B]" />
+            <p className="text-sm font-semibold text-[#1A1A1A]">Drop files to attach</p>
+            <p className="text-xs text-[#1A1A1A]/60 mt-1">Images, PDF, DOC, DOCX, TXT · up to 8MB each · multiple files OK</p>
+          </div>
+        </div>
+      )}
       <div className="px-4 py-3 border-b border-[#B89555]/45 flex items-center gap-2 bg-[#F7F2EA]">
         <Sparkles className="w-4 h-4 shrink-0" style={{ color: "#064E3B" }} />
         <span className="text-sm font-semibold leading-tight min-w-0" style={{ color: "#1A1A1A" }}>AI Document Assistant</span>
