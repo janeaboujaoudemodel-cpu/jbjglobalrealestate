@@ -30,7 +30,11 @@ import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { AICommandPanel } from "@/components/owner/documents/AICommandPanel";
 import { getCatalogByAudience, type DocumentTemplate } from "@/config/documentCatalog";
 
-const loadDocumentStudio = () => import("@/components/document-studio/DocumentStudio");
+let documentStudioPromise: Promise<typeof import("@/components/document-studio/DocumentStudio")> | null = null;
+const loadDocumentStudio = () => {
+  documentStudioPromise ||= import("@/components/document-studio/DocumentStudio");
+  return documentStudioPromise;
+};
 const DocumentStudio = lazy(loadDocumentStudio);
 
 type Cat = "all" | "leasing" | "selling";
