@@ -31,7 +31,7 @@ import {
   Sparkles, Loader2, Wand2, Printer, Mail, FlaskConical, X, ChevronRight,
   ChevronLeft, ZoomIn, ZoomOut, Bold, Italic, List, Heading2, Search,
   PanelRightClose, PanelRightOpen, Check, Download, FileText, Stamp,
-  PenLine, ChevronDown, Trash2, Maximize2, Minimize2, Plus, Globe,
+  PenLine, ChevronDown, ChevronUp, Trash2, Maximize2, Minimize2, Plus, Globe,
   Copy, Upload,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -308,8 +308,11 @@ function StudioShell({
     } catch { return null; }
   };
   // Opening a specific template from the hub must NEVER be hijacked by an
-  // unrelated previous draft. Resume is offered only for the generic Studio.
-  const snap = initialId ? null : readSnapshot();
+  // unrelated previous draft. It may resume only that exact template.
+  const storedSnap = readSnapshot();
+  const snap = initialId
+    ? (storedSnap?.templateId === initialId ? storedSnap : null)
+    : storedSnap;
 
   const [step, setStep] = useState<Step>(snap?.templateId ? (snap.step ?? 2) : (initialId ? 2 : 1));
   const [templateId, setTemplateId] = useState<string>(snap?.templateId || initialId);
@@ -354,6 +357,9 @@ function StudioShell({
   const [sending, setSending] = useState(false);
 
   const [zoom, setZoom] = useState(100);
+  const [setupChromeCollapsed, setSetupChromeCollapsed] = useState(true);
+  const [actionChromeCollapsed, setActionChromeCollapsed] = useState(true);
+  const [detailsPanelCollapsed, setDetailsPanelCollapsed] = useState(false);
   // Keep the Live Document Editor as the premium sparkle launcher by default.
   // It expands only when requested, so the A4 preview stays centered and fast.
   const [aiOpen, setAiOpen] = useState(false);
