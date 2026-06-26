@@ -109,12 +109,31 @@
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
 }
-[data-studio-workspace] [role="tab"][data-state="active"],
-[data-studio-workspace] [role="tab"][data-state="active"] * {
+[data-studio-workspace] [role="tab"][data-state="active"] {
   background-image: var(--jj-emerald-ombre) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+[data-studio-workspace] [role="tab"][data-state="active"] * {
+  background: transparent !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+[data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body,
+[data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body *,
+[data-studio-workspace] [data-document-page="true"] .jbj-doc-body,
+[data-studio-workspace] [data-document-page="true"] .jbj-doc-body * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+[data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]),
+[data-studio-workspace] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
 }
 [data-document-studio-overlay] button[data-icon-only],
 [data-studio-workspace] button[data-icon-only] {
