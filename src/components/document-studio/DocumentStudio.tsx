@@ -429,6 +429,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
+  const DOCUMENT_FIX_VERSION = 2;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -1283,7 +1284,12 @@ function StudioShell({
   const applySnapshot = useCallback((s: any) => {
     try {
       if (s.fields && typeof s.fields === "object") setFields(s.fields);
-      if (typeof s.bodyHtml === "string" && s.bodyHtml) {
+      const forceTemplateResync = s.templateId === "job_offer" && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
+      if (forceTemplateResync) {
+        userEditedRef.current = false;
+        setUserEdited(false);
+        setBodyHtml("");
+      } else if (typeof s.bodyHtml === "string" && s.bodyHtml) {
         setBodyHtml(s.bodyHtml);
         if (s.userEdited) {
           // Hand-edited contracts must reopen exactly where the owner left them.
@@ -1366,6 +1372,7 @@ function StudioShell({
     if (!hydratedRef.current) return;
     const buildPayload = () => ({
       savedAt: new Date().toISOString(),
+      documentFixVersion: DOCUMENT_FIX_VERSION,
       step,
       templateId,
       fields,
