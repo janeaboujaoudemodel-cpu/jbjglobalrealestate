@@ -34,6 +34,25 @@
   color: #FFFFFF !important;
 }
 
+/* Document Studio: every generated table row can be removed from the
+   live contract; delete controls are visible on hover only and are
+   stripped from print/export/save output. */
+[data-document-studio-overlay] .jbj-doc-body [data-removable-field] [data-field-delete-control] {
+  opacity: 0 !important;
+  pointer-events: none;
+  transition: opacity 140ms ease, background-color 140ms ease, border-color 140ms ease;
+}
+[data-document-studio-overlay] .jbj-doc-body [data-removable-field]:hover [data-field-delete-control],
+[data-document-studio-overlay] .jbj-doc-body [data-removable-field]:focus-within [data-field-delete-control] {
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+[data-document-studio-overlay] .jbj-doc-body [data-field-delete-control]:hover {
+  background: #0B3D2E !important;
+  border-color: #0B3D2E !important;
+  color: #FFFFFF !important;
+}
+
 /* =====================================================================
    PASS 55 — DOCUMENT STUDIO RESPONSIVE WORKSPACE CONTRACT
    Card grid never collapses to a vertical single column above 480px.
