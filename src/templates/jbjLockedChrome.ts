@@ -125,8 +125,8 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
         <td style="vertical-align:middle;width:44%;padding-right:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.92;font-size:8.5px;line-height:1.25;">
           ${JBJ_BRAND.address}
         </td>
-        <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:9px;font-weight:700;">
-          ${JBJ_BRAND.phone}
+        <td style="vertical-align:middle;width:22%;text-align:center;padding:0 8px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:9px;font-weight:700;line-height:1.35;">
+          ${(JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone]).map(p => `<div style="white-space:nowrap;">${p}</div>`).join("")}
         </td>
         <td style="vertical-align:middle;width:34%;text-align:right;padding-left:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-size:8.5px;">
           <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
