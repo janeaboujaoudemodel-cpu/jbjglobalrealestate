@@ -120,22 +120,40 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
   useEffect(() => () => { try { recognitionRef.current?.stop(); } catch { /* noop */ } }, []);
 
   /* ───── Attachments ───── */
+  const [dragOver, setDragOver] = useState(false);
   const onPickFiles = () => fileRef.current?.click();
-  const onFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    e.target.value = "";
+  const ingestFiles = useCallback(async (files: File[]) => {
+    if (!files.length) return;
     const next: Attachment[] = [];
     for (const f of files) {
       if (f.size > 8 * 1024 * 1024) { toast.error(`${f.name} too large (max 8MB)`); continue; }
-      const dataUrl: string = await new Promise((res, rej) => {
-        const r = new FileReader();
-        r.onload = () => res(String(r.result));
-        r.onerror = () => rej(r.error);
-        r.readAsDataURL(f);
-      });
-      next.push({ name: f.name, type: f.type, dataUrl });
+      try {
+        const dataUrl: string = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(String(r.result));
+          r.onerror = () => rej(r.error);
+          r.readAsDataURL(f);
+        });
+        next.push({ name: f.name, type: f.type, dataUrl });
+      } catch {
+        toast.error(`Could not read ${f.name}`);
+      }
     }
-    if (next.length) setAttachments((a) => [...a, ...next]);
+    if (next.length) {
+      setAttachments((a) => [...a, ...next]);
+      toast.success(`${next.length} file${next.length > 1 ? "s" : ""} attached`);
+    }
+  }, []);
+  const onFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    await ingestFiles(files);
+  };
+  const onDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const files = Array.from(e.dataTransfer.files || []);
+    await ingestFiles(files);
   };
   const removeAttachment = (i: number) =>
     setAttachments((a) => a.filter((_, idx) => idx !== i));
