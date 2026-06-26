@@ -73,7 +73,15 @@ export default function BrokerMessages() {
                 <h3 className="text-base font-semibold text-[#1A1A1A] mt-2">{a.title}</h3>
                 <div
                   className="text-sm text-[#1A1A1A]/80 mt-2 prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={{ __html: a.body_html }}
+                  // SECURITY: HR announcements are authored in-house but
+                  // sanitize defensively to neutralize any stored XSS.
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(a.body_html ?? "", {
+                      USE_PROFILES: { html: true },
+                      FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "form"],
+                      FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover", "onfocus", "onblur", "formaction"],
+                    }),
+                  }}
                 />
               </article>
             ))
