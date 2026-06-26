@@ -590,9 +590,16 @@ function StudioShell({
     const baseTemplateId = snap?.templateId || initialId;
     const base = getTemplateDefaultFields(baseTemplateId);
     const shared = readSharedIdentity();
+    // NDA opened directly from the template launcher must be BLANK — it only
+    // pre-fills when entered via the Offer → NDA companion toggle (handled
+    // below). Existing NDA drafts keep their saved fields.
+    if (baseTemplateId === "nda" && !snap) {
+      return { ...base };
+    }
     const merged = { ...base, ...shared, ...(snap?.fields || {}) };
     return baseTemplateId === "job_offer" ? normalizeJobOfferIdentityFields(snap?.fields || {}, shared) : merged;
   });
+
   // Mirror identity fields to the shared store whenever they change.
   useEffect(() => {
     try {
