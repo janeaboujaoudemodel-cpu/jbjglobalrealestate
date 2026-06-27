@@ -2072,9 +2072,10 @@ function StudioShell({
       const src = pageRef.current;
       const pdfBlob = await exportPdf(currentBody, marks, template, src, undefined, candidateName);
       const stamp = new Date().toISOString().slice(0, 10);
-      const safeName = candidateName.replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_") || "Document";
-      const safeTpl = (template.label || template.id || "Document").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_");
-      const file = new File([pdfBlob], `${safeTpl}_${safeName}_${stamp}.pdf`, { type: "application/pdf" });
+      const safeName = candidateName.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_") || "Document";
+      const tplIdMap: Record<string, string> = { job_offer: "Offer", offer_letter: "Offer", nda: "NDA", warning_letter: "Warning", termination_letter: "Termination", experience_letter: "Experience", salary_certificate: "Salary", moa: "MOA", invoice: "Invoice", receipt: "Receipt" };
+      const safeTpl = tplIdMap[(template.id || "").toLowerCase()] || (template.label || template.id || "Document").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_");
+      const file = new File([pdfBlob], `JBJ_${safeTpl}_${safeName}_${stamp}.pdf`, { type: "application/pdf" });
       await uploadAttachmentMutation.mutateAsync({
         file,
         candidate_display_name: candidateName,
