@@ -157,6 +157,26 @@ const ARABIC_NAME_MAP: Record<string, string> = {
   "بن": "bin", "ابن": "ibn", "أبو": "Abu", "ابو": "Abu",
 };
 
+const OFFICIAL_NAME_ALIASES: Record<string, { english: string; arabic?: string }> = {
+  "alwalid i s alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i. s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i.s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alhalabi alwalid i s": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+};
+
+const normaliseNameAliasKey = (value?: string): string =>
+  cleanLegalName(value)
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^a-z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const officialNameAlias = (value?: string) => {
+  const key = normaliseNameAliasKey(value);
+  return key ? OFFICIAL_NAME_ALIASES[key] : undefined;
+};
+
 const transliterateArabicName = (arabic: string): string => {
   return arabic
     .replace(/[\u064B-\u0652\u0670\u0640]/g, "")
@@ -178,12 +198,30 @@ const transliterateArabicName = (arabic: string): string => {
     .trim();
 };
 
-const arabicFullName = (source?: string): string => {
+const arabicFullNameNative = (source?: string): string => {
   if (!source) return "";
-  const line = source.match(/الاسم\s*كاملا\s*[:：]?\s*([\u0600-\u06FF\s]+)/);
+  const line = source.match(/(?:الاسم\s*كاملا|الاسم)\s*[:：]?\s*([\u0600-\u06FF\s]+)/);
   const arabic = (line?.[1] || "").split(/\n/)[0].trim();
+  return arabic.replace(/\s+/g, " ").trim();
+};
+
+const arabicFullName = (source?: string): string => {
+  const arabic = arabicFullNameNative(source);
   if (!arabic) return "";
   return transliterateArabicName(arabic);
+};
+
+const legalArabicName = (fields: Record<string, string>, source: string): string => {
+  const explicit = [fields.fullNameArabic, fields.nameArabic, fields.arabicName, fields.fullNameAsPerPassportArabic, fields.fullNameAsPerIdArabic]
+    .map((v) => arabicFullNameNative(v) || (/[\u0600-\u06FF]/.test(v || "") ? (v || "").replace(/\s+/g, " ").trim() : ""))
+    .find(Boolean);
+  if (explicit) return explicit;
+  const fromSource = arabicFullNameNative(source);
+  if (fromSource) return fromSource;
+  const alias = [fields.fullNameAsPerPassport, fields.fullNameAsPerId, fields.recipientName, fields.fullName]
+    .map(officialNameAlias)
+    .find(Boolean);
+  return alias?.arabic || "";
 };
 
 const mrzName = (value?: string): string => {
@@ -200,7 +238,7 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
   // (or equivalent ID-bound field). When the operator has typed the full chain —
   // given + father + grandfather + family — that value MUST win over any shorter
   // recipient/display name. Never let scoring downgrade it.
-  const explicit = [
+  const explicitCandidates = [
     fields.fullNameAsPerPassport,
     fields.passportFullName,
     fields.passport_name,
@@ -211,10 +249,21 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     fields.emiratesIdFullName,
   ]
     .map(cleanLegalName)
-    .find((v) => v && v.split(/\s+/).length >= 2);
+    .filter((v) => v && v.split(/\s+/).length >= 2);
+  const arabicNative = legalArabicName(fields, source);
+  const arabicLatin = arabicNative ? transliterateArabicName(arabicNative) : "";
+  const explicitWithAliases = explicitCandidates.map((name) => officialNameAlias(name)?.english || name);
+  explicitWithAliases.sort((a, b) => {
+    const score = (name: string) => (isInitialOnlyName(name) ? 0 : 1000) + name.length + (name.split(/\s+/).length >= 4 ? 180 : name.split(/\s+/).length >= 3 ? 100 : 0);
+    return score(b) - score(a);
+  });
+  const explicit = explicitWithAliases[0] || "";
+  if (explicit && (!isInitialOnlyName(explicit) || !arabicLatin)) return explicit;
+  if (arabicLatin && arabicLatin.split(/\s+/).length >= 3) return arabicLatin;
   if (explicit) return explicit;
 
   const candidates = [
+    arabicLatin,
     fields.fullName,
     fields.nameAsPerId,
     fields.nameAsPerID,
@@ -229,6 +278,7 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     firstMatch(source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
   ]
     .map(cleanLegalName)
+    .map((name) => officialNameAlias(name)?.english || name)
     .filter(Boolean)
     .filter((name) => !/^\d+$/.test(name));
 
@@ -294,6 +344,7 @@ const offerIdentity = (fields: Record<string, string>) => {
   const rawPhone = identityValue(fields, ["recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"], source, /(?:phone|mobile|whatsapp)\s*(?:is|:|-)?\s*((?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,})/i);
   return {
     name: bestLegalName(fields, source),
+    arabicName: legalArabicName(fields, source),
     emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
     passport: identityValue(fields, ["passportNumber", "passport_number", "passportNo", "passport"], source, /passport(?:\s*(?:number|no\.?))?\s*(?:is|:|-)?\s*([A-Z0-9]{5,})/i),
     nationality: normalizeNationality(identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-|recorded\s+as)?\s*([A-Za-z][A-Za-z\s-]{2,30}?)(?=[,;.\n]|\s+(?:residing|reachable|apartment|building|street|email|phone|and|with)\b|$)/i)),
