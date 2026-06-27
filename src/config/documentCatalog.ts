@@ -300,6 +300,8 @@ const STAFF: DocumentTemplate[] = [
       "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. Default Term of Confidentiality = 3 years (indefinite for trade secrets). Default Emirate = Dubai. Use clean HTML, no inline color. SURGICAL PATCH MODE — only fill placeholders.",
     ].join("\n"),
     fields: [
+      { key: "fullNameAsPerPassport", label: "Full Name as per Passport / ID", type: "text", placeholder: "Full legal name incl. father / family name", required: true },
+      { key: "fullNameArabic", label: "Arabic Name as per Passport / ID", type: "text", placeholder: "الاسم كاملا كما في الجواز / الهوية" },
       RECIPIENT_NAME,
       { key: "counterparty", label: "Counterparty / Company", type: "text" },
       { key: "counterpartyAddress", label: "Counterparty Address", type: "textarea" },
