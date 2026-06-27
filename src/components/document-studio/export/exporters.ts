@@ -338,6 +338,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     const style = node.style as CSSStyleDeclaration;
     if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
   });
+  lockFooterIconBaselineForExport(clone);
   stage.appendChild(clone);
   document.body.appendChild(stage);
   try {
