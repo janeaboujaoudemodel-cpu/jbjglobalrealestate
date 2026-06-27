@@ -238,8 +238,9 @@ export function precachePdfPages(sourceElement?: HTMLElement | null): void {
       const images = await renderPdfPageImages(pages);
       const blob = await buildPdfBlobFromPageImages(images);
       pdfPageCache.set(sourceElement, { signature, pages: images, blob, createdAt: Date.now() });
-    } catch {
+    } catch (error) {
       // Background cache failures must never affect editing/exporting.
+      console.warn("[DocumentStudio] PDF warm cache skipped", error);
     } finally {
       pdfPageInflight.delete(sourceElement);
     }
