@@ -354,6 +354,44 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   }
 }
 
+async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const host = document.createElement("div");
+  host.setAttribute("data-export-stack", "true");
+  host.style.cssText = [
+    "position:fixed",
+    "left:-12000px",
+    "top:0",
+    `width:${LIVE_PAGE_WIDTH}px`,
+    `height:${pages.length * LIVE_PAGE_HEIGHT}px`,
+    "background:#FDFBF7",
+    "overflow:hidden",
+    "pointer-events:none",
+    "z-index:-1",
+  ].join(";");
+
+  pages.forEach((page) => {
+    const clone = page.cloneNode(true) as HTMLElement;
+    clone.style.transform = "none";
+    clone.style.transformOrigin = "top left";
+    clone.style.boxShadow = "none";
+    clone.style.borderRadius = "0";
+    clone.style.border = "0";
+    clone.style.margin = "0";
+    clone.style.width = `${LIVE_PAGE_WIDTH}px`;
+    clone.style.height = `${LIVE_PAGE_HEIGHT}px`;
+    clone.style.position = "relative";
+    clone.querySelectorAll<HTMLElement>("[data-page-export-ignore]").forEach((node) => node.remove());
+    host.appendChild(clone);
+  });
+
+  document.body.appendChild(host);
+  try {
+    return await renderElementCanvas(host, scale);
+  } finally {
+    host.remove();
+  }
+}
+
 // Yield to the browser between heavy operations so the UI doesn't appear "stuck".
 const yieldToUi = () => new Promise<void>((resolve) => {
   if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => resolve());
