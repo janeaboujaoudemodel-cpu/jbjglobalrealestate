@@ -1089,8 +1089,8 @@ function StudioShell({
     };
   };
 
-  const handleSaveDocument = async () => {
-    if (!template) { toast.error("Pick a template first"); return undefined; }
+  const handleSaveDocument = async (opts?: { silent?: boolean }) => {
+    if (!template) { if (!opts?.silent) toast.error("Pick a template first"); return undefined; }
     // Derive booking id (chained, server-side) if not already in field_values.
     let booking_id = (fields.booking_id || fields.bookingRef || "").trim();
     if (!booking_id) {
@@ -1107,14 +1107,12 @@ function StudioShell({
     }
     const profile = getProfileValues(fields);
     const nextFields = { ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName };
-    // Saving/exporting must never wipe manual edits made directly in the live
-    // A4 review. Field-only updates can stay structured; edited contract HTML
-    // keeps the preview body as the source of truth.
     if (userEditedRef.current || liveEditedBodyHtmlRef.current) setFields(nextFields);
     else setSyncedFields(nextFields);
     const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
+    const candidateMeta = deriveCandidateFolder(nextFields);
     const title =
-      (profile.clientName || "Untitled") +
+      (candidateMeta.displayName || profile.clientName || "Untitled") +
       ` — ${template.label} (${booking_id})`;
     try {
       const saved = await saveDocMutation.mutateAsync({
@@ -1123,17 +1121,93 @@ function StudioShell({
         title,
         field_values: nextFields,
         rendered_html: currentBody || null,
-        client_name: profile.clientName || null,
+        client_name: candidateMeta.displayName || profile.clientName || null,
         client_email: profile.clientEmail || null,
         client_phone: profile.clientPhone || null,
+        candidate_folder: candidateMeta.folder,
+        candidate_display_name: candidateMeta.displayName,
+        silent: opts?.silent,
       });
       setCurrentDocId(saved.id);
+      // Companion NDA: when an Offer Letter is saved for a candidate with a
+      // resolvable folder, ensure a matching NDA draft exists in the same
+      // folder, pre-filled with the same identity.
+      if (template.id === "job_offer" && candidateMeta.folder) {
+        try {
+          const { data: existing } = await (supabase as any)
+            .from("crm_documents")
+            .select("id")
+            .eq("template_id", "nda")
+            .eq("candidate_folder", candidateMeta.folder)
+            .is("deleted_at", null)
+            .limit(1)
+            .maybeSingle();
+          if (!existing) {
+            const ndaHtml = composeDocument({
+              templateId: "nda",
+              fields: nextFields,
+              ownerName,
+              ownerTitle,
+              ownerDate,
+              letterDate: nextFields.letterDate || ownerDate,
+            });
+            await saveDocMutation.mutateAsync({
+              template_id: "nda",
+              title: `${candidateMeta.displayName} — NDA (${booking_id})`,
+              field_values: nextFields,
+              rendered_html: ndaHtml,
+              client_name: candidateMeta.displayName,
+              client_email: profile.clientEmail || null,
+              client_phone: profile.clientPhone || null,
+              candidate_folder: candidateMeta.folder,
+              candidate_display_name: candidateMeta.displayName,
+              silent: true,
+            });
+            if (!opts?.silent) {
+              toast.success(`NDA draft auto-created for ${candidateMeta.displayName}`);
+            }
+          }
+        } catch (ndaErr) {
+          console.warn("[DocumentStudio] NDA companion auto-create failed", ndaErr);
+        }
+      }
       return saved;
     } catch (e: any) {
-      // toast already shown by hook
       return undefined;
     }
   };
+
+  // ── Auto-save (silent) every 8s when there's a candidate name & changes ──
+  const autoSaveTimerRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!template) return;
+    const candidateName = pickCandidateDisplayName(fields);
+    if (!candidateName) return;
+    if (!bodyHtml) return;
+    if (autoSaveTimerRef.current) window.clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = window.setTimeout(() => {
+      handleSaveDocument({ silent: true });
+    }, 8000);
+    return () => {
+      if (autoSaveTimerRef.current) window.clearTimeout(autoSaveTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bodyHtml, JSON.stringify(fields), template?.id]);
+
+  // ── Cmd/Ctrl+S keyboard shortcut → manual save (toast) ──
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === "s" || e.key === "S")) {
+        e.preventDefault();
+        handleSaveDocument();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template, fields, bodyHtml]);
+
+
 
   const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string; rendered_html?: string | null }) => {
     setTemplateId(d.template_id);
