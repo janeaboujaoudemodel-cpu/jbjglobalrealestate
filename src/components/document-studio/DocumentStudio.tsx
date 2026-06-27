@@ -3711,19 +3711,23 @@ function StudioShell({
                                       (even pages dominated by opaque tables
                                       like the Compensation grid on page 2)
                                       without harming text readability. */}
-                                  <img
-                                    src={jbjMonogramSrc}
-                                    alt=""
+                                  <div
                                     aria-hidden
                                     style={{
                                       width: 540,
                                       height: 540,
-                                      objectFit: "contain",
-                                      opacity: 0.1,
+                                      backgroundColor: "#B89555",
+                                      WebkitMaskImage: `url(${jbjMonogramSrc})`,
+                                      maskImage: `url(${jbjMonogramSrc})`,
+                                      WebkitMaskRepeat: "no-repeat",
+                                      maskRepeat: "no-repeat",
+                                      WebkitMaskPosition: "center",
+                                      maskPosition: "center",
+                                      WebkitMaskSize: "contain",
+                                      maskSize: "contain",
+                                      opacity: 0.18,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
-                                      filter: "saturate(1.1)",
-                                      mixBlendMode: "multiply",
                                     }}
                                   />
 
