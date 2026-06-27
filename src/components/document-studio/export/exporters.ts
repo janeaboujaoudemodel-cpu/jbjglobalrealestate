@@ -7,6 +7,28 @@ import DOMPurify from "dompurify";
 import { wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
 import type { DocumentTemplate } from "@/config/documentCatalog";
 
+const PDF_PAGE_SCALE = 1.05;
+const PDF_JPEG_QUALITY = 0.76;
+const LIVE_PAGE_WIDTH = 816;
+const LIVE_PAGE_HEIGHT = 1154;
+
+let html2canvasLoader: Promise<(typeof import("html2canvas"))["default"]> | null = null;
+let jsPdfLoader: Promise<(typeof import("jspdf"))["default"]> | null = null;
+
+const loadHtml2Canvas = () => {
+  html2canvasLoader ??= import("html2canvas").then((m) => m.default);
+  return html2canvasLoader;
+};
+
+const loadJsPdf = () => {
+  jsPdfLoader ??= import("jspdf").then((m) => m.default);
+  return jsPdfLoader;
+};
+
+export const preloadExportLibraries = () => {
+  void Promise.all([loadHtml2Canvas(), loadJsPdf()]);
+};
+
 export interface PlacedMark {
   url: string;
   /** Width in document units (px on the 816-wide canvas). */
@@ -68,8 +90,8 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCanvasElement> {
-  const { default: html2canvas } = await import("html2canvas");
+async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const html2canvas = await loadHtml2Canvas();
 
   const prev = {
     transform: el.style.transform,
@@ -133,10 +155,11 @@ async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCa
     return await html2canvas(el, {
       backgroundColor: "#FDFBF7",
       scale,
+      foreignObjectRendering: true,
       useCORS: true,
       allowTaint: false,
       logging: false,
-      imageTimeout: 4000,
+      imageTimeout: 1800,
       removeContainer: true,
       width: widthPx,
       height: heightPx,
@@ -163,7 +186,7 @@ async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCa
   }
 }
 
-async function renderPageCanvasWithMirrorFallback(el: HTMLElement, scale = 1.6): Promise<HTMLCanvasElement> {
+async function renderPageCanvasWithMirrorFallback(el: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   try {
     return await renderElementCanvas(el, scale);
   } catch (error) {
@@ -194,11 +217,201 @@ async function renderPageCanvasWithMirrorFallback(el: HTMLElement, scale = 1.6):
   }
 }
 
+function drawImageCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
+  const iw = img.naturalWidth || img.width || 1;
+  const ih = img.naturalHeight || img.height || 1;
+  const ratio = Math.max(w / iw, h / ih);
+  const sw = w / ratio;
+  const sh = h / ratio;
+  ctx.drawImage(img, (iw - sw) / 2, (ih - sh) / 2, sw, sh, x, y, w, h);
+}
+
+function drawImageContain(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
+  const iw = img.naturalWidth || img.width || 1;
+  const ih = img.naturalHeight || img.height || 1;
+  const ratio = Math.min(w / iw, h / ih);
+  const dw = iw * ratio;
+  const dh = ih * ratio;
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+}
+
+async function cloneImagesIntoCanvas(sourceCanvas: HTMLCanvasElement, page: HTMLElement): Promise<boolean> {
+  const images = Array.from(page.querySelectorAll<HTMLImageElement>("img"))
+    .filter((img) => {
+      const src = img.currentSrc || img.src;
+      if (!src || /^data:image\/svg\+xml/i.test(src)) return false;
+      const rect = img.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+  if (!images.length) return false;
+
+  const pageRect = page.getBoundingClientRect();
+  const ctx = sourceCanvas.getContext("2d");
+  if (!ctx) return false;
+  const sx = sourceCanvas.width / (page.offsetWidth || LIVE_PAGE_WIDTH);
+  const sy = sourceCanvas.height / (page.offsetHeight || LIVE_PAGE_HEIGHT);
+  let painted = false;
+
+  for (const img of images) {
+    try {
+      if (!img.complete || !img.naturalWidth) {
+        await new Promise<void>((resolve) => {
+          const done = () => resolve();
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", done, { once: true });
+          setTimeout(done, 350);
+        });
+      }
+      if (!img.naturalWidth) continue;
+      const r = img.getBoundingClientRect();
+      const x = (r.left - pageRect.left) * sx;
+      const y = (r.top - pageRect.top) * sy;
+      const w = r.width * sx;
+      const h = r.height * sy;
+      ctx.save();
+      ctx.globalAlpha = Number(getComputedStyle(img).opacity || "1") || 1;
+      const transform = getComputedStyle(img).transform;
+      if (transform && transform !== "none") {
+        ctx.translate(x + w / 2, y + h / 2);
+        try {
+          const matrix = new DOMMatrixReadOnly(transform);
+          ctx.transform(matrix.a, matrix.b, matrix.c, matrix.d, 0, 0);
+        } catch { /* ignore invalid CSS transform */ }
+        ctx.translate(-w / 2, -h / 2);
+        const fit = getComputedStyle(img).objectFit;
+        if (fit === "cover") drawImageCover(ctx, img, 0, 0, w, h);
+        else drawImageContain(ctx, img, 0, 0, w, h);
+      } else {
+        const fit = getComputedStyle(img).objectFit;
+        if (fit === "cover") drawImageCover(ctx, img, x, y, w, h);
+        else drawImageContain(ctx, img, x, y, w, h);
+      }
+      ctx.restore();
+      painted = true;
+    } catch {
+      try { ctx.restore(); } catch { /* ignore */ }
+    }
+  }
+  return painted;
+}
+
+async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const html2canvas = await loadHtml2Canvas();
+  const prev = {
+    transform: page.style.transform,
+    transformOrigin: page.style.transformOrigin,
+    boxShadow: page.style.boxShadow,
+    borderRadius: page.style.borderRadius,
+  };
+  page.style.transform = "none";
+  page.style.transformOrigin = "top left";
+  page.style.boxShadow = "none";
+  page.style.borderRadius = "0";
+  try {
+    const rect = page.getBoundingClientRect();
+    const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
+    const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
+    const canvas = await html2canvas(page, {
+      backgroundColor: "#FDFBF7",
+      scale,
+      foreignObjectRendering: false,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      imageTimeout: 450,
+      removeContainer: true,
+      width: widthPx,
+      height: heightPx,
+      x: rect.left + window.scrollX,
+      y: rect.top + window.scrollY,
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+      windowWidth: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, Math.ceil(rect.right)),
+      windowHeight: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0, Math.ceil(rect.bottom)),
+      ignoreElements: (e) =>
+        e.tagName === "SCRIPT" ||
+        (e instanceof HTMLElement &&
+          (e.getAttribute("aria-label") === "Remove field" ||
+            e.getAttribute("aria-label") === "Change mark" ||
+            e.getAttribute("aria-label") === "Resize mark" ||
+            e.getAttribute("aria-label") === "Unlock mark" ||
+            e.getAttribute("aria-label") === "Lock mark" ||
+            e.getAttribute("data-drag-guide") === "true" ||
+            e.hasAttribute("data-page-export-ignore") ||
+            !!e.closest("[data-page-export-ignore]"))),
+    });
+    // html2canvas is fastest when it skips waiting on every image, but Safari/
+    // Chromium can occasionally omit data-URL PNGs in that fast path. Repaint the
+    // visible images from the live preview onto the captured page to preserve the
+    // same watermark/stamp/logo without paying the full slow capture cost.
+    await cloneImagesIntoCanvas(canvas, page);
+    return canvas;
+  } finally {
+    page.style.transform = prev.transform;
+    page.style.transformOrigin = prev.transformOrigin;
+    page.style.boxShadow = prev.boxShadow;
+    page.style.borderRadius = prev.borderRadius;
+  }
+}
+
+async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const host = document.createElement("div");
+  host.setAttribute("data-export-stack", "true");
+  host.style.cssText = [
+    "position:fixed",
+    "left:-12000px",
+    "top:0",
+    `width:${LIVE_PAGE_WIDTH}px`,
+    `height:${pages.length * LIVE_PAGE_HEIGHT}px`,
+    "background:#FDFBF7",
+    "overflow:hidden",
+    "pointer-events:none",
+    "z-index:-1",
+  ].join(";");
+
+  pages.forEach((page) => {
+    const clone = page.cloneNode(true) as HTMLElement;
+    clone.style.transform = "none";
+    clone.style.transformOrigin = "top left";
+    clone.style.boxShadow = "none";
+    clone.style.borderRadius = "0";
+    clone.style.border = "0";
+    clone.style.margin = "0";
+    clone.style.width = `${LIVE_PAGE_WIDTH}px`;
+    clone.style.height = `${LIVE_PAGE_HEIGHT}px`;
+    clone.style.position = "relative";
+    clone.querySelectorAll<HTMLElement>("[data-page-export-ignore]").forEach((node) => node.remove());
+    host.appendChild(clone);
+  });
+
+  document.body.appendChild(host);
+  try {
+    return await renderElementCanvas(host, scale);
+  } finally {
+    host.remove();
+  }
+}
+
 // Yield to the browser between heavy operations so the UI doesn't appear "stuck".
 const yieldToUi = () => new Promise<void>((resolve) => {
   if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => resolve());
   else setTimeout(resolve, 0);
 });
+
+const canvasToJpegBytes = (canvas: HTMLCanvasElement, quality = PDF_JPEG_QUALITY) =>
+  new Promise<Uint8Array>((resolve) => {
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+        resolve(new Uint8Array(await blob.arrayBuffer()));
+        return;
+      }
+      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+      const binary = atob(dataUrl.split(",")[1] || "");
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+      resolve(bytes);
+    }, "image/jpeg", quality);
+  });
 
 /** Off-screen chrome render (fallback when no live element is provided). */
 async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
@@ -221,7 +434,7 @@ export async function exportPdf(
   sourceElement?: HTMLElement | null,
   onProgress?: (done: number, total: number) => void,
 ): Promise<Blob> {
-  const { default: jsPDF } = await import("jspdf");
+  const [jsPDF] = await Promise.all([loadJsPdf(), loadHtml2Canvas()]);
 
   const livePages = sourceElement
     ? Array.from(sourceElement.querySelectorAll<HTMLElement>('[data-document-page="true"]'))
@@ -247,17 +460,50 @@ export async function exportPdf(
     const A4_H = 297;
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
-    for (let i = 0; i < livePages.length; i += 1) {
-      onProgress?.(i, livePages.length);
-      // Yield first so the toast/progress UI can paint between pages.
+    try {
+      onProgress?.(0, livePages.length);
       await yieldToUi();
-      const canvas = await renderPageCanvasWithMirrorFallback(livePages[i], 1.6);
-      const data = canvas.toDataURL("image/jpeg", 0.85);
-      // Free the offscreen bitmap immediately — multi-page jobs accumulate
-      // hundreds of MB otherwise and stall the browser on page 4-7.
-      canvas.width = 0; canvas.height = 0;
-      if (i > 0) pdf.addPage();
-      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      const stackCanvas = await renderLivePagesStackCanvas(livePages, PDF_PAGE_SCALE);
+      const sliceCanvas = document.createElement("canvas");
+      const ctx = sliceCanvas.getContext("2d")!;
+      sliceCanvas.width = stackCanvas.width;
+      sliceCanvas.height = Math.round(stackCanvas.height / livePages.length);
+      for (let i = 0; i < livePages.length; i += 1) {
+        onProgress?.(i, livePages.length);
+        await yieldToUi();
+        ctx.fillStyle = "#FDFBF7";
+        ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+        ctx.drawImage(
+          stackCanvas,
+          0,
+          i * sliceCanvas.height,
+          stackCanvas.width,
+          sliceCanvas.height,
+          0,
+          0,
+          sliceCanvas.width,
+          sliceCanvas.height,
+        );
+        const data = await canvasToJpegBytes(sliceCanvas);
+        if (i > 0) pdf.addPage();
+        pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      }
+      stackCanvas.width = 0; stackCanvas.height = 0;
+      sliceCanvas.width = 0; sliceCanvas.height = 0;
+    } catch {
+      // Safe fallback: individual page capture if the stacked mirror hits a
+      // browser canvas/asset edge-case.
+      for (let i = 0; i < livePages.length; i += 1) {
+        onProgress?.(i, livePages.length);
+        await yieldToUi();
+        const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
+          renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
+        );
+        const data = await canvasToJpegBytes(canvas);
+        canvas.width = 0; canvas.height = 0;
+        if (i > 0) pdf.addPage();
+        pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      }
     }
     onProgress?.(livePages.length, livePages.length);
 
@@ -268,7 +514,7 @@ export async function exportPdf(
 
   // Collect logical block boundaries from the live DOM BEFORE rasterising,
   // so we can avoid slicing through tables / signatures / terms items.
-  const SCALE = 2; // matches renderElementCanvas
+  const SCALE = PDF_PAGE_SCALE; // matches renderElementCanvas
   const sectionBottomsCss: number[] = [];
   if (sourceElement) {
     const rootTop = sourceElement.getBoundingClientRect().top;
@@ -319,7 +565,7 @@ export async function exportPdf(
     ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
     ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
 
-    const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.92);
+    const sliceData = await canvasToJpegBytes(sliceCanvas, PDF_JPEG_QUALITY);
     if (!first) pdf.addPage();
     pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, A4_H);
     first = false;

@@ -51,7 +51,7 @@ import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
-import { exportPdf, exportDocx, exportPng, printDocument, DocumentMarks } from "./export/exporters";
+import { exportPdf, exportDocx, exportPng, printDocument, preloadExportLibraries, DocumentMarks } from "./export/exporters";
 import {
   compose as composeDocument,
   DEFAULT_BROKER_COMMISSIONS,
@@ -1432,6 +1432,7 @@ function StudioShell({
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    preloadExportLibraries();
     return () => { document.body.style.overflow = prev; };
   }, []);
 
@@ -1911,34 +1912,39 @@ function StudioShell({
       if (progressId != null) toast.success("PDF downloaded", { id: progressId });
 
       if (pdfBlob) {
-        try {
-          const saved = await handleSaveDocument();
-          const docId = saved?.id || currentDocId;
-          const { data: { user } } = await supabase.auth.getUser();
-          if (docId && user) {
-            const profile = getProfileValues(fields);
-            const owner = (profile.clientName || profile.developerName || "unassigned")
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
-              .replace(/^-+|-+$/g, "") || "unassigned";
-            const profileFolder = profile.profileType === "developer" ? "developers" : "clients";
-            const pdfPath = `${user.id}/${profileFolder}/${owner}/${docId}/${Date.now()}-${template.id}.pdf`;
-            const { error: uploadError } = await supabase.storage
-              .from("crm-documents")
-              .upload(pdfPath, pdfBlob, { contentType: "application/pdf", upsert: true });
-            if (uploadError) throw uploadError;
-            await (supabase.from("crm_documents" as any) as any)
-              .update({ pdf_path: pdfPath, rendered_html: currentBody || null, field_values: { ...fields, profile_type: profile.profileType } })
-              .eq("id", docId);
-            toast.success("PDF downloaded and saved to the profile file");
-          } else {
-            toast.success(`${kind.toUpperCase()} downloaded`);
+        // The file is already on the user's device; release the UI immediately
+        // and archive the generated PDF in the profile folder in the background.
+        // This removes the perceived post-download delay without changing the
+        // exported pixels or the save/archive behavior.
+        setExporting(null);
+        const pdfBlobForArchive = pdfBlob;
+        void (async () => {
+          try {
+            const saved = await handleSaveDocument();
+            const docId = saved?.id || currentDocId;
+            const { data: { user } } = await supabase.auth.getUser();
+            if (docId && user) {
+              const profile = getProfileValues(fields);
+              const owner = (profile.clientName || profile.developerName || "unassigned")
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "") || "unassigned";
+              const profileFolder = profile.profileType === "developer" ? "developers" : "clients";
+              const pdfPath = `${user.id}/${profileFolder}/${owner}/${docId}/${Date.now()}-${template.id}.pdf`;
+              const { error: uploadError } = await supabase.storage
+                .from("crm-documents")
+                .upload(pdfPath, pdfBlobForArchive, { contentType: "application/pdf", upsert: true });
+              if (uploadError) throw uploadError;
+              await (supabase.from("crm_documents" as any) as any)
+                .update({ pdf_path: pdfPath, rendered_html: currentBody || null, field_values: { ...fields, profile_type: profile.profileType } })
+                .eq("id", docId);
+              toast.success("PDF saved to the profile file");
+            }
+          } catch (saveError: any) {
+            console.warn("[DocumentStudio] profile save failed", saveError);
+            toast.warning(saveError?.message || "Downloaded, but profile save needs attention");
           }
-        } catch (saveError: any) {
-          console.warn("[DocumentStudio] profile save failed", saveError);
-          toast.success(`${kind.toUpperCase()} downloaded`);
-          toast.warning(saveError?.message || "Downloaded, but profile save needs attention");
-        }
+        })();
       } else {
         toast.success(`${kind.toUpperCase()} downloaded`);
       }

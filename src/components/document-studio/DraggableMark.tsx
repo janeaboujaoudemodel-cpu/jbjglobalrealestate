@@ -69,6 +69,7 @@ export default function DraggableMark({
       ref={ref}
       role="group"
       aria-label={ariaLabel}
+      data-page-export-mark="true"
       className="group absolute select-none"
       style={{ left: x, top: y, zIndex, cursor: locked ? "default" : (drag?.moved ? "grabbing" : (onClick ? "pointer" : "grab")), touchAction: "none" }}
       onPointerDown={(e) => {
@@ -89,6 +90,7 @@ export default function DraggableMark({
 
       {/* Hover affordance — action circles only; no dark label rectangle. */}
       <div
+        data-page-export-ignore="true"
         className="absolute -top-2 -right-2 hidden group-hover:flex items-center gap-1"
         style={{ zIndex: 9999 }}
       >
