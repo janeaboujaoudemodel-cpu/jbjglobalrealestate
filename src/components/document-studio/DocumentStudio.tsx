@@ -2166,6 +2166,31 @@ function StudioShell({
               <Stamp className="w-4 h-4 mr-1.5" />
               <span>Stamp</span>
             </Button>
+            {template && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => handleSaveDocument()}
+                disabled={saveDocMutation.isPending}
+                title="Save this document (⌘/Ctrl+S). Also auto-saves every 8s."
+                className="h-10"
+              >
+                {saveDocMutation.isPending
+                  ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                  : <FileText className="w-4 h-4 mr-1.5" />}
+                <span>{currentDocId ? "Update" : "Save"}</span>
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { window.location.href = "/owner/documents/forms?tab=candidates"; }}
+              title="Open candidate folders"
+              className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
+            >
+              <FileText className="w-4 h-4 mr-1.5" />
+              <span>Folders</span>
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title="Document actions">
