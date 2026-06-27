@@ -233,17 +233,17 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
           ))}
         </div>
         <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
-          <div style={{ height: 14, lineHeight: "14px", display: "grid", gridTemplateColumns: "max-content 10px max-content", alignItems: "center", justifyContent: "end", columnGap: 6, width: "100%" }}>
+          <div style={{ height: 14, lineHeight: "14px", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", columnGap: 6, width: "100%" }}>
             <span style={rightItemStyle}>
               <FooterIcon type="mail" />
-              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
+              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "inline-block", verticalAlign: "middle" }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
             </span>
-            <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "block", textAlign: "center" }}>·</span>
+            <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "inline-block", verticalAlign: "middle", textAlign: "center" }}>·</span>
             <span style={rightItemStyle}>
               <FooterIcon type="globe" />
-              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
+              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "inline-block", verticalAlign: "middle" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
             </span>
