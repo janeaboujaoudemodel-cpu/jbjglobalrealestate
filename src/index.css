@@ -204,15 +204,17 @@
 [data-jbj-locked-footer] [data-jbj-footer-icon] svg,
 [data-jbj-locked-footer] [data-jbj-footer-icon] svg * {
   fill: none !important;
-  stroke: #B89555 !important;
-  color: #B89555 !important;
+  color: #D8B96A !important;
 }
 [data-jbj-locked-footer] [data-jbj-footer-icon] svg circle,
 [data-jbj-locked-footer] [data-jbj-footer-icon] svg rect,
 [data-jbj-locked-footer] [data-jbj-footer-icon] svg path,
-[data-jbj-locked-footer] [data-jbj-footer-icon] svg ellipse {
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg ellipse,
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg line,
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg polyline,
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg polygon {
   fill: none !important;
-  stroke: #B89555 !important;
+  stroke: inherit;
 }
 [data-document-studio-overlay] button[data-icon-only],
 [data-studio-workspace] button[data-icon-only] {
@@ -8716,12 +8718,15 @@ html body :is(
 /* Locked document footer: contact icons must remain clean JBJ-gold outlines
    in BOTH preview and html2canvas PDF export. They are intentionally not
    IconTile UI icons, so the global champagne SVG ink guard must not recolor them. */
-html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
-html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon) {
-  color: #B89555 !important;
-  stroke: #B89555 !important;
+html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg {
+  color: #D8B96A !important;
   fill: none !important;
   opacity: 1 !important;
+}
+html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon) {
+  fill: none !important;
+  stroke: inherit;
+  opacity: inherit;
 }
 
 /* ============================================================
@@ -17125,8 +17130,12 @@ html body #root [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
 html body #root [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon),
 html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
 html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon) {
-  color: #B89555 !important;
-  stroke: #B89555 !important;
+  color: #D8B96A !important;
   fill: none !important;
   opacity: 1 !important;
+}
+
+html body #root [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon),
+html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon) {
+  stroke: inherit;
 }
