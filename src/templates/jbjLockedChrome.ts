@@ -85,20 +85,16 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-// Premium footer icons — solid gold inline SVGs. Rasterize identically in
-// preview and html2canvas/jspdf export (no absolute-positioned spans, no glyph fonts).
+// Premium footer icons — clean gold outline inline SVGs. Rasterize identically in
+// preview and html2canvas/jspdf export (no fills, no glyph fonts).
 // Keep the SVG viewport 14px high but the drawing box 12px tall, centered by
 // the parent grid/flex cell. This prevents html2canvas from lifting icons above
 // the text baseline during PDF rasterization.
 export const FOOTER_ICON_SVG: Record<"location" | "phone" | "mail" | "globe", string> = {
-  // Refined map pin with hollow ring center
-  location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><path d="M8 1.4c-2.76 0-5 2.18-5 4.86 0 3.55 4.34 8 4.52 8.19a.66.66 0 0 0 .96 0C8.66 14.26 13 9.81 13 6.26 13 3.58 10.76 1.4 8 1.4Z" fill="${JBJ_GOLD}"/><circle cx="8" cy="6.2" r="1.75" fill="${JBJ_CHAMPAGNE}"/></svg>`,
-  // Classic handset silhouette
-  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><path d="M3.62 1.6a1.4 1.4 0 0 1 1.96.32l1.3 1.8a1.4 1.4 0 0 1-.18 1.83l-.86.8a.5.5 0 0 0-.1.6 8.6 8.6 0 0 0 3.3 3.3.5.5 0 0 0 .6-.1l.8-.86a1.4 1.4 0 0 1 1.83-.18l1.8 1.3a1.4 1.4 0 0 1 .32 1.96l-.6.84a2.3 2.3 0 0 1-2.5.9C7.4 12.92 3.08 8.6 1.88 4.3a2.3 2.3 0 0 1 .9-2.5l.84-.2Z" fill="${JBJ_GOLD}"/></svg>`,
-  // Envelope (kept — user said email is okay)
-  mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><rect x="1.6" y="3.6" width="12.8" height="8.8" rx="1.2" fill="${JBJ_GOLD}"/><path d="M2.4 4.6 8 8.6l5.6-4" stroke="${JBJ_CHAMPAGNE}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  // Premium globe with meridians + equator
-  globe: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><circle cx="8" cy="8" r="6.2" fill="${JBJ_GOLD}"/><ellipse cx="8" cy="8" rx="2.6" ry="6.2" fill="none" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="1.8" y1="8" x2="14.2" y2="8" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="8" y1="1.8" x2="8" y2="14.2" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/></svg>`,
+  location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><path d="M8 14.3S3.35 9.9 3.35 6.35A4.65 4.65 0 0 1 8 1.7a4.65 4.65 0 0 1 4.65 4.65C12.65 9.9 8 14.3 8 14.3Z" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="8" cy="6.35" r="1.55" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.25" vector-effect="non-scaling-stroke"/></svg>`,
+  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><path d="M4.05 2.25 2.85 3.1c-.62.44-.9 1.23-.7 1.97 1.18 4.33 4.45 7.6 8.78 8.78.74.2 1.53-.08 1.97-.7l.85-1.2a.9.9 0 0 0-.2-1.25l-1.72-1.23a.9.9 0 0 0-1.17.1l-.92.92a.72.72 0 0 1-.82.13 7.7 7.7 0 0 1-3.54-3.54.72.72 0 0 1 .13-.82l.92-.92a.9.9 0 0 0 .1-1.17L5.3 2.45a.9.9 0 0 0-1.25-.2Z" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`,
+  mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><rect x="1.9" y="3.5" width="12.2" height="9" rx="1.35" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.35" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><path d="M2.65 4.45 8 8.25l5.35-3.8" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`,
+  globe: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><circle cx="8" cy="8" r="6.05" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.35" vector-effect="non-scaling-stroke"/><ellipse cx="8" cy="8" rx="2.65" ry="6.05" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.05" vector-effect="non-scaling-stroke"/><path d="M2.1 8h11.8M3.55 4.25h8.9M3.55 11.75h8.9" fill="none" stroke="${JBJ_GOLD}" style="fill:none;stroke:${JBJ_GOLD};" stroke-width="1.05" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`,
 };
 
 const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => FOOTER_ICON_SVG[type];
@@ -137,7 +133,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const iconRowStyle = "height:14px;line-height:14px;display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:6px;align-items:center;";
   const textAfterIconStyle = "min-width:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
   const rightItemStyle = "display:grid;grid-template-columns:12px max-content;column-gap:6px;align-items:center;height:14px;line-height:14px;white-space:nowrap;";
-  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(4px);";
+  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(1px);";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;
