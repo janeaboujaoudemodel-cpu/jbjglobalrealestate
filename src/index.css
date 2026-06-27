@@ -193,10 +193,26 @@
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
 }
-[data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]),
-[data-studio-workspace] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]) {
+[data-document-studio-overlay] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]):not([data-jbj-footer-icon] *):not([data-jbj-footer-icon]),
+[data-studio-workspace] [data-document-page="true"] .jbj-doc-body :is(svg,[data-lucide],[class*="lucide"]):not([data-jbj-footer-icon] *):not([data-jbj-footer-icon]) {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
+}
+/* Footer icons must remain clean gold outlines (no fill) in both preview AND
+   html2canvas/jspdf export. Lock fill:none and stroke:gold at the highest
+   specificity so the studio surface rules above can never repaint them. */
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg,
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg * {
+  fill: none !important;
+  stroke: #B89555 !important;
+  color: #B89555 !important;
+}
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg circle,
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg rect,
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg path,
+[data-jbj-locked-footer] [data-jbj-footer-icon] svg ellipse {
+  fill: none !important;
+  stroke: #B89555 !important;
 }
 [data-document-studio-overlay] button[data-icon-only],
 [data-studio-workspace] button[data-icon-only] {
