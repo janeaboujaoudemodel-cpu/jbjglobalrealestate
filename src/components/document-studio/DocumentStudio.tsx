@@ -1432,6 +1432,7 @@ function StudioShell({
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    preloadExportLibraries();
     return () => { document.body.style.overflow = prev; };
   }, []);
 
