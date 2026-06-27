@@ -381,7 +381,7 @@ const renderPerPageUserSignature = (name?: string) => {
 
 
 const renderPageGeneratedDate = (): string => {
-  const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+  const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric", timeZone: "Asia/Dubai" });
   return `Generated ${today}`;
 };
 
