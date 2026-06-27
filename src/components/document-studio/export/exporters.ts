@@ -308,7 +308,6 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   page.style.boxShadow = "none";
   page.style.borderRadius = "0";
   try {
-    const rect = page.getBoundingClientRect();
     const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
     const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
     const canvas = await html2canvas(page, {
@@ -322,12 +321,8 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
       removeContainer: true,
       width: widthPx,
       height: heightPx,
-      x: rect.left + window.scrollX,
-      y: rect.top + window.scrollY,
-      scrollX: window.scrollX,
-      scrollY: window.scrollY,
-      windowWidth: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, Math.ceil(rect.right)),
-      windowHeight: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0, Math.ceil(rect.bottom)),
+      windowWidth: widthPx,
+      windowHeight: heightPx,
       ignoreElements: (e) =>
         e.tagName === "SCRIPT" ||
         (e instanceof HTMLElement &&
@@ -345,6 +340,10 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     // visible images from the live preview onto the captured page to preserve the
     // same watermark/stamp/logo without paying the full slow capture cost.
     await cloneImagesIntoCanvas(canvas, page);
+    if (isCanvasVisuallyBlank(canvas)) {
+      canvas.width = 0; canvas.height = 0;
+      return await renderElementCanvas(page, scale);
+    }
     return canvas;
   } finally {
     page.style.transform = prev.transform;
@@ -352,6 +351,24 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     page.style.boxShadow = prev.boxShadow;
     page.style.borderRadius = prev.borderRadius;
   }
+}
+
+function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx || canvas.width < 2 || canvas.height < 2) return true;
+  const stepX = Math.max(1, Math.floor(canvas.width / 24));
+  const stepY = Math.max(1, Math.floor(canvas.height / 32));
+  let sampled = 0;
+  let ink = 0;
+  for (let y = Math.floor(stepY / 2); y < canvas.height; y += stepY) {
+    for (let x = Math.floor(stepX / 2); x < canvas.width; x += stepX) {
+      const [r, g, b, a] = ctx.getImageData(x, y, 1, 1).data;
+      sampled += 1;
+      if (a > 12 && (r < 244 || g < 240 || b < 232)) ink += 1;
+      if (ink >= 8) return false;
+    }
+  }
+  return sampled > 0;
 }
 
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
