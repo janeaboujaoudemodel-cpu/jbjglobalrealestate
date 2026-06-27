@@ -55,14 +55,6 @@ export function useScrollUnlocker(): void {
       return (deltaY > 0 && editable.scrollTop < maxTop - 1) || (deltaY < 0 && editable.scrollTop > 1);
     };
 
-    const isWheelSafeSurface = (target: EventTarget | null): boolean => {
-      const element = target instanceof Element ? target : null;
-      if (!element) return true;
-      return !element.closest(
-        '[data-document-studio-overlay], [data-map], .mapboxgl-map, .leaflet-container, [data-no-page-wheel]',
-      );
-    };
-
     const findScrollableAncestor = (target: EventTarget | null, deltaY: number): HTMLElement | null => {
       const start = target instanceof Element ? target : null;
       if (!start) return null;
