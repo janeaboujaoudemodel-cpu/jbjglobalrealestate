@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState, type SetStateAction } from "react";
+import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -398,6 +399,7 @@ const anchorSignatureArtifacts = (html: string): string => {
 
 
 export default function DocumentStudio({ catalog, trigger, presetTemplateId, open: controlledOpen, onOpenChange }: Props) {
+  const navigate = useNavigate();
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen ?? internalOpen;
   const setOpen = useCallback((next: boolean) => {
@@ -448,6 +450,7 @@ function StudioShell({
   presetTemplateId?: string;
   onClose: () => void;
 }) {
+  const navigate = useNavigate();
   const templates = useMemo(() => getCatalogByAudience(catalog), [catalog]);
   const isValidCatalogTemplate = (id?: string | null) => {
     if (!id) return false;
@@ -2184,7 +2187,7 @@ function StudioShell({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => { window.location.href = "/owner/documents/forms?tab=candidates"; }}
+              onClick={() => navigate("/owner/documents/forms?tab=candidates")}
               title="Open candidate folders"
               className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
             >
