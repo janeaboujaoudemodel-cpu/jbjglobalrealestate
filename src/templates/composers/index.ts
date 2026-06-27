@@ -522,7 +522,12 @@ export function signatureBlock(opts: {
     .filter(([, value]) => (value || "").trim())
     .map(([label, value]) => row(label, esc(value || "")))
     .join("");
+  const ack = (opts.applicantAcknowledgement || "").trim();
+  const ackBlock = ack
+    ? `<div style="margin:2px 0 8px;padding:8px 10px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:9.5px;line-height:1.55;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
+    : "";
   const applicantLines = `
+    ${ackBlock}
     ${linedRow("Name", aName)}
     ${linedRow("Title", aTitle)}
     ${linedRow("Date", aDate)}
