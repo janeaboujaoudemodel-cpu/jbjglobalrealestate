@@ -509,7 +509,7 @@ export function signatureBlock(opts: {
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
         ${signatureContent}
       </div>
-      <div style="padding:10px 14px 14px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 160 : 96}px;box-sizing:border-box;display:flex;flex-direction:column;">
+      <div style="padding:10px 14px 14px;border-top:1px dashed ${GOLD}80;min-height:${lowerRowsMinHeight}px;box-sizing:border-box;display:flex;flex-direction:column;">
         ${lines}
       </div>
     </td>`;
@@ -525,18 +525,20 @@ export function signatureBlock(opts: {
     .map(([label, value]) => row(label, esc(value || "")))
     .join("");
   const ack = (opts.applicantAcknowledgement || "").trim();
+  const lowerPreambleHeight = ack ? 94 : 0;
+  const lowerRowsMinHeight = ack ? 174 : 100;
   const ackBlock = ack
-    ? `<div data-applicant-undertaking="1" style="width:100%;padding:8px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:9.2px;line-height:1.42;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
+    ? `<div data-applicant-undertaking="1" style="width:100%;max-height:${lowerPreambleHeight}px;overflow:hidden;padding:7px 9px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.35px;line-height:1.28;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
   // Lower signature geometry is locked to the user's marked reference:
   // after the dashed divider, the applicant undertaking appears FIRST, and
   // the Name / Title / Date rows are pushed DOWN underneath it. The owner side
   // receives a matching blank preamble slot so both columns' rows align.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 64px;display:flex;align-items:flex-start;margin-bottom:10px;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="flex:0 0 ${lowerPreambleHeight}px;min-height:${lowerPreambleHeight}px;max-height:${lowerPreambleHeight}px;display:flex;align-items:flex-start;margin-bottom:10px;overflow:hidden;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 64px;margin-bottom:10px;"></div>`
+    ? `<div data-sig-preamble-slot="1" style="flex:0 0 ${lowerPreambleHeight}px;min-height:${lowerPreambleHeight}px;max-height:${lowerPreambleHeight}px;margin-bottom:10px;overflow:hidden;"></div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1" style="margin-top:auto;">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
