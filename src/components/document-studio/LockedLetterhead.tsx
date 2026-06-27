@@ -36,11 +36,12 @@ function FooterIcon({ type }: { type: FooterIconType }) {
       style={{
         width: 12,
         height: 14,
-        display: "flex",
+        display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         flex: "0 0 12px",
         lineHeight: "14px",
+        verticalAlign: "middle",
       }}
       dangerouslySetInnerHTML={{ __html: FOOTER_ICON_SVG[type] }}
     />
