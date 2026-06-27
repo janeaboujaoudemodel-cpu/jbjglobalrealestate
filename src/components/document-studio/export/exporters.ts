@@ -460,19 +460,50 @@ export async function exportPdf(
     const A4_H = 297;
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
-    for (let i = 0; i < livePages.length; i += 1) {
-      onProgress?.(i, livePages.length);
-      // Yield first so the toast/progress UI can paint between pages.
+    try {
+      onProgress?.(0, livePages.length);
       await yieldToUi();
-      const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
-        renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
-      );
-      const data = await canvasToJpegBytes(canvas);
-      // Free the offscreen bitmap immediately — multi-page jobs accumulate
-      // hundreds of MB otherwise and stall the browser on page 4-7.
-      canvas.width = 0; canvas.height = 0;
-      if (i > 0) pdf.addPage();
-      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      const stackCanvas = await renderLivePagesStackCanvas(livePages, PDF_PAGE_SCALE);
+      const sliceCanvas = document.createElement("canvas");
+      const ctx = sliceCanvas.getContext("2d")!;
+      sliceCanvas.width = stackCanvas.width;
+      sliceCanvas.height = Math.round(stackCanvas.height / livePages.length);
+      for (let i = 0; i < livePages.length; i += 1) {
+        onProgress?.(i, livePages.length);
+        await yieldToUi();
+        ctx.fillStyle = "#FDFBF7";
+        ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+        ctx.drawImage(
+          stackCanvas,
+          0,
+          i * sliceCanvas.height,
+          stackCanvas.width,
+          sliceCanvas.height,
+          0,
+          0,
+          sliceCanvas.width,
+          sliceCanvas.height,
+        );
+        const data = await canvasToJpegBytes(sliceCanvas);
+        if (i > 0) pdf.addPage();
+        pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      }
+      stackCanvas.width = 0; stackCanvas.height = 0;
+      sliceCanvas.width = 0; sliceCanvas.height = 0;
+    } catch {
+      // Safe fallback: individual page capture if the stacked mirror hits a
+      // browser canvas/asset edge-case.
+      for (let i = 0; i < livePages.length; i += 1) {
+        onProgress?.(i, livePages.length);
+        await yieldToUi();
+        const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
+          renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
+        );
+        const data = await canvasToJpegBytes(canvas);
+        canvas.width = 0; canvas.height = 0;
+        if (i > 0) pdf.addPage();
+        pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      }
     }
     onProgress?.(livePages.length, livePages.length);
 
