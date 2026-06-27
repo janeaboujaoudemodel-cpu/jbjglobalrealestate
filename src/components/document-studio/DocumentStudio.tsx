@@ -2076,7 +2076,7 @@ function StudioShell({
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" disabled={!template} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title="Document actions">
+                <Button variant="outline" size="sm" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title="Document actions">
                   <Download className="w-4 h-4 mr-1.5" />
                   <span>Actions</span>
                   <ChevronDown className="w-3.5 h-3.5 ml-1" />
