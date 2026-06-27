@@ -102,6 +102,7 @@ async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Pro
   };
   const hidden: { node: HTMLElement; prevDisplay: string }[] = [];
   const styled: { node: HTMLElement; overflow: string; textOverflow: string; marginTop: string; paddingTop: string }[] = [];
+  let footerIconPrep: FooterIconExportPreparation | null = null;
   const hideNode = (node: HTMLElement) => {
     if (hidden.some((entry) => entry.node === node)) return;
     hidden.push({ node, prevDisplay: node.style.display });
@@ -151,9 +152,10 @@ async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Pro
 
   const widthPx = el.offsetWidth || 816;
   const heightPx = el.offsetHeight || 1154;
+  footerIconPrep = prepareFooterIconsForMeasuredExport(el, el);
 
   try {
-    return await html2canvas(el, {
+    const canvas = await html2canvas(el, {
       backgroundColor: "#FDFBF7",
       scale,
       foreignObjectRendering: true,
@@ -172,7 +174,10 @@ async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Pro
           (e.getAttribute("aria-label") === "Remove field" ||
             e.getAttribute("data-drag-guide") === "true")),
     });
+    drawFooterIconOverlays(canvas, footerIconPrep.overlays, el);
+    return canvas;
   } finally {
+    footerIconPrep?.restore();
     el.style.transform = prev.transform;
     el.style.transformOrigin = prev.transformOrigin;
     el.style.boxShadow = prev.boxShadow;
@@ -341,7 +346,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   stage.appendChild(clone);
   document.body.appendChild(stage);
   try {
-    replaceFooterSvgsWithCanvasForExport(clone);
+    const footerIconPrep = prepareFooterIconsForMeasuredExport(clone, clone);
     await yieldToUi();
     const canvas = await html2canvas(clone, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -370,8 +375,11 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     });
     if (isCanvasVisuallyBlank(canvas)) {
       canvas.width = 0; canvas.height = 0;
-      return await renderElementCanvas(clone, scale);
+      const fallbackCanvas = await renderElementCanvas(clone, scale);
+      drawFooterIconOverlays(fallbackCanvas, footerIconPrep.overlays, clone);
+      return fallbackCanvas;
     }
+    drawFooterIconOverlays(canvas, footerIconPrep.overlays, clone);
     return canvas;
   } finally {
     stage.remove();
@@ -396,45 +404,72 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
   return sampled > 0;
 }
 
-function replaceFooterSvgsWithCanvasForExport(root: HTMLElement): void {
+type FooterIconKind = "location" | "phone" | "mail" | "globe";
+
+type FooterIconOverlay = {
+  kind: FooterIconKind;
+  x: number;
+  y: number;
+  size: number;
+};
+
+type FooterIconExportPreparation = {
+  overlays: FooterIconOverlay[];
+  restore: () => void;
+};
+
+function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconExportPreparation {
+  const rootRect = captureRoot.getBoundingClientRect();
+  const overlays: FooterIconOverlay[] = [];
+  const touched: Array<{ svg: SVGElement; visibility: string }> = [];
   root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
     Array.from(footer.querySelectorAll<SVGElement>("svg")).forEach((svg) => {
       const wrapper = svg.parentElement as HTMLElement | null;
       if (wrapper) {
         const row = wrapper.parentElement as HTMLElement | null;
         const kind = inferFooterIconKindFromSvg(svg) || inferFooterIconKind((row?.textContent || "").trim());
-        const iconCanvas = document.createElement("canvas");
-        iconCanvas.width = 48;
-        iconCanvas.height = 48;
-        iconCanvas.style.cssText = [
-          "position:absolute",
-          "left:0",
-          "top:2.05px",
-          "width:12px",
-          "height:12px",
-          "display:block",
-          "overflow:visible",
-        ].join(";");
-        const ctx = iconCanvas.getContext("2d");
-        if (ctx) drawPremiumFooterIcon(ctx, kind, 0, 0, 12, 4, 4);
 
-        wrapper.style.width = "12px";
-        wrapper.style.height = "14px";
-        wrapper.style.minWidth = "12px";
-        wrapper.style.maxWidth = "12px";
-        wrapper.style.lineHeight = "14px";
-        wrapper.style.display = "block";
-        wrapper.style.position = "relative";
-        wrapper.style.overflow = "visible";
-        wrapper.style.flex = "0 0 12px";
-        wrapper.style.verticalAlign = "top";
-        wrapper.replaceChildren(iconCanvas);
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const siblingText = Array.from(row?.children || []).find((child) => {
+          if (child === wrapper) return false;
+          const text = (child.textContent || "").trim();
+          return text.length > 0;
+        }) as HTMLElement | undefined;
+        const textRect = (siblingText || row || wrapper).getBoundingClientRect();
+        const iconSize = 12;
+        overlays.push({
+          kind,
+          x: wrapperRect.left - rootRect.left,
+          // Do not rely on SVG/flex baselines inside html2canvas. Hide the SVG
+          // and paint the icon directly on the captured page canvas using the
+          // adjacent text line-box center from the cloned DOM. This is export-
+          // only and leaves the live preview completely untouched.
+          y: textRect.top - rootRect.top + (textRect.height - iconSize) / 2,
+          size: iconSize,
+        });
+        touched.push({ svg, visibility: svg.style.visibility });
+        svg.style.visibility = "hidden";
       }
     });
   });
+  return {
+    overlays,
+    restore: () => {
+      touched.forEach(({ svg, visibility }) => { svg.style.visibility = visibility; });
+    },
+  };
 }
 
-type FooterIconKind = "location" | "phone" | "mail" | "globe";
+function drawFooterIconOverlays(canvas: HTMLCanvasElement, overlays: FooterIconOverlay[], captureRoot: HTMLElement): void {
+  if (!overlays.length) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const sx = canvas.width / (captureRoot.offsetWidth || LIVE_PAGE_WIDTH);
+  const sy = canvas.height / (captureRoot.offsetHeight || LIVE_PAGE_HEIGHT);
+  overlays.forEach((overlay) => {
+    drawPremiumFooterIcon(ctx, overlay.kind, overlay.x, overlay.y, overlay.size, sx, sy);
+  });
+}
 
 function inferFooterIconKind(text: string): FooterIconKind {
   const value = text.toLowerCase();
@@ -555,7 +590,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
 
   document.body.appendChild(host);
   try {
-    replaceFooterSvgsWithCanvasForExport(host);
+    const footerIconPrep = prepareFooterIconsForMeasuredExport(host, host);
     await yieldToUi();
     const canvas = await html2canvas(host, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -583,6 +618,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
             !!e.closest("[data-page-export-ignore]"))),
     });
     if (isCanvasVisuallyBlank(canvas)) throw new Error("Fast stacked capture was blank");
+    drawFooterIconOverlays(canvas, footerIconPrep.overlays, host);
     return canvas;
   } finally {
     host.remove();
