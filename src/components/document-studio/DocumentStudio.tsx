@@ -3773,10 +3773,10 @@ function StudioShell({
                               {/* Header chrome starts at the page top; no separate top champagne strip. */}
                               {/* Engraved JBJ monogram watermark — centered on
                                   every page, champagne-gold tint, fully visible
-                                  (no cropping), tight letter spacing. Painted
-                                  via CSS mask. It is behind all body text and
-                                  tables remain opaque so it never bleeds through
-                                  grid/table content. */}
+                                   (no cropping), tight letter spacing. Painted
+                                   via CSS mask. It sits above opaque table/card
+                                   backgrounds at very low opacity so page 3
+                                   still shows the logo without blocking text. */}
                               {!noChrome && (
                                 <div
                                   aria-hidden
@@ -3787,11 +3787,13 @@ function StudioShell({
                                     alignItems: "center",
                                     justifyContent: "center",
                                     pointerEvents: "none",
-                                    // Sit BEHIND body content so text/tables
-                                    // are always crisp on top, while the
-                                    // champagne-gold monogram still reads as
-                                    // an engraved watermark on every page.
-                                    zIndex: 0,
+                                    // Page 3 contains opaque tables that were
+                                    // hiding the watermark when it sat behind
+                                    // the body layer. Keep it non-interactive and
+                                    // subtle, but above those fills so the real
+                                    // monogram is visible on every page.
+                                    zIndex: 3,
+                                    mixBlendMode: "multiply",
                                   }}
                                 >
                                   {/* Use the actual JBJ header logo, painted in
@@ -3799,10 +3801,11 @@ function StudioShell({
                                       ornaments — just the company monogram
                                       engraved on every page. */}
                                   <div
+                                    data-jbj-page-watermark="true"
                                     style={{
                                       width: 460,
                                       height: 460,
-                                      opacity: 0.28,
+                                      opacity: 0.22,
                                       background:
                                         "linear-gradient(160deg, #E8C77A 0%, #B89555 45%, #8C6A2E 100%)",
                                       WebkitMaskImage: `url(${jbjMonogramSrc})`,
