@@ -4,9 +4,11 @@ import MainLayout from "@/components/MainLayout";
 import { ActionGateProvider } from "@/contexts/ActionGateContext";
 import ActionGateModal from "@/components/ActionGateModal";
 import { usePrintMode } from "@/hooks/usePrintMode";
+import { useScrollUnlocker } from "@/hooks/useScrollUnlocker";
 
 const MainLayoutWrapper = () => {
   const isPrintMode = usePrintMode();
+  useScrollUnlocker();
 
   if (isPrintMode) {
     // Baseline / print mode: render content only — no header, sidebar, footer, popups, or chrome.
