@@ -3795,30 +3795,128 @@ function StudioShell({
                                   }}
                                 >
                                   {/* Premium champagne-gold engraved monogram.
-                                      Lives behind the content layer (z:0) while
-                                      body sits at z:1+, so it never hides text
-                                      and is never hidden BY text — it reads as
-                                      a true engraved watermark on every page. */}
-                                  <img
-                                    src={jbjMonogramSrc}
-                                    alt=""
+                                      Rebuilt as inline SVG so EVERY stroke
+                                      (J | B | J letters, flanking bars and
+                                      the surrounding double frame) renders in
+                                      pure champagne-gold — matching the page
+                                      letterhead. Sits behind body content
+                                      (z:0) so it never hides text. */}
+                                  <svg
+                                    width={560}
+                                    height={560}
+                                    viewBox="0 0 560 560"
                                     aria-hidden
                                     style={{
-                                      width: 620,
-                                      height: 620,
-                                      objectFit: "contain",
-                                      opacity: 0.38,
-                                      transform: "scaleX(0.92)",
-                                      transformOrigin: "center",
-                                      // Champagne-gold tint + engraved depth:
-                                      // a soft white highlight on top and a
-                                      // warm gold inner-shadow below create
-                                      // the pressed/engraved appearance on
-                                      // the cream paper.
+                                      opacity: 0.32,
                                       filter:
-                                        "sepia(0.55) saturate(1.6) hue-rotate(-8deg) brightness(1.05) contrast(1.1) drop-shadow(0 1px 0 rgba(255,255,255,0.7)) drop-shadow(0 -1px 0 rgba(140,100,40,0.35))",
+                                        "drop-shadow(0 1px 0 rgba(255,253,247,0.7)) drop-shadow(0 -0.5px 0 rgba(120,86,32,0.3))",
                                     }}
-                                  />
+
+                                  >
+                                    <defs>
+                                      <linearGradient id="jbjChampagne" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#E8C77A" />
+                                        <stop offset="50%" stopColor="#B89555" />
+                                        <stop offset="100%" stopColor="#8C6A2E" />
+                                      </linearGradient>
+                                      <linearGradient id="jbjChampagneSoft" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stopColor="#D9B873" />
+                                        <stop offset="100%" stopColor="#A07F40" />
+                                      </linearGradient>
+                                    </defs>
+                                    {/* Outer premium double frame */}
+                                    <rect
+                                      x={28}
+                                      y={28}
+                                      width={504}
+                                      height={504}
+                                      rx={6}
+                                      ry={6}
+                                      fill="none"
+                                      stroke="url(#jbjChampagne)"
+                                      strokeWidth={2}
+                                    />
+                                    <rect
+                                      x={42}
+                                      y={42}
+                                      width={476}
+                                      height={476}
+                                      rx={4}
+                                      ry={4}
+                                      fill="none"
+                                      stroke="url(#jbjChampagneSoft)"
+                                      strokeWidth={0.75}
+                                    />
+                                    {/* Corner ornaments */}
+                                    {[
+                                      [42, 42, 1, 1],
+                                      [518, 42, -1, 1],
+                                      [42, 518, 1, -1],
+                                      [518, 518, -1, -1],
+                                    ].map(([cx, cy, sx, sy], i) => (
+                                      <g key={i} stroke="url(#jbjChampagne)" strokeWidth={1.25} fill="none">
+                                        <line x1={cx} y1={cy} x2={cx + 22 * sx} y2={cy} />
+                                        <line x1={cx} y1={cy} x2={cx} y2={cy + 22 * sy} />
+                                      </g>
+                                    ))}
+                                    {/* JBJ monogram: three vertical bars + serif letters */}
+                                    {/* Vertical flanking bars */}
+                                    <rect x={168} y={160} width={3} height={240} fill="url(#jbjChampagne)" />
+                                    <rect x={389} y={160} width={3} height={240} fill="url(#jbjChampagne)" />
+                                    <rect x={278.5} y={150} width={3} height={260} fill="url(#jbjChampagne)" />
+                                    {/* Letters — serif, weighty, champagne */}
+                                    <text
+                                      x={205}
+                                      y={335}
+                                      textAnchor="middle"
+                                      fontFamily="'Cormorant Garamond', 'Playfair Display', Georgia, serif"
+                                      fontSize={170}
+                                      fontWeight={500}
+                                      fill="url(#jbjChampagne)"
+                                      letterSpacing="2"
+                                    >
+                                      J
+                                    </text>
+                                    <text
+                                      x={280}
+                                      y={335}
+                                      textAnchor="middle"
+                                      fontFamily="'Cormorant Garamond', 'Playfair Display', Georgia, serif"
+                                      fontSize={170}
+                                      fontWeight={500}
+                                      fill="url(#jbjChampagne)"
+                                      letterSpacing="2"
+                                    >
+                                      B
+                                    </text>
+                                    <text
+                                      x={355}
+                                      y={335}
+                                      textAnchor="middle"
+                                      fontFamily="'Cormorant Garamond', 'Playfair Display', Georgia, serif"
+                                      fontSize={170}
+                                      fontWeight={500}
+                                      fill="url(#jbjChampagne)"
+                                      letterSpacing="2"
+                                    >
+                                      J
+                                    </text>
+                                    {/* Subtle wordmark beneath */}
+                                    <text
+                                      x={280}
+                                      y={430}
+                                      textAnchor="middle"
+                                      fontFamily="'Inter', sans-serif"
+                                      fontSize={13}
+                                      fill="url(#jbjChampagneSoft)"
+                                      letterSpacing="8"
+                                    >
+                                      GLOBAL REAL ESTATE
+                                    </text>
+                                    {/* Hairline divider above wordmark */}
+                                    <line x1={210} y1={405} x2={350} y2={405} stroke="url(#jbjChampagne)" strokeWidth={0.75} />
+                                  </svg>
+
 
                                 </div>
                               )}
