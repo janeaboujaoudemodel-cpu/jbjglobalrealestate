@@ -16,7 +16,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPortal } from "react-dom";
+import { createPortal, flushSync } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -411,6 +411,46 @@ const cleanDocumentFieldRows = (html: string): string => {
 
   return tpl.innerHTML;
 };
+
+const countBracketPlaceholders = (html: string): number =>
+  (html.match(/\[[^\]]+\]/g) || []).length;
+
+const hasMeaningfulApplicantData = (source: Record<string, string>): boolean => {
+  const keys = [
+    "fullNameAsPerPassport",
+    "passportFullName",
+    "fullNameAsPerId",
+    "fullNameAsPerID",
+    "emiratesIdFullName",
+    "recipientName",
+    "recipientEmail",
+    "recipientPhone",
+    "jobTitle",
+    "passportNumber",
+    "emiratesId",
+    "nationality",
+    "homeAddress",
+  ];
+  return keys.some((key) => {
+    const value = String(source[key] || "").trim();
+    return !!value && !/^\[[^\]]+\]$/.test(value);
+  });
+};
+
+const shouldUseSyncedTemplateForExport = (
+  currentHtml: string,
+  syncedHtml: string,
+  fields: Record<string, string>,
+): boolean => {
+  if (!currentHtml || !syncedHtml || !hasMeaningfulApplicantData(fields)) return false;
+  const currentCount = countBracketPlaceholders(currentHtml);
+  const syncedCount = countBracketPlaceholders(syncedHtml);
+  return currentCount >= 2 && syncedCount + 1 < currentCount;
+};
+
+const waitForDocumentPaint = () => new Promise<void>((resolve) => {
+  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 0)));
+});
 
 const parseDocumentPageGroups = (html: string): string[] => {
   if (!html) return [""];
@@ -1696,6 +1736,28 @@ function StudioShell({
     JSON.stringify(extraSignatories),
   ]);
 
+  const buildSyncedBodyHtmlNow = useCallback(() => {
+    if (!template) return "";
+    const visibleFields: Record<string, string> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      if (!hiddenFieldKeys.has(k)) visibleFields[k] = v;
+    }
+    return renderStandardBody({
+      templateId: template.id,
+      fields: visibleFields,
+      department: template.needsPosition ? department : undefined,
+      commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
+      customFields: hiddenSections.has("custom") ? [] : customFields,
+      ownerName,
+      ownerTitle,
+      ownerDate,
+      letterDate: visibleFields.letterDate || ownerDate,
+      applicantDate,
+      hideLetterDate: true,
+      extraSignatories,
+    });
+  }, [template, fields, hiddenFieldKeys, department, usesCommission, hiddenSections, commissionRows, customFields, ownerName, ownerTitle, ownerDate, applicantDate, extraSignatories]);
+
   const resetToTemplate = () => {
     resumeStructuredSync();
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
@@ -1890,8 +1952,25 @@ function StudioShell({
   };
 
   const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
-    const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
+    let currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) { toast.error("Nothing to export yet"); return; }
+    const syncedBodyNow = cleanDocumentFieldRows(buildSyncedBodyHtmlNow());
+    const mustResyncBeforeExport = shouldUseSyncedTemplateForExport(currentBody, syncedBodyNow || autoBodyRef.current, fields)
+      || (hasMeaningfulApplicantData(fields)
+        && !!syncedBodyNow
+        && countBracketPlaceholders(currentBody) > countBracketPlaceholders(syncedBodyNow));
+    if (mustResyncBeforeExport) {
+      const exportBody = syncedBodyNow || autoBodyRef.current;
+      resumeStructuredSync();
+      userEditedRef.current = false;
+      liveEditedBodyHtmlRef.current = null;
+      setUserEdited(false);
+      flushSync(() => setBodyHtml(exportBody));
+      autoBodyRef.current = exportBody;
+      committedBodyHtmlRef.current = exportBody;
+      currentBody = cleanDocumentFieldRows(exportBody);
+      await waitForDocumentPaint();
+    }
     setExporting(kind);
     const progressId = kind === "pdf" || kind === "both" ? toast.loading("Preparing PDF…") : null;
     const onProgress = (done: number, total: number) => {
