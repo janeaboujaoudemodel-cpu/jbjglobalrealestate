@@ -186,9 +186,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const qc = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = (() => {
-    const t = searchParams.get("tab") as Bucket | null;
-    if (initialTabOverride && VALID_TABS.includes(initialTabOverride)) return initialTabOverride;
-    return t && VALID_TABS.includes(t) ? t : "templates";
+    if (initialTabOverride && VALID_TABS.includes(initialTabOverride)) return normalizeTabKey(initialTabOverride);
+    return normalizeTabKey(searchParams.get("tab"));
   })();
   const [tab, setTab] = useState<Bucket>(initialTab);
   const [cat, setCat] = useState<Cat>("all");
@@ -205,8 +204,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   // URL → tab sync so client-side navigation (e.g. the Folders shortcut in
   // Document Studio) switches the active tab without a page reload.
   useEffect(() => {
-    const urlTab = searchParams.get("tab") as Bucket | null;
-    const next = urlTab && VALID_TABS.includes(urlTab) ? urlTab : "templates";
+    const next = normalizeTabKey(searchParams.get("tab"));
     if (next !== tab) setTab(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
