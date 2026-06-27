@@ -11,6 +11,11 @@ export function pickCandidateDisplayName(fields: Record<string, string>): string
     pick(
       "employeeName",
       "employee_name",
+      "fullNameAsPerPassport",
+      "passportFullName",
+      "fullNameAsPerId",
+      "fullNameAsPerID",
+      "emiratesIdFullName",
       "candidateName",
       "candidate_name",
       "applicant_name",
