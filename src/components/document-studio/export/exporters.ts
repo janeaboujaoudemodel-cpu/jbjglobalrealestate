@@ -248,6 +248,14 @@ export function precachePdfPages(sourceElement?: HTMLElement | null): void {
   pdfPageInflight.set(sourceElement, task);
 }
 
+export function __debugPdfCacheState(sourceElement?: HTMLElement | null) {
+  if (!sourceElement) return { hasSource: false };
+  const pages = getLivePages(sourceElement);
+  const signature = getPagesSignature(pages);
+  const cached = pdfPageCache.get(sourceElement);
+  return { pages: pages.length, signature, hasCached: !!cached, cachedSignature: cached?.signature, hasBlob: !!cached?.blob, hasInflight: pdfPageInflight.has(sourceElement), age: cached ? Date.now() - cached.createdAt : null };
+}
+
 /** Off-screen chrome render (fallback when no live element is provided). */
 async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
   const host = document.createElement("div");
