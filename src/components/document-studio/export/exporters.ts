@@ -341,6 +341,8 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   stage.appendChild(clone);
   document.body.appendChild(stage);
   try {
+    replaceFooterSvgsWithCanvasForExport(clone);
+    await yieldToUi();
     const canvas = await html2canvas(clone, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
       scale,
@@ -394,6 +396,124 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
   return sampled > 0;
 }
 
+function replaceFooterSvgsWithCanvasForExport(root: HTMLElement): void {
+  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
+    Array.from(footer.querySelectorAll<SVGElement>("svg")).forEach((svg) => {
+      const wrapper = svg.parentElement as HTMLElement | null;
+      if (wrapper) {
+        const row = wrapper.parentElement as HTMLElement | null;
+        const kind = inferFooterIconKindFromSvg(svg) || inferFooterIconKind((row?.textContent || "").trim());
+        const iconCanvas = document.createElement("canvas");
+        iconCanvas.width = 48;
+        iconCanvas.height = 48;
+        iconCanvas.style.cssText = [
+          "position:absolute",
+          "left:0",
+          "top:2.05px",
+          "width:12px",
+          "height:12px",
+          "display:block",
+          "overflow:visible",
+        ].join(";");
+        const ctx = iconCanvas.getContext("2d");
+        if (ctx) drawPremiumFooterIcon(ctx, kind, 0, 0, 12, 4, 4);
+
+        wrapper.style.width = "12px";
+        wrapper.style.height = "14px";
+        wrapper.style.minWidth = "12px";
+        wrapper.style.maxWidth = "12px";
+        wrapper.style.lineHeight = "14px";
+        wrapper.style.display = "block";
+        wrapper.style.position = "relative";
+        wrapper.style.overflow = "visible";
+        wrapper.style.flex = "0 0 12px";
+        wrapper.style.verticalAlign = "top";
+        wrapper.replaceChildren(iconCanvas);
+      }
+    });
+  });
+}
+
+type FooterIconKind = "location" | "phone" | "mail" | "globe";
+
+function inferFooterIconKind(text: string): FooterIconKind {
+  const value = text.toLowerCase();
+  if (/office|port saeed|deira|dubai|uae/.test(value) && !value.includes("+") && !value.includes("@")) return "location";
+  if (value.includes("www") || value.includes(".ae")) return "globe";
+  if (value.includes("@")) return "mail";
+  if (value.includes("+") || /\d{2,}/.test(value)) return "phone";
+  return "location";
+}
+
+function inferFooterIconKindFromSvg(svg: SVGElement): FooterIconKind | null {
+  const html = svg.outerHTML;
+  if (html.includes("M8 14.25s5-4.45")) return "location";
+  if (html.includes("M4.08 2.05")) return "phone";
+  if (html.includes("<rect") && html.includes("M2.55 4.55")) return "mail";
+  if (html.includes("<ellipse") && html.includes("M2.15 8h11.7")) return "globe";
+  return null;
+}
+
+function strokePath(ctx: CanvasRenderingContext2D, d: string) {
+  try {
+    ctx.stroke(new Path2D(d));
+  } catch {
+    // Path2D SVG strings are supported in Chromium; ignore only if a legacy
+    // engine cannot parse the path. The other footer icons still draw.
+  }
+}
+
+function drawPremiumFooterIcon(
+  ctx: CanvasRenderingContext2D,
+  kind: FooterIconKind,
+  x: number,
+  y: number,
+  size: number,
+  sx: number,
+  sy: number,
+) {
+  ctx.save();
+  ctx.translate(x * sx, y * sy);
+  ctx.scale(sx, sy);
+  ctx.scale(size / 16, size / 16);
+  ctx.strokeStyle = "#B89555";
+  ctx.fillStyle = "transparent";
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = 1.25;
+
+  if (kind === "location") {
+    ctx.lineWidth = 1.35;
+    strokePath(ctx, "M8 14.25s5-4.45 5-8.05A5 5 0 0 0 3 6.2c0 3.6 5 8.05 5 8.05Z");
+    ctx.beginPath();
+    ctx.lineWidth = 1.2;
+    ctx.arc(8, 6.25, 1.72, 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (kind === "phone") {
+    ctx.lineWidth = 1.35;
+    strokePath(ctx, "M4.08 2.05 5.9 4.5c.3.4.24.96-.13 1.3l-.9.83a.56.56 0 0 0-.12.66 9.05 9.05 0 0 0 3.96 3.96c.23.11.5.06.66-.12l.83-.9a.96.96 0 0 1 1.3-.13l2.45 1.82c.43.32.52.93.2 1.36l-.63.84c-.56.75-1.54 1.05-2.43.75-4.6-1.53-8.4-5.33-9.93-9.93-.3-.89 0-1.87.75-2.43l.84-.63c.43-.32 1.04-.23 1.36.2Z");
+  } else if (kind === "mail") {
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    if (typeof ctx.roundRect === "function") ctx.roundRect(1.75, 3.5, 12.5, 9, 1.35);
+    else ctx.rect(1.75, 3.5, 12.5, 9);
+    ctx.stroke();
+    ctx.lineWidth = 1.25;
+    strokePath(ctx, "M2.55 4.55 8 8.42l5.45-3.87");
+  } else {
+    ctx.lineWidth = 1.25;
+    ctx.beginPath();
+    ctx.arc(8, 8, 6.15, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.lineWidth = 1.05;
+    ctx.beginPath();
+    ctx.ellipse(8, 8, 2.55, 6.15, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    strokePath(ctx, "M2.15 8h11.7M3.75 4.55h8.5M3.75 11.45h8.5");
+  }
+  ctx.restore();
+}
+
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   const html2canvas = await loadHtml2Canvas();
   const pageW = pages[0]?.offsetWidth || LIVE_PAGE_WIDTH;
@@ -435,6 +555,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
 
   document.body.appendChild(host);
   try {
+    replaceFooterSvgsWithCanvasForExport(host);
     await yieldToUi();
     const canvas = await html2canvas(host, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
