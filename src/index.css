@@ -16633,7 +16633,7 @@ main,
 .jj-card,
 [data-jj-metric-card],
 [data-card],
-[data-surface="champagne"][class*="rounded"]:not(button):not(a):not([data-cta]):not([role="button"]) {
+[data-surface="champagne"][class*="rounded"] {
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
@@ -17143,55 +17143,5 @@ html body :is(
   text-overflow: clip !important;
   overflow: visible !important;
   min-width: 0;
-}
-
-/* ------------------------------------------------------------
- * Anchor wrappers around CTAs must not collapse inside flex/grid
- * parents. <Link><Button/></Link> is the dominant pattern in this
- * codebase; a block <a> hides the button's intrinsic max-content
- * from its flex ancestor, which then sizes the row to ~50px and
- * clips the button. Force the wrapper to behave as inline-block,
- * shrink-0, and demand at least its child's max-content width.
- * ------------------------------------------------------------ */
-html body a:has(> button):not([data-allow-clip]),
-html body a:has(> .jj-cta-emerald):not([data-allow-clip]),
-html body a:has(> .jj-cta-emerald-metallic):not([data-allow-clip]),
-html body a:has(> .jj-cta-primary):not([data-allow-clip]),
-html body a:has(> .jj-cta-champagne):not([data-allow-clip]),
-html body a:has(> .jj-cta-dark):not([data-allow-clip]),
-html body a:has(> .jj-cta-outline):not([data-allow-clip]),
-html body a:has(> [data-cta]):not([data-allow-clip]) {
-  display: inline-block !important;
-  flex-shrink: 0 !important;
-  width: -webkit-max-content !important;
-  width: max-content !important;
-  min-width: -webkit-max-content !important;
-  min-width: max-content !important;
-  flex-basis: -webkit-max-content !important;
-  flex-basis: max-content !important;
-}
-
-/* ------------------------------------------------------------
- * Text-bearing buttons: force width:max-content so the flex
- * algorithm uses the FULL text width as the item's flex-basis
- * (min-width alone is not respected when an ancestor's min-content
- * propagation truncates the row to half-width). Buttons that
- * contain only an SVG (icon buttons) are excluded so we don't
- * shrink 40x40 icon hit-targets to 16x16.
- * ------------------------------------------------------------ */
-html body button:not([data-allow-clip]):not([data-icon-only]):not(.jj-icon-only):not(:has(> svg:only-child)):not(:has(> .lucide:only-child)) {
-  width: -webkit-max-content !important;
-  width: max-content !important;
-  flex-basis: -webkit-max-content !important;
-  flex-basis: max-content !important;
-}
-
-/* Mobile escape hatch: on phones (<640px) many CTAs intentionally
- * use w-full to fill the row. Honour that by reverting width back to
- * 100% when explicitly opted-in via the w-full Tailwind class. */
-@media (max-width: 639px) {
-  html body :is(button, a):is([class~="w-full"], [class*=" w-full"]) {
-    width: 100% !important;
-  }
 }
 
