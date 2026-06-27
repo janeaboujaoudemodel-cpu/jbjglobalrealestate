@@ -533,10 +533,10 @@ export function signatureBlock(opts: {
   // the Name / Title / Date rows are pushed DOWN underneath it. The owner side
   // receives a matching blank preamble slot so both columns' rows align.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 74px;display:flex;align-items:flex-start;margin-bottom:14px;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="flex:0 0 64px;display:flex;align-items:flex-start;margin-bottom:10px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 74px;margin-bottom:14px;"></div>`
+    ? `<div data-sig-preamble-slot="1" style="flex:0 0 64px;margin-bottom:10px;"></div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1" style="margin-top:auto;">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
@@ -549,8 +549,8 @@ export function signatureBlock(opts: {
       ${applicantMeta}
     `)}
   `;
-  const ownerSignatureLine = `<div style="position:absolute;left:14px;right:14px;bottom:8px;height:42px;border-bottom:1px solid ${INK};"></div>`;
-  const applicantSignatureLine = `<div style="position:absolute;left:14px;right:14px;bottom:8px;height:42px;border-bottom:1px solid ${INK};"></div>`;
+  const ownerSignatureLine = `<div style="position:absolute;left:14px;right:14px;bottom:6px;height:32px;border-bottom:1px solid ${INK};"></div>`;
+  const applicantSignatureLine = `<div style="position:absolute;left:14px;right:14px;bottom:6px;height:32px;border-bottom:1px solid ${INK};"></div>`;
 
   const extras = (opts.extraSignatories || []).filter(
     (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim(),
