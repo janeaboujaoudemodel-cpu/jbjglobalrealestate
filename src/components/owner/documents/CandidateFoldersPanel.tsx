@@ -180,18 +180,14 @@ export function CandidateFoldersPanel({ onOpenDoc }: { onOpenDoc: (id: string) =
 
   return (
     <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-      <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Per-user vaults</div>
-          <h2 className="text-lg font-semibold text-[#1A1A1A]">Folders</h2>
-          <p className="text-xs text-[#1A1A1A]/70 mt-0.5">
-            One folder per person — Offer Letters, NDAs and uploaded ID / passport scans kept together. Drag &amp; drop files onto a folder to add them.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-          <div className="relative flex-1 min-w-[200px] sm:w-64">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/55" />
-            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="pl-9 bg-[#FDFBF7]" />
+      <div className="mb-4 space-y-3">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="min-w-0">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Per-user vaults</div>
+            <h2 className="text-lg font-semibold text-[#1A1A1A]">Folders</h2>
+            <p className="text-xs text-[#1A1A1A]/70 mt-0.5 max-w-2xl">
+              One folder per person — Offer Letters, NDAs and uploaded ID / passport scans kept together. Drag &amp; drop files onto a folder to add them.
+            </p>
           </div>
           <Button
             type="button"
@@ -204,6 +200,10 @@ export function CandidateFoldersPanel({ onOpenDoc }: { onOpenDoc: (id: string) =
             {showDeleted ? <RotateCcw className="w-4 h-4 mr-1.5" /> : <Trash2 className="w-4 h-4 mr-1.5" />}
             {showDeleted ? "Show Active" : "Recently Deleted"}
           </Button>
+        </div>
+        <div className="relative max-w-md">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/55" />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name, folder or file…" className="pl-9 bg-[#FDFBF7]" />
         </div>
       </div>
 
