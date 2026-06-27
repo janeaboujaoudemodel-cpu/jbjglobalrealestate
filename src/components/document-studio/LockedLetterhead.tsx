@@ -33,7 +33,15 @@ function FooterIcon({ type }: { type: FooterIconType }) {
   return (
     <span
       aria-hidden="true"
-      style={{ width: 12, height: 14, display: "inline-block", flex: "0 0 12px", lineHeight: 0 }}
+      style={{
+        width: 12,
+        height: 14,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flex: "0 0 12px",
+        lineHeight: "14px",
+      }}
       dangerouslySetInnerHTML={{ __html: FOOTER_ICON_SVG[type] }}
     />
   );

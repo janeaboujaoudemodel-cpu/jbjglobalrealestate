@@ -85,17 +85,17 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-// Premium footer icons — solid gold inline SVGs. Rasterize identically in
+// Premium footer icons — outline-only gold inline SVGs. Rasterize identically in
 // preview and html2canvas/jspdf export (no absolute-positioned spans, no glyph fonts).
 export const FOOTER_ICON_SVG: Record<"location" | "phone" | "mail" | "globe", string> = {
-  // Refined map pin with hollow ring center
-  location: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><path d="M8 1.4c-2.76 0-5 2.18-5 4.86 0 3.55 4.34 8 4.52 8.19a.66.66 0 0 0 .96 0C8.66 14.26 13 9.81 13 6.26 13 3.58 10.76 1.4 8 1.4Z" fill="${JBJ_GOLD}"/><circle cx="8" cy="6.2" r="1.75" fill="${JBJ_CHAMPAGNE}"/></svg>`,
-  // Classic handset silhouette
-  phone: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><path d="M3.62 1.6a1.4 1.4 0 0 1 1.96.32l1.3 1.8a1.4 1.4 0 0 1-.18 1.83l-.86.8a.5.5 0 0 0-.1.6 8.6 8.6 0 0 0 3.3 3.3.5.5 0 0 0 .6-.1l.8-.86a1.4 1.4 0 0 1 1.83-.18l1.8 1.3a1.4 1.4 0 0 1 .32 1.96l-.6.84a2.3 2.3 0 0 1-2.5.9C7.4 12.92 3.08 8.6 1.88 4.3a2.3 2.3 0 0 1 .9-2.5l.84-.2Z" fill="${JBJ_GOLD}"/></svg>`,
-  // Envelope (kept — user said email is okay)
-  mail: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><rect x="1.6" y="3.6" width="12.8" height="8.8" rx="1.2" fill="${JBJ_GOLD}"/><path d="M2.4 4.6 8 8.6l5.6-4" stroke="${JBJ_CHAMPAGNE}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  // Premium globe with meridians + equator
-  globe: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><circle cx="8" cy="8" r="6.2" fill="${JBJ_GOLD}"/><ellipse cx="8" cy="8" rx="2.6" ry="6.2" fill="none" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="1.8" y1="8" x2="14.2" y2="8" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="8" y1="1.8" x2="8" y2="14.2" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/></svg>`,
+  // Hollow map pin — no fill, crisp gold stroke matching the signature frame
+  location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><path d="M8 14.25s5-4.45 5-8.05A5 5 0 0 0 3 6.2c0 3.6 5 8.05 5 8.05Z" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.35px;" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="6.25" r="1.72" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.2px;"/></svg>`,
+  // Hollow handset — elegant single-line construction
+  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><path d="M4.08 2.05 5.9 4.5c.3.4.24.96-.13 1.3l-.9.83a.56.56 0 0 0-.12.66 9.05 9.05 0 0 0 3.96 3.96c.23.11.5.06.66-.12l.83-.9a.96.96 0 0 1 1.3-.13l2.45 1.82c.43.32.52.93.2 1.36l-.63.84c-.56.75-1.54 1.05-2.43.75-4.6-1.53-8.4-5.33-9.93-9.93-.3-.89 0-1.87.75-2.43l.84-.63c.43-.32 1.04-.23 1.36.2Z" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.35px;" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  // Hollow envelope — kept refined, now outline-only for parity with the other icons
+  mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><rect x="1.75" y="3.5" width="12.5" height="9" rx="1.35" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.3px;"/><path d="M2.55 4.55 8 8.42l5.45-3.87" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.25px;" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  // Hollow globe with meridians + equator
+  globe: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><circle cx="8" cy="8" r="6.15" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.25px;"/><ellipse cx="8" cy="8" rx="2.55" ry="6.15" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.05px;"/><path d="M2.15 8h11.7M3.75 4.55h8.5M3.75 11.45h8.5" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.05px;" stroke-linecap="round"/></svg>`,
 };
 
 const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => FOOTER_ICON_SVG[type];
