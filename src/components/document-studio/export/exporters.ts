@@ -891,7 +891,6 @@ export async function exportPdf(
           const data = await canvasToJpegBytes(slice);
           if (i > 0) pdf.addPage();
           pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
-          drawLockedPdfFooter(pdf, livePages[i], A4_W, A4_H);
           await yieldToUi();
         }
         slice.width = 0; slice.height = 0;
@@ -914,7 +913,6 @@ export async function exportPdf(
         canvas.width = 0; canvas.height = 0;
         if (i > 0) pdf.addPage();
         pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
-        drawLockedPdfFooter(pdf, livePages[i], A4_W, A4_H);
       }
     }
 

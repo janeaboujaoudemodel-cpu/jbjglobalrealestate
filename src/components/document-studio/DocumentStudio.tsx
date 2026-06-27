@@ -412,6 +412,46 @@ const cleanDocumentFieldRows = (html: string): string => {
   return tpl.innerHTML;
 };
 
+const countBracketPlaceholders = (html: string): number =>
+  (html.match(/\[[^\]]+\]/g) || []).length;
+
+const hasMeaningfulApplicantData = (source: Record<string, string>): boolean => {
+  const keys = [
+    "fullNameAsPerPassport",
+    "passportFullName",
+    "fullNameAsPerId",
+    "fullNameAsPerID",
+    "emiratesIdFullName",
+    "recipientName",
+    "recipientEmail",
+    "recipientPhone",
+    "jobTitle",
+    "passportNumber",
+    "emiratesId",
+    "nationality",
+    "homeAddress",
+  ];
+  return keys.some((key) => {
+    const value = String(source[key] || "").trim();
+    return !!value && !/^\[[^\]]+\]$/.test(value);
+  });
+};
+
+const shouldUseSyncedTemplateForExport = (
+  currentHtml: string,
+  syncedHtml: string,
+  fields: Record<string, string>,
+): boolean => {
+  if (!currentHtml || !syncedHtml || !hasMeaningfulApplicantData(fields)) return false;
+  const currentCount = countBracketPlaceholders(currentHtml);
+  const syncedCount = countBracketPlaceholders(syncedHtml);
+  return currentCount >= 2 && syncedCount + 1 < currentCount;
+};
+
+const waitForDocumentPaint = () => new Promise<void>((resolve) => {
+  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(resolve, 0)));
+});
+
 const parseDocumentPageGroups = (html: string): string[] => {
   if (!html) return [""];
   if (typeof window === "undefined") return [stripGeneratedPageArtifacts(html)];
@@ -1890,8 +1930,18 @@ function StudioShell({
   };
 
   const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
-    const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
+    let currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) { toast.error("Nothing to export yet"); return; }
+    if (shouldUseSyncedTemplateForExport(currentBody, autoBodyRef.current, fields)) {
+      resumeStructuredSync();
+      userEditedRef.current = false;
+      liveEditedBodyHtmlRef.current = null;
+      setUserEdited(false);
+      setBodyHtml(autoBodyRef.current);
+      committedBodyHtmlRef.current = autoBodyRef.current;
+      currentBody = cleanDocumentFieldRows(autoBodyRef.current);
+      await waitForDocumentPaint();
+    }
     setExporting(kind);
     const progressId = kind === "pdf" || kind === "both" ? toast.loading("Preparing PDF…") : null;
     const onProgress = (done: number, total: number) => {
