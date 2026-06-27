@@ -85,16 +85,22 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-const FOOTER_ICONS = {
-  // Raster PNG data URIs are intentional: html2canvas/jsPDF can re-baseline
-  // inline SVGs during PDF export, which made footer icons look erased or
-  // shifted on the downloaded last page. These 48px gold PNGs downsample
-  // cleanly to the locked 12px slot and preserve preview/export parity.
-  location: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABNUlEQVR4nO2YwQ3CMAxFDWI4FmAK5mEKFmA7OEWqqqbJt18oEX43RJ3427HdxixJkqk5jVj09bi9a/9d7090T2yxPadrEGLO0QXMfM5H7JaEIkA4UPBmw50B0vnIei7Vrc32ohmx3eKiPNyiZ/PyDJVB+QjVNlYjV3teFSYJoJxv2Skiwm002suj9mgNrFlGkp7Ahe5Ft9LqOQKKTY9oZBIfCS6gVYD0AMwMHA0uoFV4dDeaPgNSNNRW1zsHvC3UbPAgGzW8loSPULQtRu0lAdQbZMtOyZycAUoE9WaL1kBxKvJFpuIuMtoRM1/Ru4uY7jB/eyvxvxn4FcJRVNohfSlgNvBVYkSX2mL6WwmkBuh7IYXpixgTQF0tqqAZ6HWKnCF5hNbkR73IEAHrKJff3/hGThKRD9Fxo2huXChtAAAAAElFTkSuQmCC",
-  phone: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABRklEQVR4nO1Y0Q2FIAzEF4dzAadwHqdwAbfzfZEYA7RX2sJHL/FL0B5XjpaUAoFAINCBRTLpPven9m47LtE3pYB/1gr+DS8iP2QwN3hPsAmgwXuRZRGYceUz1tbLWuCl/B5FklTgGyyyOT1IkQS+QcyWTpALteDt/xlNAhpBWSsmUmCmNFJLoZTKilmnFuxCGSUVRiijpkApeI+NbebpUxZzXHhaKpvAbCdwhlk/kBLPAHrVMj2JOZ3bfe5PfiT/VW0pt+NaKDfS7ujUN3FLCWSVucqICFC57dkvmBRr7/yuzeOMKY3/QsWvURJIeULNUdkDrZRBOrrtuBbUVlVPTKSHRr9jqgD1kx6fp+BioxkWJNyLOW01TAhwUCOC9hXmZW/valMG4Fa3S4hw3MsthVAr5Y4fchlFqTHqkqwbM903BQKBAA9/ZjzP5Qba4jMAAAAASUVORK5CYII=",
-  mail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA90lEQVR4nO2X6w2DMAyEQ9XhWKBTME+nYAG2o78iVVGwE99VKXDfH5Dy8Dl+RElJCCGEEOK+TC2Ttvdr/7WQI+ZlNTU+vA1Gim+xbzowWnzG0uFG4N85vQNPdAOvyFpAUhWOAFon6HpKCkVFMJoEnEKZLKYlpZjdrTsCnkBPnDfeW1OhFIo6wRafElAD87JOlsFSrCXe28uC0kajJ57XI/YpXSgqgnGH3LuNMgT0tN8a4QgcibcK0hqLHkbIgZqxUlz+L7+1uda+HtCl9C2o1zDLBlzEaCdB18P3wOhX2+kfNNd2gHFTMrB0uBEY7cRo+0IIIYS4NB+Ob4G3KylmggAAAABJRU5ErkJggg==",
-  globe: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABH0lEQVR4nO2ZzRHCQAiFV8fibMAqrMcqbMDu9JQLY/h5PDbJhO+8AR6EXTYZo2mapklwYRv8vB5fa839+ab5pRnyBC5hCEkbQAKXZITADzIClyBCroijiuBRu2HF2SZlN3moAlWZz/hxC/AatbLnza7XH9QDe8IlgJX96DqPX7gCzNM0Y88U8C8L7OA1u1YV4ApIw1FRcj26w6kCZm2bFloc4QpUvT6ofXXxXiowxrqwc5wDe6YFbM0t+sDSTNlzQLNRMo2uOWUTta8KqN7zvWhx0Ia5aOYYr+AYDgHIgIWCDI60YS5LyTC3wL4GMi9Ihz8H3AJYVWBfT0MVmLWtRvxAAVUeZtEkQT0w805scd6v05LD/h+QzP5D0zRNsy0/1vSgP5LwO7gAAAAASUVORK5CYII=",
-} as const;
+const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => {
+  const box = `width:12px;height:14px;display:block;position:relative;overflow:visible;flex:0 0 12px;`;
+  const fill = `background:${JBJ_GOLD};-webkit-print-color-adjust:exact;print-color-adjust:exact;`;
+  const stroke = `border-color:${JBJ_GOLD};-webkit-print-color-adjust:exact;print-color-adjust:exact;`;
+
+  if (type === "location") {
+    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:2px;top:2px;width:8px;height:8px;border:1.4px solid ${JBJ_GOLD};border-radius:50%;${stroke}"></span><span style="position:absolute;left:5px;top:5px;width:2.4px;height:2.4px;border-radius:999px;${fill}"></span></span>`;
+  }
+  if (type === "phone") {
+    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1.5px;top:4.5px;width:10px;height:4.5px;border-radius:999px;transform:rotate(-32deg);transform-origin:center;${fill}"></span><span style="position:absolute;left:1px;top:3.5px;width:3px;height:3px;border-radius:999px;${fill}"></span><span style="position:absolute;right:.5px;top:7.2px;width:3px;height:3px;border-radius:999px;${fill}"></span></span>`;
+  }
+  if (type === "mail") {
+    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1px;top:3px;width:10px;height:8px;border:1.25px solid ${JBJ_GOLD};border-radius:1.2px;${stroke}"></span><span style="position:absolute;left:2.2px;top:5.2px;width:5.4px;height:1.1px;transform:rotate(31deg);transform-origin:left center;${fill}"></span><span style="position:absolute;right:2.2px;top:5.2px;width:5.4px;height:1.1px;transform:rotate(-31deg);transform-origin:right center;${fill}"></span></span>`;
+  }
+  return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1.5px;top:2.5px;width:9px;height:9px;border:1.25px solid ${JBJ_GOLD};border-radius:999px;${stroke}"></span><span style="position:absolute;left:5.45px;top:2.5px;width:1.1px;height:9px;${fill}"></span><span style="position:absolute;left:2.5px;top:6.45px;width:7px;height:1.1px;${fill}"></span></span>`;
+};
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
@@ -127,9 +133,9 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
   const rowStyle = "position:relative;height:14px;line-height:14px;white-space:nowrap;overflow:visible;";
-  const iconStyle = "position:absolute;left:0;top:3px;width:12px;height:12px;display:block;line-height:0;font-size:0;vertical-align:top;object-fit:contain;";
-  const textAfterIconStyle = "position:absolute;left:18px;top:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
-  const rightItemStyle = "position:relative;height:14px;line-height:14px;padding-left:18px;white-space:nowrap;";
+  const iconRowStyle = "height:14px;line-height:14px;display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:6px;align-items:center;";
+  const textAfterIconStyle = "min-width:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
+  const rightItemStyle = "display:grid;grid-template-columns:12px max-content;column-gap:6px;align-items:center;height:14px;line-height:14px;white-space:nowrap;";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;
@@ -147,23 +153,23 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   ">
     <div style="width:100%;height:58px;display:grid;grid-template-columns:42% 24% 34%;align-items:center;">
       <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:14px;height:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};white-space:nowrap;">
-        <div style="${rowStyle}width:100%;">
-          <img alt="" aria-hidden="true" src="${FOOTER_ICONS.location}" style="${iconStyle}" />
+        <div style="${rowStyle}${iconRowStyle}width:100%;">
+          ${footerIconHtml("location")}
           <span style="${textAfterIconStyle}">${JBJ_BRAND.address}</span>
         </div>
       </div>
       <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:14px;text-align:center;">
-        ${phones.map((p, i) => `<div style="${rowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? `<img alt="" aria-hidden="true" src="${FOOTER_ICONS.phone}" style="${iconStyle}" />` : ``}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
+        ${phones.map((p, i) => `<div style="${rowStyle}${iconRowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? footerIconHtml("phone") : `<span aria-hidden="true" style="width:12px;height:14px;display:block;"></span>`}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
       </div>
       <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};text-align:right;white-space:nowrap;height:14px;line-height:14px;">
         <div style="height:14px;line-height:14px;display:grid;grid-template-columns:max-content 10px max-content;align-items:center;justify-content:end;column-gap:6px;width:100%;">
           <span style="${rightItemStyle}">
-            <img alt="" aria-hidden="true" src="${FOOTER_ICONS.mail}" style="${iconStyle}" />
+            ${footerIconHtml("mail")}
             <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;line-height:14px;display:block;">${JBJ_BRAND.email.toUpperCase()}</a>
           </span>
           <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:block;text-align:center;">·</span>
           <span style="${rightItemStyle}">
-            <img alt="" aria-hidden="true" src="${FOOTER_ICONS.globe}" style="${iconStyle}" />
+            ${footerIconHtml("globe")}
             <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;line-height:14px;display:block;">${JBJ_BRAND.website.toUpperCase()}</a>
           </span>
         </div>

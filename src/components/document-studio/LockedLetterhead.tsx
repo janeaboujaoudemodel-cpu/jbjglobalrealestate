@@ -25,16 +25,57 @@ const tokens = (theme: LetterheadTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
 
-const FOOTER_ICONS = {
-  // Raster PNG data URIs are intentional: html2canvas/jsPDF can re-baseline
-  // inline SVGs during PDF export, which made footer icons look erased or
-  // shifted on the downloaded last page. These 48px gold PNGs downsample
-  // cleanly to the locked 12px slot and preserve preview/export parity.
-  location: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABNUlEQVR4nO2YwQ3CMAxFDWI4FmAK5mEKFmA7OEWqqqbJt18oEX43RJ3427HdxixJkqk5jVj09bi9a/9d7090T2yxPadrEGLO0QXMfM5H7JaEIkA4UPBmw50B0vnIei7Vrc32ohmx3eKiPNyiZ/PyDJVB+QjVNlYjV3teFSYJoJxv2Skiwm002suj9mgNrFlGkp7Ahe5Ft9LqOQKKTY9oZBIfCS6gVYD0AMwMHA0uoFV4dDeaPgNSNNRW1zsHvC3UbPAgGzW8loSPULQtRu0lAdQbZMtOyZycAUoE9WaL1kBxKvJFpuIuMtoRM1/Ru4uY7jB/eyvxvxn4FcJRVNohfSlgNvBVYkSX2mL6WwmkBuh7IYXpixgTQF0tqqAZ6HWKnCF5hNbkR73IEAHrKJff3/hGThKRD9Fxo2huXChtAAAAAElFTkSuQmCC",
-  phone: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABRklEQVR4nO1Y0Q2FIAzEF4dzAadwHqdwAbfzfZEYA7RX2sJHL/FL0B5XjpaUAoFAINCBRTLpPven9m47LtE3pYB/1gr+DS8iP2QwN3hPsAmgwXuRZRGYceUz1tbLWuCl/B5FklTgGyyyOT1IkQS+QcyWTpALteDt/xlNAhpBWSsmUmCmNFJLoZTKilmnFuxCGSUVRiijpkApeI+NbebpUxZzXHhaKpvAbCdwhlk/kBLPAHrVMj2JOZ3bfe5PfiT/VW0pt+NaKDfS7ujUN3FLCWSVucqICFC57dkvmBRr7/yuzeOMKY3/QsWvURJIeULNUdkDrZRBOrrtuBbUVlVPTKSHRr9jqgD1kx6fp+BioxkWJNyLOW01TAhwUCOC9hXmZW/valMG4Fa3S4hw3MsthVAr5Y4fchlFqTHqkqwbM903BQKBAA9/ZjzP5Qba4jMAAAAASUVORK5CYII=",
-  mail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA90lEQVR4nO2X6w2DMAyEQ9XhWKBTME+nYAG2o78iVVGwE99VKXDfH5Dy8Dl+RElJCCGEEOK+TC2Ttvdr/7WQI+ZlNTU+vA1Gim+xbzowWnzG0uFG4N85vQNPdAOvyFpAUhWOAFon6HpKCkVFMJoEnEKZLKYlpZjdrTsCnkBPnDfeW1OhFIo6wRafElAD87JOlsFSrCXe28uC0kajJ57XI/YpXSgqgnGH3LuNMgT0tN8a4QgcibcK0hqLHkbIgZqxUlz+L7+1uda+HtCl9C2o1zDLBlzEaCdB18P3wOhX2+kfNNd2gHFTMrB0uBEY7cRo+0IIIYS4NB+Ob4G3KylmggAAAABJRU5ErkJggg==",
-  globe: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABH0lEQVR4nO2ZzRHCQAiFV8fibMAqrMcqbMDu9JQLY/h5PDbJhO+8AR6EXTYZo2mapklwYRv8vB5fa839+ab5pRnyBC5hCEkbQAKXZITADzIClyBCroijiuBRu2HF2SZlN3moAlWZz/hxC/AatbLnza7XH9QDe8IlgJX96DqPX7gCzNM0Y88U8C8L7OA1u1YV4ApIw1FRcj26w6kCZm2bFloc4QpUvT6ofXXxXiowxrqwc5wDe6YFbM0t+sDSTNlzQLNRMo2uOWUTta8KqN7zvWhx0Ia5aOYYr+AYDgHIgIWCDI60YS5LyTC3wL4GMi9Ihz8H3AJYVWBfT0MVmLWtRvxAAVUeZtEkQT0w805scd6v05LD/h+QzP5D0zRNsy0/1vSgP5LwO7gAAAAASUVORK5CYII=",
-} as const;
+type FooterIconType = "location" | "phone" | "mail" | "globe";
+
+function FooterIcon({ type }: { type: FooterIconType }) {
+  const iconBoxStyle = {
+    width: 12,
+    height: 14,
+    display: "block",
+    position: "relative" as const,
+    overflow: "visible" as const,
+    flex: "0 0 12px",
+  };
+  const goldFill = { background: JBJ_GOLD, WebkitPrintColorAdjust: "exact" as const, printColorAdjust: "exact" as const };
+  const goldStroke = { borderColor: JBJ_GOLD, WebkitPrintColorAdjust: "exact" as const, printColorAdjust: "exact" as const };
+
+  if (type === "location") {
+    return (
+      <span aria-hidden="true" style={iconBoxStyle}>
+        <span style={{ position: "absolute", left: 2, top: 2, width: 8, height: 8, border: `1.4px solid ${JBJ_GOLD}`, borderRadius: "50%", ...goldStroke }} />
+        <span style={{ position: "absolute", left: 5, top: 5, width: 2.4, height: 2.4, borderRadius: 999, ...goldFill }} />
+      </span>
+    );
+  }
+
+  if (type === "phone") {
+    return (
+      <span aria-hidden="true" style={iconBoxStyle}>
+        <span style={{ position: "absolute", left: 1.5, top: 4.5, width: 10, height: 4.5, borderRadius: 999, transform: "rotate(-32deg)", transformOrigin: "center", ...goldFill }} />
+        <span style={{ position: "absolute", left: 1, top: 3.5, width: 3, height: 3, borderRadius: 999, ...goldFill }} />
+        <span style={{ position: "absolute", right: 0.5, top: 7.2, width: 3, height: 3, borderRadius: 999, ...goldFill }} />
+      </span>
+    );
+  }
+
+  if (type === "mail") {
+    return (
+      <span aria-hidden="true" style={iconBoxStyle}>
+        <span style={{ position: "absolute", left: 1, top: 3, width: 10, height: 8, border: `1.25px solid ${JBJ_GOLD}`, borderRadius: 1.2, ...goldStroke }} />
+        <span style={{ position: "absolute", left: 2.2, top: 5.2, width: 5.4, height: 1.1, transform: "rotate(31deg)", transformOrigin: "left center", ...goldFill }} />
+        <span style={{ position: "absolute", right: 2.2, top: 5.2, width: 5.4, height: 1.1, transform: "rotate(-31deg)", transformOrigin: "right center", ...goldFill }} />
+      </span>
+    );
+  }
+
+  return (
+    <span aria-hidden="true" style={iconBoxStyle}>
+      <span style={{ position: "absolute", left: 1.5, top: 2.5, width: 9, height: 9, border: `1.25px solid ${JBJ_GOLD}`, borderRadius: 999, ...goldStroke }} />
+      <span style={{ position: "absolute", left: 5.45, top: 2.5, width: 1.1, height: 9, ...goldFill }} />
+      <span style={{ position: "absolute", left: 2.5, top: 6.45, width: 7, height: 1.1, ...goldFill }} />
+    </span>
+  );
+}
 
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
@@ -147,31 +188,28 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
     whiteSpace: "nowrap" as const,
     overflow: "visible" as const,
   };
-  const iconStyle = {
-    position: "absolute" as const,
-    left: 0,
-    top: 3,
-    width: 12,
-    height: 12,
-    display: "block",
-    lineHeight: 0,
-    fontSize: 0,
-    objectFit: "contain" as const,
+  const iconRowStyle = {
+    height: 14,
+    lineHeight: "14px",
+    display: "grid",
+    gridTemplateColumns: "12px minmax(0, 1fr)",
+    columnGap: 6,
+    alignItems: "center",
   };
   const textAfterIconStyle = {
-    position: "absolute" as const,
-    left: 18,
-    top: 0,
+    minWidth: 0,
     height: 14,
     lineHeight: "14px",
     display: "block",
     whiteSpace: "nowrap" as const,
   };
   const rightItemStyle = {
-    position: "relative" as const,
+    display: "grid",
+    gridTemplateColumns: "12px max-content",
+    columnGap: 6,
+    alignItems: "center",
     height: 14,
     lineHeight: "14px",
-    paddingLeft: 18,
     whiteSpace: "nowrap" as const,
   };
   return (
@@ -200,17 +238,17 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         }}
       >
         <div style={{ minWidth: 0, paddingRight: 14, fontSize: 8.5, lineHeight: "14px", color: t.fg, WebkitTextFillColor: t.fg, height: 14, whiteSpace: "nowrap" }}>
-          <div style={{ ...rowStyle, width: "100%" }}>
-            <img alt="" aria-hidden="true" src={FOOTER_ICONS.location} style={iconStyle} />
+          <div style={{ ...rowStyle, ...iconRowStyle, width: "100%" }}>
+            <FooterIcon type="location" />
             <span style={textAfterIconStyle}>{JBJ_BRAND.address}</span>
           </div>
         </div>
         <div style={{ minWidth: 0, padding: "0 8px", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, fontWeight: 700, lineHeight: "14px", textAlign: "center" }}>
           {phones.map((p, i) => (
-            <div key={p} style={{ ...rowStyle, width: 132, margin: "0 auto", textAlign: "left" }}>
+            <div key={p} style={{ ...rowStyle, ...iconRowStyle, width: 132, margin: "0 auto", textAlign: "left" }}>
               {i === 0 ? (
-                <img alt="" aria-hidden="true" src={FOOTER_ICONS.phone} style={iconStyle} />
-              ) : null}
+                <FooterIcon type="phone" />
+              ) : <span aria-hidden="true" style={{ width: 12, height: 14, display: "block" }} />}
               <span style={textAfterIconStyle}>{p}</span>
             </div>
           ))}
@@ -218,14 +256,14 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
           <div style={{ height: 14, lineHeight: "14px", display: "grid", gridTemplateColumns: "max-content 10px max-content", alignItems: "center", justifyContent: "end", columnGap: 6, width: "100%" }}>
             <span style={rightItemStyle}>
-              <img alt="" aria-hidden="true" src={FOOTER_ICONS.mail} style={iconStyle} />
+              <FooterIcon type="mail" />
               <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
             </span>
             <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "block", textAlign: "center" }}>·</span>
             <span style={rightItemStyle}>
-              <img alt="" aria-hidden="true" src={FOOTER_ICONS.globe} style={iconStyle} />
+              <FooterIcon type="globe" />
               <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
