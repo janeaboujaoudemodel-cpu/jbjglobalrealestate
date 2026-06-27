@@ -1143,6 +1143,7 @@ export async function exportPng(
 
 export async function exportDocx(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
+  candidateName?: string | null,
 ): Promise<void> {
   const docxLib = await import("docx");
   const {
