@@ -3602,20 +3602,15 @@ function StudioShell({
                                     alignItems: "center",
                                     justifyContent: "center",
                                     pointerEvents: "none",
-                                    zIndex: 0,
+                                    zIndex: 5,
                                   }}
                                 >
                                   {/* Premium gold-only monogram watermark.
-                                      Large, centered, soft champagne-gold tint
-                                      sitting BEHIND content — visible but
-                                      never competing with text. Tables remain
-                                      opaque so the watermark only reads on
-                                      the paper, not through grids. */}
-                                  {/* Use a plain <img> instead of CSS mask so
-                                      html2canvas/PDF export preserves the
-                                      monogram. CSS mask-image is NOT supported
-                                      by html2canvas and was rasterising the
-                                      backing fill as a solid champagne block. */}
+                                      Sits ABOVE body/tables with very low
+                                      opacity so it's visible on EVERY page
+                                      (even pages dominated by opaque tables
+                                      like the Compensation grid on page 2)
+                                      without harming text readability. */}
                                   <img
                                     src={jbjMonogramSrc}
                                     alt=""
@@ -3624,10 +3619,11 @@ function StudioShell({
                                       width: 540,
                                       height: 540,
                                       objectFit: "contain",
-                                      opacity: 0.12,
+                                      opacity: 0.1,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
                                       filter: "saturate(1.1)",
+                                      mixBlendMode: "multiply",
                                     }}
                                   />
 
