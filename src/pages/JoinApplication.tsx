@@ -819,21 +819,22 @@ export default function JoinApplication() {
                     </CardDescription>
                   </div>
                   <Badge
+                    data-surface="emerald"
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="careers-open-badge inline-flex items-center gap-1.5 px-3 py-1.5 self-start sm:self-end"
+                    className="jj-cta-emerald jj-pill-emerald-metallic inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 self-start sm:self-end text-[12px] font-semibold border border-[#B89555]/70"
                   >
-                    <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
                     <span>{filteredPositions.length} open</span>
                   </Badge>
                 </div>
                 <div className="relative mt-5">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#0A0A0A] z-10 pointer-events-none" strokeWidth={2.5} />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#0A0A0A] z-10 pointer-events-none" strokeWidth={2.5} />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="careers-blue-field careers-blue-placeholder pl-10 h-12 rounded-lg text-base"
+                    className="careers-blue-field careers-blue-placeholder pl-12 pr-4 h-12 rounded-lg text-base"
                   />
                 </div>
               </CardHeader>
