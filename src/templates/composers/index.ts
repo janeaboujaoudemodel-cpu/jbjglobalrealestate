@@ -508,7 +508,7 @@ export function signatureBlock(opts: {
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
         ${signatureContent}
       </div>
-      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 164 : 112}px;box-sizing:border-box;">
+      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 224 : 112}px;box-sizing:border-box;">
         ${lines}
       </div>
     </td>`;
@@ -533,10 +533,10 @@ export function signatureBlock(opts: {
   // pin the rows underneath it instead of letting the applicant paragraph push
   // only the right column down.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:86px;display:flex;align-items:flex-end;margin-bottom:14px;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="height:126px;display:flex;align-items:flex-end;margin-bottom:14px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:86px;margin-bottom:14px;"></div>`
+    ? `<div data-sig-preamble-slot="1" style="height:126px;margin-bottom:14px;"></div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
