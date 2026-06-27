@@ -418,20 +418,30 @@ type FooterIconExportPreparation = {
   restore: () => void;
 };
 
-function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconExportPreparation {
+function measureFooterOverlays(root: HTMLElement, captureRoot: HTMLElement): FooterIconOverlay[] {
   const rootRect = captureRoot.getBoundingClientRect();
+  const normalizeX = rootRect.width > 0 ? rootRect.width / (captureRoot.offsetWidth || rootRect.width) : 1;
+  const normalizeY = rootRect.height > 0 ? rootRect.height / (captureRoot.offsetHeight || rootRect.height) : 1;
   const overlays: FooterIconOverlay[] = [];
-  const touched: Array<{ footer: HTMLElement; visibility: string }> = [];
+
   root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
     const rect = footer.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return;
     overlays.push({
-      x: rect.left - rootRect.left,
-      y: rect.top - rootRect.top,
-      width: rect.width,
-      height: rect.height,
+      x: (rect.left - rootRect.left) / (normalizeX || 1),
+      y: (rect.top - rootRect.top) / (normalizeY || 1),
+      width: rect.width / (normalizeX || 1),
+      height: rect.height / (normalizeY || 1),
     });
+  });
 
+  return overlays;
+}
+
+function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconExportPreparation {
+  const overlays = measureFooterOverlays(root, captureRoot);
+  const touched: Array<{ footer: HTMLElement; visibility: string }> = [];
+  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
     // Export-only lock: html2canvas has repeatedly shifted/dropped the inline
     // SVG icons and sometimes rasterised the footer text at the wrong baseline.
     // Hide the cloned footer and repaint the full locked footer directly onto
@@ -457,6 +467,12 @@ function drawFooterIconOverlays(canvas: HTMLCanvasElement, overlays: FooterIconO
   overlays.forEach((overlay) => {
     drawLockedFooterOverlay(ctx, overlay, sx, sy);
   });
+}
+
+function drawLockedFooterFromSourcePage(canvas: HTMLCanvasElement, page: HTMLElement): void {
+  const overlays = measureFooterOverlays(page, page);
+  if (!overlays.length) return;
+  drawFooterIconOverlays(canvas, overlays, page);
 }
 
 function drawLockedFooterOverlay(ctx: CanvasRenderingContext2D, overlay: FooterIconOverlay, sx: number, sy: number): void {
