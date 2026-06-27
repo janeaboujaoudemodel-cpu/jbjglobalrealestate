@@ -304,12 +304,13 @@ async function cloneImagesIntoCanvas(sourceCanvas: HTMLCanvasElement, page: HTML
 async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   const html2canvas = await loadHtml2Canvas();
 
-  // Capture a visible fixed clone instead of the live page. Capturing the live
+  // Capture a fixed clone instead of the live page. Capturing the live
   // pages directly is unreliable once pages 2+ are below/above the viewport: in
   // Chromium html2canvas can crop the source to a transparent rectangle, which
   // then becomes an all-white/all-black PDF page after JPEG encoding. The clone
-  // keeps the preview untouched while giving html2canvas a stable 816×1154 target
-  // at (0,0) for every page.
+  // keeps the preview untouched while giving html2canvas a stable 816×1154 target.
+  // Keep it just outside the viewport, not at -20000px: very large negative
+  // coordinates are the exact case that produced blank/empty exports in Chrome.
   const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
   const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
   const stage = document.createElement("div");
@@ -317,7 +318,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   stage.setAttribute("data-export-page-stage", "true");
   stage.style.cssText = [
     "position:fixed",
-    "left:-20000px",
+    `left:-${widthPx + 96}px`,
     "top:0",
     `width:${widthPx}px`,
     `height:${heightPx}px`,
@@ -774,7 +775,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
   host.setAttribute("data-export-stack", "true");
   host.style.cssText = [
     "position:fixed",
-    "left:-20000px",
+    `left:-${pageW + 96}px`,
     "top:0",
     `width:${pageW}px`,
     `height:${totalH}px`,
