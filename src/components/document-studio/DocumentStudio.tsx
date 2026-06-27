@@ -1031,11 +1031,17 @@ function StudioShell({
   // Owner-side signature defaults (editable from the left rail).
   const [ownerName, setOwnerName] = useState<string>(snap?.ownerName || "Jane Bou Jaoude");
   const [ownerTitle, setOwnerTitle] = useState<string>(snap?.ownerTitle || "Founder & CEO");
-  const [ownerDate, setOwnerDate] = useState<string>(snap?.ownerDate || new Date().toISOString().slice(0, 10));
-  const [applicantDate, setApplicantDate] = useState<string>(snap?.applicantDate || ""); // blank by design
+  // Dates ALWAYS default to today on every open. The previous session value
+  // is intentionally ignored so the signing date never drifts behind real
+  // time — the only way to pin a non-today date is to explicitly pick one
+  // from the date picker after opening the document.
+  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [applicantDate, setApplicantDate] = useState<string>(new Date().toISOString().slice(0, 10));
 
+  // On every template change, snap dates forward to today across ALL
+  // templates (NDA, Offer Letter, warning, termination, etc.).
   useEffect(() => {
-    if (template?.id !== "job_offer") return;
+    if (!template?.id) return;
     const iso = new Date().toISOString().slice(0, 10);
     setOwnerDate(iso);
     setApplicantDate(iso);
