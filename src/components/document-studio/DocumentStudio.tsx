@@ -3796,28 +3796,23 @@ function StudioShell({
                                     mixBlendMode: "multiply",
                                   }}
                                 >
-                                  {/* Use the actual JBJ header logo, painted in
-                                      champagne-gold via CSS mask. No frame, no
-                                      ornaments — just the company monogram
-                                      engraved on every page. */}
-                                  <div
+                                  {/* Use the actual transparent JBJ header logo, painted
+                                      champagne-gold with a filter. Avoid CSS masks here:
+                                      html2canvas can export mask backgrounds as a solid
+                                      rectangle, which caused the broken box in PDFs. */}
+                                  <img
                                     data-jbj-page-watermark="true"
+                                    data-no-fallback
+                                    src={jbjMonogramSrc}
+                                    alt=""
                                     style={{
                                       width: 460,
                                       height: 460,
-                                      opacity: 0.22,
-                                      background:
-                                        "linear-gradient(160deg, #E8C77A 0%, #B89555 45%, #8C6A2E 100%)",
-                                      WebkitMaskImage: `url(${jbjMonogramSrc})`,
-                                      maskImage: `url(${jbjMonogramSrc})`,
-                                      WebkitMaskRepeat: "no-repeat",
-                                      maskRepeat: "no-repeat",
-                                      WebkitMaskPosition: "center",
-                                      maskPosition: "center",
-                                      WebkitMaskSize: "contain",
-                                      maskSize: "contain",
+                                      opacity: 0.24,
+                                      objectFit: "contain",
+                                      display: "block",
                                       filter:
-                                        "drop-shadow(0 1px 0 rgba(255,253,247,0.65)) drop-shadow(0 -0.5px 0 rgba(120,86,32,0.35))",
+                                        "brightness(0) saturate(100%) invert(66%) sepia(29%) saturate(721%) hue-rotate(3deg) brightness(95%) contrast(88%) drop-shadow(0 1px 0 rgba(255,253,247,0.65)) drop-shadow(0 -0.5px 0 rgba(120,86,32,0.35))",
                                     }}
                                   />
 

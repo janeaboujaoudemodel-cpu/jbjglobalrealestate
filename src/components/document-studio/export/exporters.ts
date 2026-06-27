@@ -575,12 +575,28 @@ function drawReliableFooterIcon(ctx: CanvasRenderingContext2D, kind: FooterIconK
     ctx.arc(size * 0.5, size * 0.38, size * 0.14, 0, Math.PI * 2);
     ctx.stroke();
   } else if (kind === "phone") {
-    // Classic handset (Lucide-style phone-call).
-    ctx.save();
-    ctx.scale(size / 16, size / 16);
-    ctx.lineWidth = 1.35 * (16 / size);
-    try { ctx.stroke(new Path2D("M4.08 2.05 5.9 4.5c.3.4.24.96-.13 1.3l-.9.83a.56.56 0 0 0-.12.66 9.05 9.05 0 0 0 3.96 3.96c.23.11.5.06.66-.12l.83-.9a.96.96 0 0 1 1.3-.13l2.45 1.82c.43.32.52.93.2 1.36l-.63.84c-.56.75-1.54 1.05-2.43.75-4.6-1.53-8.4-5.33-9.93-9.93-.3-.89 0-1.87.75-2.43l.84-.63c.43-.32 1.04-.23 1.36.2Z")); } catch { /* noop */ }
-    ctx.restore();
+    // Reliable handset drawn with canvas primitives only. Do not use Path2D
+    // SVG strings here — some export engines silently drop that path, which
+    // is why the phone icon disappeared in the PDF footer.
+    ctx.lineWidth = 1.45;
+    ctx.beginPath();
+    ctx.moveTo(size * 0.27, size * 0.15);
+    ctx.bezierCurveTo(size * 0.18, size * 0.20, size * 0.15, size * 0.30, size * 0.19, size * 0.40);
+    ctx.bezierCurveTo(size * 0.37, size * 0.82, size * 0.68, size * 1.00, size * 0.91, size * 0.82);
+    ctx.bezierCurveTo(size * 1.00, size * 0.75, size * 0.99, size * 0.62, size * 0.89, size * 0.57);
+    ctx.lineTo(size * 0.73, size * 0.49);
+    ctx.bezierCurveTo(size * 0.66, size * 0.45, size * 0.58, size * 0.47, size * 0.54, size * 0.54);
+    ctx.lineTo(size * 0.50, size * 0.62);
+    ctx.bezierCurveTo(size * 0.43, size * 0.59, size * 0.31, size * 0.47, size * 0.27, size * 0.39);
+    ctx.lineTo(size * 0.35, size * 0.34);
+    ctx.bezierCurveTo(size * 0.42, size * 0.29, size * 0.43, size * 0.20, size * 0.37, size * 0.14);
+    ctx.lineTo(size * 0.30, size * 0.14);
+    ctx.stroke();
+    // Two small call-wave strokes make it read as a phone-call icon.
+    ctx.beginPath();
+    ctx.arc(size * 0.78, size * 0.25, size * 0.15, -0.7, 0.55);
+    ctx.arc(size * 0.78, size * 0.25, size * 0.26, -0.65, 0.50);
+    ctx.stroke();
   } else if (kind === "mail") {
     ctx.beginPath();
     ctx.roundRect?.(size * 0.12, size * 0.25, size * 0.76, size * 0.54, size * 0.1);
@@ -711,25 +727,25 @@ function drawPdfFooterIcon(pdf: any, kind: FooterIconKind, x: number, y: number,
     );
     pdf.circle(x + 8 * s, y + 6.25 * s, 1.72 * s, "S");
   } else if (kind === "phone") {
-    // Phone-call handset: this is the official footer icon; never render a mobile/flower glyph.
-    const s = size / 16;
-    pdf.lines(
-      [
-        [1.82 * s, 2.45 * s],
-        [0.3 * s, 0.4 * s, 0.24 * s, 0.96 * s, -0.13 * s, 1.3 * s],
-        [-0.9 * s, 0.83 * s],
-        [-0.18 * s, 0.17 * s, -0.23 * s, 0.43 * s, -0.12 * s, 0.66 * s],
-        [0.88 * s, 1.78 * s, 2.18 * s, 3.08 * s, 3.96 * s, 3.96 * s],
-        [0.23 * s, 0.11 * s, 0.5 * s, 0.06 * s, 0.66 * s, -0.12 * s],
-        [0.83 * s, -0.9 * s],
-        [0.34 * s, -0.37 * s, 0.9 * s, -0.43 * s, 1.3 * s, -0.13 * s],
-        [2.45 * s, 1.82 * s],
-        [0.43 * s, 0.32 * s, 0.52 * s, 0.93 * s, 0.2 * s, 1.36 * s],
-        [-0.63 * s, 0.84 * s],
-        [-0.56 * s, 0.75 * s, -1.54 * s, 1.05 * s, -2.43 * s, 0.75 * s],
-      ],
-      x + 4.08 * s, y + 2.05 * s, [1, 1], "S", false,
-    );
+    // Reliable visible phone-call handset. Avoid jsPDF cubic `lines()` here:
+    // the previous bezier array rendered as nothing in exported files.
+    const px = (n: number) => x + size * n;
+    const py = (n: number) => y + size * n;
+    pdf.setLineWidth(0.28);
+    const pts: Array<[number, number]> = [
+      [0.29, 0.16], [0.20, 0.26], [0.22, 0.39], [0.31, 0.56],
+      [0.46, 0.72], [0.64, 0.84], [0.80, 0.88], [0.91, 0.79],
+      [0.86, 0.61], [0.72, 0.53], [0.61, 0.56], [0.54, 0.65],
+      [0.43, 0.59], [0.33, 0.49], [0.27, 0.38], [0.36, 0.31], [0.37, 0.20], [0.29, 0.16],
+    ];
+    for (let i = 1; i < pts.length; i += 1) {
+      pdf.line(px(pts[i - 1][0]), py(pts[i - 1][1]), px(pts[i][0]), py(pts[i][1]));
+    }
+    // Call waves.
+    pdf.line(px(0.78), py(0.18), px(0.88), py(0.24));
+    pdf.line(px(0.88), py(0.24), px(0.90), py(0.36));
+    pdf.line(px(0.73), py(0.08), px(0.96), py(0.20));
+    pdf.line(px(0.96), py(0.20), px(0.99), py(0.45));
   } else if (kind === "mail") {
     pdf.roundedRect(x + size * 0.1, y + size * 0.24, size * 0.8, size * 0.56, 0.35, 0.35, "S");
     pdf.line(x + size * 0.16, y + size * 0.31, x + size * 0.5, y + size * 0.55);
