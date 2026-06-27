@@ -33,7 +33,18 @@ function FooterIcon({ type }: { type: FooterIconType }) {
   return (
     <span
       aria-hidden="true"
-      style={{ width: 12, height: 14, display: "inline-block", flex: "0 0 12px", lineHeight: 0 }}
+      data-jbj-footer-icon={type}
+      style={{
+        width: 12,
+        height: 14,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flex: "0 0 12px",
+        lineHeight: "14px",
+        overflow: "visible",
+        transform: "translateY(1px)",
+      }}
       dangerouslySetInnerHTML={{ __html: FOOTER_ICON_SVG[type] }}
     />
   );
@@ -163,6 +174,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
     height: 14,
     lineHeight: "14px",
     display: "block",
+    alignSelf: "center",
     whiteSpace: "nowrap" as const,
   };
   const rightItemStyle = {

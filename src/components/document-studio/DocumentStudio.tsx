@@ -51,7 +51,7 @@ import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
-import { exportPdf, exportDocx, exportPng, printDocument, DocumentMarks } from "./export/exporters";
+import { exportPdf, exportDocx, exportPng, printDocument, precachePdfPages, DocumentMarks } from "./export/exporters";
 import {
   compose as composeDocument,
   DEFAULT_BROKER_COMMISSIONS,
@@ -1346,6 +1346,19 @@ function StudioShell({
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  useEffect(() => {
+    if (!open || !template || !bodyHtml) return;
+    const run = () => precachePdfPages(pageRef.current);
+    const w = window as any;
+    const idleId = typeof w.requestIdleCallback === "function"
+      ? w.requestIdleCallback(run, { timeout: 900 })
+      : window.setTimeout(run, 350);
+    return () => {
+      if (typeof w.cancelIdleCallback === "function") w.cancelIdleCallback(idleId);
+      else window.clearTimeout(idleId);
+    };
+  }, [open, template, bodyHtml, autoPageGroups, marks.signatureXY, marks.stampXY, marks.stampLocked, marks.dateXY, effectiveScale]);
+
   const clearSession = (templateToClear?: string) => {
     try { localStorage.removeItem(SESSION_KEY); } catch {}
     if (templateToClear) {
@@ -1911,7 +1924,8 @@ function StudioShell({
       if (progressId != null) toast.success("PDF downloaded", { id: progressId });
 
       if (pdfBlob) {
-        try {
+        void (async () => {
+          try {
           const saved = await handleSaveDocument();
           const docId = saved?.id || currentDocId;
           const { data: { user } } = await supabase.auth.getUser();
@@ -1930,15 +1944,16 @@ function StudioShell({
             await (supabase.from("crm_documents" as any) as any)
               .update({ pdf_path: pdfPath, rendered_html: currentBody || null, field_values: { ...fields, profile_type: profile.profileType } })
               .eq("id", docId);
-            toast.success("PDF downloaded and saved to the profile file");
+            toast.success("PDF saved to the profile file");
           } else {
             toast.success(`${kind.toUpperCase()} downloaded`);
           }
         } catch (saveError: any) {
           console.warn("[DocumentStudio] profile save failed", saveError);
-          toast.success(`${kind.toUpperCase()} downloaded`);
           toast.warning(saveError?.message || "Downloaded, but profile save needs attention");
         }
+        })();
+        toast.success(`${kind.toUpperCase()} downloaded`);
       } else {
         toast.success(`${kind.toUpperCase()} downloaded`);
       }
