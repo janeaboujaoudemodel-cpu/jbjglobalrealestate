@@ -301,9 +301,9 @@ const filledOr = (value: string | undefined, fallback: string) => {
 const paragraph = (html: string) => `<p style="margin:0 0 12px;line-height:1.65;font-size:12.5px;color:${INK};">${html}</p>`;
 
 const offerClause = (n: number, heading: string, body: string) => `
-  <section data-pdf-section="offer-clause-${n}" style="margin:0 0 13px;page-break-inside:avoid;break-inside:avoid;">
-    <h2 style="margin:0 0 5px;font-size:13px;line-height:1.35;color:${INK};font-weight:700;">${n}. ${esc(heading)}</h2>
-    <p style="margin:0;line-height:1.62;font-size:12.35px;color:${INK};">${body}</p>
+  <section data-pdf-section="offer-clause-${n}" style="margin:0 0 8px;page-break-inside:avoid;break-inside:avoid;">
+    <h2 style="margin:0 0 3px;font-size:12.5px;line-height:1.3;color:${INK};font-weight:700;">${n}. ${esc(heading)}</h2>
+    <p style="margin:0;line-height:1.5;font-size:12px;color:${INK};">${body}</p>
   </section>`;
 
 /* ───────────── Shared building blocks ───────────── */
