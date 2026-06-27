@@ -25,15 +25,57 @@ const tokens = (theme: LetterheadTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
 
-const FOOTER_ICONS = {
-  // Text glyphs are intentional: html2canvas/jsPDF was intermittently
-  // clipping tiny SVG/PNG footer icons in the downloaded last page. These
-  // glyphs rasterize as normal text, so export and preview stay aligned.
-  location: "●",
-  phone: "☎",
-  mail: "✉",
-  globe: "◎",
-} as const;
+type FooterIconType = "location" | "phone" | "mail" | "globe";
+
+function FooterIcon({ type }: { type: FooterIconType }) {
+  const iconBoxStyle = {
+    width: 12,
+    height: 14,
+    display: "block",
+    position: "relative" as const,
+    overflow: "visible" as const,
+    flex: "0 0 12px",
+  };
+  const goldFill = { background: JBJ_GOLD, WebkitPrintColorAdjust: "exact" as const, printColorAdjust: "exact" as const };
+  const goldStroke = { borderColor: JBJ_GOLD, WebkitPrintColorAdjust: "exact" as const, printColorAdjust: "exact" as const };
+
+  if (type === "location") {
+    return (
+      <span aria-hidden="true" style={iconBoxStyle}>
+        <span style={{ position: "absolute", left: 2, top: 2, width: 8, height: 8, border: `1.4px solid ${JBJ_GOLD}`, borderRadius: "50%", ...goldStroke }} />
+        <span style={{ position: "absolute", left: 5, top: 5, width: 2.4, height: 2.4, borderRadius: 999, ...goldFill }} />
+      </span>
+    );
+  }
+
+  if (type === "phone") {
+    return (
+      <span aria-hidden="true" style={iconBoxStyle}>
+        <span style={{ position: "absolute", left: 1.5, top: 4.5, width: 10, height: 4.5, borderRadius: 999, transform: "rotate(-32deg)", transformOrigin: "center", ...goldFill }} />
+        <span style={{ position: "absolute", left: 1, top: 3.5, width: 3, height: 3, borderRadius: 999, ...goldFill }} />
+        <span style={{ position: "absolute", right: 0.5, top: 7.2, width: 3, height: 3, borderRadius: 999, ...goldFill }} />
+      </span>
+    );
+  }
+
+  if (type === "mail") {
+    return (
+      <span aria-hidden="true" style={iconBoxStyle}>
+        <span style={{ position: "absolute", left: 1, top: 3, width: 10, height: 8, border: `1.25px solid ${JBJ_GOLD}`, borderRadius: 1.2, ...goldStroke }} />
+        <span style={{ position: "absolute", left: 2.2, top: 5.2, width: 5.4, height: 1.1, transform: "rotate(31deg)", transformOrigin: "left center", ...goldFill }} />
+        <span style={{ position: "absolute", right: 2.2, top: 5.2, width: 5.4, height: 1.1, transform: "rotate(-31deg)", transformOrigin: "right center", ...goldFill }} />
+      </span>
+    );
+  }
+
+  return (
+    <span aria-hidden="true" style={iconBoxStyle}>
+      <span style={{ position: "absolute", left: 1.5, top: 2.5, width: 9, height: 9, border: `1.25px solid ${JBJ_GOLD}`, borderRadius: 999, ...goldStroke }} />
+      <span style={{ position: "absolute", left: 5.45, top: 2.5, width: 1.1, height: 9, ...goldFill }} />
+      <span style={{ position: "absolute", left: 2.5, top: 6.45, width: 7, height: 1.1, ...goldFill }} />
+    </span>
+  );
+}
 
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
@@ -146,35 +188,28 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
     whiteSpace: "nowrap" as const,
     overflow: "visible" as const,
   };
-  const iconStyle = {
-    position: "absolute" as const,
-    left: 0,
-    top: 0,
-    width: 12,
-    height: 12,
-    display: "block",
+  const iconRowStyle = {
+    height: 14,
     lineHeight: "14px",
-    fontSize: 10,
-    fontWeight: 900,
-    fontFamily: "Arial, Helvetica, sans-serif",
-    color: JBJ_GOLD,
-    WebkitTextFillColor: JBJ_GOLD,
-    textAlign: "center" as const,
+    display: "grid",
+    gridTemplateColumns: "12px minmax(0, 1fr)",
+    columnGap: 6,
+    alignItems: "center",
   };
   const textAfterIconStyle = {
-    position: "absolute" as const,
-    left: 18,
-    top: 0,
+    minWidth: 0,
     height: 14,
     lineHeight: "14px",
     display: "block",
     whiteSpace: "nowrap" as const,
   };
   const rightItemStyle = {
-    position: "relative" as const,
+    display: "grid",
+    gridTemplateColumns: "12px max-content",
+    columnGap: 6,
+    alignItems: "center",
     height: 14,
     lineHeight: "14px",
-    paddingLeft: 18,
     whiteSpace: "nowrap" as const,
   };
   return (
@@ -203,17 +238,17 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         }}
       >
         <div style={{ minWidth: 0, paddingRight: 14, fontSize: 8.5, lineHeight: "14px", color: t.fg, WebkitTextFillColor: t.fg, height: 14, whiteSpace: "nowrap" }}>
-          <div style={{ ...rowStyle, width: "100%" }}>
-            <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.location}</span>
+          <div style={{ ...rowStyle, ...iconRowStyle, width: "100%" }}>
+            <FooterIcon type="location" />
             <span style={textAfterIconStyle}>{JBJ_BRAND.address}</span>
           </div>
         </div>
         <div style={{ minWidth: 0, padding: "0 8px", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, fontWeight: 700, lineHeight: "14px", textAlign: "center" }}>
           {phones.map((p, i) => (
-            <div key={p} style={{ ...rowStyle, width: 132, margin: "0 auto", textAlign: "left" }}>
+            <div key={p} style={{ ...rowStyle, ...iconRowStyle, width: 132, margin: "0 auto", textAlign: "left" }}>
               {i === 0 ? (
-                <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.phone}</span>
-              ) : null}
+                <FooterIcon type="phone" />
+              ) : <span aria-hidden="true" style={{ width: 12, height: 14, display: "block" }} />}
               <span style={textAfterIconStyle}>{p}</span>
             </div>
           ))}
@@ -221,14 +256,14 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
           <div style={{ height: 14, lineHeight: "14px", display: "grid", gridTemplateColumns: "max-content 10px max-content", alignItems: "center", justifyContent: "end", columnGap: 6, width: "100%" }}>
             <span style={rightItemStyle}>
-              <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.mail}</span>
+              <FooterIcon type="mail" />
               <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
             </span>
             <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "block", textAlign: "center" }}>·</span>
             <span style={rightItemStyle}>
-              <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.globe}</span>
+              <FooterIcon type="globe" />
               <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
