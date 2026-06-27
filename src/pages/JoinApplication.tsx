@@ -879,11 +879,11 @@ export default function JoinApplication() {
                   <div className="mt-6 text-center">
                     <Button
                       type="button"
-                      variant="dark"
+                      data-surface="emerald"
                       data-allow-dark-cta
                       data-no-contrast-guard
                       onClick={() => setShowAllPositions((v) => !v)}
-                      className="jj-cta-dark careers-navy-cta rounded-xl px-5 h-11 font-semibold"
+                      className="jj-cta-emerald jj-pill-emerald-metallic rounded-xl px-5 h-11 font-semibold border border-[#B89555]/70"
                     >
                       {showAllPositions ? (
                         <>
