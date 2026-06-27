@@ -11,6 +11,7 @@ const PDF_PAGE_SCALE = 1.05;
 const PDF_JPEG_QUALITY = 0.76;
 const LIVE_PAGE_WIDTH = 816;
 const LIVE_PAGE_HEIGHT = 1154;
+const EXPORT_PAGE_BACKGROUND = "#FDFBF7";
 
 let html2canvasLoader: Promise<(typeof import("html2canvas"))["default"]> | null = null;
 let jsPdfLoader: Promise<(typeof import("jspdf"))["default"]> | null = null;
@@ -297,22 +298,51 @@ async function cloneImagesIntoCanvas(sourceCanvas: HTMLCanvasElement, page: HTML
 
 async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   const html2canvas = await loadHtml2Canvas();
-  const prev = {
-    transform: page.style.transform,
-    transformOrigin: page.style.transformOrigin,
-    boxShadow: page.style.boxShadow,
-    borderRadius: page.style.borderRadius,
-  };
-  page.style.transform = "none";
-  page.style.transformOrigin = "top left";
-  page.style.boxShadow = "none";
-  page.style.borderRadius = "0";
+
+  // Capture a visible fixed clone instead of the live page. Capturing the live
+  // pages directly is unreliable once pages 2+ are below/above the viewport: in
+  // Chromium html2canvas can crop the source to a transparent rectangle, which
+  // then becomes an all-white/all-black PDF page after JPEG encoding. The clone
+  // keeps the preview untouched while giving html2canvas a stable 816×1154 target
+  // at (0,0) for every page.
+  const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
+  const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
+  const stage = document.createElement("div");
+  const clone = page.cloneNode(true) as HTMLElement;
+  stage.setAttribute("data-export-page-stage", "true");
+  stage.style.cssText = [
+    "position:fixed",
+    "left:0",
+    "top:0",
+    `width:${widthPx}px`,
+    `height:${heightPx}px`,
+    `background:${EXPORT_PAGE_BACKGROUND}`,
+    "overflow:hidden",
+    "pointer-events:none",
+    "z-index:2147483000",
+  ].join(";");
+  clone.style.transform = "none";
+  clone.style.transformOrigin = "top left";
+  clone.style.boxShadow = "none";
+  clone.style.borderRadius = "0";
+  clone.style.margin = "0";
+  clone.style.width = `${widthPx}px`;
+  clone.style.height = `${heightPx}px`;
+  clone.style.background = EXPORT_PAGE_BACKGROUND;
+  clone.querySelectorAll<HTMLElement>("[data-page-export-ignore]").forEach((node) => node.remove());
+  // html2canvas has blend/filter edge cases that can turn transparent PNG layers
+  // into a solid black page during rasterisation. The live preview still keeps
+  // its premium blend mode; the export clone uses normal blending at the same
+  // opacity so the watermark/stamp remain visible without corrupting the page.
+  clone.querySelectorAll<HTMLElement>("*").forEach((node) => {
+    const style = node.style as CSSStyleDeclaration;
+    if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
+  });
+  stage.appendChild(clone);
+  document.body.appendChild(stage);
   try {
-    const rect = page.getBoundingClientRect();
-    const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
-    const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
-    const canvas = await html2canvas(page, {
-      backgroundColor: "#FDFBF7",
+    const canvas = await html2canvas(clone, {
+      backgroundColor: EXPORT_PAGE_BACKGROUND,
       scale,
       foreignObjectRendering: false,
       useCORS: true,
@@ -322,12 +352,8 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
       removeContainer: true,
       width: widthPx,
       height: heightPx,
-      x: rect.left + window.scrollX,
-      y: rect.top + window.scrollY,
-      scrollX: window.scrollX,
-      scrollY: window.scrollY,
-      windowWidth: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, Math.ceil(rect.right)),
-      windowHeight: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0, Math.ceil(rect.bottom)),
+      windowWidth: widthPx,
+      windowHeight: heightPx,
       ignoreElements: (e) =>
         e.tagName === "SCRIPT" ||
         (e instanceof HTMLElement &&
@@ -344,29 +370,52 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     // Chromium can occasionally omit data-URL PNGs in that fast path. Repaint the
     // visible images from the live preview onto the captured page to preserve the
     // same watermark/stamp/logo without paying the full slow capture cost.
-    await cloneImagesIntoCanvas(canvas, page);
+    await cloneImagesIntoCanvas(canvas, clone);
+    if (isCanvasVisuallyBlank(canvas)) {
+      canvas.width = 0; canvas.height = 0;
+      return await renderElementCanvas(clone, scale);
+    }
     return canvas;
   } finally {
-    page.style.transform = prev.transform;
-    page.style.transformOrigin = prev.transformOrigin;
-    page.style.boxShadow = prev.boxShadow;
-    page.style.borderRadius = prev.borderRadius;
+    stage.remove();
   }
 }
 
+function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx || canvas.width < 2 || canvas.height < 2) return true;
+  const stepX = Math.max(1, Math.floor(canvas.width / 24));
+  const stepY = Math.max(1, Math.floor(canvas.height / 32));
+  let sampled = 0;
+  let ink = 0;
+  for (let y = Math.floor(stepY / 2); y < canvas.height; y += stepY) {
+    for (let x = Math.floor(stepX / 2); x < canvas.width; x += stepX) {
+      const [r, g, b, a] = ctx.getImageData(x, y, 1, 1).data;
+      sampled += 1;
+      if (a > 12 && (r < 244 || g < 240 || b < 232)) ink += 1;
+      if (ink >= 8) return false;
+    }
+  }
+  return sampled > 0;
+}
+
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const html2canvas = await loadHtml2Canvas();
+  const pageW = pages[0]?.offsetWidth || LIVE_PAGE_WIDTH;
+  const pageH = pages[0]?.offsetHeight || LIVE_PAGE_HEIGHT;
+  const totalH = pageH * pages.length;
   const host = document.createElement("div");
   host.setAttribute("data-export-stack", "true");
   host.style.cssText = [
     "position:fixed",
-    "left:-12000px",
+    "left:0",
     "top:0",
-    `width:${LIVE_PAGE_WIDTH}px`,
-    `height:${pages.length * LIVE_PAGE_HEIGHT}px`,
-    "background:#FDFBF7",
+    `width:${pageW}px`,
+    `height:${totalH}px`,
+    `background:${EXPORT_PAGE_BACKGROUND}`,
     "overflow:hidden",
     "pointer-events:none",
-    "z-index:-1",
+    "z-index:2147483000",
   ].join(";");
 
   pages.forEach((page) => {
@@ -377,16 +426,49 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
     clone.style.borderRadius = "0";
     clone.style.border = "0";
     clone.style.margin = "0";
-    clone.style.width = `${LIVE_PAGE_WIDTH}px`;
-    clone.style.height = `${LIVE_PAGE_HEIGHT}px`;
+    clone.style.width = `${pageW}px`;
+    clone.style.height = `${pageH}px`;
     clone.style.position = "relative";
+    clone.style.background = EXPORT_PAGE_BACKGROUND;
     clone.querySelectorAll<HTMLElement>("[data-page-export-ignore]").forEach((node) => node.remove());
+    clone.querySelectorAll<HTMLElement>("*").forEach((node) => {
+      const style = node.style as CSSStyleDeclaration;
+      if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
+    });
     host.appendChild(clone);
   });
 
   document.body.appendChild(host);
   try {
-    return await renderElementCanvas(host, scale);
+    await yieldToUi();
+    const canvas = await html2canvas(host, {
+      backgroundColor: EXPORT_PAGE_BACKGROUND,
+      scale,
+      foreignObjectRendering: false,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      imageTimeout: 450,
+      removeContainer: true,
+      width: pageW,
+      height: totalH,
+      windowWidth: pageW,
+      windowHeight: totalH,
+      ignoreElements: (e) =>
+        e.tagName === "SCRIPT" ||
+        (e instanceof HTMLElement &&
+          (e.getAttribute("aria-label") === "Remove field" ||
+            e.getAttribute("aria-label") === "Change mark" ||
+            e.getAttribute("aria-label") === "Resize mark" ||
+            e.getAttribute("aria-label") === "Unlock mark" ||
+            e.getAttribute("aria-label") === "Lock mark" ||
+            e.getAttribute("data-drag-guide") === "true" ||
+            e.hasAttribute("data-page-export-ignore") ||
+            !!e.closest("[data-page-export-ignore]"))),
+    });
+    await cloneImagesIntoCanvas(canvas, host);
+    if (isCanvasVisuallyBlank(canvas)) throw new Error("Fast stacked capture was blank");
+    return canvas;
   } finally {
     host.remove();
   }
@@ -400,16 +482,29 @@ const yieldToUi = () => new Promise<void>((resolve) => {
 
 const canvasToJpegBytes = (canvas: HTMLCanvasElement, quality = PDF_JPEG_QUALITY) =>
   new Promise<Uint8Array>((resolve) => {
-    canvas.toBlob(async (blob) => {
+    // JPEG has no alpha channel. If html2canvas leaves any transparent pixels,
+    // browsers encode them as black. Flatten first onto the JBJ paper color so
+    // a transparent capture can never become a black PDF page.
+    const out = document.createElement("canvas");
+    out.width = canvas.width;
+    out.height = canvas.height;
+    const ctx = out.getContext("2d")!;
+    ctx.fillStyle = EXPORT_PAGE_BACKGROUND;
+    ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(canvas, 0, 0);
+
+    out.toBlob(async (blob) => {
       if (blob) {
         resolve(new Uint8Array(await blob.arrayBuffer()));
+        out.width = 0; out.height = 0;
         return;
       }
-      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+      const dataUrl = out.toDataURL("image/jpeg", quality);
       const binary = atob(dataUrl.split(",")[1] || "");
       const bytes = new Uint8Array(binary.length);
       for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
       resolve(bytes);
+      out.width = 0; out.height = 0;
     }, "image/jpeg", quality);
   });
 
@@ -461,16 +556,46 @@ export async function exportPdf(
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
     onProgress?.(0, livePages.length);
-    for (let i = 0; i < livePages.length; i += 1) {
-      onProgress?.(i, livePages.length);
-      await yieldToUi();
-      const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
-        renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
-      );
-      const data = await canvasToJpegBytes(canvas);
-      canvas.width = 0; canvas.height = 0;
-      if (i > 0) pdf.addPage();
-      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+    let usedStack = false;
+    if (livePages.length > 1) {
+      try {
+        const stack = await renderLivePagesStackCanvas(livePages, PDF_PAGE_SCALE);
+        const pageSliceH = Math.round(stack.height / livePages.length);
+        const slice = document.createElement("canvas");
+        slice.width = stack.width;
+        slice.height = pageSliceH;
+        const ctx = slice.getContext("2d")!;
+        for (let i = 0; i < livePages.length; i += 1) {
+          onProgress?.(i, livePages.length);
+          ctx.fillStyle = EXPORT_PAGE_BACKGROUND;
+          ctx.fillRect(0, 0, slice.width, slice.height);
+          ctx.drawImage(stack, 0, i * pageSliceH, stack.width, pageSliceH, 0, 0, slice.width, slice.height);
+          if (isCanvasVisuallyBlank(slice)) throw new Error(`Fast stacked capture produced a blank page ${i + 1}`);
+          const data = await canvasToJpegBytes(slice);
+          if (i > 0) pdf.addPage();
+          pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+          await yieldToUi();
+        }
+        slice.width = 0; slice.height = 0;
+        stack.width = 0; stack.height = 0;
+        usedStack = true;
+      } catch (error) {
+        console.warn("[DocumentStudio] fast stacked export fallback", error);
+      }
+    }
+
+    if (!usedStack) {
+      for (let i = 0; i < livePages.length; i += 1) {
+        onProgress?.(i, livePages.length);
+        await yieldToUi();
+        const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
+          renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
+        );
+        const data = await canvasToJpegBytes(canvas);
+        canvas.width = 0; canvas.height = 0;
+        if (i > 0) pdf.addPage();
+        pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      }
     }
 
     onProgress?.(livePages.length, livePages.length);
