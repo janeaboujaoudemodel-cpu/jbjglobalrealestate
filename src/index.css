@@ -17168,16 +17168,8 @@ html body a:has(> [data-cta]):not([data-allow-clip]) {
   width: auto !important;
 }
 
-/* Force any CTA-containing button to also expose its max-content as
- * the layout width when sitting in a flex/grid parent that would
- * otherwise compress it. width:auto is safe here because min-width
- * (max-content) still wins; on mobile w-full classes are honoured
- * because mobile typically has only one CTA per row and max-content
- * is smaller than the row. */
-html body :is(
-  button,
-  a[role="button"]
-):not([data-allow-clip]):not([data-icon-only]):not(.jj-icon-only):not([aria-label][class*="w-"]) {
-  width: auto !important;
-}
+/* Note: we intentionally do NOT set width:auto on buttons globally —
+ * icon-only buttons rely on explicit w-* sizing. The anchor :has()
+ * rule above propagates max-content from button → wrapper, which is
+ * sufficient to release the flex parent and stop the clipping. */
 
