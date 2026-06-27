@@ -1346,13 +1346,6 @@ function StudioShell({
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  useEffect(() => {
-    // Do not pre-render PDFs while the owner is editing. html2canvas is CPU-heavy
-    // and was competing with the real click-to-export path, making downloads feel
-    // stuck for minutes. Export now runs only when requested, from the live preview.
-    return undefined;
-  }, [open, template, bodyHtml, autoPageGroups, marks.signatureXY, marks.stampXY, marks.stampLocked, marks.dateXY, effectiveScale]);
-
   const clearSession = (templateToClear?: string) => {
     try { localStorage.removeItem(SESSION_KEY); } catch {}
     if (templateToClear) {
@@ -1918,8 +1911,7 @@ function StudioShell({
       if (progressId != null) toast.success("PDF downloaded", { id: progressId });
 
       if (pdfBlob) {
-        void (async () => {
-          try {
+        try {
           const saved = await handleSaveDocument();
           const docId = saved?.id || currentDocId;
           const { data: { user } } = await supabase.auth.getUser();
@@ -1938,16 +1930,15 @@ function StudioShell({
             await (supabase.from("crm_documents" as any) as any)
               .update({ pdf_path: pdfPath, rendered_html: currentBody || null, field_values: { ...fields, profile_type: profile.profileType } })
               .eq("id", docId);
-            toast.success("PDF saved to the profile file");
+            toast.success("PDF downloaded and saved to the profile file");
           } else {
             toast.success(`${kind.toUpperCase()} downloaded`);
           }
         } catch (saveError: any) {
           console.warn("[DocumentStudio] profile save failed", saveError);
+          toast.success(`${kind.toUpperCase()} downloaded`);
           toast.warning(saveError?.message || "Downloaded, but profile save needs attention");
         }
-        })();
-        toast.success(`${kind.toUpperCase()} downloaded`);
       } else {
         toast.success(`${kind.toUpperCase()} downloaded`);
       }
