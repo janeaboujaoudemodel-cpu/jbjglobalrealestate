@@ -562,7 +562,7 @@ export function signatureBlock(opts: {
         <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
           <tbody>
             <tr>
-              ${cellInner("owner", "Authorised Signatory", ownerLines, false)}
+              ${cellInner("owner", "Authorised Signatory", ownerLinesWithSpacer, false)}
               ${cellInner("recipient", aLabel, applicantLines, true)}
             </tr>
             ${extraRows.join("")}
