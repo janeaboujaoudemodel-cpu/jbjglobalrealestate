@@ -151,16 +151,26 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         signingDate: today,
         leadsCountAtSigning: "approximately 310",
       };
+    case "nda":
+      return {
+        letterDate: today,
+        preparedDate: today,
+        documentDate: today,
+        startDate: today,
+        signingDate: today,
+        ownerDate: today,
+        applicantDate: today,
+      };
     case "warning_letter":
       return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, letterDate: today, signingDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
     case "termination_letter":
       return { recipientName: "[Employee Name]", jobTitle: "[Position]", letterDate: today, signingDate: today, terminationDate: today, lastWorkingDay: today, noticePeriod: "As per UAE Labour Law / employment contract", reason: "business_requirements", returnOfProperty: "Laptop, access cards, keys, documents and all company property", finalSettlement: "Final settlement to be processed after clearance." };
     case "developer_commission_invoice":
-      return { developerName: "Emaar Properties", developerContact: "brokerrelations@emaar.ae · +971 4 366 1688", closingDate: today, commissionRate: "2%", paymentTerms: "Net 7 days from invoice date" };
+      return { developerName: "Emaar Properties", developerContact: "brokerrelations@emaar.ae · +971 4 366 1688", letterDate: today, signingDate: today, closingDate: today, commissionRate: "2%", paymentTerms: "Net 7 days from invoice date" };
     case "developer_payment_request":
-      return { developerName: "Emaar Properties", accountsEmail: "brokerrelations@emaar.ae", requestedPaymentDate: today, dueReason: "Closed deal — commission payable after SPA / booking confirmation." };
+      return { developerName: "Emaar Properties", accountsEmail: "brokerrelations@emaar.ae", letterDate: today, signingDate: today, requestedPaymentDate: today, dueReason: "Closed deal — commission payable after SPA / booking confirmation." };
     case "developer_closing_notice":
-      return { developerName: "Emaar Properties", closingDate: today, commissionRate: "2%", brokerName: "JBJ GLOBAL REAL ESTATE" };
+      return { developerName: "Emaar Properties", letterDate: today, signingDate: today, closingDate: today, commissionRate: "2%", brokerName: "JBJ GLOBAL REAL ESTATE" };
     case "maintenance_request":
       return { requestDate: today, priority: "normal", serviceRequired: "General maintenance inspection and required rectification works." };
     case "interior_design_quotation":
