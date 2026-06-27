@@ -297,44 +297,61 @@ async function cloneImagesIntoCanvas(sourceCanvas: HTMLCanvasElement, page: HTML
 
 async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   const html2canvas = await loadHtml2Canvas();
-  const rect = page.getBoundingClientRect();
-  const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
-  const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
-  const canvas = await html2canvas(page, {
-    backgroundColor: "#FDFBF7",
-    scale,
-    foreignObjectRendering: false,
-    useCORS: true,
-    allowTaint: false,
-    logging: false,
-    imageTimeout: 450,
-    removeContainer: true,
-    width: widthPx,
-    height: heightPx,
-    x: rect.left + window.scrollX,
-    y: rect.top + window.scrollY,
-    scrollX: window.scrollX,
-    scrollY: window.scrollY,
-    windowWidth: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, Math.ceil(rect.right)),
-    windowHeight: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0, Math.ceil(rect.bottom)),
-    ignoreElements: (e) =>
-      e.tagName === "SCRIPT" ||
-      (e instanceof HTMLElement &&
-        (e.getAttribute("aria-label") === "Remove field" ||
-          e.getAttribute("aria-label") === "Change mark" ||
-          e.getAttribute("aria-label") === "Resize mark" ||
-          e.getAttribute("aria-label") === "Unlock mark" ||
-          e.getAttribute("aria-label") === "Lock mark" ||
-          e.getAttribute("data-drag-guide") === "true" ||
-          e.hasAttribute("data-page-export-ignore") ||
-          !!e.closest("[data-page-export-ignore]"))),
-  });
-  // html2canvas is fastest when it skips waiting on every image, but Safari/
-  // Chromium can occasionally omit data-URL PNGs in that fast path. Repaint the
-  // visible images from the live preview onto the captured page to preserve the
-  // same watermark/stamp/logo without paying the full slow capture cost.
-  await cloneImagesIntoCanvas(canvas, page);
-  return canvas;
+  const prev = {
+    transform: page.style.transform,
+    transformOrigin: page.style.transformOrigin,
+    boxShadow: page.style.boxShadow,
+    borderRadius: page.style.borderRadius,
+  };
+  page.style.transform = "none";
+  page.style.transformOrigin = "top left";
+  page.style.boxShadow = "none";
+  page.style.borderRadius = "0";
+  try {
+    const rect = page.getBoundingClientRect();
+    const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
+    const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
+    const canvas = await html2canvas(page, {
+      backgroundColor: "#FDFBF7",
+      scale,
+      foreignObjectRendering: false,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      imageTimeout: 450,
+      removeContainer: true,
+      width: widthPx,
+      height: heightPx,
+      x: rect.left + window.scrollX,
+      y: rect.top + window.scrollY,
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+      windowWidth: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, Math.ceil(rect.right)),
+      windowHeight: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0, Math.ceil(rect.bottom)),
+      ignoreElements: (e) =>
+        e.tagName === "SCRIPT" ||
+        (e instanceof HTMLElement &&
+          (e.getAttribute("aria-label") === "Remove field" ||
+            e.getAttribute("aria-label") === "Change mark" ||
+            e.getAttribute("aria-label") === "Resize mark" ||
+            e.getAttribute("aria-label") === "Unlock mark" ||
+            e.getAttribute("aria-label") === "Lock mark" ||
+            e.getAttribute("data-drag-guide") === "true" ||
+            e.hasAttribute("data-page-export-ignore") ||
+            !!e.closest("[data-page-export-ignore]"))),
+    });
+    // html2canvas is fastest when it skips waiting on every image, but Safari/
+    // Chromium can occasionally omit data-URL PNGs in that fast path. Repaint the
+    // visible images from the live preview onto the captured page to preserve the
+    // same watermark/stamp/logo without paying the full slow capture cost.
+    await cloneImagesIntoCanvas(canvas, page);
+    return canvas;
+  } finally {
+    page.style.transform = prev.transform;
+    page.style.transformOrigin = prev.transformOrigin;
+    page.style.boxShadow = prev.boxShadow;
+    page.style.borderRadius = prev.borderRadius;
+  }
 }
 
 // Yield to the browser between heavy operations so the UI doesn't appear "stuck".
