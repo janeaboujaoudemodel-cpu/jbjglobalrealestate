@@ -638,7 +638,7 @@ function inferFooterIconKind(text: string): FooterIconKind {
 function inferFooterIconKindFromSvg(svg: SVGElement): FooterIconKind | null {
   const html = svg.outerHTML;
   if (html.includes("M8 14.25s5-4.45")) return "location";
-  if (html.includes("M4.08 2.05")) return "phone";
+  if (html.includes("M4.08 2.05") || html.includes("M4.15 2.25")) return "phone";
   if (html.includes("<rect") && html.includes("M2.55 4.55")) return "mail";
   if (html.includes("<ellipse") && html.includes("M2.15 8h11.7")) return "globe";
   return null;
