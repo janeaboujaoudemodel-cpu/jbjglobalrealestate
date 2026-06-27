@@ -701,12 +701,22 @@ function drawPdfFooterIcon(pdf: any, kind: FooterIconKind, x: number, y: number,
   setPdfHex(pdf, "setDrawColor", JBJ_GOLD);
   pdf.setLineWidth(0.22);
   if (kind === "location") {
-    pdf.circle(x + size / 2, y + size * 0.42, size * 0.18, "S");
-    pdf.ellipse(x + size / 2, y + size * 0.43, size * 0.38, size * 0.42, "S");
-    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.28, y + size * 0.58);
-    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.72, y + size * 0.58);
+    // Map-pin teardrop using two symmetric bezier curves + inner dot.
+    const cx = x + size * 0.5;
+    pdf.lines(
+      [
+        [-0.45, -0.43, -0.45, -0.93, 0, -0.93],
+        [0.45, 0, 0.45, 0.50, 0, 0.93],
+      ],
+      cx, y + size * 0.98, [size, size], "S", true,
+    );
+    pdf.circle(cx, y + size * 0.38, size * 0.13, "S");
   } else if (kind === "phone") {
-    pdf.lines([[0.45, 0.52], [0.5, -0.18], [0.72, 0.38], [-0.5, 0.18], [-0.42, -0.9], [0.5, -0.18]], x + size * 0.14, y + size * 0.22, [size, size], "S", false);
+    // Clean smartphone outline with speaker and home dot.
+    pdf.roundedRect(x + size * 0.28, y + size * 0.08, size * 0.44, size * 0.84, size * 0.08, size * 0.08, "S");
+    pdf.line(x + size * 0.42, y + size * 0.18, x + size * 0.58, y + size * 0.18);
+    pdf.circle(x + size * 0.5, y + size * 0.82, size * 0.045, "S");
+  }
   } else if (kind === "mail") {
     pdf.roundedRect(x + size * 0.1, y + size * 0.24, size * 0.8, size * 0.56, 0.35, 0.35, "S");
     pdf.line(x + size * 0.16, y + size * 0.31, x + size * 0.5, y + size * 0.55);
