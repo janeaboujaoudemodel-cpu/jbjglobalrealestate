@@ -4,7 +4,7 @@
  * signature / stamp the user has placed on the document.
  */
 import DOMPurify from "dompurify";
-import { wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
+import { JBJ_BRAND, JBJ_CHAMPAGNE, JBJ_GOLD, JBJ_INK, wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
 import type { DocumentTemplate } from "@/config/documentCatalog";
 
 const PDF_PAGE_SCALE = 1.8;
@@ -407,10 +407,10 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
 type FooterIconKind = "location" | "phone" | "mail" | "globe";
 
 type FooterIconOverlay = {
-  kind: FooterIconKind;
   x: number;
   y: number;
-  size: number;
+  width: number;
+  height: number;
 };
 
 type FooterIconExportPreparation = {
@@ -418,44 +418,42 @@ type FooterIconExportPreparation = {
   restore: () => void;
 };
 
-function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconExportPreparation {
+function measureFooterOverlays(root: HTMLElement, captureRoot: HTMLElement): FooterIconOverlay[] {
   const rootRect = captureRoot.getBoundingClientRect();
+  const normalizeX = rootRect.width > 0 ? rootRect.width / (captureRoot.offsetWidth || rootRect.width) : 1;
+  const normalizeY = rootRect.height > 0 ? rootRect.height / (captureRoot.offsetHeight || rootRect.height) : 1;
   const overlays: FooterIconOverlay[] = [];
-  const touched: Array<{ svg: SVGElement; visibility: string }> = [];
-  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
-    Array.from(footer.querySelectorAll<SVGElement>("svg")).forEach((svg) => {
-      const wrapper = svg.parentElement as HTMLElement | null;
-      if (wrapper) {
-        const row = wrapper.parentElement as HTMLElement | null;
-        const kind = inferFooterIconKindFromSvg(svg) || inferFooterIconKind((row?.textContent || "").trim());
 
-        const wrapperRect = wrapper.getBoundingClientRect();
-        const siblingText = Array.from(row?.children || []).find((child) => {
-          if (child === wrapper) return false;
-          const text = (child.textContent || "").trim();
-          return text.length > 0;
-        }) as HTMLElement | undefined;
-        const textRect = (siblingText || row || wrapper).getBoundingClientRect();
-        const iconSize = 12;
-        overlays.push({
-          kind,
-          x: wrapperRect.left - rootRect.left,
-          // Do not rely on SVG/flex baselines inside html2canvas. Hide the SVG
-          // and paint the icon directly on the captured page canvas using the
-          // adjacent text line-box center from the cloned DOM. This is export-
-          // only and leaves the live preview completely untouched.
-          y: textRect.top - rootRect.top + (textRect.height - iconSize) / 2,
-          size: iconSize,
-        });
-        touched.push({ svg, visibility: svg.style.visibility });
-        svg.style.visibility = "hidden";
-      }
+  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
+    const rect = footer.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    overlays.push({
+      x: (rect.left - rootRect.left) / (normalizeX || 1),
+      y: (rect.top - rootRect.top) / (normalizeY || 1),
+      width: rect.width / (normalizeX || 1),
+      height: rect.height / (normalizeY || 1),
     });
+  });
+
+  return overlays;
+}
+
+function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconExportPreparation {
+  const overlays = measureFooterOverlays(root, captureRoot);
+  const touched: Array<{ footer: HTMLElement; visibility: string }> = [];
+  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
+    // Export-only lock: html2canvas has repeatedly shifted/dropped the inline
+    // SVG icons and sometimes rasterised the footer text at the wrong baseline.
+    // Hide the cloned footer and repaint the full locked footer directly onto
+    // the captured canvas. The live preview is untouched because this runs only
+    // against the export clone / temporary render host.
+    touched.push({ footer, visibility: footer.style.visibility });
+    footer.style.visibility = "hidden";
   });
   return {
     overlays,
     restore: () => {
-      touched.forEach(({ svg, visibility }) => { svg.style.visibility = visibility; });
+      touched.forEach(({ footer, visibility }) => { footer.style.visibility = visibility; });
     },
   };
 }
@@ -467,8 +465,92 @@ function drawFooterIconOverlays(canvas: HTMLCanvasElement, overlays: FooterIconO
   const sx = canvas.width / (captureRoot.offsetWidth || LIVE_PAGE_WIDTH);
   const sy = canvas.height / (captureRoot.offsetHeight || LIVE_PAGE_HEIGHT);
   overlays.forEach((overlay) => {
-    drawPremiumFooterIcon(ctx, overlay.kind, overlay.x, overlay.y, overlay.size, sx, sy);
+    drawLockedFooterOverlay(ctx, overlay, sx, sy);
   });
+}
+
+function drawLockedFooterFromSourcePage(canvas: HTMLCanvasElement, page: HTMLElement): void {
+  const overlays = measureFooterOverlays(page, page);
+  if (!overlays.length) return;
+  drawFooterIconOverlays(canvas, overlays, page);
+}
+
+function drawLockedFooterOverlay(ctx: CanvasRenderingContext2D, overlay: FooterIconOverlay, sx: number, sy: number): void {
+  const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
+  const address = JBJ_BRAND.address;
+  const phone = phones[0] || JBJ_BRAND.phone;
+  const email = JBJ_BRAND.email.toUpperCase();
+  const website = JBJ_BRAND.website.toUpperCase();
+
+  ctx.save();
+  ctx.translate(overlay.x * sx, overlay.y * sy);
+  ctx.scale(sx, sy);
+
+  const w = overlay.width;
+  const h = overlay.height;
+  const padX = 28;
+  const innerW = Math.max(0, w - padX * 2);
+  const centerY = h / 2;
+  const iconSize = 12;
+  const iconGap = 6;
+  const leftX = padX;
+  const midX = padX + innerW * 0.42;
+  const rightX = padX + innerW * 0.66;
+  const midW = innerW * 0.24;
+  const rightW = innerW * 0.34;
+
+  // Repaint the complete export footer so the PDF cannot inherit html2canvas
+  // grid/SVG baseline drift. Match the locked preview dimensions exactly.
+  ctx.fillStyle = JBJ_CHAMPAGNE;
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = JBJ_GOLD;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, 0.5);
+  ctx.lineTo(w, 0.5);
+  ctx.stroke();
+
+  const drawText = (text: string, x: number, y: number, options?: { fontSize?: number; weight?: number | string; align?: CanvasTextAlign }) => {
+    ctx.font = `${options?.weight ?? 700} ${options?.fontSize ?? 8.5}px Inter, Arial, sans-serif`;
+    ctx.fillStyle = JBJ_INK;
+    ctx.textAlign = options?.align ?? "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x, y);
+  };
+
+  // Left: office location.
+  drawPremiumFooterIcon(ctx, "location", leftX, centerY - iconSize / 2, iconSize, 1, 1);
+  drawText(address, leftX + iconSize + iconGap, centerY, { fontSize: 8.5, weight: 600 });
+
+  // Center: official company phone.
+  const phoneGroupW = 132;
+  const phoneX = midX + Math.max(0, (midW - phoneGroupW) / 2);
+  drawPremiumFooterIcon(ctx, "phone", phoneX, centerY - iconSize / 2, iconSize, 1, 1);
+  drawText(phone, phoneX + iconSize + iconGap, centerY, { fontSize: 9, weight: 800 });
+
+  // Right: official email and website, right-aligned as one premium row.
+  ctx.font = `700 8.5px Inter, Arial, sans-serif`;
+  const emailW = ctx.measureText(email).width;
+  ctx.font = `850 8.5px Inter, Arial, sans-serif`;
+  const webW = ctx.measureText(website).width;
+  const dotW = 10;
+  const itemGap = 6;
+  const totalRightW = iconSize + iconGap + emailW + itemGap + dotW + itemGap + iconSize + iconGap + webW;
+  const rightStart = Math.max(rightX, rightX + rightW - totalRightW);
+  let cursor = rightStart;
+  drawPremiumFooterIcon(ctx, "mail", cursor, centerY - iconSize / 2, iconSize, 1, 1);
+  cursor += iconSize + iconGap;
+  drawText(email, cursor, centerY, { fontSize: 8.5, weight: 700 });
+  cursor += emailW + itemGap;
+  ctx.globalAlpha = 0.5;
+  drawText("·", cursor + dotW / 2, centerY, { fontSize: 8.5, weight: 700, align: "center" });
+  ctx.globalAlpha = 1;
+  cursor += dotW + itemGap;
+  drawPremiumFooterIcon(ctx, "globe", cursor, centerY - iconSize / 2, iconSize, 1, 1);
+  cursor += iconSize + iconGap;
+  drawText(website, cursor, centerY, { fontSize: 8.5, weight: 850 });
+
+  ctx.restore();
 }
 
 function inferFooterIconKind(text: string): FooterIconKind {
@@ -547,6 +629,84 @@ function drawPremiumFooterIcon(
     strokePath(ctx, "M2.15 8h11.7M3.75 4.55h8.5M3.75 11.45h8.5");
   }
   ctx.restore();
+}
+
+function setPdfHex(pdf: any, method: "setFillColor" | "setDrawColor" | "setTextColor", hex: string) {
+  const value = hex.replace("#", "");
+  const r = parseInt(value.slice(0, 2), 16);
+  const g = parseInt(value.slice(2, 4), 16);
+  const b = parseInt(value.slice(4, 6), 16);
+  pdf[method](r, g, b);
+}
+
+function drawPdfFooterIcon(pdf: any, kind: FooterIconKind, x: number, y: number, size: number) {
+  setPdfHex(pdf, "setDrawColor", JBJ_GOLD);
+  pdf.setLineWidth(0.22);
+  if (kind === "location") {
+    pdf.circle(x + size / 2, y + size * 0.42, size * 0.18, "S");
+    pdf.ellipse(x + size / 2, y + size * 0.43, size * 0.38, size * 0.42, "S");
+    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.28, y + size * 0.58);
+    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.72, y + size * 0.58);
+  } else if (kind === "phone") {
+    pdf.lines([[0.45, 0.52], [0.5, -0.18], [0.72, 0.38], [-0.5, 0.18], [-0.42, -0.9], [0.5, -0.18]], x + size * 0.14, y + size * 0.22, [size, size], "S", false);
+  } else if (kind === "mail") {
+    pdf.roundedRect(x + size * 0.1, y + size * 0.24, size * 0.8, size * 0.56, 0.35, 0.35, "S");
+    pdf.line(x + size * 0.16, y + size * 0.31, x + size * 0.5, y + size * 0.55);
+    pdf.line(x + size * 0.84, y + size * 0.31, x + size * 0.5, y + size * 0.55);
+  } else {
+    pdf.circle(x + size / 2, y + size / 2, size * 0.42, "S");
+    pdf.ellipse(x + size / 2, y + size / 2, size * 0.18, size * 0.42, "S");
+    pdf.line(x + size * 0.12, y + size * 0.5, x + size * 0.88, y + size * 0.5);
+    pdf.line(x + size * 0.24, y + size * 0.32, x + size * 0.76, y + size * 0.32);
+    pdf.line(x + size * 0.24, y + size * 0.68, x + size * 0.76, y + size * 0.68);
+  }
+}
+
+function drawLockedPdfFooter(pdf: any, page: HTMLElement, A4_W: number, A4_H: number) {
+  const footer = page.querySelector<HTMLElement>('[data-jbj-locked-footer="true"]');
+  if (!footer) return;
+
+  const footerH = 58 * (A4_H / LIVE_PAGE_HEIGHT);
+  const y = A4_H - footerH;
+  const padX = 28 * (A4_W / LIVE_PAGE_WIDTH);
+  const iconSize = 12 * (A4_W / LIVE_PAGE_WIDTH);
+  const iconGap = 6 * (A4_W / LIVE_PAGE_WIDTH);
+  const centerY = y + footerH / 2 + 0.25;
+  const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
+  const phone = phones[0] || JBJ_BRAND.phone;
+  const email = JBJ_BRAND.email.toUpperCase();
+  const website = JBJ_BRAND.website.toUpperCase();
+
+  pdf.saveGraphicsState?.();
+  setPdfHex(pdf, "setFillColor", JBJ_CHAMPAGNE);
+  pdf.rect(0, y, A4_W, footerH, "F");
+  setPdfHex(pdf, "setDrawColor", JBJ_GOLD);
+  pdf.setLineWidth(0.18);
+  pdf.line(0, y, A4_W, y);
+  setPdfHex(pdf, "setTextColor", JBJ_INK);
+  pdf.setFont("helvetica", "bold");
+
+  const leftX = padX;
+  drawPdfFooterIcon(pdf, "location", leftX, centerY - iconSize / 2, iconSize);
+  pdf.setFontSize(6.35);
+  pdf.text(JBJ_BRAND.address, leftX + iconSize + iconGap, centerY, { baseline: "middle" });
+
+  const phoneX = A4_W * 0.47;
+  drawPdfFooterIcon(pdf, "phone", phoneX, centerY - iconSize / 2, iconSize);
+  pdf.setFontSize(6.8);
+  pdf.text(phone, phoneX + iconSize + iconGap, centerY, { baseline: "middle" });
+
+  pdf.setFontSize(6.35);
+  const webW = pdf.getTextWidth(website);
+  const emailW = pdf.getTextWidth(email);
+  let cursor = A4_W - padX - webW;
+  drawPdfFooterIcon(pdf, "globe", cursor - iconGap - iconSize, centerY - iconSize / 2, iconSize);
+  pdf.text(website, cursor, centerY, { baseline: "middle" });
+  cursor -= iconSize + iconGap + emailW + 5;
+  drawPdfFooterIcon(pdf, "mail", cursor - iconGap - iconSize, centerY - iconSize / 2, iconSize);
+  pdf.text(email, cursor, centerY, { baseline: "middle" });
+
+  pdf.restoreGraphicsState?.();
 }
 
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
@@ -721,10 +881,17 @@ export async function exportPdf(
           ctx.fillStyle = EXPORT_PAGE_BACKGROUND;
           ctx.fillRect(0, 0, slice.width, slice.height);
           ctx.drawImage(stack, 0, i * pageSliceH, stack.width, pageSliceH, 0, 0, slice.width, slice.height);
+          // Final export-only footer lock: after slicing the stacked capture into
+          // separate A4 pages, repaint the locked footer directly on the page
+          // slice from the live page geometry. This prevents the last-page footer
+          // from being lost or vertically shifted by html2canvas/svg baseline
+          // rasterisation while leaving the preview DOM completely untouched.
+          drawLockedFooterFromSourcePage(slice, livePages[i]);
           if (isCanvasVisuallyBlank(slice)) throw new Error(`Fast stacked capture produced a blank page ${i + 1}`);
           const data = await canvasToJpegBytes(slice);
           if (i > 0) pdf.addPage();
           pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+          drawLockedPdfFooter(pdf, livePages[i], A4_W, A4_H);
           await yieldToUi();
         }
         slice.width = 0; slice.height = 0;
@@ -742,10 +909,12 @@ export async function exportPdf(
         const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
           renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
         );
+        drawLockedFooterFromSourcePage(canvas, livePages[i]);
         const data = await canvasToJpegBytes(canvas);
         canvas.width = 0; canvas.height = 0;
         if (i > 0) pdf.addPage();
         pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+        drawLockedPdfFooter(pdf, livePages[i], A4_W, A4_H);
       }
     }
 
