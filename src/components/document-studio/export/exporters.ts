@@ -68,7 +68,10 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-async function renderElementCanvas(el: HTMLElement, scale = 0.72): Promise<HTMLCanvasElement> {
+const PDF_EXPORT_VERSION = "hq-lossless-footer-v2";
+const PDF_CAPTURE_SCALE = 3;
+
+async function renderElementCanvas(el: HTMLElement, scale = PDF_CAPTURE_SCALE): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
 
   const prev = {
@@ -136,7 +139,7 @@ async function renderElementCanvas(el: HTMLElement, scale = 0.72): Promise<HTMLC
       useCORS: true,
       allowTaint: false,
       logging: false,
-      imageTimeout: 500,
+      imageTimeout: 3000,
       removeContainer: true,
       width: widthPx,
       height: heightPx,
@@ -160,6 +163,45 @@ async function renderElementCanvas(el: HTMLElement, scale = 0.72): Promise<HTMLC
       node.style.marginTop = marginTop;
       node.style.paddingTop = paddingTop;
     });
+  }
+}
+
+async function renderClonedPageCanvas(el: HTMLElement, scale = PDF_CAPTURE_SCALE): Promise<HTMLCanvasElement> {
+  const widthPx = el.offsetWidth || 816;
+  const heightPx = el.offsetHeight || 1154;
+  const host = document.createElement("div");
+  host.style.cssText = [
+    "position:fixed",
+    "left:-12000px",
+    "top:0",
+    `width:${widthPx}px`,
+    `height:${heightPx}px`,
+    "background:#FDFBF7",
+    "z-index:-1",
+    "overflow:hidden",
+    "pointer-events:none",
+  ].join(";");
+
+  const clone = el.cloneNode(true) as HTMLElement;
+  clone.style.transform = "none";
+  clone.style.transformOrigin = "top left";
+  clone.style.boxShadow = "none";
+  clone.style.borderRadius = "0";
+  clone.style.margin = "0";
+  clone.style.width = `${widthPx}px`;
+  clone.style.height = `${heightPx}px`;
+  clone.style.minHeight = `${heightPx}px`;
+  clone.style.maxHeight = `${heightPx}px`;
+  clone.style.overflow = "hidden";
+  clone.style.background = "#FDFBF7";
+  host.appendChild(clone);
+  document.body.appendChild(host);
+  try {
+    if (document.fonts?.ready) await document.fonts.ready;
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    return await renderElementCanvas(clone, scale);
+  } finally {
+    if (host.parentNode) host.parentNode.removeChild(host);
   }
 }
 
@@ -193,7 +235,7 @@ function getPagesSignature(pages: HTMLElement[]) {
       const mediaKey = Array.from(page.querySelectorAll<HTMLImageElement | SVGElement>("img,svg"))
         .map((node) => node instanceof HTMLImageElement ? node.currentSrc || node.src || "img" : node.getAttribute("data-icon") || node.outerHTML.length)
         .join("~");
-      return `${page.offsetWidth}x${page.offsetHeight}:${page.textContent || ""}:${mediaKey}`;
+      return `${PDF_EXPORT_VERSION}:${page.offsetWidth}x${page.offsetHeight}:${page.textContent || ""}:${mediaKey}`;
     })
     .map((value) => hashString(value))
     .join("|");
@@ -206,8 +248,8 @@ async function renderPdfPageImages(
   const images: string[] = [];
   for (let i = 0; i < pages.length; i += 1) {
     onProgress?.(i, pages.length);
-    const canvas = await renderElementCanvas(pages[i], 0.72);
-    images.push(canvas.toDataURL("image/jpeg", 0.78));
+    const canvas = await renderClonedPageCanvas(pages[i], PDF_CAPTURE_SCALE);
+    images.push(canvas.toDataURL("image/png"));
     canvas.width = 0;
     canvas.height = 0;
     await yieldToUi();
@@ -223,7 +265,7 @@ async function buildPdfBlobFromPageImages(pageImages: string[]): Promise<Blob> {
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
   for (let i = 0; i < pageImages.length; i += 1) {
     if (i > 0) pdf.addPage();
-    pdf.addImage(pageImages[i], "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+    pdf.addImage(pageImages[i], "PNG", 0, 0, A4_W, A4_H, undefined, "FAST");
   }
   return pdf.output("blob");
 }
@@ -314,7 +356,7 @@ export async function exportPdf(
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
     for (let i = 0; i < pageImages.length; i += 1) {
       if (i > 0) pdf.addPage();
-      pdf.addImage(pageImages[i], "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      pdf.addImage(pageImages[i], "PNG", 0, 0, A4_W, A4_H, undefined, "FAST");
     }
 
     const blob = pdf.output("blob");
@@ -325,7 +367,7 @@ export async function exportPdf(
 
   // Collect logical block boundaries from the live DOM BEFORE rasterising,
   // so we can avoid slicing through tables / signatures / terms items.
-  const SCALE = 2; // matches renderElementCanvas
+  const SCALE = PDF_CAPTURE_SCALE; // matches renderElementCanvas
   const sectionBottomsCss: number[] = [];
   if (sourceElement) {
     const rootTop = sourceElement.getBoundingClientRect().top;
@@ -377,9 +419,9 @@ export async function exportPdf(
     ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
     ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
 
-    const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.92);
+    const sliceData = sliceCanvas.toDataURL("image/png");
     if (!first) pdf.addPage();
-    pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, A4_H);
+    pdf.addImage(sliceData, "PNG", 0, 0, A4_W, A4_H, undefined, "FAST");
     first = false;
     yOffset = cut;
   }
