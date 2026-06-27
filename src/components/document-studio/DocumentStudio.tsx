@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 23;
+  const DOCUMENT_FIX_VERSION = 25;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -1980,6 +1980,8 @@ function StudioShell({
         [data-document-studio-overlay] .studio-toolbar-scroll::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
         [data-document-studio-overlay] .studio-top-primary-actions { width:100%; overflow:visible !important; padding-bottom:2px; justify-content:flex-start !important; flex-wrap:wrap !important; }
         [data-document-studio-overlay] .studio-top-primary-actions > * { flex:0 0 auto; }
+        [data-document-studio-overlay] .studio-live-editor-actions { min-width:0; justify-content:flex-end; }
+        [data-document-studio-overlay] .studio-live-editor-actions > * { flex:0 0 auto; }
         [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar { height:6px; }
         [data-document-studio-overlay] .studio-top-primary-actions::-webkit-scrollbar-thumb { background:rgba(184,149,85,.55); border-radius:999px; }
         [data-document-studio-overlay] .studio-top-primary-actions button { height:42px; }
@@ -2014,7 +2016,7 @@ function StudioShell({
       `}</style>
       {/* ─── Topbar ─── */}
       <div className="studio-topbar shrink-0 border-b border-[#B89555]/55 bg-[#FDFBF7] flex flex-col gap-3 px-4 py-3 lg:px-5">
-        <div className="flex items-center justify-between gap-3 min-w-0">
+        <div className="flex flex-wrap items-center justify-between gap-3 min-w-0">
           <div className="flex items-center gap-2 min-w-0">
             <div className="w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center shrink-0">
               <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
@@ -2026,7 +2028,7 @@ function StudioShell({
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="studio-live-editor-actions flex flex-wrap items-center gap-2 shrink min-w-0">
             {/* Offer / NDA quick-switch is ALWAYS visible (collapsed or not)
                 so the companion document is one click away from any state. */}
             <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Offer / NDA quick switch" data-surface="champagne">
@@ -2072,6 +2074,47 @@ function StudioShell({
               <Stamp className="w-4 h-4 mr-1.5" />
               <span>Stamp</span>
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title="Document actions">
+                  <Download className="w-4 h-4 mr-1.5" />
+                  <span>Actions</span>
+                  <ChevronDown className="w-3.5 h-3.5 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#FDFBF7] z-[2147483647] border-[#B89555]/50 min-w-[220px]">
+                <DropdownMenuItem onClick={startNewSubmission}>
+                  <Plus className="w-4 h-4 mr-2" /> Start New
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={resetToTemplate} disabled={!bodyHtml}>
+                  <Wand2 className="w-4 h-4 mr-2" /> Reset Template
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handlePrint} disabled={!bodyHtml}>
+                  <Printer className="w-4 h-4 mr-2" /> Print
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("pdf")} disabled={!bodyHtml || !!exporting}>
+                  <FileText className="w-4 h-4 mr-2" /> Export PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("png")} disabled={!bodyHtml || !!exporting}>
+                  <FileText className="w-4 h-4 mr-2" /> Export PNG
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("docx")} disabled={!bodyHtml || !!exporting}>
+                  <FileText className="w-4 h-4 mr-2" /> Export Word
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport("both")} disabled={!bodyHtml || !!exporting}>
+                  <FileText className="w-4 h-4 mr-2" /> Export PDF + PNG
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => { setSaveName(`${template?.label || "Document"} — Custom`); setSaveDialogOpen(true); }} disabled={!template}>
+                  <Check className="w-4 h-4 mr-2" /> Save Template
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSaveDocument} disabled={!template || saveDocMutation.isPending}>
+                  <FileText className="w-4 h-4 mr-2" /> {currentDocId ? "Update Document" : "Save Document"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={toggleFullscreen}>
+                  <Maximize2 className="w-4 h-4 mr-2" /> {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             {setupChromeCollapsed && (
               <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"} className="h-10 hover:bg-[#EFE6D6]">
                 {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
@@ -3552,8 +3595,8 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 255}
-                                    y={marks.stampXY?.y ?? Math.max(860, PAGE_H - (isLast ? chromeHeights.footer : 0) - 200)}
+                                    x={marks.stampXY?.x ?? 275}
+                                    y={marks.stampXY?.y ?? Math.max(735, PAGE_H - (isLast ? chromeHeights.footer : 0) - 360)}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
