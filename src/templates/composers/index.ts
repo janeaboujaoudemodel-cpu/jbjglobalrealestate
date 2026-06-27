@@ -505,11 +505,11 @@ export function signatureBlock(opts: {
   const cellInner = (sigId: string, heading: string, signatureContent: string, lines: string, isRight: boolean) => `
     <td data-sig-id="${sigId}" style="width:50%;vertical-align:top;padding:0;position:relative;${isRight ? `border-left:1px solid ${GOLD};` : ""}">
       <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
-      <div style="position:relative;height:118px;padding:10px 14px 8px;box-sizing:border-box;">
+      <div style="position:relative;height:88px;padding:8px 14px 6px;box-sizing:border-box;">
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
         ${signatureContent}
       </div>
-      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 178 : 112}px;box-sizing:border-box;display:flex;flex-direction:column;">
+      <div style="padding:10px 14px 14px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 160 : 96}px;box-sizing:border-box;display:flex;flex-direction:column;">
         ${lines}
       </div>
     </td>`;
