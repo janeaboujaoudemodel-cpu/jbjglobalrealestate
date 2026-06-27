@@ -1256,6 +1256,7 @@ function StudioShell({
   const [autoFillText, setAutoFillText] = useState("");
   const [autoFillBusy, setAutoFillBusy] = useState(false);
   const autoFillFileRef = useRef<HTMLInputElement>(null);
+  const uploadAttachmentMutation = useUploadCandidateAttachment();
 
   // Document language (drives translation + AI replies + STT).
   const [docLanguage, setDocLanguage] = useState<string>(snap?.docLanguage || "English");
