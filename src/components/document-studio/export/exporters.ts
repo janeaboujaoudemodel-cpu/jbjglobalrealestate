@@ -312,7 +312,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   stage.setAttribute("data-export-page-stage", "true");
   stage.style.cssText = [
     "position:fixed",
-    "left:0",
+    "left:-20000px",
     "top:0",
     `width:${widthPx}px`,
     `height:${heightPx}px`,
@@ -523,7 +523,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
   host.setAttribute("data-export-stack", "true");
   host.style.cssText = [
     "position:fixed",
-    "left:0",
+    "left:-20000px",
     "top:0",
     `width:${pageW}px`,
     `height:${totalH}px`,
