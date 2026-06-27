@@ -99,6 +99,19 @@ const todayIso = () => {
   const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
   return `${get("year")}-${get("month")}-${get("day")}`;
 };
+const snapDocumentDatesToToday = (values: Record<string, string> = {}) => {
+  const today = todayIso();
+  return {
+    ...values,
+    letterDate: today,
+    preparedDate: today,
+    documentDate: today,
+    signingDate: today,
+    ownerDate: today,
+    applicantDate: today,
+    startDate: today,
+  };
+};
 const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
 const UAE_DEVELOPERS = [
@@ -139,9 +152,9 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         leadsCountAtSigning: "approximately 310",
       };
     case "warning_letter":
-      return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
+      return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, letterDate: today, signingDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
     case "termination_letter":
-      return { recipientName: "[Employee Name]", jobTitle: "[Position]", terminationDate: today, lastWorkingDay: today, noticePeriod: "As per UAE Labour Law / employment contract", reason: "business_requirements", returnOfProperty: "Laptop, access cards, keys, documents and all company property", finalSettlement: "Final settlement to be processed after clearance." };
+      return { recipientName: "[Employee Name]", jobTitle: "[Position]", letterDate: today, signingDate: today, terminationDate: today, lastWorkingDay: today, noticePeriod: "As per UAE Labour Law / employment contract", reason: "business_requirements", returnOfProperty: "Laptop, access cards, keys, documents and all company property", finalSettlement: "Final settlement to be processed after clearance." };
     case "developer_commission_invoice":
       return { developerName: "Emaar Properties", developerContact: "brokerrelations@emaar.ae · +971 4 366 1688", closingDate: today, commissionRate: "2%", paymentTerms: "Net 7 days from invoice date" };
     case "developer_payment_request":
