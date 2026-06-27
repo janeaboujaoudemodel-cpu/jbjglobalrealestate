@@ -3794,11 +3794,13 @@ function StudioShell({
                                       src={jbjWatermarkChampagneSrc}
                                       alt=""
                                       style={{
-                                        width: 480,
-                                        height: 480,
-                                        opacity: 0.34,
+                                        width: 520,
+                                        height: 520,
+                                        opacity: 0.42,
                                         objectFit: "contain",
                                         display: "block",
+                                        filter:
+                                          "saturate(115%) contrast(110%) drop-shadow(0 1px 0 rgba(255,253,247,0.55))",
                                       }}
                                     />
                                   </div>
@@ -3823,13 +3825,16 @@ function StudioShell({
                                       src={jbjWatermarkChampagneSrc}
                                       alt=""
                                       style={{
-                                        width: 480,
-                                        height: 480,
-                                        opacity: 0.075,
+                                        width: 520,
+                                        height: 520,
+                                        opacity: 0.20,
                                         objectFit: "contain",
                                         display: "block",
+                                        filter:
+                                          "saturate(125%) contrast(115%) drop-shadow(0 1px 0 rgba(255,253,247,0.6))",
                                       }}
                                     />
+
                                   </div>
                                 </>
                               )}
