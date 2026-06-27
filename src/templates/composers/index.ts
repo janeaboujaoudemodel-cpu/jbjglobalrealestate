@@ -550,8 +550,11 @@ export function signatureBlock(opts: {
   // stamp layer, not duplicated inside this static signature block.
   const stampOverlay = "";
   const ack = (opts.applicantAcknowledgement || "").trim();
-  const lowerPreambleHeight = ack ? 94 : 0;
-  const lowerRowsMinHeight = ack ? 174 : 100;
+  // Acknowledgement no longer has a hard max-height clamp — it must show
+  // the FULL sentence (owner complaint: "I accept full…" was cropped).
+  // Cells expand vertically to fit; both columns share the same min-height
+  // via lowerRowsMinHeight so the baseline alignment is preserved.
+  const lowerRowsMinHeight = ack ? 190 : 100;
 
   // Premium bordered signature box (mirrors institutional NDA layout):
   // a SINGLE gold-hairline frame containing two columns (Authorised
@@ -580,17 +583,16 @@ export function signatureBlock(opts: {
     .map(([label, value]) => row(label, esc(value || "")))
     .join("");
   const ackBlock = ack
-    ? `<div data-applicant-undertaking="1" style="width:100%;max-height:${lowerPreambleHeight}px;overflow:hidden;padding:7px 9px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.35px;line-height:1.28;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
+    ? `<div data-applicant-undertaking="1" style="width:100%;padding:8px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:9px;line-height:1.42;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
-  // Lower signature geometry is locked to the user's marked reference:
-  // after the dashed divider, the applicant undertaking appears FIRST, and
-  // the Name / Title / Date rows are pushed DOWN underneath it. The owner side
-  // receives a matching blank preamble slot so both columns' rows align.
+  // Lower signature geometry: undertaking sits ABOVE Name / Title / Date
+  // rows. The opposite (owner) column gets a matching invisible spacer
+  // whose height equals the rendered ack block so both Name rows align.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 ${lowerPreambleHeight}px;min-height:${lowerPreambleHeight}px;max-height:${lowerPreambleHeight}px;display:flex;align-items:flex-start;margin-bottom:10px;overflow:hidden;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="display:flex;align-items:flex-start;margin-bottom:10px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 ${lowerPreambleHeight}px;min-height:${lowerPreambleHeight}px;max-height:${lowerPreambleHeight}px;margin-bottom:10px;overflow:hidden;"></div>`
+    ? `<div data-sig-preamble-slot="1" data-sig-spacer="owner" style="margin-bottom:10px;visibility:hidden;">${ackBlock}</div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1" style="margin-top:auto;">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
