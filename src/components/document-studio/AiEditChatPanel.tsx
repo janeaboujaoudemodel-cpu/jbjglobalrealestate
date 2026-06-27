@@ -26,7 +26,7 @@ interface Attachment { name: string; type: string; dataUrl: string }
 interface Props {
   currentBody: string;
   aiInstructions: string;
-  onApply: (nextBody: string, sourceText?: string) => void;
+  onApply: (nextBody: string, sourceText?: string, mode?: "patch" | "full-replace") => void;
   language?: string;
   onClose?: () => void;
 }
