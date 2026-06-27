@@ -2186,7 +2186,7 @@ function StudioShell({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => { window.location.href = "/owner/documents/forms?tab=candidates"; }}
+              onClick={() => navigate("/owner/documents/forms?tab=candidates")}
               title="Open candidate folders"
               className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
             >
