@@ -2365,7 +2365,7 @@ function StudioShell({
                 // tab. Without closing, the modal would cover the new tab.
                 try { onClose(); } catch {}
                 window.setTimeout(() => {
-                  navigate("/owner/documents/forms?tab=candidates");
+                  navigate("/owner/documents/forms?tab=folders");
                 }, 50);
               }}
               title="Open candidate folders"
