@@ -127,7 +127,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
   const rowStyle = "position:relative;height:14px;line-height:14px;white-space:nowrap;overflow:visible;";
-  const iconStyle = "position:absolute;left:0;top:1px;width:12px;height:12px;display:block;line-height:0;font-size:0;vertical-align:top;object-fit:contain;";
+  const iconStyle = "position:absolute;left:0;top:3px;width:12px;height:12px;display:block;line-height:0;font-size:0;vertical-align:top;object-fit:contain;";
   const textAfterIconStyle = "position:absolute;left:18px;top:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
   const rightItemStyle = "position:relative;height:14px;line-height:14px;padding-left:18px;white-space:nowrap;";
   return `

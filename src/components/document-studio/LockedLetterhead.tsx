@@ -150,7 +150,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
   const iconStyle = {
     position: "absolute" as const,
     left: 0,
-    top: 1,
+    top: 3,
     width: 12,
     height: 12,
     display: "block",
