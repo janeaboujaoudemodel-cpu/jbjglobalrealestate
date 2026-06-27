@@ -968,6 +968,7 @@ export async function exportPdf(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
   sourceElement?: HTMLElement | null,
   onProgress?: (done: number, total: number) => void,
+  candidateName?: string | null,
 ): Promise<Blob> {
   const [jsPDF] = await Promise.all([loadJsPdf(), loadHtml2Canvas()]);
 
