@@ -1247,8 +1247,8 @@ function StudioShell({
         if (!next.signature && defaultSignature?.signedUrl) {
           next.signature = { url: defaultSignature.signedUrl, width: 200 };
         }
-        if (!next.stamp && stampUrl) next.stamp = { url: stampUrl, width: 142, rotation: 0 };
-        else if (next.stamp) next.stamp = { ...next.stamp, width: Math.min(next.stamp.width || 142, 160), rotation: 0 };
+        if (!next.stamp && stampUrl) next.stamp = { url: stampUrl, width: 120, rotation: 0 };
+        else if (next.stamp) next.stamp = { ...next.stamp, width: Math.min(next.stamp.width || 120, 140), rotation: 0 };
         return next;
       });
     })();
