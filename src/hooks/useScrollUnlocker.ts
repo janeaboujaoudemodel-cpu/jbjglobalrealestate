@@ -118,7 +118,14 @@ export function useScrollUnlocker(): void {
       const before = window.scrollY || html.scrollTop || body.scrollTop || 0;
       window.requestAnimationFrame(() => {
         const after = window.scrollY || html.scrollTop || body.scrollTop || 0;
-        if (Math.abs(after - before) < 1) forcePageScroll(deltaY);
+        const moved = after - before;
+        const expected = Math.abs(deltaY);
+        // Some desktop overlays/security listeners do not fully freeze the page,
+        // but they swallow enough wheel delta that the site feels blocked. If the
+        // browser moved less than half of the intended vertical delta, apply the
+        // missing amount once. Native scroll remains untouched when it works.
+        if (Math.sign(moved || deltaY) === Math.sign(deltaY) && Math.abs(moved) >= expected * 0.5) return;
+        forcePageScroll(deltaY - moved);
       });
     };
 
