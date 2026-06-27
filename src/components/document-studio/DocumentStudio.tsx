@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 31;
+  const DOCUMENT_FIX_VERSION = 32;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -3442,32 +3442,25 @@ function StudioShell({
                                       never competing with text. Tables remain
                                       opaque so the watermark only reads on
                                       the paper, not through grids. */}
-                                  <div
+                                  {/* Use a plain <img> instead of CSS mask so
+                                      html2canvas/PDF export preserves the
+                                      monogram. CSS mask-image is NOT supported
+                                      by html2canvas and was rasterising the
+                                      backing fill as a solid champagne block. */}
+                                  <img
+                                    src={jbjMonogramSrc}
+                                    alt=""
+                                    aria-hidden
                                     style={{
-                                      position: "relative",
                                       width: 540,
                                       height: 540,
+                                      objectFit: "contain",
+                                      opacity: 0.12,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
+                                      filter: "saturate(1.1)",
                                     }}
-                                  >
-                                    <div
-                                      style={{
-                                        position: "absolute",
-                                        inset: 0,
-                                        background: "#B89555",
-                                        opacity: 0.11,
-                                        WebkitMaskImage: `url(${jbjMonogramSrc})`,
-                                        maskImage: `url(${jbjMonogramSrc})`,
-                                        WebkitMaskRepeat: "no-repeat",
-                                        maskRepeat: "no-repeat",
-                                        WebkitMaskPosition: "center",
-                                        maskPosition: "center",
-                                        WebkitMaskSize: "contain",
-                                        maskSize: "contain",
-                                      }}
-                                    />
-                                  </div>
+                                  />
 
                                 </div>
                               )}
