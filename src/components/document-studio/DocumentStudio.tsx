@@ -3032,9 +3032,21 @@ function StudioShell({
                     </div>
                     <div className="grid grid-cols-1 gap-1.5">
                       <Input
+                        value={fields.fullNameAsPerPassport || ""}
+                        onChange={(e) => {
+                          setField("fullNameAsPerPassport", e.target.value);
+                          // Mirror to recipientName so existing flows (folder,
+                          // signature, candidate display) stay in sync with the
+                          // canonical full legal name.
+                          if (e.target.value.trim()) setField("recipientName", e.target.value);
+                        }}
+                        placeholder="Full Legal Name (as per Passport — incl. father's name)"
+                        className="bg-[#FDFBF7] h-7 text-[11px] font-medium"
+                      />
+                      <Input
                         value={fields.recipientName || ""}
                         onChange={(e) => setField("recipientName", e.target.value)}
-                        placeholder="Recipient Name"
+                        placeholder="Recipient Name (display)"
                         className="bg-[#FDFBF7] h-7 text-[11px]"
                       />
                     </div>
