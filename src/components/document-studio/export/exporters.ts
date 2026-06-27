@@ -1115,7 +1115,7 @@ export async function exportPdf(
     yOffset = cut;
   }
   const blob = pdf.output("blob");
-  triggerDownload(blob, fileName(template, "pdf"));
+  triggerDownload(blob, fileName(template, "pdf", candidateName));
   return blob;
 }
 
