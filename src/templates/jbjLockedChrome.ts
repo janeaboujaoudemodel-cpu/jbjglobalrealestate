@@ -155,12 +155,12 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
       </div>
       <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};text-align:right;white-space:nowrap;height:14px;line-height:14px;">
         <div style="${rowStyle}display:inline-block;width:100%;text-align:right;">
-          <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:15px;vertical-align:top;">
+          <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:18px;vertical-align:top;">
             <span aria-hidden="true" style="${iconStyle("mail")}"></span>
             <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;line-height:14px;display:block;">${JBJ_BRAND.email.toUpperCase()}</a>
           </span>
           <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:inline-block;vertical-align:top;margin:0 6px;">·</span>
-          <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:15px;vertical-align:top;">
+          <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:18px;vertical-align:top;">
             <span aria-hidden="true" style="${iconStyle("globe")}"></span>
             <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;line-height:14px;display:block;">${JBJ_BRAND.website.toUpperCase()}</a>
           </span>

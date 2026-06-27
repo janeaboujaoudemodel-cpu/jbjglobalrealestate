@@ -212,14 +212,14 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         </div>
         <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
           <div style={{ ...rowStyle, display: "inline-block", width: "100%", textAlign: "right" }}>
-            <span style={{ position: "relative", display: "inline-block", height: 14, lineHeight: "14px", paddingLeft: 15, verticalAlign: "top" }}>
+            <span style={{ position: "relative", display: "inline-block", height: 14, lineHeight: "14px", paddingLeft: 18, verticalAlign: "top" }}>
               <span aria-hidden="true" style={iconStyle("mail")} />
               <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
             </span>
             <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "inline-block", verticalAlign: "top", margin: "0 6px" }}>·</span>
-            <span style={{ position: "relative", display: "inline-block", height: 14, lineHeight: "14px", paddingLeft: 15, verticalAlign: "top" }}>
+            <span style={{ position: "relative", display: "inline-block", height: 14, lineHeight: "14px", paddingLeft: 18, verticalAlign: "top" }}>
               <span aria-hidden="true" style={iconStyle("globe")} />
               <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.website.toUpperCase()}
