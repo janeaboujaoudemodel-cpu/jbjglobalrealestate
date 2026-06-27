@@ -891,6 +891,9 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           <TabsContent value="signed" className="mt-4">
             {renderBucketCards(buckets.signed, "No signed contracts yet.", "signed")}
           </TabsContent>
+          <TabsContent value="candidates" className="mt-4">
+            <CandidateFoldersPanel onOpenDoc={(id) => navigate(`/owner/documents/forms?openDoc=${id}`)} />
+          </TabsContent>
           <TabsContent value="vault" className="mt-4">
             <Suspense fallback={<div className="flex items-center gap-2 text-sm text-[#1A1A1A]/70"><Loader2 className="w-4 h-4 animate-spin" /> Loading Contract Vault…</div>}>
               <ContractVaultEmbedded />
