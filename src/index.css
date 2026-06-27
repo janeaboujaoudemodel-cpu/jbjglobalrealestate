@@ -17092,3 +17092,180 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
     display: none !important;
   }
 }
+
+/* ============================================================
+   PASS 59 — GLOBAL DESIGN SYSTEM RECOVERY
+   Single layer that resolves the recurring failures the user
+   has flagged across Market Intelligence, Careers, Resale,
+   Broker Academy, Owner/Broker Portal, Document Studio, etc.
+
+   Goals (in order of priority):
+   1. NO BUTTON CLIPPING/SQUEEZING — labels always fit.
+   2. NO BLUE FILLED BUTTONS anywhere.
+   3. NO PURE-BLACK FILLED ACTION BUTTONS — repaint to emerald.
+   4. EMERALD SURFACES → WHITE text + WHITE icons.
+   5. CHAMPAGNE/LIGHT SURFACES → INK (#1A1A1A) text + icons.
+
+   Opt-outs honored:
+     - [data-no-contrast-guard]
+     - [data-ink-emerald-opt-out]
+     - header, aside, footer, [data-app-chrome]
+   ============================================================ */
+
+/* ---------- 1. Button geometry: never clip the label ---------- */
+html body button:not([data-no-contrast-guard] button),
+html body a[role="button"],
+html body .jj-cta-emerald,
+html body .jj-pill-emerald-metallic,
+html body [data-cta] {
+  min-width: fit-content;
+  width: auto;
+  flex-shrink: 0;
+}
+
+/* Inner label content of a button must not be squeezed to a vertical
+   sliver. This is the root cause of "Subscribe", "Apply", "Continue",
+   "View Area Details", "Generate Market Overview", etc rendering as
+   1-letter columns. */
+html body button > *,
+html body a[role="button"] > * {
+  min-width: 0;
+}
+html body button > span:not([class*="sr-only"]),
+html body a[role="button"] > span:not([class*="sr-only"]) {
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  flex-shrink: 0;
+}
+
+/* Action rows containing multiple CTAs should wrap, not crush. */
+html body .jj-cta-row,
+html body [data-cta-row] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ---------- 2. Kill blue filled buttons globally ----------
+   Repaint any tailwind blue background or hard-coded blue/navy hex
+   filled button to the brand emerald gradient with white content. */
+html body button.bg-blue-500:not([data-no-contrast-guard]),
+html body button.bg-blue-600:not([data-no-contrast-guard]),
+html body button.bg-blue-700:not([data-no-contrast-guard]),
+html body button.bg-blue-800:not([data-no-contrast-guard]),
+html body button.bg-indigo-500:not([data-no-contrast-guard]),
+html body button.bg-indigo-600:not([data-no-contrast-guard]),
+html body button.bg-indigo-700:not([data-no-contrast-guard]),
+html body button.bg-sky-500:not([data-no-contrast-guard]),
+html body button.bg-sky-600:not([data-no-contrast-guard]),
+html body button.bg-cyan-500:not([data-no-contrast-guard]),
+html body button.bg-cyan-600:not([data-no-contrast-guard]),
+html body button[class*="bg-[#0a1628]"]:not([data-no-contrast-guard]),
+html body button[class*="bg-[#102540]"]:not([data-no-contrast-guard]),
+html body button[class*="bg-[#0f1b3d]"]:not([data-no-contrast-guard]),
+html body button[class*="bg-[#1e3a5f]"]:not([data-no-contrast-guard]),
+html body button[class*="bg-[#1e40af]"]:not([data-no-contrast-guard]),
+html body button[class*="bg-[#2563eb]"]:not([data-no-contrast-guard]),
+html body a[role="button"].bg-blue-500:not([data-no-contrast-guard]),
+html body a[role="button"].bg-blue-600:not([data-no-contrast-guard]) {
+  background: var(--gradient-ink, linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000 100%)) !important;
+  border-color: #B89555 !important;
+  color: #FFFFFF !important;
+}
+
+/* ---------- 3. Repaint pure-black filled action buttons ----------
+   Public marketing CTAs must never be flat #000. The user has
+   demanded "no black filled buttons anywhere".
+   We scope this to clearly-CTA elements so utility chips, code
+   blocks, etc are unaffected. */
+html body main button.bg-black:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-\[\#000\]:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-\[\#000000\]:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-\[\#0A0A0A\]:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-\[\#0a0a0a\]:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-\[\#1A1A1A\]:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-\[\#1a1a1a\]:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-slate-900:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-neutral-900:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-zinc-900:not([data-no-contrast-guard]):not([data-keep-black]),
+html body main button.bg-gray-900:not([data-no-contrast-guard]):not([data-keep-black]) {
+  background: var(--gradient-ink, linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000 100%)) !important;
+  border: 1px solid #B89555 !important;
+  color: #FFFFFF !important;
+}
+
+/* All descendants of those repainted CTAs must be white. */
+html body main button.bg-blue-500 *,
+html body main button.bg-blue-600 *,
+html body main button.bg-blue-700 *,
+html body main button.bg-indigo-600 *,
+html body main button.bg-black:not([data-keep-black]) *,
+html body main button.bg-slate-900:not([data-keep-black]) *,
+html body main button.bg-neutral-900:not([data-keep-black]) *,
+html body main button.bg-zinc-900:not([data-keep-black]) *,
+html body main button.bg-gray-900:not([data-keep-black]) * {
+  color: #FFFFFF !important;
+}
+html body main button.bg-blue-500 svg,
+html body main button.bg-blue-600 svg,
+html body main button.bg-blue-700 svg,
+html body main button.bg-indigo-600 svg,
+html body main button.bg-black:not([data-keep-black]) svg,
+html body main button.bg-slate-900:not([data-keep-black]) svg,
+html body main button.bg-neutral-900:not([data-keep-black]) svg,
+html body main button.bg-zinc-900:not([data-keep-black]) svg,
+html body main button.bg-gray-900:not([data-keep-black]) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+/* ---------- 4. Metric-card badge padding ----------
+   Percentage chips (+12.5%, -8%) were touching the icon. */
+html body .jj-metric-card .jj-metric-delta,
+html body [data-metric-card] [data-metric-delta] {
+  padding: 4px 10px;
+  margin-left: 8px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* ---------- 5. Final emerald content lock ----------
+   Any element with an emerald background (gradient or solid) must
+   render white text + white svgs at idle & hover, except when an
+   explicit opt-out is set. This re-asserts the existing rule with
+   higher specificity to beat stale per-component overrides. */
+html body :where(
+  .jj-cta-emerald,
+  .jj-pill-emerald-metallic,
+  [data-surface="emerald"],
+  [data-emerald-fill]
+):not([data-no-contrast-guard]):not([data-ink-emerald-opt-out]),
+html body :where(
+  .jj-cta-emerald,
+  .jj-pill-emerald-metallic,
+  [data-surface="emerald"],
+  [data-emerald-fill]
+):not([data-no-contrast-guard]):not([data-ink-emerald-opt-out]):hover {
+  color: #FFFFFF !important;
+}
+html body :where(
+  .jj-cta-emerald,
+  .jj-pill-emerald-metallic,
+  [data-surface="emerald"],
+  [data-emerald-fill]
+):not([data-no-contrast-guard]):not([data-ink-emerald-opt-out]) :where(span, p, h1, h2, h3, h4, h5, h6, strong, em, small) {
+  color: #FFFFFF !important;
+}
+html body :where(
+  .jj-cta-emerald,
+  .jj-pill-emerald-metallic,
+  [data-surface="emerald"],
+  [data-emerald-fill]
+):not([data-no-contrast-guard]):not([data-ink-emerald-opt-out]) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* end PASS 59 */
