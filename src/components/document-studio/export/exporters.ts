@@ -409,7 +409,9 @@ export async function exportPdf(
       onProgress?.(i, livePages.length);
       // Yield first so the toast/progress UI can paint between pages.
       await yieldToUi();
-      const canvas = await renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE);
+      const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
+        renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
+      );
       const data = await canvasToJpegBytes(canvas);
       // Free the offscreen bitmap immediately — multi-page jobs accumulate
       // hundreds of MB otherwise and stall the browser on page 4-7.
