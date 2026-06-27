@@ -508,7 +508,7 @@ export function signatureBlock(opts: {
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
         ${signatureContent}
       </div>
-      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 224 : 112}px;box-sizing:border-box;">
+      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 178 : 112}px;box-sizing:border-box;">
         ${lines}
       </div>
     </td>`;
@@ -525,7 +525,7 @@ export function signatureBlock(opts: {
     .join("");
   const ack = (opts.applicantAcknowledgement || "").trim();
   const ackBlock = ack
-    ? `<div data-applicant-undertaking="1" style="width:100%;padding:7px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.65px;line-height:1.38;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
+    ? `<div data-applicant-undertaking="1" style="width:100%;padding:8px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:9.2px;line-height:1.42;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
   // The undersigned preamble must sit directly above the applicant's
   // Name/Title/Date rows, while BOTH columns keep those rows on the exact same
@@ -533,10 +533,10 @@ export function signatureBlock(opts: {
   // pin the rows underneath it instead of letting the applicant paragraph push
   // only the right column down.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:126px;display:flex;align-items:flex-end;margin-bottom:14px;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="height:72px;display:flex;align-items:flex-end;margin-bottom:16px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:126px;margin-bottom:14px;"></div>`
+    ? `<div data-sig-preamble-slot="1" style="height:72px;margin-bottom:16px;"></div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
@@ -815,7 +815,7 @@ function composeJobOffer(input: ComposerInput): string {
       applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
-      applicantAcknowledgement: `I, the undersigned, confirm my acceptance to the above terms and conditions and further confirm my employment with ${companyName}. I shall ensure full and absolute loyalty to the company, by word and deed and during my employment with the company, shall not at any time conduct myself in a manner that can be construed to be an act or statement that would undermine the authority of ${companyName}.`,
+      applicantAcknowledgement: `I, the undersigned, confirm my acceptance to the above terms and conditions.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
