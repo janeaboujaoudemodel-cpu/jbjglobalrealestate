@@ -27,6 +27,11 @@ export const JBJ_BRAND = {
 } as const;
 
 export const JBJ_GOLD = "#B89555";
+export const JBJ_ICON_GOLD = {
+  main: "#D8B96A",
+  shadow: "#A9782B",
+  shine: "#FFF0B8",
+} as const;
 export const JBJ_INK = "#1A1A1A";
 export const JBJ_CHAMPAGNE = "#F7F2EA";
 
@@ -85,6 +90,31 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
+// Premium footer icons — clean layered gold outlines. Rasterize identically in
+// preview and html2canvas/jspdf export (no fills, no glyph fonts). Every shape
+// has a classic darker gold body + thin champagne-gold shine stroke.
+const svgBaseStyle = "display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;filter:drop-shadow(0 .35px .35px rgba(104,70,19,.18));";
+const mainStrokeStyle = `fill:none !important;stroke:${JBJ_ICON_GOLD.main} !important;`;
+const shineStrokeStyle = `fill:none !important;stroke:${JBJ_ICON_GOLD.shine} !important;opacity:.64 !important;`;
+const shadowStrokeStyle = `fill:none !important;stroke:${JBJ_ICON_GOLD.shadow} !important;opacity:.34 !important;`;
+const pathOutline = (d: string, w = 1.42, extra = "") =>
+  `<path d="${d}" fill="none" stroke="${JBJ_ICON_GOLD.shadow}" style="${shadowStrokeStyle}" stroke-width="${(w + 0.35).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" ${extra}/><path d="${d}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" ${extra}/><path d="${d}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.48, w * 0.38).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" ${extra}/>`;
+const circleOutline = (cx: number, cy: number, r: number, w = 1.28) =>
+  `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${JBJ_ICON_GOLD.shadow}" style="${shadowStrokeStyle}" stroke-width="${(w + 0.28).toFixed(2)}" vector-effect="non-scaling-stroke"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" vector-effect="non-scaling-stroke"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.46, w * 0.38).toFixed(2)}" vector-effect="non-scaling-stroke"/>`;
+const rectOutline = (x: number, y: number, width: number, height: number, rx: number, w = 1.38) =>
+  `<rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" fill="none" stroke="${JBJ_ICON_GOLD.shadow}" style="${shadowStrokeStyle}" stroke-width="${(w + 0.28).toFixed(2)}" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.46, w * 0.36).toFixed(2)}" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+const ellipseOutline = (cx: number, cy: number, rx: number, ry: number, w = 1.1) =>
+  `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" vector-effect="non-scaling-stroke"/><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.42, w * 0.34).toFixed(2)}" vector-effect="non-scaling-stroke"/>`;
+
+export const FOOTER_ICON_SVG: Record<"location" | "phone" | "mail" | "globe", string> = {
+  location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${pathOutline("M8 14.3S3.35 9.9 3.35 6.35A4.65 4.65 0 0 1 8 1.7a4.65 4.65 0 0 1 4.65 4.65C12.65 9.9 8 14.3 8 14.3Z", 1.44)}${circleOutline(8, 6.35, 1.55, 1.2)}</svg>`,
+  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${pathOutline("M4.05 2.25 2.85 3.1c-.62.44-.9 1.23-.7 1.97 1.18 4.33 4.45 7.6 8.78 8.78.74.2 1.53-.08 1.97-.7l.85-1.2a.9.9 0 0 0-.2-1.25l-1.72-1.23a.9.9 0 0 0-1.17.1l-.92.92a.72.72 0 0 1-.82.13 7.7 7.7 0 0 1-3.54-3.54.72.72 0 0 1 .13-.82l.92-.92a.9.9 0 0 0 .1-1.17L5.3 2.45a.9.9 0 0 0-1.25-.2Z", 1.42)}</svg>`,
+  mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${rectOutline(1.9, 3.5, 12.2, 9, 1.35, 1.38)}${pathOutline("M2.65 4.45 8 8.25l5.35-3.8", 1.16)}</svg>`,
+  globe: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${circleOutline(8, 8, 6.05, 1.34)}${ellipseOutline(8, 8, 2.65, 6.05, 1.05)}${pathOutline("M2.1 8h11.8M3.55 4.25h8.9M3.55 11.75h8.9", 1.04)}</svg>`,
+};
+
+const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => FOOTER_ICON_SVG[type];
+
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
   const monogram = `<img src="${monogramSrc}" alt="JBJ" aria-label="JBJ" role="img" style="width:184px;height:184px;object-fit:contain;display:block;${monogramImgStyle(theme)}" />`;
@@ -115,6 +145,11 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
 export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
+  const rowStyle = "position:relative;height:14px;line-height:14px;white-space:nowrap;overflow:visible;";
+  const iconRowStyle = "height:14px;line-height:14px;display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:6px;align-items:center;";
+  const textAfterIconStyle = "min-width:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
+  const rightItemStyle = "display:grid;grid-template-columns:12px max-content;column-gap:6px;align-items:center;height:14px;line-height:14px;white-space:nowrap;";
+  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(3px);";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;
@@ -131,26 +166,29 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
     box-sizing:border-box;
   ">
     <div style="width:100%;height:58px;display:grid;grid-template-columns:42% 24% 34%;align-items:center;">
-      <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:1.25;color:${t.fg};-webkit-text-fill-color:${t.fg};">
-        <span style="display:flex;align-items:center;gap:5px;min-width:0;">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span style="display:block;white-space:nowrap;overflow:visible;text-overflow:clip;">${JBJ_BRAND.address}</span>
-        </span>
+      <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:14px;height:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};white-space:nowrap;">
+        <div style="${rowStyle}${iconRowStyle}width:100%;">
+          <span data-jbj-footer-icon="location" style="${iconSlotStyle}">${footerIconHtml("location")}</span>
+          <span style="${textAfterIconStyle}">${JBJ_BRAND.address}</span>
+        </div>
       </div>
-      <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:1.35;">
-        ${phones.map((p, i) => `<div style="white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;">${i === 0 ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>` : `<span style="display:inline-block;flex:0 0 10px;"></span>`}<span>${p}</span></div>`).join("")}
+      <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:14px;text-align:center;">
+        ${phones.map((p, i) => `<div style="${rowStyle}${iconRowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? `<span data-jbj-footer-icon="phone" style="${iconSlotStyle}">${footerIconHtml("phone")}</span>` : `<span aria-hidden="true" style="width:12px;height:14px;display:block;"></span>`}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
       </div>
-      <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};display:flex;align-items:center;justify-content:flex-end;gap:6px;white-space:nowrap;">
-        <span style="display:inline-flex;align-items:center;gap:5px;min-width:0;">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
-          <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
-        </span>
-        <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;">·</span>
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
-        </span>
+      <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};text-align:right;white-space:nowrap;height:14px;line-height:14px;">
+        <div style="height:14px;line-height:14px;display:grid;grid-template-columns:max-content 10px max-content;align-items:center;justify-content:end;column-gap:6px;width:100%;">
+          <span style="${rightItemStyle}">
+            <span data-jbj-footer-icon="mail" style="${iconSlotStyle}">${footerIconHtml("mail")}</span>
+            <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;line-height:14px;display:block;">${JBJ_BRAND.email.toUpperCase()}</a>
+          </span>
+          <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:block;text-align:center;">·</span>
+          <span style="${rightItemStyle}">
+            <span data-jbj-footer-icon="globe" style="${iconSlotStyle}">${footerIconHtml("globe")}</span>
+            <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;line-height:14px;display:block;">${JBJ_BRAND.website.toUpperCase()}</a>
+          </span>
+        </div>
       </div>
+
     </div>
   </footer>`;
 };

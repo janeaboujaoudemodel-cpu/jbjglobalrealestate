@@ -68,7 +68,12 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> {
+const PDF_EXPORT_VERSION = "instant-premium-fast-outline-footer-v6";
+const PDF_CAPTURE_SCALE = 2;
+const PDF_ADD_IMAGE_FORMAT = "JPEG" as const;
+const PDF_IMAGE_QUALITY = 0.94;
+
+async function renderElementCanvas(el: HTMLElement, scale = PDF_CAPTURE_SCALE): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
 
   const prev = {
@@ -132,10 +137,12 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
   try {
     return await html2canvas(el, {
       backgroundColor: "#FDFBF7",
-      scale: 2,
+      scale,
       useCORS: true,
       allowTaint: false,
       logging: false,
+      imageTimeout: 3000,
+      removeContainer: true,
       width: widthPx,
       height: heightPx,
       windowWidth: widthPx,
@@ -161,6 +168,143 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
   }
 }
 
+async function renderClonedPageCanvas(el: HTMLElement, scale = PDF_CAPTURE_SCALE): Promise<HTMLCanvasElement> {
+  const widthPx = el.offsetWidth || 816;
+  const heightPx = el.offsetHeight || 1154;
+  const host = document.createElement("div");
+  host.style.cssText = [
+    "position:fixed",
+    "left:-12000px",
+    "top:0",
+    `width:${widthPx}px`,
+    `height:${heightPx}px`,
+    "background:#FDFBF7",
+    "z-index:-1",
+    "overflow:hidden",
+    "pointer-events:none",
+  ].join(";");
+
+  const clone = el.cloneNode(true) as HTMLElement;
+  clone.style.transform = "none";
+  clone.style.transformOrigin = "top left";
+  clone.style.boxShadow = "none";
+  clone.style.borderRadius = "0";
+  clone.style.margin = "0";
+  clone.style.width = `${widthPx}px`;
+  clone.style.height = `${heightPx}px`;
+  clone.style.minHeight = `${heightPx}px`;
+  clone.style.maxHeight = `${heightPx}px`;
+  clone.style.overflow = "hidden";
+  clone.style.background = "#FDFBF7";
+  host.appendChild(clone);
+  document.body.appendChild(host);
+  try {
+    if (document.fonts?.ready) await document.fonts.ready;
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    return await renderElementCanvas(clone, scale);
+  } finally {
+    if (host.parentNode) host.parentNode.removeChild(host);
+  }
+}
+
+// Yield to the browser between heavy operations so the UI doesn't appear "stuck".
+const yieldToUi = () => new Promise<void>((resolve) => {
+  if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => resolve());
+  else setTimeout(resolve, 0);
+});
+
+type PdfPageCache = { signature: string; pages: string[]; blob?: Blob; createdAt: number };
+
+const pdfPageCache = new WeakMap<HTMLElement, PdfPageCache>();
+const pdfPageInflight = new WeakMap<HTMLElement, Promise<void>>();
+const pdfPageInflightController = new WeakMap<HTMLElement, AbortController>();
+
+const getLivePages = (sourceElement?: HTMLElement | null) => sourceElement
+  ? Array.from(sourceElement.querySelectorAll<HTMLElement>('[data-document-page="true"]'))
+  : [];
+
+function hashString(value: string) {
+  let hash = 2166136261;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+function getPagesSignature(pages: HTMLElement[]) {
+  return `${PDF_EXPORT_VERSION}:count=${pages.length};` + pages
+    .map((page) => {
+      const mediaKey = Array.from(page.querySelectorAll<HTMLImageElement | SVGElement>("img,svg"))
+        .map((node) => node instanceof HTMLImageElement ? node.currentSrc || node.src || "img" : node.getAttribute("data-icon") || node.outerHTML.length)
+        .join("~");
+      return `${page.offsetWidth}x${page.offsetHeight}:${page.textContent || ""}:${mediaKey}`;
+    })
+    .map((value) => hashString(value))
+    .join("|");
+}
+
+async function renderPdfPageImages(
+  pages: HTMLElement[],
+  onProgress?: (done: number, total: number) => void,
+  signal?: AbortSignal,
+) {
+  const images: string[] = [];
+  for (let i = 0; i < pages.length; i += 1) {
+    if (signal?.aborted) throw new DOMException("PDF render cancelled", "AbortError");
+    onProgress?.(i, pages.length);
+    const canvas = await renderClonedPageCanvas(pages[i], PDF_CAPTURE_SCALE);
+    if (signal?.aborted) throw new DOMException("PDF render cancelled", "AbortError");
+    images.push(canvas.toDataURL("image/jpeg", PDF_IMAGE_QUALITY));
+    canvas.width = 0;
+    canvas.height = 0;
+    await yieldToUi();
+  }
+  onProgress?.(pages.length, pages.length);
+  return images;
+}
+
+async function buildPdfBlobFromPageImages(pageImages: string[]): Promise<Blob> {
+  const { default: jsPDF } = await import("jspdf");
+  const A4_W = 210;
+  const A4_H = 297;
+  const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  for (let i = 0; i < pageImages.length; i += 1) {
+    if (i > 0) pdf.addPage();
+    pdf.addImage(pageImages[i], PDF_ADD_IMAGE_FORMAT, 0, 0, A4_W, A4_H, undefined, "FAST");
+  }
+  return pdf.output("blob");
+}
+
+export function precachePdfPages(sourceElement?: HTMLElement | null): void {
+  if (!sourceElement) return;
+  const pages = getLivePages(sourceElement);
+  if (!pages.length) return;
+  const signature = getPagesSignature(pages);
+  const cached = pdfPageCache.get(sourceElement);
+  if (cached?.signature === signature) return;
+  if (pdfPageInflight.has(sourceElement)) return;
+  const controller = new AbortController();
+  pdfPageInflightController.set(sourceElement, controller);
+
+  const task = (async () => {
+    try {
+      // Warm jsPDF while the owner is reviewing, so click-to-download is instant.
+      await import("jspdf");
+      const images = await renderPdfPageImages(pages, undefined, controller.signal);
+      if (controller.signal.aborted) return;
+      const blob = await buildPdfBlobFromPageImages(images);
+      pdfPageCache.set(sourceElement, { signature, pages: images, blob, createdAt: Date.now() });
+    } catch {
+      // Background cache failures must never affect editing/exporting.
+    } finally {
+      pdfPageInflight.delete(sourceElement);
+      pdfPageInflightController.delete(sourceElement);
+    }
+  })();
+  pdfPageInflight.set(sourceElement, task);
+}
+
 /** Off-screen chrome render (fallback when no live element is provided). */
 async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
   const host = document.createElement("div");
@@ -182,11 +326,7 @@ export async function exportPdf(
   sourceElement?: HTMLElement | null,
   onProgress?: (done: number, total: number) => void,
 ): Promise<Blob> {
-  const { default: jsPDF } = await import("jspdf");
-
-  const livePages = sourceElement
-    ? Array.from(sourceElement.querySelectorAll<HTMLElement>('[data-document-page="true"]'))
-    : [];
+  const livePages = getLivePages(sourceElement);
 
   const triggerDownload = (blob: Blob, name: string) => {
     const url = URL.createObjectURL(blob);
@@ -204,27 +344,49 @@ export async function exportPdf(
   };
 
   if (livePages.length > 0) {
+    const signature = getPagesSignature(livePages);
+    const inflight = sourceElement ? pdfPageInflight.get(sourceElement) : undefined;
+    const cached = sourceElement ? pdfPageCache.get(sourceElement) : undefined;
+    if (cached?.signature === signature && cached.blob && cached.pages.length === livePages.length) {
+      triggerDownload(cached.blob, fileName(template, "pdf"));
+      return cached.blob;
+    }
+    if (inflight && sourceElement && (!cached || cached.signature !== signature || cached.pages.length !== livePages.length)) {
+      pdfPageInflightController.get(sourceElement)?.abort();
+    } else if (inflight) {
+      await Promise.race([inflight, new Promise((resolve) => setTimeout(resolve, 250))]);
+      const warmed = sourceElement ? pdfPageCache.get(sourceElement) : undefined;
+      if (warmed?.signature === signature && warmed.blob && warmed.pages.length === livePages.length) {
+        triggerDownload(warmed.blob, fileName(template, "pdf"));
+        return warmed.blob;
+      }
+    }
+    const pageImages = cached?.signature === signature && cached.pages.length === livePages.length
+      ? cached.pages
+      : await renderPdfPageImages(livePages, onProgress);
+
+    if (sourceElement && cached?.signature !== signature) {
+      pdfPageCache.set(sourceElement, { signature, pages: pageImages, createdAt: Date.now() });
+    }
+
+    const { default: jsPDF } = await import("jspdf");
     const A4_W = 210;
     const A4_H = 297;
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
-
-    for (let i = 0; i < livePages.length; i += 1) {
-      onProgress?.(i, livePages.length);
-      const canvas = await renderElementCanvas(livePages[i]);
-      const data = canvas.toDataURL("image/jpeg", 0.92);
+    for (let i = 0; i < pageImages.length; i += 1) {
       if (i > 0) pdf.addPage();
-      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H);
+      pdf.addImage(pageImages[i], PDF_ADD_IMAGE_FORMAT, 0, 0, A4_W, A4_H, undefined, "FAST");
     }
-    onProgress?.(livePages.length, livePages.length);
 
     const blob = pdf.output("blob");
+    if (sourceElement) pdfPageCache.set(sourceElement, { signature, pages: pageImages, blob, createdAt: Date.now() });
     triggerDownload(blob, fileName(template, "pdf"));
     return blob;
   }
 
   // Collect logical block boundaries from the live DOM BEFORE rasterising,
   // so we can avoid slicing through tables / signatures / terms items.
-  const SCALE = 2; // matches renderElementCanvas
+  const SCALE = PDF_CAPTURE_SCALE; // matches renderElementCanvas
   const sectionBottomsCss: number[] = [];
   if (sourceElement) {
     const rootTop = sourceElement.getBoundingClientRect().top;
@@ -243,6 +405,7 @@ export async function exportPdf(
 
   const A4_W = 210;
   const A4_H = 297;
+  const { default: jsPDF } = await import("jspdf");
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
   const sliceHpx = Math.round((canvas.width * A4_H) / A4_W);
@@ -275,9 +438,9 @@ export async function exportPdf(
     ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
     ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
 
-    const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.92);
+    const sliceData = sliceCanvas.toDataURL("image/png");
     if (!first) pdf.addPage();
-    pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, A4_H);
+    pdf.addImage(sliceData, "PNG", 0, 0, A4_W, A4_H, undefined, "FAST");
     first = false;
     yOffset = cut;
   }

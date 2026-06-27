@@ -157,6 +157,26 @@ const ARABIC_NAME_MAP: Record<string, string> = {
   "بن": "bin", "ابن": "ibn", "أبو": "Abu", "ابو": "Abu",
 };
 
+const OFFICIAL_NAME_ALIASES: Record<string, { english: string; arabic?: string }> = {
+  "alwalid i s alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i. s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i.s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alhalabi alwalid i s": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+};
+
+const normaliseNameAliasKey = (value?: string): string =>
+  cleanLegalName(value)
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^a-z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const officialNameAlias = (value?: string) => {
+  const key = normaliseNameAliasKey(value);
+  return key ? OFFICIAL_NAME_ALIASES[key] : undefined;
+};
+
 const transliterateArabicName = (arabic: string): string => {
   return arabic
     .replace(/[\u064B-\u0652\u0670\u0640]/g, "")
@@ -178,12 +198,30 @@ const transliterateArabicName = (arabic: string): string => {
     .trim();
 };
 
-const arabicFullName = (source?: string): string => {
+const arabicFullNameNative = (source?: string): string => {
   if (!source) return "";
-  const line = source.match(/الاسم\s*كاملا\s*[:：]?\s*([\u0600-\u06FF\s]+)/);
+  const line = source.match(/(?:الاسم\s*كاملا|الاسم)\s*[:：]?\s*([\u0600-\u06FF\s]+)/);
   const arabic = (line?.[1] || "").split(/\n/)[0].trim();
+  return arabic.replace(/\s+/g, " ").trim();
+};
+
+const arabicFullName = (source?: string): string => {
+  const arabic = arabicFullNameNative(source);
   if (!arabic) return "";
   return transliterateArabicName(arabic);
+};
+
+const legalArabicName = (fields: Record<string, string>, source: string): string => {
+  const explicit = [fields.fullNameArabic, fields.nameArabic, fields.arabicName, fields.fullNameAsPerPassportArabic, fields.fullNameAsPerIdArabic]
+    .map((v) => arabicFullNameNative(v) || (/[\u0600-\u06FF]/.test(v || "") ? (v || "").replace(/\s+/g, " ").trim() : ""))
+    .find(Boolean);
+  if (explicit) return explicit;
+  const fromSource = arabicFullNameNative(source);
+  if (fromSource) return fromSource;
+  const alias = [fields.fullNameAsPerPassport, fields.fullNameAsPerId, fields.recipientName, fields.fullName]
+    .map(officialNameAlias)
+    .find(Boolean);
+  return alias?.arabic || "";
 };
 
 const mrzName = (value?: string): string => {
@@ -196,7 +234,11 @@ const mrzName = (value?: string): string => {
 };
 
 const bestLegalName = (fields: Record<string, string>, source: string): string => {
-  const candidates = [
+  // 🔒 Highest priority: an explicit, user-confirmed "Full Name as per Passport"
+  // (or equivalent ID-bound field). When the operator has typed the full chain —
+  // given + father + grandfather + family — that value MUST win over any shorter
+  // recipient/display name. Never let scoring downgrade it.
+  const explicitCandidates = [
     fields.fullNameAsPerPassport,
     fields.passportFullName,
     fields.passport_name,
@@ -205,6 +247,23 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     fields.fullNameAsPerID,
     fields.idFullName,
     fields.emiratesIdFullName,
+  ]
+    .map(cleanLegalName)
+    .filter((v) => v && v.split(/\s+/).length >= 2);
+  const arabicNative = legalArabicName(fields, source);
+  const arabicLatin = arabicNative ? transliterateArabicName(arabicNative) : "";
+  const explicitWithAliases = explicitCandidates.map((name) => officialNameAlias(name)?.english || name);
+  explicitWithAliases.sort((a, b) => {
+    const score = (name: string) => (isInitialOnlyName(name) ? 0 : 1000) + name.length + (name.split(/\s+/).length >= 4 ? 180 : name.split(/\s+/).length >= 3 ? 100 : 0);
+    return score(b) - score(a);
+  });
+  const explicit = explicitWithAliases[0] || "";
+  if (explicit && (!isInitialOnlyName(explicit) || !arabicLatin)) return explicit;
+  if (arabicLatin && arabicLatin.split(/\s+/).length >= 3) return arabicLatin;
+  if (explicit) return explicit;
+
+  const candidates = [
+    arabicLatin,
     fields.fullName,
     fields.nameAsPerId,
     fields.nameAsPerID,
@@ -219,6 +278,7 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     firstMatch(source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
   ]
     .map(cleanLegalName)
+    .map((name) => officialNameAlias(name)?.english || name)
     .filter(Boolean)
     .filter((name) => !/^\d+$/.test(name));
 
@@ -284,6 +344,7 @@ const offerIdentity = (fields: Record<string, string>) => {
   const rawPhone = identityValue(fields, ["recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"], source, /(?:phone|mobile|whatsapp)\s*(?:is|:|-)?\s*((?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,})/i);
   return {
     name: bestLegalName(fields, source),
+    arabicName: legalArabicName(fields, source),
     emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
     passport: identityValue(fields, ["passportNumber", "passport_number", "passportNo", "passport"], source, /passport(?:\s*(?:number|no\.?))?\s*(?:is|:|-)?\s*([A-Z0-9]{5,})/i),
     nationality: normalizeNationality(identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-|recorded\s+as)?\s*([A-Za-z][A-Za-z\s-]{2,30}?)(?=[,;.\n]|\s+(?:residing|reachable|apartment|building|street|email|phone|and|with)\b|$)/i)),
@@ -301,9 +362,9 @@ const filledOr = (value: string | undefined, fallback: string) => {
 const paragraph = (html: string) => `<p style="margin:0 0 12px;line-height:1.65;font-size:12.5px;color:${INK};">${html}</p>`;
 
 const offerClause = (n: number, heading: string, body: string) => `
-  <section data-pdf-section="offer-clause-${n}" style="margin:0 0 13px;page-break-inside:avoid;break-inside:avoid;">
-    <h2 style="margin:0 0 5px;font-size:13px;line-height:1.35;color:${INK};font-weight:700;">${n}. ${esc(heading)}</h2>
-    <p style="margin:0;line-height:1.62;font-size:12.35px;color:${INK};">${body}</p>
+  <section data-pdf-section="offer-clause-${n}" style="margin:0 0 8px;page-break-inside:avoid;break-inside:avoid;">
+    <h2 style="margin:0 0 3px;font-size:12.5px;line-height:1.3;color:${INK};font-weight:700;">${n}. ${esc(heading)}</h2>
+    <p style="margin:0;line-height:1.5;font-size:12px;color:${INK};">${body}</p>
   </section>`;
 
 /* ───────────── Shared building blocks ───────────── */
@@ -436,8 +497,8 @@ const formatMonthlySalary = (value?: string): string => {
 };
 
 /**
- * Unified Compensation & Commission table — ONE table for the Offer Letter.
- * - Top rows: compensation terms (Basic Salary, Allowances, Payment Cycle…);
+ * Unified Salary & Commission table — ONE table for the Offer Letter.
+ * - Top rows: zero-salary / onboarding terms and payment cycle;
  *   empty rows are filtered out, each surviving row has its own delete X.
  * - Sub-header "Commission Tiers" followed by tier rows (Tier · Rate · When
  *   Paid). Each tier row deletable. Legal note rendered below the table.
@@ -536,7 +597,7 @@ export function signatureBlock(opts: {
     <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:7px;line-height:1.35;min-height:20px;overflow:visible;">
       <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
       <span style="display:block;min-height:20px;position:relative;min-width:0;overflow:visible;padding:1px 0;">
-        ${value ? `<span style="display:block;font-size:11px;line-height:1.45;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:230px;overflow:visible;text-overflow:clip;">${value}</span>` : ""}
+        ${value ? `<span style="display:block;font-size:11px;line-height:1.4;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:normal;max-width:100%;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;word-break:normal;">${value}</span>` : ""}
       </span>
     </div>`;
 
@@ -550,8 +611,11 @@ export function signatureBlock(opts: {
   // stamp layer, not duplicated inside this static signature block.
   const stampOverlay = "";
   const ack = (opts.applicantAcknowledgement || "").trim();
-  const lowerPreambleHeight = ack ? 94 : 0;
-  const lowerRowsMinHeight = ack ? 174 : 100;
+  // Acknowledgement no longer has a hard max-height clamp — it must show
+  // the FULL sentence (owner complaint: "I accept full…" was cropped).
+  // Cells expand vertically to fit; both columns share the same min-height
+  // via lowerRowsMinHeight so the baseline alignment is preserved.
+  const lowerRowsMinHeight = ack ? 190 : 100;
 
   // Premium bordered signature box (mirrors institutional NDA layout):
   // a SINGLE gold-hairline frame containing two columns (Authorised
@@ -580,17 +644,16 @@ export function signatureBlock(opts: {
     .map(([label, value]) => row(label, esc(value || "")))
     .join("");
   const ackBlock = ack
-    ? `<div data-applicant-undertaking="1" style="width:100%;max-height:${lowerPreambleHeight}px;overflow:hidden;padding:7px 9px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.35px;line-height:1.28;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
+    ? `<div data-applicant-undertaking="1" style="width:100%;padding:8px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:9px;line-height:1.42;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
-  // Lower signature geometry is locked to the user's marked reference:
-  // after the dashed divider, the applicant undertaking appears FIRST, and
-  // the Name / Title / Date rows are pushed DOWN underneath it. The owner side
-  // receives a matching blank preamble slot so both columns' rows align.
+  // Lower signature geometry: undertaking sits ABOVE Name / Title / Date
+  // rows. The opposite (owner) column gets a matching invisible spacer
+  // whose height equals the rendered ack block so both Name rows align.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 ${lowerPreambleHeight}px;min-height:${lowerPreambleHeight}px;max-height:${lowerPreambleHeight}px;display:flex;align-items:flex-start;margin-bottom:10px;overflow:hidden;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="display:flex;align-items:flex-start;margin-bottom:10px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="flex:0 0 ${lowerPreambleHeight}px;min-height:${lowerPreambleHeight}px;max-height:${lowerPreambleHeight}px;margin-bottom:10px;overflow:hidden;"></div>`
+    ? `<div data-sig-preamble-slot="1" data-sig-spacer="owner" style="margin-bottom:10px;visibility:hidden;">${ackBlock}</div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1" style="margin-top:auto;">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
@@ -732,6 +795,10 @@ function composeJobOffer(input: ComposerInput): string {
   const f = input.fields;
   const id = offerIdentity(f);
   const candidateName = esc(filledOr(id.name || f.recipientName, "[Candidate Name]"));
+  const candidateArabicName = esc(id.arabicName || "");
+  const candidateNameWithArabic = candidateArabicName
+    ? `${candidateName} <span dir="rtl" lang="ar" style="font-family:Inter,system-ui,sans-serif;font-weight:600;white-space:nowrap;">(${candidateArabicName})</span>`
+    : candidateName;
   const address = esc(filledOr(id.address, "[Address]"));
   const email = esc(filledOr(id.email, "[Email]"));
   const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
@@ -755,7 +822,7 @@ function composeJobOffer(input: ComposerInput): string {
   const workingHours = esc(workingHoursRaw).replace(/\n/g, "<br/>");
 
   const candidateIdentity = paragraph(
-    `For identification purposes, this offer is issued to <strong>${candidateName}</strong>, holder of Passport No. <strong>${passport}</strong>, Emirates ID No. <strong>${emiratesId}</strong>, <strong>${nationality}</strong> national, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone / WhatsApp at <strong>${phone}</strong>.`,
+    `For identification purposes, this offer is issued to <strong>${candidateName}</strong>${candidateArabicName ? `, Arabic name as recorded on the identity document: <strong dir="rtl" lang="ar">${candidateArabicName}</strong>` : ""}, holder of Passport No. <strong>${passport}</strong>, Emirates ID No. <strong>${emiratesId}</strong>, <strong>${nationality}</strong> national, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone / WhatsApp at <strong>${phone}</strong>.`,
   );
 
   const replacementParagraph = paragraph(
@@ -776,9 +843,10 @@ function composeJobOffer(input: ComposerInput): string {
 
   const compensationTerms = compensationAndCommissionTable(
     [
-      ["Basic Salary", filledOr(formatMonthlySalary(f.salary), "Not applicable — fixed commission basis"), "salary"],
-      ["Allowances", filledOr(f.allowances, ""), "allowances"],
-      ["Payment Cycle", filledOr(f.paymentCycle, ""), "paymentCycle"],
+      ["Salary", "AED 0 — zero salary. The candidate receives no salary under this conditional offer.", "salary"],
+      ["Commission only before documented onboarding", "Before the first Company-approved deal is closed, the required cleared commission is received by the Company, and formal employment/onboarding is documented and approved in writing, the candidate receives only the commission expressly agreed in the Commission Tiers below, if payable under this document — otherwise nothing else is owed, processed, provided, reimbursed, or promised.", "postFirstDealBenefits"],
+      ["Post-first-deal onboarding items only", "Only after that first-deal milestone and written Company approval: visa processing, Emirates ID, medical insurance, and RERA card only — no other item is included.", "postFirstDealBenefits"],
+      ["Payment Cycle", filledOr(f.paymentCycle, "Upon the Company's receipt of cleared commission"), "paymentCycle"],
     ],
     normalizeOfferCommissionRows(input.commissionRows || []),
   );
@@ -790,24 +858,24 @@ function composeJobOffer(input: ComposerInput): string {
 
   const clauses = [
     offerClause(1, "Nature of This Offer", `This document is <strong>not, by itself, a final UAE employment contract</strong>, work permit, visa sponsorship, labour registration, RERA/DLD registration, broker registration, or unconditional authorization for you to commence formal employment or regulated work with the Company. No formal employment relationship shall commence unless and until all required legal, regulatory, immigration, labour, internal company, and professional registration requirements have been completed and approved in writing by the Company and, where required, by the competent UAE authorities. The purpose of this document is to define the <strong>conditional commercial relationship</strong> between you and the Company before formal onboarding, and to protect the Company's confidential information, leads, data, clients, goodwill, reputation, commission rights, and business opportunities.`),
-    offerClause(2, "Conditional Future Position", `The Company may evaluate you for future onboarding and potential employment as <strong>${jobTitle}</strong>. During this conditional period, the Company may allow you to receive limited introductions, selected company leads, business opportunities, training materials, scripts, company information, business cards, approved title wording, or selected client communications for evaluation, commercial introduction, and business development purposes only. Such limited access does <strong>not</strong> create any salary entitlement, fixed payment entitlement, employment benefit entitlement, visa entitlement, automatic commission entitlement, or authorization to perform any activity that requires a valid UAE work permit, employment contract, broker registration, RERA/DLD approval, or other official authorization. You must comply with all Company instructions and must not act beyond the limited permission granted by the Company.`),
-    offerClause(3, "Commission Milestone Before Full Onboarding", `The Company shall only consider proceeding with full onboarding, a formal employment contract, labour registration, work permit processing, official duties, RERA/DLD registration, and, if requested, visa sponsorship <strong>after you successfully close the first Company-approved transaction and the Company actually receives at least AED 50,000 net cleared commission</strong> from that transaction. For the purpose of this document, <strong>net cleared commission</strong> means the amount actually received by the Company in cleared funds after any refunds, reversals, cancellations, chargebacks, taxes, gateway fees, referral fees, third-party deductions, agreed transaction costs, or any other applicable deductions. A transaction shall not be considered closed merely because of a verbal discussion, WhatsApp message, client interest, viewing, reservation, booking, offer, pending transaction, expected commission, or client promise. A transaction shall be considered closed only when the Company confirms it in writing and the Company has actually received the required cleared funds. Meeting the AED 50,000 net cleared commission milestone does not automatically guarantee employment, visa sponsorship, work permit approval, RERA/DLD registration, continued engagement, fixed salary, or any future commission structure unless confirmed in a separate written agreement signed by the Company.`),
-    offerClause(4, "Future Employment, Visa and Onboarding", `After the AED 50,000 net cleared commission milestone is achieved, the Company may, at its sole discretion, proceed with a formal UAE employment contract and full onboarding. If you request Company visa sponsorship after achieving the milestone, the Company may consider processing it, subject to legal eligibility, document approval, internal approval, government approval, and written Company confirmation. If you already hold a valid lawful UAE visa or residency status and do not request Company visa sponsorship, you may continue under that visa only if all legally required work permits, approvals, registrations, or authorizations are obtained and the arrangement is permitted under applicable UAE law. Nothing in this document shall be interpreted as a promise or guarantee that the Company will sponsor a visa, issue a work permit, register you as an employee, register you with RERA/DLD, or continue the engagement.`),
+    offerClause(2, "Conditional Future Position", `The Company may evaluate you for future onboarding and potential employment as <strong>${jobTitle}</strong>. During this conditional period, the Company may allow you to receive limited introductions, selected company leads, business opportunities, training materials, scripts, company information, business cards, approved title wording, or selected client communications for evaluation, commercial introduction, and business development purposes only. Such limited access does <strong>not</strong> create formal employment/onboarding, payment entitlement, automatic commission entitlement, visa processing, Emirates ID, medical insurance, RERA card, or authorization to perform any activity that requires a valid UAE work permit, employment contract, broker registration, RERA/DLD approval, or other official authorization. <strong>Salary is zero (AED 0)</strong> during this conditional period. You must comply with all Company instructions and must not act beyond the limited permission granted by the Company.`),
+    offerClause(3, "Commission Milestone Before Full Onboarding", `The Company shall only consider proceeding with full onboarding, a formal employment contract, labour registration, work permit processing, official duties, RERA/DLD registration, and Company-supported onboarding items <strong>after you successfully close the first Company-approved transaction and the Company actually receives at least AED 50,000 net cleared commission</strong> from that transaction. For the purpose of this document, <strong>net cleared commission</strong> means the amount actually received by the Company in cleared funds after any refunds, reversals, cancellations, chargebacks, taxes, gateway fees, referral fees, third-party deductions, agreed transaction costs, or any other applicable deductions. A transaction shall not be considered closed merely because of a verbal discussion, WhatsApp message, client interest, viewing, reservation, booking, offer, pending transaction, expected commission, or client promise. A transaction shall be considered closed only when the Company confirms it in writing and the Company has actually received the required cleared funds. Meeting the AED 50,000 net cleared commission milestone does not automatically guarantee formal employment/onboarding, visa processing, work permit approval, RERA/DLD registration, continued engagement, or any future commission structure unless confirmed in a separate written agreement signed by the Company. <strong>Salary is zero (AED 0)</strong>; before documented onboarding, the only monetary entitlement under this conditional offer is the commission expressly agreed in this document and actually payable under its terms.`),
+    offerClause(4, "Future Employment, Visa and Onboarding", `After the AED 50,000 net cleared commission milestone is achieved, the Company may, at its sole discretion, proceed with a formal UAE employment contract and full onboarding. If approved in writing after the first Company-approved deal is closed and the required cleared commission is received, the Company-supported onboarding items are limited to <strong>visa processing, Emirates ID, medical insurance, and RERA card only</strong>. If you already hold a valid lawful UAE visa or residency status and do not request Company visa sponsorship, you may continue under that visa only if all legally required work permits, approvals, registrations, or authorizations are obtained and the arrangement is permitted under applicable UAE law. Nothing in this document shall be interpreted as a promise or guarantee that the Company will sponsor a visa, issue a work permit, register you as an employee, register you with RERA/DLD, issue a RERA card, provide medical insurance, or continue the engagement unless the first-deal milestone is achieved and the Company confirms the next step in writing. No other onboarding item is included under this conditional offer.`),
     offerClause(5, "Business Card, Consultant Title and Limited Representation", `The Company may, at its sole discretion, allow you to use a Company business card, Company-approved title, email signature, introduction wording, or to identify yourself as a <strong>Consultant</strong> connected to the Company for limited business development, client introduction, lead-generation, and commercial communication purposes only. This permission, if granted, is strictly limited. It does not create employment status, agency authority, signing authority, broker authority, visa sponsorship obligation, work permit obligation, or any right to bind the Company. You shall not sign, approve, negotiate as final, amend, commit to, promise, collect, receive, transfer, acknowledge, issue, or accept any payment, deposit, booking amount, commission, agreement, memorandum, offer, reservation, receipt, invoice, undertaking, legal obligation, or commercial obligation on behalf of the Company. You shall not represent to any client, owner, developer, landlord, seller, buyer, tenant, investor, broker, supplier, authority, or third party that you have authority to bind the Company, make final decisions for the Company, approve deals, guarantee availability, guarantee pricing, guarantee commission, or finalize any transaction unless the Company has given specific written authorization for that exact matter. Any business card, title, introduction wording, logo, or Company material provided to you remains the <strong>exclusive property of the Company</strong> and may be withdrawn at any time. Upon request, you must immediately stop using the Company name, logo, business card, title, email signature, introductions, marketing materials, and any other Company identification.`),
     offerClause(6, "No Authority to Bind the Company", `You have <strong>no authority to bind the Company</strong> unless the Company gives prior written approval for the specific matter. You shall not enter into agreements, issue confirmations, approve transactions, accept money, collect deposits, issue receipts, negotiate final terms, make representations, promise outcomes, or create obligations on behalf of the Company. All final approvals, commercial terms, commissions, client commitments, property details, pricing, availability, contracts, and transactions remain subject to the Company's written approval. Any act outside the scope of written authorization shall be your personal responsibility and shall not bind the Company.`),
     offerClause(7, "Confidentiality and Company Information", `You must keep <strong>strictly confidential</strong> all Company information received before, during, or after this conditional offer. Confidential information includes, without limitation, company leads, client names, phone numbers, WhatsApp conversations, CRM data, owner contacts, developer contacts, landlord contacts, seller contacts, buyer contacts, tenant contacts, investor details, broker contacts, supplier details, partner details, pricing information, commission information, property information, photos, videos, floor plans, brochures, listing materials, marketing materials, social media accounts, passwords, login details, emails, call records, scripts, training materials, internal policies, business methods, company strategies, files, documents, and any information related to the Company's business. You shall not disclose, copy, screenshot, export, transfer, sell, leak, misuse, delete, hide, retain, redirect, or use any confidential information except for the sole benefit of the Company and only as expressly authorized by the Company. Your confidentiality obligations shall continue after the expiry, withdrawal, cancellation, termination, or completion of this conditional offer.`),
     offerClause(8, "Ownership of Leads, Clients and Business Opportunities", `All leads, clients, prospects, inquiries, contacts, databases, owners, developers, landlords, sellers, buyers, tenants, investors, brokers, suppliers, partners, business opportunities, property information, and transaction opportunities introduced, generated, received, assigned, accessed, handled, or discussed during this conditional offer are the <strong>exclusive property of the Company</strong>. You shall not treat any Company lead, client, contact, property, business opportunity, WhatsApp conversation, CRM entry, social media inquiry, or database information as your personal property. You shall not close, redirect, transfer, sell, leak, copy, screenshot, export, conceal, delete, bypass, or use any Company lead, client, contact, property owner, developer, investor, or business opportunity outside the Company or through another company, broker, agent, platform, friend, family member, nominee, partner, or third party. Any commission, benefit, referral fee, introduction fee, side payment, gift, reward, or business advantage resulting from Company leads, Company data, Company clients, Company relationships, or Company opportunities shall belong to the Company unless the Company agrees otherwise in writing.`),
     offerClause(9, "Non-Circumvention and Non-Solicitation", `You shall not directly or indirectly approach, solicit, divert, contact, deal with, serve, invoice, refer, transfer, or close any Company client, lead, owner, developer, landlord, seller, buyer, tenant, investor, broker, supplier, employee, consultant, contractor, partner, or business contact for personal benefit or for the benefit of any third party. This restriction applies during this conditional offer and after it ends, to the fullest extent permitted by UAE law. You shall not use any Company relationship, lead, data, or information to bypass the Company, reduce the Company's commission, avoid paying the Company, divert a transaction, or move a client or opportunity to another person or entity.`),
     offerClause(10, "Conflict of Interest and Competing Activity", `You shall not use Company information, Company leads, Company clients, Company contacts, Company training, Company business cards, Company reputation, Company marketing, or Company opportunities to benefit any competing real estate company, broker, agency, developer, platform, property management company, holiday-home company, or other business. You must immediately disclose to the Company any actual or potential conflict of interest, including any work, ownership, partnership, commission arrangement, referral arrangement, consultancy, side business, or relationship with any real estate company or competing business. You shall not create, support, join, assist, own, manage, advise, or work with a competing business using the Company's confidential information, leads, clients, data, relationships, goodwill, or opportunities. Any restriction in this clause shall be interpreted reasonably and only to the extent permitted by UAE law, with the purpose of protecting the Company's legitimate business interests, confidential information, client relationships, leads, commissions, and goodwill.`),
-    offerClause(11, "Commission Before Formal Employment", `Before formal employment is approved and documented, you shall <strong>not</strong> be entitled to any salary, fixed payment, employment benefit, visa benefit, allowance, or automatic commission. Any commission or success fee before formal employment shall only be payable if approved in writing by the Company, and only after the Company has actually received the relevant cleared funds. The Company shall determine in good faith whether a transaction qualifies for commission, whether you were the effective cause of the transaction, whether the transaction was Company-approved, whether the commission was actually received, and whether any deductions, reversals, refunds, cancellations, disputes, or third-party claims apply. No verbal promise, WhatsApp message, client discussion, lead allocation, viewing, booking, pending deal, or expected payment shall create a commission entitlement unless confirmed in writing by the Company. The AED 50,000 net cleared commission milestone must first be achieved before the Company considers full onboarding, formal employment, or further arrangements.`),
+    offerClause(11, "Zero Salary, Commission Only and Limited Onboarding Items", `Before formal employment/onboarding is approved and documented in writing by the Company, <strong>Salary is zero (AED 0)</strong>. No formal employment/onboarding exists unless it is documented in writing after you close the first Company-approved deal and the Company receives the required cleared commission. Until then, your only potential monetary entitlement is the commission expressly agreed above: <strong>65% Broker / 35% Company for Broker-sourced direct deals</strong>, <strong>55% Broker / 45% Company for Company-sourced leads</strong>, and <strong>70% Broker / 30% Company only for Company-approved premium-tier direct deals after AED 10,000,000 Company-recognised sales in one year and written management approval</strong>. Otherwise, nothing else is owed, processed, provided, reimbursed, or promised under this conditional offer. After the first-deal milestone and written Company approval only, the Company-supported onboarding items are limited to <strong>visa processing, Emirates ID, medical insurance, and RERA card only</strong>. No other item is included. Any commission or success fee shall only be payable if approved in writing by the Company and only after the Company has actually received the relevant cleared funds. The Company shall determine in good faith whether a transaction qualifies for commission, whether you were the effective cause of the transaction, whether the transaction was Company-approved, whether the commission was actually received, and whether any deductions, reversals, refunds, cancellations, disputes, or third-party claims apply. No verbal promise, WhatsApp message, client discussion, lead allocation, viewing, booking, pending deal, or expected payment shall create a commission entitlement unless confirmed in writing by the Company.`),
     offerClause(12, "Misuse, Theft or Unauthorized Use of Company Information", `Any theft, copying, screenshotting, exporting, transferring, leaking, selling, deleting, hiding, retaining, concealing, redirecting, or unauthorized personal use of Company data, leads, clients, contacts, WhatsApp conversations, CRM information, owner or developer contacts, photos, videos, listing materials, social media access, files, emails, passwords, or confidential information shall be treated as a <strong>serious breach of trust and confidentiality</strong>. If you misuse Company information or cause the Company any loss, damage, reputational harm, lost commission, lost opportunity, client diversion, regulatory exposure, legal claim, cost, or expense, you shall indemnify and compensate the Company to the fullest extent permitted by UAE law. The Company may seek all available legal remedies, including damages, injunctive relief, recovery of lost commissions, return of information, deletion of unauthorized copies, and any other remedy available under applicable law.`),
     offerClause(13, "Return and Deletion of Company Data", `Upon the Company's request, or upon termination, cancellation, withdrawal, or expiry of this conditional offer, you shall immediately return, delete, and permanently stop using all Company information and materials. This includes, without limitation, business cards, files, contacts, phone numbers, WhatsApp conversations, CRM access, passwords, social media access, emails, documents, screenshots, photographs, videos, property details, client lists, owner lists, developer lists, pricing information, commission information, scripts, marketing materials, and any copies stored on phones, laptops, cloud storage, email accounts, messaging applications, notebooks, or external devices. You shall confirm in writing, if requested by the Company, that all Company information has been returned and deleted and that no copy has been retained.`),
     offerClause(14, "Retroactive Protection", `You acknowledge that you may have received Company leads, client information, business opportunities, documents, communications, introductions, WhatsApp messages, phone numbers, social media information, CRM access, property details, files, or other confidential information before signing this document. Accordingly, all confidentiality, data protection, ownership, non-circumvention, non-solicitation, non-misuse, return, deletion, liability, and indemnity obligations in this document shall apply <strong>retroactively from ${esc(leadsFromHuman)}</strong>, being the first date on which you received Company-related information, leads, contacts, files, messages, introductions, documents, information, or access. For avoidance of doubt, this protection applies to approximately <strong>${esc(leadsCount)} leads</strong> already handled or accessed between <strong>${esc(leadsFromHuman)} and ${esc(signingHuman)}</strong>, together with any and all future leads, client names, phone numbers, social media account links, messages, files, contacts, property details, CRM information, Company communications, and business data assigned, shared, introduced, or made available to you at any time thereafter. These obligations shall continue after this conditional offer ends, regardless of whether you are later hired, onboarded, sponsored, registered, rejected, withdrawn, or not continued.`),
-    offerClause(15, "No Employment Benefits Before Formal Employment", `Until a formal employment contract and all required legal approvals are completed, you shall not be entitled to salary, annual leave, end-of-service gratuity, medical insurance, visa sponsorship, employment benefits, allowances, fixed working hours, employee status, or any other benefit associated with formal employment. Nothing in this clause limits any rights that may be mandatory under applicable UAE law if a competent authority determines that an employment relationship legally exists.`),
+    offerClause(15, "Zero Salary and Limited Onboarding Items", `The agreed salary under this conditional offer is <strong>zero (AED 0)</strong>. Until the first Company-approved deal is closed, the required cleared commission is received by the Company, and formal employment/onboarding is approved and documented in writing, your only monetary entitlement is the commission expressly agreed in this document and actually payable under its terms. Before that documented onboarding approval, the Company shall not process or provide visa processing, Emirates ID, medical insurance, RERA card, or any other onboarding item. After those conditions are satisfied, the only Company-supported onboarding items contemplated by this document are <strong>visa processing, Emirates ID, medical insurance, and RERA card only</strong>, subject always to legal eligibility, government approval, RERA/DLD requirements, internal approval, and written Company confirmation. Nothing else is owed, processed, provided, reimbursed, or promised under this conditional offer unless required by mandatory UAE law or separately agreed in a written document signed by the Company.`),
     offerClause(16, "Compliance With Law and Company Instructions", `You shall comply with all applicable UAE laws, regulations, real estate rules, data protection obligations, professional standards, and Company instructions. You shall act honestly, professionally, transparently, and in good faith. You shall not make false statements, mislead clients, misuse the Company name, promise unavailable properties, guarantee prices, guarantee commissions, accept money, or perform any act that may expose the Company to legal, regulatory, financial, or reputational risk.`),
     offerClause(17, "Company's Right to Withdraw This Offer", `The Company may withdraw, suspend, cancel, or end this conditional offer at any time by written notice if the Company determines that you are not suitable, have failed to meet the required milestone, have breached this document, have misused Company information, have created risk for the Company, or have failed to comply with Company instructions. Upon withdrawal, suspension, cancellation, or termination, you must immediately stop using the Company name, logo, business card, consultant title, introductions, materials, leads, information, and any Company-related identity or access. Your obligations relating to confidentiality, Company data, ownership of leads, non-circumvention, non-solicitation, return of information, deletion of information, liability, indemnity, and dispute resolution shall survive.`),
     offerClause(18, "Governing Law and Jurisdiction", `This document shall be governed by and interpreted in accordance with the laws of the <strong>United Arab Emirates</strong> as applicable in the Emirate of Dubai. Any dispute arising out of or in connection with this document shall be subject to the competent courts, authorities, or tribunals of the United Arab Emirates, unless the Parties agree in writing to another lawful dispute resolution method.`),
-    offerClause(19, "Entire Understanding and Replacement of Previous Drafts", `This document represents the <strong>entire understanding</strong> between the Parties regarding the conditional offer, commission milestone, confidentiality, Company data protection, non-circumvention, non-solicitation, limited representation, and protection of Company interests described herein. This document replaces all previous drafts, versions, discussions, messages, promises, offers, employment offer letters, or understandings relating to the same subject matter, whether oral or written, except for any separate written agreement signed by the Company after the date of this document. No amendment to this document shall be valid unless made in writing and signed by the Company.`),
+    
   ].join("");
 
   const closing = `
@@ -832,7 +900,7 @@ function composeJobOffer(input: ComposerInput): string {
     offerHeaderDetails,
     subjectLine(`CONDITIONAL OFFER, COMMISSION MILESTONE, CONFIDENTIALITY AND COMPANY DATA PROTECTION UNDERTAKING`),
     paragraph(`<strong>Employment Offer – ${jobTitle}</strong>`),
-    paragraph(`Dear ${candidateName},`),
+    paragraph(`Dear ${candidateNameWithArabic},`),
     paragraph(`We are pleased to issue this <strong>conditional offer</strong> for the future position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency holding Trade Licence No. <strong>${JBJ_BRAND.tradeLicense}</strong> and ORN <strong>41486</strong>, subject to the terms set out in this document.`),
     replacementParagraph,
     candidateIdentity,
@@ -849,7 +917,8 @@ function composeJobOffer(input: ComposerInput): string {
       applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
-      applicantAcknowledgement: `I, ${candidateName}, confirm that I have read, understood, and accepted all terms of this Conditional Offer, Commission Milestone, Confidentiality and Company Data Protection Undertaking. I understand that this document does not create formal employment or authorize regulated work unless all required legal approvals and Company authorizations are completed. I agree to protect all Company leads, clients, data, information, business opportunities, reputation, commissions, and commercial interests, and I accept full responsibility for any breach of this document.`,
+      applicantMetaRows: candidateArabicName ? [["Arabic Name", id.arabicName]] : undefined,
+      applicantAcknowledgement: `I, ${candidateName}${candidateArabicName ? ` (${candidateArabicName})` : ""}, confirm that I have read, understood, and accepted all terms of this Conditional Offer, Commission Milestone, Confidentiality and Company Data Protection Undertaking. I understand that this document does not create formal employment or authorize regulated work unless all required legal approvals and Company authorizations are completed. I agree to protect all Company leads, clients, data, information, business opportunities, reputation, commissions, and commercial interests, and I accept full responsibility for any breach of this document.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
@@ -971,6 +1040,7 @@ function composeNda(input: ComposerInput): string {
   const f = input.fields;
   const id = offerIdentity(f);
   const candidateName = esc(filledOr(id.name || f.recipientName, "[Counterparty Name]"));
+  const candidateArabicName = esc(id.arabicName || "");
   const address = esc(filledOr(id.address, "[Address]"));
   const email = esc(filledOr(id.email, "[Email]"));
   const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
@@ -989,6 +1059,7 @@ function composeNda(input: ComposerInput): string {
   const identityTable = termsTable(
     [
       ["Full Legal Name", filledOr(candidateName, ""), "recipientName"],
+      ["Arabic Name as per ID / Passport", filledOr(candidateArabicName, ""), "fullNameArabic"],
       ["Nationality", filledOr(nationality, ""), "nationality"],
       ["Emirates ID", filledOr(emiratesId, ""), "emiratesId"],
       ["Passport Number", filledOr(passport, ""), "passportNumber"],
@@ -1037,11 +1108,12 @@ function composeNda(input: ComposerInput): string {
       applicantTitle: position,
       applicantDate: input.applicantDate,
       applicantLabel: "Recipient Signature",
+      applicantMetaRows: candidateArabicName ? [["Arabic Name", id.arabicName]] : undefined,
       // LOCKED RULE: NDA recipient signature carries the SAME acknowledgement
       // sentence as the Offer Letter recipient signature, worded for the NDA
       // context. Confirms irrevocable acceptance of all NDA terms + loyalty
       // commitment to the Company.
-      applicantAcknowledgement: `I, the undersigned, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, restrictions, non-circumvention, non-compete, lead-ownership and confidentiality undertakings set out in this Non-Disclosure Agreement and its accompanying Offer Letter, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
+      applicantAcknowledgement: `I, ${candidateName}${candidateArabicName ? ` (${candidateArabicName})` : ""}, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, restrictions, non-circumvention, non-compete, lead-ownership and confidentiality undertakings set out in this Non-Disclosure Agreement and its accompanying Offer Letter, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");

@@ -14,7 +14,7 @@
  *   - Footer: single hairline divider, charcoal body, no duplicate legal name
  */
 
-import { JBJ_BRAND, JBJ_GOLD, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
+import { JBJ_BRAND, JBJ_GOLD, JBJ_CHAMPAGNE, jbjMonogramSrc, FOOTER_ICON_SVG } from "@/templates/jbjLockedChrome";
 
 export type LetterheadTheme = "champagne" | "emerald";
 
@@ -24,6 +24,31 @@ const tokens = (theme: LetterheadTheme) =>
     : { bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD, jColor: "#1A1A1A", bColor: JBJ_GOLD };
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
+
+type FooterIconType = "location" | "phone" | "mail" | "globe";
+
+function FooterIcon({ type }: { type: FooterIconType }) {
+  // Inline SVG via dangerouslySetInnerHTML — shared source of truth with
+  // the HTML chrome so preview and html2canvas export rasterize identically.
+  return (
+    <span
+      aria-hidden="true"
+      data-jbj-footer-icon={type}
+      style={{
+        width: 12,
+        height: 14,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flex: "0 0 12px",
+        lineHeight: "14px",
+        overflow: "visible",
+        transform: "translateY(3px)",
+      }}
+      dangerouslySetInnerHTML={{ __html: FOOTER_ICON_SVG[type] }}
+    />
+  );
+}
 
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = tokens(theme);
@@ -129,6 +154,38 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
 export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
+  const rowStyle = {
+    position: "relative" as const,
+    height: 14,
+    lineHeight: "14px",
+    whiteSpace: "nowrap" as const,
+    overflow: "visible" as const,
+  };
+  const iconRowStyle = {
+    height: 14,
+    lineHeight: "14px",
+    display: "grid",
+    gridTemplateColumns: "12px minmax(0, 1fr)",
+    columnGap: 6,
+    alignItems: "center",
+  };
+  const textAfterIconStyle = {
+    minWidth: 0,
+    height: 14,
+    lineHeight: "14px",
+    display: "block",
+    alignSelf: "center",
+    whiteSpace: "nowrap" as const,
+  };
+  const rightItemStyle = {
+    display: "grid",
+    gridTemplateColumns: "12px max-content",
+    columnGap: 6,
+    alignItems: "center",
+    height: 14,
+    lineHeight: "14px",
+    whiteSpace: "nowrap" as const,
+  };
   return (
     <footer
       data-jbj-locked-footer="true"
@@ -154,40 +211,41 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
           alignItems: "center",
         }}
       >
-        <div style={{ minWidth: 0, paddingRight: 14, fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg }}>
-          <span style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0 }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "0 0 10px" }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span style={{ display: "block", whiteSpace: "nowrap", overflow: "visible", textOverflow: "clip" }}>{JBJ_BRAND.address}</span>
-          </span>
+        <div style={{ minWidth: 0, paddingRight: 14, fontSize: 8.5, lineHeight: "14px", color: t.fg, WebkitTextFillColor: t.fg, height: 14, whiteSpace: "nowrap" }}>
+          <div style={{ ...rowStyle, ...iconRowStyle, width: "100%" }}>
+            <FooterIcon type="location" />
+            <span style={textAfterIconStyle}>{JBJ_BRAND.address}</span>
+          </div>
         </div>
-        <div style={{ minWidth: 0, padding: "0 8px", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, fontWeight: 700, lineHeight: 1.35 }}>
+        <div style={{ minWidth: 0, padding: "0 8px", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, fontWeight: 700, lineHeight: "14px", textAlign: "center" }}>
           {phones.map((p, i) => (
-            <div key={p} style={{ whiteSpace: "nowrap", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, minWidth: 0 }}>
+            <div key={p} style={{ ...rowStyle, ...iconRowStyle, width: 132, margin: "0 auto", textAlign: "left" }}>
               {i === 0 ? (
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "0 0 10px" }}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              ) : (
-                <span style={{ display: "inline-block", flex: "0 0 10px" }} />
-              )}
-              <span>{p}</span>
+                <FooterIcon type="phone" />
+              ) : <span aria-hidden="true" style={{ width: 12, height: 14, display: "block" }} />}
+              <span style={textAfterIconStyle}>{p}</span>
             </div>
           ))}
         </div>
-        <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6, whiteSpace: "nowrap" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, minWidth: 0 }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "0 0 10px" }}><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
-            <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700 }}>
-              {JBJ_BRAND.email.toUpperCase()}
-            </a>
-          </span>
-          <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5 }}>·</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "0 0 10px" }}><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em" }}>
-              {JBJ_BRAND.website.toUpperCase()}
-            </a>
-          </span>
+        <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
+          <div style={{ height: 14, lineHeight: "14px", display: "grid", gridTemplateColumns: "max-content 10px max-content", alignItems: "center", justifyContent: "end", columnGap: 6, width: "100%" }}>
+            <span style={rightItemStyle}>
+              <FooterIcon type="mail" />
+              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
+                {JBJ_BRAND.email.toUpperCase()}
+              </a>
+            </span>
+            <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "block", textAlign: "center" }}>·</span>
+            <span style={rightItemStyle}>
+              <FooterIcon type="globe" />
+              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
+                {JBJ_BRAND.website.toUpperCase()}
+              </a>
+            </span>
+          </div>
         </div>
       </div>
     </footer>
+
   );
 }
