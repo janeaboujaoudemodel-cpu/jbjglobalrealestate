@@ -526,7 +526,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 43;
+  const DOCUMENT_FIX_VERSION = 44;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -1141,6 +1141,7 @@ function StudioShell({
     const pick = (...keys: string[]) => keys.map((key) => (source[key] || "").trim()).find(Boolean) || "";
     const developerName = pick("developerName", "developer_name", "developer", "developer_company");
     const clientName = pick(
+      "fullNameAsPerPassport", "passportFullName", "fullNameAsPerId", "fullNameAsPerID", "emiratesIdFullName",
       "recipientName", "employeeName", "employee_name", "guest_name", "client_name", "full_name",
       "landlord_name", "tenant_name", "buyer_name", "seller_name", "applicant_name", "customer_name",
     );
@@ -1443,7 +1444,20 @@ function StudioShell({
 
   const setField = (k: string, v: string) => {
     resumeStructuredSync();
-    setFields((p) => ({ ...p, [k]: v }));
+    setFields((p) => {
+      const alias = /^(recipientName|fullName|full_name|candidateName|fullNameAsPerPassport|passportFullName|fullNameAsPerId|fullNameAsPerID|emiratesIdFullName)$/i.test(k)
+        ? officialNameAlias(v)
+        : undefined;
+      const nextValue = alias?.english || v;
+      const next = { ...p, [k]: nextValue };
+      if (alias?.english) {
+        next.fullNameAsPerPassport = alias.english;
+        next.fullNameAsPerId = alias.english;
+        next.recipientName = alias.english;
+      }
+      if (alias?.arabic && !next.fullNameArabic) next.fullNameArabic = alias.arabic;
+      return next;
+    });
   };
   const applyDeveloperDetails = (developerName: string) => {
     const dev = UAE_DEVELOPERS.find((d) => d.name.toLowerCase() === developerName.trim().toLowerCase());
