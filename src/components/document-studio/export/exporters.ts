@@ -49,8 +49,14 @@ export interface DocumentMarks {
  * Falls back gracefully when no candidate name is supplied.
  */
 function fileName(template: DocumentTemplate, ext: string, candidate?: string | null) {
-  const d = new Date();
-  const datePart = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Dubai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
+  const datePart = `${get("year")}-${get("month")}-${get("day")}`;
   const sanitize = (s: string) =>
     s.normalize("NFKD")
       .replace(/[\u0300-\u036f]/g, "")

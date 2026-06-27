@@ -89,7 +89,29 @@ const PAGE_SIGNATURE_RESERVE = 132;
 const escapeSignatureHtml = (value?: string) =>
   (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
-const todayIso = () => new Date().toISOString().slice(0, 10);
+const todayIso = () => {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Dubai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+};
+const snapDocumentDatesToToday = (values: Record<string, string> = {}) => {
+  const today = todayIso();
+  return {
+    ...values,
+    letterDate: today,
+    preparedDate: today,
+    documentDate: today,
+    signingDate: today,
+    ownerDate: today,
+    applicantDate: today,
+    startDate: today,
+  };
+};
 const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
 const UAE_DEVELOPERS = [
@@ -129,16 +151,26 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         signingDate: today,
         leadsCountAtSigning: "approximately 310",
       };
+    case "nda":
+      return {
+        letterDate: today,
+        preparedDate: today,
+        documentDate: today,
+        startDate: today,
+        signingDate: today,
+        ownerDate: today,
+        applicantDate: today,
+      };
     case "warning_letter":
-      return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
+      return { recipientName: "[Employee Name]", warningLevel: "first", issueDate: today, letterDate: today, signingDate: today, correctiveAction: "Immediate corrective action and written acknowledgement are required." };
     case "termination_letter":
-      return { recipientName: "[Employee Name]", jobTitle: "[Position]", terminationDate: today, lastWorkingDay: today, noticePeriod: "As per UAE Labour Law / employment contract", reason: "business_requirements", returnOfProperty: "Laptop, access cards, keys, documents and all company property", finalSettlement: "Final settlement to be processed after clearance." };
+      return { recipientName: "[Employee Name]", jobTitle: "[Position]", letterDate: today, signingDate: today, terminationDate: today, lastWorkingDay: today, noticePeriod: "As per UAE Labour Law / employment contract", reason: "business_requirements", returnOfProperty: "Laptop, access cards, keys, documents and all company property", finalSettlement: "Final settlement to be processed after clearance." };
     case "developer_commission_invoice":
-      return { developerName: "Emaar Properties", developerContact: "brokerrelations@emaar.ae · +971 4 366 1688", closingDate: today, commissionRate: "2%", paymentTerms: "Net 7 days from invoice date" };
+      return { developerName: "Emaar Properties", developerContact: "brokerrelations@emaar.ae · +971 4 366 1688", letterDate: today, signingDate: today, closingDate: today, commissionRate: "2%", paymentTerms: "Net 7 days from invoice date" };
     case "developer_payment_request":
-      return { developerName: "Emaar Properties", accountsEmail: "brokerrelations@emaar.ae", requestedPaymentDate: today, dueReason: "Closed deal — commission payable after SPA / booking confirmation." };
+      return { developerName: "Emaar Properties", accountsEmail: "brokerrelations@emaar.ae", letterDate: today, signingDate: today, requestedPaymentDate: today, dueReason: "Closed deal — commission payable after SPA / booking confirmation." };
     case "developer_closing_notice":
-      return { developerName: "Emaar Properties", closingDate: today, commissionRate: "2%", brokerName: "JBJ GLOBAL REAL ESTATE" };
+      return { developerName: "Emaar Properties", letterDate: today, signingDate: today, closingDate: today, commissionRate: "2%", brokerName: "JBJ GLOBAL REAL ESTATE" };
     case "maintenance_request":
       return { requestDate: today, priority: "normal", serviceRequired: "General maintenance inspection and required rectification works." };
     case "interior_design_quotation":
@@ -372,7 +404,7 @@ const renderPerPageUserSignature = (name?: string) => {
 
 
 const renderPageGeneratedDate = (): string => {
-  const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+  const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric", timeZone: "Asia/Dubai" });
   return `Generated ${today}`;
 };
 
@@ -699,10 +731,10 @@ function StudioShell({
     // pre-fills when entered via the Offer → NDA companion toggle (handled
     // below). Existing NDA drafts keep their saved fields.
     if (baseTemplateId === "nda" && !snap) {
-      return { ...base };
+      return snapDocumentDatesToToday({ ...base });
     }
-    const merged = { ...base, ...shared, ...(snap?.fields || {}) };
-    return baseTemplateId === "job_offer" ? normalizeJobOfferIdentityFields(snap?.fields || {}, shared) : merged;
+    const merged = snapDocumentDatesToToday({ ...base, ...shared, ...(snap?.fields || {}) });
+    return baseTemplateId === "job_offer" ? snapDocumentDatesToToday(normalizeJobOfferIdentityFields(snap?.fields || {}, shared)) : merged;
   });
 
   // Mirror identity fields to the shared store whenever they change.
@@ -1035,16 +1067,17 @@ function StudioShell({
   // is intentionally ignored so the signing date never drifts behind real
   // time — the only way to pin a non-today date is to explicitly pick one
   // from the date picker after opening the document.
-  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [applicantDate, setApplicantDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [ownerDate, setOwnerDate] = useState<string>(todayIso());
+  const [applicantDate, setApplicantDate] = useState<string>(todayIso());
 
   // On every template change, snap dates forward to today across ALL
   // templates (NDA, Offer Letter, warning, termination, etc.).
   useEffect(() => {
     if (!template?.id) return;
-    const iso = new Date().toISOString().slice(0, 10);
+    const iso = todayIso();
     setOwnerDate(iso);
     setApplicantDate(iso);
+    setFields((prev) => snapDocumentDatesToToday(prev));
   }, [template?.id]);
 
   // Additional signatories (beyond the default Owner + Counterparty).
@@ -1119,13 +1152,15 @@ function StudioShell({
     const p = s.payload || {};
     setTemplateId(s.base_template_id);
     resumeStructuredSync();
-    if (p.fields) setSyncedFields(p.fields);
+    if (p.fields) setSyncedFields(snapDocumentDatesToToday(p.fields));
     if (p.department) setDepartment(p.department);
     if (p.commissionRows) setCommissionRows(p.commissionRows);
     if (p.customFields) setCustomFields(p.customFields);
     if (p.ownerName) setOwnerName(p.ownerName);
     if (p.ownerTitle) setOwnerTitle(p.ownerTitle);
-    if (p.ownerDate) setOwnerDate(p.ownerDate);
+    const iso = todayIso();
+    setOwnerDate(iso);
+    setApplicantDate(iso);
     if (p.hiddenFieldKeys) setHiddenFieldKeys(new Set(p.hiddenFieldKeys));
     if (p.fieldLabelOverrides) setFieldLabelOverrides(p.fieldLabelOverrides);
     if (p.hiddenSections) setHiddenSections(new Set(p.hiddenSections));
@@ -1220,7 +1255,7 @@ function StudioShell({
       if (!booking_id) booking_id = `${"JBJ-DOC"}-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
     }
     const profile = getProfileValues(fields);
-    const nextFields = { ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName };
+    const nextFields = snapDocumentDatesToToday({ ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName });
     if (userEditedRef.current || liveEditedBodyHtmlRef.current) setFields(nextFields);
     else setSyncedFields(nextFields);
     const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
@@ -1325,7 +1360,7 @@ function StudioShell({
 
   const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string; rendered_html?: string | null }) => {
     setTemplateId(d.template_id);
-    setSyncedFields(d.field_values || {});
+    setSyncedFields(snapDocumentDatesToToday(d.field_values || {}));
     if (d.rendered_html) {
       userEditedRef.current = true;
       setUserEdited(true);
@@ -1388,7 +1423,7 @@ function StudioShell({
     showDate?: boolean;
     showSigB?: boolean;
     stampLocked?: boolean;
-  }>(() => ({ showDate: false, showSigB: true, stampLocked: true, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
+  }>(() => ({ showDate: false, showSigB: true, stampLocked: true, ...(snap?.marks || {}), dateValue: todayIso() }));
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -1512,12 +1547,12 @@ function StudioShell({
     if (!dev) return;
     userEditedRef.current = false;
     setUserEdited(false);
-    setFields((p) => ({
+      setFields((p) => snapDocumentDatesToToday({
       ...p,
       developerName: dev.name,
       developerContact: `${dev.email} · ${dev.phone}`,
       accountsEmail: dev.email,
-    }));
+      }));
   };
 
   // Auto-render locked standard body whenever template / fields / commissions /
@@ -1545,9 +1580,10 @@ function StudioShell({
       const forceTemplateResync = (s.templateId === "job_offer" || s.templateId === "nda") && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
       if (s.fields && typeof s.fields === "object") {
         const shared = readSharedIdentity();
-        setFields(forceTemplateResync
+        const nextFields = forceTemplateResync
           ? normalizeJobOfferIdentityFields(s.fields, shared)
-          : (s.templateId === "job_offer" ? normalizeJobOfferIdentityFields(s.fields, shared) : s.fields));
+          : (s.templateId === "job_offer" ? normalizeJobOfferIdentityFields(s.fields, shared) : s.fields);
+        setFields(snapDocumentDatesToToday(nextFields));
       }
       if (forceTemplateResync) {
         userEditedRef.current = false;
@@ -1571,7 +1607,7 @@ function StudioShell({
       // forward to today so the signing line reflects the current day
       // unless the user explicitly edits it after open.
       {
-        const iso = new Date().toISOString().slice(0, 10);
+        const iso = todayIso();
         setOwnerDate(iso);
         setApplicantDate(iso);
       }
@@ -1635,7 +1671,7 @@ function StudioShell({
         if (validPrefillTemplate) {
           setTemplateId(p.templateId);
           if (p?.fields && typeof p.fields === "object") {
-            setSyncedFields((cur) => ({ ...cur, ...p.fields }));
+            setSyncedFields((cur) => snapDocumentDatesToToday({ ...cur, ...p.fields }));
           }
           setStep(2);
           toast.success("Applicant loaded", { description: "Details pre-filled in the Studio." });
@@ -1775,7 +1811,7 @@ function StudioShell({
     const targetId = templateId || initialId;
     clearSession(targetId);
     setCurrentDocId(null);
-    setSyncedFields(getTemplateDefaultFields(targetId));
+    setSyncedFields(snapDocumentDatesToToday(getTemplateDefaultFields(targetId)));
     setCustomFields([]);
     setCommissionRows(DEFAULT_BROKER_COMMISSIONS);
     setExtraSignatories([]);
@@ -1796,12 +1832,10 @@ function StudioShell({
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
-    setSyncedFields(getTemplateDefaultFields(id));
-    if (id === "job_offer") {
-      const iso = new Date().toISOString().slice(0, 10);
-      setOwnerDate(iso);
-      setApplicantDate(iso);
-    }
+    setSyncedFields(snapDocumentDatesToToday(getTemplateDefaultFields(id)));
+    const iso = todayIso();
+    setOwnerDate(iso);
+    setApplicantDate(iso);
     setExtraSignatories([]);
     autoBodyRef.current = "";
     resumeStructuredSync();
@@ -2071,7 +2105,7 @@ function StudioShell({
       await handleSaveDocument({ silent: true });
       const src = pageRef.current;
       const pdfBlob = await exportPdf(currentBody, marks, template, src, undefined, candidateName);
-      const stamp = new Date().toISOString().slice(0, 10);
+      const stamp = todayIso();
       const safeName = candidateName.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_") || "Document";
       const tplIdMap: Record<string, string> = { job_offer: "Offer", offer_letter: "Offer", nda: "NDA", warning_letter: "Warning", termination_letter: "Termination", experience_letter: "Experience", salary_certificate: "Salary", moa: "MOA", invoice: "Invoice", receipt: "Receipt" };
       const safeTpl = tplIdMap[(template.id || "").toLowerCase()] || (template.label || template.id || "Document").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_");
@@ -2376,7 +2410,7 @@ function StudioShell({
                   if (wasOffer) {
                     const shared = readSharedIdentity();
                     if (Object.keys(shared).length) {
-                      setFields((prev) => ({ ...prev, ...shared }));
+                      setFields((prev) => snapDocumentDatesToToday({ ...prev, ...shared }));
                     }
                   }
                 }}
@@ -2563,7 +2597,7 @@ function StudioShell({
                 if (wasOffer) {
                   const shared = readSharedIdentity();
                   if (Object.keys(shared).length) {
-                    setFields((prev) => ({ ...prev, ...shared }));
+                    setFields((prev) => snapDocumentDatesToToday({ ...prev, ...shared }));
                   }
                 }
               }}
@@ -4048,7 +4082,7 @@ function StudioShell({
                                 {isLast && marks.showDate !== false && (
                                   <DraggableMark x={marks.dateXY?.x ?? 556} y={marks.dateXY?.y ?? 8} onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))} onRemove={() => removeMark("date")} ariaLabel="Date" hint="Drag to move">
                                     <div className="text-[11px] uppercase" style={{ color: "#1A1A1A", opacity: 0.42, letterSpacing: "0.22em", fontVariantNumeric: "tabular-nums", textShadow: "0 1px 0 rgba(255,255,255,0.65)" }}>
-                                      {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10)).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                                      {new Date(marks.dateValue || ownerDate || todayIso()).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric", timeZone: "Asia/Dubai" })}
                                     </div>
                                   </DraggableMark>
                                 )}
