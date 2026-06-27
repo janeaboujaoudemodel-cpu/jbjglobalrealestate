@@ -3326,7 +3326,7 @@ function StudioShell({
                                   via CSS mask. It is behind all body text and
                                   tables remain opaque so it never bleeds through
                                   grid/table content. */}
-                              {!noChrome && (
+                              {!noChrome && !isFirst && (
                                 <div
                                   aria-hidden
                                   style={{
