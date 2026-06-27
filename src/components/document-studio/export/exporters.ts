@@ -1051,7 +1051,7 @@ export async function exportPdf(
     onProgress?.(livePages.length, livePages.length);
 
     const blob = pdf.output("blob");
-    triggerDownload(blob, fileName(template, "pdf"));
+    triggerDownload(blob, fileName(template, "pdf", candidateName));
     return blob;
   }
 
