@@ -188,10 +188,10 @@ export function CandidateFoldersPanel({ onOpenDoc }: { onOpenDoc: (id: string) =
             One folder per person — Offer Letters, NDAs and uploaded ID / passport scans kept together. Drag &amp; drop files onto a folder to add them.
           </p>
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="relative flex-1 sm:w-80">
+        <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+          <div className="relative flex-1 min-w-[200px] sm:w-64">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/55" />
-            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name, folder or file…" className="pl-9 bg-[#FDFBF7]" />
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="pl-9 bg-[#FDFBF7]" />
           </div>
           <Button
             type="button"
