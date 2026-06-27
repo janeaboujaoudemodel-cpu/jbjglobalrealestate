@@ -213,6 +213,8 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     fields.surname && fields.givenNames ? `${fields.givenNames} ${fields.surname}` : "",
     fields.lastName && fields.firstName ? `${fields.firstName} ${fields.middleName || ""} ${fields.lastName}` : "",
     mrzName(source),
+    arabicFullName(source),
+    arabicFullName(fields.fullNameArabic || fields.nameArabic || fields.arabicName || ""),
     firstMatch(source, /(?:full\s+name\s+as\s+per\s+passport|name\s+on\s+passport|passport\s+full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
     firstMatch(source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
   ]
