@@ -3118,6 +3118,13 @@ function StudioShell({
                         className="bg-[#FDFBF7] h-7 text-[11px] font-medium"
                       />
                       <Input
+                        value={fields.fullNameArabic || ""}
+                        onChange={(e) => setField("fullNameArabic", e.target.value)}
+                        placeholder="Arabic Name (as per ID / Passport)"
+                        dir="rtl"
+                        className="bg-[#FDFBF7] h-7 text-[11px] font-medium text-right"
+                      />
+                      <Input
                         value={fields.recipientName || ""}
                         onChange={(e) => setField("recipientName", e.target.value)}
                         placeholder="Recipient Name (display)"
