@@ -502,9 +502,6 @@ export function signatureBlock(opts: {
   // a SINGLE gold-hairline frame containing two columns (Authorised
   // Signatory + Recipient) joined together and sharing the middle divider —
   // no gap between cells, identical to the uploaded reference NDA.
-  const lowerPreambleHeight = ack ? 94 : 0;
-  const lowerRowsMinHeight = ack ? 174 : 100;
-
   const cellInner = (sigId: string, heading: string, signatureContent: string, lines: string, isRight: boolean) => `
     <td data-sig-id="${sigId}" style="width:50%;vertical-align:top;padding:0;position:relative;${isRight ? `border-left:1px solid ${GOLD};` : ""}">
       <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
@@ -528,6 +525,8 @@ export function signatureBlock(opts: {
     .map(([label, value]) => row(label, esc(value || "")))
     .join("");
   const ack = (opts.applicantAcknowledgement || "").trim();
+  const lowerPreambleHeight = ack ? 94 : 0;
+  const lowerRowsMinHeight = ack ? 174 : 100;
   const ackBlock = ack
     ? `<div data-applicant-undertaking="1" style="width:100%;max-height:${lowerPreambleHeight}px;overflow:hidden;padding:7px 9px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.35px;line-height:1.28;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
