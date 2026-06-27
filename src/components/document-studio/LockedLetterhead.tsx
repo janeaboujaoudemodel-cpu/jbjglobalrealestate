@@ -14,7 +14,7 @@
  *   - Footer: single hairline divider, charcoal body, no duplicate legal name
  */
 
-import { JBJ_BRAND, JBJ_GOLD, JBJ_CHAMPAGNE, jbjMonogramSrc } from "@/templates/jbjLockedChrome";
+import { JBJ_BRAND, JBJ_GOLD, JBJ_CHAMPAGNE, jbjMonogramSrc, FOOTER_ICON_SVG } from "@/templates/jbjLockedChrome";
 
 export type LetterheadTheme = "champagne" | "emerald";
 
@@ -28,52 +28,14 @@ const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GO
 type FooterIconType = "location" | "phone" | "mail" | "globe";
 
 function FooterIcon({ type }: { type: FooterIconType }) {
-  const iconBoxStyle = {
-    width: 12,
-    height: 14,
-    display: "block",
-    position: "relative" as const,
-    overflow: "visible" as const,
-    flex: "0 0 12px",
-  };
-  const goldFill = { background: JBJ_GOLD, WebkitPrintColorAdjust: "exact" as const, printColorAdjust: "exact" as const };
-  const goldStroke = { borderColor: JBJ_GOLD, WebkitPrintColorAdjust: "exact" as const, printColorAdjust: "exact" as const };
-
-  if (type === "location") {
-    return (
-      <span aria-hidden="true" style={iconBoxStyle}>
-        <span style={{ position: "absolute", left: 2, top: 2, width: 8, height: 8, border: `1.4px solid ${JBJ_GOLD}`, borderRadius: "50%", ...goldStroke }} />
-        <span style={{ position: "absolute", left: 5, top: 5, width: 2.4, height: 2.4, borderRadius: 999, ...goldFill }} />
-      </span>
-    );
-  }
-
-  if (type === "phone") {
-    return (
-      <span aria-hidden="true" style={iconBoxStyle}>
-        <span style={{ position: "absolute", left: 1.5, top: 4.5, width: 10, height: 4.5, borderRadius: 999, transform: "rotate(-32deg)", transformOrigin: "center", ...goldFill }} />
-        <span style={{ position: "absolute", left: 1, top: 3.5, width: 3, height: 3, borderRadius: 999, ...goldFill }} />
-        <span style={{ position: "absolute", right: 0.5, top: 7.2, width: 3, height: 3, borderRadius: 999, ...goldFill }} />
-      </span>
-    );
-  }
-
-  if (type === "mail") {
-    return (
-      <span aria-hidden="true" style={iconBoxStyle}>
-        <span style={{ position: "absolute", left: 1, top: 3, width: 10, height: 8, border: `1.25px solid ${JBJ_GOLD}`, borderRadius: 1.2, ...goldStroke }} />
-        <span style={{ position: "absolute", left: 2.2, top: 5.2, width: 5.4, height: 1.1, transform: "rotate(31deg)", transformOrigin: "left center", ...goldFill }} />
-        <span style={{ position: "absolute", right: 2.2, top: 5.2, width: 5.4, height: 1.1, transform: "rotate(-31deg)", transformOrigin: "right center", ...goldFill }} />
-      </span>
-    );
-  }
-
+  // Inline SVG via dangerouslySetInnerHTML — shared source of truth with
+  // the HTML chrome so preview and html2canvas export rasterize identically.
   return (
-    <span aria-hidden="true" style={iconBoxStyle}>
-      <span style={{ position: "absolute", left: 1.5, top: 2.5, width: 9, height: 9, border: `1.25px solid ${JBJ_GOLD}`, borderRadius: 999, ...goldStroke }} />
-      <span style={{ position: "absolute", left: 5.45, top: 2.5, width: 1.1, height: 9, ...goldFill }} />
-      <span style={{ position: "absolute", left: 2.5, top: 6.45, width: 7, height: 1.1, ...goldFill }} />
-    </span>
+    <span
+      aria-hidden="true"
+      style={{ width: 12, height: 14, display: "inline-block", flex: "0 0 12px", lineHeight: 0 }}
+      dangerouslySetInnerHTML={{ __html: FOOTER_ICON_SVG[type] }}
+    />
   );
 }
 
