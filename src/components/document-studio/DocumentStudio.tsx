@@ -3479,6 +3479,43 @@ function StudioShell({
 
         {/* CENTER — A4 PREVIEW (fixed A4 sheets, smart-cropped) */}
         <main ref={previewWrapRef} className="flex-1 min-w-0 min-h-[52vh] lg:min-h-0 bg-[#EFE6D6] overflow-auto relative border-y lg:border-y-0 lg:border-x border-[#B89555]/35">
+          {aiPreviewSnapshot !== null && (
+            <div
+              data-surface="emerald"
+              data-no-contrast-guard
+              className="sticky top-0 z-30 flex flex-wrap items-center gap-3 px-5 py-3 bg-[var(--jj-emerald-ombre)] border-b border-[#B89555]/70 shadow-md"
+            >
+              <Sparkles className="w-4 h-4 text-white shrink-0" />
+              <span className="text-sm font-semibold text-white">
+                AI preview — review the document, then keep or revert this change.
+              </span>
+              <div className="ml-auto flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const snap = aiPreviewSnapshot;
+                    if (snap !== null) setBodyHtml(snap);
+                    setAiPreviewSnapshot(null);
+                    toast.success("Reverted to previous version");
+                  }}
+                  className="h-9 rounded-lg px-3 text-sm font-semibold bg-white text-[#1A1A1A] border border-[#B89555]/70 hover:bg-[#F7F2EA]"
+                >
+                  Revert
+                </button>
+                <button
+                  type="button"
+                  data-allow-dark-cta
+                  onClick={() => {
+                    setAiPreviewSnapshot(null);
+                    toast.success("Changes kept");
+                  }}
+                  className="h-9 rounded-lg px-3 text-sm font-semibold bg-[#B89555] text-[#1A1A1A] hover:brightness-105"
+                >
+                  Keep changes
+                </button>
+              </div>
+            </div>
+          )}
           <div className="studio-preview-shell min-h-full py-10 px-6">
             {template ? (
               (() => {
