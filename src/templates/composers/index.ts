@@ -457,6 +457,7 @@ export function signatureBlock(opts: {
   applicantDate?: string;
   applicantLabel?: string;
   applicantMetaRows?: Array<[string, string | undefined]>;
+  applicantAcknowledgement?: string;
   extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }): string {
   const oName = esc(opts.ownerName || "Jane Bou Jaoude");
