@@ -802,7 +802,7 @@ export default function JoinApplication() {
             <Card
               id="open-positions"
               data-no-contrast-guard
-              className="careers-card-navy mb-8 rounded-2xl scroll-mt-24 overflow-hidden"
+              className="careers-card-emerald mb-8 rounded-2xl scroll-mt-24 overflow-hidden"
             >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
               <CardHeader className="pt-9 pb-5 relative z-[1]">
@@ -833,7 +833,7 @@ export default function JoinApplication() {
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="careers-blue-field careers-blue-placeholder pl-10 h-12 rounded-lg text-base"
+                    className="jbj-form-field pl-10 h-12 rounded-lg text-base"
                   />
                 </div>
               </CardHeader>
@@ -878,11 +878,11 @@ export default function JoinApplication() {
                   <div className="mt-6 text-center">
                     <Button
                       type="button"
-                      variant="dark"
+                      variant="primary"
                       data-allow-dark-cta
                       data-no-contrast-guard
                       onClick={() => setShowAllPositions((v) => !v)}
-                      className="jj-cta-dark careers-navy-cta rounded-xl px-5 h-11 font-semibold"
+                      className="jj-cta-primary allow-white rounded-xl px-5 h-11 font-semibold"
                     >
                       {showAllPositions ? (
                         <>
@@ -904,14 +904,14 @@ export default function JoinApplication() {
 
           {/* Application Form */}
           <div ref={formAnchorRef} />
-          <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-[0_22px_60px_-40px_rgba(10,10,10,0.45)] overflow-hidden">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/65 shadow-[0_22px_60px_-40px_rgba(10,10,10,0.45)] overflow-hidden">
             <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
             <CardHeader className="text-center pt-10 pb-6">
               <span className="inline-flex items-center justify-center gap-1.5 mx-auto rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A] mb-3 w-fit">
                 <Sparkles className="w-3 h-3" /> Five quick steps · ~3 min
               </span>
-              <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
-              <CardDescription className="careers-gold font-semibold text-base md:text-lg mt-1.5">
+              <CardTitle className="text-4xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">Application Form</CardTitle>
+              <CardDescription className="text-[#1A1A1A]/75 font-semibold text-base md:text-lg mt-1.5">
                 All fields are required · Your progress saves automatically.
               </CardDescription>
             </CardHeader>
@@ -1001,7 +1001,7 @@ export default function JoinApplication() {
                       required
                       aria-required="true"
                       {...invalidProps("firstName")}
-                      className="careers-blue-field h-12 rounded-lg text-base"
+                      className="jbj-form-field h-12 rounded-lg text-base"
                     />
                     <FieldError id="firstName-err" message={fieldErr("firstName")} />
                   </div>
@@ -1016,7 +1016,7 @@ export default function JoinApplication() {
                       required
                       aria-required="true"
                       {...invalidProps("lastName")}
-                      className="careers-blue-field h-12 rounded-lg text-base"
+                      className="jbj-form-field h-12 rounded-lg text-base"
                     />
                     <FieldError id="lastName-err" message={fieldErr("lastName")} />
                   </div>
@@ -1031,7 +1031,7 @@ export default function JoinApplication() {
                     value=""
                     placeholder="you@email.com"
                     disabled
-                    className="careers-blue-field h-12 rounded-lg text-base"
+                    className="jbj-form-field h-12 rounded-lg text-base"
                   />
                   <p className="text-xs text-[#1A1A1A]/70">Email is linked to your account</p>
                 </div>
@@ -1069,7 +1069,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search nationality..."
                       flagType="nationality"
                       disabled={loading}
-                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("nationality") ? "is-invalid" : ""}`}
+                      triggerClassName={`jbj-form-field h-12 rounded-lg ${fieldErr("nationality") ? "is-invalid" : ""}`}
                     />
                     <FieldError id="nationality-err" message={fieldErr("nationality")} />
                   </div>
@@ -1083,7 +1083,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search language..."
                       flagType="language"
                       disabled={loading}
-                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("preferredLanguage") ? "is-invalid" : ""}`}
+                      triggerClassName={`jbj-form-field h-12 rounded-lg ${fieldErr("preferredLanguage") ? "is-invalid" : ""}`}
                     />
                     <FieldError id="preferredLanguage-err" message={fieldErr("preferredLanguage")} />
                   </div>
@@ -1101,7 +1101,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search country..."
                       flagType="country"
                       disabled={loading}
-                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("country") ? "is-invalid" : ""}`}
+                      triggerClassName={`jbj-form-field h-12 rounded-lg ${fieldErr("country") ? "is-invalid" : ""}`}
                     />
                     <FieldError id="country-err" message={fieldErr("country")} />
                   </div>
@@ -1115,7 +1115,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search UAE city..."
                       showFlags={false}
                       disabled={loading}
-                      triggerClassName={`careers-gold-field h-12 rounded-lg ${fieldErr("city") ? "is-invalid" : ""}`}
+                      triggerClassName={`text-[#1A1A1A]/75-field h-12 rounded-lg ${fieldErr("city") ? "is-invalid" : ""}`}
                     />
                     <FieldError id="city-err" message={fieldErr("city")} />
                   </div>
@@ -1157,7 +1157,7 @@ export default function JoinApplication() {
                       searchPlaceholder="Search positions..."
                       showFlags={false}
                       disabled={loading}
-                      triggerClassName={`careers-blue-field h-12 rounded-lg ${fieldErr("positionApplied") ? "is-invalid" : ""}`}
+                      triggerClassName={`jbj-form-field h-12 rounded-lg ${fieldErr("positionApplied") ? "is-invalid" : ""}`}
                     />
                     <FieldError id="positionApplied-err" message={fieldErr("positionApplied")} />
                   </div>
@@ -1328,7 +1328,7 @@ export default function JoinApplication() {
                     variant="outline"
                     onClick={handleBack}
                     disabled={currentStep === 0 || loading}
-                    className="sm:w-40 h-12 rounded-xl border-2 border-[#BFA46A] bg-[#F7F2EA] text-[#071B33] font-semibold disabled:border-[#D5C3A0] disabled:bg-[#F3EBDD] disabled:text-[#7A7469] disabled:opacity-100"
+                    className="sm:w-40 h-12 rounded-xl border-2 border-[#BFA46A] bg-[#F7F2EA] text-[#1A1A1A] font-semibold disabled:border-[#D5C3A0] disabled:bg-[#F3EBDD] disabled:text-[#7A7469] disabled:opacity-100"
                   >
                     <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
                   </Button>
@@ -1346,23 +1346,23 @@ export default function JoinApplication() {
                   {currentStep < TOTAL_STEPS - 1 ? (
                     <Button
                       type="button"
-                      variant="dark"
+                      variant="primary"
                       onClick={handleNext}
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="jj-cta-dark careers-navy-cta sm:w-48 h-12 rounded-xl font-semibold"
+                      className="jj-cta-primary allow-white sm:w-48 h-12 rounded-xl font-semibold"
                     >
                       Continue <ArrowRight className="w-4 h-4 ml-1.5" />
                     </Button>
                   ) : (
                     <Button
                       type="submit"
-                      variant="dark"
+                      variant="primary"
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="jj-cta-dark careers-navy-cta sm:flex-1 h-14 rounded-xl font-bold text-base sm:text-lg"
+                      className="jj-cta-primary allow-white sm:flex-1 h-14 rounded-xl font-bold text-base sm:text-lg"
 
                     >
                       {loading ? (
@@ -1397,12 +1397,12 @@ export default function JoinApplication() {
                     {currentStep < TOTAL_STEPS - 1 ? (
                       <Button
                         type="button"
-                        variant="dark"
+                        variant="primary"
                         onClick={handleNext}
                         disabled={loading}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="jj-cta-dark careers-navy-cta flex-1 font-semibold"
+                        className="jj-cta-primary allow-white flex-1 font-semibold"
                       >
                         Continue · Step {currentStep + 2}
                         <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -1410,11 +1410,11 @@ export default function JoinApplication() {
                     ) : (
                       <Button
                         type="submit"
-                        variant="dark"
+                        variant="primary"
                         disabled={loading}
                         data-allow-dark-cta
                         data-no-contrast-guard
-                        className="jj-cta-dark careers-navy-cta flex-1 font-bold"
+                        className="jj-cta-primary allow-white flex-1 font-bold"
                       >
                         {loading ? (
                           <>

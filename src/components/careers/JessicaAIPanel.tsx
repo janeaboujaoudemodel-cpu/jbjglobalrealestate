@@ -34,11 +34,11 @@ export default function JessicaAIPanel() {
           <div className="relative flex-shrink-0 mx-auto md:mx-0">
             <span
               aria-hidden
-              className="absolute inset-0 rounded-full bg-[#0A0A0A]/30 careers-pulse"
+              className="absolute inset-0 rounded-full bg-[#064E3B]/25 careers-pulse"
             />
             <div
               data-no-contrast-guard
-              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#0A0A0A] to-[#1F1F1F] border border-[#B89555]/70 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_24px_-12px_rgba(10,10,10,0.55)]"
+              className="relative w-20 h-20 rounded-full bg-[image:var(--jj-emerald-ombre)] border border-white/25 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_24px_-12px_rgba(6,78,59,0.65)]"
             >
               <Bot
                 className="w-10 h-10 allow-white"
@@ -94,7 +94,7 @@ export default function JessicaAIPanel() {
               to="/hr-agent"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="careers-white inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555]/70 shadow-[0_8px_22px_-10px_rgba(10,10,10,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] transition-all"
+              className="jj-cta-primary allow-white inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap active:translate-y-[1px] transition-all"
             >
               <MessageCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
               <span className="allow-white" style={{ color: "#FFFFFF" }}>
