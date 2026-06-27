@@ -110,13 +110,13 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   switch (templateId) {
     case "job_offer":
       return {
-        letterDate: "2026-06-20",
+        letterDate: today,
         recipientName: "[Employee Name]",
         homeAddress: "[Employee Address]",
         recipientEmail: "[Employee Email]",
         recipientPhone: "[Employee Phone / WhatsApp]",
         jobTitle: "[Position]",
-        startDate: "2026-06-20",
+        startDate: today,
         probation: "6 months",
         workingHours: JOB_OFFER_WORKING_HOURS,
         annualLeave: "30 calendar days",
@@ -125,8 +125,8 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         salary: "AED 0 — zero salary; commission-only",
         commission: "65% on own direct deals; 55% on Company-sourced deals; 70% Company-approved premium tier only after AED 10,000,000 Company-recognised sales in one year and written management approval",
         paymentCycle: "Upon the Company's receipt of cleared commission",
-        leadsReceivedFrom: "2026-06-20",
-        signingDate: "2026-06-26",
+        leadsReceivedFrom: today,
+        signingDate: today,
         leadsCountAtSigning: "approximately 310",
       };
     case "warning_letter":
@@ -1031,13 +1031,20 @@ function StudioShell({
   // Owner-side signature defaults (editable from the left rail).
   const [ownerName, setOwnerName] = useState<string>(snap?.ownerName || "Jane Bou Jaoude");
   const [ownerTitle, setOwnerTitle] = useState<string>(snap?.ownerTitle || "Founder & CEO");
-  const [ownerDate, setOwnerDate] = useState<string>(snap?.ownerDate || new Date().toISOString().slice(0, 10));
-  const [applicantDate, setApplicantDate] = useState<string>(snap?.applicantDate || ""); // blank by design
+  // Dates ALWAYS default to today on every open. The previous session value
+  // is intentionally ignored so the signing date never drifts behind real
+  // time — the only way to pin a non-today date is to explicitly pick one
+  // from the date picker after opening the document.
+  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [applicantDate, setApplicantDate] = useState<string>(new Date().toISOString().slice(0, 10));
 
+  // On every template change, snap dates forward to today across ALL
+  // templates (NDA, Offer Letter, warning, termination, etc.).
   useEffect(() => {
-    if (template?.id !== "job_offer") return;
-    setOwnerDate("2026-06-26");
-    setApplicantDate("2026-06-26");
+    if (!template?.id) return;
+    const iso = new Date().toISOString().slice(0, 10);
+    setOwnerDate(iso);
+    setApplicantDate(iso);
   }, [template?.id]);
 
   // Additional signatories (beyond the default Owner + Counterparty).
@@ -1560,12 +1567,13 @@ function StudioShell({
       setStep(typeof s.step === "number" ? (s.step as Step) : 2);
       if (typeof s.ownerName === "string") setOwnerName(s.ownerName);
       if (typeof s.ownerTitle === "string") setOwnerTitle(s.ownerTitle);
-      if (forceTemplateResync && s.templateId === "job_offer") {
-        setOwnerDate("2026-06-26");
-        setApplicantDate("2026-06-26");
-      } else {
-        if (typeof s.ownerDate === "string") setOwnerDate(s.ownerDate);
-        if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
+      // Dates are NEVER restored from a stale session — they always snap
+      // forward to today so the signing line reflects the current day
+      // unless the user explicitly edits it after open.
+      {
+        const iso = new Date().toISOString().slice(0, 10);
+        setOwnerDate(iso);
+        setApplicantDate(iso);
       }
       if (Array.isArray(s.extraSignatories)) setExtraSignatories(s.extraSignatories);
       if (forceTemplateResync && s.templateId === "job_offer") setHiddenFieldKeys(new Set());
@@ -1790,8 +1798,9 @@ function StudioShell({
     setTemplateId(id);
     setSyncedFields(getTemplateDefaultFields(id));
     if (id === "job_offer") {
-      setOwnerDate("2026-06-26");
-      setApplicantDate("2026-06-26");
+      const iso = new Date().toISOString().slice(0, 10);
+      setOwnerDate(iso);
+      setApplicantDate(iso);
     }
     setExtraSignatories([]);
     autoBodyRef.current = "";
