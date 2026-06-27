@@ -556,7 +556,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     // Flat — no per-row backgrounds, no hover/selected tint. Whole list shares
     // one uniform champagne surface so there are no visible "highlight" boxes
     // around each row.
-    const commandItemStyles = "text-[#1A1A1A] bg-transparent hover:bg-[#EFE6D6] data-[selected=true]:bg-[#EFE6D6] data-[selected=true]:text-[#1A1A1A] aria-selected:bg-[#EFE6D6]";
+    const commandItemStyles = "text-[#1A1A1A] bg-transparent hover:bg-transparent data-[selected=true]:bg-transparent data-[selected=true]:text-[#1A1A1A] aria-selected:bg-transparent";
     const commandEmptyStyles = isLight
       ? "text-[#1A1A1A]/70"
       : "text-[#1A1A1A]/70";
@@ -627,7 +627,6 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                           onSelect={() => handleCodeChange(country.code)}
                           className={cn("cursor-pointer py-2.5 px-2 rounded-md", commandItemStyles)}
                           data-no-contrast-guard
-                          data-phone-country-item
                           style={{ color: "#1A1A1A" }}
                         >
                           <span className="flex items-center gap-3 w-full" style={{ color: "#1A1A1A" }}>

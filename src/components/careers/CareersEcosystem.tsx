@@ -2,7 +2,6 @@ import {
   Building2, Users, Bot, GraduationCap, Globe2, Megaphone,
   Sparkles, Award, Briefcase,
 } from "lucide-react";
-import { IconTile } from "@/components/ui/icon-tile";
 
 interface PillarTile {
   icon: React.ElementType;
@@ -98,7 +97,9 @@ export function CareersEcosystem() {
                 <div className="pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full bg-[#047857]/[0.06] blur-3xl group-hover:bg-[#047857]/[0.10] transition" />
 
                 <div className="relative">
-                  <IconTile icon={Icon as any} tone="emerald" size="lg" />
+                  <div className="grid h-12 w-12 place-items-center rounded-xl border border-[#047857]/35 bg-gradient-to-br from-[#FFFDF8] to-[#EEF7F1] shadow-[0_12px_26px_-18px_rgba(6,78,59,0.28)]">
+                    <Icon className="h-6 w-6 text-[#047857]" strokeWidth={2} />
+                  </div>
                   <h3 className="mt-4 text-lg font-semibold text-[#1A1A1A] leading-snug tracking-tight">
                     {tile.title}
                   </h3>
@@ -107,7 +108,7 @@ export function CareersEcosystem() {
                   </p>
                 </div>
 
-
+                <div className="absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-[#047857]/30 to-transparent" />
               </article>
 
             );

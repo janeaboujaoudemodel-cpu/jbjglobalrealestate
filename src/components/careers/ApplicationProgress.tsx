@@ -35,10 +35,10 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
 
 
   return (
-    <div className="rounded-2xl border border-[#B89555]/45 bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.96))] p-5 shadow-[0_18px_42px_-30px_rgba(6,78,59,0.18)]">
+    <div className="rounded-2xl border border-[#047857]/25 bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.96))] p-5 shadow-[0_18px_42px_-30px_rgba(6,78,59,0.18)]">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#064E3B]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#047857]">
             Application Progress
           </p>
           <p
@@ -58,11 +58,11 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
           </p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-[#064E3B] leading-none">{pct}%</p>
+          <p className="text-2xl font-bold text-[#047857] leading-none">{pct}%</p>
         </div>
       </div>
 
-      <div className="relative h-2.5 w-full overflow-hidden rounded-full border border-[#B89555]/35 bg-[#EFE6D6] mb-4 shadow-inner">
+      <div className="relative h-2.5 w-full overflow-hidden rounded-full border border-[#047857]/20 bg-[#047857]/10 mb-4 shadow-inner">
         <div
           className="absolute left-0 top-0 h-full rounded-full shadow-[0_6px_16px_-8px_rgba(6,78,59,0.55)] transition-all duration-500"
           style={{ width: `${pct}%`, background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)' }}
@@ -85,8 +85,8 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
                 "flex min-h-[40px] items-center gap-2 rounded-full border px-3.5 py-2.5 text-xs font-semibold transition-all",
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
-                  ? "jj-cta-primary allow-white data-[allow-dark-cta]:text-white"
-                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/45 hover:border-[#BFA46A] hover:shadow-[0_14px_22px_-18px_rgba(7,27,51,0.4)]"
+                  ? "careers-pill-active allow-white data-[allow-dark-cta]:text-white"
+                  : "careers-pill-inactive hover:border-[#BFA46A] hover:shadow-[0_14px_22px_-18px_rgba(7,27,51,0.4)]"
               )}
 
               style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}

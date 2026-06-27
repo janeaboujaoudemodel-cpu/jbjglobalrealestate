@@ -65,7 +65,7 @@ export function CareersFAQ() {
                   onClick={() => setOpenIdx(open ? null : i)}
                   className={cn(
                     "flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors",
-                    open ? "bg-[#FDFBF7]" : "bg-transparent"
+                    open ? "bg-[#EEF7F1]" : "bg-transparent"
                   )}
                   aria-expanded={open}
                 >
@@ -75,7 +75,9 @@ export function CareersFAQ() {
                     data-no-contrast-guard
                     className={cn(
                       "allow-white grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
-                      "border-white/20 bg-[image:var(--jj-emerald-ombre)] shadow-[0_12px_22px_-12px_rgba(6,78,59,0.45)]"
+                      open
+                        ? "border-[#047857] bg-[image:var(--jj-emerald-ombre)] shadow-[0_12px_22px_-12px_rgba(6,78,59,0.45)]"
+                        : "border-[#047857]/40 bg-[#F7F2EA]"
                     )}
                   >
                     {open ? (
@@ -87,9 +89,9 @@ export function CareersFAQ() {
                       />
                     ) : (
                       <ChevronDown
-                        className="h-4 w-4 allow-white"
+                        className="h-4 w-4"
                         data-no-contrast-guard
-                        style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }}
+                        style={{ color: "#047857", stroke: "#047857", opacity: 1 }}
                         strokeWidth={2.5}
                       />
                     )}
