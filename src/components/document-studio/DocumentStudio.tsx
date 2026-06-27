@@ -2264,7 +2264,14 @@ function StudioShell({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigate("/owner/documents/forms?tab=candidates")}
+              onClick={() => {
+                // Close the studio dialog first, then route to the Candidates
+                // tab. Without closing, the modal would cover the new tab.
+                try { onClose(); } catch {}
+                window.setTimeout(() => {
+                  navigate("/owner/documents/forms?tab=candidates");
+                }, 50);
+              }}
               title="Open candidate folders"
               className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
             >
