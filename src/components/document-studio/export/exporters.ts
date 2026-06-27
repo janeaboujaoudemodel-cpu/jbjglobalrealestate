@@ -803,6 +803,12 @@ export async function exportPdf(
           ctx.fillStyle = EXPORT_PAGE_BACKGROUND;
           ctx.fillRect(0, 0, slice.width, slice.height);
           ctx.drawImage(stack, 0, i * pageSliceH, stack.width, pageSliceH, 0, 0, slice.width, slice.height);
+          // Final export-only footer lock: after slicing the stacked capture into
+          // separate A4 pages, repaint the locked footer directly on the page
+          // slice from the live page geometry. This prevents the last-page footer
+          // from being lost or vertically shifted by html2canvas/svg baseline
+          // rasterisation while leaving the preview DOM completely untouched.
+          drawLockedFooterFromSourcePage(slice, livePages[i]);
           if (isCanvasVisuallyBlank(slice)) throw new Error(`Fast stacked capture produced a blank page ${i + 1}`);
           const data = await canvasToJpegBytes(slice);
           if (i > 0) pdf.addPage();
@@ -824,6 +830,7 @@ export async function exportPdf(
         const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
           renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
         );
+        drawLockedFooterFromSourcePage(canvas, livePages[i]);
         const data = await canvasToJpegBytes(canvas);
         canvas.width = 0; canvas.height = 0;
         if (i > 0) pdf.addPage();
