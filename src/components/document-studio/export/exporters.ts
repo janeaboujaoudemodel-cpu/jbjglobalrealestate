@@ -716,7 +716,6 @@ function drawPdfFooterIcon(pdf: any, kind: FooterIconKind, x: number, y: number,
     pdf.roundedRect(x + size * 0.28, y + size * 0.08, size * 0.44, size * 0.84, size * 0.08, size * 0.08, "S");
     pdf.line(x + size * 0.42, y + size * 0.18, x + size * 0.58, y + size * 0.18);
     pdf.circle(x + size * 0.5, y + size * 0.82, size * 0.045, "S");
-  }
   } else if (kind === "mail") {
     pdf.roundedRect(x + size * 0.1, y + size * 0.24, size * 0.8, size * 0.56, 0.35, 0.35, "S");
     pdf.line(x + size * 0.16, y + size * 0.31, x + size * 0.5, y + size * 0.55);
