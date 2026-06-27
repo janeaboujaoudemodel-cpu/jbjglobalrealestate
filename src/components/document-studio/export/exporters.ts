@@ -556,16 +556,46 @@ export async function exportPdf(
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
     onProgress?.(0, livePages.length);
-    for (let i = 0; i < livePages.length; i += 1) {
-      onProgress?.(i, livePages.length);
-      await yieldToUi();
-      const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
-        renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
-      );
-      const data = await canvasToJpegBytes(canvas);
-      canvas.width = 0; canvas.height = 0;
-      if (i > 0) pdf.addPage();
-      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+    let usedStack = false;
+    if (livePages.length > 1) {
+      try {
+        const stack = await renderLivePagesStackCanvas(livePages, PDF_PAGE_SCALE);
+        const pageSliceH = Math.round(stack.height / livePages.length);
+        const slice = document.createElement("canvas");
+        slice.width = stack.width;
+        slice.height = pageSliceH;
+        const ctx = slice.getContext("2d")!;
+        for (let i = 0; i < livePages.length; i += 1) {
+          onProgress?.(i, livePages.length);
+          ctx.fillStyle = EXPORT_PAGE_BACKGROUND;
+          ctx.fillRect(0, 0, slice.width, slice.height);
+          ctx.drawImage(stack, 0, i * pageSliceH, stack.width, pageSliceH, 0, 0, slice.width, slice.height);
+          if (isCanvasVisuallyBlank(slice)) throw new Error(`Fast stacked capture produced a blank page ${i + 1}`);
+          const data = await canvasToJpegBytes(slice);
+          if (i > 0) pdf.addPage();
+          pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+          await yieldToUi();
+        }
+        slice.width = 0; slice.height = 0;
+        stack.width = 0; stack.height = 0;
+        usedStack = true;
+      } catch (error) {
+        console.warn("[DocumentStudio] fast stacked export fallback", error);
+      }
+    }
+
+    if (!usedStack) {
+      for (let i = 0; i < livePages.length; i += 1) {
+        onProgress?.(i, livePages.length);
+        await yieldToUi();
+        const canvas = await renderFastPageCanvas(livePages[i], PDF_PAGE_SCALE).catch(() =>
+          renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE),
+        );
+        const data = await canvasToJpegBytes(canvas);
+        canvas.width = 0; canvas.height = 0;
+        if (i > 0) pdf.addPage();
+        pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+      }
     }
 
     onProgress?.(livePages.length, livePages.length);
