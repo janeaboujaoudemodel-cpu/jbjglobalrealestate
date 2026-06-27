@@ -2358,7 +2358,7 @@ function StudioShell({
             <Button
               variant="primary"
               size="sm"
-              onClick={handleSaveDocument}
+              onClick={() => handleSaveDocument()}
               disabled={saveDocMutation.isPending}
               title="Save this filled document to My Documents"
               className=""
