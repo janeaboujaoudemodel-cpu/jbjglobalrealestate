@@ -39800,6 +39800,7 @@ export type Database = {
         Args: { _project_id: string }
         Returns: string[]
       }
+      purge_deleted_candidate_data: { Args: never; Returns: undefined }
       purge_deleted_esign_envelopes: { Args: never; Returns: Json }
       purge_old_deleted_documents: { Args: never; Returns: undefined }
       purge_soft_deleted_documents: { Args: never; Returns: undefined }
