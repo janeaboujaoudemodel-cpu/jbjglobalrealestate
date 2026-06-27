@@ -597,7 +597,7 @@ export function signatureBlock(opts: {
     <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:7px;line-height:1.35;min-height:20px;overflow:visible;">
       <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
       <span style="display:block;min-height:20px;position:relative;min-width:0;overflow:visible;padding:1px 0;">
-        ${value ? `<span style="display:block;font-size:11px;line-height:1.45;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:230px;overflow:visible;text-overflow:clip;">${value}</span>` : ""}
+        ${value ? `<span style="display:block;font-size:11px;line-height:1.4;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:normal;max-width:100%;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;word-break:normal;">${value}</span>` : ""}
       </span>
     </div>`;
 
@@ -795,6 +795,10 @@ function composeJobOffer(input: ComposerInput): string {
   const f = input.fields;
   const id = offerIdentity(f);
   const candidateName = esc(filledOr(id.name || f.recipientName, "[Candidate Name]"));
+  const candidateArabicName = esc(id.arabicName || "");
+  const candidateNameWithArabic = candidateArabicName
+    ? `${candidateName} <span dir="rtl" lang="ar" style="font-family:Inter,system-ui,sans-serif;font-weight:600;white-space:nowrap;">(${candidateArabicName})</span>`
+    : candidateName;
   const address = esc(filledOr(id.address, "[Address]"));
   const email = esc(filledOr(id.email, "[Email]"));
   const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
@@ -818,7 +822,7 @@ function composeJobOffer(input: ComposerInput): string {
   const workingHours = esc(workingHoursRaw).replace(/\n/g, "<br/>");
 
   const candidateIdentity = paragraph(
-    `For identification purposes, this offer is issued to <strong>${candidateName}</strong>, holder of Passport No. <strong>${passport}</strong>, Emirates ID No. <strong>${emiratesId}</strong>, <strong>${nationality}</strong> national, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone / WhatsApp at <strong>${phone}</strong>.`,
+    `For identification purposes, this offer is issued to <strong>${candidateName}</strong>${candidateArabicName ? `, Arabic name as recorded on the identity document: <strong dir="rtl" lang="ar">${candidateArabicName}</strong>` : ""}, holder of Passport No. <strong>${passport}</strong>, Emirates ID No. <strong>${emiratesId}</strong>, <strong>${nationality}</strong> national, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone / WhatsApp at <strong>${phone}</strong>.`,
   );
 
   const replacementParagraph = paragraph(
@@ -895,7 +899,7 @@ function composeJobOffer(input: ComposerInput): string {
     offerHeaderDetails,
     subjectLine(`CONDITIONAL OFFER, COMMISSION MILESTONE, CONFIDENTIALITY AND COMPANY DATA PROTECTION UNDERTAKING`),
     paragraph(`<strong>Employment Offer – ${jobTitle}</strong>`),
-    paragraph(`Dear ${candidateName},`),
+    paragraph(`Dear ${candidateNameWithArabic},`),
     paragraph(`We are pleased to issue this <strong>conditional offer</strong> for the future position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency holding Trade Licence No. <strong>${JBJ_BRAND.tradeLicense}</strong> and ORN <strong>41486</strong>, subject to the terms set out in this document.`),
     replacementParagraph,
     candidateIdentity,
@@ -912,7 +916,8 @@ function composeJobOffer(input: ComposerInput): string {
       applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
-      applicantAcknowledgement: `I, ${candidateName}, confirm that I have read, understood, and accepted all terms of this Conditional Offer, Commission Milestone, Confidentiality and Company Data Protection Undertaking. I understand that this document does not create formal employment or authorize regulated work unless all required legal approvals and Company authorizations are completed. I agree to protect all Company leads, clients, data, information, business opportunities, reputation, commissions, and commercial interests, and I accept full responsibility for any breach of this document.`,
+      applicantMetaRows: candidateArabicName ? [["Arabic Name", id.arabicName]] : undefined,
+      applicantAcknowledgement: `I, ${candidateName}${candidateArabicName ? ` (${candidateArabicName})` : ""}, confirm that I have read, understood, and accepted all terms of this Conditional Offer, Commission Milestone, Confidentiality and Company Data Protection Undertaking. I understand that this document does not create formal employment or authorize regulated work unless all required legal approvals and Company authorizations are completed. I agree to protect all Company leads, clients, data, information, business opportunities, reputation, commissions, and commercial interests, and I accept full responsibility for any breach of this document.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
