@@ -793,6 +793,7 @@ function composeJobOffer(input: ComposerInput): string {
       applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
+      applicantAcknowledgement: `I, the undersigned, confirm my acceptance to the above terms and conditions and further confirm my employment with ${companyName}. I shall ensure full and absolute loyalty to the company, by word and deed and during my employment with the company, shall not at any time conduct myself in a manner that can be construed to be an act or statement that would undermine the authority of ${companyName}.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
