@@ -85,24 +85,6 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-// Premium footer icons — solid gold inline SVGs. Rasterize identically in
-// preview and html2canvas/jspdf export (no absolute-positioned spans, no glyph fonts).
-// Keep the SVG viewport 14px high but the drawing box 12px tall, centered by
-// the parent grid/flex cell. This prevents html2canvas from lifting icons above
-// the text baseline during PDF rasterization.
-export const FOOTER_ICON_SVG: Record<"location" | "phone" | "mail" | "globe", string> = {
-  // Refined map pin with hollow ring center
-  location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><path d="M8 1.4c-2.76 0-5 2.18-5 4.86 0 3.55 4.34 8 4.52 8.19a.66.66 0 0 0 .96 0C8.66 14.26 13 9.81 13 6.26 13 3.58 10.76 1.4 8 1.4Z" fill="${JBJ_GOLD}"/><circle cx="8" cy="6.2" r="1.75" fill="${JBJ_CHAMPAGNE}"/></svg>`,
-  // Classic handset silhouette
-  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><path d="M3.62 1.6a1.4 1.4 0 0 1 1.96.32l1.3 1.8a1.4 1.4 0 0 1-.18 1.83l-.86.8a.5.5 0 0 0-.1.6 8.6 8.6 0 0 0 3.3 3.3.5.5 0 0 0 .6-.1l.8-.86a1.4 1.4 0 0 1 1.83-.18l1.8 1.3a1.4 1.4 0 0 1 .32 1.96l-.6.84a2.3 2.3 0 0 1-2.5.9C7.4 12.92 3.08 8.6 1.88 4.3a2.3 2.3 0 0 1 .9-2.5l.84-.2Z" fill="${JBJ_GOLD}"/></svg>`,
-  // Envelope (kept — user said email is okay)
-  mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><rect x="1.6" y="3.6" width="12.8" height="8.8" rx="1.2" fill="${JBJ_GOLD}"/><path d="M2.4 4.6 8 8.6l5.6-4" stroke="${JBJ_CHAMPAGNE}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  // Premium globe with meridians + equator
-  globe: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;"><circle cx="8" cy="8" r="6.2" fill="${JBJ_GOLD}"/><ellipse cx="8" cy="8" rx="2.6" ry="6.2" fill="none" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="1.8" y1="8" x2="14.2" y2="8" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="8" y1="1.8" x2="8" y2="14.2" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/></svg>`,
-};
-
-const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => FOOTER_ICON_SVG[type];
-
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
   const monogram = `<img src="${monogramSrc}" alt="JBJ" aria-label="JBJ" role="img" style="width:184px;height:184px;object-fit:contain;display:block;${monogramImgStyle(theme)}" />`;
@@ -133,11 +115,6 @@ export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
 export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
-  const rowStyle = "position:relative;height:14px;line-height:14px;white-space:nowrap;overflow:visible;";
-  const iconRowStyle = "height:14px;line-height:14px;display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:6px;align-items:center;";
-  const textAfterIconStyle = "min-width:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
-  const rightItemStyle = "display:grid;grid-template-columns:12px max-content;column-gap:6px;align-items:center;height:14px;line-height:14px;white-space:nowrap;";
-  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(4px);";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;
@@ -154,29 +131,26 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
     box-sizing:border-box;
   ">
     <div style="width:100%;height:58px;display:grid;grid-template-columns:42% 24% 34%;align-items:center;">
-      <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:14px;height:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};white-space:nowrap;">
-        <div style="${rowStyle}${iconRowStyle}width:100%;">
-          <span data-jbj-footer-icon="location" style="${iconSlotStyle}">${footerIconHtml("location")}</span>
-          <span style="${textAfterIconStyle}">${JBJ_BRAND.address}</span>
-        </div>
+      <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:1.25;color:${t.fg};-webkit-text-fill-color:${t.fg};">
+        <span style="display:flex;align-items:center;gap:5px;min-width:0;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span style="display:block;white-space:nowrap;overflow:visible;text-overflow:clip;">${JBJ_BRAND.address}</span>
+        </span>
       </div>
-      <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:14px;text-align:center;">
-        ${phones.map((p, i) => `<div style="${rowStyle}${iconRowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? `<span data-jbj-footer-icon="phone" style="${iconSlotStyle}">${footerIconHtml("phone")}</span>` : `<span aria-hidden="true" style="width:12px;height:14px;display:block;"></span>`}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
+      <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:1.35;">
+        ${phones.map((p, i) => `<div style="white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;">${i === 0 ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>` : `<span style="display:inline-block;flex:0 0 10px;"></span>`}<span>${p}</span></div>`).join("")}
       </div>
-      <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};text-align:right;white-space:nowrap;height:14px;line-height:14px;">
-        <div style="height:14px;line-height:14px;display:grid;grid-template-columns:max-content 10px max-content;align-items:center;justify-content:end;column-gap:6px;width:100%;">
-          <span style="${rightItemStyle}">
-            <span data-jbj-footer-icon="mail" style="${iconSlotStyle}">${footerIconHtml("mail")}</span>
-            <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;line-height:14px;display:block;">${JBJ_BRAND.email.toUpperCase()}</a>
-          </span>
-          <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:block;text-align:center;">·</span>
-          <span style="${rightItemStyle}">
-            <span data-jbj-footer-icon="globe" style="${iconSlotStyle}">${footerIconHtml("globe")}</span>
-            <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;line-height:14px;display:block;">${JBJ_BRAND.website.toUpperCase()}</a>
-          </span>
-        </div>
+      <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};display:flex;align-items:center;justify-content:flex-end;gap:6px;white-space:nowrap;">
+        <span style="display:inline-flex;align-items:center;gap:5px;min-width:0;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+          <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;">${JBJ_BRAND.email.toUpperCase()}</a>
+        </span>
+        <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;">·</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;">${JBJ_BRAND.website.toUpperCase()}</a>
+        </span>
       </div>
-
     </div>
   </footer>`;
 };
