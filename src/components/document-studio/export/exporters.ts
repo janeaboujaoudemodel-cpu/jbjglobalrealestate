@@ -230,12 +230,12 @@ function hashString(value: string) {
 }
 
 function getPagesSignature(pages: HTMLElement[]) {
-  return pages
+  return `${PDF_EXPORT_VERSION}:count=${pages.length};` + pages
     .map((page) => {
       const mediaKey = Array.from(page.querySelectorAll<HTMLImageElement | SVGElement>("img,svg"))
         .map((node) => node instanceof HTMLImageElement ? node.currentSrc || node.src || "img" : node.getAttribute("data-icon") || node.outerHTML.length)
         .join("~");
-      return `${PDF_EXPORT_VERSION}:${page.offsetWidth}x${page.offsetHeight}:${page.textContent || ""}:${mediaKey}`;
+      return `${page.offsetWidth}x${page.offsetHeight}:${page.textContent || ""}:${mediaKey}`;
     })
     .map((value) => hashString(value))
     .join("|");
@@ -338,11 +338,11 @@ export async function exportPdf(
     const inflight = sourceElement ? pdfPageInflight.get(sourceElement) : undefined;
     if (inflight) await inflight;
     const cached = sourceElement ? pdfPageCache.get(sourceElement) : undefined;
-    if (cached?.signature === signature && cached.blob) {
+    if (cached?.signature === signature && cached.blob && cached.pages.length === livePages.length) {
       triggerDownload(cached.blob, fileName(template, "pdf"));
       return cached.blob;
     }
-    const pageImages = cached?.signature === signature
+    const pageImages = cached?.signature === signature && cached.pages.length === livePages.length
       ? cached.pages
       : await renderPdfPageImages(livePages, onProgress);
 
