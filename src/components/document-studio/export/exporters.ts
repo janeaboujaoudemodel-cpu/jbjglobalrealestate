@@ -700,21 +700,36 @@ function drawPdfFooterIcon(pdf: any, kind: FooterIconKind, x: number, y: number,
   setPdfHex(pdf, "setDrawColor", JBJ_GOLD);
   pdf.setLineWidth(0.22);
   if (kind === "location") {
-    // Map-pin teardrop using two symmetric bezier curves + inner dot.
-    const cx = x + size * 0.5;
+    // Map-pin teardrop: mirror the locked preview SVG, not a generic glyph.
+    const s = size / 16;
     pdf.lines(
       [
-        [-0.45, -0.43, -0.45, -0.93, 0, -0.93],
-        [0.45, 0, 0.45, 0.50, 0, 0.93],
+        [-5 * s, -4.45 * s, -5 * s, -13.25 * s, 0, -13.25 * s],
+        [5 * s, 0, 5 * s, 8.8 * s, 0, 13.25 * s],
       ],
-      cx, y + size * 0.98, [size, size], "S", true,
+      x + 8 * s, y + 14.25 * s, [1, 1], "S", true,
     );
-    pdf.circle(cx, y + size * 0.38, size * 0.13, "S");
+    pdf.circle(x + 8 * s, y + 6.25 * s, 1.72 * s, "S");
   } else if (kind === "phone") {
-    // Clean smartphone outline with speaker and home dot.
-    pdf.roundedRect(x + size * 0.28, y + size * 0.08, size * 0.44, size * 0.84, size * 0.08, size * 0.08, "S");
-    pdf.line(x + size * 0.42, y + size * 0.18, x + size * 0.58, y + size * 0.18);
-    pdf.circle(x + size * 0.5, y + size * 0.82, size * 0.045, "S");
+    // Phone-call handset: this is the official footer icon; never render a mobile/flower glyph.
+    const s = size / 16;
+    pdf.lines(
+      [
+        [1.82 * s, 2.45 * s],
+        [0.3 * s, 0.4 * s, 0.24 * s, 0.96 * s, -0.13 * s, 1.3 * s],
+        [-0.9 * s, 0.83 * s],
+        [-0.18 * s, 0.17 * s, -0.23 * s, 0.43 * s, -0.12 * s, 0.66 * s],
+        [0.88 * s, 1.78 * s, 2.18 * s, 3.08 * s, 3.96 * s, 3.96 * s],
+        [0.23 * s, 0.11 * s, 0.5 * s, 0.06 * s, 0.66 * s, -0.12 * s],
+        [0.83 * s, -0.9 * s],
+        [0.34 * s, -0.37 * s, 0.9 * s, -0.43 * s, 1.3 * s, -0.13 * s],
+        [2.45 * s, 1.82 * s],
+        [0.43 * s, 0.32 * s, 0.52 * s, 0.93 * s, 0.2 * s, 1.36 * s],
+        [-0.63 * s, 0.84 * s],
+        [-0.56 * s, 0.75 * s, -1.54 * s, 1.05 * s, -2.43 * s, 0.75 * s],
+      ],
+      x + 4.08 * s, y + 2.05 * s, [1, 1], "S", false,
+    );
   } else if (kind === "mail") {
     pdf.roundedRect(x + size * 0.1, y + size * 0.24, size * 0.8, size * 0.56, 0.35, 0.35, "S");
     pdf.line(x + size * 0.16, y + size * 0.31, x + size * 0.5, y + size * 0.55);
@@ -735,6 +750,7 @@ function drawLockedPdfFooter(pdf: any, page: HTMLElement, A4_W: number, A4_H: nu
   const footerH = 58 * (A4_H / LIVE_PAGE_HEIGHT);
   const y = A4_H - footerH;
   const padX = 28 * (A4_W / LIVE_PAGE_WIDTH);
+  const innerW = A4_W - padX * 2;
   const iconSize = 12 * (A4_W / LIVE_PAGE_WIDTH);
   const iconGap = 6 * (A4_W / LIVE_PAGE_WIDTH);
   const centerY = y + footerH / 2 + 0.25;
@@ -757,7 +773,10 @@ function drawLockedPdfFooter(pdf: any, page: HTMLElement, A4_W: number, A4_H: nu
   pdf.setFontSize(6.35);
   pdf.text(JBJ_BRAND.address, leftX + iconSize + iconGap, centerY, { baseline: "middle" });
 
-  const phoneX = A4_W * 0.47;
+  const midX = padX + innerW * 0.42;
+  const midW = innerW * 0.24;
+  const phoneGroupW = 132 * (A4_W / LIVE_PAGE_WIDTH);
+  const phoneX = midX + Math.max(0, (midW - phoneGroupW) / 2);
   drawPdfFooterIcon(pdf, "phone", phoneX, centerY - iconSize / 2, iconSize);
   pdf.setFontSize(6.8);
   pdf.text(phone, phoneX + iconSize + iconGap, centerY, { baseline: "middle" });
@@ -765,12 +784,21 @@ function drawLockedPdfFooter(pdf: any, page: HTMLElement, A4_W: number, A4_H: nu
   pdf.setFontSize(6.35);
   const webW = pdf.getTextWidth(website);
   const emailW = pdf.getTextWidth(email);
-  let cursor = A4_W - padX - webW;
-  drawPdfFooterIcon(pdf, "globe", cursor - iconGap - iconSize, centerY - iconSize / 2, iconSize);
-  pdf.text(website, cursor, centerY, { baseline: "middle" });
-  cursor -= iconSize + iconGap + emailW + 5;
-  drawPdfFooterIcon(pdf, "mail", cursor - iconGap - iconSize, centerY - iconSize / 2, iconSize);
+  const dotGap = 2.7;
+  const dotW = 2.6;
+  const totalRightW = iconSize + iconGap + emailW + dotGap + dotW + dotGap + iconSize + iconGap + webW;
+  let cursor = Math.max(padX + innerW * 0.66, A4_W - padX - totalRightW);
+  drawPdfFooterIcon(pdf, "mail", cursor, centerY - iconSize / 2, iconSize);
+  cursor += iconSize + iconGap;
   pdf.text(email, cursor, centerY, { baseline: "middle" });
+  cursor += emailW + dotGap;
+  pdf.setTextColor(26, 26, 26);
+  pdf.text("·", cursor + dotW / 2, centerY, { baseline: "middle", align: "center" });
+  cursor += dotW + dotGap;
+  setPdfHex(pdf, "setTextColor", JBJ_INK);
+  drawPdfFooterIcon(pdf, "globe", cursor, centerY - iconSize / 2, iconSize);
+  cursor += iconSize + iconGap;
+  pdf.text(website, cursor, centerY, { baseline: "middle" });
 
   pdf.restoreGraphicsState?.();
 }
