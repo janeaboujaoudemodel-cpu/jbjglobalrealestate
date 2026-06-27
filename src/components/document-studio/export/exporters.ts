@@ -61,7 +61,7 @@ function fileName(template: DocumentTemplate, ext: string, candidate?: string | 
   const tplShort = (template.id || "Document")
     .replace(/^job_offer$/i, "Offer_Letter")
     .replace(/^nda$/i, "NDA");
-  const tplPart = sanitize(template.shortName || template.title || tplShort) || "Document";
+  const tplPart = sanitize((template as any).label || tplShort) || "Document";
   const candPart = candidate ? sanitize(candidate) : "";
   const stem = candPart ? `${tplPart}_${candPart}_${datePart}` : `${tplPart}_${datePart}`;
   return `${stem}.${ext}`;
