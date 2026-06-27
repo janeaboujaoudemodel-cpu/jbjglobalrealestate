@@ -137,7 +137,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const iconRowStyle = "height:14px;line-height:14px;display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:6px;align-items:center;";
   const textAfterIconStyle = "min-width:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
   const rightItemStyle = "display:grid;grid-template-columns:12px max-content;column-gap:6px;align-items:center;height:14px;line-height:14px;white-space:nowrap;";
-  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(1px);";
+  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(4px);";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;
