@@ -653,6 +653,9 @@ function StudioShell({
   // Keep the Live Document Editor as the premium sparkle launcher by default.
   // It expands only when requested, so the A4 preview stays centered and fast.
   const [aiOpen, setAiOpen] = useState(false);
+  // Pending AI preview — snapshot of the previous body so the user can
+  // visually approve or revert before the AI's change is committed.
+  const [aiPreviewSnapshot, setAiPreviewSnapshot] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   // Auto-fit preview: scale the fixed 816-wide A4 page down to whatever
