@@ -237,10 +237,10 @@ export default function PremiumJobCard({
             <Button
               type="button"
               size="sm"
-              variant="dark"
+              data-surface="emerald"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="jj-cta-dark careers-navy-cta h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
+              className={`jj-cta-emerald jj-pill-emerald-metallic h-10 rounded-xl px-5 font-semibold border border-[#B89555]/70 active:translate-y-[1px] transition-all ${selected ? "ring-2 ring-[#B89555]/70" : ""}`}
               onClick={(e) => {
                 e.stopPropagation();
                 onApply(id);
