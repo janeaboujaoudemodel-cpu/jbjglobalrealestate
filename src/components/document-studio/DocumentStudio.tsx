@@ -399,6 +399,7 @@ const anchorSignatureArtifacts = (html: string): string => {
 
 
 export default function DocumentStudio({ catalog, trigger, presetTemplateId, open: controlledOpen, onOpenChange }: Props) {
+  const navigate = useNavigate();
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen ?? internalOpen;
   const setOpen = useCallback((next: boolean) => {
