@@ -3851,7 +3851,25 @@ function StudioShell({
               currentBody={bodyHtml}
               language={docLanguage}
               aiInstructions={template?.aiInstructions || ""}
-              onApply={(next, sourceText) => {
+              onApply={(next, sourceText, mode) => {
+                // Snapshot the current body BEFORE applying so the owner can
+                // visually approve or revert this AI change in one click.
+                const previousBody = bodyHtml || "";
+                setAiPreviewSnapshot(previousBody);
+
+                // Full-replace mode: trust the AI body verbatim and bypass the
+                // locked-template field re-render. This is the only way the
+                // user can actually swap the clause text without losing the
+                // header / footer chrome (those are rendered separately and
+                // are unaffected by body content).
+                if (mode === "full-replace") {
+                  userEditedRef.current = true;
+                  setUserEdited(true);
+                  setBodyHtml(next);
+                  toast.success("Preview updated — review and click Keep or Revert");
+                  return;
+                }
+
                 if (template?.id === "job_offer") {
                   const extracted = normalizeExtractedDocumentFields({}, [sourceText, next].filter(Boolean).join("\n"));
                   const nextFields = { ...fields, ...extracted };
@@ -3878,12 +3896,13 @@ function StudioShell({
                   userEditedRef.current = false;
                   setUserEdited(false);
                   setBodyHtml(lockedOfferBody);
-                  toast.success("Offer Letter values applied into the locked legal template");
+                  toast.success("Preview updated — review and click Keep or Revert");
                   return;
                 }
                 userEditedRef.current = true;
                 setUserEdited(true);
                 setBodyHtml(next);
+                toast.success("Preview updated — review and click Keep or Revert");
               }}
               onClose={() => setAiOpen(false)}
             />
