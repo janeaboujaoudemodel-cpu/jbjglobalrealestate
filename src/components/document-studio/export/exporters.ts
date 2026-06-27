@@ -44,9 +44,9 @@ export interface DocumentMarks {
 }
 
 /**
- * Build the download filename. Format: `{TemplateName}_{Candidate}_{YYYY-MM-DD}.{ext}`
- * — e.g. `NDA_Walid_Halawi_2026-06-27.pdf`. Falls back gracefully when no
- * candidate name is supplied.
+ * Build the download filename. Format: `JBJ_{TemplateShort}_{Candidate}_{YYYY-MM-DD}.{ext}`
+ * — e.g. `JBJ_NDA_Walid_Halabi_2026-06-28.pdf` or `JBJ_Offer_Walid_Halabi_2026-06-28.pdf`.
+ * Falls back gracefully when no candidate name is supplied.
  */
 function fileName(template: DocumentTemplate, ext: string, candidate?: string | null) {
   const d = new Date();
@@ -58,14 +58,25 @@ function fileName(template: DocumentTemplate, ext: string, candidate?: string | 
       .trim()
       .replace(/\s+/g, "_")
       .replace(/_+/g, "_");
-  const tplShort = (template.id || "Document")
-    .replace(/^job_offer$/i, "Offer_Letter")
-    .replace(/^nda$/i, "NDA");
-  const tplPart = sanitize((template as any).label || tplShort) || "Document";
+  // Short, friendly template label for filenames.
+  const idMap: Record<string, string> = {
+    job_offer: "Offer",
+    offer_letter: "Offer",
+    nda: "NDA",
+    warning_letter: "Warning",
+    termination_letter: "Termination",
+    experience_letter: "Experience",
+    salary_certificate: "Salary",
+    moa: "MOA",
+    invoice: "Invoice",
+    receipt: "Receipt",
+  };
+  const tplShort = idMap[(template.id || "").toLowerCase()] || sanitize((template as any).label || template.id || "Document") || "Document";
   const candPart = candidate ? sanitize(candidate) : "";
-  const stem = candPart ? `${tplPart}_${candPart}_${datePart}` : `${tplPart}_${datePart}`;
+  const stem = candPart ? `JBJ_${tplShort}_${candPart}_${datePart}` : `JBJ_${tplShort}_${datePart}`;
   return `${stem}.${ext}`;
 }
+
 
 
 /** Convert a (possibly external) image URL to a base64 data URL. */
