@@ -1607,13 +1607,13 @@ function StudioShell({
     if (hydratedRef.current) return;
     hydratedRef.current = true;
 
-    // Always auto-restore the previous draft. The owner explicitly asked that
-    // refresh / close / route changes resume exactly where they left off unless
-    // they intentionally start a new submission or submit/send.
-    if (snap && !restoredOnce.current) {
-      restoredOnce.current = true;
-      applySnapshot(snap);
-    }
+    // Per latest owner directive: opening a template (Offer Letter, NDA, etc.)
+    // ALWAYS opens a fresh document. Incomplete work lives in the Drafts tab
+    // and completed work lives in the Folders tab — both visible in the
+    // DocumentsFormsHub header. The session-level auto-restore is therefore
+    // intentionally disabled. Per-template snapshots are still written so the
+    // Drafts tab can list and resume them on demand.
+    void snap; void applySnapshot; void restoredOnce;
 
     // ── One-shot prefill from an external bridge.
     // Only valid, current templates may open Document Studio. Removed templates
