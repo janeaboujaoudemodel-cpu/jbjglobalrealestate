@@ -217,6 +217,126 @@ async function renderPageCanvasWithMirrorFallback(el: HTMLElement, scale = PDF_P
   }
 }
 
+function drawImageCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
+  const iw = img.naturalWidth || img.width || 1;
+  const ih = img.naturalHeight || img.height || 1;
+  const ratio = Math.max(w / iw, h / ih);
+  const sw = w / ratio;
+  const sh = h / ratio;
+  ctx.drawImage(img, (iw - sw) / 2, (ih - sh) / 2, sw, sh, x, y, w, h);
+}
+
+function drawImageContain(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
+  const iw = img.naturalWidth || img.width || 1;
+  const ih = img.naturalHeight || img.height || 1;
+  const ratio = Math.min(w / iw, h / ih);
+  const dw = iw * ratio;
+  const dh = ih * ratio;
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+}
+
+async function cloneImagesIntoCanvas(sourceCanvas: HTMLCanvasElement, page: HTMLElement): Promise<boolean> {
+  const images = Array.from(page.querySelectorAll<HTMLImageElement>("img"))
+    .filter((img) => {
+      const src = img.currentSrc || img.src;
+      if (!src || /^data:image\/svg\+xml/i.test(src)) return false;
+      const rect = img.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+  if (!images.length) return false;
+
+  const pageRect = page.getBoundingClientRect();
+  const ctx = sourceCanvas.getContext("2d");
+  if (!ctx) return false;
+  const sx = sourceCanvas.width / (page.offsetWidth || LIVE_PAGE_WIDTH);
+  const sy = sourceCanvas.height / (page.offsetHeight || LIVE_PAGE_HEIGHT);
+  let painted = false;
+
+  for (const img of images) {
+    try {
+      if (!img.complete || !img.naturalWidth) {
+        await new Promise<void>((resolve) => {
+          const done = () => resolve();
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", done, { once: true });
+          setTimeout(done, 350);
+        });
+      }
+      if (!img.naturalWidth) continue;
+      const r = img.getBoundingClientRect();
+      const x = (r.left - pageRect.left) * sx;
+      const y = (r.top - pageRect.top) * sy;
+      const w = r.width * sx;
+      const h = r.height * sy;
+      ctx.save();
+      ctx.globalAlpha = Number(getComputedStyle(img).opacity || "1") || 1;
+      const transform = getComputedStyle(img).transform;
+      if (transform && transform !== "none") {
+        ctx.translate(x + w / 2, y + h / 2);
+        try {
+          const matrix = new DOMMatrixReadOnly(transform);
+          ctx.transform(matrix.a, matrix.b, matrix.c, matrix.d, 0, 0);
+        } catch { /* ignore invalid CSS transform */ }
+        ctx.translate(-w / 2, -h / 2);
+        const fit = getComputedStyle(img).objectFit;
+        if (fit === "cover") drawImageCover(ctx, img, 0, 0, w, h);
+        else drawImageContain(ctx, img, 0, 0, w, h);
+      } else {
+        const fit = getComputedStyle(img).objectFit;
+        if (fit === "cover") drawImageCover(ctx, img, x, y, w, h);
+        else drawImageContain(ctx, img, x, y, w, h);
+      }
+      ctx.restore();
+      painted = true;
+    } catch {
+      try { ctx.restore(); } catch { /* ignore */ }
+    }
+  }
+  return painted;
+}
+
+async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const html2canvas = await loadHtml2Canvas();
+  const rect = page.getBoundingClientRect();
+  const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
+  const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
+  const canvas = await html2canvas(page, {
+    backgroundColor: "#FDFBF7",
+    scale,
+    foreignObjectRendering: false,
+    useCORS: true,
+    allowTaint: false,
+    logging: false,
+    imageTimeout: 450,
+    removeContainer: true,
+    width: widthPx,
+    height: heightPx,
+    x: rect.left + window.scrollX,
+    y: rect.top + window.scrollY,
+    scrollX: window.scrollX,
+    scrollY: window.scrollY,
+    windowWidth: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, Math.ceil(rect.right)),
+    windowHeight: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0, Math.ceil(rect.bottom)),
+    ignoreElements: (e) =>
+      e.tagName === "SCRIPT" ||
+      (e instanceof HTMLElement &&
+        (e.getAttribute("aria-label") === "Remove field" ||
+          e.getAttribute("aria-label") === "Change mark" ||
+          e.getAttribute("aria-label") === "Resize mark" ||
+          e.getAttribute("aria-label") === "Unlock mark" ||
+          e.getAttribute("aria-label") === "Lock mark" ||
+          e.getAttribute("data-drag-guide") === "true" ||
+          e.hasAttribute("data-page-export-ignore") ||
+          !!e.closest("[data-page-export-ignore]"))),
+  });
+  // html2canvas is fastest when it skips waiting on every image, but Safari/
+  // Chromium can occasionally omit data-URL PNGs in that fast path. Repaint the
+  // visible images from the live preview onto the captured page to preserve the
+  // same watermark/stamp/logo without paying the full slow capture cost.
+  await cloneImagesIntoCanvas(canvas, page);
+  return canvas;
+}
+
 // Yield to the browser between heavy operations so the UI doesn't appear "stuck".
 const yieldToUi = () => new Promise<void>((resolve) => {
   if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => resolve());
