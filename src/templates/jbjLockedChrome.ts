@@ -123,7 +123,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
     padding:0 28px;
     height:58px;
     min-height:58px;
-    overflow:hidden;
+    overflow:visible;
     font-family:Inter, system-ui, sans-serif;
     font-size:8.5px;
     line-height:1.25;
@@ -134,7 +134,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
       <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:1.25;color:${t.fg};-webkit-text-fill-color:${t.fg};">
         <span style="display:flex;align-items:center;gap:5px;min-width:0;">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 10px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${JBJ_BRAND.address}</span>
+          <span style="display:block;white-space:nowrap;overflow:visible;text-overflow:clip;">${JBJ_BRAND.address}</span>
         </span>
       </div>
       <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:1.35;">
