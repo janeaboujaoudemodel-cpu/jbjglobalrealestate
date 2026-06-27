@@ -7,8 +7,10 @@ import DOMPurify from "dompurify";
 import { wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
 import type { DocumentTemplate } from "@/config/documentCatalog";
 
-const PDF_PAGE_SCALE = 1.22;
-const PDF_JPEG_QUALITY = 0.8;
+const PDF_PAGE_SCALE = 1.05;
+const PDF_JPEG_QUALITY = 0.76;
+const LIVE_PAGE_WIDTH = 816;
+const LIVE_PAGE_HEIGHT = 1154;
 
 let html2canvasLoader: Promise<(typeof import("html2canvas"))["default"]> | null = null;
 let jsPdfLoader: Promise<(typeof import("jspdf"))["default"]> | null = null;
@@ -21,6 +23,10 @@ const loadHtml2Canvas = () => {
 const loadJsPdf = () => {
   jsPdfLoader ??= import("jspdf").then((m) => m.default);
   return jsPdfLoader;
+};
+
+export const preloadExportLibraries = () => {
+  void Promise.all([loadHtml2Canvas(), loadJsPdf()]);
 };
 
 export interface PlacedMark {
