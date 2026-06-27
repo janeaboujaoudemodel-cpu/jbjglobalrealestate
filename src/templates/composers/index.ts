@@ -749,18 +749,44 @@ export const clientInitialsStrip = clientSignatureStrip;
 
 
 
+/** Format an ISO yyyy-mm-dd (or any Date-parseable string) as "28 Jun 2026".
+ *  Falls back to today when the input is empty / unparseable. */
+function formatPrettyDate(raw?: string | null): string {
+  const d = raw ? new Date(raw) : new Date();
+  const safe = isNaN(d.getTime()) ? new Date() : d;
+  return safe.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
 export function recipientBlock(fields: Record<string, string>, opts?: { greeting?: boolean }): string {
   const name = esc(fields.recipientName);
+  const today = new Date().toISOString().slice(0, 10);
+  const prepared = formatPrettyDate(fields.letterDate || fields.preparedDate || fields.documentDate || today);
+  const signing = formatPrettyDate(fields.signingDate || fields.applicantDate || fields.ownerDate || today);
+  const datesPanel = `
+    <div style="text-align:right;font-size:11px;line-height:1.45;color:${INK};min-width:170px;white-space:nowrap;">
+      <div>
+        <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">Date Prepared</div>
+        <div style="font-weight:600;margin-top:1px;">${prepared}</div>
+      </div>
+      <div style="margin-top:8px;">
+        <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">Date of Signing</div>
+        <div style="font-weight:600;margin-top:1px;">${signing}</div>
+      </div>
+    </div>`;
   if (opts?.greeting) {
     return `
-      <div style="margin:6px 0 14px;font-size:12.5px;color:${INK};line-height:1.6;">
-        <div style="font-weight:600;">Dear ${name || "Candidate"},</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin:6px 0 14px;font-size:12.5px;color:${INK};line-height:1.6;">
+        <div style="font-weight:600;flex:1;min-width:0;">Dear ${name || "Candidate"},</div>
+        ${datesPanel}
       </div>`;
   }
   return `
-    <div style="margin:8px 0 18px;font-size:12px;color:${INK};line-height:1.6;">
-      <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:3px;">To</div>
-      <div style="font-weight:600;">${name || "—"}</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin:8px 0 18px;font-size:12px;color:${INK};line-height:1.6;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};margin-bottom:3px;">To</div>
+        <div style="font-weight:600;">${name || "—"}</div>
+      </div>
+      ${datesPanel}
     </div>`;
 }
 
