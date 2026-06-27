@@ -181,7 +181,8 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
             {JBJ_BRAND.website.toUpperCase()}
           </a>
         </div>
-
+      </div>
     </footer>
+
   );
 }
