@@ -2461,7 +2461,13 @@ function StudioShell({
               type="button"
               role="tab"
               aria-selected={templateId === "job_offer"}
-              onClick={() => setTemplateId("job_offer")}
+              onClick={() => {
+                if (templateId === "job_offer") return;
+                resumeStructuredSync();
+                autoBodyRef.current = "";
+                setBodyHtml("");
+                setTemplateId("job_offer");
+              }}
               className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${templateId === "job_offer" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"}`}
               title="Open Offer Letter (auto-synced identity)"
             >
@@ -2472,12 +2478,17 @@ function StudioShell({
               role="tab"
               aria-selected={templateId === "nda"}
               onClick={() => {
+                if (templateId === "nda") return;
                 // Companion entry: switching from Offer → NDA inside the same
                 // Studio session pre-fills NDA identity from the current Offer
                 // fields (shared identity store). Opening NDA directly from
                 // the launcher stays blank — see fields useState above.
+                const wasOffer = templateId === "job_offer";
+                resumeStructuredSync();
+                autoBodyRef.current = "";
+                setBodyHtml("");
                 setTemplateId("nda");
-                if (templateId === "job_offer") {
+                if (wasOffer) {
                   const shared = readSharedIdentity();
                   if (Object.keys(shared).length) {
                     setFields((prev) => ({ ...prev, ...shared }));
@@ -2489,6 +2500,7 @@ function StudioShell({
             >
               NDA
             </button>
+
 
           </div>
           {/* Theme switcher — Champagne / Emerald letterhead */}
