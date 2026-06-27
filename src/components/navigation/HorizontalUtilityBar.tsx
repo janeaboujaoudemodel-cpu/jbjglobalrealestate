@@ -97,7 +97,7 @@ export default function HorizontalUtilityBar() {
     <>
       <div
         data-jj-utility-bar
-        className="jj-utility-shell fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out px-5 xl:px-7 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent"
+        className="jj-utility-shell fixed top-0 right-0 h-[88px] [body.jj-vertical-nav-collapsed_&]:h-[48px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out px-4 xl:px-6 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent"
       >
 
 
@@ -125,7 +125,7 @@ export default function HorizontalUtilityBar() {
         </div>
 
         {/* ── RIGHT: Filter · Favorites · Sq ft/m · Currency · Mode · Avatar ── */}
-        <div className="ml-auto flex items-center gap-2 shrink-0">
+        <div className="ml-auto flex items-center gap-2 shrink-0 min-w-0">
           {/* Filter */}
           <Tooltip>
             <TooltipTrigger asChild>
@@ -214,14 +214,14 @@ export default function HorizontalUtilityBar() {
 
 
           {/* Currency — flag + AED */}
-          <CurrencySwitcher variant="flag" />
+          <div className="shrink-0"><CurrencySwitcher variant="flag" /></div>
 
           {/* Mode chip */}
-          <ModeSwitcher variant="header" showForUnselected />
+          <ModeSwitcher variant="header" showForUnselected className="max-w-[136px]" />
 
           {/* User avatar OR Sign in */}
           {user ? (
-            <UserAvatarMenu onOpenFilters={() => setFilterOpen(true)} />
+            <div className="shrink-0"><UserAvatarMenu onOpenFilters={() => setFilterOpen(true)} /></div>
           ) : (
             <Link
               to="/auth"

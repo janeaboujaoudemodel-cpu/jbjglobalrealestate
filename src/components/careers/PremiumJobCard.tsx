@@ -74,8 +74,8 @@ const TAG_STYLES: Record<
   featured: {
     label: "Featured",
     icon: Star,
-    bg: "bg-[#0A0A0A]",
-    ring: "border-[#B89555]",
+    bg: "bg-[image:var(--jj-emerald-ombre)]",
+    ring: "border-white/25",
     text: "!text-white",
   },
 };
@@ -149,7 +149,7 @@ export default function PremiumJobCard({
 
       <div className="relative">
         <div className="flex items-start justify-between gap-3 mb-3">
-          <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#071B33] tracking-tight">
+          <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#1A1A1A] tracking-tight">
             {title}
           </h4>
           {selected && isOpenForApply && (
@@ -230,17 +230,17 @@ export default function PremiumJobCard({
         )}
 
         <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#BFA46A]/60">
-          <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#071B33] pt-3">
+          <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#1A1A1A] pt-3">
             JBJ GLOBAL REAL ESTATE · Dubai
           </span>
           {isOpenForApply ? (
             <Button
               type="button"
               size="sm"
-              variant="dark"
+              variant="primary"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="jj-cta-dark careers-navy-cta h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
+              className="jj-cta-primary allow-white h-10 rounded-xl px-5 font-semibold active:translate-y-[1px] transition-all"
               onClick={(e) => {
                 e.stopPropagation();
                 onApply(id);
