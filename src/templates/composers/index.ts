@@ -508,7 +508,7 @@ export function signatureBlock(opts: {
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
         ${signatureContent}
       </div>
-      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 178 : 112}px;box-sizing:border-box;">
+      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 178 : 112}px;box-sizing:border-box;display:flex;flex-direction:column;">
         ${lines}
       </div>
     </td>`;
@@ -527,18 +527,17 @@ export function signatureBlock(opts: {
   const ackBlock = ack
     ? `<div data-applicant-undertaking="1" style="width:100%;padding:8px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:9.2px;line-height:1.42;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
-  // The undersigned preamble must sit directly above the applicant's
-  // Name/Title/Date rows, while BOTH columns keep those rows on the exact same
-  // horizontal baseline. Reserve the same preamble slot on the owner side, then
-  // pin the rows underneath it instead of letting the applicant paragraph push
-  // only the right column down.
+  // Lower signature geometry is locked to the user's marked reference:
+  // after the dashed divider, the applicant undertaking appears FIRST, and
+  // the Name / Title / Date rows are pushed DOWN underneath it. The owner side
+  // receives a matching blank preamble slot so both columns' rows align.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:72px;display:flex;align-items:flex-end;margin-bottom:16px;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="flex:0 0 74px;display:flex;align-items:flex-start;margin-bottom:14px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:72px;margin-bottom:16px;"></div>`
+    ? `<div data-sig-preamble-slot="1" style="flex:0 0 74px;margin-bottom:14px;"></div>`
     : "";
-  const rowsWrap = (html: string) => `<div data-sig-detail-rows="1">${html}</div>`;
+  const rowsWrap = (html: string) => `<div data-sig-detail-rows="1" style="margin-top:auto;">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
   const applicantLines = `
     ${preambleSlot}
