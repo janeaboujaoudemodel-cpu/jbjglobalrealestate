@@ -2038,6 +2038,51 @@ function StudioShell({
     }
   };
 
+  // ── "Ready" → finalize the current document and file it into the
+  // candidate's Folder. Renders a PDF, uploads it to the candidate folder
+  // (creating it if needed), clears the working draft, and routes the user
+  // to the Folders tab so they can see the finished file alongside the
+  // candidate's other documents. The PDF is also downloaded to the user's
+  // device as a side-effect of exportPdf, which gives the owner a local
+  // copy without an extra click.
+  const [readyPending, setReadyPending] = useState(false);
+  const handleReady = async () => {
+    if (!template) { toast.error("Choose a template first"); return; }
+    const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
+    if (!currentBody) { toast.error("Nothing to file — generate the document first"); return; }
+    const candidateName =
+      pickCandidateDisplayName(fields) || deriveCandidateFolder(fields).displayName || "";
+    if (!candidateName.trim()) {
+      toast.error("Add the candidate / client name before marking Ready");
+      return;
+    }
+    setReadyPending(true);
+    const progressId = toast.loading("Finalizing document for the folder…");
+    try {
+      await handleSaveDocument({ silent: true });
+      const src = pageRef.current;
+      const pdfBlob = await exportPdf(currentBody, marks, template, src, undefined, candidateName);
+      const stamp = new Date().toISOString().slice(0, 10);
+      const safeName = candidateName.replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_") || "Document";
+      const safeTpl = (template.label || template.id || "Document").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_");
+      const file = new File([pdfBlob], `${safeTpl}_${safeName}_${stamp}.pdf`, { type: "application/pdf" });
+      await uploadAttachmentMutation.mutateAsync({
+        file,
+        candidate_display_name: candidateName,
+        kind: "ready_document",
+      });
+      try { clearSession(template.id); } catch {}
+      toast.success(`Filed in ${candidateName}'s folder`, { id: progressId });
+      try { onClose(); } catch {}
+      window.setTimeout(() => navigate("/owner/documents/forms?tab=folders"), 60);
+    } catch (e: any) {
+      console.error("[DocumentStudio] Ready failed", e);
+      toast.error(e?.message || "Could not file document to the folder", { id: progressId });
+    } finally {
+      setReadyPending(false);
+    }
+  };
+
   const handleSend = async (recipientOverride?: string) => {
     const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) return;
