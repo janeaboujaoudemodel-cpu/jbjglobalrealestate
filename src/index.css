@@ -8697,17 +8697,6 @@ html body :is(
   opacity: 1 !important;
 }
 
-/* Locked document footer: contact icons must remain clean JBJ-gold outlines
-   in BOTH preview and html2canvas PDF export. They are intentionally not
-   IconTile UI icons, so the global champagne SVG ink guard must not recolor them. */
-html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
-html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon) {
-  color: #B89555 !important;
-  stroke: #B89555 !important;
-  fill: none !important;
-  opacity: 1 !important;
-}
-
 /* ============================================================
    DLD Daily Snapshot — bar fills (locked from global guards)
    ============================================================ */
@@ -17102,15 +17091,4 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
   html body #root .jj-home-hero button.sm\:hidden {
     display: none !important;
   }
-}
-
-/* FINAL LOCK — Document footer contact icons stay gold outlines in preview/export. */
-html body #root [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
-html body #root [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon),
-html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
-html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon) {
-  color: #B89555 !important;
-  stroke: #B89555 !important;
-  fill: none !important;
-  opacity: 1 !important;
 }
