@@ -1567,13 +1567,13 @@ function StudioShell({
       setStep(typeof s.step === "number" ? (s.step as Step) : 2);
       if (typeof s.ownerName === "string") setOwnerName(s.ownerName);
       if (typeof s.ownerTitle === "string") setOwnerTitle(s.ownerTitle);
-      if (forceTemplateResync && s.templateId === "job_offer") {
+      // Dates are NEVER restored from a stale session — they always snap
+      // forward to today so the signing line reflects the current day
+      // unless the user explicitly edits it after open.
+      {
         const iso = new Date().toISOString().slice(0, 10);
         setOwnerDate(iso);
         setApplicantDate(iso);
-      } else {
-        if (typeof s.ownerDate === "string") setOwnerDate(s.ownerDate);
-        if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
       }
       if (Array.isArray(s.extraSignatories)) setExtraSignatories(s.extraSignatories);
       if (forceTemplateResync && s.templateId === "job_offer") setHiddenFieldKeys(new Set());
