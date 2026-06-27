@@ -92,14 +92,13 @@ export default function JessicaAIPanel() {
           <div className="flex flex-col items-center md:items-end gap-2">
             <Link
               to="/hr-agent"
+              data-surface="emerald"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="careers-white inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white border border-[#B89555]/70 shadow-[0_8px_22px_-10px_rgba(10,10,10,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] transition-all"
+              className="jj-cta-emerald jj-pill-emerald-metallic inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
             >
-              <MessageCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
-              <span className="allow-white" style={{ color: "#FFFFFF" }}>
-                Start Conversation
-              </span>
+              <MessageCircle className="w-4 h-4" />
+              <span>Start Conversation</span>
             </Link>
           </div>
         </div>

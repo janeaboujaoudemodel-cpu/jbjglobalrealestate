@@ -116,12 +116,12 @@ export default function PremiumCareersHero() {
             />
             <a
               href="#open-positions"
+              data-surface="emerald"
               data-allow-dark-cta
               data-no-contrast-guard
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              className="relative inline-flex items-center justify-center gap-2 rounded-xl px-7 h-12 font-semibold bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 shadow-[0_8px_24px_-8px_rgba(10,10,10,0.55),inset_0_1px_0_rgba(255,255,255,0.18)] active:translate-y-[1px] transition-all allow-white"
+              className="jj-cta-emerald jj-pill-emerald-metallic relative inline-flex items-center justify-center gap-2 rounded-xl px-7 h-12 font-semibold border border-[#B89555]/70 active:translate-y-[1px] transition-all"
             >
-              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Explore Open Positions</span>
+              <span>Explore Open Positions</span>
             </a>
 
           </div>
