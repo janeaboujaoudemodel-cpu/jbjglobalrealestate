@@ -16633,7 +16633,7 @@ main,
 .jj-card,
 [data-jj-metric-card],
 [data-card],
-[data-surface="champagne"][class*="rounded"] {
+[data-surface="champagne"][class*="rounded"]:not(button):not(a):not([data-cta]):not([role="button"]) {
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
