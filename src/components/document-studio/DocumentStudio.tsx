@@ -1980,13 +1980,15 @@ function StudioShell({
     };
     try {
       const src = pageRef.current;
+      const candidateNameForFile =
+        pickCandidateDisplayName(fields) || deriveCandidateFolder(fields).displayName || null;
       let pdfBlob: Blob | null = null;
-      if (kind === "pdf") pdfBlob = await exportPdf(currentBody, marks, template, src, onProgress);
-      else if (kind === "docx") await exportDocx(currentBody, marks, template);
-      else if (kind === "png") await exportPng(currentBody, marks, template, src);
+      if (kind === "pdf") pdfBlob = await exportPdf(currentBody, marks, template, src, onProgress, candidateNameForFile);
+      else if (kind === "docx") await exportDocx(currentBody, marks, template, candidateNameForFile);
+      else if (kind === "png") await exportPng(currentBody, marks, template, src, candidateNameForFile);
       else if (kind === "both") {
-        pdfBlob = await exportPdf(currentBody, marks, template, src, onProgress);
-        await exportPng(currentBody, marks, template, src);
+        pdfBlob = await exportPdf(currentBody, marks, template, src, onProgress, candidateNameForFile);
+        await exportPng(currentBody, marks, template, src, candidateNameForFile);
       }
       if (progressId != null) toast.success("PDF downloaded", { id: progressId });
 

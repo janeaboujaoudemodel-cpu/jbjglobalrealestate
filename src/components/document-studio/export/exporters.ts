@@ -43,11 +43,30 @@ export interface DocumentMarks {
   stamp?: PlacedMark;
 }
 
-function fileName(template: DocumentTemplate, ext: string) {
+/**
+ * Build the download filename. Format: `{TemplateName}_{Candidate}_{YYYY-MM-DD}.{ext}`
+ * — e.g. `NDA_Walid_Halawi_2026-06-27.pdf`. Falls back gracefully when no
+ * candidate name is supplied.
+ */
+function fileName(template: DocumentTemplate, ext: string, candidate?: string | null) {
   const d = new Date();
-  const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
-  return `JBJ-${template.id}-${stamp}.${ext}`;
+  const datePart = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const sanitize = (s: string) =>
+    s.normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^A-Za-z0-9\- ]+/g, "")
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/_+/g, "_");
+  const tplShort = (template.id || "Document")
+    .replace(/^job_offer$/i, "Offer_Letter")
+    .replace(/^nda$/i, "NDA");
+  const tplPart = sanitize((template as any).label || tplShort) || "Document";
+  const candPart = candidate ? sanitize(candidate) : "";
+  const stem = candPart ? `${tplPart}_${candPart}_${datePart}` : `${tplPart}_${datePart}`;
+  return `${stem}.${ext}`;
 }
+
 
 /** Convert a (possibly external) image URL to a base64 data URL. */
 async function urlToDataUrl(url: string): Promise<string> {
@@ -949,6 +968,7 @@ export async function exportPdf(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
   sourceElement?: HTMLElement | null,
   onProgress?: (done: number, total: number) => void,
+  candidateName?: string | null,
 ): Promise<Blob> {
   const [jsPDF] = await Promise.all([loadJsPdf(), loadHtml2Canvas()]);
 
@@ -1031,7 +1051,7 @@ export async function exportPdf(
     onProgress?.(livePages.length, livePages.length);
 
     const blob = pdf.output("blob");
-    triggerDownload(blob, fileName(template, "pdf"));
+    triggerDownload(blob, fileName(template, "pdf", candidateName));
     return blob;
   }
 
@@ -1095,7 +1115,7 @@ export async function exportPdf(
     yOffset = cut;
   }
   const blob = pdf.output("blob");
-  triggerDownload(blob, fileName(template, "pdf"));
+  triggerDownload(blob, fileName(template, "pdf", candidateName));
   return blob;
 }
 
@@ -1106,6 +1126,7 @@ export async function exportPdf(
 export async function exportPng(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
   sourceElement?: HTMLElement | null,
+  candidateName?: string | null,
 ): Promise<void> {
   const canvas = sourceElement
     ? await renderElementCanvas(sourceElement)
@@ -1113,7 +1134,7 @@ export async function exportPng(
   const dataUrl = canvas.toDataURL("image/png");
   const a = document.createElement("a");
   a.href = dataUrl;
-  a.download = fileName(template, "png");
+  a.download = fileName(template, "png", candidateName);
   document.body.appendChild(a); a.click(); a.remove();
 }
 
@@ -1122,6 +1143,7 @@ export async function exportPng(
 
 export async function exportDocx(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
+  candidateName?: string | null,
 ): Promise<void> {
   const docxLib = await import("docx");
   const {
@@ -1223,7 +1245,7 @@ export async function exportDocx(
   const blob = await Packer.toBlob(doc);
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = fileName(template, "docx");
+  a.download = fileName(template, "docx", candidateName);
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   void Table; void TableRow; void TableCell; void WidthType; void HeightRule;
