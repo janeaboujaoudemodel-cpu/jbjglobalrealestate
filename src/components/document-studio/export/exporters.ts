@@ -338,10 +338,11 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     const style = node.style as CSSStyleDeclaration;
     if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
   });
-  lockFooterIconBaselineForExport(clone);
   stage.appendChild(clone);
   document.body.appendChild(stage);
   try {
+    prepareFooterIconsForExport(clone);
+    await yieldToUi();
     const canvas = await html2canvas(clone, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
       scale,
@@ -367,6 +368,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
             e.hasAttribute("data-page-export-ignore") ||
             !!e.closest("[data-page-export-ignore]"))),
     });
+    paintFooterIconsForExport(canvas, clone);
     if (isCanvasVisuallyBlank(canvas)) {
       canvas.width = 0; canvas.height = 0;
       return await renderElementCanvas(clone, scale);
@@ -395,7 +397,7 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
   return sampled > 0;
 }
 
-function lockFooterIconBaselineForExport(root: HTMLElement): void {
+function prepareFooterIconsForExport(root: HTMLElement): void {
   root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
     footer.querySelectorAll<HTMLElement>("svg").forEach((svg) => {
       svg.style.display = "block";
@@ -407,10 +409,15 @@ function lockFooterIconBaselineForExport(root: HTMLElement): void {
       svg.style.maxHeight = "12px";
       svg.style.overflow = "visible";
       svg.style.position = "relative";
-      svg.style.top = "1.6px";
+      svg.style.top = "0";
       svg.style.verticalAlign = "top";
       svg.style.transform = "none";
       svg.style.transformOrigin = "center center";
+      // Export-only fix: html2canvas rasterizes inline SVG baselines slightly
+      // above their text. Keep the layout space, hide the SVG in the clone,
+      // then repaint the same premium icons on the final canvas at the exact
+      // text-line center. This leaves the live preview completely untouched.
+      svg.style.opacity = "0";
 
       const wrapper = svg.parentElement as HTMLElement | null;
       if (wrapper) {
@@ -427,6 +434,109 @@ function lockFooterIconBaselineForExport(root: HTMLElement): void {
       }
     });
   });
+}
+
+type FooterIconKind = "location" | "phone" | "mail" | "globe";
+
+function inferFooterIconKind(text: string): FooterIconKind {
+  const value = text.toLowerCase();
+  if (value.includes("www") || value.includes(".ae")) return "globe";
+  if (value.includes("@")) return "mail";
+  if (value.includes("+") || /\d{2,}/.test(value)) return "phone";
+  return "location";
+}
+
+function firstTextPeer(wrapper: HTMLElement): HTMLElement | null {
+  const parent = wrapper.parentElement;
+  if (!parent) return null;
+  return Array.from(parent.children).find((child) => {
+    if (child === wrapper) return false;
+    const text = (child.textContent || "").trim();
+    return text.length > 0;
+  }) as HTMLElement | null;
+}
+
+function paintFooterIconsForExport(canvas: HTMLCanvasElement, root: HTMLElement): void {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const rootRect = root.getBoundingClientRect();
+  const sx = canvas.width / (rootRect.width || root.offsetWidth || LIVE_PAGE_WIDTH);
+  const sy = canvas.height / (rootRect.height || root.offsetHeight || LIVE_PAGE_HEIGHT);
+
+  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"] svg').forEach((svg) => {
+    const wrapper = svg.parentElement as HTMLElement | null;
+    if (!wrapper) return;
+    const row = wrapper.parentElement as HTMLElement | null;
+    const textPeer = firstTextPeer(wrapper) || row || wrapper;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const textRect = textPeer.getBoundingClientRect();
+    const kind = inferFooterIconKind((row?.textContent || textPeer.textContent || "").trim());
+    const iconSize = 12;
+    const yNudge = 0.85;
+    const x = wrapperRect.left - rootRect.left;
+    const y = textRect.top - rootRect.top + (textRect.height - iconSize) / 2 + yNudge;
+    drawPremiumFooterIcon(ctx, kind, x, y, iconSize, sx, sy);
+  });
+}
+
+function strokePath(ctx: CanvasRenderingContext2D, d: string) {
+  try {
+    ctx.stroke(new Path2D(d));
+  } catch {
+    // Path2D SVG strings are supported in Chromium; ignore only if a legacy
+    // engine cannot parse the path. The other footer icons still draw.
+  }
+}
+
+function drawPremiumFooterIcon(
+  ctx: CanvasRenderingContext2D,
+  kind: FooterIconKind,
+  x: number,
+  y: number,
+  size: number,
+  sx: number,
+  sy: number,
+) {
+  ctx.save();
+  ctx.translate(x * sx, y * sy);
+  ctx.scale(sx, sy);
+  ctx.scale(size / 16, size / 16);
+  ctx.strokeStyle = "#B89555";
+  ctx.fillStyle = "transparent";
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = 1.25;
+
+  if (kind === "location") {
+    ctx.lineWidth = 1.35;
+    strokePath(ctx, "M8 14.25s5-4.45 5-8.05A5 5 0 0 0 3 6.2c0 3.6 5 8.05 5 8.05Z");
+    ctx.beginPath();
+    ctx.lineWidth = 1.2;
+    ctx.arc(8, 6.25, 1.72, 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (kind === "phone") {
+    ctx.lineWidth = 1.35;
+    strokePath(ctx, "M4.08 2.05 5.9 4.5c.3.4.24.96-.13 1.3l-.9.83a.56.56 0 0 0-.12.66 9.05 9.05 0 0 0 3.96 3.96c.23.11.5.06.66-.12l.83-.9a.96.96 0 0 1 1.3-.13l2.45 1.82c.43.32.52.93.2 1.36l-.63.84c-.56.75-1.54 1.05-2.43.75-4.6-1.53-8.4-5.33-9.93-9.93-.3-.89 0-1.87.75-2.43l.84-.63c.43-.32 1.04-.23 1.36.2Z");
+  } else if (kind === "mail") {
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    if (typeof ctx.roundRect === "function") ctx.roundRect(1.75, 3.5, 12.5, 9, 1.35);
+    else ctx.rect(1.75, 3.5, 12.5, 9);
+    ctx.stroke();
+    ctx.lineWidth = 1.25;
+    strokePath(ctx, "M2.55 4.55 8 8.42l5.45-3.87");
+  } else {
+    ctx.lineWidth = 1.25;
+    ctx.beginPath();
+    ctx.arc(8, 8, 6.15, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.lineWidth = 1.05;
+    ctx.beginPath();
+    ctx.ellipse(8, 8, 2.55, 6.15, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    strokePath(ctx, "M2.15 8h11.7M3.75 4.55h8.5M3.75 11.45h8.5");
+  }
+  ctx.restore();
 }
 
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
@@ -465,12 +575,12 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
       const style = node.style as CSSStyleDeclaration;
       if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
     });
-    lockFooterIconBaselineForExport(clone);
     host.appendChild(clone);
   });
 
   document.body.appendChild(host);
   try {
+    prepareFooterIconsForExport(host);
     await yieldToUi();
     const canvas = await html2canvas(host, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -497,6 +607,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
             e.hasAttribute("data-page-export-ignore") ||
             !!e.closest("[data-page-export-ignore]"))),
     });
+    paintFooterIconsForExport(canvas, host);
     if (isCanvasVisuallyBlank(canvas)) throw new Error("Fast stacked capture was blank");
     return canvas;
   } finally {
