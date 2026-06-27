@@ -3171,6 +3171,30 @@ function StudioShell({
                           } else {
                             toast.info("Nothing extractable found in attachments");
                           }
+                          // Archive the raw scans into the candidate's folder.
+                          const candidateName =
+                            pickCandidateDisplayName({ ...fields, ...merged } as Record<string, string>);
+                          if (candidateName) {
+                            for (const file of files) {
+                              try {
+                                const lower = file.name.toLowerCase();
+                                const kind = lower.includes("passport")
+                                  ? "passport"
+                                  : lower.includes("visa")
+                                  ? "visa"
+                                  : (lower.includes("eid") || lower.includes("emirates") || lower.includes("id"))
+                                  ? "emirates_id"
+                                  : "other";
+                                await uploadAttachmentMutation.mutateAsync({
+                                  file,
+                                  candidate_display_name: candidateName,
+                                  kind,
+                                });
+                              } catch (uploadErr) {
+                                console.warn("[DocumentStudio] attachment archive failed", uploadErr);
+                              }
+                            }
+                          }
                         } catch (err: any) {
                           toast.error(err?.message || "Attachment processing failed");
                         } finally {
