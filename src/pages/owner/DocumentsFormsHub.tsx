@@ -40,7 +40,7 @@ const DocumentStudio = lazy(loadDocumentStudio);
 
 type Cat = "all" | "leasing" | "selling";
 type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer" | "finance";
-type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "candidates" | "deleted" | "assets";
+type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "candidates" | "folders" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
 const FEATURED_STUDIO_TEMPLATE_IDS = [
@@ -169,7 +169,13 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
   return hasClientName && hasContact;
 }
 
-const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","vault","deleted","assets"];
+const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","vault","candidates","folders","deleted","assets"];
+// `folders` is the canonical key; `candidates` is kept as a legacy alias.
+const normalizeTabKey = (t: string | null | undefined): Bucket => {
+  if (!t) return "templates";
+  if (t === "candidates") return "folders";
+  return (VALID_TABS as string[]).includes(t) ? (t as Bucket) : "templates";
+};
 
 // Lazy-loaded so the Vault payload (developer combobox + signed-document query) only
 // loads when the owner opens the tab.
@@ -180,9 +186,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const qc = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = (() => {
-    const t = searchParams.get("tab") as Bucket | null;
-    if (initialTabOverride && VALID_TABS.includes(initialTabOverride)) return initialTabOverride;
-    return t && VALID_TABS.includes(t) ? t : "templates";
+    if (initialTabOverride && VALID_TABS.includes(initialTabOverride)) return normalizeTabKey(initialTabOverride);
+    return normalizeTabKey(searchParams.get("tab"));
   })();
   const [tab, setTab] = useState<Bucket>(initialTab);
   const [cat, setCat] = useState<Cat>("all");
@@ -199,8 +204,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   // URL → tab sync so client-side navigation (e.g. the Folders shortcut in
   // Document Studio) switches the active tab without a page reload.
   useEffect(() => {
-    const urlTab = searchParams.get("tab") as Bucket | null;
-    const next = urlTab && VALID_TABS.includes(urlTab) ? urlTab : "templates";
+    const next = normalizeTabKey(searchParams.get("tab"));
     if (next !== tab) setTab(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
@@ -713,9 +717,9 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <TabsTrigger value="drafts">Drafts ({buckets.drafts.length})</TabsTrigger>
             <TabsTrigger value="generated">Generated ({buckets.generated.length})</TabsTrigger>
             <TabsTrigger value="sent">Pending ({buckets.sent.length})</TabsTrigger>
+            <TabsTrigger value="folders">📁 Folders</TabsTrigger>
             <TabsTrigger value="submitted">Review ({buckets.submitted.length})</TabsTrigger>
             <TabsTrigger value="signed">Signed ({buckets.signed.length})</TabsTrigger>
-            <TabsTrigger value="candidates">Candidates 📁</TabsTrigger>
             <TabsTrigger value="vault">Contract Vault</TabsTrigger>
             <TabsTrigger value="deleted">Deleted ({buckets.deleted.length})</TabsTrigger>
             <TabsTrigger value="assets">Stamps & Signatures</TabsTrigger>
@@ -900,7 +904,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           <TabsContent value="signed" className="mt-4">
             {renderBucketCards(buckets.signed, "No signed contracts yet.", "signed")}
           </TabsContent>
-          <TabsContent value="candidates" className="mt-4">
+          <TabsContent value="folders" className="mt-4">
             <CandidateFoldersPanel onOpenDoc={(id) => navigate(`/owner/documents/forms?openDoc=${id}`)} />
           </TabsContent>
           <TabsContent value="vault" className="mt-4">
