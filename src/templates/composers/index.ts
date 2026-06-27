@@ -501,13 +501,14 @@ export function signatureBlock(opts: {
   // a SINGLE gold-hairline frame containing two columns (Authorised
   // Signatory + Recipient) joined together and sharing the middle divider —
   // no gap between cells, identical to the uploaded reference NDA.
-  const cellInner = (sigId: string, heading: string, lines: string, isRight: boolean) => `
+  const cellInner = (sigId: string, heading: string, signatureContent: string, lines: string, isRight: boolean) => `
     <td data-sig-id="${sigId}" style="width:50%;vertical-align:top;padding:0;position:relative;${isRight ? `border-left:1px solid ${GOLD};` : ""}">
       <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
-      <div style="position:relative;min-height:138px;padding:10px 14px 6px;">
+      <div style="position:relative;height:118px;padding:10px 14px 8px;box-sizing:border-box;">
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
+        ${signatureContent}
       </div>
-      <div style="padding:10px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 190 : 112}px;box-sizing:border-box;">
+      <div style="padding:14px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 224 : 112}px;box-sizing:border-box;">
         ${lines}
       </div>
     </td>`;
@@ -524,7 +525,7 @@ export function signatureBlock(opts: {
     .join("");
   const ack = (opts.applicantAcknowledgement || "").trim();
   const ackBlock = ack
-    ? `<div data-applicant-undertaking="1" style="width:100%;padding:7px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.8px;line-height:1.42;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
+    ? `<div data-applicant-undertaking="1" style="width:100%;padding:7px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.65px;line-height:1.38;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
   // The undersigned preamble must sit directly above the applicant's
   // Name/Title/Date rows, while BOTH columns keep those rows on the exact same
@@ -532,10 +533,10 @@ export function signatureBlock(opts: {
   // pin the rows underneath it instead of letting the applicant paragraph push
   // only the right column down.
   const preambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:86px;display:flex;align-items:flex-end;margin-bottom:14px;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="height:126px;display:flex;align-items:flex-end;margin-bottom:14px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div data-sig-preamble-slot="1" style="height:86px;margin-bottom:14px;"></div>`
+    ? `<div data-sig-preamble-slot="1" style="height:126px;margin-bottom:14px;"></div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
@@ -548,6 +549,8 @@ export function signatureBlock(opts: {
       ${applicantMeta}
     `)}
   `;
+  const ownerSignatureLine = `<div style="position:absolute;left:14px;right:14px;bottom:8px;height:42px;border-bottom:1px solid ${INK};"></div>`;
+  const applicantSignatureLine = `<div style="position:absolute;left:14px;right:14px;bottom:8px;height:42px;border-bottom:1px solid ${INK};"></div>`;
 
   const extras = (opts.extraSignatories || []).filter(
     (s) => (s?.name || "").trim() || (s?.title || "").trim() || (s?.date || "").trim(),
@@ -560,7 +563,7 @@ export function signatureBlock(opts: {
     const bLines = b
       ? [row("Name", esc(b?.name || "")), row("Title", esc(b?.title || "")), row("Date", esc(formatHumanDate(b?.date)))].join("")
       : "";
-    extraRows.push(`<tr><td colspan="2" style="height:24px;border:none;"></td></tr><tr>${cellInner(`extra-${i}`, esc(a?.label || "Additional Signatory"), aLines, false)}${b ? cellInner(`extra-${i + 1}`, esc(b?.label || "Additional Signatory"), bLines, true) : `<td style="width:50%;border-left:1px solid ${GOLD};"></td>`}</tr>`);
+    extraRows.push(`<tr><td colspan="2" style="height:24px;border:none;"></td></tr><tr>${cellInner(`extra-${i}`, esc(a?.label || "Additional Signatory"), "", aLines, false)}${b ? cellInner(`extra-${i + 1}`, esc(b?.label || "Additional Signatory"), "", bLines, true) : `<td style="width:50%;border-left:1px solid ${GOLD};"></td>`}</tr>`);
   }
 
   return `
@@ -569,8 +572,8 @@ export function signatureBlock(opts: {
         <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
           <tbody>
             <tr>
-              ${cellInner("owner", "Authorised Signatory", ownerLinesWithSpacer, false)}
-              ${cellInner("recipient", aLabel, applicantLines, true)}
+              ${cellInner("owner", "Authorised Signatory", ownerSignatureLine, ownerLinesWithSpacer, false)}
+              ${cellInner("recipient", aLabel, applicantSignatureLine, applicantLines, true)}
             </tr>
             ${extraRows.join("")}
           </tbody>
