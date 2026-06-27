@@ -68,7 +68,7 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> {
+async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
 
   const prev = {
@@ -132,10 +132,12 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
   try {
     return await html2canvas(el, {
       backgroundColor: "#FDFBF7",
-      scale: 2,
+      scale,
       useCORS: true,
       allowTaint: false,
       logging: false,
+      imageTimeout: 4000,
+      removeContainer: true,
       width: widthPx,
       height: heightPx,
       windowWidth: widthPx,
@@ -160,6 +162,12 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
     });
   }
 }
+
+// Yield to the browser between heavy operations so the UI doesn't appear "stuck".
+const yieldToUi = () => new Promise<void>((resolve) => {
+  if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => resolve());
+  else setTimeout(resolve, 0);
+});
 
 /** Off-screen chrome render (fallback when no live element is provided). */
 async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
@@ -210,10 +218,15 @@ export async function exportPdf(
 
     for (let i = 0; i < livePages.length; i += 1) {
       onProgress?.(i, livePages.length);
-      const canvas = await renderElementCanvas(livePages[i]);
-      const data = canvas.toDataURL("image/jpeg", 0.92);
+      // Yield first so the toast/progress UI can paint between pages.
+      await yieldToUi();
+      const canvas = await renderElementCanvas(livePages[i], 1.6);
+      const data = canvas.toDataURL("image/jpeg", 0.85);
+      // Free the offscreen bitmap immediately — multi-page jobs accumulate
+      // hundreds of MB otherwise and stall the browser on page 4-7.
+      canvas.width = 0; canvas.height = 0;
       if (i > 0) pdf.addPage();
-      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H);
+      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
     }
     onProgress?.(livePages.length, livePages.length);
 
