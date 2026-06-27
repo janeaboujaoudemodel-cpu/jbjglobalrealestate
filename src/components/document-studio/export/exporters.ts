@@ -169,7 +169,7 @@ const yieldToUi = () => new Promise<void>((resolve) => {
   else setTimeout(resolve, 0);
 });
 
-type PdfPageCache = { signature: string; pages: string[]; createdAt: number };
+type PdfPageCache = { signature: string; pages: string[]; blob?: Blob; createdAt: number };
 
 const pdfPageCache = new WeakMap<HTMLElement, PdfPageCache>();
 const pdfPageInflight = new WeakMap<HTMLElement, Promise<void>>();
@@ -210,6 +210,18 @@ async function renderPdfPageImages(
   return images;
 }
 
+async function buildPdfBlobFromPageImages(pageImages: string[]): Promise<Blob> {
+  const { default: jsPDF } = await import("jspdf");
+  const A4_W = 210;
+  const A4_H = 297;
+  const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  for (let i = 0; i < pageImages.length; i += 1) {
+    if (i > 0) pdf.addPage();
+    pdf.addImage(pageImages[i], "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
+  }
+  return pdf.output("blob");
+}
+
 export function precachePdfPages(sourceElement?: HTMLElement | null): void {
   if (!sourceElement) return;
   const pages = getLivePages(sourceElement);
@@ -224,7 +236,8 @@ export function precachePdfPages(sourceElement?: HTMLElement | null): void {
       // Warm jsPDF while the owner is reviewing, so click-to-download is instant.
       await import("jspdf");
       const images = await renderPdfPageImages(pages);
-      pdfPageCache.set(sourceElement, { signature, pages: images, createdAt: Date.now() });
+      const blob = await buildPdfBlobFromPageImages(images);
+      pdfPageCache.set(sourceElement, { signature, pages: images, blob, createdAt: Date.now() });
     } catch {
       // Background cache failures must never affect editing/exporting.
     } finally {
@@ -280,6 +293,10 @@ export async function exportPdf(
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
     const signature = getPagesSignature(livePages);
     const cached = sourceElement ? pdfPageCache.get(sourceElement) : undefined;
+    if (cached?.signature === signature && cached.blob) {
+      triggerDownload(cached.blob, fileName(template, "pdf"));
+      return cached.blob;
+    }
     const pageImages = cached?.signature === signature
       ? cached.pages
       : await renderPdfPageImages(livePages, onProgress);
@@ -294,6 +311,7 @@ export async function exportPdf(
     }
 
     const blob = pdf.output("blob");
+    if (sourceElement) pdfPageCache.set(sourceElement, { signature, pages: pageImages, blob, createdAt: Date.now() });
     triggerDownload(blob, fileName(template, "pdf"));
     return blob;
   }
