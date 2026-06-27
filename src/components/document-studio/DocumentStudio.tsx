@@ -1077,6 +1077,7 @@ function StudioShell({
     const iso = todayIso();
     setOwnerDate(iso);
     setApplicantDate(iso);
+    setFields((prev) => snapDocumentDatesToToday(prev));
   }, [template?.id]);
 
   // Additional signatories (beyond the default Owner + Counterparty).
@@ -1254,7 +1255,7 @@ function StudioShell({
       if (!booking_id) booking_id = `${"JBJ-DOC"}-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
     }
     const profile = getProfileValues(fields);
-    const nextFields = { ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName };
+    const nextFields = snapDocumentDatesToToday({ ...fields, booking_id, profile_type: profile.profileType, developerName: fields.developerName || profile.developerName });
     if (userEditedRef.current || liveEditedBodyHtmlRef.current) setFields(nextFields);
     else setSyncedFields(nextFields);
     const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
@@ -1359,7 +1360,7 @@ function StudioShell({
 
   const loadCrmDocument = (d: { id: string; field_values: Record<string, string>; template_id: string; title: string; rendered_html?: string | null }) => {
     setTemplateId(d.template_id);
-    setSyncedFields(d.field_values || {});
+    setSyncedFields(snapDocumentDatesToToday(d.field_values || {}));
     if (d.rendered_html) {
       userEditedRef.current = true;
       setUserEdited(true);
@@ -1546,12 +1547,12 @@ function StudioShell({
     if (!dev) return;
     userEditedRef.current = false;
     setUserEdited(false);
-    setFields((p) => ({
+      setFields((p) => snapDocumentDatesToToday({
       ...p,
       developerName: dev.name,
       developerContact: `${dev.email} · ${dev.phone}`,
       accountsEmail: dev.email,
-    }));
+      }));
   };
 
   // Auto-render locked standard body whenever template / fields / commissions /
@@ -1670,7 +1671,7 @@ function StudioShell({
         if (validPrefillTemplate) {
           setTemplateId(p.templateId);
           if (p?.fields && typeof p.fields === "object") {
-            setSyncedFields((cur) => ({ ...cur, ...p.fields }));
+            setSyncedFields((cur) => snapDocumentDatesToToday({ ...cur, ...p.fields }));
           }
           setStep(2);
           toast.success("Applicant loaded", { description: "Details pre-filled in the Studio." });
@@ -1810,7 +1811,7 @@ function StudioShell({
     const targetId = templateId || initialId;
     clearSession(targetId);
     setCurrentDocId(null);
-    setSyncedFields(getTemplateDefaultFields(targetId));
+    setSyncedFields(snapDocumentDatesToToday(getTemplateDefaultFields(targetId)));
     setCustomFields([]);
     setCommissionRows(DEFAULT_BROKER_COMMISSIONS);
     setExtraSignatories([]);
@@ -2409,7 +2410,7 @@ function StudioShell({
                   if (wasOffer) {
                     const shared = readSharedIdentity();
                     if (Object.keys(shared).length) {
-                      setFields((prev) => ({ ...prev, ...shared }));
+                      setFields((prev) => snapDocumentDatesToToday({ ...prev, ...shared }));
                     }
                   }
                 }}
@@ -2596,7 +2597,7 @@ function StudioShell({
                 if (wasOffer) {
                   const shared = readSharedIdentity();
                   if (Object.keys(shared).length) {
-                    setFields((prev) => ({ ...prev, ...shared }));
+                    setFields((prev) => snapDocumentDatesToToday({ ...prev, ...shared }));
                   }
                 }
               }}
