@@ -848,7 +848,7 @@ function composeJobOffer(input: ComposerInput): string {
   const placeOfWork = filledOr(f.placeOfWork || f.officeAddress, "To be designated by the Company");
   const offerEffectiveIso = WALEED_EFFECTIVE_DATE;
   const offerSigningIso = WALEED_SIGNING_DATE;
-  const startDate = esc(formatHumanDate(f.startDate || WALEED_EFFECTIVE_DATE) || f.startDate || "20 June 2026");
+  const startDate = esc(formatHumanDate(f.startDate || WALEED_EFFECTIVE_DATE) || f.startDate || "28 June 2026");
   const workingHoursRaw = filledOr(f.workingHours, JOB_OFFER_WORKING_HOURS)
     .replace(/\s*;\s*/g, "\n")
     .replace(/(7:00\s*PM)\s+(Saturday)/i, "$1\n$2")
@@ -886,7 +886,7 @@ function composeJobOffer(input: ComposerInput): string {
   );
   const commissionRowsTable = "";
 
-  const leadsFromHuman = formatHumanDate(f.leadsReceivedFrom || WALEED_EFFECTIVE_DATE) || f.leadsReceivedFrom || "20 June 2026";
+  const leadsFromHuman = formatHumanDate(f.leadsReceivedFrom || WALEED_EFFECTIVE_DATE) || f.leadsReceivedFrom || "28 June 2026";
   const signingHuman = formatHumanDate(offerSigningIso) || offerSigningIso || todayLong();
   const leadsCount = (f.leadsCountAtSigning || f.leadsCount || "310").toString().trim() || "310";
 
