@@ -134,7 +134,57 @@ const cleanLegalName = (value?: string): string =>
     .replace(/\s+/g, " ")
     .trim();
 
-const isInitialOnlyName = (value?: string): boolean => /\b[A-Z]\.?\b(?:\s*[A-Z]\.?\b)+/i.test(value || "");
+const isInitialOnlyName = (value?: string): boolean => {
+  if (!value) return false;
+  const tokens = value.trim().split(/\s+/);
+  if (tokens.length < 2) return false;
+  return tokens.some((t) => /^[A-Z]\.?$/.test(t));
+};
+
+// Arabic → Latin transliteration for the most common Arab given/family-name tokens.
+// Used when a passport's English line is MRZ-truncated (e.g. "ALWALID I. S. ALHALABI")
+// but the Arabic "الاسم كاملا" line carries the full chain: given + father + grandfather + family.
+const ARABIC_NAME_MAP: Record<string, string> = {
+  "الوليد": "Alwalid", "وليد": "Waleed", "محمد": "Mohammad", "احمد": "Ahmad", "أحمد": "Ahmad",
+  "محمود": "Mahmoud", "علي": "Ali", "حسن": "Hassan", "حسين": "Hussein", "عمر": "Omar",
+  "عثمان": "Othman", "ابراهيم": "Ibrahim", "إبراهيم": "Ibrahim", "اسماعيل": "Ismail",
+  "يوسف": "Yousef", "يعقوب": "Yacoub", "خالد": "Khaled", "سامي": "Sami", "سامر": "Samer",
+  "بسام": "Bassam", "زياد": "Ziad", "هاني": "Hani", "نبيل": "Nabil", "كريم": "Karim",
+  "طارق": "Tarek", "رامي": "Rami", "فادي": "Fadi", "ماجد": "Majed", "وائل": "Wael",
+  "عصام": "Issam", "شعبان": "Shaaban", "رمضان": "Ramadan", "صلاح": "Salah", "نور": "Nour",
+  "الحلبي": "Alhalabi", "الحمصي": "Alhomsi", "الدمشقي": "Aldimashqi", "المقدسي": "Almaqdisi",
+  "القدسي": "Alqudsi", "الخليلي": "Alkhalili", "النابلسي": "Alnabulsi", "الغزاوي": "Alghazawi",
+  "بن": "bin", "ابن": "ibn", "أبو": "Abu", "ابو": "Abu",
+};
+
+const transliterateArabicName = (arabic: string): string => {
+  return arabic
+    .replace(/[\u064B-\u0652\u0670\u0640]/g, "")
+    .split(/\s+/)
+    .map((token) => {
+      const stripped = token.replace(/[^\u0600-\u06FF]/g, "");
+      if (!stripped) return "";
+      if (ARABIC_NAME_MAP[stripped]) return ARABIC_NAME_MAP[stripped];
+      const map: Record<string, string> = {
+        "ا":"a","أ":"a","إ":"i","آ":"aa","ب":"b","ت":"t","ث":"th","ج":"j","ح":"h","خ":"kh",
+        "د":"d","ذ":"dh","ر":"r","ز":"z","س":"s","ش":"sh","ص":"s","ض":"d","ط":"t","ظ":"z",
+        "ع":"a","غ":"gh","ف":"f","ق":"q","ك":"k","ل":"l","م":"m","ن":"n","ه":"h","و":"w","ي":"y","ى":"a","ة":"a","ء":"","ئ":"i","ؤ":"u",
+      };
+      const latin = Array.from(stripped).map((ch) => map[ch] ?? "").join("");
+      return latin ? latin.charAt(0).toUpperCase() + latin.slice(1) : "";
+    })
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+};
+
+const arabicFullName = (source?: string): string => {
+  if (!source) return "";
+  const line = source.match(/الاسم\s*كاملا\s*[:：]?\s*([\u0600-\u06FF\s]+)/);
+  const arabic = (line?.[1] || "").split(/\n/)[0].trim();
+  if (!arabic) return "";
+  return transliterateArabicName(arabic);
+};
 
 const mrzName = (value?: string): string => {
   const line = (value || "").split(/\n/).find((part) => /^P<|^[A-Z0-9<]{20,}$/.test(part.trim()))?.trim() || "";
@@ -163,6 +213,8 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     fields.surname && fields.givenNames ? `${fields.givenNames} ${fields.surname}` : "",
     fields.lastName && fields.firstName ? `${fields.firstName} ${fields.middleName || ""} ${fields.lastName}` : "",
     mrzName(source),
+    arabicFullName(source),
+    arabicFullName(fields.fullNameArabic || fields.nameArabic || fields.arabicName || ""),
     firstMatch(source, /(?:full\s+name\s+as\s+per\s+passport|name\s+on\s+passport|passport\s+full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
     firstMatch(source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
   ]
