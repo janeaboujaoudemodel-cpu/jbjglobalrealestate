@@ -85,14 +85,15 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-const footerIconDataUri = (inner: string) =>
-  `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${JBJ_GOLD}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`)}`;
-
 const FOOTER_ICONS = {
-  location: footerIconDataUri('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'),
-  phone: footerIconDataUri('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>'),
-  mail: footerIconDataUri('<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/>'),
-  globe: footerIconDataUri('<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'),
+  // Raster PNG data URIs are intentional: html2canvas/jsPDF can re-baseline
+  // inline SVGs during PDF export, which made footer icons look erased or
+  // shifted on the downloaded last page. These 48px gold PNGs downsample
+  // cleanly to the locked 12px slot and preserve preview/export parity.
+  location: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABNUlEQVR4nO2YwQ3CMAxFDWI4FmAK5mEKFmA7OEWqqqbJt18oEX43RJ3427HdxixJkqk5jVj09bi9a/9d7090T2yxPadrEGLO0QXMfM5H7JaEIkA4UPBmw50B0vnIei7Vrc32ohmx3eKiPNyiZ/PyDJVB+QjVNlYjV3teFSYJoJxv2Skiwm002suj9mgNrFlGkp7Ahe5Ft9LqOQKKTY9oZBIfCS6gVYD0AMwMHA0uoFV4dDeaPgNSNNRW1zsHvC3UbPAgGzW8loSPULQtRu0lAdQbZMtOyZycAUoE9WaL1kBxKvJFpuIuMtoRM1/Ru4uY7jB/eyvxvxn4FcJRVNohfSlgNvBVYkSX2mL6WwmkBuh7IYXpixgTQF0tqqAZ6HWKnCF5hNbkR73IEAHrKJff3/hGThKRD9Fxo2huXChtAAAAAElFTkSuQmCC",
+  phone: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABRklEQVR4nO1Y0Q2FIAzEF4dzAadwHqdwAbfzfZEYA7RX2sJHL/FL0B5XjpaUAoFAINCBRTLpPven9m47LtE3pYB/1gr+DS8iP2QwN3hPsAmgwXuRZRGYceUz1tbLWuCl/B5FklTgGyyyOT1IkQS+QcyWTpALteDt/xlNAhpBWSsmUmCmNFJLoZTKilmnFuxCGSUVRiijpkApeI+NbebpUxZzXHhaKpvAbCdwhlk/kBLPAHrVMj2JOZ3bfe5PfiT/VW0pt+NaKDfS7ujUN3FLCWSVucqICFC57dkvmBRr7/yuzeOMKY3/QsWvURJIeULNUdkDrZRBOrrtuBbUVlVPTKSHRr9jqgD1kx6fp+BioxkWJNyLOW01TAhwUCOC9hXmZW/valMG4Fa3S4hw3MsthVAr5Y4fchlFqTHqkqwbM903BQKBAA9/ZjzP5Qba4jMAAAAASUVORK5CYII=",
+  mail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA90lEQVR4nO2X6w2DMAyEQ9XhWKBTME+nYAG2o78iVVGwE99VKXDfH5Dy8Dl+RElJCCGEEOK+TC2Ttvdr/7WQI+ZlNTU+vA1Gim+xbzowWnzG0uFG4N85vQNPdAOvyFpAUhWOAFon6HpKCkVFMJoEnEKZLKYlpZjdrTsCnkBPnDfeW1OhFIo6wRafElAD87JOlsFSrCXe28uC0kajJ57XI/YpXSgqgnGH3LuNMgT0tN8a4QgcibcK0hqLHkbIgZqxUlz+L7+1uda+HtCl9C2o1zDLBlzEaCdB18P3wOhX2+kfNNd2gHFTMrB0uBEY7cRo+0IIIYS4NB+Ob4G3KylmggAAAABJRU5ErkJggg==",
+  globe: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABH0lEQVR4nO2ZzRHCQAiFV8fibMAqrMcqbMDu9JQLY/h5PDbJhO+8AR6EXTYZo2mapklwYRv8vB5fa839+ab5pRnyBC5hCEkbQAKXZITADzIClyBCroijiuBRu2HF2SZlN3moAlWZz/hxC/AatbLnza7XH9QDe8IlgJX96DqPX7gCzNM0Y88U8C8L7OA1u1YV4ApIw1FRcj26w6kCZm2bFloc4QpUvT6ofXXxXiowxrqwc5wDe6YFbM0t+sDSTNlzQLNRMo2uOWUTta8KqN7zvWhx0Ia5aOYYr+AYDgHIgIWCDI60YS5LyTC3wL4GMi9Ihz8H3AJYVWBfT0MVmLWtRvxAAVUeZtEkQT0w805scd6v05LD/h+QzP5D0zRNsy0/1vSgP5LwO7gAAAAASUVORK5CYII=",
 } as const;
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
@@ -126,8 +127,9 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
   const rowStyle = "position:relative;height:14px;line-height:14px;white-space:nowrap;overflow:visible;";
-  const iconStyle = "position:absolute;left:0;top:1px;width:12px;height:12px;display:block;line-height:0;font-size:0;vertical-align:top;";
+  const iconStyle = "position:absolute;left:0;top:1px;width:12px;height:12px;display:block;line-height:0;font-size:0;vertical-align:top;object-fit:contain;";
   const textAfterIconStyle = "position:absolute;left:18px;top:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
+  const rightItemStyle = "position:relative;height:14px;line-height:14px;padding-left:18px;white-space:nowrap;";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;
@@ -145,7 +147,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   ">
     <div style="width:100%;height:58px;display:grid;grid-template-columns:42% 24% 34%;align-items:center;">
       <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:14px;height:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};white-space:nowrap;">
-        <div style="${rowStyle}">
+        <div style="${rowStyle}width:100%;">
           <img alt="" aria-hidden="true" src="${FOOTER_ICONS.location}" style="${iconStyle}" />
           <span style="${textAfterIconStyle}">${JBJ_BRAND.address}</span>
         </div>
@@ -154,13 +156,13 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
         ${phones.map((p, i) => `<div style="${rowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? `<img alt="" aria-hidden="true" src="${FOOTER_ICONS.phone}" style="${iconStyle}" />` : ``}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
       </div>
       <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};text-align:right;white-space:nowrap;height:14px;line-height:14px;">
-        <div style="${rowStyle}display:inline-block;width:100%;text-align:right;">
-          <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:18px;vertical-align:top;">
+        <div style="height:14px;line-height:14px;display:grid;grid-template-columns:max-content 10px max-content;align-items:center;justify-content:end;column-gap:6px;width:100%;">
+          <span style="${rightItemStyle}">
             <img alt="" aria-hidden="true" src="${FOOTER_ICONS.mail}" style="${iconStyle}" />
             <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;line-height:14px;display:block;">${JBJ_BRAND.email.toUpperCase()}</a>
           </span>
-          <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:inline-block;vertical-align:top;margin:0 6px;">·</span>
-          <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:18px;vertical-align:top;">
+          <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:block;text-align:center;">·</span>
+          <span style="${rightItemStyle}">
             <img alt="" aria-hidden="true" src="${FOOTER_ICONS.globe}" style="${iconStyle}" />
             <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;line-height:14px;display:block;">${JBJ_BRAND.website.toUpperCase()}</a>
           </span>
