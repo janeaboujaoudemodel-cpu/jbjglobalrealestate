@@ -341,7 +341,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   stage.appendChild(clone);
   document.body.appendChild(stage);
   try {
-    prepareFooterIconsForExport(clone);
+    replaceFooterSvgsWithCanvasForExport(clone);
     await yieldToUi();
     const canvas = await html2canvas(clone, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -368,7 +368,6 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
             e.hasAttribute("data-page-export-ignore") ||
             !!e.closest("[data-page-export-ignore]"))),
     });
-    paintFooterIconsForExport(canvas, clone);
     if (isCanvasVisuallyBlank(canvas)) {
       canvas.width = 0; canvas.height = 0;
       return await renderElementCanvas(clone, scale);
@@ -397,30 +396,28 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
   return sampled > 0;
 }
 
-function prepareFooterIconsForExport(root: HTMLElement): void {
+function replaceFooterSvgsWithCanvasForExport(root: HTMLElement): void {
   root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
-    footer.querySelectorAll<HTMLElement>("svg").forEach((svg) => {
-      svg.style.display = "block";
-      svg.style.width = "12px";
-      svg.style.height = "12px";
-      svg.style.minWidth = "12px";
-      svg.style.maxWidth = "12px";
-      svg.style.minHeight = "12px";
-      svg.style.maxHeight = "12px";
-      svg.style.overflow = "visible";
-      svg.style.position = "relative";
-      svg.style.top = "0";
-      svg.style.verticalAlign = "top";
-      svg.style.transform = "none";
-      svg.style.transformOrigin = "center center";
-      // Export-only fix: html2canvas rasterizes inline SVG baselines slightly
-      // above their text. Keep the layout space, hide the SVG in the clone,
-      // then repaint the same premium icons on the final canvas at the exact
-      // text-line center. This leaves the live preview completely untouched.
-      svg.style.opacity = "0";
-
+    Array.from(footer.querySelectorAll<SVGElement>("svg")).forEach((svg) => {
       const wrapper = svg.parentElement as HTMLElement | null;
       if (wrapper) {
+        const row = wrapper.parentElement as HTMLElement | null;
+        const kind = inferFooterIconKind((row?.textContent || "").trim());
+        const iconCanvas = document.createElement("canvas");
+        iconCanvas.width = 48;
+        iconCanvas.height = 48;
+        iconCanvas.style.cssText = [
+          "position:absolute",
+          "left:0",
+          "top:1.15px",
+          "width:12px",
+          "height:12px",
+          "display:block",
+          "overflow:visible",
+        ].join(";");
+        const ctx = iconCanvas.getContext("2d");
+        if (ctx) drawPremiumFooterIcon(ctx, kind, 0, 0, 12, 4, 4);
+
         wrapper.style.width = "12px";
         wrapper.style.height = "14px";
         wrapper.style.minWidth = "12px";
@@ -431,6 +428,7 @@ function prepareFooterIconsForExport(root: HTMLElement): void {
         wrapper.style.overflow = "visible";
         wrapper.style.flex = "0 0 12px";
         wrapper.style.verticalAlign = "top";
+        wrapper.replaceChildren(iconCanvas);
       }
     });
   });
@@ -580,7 +578,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
 
   document.body.appendChild(host);
   try {
-    prepareFooterIconsForExport(host);
+    replaceFooterSvgsWithCanvasForExport(host);
     await yieldToUi();
     const canvas = await html2canvas(host, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -607,7 +605,6 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
             e.hasAttribute("data-page-export-ignore") ||
             !!e.closest("[data-page-export-ignore]"))),
     });
-    paintFooterIconsForExport(canvas, host);
     if (isCanvasVisuallyBlank(canvas)) throw new Error("Fast stacked capture was blank");
     return canvas;
   } finally {
