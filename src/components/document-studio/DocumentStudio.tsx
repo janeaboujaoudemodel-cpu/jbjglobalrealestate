@@ -614,7 +614,13 @@ function StudioShell({
       }
     } catch {}
   }, [fields]);
-  const [bodyHtml, setBodyHtml] = useState<string>(() => snap?.bodyHtml || "");
+  const [bodyHtml, setBodyHtml] = useState<string>(() => {
+    const staleStructuredDraft =
+      !!snap?.templateId &&
+      (snap.templateId === "job_offer" || snap.templateId === "nda") &&
+      (snap.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
+    return staleStructuredDraft ? "" : (snap?.bodyHtml || "");
+  });
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
   const [addPageAfterIndex, setAddPageAfterIndex] = useState<number | null>(null);
