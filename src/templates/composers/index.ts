@@ -1039,6 +1039,7 @@ function composeNda(input: ComposerInput): string {
   const f = input.fields;
   const id = offerIdentity(f);
   const candidateName = esc(filledOr(id.name || f.recipientName, "[Counterparty Name]"));
+  const candidateArabicName = esc(id.arabicName || "");
   const address = esc(filledOr(id.address, "[Address]"));
   const email = esc(filledOr(id.email, "[Email]"));
   const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
@@ -1057,6 +1058,7 @@ function composeNda(input: ComposerInput): string {
   const identityTable = termsTable(
     [
       ["Full Legal Name", filledOr(candidateName, ""), "recipientName"],
+      ["Arabic Name as per ID / Passport", filledOr(candidateArabicName, ""), "fullNameArabic"],
       ["Nationality", filledOr(nationality, ""), "nationality"],
       ["Emirates ID", filledOr(emiratesId, ""), "emiratesId"],
       ["Passport Number", filledOr(passport, ""), "passportNumber"],
@@ -1105,11 +1107,12 @@ function composeNda(input: ComposerInput): string {
       applicantTitle: position,
       applicantDate: input.applicantDate,
       applicantLabel: "Recipient Signature",
+      applicantMetaRows: candidateArabicName ? [["Arabic Name", id.arabicName]] : undefined,
       // LOCKED RULE: NDA recipient signature carries the SAME acknowledgement
       // sentence as the Offer Letter recipient signature, worded for the NDA
       // context. Confirms irrevocable acceptance of all NDA terms + loyalty
       // commitment to the Company.
-      applicantAcknowledgement: `I, the undersigned, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, restrictions, non-circumvention, non-compete, lead-ownership and confidentiality undertakings set out in this Non-Disclosure Agreement and its accompanying Offer Letter, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
+      applicantAcknowledgement: `I, ${candidateName}${candidateArabicName ? ` (${candidateArabicName})` : ""}, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, restrictions, non-circumvention, non-compete, lead-ownership and confidentiality undertakings set out in this Non-Disclosure Agreement and its accompanying Offer Letter, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
