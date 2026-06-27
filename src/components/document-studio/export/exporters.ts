@@ -1245,7 +1245,7 @@ export async function exportDocx(
   const blob = await Packer.toBlob(doc);
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = fileName(template, "docx");
+  a.download = fileName(template, "docx", candidateName);
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   void Table; void TableRow; void TableCell; void WidthType; void HeightRule;
