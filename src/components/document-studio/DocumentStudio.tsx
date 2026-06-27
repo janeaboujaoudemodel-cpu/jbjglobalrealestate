@@ -45,7 +45,7 @@ import {
  DocumentAudience, DocumentScope, DocumentTemplate,
 } from "@/config/documentCatalog";
 import { DEPARTMENTS } from "@/hooks/useHRJobOffers";
-import { stripChromeArtifacts, jbjMonogramSrc, jbjCompanyStampSrc } from "@/templates/jbjLockedChrome";
+import { stripChromeArtifacts, jbjMonogramSrc, jbjWatermarkChampagneSrc, jbjCompanyStampSrc } from "@/templates/jbjLockedChrome";
 import { LockedLetterhead, LockedFooter } from "./LockedLetterhead";
 import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
@@ -3771,54 +3771,67 @@ function StudioShell({
                               }}
                             >
                               {/* Header chrome starts at the page top; no separate top champagne strip. */}
-                              {/* Engraved JBJ monogram watermark — centered on
-                                  every page, champagne-gold tint, fully visible
-                                   (no cropping), tight letter spacing. Painted
-                                   via CSS mask. It sits above opaque table/card
-                                   backgrounds at very low opacity so page 3
-                                   still shows the logo without blocking text. */}
                               {!noChrome && (
-                                <div
-                                  aria-hidden
-                                  style={{
-                                    position: "absolute",
-                                    inset: 0,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    pointerEvents: "none",
-                                    // Page 3 contains opaque tables that were
-                                    // hiding the watermark when it sat behind
-                                    // the body layer. Keep it non-interactive and
-                                    // subtle, but above those fills so the real
-                                    // monogram is visible on every page.
-                                    zIndex: 3,
-                                    mixBlendMode: "multiply",
-                                  }}
-                                >
-                                  {/* Use the actual transparent JBJ header logo, painted
-                                      champagne-gold with a filter. Avoid CSS masks here:
-                                      html2canvas can export mask backgrounds as a solid
-                                      rectangle, which caused the broken box in PDFs. */}
-                                  <img
-                                    data-jbj-page-watermark="true"
-                                    data-no-fallback
-                                    src={jbjMonogramSrc}
-                                    alt=""
+                                <>
+                                  {/* Actual JBJ header monogram, pre-painted champagne PNG.
+                                      No CSS mask/filter/blend: html2canvas exported those
+                                      as a solid rectangle. This layer stays behind content. */}
+                                  <div
+                                    aria-hidden
                                     style={{
-                                      width: 460,
-                                      height: 460,
-                                      opacity: 0.24,
-                                      objectFit: "contain",
-                                      display: "block",
-                                      filter:
-                                        "brightness(0) saturate(100%) invert(66%) sepia(29%) saturate(721%) hue-rotate(3deg) brightness(95%) contrast(88%) drop-shadow(0 1px 0 rgba(255,253,247,0.65)) drop-shadow(0 -0.5px 0 rgba(120,86,32,0.35))",
+                                      position: "absolute",
+                                      inset: 0,
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      pointerEvents: "none",
+                                      zIndex: 1,
                                     }}
-                                  />
-
-
-
-                                </div>
+                                  >
+                                    <img
+                                      data-jbj-page-watermark="true"
+                                      data-no-fallback
+                                      src={jbjWatermarkChampagneSrc}
+                                      alt=""
+                                      style={{
+                                        width: 480,
+                                        height: 480,
+                                        opacity: 0.34,
+                                        objectFit: "contain",
+                                        display: "block",
+                                      }}
+                                    />
+                                  </div>
+                                  {/* Export-safe visibility pass for pages with opaque tables.
+                                      Blend is normal and the pre-tinted PNG has transparency,
+                                      so export cannot become a colored box. */}
+                                  <div
+                                    aria-hidden
+                                    style={{
+                                      position: "absolute",
+                                      inset: 0,
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      pointerEvents: "none",
+                                      zIndex: 3,
+                                    }}
+                                  >
+                                    <img
+                                      data-jbj-page-watermark-overlay="true"
+                                      data-no-fallback
+                                      src={jbjWatermarkChampagneSrc}
+                                      alt=""
+                                      style={{
+                                        width: 480,
+                                        height: 480,
+                                        opacity: 0.075,
+                                        objectFit: "contain",
+                                        display: "block",
+                                      }}
+                                    />
+                                  </div>
+                                </>
                               )}
 
                               {/* Document generation date — top-right corner of EVERY page (above

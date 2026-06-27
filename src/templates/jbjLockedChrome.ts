@@ -6,6 +6,7 @@
  */
 
 import monogramSrc from "@/assets/jbj-monogram-letterhead.png";
+import watermarkChampagneSrc from "@/assets/jbj-monogram-watermark-champagne.png";
 import companyStampSrc from "@/assets/jbj-company-stamp-transparent.png?inline";
 import {
   TRADE_LICENSE_OFFICE,
@@ -31,6 +32,7 @@ export const JBJ_INK = "#1A1A1A";
 export const JBJ_CHAMPAGNE = "#F7F2EA";
 
 export const jbjMonogramSrc = monogramSrc;
+export const jbjWatermarkChampagneSrc = watermarkChampagneSrc;
 export const jbjCompanyStampSrc = companyStampSrc;
 
 /**
@@ -90,8 +92,8 @@ const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD
 export const FOOTER_ICON_SVG: Record<"location" | "phone" | "mail" | "globe", string> = {
   // Hollow map pin — no fill, crisp gold stroke matching the signature frame
   location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><path d="M8 14.25s5-4.45 5-8.05A5 5 0 0 0 3 6.2c0 3.6 5 8.05 5 8.05Z" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.35px;" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="6.25" r="1.72" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.2px;"/></svg>`,
-  // Hollow handset — elegant single-line construction
-  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><path d="M4.08 2.05 5.9 4.5c.3.4.24.96-.13 1.3l-.9.83a.56.56 0 0 0-.12.66 9.05 9.05 0 0 0 3.96 3.96c.23.11.5.06.66-.12l.83-.9a.96.96 0 0 1 1.3-.13l2.45 1.82c.43.32.52.93.2 1.36l-.63.84c-.56.75-1.54 1.05-2.43.75-4.6-1.53-8.4-5.33-9.93-9.93-.3-.89 0-1.87.75-2.43l.84-.63c.43-.32 1.04-.23 1.36.2Z" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.35px;" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  // Hollow phone call icon — handset plus two call waves, export-safe strokes
+  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><path d="M4.15 2.25c-.78.45-1.12 1.35-.78 2.22 1.45 3.76 4.4 6.71 8.16 8.16.87.34 1.77 0 2.22-.78l.45-.78-2.75-1.78-1.18 1.08c-1.62-.72-2.92-2.02-3.64-3.64l1.08-1.18L5.93 2.8l-1.78-.55Z" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.35px;" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.65 2.1c1.35.35 2.9 1.9 3.25 3.25M10.15 4.05c.78.22 1.58 1.02 1.8 1.8" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.15px;" stroke-linecap="round"/></svg>`,
   // Hollow envelope — kept refined, now outline-only for parity with the other icons
   mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;shape-rendering:geometricPrecision;color:${JBJ_GOLD}!important;stroke:${JBJ_GOLD}!important;"><rect x="1.75" y="3.5" width="12.5" height="9" rx="1.35" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.3px;"/><path d="M2.55 4.55 8 8.42l5.45-3.87" style="fill:none!important;stroke:${JBJ_GOLD}!important;stroke-width:1.25px;" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   // Hollow globe with meridians + equator
