@@ -394,6 +394,40 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
   return sampled > 0;
 }
 
+function lockFooterIconBaselineForExport(root: HTMLElement): void {
+  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
+    footer.querySelectorAll<HTMLElement>("svg").forEach((svg) => {
+      svg.style.display = "block";
+      svg.style.width = "12px";
+      svg.style.height = "12px";
+      svg.style.minWidth = "12px";
+      svg.style.maxWidth = "12px";
+      svg.style.minHeight = "12px";
+      svg.style.maxHeight = "12px";
+      svg.style.overflow = "visible";
+      svg.style.position = "relative";
+      svg.style.top = "1.6px";
+      svg.style.verticalAlign = "top";
+      svg.style.transform = "none";
+      svg.style.transformOrigin = "center center";
+
+      const wrapper = svg.parentElement as HTMLElement | null;
+      if (wrapper) {
+        wrapper.style.width = "12px";
+        wrapper.style.height = "14px";
+        wrapper.style.minWidth = "12px";
+        wrapper.style.maxWidth = "12px";
+        wrapper.style.lineHeight = "14px";
+        wrapper.style.display = "block";
+        wrapper.style.position = "relative";
+        wrapper.style.overflow = "visible";
+        wrapper.style.flex = "0 0 12px";
+        wrapper.style.verticalAlign = "top";
+      }
+    });
+  });
+}
+
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   const html2canvas = await loadHtml2Canvas();
   const pageW = pages[0]?.offsetWidth || LIVE_PAGE_WIDTH;
@@ -430,6 +464,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
       const style = node.style as CSSStyleDeclaration;
       if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
     });
+    lockFooterIconBaselineForExport(clone);
     host.appendChild(clone);
   });
 
