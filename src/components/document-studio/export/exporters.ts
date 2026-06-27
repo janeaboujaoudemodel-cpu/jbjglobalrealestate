@@ -189,7 +189,13 @@ function hashString(value: string) {
 
 function getPagesSignature(pages: HTMLElement[]) {
   return pages
-    .map((page) => `${page.offsetWidth}x${page.offsetHeight}:${hashString(page.outerHTML)}`)
+    .map((page) => {
+      const mediaKey = Array.from(page.querySelectorAll<HTMLImageElement | SVGElement>("img,svg"))
+        .map((node) => node instanceof HTMLImageElement ? node.currentSrc || node.src || "img" : node.getAttribute("data-icon") || node.outerHTML.length)
+        .join("~");
+      return `${page.offsetWidth}x${page.offsetHeight}:${page.textContent || ""}:${mediaKey}`;
+    })
+    .map((value) => hashString(value))
     .join("|");
 }
 
@@ -246,14 +252,6 @@ export function precachePdfPages(sourceElement?: HTMLElement | null): void {
     }
   })();
   pdfPageInflight.set(sourceElement, task);
-}
-
-export function __debugPdfCacheState(sourceElement?: HTMLElement | null) {
-  if (!sourceElement) return { hasSource: false };
-  const pages = getLivePages(sourceElement);
-  const signature = getPagesSignature(pages);
-  const cached = pdfPageCache.get(sourceElement);
-  return { pages: pages.length, signature, hasCached: !!cached, cachedSignature: cached?.signature, hasBlob: !!cached?.blob, hasInflight: pdfPageInflight.has(sourceElement), age: cached ? Date.now() - cached.createdAt : null };
 }
 
 /** Off-screen chrome render (fallback when no live element is provided). */
