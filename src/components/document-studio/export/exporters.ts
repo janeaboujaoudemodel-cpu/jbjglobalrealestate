@@ -68,7 +68,7 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-async function renderElementCanvas(el: HTMLElement, scale = 1.05): Promise<HTMLCanvasElement> {
+async function renderElementCanvas(el: HTMLElement, scale = 0.72): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
 
   const prev = {
@@ -136,7 +136,7 @@ async function renderElementCanvas(el: HTMLElement, scale = 1.05): Promise<HTMLC
       useCORS: true,
       allowTaint: false,
       logging: false,
-      imageTimeout: 1500,
+      imageTimeout: 500,
       removeContainer: true,
       width: widthPx,
       height: heightPx,
@@ -200,8 +200,8 @@ async function renderPdfPageImages(
   const images: string[] = [];
   for (let i = 0; i < pages.length; i += 1) {
     onProgress?.(i, pages.length);
-    const canvas = await renderElementCanvas(pages[i], 1.05);
-    images.push(canvas.toDataURL("image/jpeg", 0.82));
+    const canvas = await renderElementCanvas(pages[i], 0.72);
+    images.push(canvas.toDataURL("image/jpeg", 0.78));
     canvas.width = 0;
     canvas.height = 0;
     await yieldToUi();
