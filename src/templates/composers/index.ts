@@ -557,7 +557,6 @@ export function signatureBlock(opts: {
       </div>
     </div>`;
 }
-}
 
 /**
  * GLOBAL PAGE SIGNATURE RULE (locked):
