@@ -79,7 +79,8 @@ const todayLong = () =>
   new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 
 const WALEED_EFFECTIVE_DATE = "2026-06-20";
-const WALEED_SIGNING_DATE = "2026-06-26";
+// Signing date auto-syncs to today so the offer always reflects the actual day of signature.
+const WALEED_SIGNING_DATE = new Date().toISOString().slice(0, 10);
 const WALEED_DIRECT_PHONES = "+971 50 999 3839 · +971 54 366 2223";
 const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
