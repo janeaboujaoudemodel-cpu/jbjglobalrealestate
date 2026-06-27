@@ -450,6 +450,7 @@ function StudioShell({
   presetTemplateId?: string;
   onClose: () => void;
 }) {
+  const navigate = useNavigate();
   const templates = useMemo(() => getCatalogByAudience(catalog), [catalog]);
   const isValidCatalogTemplate = (id?: string | null) => {
     if (!id) return false;
