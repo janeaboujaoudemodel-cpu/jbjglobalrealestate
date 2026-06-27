@@ -26,7 +26,7 @@ interface Attachment { name: string; type: string; dataUrl: string }
 interface Props {
   currentBody: string;
   aiInstructions: string;
-  onApply: (nextBody: string, sourceText?: string) => void;
+  onApply: (nextBody: string, sourceText?: string, mode?: "patch" | "full-replace") => void;
   language?: string;
   onClose?: () => void;
 }
@@ -164,6 +164,15 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
     if ((!instruction && attachments.length === 0) || busy) return;
     if (listening) stopMic();
 
+    // Detect full-body replacement intent. When the user pastes a complete
+    // new contract and asks us to swap it in, we must NOT run surgical-patch
+    // mode (which only fills slots) — we replace the body verbatim and let
+    // the locked header/footer/pagination chrome handle the layout.
+    const fullReplaceIntent =
+      /\b(replace\s+(all|the\s+(entire|whole|full|complete)\s+(contract|document|body|letter|text))|full[\s-]?replace|rewrite\s+(the\s+)?(contract|document|body)|new\s+(contract|document|body)|swap\s+(the\s+)?(contract|document|body))\b/i.test(
+        instruction,
+      );
+
     setMessages((m) => [...m, {
       role: "user",
       content: instruction + (attachments.length ? `\n\n📎 ${attachments.map((a) => a.name).join(", ")}` : ""),
@@ -173,47 +182,78 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
     setBusy(true);
 
     try {
-      const promptParts = [
+      const sharedHeader = [
         `ROLE: You are a UAE-licensed HR Director and corporate lawyer drafting on behalf of JBJ GLOBAL REAL ESTATE (Dubai). You write offers, contracts, warnings, NDAs, commission and tenancy documents that comply with UAE Federal Decree-Law No. 33 of 2021 (Labour Law), RERA / DLD Forms, and the UAE Civil Code.`,
-        `STYLE: Inter, single-page A4, no markdown asterisks, no emoji. Tight clauses. Currency = AED unless stated. Dates DD Month YYYY. Never expose private contact info.`,
-        ``,
-        `🔒 SURGICAL PATCH MODE — STRICTLY ENFORCED 🔒`,
-        `You are NOT rewriting the document. You are a lawyer FILLING IN BLANKS on an existing, approved template.`,
-        `HARD RULES:`,
-        `  1. PRESERVE the existing template wording, clause order, structure, headings, and formatting EXACTLY. Do not paraphrase, reword, shorten, expand, restructure, retitle, or "improve" any sentence the user did not explicitly ask you to change.`,
-        `  2. Treat the user's instruction as a set of VALUES (name, email, address, position, salary, date, location, phone, etc.). Insert each value ONLY where it is contextually applicable in the template (e.g. address goes next to "Address:", email next to "Email:", position next to the role line). If the template has no slot for a value, leave the value out — do NOT invent a new paragraph for it.`,
-        `  3. If a value is NOT provided in the instruction, leave the existing template text untouched. NEVER add empty fields like "Home Address: " or "[Address]" if the user didn't supply one.`,
-        `  4. NEVER replace, rewrite, or regenerate the whole template. The only time you may restructure is if the user literally says "rewrite the template", "replace the template", or "generate a new template".`,
-        `  5. Return the FULL current body with ONLY the surgical edits applied. Every untouched byte must come back identical.`,
-        `  6. Never fabricate names, salaries, IDs, dates, or clauses that aren't in the body or instruction.`,
-        ``,
-        `Template steering (for tone reference only — do not regenerate): ${aiInstructions}`,
-        `Reply in ${language}.`,
-        ``,
-        `CURRENT DOCUMENT BODY (this is the source of truth — patch, do not replace):`,
-        `"""`,
-        stripChromeArtifacts(currentBody)
-          .replace(/<br\s*\/?>/gi, "\n")
-          .replace(/<\/p>/gi, "\n\n")
-          .replace(/<[^>]+>/g, "")
-          .replace(/\n{3,}/g, "\n\n")
-          .trim(),
-        `"""`,
-        ``,
-        attachments.length
-          ? `Attached files (extract values to slot into the template — do NOT add new sections): ${attachments.map((a) => `${a.name} (${a.type || "file"})`).join(", ")}`
-          : ``,
-        ``,
-        `USER INSTRUCTION (extract values and slot them into matching template fields only):`,
-        instruction || "(use attachments to fill matching template fields only)",
-        ``,
-        `Return the FULL revised body with surgical edits ONLY.`,
-      ].filter(Boolean).join("\n");
+        `STYLE: Inter, A4 sheets, no markdown asterisks, no emoji. Tight numbered clauses. Currency = AED unless stated. Dates DD Month YYYY.`,
+        `LAYOUT LOCK: The page header (JBJ monogram + wordmark + gold divider), the page footer (contact strip), the per-page candidate-initials line, the signature block, the watermark, and the document chrome are ALL rendered by the app outside the body. NEVER include any of those in your output. Output only the editable body text — starting with the candidate identity block / salutation and ending just before the signature lines.`,
+      ];
 
+      let promptParts: string[];
+
+      if (fullReplaceIntent) {
+        promptParts = [
+          ...sharedHeader,
+          ``,
+          `🔁 FULL-REPLACE MODE 🔁`,
+          `The user is pasting a COMPLETE new contract body and asking you to swap it in. Do NOT patch the existing body. Do NOT merge. Output the user's new contract verbatim with the following formatting rules ONLY:`,
+          `  1. Preserve the user's clause numbering, headings, paragraph order, and wording exactly as provided.`,
+          `  2. Strip any visual separators like "⸻" / "———" / horizontal rules — the app draws its own dividers.`,
+          `  3. Remove any header lines the user may have pasted ("JBJ GLOBAL REAL ESTATE L.L.C S.O.C", phone / footer strip) — those belong to the locked chrome and must not be duplicated.`,
+          `  4. Keep the candidate identity block at the top (Date / Candidate Name / Address / Email / Phone) so the page reads naturally under the header.`,
+          `  5. Drop the closing signature block ("Sincerely, …", "Accepted by Candidate", Name/Title/Date lines) — the app renders the locked signature frame automatically.`,
+          `  6. Return plain prose. Use blank lines between paragraphs. No markdown, no asterisks, no underscores, no HTML tags.`,
+          ``,
+          `Template steering (for tone reference only — do not invent extra clauses): ${aiInstructions}`,
+          `Reply in ${language}.`,
+          ``,
+          `USER INSTRUCTION (contains the full replacement contract — emit it verbatim per the rules above):`,
+          instruction,
+          ``,
+          `Return the FULL revised body. Nothing else.`,
+        ];
+      } else {
+        promptParts = [
+          ...sharedHeader,
+          ``,
+          `🔒 SURGICAL PATCH MODE — STRICTLY ENFORCED 🔒`,
+          `You are NOT rewriting the document. You are a lawyer FILLING IN BLANKS on an existing, approved template.`,
+          `HARD RULES:`,
+          `  1. PRESERVE the existing template wording, clause order, structure, headings, and formatting EXACTLY. Do not paraphrase, reword, shorten, expand, restructure, retitle, or "improve" any sentence the user did not explicitly ask you to change.`,
+          `  2. Treat the user's instruction as a set of VALUES (name, email, address, position, salary, date, location, phone, etc.). Insert each value ONLY where it is contextually applicable in the template. If the template has no slot for a value, leave the value out.`,
+          `  3. If a value is NOT provided in the instruction, leave the existing template text untouched. NEVER add empty fields like "Home Address: " or "[Address]" if the user didn't supply one.`,
+          `  4. NEVER replace, rewrite, or regenerate the whole template. If the user wants a full replacement they will explicitly say "replace all" / "rewrite the contract" / "full replace".`,
+          `  5. Return the FULL current body with ONLY the surgical edits applied. Every untouched byte must come back identical.`,
+          `  6. Never fabricate names, salaries, IDs, dates, or clauses that aren't in the body or instruction.`,
+          ``,
+          `Template steering (for tone reference only — do not regenerate): ${aiInstructions}`,
+          `Reply in ${language}.`,
+          ``,
+          `CURRENT DOCUMENT BODY (this is the source of truth — patch, do not replace):`,
+          `"""`,
+          stripChromeArtifacts(currentBody)
+            .replace(/<br\s*\/?>/gi, "\n")
+            .replace(/<\/p>/gi, "\n\n")
+            .replace(/<[^>]+>/g, "")
+            .replace(/\n{3,}/g, "\n\n")
+            .trim(),
+          `"""`,
+          ``,
+          attachments.length
+            ? `Attached files (extract values to slot into the template — do NOT add new sections): ${attachments.map((a) => `${a.name} (${a.type || "file"})`).join(", ")}`
+            : ``,
+          ``,
+          `USER INSTRUCTION (extract values and slot them into matching template fields only):`,
+          instruction || "(use attachments to fill matching template fields only)",
+          ``,
+          `Return the FULL revised body with surgical edits ONLY.`,
+        ];
+      }
+
+      const prompt = promptParts.filter(Boolean).join("\n");
 
       const { data, error } = await supabase.functions.invoke("letter-ai-generate", {
         body: {
-          prompt: promptParts,
+          prompt,
           tone: "formal",
           language,
           attachments: attachments.map((a) => ({ name: a.name, type: a.type, dataUrl: a.dataUrl })),
@@ -229,9 +269,18 @@ export default function AiEditChatPanel({ currentBody, aiInstructions, onApply, 
         .map((p) => `<p style="margin:0 0 14px;line-height:1.65;">${p.replace(/\n/g, "<br/>")}</p>`)
         .join("");
 
-      onApply(html, [instruction, newBodyText].filter(Boolean).join("\n\n"));
+      onApply(
+        html,
+        [instruction, newBodyText].filter(Boolean).join("\n\n"),
+        fullReplaceIntent ? "full-replace" : "patch",
+      );
       setAttachments([]);
-      setMessages((m) => [...m, { role: "assistant", content: "Done — the document has been updated. Anything else?" }]);
+      setMessages((m) => [...m, {
+        role: "assistant",
+        content: fullReplaceIntent
+          ? "Preview ready — review the document, then click Keep changes or Revert above the page."
+          : "Preview ready — review the document, then click Keep changes or Revert above the page.",
+      }]);
     } catch (e: any) {
       toast.error(e?.message || "AI edit failed");
       setMessages((m) => [...m, { role: "assistant", content: "I couldn't apply that change. Try rephrasing." }]);
