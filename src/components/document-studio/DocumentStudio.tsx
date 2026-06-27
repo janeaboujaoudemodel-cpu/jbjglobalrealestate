@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 19;
+  const DOCUMENT_FIX_VERSION = 20;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -3326,7 +3326,7 @@ function StudioShell({
                                   via CSS mask. It is behind all body text and
                                   tables remain opaque so it never bleeds through
                                   grid/table content. */}
-                              {!noChrome && (
+                              {!noChrome && !isFirst && (
                                 <div
                                   aria-hidden
                                   style={{
