@@ -178,21 +178,47 @@ const Index = () => {
     return () => globalThis.clearTimeout(timer);
   }, []);
 
-  // Scroll safety net — runs once on mount + when tab regains focus, instead
-  // of polling every 1.5s forever (wasteful background tick).
+  // Scroll safety net — homepage must NEVER inherit a stuck body lock left
+  // behind by a modal/dialog/carousel that crashed before its cleanup ran.
+  // We aggressively release any inline overflow/position lock on the home
+  // route at mount, on focus, on tab visibility, and on the first user
+  // interaction. The home page itself never needs a body-level scroll lock.
   useEffect(() => {
-    const releaseScroll = () => {
-      if (typeof document === 'undefined') return;
-      const body = document.body;
-      const html = document.documentElement;
-      if (body.style.overflow === 'hidden') body.style.overflow = '';
-      if (body.style.position === 'fixed') body.style.position = '';
-      if (html.style.overflow === 'hidden') html.style.overflow = '';
-      body.style.pointerEvents = '';
+    if (typeof document === 'undefined') return;
+    const body = document.body;
+    const html = document.documentElement;
+    const release = () => {
+      // Clear any inline overflow/position/pointer-events lock left over
+      // from a modal/dialog/carousel that didn't run its cleanup.
+      if (body.style.overflow) body.style.overflow = '';
+      if (body.style.overflowY === 'hidden') body.style.overflowY = '';
+      if (body.style.position === 'fixed') {
+        body.style.position = '';
+        body.style.top = '';
+        body.style.width = '';
+      }
+      if (body.style.pointerEvents === 'none') body.style.pointerEvents = '';
+      if (html.style.overflow) html.style.overflow = '';
+      if (html.style.overflowY === 'hidden') html.style.overflowY = '';
     };
-    releaseScroll();
-    window.addEventListener('focus', releaseScroll);
-    return () => window.removeEventListener('focus', releaseScroll);
+    release();
+    const onFocus = () => release();
+    const onVis = () => { if (document.visibilityState === 'visible') release(); };
+    const onPointer = () => release();
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('pointerdown', onPointer, { passive: true });
+    // Watch the body's style attribute — if anything re-locks it while the
+    // home page is mounted, release immediately.
+    const obs = new MutationObserver(release);
+    obs.observe(body, { attributes: true, attributeFilter: ['style'] });
+    obs.observe(html, { attributes: true, attributeFilter: ['style'] });
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('pointerdown', onPointer);
+      obs.disconnect();
+    };
   }, []);
 
   // LCP boost — preload the hero poster image immediately so it paints before
