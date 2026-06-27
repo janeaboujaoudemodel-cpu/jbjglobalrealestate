@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 23;
+  const DOCUMENT_FIX_VERSION = 24;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -3595,8 +3595,8 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 255}
-                                    y={marks.stampXY?.y ?? Math.max(860, PAGE_H - (isLast ? chromeHeights.footer : 0) - 200)}
+                                    x={marks.stampXY?.x ?? 275}
+                                    y={marks.stampXY?.y ?? Math.max(905, PAGE_H - (isLast ? chromeHeights.footer : 0) - 155)}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
