@@ -126,7 +126,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
   const rowStyle = "position:relative;height:14px;line-height:14px;white-space:nowrap;overflow:visible;";
-  const iconStyle = (icon: keyof typeof FOOTER_ICONS) => `position:absolute;left:0;top:1px;width:12px;height:12px;display:block;background-image:url('${FOOTER_ICONS[icon]}');background-repeat:no-repeat;background-position:center;background-size:12px 12px;line-height:0;font-size:0;`;
+  const iconStyle = "position:absolute;left:0;top:1px;width:12px;height:12px;display:block;line-height:0;font-size:0;vertical-align:top;";
   const textAfterIconStyle = "position:absolute;left:18px;top:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
   return `
   <footer data-jbj-locked-footer="true" style="
@@ -146,22 +146,22 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
     <div style="width:100%;height:58px;display:grid;grid-template-columns:42% 24% 34%;align-items:center;">
       <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:14px;height:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};white-space:nowrap;">
         <div style="${rowStyle}">
-          <span aria-hidden="true" style="${iconStyle("location")}"></span>
+          <img alt="" aria-hidden="true" src="${FOOTER_ICONS.location}" style="${iconStyle}" />
           <span style="${textAfterIconStyle}">${JBJ_BRAND.address}</span>
         </div>
       </div>
       <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:14px;text-align:center;">
-        ${phones.map((p, i) => `<div style="${rowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? `<span aria-hidden="true" style="${iconStyle("phone")}"></span>` : ``}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
+        ${phones.map((p, i) => `<div style="${rowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? `<img alt="" aria-hidden="true" src="${FOOTER_ICONS.phone}" style="${iconStyle}" />` : ``}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
       </div>
       <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};text-align:right;white-space:nowrap;height:14px;line-height:14px;">
         <div style="${rowStyle}display:inline-block;width:100%;text-align:right;">
           <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:18px;vertical-align:top;">
-            <span aria-hidden="true" style="${iconStyle("mail")}"></span>
+            <img alt="" aria-hidden="true" src="${FOOTER_ICONS.mail}" style="${iconStyle}" />
             <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;line-height:14px;display:block;">${JBJ_BRAND.email.toUpperCase()}</a>
           </span>
           <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:inline-block;vertical-align:top;margin:0 6px;">·</span>
           <span style="position:relative;display:inline-block;height:14px;line-height:14px;padding-left:18px;vertical-align:top;">
-            <span aria-hidden="true" style="${iconStyle("globe")}"></span>
+            <img alt="" aria-hidden="true" src="${FOOTER_ICONS.globe}" style="${iconStyle}" />
             <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;line-height:14px;display:block;">${JBJ_BRAND.website.toUpperCase()}</a>
           </span>
         </div>

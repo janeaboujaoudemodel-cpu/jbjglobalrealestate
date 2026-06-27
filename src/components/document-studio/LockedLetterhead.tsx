@@ -146,17 +146,13 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
     whiteSpace: "nowrap" as const,
     overflow: "visible" as const,
   };
-  const iconStyle = (icon: keyof typeof FOOTER_ICONS) => ({
+  const iconStyle = {
     position: "absolute" as const,
     left: 0,
     top: 1,
     width: 12,
     height: 12,
     display: "block",
-    backgroundImage: `url('${FOOTER_ICONS[icon]}')`,
-    backgroundRepeat: "no-repeat" as const,
-    backgroundPosition: "center",
-    backgroundSize: "12px 12px",
     lineHeight: 0,
     fontSize: 0,
   });
@@ -196,7 +192,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
       >
         <div style={{ minWidth: 0, paddingRight: 14, fontSize: 8.5, lineHeight: "14px", color: t.fg, WebkitTextFillColor: t.fg, height: 14, whiteSpace: "nowrap" }}>
           <div style={rowStyle}>
-            <span aria-hidden="true" style={iconStyle("location")} />
+            <img alt="" aria-hidden="true" src={FOOTER_ICONS.location} style={iconStyle} />
             <span style={textAfterIconStyle}>{JBJ_BRAND.address}</span>
           </div>
         </div>
@@ -204,7 +200,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
           {phones.map((p, i) => (
             <div key={p} style={{ ...rowStyle, width: 132, margin: "0 auto", textAlign: "left" }}>
               {i === 0 ? (
-                <span aria-hidden="true" style={iconStyle("phone")} />
+                <img alt="" aria-hidden="true" src={FOOTER_ICONS.phone} style={iconStyle} />
               ) : null}
               <span style={textAfterIconStyle}>{p}</span>
             </div>
@@ -213,14 +209,14 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
           <div style={{ ...rowStyle, display: "inline-block", width: "100%", textAlign: "right" }}>
             <span style={{ position: "relative", display: "inline-block", height: 14, lineHeight: "14px", paddingLeft: 18, verticalAlign: "top" }}>
-              <span aria-hidden="true" style={iconStyle("mail")} />
+              <img alt="" aria-hidden="true" src={FOOTER_ICONS.mail} style={iconStyle} />
               <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
             </span>
             <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "inline-block", verticalAlign: "top", margin: "0 6px" }}>·</span>
             <span style={{ position: "relative", display: "inline-block", height: 14, lineHeight: "14px", paddingLeft: 18, verticalAlign: "top" }}>
-              <span aria-hidden="true" style={iconStyle("globe")} />
+              <img alt="" aria-hidden="true" src={FOOTER_ICONS.globe} style={iconStyle} />
               <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
