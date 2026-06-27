@@ -40,7 +40,7 @@ const DocumentStudio = lazy(loadDocumentStudio);
 
 type Cat = "all" | "leasing" | "selling";
 type TemplateCategoryKey = "all" | "employees" | "client" | "forms" | "leasing" | "selling" | "after_sale" | "developer" | "finance";
-type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "candidates" | "deleted" | "assets";
+type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "candidates" | "folders" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
 const FEATURED_STUDIO_TEMPLATE_IDS = [
