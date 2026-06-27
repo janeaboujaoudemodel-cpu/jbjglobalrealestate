@@ -526,15 +526,20 @@ export function signatureBlock(opts: {
   const ackBlock = ack
     ? `<div style="margin:10px 0 0;padding:8px 10px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:9.5px;line-height:1.55;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
     : "";
-  // Name / Title / Date FIRST on both sides so the rows align horizontally
-  // across Authorised Signatory ↔ Accepted by Candidate. The acknowledgement
-  // paragraph (applicant only) sits BELOW the rows so it cannot push them down.
+  // Acknowledgement sits ABOVE Name/Title/Date (tight under the heading) so
+  // the loyalty text reads like an undersigned preamble, then a generous gap
+  // pushes the Name/Title/Date rows downward in a premium way. The owner side
+  // receives the same top spacer so the rows still align horizontally across
+  // both cells.
+  const sideSpacer = ack ? `<div style="height:42px;"></div>` : "";
+  const ownerLinesWithSpacer = `${sideSpacer}${ownerLines}`;
   const applicantLines = `
+    ${ackBlock}
+    ${sideSpacer}
     ${linedRow("Name", aName)}
     ${linedRow("Title", aTitle)}
     ${linedRow("Date", aDate)}
     ${applicantMeta}
-    ${ackBlock}
   `;
 
   const extras = (opts.extraSignatories || []).filter(
@@ -557,7 +562,7 @@ export function signatureBlock(opts: {
         <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
           <tbody>
             <tr>
-              ${cellInner("owner", "Authorised Signatory", ownerLines, false)}
+              ${cellInner("owner", "Authorised Signatory", ownerLinesWithSpacer, false)}
               ${cellInner("recipient", aLabel, applicantLines, true)}
             </tr>
             ${extraRows.join("")}

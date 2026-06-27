@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 22;
+  const DOCUMENT_FIX_VERSION = 23;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -2027,17 +2027,56 @@ function StudioShell({
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
+            {/* Offer / NDA quick-switch is ALWAYS visible (collapsed or not)
+                so the companion document is one click away from any state. */}
+            <div className="flex h-10 items-center gap-1 border border-[#B89555]/70 bg-[#F7F2EA] rounded-md p-1 shrink-0" role="tablist" aria-label="Offer / NDA quick switch" data-surface="champagne">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={templateId === "job_offer"}
+                onClick={() => setTemplateId("job_offer")}
+                className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${templateId === "job_offer" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"}`}
+                title="Open Offer Letter (auto-synced identity)"
+              >
+                Offer
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={templateId === "nda"}
+                onClick={() => {
+                  const wasOffer = templateId === "job_offer";
+                  setTemplateId("nda");
+                  if (wasOffer) {
+                    const shared = readSharedIdentity();
+                    if (Object.keys(shared).length) {
+                      setFields((prev) => ({ ...prev, ...shared }));
+                    }
+                  }
+                }}
+                className={`h-7 px-3 rounded text-[11px] font-semibold tracking-wide uppercase transition-colors ${templateId === "nda" ? "jj-pill-emerald text-white" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"}`}
+                title="Open the NDA — pre-fills from the Offer Letter when switched from Offer; blank when opened directly"
+              >
+                NDA
+              </button>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => autoFillFileRef.current?.click()} title="Attach Emirates ID, passport or document" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
+              <Upload className="w-4 h-4 mr-1.5" />
+              <span>Attach ID</span>
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setAssetDialog("signature")} title="Signature" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
+              <PenLine className="w-4 h-4 mr-1.5" />
+              <span>Signature</span>
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setAssetDialog("stamp")} title="Stamp" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
+              <Stamp className="w-4 h-4 mr-1.5" />
+              <span>Stamp</span>
+            </Button>
             {setupChromeCollapsed && (
-              <>
-                <Button variant="outline" size="sm" onClick={() => autoFillFileRef.current?.click()} title="Attach Emirates ID, passport or document" className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]">
-                  <Upload className="w-4 h-4 mr-1.5" />
-                  <span>Attach ID</span>
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"} className="h-10 hover:bg-[#EFE6D6]">
-                  {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
-                  <span>AI</span>
-                </Button>
-              </>
+              <Button variant="ghost" size="sm" onClick={() => setAiOpen((v) => !v)} title={aiOpen ? "Hide AI" : "Show AI"} className="h-10 hover:bg-[#EFE6D6]">
+                {aiOpen ? <PanelRightClose className="w-4 h-4 mr-1.5" /> : <PanelRightOpen className="w-4 h-4 mr-1.5" />}
+                <span>AI</span>
+              </Button>
             )}
             <Button variant="outline" size="sm" onClick={() => setSetupChromeCollapsed((v) => !v)} className="h-10 border-[#B89555]/60 bg-[#F7F2EA] hover:bg-[#EFE6D6]" title={setupChromeCollapsed ? "Expand editor tools" : "Minimize editor tools"}>
               {setupChromeCollapsed ? <ChevronDown className="w-4 h-4 mr-1.5" /> : <ChevronUp className="w-4 h-4 mr-1.5" />}
