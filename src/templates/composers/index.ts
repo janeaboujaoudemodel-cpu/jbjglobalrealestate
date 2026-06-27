@@ -524,14 +524,17 @@ export function signatureBlock(opts: {
     .join("");
   const ack = (opts.applicantAcknowledgement || "").trim();
   const ackBlock = ack
-    ? `<div style="margin:2px 0 8px;padding:8px 10px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:9.5px;line-height:1.55;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
+    ? `<div style="margin:10px 0 0;padding:8px 10px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:9.5px;line-height:1.55;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
     : "";
+  // Name / Title / Date FIRST on both sides so the rows align horizontally
+  // across Authorised Signatory ↔ Accepted by Candidate. The acknowledgement
+  // paragraph (applicant only) sits BELOW the rows so it cannot push them down.
   const applicantLines = `
-    ${ackBlock}
     ${linedRow("Name", aName)}
     ${linedRow("Title", aTitle)}
     ${linedRow("Date", aDate)}
     ${applicantMeta}
+    ${ackBlock}
   `;
 
   const extras = (opts.extraSignatories || []).filter(
