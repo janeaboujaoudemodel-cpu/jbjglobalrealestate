@@ -67,6 +67,8 @@ import {
   useHardDeleteDocument,
   type CrmDocument,
 } from "@/hooks/useCrmDocuments";
+import { useUploadCandidateAttachment } from "@/hooks/useCandidateAttachments";
+import { deriveCandidateFolder, pickCandidateDisplayName } from "@/utils/candidateFolder";
 import DocumentActionSheet from "./DocumentActionSheet";
 import DocumentPreviewDialog from "./DocumentPreviewDialog";
 import { RotateCcw } from "lucide-react";
