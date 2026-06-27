@@ -481,10 +481,10 @@ export function signatureBlock(opts: {
   // the colons (Name: / Title: / Date:) align on the same vertical line
   // across the two signature cells.
   const linedRow = (label: string, value?: string) => `
-    <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:7px;line-height:1.3;min-height:18px;">
+    <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:7px;line-height:1.35;min-height:20px;overflow:visible;">
       <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
-      <span style="display:block;min-height:18px;position:relative;min-width:0;">
-        ${value ? `<span style="display:block;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
+      <span style="display:block;min-height:20px;position:relative;min-width:0;overflow:visible;padding:1px 0;">
+        ${value ? `<span style="display:block;font-size:11px;line-height:1.45;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:230px;overflow:visible;text-overflow:clip;">${value}</span>` : ""}
       </span>
     </div>`;
 
@@ -497,6 +497,9 @@ export function signatureBlock(opts: {
   // The company stamp is controlled by DocumentStudio's draggable/lockable
   // stamp layer, not duplicated inside this static signature block.
   const stampOverlay = "";
+  const ack = (opts.applicantAcknowledgement || "").trim();
+  const lowerPreambleHeight = ack ? 94 : 0;
+  const lowerRowsMinHeight = ack ? 174 : 100;
 
   // Premium bordered signature box (mirrors institutional NDA layout):
   // a SINGLE gold-hairline frame containing two columns (Authorised
@@ -524,9 +527,6 @@ export function signatureBlock(opts: {
     .filter(([, value]) => (value || "").trim())
     .map(([label, value]) => row(label, esc(value || "")))
     .join("");
-  const ack = (opts.applicantAcknowledgement || "").trim();
-  const lowerPreambleHeight = ack ? 94 : 0;
-  const lowerRowsMinHeight = ack ? 174 : 100;
   const ackBlock = ack
     ? `<div data-applicant-undertaking="1" style="width:100%;max-height:${lowerPreambleHeight}px;overflow:hidden;padding:7px 9px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.35px;line-height:1.28;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";

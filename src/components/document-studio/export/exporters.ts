@@ -78,13 +78,34 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
     borderRadius: el.style.borderRadius,
   };
   const hidden: { node: HTMLElement; prevDisplay: string }[] = [];
+  const styled: { node: HTMLElement; overflow: string; textOverflow: string; marginTop: string; paddingTop: string }[] = [];
   const hideNode = (node: HTMLElement) => {
     if (hidden.some((entry) => entry.node === node)) return;
     hidden.push({ node, prevDisplay: node.style.display });
     node.style.display = "none";
   };
+  const touchExportStyle = (node: HTMLElement) => {
+    if (styled.some((entry) => entry.node === node)) return;
+    styled.push({
+      node,
+      overflow: node.style.overflow,
+      textOverflow: node.style.textOverflow,
+      marginTop: node.style.marginTop,
+      paddingTop: node.style.paddingTop,
+    });
+  };
   el.querySelectorAll<HTMLElement>('[aria-label="Remove field"],[data-drag-guide="true"]').forEach((n) => {
     hideNode(n);
+  });
+  el.querySelectorAll<HTMLElement>('[data-sig-detail-rows="1"],[data-sig-detail-rows="1"] *').forEach((n) => {
+    touchExportStyle(n);
+    n.style.overflow = "visible";
+    n.style.textOverflow = "clip";
+  });
+  el.querySelectorAll<HTMLElement>('[data-signature-block="1"]').forEach((block) => {
+    touchExportStyle(block);
+    block.style.marginTop = "0";
+    block.style.paddingTop = "14px";
   });
   el.querySelectorAll<HTMLElement>("[data-removable-field]").forEach((row) => {
     const valueCell = row.querySelector<HTMLElement>("[data-field-value-cell]");
@@ -131,6 +152,12 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
     el.style.boxShadow = prev.boxShadow;
     el.style.borderRadius = prev.borderRadius;
     hidden.forEach(({ node, prevDisplay }) => { node.style.display = prevDisplay; });
+    styled.forEach(({ node, overflow, textOverflow, marginTop, paddingTop }) => {
+      node.style.overflow = overflow;
+      node.style.textOverflow = textOverflow;
+      node.style.marginTop = marginTop;
+      node.style.paddingTop = paddingTop;
+    });
   }
 }
 
