@@ -7,6 +7,22 @@ import DOMPurify from "dompurify";
 import { wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
 import type { DocumentTemplate } from "@/config/documentCatalog";
 
+const PDF_PAGE_SCALE = 1.22;
+const PDF_JPEG_QUALITY = 0.8;
+
+let html2canvasLoader: Promise<(typeof import("html2canvas"))["default"]> | null = null;
+let jsPdfLoader: Promise<(typeof import("jspdf"))["default"]> | null = null;
+
+const loadHtml2Canvas = () => {
+  html2canvasLoader ??= import("html2canvas").then((m) => m.default);
+  return html2canvasLoader;
+};
+
+const loadJsPdf = () => {
+  jsPdfLoader ??= import("jspdf").then((m) => m.default);
+  return jsPdfLoader;
+};
+
 export interface PlacedMark {
   url: string;
   /** Width in document units (px on the 816-wide canvas). */
@@ -68,8 +84,8 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCanvasElement> {
-  const { default: html2canvas } = await import("html2canvas");
+async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const html2canvas = await loadHtml2Canvas();
 
   const prev = {
     transform: el.style.transform,
@@ -133,10 +149,11 @@ async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCa
     return await html2canvas(el, {
       backgroundColor: "#FDFBF7",
       scale,
+      foreignObjectRendering: true,
       useCORS: true,
       allowTaint: false,
       logging: false,
-      imageTimeout: 4000,
+      imageTimeout: 1800,
       removeContainer: true,
       width: widthPx,
       height: heightPx,
@@ -163,7 +180,7 @@ async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCa
   }
 }
 
-async function renderPageCanvasWithMirrorFallback(el: HTMLElement, scale = 1.6): Promise<HTMLCanvasElement> {
+async function renderPageCanvasWithMirrorFallback(el: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   try {
     return await renderElementCanvas(el, scale);
   } catch (error) {
@@ -200,6 +217,21 @@ const yieldToUi = () => new Promise<void>((resolve) => {
   else setTimeout(resolve, 0);
 });
 
+const canvasToJpegBytes = (canvas: HTMLCanvasElement, quality = PDF_JPEG_QUALITY) =>
+  new Promise<Uint8Array>((resolve) => {
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+        resolve(new Uint8Array(await blob.arrayBuffer()));
+        return;
+      }
+      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+      const binary = atob(dataUrl.split(",")[1] || "");
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+      resolve(bytes);
+    }, "image/jpeg", quality);
+  });
+
 /** Off-screen chrome render (fallback when no live element is provided). */
 async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
   const host = document.createElement("div");
@@ -221,7 +253,7 @@ export async function exportPdf(
   sourceElement?: HTMLElement | null,
   onProgress?: (done: number, total: number) => void,
 ): Promise<Blob> {
-  const { default: jsPDF } = await import("jspdf");
+  const [jsPDF] = await Promise.all([loadJsPdf(), loadHtml2Canvas()]);
 
   const livePages = sourceElement
     ? Array.from(sourceElement.querySelectorAll<HTMLElement>('[data-document-page="true"]'))
@@ -251,8 +283,8 @@ export async function exportPdf(
       onProgress?.(i, livePages.length);
       // Yield first so the toast/progress UI can paint between pages.
       await yieldToUi();
-      const canvas = await renderPageCanvasWithMirrorFallback(livePages[i], 1.6);
-      const data = canvas.toDataURL("image/jpeg", 0.85);
+      const canvas = await renderPageCanvasWithMirrorFallback(livePages[i], PDF_PAGE_SCALE);
+      const data = await canvasToJpegBytes(canvas);
       // Free the offscreen bitmap immediately — multi-page jobs accumulate
       // hundreds of MB otherwise and stall the browser on page 4-7.
       canvas.width = 0; canvas.height = 0;
@@ -268,7 +300,7 @@ export async function exportPdf(
 
   // Collect logical block boundaries from the live DOM BEFORE rasterising,
   // so we can avoid slicing through tables / signatures / terms items.
-  const SCALE = 2; // matches renderElementCanvas
+  const SCALE = PDF_PAGE_SCALE; // matches renderElementCanvas
   const sectionBottomsCss: number[] = [];
   if (sourceElement) {
     const rootTop = sourceElement.getBoundingClientRect().top;
@@ -319,7 +351,7 @@ export async function exportPdf(
     ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
     ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
 
-    const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.92);
+    const sliceData = await canvasToJpegBytes(sliceCanvas, PDF_JPEG_QUALITY);
     if (!first) pdf.addPage();
     pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, A4_H);
     first = false;
