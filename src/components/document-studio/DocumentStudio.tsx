@@ -1735,16 +1735,24 @@ function StudioShell({
     const currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) { toast.error("Nothing to export yet"); return; }
     setExporting(kind);
+    const progressId = kind === "pdf" || kind === "both" ? toast.loading("Preparing PDF…") : null;
+    const onProgress = (done: number, total: number) => {
+      if (progressId != null) {
+        toast.loading(`Rendering page ${Math.min(done + 1, total)} of ${total}…`, { id: progressId });
+      }
+    };
     try {
       const src = pageRef.current;
       let pdfBlob: Blob | null = null;
-      if (kind === "pdf") pdfBlob = await exportPdf(currentBody, marks, template, src);
+      if (kind === "pdf") pdfBlob = await exportPdf(currentBody, marks, template, src, onProgress);
       else if (kind === "docx") await exportDocx(currentBody, marks, template);
       else if (kind === "png") await exportPng(currentBody, marks, template, src);
       else if (kind === "both") {
-        pdfBlob = await exportPdf(currentBody, marks, template, src);
+        pdfBlob = await exportPdf(currentBody, marks, template, src, onProgress);
         await exportPng(currentBody, marks, template, src);
       }
+      if (progressId != null) toast.success("PDF downloaded", { id: progressId });
+
       if (pdfBlob) {
         try {
           const saved = await handleSaveDocument();
@@ -1779,7 +1787,8 @@ function StudioShell({
       }
     } catch (e: any) {
       console.error("[DocumentStudio] export failed", kind, e);
-      toast.error(e?.message || `${kind.toUpperCase()} export failed`);
+      if (progressId != null) toast.error(e?.message || `${kind.toUpperCase()} export failed`, { id: progressId });
+      else toast.error(e?.message || `${kind.toUpperCase()} export failed`);
     } finally {
       setExporting(null);
     }

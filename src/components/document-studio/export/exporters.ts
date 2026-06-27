@@ -153,6 +153,7 @@ async function renderHostCanvas(bodyHtml: string, marks: DocumentMarks) {
 export async function exportPdf(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
   sourceElement?: HTMLElement | null,
+  onProgress?: (done: number, total: number) => void,
 ): Promise<Blob> {
   const { default: jsPDF } = await import("jspdf");
 
@@ -160,20 +161,37 @@ export async function exportPdf(
     ? Array.from(sourceElement.querySelectorAll<HTMLElement>('[data-document-page="true"]'))
     : [];
 
+  const triggerDownload = (blob: Blob, name: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      try { document.body.removeChild(a); } catch { /* ignore */ }
+      URL.revokeObjectURL(url);
+    }, 1500);
+  };
+
   if (livePages.length > 0) {
     const A4_W = 210;
     const A4_H = 297;
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
     for (let i = 0; i < livePages.length; i += 1) {
+      onProgress?.(i, livePages.length);
       const canvas = await renderElementCanvas(livePages[i]);
-      const data = canvas.toDataURL("image/jpeg", 0.95);
+      const data = canvas.toDataURL("image/jpeg", 0.92);
       if (i > 0) pdf.addPage();
       pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H);
     }
+    onProgress?.(livePages.length, livePages.length);
 
     const blob = pdf.output("blob");
-    pdf.save(fileName(template, "pdf"));
+    triggerDownload(blob, fileName(template, "pdf"));
     return blob;
   }
 
@@ -230,14 +248,14 @@ export async function exportPdf(
     ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
     ctx.drawImage(canvas, 0, yOffset, canvas.width, h, 0, 0, canvas.width, h);
 
-    const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
+    const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.92);
     if (!first) pdf.addPage();
     pdf.addImage(sliceData, "JPEG", 0, 0, A4_W, A4_H);
     first = false;
     yOffset = cut;
   }
   const blob = pdf.output("blob");
-  pdf.save(fileName(template, "pdf"));
+  triggerDownload(blob, fileName(template, "pdf"));
   return blob;
 }
 
