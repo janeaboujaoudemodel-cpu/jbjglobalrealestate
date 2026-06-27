@@ -731,10 +731,10 @@ function StudioShell({
     // pre-fills when entered via the Offer → NDA companion toggle (handled
     // below). Existing NDA drafts keep their saved fields.
     if (baseTemplateId === "nda" && !snap) {
-      return { ...base };
+      return snapDocumentDatesToToday({ ...base });
     }
-    const merged = { ...base, ...shared, ...(snap?.fields || {}) };
-    return baseTemplateId === "job_offer" ? normalizeJobOfferIdentityFields(snap?.fields || {}, shared) : merged;
+    const merged = snapDocumentDatesToToday({ ...base, ...shared, ...(snap?.fields || {}) });
+    return baseTemplateId === "job_offer" ? snapDocumentDatesToToday(normalizeJobOfferIdentityFields(snap?.fields || {}, shared)) : merged;
   });
 
   // Mirror identity fields to the shared store whenever they change.
@@ -1151,7 +1151,7 @@ function StudioShell({
     const p = s.payload || {};
     setTemplateId(s.base_template_id);
     resumeStructuredSync();
-    if (p.fields) setSyncedFields(p.fields);
+    if (p.fields) setSyncedFields(snapDocumentDatesToToday(p.fields));
     if (p.department) setDepartment(p.department);
     if (p.commissionRows) setCommissionRows(p.commissionRows);
     if (p.customFields) setCustomFields(p.customFields);
@@ -1579,9 +1579,10 @@ function StudioShell({
       const forceTemplateResync = (s.templateId === "job_offer" || s.templateId === "nda") && (s.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
       if (s.fields && typeof s.fields === "object") {
         const shared = readSharedIdentity();
-        setFields(forceTemplateResync
+        const nextFields = forceTemplateResync
           ? normalizeJobOfferIdentityFields(s.fields, shared)
-          : (s.templateId === "job_offer" ? normalizeJobOfferIdentityFields(s.fields, shared) : s.fields));
+          : (s.templateId === "job_offer" ? normalizeJobOfferIdentityFields(s.fields, shared) : s.fields);
+        setFields(snapDocumentDatesToToday(nextFields));
       }
       if (forceTemplateResync) {
         userEditedRef.current = false;
@@ -1830,7 +1831,7 @@ function StudioShell({
     // No-op if the same template is re-selected — never wipe an in-progress body.
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
-    setSyncedFields(getTemplateDefaultFields(id));
+    setSyncedFields(snapDocumentDatesToToday(getTemplateDefaultFields(id)));
     const iso = todayIso();
     setOwnerDate(iso);
     setApplicantDate(iso);
