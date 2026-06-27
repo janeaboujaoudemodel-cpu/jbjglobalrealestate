@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 28;
+  const DOCUMENT_FIX_VERSION = 29;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -614,7 +614,13 @@ function StudioShell({
       }
     } catch {}
   }, [fields]);
-  const [bodyHtml, setBodyHtml] = useState<string>(() => snap?.bodyHtml || "");
+  const [bodyHtml, setBodyHtml] = useState<string>(() => {
+    const staleStructuredDraft =
+      !!snap?.templateId &&
+      (snap.templateId === "job_offer" || snap.templateId === "nda") &&
+      (snap.documentFixVersion || 0) < DOCUMENT_FIX_VERSION;
+    return staleStructuredDraft ? "" : (snap?.bodyHtml || "");
+  });
   const [generating, setGenerating] = useState(false);
   const [addPagePrompt, setAddPagePrompt] = useState("");
   const [addPageAfterIndex, setAddPageAfterIndex] = useState<number | null>(null);
