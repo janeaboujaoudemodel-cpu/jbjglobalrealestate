@@ -480,7 +480,7 @@ export function signatureBlock(opts: {
   // the colons (Name: / Title: / Date:) align on the same vertical line
   // across the two signature cells.
   const linedRow = (label: string, value?: string) => `
-    <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:8px;line-height:1.3;min-height:18px;">
+    <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:7px;line-height:1.3;min-height:18px;">
       <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
       <span style="display:block;min-height:18px;position:relative;min-width:0;">
         ${value ? `<span style="display:block;font-size:11px;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis;">${value}</span>` : ""}
@@ -504,10 +504,10 @@ export function signatureBlock(opts: {
   const cellInner = (sigId: string, heading: string, lines: string, isRight: boolean) => `
     <td data-sig-id="${sigId}" style="width:50%;vertical-align:top;padding:0;position:relative;${isRight ? `border-left:1px solid ${GOLD};` : ""}">
       <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
-      <div style="position:relative;min-height:130px;padding:10px 14px 6px;">
+      <div style="position:relative;min-height:142px;padding:10px 14px 6px;">
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
       </div>
-      <div style="padding:8px 14px 12px;border-top:1px dashed ${GOLD}80;">
+      <div style="padding:9px 14px 13px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 204 : 112}px;box-sizing:border-box;">
         ${lines}
       </div>
     </td>`;
@@ -524,22 +524,29 @@ export function signatureBlock(opts: {
     .join("");
   const ack = (opts.applicantAcknowledgement || "").trim();
   const ackBlock = ack
-    ? `<div style="margin:10px 0 0;padding:8px 10px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:9.5px;line-height:1.55;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
+    ? `<div style="padding:6px 9px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:8.6px;line-height:1.38;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
     : "";
-  // Acknowledgement sits ABOVE Name/Title/Date (tight under the heading) so
-  // the loyalty text reads like an undersigned preamble, then a generous gap
-  // pushes the Name/Title/Date rows downward in a premium way. The owner side
-  // receives the same top spacer so the rows still align horizontally across
-  // both cells.
-  const sideSpacer = ack ? `<div style="height:42px;"></div>` : "";
-  const ownerLinesWithSpacer = `${sideSpacer}${ownerLines}`;
+  // The undersigned preamble must sit directly above the applicant's
+  // Name/Title/Date rows, while BOTH columns keep those rows on the exact same
+  // horizontal baseline. Reserve the same preamble slot on the owner side, then
+  // pin the rows underneath it instead of letting the applicant paragraph push
+  // only the right column down.
+  const preambleSlot = ack
+    ? `<div style="height:96px;display:flex;align-items:flex-end;margin-bottom:10px;">${ackBlock}</div>`
+    : "";
+  const blankPreambleSlot = ack
+    ? `<div style="height:96px;margin-bottom:10px;"></div>`
+    : "";
+  const rowsWrap = (html: string) => `<div data-sig-detail-rows="1">${html}</div>`;
+  const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
   const applicantLines = `
-    ${ackBlock}
-    ${sideSpacer}
-    ${linedRow("Name", aName)}
-    ${linedRow("Title", aTitle)}
-    ${linedRow("Date", aDate)}
-    ${applicantMeta}
+    ${preambleSlot}
+    ${rowsWrap(`
+      ${linedRow("Name", aName)}
+      ${linedRow("Title", aTitle)}
+      ${linedRow("Date", aDate)}
+      ${applicantMeta}
+    `)}
   `;
 
   const extras = (opts.extraSignatories || []).filter(
