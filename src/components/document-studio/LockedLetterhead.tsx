@@ -36,11 +36,12 @@ function FooterIcon({ type }: { type: FooterIconType }) {
       style={{
         width: 12,
         height: 14,
-        display: "flex",
+        display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         flex: "0 0 12px",
         lineHeight: "14px",
+        verticalAlign: "middle",
       }}
       dangerouslySetInnerHTML={{ __html: FOOTER_ICON_SVG[type] }}
     />
@@ -158,29 +159,37 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
     whiteSpace: "nowrap" as const,
     overflow: "visible" as const,
   };
+  // Export parity: html2canvas mis-baselines grid cells with mixed
+  // SVG (12px) and text (14px line-box) children — the SVG rasterizes
+  // above the text baseline. Inline-flex with explicit verticalAlign
+  // forces icon + text onto the same middle baseline in both preview
+  // and raster export.
   const iconRowStyle = {
     height: 14,
     lineHeight: "14px",
-    display: "grid",
-    gridTemplateColumns: "12px minmax(0, 1fr)",
-    columnGap: 6,
+    display: "inline-flex",
+    flexDirection: "row" as const,
     alignItems: "center",
+    columnGap: 6,
+    verticalAlign: "middle" as const,
   };
   const textAfterIconStyle = {
     minWidth: 0,
     height: 14,
     lineHeight: "14px",
-    display: "block",
+    display: "inline-block",
+    verticalAlign: "middle" as const,
     whiteSpace: "nowrap" as const,
   };
   const rightItemStyle = {
-    display: "grid",
-    gridTemplateColumns: "12px max-content",
-    columnGap: 6,
+    display: "inline-flex",
+    flexDirection: "row" as const,
     alignItems: "center",
+    columnGap: 6,
     height: 14,
     lineHeight: "14px",
     whiteSpace: "nowrap" as const,
+    verticalAlign: "middle" as const,
   };
   return (
     <footer
@@ -224,17 +233,17 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
           ))}
         </div>
         <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
-          <div style={{ height: 14, lineHeight: "14px", display: "grid", gridTemplateColumns: "max-content 10px max-content", alignItems: "center", justifyContent: "end", columnGap: 6, width: "100%" }}>
+          <div style={{ height: 14, lineHeight: "14px", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", columnGap: 6, width: "100%" }}>
             <span style={rightItemStyle}>
               <FooterIcon type="mail" />
-              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
+              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "inline-block", verticalAlign: "middle" }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
             </span>
-            <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "block", textAlign: "center" }}>·</span>
+            <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "inline-block", verticalAlign: "middle", textAlign: "center" }}>·</span>
             <span style={rightItemStyle}>
               <FooterIcon type="globe" />
-              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
+              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "inline-block", verticalAlign: "middle" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
             </span>
