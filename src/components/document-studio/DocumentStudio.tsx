@@ -16,7 +16,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPortal } from "react-dom";
+import { createPortal, flushSync } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -1736,6 +1736,28 @@ function StudioShell({
     JSON.stringify(extraSignatories),
   ]);
 
+  const buildSyncedBodyHtmlNow = useCallback(() => {
+    if (!template) return "";
+    const visibleFields: Record<string, string> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      if (!hiddenFieldKeys.has(k)) visibleFields[k] = v;
+    }
+    return renderStandardBody({
+      templateId: template.id,
+      fields: visibleFields,
+      department: template.needsPosition ? department : undefined,
+      commissionRows: usesCommission && !hiddenSections.has("commission") ? commissionRows : undefined,
+      customFields: hiddenSections.has("custom") ? [] : customFields,
+      ownerName,
+      ownerTitle,
+      ownerDate,
+      letterDate: visibleFields.letterDate || ownerDate,
+      applicantDate,
+      hideLetterDate: true,
+      extraSignatories,
+    });
+  }, [template, fields, hiddenFieldKeys, department, usesCommission, hiddenSections, commissionRows, customFields, ownerName, ownerTitle, ownerDate, applicantDate, extraSignatories]);
+
   const resetToTemplate = () => {
     resumeStructuredSync();
     if (autoBodyRef.current) setBodyHtml(autoBodyRef.current);
@@ -1932,14 +1954,21 @@ function StudioShell({
   const handleExport = async (kind: "pdf" | "docx" | "png" | "both") => {
     let currentBody = cleanDocumentFieldRows(getCurrentBodyHtml());
     if (!currentBody || !template) { toast.error("Nothing to export yet"); return; }
-    if (shouldUseSyncedTemplateForExport(currentBody, autoBodyRef.current, fields)) {
+    const syncedBodyNow = cleanDocumentFieldRows(buildSyncedBodyHtmlNow());
+    const mustResyncBeforeExport = shouldUseSyncedTemplateForExport(currentBody, syncedBodyNow || autoBodyRef.current, fields)
+      || (hasMeaningfulApplicantData(fields)
+        && !!syncedBodyNow
+        && countBracketPlaceholders(currentBody) > countBracketPlaceholders(syncedBodyNow));
+    if (mustResyncBeforeExport) {
+      const exportBody = syncedBodyNow || autoBodyRef.current;
       resumeStructuredSync();
       userEditedRef.current = false;
       liveEditedBodyHtmlRef.current = null;
       setUserEdited(false);
-      setBodyHtml(autoBodyRef.current);
-      committedBodyHtmlRef.current = autoBodyRef.current;
-      currentBody = cleanDocumentFieldRows(autoBodyRef.current);
+      flushSync(() => setBodyHtml(exportBody));
+      autoBodyRef.current = exportBody;
+      committedBodyHtmlRef.current = exportBody;
+      currentBody = cleanDocumentFieldRows(exportBody);
       await waitForDocumentPaint();
     }
     setExporting(kind);
