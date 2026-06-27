@@ -168,7 +168,23 @@ const restoreOfferCommissionRows = (templateId?: string, rows?: CommissionRow[])
   ];
 };
 
-const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
+const IDENTITY_FIELD_KEYS = [
+  "fullNameAsPerPassport",
+  "passportFullName",
+  "fullNameAsPerId",
+  "fullNameAsPerID",
+  "emiratesIdFullName",
+  "fullNameArabic",
+  "nameArabic",
+  "arabicName",
+  "recipientName",
+  "emiratesId",
+  "passportNumber",
+  "nationality",
+  "homeAddress",
+  "recipientEmail",
+  "recipientPhone",
+];
 
 const isMeaningfulDocumentValue = (value?: any): value is string => {
   const text = String(value || "").trim();
@@ -178,16 +194,55 @@ const isMeaningfulDocumentValue = (value?: any): value is string => {
 const pickMeaningful = (...values: any[]): string =>
   values.map((v) => String(v || "").trim()).find((v) => isMeaningfulDocumentValue(v)) || "";
 
+const OFFICIAL_NAME_ALIASES: Record<string, { english: string; arabic?: string }> = {
+  "alwalid i s alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i. s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i.s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alhalabi alwalid i s": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+};
+
+const cleanIdentityName = (value?: string) => (value || "")
+  .replace(/^\s*(?:full\s+name\s+(?:as\s+per\s+(?:id|passport)|on\s+passport)|candidate\s+name|name)\s*(?:is|:|-)?\s*/i, "")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const normaliseNameAliasKey = (value?: string): string =>
+  cleanIdentityName(value)
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^a-z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const officialNameAlias = (value?: string) => {
+  const key = normaliseNameAliasKey(value);
+  return key ? OFFICIAL_NAME_ALIASES[key] : undefined;
+};
+
+const normalizeArabicIdentityName = (value?: string): string => {
+  if (!value || !/[\u0600-\u06FF]/.test(value)) return "";
+  const line = value.match(/(?:الاسم\s*كاملا|الاسم)\s*[:：]?\s*([\u0600-\u06FF\s]+)/)?.[1] || value;
+  return line.split(/\n/)[0].replace(/\s+/g, " ").trim();
+};
+
 const normalizeJobOfferIdentityFields = (raw: Record<string, string> = {}, shared: Record<string, string> = {}) => {
   const base = getTemplateDefaultFields("job_offer");
   const next = { ...base, ...shared, ...raw };
   const from = (keys: string[]) => pickMeaningful(...keys.map((k) => raw[k]), ...keys.map((k) => shared[k]), ...keys.map((k) => next[k]));
-  const name = from(["recipientName", "employeeName", "employee_name", "fullName", "full_name", "candidateName", "client_name", "guest_name", "name"]);
+  const name = from(["fullNameAsPerPassport", "passportFullName", "fullNameAsPerId", "fullNameAsPerID", "emiratesIdFullName", "recipientName", "employeeName", "employee_name", "fullName", "full_name", "candidateName", "client_name", "guest_name", "name"]);
+  const official = officialNameAlias(name);
+  const legalName = official?.english || name;
+  const arabicName = from(["fullNameArabic", "nameArabic", "arabicName", "fullNameAsPerPassportArabic", "fullNameAsPerIdArabic"]) || official?.arabic || "";
   const address = from(["homeAddress", "employeeAddress", "employee_address", "address", "home_address", "residentialAddress", "residential_address"]);
   const email = from(["recipientEmail", "employeeEmail", "employee_email", "email", "emailAddress", "email_address"]);
   const phone = from(["recipientPhone", "employeePhone", "employee_phone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"]);
   const title = from(["jobTitle", "position", "employeeTitle", "employee_title", "title"]);
-  if (name) next.recipientName = name;
+  if (legalName) {
+    next.fullNameAsPerPassport = legalName;
+    next.fullNameAsPerId = legalName;
+    next.recipientName = legalName;
+  }
+  if (arabicName) next.fullNameArabic = normalizeArabicIdentityName(arabicName) || arabicName;
   if (address) next.homeAddress = address;
   if (email) next.recipientEmail = email;
   if (phone) next.recipientPhone = phone;
