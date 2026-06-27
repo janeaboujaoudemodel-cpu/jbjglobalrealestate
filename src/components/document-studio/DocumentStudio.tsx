@@ -122,7 +122,7 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         annualLeave: "30 calendar days",
         noticePeriod: "30 calendar days",
         reportingTo: "Management",
-        salary: "Not applicable — fixed commission basis",
+        salary: "AED 0 — zero salary; commission-only",
         commission: "65% on own direct deals; 55% on Company-sourced deals; 70% Company-approved premium tier only after AED 10,000,000 Company-recognised sales in one year and written management approval",
         paymentCycle: "Upon the Company's receipt of cleared commission",
         leadsReceivedFrom: "2026-06-20",
@@ -526,7 +526,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 44;
+  const DOCUMENT_FIX_VERSION = 45;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {

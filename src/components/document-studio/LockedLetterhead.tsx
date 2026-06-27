@@ -26,14 +26,13 @@ const tokens = (theme: LetterheadTheme) =>
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: "#1A1A1A", hairline: JBJ_GOLD });
 
 const FOOTER_ICONS = {
-  // Raster PNG data URIs are intentional: html2canvas/jsPDF can re-baseline
-  // inline SVGs during PDF export, which made footer icons look erased or
-  // shifted on the downloaded last page. These 48px gold PNGs downsample
-  // cleanly to the locked 12px slot and preserve preview/export parity.
-  location: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABNUlEQVR4nO2YwQ3CMAxFDWI4FmAK5mEKFmA7OEWqqqbJt18oEX43RJ3427HdxixJkqk5jVj09bi9a/9d7090T2yxPadrEGLO0QXMfM5H7JaEIkA4UPBmw50B0vnIei7Vrc32ohmx3eKiPNyiZ/PyDJVB+QjVNlYjV3teFSYJoJxv2Skiwm002suj9mgNrFlGkp7Ahe5Ft9LqOQKKTY9oZBIfCS6gVYD0AMwMHA0uoFV4dDeaPgNSNNRW1zsHvC3UbPAgGzW8loSPULQtRu0lAdQbZMtOyZycAUoE9WaL1kBxKvJFpuIuMtoRM1/Ru4uY7jB/eyvxvxn4FcJRVNohfSlgNvBVYkSX2mL6WwmkBuh7IYXpixgTQF0tqqAZ6HWKnCF5hNbkR73IEAHrKJff3/hGThKRD9Fxo2huXChtAAAAAElFTkSuQmCC",
-  phone: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABRklEQVR4nO1Y0Q2FIAzEF4dzAadwHqdwAbfzfZEYA7RX2sJHL/FL0B5XjpaUAoFAINCBRTLpPven9m47LtE3pYB/1gr+DS8iP2QwN3hPsAmgwXuRZRGYceUz1tbLWuCl/B5FklTgGyyyOT1IkQS+QcyWTpALteDt/xlNAhpBWSsmUmCmNFJLoZTKilmnFuxCGSUVRiijpkApeI+NbebpUxZzXHhaKpvAbCdwhlk/kBLPAHrVMj2JOZ3bfe5PfiT/VW0pt+NaKDfS7ujUN3FLCWSVucqICFC57dkvmBRr7/yuzeOMKY3/QsWvURJIeULNUdkDrZRBOrrtuBbUVlVPTKSHRr9jqgD1kx6fp+BioxkWJNyLOW01TAhwUCOC9hXmZW/valMG4Fa3S4hw3MsthVAr5Y4fchlFqTHqkqwbM903BQKBAA9/ZjzP5Qba4jMAAAAASUVORK5CYII=",
-  mail: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAA90lEQVR4nO2X6w2DMAyEQ9XhWKBTME+nYAG2o78iVVGwE99VKXDfH5Dy8Dl+RElJCCGEEOK+TC2Ttvdr/7WQI+ZlNTU+vA1Gim+xbzowWnzG0uFG4N85vQNPdAOvyFpAUhWOAFon6HpKCkVFMJoEnEKZLKYlpZjdrTsCnkBPnDfeW1OhFIo6wRafElAD87JOlsFSrCXe28uC0kajJ57XI/YpXSgqgnGH3LuNMgT0tN8a4QgcibcK0hqLHkbIgZqxUlz+L7+1uda+HtCl9C2o1zDLBlzEaCdB18P3wOhX2+kfNNd2gHFTMrB0uBEY7cRo+0IIIYS4NB+Ob4G3KylmggAAAABJRU5ErkJggg==",
-  globe: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAABH0lEQVR4nO2ZzRHCQAiFV8fibMAqrMcqbMDu9JQLY/h5PDbJhO+8AR6EXTYZo2mapklwYRv8vB5fa839+ab5pRnyBC5hCEkbQAKXZITADzIClyBCroijiuBRu2HF2SZlN3moAlWZz/hxC/AatbLnza7XH9QDe8IlgJX96DqPX7gCzNM0Y88U8C8L7OA1u1YV4ApIw1FRcj26w6kCZm2bFloc4QpUvT6ofXXxXiowxrqwc5wDe6YFbM0t+sDSTNlzQLNRMo2uOWUTta8KqN7zvWhx0Ia5aOYYr+AYDgHIgIWCDI60YS5LyTC3wL4GMi9Ihz8H3AJYVWBfT0MVmLWtRvxAAVUeZtEkQT0w805scd6v05LD/h+QzP5D0zRNsy0/1vSgP5LwO7gAAAAASUVORK5CYII=",
+  // Text glyphs are intentional: html2canvas/jsPDF was intermittently
+  // clipping tiny SVG/PNG footer icons in the downloaded last page. These
+  // glyphs rasterize as normal text, so export and preview stay aligned.
+  location: "●",
+  phone: "☎",
+  mail: "✉",
+  globe: "◎",
 } as const;
 
 export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { theme?: LetterheadTheme }) {
@@ -150,13 +149,17 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
   const iconStyle = {
     position: "absolute" as const,
     left: 0,
-    top: 1,
+    top: 0,
     width: 12,
     height: 12,
     display: "block",
-    lineHeight: 0,
-    fontSize: 0,
-    objectFit: "contain" as const,
+    lineHeight: "14px",
+    fontSize: 10,
+    fontWeight: 900,
+    fontFamily: "Arial, Helvetica, sans-serif",
+    color: JBJ_GOLD,
+    WebkitTextFillColor: JBJ_GOLD,
+    textAlign: "center" as const,
   };
   const textAfterIconStyle = {
     position: "absolute" as const,
@@ -201,7 +204,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
       >
         <div style={{ minWidth: 0, paddingRight: 14, fontSize: 8.5, lineHeight: "14px", color: t.fg, WebkitTextFillColor: t.fg, height: 14, whiteSpace: "nowrap" }}>
           <div style={{ ...rowStyle, width: "100%" }}>
-            <img alt="" aria-hidden="true" src={FOOTER_ICONS.location} style={iconStyle} />
+            <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.location}</span>
             <span style={textAfterIconStyle}>{JBJ_BRAND.address}</span>
           </div>
         </div>
@@ -209,7 +212,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
           {phones.map((p, i) => (
             <div key={p} style={{ ...rowStyle, width: 132, margin: "0 auto", textAlign: "left" }}>
               {i === 0 ? (
-                <img alt="" aria-hidden="true" src={FOOTER_ICONS.phone} style={iconStyle} />
+                <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.phone}</span>
               ) : null}
               <span style={textAfterIconStyle}>{p}</span>
             </div>
@@ -218,14 +221,14 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         <div style={{ minWidth: 0, paddingLeft: 14, fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", whiteSpace: "nowrap", height: 14, lineHeight: "14px" }}>
           <div style={{ height: 14, lineHeight: "14px", display: "grid", gridTemplateColumns: "max-content 10px max-content", alignItems: "center", justifyContent: "end", columnGap: 6, width: "100%" }}>
             <span style={rightItemStyle}>
-              <img alt="" aria-hidden="true" src={FOOTER_ICONS.mail} style={iconStyle} />
+              <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.mail}</span>
               <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700, lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.email.toUpperCase()}
               </a>
             </span>
             <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, lineHeight: "14px", display: "block", textAlign: "center" }}>·</span>
             <span style={rightItemStyle}>
-              <img alt="" aria-hidden="true" src={FOOTER_ICONS.globe} style={iconStyle} />
+              <span aria-hidden="true" style={iconStyle}>{FOOTER_ICONS.globe}</span>
               <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em", lineHeight: "14px", display: "block" }}>
                 {JBJ_BRAND.website.toUpperCase()}
               </a>
