@@ -169,7 +169,13 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
   return hasClientName && hasContact;
 }
 
-const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","vault","deleted","assets"];
+const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","vault","candidates","folders","deleted","assets"];
+// `folders` is the canonical key; `candidates` is kept as a legacy alias.
+const normalizeTabKey = (t: string | null | undefined): Bucket => {
+  if (!t) return "templates";
+  if (t === "candidates") return "folders";
+  return (VALID_TABS as string[]).includes(t) ? (t as Bucket) : "templates";
+};
 
 // Lazy-loaded so the Vault payload (developer combobox + signed-document query) only
 // loads when the owner opens the tab.
