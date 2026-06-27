@@ -504,10 +504,10 @@ export function signatureBlock(opts: {
   const cellInner = (sigId: string, heading: string, lines: string, isRight: boolean) => `
     <td data-sig-id="${sigId}" style="width:50%;vertical-align:top;padding:0;position:relative;${isRight ? `border-left:1px solid ${GOLD};` : ""}">
       <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
-      <div style="position:relative;min-height:142px;padding:10px 14px 6px;">
+      <div style="position:relative;min-height:138px;padding:10px 14px 6px;">
         <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
       </div>
-      <div style="padding:9px 14px 13px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 204 : 112}px;box-sizing:border-box;">
+      <div style="padding:10px 14px 15px;border-top:1px dashed ${GOLD}80;min-height:${ack ? 190 : 112}px;box-sizing:border-box;">
         ${lines}
       </div>
     </td>`;
@@ -524,7 +524,7 @@ export function signatureBlock(opts: {
     .join("");
   const ack = (opts.applicantAcknowledgement || "").trim();
   const ackBlock = ack
-    ? `<div style="padding:6px 9px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:8.6px;line-height:1.38;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
+    ? `<div data-applicant-undertaking="1" style="width:100%;padding:7px 10px;border:1px solid ${GOLD}66;border-left:3px solid ${GOLD};border-radius:4px;background:#FBF7EE;font-size:8.8px;line-height:1.42;color:${INK};font-style:italic;text-align:justify;box-sizing:border-box;">${esc(ack)}</div>`
     : "";
   // The undersigned preamble must sit directly above the applicant's
   // Name/Title/Date rows, while BOTH columns keep those rows on the exact same
@@ -532,10 +532,10 @@ export function signatureBlock(opts: {
   // pin the rows underneath it instead of letting the applicant paragraph push
   // only the right column down.
   const preambleSlot = ack
-    ? `<div style="height:96px;display:flex;align-items:flex-end;margin-bottom:10px;">${ackBlock}</div>`
+    ? `<div data-sig-preamble-slot="1" style="height:86px;display:flex;align-items:flex-end;margin-bottom:14px;">${ackBlock}</div>`
     : "";
   const blankPreambleSlot = ack
-    ? `<div style="height:96px;margin-bottom:10px;"></div>`
+    ? `<div data-sig-preamble-slot="1" style="height:86px;margin-bottom:14px;"></div>`
     : "";
   const rowsWrap = (html: string) => `<div data-sig-detail-rows="1">${html}</div>`;
   const ownerLinesWithSpacer = `${blankPreambleSlot}${rowsWrap(ownerLines)}`;
