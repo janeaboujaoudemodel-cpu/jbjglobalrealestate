@@ -631,6 +631,84 @@ function drawPremiumFooterIcon(
   ctx.restore();
 }
 
+function setPdfHex(pdf: any, method: "setFillColor" | "setDrawColor" | "setTextColor", hex: string) {
+  const value = hex.replace("#", "");
+  const r = parseInt(value.slice(0, 2), 16);
+  const g = parseInt(value.slice(2, 4), 16);
+  const b = parseInt(value.slice(4, 6), 16);
+  pdf[method](r, g, b);
+}
+
+function drawPdfFooterIcon(pdf: any, kind: FooterIconKind, x: number, y: number, size: number) {
+  setPdfHex(pdf, "setDrawColor", JBJ_GOLD);
+  pdf.setLineWidth(0.22);
+  if (kind === "location") {
+    pdf.circle(x + size / 2, y + size * 0.42, size * 0.18, "S");
+    pdf.ellipse(x + size / 2, y + size * 0.43, size * 0.38, size * 0.42, "S");
+    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.28, y + size * 0.58);
+    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.72, y + size * 0.58);
+  } else if (kind === "phone") {
+    pdf.lines([[0.45, 0.52], [0.5, -0.18], [0.72, 0.38], [-0.5, 0.18], [-0.42, -0.9], [0.5, -0.18]], x + size * 0.14, y + size * 0.22, [size, size], "S", false);
+  } else if (kind === "mail") {
+    pdf.roundedRect(x + size * 0.1, y + size * 0.24, size * 0.8, size * 0.56, 0.35, 0.35, "S");
+    pdf.line(x + size * 0.16, y + size * 0.31, x + size * 0.5, y + size * 0.55);
+    pdf.line(x + size * 0.84, y + size * 0.31, x + size * 0.5, y + size * 0.55);
+  } else {
+    pdf.circle(x + size / 2, y + size / 2, size * 0.42, "S");
+    pdf.ellipse(x + size / 2, y + size / 2, size * 0.18, size * 0.42, "S");
+    pdf.line(x + size * 0.12, y + size * 0.5, x + size * 0.88, y + size * 0.5);
+    pdf.line(x + size * 0.24, y + size * 0.32, x + size * 0.76, y + size * 0.32);
+    pdf.line(x + size * 0.24, y + size * 0.68, x + size * 0.76, y + size * 0.68);
+  }
+}
+
+function drawLockedPdfFooter(pdf: any, page: HTMLElement, A4_W: number, A4_H: number) {
+  const footer = page.querySelector<HTMLElement>('[data-jbj-locked-footer="true"]');
+  if (!footer) return;
+
+  const footerH = 58 * (A4_H / LIVE_PAGE_HEIGHT);
+  const y = A4_H - footerH;
+  const padX = 28 * (A4_W / LIVE_PAGE_WIDTH);
+  const iconSize = 12 * (A4_W / LIVE_PAGE_WIDTH);
+  const iconGap = 6 * (A4_W / LIVE_PAGE_WIDTH);
+  const centerY = y + footerH / 2 + 0.25;
+  const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
+  const phone = phones[0] || JBJ_BRAND.phone;
+  const email = JBJ_BRAND.email.toUpperCase();
+  const website = JBJ_BRAND.website.toUpperCase();
+
+  pdf.saveGraphicsState?.();
+  setPdfHex(pdf, "setFillColor", JBJ_CHAMPAGNE);
+  pdf.rect(0, y, A4_W, footerH, "F");
+  setPdfHex(pdf, "setDrawColor", JBJ_GOLD);
+  pdf.setLineWidth(0.18);
+  pdf.line(0, y, A4_W, y);
+  setPdfHex(pdf, "setTextColor", JBJ_INK);
+  pdf.setFont("helvetica", "bold");
+
+  const leftX = padX;
+  drawPdfFooterIcon(pdf, "location", leftX, centerY - iconSize / 2, iconSize);
+  pdf.setFontSize(6.35);
+  pdf.text(JBJ_BRAND.address, leftX + iconSize + iconGap, centerY, { baseline: "middle" });
+
+  const phoneX = A4_W * 0.47;
+  drawPdfFooterIcon(pdf, "phone", phoneX, centerY - iconSize / 2, iconSize);
+  pdf.setFontSize(6.8);
+  pdf.text(phone, phoneX + iconSize + iconGap, centerY, { baseline: "middle" });
+
+  pdf.setFontSize(6.35);
+  const webW = pdf.getTextWidth(website);
+  const emailW = pdf.getTextWidth(email);
+  let cursor = A4_W - padX - webW;
+  drawPdfFooterIcon(pdf, "globe", cursor - iconGap - iconSize, centerY - iconSize / 2, iconSize);
+  pdf.text(website, cursor, centerY, { baseline: "middle" });
+  cursor -= iconSize + iconGap + emailW + 5;
+  drawPdfFooterIcon(pdf, "mail", cursor - iconGap - iconSize, centerY - iconSize / 2, iconSize);
+  pdf.text(email, cursor, centerY, { baseline: "middle" });
+
+  pdf.restoreGraphicsState?.();
+}
+
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   const html2canvas = await loadHtml2Canvas();
   const pageW = pages[0]?.offsetWidth || LIVE_PAGE_WIDTH;
