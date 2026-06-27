@@ -3801,13 +3801,13 @@ function StudioShell({
                                     alt=""
                                     aria-hidden
                                     style={{
-                                      width: 540,
-                                      height: 540,
+                                      width: 600,
+                                      height: 600,
                                       objectFit: "contain",
-                                      opacity: 0.1,
+                                      opacity: 0.22,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
-                                      filter: "saturate(1.1)",
+                                      filter: "saturate(1.35) contrast(1.15) drop-shadow(0 1px 0 rgba(255,255,255,0.55))",
                                       mixBlendMode: "multiply",
                                     }}
                                   />
