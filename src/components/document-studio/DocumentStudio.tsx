@@ -461,7 +461,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 18;
+  const DOCUMENT_FIX_VERSION = 19;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -1247,8 +1247,8 @@ function StudioShell({
         if (!next.signature && defaultSignature?.signedUrl) {
           next.signature = { url: defaultSignature.signedUrl, width: 200 };
         }
-        if (!next.stamp && stampUrl) next.stamp = { url: stampUrl, width: 142, rotation: 0 };
-        else if (next.stamp) next.stamp = { ...next.stamp, width: Math.min(next.stamp.width || 142, 160), rotation: 0 };
+        if (!next.stamp && stampUrl) next.stamp = { url: stampUrl, width: 120, rotation: 0 };
+        else if (next.stamp) next.stamp = { ...next.stamp, width: Math.min(next.stamp.width || 120, 140), rotation: 0 };
         return next;
       });
     })();
@@ -3513,8 +3513,8 @@ function StudioShell({
                                 )}
                                 {isLast && marks.stamp && (
                                   <DraggableMark
-                                    x={marks.stampXY?.x ?? 235}
-                                    y={marks.stampXY?.y ?? Math.max(792, PAGE_H - (isLast ? chromeHeights.footer : 0) - 178)}
+                                    x={marks.stampXY?.x ?? 210}
+                                    y={marks.stampXY?.y ?? Math.max(860, PAGE_H - (isLast ? chromeHeights.footer : 0) - 200)}
                                     onChange={(x, y) => setMarks((m) => ({ ...m, stampXY: { x, y } }))}
                                     onRemove={() => removeMark("stamp")}
                                     onClick={() => setAssetDialog("stamp")}
