@@ -3787,33 +3787,42 @@ function StudioShell({
                                     alignItems: "center",
                                     justifyContent: "center",
                                     pointerEvents: "none",
-                                    zIndex: 5,
+                                    // Sit BEHIND body content so text/tables
+                                    // are always crisp on top, while the
+                                    // champagne-gold monogram still reads as
+                                    // an engraved watermark on every page.
+                                    zIndex: 0,
                                   }}
                                 >
-                                  {/* Premium gold-only monogram watermark.
-                                      Sits ABOVE body/tables with very low
-                                      opacity so it's visible on EVERY page
-                                      (even pages dominated by opaque tables
-                                      like the Compensation grid on page 2)
-                                      without harming text readability. */}
+                                  {/* Premium champagne-gold engraved monogram.
+                                      Lives behind the content layer (z:0) while
+                                      body sits at z:1+, so it never hides text
+                                      and is never hidden BY text — it reads as
+                                      a true engraved watermark on every page. */}
                                   <img
                                     src={jbjMonogramSrc}
                                     alt=""
                                     aria-hidden
                                     style={{
-                                      width: 600,
-                                      height: 600,
+                                      width: 620,
+                                      height: 620,
                                       objectFit: "contain",
-                                      opacity: 0.22,
+                                      opacity: 0.38,
                                       transform: "scaleX(0.92)",
                                       transformOrigin: "center",
-                                      filter: "saturate(1.35) contrast(1.15) drop-shadow(0 1px 0 rgba(255,255,255,0.55))",
-                                      mixBlendMode: "multiply",
+                                      // Champagne-gold tint + engraved depth:
+                                      // a soft white highlight on top and a
+                                      // warm gold inner-shadow below create
+                                      // the pressed/engraved appearance on
+                                      // the cream paper.
+                                      filter:
+                                        "sepia(0.55) saturate(1.6) hue-rotate(-8deg) brightness(1.05) contrast(1.1) drop-shadow(0 1px 0 rgba(255,255,255,0.7)) drop-shadow(0 -1px 0 rgba(140,100,40,0.35))",
                                     }}
                                   />
 
                                 </div>
                               )}
+
                               {/* Document generation date — top-right corner of EVERY page (above
                                   letterhead on page 1, above body on pages 2+). Distinct from the
                                   per-page signature date, which sits next to the signature below. */}
