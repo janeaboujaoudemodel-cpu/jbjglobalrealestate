@@ -218,10 +218,15 @@ export async function exportPdf(
 
     for (let i = 0; i < livePages.length; i += 1) {
       onProgress?.(i, livePages.length);
-      const canvas = await renderElementCanvas(livePages[i]);
-      const data = canvas.toDataURL("image/jpeg", 0.92);
+      // Yield first so the toast/progress UI can paint between pages.
+      await yieldToUi();
+      const canvas = await renderElementCanvas(livePages[i], 1.6);
+      const data = canvas.toDataURL("image/jpeg", 0.85);
+      // Free the offscreen bitmap immediately — multi-page jobs accumulate
+      // hundreds of MB otherwise and stall the browser on page 4-7.
+      canvas.width = 0; canvas.height = 0;
       if (i > 0) pdf.addPage();
-      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H);
+      pdf.addImage(data, "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
     }
     onProgress?.(livePages.length, livePages.length);
 
