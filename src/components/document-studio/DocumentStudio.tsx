@@ -51,7 +51,7 @@ import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
-import { exportPdf, exportDocx, exportPng, printDocument, DocumentMarks } from "./export/exporters";
+import { exportPdf, exportDocx, exportPng, printDocument, preloadExportLibraries, DocumentMarks } from "./export/exporters";
 import {
   compose as composeDocument,
   DEFAULT_BROKER_COMMISSIONS,
