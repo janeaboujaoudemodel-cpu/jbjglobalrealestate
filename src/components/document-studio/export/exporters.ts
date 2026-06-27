@@ -341,7 +341,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   stage.appendChild(clone);
   document.body.appendChild(stage);
   try {
-    replaceFooterSvgsWithCanvasForExport(clone);
+    const footerIconOverlays = prepareFooterIconsForMeasuredExport(clone, clone);
     await yieldToUi();
     const canvas = await html2canvas(clone, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -370,8 +370,11 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     });
     if (isCanvasVisuallyBlank(canvas)) {
       canvas.width = 0; canvas.height = 0;
-      return await renderElementCanvas(clone, scale);
+      const fallbackCanvas = await renderElementCanvas(clone, scale);
+      drawFooterIconOverlays(fallbackCanvas, footerIconOverlays, clone);
+      return fallbackCanvas;
     }
+    drawFooterIconOverlays(canvas, footerIconOverlays, clone);
     return canvas;
   } finally {
     stage.remove();
@@ -396,31 +399,43 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
   return sampled > 0;
 }
 
-function replaceFooterSvgsWithCanvasForExport(root: HTMLElement): void {
+type FooterIconKind = "location" | "phone" | "mail" | "globe";
+
+type FooterIconOverlay = {
+  kind: FooterIconKind;
+  x: number;
+  y: number;
+  size: number;
+};
+
+function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconOverlay[] {
+  const rootRect = captureRoot.getBoundingClientRect();
+  const overlays: FooterIconOverlay[] = [];
   root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
     Array.from(footer.querySelectorAll<SVGElement>("svg")).forEach((svg) => {
       const wrapper = svg.parentElement as HTMLElement | null;
       if (wrapper) {
         const row = wrapper.parentElement as HTMLElement | null;
         const kind = inferFooterIconKindFromSvg(svg) || inferFooterIconKind((row?.textContent || "").trim());
-        const iconCanvas = document.createElement("canvas");
-        iconCanvas.width = 48;
-        iconCanvas.height = 48;
-        iconCanvas.style.cssText = [
-          "position:absolute",
-          "left:0",
-          // Export-only baseline correction: html2canvas/jsPDF rasterizes the
-          // footer text slightly lower than the live browser preview. The icon
-          // canvas must sit lower inside the preserved 14px line box so the
-          // exported glyph centers match the exported text centers.
-          "top:4.65px",
-          "width:12px",
-          "height:12px",
-          "display:block",
-          "overflow:visible",
-        ].join(";");
-        const ctx = iconCanvas.getContext("2d");
-        if (ctx) drawPremiumFooterIcon(ctx, kind, 0, 0, 12, 4, 4);
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const siblingText = Array.from(row?.children || []).find((child) => {
+          if (child === wrapper) return false;
+          const text = (child.textContent || "").trim();
+          return text.length > 0;
+        }) as HTMLElement | undefined;
+        const textRect = (siblingText || row || wrapper).getBoundingClientRect();
+        const iconSize = 12;
+        overlays.push({
+          kind,
+          x: wrapperRect.left - rootRect.left,
+          // Do not rely on SVG/flex baselines inside html2canvas. Hide the SVG
+          // and paint the icon directly on the captured page canvas using the
+          // adjacent text line-box center from the cloned DOM. This is export-
+          // only and leaves the live preview completely untouched.
+          y: textRect.top - rootRect.top + (textRect.height - iconSize) / 2,
+          size: iconSize,
+        });
 
         wrapper.style.width = "12px";
         wrapper.style.height = "14px";
@@ -432,13 +447,23 @@ function replaceFooterSvgsWithCanvasForExport(root: HTMLElement): void {
         wrapper.style.overflow = "visible";
         wrapper.style.flex = "0 0 12px";
         wrapper.style.verticalAlign = "top";
-        wrapper.replaceChildren(iconCanvas);
+        wrapper.replaceChildren();
       }
     });
   });
+  return overlays;
 }
 
-type FooterIconKind = "location" | "phone" | "mail" | "globe";
+function drawFooterIconOverlays(canvas: HTMLCanvasElement, overlays: FooterIconOverlay[], captureRoot: HTMLElement): void {
+  if (!overlays.length) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const sx = canvas.width / (captureRoot.offsetWidth || LIVE_PAGE_WIDTH);
+  const sy = canvas.height / (captureRoot.offsetHeight || LIVE_PAGE_HEIGHT);
+  overlays.forEach((overlay) => {
+    drawPremiumFooterIcon(ctx, overlay.kind, overlay.x, overlay.y, overlay.size, sx, sy);
+  });
+}
 
 function inferFooterIconKind(text: string): FooterIconKind {
   const value = text.toLowerCase();
