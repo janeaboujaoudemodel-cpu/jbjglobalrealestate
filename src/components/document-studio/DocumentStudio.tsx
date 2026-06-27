@@ -125,8 +125,8 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
         salary: "AED 0 — zero salary; commission-only",
         commission: "65% on own direct deals; 55% on Company-sourced deals; 70% Company-approved premium tier only after AED 10,000,000 Company-recognised sales in one year and written management approval",
         paymentCycle: "Upon the Company's receipt of cleared commission",
-        leadsReceivedFrom: "2026-06-20",
-        signingDate: "2026-06-26",
+        leadsReceivedFrom: today,
+        signingDate: today,
         leadsCountAtSigning: "approximately 310",
       };
     case "warning_letter":
@@ -1036,8 +1036,9 @@ function StudioShell({
 
   useEffect(() => {
     if (template?.id !== "job_offer") return;
-    setOwnerDate("2026-06-26");
-    setApplicantDate("2026-06-26");
+    const iso = new Date().toISOString().slice(0, 10);
+    setOwnerDate(iso);
+    setApplicantDate(iso);
   }, [template?.id]);
 
   // Additional signatories (beyond the default Owner + Counterparty).
@@ -1561,8 +1562,9 @@ function StudioShell({
       if (typeof s.ownerName === "string") setOwnerName(s.ownerName);
       if (typeof s.ownerTitle === "string") setOwnerTitle(s.ownerTitle);
       if (forceTemplateResync && s.templateId === "job_offer") {
-        setOwnerDate("2026-06-26");
-        setApplicantDate("2026-06-26");
+        const iso = new Date().toISOString().slice(0, 10);
+        setOwnerDate(iso);
+        setApplicantDate(iso);
       } else {
         if (typeof s.ownerDate === "string") setOwnerDate(s.ownerDate);
         if (typeof s.applicantDate === "string") setApplicantDate(s.applicantDate);
@@ -1790,8 +1792,9 @@ function StudioShell({
     setTemplateId(id);
     setSyncedFields(getTemplateDefaultFields(id));
     if (id === "job_offer") {
-      setOwnerDate("2026-06-26");
-      setApplicantDate("2026-06-26");
+      const iso = new Date().toISOString().slice(0, 10);
+      setOwnerDate(iso);
+      setApplicantDate(iso);
     }
     setExtraSignatories([]);
     autoBodyRef.current = "";
