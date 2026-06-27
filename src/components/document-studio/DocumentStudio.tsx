@@ -3807,10 +3807,11 @@ function StudioShell({
                                     viewBox="0 0 560 560"
                                     aria-hidden
                                     style={{
-                                      opacity: 0.42,
+                                      opacity: 0.32,
                                       filter:
-                                        "drop-shadow(0 1px 0 rgba(255,253,247,0.75)) drop-shadow(0 -1px 0 rgba(120,86,32,0.35))",
+                                        "drop-shadow(0 1px 0 rgba(255,253,247,0.7)) drop-shadow(0 -0.5px 0 rgba(120,86,32,0.3))",
                                     }}
+
                                   >
                                     <defs>
                                       <linearGradient id="jbjChampagne" x1="0" y1="0" x2="0" y2="1">
