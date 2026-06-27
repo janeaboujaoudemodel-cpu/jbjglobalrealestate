@@ -85,22 +85,20 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => {
-  const box = `width:12px;height:14px;display:block;position:relative;overflow:visible;flex:0 0 12px;`;
-  const fill = `background:${JBJ_GOLD};-webkit-print-color-adjust:exact;print-color-adjust:exact;`;
-  const stroke = `border-color:${JBJ_GOLD};-webkit-print-color-adjust:exact;print-color-adjust:exact;`;
-
-  if (type === "location") {
-    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:2px;top:2px;width:8px;height:8px;border:1.4px solid ${JBJ_GOLD};border-radius:50%;${stroke}"></span><span style="position:absolute;left:5px;top:5px;width:2.4px;height:2.4px;border-radius:999px;${fill}"></span></span>`;
-  }
-  if (type === "phone") {
-    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1.5px;top:4.5px;width:10px;height:4.5px;border-radius:999px;transform:rotate(-32deg);transform-origin:center;${fill}"></span><span style="position:absolute;left:1px;top:3.5px;width:3px;height:3px;border-radius:999px;${fill}"></span><span style="position:absolute;right:.5px;top:7.2px;width:3px;height:3px;border-radius:999px;${fill}"></span></span>`;
-  }
-  if (type === "mail") {
-    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1px;top:3px;width:10px;height:8px;border:1.25px solid ${JBJ_GOLD};border-radius:1.2px;${stroke}"></span><span style="position:absolute;left:2.2px;top:5.2px;width:5.4px;height:1.1px;transform:rotate(31deg);transform-origin:left center;${fill}"></span><span style="position:absolute;right:2.2px;top:5.2px;width:5.4px;height:1.1px;transform:rotate(-31deg);transform-origin:right center;${fill}"></span></span>`;
-  }
-  return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1.5px;top:2.5px;width:9px;height:9px;border:1.25px solid ${JBJ_GOLD};border-radius:999px;${stroke}"></span><span style="position:absolute;left:5.45px;top:2.5px;width:1.1px;height:9px;${fill}"></span><span style="position:absolute;left:2.5px;top:6.45px;width:7px;height:1.1px;${fill}"></span></span>`;
+// Premium footer icons — solid gold inline SVGs. Rasterize identically in
+// preview and html2canvas/jspdf export (no absolute-positioned spans, no glyph fonts).
+export const FOOTER_ICON_SVG: Record<"location" | "phone" | "mail" | "globe", string> = {
+  // Refined map pin with hollow ring center
+  location: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><path d="M8 1.4c-2.76 0-5 2.18-5 4.86 0 3.55 4.34 8 4.52 8.19a.66.66 0 0 0 .96 0C8.66 14.26 13 9.81 13 6.26 13 3.58 10.76 1.4 8 1.4Z" fill="${JBJ_GOLD}"/><circle cx="8" cy="6.2" r="1.75" fill="${JBJ_CHAMPAGNE}"/></svg>`,
+  // Classic handset silhouette
+  phone: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><path d="M3.62 1.6a1.4 1.4 0 0 1 1.96.32l1.3 1.8a1.4 1.4 0 0 1-.18 1.83l-.86.8a.5.5 0 0 0-.1.6 8.6 8.6 0 0 0 3.3 3.3.5.5 0 0 0 .6-.1l.8-.86a1.4 1.4 0 0 1 1.83-.18l1.8 1.3a1.4 1.4 0 0 1 .32 1.96l-.6.84a2.3 2.3 0 0 1-2.5.9C7.4 12.92 3.08 8.6 1.88 4.3a2.3 2.3 0 0 1 .9-2.5l.84-.2Z" fill="${JBJ_GOLD}"/></svg>`,
+  // Envelope (kept — user said email is okay)
+  mail: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><rect x="1.6" y="3.6" width="12.8" height="8.8" rx="1.2" fill="${JBJ_GOLD}"/><path d="M2.4 4.6 8 8.6l5.6-4" stroke="${JBJ_CHAMPAGNE}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  // Premium globe with meridians + equator
+  globe: `<svg width="12" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;flex:0 0 12px;"><circle cx="8" cy="8" r="6.2" fill="${JBJ_GOLD}"/><ellipse cx="8" cy="8" rx="2.6" ry="6.2" fill="none" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="1.8" y1="8" x2="14.2" y2="8" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/><line x1="8" y1="1.8" x2="8" y2="14.2" stroke="${JBJ_CHAMPAGNE}" stroke-width="0.9"/></svg>`,
 };
+
+const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => FOOTER_ICON_SVG[type];
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
