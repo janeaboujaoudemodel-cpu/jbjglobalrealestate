@@ -116,7 +116,7 @@ export function useScrollUnlocker(): void {
       if (!deltaY || findScrollableAncestor(event.target, deltaY) || !canPageMove(deltaY)) return;
 
       const before = window.scrollY || html.scrollTop || body.scrollTop || 0;
-      window.requestAnimationFrame(() => {
+      const correctIfTrapped = () => {
         const after = window.scrollY || html.scrollTop || body.scrollTop || 0;
         const moved = after - before;
         const expected = Math.abs(deltaY);
@@ -126,7 +126,9 @@ export function useScrollUnlocker(): void {
         // missing amount once. Native scroll remains untouched when it works.
         if (Math.sign(moved || deltaY) === Math.sign(deltaY) && Math.abs(moved) >= expected * 0.5) return;
         forcePageScroll(deltaY - moved);
-      });
+      };
+
+      window.requestAnimationFrame(() => window.setTimeout(correctIfTrapped, 0));
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
