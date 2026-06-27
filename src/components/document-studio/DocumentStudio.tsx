@@ -89,7 +89,16 @@ const PAGE_SIGNATURE_RESERVE = 132;
 const escapeSignatureHtml = (value?: string) =>
   (value || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
-const todayIso = () => new Date().toISOString().slice(0, 10);
+const todayIso = () => {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Dubai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+};
 const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
 const UAE_DEVELOPERS = [
@@ -1035,14 +1044,14 @@ function StudioShell({
   // is intentionally ignored so the signing date never drifts behind real
   // time — the only way to pin a non-today date is to explicitly pick one
   // from the date picker after opening the document.
-  const [ownerDate, setOwnerDate] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [applicantDate, setApplicantDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [ownerDate, setOwnerDate] = useState<string>(todayIso());
+  const [applicantDate, setApplicantDate] = useState<string>(todayIso());
 
   // On every template change, snap dates forward to today across ALL
   // templates (NDA, Offer Letter, warning, termination, etc.).
   useEffect(() => {
     if (!template?.id) return;
-    const iso = new Date().toISOString().slice(0, 10);
+    const iso = todayIso();
     setOwnerDate(iso);
     setApplicantDate(iso);
   }, [template?.id]);
@@ -1125,7 +1134,9 @@ function StudioShell({
     if (p.customFields) setCustomFields(p.customFields);
     if (p.ownerName) setOwnerName(p.ownerName);
     if (p.ownerTitle) setOwnerTitle(p.ownerTitle);
-    if (p.ownerDate) setOwnerDate(p.ownerDate);
+    const iso = todayIso();
+    setOwnerDate(iso);
+    setApplicantDate(iso);
     if (p.hiddenFieldKeys) setHiddenFieldKeys(new Set(p.hiddenFieldKeys));
     if (p.fieldLabelOverrides) setFieldLabelOverrides(p.fieldLabelOverrides);
     if (p.hiddenSections) setHiddenSections(new Set(p.hiddenSections));
@@ -1388,7 +1399,7 @@ function StudioShell({
     showDate?: boolean;
     showSigB?: boolean;
     stampLocked?: boolean;
-  }>(() => ({ showDate: false, showSigB: true, stampLocked: true, dateValue: new Date().toISOString().slice(0, 10), ...(snap?.marks || {}) }));
+  }>(() => ({ showDate: false, showSigB: true, stampLocked: true, ...(snap?.marks || {}), dateValue: todayIso() }));
   const [assetDialog, setAssetDialog] = useState<null | AssetKind>(null);
   const [exporting, setExporting] = useState<null | "pdf" | "docx" | "png" | "both">(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -1571,7 +1582,7 @@ function StudioShell({
       // forward to today so the signing line reflects the current day
       // unless the user explicitly edits it after open.
       {
-        const iso = new Date().toISOString().slice(0, 10);
+        const iso = todayIso();
         setOwnerDate(iso);
         setApplicantDate(iso);
       }
@@ -1797,11 +1808,9 @@ function StudioShell({
     if (id === templateId) { setStep(2); return; }
     setTemplateId(id);
     setSyncedFields(getTemplateDefaultFields(id));
-    if (id === "job_offer") {
-      const iso = new Date().toISOString().slice(0, 10);
-      setOwnerDate(iso);
-      setApplicantDate(iso);
-    }
+    const iso = todayIso();
+    setOwnerDate(iso);
+    setApplicantDate(iso);
     setExtraSignatories([]);
     autoBodyRef.current = "";
     resumeStructuredSync();
@@ -2071,7 +2080,7 @@ function StudioShell({
       await handleSaveDocument({ silent: true });
       const src = pageRef.current;
       const pdfBlob = await exportPdf(currentBody, marks, template, src, undefined, candidateName);
-      const stamp = new Date().toISOString().slice(0, 10);
+      const stamp = todayIso();
       const safeName = candidateName.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_") || "Document";
       const tplIdMap: Record<string, string> = { job_offer: "Offer", offer_letter: "Offer", nda: "NDA", warning_letter: "Warning", termination_letter: "Termination", experience_letter: "Experience", salary_certificate: "Salary", moa: "MOA", invoice: "Invoice", receipt: "Receipt" };
       const safeTpl = tplIdMap[(template.id || "").toLowerCase()] || (template.label || template.id || "Document").replace(/[^A-Za-z0-9\- ]+/g, "").trim().replace(/\s+/g, "_");
@@ -4048,7 +4057,7 @@ function StudioShell({
                                 {isLast && marks.showDate !== false && (
                                   <DraggableMark x={marks.dateXY?.x ?? 556} y={marks.dateXY?.y ?? 8} onChange={(x, y) => setMarks((m) => ({ ...m, dateXY: { x, y } }))} onRemove={() => removeMark("date")} ariaLabel="Date" hint="Drag to move">
                                     <div className="text-[11px] uppercase" style={{ color: "#1A1A1A", opacity: 0.42, letterSpacing: "0.22em", fontVariantNumeric: "tabular-nums", textShadow: "0 1px 0 rgba(255,255,255,0.65)" }}>
-                                      {new Date(marks.dateValue || ownerDate || new Date().toISOString().slice(0,10)).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+                                      {new Date(marks.dateValue || ownerDate || todayIso()).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric", timeZone: "Asia/Dubai" })}
                                     </div>
                                   </DraggableMark>
                                 )}

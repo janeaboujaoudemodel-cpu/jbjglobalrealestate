@@ -75,12 +75,23 @@ const INK = "#1A1A1A";
 const CHAMPAGNE = "#F7F2EA";
 const MUTED = "rgba(26,26,26,0.65)";
 
-const todayLong = () =>
-  new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+const dubaiTodayIso = () => {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Dubai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+};
 
-const WALEED_EFFECTIVE_DATE = "2026-06-20";
-// Signing date auto-syncs to today so the offer always reflects the actual day of signature.
-const WALEED_SIGNING_DATE = new Date().toISOString().slice(0, 10);
+const todayLong = () =>
+  new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric", timeZone: "Asia/Dubai" });
+
+const WALEED_EFFECTIVE_DATE = dubaiTodayIso();
+// Signing date auto-syncs to Dubai today so the offer always reflects the actual day of signature.
+const WALEED_SIGNING_DATE = dubaiTodayIso();
 const WALEED_DIRECT_PHONES = "+971 50 999 3839 · +971 54 366 2223";
 const JOB_OFFER_WORKING_HOURS = "Monday to Friday: 10:00 AM – 7:00 PM\nSaturday: 11:00 AM – 4:00 PM";
 
@@ -88,7 +99,7 @@ const formatHumanDate = (raw?: string): string => {
   if (!raw) return "";
   const d = new Date(raw);
   if (Number.isNaN(d.getTime())) return raw;
-  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric", timeZone: "Asia/Dubai" });
 };
 
 const esc = (s?: string) =>
@@ -752,14 +763,14 @@ export const clientInitialsStrip = clientSignatureStrip;
 /** Format an ISO yyyy-mm-dd (or any Date-parseable string) as "28 Jun 2026".
  *  Falls back to today when the input is empty / unparseable. */
 function formatPrettyDate(raw?: string | null): string {
-  const d = raw ? new Date(raw) : new Date();
+  const d = raw ? new Date(raw) : new Date(dubaiTodayIso());
   const safe = isNaN(d.getTime()) ? new Date() : d;
-  return safe.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  return safe.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "Asia/Dubai" });
 }
 
 export function recipientBlock(fields: Record<string, string>, opts?: { greeting?: boolean }): string {
   const name = esc(fields.recipientName);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = dubaiTodayIso();
   const prepared = formatPrettyDate(fields.letterDate || fields.preparedDate || fields.documentDate || today);
   const signing = formatPrettyDate(fields.signingDate || fields.applicantDate || fields.ownerDate || today);
   const datesPanel = `
