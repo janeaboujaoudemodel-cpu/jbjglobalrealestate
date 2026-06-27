@@ -110,13 +110,13 @@ function getTemplateDefaultFields(templateId?: string): Record<string, string> {
   switch (templateId) {
     case "job_offer":
       return {
-        letterDate: "2026-06-20",
+        letterDate: today,
         recipientName: "[Employee Name]",
         homeAddress: "[Employee Address]",
         recipientEmail: "[Employee Email]",
         recipientPhone: "[Employee Phone / WhatsApp]",
         jobTitle: "[Position]",
-        startDate: "2026-06-20",
+        startDate: today,
         probation: "6 months",
         workingHours: JOB_OFFER_WORKING_HOURS,
         annualLeave: "30 calendar days",
