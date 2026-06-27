@@ -497,23 +497,19 @@ export function signatureBlock(opts: {
   const stampOverlay = "";
 
   // Premium bordered signature box (mirrors institutional NDA layout):
-  // gold-hairline frame with an uppercase header strip, a tall open signing
-  // area sized for handwritten signature + company stamp side-by-side, and
-  // Name/Title/Date rows pinned to the bottom of the box.
-  const cell = (sigId: string, heading: string, lines: string, withStamp = false) => `
-    <td data-sig-id="${sigId}" style="width:44%;vertical-align:top;padding:0 14px;position:relative;">
-      <div style="border:1px solid ${GOLD};border-radius:6px;background:#FDFBF7;overflow:hidden;">
-        <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
-        <div style="position:relative;min-height:130px;padding:10px 14px 6px;">
-          <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
-          ${withStamp ? stampOverlay : ""}
-        </div>
-        <div style="padding:8px 14px 12px;border-top:1px dashed ${GOLD}80;">
-          ${lines}
-        </div>
+  // a SINGLE gold-hairline frame containing two columns (Authorised
+  // Signatory + Recipient) joined together and sharing the middle divider —
+  // no gap between cells, identical to the uploaded reference NDA.
+  const cellInner = (sigId: string, heading: string, lines: string, isRight: boolean) => `
+    <td data-sig-id="${sigId}" style="width:50%;vertical-align:top;padding:0;position:relative;${isRight ? `border-left:1px solid ${GOLD};` : ""}">
+      <div style="padding:8px 14px;border-bottom:1px solid ${GOLD};background:${CHAMPAGNE};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${INK};font-weight:700;text-align:center;">${heading}</div>
+      <div style="position:relative;min-height:130px;padding:10px 14px 6px;">
+        <div style="font-size:10px;color:${MUTED};letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Signature</div>
+      </div>
+      <div style="padding:8px 14px 12px;border-top:1px dashed ${GOLD}80;">
+        ${lines}
       </div>
     </td>`;
-  const gapCell = `<td style="width:12%;"></td>`;
 
   const ownerLines = [
     linedRow("Name", oName),
@@ -521,10 +517,6 @@ export function signatureBlock(opts: {
     linedRow("Date", oDate),
   ].join("");
 
-  // Recipient cell: the cell's top border IS the signature line (user signs
-  // ON it). Below it we only print Name (typed legal name) and Date — the
-  // literal "Signature:" row was removed to avoid a duplicate signature
-  // request inside the cell.
   const applicantMeta = (opts.applicantMetaRows || [])
     .filter(([, value]) => (value || "").trim())
     .map(([label, value]) => row(label, esc(value || "")))
@@ -547,24 +539,24 @@ export function signatureBlock(opts: {
     const bLines = b
       ? [row("Name", esc(b?.name || "")), row("Title", esc(b?.title || "")), row("Date", esc(formatHumanDate(b?.date)))].join("")
       : "";
-    extraRows.push(`<tr><td colspan="3" style="height:32px;"></td></tr><tr>${cell(`extra-${i}`, esc(a?.label || "Additional Signatory"), aLines)}${gapCell}${b ? cell(`extra-${i + 1}`, esc(b?.label || "Additional Signatory"), bLines) : `<td style="width:44%;"></td>`}</tr>`);
+    extraRows.push(`<tr><td colspan="2" style="height:24px;border:none;"></td></tr><tr>${cellInner(`extra-${i}`, esc(a?.label || "Additional Signatory"), aLines, false)}${b ? cellInner(`extra-${i + 1}`, esc(b?.label || "Additional Signatory"), bLines, true) : `<td style="width:50%;border-left:1px solid ${GOLD};"></td>`}</tr>`);
   }
 
-  // Owner heading is the signatory ROLE (e.g. "Authorised Signatory"),
-  // NEVER the company name — the company is already in the header/footer.
   return `
     <div data-signature-block="1" data-pdf-section="signature" style="margin-top:auto;padding-top:22px;page-break-inside:avoid;break-inside:avoid;">
-      <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
-        <tbody>
-          <tr>
-            ${cell("owner", "Authorised Signatory", ownerLines, false)}
-            ${gapCell}
-            ${cell("recipient", aLabel, applicantLines)}
-          </tr>
-          ${extraRows.join("")}
-        </tbody>
-      </table>
+      <div style="border:1px solid ${GOLD};border-radius:6px;background:#FDFBF7;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;font-family:Inter,system-ui,sans-serif;">
+          <tbody>
+            <tr>
+              ${cellInner("owner", "Authorised Signatory", ownerLines, false)}
+              ${cellInner("recipient", aLabel, applicantLines, true)}
+            </tr>
+            ${extraRows.join("")}
+          </tbody>
+        </table>
+      </div>
     </div>`;
+}
 }
 
 /**
