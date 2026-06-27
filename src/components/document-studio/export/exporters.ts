@@ -581,7 +581,6 @@ function drawReliableFooterIcon(ctx: CanvasRenderingContext2D, kind: FooterIconK
     ctx.lineWidth = 1.35 * (16 / size);
     try { ctx.stroke(new Path2D("M4.08 2.05 5.9 4.5c.3.4.24.96-.13 1.3l-.9.83a.56.56 0 0 0-.12.66 9.05 9.05 0 0 0 3.96 3.96c.23.11.5.06.66-.12l.83-.9a.96.96 0 0 1 1.3-.13l2.45 1.82c.43.32.52.93.2 1.36l-.63.84c-.56.75-1.54 1.05-2.43.75-4.6-1.53-8.4-5.33-9.93-9.93-.3-.89 0-1.87.75-2.43l.84-.63c.43-.32 1.04-.23 1.36.2Z")); } catch { /* noop */ }
     ctx.restore();
-  }
   } else if (kind === "mail") {
     ctx.beginPath();
     ctx.roundRect?.(size * 0.12, size * 0.25, size * 0.76, size * 0.54, size * 0.1);
