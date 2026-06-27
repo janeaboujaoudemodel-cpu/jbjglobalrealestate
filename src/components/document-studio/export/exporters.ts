@@ -519,13 +519,13 @@ function drawLockedFooterOverlay(ctx: CanvasRenderingContext2D, overlay: FooterI
   };
 
   // Left: office location.
-  drawPremiumFooterIcon(ctx, "location", leftX, centerY - iconSize / 2, iconSize, 1, 1);
+  drawReliableFooterIcon(ctx, "location", leftX, centerY - iconSize / 2, iconSize);
   drawText(address, leftX + iconSize + iconGap, centerY, { fontSize: 8.5, weight: 600 });
 
   // Center: official company phone.
   const phoneGroupW = 132;
   const phoneX = midX + Math.max(0, (midW - phoneGroupW) / 2);
-  drawPremiumFooterIcon(ctx, "phone", phoneX, centerY - iconSize / 2, iconSize, 1, 1);
+  drawReliableFooterIcon(ctx, "phone", phoneX, centerY - iconSize / 2, iconSize);
   drawText(phone, phoneX + iconSize + iconGap, centerY, { fontSize: 9, weight: 800 });
 
   // Right: official email and website, right-aligned as one premium row.
@@ -538,7 +538,7 @@ function drawLockedFooterOverlay(ctx: CanvasRenderingContext2D, overlay: FooterI
   const totalRightW = iconSize + iconGap + emailW + itemGap + dotW + itemGap + iconSize + iconGap + webW;
   const rightStart = Math.max(rightX, rightX + rightW - totalRightW);
   let cursor = rightStart;
-  drawPremiumFooterIcon(ctx, "mail", cursor, centerY - iconSize / 2, iconSize, 1, 1);
+  drawReliableFooterIcon(ctx, "mail", cursor, centerY - iconSize / 2, iconSize);
   cursor += iconSize + iconGap;
   drawText(email, cursor, centerY, { fontSize: 8.5, weight: 700 });
   cursor += emailW + itemGap;
@@ -546,10 +546,66 @@ function drawLockedFooterOverlay(ctx: CanvasRenderingContext2D, overlay: FooterI
   drawText("·", cursor + dotW / 2, centerY, { fontSize: 8.5, weight: 700, align: "center" });
   ctx.globalAlpha = 1;
   cursor += dotW + itemGap;
-  drawPremiumFooterIcon(ctx, "globe", cursor, centerY - iconSize / 2, iconSize, 1, 1);
+  drawReliableFooterIcon(ctx, "globe", cursor, centerY - iconSize / 2, iconSize);
   cursor += iconSize + iconGap;
   drawText(website, cursor, centerY, { fontSize: 8.5, weight: 850 });
 
+  ctx.restore();
+}
+
+function drawReliableFooterIcon(ctx: CanvasRenderingContext2D, kind: FooterIconKind, x: number, y: number, size: number) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.strokeStyle = JBJ_GOLD;
+  ctx.fillStyle = "transparent";
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = 1.35;
+
+  if (kind === "location") {
+    ctx.beginPath();
+    ctx.ellipse(size * 0.5, size * 0.44, size * 0.34, size * 0.38, 0, Math.PI * 0.1, Math.PI * 1.9);
+    ctx.quadraticCurveTo(size * 0.5, size * 0.96, size * 0.28, size * 0.62);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(size * 0.5, size * 0.43, size * 0.13, 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (kind === "phone") {
+    ctx.beginPath();
+    ctx.moveTo(size * 0.25, size * 0.18);
+    ctx.bezierCurveTo(size * 0.08, size * 0.30, size * 0.18, size * 0.62, size * 0.42, size * 0.82);
+    ctx.bezierCurveTo(size * 0.62, size * 0.98, size * 0.88, size * 0.90, size * 0.94, size * 0.72);
+    ctx.moveTo(size * 0.25, size * 0.18);
+    ctx.lineTo(size * 0.39, size * 0.34);
+    ctx.moveTo(size * 0.73, size * 0.62);
+    ctx.lineTo(size * 0.94, size * 0.72);
+    ctx.stroke();
+  } else if (kind === "mail") {
+    ctx.beginPath();
+    ctx.roundRect?.(size * 0.12, size * 0.25, size * 0.76, size * 0.54, size * 0.1);
+    if (typeof ctx.roundRect !== "function") ctx.rect(size * 0.12, size * 0.25, size * 0.76, size * 0.54);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(size * 0.16, size * 0.32);
+    ctx.lineTo(size * 0.5, size * 0.56);
+    ctx.lineTo(size * 0.84, size * 0.32);
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.arc(size * 0.5, size * 0.5, size * 0.39, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(size * 0.5, size * 0.5, size * 0.17, size * 0.39, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(size * 0.14, size * 0.5);
+    ctx.lineTo(size * 0.86, size * 0.5);
+    ctx.moveTo(size * 0.25, size * 0.34);
+    ctx.lineTo(size * 0.75, size * 0.34);
+    ctx.moveTo(size * 0.25, size * 0.66);
+    ctx.lineTo(size * 0.75, size * 0.66);
+    ctx.stroke();
+  }
   ctx.restore();
 }
 
