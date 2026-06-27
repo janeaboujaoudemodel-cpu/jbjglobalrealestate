@@ -158,29 +158,37 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
     whiteSpace: "nowrap" as const,
     overflow: "visible" as const,
   };
+  // Export parity: html2canvas mis-baselines grid cells with mixed
+  // SVG (12px) and text (14px line-box) children — the SVG rasterizes
+  // above the text baseline. Inline-flex with explicit verticalAlign
+  // forces icon + text onto the same middle baseline in both preview
+  // and raster export.
   const iconRowStyle = {
     height: 14,
     lineHeight: "14px",
-    display: "grid",
-    gridTemplateColumns: "12px minmax(0, 1fr)",
-    columnGap: 6,
+    display: "inline-flex",
+    flexDirection: "row" as const,
     alignItems: "center",
+    columnGap: 6,
+    verticalAlign: "middle" as const,
   };
   const textAfterIconStyle = {
     minWidth: 0,
     height: 14,
     lineHeight: "14px",
-    display: "block",
+    display: "inline-block",
+    verticalAlign: "middle" as const,
     whiteSpace: "nowrap" as const,
   };
   const rightItemStyle = {
-    display: "grid",
-    gridTemplateColumns: "12px max-content",
-    columnGap: 6,
+    display: "inline-flex",
+    flexDirection: "row" as const,
     alignItems: "center",
+    columnGap: 6,
     height: 14,
     lineHeight: "14px",
     whiteSpace: "nowrap" as const,
+    verticalAlign: "middle" as const,
   };
   return (
     <footer
