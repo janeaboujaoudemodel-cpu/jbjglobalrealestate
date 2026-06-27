@@ -11,6 +11,7 @@ const PDF_PAGE_SCALE = 1.05;
 const PDF_JPEG_QUALITY = 0.76;
 const LIVE_PAGE_WIDTH = 816;
 const LIVE_PAGE_HEIGHT = 1154;
+const EXPORT_PAGE_BACKGROUND = "#FDFBF7";
 
 let html2canvasLoader: Promise<(typeof import("html2canvas"))["default"]> | null = null;
 let jsPdfLoader: Promise<(typeof import("jspdf"))["default"]> | null = null;
@@ -297,21 +298,51 @@ async function cloneImagesIntoCanvas(sourceCanvas: HTMLCanvasElement, page: HTML
 
 async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
   const html2canvas = await loadHtml2Canvas();
-  const prev = {
-    transform: page.style.transform,
-    transformOrigin: page.style.transformOrigin,
-    boxShadow: page.style.boxShadow,
-    borderRadius: page.style.borderRadius,
-  };
-  page.style.transform = "none";
-  page.style.transformOrigin = "top left";
-  page.style.boxShadow = "none";
-  page.style.borderRadius = "0";
+
+  // Capture a visible fixed clone instead of the live page. Capturing the live
+  // pages directly is unreliable once pages 2+ are below/above the viewport: in
+  // Chromium html2canvas can crop the source to a transparent rectangle, which
+  // then becomes an all-white/all-black PDF page after JPEG encoding. The clone
+  // keeps the preview untouched while giving html2canvas a stable 816×1154 target
+  // at (0,0) for every page.
+  const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
+  const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
+  const stage = document.createElement("div");
+  const clone = page.cloneNode(true) as HTMLElement;
+  stage.setAttribute("data-export-page-stage", "true");
+  stage.style.cssText = [
+    "position:fixed",
+    "left:0",
+    "top:0",
+    `width:${widthPx}px`,
+    `height:${heightPx}px`,
+    `background:${EXPORT_PAGE_BACKGROUND}`,
+    "overflow:hidden",
+    "pointer-events:none",
+    "z-index:2147483000",
+  ].join(";");
+  clone.style.transform = "none";
+  clone.style.transformOrigin = "top left";
+  clone.style.boxShadow = "none";
+  clone.style.borderRadius = "0";
+  clone.style.margin = "0";
+  clone.style.width = `${widthPx}px`;
+  clone.style.height = `${heightPx}px`;
+  clone.style.background = EXPORT_PAGE_BACKGROUND;
+  clone.querySelectorAll<HTMLElement>("[data-page-export-ignore]").forEach((node) => node.remove());
+  // html2canvas has blend/filter edge cases that can turn transparent PNG layers
+  // into a solid black page during rasterisation. The live preview still keeps
+  // its premium blend mode; the export clone uses normal blending at the same
+  // opacity so the watermark/stamp remain visible without corrupting the page.
+  clone.querySelectorAll<HTMLElement>("*").forEach((node) => {
+    const style = node.style as CSSStyleDeclaration;
+    if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
+  });
+  stage.appendChild(clone);
+  document.body.appendChild(stage);
   try {
-    const widthPx = page.offsetWidth || LIVE_PAGE_WIDTH;
-    const heightPx = page.offsetHeight || LIVE_PAGE_HEIGHT;
-    const canvas = await html2canvas(page, {
-      backgroundColor: "#FDFBF7",
+    const canvas = await html2canvas(clone, {
+      backgroundColor: EXPORT_PAGE_BACKGROUND,
       scale,
       foreignObjectRendering: false,
       useCORS: true,
@@ -339,17 +370,14 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     // Chromium can occasionally omit data-URL PNGs in that fast path. Repaint the
     // visible images from the live preview onto the captured page to preserve the
     // same watermark/stamp/logo without paying the full slow capture cost.
-    await cloneImagesIntoCanvas(canvas, page);
+    await cloneImagesIntoCanvas(canvas, clone);
     if (isCanvasVisuallyBlank(canvas)) {
       canvas.width = 0; canvas.height = 0;
-      return await renderElementCanvas(page, scale);
+      return await renderElementCanvas(clone, scale);
     }
     return canvas;
   } finally {
-    page.style.transform = prev.transform;
-    page.style.transformOrigin = prev.transformOrigin;
-    page.style.boxShadow = prev.boxShadow;
-    page.style.borderRadius = prev.borderRadius;
+    stage.remove();
   }
 }
 
@@ -417,16 +445,29 @@ const yieldToUi = () => new Promise<void>((resolve) => {
 
 const canvasToJpegBytes = (canvas: HTMLCanvasElement, quality = PDF_JPEG_QUALITY) =>
   new Promise<Uint8Array>((resolve) => {
-    canvas.toBlob(async (blob) => {
+    // JPEG has no alpha channel. If html2canvas leaves any transparent pixels,
+    // browsers encode them as black. Flatten first onto the JBJ paper color so
+    // a transparent capture can never become a black PDF page.
+    const out = document.createElement("canvas");
+    out.width = canvas.width;
+    out.height = canvas.height;
+    const ctx = out.getContext("2d")!;
+    ctx.fillStyle = EXPORT_PAGE_BACKGROUND;
+    ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(canvas, 0, 0);
+
+    out.toBlob(async (blob) => {
       if (blob) {
         resolve(new Uint8Array(await blob.arrayBuffer()));
+        out.width = 0; out.height = 0;
         return;
       }
-      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+      const dataUrl = out.toDataURL("image/jpeg", quality);
       const binary = atob(dataUrl.split(",")[1] || "");
       const bytes = new Uint8Array(binary.length);
       for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
       resolve(bytes);
+      out.width = 0; out.height = 0;
     }, "image/jpeg", quality);
   });
 
