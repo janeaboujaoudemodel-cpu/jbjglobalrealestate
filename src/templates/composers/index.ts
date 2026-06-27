@@ -774,15 +774,9 @@ export function recipientBlock(fields: Record<string, string>, opts?: { greeting
   const prepared = formatPrettyDate(fields.letterDate || fields.preparedDate || fields.documentDate || today);
   const signing = formatPrettyDate(fields.signingDate || fields.applicantDate || fields.ownerDate || today);
   const datesPanel = `
-    <div style="text-align:right;font-size:11px;line-height:1.45;color:${INK};min-width:170px;white-space:nowrap;">
-      <div>
-        <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">Date Prepared</div>
-        <div style="font-weight:600;margin-top:1px;">${prepared}</div>
-      </div>
-      <div style="margin-top:8px;">
-        <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">Date of Signing</div>
-        <div style="font-weight:600;margin-top:1px;">${signing}</div>
-      </div>
+    <div style="text-align:right;font-size:11px;line-height:1.45;color:${INK};min-width:140px;white-space:nowrap;">
+      <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">Date</div>
+      <div style="font-weight:600;margin-top:1px;">${signing || prepared}</div>
     </div>`;
   if (opts?.greeting) {
     return `
