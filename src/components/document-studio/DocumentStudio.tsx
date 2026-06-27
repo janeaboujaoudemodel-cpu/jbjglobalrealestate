@@ -1787,7 +1787,8 @@ function StudioShell({
       }
     } catch (e: any) {
       console.error("[DocumentStudio] export failed", kind, e);
-      toast.error(e?.message || `${kind.toUpperCase()} export failed`);
+      if (progressId != null) toast.error(e?.message || `${kind.toUpperCase()} export failed`, { id: progressId });
+      else toast.error(e?.message || `${kind.toUpperCase()} export failed`);
     } finally {
       setExporting(null);
     }
