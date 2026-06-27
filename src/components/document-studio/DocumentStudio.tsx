@@ -51,7 +51,7 @@ import DraggableMark from "./DraggableMark";
 import AiEditChatPanel, { LANGUAGES as AI_LANGUAGES } from "./AiEditChatPanel";
 import AssetLibraryDialog from "./assets/AssetLibraryDialog";
 import { useOwnerAssets, OwnerAsset, AssetKind } from "./assets/useOwnerAssets";
-import { exportPdf, exportDocx, exportPng, printDocument, DocumentMarks } from "./export/exporters";
+import { exportPdf, exportDocx, exportPng, printDocument, precachePdfPages, DocumentMarks } from "./export/exporters";
 import {
   compose as composeDocument,
   DEFAULT_BROKER_COMMISSIONS,
@@ -1347,10 +1347,16 @@ function StudioShell({
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    // Do not pre-render PDFs while the owner is editing. html2canvas is CPU-heavy
-    // and was competing with the real click-to-export path, making downloads feel
-    // stuck for minutes. Export now runs only when requested, from the live preview.
-    return undefined;
+    if (!open || !template || !bodyHtml) return;
+    const run = () => precachePdfPages(pageRef.current);
+    const w = window as any;
+    const idleId = typeof w.requestIdleCallback === "function"
+      ? w.requestIdleCallback(run, { timeout: 900 })
+      : window.setTimeout(run, 350);
+    return () => {
+      if (typeof w.cancelIdleCallback === "function") w.cancelIdleCallback(idleId);
+      else window.clearTimeout(idleId);
+    };
   }, [open, template, bodyHtml, autoPageGroups, marks.signatureXY, marks.stampXY, marks.stampLocked, marks.dateXY, effectiveScale]);
 
   const clearSession = (templateToClear?: string) => {

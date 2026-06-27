@@ -27,11 +27,6 @@ export const JBJ_BRAND = {
 } as const;
 
 export const JBJ_GOLD = "#B89555";
-export const JBJ_ICON_GOLD = {
-  main: "#D8B96A",
-  shadow: "#A9782B",
-  shine: "#FFF0B8",
-} as const;
 export const JBJ_INK = "#1A1A1A";
 export const JBJ_CHAMPAGNE = "#F7F2EA";
 
@@ -90,27 +85,16 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-// Premium footer icons — clean layered gold outlines. Rasterize identically in
-// preview and html2canvas/jspdf export (no fills, no glyph fonts). Every shape
-// has a classic darker gold body + thin champagne-gold shine stroke.
-const svgBaseStyle = "display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;filter:drop-shadow(0 .35px .35px rgba(104,70,19,.18));";
-const mainStrokeStyle = `fill:none !important;stroke:${JBJ_ICON_GOLD.main} !important;`;
-const shineStrokeStyle = `fill:none !important;stroke:${JBJ_ICON_GOLD.shine} !important;opacity:.64 !important;`;
-const shadowStrokeStyle = `fill:none !important;stroke:${JBJ_ICON_GOLD.shadow} !important;opacity:.34 !important;`;
-const pathOutline = (d: string, w = 1.42, extra = "") =>
-  `<path d="${d}" fill="none" stroke="${JBJ_ICON_GOLD.shadow}" style="${shadowStrokeStyle}" stroke-width="${(w + 0.35).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" ${extra}/><path d="${d}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" ${extra}/><path d="${d}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.48, w * 0.38).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" ${extra}/>`;
-const circleOutline = (cx: number, cy: number, r: number, w = 1.28) =>
-  `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${JBJ_ICON_GOLD.shadow}" style="${shadowStrokeStyle}" stroke-width="${(w + 0.28).toFixed(2)}" vector-effect="non-scaling-stroke"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" vector-effect="non-scaling-stroke"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.46, w * 0.38).toFixed(2)}" vector-effect="non-scaling-stroke"/>`;
-const rectOutline = (x: number, y: number, width: number, height: number, rx: number, w = 1.38) =>
-  `<rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" fill="none" stroke="${JBJ_ICON_GOLD.shadow}" style="${shadowStrokeStyle}" stroke-width="${(w + 0.28).toFixed(2)}" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.46, w * 0.36).toFixed(2)}" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
-const ellipseOutline = (cx: number, cy: number, rx: number, ry: number, w = 1.1) =>
-  `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${JBJ_ICON_GOLD.main}" style="${mainStrokeStyle}" stroke-width="${w}" vector-effect="non-scaling-stroke"/><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${JBJ_ICON_GOLD.shine}" style="${shineStrokeStyle}" stroke-width="${Math.max(0.42, w * 0.34).toFixed(2)}" vector-effect="non-scaling-stroke"/>`;
-
+// Premium footer icons — clean gold outline inline SVGs. Rasterize identically in
+// preview and html2canvas/jspdf export (no fills, no glyph fonts).
+// Keep the SVG viewport 14px high but the drawing box 12px tall, centered by
+// the parent grid/flex cell. This prevents html2canvas from lifting icons above
+// the text baseline during PDF rasterization.
 export const FOOTER_ICON_SVG: Record<"location" | "phone" | "mail" | "globe", string> = {
-  location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${pathOutline("M8 14.3S3.35 9.9 3.35 6.35A4.65 4.65 0 0 1 8 1.7a4.65 4.65 0 0 1 4.65 4.65C12.65 9.9 8 14.3 8 14.3Z", 1.44)}${circleOutline(8, 6.35, 1.55, 1.2)}</svg>`,
-  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${pathOutline("M4.05 2.25 2.85 3.1c-.62.44-.9 1.23-.7 1.97 1.18 4.33 4.45 7.6 8.78 8.78.74.2 1.53-.08 1.97-.7l.85-1.2a.9.9 0 0 0-.2-1.25l-1.72-1.23a.9.9 0 0 0-1.17.1l-.92.92a.72.72 0 0 1-.82.13 7.7 7.7 0 0 1-3.54-3.54.72.72 0 0 1 .13-.82l.92-.92a.9.9 0 0 0 .1-1.17L5.3 2.45a.9.9 0 0 0-1.25-.2Z", 1.42)}</svg>`,
-  mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${rectOutline(1.9, 3.5, 12.2, 9, 1.35, 1.38)}${pathOutline("M2.65 4.45 8 8.25l5.35-3.8", 1.16)}</svg>`,
-  globe: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="${svgBaseStyle}">${circleOutline(8, 8, 6.05, 1.34)}${ellipseOutline(8, 8, 2.65, 6.05, 1.05)}${pathOutline("M2.1 8h11.8M3.55 4.25h8.9M3.55 11.75h8.9", 1.04)}</svg>`,
+  location: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><path d="M8 14.3S3.35 9.9 3.35 6.35A4.65 4.65 0 0 1 8 1.7a4.65 4.65 0 0 1 4.65 4.65C12.65 9.9 8 14.3 8 14.3Z" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="8" cy="6.35" r="1.55" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.25" vector-effect="non-scaling-stroke"/></svg>`,
+  phone: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><path d="M4.05 2.25 2.85 3.1c-.62.44-.9 1.23-.7 1.97 1.18 4.33 4.45 7.6 8.78 8.78.74.2 1.53-.08 1.97-.7l.85-1.2a.9.9 0 0 0-.2-1.25l-1.72-1.23a.9.9 0 0 0-1.17.1l-.92.92a.72.72 0 0 1-.82.13 7.7 7.7 0 0 1-3.54-3.54.72.72 0 0 1 .13-.82l.92-.92a.9.9 0 0 0 .1-1.17L5.3 2.45a.9.9 0 0 0-1.25-.2Z" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`,
+  mail: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><rect x="1.9" y="3.5" width="12.2" height="9" rx="1.35" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.35" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><path d="M2.65 4.45 8 8.25l5.35-3.8" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`,
+  globe: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;width:12px;height:12px;flex:0 0 12px;overflow:visible;"><circle cx="8" cy="8" r="6.05" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.35" vector-effect="non-scaling-stroke"/><ellipse cx="8" cy="8" rx="2.65" ry="6.05" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.05" vector-effect="non-scaling-stroke"/><path d="M2.1 8h11.8M3.55 4.25h8.9M3.55 11.75h8.9" fill="none" stroke="${JBJ_GOLD}" style="fill:none !important;stroke:${JBJ_GOLD} !important;" stroke-width="1.05" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`,
 };
 
 const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => FOOTER_ICON_SVG[type];
@@ -149,7 +133,7 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const iconRowStyle = "height:14px;line-height:14px;display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:6px;align-items:center;";
   const textAfterIconStyle = "min-width:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
   const rightItemStyle = "display:grid;grid-template-columns:12px max-content;column-gap:6px;align-items:center;height:14px;line-height:14px;white-space:nowrap;";
-  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(3px);";
+  const iconSlotStyle = "width:12px;height:14px;line-height:14px;display:flex;align-items:center;justify-content:center;overflow:visible;transform:translateY(1px);";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;

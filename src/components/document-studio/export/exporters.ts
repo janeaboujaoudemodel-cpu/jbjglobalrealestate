@@ -68,10 +68,8 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-const PDF_EXPORT_VERSION = "instant-premium-fast-outline-footer-v6";
-const PDF_CAPTURE_SCALE = 2;
-const PDF_ADD_IMAGE_FORMAT = "JPEG" as const;
-const PDF_IMAGE_QUALITY = 0.94;
+const PDF_EXPORT_VERSION = "hq-lossless-outline-footer-v3";
+const PDF_CAPTURE_SCALE = 3;
 
 async function renderElementCanvas(el: HTMLElement, scale = PDF_CAPTURE_SCALE): Promise<HTMLCanvasElement> {
   const { default: html2canvas } = await import("html2canvas");
@@ -217,7 +215,6 @@ type PdfPageCache = { signature: string; pages: string[]; blob?: Blob; createdAt
 
 const pdfPageCache = new WeakMap<HTMLElement, PdfPageCache>();
 const pdfPageInflight = new WeakMap<HTMLElement, Promise<void>>();
-const pdfPageInflightController = new WeakMap<HTMLElement, AbortController>();
 
 const getLivePages = (sourceElement?: HTMLElement | null) => sourceElement
   ? Array.from(sourceElement.querySelectorAll<HTMLElement>('[data-document-page="true"]'))
@@ -247,15 +244,12 @@ function getPagesSignature(pages: HTMLElement[]) {
 async function renderPdfPageImages(
   pages: HTMLElement[],
   onProgress?: (done: number, total: number) => void,
-  signal?: AbortSignal,
 ) {
   const images: string[] = [];
   for (let i = 0; i < pages.length; i += 1) {
-    if (signal?.aborted) throw new DOMException("PDF render cancelled", "AbortError");
     onProgress?.(i, pages.length);
     const canvas = await renderClonedPageCanvas(pages[i], PDF_CAPTURE_SCALE);
-    if (signal?.aborted) throw new DOMException("PDF render cancelled", "AbortError");
-    images.push(canvas.toDataURL("image/jpeg", PDF_IMAGE_QUALITY));
+    images.push(canvas.toDataURL("image/png"));
     canvas.width = 0;
     canvas.height = 0;
     await yieldToUi();
@@ -271,7 +265,7 @@ async function buildPdfBlobFromPageImages(pageImages: string[]): Promise<Blob> {
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
   for (let i = 0; i < pageImages.length; i += 1) {
     if (i > 0) pdf.addPage();
-    pdf.addImage(pageImages[i], PDF_ADD_IMAGE_FORMAT, 0, 0, A4_W, A4_H, undefined, "FAST");
+    pdf.addImage(pageImages[i], "PNG", 0, 0, A4_W, A4_H, undefined, "FAST");
   }
   return pdf.output("blob");
 }
@@ -284,22 +278,18 @@ export function precachePdfPages(sourceElement?: HTMLElement | null): void {
   const cached = pdfPageCache.get(sourceElement);
   if (cached?.signature === signature) return;
   if (pdfPageInflight.has(sourceElement)) return;
-  const controller = new AbortController();
-  pdfPageInflightController.set(sourceElement, controller);
 
   const task = (async () => {
     try {
       // Warm jsPDF while the owner is reviewing, so click-to-download is instant.
       await import("jspdf");
-      const images = await renderPdfPageImages(pages, undefined, controller.signal);
-      if (controller.signal.aborted) return;
+      const images = await renderPdfPageImages(pages);
       const blob = await buildPdfBlobFromPageImages(images);
       pdfPageCache.set(sourceElement, { signature, pages: images, blob, createdAt: Date.now() });
     } catch {
       // Background cache failures must never affect editing/exporting.
     } finally {
       pdfPageInflight.delete(sourceElement);
-      pdfPageInflightController.delete(sourceElement);
     }
   })();
   pdfPageInflight.set(sourceElement, task);
@@ -346,20 +336,11 @@ export async function exportPdf(
   if (livePages.length > 0) {
     const signature = getPagesSignature(livePages);
     const inflight = sourceElement ? pdfPageInflight.get(sourceElement) : undefined;
+    if (inflight) await inflight;
     const cached = sourceElement ? pdfPageCache.get(sourceElement) : undefined;
     if (cached?.signature === signature && cached.blob && cached.pages.length === livePages.length) {
       triggerDownload(cached.blob, fileName(template, "pdf"));
       return cached.blob;
-    }
-    if (inflight && sourceElement && (!cached || cached.signature !== signature || cached.pages.length !== livePages.length)) {
-      pdfPageInflightController.get(sourceElement)?.abort();
-    } else if (inflight) {
-      await Promise.race([inflight, new Promise((resolve) => setTimeout(resolve, 250))]);
-      const warmed = sourceElement ? pdfPageCache.get(sourceElement) : undefined;
-      if (warmed?.signature === signature && warmed.blob && warmed.pages.length === livePages.length) {
-        triggerDownload(warmed.blob, fileName(template, "pdf"));
-        return warmed.blob;
-      }
     }
     const pageImages = cached?.signature === signature && cached.pages.length === livePages.length
       ? cached.pages
@@ -375,7 +356,7 @@ export async function exportPdf(
     const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
     for (let i = 0; i < pageImages.length; i += 1) {
       if (i > 0) pdf.addPage();
-      pdf.addImage(pageImages[i], PDF_ADD_IMAGE_FORMAT, 0, 0, A4_W, A4_H, undefined, "FAST");
+      pdf.addImage(pageImages[i], "PNG", 0, 0, A4_W, A4_H, undefined, "FAST");
     }
 
     const blob = pdf.output("blob");
