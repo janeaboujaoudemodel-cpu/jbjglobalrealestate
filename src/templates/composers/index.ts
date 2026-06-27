@@ -457,6 +457,7 @@ export function signatureBlock(opts: {
   applicantDate?: string;
   applicantLabel?: string;
   applicantMetaRows?: Array<[string, string | undefined]>;
+  applicantAcknowledgement?: string;
   extraSignatories?: Array<{ name?: string; title?: string; date?: string; label?: string }>;
 }): string {
   const oName = esc(opts.ownerName || "Jane Bou Jaoude");
@@ -521,7 +522,12 @@ export function signatureBlock(opts: {
     .filter(([, value]) => (value || "").trim())
     .map(([label, value]) => row(label, esc(value || "")))
     .join("");
+  const ack = (opts.applicantAcknowledgement || "").trim();
+  const ackBlock = ack
+    ? `<div style="margin:2px 0 8px;padding:8px 10px;border-left:2px solid ${GOLD};background:#FBF7EE;font-size:9.5px;line-height:1.55;color:${INK};font-style:italic;text-align:justify;">${esc(ack)}</div>`
+    : "";
   const applicantLines = `
+    ${ackBlock}
     ${linedRow("Name", aName)}
     ${linedRow("Title", aTitle)}
     ${linedRow("Date", aDate)}
@@ -787,6 +793,7 @@ function composeJobOffer(input: ComposerInput): string {
       applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
+      applicantAcknowledgement: `I, the undersigned, confirm my acceptance to the above terms and conditions and further confirm my employment with ${companyName}. I shall ensure full and absolute loyalty to the company, by word and deed and during my employment with the company, shall not at any time conduct myself in a manner that can be construed to be an act or statement that would undermine the authority of ${companyName}.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
