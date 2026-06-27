@@ -7,8 +7,8 @@ import DOMPurify from "dompurify";
 import { wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
 import type { DocumentTemplate } from "@/config/documentCatalog";
 
-const PDF_PAGE_SCALE = 1.05;
-const PDF_JPEG_QUALITY = 0.76;
+const PDF_PAGE_SCALE = 1.8;
+const PDF_JPEG_QUALITY = 0.94;
 const LIVE_PAGE_WIDTH = 816;
 const LIVE_PAGE_HEIGHT = 1154;
 const EXPORT_PAGE_BACKGROUND = "#FDFBF7";
@@ -348,7 +348,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
       useCORS: true,
       allowTaint: false,
       logging: false,
-      imageTimeout: 450,
+      imageTimeout: 2200,
       removeContainer: true,
       width: widthPx,
       height: heightPx,
@@ -366,11 +366,6 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
             e.hasAttribute("data-page-export-ignore") ||
             !!e.closest("[data-page-export-ignore]"))),
     });
-    // html2canvas is fastest when it skips waiting on every image, but Safari/
-    // Chromium can occasionally omit data-URL PNGs in that fast path. Repaint the
-    // visible images from the live preview onto the captured page to preserve the
-    // same watermark/stamp/logo without paying the full slow capture cost.
-    await cloneImagesIntoCanvas(canvas, clone);
     if (isCanvasVisuallyBlank(canvas)) {
       canvas.width = 0; canvas.height = 0;
       return await renderElementCanvas(clone, scale);
@@ -448,7 +443,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
       useCORS: true,
       allowTaint: false,
       logging: false,
-      imageTimeout: 450,
+      imageTimeout: 2200,
       removeContainer: true,
       width: pageW,
       height: totalH,
@@ -466,7 +461,6 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
             e.hasAttribute("data-page-export-ignore") ||
             !!e.closest("[data-page-export-ignore]"))),
     });
-    await cloneImagesIntoCanvas(canvas, host);
     if (isCanvasVisuallyBlank(canvas)) throw new Error("Fast stacked capture was blank");
     return canvas;
   } finally {
