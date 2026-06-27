@@ -8911,8 +8911,52 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_document_attachments: {
+        Row: {
+          candidate_display_name: string | null
+          candidate_folder: string
+          created_at: string
+          deleted_at: string | null
+          file_path: string
+          id: string
+          kind: string | null
+          mime_type: string | null
+          original_filename: string | null
+          owner_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          candidate_display_name?: string | null
+          candidate_folder: string
+          created_at?: string
+          deleted_at?: string | null
+          file_path: string
+          id?: string
+          kind?: string | null
+          mime_type?: string | null
+          original_filename?: string | null
+          owner_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          candidate_display_name?: string | null
+          candidate_folder?: string
+          created_at?: string
+          deleted_at?: string | null
+          file_path?: string
+          id?: string
+          kind?: string | null
+          mime_type?: string | null
+          original_filename?: string | null
+          owner_user_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       crm_documents: {
         Row: {
+          candidate_display_name: string | null
+          candidate_folder: string | null
           client_email: string | null
           client_lead_id: string | null
           client_name: string | null
@@ -8941,6 +8985,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          candidate_display_name?: string | null
+          candidate_folder?: string | null
           client_email?: string | null
           client_lead_id?: string | null
           client_name?: string | null
@@ -8969,6 +9015,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          candidate_display_name?: string | null
+          candidate_folder?: string | null
           client_email?: string | null
           client_lead_id?: string | null
           client_name?: string | null
@@ -39753,6 +39801,7 @@ export type Database = {
         Returns: string[]
       }
       purge_deleted_esign_envelopes: { Args: never; Returns: Json }
+      purge_old_deleted_documents: { Args: never; Returns: undefined }
       purge_soft_deleted_documents: { Args: never; Returns: undefined }
       redact_expired_vapi_recordings: { Args: never; Returns: number }
       redact_sensitive_transcript: {

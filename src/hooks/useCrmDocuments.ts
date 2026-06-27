@@ -126,6 +126,9 @@ export function useSaveDocument() {
       client_name?: string | null;
       client_email?: string | null;
       client_phone?: string | null;
+      candidate_folder?: string | null;
+      candidate_display_name?: string | null;
+      silent?: boolean;
     }) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
@@ -142,6 +145,8 @@ export function useSaveDocument() {
             client_name: vars.client_name ?? null,
             client_email: vars.client_email ?? null,
             client_phone: vars.client_phone ?? null,
+            candidate_folder: vars.candidate_folder ?? null,
+            candidate_display_name: vars.candidate_display_name ?? null,
           })
           .eq("id", vars.id).select().single();
         if (error) throw error;
@@ -157,16 +162,20 @@ export function useSaveDocument() {
           client_name: vars.client_name ?? null,
           client_email: vars.client_email ?? null,
           client_phone: vars.client_phone ?? null,
+          candidate_folder: vars.candidate_folder ?? null,
+          candidate_display_name: vars.candidate_display_name ?? null,
         })
         .select().single();
       if (error) throw error;
       return data as unknown as CrmDocument;
     },
-    onSuccess: () => {
+    onSuccess: (_data, vars: any) => {
       qc.invalidateQueries({ queryKey: ["crm_documents"] });
-      toast.success("Saved");
+      if (!vars?.silent) toast.success("Saved");
     },
-    onError: (e: any) => toast.error(e?.message || "Save failed"),
+    onError: (e: any, vars: any) => {
+      if (!vars?.silent) toast.error(e?.message || "Save failed");
+    },
   });
 }
 
