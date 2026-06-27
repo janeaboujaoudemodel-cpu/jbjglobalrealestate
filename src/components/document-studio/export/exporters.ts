@@ -564,23 +564,24 @@ function drawReliableFooterIcon(ctx: CanvasRenderingContext2D, kind: FooterIconK
   ctx.lineWidth = 1.35;
 
   if (kind === "location") {
+    // Clean map-pin teardrop with inner dot.
     ctx.beginPath();
-    ctx.ellipse(size * 0.5, size * 0.44, size * 0.34, size * 0.38, 0, Math.PI * 0.1, Math.PI * 1.9);
-    ctx.quadraticCurveTo(size * 0.5, size * 0.96, size * 0.28, size * 0.62);
+    ctx.moveTo(size * 0.5, size * 0.98);
+    ctx.bezierCurveTo(size * 0.05, size * 0.55, size * 0.05, size * 0.05, size * 0.5, size * 0.05);
+    ctx.bezierCurveTo(size * 0.95, size * 0.05, size * 0.95, size * 0.55, size * 0.5, size * 0.98);
+    ctx.closePath();
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(size * 0.5, size * 0.43, size * 0.13, 0, Math.PI * 2);
+    ctx.arc(size * 0.5, size * 0.38, size * 0.14, 0, Math.PI * 2);
     ctx.stroke();
   } else if (kind === "phone") {
-    ctx.beginPath();
-    ctx.moveTo(size * 0.25, size * 0.18);
-    ctx.bezierCurveTo(size * 0.08, size * 0.30, size * 0.18, size * 0.62, size * 0.42, size * 0.82);
-    ctx.bezierCurveTo(size * 0.62, size * 0.98, size * 0.88, size * 0.90, size * 0.94, size * 0.72);
-    ctx.moveTo(size * 0.25, size * 0.18);
-    ctx.lineTo(size * 0.39, size * 0.34);
-    ctx.moveTo(size * 0.73, size * 0.62);
-    ctx.lineTo(size * 0.94, size * 0.72);
-    ctx.stroke();
+    // Classic handset (Lucide-style phone-call).
+    ctx.save();
+    ctx.scale(size / 16, size / 16);
+    ctx.lineWidth = 1.35 * (16 / size);
+    try { ctx.stroke(new Path2D("M4.08 2.05 5.9 4.5c.3.4.24.96-.13 1.3l-.9.83a.56.56 0 0 0-.12.66 9.05 9.05 0 0 0 3.96 3.96c.23.11.5.06.66-.12l.83-.9a.96.96 0 0 1 1.3-.13l2.45 1.82c.43.32.52.93.2 1.36l-.63.84c-.56.75-1.54 1.05-2.43.75-4.6-1.53-8.4-5.33-9.93-9.93-.3-.89 0-1.87.75-2.43l.84-.63c.43-.32 1.04-.23 1.36.2Z")); } catch { /* noop */ }
+    ctx.restore();
+  }
   } else if (kind === "mail") {
     ctx.beginPath();
     ctx.roundRect?.(size * 0.12, size * 0.25, size * 0.76, size * 0.54, size * 0.1);
@@ -700,12 +701,21 @@ function drawPdfFooterIcon(pdf: any, kind: FooterIconKind, x: number, y: number,
   setPdfHex(pdf, "setDrawColor", JBJ_GOLD);
   pdf.setLineWidth(0.22);
   if (kind === "location") {
-    pdf.circle(x + size / 2, y + size * 0.42, size * 0.18, "S");
-    pdf.ellipse(x + size / 2, y + size * 0.43, size * 0.38, size * 0.42, "S");
-    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.28, y + size * 0.58);
-    pdf.line(x + size / 2, y + size * 0.86, x + size * 0.72, y + size * 0.58);
+    // Map-pin teardrop using two symmetric bezier curves + inner dot.
+    const cx = x + size * 0.5;
+    pdf.lines(
+      [
+        [-0.45, -0.43, -0.45, -0.93, 0, -0.93],
+        [0.45, 0, 0.45, 0.50, 0, 0.93],
+      ],
+      cx, y + size * 0.98, [size, size], "S", true,
+    );
+    pdf.circle(cx, y + size * 0.38, size * 0.13, "S");
   } else if (kind === "phone") {
-    pdf.lines([[0.45, 0.52], [0.5, -0.18], [0.72, 0.38], [-0.5, 0.18], [-0.42, -0.9], [0.5, -0.18]], x + size * 0.14, y + size * 0.22, [size, size], "S", false);
+    // Clean smartphone outline with speaker and home dot.
+    pdf.roundedRect(x + size * 0.28, y + size * 0.08, size * 0.44, size * 0.84, size * 0.08, size * 0.08, "S");
+    pdf.line(x + size * 0.42, y + size * 0.18, x + size * 0.58, y + size * 0.18);
+    pdf.circle(x + size * 0.5, y + size * 0.82, size * 0.045, "S");
   } else if (kind === "mail") {
     pdf.roundedRect(x + size * 0.1, y + size * 0.24, size * 0.8, size * 0.56, 0.35, 0.35, "S");
     pdf.line(x + size * 0.16, y + size * 0.31, x + size * 0.5, y + size * 0.55);
