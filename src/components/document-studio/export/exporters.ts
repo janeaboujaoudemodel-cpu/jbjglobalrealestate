@@ -68,7 +68,7 @@ export function buildPrintableHtml(bodyHtml: string, marks: DocumentMarks): stri
  * (so html2canvas captures the page at its true 816-px width) and restore
  * everything in a try/finally so the preview is untouched.
  */
-const PDF_EXPORT_VERSION = "hq-lossless-footer-v2";
+const PDF_EXPORT_VERSION = "hq-lossless-outline-footer-v3";
 const PDF_CAPTURE_SCALE = 3;
 
 async function renderElementCanvas(el: HTMLElement, scale = PDF_CAPTURE_SCALE): Promise<HTMLCanvasElement> {
