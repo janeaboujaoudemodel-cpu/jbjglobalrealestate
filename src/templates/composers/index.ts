@@ -83,7 +83,10 @@ const dubaiTodayIso = () => {
     day: "2-digit",
   }).formatToParts(new Date());
   const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
-  return `${get("year")}-${get("month")}-${get("day")}`;
+  const iso = `${get("year")}-${get("month")}-${get("day")}`;
+  // Owner directive 2026-06-28: contracts must never render a date earlier than
+  // 28 June 2026 — older defaults (20/26/27) are obsolete. Floor to that date.
+  return iso < "2026-06-28" ? "2026-06-28" : iso;
 };
 
 const todayLong = () =>
@@ -845,7 +848,7 @@ function composeJobOffer(input: ComposerInput): string {
   const placeOfWork = filledOr(f.placeOfWork || f.officeAddress, "To be designated by the Company");
   const offerEffectiveIso = WALEED_EFFECTIVE_DATE;
   const offerSigningIso = WALEED_SIGNING_DATE;
-  const startDate = esc(formatHumanDate(f.startDate || WALEED_EFFECTIVE_DATE) || f.startDate || "20 June 2026");
+  const startDate = esc(formatHumanDate(f.startDate || WALEED_EFFECTIVE_DATE) || f.startDate || "28 June 2026");
   const workingHoursRaw = filledOr(f.workingHours, JOB_OFFER_WORKING_HOURS)
     .replace(/\s*;\s*/g, "\n")
     .replace(/(7:00\s*PM)\s+(Saturday)/i, "$1\n$2")
@@ -883,7 +886,7 @@ function composeJobOffer(input: ComposerInput): string {
   );
   const commissionRowsTable = "";
 
-  const leadsFromHuman = formatHumanDate(f.leadsReceivedFrom || WALEED_EFFECTIVE_DATE) || f.leadsReceivedFrom || "20 June 2026";
+  const leadsFromHuman = formatHumanDate(f.leadsReceivedFrom || WALEED_EFFECTIVE_DATE) || f.leadsReceivedFrom || "28 June 2026";
   const signingHuman = formatHumanDate(offerSigningIso) || offerSigningIso || todayLong();
   const leadsCount = (f.leadsCountAtSigning || f.leadsCount || "310").toString().trim() || "310";
 
