@@ -454,39 +454,6 @@ function inferFooterIconKindFromSvg(svg: SVGElement): FooterIconKind | null {
   return null;
 }
 
-function firstTextPeer(wrapper: HTMLElement): HTMLElement | null {
-  const parent = wrapper.parentElement;
-  if (!parent) return null;
-  return Array.from(parent.children).find((child) => {
-    if (child === wrapper) return false;
-    const text = (child.textContent || "").trim();
-    return text.length > 0;
-  }) as HTMLElement | null;
-}
-
-function paintFooterIconsForExport(canvas: HTMLCanvasElement, root: HTMLElement): void {
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-  const rootRect = root.getBoundingClientRect();
-  const sx = canvas.width / (rootRect.width || root.offsetWidth || LIVE_PAGE_WIDTH);
-  const sy = canvas.height / (rootRect.height || root.offsetHeight || LIVE_PAGE_HEIGHT);
-
-  root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"] svg').forEach((svg) => {
-    const wrapper = svg.parentElement as HTMLElement | null;
-    if (!wrapper) return;
-    const row = wrapper.parentElement as HTMLElement | null;
-    const textPeer = firstTextPeer(wrapper) || row || wrapper;
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const textRect = textPeer.getBoundingClientRect();
-    const kind = inferFooterIconKind((row?.textContent || textPeer.textContent || "").trim());
-    const iconSize = 12;
-    const yNudge = 0.85;
-    const x = wrapperRect.left - rootRect.left;
-    const y = textRect.top - rootRect.top + (textRect.height - iconSize) / 2 + yNudge;
-    drawPremiumFooterIcon(ctx, kind, x, y, iconSize, sx, sy);
-  });
-}
-
 function strokePath(ctx: CanvasRenderingContext2D, d: string) {
   try {
     ctx.stroke(new Path2D(d));
