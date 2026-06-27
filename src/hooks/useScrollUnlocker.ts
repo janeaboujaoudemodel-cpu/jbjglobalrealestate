@@ -30,11 +30,36 @@ export function useScrollUnlocker(): void {
       );
     };
 
-    const isEditableTarget = (target: EventTarget | null): boolean => {
+    const isTextEntryTarget = (target: EventTarget | null): boolean => {
       const element = target instanceof Element ? target : null;
       if (!element) return false;
       return !!element.closest(
-        'input, textarea, select, [contenteditable="true"], [role="textbox"], [data-document-studio-overlay], [data-map], .mapboxgl-map, .leaflet-container, [data-no-page-wheel]',
+        'input, textarea, select, [contenteditable="true"], [role="textbox"]',
+      );
+    };
+
+    const shouldKeepWheelLocal = (target: EventTarget | null, deltaY: number): boolean => {
+      const element = target instanceof Element ? target : null;
+      if (!element) return false;
+
+      if (element.closest('[data-document-studio-overlay], [data-map], .mapboxgl-map, .leaflet-container, [data-no-page-wheel]')) {
+        return true;
+      }
+
+      const editable = element.closest('textarea, select, [contenteditable="true"], [role="textbox"]');
+      if (!(editable instanceof HTMLElement)) return false;
+      const styles = window.getComputedStyle(editable);
+      const canScrollY = /(auto|scroll)/.test(styles.overflowY) && editable.scrollHeight > editable.clientHeight + 2;
+      if (!canScrollY) return false;
+      const maxTop = editable.scrollHeight - editable.clientHeight;
+      return (deltaY > 0 && editable.scrollTop < maxTop - 1) || (deltaY < 0 && editable.scrollTop > 1);
+    };
+
+    const isWheelSafeSurface = (target: EventTarget | null): boolean => {
+      const element = target instanceof Element ? target : null;
+      if (!element) return true;
+      return !element.closest(
+        '[data-document-studio-overlay], [data-map], .mapboxgl-map, .leaflet-container, [data-no-page-wheel]',
       );
     };
 
@@ -68,6 +93,10 @@ export function useScrollUnlocker(): void {
 
     const forcePageScroll = (deltaY: number) => {
       if (!deltaY || hasOpenModal() || !canPageMove(deltaY)) return;
+      const scroller = (document.scrollingElement || html) as HTMLElement;
+      if (window.getComputedStyle(scroller).overflowY === "hidden") {
+        scroller.style.overflowY = "auto";
+      }
       window.scrollBy({ top: deltaY, left: 0, behavior: "auto" });
     };
 
@@ -111,9 +140,9 @@ export function useScrollUnlocker(): void {
     const onPop = () => release();
 
     const onWheel = (event: WheelEvent) => {
-      if (hasOpenModal() || isEditableTarget(event.target)) return;
+      if (hasOpenModal()) return;
       const deltaY = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : 0;
-      if (!deltaY || findScrollableAncestor(event.target, deltaY) || !canPageMove(deltaY)) return;
+      if (!deltaY || shouldKeepWheelLocal(event.target, deltaY) || findScrollableAncestor(event.target, deltaY) || !canPageMove(deltaY)) return;
 
       const before = window.scrollY || html.scrollTop || body.scrollTop || 0;
       const correctIfTrapped = () => {
@@ -136,14 +165,15 @@ export function useScrollUnlocker(): void {
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || hasOpenModal() || isEditableTarget(event.target)) return;
+      if (event.defaultPrevented || hasOpenModal()) return;
       const viewportStep = Math.max(window.innerHeight * 0.82, 320);
       const lineStep = 90;
       let deltaY = 0;
-      if (event.key === "PageDown" || event.key === " ") deltaY = viewportStep;
+      if (event.key === "PageDown") deltaY = viewportStep;
+      if (event.key === " " && !isTextEntryTarget(event.target)) deltaY = viewportStep;
       if (event.key === "PageUp") deltaY = -viewportStep;
-      if (event.key === "ArrowDown") deltaY = lineStep;
-      if (event.key === "ArrowUp") deltaY = -lineStep;
+      if (event.key === "ArrowDown" && !isTextEntryTarget(event.target)) deltaY = lineStep;
+      if (event.key === "ArrowUp" && !isTextEntryTarget(event.target)) deltaY = -lineStep;
       if (event.key === "Home") deltaY = -Number.MAX_SAFE_INTEGER;
       if (event.key === "End") deltaY = Number.MAX_SAFE_INTEGER;
       if (!deltaY || !canPageMove(deltaY)) return;
