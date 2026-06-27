@@ -102,6 +102,7 @@ async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Pro
   };
   const hidden: { node: HTMLElement; prevDisplay: string }[] = [];
   const styled: { node: HTMLElement; overflow: string; textOverflow: string; marginTop: string; paddingTop: string }[] = [];
+  let footerIconPrep: FooterIconExportPreparation | null = null;
   const hideNode = (node: HTMLElement) => {
     if (hidden.some((entry) => entry.node === node)) return;
     hidden.push({ node, prevDisplay: node.style.display });
@@ -151,9 +152,10 @@ async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Pro
 
   const widthPx = el.offsetWidth || 816;
   const heightPx = el.offsetHeight || 1154;
+  footerIconPrep = prepareFooterIconsForMeasuredExport(el, el);
 
   try {
-    return await html2canvas(el, {
+    const canvas = await html2canvas(el, {
       backgroundColor: "#FDFBF7",
       scale,
       foreignObjectRendering: true,
@@ -172,7 +174,10 @@ async function renderElementCanvas(el: HTMLElement, scale = PDF_PAGE_SCALE): Pro
           (e.getAttribute("aria-label") === "Remove field" ||
             e.getAttribute("data-drag-guide") === "true")),
     });
+    drawFooterIconOverlays(canvas, footerIconPrep.overlays, el);
+    return canvas;
   } finally {
+    footerIconPrep?.restore();
     el.style.transform = prev.transform;
     el.style.transformOrigin = prev.transformOrigin;
     el.style.boxShadow = prev.boxShadow;
@@ -341,7 +346,7 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
   stage.appendChild(clone);
   document.body.appendChild(stage);
   try {
-    const footerIconOverlays = prepareFooterIconsForMeasuredExport(clone, clone);
+    const footerIconPrep = prepareFooterIconsForMeasuredExport(clone, clone);
     await yieldToUi();
     const canvas = await html2canvas(clone, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -371,10 +376,10 @@ async function renderFastPageCanvas(page: HTMLElement, scale = PDF_PAGE_SCALE): 
     if (isCanvasVisuallyBlank(canvas)) {
       canvas.width = 0; canvas.height = 0;
       const fallbackCanvas = await renderElementCanvas(clone, scale);
-      drawFooterIconOverlays(fallbackCanvas, footerIconOverlays, clone);
+      drawFooterIconOverlays(fallbackCanvas, footerIconPrep.overlays, clone);
       return fallbackCanvas;
     }
-    drawFooterIconOverlays(canvas, footerIconOverlays, clone);
+    drawFooterIconOverlays(canvas, footerIconPrep.overlays, clone);
     return canvas;
   } finally {
     stage.remove();
@@ -408,9 +413,15 @@ type FooterIconOverlay = {
   size: number;
 };
 
-function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconOverlay[] {
+type FooterIconExportPreparation = {
+  overlays: FooterIconOverlay[];
+  restore: () => void;
+};
+
+function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconExportPreparation {
   const rootRect = captureRoot.getBoundingClientRect();
   const overlays: FooterIconOverlay[] = [];
+  const touched: Array<{ svg: SVGElement; visibility: string }> = [];
   root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
     Array.from(footer.querySelectorAll<SVGElement>("svg")).forEach((svg) => {
       const wrapper = svg.parentElement as HTMLElement | null;
@@ -436,22 +447,17 @@ function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTM
           y: textRect.top - rootRect.top + (textRect.height - iconSize) / 2,
           size: iconSize,
         });
-
-        wrapper.style.width = "12px";
-        wrapper.style.height = "14px";
-        wrapper.style.minWidth = "12px";
-        wrapper.style.maxWidth = "12px";
-        wrapper.style.lineHeight = "14px";
-        wrapper.style.display = "block";
-        wrapper.style.position = "relative";
-        wrapper.style.overflow = "visible";
-        wrapper.style.flex = "0 0 12px";
-        wrapper.style.verticalAlign = "top";
-        wrapper.replaceChildren();
+        touched.push({ svg, visibility: svg.style.visibility });
+        svg.style.visibility = "hidden";
       }
     });
   });
-  return overlays;
+  return {
+    overlays,
+    restore: () => {
+      touched.forEach(({ svg, visibility }) => { svg.style.visibility = visibility; });
+    },
+  };
 }
 
 function drawFooterIconOverlays(canvas: HTMLCanvasElement, overlays: FooterIconOverlay[], captureRoot: HTMLElement): void {
