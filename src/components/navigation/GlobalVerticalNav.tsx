@@ -74,7 +74,7 @@ const NAV_ITEMS: NavItem[] = [
   
   { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, highlight: true },
   { label: "List Your Property", href: "/list-property", icon: ClipboardCheck, highlight: true },
-  { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
+  { label: "Careers", href: "/join", icon: Briefcase, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
@@ -166,7 +166,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
 
   // ── Services ──
-  { label: "All Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
+  { label: "All Services", href: "/services", icon: Handshake, megaMenu: 'services', section: "SERVICES" },
   { label: "Property Management", href: "/services/property-management", icon: Key },
   { label: "Golden Visa", href: "/guides/golden-visa-uae", icon: Award },
   { label: "Mortgage Advisory", href: "/partners/mortgage", icon: Landmark },
@@ -543,7 +543,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "TOOLS & WORKSPACE": Sparkles,
   "PROPERTIES": Building2,
   "INSIGHTS & GUIDES": Lightbulb,
-  "SERVICES": Briefcase,
+  "SERVICES": Handshake,
   "BROKER & ACADEMY": GraduationCap,
   "INVESTOR": TrendingUp,
   "COMPANY & LEGAL": Users,
@@ -1068,7 +1068,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             const isOpen = openSection === sectionKey;
             const hasActiveChild = items.some(item => isRouteActive(item.href));
             const hasMegaActive = sectionHasActiveMega(sectionKey);
-            const sectionHighlighted = isOpen || hasActiveChild || hasMegaActive;
+            const sectionHighlighted = hasActiveChild || hasMegaActive;
             const SectionIcon = SECTION_ICONS[sectionKey];
 
             return (
@@ -1083,7 +1083,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
-                    className="w-full flex items-center gap-2 px-2.5 h-[34px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
+                    className="w-full flex items-center gap-1.5 px-2 h-[34px] text-[9px] uppercase tracking-[0.13em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
                   >
                     <div data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
                       <SectionIcon ref={lockEmeraldGlyphWhite} data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -1097,7 +1097,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         background: 'none',
                         backgroundImage: 'none',
                       }}
-                      className={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
+                      className={`flex-1 min-w-0 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     >{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
 

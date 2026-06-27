@@ -4,6 +4,7 @@ import {
   Calendar, BarChart3, Percent, Clock
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { IconTile } from "@/components/ui/icon-tile";
 import {
   MARKET_OVERVIEW_STATS,
   QUARTERLY_TRENDS,
@@ -25,13 +26,9 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* Icon box — champagne/gold standard */
+/* Icon box — locked emerald/black gradient with pure white glyph */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
-  >
-    <Icon className="w-6 h-6 text-[#1A1A1A]" />
-  </div>
+  <IconTile icon={Icon as any} tone="emerald" size="lg" className={className} />
 );
 
 const TONE_BY_ACCENT: Record<string, string> = {
@@ -66,10 +63,10 @@ const StatCard = ({
         className="jj-card-inner transition-all h-full rounded-xl"
       >
         <CardContent className="p-6">
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between gap-4">
             <IconBox icon={Icon} />
-            <div className={`flex items-center gap-1 ${MI_CHIP} rounded-full border px-2 py-0.5 ${isPositive ? 'border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]' : 'border-red-700/30 bg-red-50 text-red-800'}`}>
-              {isPositive ? <TrendingUp className="w-4 h-4 text-[#B89555]" /> : <TrendingDown className="w-4 h-4" />}
+            <div className={`flex items-center gap-1 ${MI_CHIP} rounded-full border px-2.5 py-1 mt-1 shrink-0 ${isPositive ? 'border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A]' : 'border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A]'}`}>
+              {isPositive ? <TrendingUp className="w-4 h-4 text-[#064E3B]" /> : <TrendingDown className="w-4 h-4 text-[#064E3B]" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </div>
           </div>
@@ -165,7 +162,7 @@ export const MarketOverviewDashboard = () => {
                           <span className="text-sm font-semibold leading-none w-20 text-foreground">{quarter.quarter}</span>
                           <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-[#EFE6D6] border border-[#B89555]/30">
                             <motion.div
-                              className="h-full bg-[#1A1A1A]"
+                              className="h-full bg-[image:var(--jj-emerald-ombre)]"
                               initial={{ width: 0 }}
                               whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
                               viewport={{ once: true }}
