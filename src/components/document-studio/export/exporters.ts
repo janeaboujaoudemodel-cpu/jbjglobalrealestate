@@ -268,8 +268,6 @@ export async function exportPdf(
   sourceElement?: HTMLElement | null,
   onProgress?: (done: number, total: number) => void,
 ): Promise<Blob> {
-  const { default: jsPDF } = await import("jspdf");
-
   const livePages = getLivePages(sourceElement);
 
   const triggerDownload = (blob: Blob, name: string) => {
@@ -288,10 +286,9 @@ export async function exportPdf(
   };
 
   if (livePages.length > 0) {
-    const A4_W = 210;
-    const A4_H = 297;
-    const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
     const signature = getPagesSignature(livePages);
+    const inflight = sourceElement ? pdfPageInflight.get(sourceElement) : undefined;
+    if (inflight) await inflight;
     const cached = sourceElement ? pdfPageCache.get(sourceElement) : undefined;
     if (cached?.signature === signature && cached.blob) {
       triggerDownload(cached.blob, fileName(template, "pdf"));
@@ -305,6 +302,10 @@ export async function exportPdf(
       pdfPageCache.set(sourceElement, { signature, pages: pageImages, createdAt: Date.now() });
     }
 
+    const { default: jsPDF } = await import("jspdf");
+    const A4_W = 210;
+    const A4_H = 297;
+    const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
     for (let i = 0; i < pageImages.length; i += 1) {
       if (i > 0) pdf.addPage();
       pdf.addImage(pageImages[i], "JPEG", 0, 0, A4_W, A4_H, undefined, "FAST");
@@ -337,6 +338,7 @@ export async function exportPdf(
 
   const A4_W = 210;
   const A4_H = 297;
+  const { default: jsPDF } = await import("jspdf");
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
 
   const sliceHpx = Math.round((canvas.width * A4_H) / A4_W);
