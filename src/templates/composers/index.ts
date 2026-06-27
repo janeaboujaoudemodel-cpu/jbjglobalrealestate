@@ -1049,10 +1049,19 @@ function composeNda(input: ComposerInput): string {
       ownerName: input.ownerName,
       ownerTitle: input.ownerTitle,
       ownerDate: input.ownerDate,
-      applicantName: candidateName,
+      // Always render the Recipient's FULL legal name (including father's
+      // name where available) — `id.name` is resolved via bestLegalName which
+      // already prefers the transliterated full Arabic name when the English
+      // MRZ line is initials-only.
+      applicantName: id.name || candidateName,
       applicantTitle: position,
       applicantDate: input.applicantDate,
       applicantLabel: "Recipient Signature",
+      // LOCKED RULE: NDA recipient signature carries the SAME acknowledgement
+      // sentence as the Offer Letter recipient signature, worded for the NDA
+      // context. Confirms irrevocable acceptance of all NDA terms + loyalty
+      // commitment to the Company.
+      applicantAcknowledgement: `I, the undersigned, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, restrictions, non-circumvention, non-compete, lead-ownership and confidentiality undertakings set out in this Non-Disclosure Agreement and its accompanying Offer Letter, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
