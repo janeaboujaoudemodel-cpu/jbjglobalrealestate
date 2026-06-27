@@ -43,7 +43,7 @@ function FooterIcon({ type }: { type: FooterIconType }) {
         flex: "0 0 12px",
         lineHeight: "14px",
         overflow: "visible",
-        transform: "translateY(4px)",
+        transform: "translateY(1px)",
       }}
       dangerouslySetInnerHTML={{ __html: FOOTER_ICON_SVG[type] }}
     />
