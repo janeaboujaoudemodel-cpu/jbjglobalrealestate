@@ -142,7 +142,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         boxSizing: "border-box",
         height: 58,
         minHeight: 58,
-        overflow: "hidden",
+        overflow: "visible",
       }}
     >
       <div
@@ -157,7 +157,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
         <div style={{ minWidth: 0, paddingRight: 14, fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg }}>
           <span style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0 }}>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "0 0 10px" }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span style={{ display: "block", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{JBJ_BRAND.address}</span>
+            <span style={{ display: "block", whiteSpace: "nowrap", overflow: "visible", textOverflow: "clip" }}>{JBJ_BRAND.address}</span>
           </span>
         </div>
         <div style={{ minWidth: 0, padding: "0 8px", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, fontWeight: 700, lineHeight: 1.35 }}>
