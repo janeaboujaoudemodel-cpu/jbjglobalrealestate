@@ -83,7 +83,10 @@ const dubaiTodayIso = () => {
     day: "2-digit",
   }).formatToParts(new Date());
   const get = (type: string) => parts.find((part) => part.type === type)?.value || "";
-  return `${get("year")}-${get("month")}-${get("day")}`;
+  const iso = `${get("year")}-${get("month")}-${get("day")}`;
+  // Owner directive 2026-06-28: contracts must never render a date earlier than
+  // 28 June 2026 — older defaults (20/26/27) are obsolete. Floor to that date.
+  return iso < "2026-06-28" ? "2026-06-28" : iso;
 };
 
 const todayLong = () =>
