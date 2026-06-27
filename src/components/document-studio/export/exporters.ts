@@ -4,7 +4,7 @@
  * signature / stamp the user has placed on the document.
  */
 import DOMPurify from "dompurify";
-import { wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
+import { JBJ_BRAND, JBJ_CHAMPAGNE, JBJ_GOLD, JBJ_INK, wrapWithJbjChrome } from "@/templates/jbjLockedChrome";
 import type { DocumentTemplate } from "@/config/documentCatalog";
 
 const PDF_PAGE_SCALE = 1.8;
@@ -407,10 +407,10 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
 type FooterIconKind = "location" | "phone" | "mail" | "globe";
 
 type FooterIconOverlay = {
-  kind: FooterIconKind;
   x: number;
   y: number;
-  size: number;
+  width: number;
+  height: number;
 };
 
 type FooterIconExportPreparation = {
@@ -421,41 +421,29 @@ type FooterIconExportPreparation = {
 function prepareFooterIconsForMeasuredExport(root: HTMLElement, captureRoot: HTMLElement): FooterIconExportPreparation {
   const rootRect = captureRoot.getBoundingClientRect();
   const overlays: FooterIconOverlay[] = [];
-  const touched: Array<{ svg: SVGElement; visibility: string }> = [];
+  const touched: Array<{ footer: HTMLElement; visibility: string }> = [];
   root.querySelectorAll<HTMLElement>('[data-jbj-locked-footer="true"]').forEach((footer) => {
-    Array.from(footer.querySelectorAll<SVGElement>("svg")).forEach((svg) => {
-      const wrapper = svg.parentElement as HTMLElement | null;
-      if (wrapper) {
-        const row = wrapper.parentElement as HTMLElement | null;
-        const kind = inferFooterIconKindFromSvg(svg) || inferFooterIconKind((row?.textContent || "").trim());
-
-        const wrapperRect = wrapper.getBoundingClientRect();
-        const siblingText = Array.from(row?.children || []).find((child) => {
-          if (child === wrapper) return false;
-          const text = (child.textContent || "").trim();
-          return text.length > 0;
-        }) as HTMLElement | undefined;
-        const textRect = (siblingText || row || wrapper).getBoundingClientRect();
-        const iconSize = 12;
-        overlays.push({
-          kind,
-          x: wrapperRect.left - rootRect.left,
-          // Do not rely on SVG/flex baselines inside html2canvas. Hide the SVG
-          // and paint the icon directly on the captured page canvas using the
-          // adjacent text line-box center from the cloned DOM. This is export-
-          // only and leaves the live preview completely untouched.
-          y: textRect.top - rootRect.top + (textRect.height - iconSize) / 2,
-          size: iconSize,
-        });
-        touched.push({ svg, visibility: svg.style.visibility });
-        svg.style.visibility = "hidden";
-      }
+    const rect = footer.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    overlays.push({
+      x: rect.left - rootRect.left,
+      y: rect.top - rootRect.top,
+      width: rect.width,
+      height: rect.height,
     });
+
+    // Export-only lock: html2canvas has repeatedly shifted/dropped the inline
+    // SVG icons and sometimes rasterised the footer text at the wrong baseline.
+    // Hide the cloned footer and repaint the full locked footer directly onto
+    // the captured canvas. The live preview is untouched because this runs only
+    // against the export clone / temporary render host.
+    touched.push({ footer, visibility: footer.style.visibility });
+    footer.style.visibility = "hidden";
   });
   return {
     overlays,
     restore: () => {
-      touched.forEach(({ svg, visibility }) => { svg.style.visibility = visibility; });
+      touched.forEach(({ footer, visibility }) => { footer.style.visibility = visibility; });
     },
   };
 }
@@ -467,8 +455,86 @@ function drawFooterIconOverlays(canvas: HTMLCanvasElement, overlays: FooterIconO
   const sx = canvas.width / (captureRoot.offsetWidth || LIVE_PAGE_WIDTH);
   const sy = canvas.height / (captureRoot.offsetHeight || LIVE_PAGE_HEIGHT);
   overlays.forEach((overlay) => {
-    drawPremiumFooterIcon(ctx, overlay.kind, overlay.x, overlay.y, overlay.size, sx, sy);
+    drawLockedFooterOverlay(ctx, overlay, sx, sy);
   });
+}
+
+function drawLockedFooterOverlay(ctx: CanvasRenderingContext2D, overlay: FooterIconOverlay, sx: number, sy: number): void {
+  const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
+  const address = JBJ_BRAND.address;
+  const phone = phones[0] || JBJ_BRAND.phone;
+  const email = JBJ_BRAND.email.toUpperCase();
+  const website = JBJ_BRAND.website.toUpperCase();
+
+  ctx.save();
+  ctx.translate(overlay.x * sx, overlay.y * sy);
+  ctx.scale(sx, sy);
+
+  const w = overlay.width;
+  const h = overlay.height;
+  const padX = 28;
+  const innerW = Math.max(0, w - padX * 2);
+  const centerY = h / 2;
+  const iconSize = 12;
+  const iconGap = 6;
+  const leftX = padX;
+  const midX = padX + innerW * 0.42;
+  const rightX = padX + innerW * 0.66;
+  const midW = innerW * 0.24;
+  const rightW = innerW * 0.34;
+
+  // Repaint the complete export footer so the PDF cannot inherit html2canvas
+  // grid/SVG baseline drift. Match the locked preview dimensions exactly.
+  ctx.fillStyle = JBJ_CHAMPAGNE;
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = JBJ_GOLD;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, 0.5);
+  ctx.lineTo(w, 0.5);
+  ctx.stroke();
+
+  const drawText = (text: string, x: number, y: number, options?: { fontSize?: number; weight?: number | string; align?: CanvasTextAlign }) => {
+    ctx.font = `${options?.weight ?? 700} ${options?.fontSize ?? 8.5}px Inter, Arial, sans-serif`;
+    ctx.fillStyle = JBJ_INK;
+    ctx.textAlign = options?.align ?? "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x, y);
+  };
+
+  // Left: office location.
+  drawPremiumFooterIcon(ctx, "location", leftX, centerY - iconSize / 2, iconSize, 1, 1);
+  drawText(address, leftX + iconSize + iconGap, centerY, { fontSize: 8.5, weight: 600 });
+
+  // Center: official company phone.
+  const phoneGroupW = 132;
+  const phoneX = midX + Math.max(0, (midW - phoneGroupW) / 2);
+  drawPremiumFooterIcon(ctx, "phone", phoneX, centerY - iconSize / 2, iconSize, 1, 1);
+  drawText(phone, phoneX + iconSize + iconGap, centerY, { fontSize: 9, weight: 800 });
+
+  // Right: official email and website, right-aligned as one premium row.
+  ctx.font = `700 8.5px Inter, Arial, sans-serif`;
+  const emailW = ctx.measureText(email).width;
+  ctx.font = `850 8.5px Inter, Arial, sans-serif`;
+  const webW = ctx.measureText(website).width;
+  const dotW = 10;
+  const itemGap = 6;
+  const totalRightW = iconSize + iconGap + emailW + itemGap + dotW + itemGap + iconSize + iconGap + webW;
+  const rightStart = Math.max(rightX, rightX + rightW - totalRightW);
+  let cursor = rightStart;
+  drawPremiumFooterIcon(ctx, "mail", cursor, centerY - iconSize / 2, iconSize, 1, 1);
+  cursor += iconSize + iconGap;
+  drawText(email, cursor, centerY, { fontSize: 8.5, weight: 700 });
+  cursor += emailW + itemGap;
+  ctx.globalAlpha = 0.5;
+  drawText("·", cursor + dotW / 2, centerY, { fontSize: 8.5, weight: 700, align: "center" });
+  ctx.globalAlpha = 1;
+  cursor += dotW + itemGap;
+  drawPremiumFooterIcon(ctx, "globe", cursor, centerY - iconSize / 2, iconSize, 1, 1);
+  cursor += iconSize + iconGap;
+  drawText(website, cursor, centerY, { fontSize: 8.5, weight: 850 });
+
+  ctx.restore();
 }
 
 function inferFooterIconKind(text: string): FooterIconKind {
