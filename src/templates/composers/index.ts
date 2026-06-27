@@ -196,7 +196,11 @@ const mrzName = (value?: string): string => {
 };
 
 const bestLegalName = (fields: Record<string, string>, source: string): string => {
-  const candidates = [
+  // 🔒 Highest priority: an explicit, user-confirmed "Full Name as per Passport"
+  // (or equivalent ID-bound field). When the operator has typed the full chain —
+  // given + father + grandfather + family — that value MUST win over any shorter
+  // recipient/display name. Never let scoring downgrade it.
+  const explicit = [
     fields.fullNameAsPerPassport,
     fields.passportFullName,
     fields.passport_name,
@@ -205,6 +209,12 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     fields.fullNameAsPerID,
     fields.idFullName,
     fields.emiratesIdFullName,
+  ]
+    .map(cleanLegalName)
+    .find((v) => v && v.split(/\s+/).length >= 2);
+  if (explicit) return explicit;
+
+  const candidates = [
     fields.fullName,
     fields.nameAsPerId,
     fields.nameAsPerID,
