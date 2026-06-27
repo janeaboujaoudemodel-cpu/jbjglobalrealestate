@@ -590,7 +590,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
 
   document.body.appendChild(host);
   try {
-    const footerIconOverlays = prepareFooterIconsForMeasuredExport(host, host);
+    const footerIconPrep = prepareFooterIconsForMeasuredExport(host, host);
     await yieldToUi();
     const canvas = await html2canvas(host, {
       backgroundColor: EXPORT_PAGE_BACKGROUND,
@@ -618,7 +618,7 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
             !!e.closest("[data-page-export-ignore]"))),
     });
     if (isCanvasVisuallyBlank(canvas)) throw new Error("Fast stacked capture was blank");
-    drawFooterIconOverlays(canvas, footerIconOverlays, host);
+    drawFooterIconOverlays(canvas, footerIconPrep.overlays, host);
     return canvas;
   } finally {
     host.remove();
