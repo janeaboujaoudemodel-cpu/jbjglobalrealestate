@@ -85,15 +85,22 @@ const monogramImgStyle = (theme: JbjChromeTheme) =>
 
 const footerTokens = () => ({ bg: JBJ_CHAMPAGNE, fg: JBJ_INK, hairline: JBJ_GOLD });
 
-const FOOTER_ICONS = {
-  // Text glyphs are intentional: html2canvas/jsPDF was intermittently
-  // clipping tiny SVG/PNG footer icons in the downloaded last page. These
-  // glyphs rasterize as normal text, so export and preview stay aligned.
-  location: "●",
-  phone: "☎",
-  mail: "✉",
-  globe: "◎",
-} as const;
+const footerIconHtml = (type: "location" | "phone" | "mail" | "globe") => {
+  const box = `width:12px;height:14px;display:block;position:relative;overflow:visible;flex:0 0 12px;`;
+  const fill = `background:${JBJ_GOLD};-webkit-print-color-adjust:exact;print-color-adjust:exact;`;
+  const stroke = `border-color:${JBJ_GOLD};-webkit-print-color-adjust:exact;print-color-adjust:exact;`;
+
+  if (type === "location") {
+    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:2px;top:2px;width:8px;height:8px;border:1.4px solid ${JBJ_GOLD};border-radius:50%;${stroke}"></span><span style="position:absolute;left:5px;top:5px;width:2.4px;height:2.4px;border-radius:999px;${fill}"></span></span>`;
+  }
+  if (type === "phone") {
+    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1.5px;top:4.5px;width:10px;height:4.5px;border-radius:999px;transform:rotate(-32deg);transform-origin:center;${fill}"></span><span style="position:absolute;left:1px;top:3.5px;width:3px;height:3px;border-radius:999px;${fill}"></span><span style="position:absolute;right:.5px;top:7.2px;width:3px;height:3px;border-radius:999px;${fill}"></span></span>`;
+  }
+  if (type === "mail") {
+    return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1px;top:3px;width:10px;height:8px;border:1.25px solid ${JBJ_GOLD};border-radius:1.2px;${stroke}"></span><span style="position:absolute;left:2.2px;top:5.2px;width:5.4px;height:1.1px;transform:rotate(31deg);transform-origin:left center;${fill}"></span><span style="position:absolute;right:2.2px;top:5.2px;width:5.4px;height:1.1px;transform:rotate(-31deg);transform-origin:right center;${fill}"></span></span>`;
+  }
+  return `<span aria-hidden="true" style="${box}"><span style="position:absolute;left:1.5px;top:2.5px;width:9px;height:9px;border:1.25px solid ${JBJ_GOLD};border-radius:999px;${stroke}"></span><span style="position:absolute;left:5.45px;top:2.5px;width:1.1px;height:9px;${fill}"></span><span style="position:absolute;left:2.5px;top:6.45px;width:7px;height:1.1px;${fill}"></span></span>`;
+};
 
 export const jbjHeaderHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = themeTokens(theme);
@@ -126,9 +133,9 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   const t = footerTokens();
   const phones = JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone];
   const rowStyle = "position:relative;height:14px;line-height:14px;white-space:nowrap;overflow:visible;";
-  const iconStyle = `position:absolute;left:0;top:0;width:12px;height:12px;display:block;line-height:14px;font-size:10px;font-weight:900;font-family:Arial, Helvetica, sans-serif;color:${JBJ_GOLD};-webkit-text-fill-color:${JBJ_GOLD};text-align:center;`;
-  const textAfterIconStyle = "position:absolute;left:18px;top:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
-  const rightItemStyle = "position:relative;height:14px;line-height:14px;padding-left:18px;white-space:nowrap;";
+  const iconRowStyle = "height:14px;line-height:14px;display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:6px;align-items:center;";
+  const textAfterIconStyle = "min-width:0;height:14px;line-height:14px;display:block;white-space:nowrap;";
+  const rightItemStyle = "display:grid;grid-template-columns:12px max-content;column-gap:6px;align-items:center;height:14px;line-height:14px;white-space:nowrap;";
   return `
   <footer data-jbj-locked-footer="true" style="
     width:100%;
@@ -146,23 +153,23 @@ export const jbjFooterHtml = (theme: JbjChromeTheme = "champagne"): string => {
   ">
     <div style="width:100%;height:58px;display:grid;grid-template-columns:42% 24% 34%;align-items:center;">
       <div style="min-width:0;padding-right:14px;font-size:8.5px;line-height:14px;height:14px;color:${t.fg};-webkit-text-fill-color:${t.fg};white-space:nowrap;">
-        <div style="${rowStyle}width:100%;">
-          <span aria-hidden="true" style="${iconStyle}">${FOOTER_ICONS.location}</span>
+        <div style="${rowStyle}${iconRowStyle}width:100%;">
+          ${footerIconHtml("location")}
           <span style="${textAfterIconStyle}">${JBJ_BRAND.address}</span>
         </div>
       </div>
       <div style="min-width:0;padding:0 8px;font-size:9px;color:${t.fg};-webkit-text-fill-color:${t.fg};font-weight:700;line-height:14px;text-align:center;">
-        ${phones.map((p, i) => `<div style="${rowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? `<span aria-hidden="true" style="${iconStyle}">${FOOTER_ICONS.phone}</span>` : ``}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
+        ${phones.map((p, i) => `<div style="${rowStyle}${iconRowStyle}width:132px;margin:0 auto;text-align:left;">${i === 0 ? footerIconHtml("phone") : `<span aria-hidden="true" style="width:12px;height:14px;display:block;"></span>`}<span style="${textAfterIconStyle}">${p}</span></div>`).join("")}
       </div>
       <div style="min-width:0;padding-left:14px;font-size:8.5px;color:${t.fg};-webkit-text-fill-color:${t.fg};text-align:right;white-space:nowrap;height:14px;line-height:14px;">
         <div style="height:14px;line-height:14px;display:grid;grid-template-columns:max-content 10px max-content;align-items:center;justify-content:end;column-gap:6px;width:100%;">
           <span style="${rightItemStyle}">
-            <span aria-hidden="true" style="${iconStyle}">${FOOTER_ICONS.mail}</span>
+            ${footerIconHtml("mail")}
             <a href="mailto:${JBJ_BRAND.email}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:700;line-height:14px;display:block;">${JBJ_BRAND.email.toUpperCase()}</a>
           </span>
           <span style="color:${t.fg};-webkit-text-fill-color:${t.fg};opacity:.5;line-height:14px;display:block;text-align:center;">·</span>
           <span style="${rightItemStyle}">
-            <span aria-hidden="true" style="${iconStyle}">${FOOTER_ICONS.globe}</span>
+            ${footerIconHtml("globe")}
             <a href="https://${JBJ_BRAND.website}" style="color:${t.fg};-webkit-text-fill-color:${t.fg};text-decoration:none;font-weight:850;letter-spacing:.04em;line-height:14px;display:block;">${JBJ_BRAND.website.toUpperCase()}</a>
           </span>
         </div>
