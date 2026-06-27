@@ -2404,6 +2404,21 @@ function StudioShell({
                 <span>{currentDocId ? "Update" : "Save"}</span>
               </Button>
             )}
+            {template && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleReady}
+                disabled={readyPending || !bodyHtml}
+                title="Finalize this document and move it to the candidate folder"
+                className="h-10 jj-cta-emerald"
+              >
+                {readyPending
+                  ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                  : <Check className="w-4 h-4 mr-1.5" />}
+                <span>Ready</span>
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
