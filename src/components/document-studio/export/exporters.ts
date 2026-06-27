@@ -43,11 +43,30 @@ export interface DocumentMarks {
   stamp?: PlacedMark;
 }
 
-function fileName(template: DocumentTemplate, ext: string) {
+/**
+ * Build the download filename. Format: `{TemplateName}_{Candidate}_{YYYY-MM-DD}.{ext}`
+ * — e.g. `NDA_Walid_Halawi_2026-06-27.pdf`. Falls back gracefully when no
+ * candidate name is supplied.
+ */
+function fileName(template: DocumentTemplate, ext: string, candidate?: string | null) {
   const d = new Date();
-  const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
-  return `JBJ-${template.id}-${stamp}.${ext}`;
+  const datePart = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const sanitize = (s: string) =>
+    s.normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^A-Za-z0-9\- ]+/g, "")
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/_+/g, "_");
+  const tplShort = (template.id || "Document")
+    .replace(/^job_offer$/i, "Offer_Letter")
+    .replace(/^nda$/i, "NDA");
+  const tplPart = sanitize(template.shortName || template.title || tplShort) || "Document";
+  const candPart = candidate ? sanitize(candidate) : "";
+  const stem = candPart ? `${tplPart}_${candPart}_${datePart}` : `${tplPart}_${datePart}`;
+  return `${stem}.${ext}`;
 }
+
 
 /** Convert a (possibly external) image URL to a base64 data URL. */
 async function urlToDataUrl(url: string): Promise<string> {
