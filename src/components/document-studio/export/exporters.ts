@@ -409,7 +409,11 @@ function replaceFooterSvgsWithCanvasForExport(root: HTMLElement): void {
         iconCanvas.style.cssText = [
           "position:absolute",
           "left:0",
-          "top:2.05px",
+          // Export-only baseline correction: html2canvas/jsPDF rasterizes the
+          // footer text slightly lower than the live browser preview. The icon
+          // canvas must sit lower inside the preserved 14px line box so the
+          // exported glyph centers match the exported text centers.
+          "top:4.65px",
           "width:12px",
           "height:12px",
           "display:block",
