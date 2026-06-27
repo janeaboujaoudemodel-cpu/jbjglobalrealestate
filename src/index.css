@@ -17103,3 +17103,14 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
     display: none !important;
   }
 }
+
+/* FINAL LOCK — Document footer contact icons stay gold outlines in preview/export. */
+html body #root [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
+html body #root [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon),
+html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg,
+html body [data-jbj-locked-footer="true"] [data-jbj-footer-icon] svg :is(path, circle, rect, ellipse, line, polyline, polygon) {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
