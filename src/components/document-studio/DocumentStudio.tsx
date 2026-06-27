@@ -2198,7 +2198,7 @@ function StudioShell({
                 <DropdownMenuItem onClick={() => { setSaveName(`${template?.label || "Document"} — Custom`); setSaveDialogOpen(true); }} disabled={!template}>
                   <Check className="w-4 h-4 mr-2" /> Save Template
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSaveDocument} disabled={!template || saveDocMutation.isPending}>
+                <DropdownMenuItem onClick={() => handleSaveDocument()} disabled={!template || saveDocMutation.isPending}>
                   <FileText className="w-4 h-4 mr-2" /> {currentDocId ? "Update Document" : "Save Document"}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={toggleFullscreen}>
