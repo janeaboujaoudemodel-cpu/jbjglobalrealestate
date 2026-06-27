@@ -163,6 +163,37 @@ async function renderElementCanvas(el: HTMLElement, scale = 1.6): Promise<HTMLCa
   }
 }
 
+async function renderPageCanvasWithMirrorFallback(el: HTMLElement, scale = 1.6): Promise<HTMLCanvasElement> {
+  try {
+    return await renderElementCanvas(el, scale);
+  } catch (error) {
+    const message = String((error as Error)?.message || error || "");
+    if (!/cloned iframe|Unable to find element/i.test(message)) throw error;
+
+    // html2canvas can occasionally lose the source node when a transformed
+    // page is captured inside the live editor overlay. Clone the exact page
+    // node into the same document, keep all classes/inline styles/assets, and
+    // capture that mirror instead. This preserves preview pixels while making
+    // export deterministic instead of failing/stalling.
+    const clone = el.cloneNode(true) as HTMLElement;
+    clone.style.position = "fixed";
+    clone.style.left = "-10000px";
+    clone.style.top = "0";
+    clone.style.width = `${el.offsetWidth || 816}px`;
+    clone.style.height = `${el.offsetHeight || 1154}px`;
+    clone.style.transform = "none";
+    clone.style.transformOrigin = "top left";
+    clone.style.opacity = "1";
+    clone.style.pointerEvents = "none";
+    document.body.appendChild(clone);
+    try {
+      return await renderElementCanvas(clone, scale);
+    } finally {
+      clone.remove();
+    }
+  }
+}
+
 // Yield to the browser between heavy operations so the UI doesn't appear "stuck".
 const yieldToUi = () => new Promise<void>((resolve) => {
   if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => resolve());
@@ -220,7 +251,7 @@ export async function exportPdf(
       onProgress?.(i, livePages.length);
       // Yield first so the toast/progress UI can paint between pages.
       await yieldToUi();
-      const canvas = await renderElementCanvas(livePages[i], 1.6);
+      const canvas = await renderPageCanvasWithMirrorFallback(livePages[i], 1.6);
       const data = canvas.toDataURL("image/jpeg", 0.85);
       // Free the offscreen bitmap immediately — multi-page jobs accumulate
       // hundreds of MB otherwise and stall the browser on page 4-7.
