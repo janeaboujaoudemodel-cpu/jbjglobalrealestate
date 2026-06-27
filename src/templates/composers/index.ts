@@ -157,6 +157,26 @@ const ARABIC_NAME_MAP: Record<string, string> = {
   "بن": "bin", "ابن": "ibn", "أبو": "Abu", "ابو": "Abu",
 };
 
+const OFFICIAL_NAME_ALIASES: Record<string, { english: string; arabic?: string }> = {
+  "alwalid i s alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i. s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i.s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alhalabi alwalid i s": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+};
+
+const normaliseNameAliasKey = (value?: string): string =>
+  cleanLegalName(value)
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^a-z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const officialNameAlias = (value?: string) => {
+  const key = normaliseNameAliasKey(value);
+  return key ? OFFICIAL_NAME_ALIASES[key] : undefined;
+};
+
 const transliterateArabicName = (arabic: string): string => {
   return arabic
     .replace(/[\u064B-\u0652\u0670\u0640]/g, "")
@@ -178,12 +198,30 @@ const transliterateArabicName = (arabic: string): string => {
     .trim();
 };
 
-const arabicFullName = (source?: string): string => {
+const arabicFullNameNative = (source?: string): string => {
   if (!source) return "";
-  const line = source.match(/الاسم\s*كاملا\s*[:：]?\s*([\u0600-\u06FF\s]+)/);
+  const line = source.match(/(?:الاسم\s*كاملا|الاسم)\s*[:：]?\s*([\u0600-\u06FF\s]+)/);
   const arabic = (line?.[1] || "").split(/\n/)[0].trim();
+  return arabic.replace(/\s+/g, " ").trim();
+};
+
+const arabicFullName = (source?: string): string => {
+  const arabic = arabicFullNameNative(source);
   if (!arabic) return "";
   return transliterateArabicName(arabic);
+};
+
+const legalArabicName = (fields: Record<string, string>, source: string): string => {
+  const explicit = [fields.fullNameArabic, fields.nameArabic, fields.arabicName, fields.fullNameAsPerPassportArabic, fields.fullNameAsPerIdArabic]
+    .map((v) => arabicFullNameNative(v) || (/[\u0600-\u06FF]/.test(v || "") ? (v || "").replace(/\s+/g, " ").trim() : ""))
+    .find(Boolean);
+  if (explicit) return explicit;
+  const fromSource = arabicFullNameNative(source);
+  if (fromSource) return fromSource;
+  const alias = [fields.fullNameAsPerPassport, fields.fullNameAsPerId, fields.recipientName, fields.fullName]
+    .map(officialNameAlias)
+    .find(Boolean);
+  return alias?.arabic || "";
 };
 
 const mrzName = (value?: string): string => {
@@ -200,7 +238,7 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
   // (or equivalent ID-bound field). When the operator has typed the full chain —
   // given + father + grandfather + family — that value MUST win over any shorter
   // recipient/display name. Never let scoring downgrade it.
-  const explicit = [
+  const explicitCandidates = [
     fields.fullNameAsPerPassport,
     fields.passportFullName,
     fields.passport_name,
@@ -211,10 +249,21 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     fields.emiratesIdFullName,
   ]
     .map(cleanLegalName)
-    .find((v) => v && v.split(/\s+/).length >= 2);
+    .filter((v) => v && v.split(/\s+/).length >= 2);
+  const arabicNative = legalArabicName(fields, source);
+  const arabicLatin = arabicNative ? transliterateArabicName(arabicNative) : "";
+  const explicitWithAliases = explicitCandidates.map((name) => officialNameAlias(name)?.english || name);
+  explicitWithAliases.sort((a, b) => {
+    const score = (name: string) => (isInitialOnlyName(name) ? 0 : 1000) + name.length + (name.split(/\s+/).length >= 4 ? 180 : name.split(/\s+/).length >= 3 ? 100 : 0);
+    return score(b) - score(a);
+  });
+  const explicit = explicitWithAliases[0] || "";
+  if (explicit && (!isInitialOnlyName(explicit) || !arabicLatin)) return explicit;
+  if (arabicLatin && arabicLatin.split(/\s+/).length >= 3) return arabicLatin;
   if (explicit) return explicit;
 
   const candidates = [
+    arabicLatin,
     fields.fullName,
     fields.nameAsPerId,
     fields.nameAsPerID,
@@ -229,6 +278,7 @@ const bestLegalName = (fields: Record<string, string>, source: string): string =
     firstMatch(source, /(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|candidate\s+name|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i),
   ]
     .map(cleanLegalName)
+    .map((name) => officialNameAlias(name)?.english || name)
     .filter(Boolean)
     .filter((name) => !/^\d+$/.test(name));
 
@@ -294,6 +344,7 @@ const offerIdentity = (fields: Record<string, string>) => {
   const rawPhone = identityValue(fields, ["recipientPhone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"], source, /(?:phone|mobile|whatsapp)\s*(?:is|:|-)?\s*((?:\+971|00971|0)?[\s-]?(?:5\d|4|2|3|6|7|9)[\d\s-]{7,})/i);
   return {
     name: bestLegalName(fields, source),
+    arabicName: legalArabicName(fields, source),
     emiratesId: identityValue(fields, ["emiratesId", "idNumber", "emirates_id", "eid_number", "eid"], source, /(?:emirates\s*id(?:\s*number)?|eid(?:\s*number)?|id\s*number)\s*(?:is|:|-)?\s*(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)/i, /\b(784[-\s]?\d{4}[-\s]?\d{7}[-\s]?\d)\b/i),
     passport: identityValue(fields, ["passportNumber", "passport_number", "passportNo", "passport"], source, /passport(?:\s*(?:number|no\.?))?\s*(?:is|:|-)?\s*([A-Z0-9]{5,})/i),
     nationality: normalizeNationality(identityValue(fields, ["nationality", "nationalityName", "countryOfNationality"], source, /nationality\s*(?:is|:|-|recorded\s+as)?\s*([A-Za-z][A-Za-z\s-]{2,30}?)(?=[,;.\n]|\s+(?:residing|reachable|apartment|building|street|email|phone|and|with)\b|$)/i)),
@@ -546,7 +597,7 @@ export function signatureBlock(opts: {
     <div style="display:grid;grid-template-columns:54px 1fr;align-items:center;column-gap:8px;font-size:11px;color:${INK};margin-top:7px;line-height:1.35;min-height:20px;overflow:visible;">
       <strong style="font-weight:600;white-space:nowrap;">${label}:</strong>
       <span style="display:block;min-height:20px;position:relative;min-width:0;overflow:visible;padding:1px 0;">
-        ${value ? `<span style="display:block;font-size:11px;line-height:1.45;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:nowrap;max-width:230px;overflow:visible;text-overflow:clip;">${value}</span>` : ""}
+        ${value ? `<span style="display:block;font-size:11px;line-height:1.4;font-family:Inter,system-ui,sans-serif;font-weight:500;letter-spacing:0;color:${INK};white-space:normal;max-width:100%;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;word-break:normal;">${value}</span>` : ""}
       </span>
     </div>`;
 
@@ -744,6 +795,10 @@ function composeJobOffer(input: ComposerInput): string {
   const f = input.fields;
   const id = offerIdentity(f);
   const candidateName = esc(filledOr(id.name || f.recipientName, "[Candidate Name]"));
+  const candidateArabicName = esc(id.arabicName || "");
+  const candidateNameWithArabic = candidateArabicName
+    ? `${candidateName} <span dir="rtl" lang="ar" style="font-family:Inter,system-ui,sans-serif;font-weight:600;white-space:nowrap;">(${candidateArabicName})</span>`
+    : candidateName;
   const address = esc(filledOr(id.address, "[Address]"));
   const email = esc(filledOr(id.email, "[Email]"));
   const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
@@ -767,7 +822,7 @@ function composeJobOffer(input: ComposerInput): string {
   const workingHours = esc(workingHoursRaw).replace(/\n/g, "<br/>");
 
   const candidateIdentity = paragraph(
-    `For identification purposes, this offer is issued to <strong>${candidateName}</strong>, holder of Passport No. <strong>${passport}</strong>, Emirates ID No. <strong>${emiratesId}</strong>, <strong>${nationality}</strong> national, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone / WhatsApp at <strong>${phone}</strong>.`,
+    `For identification purposes, this offer is issued to <strong>${candidateName}</strong>${candidateArabicName ? `, Arabic name as recorded on the identity document: <strong dir="rtl" lang="ar">${candidateArabicName}</strong>` : ""}, holder of Passport No. <strong>${passport}</strong>, Emirates ID No. <strong>${emiratesId}</strong>, <strong>${nationality}</strong> national, residing at <strong>${address}</strong>, reachable by email at <strong>${email}</strong> and by phone / WhatsApp at <strong>${phone}</strong>.`,
   );
 
   const replacementParagraph = paragraph(
@@ -844,7 +899,7 @@ function composeJobOffer(input: ComposerInput): string {
     offerHeaderDetails,
     subjectLine(`CONDITIONAL OFFER, COMMISSION MILESTONE, CONFIDENTIALITY AND COMPANY DATA PROTECTION UNDERTAKING`),
     paragraph(`<strong>Employment Offer – ${jobTitle}</strong>`),
-    paragraph(`Dear ${candidateName},`),
+    paragraph(`Dear ${candidateNameWithArabic},`),
     paragraph(`We are pleased to issue this <strong>conditional offer</strong> for the future position of <strong>${jobTitle}</strong> with <strong>${companyName}</strong>, a UAE real estate agency holding Trade Licence No. <strong>${JBJ_BRAND.tradeLicense}</strong> and ORN <strong>41486</strong>, subject to the terms set out in this document.`),
     replacementParagraph,
     candidateIdentity,
@@ -861,7 +916,8 @@ function composeJobOffer(input: ComposerInput): string {
       applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
-      applicantAcknowledgement: `I, ${candidateName}, confirm that I have read, understood, and accepted all terms of this Conditional Offer, Commission Milestone, Confidentiality and Company Data Protection Undertaking. I understand that this document does not create formal employment or authorize regulated work unless all required legal approvals and Company authorizations are completed. I agree to protect all Company leads, clients, data, information, business opportunities, reputation, commissions, and commercial interests, and I accept full responsibility for any breach of this document.`,
+      applicantMetaRows: candidateArabicName ? [["Arabic Name", id.arabicName]] : undefined,
+      applicantAcknowledgement: `I, ${candidateName}${candidateArabicName ? ` (${candidateArabicName})` : ""}, confirm that I have read, understood, and accepted all terms of this Conditional Offer, Commission Milestone, Confidentiality and Company Data Protection Undertaking. I understand that this document does not create formal employment or authorize regulated work unless all required legal approvals and Company authorizations are completed. I agree to protect all Company leads, clients, data, information, business opportunities, reputation, commissions, and commercial interests, and I accept full responsibility for any breach of this document.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
@@ -983,6 +1039,7 @@ function composeNda(input: ComposerInput): string {
   const f = input.fields;
   const id = offerIdentity(f);
   const candidateName = esc(filledOr(id.name || f.recipientName, "[Counterparty Name]"));
+  const candidateArabicName = esc(id.arabicName || "");
   const address = esc(filledOr(id.address, "[Address]"));
   const email = esc(filledOr(id.email, "[Email]"));
   const phone = esc(safePhoneDisplay(id.phone || f.recipientPhone || f.phone || f.mobile || f.whatsapp));
@@ -1001,6 +1058,7 @@ function composeNda(input: ComposerInput): string {
   const identityTable = termsTable(
     [
       ["Full Legal Name", filledOr(candidateName, ""), "recipientName"],
+      ["Arabic Name as per ID / Passport", filledOr(candidateArabicName, ""), "fullNameArabic"],
       ["Nationality", filledOr(nationality, ""), "nationality"],
       ["Emirates ID", filledOr(emiratesId, ""), "emiratesId"],
       ["Passport Number", filledOr(passport, ""), "passportNumber"],
@@ -1049,11 +1107,12 @@ function composeNda(input: ComposerInput): string {
       applicantTitle: position,
       applicantDate: input.applicantDate,
       applicantLabel: "Recipient Signature",
+      applicantMetaRows: candidateArabicName ? [["Arabic Name", id.arabicName]] : undefined,
       // LOCKED RULE: NDA recipient signature carries the SAME acknowledgement
       // sentence as the Offer Letter recipient signature, worded for the NDA
       // context. Confirms irrevocable acceptance of all NDA terms + loyalty
       // commitment to the Company.
-      applicantAcknowledgement: `I, the undersigned, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, restrictions, non-circumvention, non-compete, lead-ownership and confidentiality undertakings set out in this Non-Disclosure Agreement and its accompanying Offer Letter, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
+      applicantAcknowledgement: `I, ${candidateName}${candidateArabicName ? ` (${candidateArabicName})` : ""}, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, restrictions, non-circumvention, non-compete, lead-ownership and confidentiality undertakings set out in this Non-Disclosure Agreement and its accompanying Offer Letter, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");

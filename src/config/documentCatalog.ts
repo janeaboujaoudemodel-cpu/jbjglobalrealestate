@@ -134,6 +134,8 @@ const STAFF: DocumentTemplate[] = [
     ].join("\n"),
     fields: [
       { key: "letterDate", label: "Letter Date", type: "date" },
+      { key: "fullNameAsPerPassport", label: "Full Name as per Passport / ID", type: "text", placeholder: "Full legal name incl. father / family name", required: true },
+      { key: "fullNameArabic", label: "Arabic Name as per Passport / ID", type: "text", placeholder: "الاسم كاملا كما في الجواز / الهوية" },
       RECIPIENT_NAME,
       { key: "emiratesId", label: "Emirates ID Number", type: "text", placeholder: "e.g., 784-1988-6468692-2" },
       { key: "passportNumber", label: "Passport Number", type: "text", placeholder: "Passport number only" },
@@ -188,6 +190,8 @@ const STAFF: DocumentTemplate[] = [
       "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. [Office Address] = Office SM1-195, Port Saeed, Deira, Dubai, UAE. Default working hours = Monday to Friday: 10:00 AM – 7:00 PM, then a new line for Saturday: 11:00 AM – 4:00 PM. Default Restriction Period = 12 months. Default Geographic Scope = Dubai, UAE. Default Emirate = Dubai. Use clean HTML, no inline color. SURGICAL PATCH MODE — only fill placeholders.",
     ].join("\n"),
     fields: [
+      { key: "fullNameAsPerPassport", label: "Full Name as per Passport / ID", type: "text", placeholder: "Full legal name incl. father / family name", required: true },
+      { key: "fullNameArabic", label: "Arabic Name as per Passport / ID", type: "text", placeholder: "الاسم كاملا كما في الجواز / الهوية" },
       RECIPIENT_NAME,
       { key: "emiratesId", label: "Emirates ID Number", type: "text", placeholder: "e.g., 784-1988-6468692-2" },
       { key: "passportNumber", label: "Passport Number", type: "text", placeholder: "Passport number only" },
@@ -296,6 +300,8 @@ const STAFF: DocumentTemplate[] = [
       "DEFAULTS: [Company Legal Name] = J B J GLOBAL REAL ESTATE L.L.C S.O.C. Default Term of Confidentiality = 3 years (indefinite for trade secrets). Default Emirate = Dubai. Use clean HTML, no inline color. SURGICAL PATCH MODE — only fill placeholders.",
     ].join("\n"),
     fields: [
+      { key: "fullNameAsPerPassport", label: "Full Name as per Passport / ID", type: "text", placeholder: "Full legal name incl. father / family name", required: true },
+      { key: "fullNameArabic", label: "Arabic Name as per Passport / ID", type: "text", placeholder: "الاسم كاملا كما في الجواز / الهوية" },
       RECIPIENT_NAME,
       { key: "counterparty", label: "Counterparty / Company", type: "text" },
       { key: "counterpartyAddress", label: "Counterparty Address", type: "textarea" },

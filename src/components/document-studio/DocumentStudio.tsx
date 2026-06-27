@@ -168,7 +168,23 @@ const restoreOfferCommissionRows = (templateId?: string, rows?: CommissionRow[])
   ];
 };
 
-const IDENTITY_FIELD_KEYS = ["recipientName", "emiratesId", "passportNumber", "nationality", "homeAddress", "recipientEmail", "recipientPhone"];
+const IDENTITY_FIELD_KEYS = [
+  "fullNameAsPerPassport",
+  "passportFullName",
+  "fullNameAsPerId",
+  "fullNameAsPerID",
+  "emiratesIdFullName",
+  "fullNameArabic",
+  "nameArabic",
+  "arabicName",
+  "recipientName",
+  "emiratesId",
+  "passportNumber",
+  "nationality",
+  "homeAddress",
+  "recipientEmail",
+  "recipientPhone",
+];
 
 const isMeaningfulDocumentValue = (value?: any): value is string => {
   const text = String(value || "").trim();
@@ -178,16 +194,55 @@ const isMeaningfulDocumentValue = (value?: any): value is string => {
 const pickMeaningful = (...values: any[]): string =>
   values.map((v) => String(v || "").trim()).find((v) => isMeaningfulDocumentValue(v)) || "";
 
+const OFFICIAL_NAME_ALIASES: Record<string, { english: string; arabic?: string }> = {
+  "alwalid i s alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i. s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alwalid i.s. alhalabi": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+  "alhalabi alwalid i s": { english: "Alwalid Issam Shaaban Alhalabi", arabic: "الوليد عصام شعبان الحلبي" },
+};
+
+const cleanIdentityName = (value?: string) => (value || "")
+  .replace(/^\s*(?:full\s+name\s+(?:as\s+per\s+(?:id|passport)|on\s+passport)|candidate\s+name|name)\s*(?:is|:|-)?\s*/i, "")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const normaliseNameAliasKey = (value?: string): string =>
+  cleanIdentityName(value)
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^a-z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const officialNameAlias = (value?: string) => {
+  const key = normaliseNameAliasKey(value);
+  return key ? OFFICIAL_NAME_ALIASES[key] : undefined;
+};
+
+const normalizeArabicIdentityName = (value?: string): string => {
+  if (!value || !/[\u0600-\u06FF]/.test(value)) return "";
+  const line = value.match(/(?:الاسم\s*كاملا|الاسم)\s*[:：]?\s*([\u0600-\u06FF\s]+)/)?.[1] || value;
+  return line.split(/\n/)[0].replace(/\s+/g, " ").trim();
+};
+
 const normalizeJobOfferIdentityFields = (raw: Record<string, string> = {}, shared: Record<string, string> = {}) => {
   const base = getTemplateDefaultFields("job_offer");
   const next = { ...base, ...shared, ...raw };
   const from = (keys: string[]) => pickMeaningful(...keys.map((k) => raw[k]), ...keys.map((k) => shared[k]), ...keys.map((k) => next[k]));
-  const name = from(["recipientName", "employeeName", "employee_name", "fullName", "full_name", "candidateName", "client_name", "guest_name", "name"]);
+  const name = from(["fullNameAsPerPassport", "passportFullName", "fullNameAsPerId", "fullNameAsPerID", "emiratesIdFullName", "recipientName", "employeeName", "employee_name", "fullName", "full_name", "candidateName", "client_name", "guest_name", "name"]);
+  const official = officialNameAlias(name);
+  const legalName = official?.english || name;
+  const arabicName = from(["fullNameArabic", "nameArabic", "arabicName", "fullNameAsPerPassportArabic", "fullNameAsPerIdArabic"]) || official?.arabic || "";
   const address = from(["homeAddress", "employeeAddress", "employee_address", "address", "home_address", "residentialAddress", "residential_address"]);
   const email = from(["recipientEmail", "employeeEmail", "employee_email", "email", "emailAddress", "email_address"]);
   const phone = from(["recipientPhone", "employeePhone", "employee_phone", "phone", "phoneNumber", "mobile", "mobileNumber", "whatsapp"]);
   const title = from(["jobTitle", "position", "employeeTitle", "employee_title", "title"]);
-  if (name) next.recipientName = name;
+  if (legalName) {
+    next.fullNameAsPerPassport = legalName;
+    next.fullNameAsPerId = legalName;
+    next.recipientName = legalName;
+  }
+  if (arabicName) next.fullNameArabic = normalizeArabicIdentityName(arabicName) || arabicName;
   if (address) next.homeAddress = address;
   if (email) next.recipientEmail = email;
   if (phone) next.recipientPhone = phone;
@@ -209,26 +264,31 @@ function normalizeExtractedDocumentFields(raw: Record<string, any> = {}, source 
   const pick = (...keys: string[]) => keys.map((k) => all[k]).find((v) => typeof v === "string" && v.trim());
   const set = (k: string, v?: any) => { if (typeof v === "string" && v.trim()) out[k] = v.trim(); };
 
-  const cleanName = (value?: string) => (value || "")
-    .replace(/^\s*(?:full\s+name\s+(?:as\s+per\s+(?:id|passport)|on\s+passport)|candidate\s+name|name)\s*(?:is|:|-)?\s*/i, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  const cleanName = cleanIdentityName;
+  const arabicName = normalizeArabicIdentityName(text);
+  const arabicNameAlias = arabicName === "الوليد عصام شعبان الحلبي"
+    ? "Alwalid Issam Shaaban Alhalabi"
+    : "";
   const mrzLine = text.split(/\n/).find((line) => /^P<|^[A-Z0-9<]{20,}$/.test(line.trim()))?.trim() || "";
   const mrzMatch = mrzLine.match(/P<[A-Z]{3}([A-Z<]+)<<([A-Z<]+)/i) || mrzLine.match(/^([A-Z<]+)<<([A-Z<]+)/i);
   const mrzFullName = mrzMatch ? cleanName(`${mrzMatch[2].replace(/<+/g, " ")} ${mrzMatch[1].replace(/<+/g, " ")}`) : "";
   const nameCandidates = [
+    arabicNameAlias,
     pick("fullNameAsPerPassport", "passportFullName", "passport_name", "nameOnPassport"),
     pick("fullNameAsPerId", "fullNameAsPerID", "idFullName", "emiratesIdFullName"),
     pick("recipientName", "fullName", "nameAsPerId", "name", "applicantName"),
     mrzFullName,
     text.match(/(?:full\s+name\s+as\s+per\s+passport|name\s+on\s+passport|passport\s+full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1],
     text.match(/(?:full\s+name\s+as\s+per\s+id|name\s+as\s+per\s+id|full\s+name)\s*(?:is|:|-)?\s*([^;\n]+)/i)?.[1],
-  ].map(cleanName).filter(Boolean);
+  ].map(cleanName).map((name) => officialNameAlias(name)?.english || name).filter(Boolean);
   nameCandidates.sort((a, b) => {
-    const score = (name: string) => (/\b[A-Z]\.?\b(?:\s*[A-Z]\.?\b)+/i.test(name) ? 0 : 1000) + name.length + (name.split(/\s+/).length >= 3 ? 100 : 0);
+    const score = (name: string) => (/\b[A-Z]\.?\b(?:\s*[A-Z]\.?\b)+/i.test(name) ? 0 : 1000) + name.length + (name.split(/\s+/).length >= 4 ? 180 : name.split(/\s+/).length >= 3 ? 100 : 0);
     return score(b) - score(a);
   });
+  set("fullNameAsPerPassport", nameCandidates[0]);
+  set("fullNameAsPerId", nameCandidates[0]);
   set("recipientName", nameCandidates[0]);
+  set("fullNameArabic", arabicName || officialNameAlias(nameCandidates[0])?.arabic);
   set("emiratesId", pick("emiratesId", "emiratesID", "emirates_id", "eid", "idNumber", "id_number", "eidNumber"));
   set("passportNumber", pick("passportNumber", "passportNo", "passport_no", "passport", "passport_number"));
   set("homeAddress", pick("homeAddress", "residentialAddress", "residential_address", "address", "home_address"));
@@ -466,7 +526,7 @@ function StudioShell({
   // ── Session persistence: survive refresh / tab-close / accidental logout.
   const SESSION_KEY = `jbj:doc-studio:session:${catalog}`;
   const TEMPLATE_KEY = (tid: string) => `jbj:doc-studio:template:${tid}`;
-  const DOCUMENT_FIX_VERSION = 43;
+  const DOCUMENT_FIX_VERSION = 44;
   const hydratedRef = useRef(false);
   const restoredOnce = useRef(false);
   const parseSnap = (raw: string | null): any => {
@@ -1081,6 +1141,7 @@ function StudioShell({
     const pick = (...keys: string[]) => keys.map((key) => (source[key] || "").trim()).find(Boolean) || "";
     const developerName = pick("developerName", "developer_name", "developer", "developer_company");
     const clientName = pick(
+      "fullNameAsPerPassport", "passportFullName", "fullNameAsPerId", "fullNameAsPerID", "emiratesIdFullName",
       "recipientName", "employeeName", "employee_name", "guest_name", "client_name", "full_name",
       "landlord_name", "tenant_name", "buyer_name", "seller_name", "applicant_name", "customer_name",
     );
@@ -1383,7 +1444,20 @@ function StudioShell({
 
   const setField = (k: string, v: string) => {
     resumeStructuredSync();
-    setFields((p) => ({ ...p, [k]: v }));
+    setFields((p) => {
+      const alias = /^(recipientName|fullName|full_name|candidateName|fullNameAsPerPassport|passportFullName|fullNameAsPerId|fullNameAsPerID|emiratesIdFullName)$/i.test(k)
+        ? officialNameAlias(v)
+        : undefined;
+      const nextValue = alias?.english || v;
+      const next = { ...p, [k]: nextValue };
+      if (alias?.english) {
+        next.fullNameAsPerPassport = alias.english;
+        next.fullNameAsPerId = alias.english;
+        next.recipientName = alias.english;
+      }
+      if (alias?.arabic && !next.fullNameArabic) next.fullNameArabic = alias.arabic;
+      return next;
+    });
   };
   const applyDeveloperDetails = (developerName: string) => {
     const dev = UAE_DEVELOPERS.find((d) => d.name.toLowerCase() === developerName.trim().toLowerCase());
@@ -3042,6 +3116,13 @@ function StudioShell({
                         }}
                         placeholder="Full Legal Name (as per Passport — incl. father's name)"
                         className="bg-[#FDFBF7] h-7 text-[11px] font-medium"
+                      />
+                      <Input
+                        value={fields.fullNameArabic || ""}
+                        onChange={(e) => setField("fullNameArabic", e.target.value)}
+                        placeholder="Arabic Name (as per ID / Passport)"
+                        dir="rtl"
+                        className="bg-[#FDFBF7] h-7 text-[11px] font-medium text-right"
                       />
                       <Input
                         value={fields.recipientName || ""}
