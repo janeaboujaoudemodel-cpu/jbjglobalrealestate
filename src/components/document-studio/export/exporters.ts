@@ -1126,6 +1126,7 @@ export async function exportPdf(
 export async function exportPng(
   bodyHtml: string, marks: DocumentMarks, template: DocumentTemplate,
   sourceElement?: HTMLElement | null,
+  candidateName?: string | null,
 ): Promise<void> {
   const canvas = sourceElement
     ? await renderElementCanvas(sourceElement)
@@ -1133,7 +1134,7 @@ export async function exportPng(
   const dataUrl = canvas.toDataURL("image/png");
   const a = document.createElement("a");
   a.href = dataUrl;
-  a.download = fileName(template, "png");
+  a.download = fileName(template, "png", candidateName);
   document.body.appendChild(a); a.click(); a.remove();
 }
 
