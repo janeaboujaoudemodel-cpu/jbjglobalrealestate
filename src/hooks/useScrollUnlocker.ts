@@ -124,8 +124,12 @@ export function useScrollUnlocker(): void {
         // but they swallow enough wheel delta that the site feels blocked. If the
         // browser moved less than half of the intended vertical delta, apply the
         // missing amount once. Native scroll remains untouched when it works.
-        if (Math.sign(moved || deltaY) === Math.sign(deltaY) && Math.abs(moved) >= expected * 0.5) return;
-        forcePageScroll(deltaY - moved);
+        if (Math.sign(moved || deltaY) === Math.sign(deltaY) && Math.abs(moved) >= expected * 0.75) return;
+        const missing = deltaY - moved;
+        const boostedMissing = expected >= 120
+          ? Math.sign(deltaY) * Math.max(Math.abs(missing), Math.min(window.innerHeight * 0.72, 680))
+          : missing;
+        forcePageScroll(boostedMissing);
       };
 
       window.requestAnimationFrame(() => window.setTimeout(correctIfTrapped, 0));
