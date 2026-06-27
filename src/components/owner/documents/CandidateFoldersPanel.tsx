@@ -193,7 +193,8 @@ export function CandidateFoldersPanel({ onOpenDoc }: { onOpenDoc: (id: string) =
             type="button"
             variant={showDeleted ? "primary" : "outline"}
             size="sm"
-            className="h-10 shrink-0 whitespace-nowrap"
+            style={{ width: 180, minWidth: 180 }}
+            className="h-10 shrink-0 whitespace-nowrap !overflow-visible"
             onClick={() => setShowDeleted((v) => !v)}
             title="Toggle Recently Deleted (auto-purges after 30 days)"
           >
