@@ -715,9 +715,9 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <TabsTrigger value="documents">Live Editor</TabsTrigger>
             <TabsTrigger value="esign">E-signature</TabsTrigger>
             <TabsTrigger value="drafts">Drafts ({buckets.drafts.length})</TabsTrigger>
+            <TabsTrigger value="folders">📁 Folders</TabsTrigger>
             <TabsTrigger value="generated">Generated ({buckets.generated.length})</TabsTrigger>
             <TabsTrigger value="sent">Pending ({buckets.sent.length})</TabsTrigger>
-            <TabsTrigger value="folders">📁 Folders</TabsTrigger>
             <TabsTrigger value="submitted">Review ({buckets.submitted.length})</TabsTrigger>
             <TabsTrigger value="signed">Signed ({buckets.signed.length})</TabsTrigger>
             <TabsTrigger value="vault">Contract Vault</TabsTrigger>
