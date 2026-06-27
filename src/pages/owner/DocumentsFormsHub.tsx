@@ -904,7 +904,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           <TabsContent value="signed" className="mt-4">
             {renderBucketCards(buckets.signed, "No signed contracts yet.", "signed")}
           </TabsContent>
-          <TabsContent value="candidates" className="mt-4">
+          <TabsContent value="folders" className="mt-4">
             <CandidateFoldersPanel onOpenDoc={(id) => navigate(`/owner/documents/forms?openDoc=${id}`)} />
           </TabsContent>
           <TabsContent value="vault" className="mt-4">
