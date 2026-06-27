@@ -402,14 +402,14 @@ function replaceFooterSvgsWithCanvasForExport(root: HTMLElement): void {
       const wrapper = svg.parentElement as HTMLElement | null;
       if (wrapper) {
         const row = wrapper.parentElement as HTMLElement | null;
-        const kind = inferFooterIconKind((row?.textContent || "").trim());
+        const kind = inferFooterIconKindFromSvg(svg) || inferFooterIconKind((row?.textContent || "").trim());
         const iconCanvas = document.createElement("canvas");
         iconCanvas.width = 48;
         iconCanvas.height = 48;
         iconCanvas.style.cssText = [
           "position:absolute",
           "left:0",
-          "top:1.15px",
+          "top:2.05px",
           "width:12px",
           "height:12px",
           "display:block",
@@ -438,10 +438,20 @@ type FooterIconKind = "location" | "phone" | "mail" | "globe";
 
 function inferFooterIconKind(text: string): FooterIconKind {
   const value = text.toLowerCase();
+  if (/office|port saeed|deira|dubai|uae/.test(value) && !value.includes("+") && !value.includes("@")) return "location";
   if (value.includes("www") || value.includes(".ae")) return "globe";
   if (value.includes("@")) return "mail";
   if (value.includes("+") || /\d{2,}/.test(value)) return "phone";
   return "location";
+}
+
+function inferFooterIconKindFromSvg(svg: SVGElement): FooterIconKind | null {
+  const html = svg.outerHTML;
+  if (html.includes("M8 14.25s5-4.45")) return "location";
+  if (html.includes("M4.08 2.05")) return "phone";
+  if (html.includes("<rect") && html.includes("M2.55 4.55")) return "mail";
+  if (html.includes("<ellipse") && html.includes("M2.15 8h11.7")) return "globe";
+  return null;
 }
 
 function firstTextPeer(wrapper: HTMLElement): HTMLElement | null {
