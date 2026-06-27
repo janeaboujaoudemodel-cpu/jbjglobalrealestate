@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { AICommandPanel } from "@/components/owner/documents/AICommandPanel";
 import { getCatalogByAudience, type DocumentTemplate } from "@/config/documentCatalog";
+import { CandidateFoldersPanel } from "@/components/owner/documents/CandidateFoldersPanel";
 
 let documentStudioPromise: Promise<typeof import("@/components/document-studio/DocumentStudio")> | null = null;
 const loadDocumentStudio = () => {
