@@ -155,7 +155,7 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
     display: "block",
     lineHeight: 0,
     fontSize: 0,
-  });
+  };
   const textAfterIconStyle = {
     position: "absolute" as const,
     left: 18,
