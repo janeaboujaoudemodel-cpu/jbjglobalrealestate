@@ -815,7 +815,7 @@ function composeJobOffer(input: ComposerInput): string {
       applicantTitle: f.jobTitle,
       applicantDate: offerSigningIso,
       applicantLabel: "Accepted by Candidate",
-      applicantAcknowledgement: `I, the undersigned, confirm my acceptance to the above terms and conditions.`,
+      applicantAcknowledgement: `I, the undersigned, hereby confirm that I have read, fully understood, and irrevocably accept all terms, conditions, obligations, and restrictions set out in this Offer Letter and its accompanying NDA, and I commit to act with full loyalty, integrity, and confidentiality toward J B J GLOBAL REAL ESTATE L.L.C S.O.C throughout and after my engagement with the Company.`,
       extraSignatories: input.extraSignatories,
     }),
   ].join("");
