@@ -1149,7 +1149,7 @@ function StudioShell({
               ownerName,
               ownerTitle,
               ownerDate,
-              letterDate: nextFields.letterDate || ownerDate,
+              letterDate: (nextFields as any).letterDate || ownerDate,
             });
             await saveDocMutation.mutateAsync({
               template_id: "nda",
