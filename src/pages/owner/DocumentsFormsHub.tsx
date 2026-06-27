@@ -706,6 +706,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <TabsTrigger value="sent">Pending ({buckets.sent.length})</TabsTrigger>
             <TabsTrigger value="submitted">Review ({buckets.submitted.length})</TabsTrigger>
             <TabsTrigger value="signed">Signed ({buckets.signed.length})</TabsTrigger>
+            <TabsTrigger value="candidates">Candidates 📁</TabsTrigger>
             <TabsTrigger value="vault">Contract Vault</TabsTrigger>
             <TabsTrigger value="deleted">Deleted ({buckets.deleted.length})</TabsTrigger>
             <TabsTrigger value="assets">Stamps & Signatures</TabsTrigger>
