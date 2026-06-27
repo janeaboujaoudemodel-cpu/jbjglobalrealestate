@@ -1605,9 +1605,9 @@ export function compose(input: ComposerInput): string {
 
 /** Pre-seeded commission rows for HR/broker offers. */
 export const DEFAULT_BROKER_COMMISSIONS: CommissionRow[] = [
-  { label: "Direct deals", rate: "65%", trigger: "Own direct deals, paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "Enhanced while HR, admin and assistant duties are performed" },
-  { label: "Company-sourced leads", rate: "55%", trigger: "Company source leads, paid after JBJ Global Real Estate LLC SOC receives the cleared commission", notes: "Enhanced while HR, admin and assistant duties are performed" },
-  { label: "Company-approved premium tier · direct deals", rate: "70%", trigger: "Eligible own direct deals only after AED 10,000,000 Company-recognised sales in one year, written management approval, and JBJ receipt of cleared net commission", notes: "Not automatic; calculated on cleared net commission actually received by JBJ after lawful deductions, reversals and transaction costs" },
+  { label: "Direct deals (Broker-sourced)", rate: "65% Broker / 35% Company", trigger: "Own direct deals — paid after JBJ Global Real Estate LLC SOC receives the cleared net commission", notes: "Enhanced while HR, admin and assistant duties are performed; reverts to 50/50 otherwise" },
+  { label: "Company-sourced leads", rate: "55% Broker / 45% Company", trigger: "Leads supplied by the Company — paid after JBJ Global Real Estate LLC SOC receives the cleared net commission", notes: "Enhanced while HR, admin and assistant duties are performed; reverts to 50/50 otherwise" },
+  { label: "Company-approved premium tier · direct deals", rate: "70% Broker / 30% Company", trigger: "Eligible own direct deals only after AED 10,000,000 Company-recognised sales in one year, written management approval, and JBJ receipt of cleared net commission", notes: "Not automatic; calculated on cleared net commission actually received by JBJ after lawful deductions, reversals and transaction costs" },
 ];
 
 function normalizeOfferCommissionRows(rows: CommissionRow[]): CommissionRow[] {
