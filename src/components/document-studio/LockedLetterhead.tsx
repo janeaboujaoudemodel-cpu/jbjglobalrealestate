@@ -140,22 +140,38 @@ export function LockedFooter({ theme = "champagne" as LetterheadTheme }: { theme
       <table style={{ width: "100%", height: 58, borderCollapse: "collapse", tableLayout: "fixed" }}>
         <tbody>
           <tr>
-            <td style={{ verticalAlign: "middle", width: "44%", fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg, padding: "0 14px 0 0" }}>
-              {JBJ_BRAND.address}
+            <td style={{ verticalAlign: "middle", width: "42%", fontSize: 8.5, lineHeight: 1.25, color: t.fg, WebkitTextFillColor: t.fg, padding: "0 14px 0 0" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, verticalAlign: "middle" }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>{JBJ_BRAND.address}</span>
+              </span>
             </td>
-            <td style={{ verticalAlign: "middle", width: "22%", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700, lineHeight: 1.35 }}>
-              {(JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone]).map((p) => (
-                <div key={p} style={{ whiteSpace: "nowrap" }}>{p}</div>
+            <td style={{ verticalAlign: "middle", width: "24%", fontSize: 9, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "center", padding: "0 8px", fontWeight: 700, lineHeight: 1.35 }}>
+              {(JBJ_BRAND.letterheadPhones ?? [JBJ_BRAND.phone]).map((p, i) => (
+                <div key={p} style={{ whiteSpace: "nowrap", display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                  {i === 0 ? (
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  ) : (
+                    <span style={{ display: "inline-block", width: 10 }} />
+                  )}
+                  <span>{p}</span>
+                </div>
               ))}
             </td>
             <td style={{ verticalAlign: "middle", width: "34%", fontSize: 8.5, color: t.fg, WebkitTextFillColor: t.fg, textAlign: "right", padding: "0 0 0 14px" }}>
-              <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700 }}>
-                {JBJ_BRAND.email.toUpperCase()}
-              </a>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, verticalAlign: "middle" }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+                <a href={`mailto:${JBJ_BRAND.email}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 700 }}>
+                  {JBJ_BRAND.email.toUpperCase()}
+                </a>
+              </span>
               <span style={{ color: t.fg, WebkitTextFillColor: t.fg, opacity: 0.5, margin: "0 6px" }}>·</span>
-              <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em" }}>
-                {JBJ_BRAND.website.toUpperCase()}
-              </a>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5, verticalAlign: "middle" }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B89555" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <a href={`https://${JBJ_BRAND.website}`} style={{ color: t.fg, WebkitTextFillColor: t.fg, textDecoration: "none", fontWeight: 850, letterSpacing: "0.04em" }}>
+                  {JBJ_BRAND.website.toUpperCase()}
+                </a>
+              </span>
             </td>
           </tr>
         </tbody>
