@@ -86,6 +86,14 @@ async function renderElementCanvas(el: HTMLElement): Promise<HTMLCanvasElement> 
   el.querySelectorAll<HTMLElement>('[aria-label="Remove field"],[data-drag-guide="true"]').forEach((n) => {
     hideNode(n);
   });
+  el.querySelectorAll<HTMLElement>('[data-sig-detail-rows="1"],[data-sig-detail-rows="1"] *').forEach((n) => {
+    n.style.overflow = "visible";
+    n.style.textOverflow = "clip";
+  });
+  el.querySelectorAll<HTMLElement>('[data-signature-block="1"]').forEach((block) => {
+    block.style.marginTop = "0";
+    block.style.paddingTop = "14px";
+  });
   el.querySelectorAll<HTMLElement>("[data-removable-field]").forEach((row) => {
     const valueCell = row.querySelector<HTMLElement>("[data-field-value-cell]");
     const probe = valueCell || row;
