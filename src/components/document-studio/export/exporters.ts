@@ -400,18 +400,22 @@ function isCanvasVisuallyBlank(canvas: HTMLCanvasElement): boolean {
 }
 
 async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE_SCALE): Promise<HTMLCanvasElement> {
+  const html2canvas = await loadHtml2Canvas();
+  const pageW = pages[0]?.offsetWidth || LIVE_PAGE_WIDTH;
+  const pageH = pages[0]?.offsetHeight || LIVE_PAGE_HEIGHT;
+  const totalH = pageH * pages.length;
   const host = document.createElement("div");
   host.setAttribute("data-export-stack", "true");
   host.style.cssText = [
     "position:fixed",
-    "left:-12000px",
+    "left:0",
     "top:0",
-    `width:${LIVE_PAGE_WIDTH}px`,
-    `height:${pages.length * LIVE_PAGE_HEIGHT}px`,
-    "background:#FDFBF7",
+    `width:${pageW}px`,
+    `height:${totalH}px`,
+    `background:${EXPORT_PAGE_BACKGROUND}`,
     "overflow:hidden",
     "pointer-events:none",
-    "z-index:-1",
+    "z-index:2147483000",
   ].join(";");
 
   pages.forEach((page) => {
@@ -422,16 +426,49 @@ async function renderLivePagesStackCanvas(pages: HTMLElement[], scale = PDF_PAGE
     clone.style.borderRadius = "0";
     clone.style.border = "0";
     clone.style.margin = "0";
-    clone.style.width = `${LIVE_PAGE_WIDTH}px`;
-    clone.style.height = `${LIVE_PAGE_HEIGHT}px`;
+    clone.style.width = `${pageW}px`;
+    clone.style.height = `${pageH}px`;
     clone.style.position = "relative";
+    clone.style.background = EXPORT_PAGE_BACKGROUND;
     clone.querySelectorAll<HTMLElement>("[data-page-export-ignore]").forEach((node) => node.remove());
+    clone.querySelectorAll<HTMLElement>("*").forEach((node) => {
+      const style = node.style as CSSStyleDeclaration;
+      if (style.mixBlendMode && style.mixBlendMode !== "normal") style.mixBlendMode = "normal";
+    });
     host.appendChild(clone);
   });
 
   document.body.appendChild(host);
   try {
-    return await renderElementCanvas(host, scale);
+    await yieldToUi();
+    const canvas = await html2canvas(host, {
+      backgroundColor: EXPORT_PAGE_BACKGROUND,
+      scale,
+      foreignObjectRendering: false,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      imageTimeout: 450,
+      removeContainer: true,
+      width: pageW,
+      height: totalH,
+      windowWidth: pageW,
+      windowHeight: totalH,
+      ignoreElements: (e) =>
+        e.tagName === "SCRIPT" ||
+        (e instanceof HTMLElement &&
+          (e.getAttribute("aria-label") === "Remove field" ||
+            e.getAttribute("aria-label") === "Change mark" ||
+            e.getAttribute("aria-label") === "Resize mark" ||
+            e.getAttribute("aria-label") === "Unlock mark" ||
+            e.getAttribute("aria-label") === "Lock mark" ||
+            e.getAttribute("data-drag-guide") === "true" ||
+            e.hasAttribute("data-page-export-ignore") ||
+            !!e.closest("[data-page-export-ignore]"))),
+    });
+    await cloneImagesIntoCanvas(canvas, host);
+    if (isCanvasVisuallyBlank(canvas)) throw new Error("Fast stacked capture was blank");
+    return canvas;
   } finally {
     host.remove();
   }
