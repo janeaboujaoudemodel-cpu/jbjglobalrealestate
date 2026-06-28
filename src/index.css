@@ -18822,8 +18822,7 @@ html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] 
   border: 1px solid rgba(184,149,85,0.35) !important;
 }
 
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill],
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill] * {
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill] {
   background: linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%) !important;
   background-image: linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%) !important;
   color: #064E3B !important;
@@ -18832,10 +18831,25 @@ html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] 
   border-color: #B89555 !important;
 }
 
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-select-pill],
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-select-pill] * {
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill] * {
+  background: transparent !important;
+  background-image: none !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-select-pill] {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-select-pill] * {
+  background: transparent !important;
+  background-image: none !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
