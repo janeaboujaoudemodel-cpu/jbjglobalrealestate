@@ -18262,3 +18262,176 @@ html body #root#root#root#root#root#root#root#root :is(
   text-shadow: none !important;
   opacity: 1 !important;
 }
+
+/* PASS 71 — VERIFIED TWO-SURFACE CONTRAST CONTRACT.
+   Repairs the two live regressions reported by the owner:
+   1) Champagne/gold/page own-surfaces must render ink-black descendants.
+   2) Emerald/dark own-controls must render pure-white descendants/icons.
+   The selectors are intentionally ordered: light restore first, then exact
+   emerald/dark control restore so emerald CTAs inside champagne cards remain
+   white while surrounding champagne copy remains ink. */
+html body #root#root#root#root#root#root#root#root#root :is(
+  [aria-labelledby="pending-tasks-title"],
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"], [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"], [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="from-champagne"], [class*="via-champagne"], [class*="to-champagne"], [class*="bg-champagne"]
+),
+html body #root#root#root#root#root#root#root#root#root :is(
+  [aria-labelledby="pending-tasks-title"],
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"], [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"], [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="from-champagne"], [class*="via-champagne"], [class*="to-champagne"], [class*="bg-champagne"]
+) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g)
+  :not(.jj-cta-primary):not(.jj-cta-primary *)
+  :not(.jj-cta-emerald):not(.jj-cta-emerald *)
+  :not(.jj-emerald-action):not(.jj-emerald-action *)
+  :not(.jj-pill-emerald):not(.jj-pill-emerald *)
+  :not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *)
+  :not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *)
+  :not(.jj-side-tile):not(.jj-side-tile *)
+  :not(.jj-sqtoggle[data-active="true"]):not(.jj-sqtoggle[data-active="true"] *)
+  :not([data-emerald-action]):not([data-emerald-action] *)
+  :not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *)
+  :not([data-surface="emerald"]):not([data-surface="emerald"] *)
+  :not([data-surface="dark"]):not([data-surface="dark"] *)
+  :not([data-surface="ink"]):not([data-surface="ink"] *)
+  :not([data-surface="navy"]):not([data-surface="navy"] *)
+  :not([data-cta="primary"]):not([data-cta="primary"] *)
+  :not([data-cta="dark"]):not([data-cta="dark"] *)
+  :not([data-on-dark]):not([data-on-dark] *)
+  :not([data-allow-dark-cta][data-active="true"]):not([data-allow-dark-cta][data-active="true"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  fill: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root :is(
+  [aria-labelledby="pending-tasks-title"],
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"], [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"], [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="from-champagne"], [class*="via-champagne"], [class*="to-champagne"], [class*="bg-champagne"]
+) :is(svg, [class*="lucide"], [data-lucide])
+  :not(.jj-cta-primary *):not(.jj-cta-emerald *):not(.jj-emerald-action *):not(.jj-pill-emerald *):not(.jj-pill-emerald-metallic *):not(.jj-icon-tile-emerald *):not(.jj-side-tile *)
+  :not(.jj-sqtoggle[data-active="true"] *):not([data-emerald-action] *):not([data-emerald-icon-surface] *):not([data-surface="emerald"] *):not([data-on-dark] *) {
+  fill: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white[data-emerald-action],
+  .allow-white[data-emerald="true"],
+  .jj-sqtoggle[data-active="true"],
+  [data-emerald-action],
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="primary"],
+  [data-cta="dark"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control
+),
+html body #root#root#root#root#root#root#root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white[data-emerald-action],
+  .allow-white[data-emerald="true"],
+  .jj-sqtoggle[data-active="true"],
+  [data-emerald-action],
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="primary"],
+  [data-cta="dark"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control
+) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  fill: currentColor !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root :is(
+  .jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald,
+  .jj-side-tile, .allow-white[data-emerald-action], .allow-white[data-emerald="true"], .jj-sqtoggle[data-active="true"], [data-emerald-action], [data-ink-emerald], [data-on-dark],
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-cta="primary"], [data-cta="dark"], [data-emerald="true"], [data-emerald-filled],
+  [data-emerald-band], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"], [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control
+) :is(svg, [class*="lucide"], [data-lucide]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root :is(
+  .jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald,
+  .jj-side-tile, .allow-white[data-emerald-action], .allow-white[data-emerald="true"], .jj-sqtoggle[data-active="true"], [data-emerald-action], [data-ink-emerald], [data-on-dark],
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-cta="primary"], [data-cta="dark"], [data-emerald="true"], [data-emerald-filled],
+  [data-emerald-band], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"], [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control
+) svg :is(path, line, polyline, polygon, rect, circle, ellipse, use, g)[fill]:not([fill="none"]) {
+  fill: #FFFFFF !important;
+  fill-opacity: 1 !important;
+}
