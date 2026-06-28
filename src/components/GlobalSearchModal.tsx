@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin, MessageCircle, Mail, LifeBuoy, Compass, TrendingUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -218,7 +217,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       setQuery(q);
       setRecentSearches(getRecentSearches());
       setShortcuts(getSearchShortcuts());
-      setTimeout(() => inputRef.current?.focus(), 100);
+      inputRef.current?.focus({ preventScroll: true });
     }
   }, [isOpen, initialQuery]);
 
@@ -461,38 +460,29 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     );
   }
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.12 }}
-            className="fixed inset-0 bg-[#1A1A1A]/80 backdrop-blur-sm z-[10000]"
+          <div
+            className="fixed inset-0 bg-[#1A1A1A]/78 z-[10000]"
             onClick={onClose}
           />
 
           {/* Modal — viewport-safe, never clipped on any device.
-              NOTE: outer wrapper handles fixed centering so framer-motion's transform
-              cannot override our translate. Inner motion.div animates opacity/y only. */}
+              No motion wrapper: the header search opens immediately and cannot
+              have transform-based centering overridden by animation libraries. */}
           <div
-            className="fixed z-[10001] top-[12px] sm:top-[56px] left-1/2"
+            data-global-search-modal
+            className="fixed z-[10001] left-1/2 top-[12px] sm:top-[88px]"
             style={{
-              width: "min(48rem, calc(100vw - 24px))",
+              width: "min(48rem, calc(100vw - 20px))",
               transform: "translateX(-50%)",
+              maxWidth: "calc(100vw - 20px)",
             }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.12, ease: "easeOut" }}
-              style={{ maxHeight: "calc(100dvh - 80px)" }}
-            >
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'min(720px, calc(100dvh - 108px))' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-[#B89555]/30 flex-shrink-0">
                 <IconTile icon={Search} tone="emerald" size="sm" className="absolute left-4 top-1/2 -translate-y-1/2" />
@@ -513,7 +503,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               </div>
 
               {/* Main Content - Scrollable */}
-              <div className="overflow-y-auto p-4 flex-1" style={{ maxHeight: 'calc(100dvh - 12rem)' }}>
+              <div className="overflow-y-auto p-4 flex-1" style={{ maxHeight: 'min(640px, calc(100dvh - 188px))' }}>
                 {/* Show search results when typing */}
                 {query.trim() ? (
                   <div className="space-y-4">
@@ -590,9 +580,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   <div className="space-y-6">
                     {/* Role-aware shortcuts */}
                     <div>
-                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
+                      <div className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
                         <IconTile icon={Compass} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" /> For {roleLabel}s
-                      </p>
+                      </div>
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                         {roleShortcuts.map((shortcut) => (
                           <button
@@ -648,9 +638,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     {/* Your Pinned Shortcuts */}
                     {shortcuts.length > 0 && (
                       <div>
-                        <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
+                        <div className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
                           <IconTile icon={Pin} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" /> Your Shortcuts
-                        </p>
+                        </div>
                         <div className="flex flex-wrap gap-2">
                           {shortcuts.map((search, i) => (
                             <div
@@ -815,11 +805,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 </p>
               </div>
             </div>
-            </motion.div>
           </div>
         </>
-      )}
-    </AnimatePresence>
   );
 };
 

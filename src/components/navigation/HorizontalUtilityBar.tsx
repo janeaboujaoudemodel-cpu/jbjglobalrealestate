@@ -138,7 +138,7 @@ export default function HorizontalUtilityBar() {
           {/* Favorites */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link to="/favorites" aria-label="Favorites" className="contents">
+              <Link to="/favorites" className="contents">
                 <HeaderControl
                   shape="circle"
                   tone="emerald"

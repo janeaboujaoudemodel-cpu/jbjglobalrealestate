@@ -18112,6 +18112,30 @@ html body #root [data-jj-utility-bar] :is(
   text-shadow: none !important;
 }
 
+html body #root [data-jj-utility-bar] button[aria-label="Account menu"].jj-avatar-metallic,
+html body #root [data-jj-utility-bar] button[aria-label="Account menu"].jj-avatar-metallic:is(:hover, :focus-visible, [data-state="open"]) {
+  background: radial-gradient(130% 130% at 26% 20%, #087052 0%, #064E3B 34%, #042c1c 66%, #000000 100%) !important;
+  background-image: radial-gradient(130% 130% at 26% 20%, #087052 0%, #064E3B 34%, #042c1c 66%, #000000 100%) !important;
+  box-shadow:
+    0 14px 30px -13px rgba(6,78,59,1),
+    0 4px 10px -6px rgba(0,0,0,0.65),
+    inset 0 1px 0 rgba(255,255,255,0.34),
+    inset 0 -10px 18px rgba(0,0,0,0.34) !important;
+}
+
+html body #root [data-jj-utility-bar] .jj-avatar-metallic .jj-avatar-spinner {
+  opacity: 1 !important;
+}
+
+html body #root [data-jj-utility-bar] .jj-avatar-metallic span {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-jj-utility-bar] .jj-avatar-metallic > span:not(.jj-avatar-spinner) span:last-child {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.72) !important;
+}
+
 
 /* ── Avatar metallic spinner shine (Header JB) ───────────────── */
 @keyframes jj-avatar-shine-rotate {
