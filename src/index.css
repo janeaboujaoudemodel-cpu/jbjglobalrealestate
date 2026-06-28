@@ -17264,7 +17264,7 @@ html body :is(
   [data-emerald-filled],
   [data-emerald-ok="button"],
   [data-allow-dark-cta]
-) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
