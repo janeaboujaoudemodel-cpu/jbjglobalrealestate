@@ -64,14 +64,34 @@ function relativeLuminance(r: number, g: number, b: number): number {
 }
 
 function detectUnderlayLuminance(target: HTMLElement): number {
-  let el: HTMLElement | null = target.parentElement;
-  while (el && el !== document.documentElement) {
-    const bg = getComputedStyle(el).backgroundColor;
-    const rgba = parseRgb(bg);
+  const declaredSurface = target.closest<HTMLElement>(
+    '[data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], .surface-light, .surface-champagne, .jj-surface-champagne, [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-on-dark], [data-hero-dark], .surface-dark, .surface-ink, .jj-surface-emerald, .jj-hero-fullscreen, .jj-hero-neon',
+  );
+  if (declaredSurface) {
+    const surface = declaredSurface.getAttribute('data-surface');
+    if (
+      surface === 'light' ||
+      surface === 'champagne' ||
+      surface === 'cream' ||
+      surface === 'page' ||
+      surface === 'raised' ||
+      surface === 'gold' ||
+      surface === 'pearl' ||
+      declaredSurface.matches('.surface-light, .surface-champagne, .jj-surface-champagne')
+    ) {
+      return 0.86;
+    }
+    return BASELINE.luminance;
+  }
+
+  // Avoid walking every ancestor with getComputedStyle. One parent read plus
+  // the root fallback is enough for adaptive hairlines and prevents layout
+  // thrashing during dropdown/menu opens.
+  if (target.parentElement) {
+    const rgba = parseRgb(getComputedStyle(target.parentElement).backgroundColor);
     if (rgba && rgba[3] > 0.01) {
       return relativeLuminance(rgba[0], rgba[1], rgba[2]);
     }
-    el = el.parentElement;
   }
   const htmlBg = parseRgb(
     getComputedStyle(document.documentElement).backgroundColor,
@@ -140,16 +160,9 @@ export function useAdaptiveHairline<T extends HTMLElement>(
 
     window.addEventListener("resize", measure);
 
-    const mo = new MutationObserver(measure);
-    mo.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class", "data-theme", "style"],
-    });
-
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
-      mo.disconnect();
       window.removeEventListener("resize", measure);
     };
   }, [ref]);

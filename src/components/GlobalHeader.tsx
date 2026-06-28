@@ -217,13 +217,23 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     const getViewportWidth = () =>
       headerViewportRef.current?.clientWidth ?? window.innerWidth;
 
+    let raf = 0;
     const recompute = () => {
-      setIsDesktopWidth(getViewportWidth() >= 768);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        setIsDesktopWidth((prev) => {
+          const next = getViewportWidth() >= 768;
+          return prev === next ? prev : next;
+        });
+      });
     };
 
     recompute();
     window.addEventListener("resize", recompute);
-    return () => window.removeEventListener("resize", recompute);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", recompute);
+    };
   }, []);
 
   const shouldUseMobileHeader = isTouchLayout || !isDesktopWidth;
@@ -251,23 +261,35 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       return;
     }
     
-    // Scroll handler - only trigger solid after scrolling past threshold
-    const onScroll = () => {
+    let raf = 0;
+    let lastSolid = window.scrollY > 80;
+    const applyScrollState = () => {
       const shouldBeSolid = window.scrollY > 80;
+      if (shouldBeSolid === lastSolid) return;
+      lastSolid = shouldBeSolid;
       setIsSolid(shouldBeSolid);
       setIsAtPageTop(!shouldBeSolid);
+    };
+    // Scroll handler - only trigger solid after scrolling past threshold
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(applyScrollState);
     };
     
     // Check initial scroll position after a brief delay to ensure proper hydration
     // This handles cases where user refreshes mid-page
-    requestAnimationFrame(() => {
+    raf = requestAnimationFrame(() => {
       const shouldBeSolid = window.scrollY > 80;
+      lastSolid = shouldBeSolid;
       setIsSolid(shouldBeSolid);
       setIsAtPageTop(!shouldBeSolid);
     });
     
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [forceSolid]);
 
   // Deterministic body-attribute toggle: on the homepage, paint the mobile
@@ -280,14 +302,23 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       document.body.removeAttribute("data-home-hero-state");
       return;
     }
+    let raf = 0;
+    let lastState = "";
     const apply = () => {
-      const state = window.scrollY > 80 ? "scrolled" : "atrest";
-      document.body.setAttribute("data-home-hero-state", state);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const state = window.scrollY > 80 ? "scrolled" : "atrest";
+        if (state !== lastState) {
+          lastState = state;
+          document.body.setAttribute("data-home-hero-state", state);
+        }
+      });
     };
     apply();
     window.addEventListener("scroll", apply, { passive: true });
     window.addEventListener("resize", apply);
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener("scroll", apply);
       window.removeEventListener("resize", apply);
       document.body.removeAttribute("data-home-hero-state");

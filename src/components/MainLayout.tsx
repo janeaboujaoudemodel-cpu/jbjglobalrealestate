@@ -230,7 +230,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       if (main instanceof HTMLElement) {
         main.style.paddingTop = '6rem';
         main.style.minHeight = '100vh';
-        main.getBoundingClientRect();
       }
       window.dispatchEvent(new Event('resize'));
       setLayoutGuardTriggered(true);
@@ -240,11 +239,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   useEffect(() => {
     if (!showLayoutDebug) { setLayoutDebugSnapshot(null); return; }
-    const syncSnapshot = () => setLayoutDebugSnapshot(getServiceLayoutSnapshot());
+    let raf = 0;
+    const syncSnapshot = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setLayoutDebugSnapshot(getServiceLayoutSnapshot()));
+    };
     syncSnapshot();
     window.addEventListener('scroll', syncSnapshot, { passive: true });
     window.addEventListener('resize', syncSnapshot);
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener('scroll', syncSnapshot);
       window.removeEventListener('resize', syncSnapshot);
     };

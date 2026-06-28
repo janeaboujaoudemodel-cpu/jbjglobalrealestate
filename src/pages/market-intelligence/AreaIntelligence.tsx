@@ -33,7 +33,7 @@ const AreaIntelligence = () => {
       case 'bullish':
         return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45">Bullish</Badge>;
       case 'bearish':
-        return <Badge className="bg-red-50 text-red-800 border-red-700/30">Bearish</Badge>;
+        return <Badge variant="secondary">Bearish</Badge>;
       default:
         return <Badge className="bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35">Neutral</Badge>;
     }
@@ -275,14 +275,14 @@ const AreaIntelligence = () => {
                         "Provide guarantees or forecasts"
                       ].map((item, idx) => (
                         <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center flex-shrink-0">
-                            <span className="text-red-500 text-xs font-bold">✕</span>
+                          <div className="w-6 h-6 rounded-full bg-[#EFE6D6] border border-[#B89555]/35 flex items-center justify-center flex-shrink-0">
+                            <span className="text-[#1A1A1A] text-xs font-bold">✕</span>
                           </div>
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="p-4 bg-red-500/5 rounded-xl border border-red-500/20">
+                    <div className="p-4 bg-[#EFE6D6] rounded-xl border border-[#B89555]/25">
                       <p className="text-[#1A1A1A]/70 text-sm font-medium">
                         Any area discussion that promises returns or future appreciation is not compliant with Dubai real estate regulations.
                       </p>
@@ -425,9 +425,9 @@ const AreaIntelligence = () => {
                                       {area.yoyChange > 0 ? (
                                         <TrendingUp className="w-4 h-4 text-[#B89555]" />
                                       ) : (
-                                        <TrendingDown className="w-4 h-4 text-red-500" />
+                                        <TrendingDown className="w-4 h-4 text-[#064E3B]" />
                                       )}
-                                      <span className={area.yoyChange > 0 ? 'text-[#1A1A1A] font-medium' : 'text-red-700 font-medium'}>
+                                      <span className="text-[#1A1A1A] font-medium">
                                         {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
                                       </span>
                                     </div>
@@ -446,18 +446,18 @@ const AreaIntelligence = () => {
                                   </div>
                                   <div>
                                     <p className="text-[#1A1A1A]/70 text-xs">Demand</p>
-                                    <div className="w-full bg-[#1A1A1A]/10 rounded-full h-1.5 mt-1">
+                                    <div className="w-full bg-[#064E3B]/10 rounded-full h-2.5 mt-1" data-score-bar>
                                       <div 
-                                        className="bg-[#1A1A1A] h-1.5 rounded-full" 
+                                        className="bg-[#064E3B] h-full rounded-full" 
                                         style={{ width: `${area.demandScore}%` }}
                                       />
                                     </div>
                                   </div>
                                   <div>
                                     <p className="text-[#1A1A1A]/70 text-xs">Supply</p>
-                                    <div className="w-full bg-[#1A1A1A]/10 rounded-full h-1.5 mt-1">
+                                    <div className="w-full bg-[#064E3B]/10 rounded-full h-2.5 mt-1" data-score-bar>
                                       <div 
-                                        className="bg-[#B89555] h-1.5 rounded-full" 
+                                        className="bg-[#064E3B] h-full rounded-full" 
                                         style={{ width: `${area.supplyScore}%` }}
                                       />
                                     </div>

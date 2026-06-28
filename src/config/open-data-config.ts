@@ -115,7 +115,7 @@ export const DUBAI_AREAS_MARKET_DATA: AreaMarketSnapshot[] = [
     trend: 'bullish',
     highlights: [
       'Waterfront lifestyle attracts expats',
-      'High rental yields for investors',
+      'Strong registered rental activity for investors',
       'Established community with amenities'
     ],
   },
@@ -172,7 +172,7 @@ export const DUBAI_AREAS_MARKET_DATA: AreaMarketSnapshot[] = [
     highlights: [
       'Affordable entry point',
       'Popular with first-time buyers',
-      'High rental yields (8%+)'
+      'Strong registered rental activity'
     ],
   },
   {
@@ -212,8 +212,8 @@ export const MARKET_OVERVIEW_STATS = {
   totalTransactionsChange: 12.5,
   avgPricePerSqft: 1450,
   avgPriceChange: 7.8,
-  avgRentalYield: 6.2,
-  yieldChange: 0.3,
+  avgRentIndex: 118,
+  rentIndexChange: 0.3,
   daysOnMarket: 42,
   domChange: -8,
   reportDate: new Date().toISOString().slice(0, 10),

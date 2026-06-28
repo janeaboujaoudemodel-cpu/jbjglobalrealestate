@@ -45,7 +45,7 @@ const DropdownMenuSubContent = React.forwardRef<
     ref={ref}
     data-surface="light"
     className={cn(
-      "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
     )}
     {...props}
@@ -63,7 +63,7 @@ const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       data-surface="light"
       className={cn(
-        "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         className,
       )}
       {...props}
@@ -130,8 +130,8 @@ const DropdownMenuRadioItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex cursor-default select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm text-[#1A1A1A] outline-none transition-all duration-200 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[#EFE6D6]/15 hover:text-[#1A1A1A] hover:shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:-translate-y-0.5",
-      "focus:bg-[#EFE6D6]/15 focus:text-[#1A1A1A] focus:shadow-[0_4px_15px_rgba(200,167,102,0.2)] focus:-translate-y-0.5",
+      "hover:bg-[rgba(6,78,59,0.10)] hover:text-[#064E3B]",
+      "focus:bg-[rgba(6,78,59,0.10)] focus:text-[#064E3B]",
       className,
     )}
     {...props}

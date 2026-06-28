@@ -45,10 +45,60 @@ interface NodeWithOrig extends Node {
 let currentLang: Language = 'en';
 let observer: MutationObserver | null = null;
 let headObserver: MutationObserver | null = null;
+let unsubscribeTranslationEvents: (() => void) | null = null;
 let scheduled = false;
 // Roots queued for the next scoped sweep. If the set contains document.body
 // we treat that as a full sweep request.
 const dirtyRoots = new Set<Node>();
+
+function stopDomObservers() {
+  observer?.disconnect();
+  observer = null;
+  headObserver?.disconnect();
+  headObserver = null;
+}
+
+function startDomObservers() {
+  if (typeof document === 'undefined') return;
+  if (observer) observer.disconnect();
+  observer = new MutationObserver((mutations) => {
+    if (currentLang === 'en') return;
+    for (const m of mutations) {
+      if (m.type === 'childList') {
+        m.addedNodes.forEach((n) => {
+          if (n.nodeType === Node.ELEMENT_NODE || n.nodeType === Node.TEXT_NODE) {
+            scheduleSweep(n);
+          }
+        });
+      } else if (m.type === 'characterData') {
+        scheduleSweep(m.target);
+      } else if (m.type === 'attributes') {
+        scheduleSweep(m.target);
+      }
+    }
+  });
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: TRANSLATABLE_ATTRS,
+  });
+
+  if (headObserver) headObserver.disconnect();
+  headObserver = new MutationObserver(() => {
+    if (currentLang !== 'en') scheduleSweep();
+  });
+  if (document.head) {
+    headObserver.observe(document.head, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['content'],
+    });
+  }
+}
 
 function isInsideSkippedAncestor(node: Node): boolean {
   let p: Node | null = node.parentNode;
@@ -288,55 +338,32 @@ export function startAutoTranslator(initialLang: Language) {
   if (typeof document === 'undefined') return;
   currentLang = initialLang;
 
+  unsubscribeTranslationEvents?.();
+  unsubscribeTranslationEvents = subscribeTranslations(() => {
+    if (currentLang !== 'en') scheduleSweep();
+  });
+
+  // English is the default DOM language. Do not attach a body-wide
+  // MutationObserver or run TreeWalker sweeps while no translation is needed;
+  // this was a major source of slow dropdown/menu opening after React renders.
+  if (currentLang === 'en') {
+    stopDomObservers();
+    return;
+  }
+
   // Initial full sweep
   scheduleSweep();
 
-  // Re-apply when batch translations land
-  subscribeTranslations(() => scheduleSweep());
-
   // Watch for new DOM nodes (React renders, route changes) — scoped to mutation targets.
-  if (observer) observer.disconnect();
-  observer = new MutationObserver((mutations) => {
-    for (const m of mutations) {
-      if (m.type === 'childList') {
-        m.addedNodes.forEach((n) => {
-          if (n.nodeType === Node.ELEMENT_NODE || n.nodeType === Node.TEXT_NODE) {
-            scheduleSweep(n);
-          }
-        });
-      } else if (m.type === 'characterData') {
-        scheduleSweep(m.target);
-      } else if (m.type === 'attributes') {
-        scheduleSweep(m.target);
-      }
-    }
-  });
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-    attributes: true,
-    attributeFilter: TRANSLATABLE_ATTRS,
-  });
-
-  // Head observer — separate target, separate config
-  if (headObserver) headObserver.disconnect();
-  headObserver = new MutationObserver(() => scheduleSweep());
-  if (document.head) {
-    headObserver.observe(document.head, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-      attributes: true,
-      attributeFilter: ['content'],
-    });
-  }
+  startDomObservers();
 }
 
 export function setAutoTranslatorLanguage(lang: Language) {
   currentLang = lang;
+  if (lang !== 'en' && !observer) startDomObservers();
   // Force a full sweep on language change so previously translated nodes
   // are re-translated into the new language.
   dirtyRoots.add(document.body);
   scheduleSweep();
+  if (lang === 'en') stopDomObservers();
 }

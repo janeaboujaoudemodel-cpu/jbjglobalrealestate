@@ -41,6 +41,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       ref={ref}
       className={cn(cardVariants({ surface }), className)}
       data-jbj-card=""
+      data-surface={surface === "dark" || surface === "emerald" ? surface : "champagne"}
       {...props}
     />
   ),

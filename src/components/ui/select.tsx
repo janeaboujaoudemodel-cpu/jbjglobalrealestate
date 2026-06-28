@@ -27,7 +27,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 text-[#0A0A0A]/70 opacity-70" />
+      <ChevronDown className="h-4 w-4 text-[#064E3B] opacity-100" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -53,7 +53,7 @@ const SelectTriggerDark = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 text-[#1A1A1A]/70 opacity-70" />
+      <ChevronDown className="h-4 w-4 text-white opacity-100" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -127,9 +127,9 @@ const SelectContent = React.forwardRef<
       data-surface="light"
       className={cn(
         "jbj-form-popover relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl max-w-[calc(100vw-2rem)]",
-        "text-[#0A0A0A]",
+        "text-[#0A0A0A] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30",
         "shadow-[0_10px_40px_rgba(0,0,0,0.12),0_4px_15px_rgba(0,0,0,0.08)]",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className,
@@ -164,9 +164,9 @@ const SelectContentDark = React.forwardRef<
       ref={ref}
       className={cn(
         "relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl",
-        "bg-[#1A1A1A] border border-[#1A1A1A] text-white",
+        "bg-[#064E3B] border border-white/20 text-white",
         "shadow-[0_10px_40px_rgba(0,0,0,0.5),0_4px_15px_rgba(0,0,0,0.3)]",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className,
@@ -217,9 +217,9 @@ const SelectItem = React.forwardRef<
     className={cn(
       "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[color:var(--emerald-1)] hover:text-white",
-      "focus:bg-[color:var(--emerald-1)] focus:text-white",
-      "data-[highlighted]:bg-[color:var(--emerald-1)] data-[highlighted]:text-white",
+       "hover:bg-[rgba(6,78,59,0.10)] hover:text-[#064E3B]",
+       "focus:bg-[rgba(6,78,59,0.10)] focus:text-[#064E3B]",
+       "data-[highlighted]:bg-[rgba(6,78,59,0.10)] data-[highlighted]:text-[#064E3B]",
       "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
       "data-[state=checked]:text-[color:var(--emerald-1)] data-[state=checked]:font-semibold",
       className,
