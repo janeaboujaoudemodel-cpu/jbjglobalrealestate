@@ -18933,3 +18933,36 @@ html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root
   text-shadow: none !important;
   filter: none !important;
 }
+
+/* PASS 78 — TRANSLUCENT DARK OWN-SURFACES.
+   Tailwind opacity dark fills (`bg-[#1A1A1A]/30`, `bg-black/40`, emerald/30)
+   are still dark own-surfaces even though their computed background is alpha.
+   Keep their text/icons white, without matching hover-only champagne pills. */
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [class*="bg-[#1A1A1A]/"]:not([class*="hover:bg-[#1A1A1A]/"]),
+  [class*="bg-[#1a1a1a]/"]:not([class*="hover:bg-[#1a1a1a]/"]),
+  [class*="bg-[#0A0A0A]/"]:not([class*="hover:bg-[#0A0A0A]/"]),
+  [class*="bg-[#0a0a0a]/"]:not([class*="hover:bg-[#0a0a0a]/"]),
+  [class*="bg-black/"]:not([class*="hover:bg-black/"]),
+  [class*="bg-[#064E3B]/"]:not([class*="hover:bg-[#064E3B]/"]),
+  [class*="bg-[#064e3b]/"]:not([class*="hover:bg-[#064e3b]/"])
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [class*="bg-[#1A1A1A]/"]:not([class*="hover:bg-[#1A1A1A]/"]),
+  [class*="bg-[#1a1a1a]/"]:not([class*="hover:bg-[#1a1a1a]/"]),
+  [class*="bg-[#0A0A0A]/"]:not([class*="hover:bg-[#0A0A0A]/"]),
+  [class*="bg-[#0a0a0a]/"]:not([class*="hover:bg-[#0a0a0a]/"]),
+  [class*="bg-black/"]:not([class*="hover:bg-black/"]),
+  [class*="bg-[#064E3B]/"]:not([class*="hover:bg-[#064E3B]/"]),
+  [class*="bg-[#064e3b]/"]:not([class*="hover:bg-[#064e3b]/"])
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,time,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
