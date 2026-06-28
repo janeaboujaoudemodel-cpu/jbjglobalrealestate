@@ -59,6 +59,10 @@ function applicantSafetyReply() {
   return "I can help you apply for open roles, upload your CV, and answer career or application questions. I can’t create job offers, approve employment, access confidential company data, or share internal applicant records; only the authorized HR team can handle those steps.";
 }
 
+function ownerSafetyReply() {
+  return "I can brief you on pipeline status and hiring process questions, but this Jessica chat does not generate job offers, offer letters, employment contracts, approvals, payroll data, or confidential candidate records. Please use the restricted Careers Portal / Contracts workflow for any authorized employment documents.";
+}
+
 async function callLovableAI(systemPrompt: string, userMessage: string, conversationHistory: Message[] = []) {
   const messages = [
     { role: 'system', content: systemPrompt },
@@ -219,11 +223,13 @@ ABSOLUTE RULES:
 - Never ask qualification or interview questions of the user.
 - Never describe yourself as conducting an interview of the user.
 - Do not push them toward the /join page.
+- Do not generate, draft, simulate, approve, or promise job offers, offer letters, employment contracts, salary offers, onboarding approvals, payroll content, or confidential HR records in this chat.
+- If employment documents are needed, direct authorized owners/admins to the restricted Careers Portal / Contracts workflow instead.
 
 YOUR ROLE FOR OWNERS/ADMINS:
 - Brief them on hiring pipeline, open positions, recent applicants, interview results.
-- Help draft job descriptions, offer letters, rejection emails, and onboarding plans.
-- Answer questions about candidates, approvals, payroll workflows, and policies.
+- Help draft job descriptions, rejection emails, interview questions, and onboarding checklists that do not create employment obligations.
+- Answer general questions about hiring workflows and policies without exposing private records unless retrieved through authorized backend views.
 - Be concise (2-4 sentences unless detail is requested) and professional.
 - If the requested data isn't available, say so plainly — do not invent numbers.`;
 
@@ -247,7 +253,7 @@ YOUR ROLE FOR OWNERS/ADMINS:
           if (convError) throw convError;
           conversation = newConv;
         }
-        const greetingMessage = `Hello — I'm Jessica, your HR assistant. I can brief you on the hiring pipeline, draft offer letters, summarise interview results, or help with policies. What do you need?`;
+        const greetingMessage = `Hello — I'm Jessica, your HR assistant. I can brief you on hiring workflows, open roles, interview structure, and policy guidance. I do not generate job offers or employment contracts in chat. What do you need?`;
         await supabase
           .from('hr_agent_conversations')
           .update({ messages: [{ role: 'assistant', content: greetingMessage, timestamp: new Date().toISOString() }], stage: 'completed' })
@@ -269,6 +275,20 @@ YOUR ROLE FOR OWNERS/ADMINS:
           .single();
         const history: Message[] = conversation?.messages || [];
         history.push({ role: 'user', content: message, timestamp: new Date().toISOString() });
+        if (APPLICANT_FORBIDDEN_REQUEST.test(message)) {
+          const reply = ownerSafetyReply();
+          history.push({ role: 'assistant', content: reply, timestamp: new Date().toISOString() });
+          await supabase
+            .from('hr_agent_conversations')
+            .update({ messages: history, stage: 'completed' })
+            .eq('id', conversationId);
+          return new Response(JSON.stringify({
+            message: reply,
+            stage: 'completed',
+            conversationId,
+            mode: 'owner',
+          }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
         const reply = await callLovableAI(ownerSystemPrompt, message, history.slice(-10));
         history.push({ role: 'assistant', content: reply, timestamp: new Date().toISOString() });
         await supabase
@@ -332,7 +352,12 @@ Your role is to:
 2. Collect their CV if not already submitted
 3. Conduct qualification screening
 4. Perform initial interviews
-5. Provide assessment feedback
+5. Confirm next steps without revealing internal scores, recommendations, or confidential HR records
+
+Absolute safety rules:
+- Never generate, draft, promise, approve, or simulate a job offer, offer letter, employment contract, salary offer, hiring approval, or onboarding authorization.
+- Never reveal confidential company data, other applicant data, internal HR records, payroll data, or private assessment recommendations.
+- If asked for restricted content, refuse briefly and redirect to application guidance or career questions.
 
 Be conversational, professional, and encouraging. Keep responses concise but warm.
 If the candidate has already submitted an application, acknowledge that and move to the next stage.`;
@@ -510,39 +535,7 @@ Applicant safety rules:
 
             stage = 'completed';
             
-            // Format assessment response
-            const recText = {
-              'strongly_recommend': '🌟 Strongly Recommended',
-              'recommend': '✅ Recommended',
-              'consider': '🤔 For Consideration',
-              'not_recommend': '⚠️ Needs Development'
-            };
-
-            responseMessage = `
-## Interview Assessment Complete! 📋
-
-**Overall Score:** ${assessment.overall_score}/100
-
-### Scores Breakdown:
-- Communication: ${assessment.communication_score}/10
-- Technical Knowledge: ${assessment.technical_score}/10
-- Motivation: ${assessment.motivation_score}/10
-- Experience: ${assessment.experience_score}/10
-- Cultural Fit: ${assessment.cultural_fit_score}/10
-
-### Strengths:
-${assessment.strengths.map((s: string) => `✓ ${s}`).join('\n')}
-
-### Areas for Growth:
-${assessment.weaknesses.map((w: string) => `• ${w}`).join('\n')}
-
-### Recommendation: ${recText[assessment.recommendation as keyof typeof recText] || assessment.recommendation}
-
-### Feedback:
-${assessment.detailed_feedback}
-
----
-*Our HR team will review your assessment and contact you within 2-3 business days. Thank you for your interest in joining our team!*`;
+            responseMessage = `Thank you for completing the interview. Your answers and CV have been securely saved for authorized HR review. I can’t share internal scoring, recommendations, confidential records, or generate any job offer here; our HR team will contact you with the official next steps within 2–3 business days.`;
           } else {
             qualificationData.currentInterviewQuestion = currentQ + 1;
             const nextQ = INTERVIEW_QUESTIONS[currentQ + 1];
@@ -610,6 +603,14 @@ ${assessment.detailed_feedback}
       }
 
       case 'get_assessment': {
+        if (!isPrivileged) {
+          return new Response(JSON.stringify({
+            assessment: null,
+            message: 'Internal HR assessments are restricted to authorized HR users.'
+          }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
         const { data: assessment, error } = await supabase
           .from('hr_interview_assessments')
           .select('*, hr_interviews(*)')
