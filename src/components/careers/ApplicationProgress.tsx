@@ -82,18 +82,23 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               type={clickable ? "button" : undefined}
               onClick={clickable ? () => onStepClick!(idx) : undefined}
               className={cn(
-                "flex min-h-[42px] items-center gap-2 rounded-full border px-4 py-2.5 text-xs font-semibold transition-all",
+                "flex min-h-[42px] items-center gap-2 rounded-full border px-4 py-2.5 text-xs font-semibold transition-all whitespace-nowrap",
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
                   ? "careers-pill-active allow-white !text-white"
                   : "careers-pill-inactive hover:border-[#BFA46A] hover:shadow-[0_14px_22px_-18px_rgba(7,27,51,0.4)]"
               )}
-              style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+              style={isActive ? {
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                background: "linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #042c1c 100%)",
+              } : undefined}
               data-allow-dark-cta={isActive ? "" : undefined}
               data-no-contrast-guard={isActive ? "" : undefined}
+              data-surface={isActive ? "emerald" : undefined}
             >
               {s.done && !isActive ? (
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#0A0A0A]" />
+                <CheckCircle2 className="h-3.5 w-3.5" style={{ color: "#047857" }} />
               ) : (
                 <span
                   className="grid h-4.5 w-4.5 place-items-center"
@@ -107,6 +112,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
                 {s.label}
               </span>
             </Tag>
+
 
           );
         })}
