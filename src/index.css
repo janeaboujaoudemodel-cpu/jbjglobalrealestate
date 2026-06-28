@@ -17280,10 +17280,8 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   text-fill-color: var(--jbj-ink) !important;
 }
 
-/* Materialize dark/hero backdrops so rendered audits and users see the same surface. */
-:where(.jj-hero-fullscreen, .jj-hero-neon, [data-hero-dark], [data-on-dark]):not(:where([data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"])) {
-  background-color: var(--jbj-dark) !important;
-}
+/* Dark/hero surfaces define foreground only; never materialize page or hero
+   backgrounds to black from a contrast helper. */
 :where(.jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-surface="emerald"], [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], [data-cta="primary"], [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"]) {
   background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
   background-color: var(--jbj-emerald) !important;
@@ -17350,7 +17348,7 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
 /* Buttons / CTAs: one height, one radius, one icon rhythm; no cropped labels. */
 :where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])) {
   min-height: var(--jbj-control-h) !important;
-  min-width: var(--jbj-control-h);
+  min-width: 0;
   border-radius: var(--jbj-radius-md);
   display: inline-flex;
   align-items: center;
@@ -17362,6 +17360,25 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   max-width: 100%;
   overflow: visible;
   transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease, transform 140ms ease, opacity 140ms ease;
+}
+:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]):where(:not(.jj-header-icon-control)) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]):where(:hover, :focus-visible, :active, [data-state="open"], [data-state="active"]) {
+  background: var(--jj-emerald-ombre-hover, var(--jj-emerald-ombre)) !important;
+  background-image: var(--jj-emerald-ombre-hover, var(--jj-emerald-ombre)) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]) :where(span, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
 }
 :where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])):not([data-icon-only]):not(.aspect-square) {
   padding-inline: var(--jbj-control-x);
