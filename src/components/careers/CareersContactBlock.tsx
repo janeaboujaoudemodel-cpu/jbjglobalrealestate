@@ -45,8 +45,14 @@ export default function CareersContactBlock() {
 
         <div className="relative">
           <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7]/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]">
-              <Sparkles className="w-3 h-3" /> Talk to us
+            <span
+              data-surface="emerald"
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em]"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
+              <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Talk to us
             </span>
           </div>
           <h3 className="text-2xl sm:text-3xl font-semibold text-[#1A1A1A] tracking-tight">
