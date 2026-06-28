@@ -825,7 +825,7 @@ export default function JoinApplication() {
                     data-allow-dark-cta
                     data-no-contrast-guard
                     data-open-positions-count
-                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex h-11 items-center gap-2 rounded-xl px-5 self-start sm:self-end text-[12px] font-semibold border border-[#B89555]/70 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.14)]"
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border inline-flex h-11 items-center gap-2 rounded-xl px-5 self-start sm:self-end text-[12px] font-semibold border-transparent shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)]"
                     style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
@@ -852,8 +852,8 @@ export default function JoinApplication() {
                       const tags: JobCardTag[] = [];
                       if (idx === 0 && pos.status !== "closed" && pos.status !== "paused") tags.push("top-opportunity");
                       if (pos.is_broker_role) tags.push("premium");
-                      if ((pos.applications_count ?? 0) >= 10) tags.push("most-applied");
-                      if (!tags.length && !pos.is_featured) tags.push("partner");
+                        if ((pos.applications_count ?? 0) >= 10) tags.push("most-applied");
+                        if (!pos.is_featured) tags.push("partner");
                       return (
                         <PremiumJobCard
                           key={pos.id}
