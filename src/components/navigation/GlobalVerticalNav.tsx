@@ -1073,6 +1073,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   aria-current={highlightActive ? 'page' : undefined}
                   className={`group flex items-center gap-2.5 px-2.5 h-10 text-[12px] transition-all duration-200 rounded-lg ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
+                  iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true }}
                   iconWrapperClassName="w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0"
                   iconClassName="w-[18px] h-[18px] transition-colors"
                   iconStrokeWidth={2.1}
