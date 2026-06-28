@@ -124,7 +124,6 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
 
     if (to && !asButton) {
       return (
-        // @ts-expect-error ref forwarding to NavLink anchor
         <NavLink ref={ref as React.Ref<HTMLAnchorElement>} to={to} className={cls} style={style} {...common}>
           {inner}
         </NavLink>
@@ -132,7 +131,6 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
     }
     return (
       <button
-        // @ts-expect-error ref forwarding to button
         ref={ref as React.Ref<HTMLButtonElement>}
         type="button"
         onClick={onClick}
