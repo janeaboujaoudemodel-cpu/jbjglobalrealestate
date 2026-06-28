@@ -17542,12 +17542,12 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   gap: 0.625rem;
   transition: background-color 110ms ease, color 110ms ease, box-shadow 110ms ease, transform 110ms ease;
 }
-:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]) {
+:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) {
   background: rgba(6, 78, 59, 0.10) !important;
   color: var(--jbj-emerald) !important;
   -webkit-text-fill-color: var(--jbj-emerald) !important;
 }
-:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]) :where(svg, [class*="lucide"], [data-lucide], path, line, polyline, circle, rect) {
+:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) :where(svg, [class*="lucide"], [data-lucide], path, line, polyline, circle, rect) {
   color: var(--jbj-emerald) !important;
   stroke: currentColor !important;
 }
@@ -18755,4 +18755,22 @@ html body #root#root [data-careers-position-search-wrap][data-careers-position-s
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
+}
+
+/* PASS 94 — ModeSwitcher active row lock: emerald card → white content */
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"],
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] p,
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] span,
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] [data-mode-active-pill] {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] [data-mode-active-pill] svg {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
 }
