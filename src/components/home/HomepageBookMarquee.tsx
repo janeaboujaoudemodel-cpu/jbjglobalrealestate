@@ -39,7 +39,7 @@ export default function HomepageBookMarquee() {
             <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </Link>
         </div>
-      </ContentTrack>
+      </ContentTrack></div>
 
       {/* Canonical book strip — full-bleed, smooth CSS marquee, titles engraved on covers */}
       <BookCarousel books={allBooks} size="sm" durationSec={38} compact />
