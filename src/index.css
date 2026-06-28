@@ -18310,7 +18310,7 @@ html body #root#root#root#root#root#root#root#root#root :is(
   -webkit-text-fill-color: #1A1A1A !important;
   text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
-  fill: currentColor !important;
+  fill: none !important;
   text-shadow: none !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
@@ -18405,7 +18405,7 @@ html body #root#root#root#root#root#root#root#root#root :is(
   text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   stroke-opacity: 1 !important;
-  fill: currentColor !important;
+  fill: none !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
   text-shadow: none !important;
