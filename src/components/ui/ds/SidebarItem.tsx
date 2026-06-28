@@ -42,6 +42,7 @@ export interface SidebarItemProps {
   iconWrapperStyle?: React.CSSProperties;
   iconStyle?: React.CSSProperties;
   iconStrokeWidth?: number;
+  iconData?: Record<`data-${string}`, unknown>;
   labelClassName?: string;
   labelStyle?: React.CSSProperties;
   trailingClassName?: string;
@@ -101,6 +102,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
       iconWrapperStyle,
       iconStyle,
       iconStrokeWidth = 2.1,
+      iconData,
       labelClassName,
       labelStyle,
       trailingClassName,
@@ -129,6 +131,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
           >
             <Icon
               ref={iconRef}
+              {...iconData}
               className={cn(iconClassName ?? ICON_SIZE[level], active && "allow-white")}
               strokeWidth={iconStrokeWidth}
               style={iconStyle ?? (active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined)}
