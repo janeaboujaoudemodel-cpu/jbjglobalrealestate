@@ -1101,8 +1101,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             return (
               <React.Fragment key={sectionKey}>
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
-                  <button
-                    onClick={(e) => toggleSection(sectionKey, e)}
+                  <SidebarItem
+                    preserveVisual
+                    asButton
+                    icon={SectionIcon}
+                    iconRef={lockEmeraldGlyphWhite}
+                    label={sectionKey}
+                    active={sectionHighlighted}
+                    onClick={(e) => toggleSection(sectionKey, e as React.MouseEvent)}
                     data-sidebar-section
                     data-active={sectionHighlighted ? 'true' : undefined}
                     data-no-contrast-guard
@@ -1111,27 +1117,29 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
                     className="w-full flex items-center gap-2.5 px-2.5 h-10 text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
-                  >
-                    <div data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
-                      <SectionIcon ref={lockEmeraldGlyphWhite} data-sidebar-section-icon className="w-[18px] h-[18px] transition-colors" strokeWidth={2.1} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                    </div>
-                    <span
-                      data-sidebar-section-label
-                      data-no-contrast-guard
-                      style={{
-                        color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
-                        WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
-                        background: 'none',
-                        backgroundImage: 'none',
-                      }}
-                      className={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
-                    >{sectionKey}</span>
-                    <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
-
-                    {!isOpen && hasActiveChild && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
+                    iconWrapperData={{ 'data-emerald-icon-surface': true }}
+                    iconWrapperClassName={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}
+                    iconClassName="w-[18px] h-[18px] transition-colors"
+                    iconStrokeWidth={2.1}
+                    iconData={{ 'data-sidebar-section-icon': true }}
+                    iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                    labelClassName={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
+                    labelStyle={{
+                      color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
+                      WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
+                      background: 'none',
+                      backgroundImage: 'none',
+                    }}
+                    trailing={(
+                      <>
+                        <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
+                        {!isOpen && hasActiveChild && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
+                        )}
+                      </>
                     )}
-                  </button>
+                    trailingClassName="ml-0"
+                  />
 
 
 
