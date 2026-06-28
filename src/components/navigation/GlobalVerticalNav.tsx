@@ -759,6 +759,23 @@ export default function GlobalVerticalNav() {
 
   // Auto-open is now handled by the route-change effect above
 
+  const passSidebarBoundaryWheelToPage = useCallback((event: React.WheelEvent<HTMLElement>) => {
+    const target = event.currentTarget;
+    const hasLocalScroll = target.scrollHeight > target.clientHeight + 2;
+    const atTop = target.scrollTop <= 0;
+    const atBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 2;
+    const goingUp = event.deltaY < 0;
+    const goingDown = event.deltaY > 0;
+
+    // Fixed desktop chrome must never trap the page. If the sidebar has no
+    // local scroll room, or it is already at the edge in the wheel direction,
+    // pass the exact native wheel delta to the document once. No boosting.
+    if (!hasLocalScroll || (goingUp && atTop) || (goingDown && atBottom)) {
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
+    }
+  }, []);
+
   // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -1010,6 +1027,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
+        onWheel={passSidebarBoundaryWheelToPage}
         className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0 flex flex-col"
         style={{ scrollbarGutter: "stable" }}
       >
@@ -1289,7 +1307,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {/* Logo header (88px) — collapsed: just icon */}
           {/* Logo header — MUST match expanded (88px) so the under-monogram divider lines up exactly with the horizontal header hairline */}
           <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">

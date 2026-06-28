@@ -1336,6 +1336,14 @@ All colors MUST be HSL.
   width: 100%;
   min-height: 100%;
   background: #FDFBF7;
+  /* Root scroll contract:
+     PageShell may hide horizontal overflow visually, but it must NEVER become
+     a competing vertical scroll container. `overflow-x: hidden` computes
+     `overflow-y` to auto in browsers, which created the desktop double-scroller
+     that made real wheel/trackpad input feel blocked or inconsistent. */
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  overscroll-behavior-y: auto !important;
 }
 
 .jj-section-strap,
@@ -16616,16 +16624,16 @@ html body :is([data-hero-dark], [data-on-dark]) :where(svg, [class*="lucide"]) {
 html, body {
   overscroll-behavior-x: none;
 }
-.jj-page-shell,
-[data-owner-shell],
-[data-broker-shell],
-main,
 .overflow-x-auto,
 .overflow-x-scroll,
-.overflow-auto,
-.overflow-scroll,
 [data-scroll-x] {
-  overscroll-behavior: contain;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+}
+.jj-page-shell,
+main {
+  /* The document/html element is the only page-level vertical scroller. */
+  overscroll-behavior-y: auto !important;
 }
 
 /* =====================================================================
@@ -17094,4 +17102,17 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
   html body #root .jj-home-hero button.sm\:hidden {
     display: none !important;
   }
+}
+
+/* =====================================================================
+   PASS 59 — DESKTOP SCROLL ROOT LOCK
+   The browser document (HTML) is the only vertical page scroller. Do not let
+   PageShell's Tailwind `overflow-x-hidden` compute into `overflow-y:auto`,
+   because that creates a competing page-sized scroller and blocks/inconsistently
+   absorbs real wheel/trackpad input on desktop.
+   ===================================================================== */
+html body #root .jj-page-shell {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  overscroll-behavior-y: auto !important;
 }
