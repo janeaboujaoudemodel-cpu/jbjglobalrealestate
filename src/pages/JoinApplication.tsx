@@ -805,13 +805,24 @@ export default function JoinApplication() {
               data-surface="emerald"
               data-emerald-band
               className="careers-card-navy mb-8 rounded-2xl scroll-mt-24 overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(180deg, #043024 0%, #064E3B 35%, #064E3B 100%)",
+              }}
             >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
-              <CardHeader className="pt-9 pb-5 relative z-[1]">
+              <CardHeader className="pt-9 pb-8 relative z-[1]">
                 <div className="flex items-end justify-between flex-wrap gap-4">
                   <div className="min-w-0">
-                    <span data-careers-emerald-label data-no-contrast-guard className="allow-white inline-flex min-h-[30px] items-center gap-1.5 rounded-full border border-white/35 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white mb-2">
-                      <Briefcase className="w-3.5 h-3.5 text-white" /> Live Roles
+                    <span
+                      data-careers-emerald-label
+                      data-surface="emerald"
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex h-7 items-center gap-1.5 rounded-full border border-[#B89555]/70 px-3 text-[10px] font-bold uppercase tracking-[0.22em] mb-2"
+                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                    >
+                      <Briefcase className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Live Roles
                     </span>
                     <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
                       Open Positions
@@ -833,7 +844,7 @@ export default function JoinApplication() {
                     <span>{filteredPositions.length} Open Positions</span>
                   </Badge>
                 </div>
-                <div className="relative mt-5">
+                <div className="relative mt-8">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#1A1A1A] z-10 pointer-events-none" strokeWidth={2.25} />
                   <Input
                     value={positionSearch}
