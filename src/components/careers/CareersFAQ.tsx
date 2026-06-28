@@ -40,7 +40,7 @@ export function CareersFAQ() {
             data-surface="emerald"
             data-allow-dark-cta
             data-no-contrast-guard
-            className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border-transparent px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white"
+            className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
             <HelpCircle className="h-3 w-3 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Frequently Asked
