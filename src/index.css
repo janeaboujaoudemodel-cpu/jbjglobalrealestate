@@ -18395,33 +18395,32 @@ html body #root [data-chrome="sidebar"] [data-sidebar-emerald] > nav > div > div
   to { --jj-avatar-angle: 360deg; }
 }
 @keyframes jj-avatar-ring-pulse {
-  0%, 100% { opacity: 0.86; filter: saturate(1.25) contrast(1.08) brightness(0.98); }
-  50% { opacity: 1; filter: saturate(1.55) contrast(1.18) brightness(1.18); }
+  0%, 100% { opacity: 0.78; }
+  50% { opacity: 1; }
 }
 html body [data-jbj-avatar].jj-avatar-metallic {
   background: transparent !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  filter: saturate(1.08) contrast(1.05) !important;
   isolation: isolate !important;
 }
 html body [data-jbj-avatar] .jj-avatar-core {
   z-index: 0 !important;
   background:
-    radial-gradient(120% 120% at 24% 16%, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 23%),
-    radial-gradient(120% 120% at 30% 18%, #0B6B4E 0%, #064E3B 38%, #042F22 72%, #07130E 100%) !important;
+    radial-gradient(120% 120% at 26% 18%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 26%),
+    radial-gradient(120% 120% at 30% 20%, #0B6B4E 0%, #064E3B 42%, #042F22 78%, #07130E 100%) !important;
   box-shadow:
-    0 14px 30px -13px rgba(6,78,59,1),
-    0 5px 12px -7px rgba(0,0,0,0.78),
-    inset 0 1px 0 rgba(255,255,255,0.34),
-    inset 0 -10px 18px rgba(0,0,0,0.36) !important;
+    0 14px 30px -13px rgba(6,78,59,0.95),
+    0 5px 12px -7px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    inset 0 -10px 18px rgba(0,0,0,0.34) !important;
 }
 html body [data-jbj-avatar] .jj-avatar-core::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0) 34%, rgba(184,149,85,0.18) 62%, rgba(255,255,255,0.08));
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0) 38%, rgba(184,149,85,0.14) 66%, rgba(255,255,255,0.06));
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
@@ -18434,26 +18433,23 @@ html body [data-jbj-avatar] .jj-avatar-spinner {
   background-color: transparent !important;
   background-image:
     conic-gradient(from var(--jj-avatar-angle, 0deg),
-      rgba(3,20,15,0.00) 0deg,
-      rgba(4,47,34,0.55) 40deg,
-      rgba(4,120,87,0.78) 78deg,
-      rgba(16,185,129,1.00) 108deg,
-      rgba(255,255,255,0.95) 124deg,
-      rgba(16,185,129,1.00) 140deg,
-      rgba(4,120,87,0.78) 170deg,
-      rgba(4,47,34,0.55) 210deg,
-      rgba(3,20,15,0.00) 300deg,
-      rgba(3,20,15,0.00) 360deg) !important;
+      rgba(16,185,129,0.00) 0deg,
+      rgba(16,185,129,0.00) 200deg,
+      rgba(16,185,129,0.45) 260deg,
+      rgba(110,231,183,0.85) 320deg,
+      rgba(255,255,255,0.95) 340deg,
+      rgba(110,231,183,0.85) 354deg,
+      rgba(16,185,129,0.00) 360deg) !important;
   background-repeat: no-repeat !important;
-  -webkit-mask: radial-gradient(circle, transparent 0 62%, #000 66%, #000 95%, transparent 98%) !important;
-  mask: radial-gradient(circle, transparent 0 62%, #000 66%, #000 95%, transparent 98%) !important;
+  -webkit-mask: radial-gradient(circle, transparent 0 70%, #000 74%, #000 96%, transparent 99%) !important;
+  mask: radial-gradient(circle, transparent 0 70%, #000 74%, #000 96%, transparent 99%) !important;
   mix-blend-mode: screen !important;
-  opacity: 1 !important;
-  filter: saturate(1.5) contrast(1.15) brightness(1.1) !important;
+  opacity: 0.95 !important;
+  filter: saturate(1.25) blur(0.3px) !important;
   animation:
-    jj-avatar-radius-spin 2.4s linear infinite,
-    jj-avatar-ring-pulse 2.8s ease-in-out infinite !important;
-  will-change: --jj-avatar-angle, opacity, filter !important;
+    jj-avatar-radius-spin 5.5s linear infinite,
+    jj-avatar-ring-pulse 4.8s ease-in-out infinite !important;
+  will-change: --jj-avatar-angle, opacity !important;
 }
 html body [data-jbj-avatar] span {
   color: #FFFFFF !important;
