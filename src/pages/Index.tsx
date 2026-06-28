@@ -255,42 +255,41 @@ const Index = () => {
           MERGED HERO: Video Background + Gateway Tagline + CTA Pills
           Single fullscreen section — no separate IntroHeroSection
          ═══════════════════════════════════════════════════════════ */}
-      <div data-surface="dark" data-hero-dark className="jj-hero-fullscreen jj-home-hero relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div data-surface="dark" data-hero-dark className="jj-hero-fullscreen jj-home-hero relative flex items-center justify-center overflow-hidden bg-black">
         {/* Video Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-          {/* Branded fallback — renders instantly, unmounts after video loads */}
-          {!videoLoaded && (
-            <div 
-              className="absolute inset-0 z-[1] pointer-events-none"
-            >
-              {/* Gold accent orbs only — no logo to avoid overlapping headline on mobile */}
-              <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#FDFBF7]/5 rounded-full blur-[100px]" />
-              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-[#FDFBF7]/5 rounded-full blur-[120px]" />
-            </div>
-          )}
+        <div className="absolute inset-0 bg-black">
+          {/* Instant fallback poster image — paints immediately, no orbs, no brown */}
+          <img
+            src={heroFallbackDubai}
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover z-[1]"
+          />
 
-          <video 
+          <video
             autoPlay loop muted playsInline
-            preload="metadata"
+            preload="auto"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
             className="absolute inset-0 w-full h-full object-cover z-[2]"
-            style={{ 
+            style={{
               WebkitTransform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
-              opacity: 0,
-              transition: 'opacity 0.8s ease-in-out',
+              opacity: 1,
             }}
-            onLoadedData={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
-            onCanPlay={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
-            onError={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
+            onLoadedData={() => setVideoLoaded(true)}
+            onCanPlay={() => setVideoLoaded(true)}
+            onError={() => setVideoLoaded(true)}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
           {/* Lighter overlay: video visibility prioritized, headline still legible via its own text-shadow */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/45 z-[3] pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-[3] pointer-events-none" />
         </div>
+
         
         {/* MERGED HERO CONTENT — tagline + CTAs + pillars */}
         <motion.div 
