@@ -828,7 +828,7 @@ export default function JoinApplication() {
                       Open Positions
                     </CardTitle>
                     <CardDescription data-careers-emerald-subtitle data-no-contrast-guard className="allow-white text-white font-medium mt-1.5">
-                      Tap <strong className="text-white font-semibold">Apply</strong> on any role to auto-select it in the form below.
+                      Tap <strong data-no-contrast-guard className="allow-white text-white font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Apply</strong> on any role to auto-select it in the form below.
                     </CardDescription>
                   </div>
                   <Badge
