@@ -158,11 +158,12 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           data-no-contrast-guard
           data-allow-dark-cta
           data-on-dark
-          className="jj-header-icon-control allow-white relative h-11 w-11 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-transform hover:scale-[1.04]"
+          data-header-control-family="circle"
+          className="jj-header-icon-control jj-header-premium-control allow-white relative h-11 w-11 rounded-full border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-[filter] hover:brightness-110"
           style={{
-            border: "1.5px solid rgba(255,255,255,0.45)",
+            border: 0,
             boxShadow:
-              "0 0 0 1px rgba(4,120,87,0.55), 0 8px 18px -12px rgba(6,78,59,0.85)",
+              "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
           }}
         >
           <span
