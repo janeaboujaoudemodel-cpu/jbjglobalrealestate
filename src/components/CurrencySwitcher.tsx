@@ -94,7 +94,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             style={{ border: 0 }}
             aria-label="Currency"
           >
-            <span className="text-sm leading-none" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.flag}</span>
+            <DollarSign className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <span className="text-[12px] font-semibold tracking-wide" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.code}</span>
             <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           </button>
