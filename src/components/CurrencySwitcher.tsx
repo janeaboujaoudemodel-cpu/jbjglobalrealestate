@@ -89,12 +89,12 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             data-surface="emerald"
             data-emerald-ok="button"
             data-emerald-action="true"
-            className="jj-emerald-action jj-surface-emerald h-9 inline-flex items-center gap-1.5 px-3 rounded-full transition-colors hover:brightness-110"
+            className="jj-header-selector-control jj-emerald-action jj-surface-emerald h-10 inline-flex items-center gap-1.5 px-3.5 rounded-full transition-colors duration-150 hover:brightness-110"
             aria-label="Currency"
           >
             <span className="text-sm leading-none" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.flag}</span>
             <span className="text-[12px] font-semibold tracking-wide" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.code}</span>
-            <ChevronDown className="w-3 h-3" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           </button>
         ) : (
           <button className="h-10 px-3 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#B89555]/20 hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/10 flex items-center gap-2">

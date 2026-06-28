@@ -186,7 +186,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         style={triggerStyle}
         data-no-contrast-guard
         data-emerald-action="true"
-        data-mode-trigger="compact"
+          data-mode-trigger="compact"
         className={cn(
           "flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all duration-200 hover:-translate-y-0.5",
           className
@@ -221,8 +221,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             data-allow-dark-cta
             data-on-dark
             data-mode-trigger="header"
-            className={cn(
-              "allow-white flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 whitespace-nowrap shrink-0",
+          className={cn(
+              "jj-header-selector-control allow-white h-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
               isOpen && "ring-2",
               className
@@ -256,7 +256,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           data-surface="light"
           data-mode-switcher-panel="true"
           style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A' }}
-          className="mode-switcher-panel w-[360px] mr-3 bg-[#FDFBF7] border border-[#B89555]/30 shadow-2xl rounded-2xl p-3 z-[10001]"
+              className="mode-switcher-panel w-[360px] mr-3 bg-[#FDFBF7] border border-[#B89555]/30 shadow-2xl rounded-2xl p-3 z-[10001] motion-safe:animate-in motion-safe:fade-in-0 motion-safe:zoom-in-95"
           sideOffset={10}
           collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
           avoidCollisions
@@ -330,7 +330,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   unstyled
                   className={cn(
                     "mode-switcher-item",
-                    "relative flex items-start gap-3 pl-5 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-200 border w-full",
+                    "relative flex items-start gap-3 pl-5 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-75 border w-full",
                     "focus:outline-none",
                   )}
                 >
