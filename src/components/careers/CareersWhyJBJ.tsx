@@ -39,7 +39,13 @@ export function CareersWhyJBJ() {
     <section data-surface="page" className="surface-page relative py-16 px-4 sm:px-6 lg:px-8 bg-[#FDFBF7]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555] bg-[#F7F2EA] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0A0A0A]">
+          <div
+            data-surface="emerald"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border-transparent px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
             Why JBJ
           </div>
           <h2 className="mt-4 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">

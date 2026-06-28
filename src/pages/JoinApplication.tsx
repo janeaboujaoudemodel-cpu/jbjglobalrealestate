@@ -650,7 +650,7 @@ export default function JoinApplication() {
             <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 shadow-2xl p-8 md:p-12 rounded-2xl">
               <CardHeader className="text-center pb-6">
                 <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br /20 /10 border-2 border-[color:var(--emerald-1)]/30/40 flex items-center justify-center shadow-lg shadow-emerald-500/10">
-                  <CheckCircle className="h-12 w-12 text-[color:var(--emerald-1)]" />
+                  <CheckCircle className="h-12 w-12 text-[#1A1A1A]" />
                 </div>
                 <CardTitle className="text-3xl md:text-4xl text-[#1A1A1A] mb-4">Welcome Back</CardTitle>
                 <CardDescription className="text-lg text-[#1A1A1A]/70">
@@ -666,7 +666,7 @@ export default function JoinApplication() {
                     <div className="pt-4">
                       <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
                         <Link to="/onboarding">
-                          <span className="text-[#1A1A1A]">Go to Onboarding Dashboard</span>
+                          <span className="text-white">Go to Onboarding Dashboard</span>
                         </Link>
                       </Button>
                     </div>
@@ -823,10 +823,14 @@ export default function JoinApplication() {
                   <Badge
                     data-surface="emerald"
                     data-allow-dark-cta
-                    className="jj-cta-emerald jj-pill-emerald-metallic inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 self-start sm:self-end text-[12px] font-semibold border border-[#B89555]/70"
+                    data-no-contrast-guard
+                    data-open-positions-count
+                    data-careers-primary-pill
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 self-start sm:self-end text-[12px] font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-                    <span>{filteredPositions.length} open</span>
+                    <span>{filteredPositions.length} Open Positions</span>
                   </Badge>
                 </div>
                 <div className="relative mt-5">
@@ -849,8 +853,8 @@ export default function JoinApplication() {
                       const tags: JobCardTag[] = [];
                       if (idx === 0 && pos.status !== "closed" && pos.status !== "paused") tags.push("top-opportunity");
                       if (pos.is_broker_role) tags.push("premium");
-                      if ((pos.applications_count ?? 0) >= 10) tags.push("most-applied");
-                      if (!tags.length && !pos.is_featured) tags.push("partner");
+                        if ((pos.applications_count ?? 0) >= 10) tags.push("most-applied");
+                        if (!pos.is_featured) tags.push("partner");
                       return (
                         <PremiumJobCard
                           key={pos.id}

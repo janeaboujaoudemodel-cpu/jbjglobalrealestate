@@ -481,8 +481,8 @@ export default function HRAgentChat() {
                       <MessageCircle className="w-3.5 h-3.5 text-[#0A0A0A]" /> What would you like to do?
                     </div>
                     <div className="grid gap-2 sm:grid-cols-2">
-                      <Button type="button" onClick={startApplicationInChat} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border border-[#B89555]/50">
-                        <Briefcase className="w-4 h-4 mr-1.5 text-[#1A1A1A]" /> Apply for a Job
+                      <Button type="button" onClick={startApplicationInChat} data-surface="emerald" data-allow-dark-cta data-no-contrast-guard className="jj-cta-emerald jj-pill-emerald-metallic allow-white border-transparent" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                        <Briefcase className="w-4 h-4 mr-1.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} /> Apply for a Job
                       </Button>
                       <Button type="button" variant="outline" onClick={continueWithQuestions} className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]">
                         <MessageCircle className="w-4 h-4 mr-1.5 text-[#1A1A1A]" /> Ask Jessica
@@ -500,7 +500,7 @@ export default function HRAgentChat() {
 
                     <div className="grid grid-cols-5 gap-1" aria-hidden="true">
                       {[0, 1, 2, 3, 4].map((step) => (
-                        <span key={step} className={`h-1.5 rounded-full ${step <= applicationStep ? 'bg-[#0A0A0A]' : 'bg-[#EFE6D6]'}`} />
+                        <span key={step} className={`h-1.5 rounded-full ${step <= applicationStep ? 'bg-[#064E3B]' : 'bg-[#EFE6D6]'}`} />
                       ))}
                     </div>
 
@@ -572,8 +572,8 @@ export default function HRAgentChat() {
                     {applicationStep === 3 && (
                       <div className="space-y-2">
                         {cvFile ? (
-                          <div className="flex items-center gap-2 rounded-md border border-[color:var(--emerald-1)]/30/40 jj-emerald-soft px-3 py-2 text-sm text-[#1A1A1A]">
-                            <FileText className="w-4 h-4 text-[color:var(--emerald-1)]" /><span className="truncate flex-1">{cvFile.name}</span>
+                          <div className="flex items-center gap-2 rounded-md border border-[#B89555]/50 bg-[#FDFBF7] px-3 py-2 text-sm text-[#1A1A1A]">
+                            <FileText className="w-4 h-4 text-[#1A1A1A]" /><span className="truncate flex-1">{cvFile.name}</span>
                             <button type="button" onClick={() => setCvFile(null)} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]" aria-label="Remove CV"><X className="w-4 h-4" /></button>
                           </div>
                         ) : (
@@ -598,12 +598,12 @@ export default function HRAgentChat() {
                         <ArrowLeft className="w-4 h-4 mr-1.5 text-[#1A1A1A]" /> Back
                       </Button>
                       {applicationStep < 4 ? (
-                        <Button type="button" onClick={nextApplicationStep} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] border border-[#B89555]/50">
-                          Next <ArrowRight className="w-4 h-4 ml-1.5 text-[#1A1A1A]" />
+                          <Button type="button" onClick={nextApplicationStep} data-surface="emerald" data-allow-dark-cta data-no-contrast-guard className="jj-cta-emerald jj-pill-emerald-metallic allow-white border-transparent" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                          Next <ArrowRight className="w-4 h-4 ml-1.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                         </Button>
                       ) : (
-                        <Button type="button" onClick={submitApplication} disabled={submittingApp || !isStepComplete(4)} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] disabled:text-[#1A1A1A] disabled:opacity-100 border border-[#B89555]/50">
-                          {submittingApp ? <><Loader2 className="w-4 h-4 mr-1.5 animate-spin text-[#1A1A1A]" /> Submitting…</> : 'Submit application'}
+                        <Button type="button" onClick={submitApplication} disabled={submittingApp || !isStepComplete(4)} data-surface="emerald" data-allow-dark-cta data-no-contrast-guard className="jj-cta-emerald jj-pill-emerald-metallic allow-white border-transparent disabled:opacity-70" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                          {submittingApp ? <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} /> Submitting…</> : 'Submit application'}
                         </Button>
                       )}
                     </div>
@@ -625,7 +625,11 @@ export default function HRAgentChat() {
                 onClick={sendMessage}
                 disabled={!input.trim() || loading}
                 size="icon"
-                className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
+                data-surface="emerald"
+                data-allow-dark-cta
+                data-no-contrast-guard
+                className="jj-cta-emerald jj-pill-emerald-metallic allow-white"
+                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
@@ -638,7 +642,7 @@ export default function HRAgentChat() {
 
         {stage === 'completed' && mode !== 'owner' && (
           <div className="border-t border-[#B89555]/20 p-4 jj-emerald-soft">
-            <div className="flex items-center justify-center gap-2 text-[color:var(--emerald-1)]">
+            <div className="flex items-center justify-center gap-2 text-[#1A1A1A]">
               <CheckCircle className="w-5 h-5" />
               <span className="font-medium">Interview Complete - Assessment Generated</span>
             </div>
