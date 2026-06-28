@@ -115,9 +115,9 @@ const MarketOverview = () => {
       period: "YoY"
     },
     {
-      label: "Avg Rental Yield",
-      value: `${MARKET_OVERVIEW_STATS.avgRentalYield}%`,
-      change: MARKET_OVERVIEW_STATS.yieldChange,
+      label: "Rent Index",
+      value: MARKET_OVERVIEW_STATS.avgRentIndex.toString(),
+      change: MARKET_OVERVIEW_STATS.rentIndexChange,
       period: "YoY"
     },
     {

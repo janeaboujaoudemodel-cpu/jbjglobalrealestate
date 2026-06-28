@@ -129,11 +129,10 @@ export const MarketOverviewDashboard = () => {
               accentColor="text-[#1A1A1A]"
             />
             <StatCard
-              title="Avg. Rental Yield"
-              value={MARKET_OVERVIEW_STATS.avgRentalYield}
-              change={MARKET_OVERVIEW_STATS.yieldChange}
+              title="Rent Index"
+              value={MARKET_OVERVIEW_STATS.avgRentIndex}
+              change={MARKET_OVERVIEW_STATS.rentIndexChange}
               icon={Percent}
-              suffix="%"
               accentColor="text-[#1A1A1A]"
             />
             <StatCard
