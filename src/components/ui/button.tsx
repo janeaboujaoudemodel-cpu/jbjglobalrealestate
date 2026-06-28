@@ -51,7 +51,7 @@ const DARK_SURFACE_VARIANTS = new Set(["hero", "media", "dark", "dark-ghost", "d
 const LIGHT_CTA_VARIANTS = new Set(["primary", "secondary", "tertiary", "gold", "default", "destructive", "outline", "ghost", "link"]);
 
 const buttonVariants = cva(
-  "inline-flex min-h-11 items-center justify-center text-center gap-2 whitespace-normal [word-break:normal] rounded-xl text-sm font-semibold leading-[1.18] ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em] min-w-0 max-w-full overflow-visible",
+  "inline-flex min-h-11 items-center justify-center text-center gap-2 whitespace-normal [word-break:normal] rounded-xl text-sm font-semibold leading-[1.25] ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em] min-w-0 max-w-full overflow-visible",
   {
     variants: {
       variant: {
@@ -94,10 +94,10 @@ const buttonVariants = cva(
         "dark-outline": DARK_OUTLINE,
       },
       size: {
-        default: "h-11 px-6 py-2.5",
+        default: "min-h-11 px-6 py-2.5",
         sm: "min-h-10 rounded-xl px-4 py-2",
-        lg: "h-12 rounded-xl px-8 text-base",
-        icon: "h-11 w-11 !translate-y-0 hover:!translate-y-0 active:!translate-y-0",
+        lg: "min-h-12 rounded-xl px-8 py-3 text-base",
+        icon: "h-11 w-11 min-w-11 p-0 !translate-y-0 hover:!translate-y-0 active:!translate-y-0",
       },
     },
     defaultVariants: {
@@ -139,7 +139,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-cta={cta}
         ref={ref}
         {...props}
-        style={{ color: isPrimaryCta ? "#FFFFFF" : undefined, ...(props.style ?? {}) }}
+        style={{ ...(props.style ?? {}), color: isPrimaryCta ? "#FFFFFF" : props.style?.color, WebkitTextFillColor: isPrimaryCta ? "#FFFFFF" : (props.style as React.CSSProperties | undefined)?.WebkitTextFillColor }}
       />
     );
   },
