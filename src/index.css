@@ -1341,9 +1341,9 @@ All colors MUST be HSL.
      a competing vertical scroll container. `overflow-x: hidden` computes
      `overflow-y` to auto in browsers, which created the desktop double-scroller
      that made real wheel/trackpad input feel blocked or inconsistent. */
-  overflow-x: clip;
-  overflow-y: visible;
-  overscroll-behavior-y: auto;
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  overscroll-behavior-y: auto !important;
 }
 
 .jj-section-strap,
