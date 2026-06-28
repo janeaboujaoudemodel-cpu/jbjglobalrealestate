@@ -1053,13 +1053,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               const highlightActive = activeMegaMenu ? isMenuOpen : routeActive;
               const Icon = item.icon;
               return (
-                <Link
+                <SidebarItem
                   key={item.href + item.label + i}
+                  preserveVisual
                   to={item.href}
+                  icon={Icon}
+                  iconRef={lockEmeraldGlyphWhite}
+                  label={item.label}
+                  active={highlightActive}
                   onMouseEnter={() => prefetchAITool(item.href)}
                   onFocus={() => prefetchAITool(item.href)}
                   onClick={(e) => {
-                    if (hasMega) handleNavClick(item.megaMenu, e);
+                    if (hasMega) handleNavClick(item.megaMenu, e as React.MouseEvent<HTMLAnchorElement>);
                     else handleNavClick(undefined);
                   }}
                   data-no-contrast-guard
@@ -1068,15 +1073,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   aria-current={highlightActive ? 'page' : undefined}
                   className={`group flex items-center gap-2.5 px-2.5 h-10 text-[12px] transition-all duration-200 rounded-lg ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
-                >
-                  <span data-sidebar-highlight-tile data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0`}>
-                    <Icon ref={lockEmeraldGlyphWhite} data-sidebar-highlight-icon className="w-[18px] h-[18px] transition-colors" strokeWidth={2.1} />
-                  </span>
-                  <span data-sidebar-highlight-label className="flex-1 text-left relative inline-block transition-colors duration-200" style={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}>{item.label}</span>
-                  {hasMega && (
-                    <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : undefined} />
-                  )}
-                </Link>
+                  iconWrapperClassName="w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0"
+                  iconClassName="w-[18px] h-[18px] transition-colors"
+                  iconStrokeWidth={2.1}
+                  iconData={{ 'data-sidebar-highlight-icon': true }}
+                  labelClassName="flex-1 text-left relative inline-block transition-colors duration-200"
+                  labelStyle={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
+                  trailing={hasMega ? <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : undefined} /> : undefined}
+                  trailingClassName="ml-0"
+                />
 
 
               );
