@@ -43,10 +43,10 @@ const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
 };
 
 const SIZE: Record<IconTileSize, { box: string; icon: string }> = {
-  sm: { box: "w-8 h-8 rounded-lg",   icon: "w-4 h-4" },
-  md: { box: "w-10 h-10 rounded-xl", icon: "w-5 h-5" },
-  lg: { box: "w-12 h-12 rounded-xl", icon: "w-6 h-6" },
-  xl: { box: "w-16 h-16 rounded-2xl",icon: "w-8 h-8" },
+  sm: { box: "w-9 h-9 rounded-xl",   icon: "w-4 h-4" },
+  md: { box: "w-11 h-11 rounded-xl", icon: "w-5 h-5" },
+  lg: { box: "w-12 h-12 rounded-xl", icon: "w-5 h-5" },
+  xl: { box: "w-16 h-16 rounded-2xl",icon: "w-7 h-7" },
 };
 
 interface IconTileProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -98,7 +98,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         data-icon-tile-tone={tone}
         data-surface="emerald"
         className={cn(
-          "inline-flex items-center justify-center flex-shrink-0",
+          "inline-flex items-center justify-center flex-shrink-0 leading-none",
           s.box,
           t.tile,
           isDark && "allow-white",
