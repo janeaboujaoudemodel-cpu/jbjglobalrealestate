@@ -209,12 +209,12 @@ export default function PremiumJobCard({
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
           <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-            <Briefcase className="w-4 h-4 text-[#064E3B] shrink-0" strokeWidth={2.5} aria-hidden />
+            <Briefcase className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
             {department}
           </span>
           {location && (
             <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-              <MapPin className="w-4 h-4 text-[#064E3B] shrink-0" strokeWidth={2.5} aria-hidden />
+              <MapPin className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
               {location}
             </span>
           )}
