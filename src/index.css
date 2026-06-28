@@ -17542,12 +17542,12 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   gap: 0.625rem;
   transition: background-color 110ms ease, color 110ms ease, box-shadow 110ms ease, transform 110ms ease;
 }
-:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]) {
+:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) {
   background: rgba(6, 78, 59, 0.10) !important;
   color: var(--jbj-emerald) !important;
   -webkit-text-fill-color: var(--jbj-emerald) !important;
 }
-:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]) :where(svg, [class*="lucide"], [data-lucide], path, line, polyline, circle, rect) {
+:where([data-surface="light"], [data-surface="champagne"], .surface-light, .surface-champagne, .bg-popover) :where([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([data-no-emerald-hover]) :where(svg, [class*="lucide"], [data-lucide], path, line, polyline, circle, rect) {
   color: var(--jbj-emerald) !important;
   stroke: currentColor !important;
 }
