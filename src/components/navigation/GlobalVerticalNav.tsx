@@ -1105,8 +1105,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     }}
                     className="w-full flex items-center gap-2.5 px-2.5 h-10 text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
                   >
-                    <div data-emerald-icon-surface className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${getIconTileClass()}`}>
-                      <SectionIcon ref={lockEmeraldGlyphWhite} data-sidebar-section-icon className="w-5 h-5 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                    <div data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
+                      <SectionIcon ref={lockEmeraldGlyphWhite} data-sidebar-section-icon className="w-[18px] h-[18px] transition-colors" strokeWidth={2.1} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </div>
                     <span
                       data-sidebar-section-label
