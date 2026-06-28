@@ -17260,7 +17260,7 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   --jbj-radius-sm: 10px;
   --jbj-radius-md: 14px;
   --jbj-radius-lg: 18px;
-  --jbj-control-h: 42px;
+  --jbj-control-h: 44px;
   --jbj-control-x: 16px;
   --jbj-icon-size: 18px;
   --jbj-focus-ring: 0 0 0 3px rgba(184, 149, 85, 0.34);
@@ -17304,6 +17304,17 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   opacity: 1 !important;
   mix-blend-mode: normal !important;
 }
+
+/* Careers emerald band hard-lock: prevents generic light-card rules from
+   turning Live Roles / Open Positions black on dark emerald cards. */
+:where([data-emerald-band], .careers-card-navy) :where([data-careers-emerald-label], [data-careers-emerald-title], [data-careers-emerald-subtitle], [data-careers-emerald-label] *, [data-careers-emerald-title] *, [data-careers-emerald-subtitle] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
 :where([data-surface="light"], [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"], [data-studio-surface="champagne"], .surface-light, .surface-champagne, .surface-cream, .surface-page, .surface-raised, .surface-gold, .surface-pearl, .jj-surface-champagne, .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active, .jj-gold-metallic, .bg-background, .bg-popover, [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"], [class*="bg-white"])
   :where(svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g):not(:where([data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *, [data-on-dark] *, [data-hero-dark] *, [data-studio-surface="emerald"] *, .jj-surface-emerald *, .jj-cta-primary *, .jj-cta-emerald *, .jj-cta-dark *, .jj-navy-cta *, .jj-emerald-action *, .jj-emerald-metallic *, .jj-pill-emerald *, .jj-icon-tile-emerald *, [data-emerald-action] *, [data-emerald="true"] *, [data-emerald-filled] *, [data-emerald-band] *, [data-emerald-icon-surface] *, [data-cta="primary"] *, [data-cta="dark"] *, [data-jj-segmented-trigger][data-state="active"] *, [role="tab"][data-state="active"] *)) {
   color: var(--jbj-emerald) !important;
@@ -17338,15 +17349,18 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
 
 /* Buttons / CTAs: one height, one radius, one icon rhythm; no cropped labels. */
 :where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])) {
-  min-height: var(--jbj-control-h);
+  min-height: var(--jbj-control-h) !important;
+  min-width: var(--jbj-control-h);
   border-radius: var(--jbj-radius-md);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  white-space: nowrap;
+  white-space: normal;
   line-height: 1.1;
   text-align: center;
+  max-width: 100%;
+  overflow: visible;
   transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease, transform 140ms ease, opacity 140ms ease;
 }
 :where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])):not([data-icon-only]):not(.aspect-square) {
@@ -17359,6 +17373,40 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   flex: 0 0 auto;
   stroke-width: 2.25;
   vertical-align: middle;
+}
+
+/* Header controls keep their original single-line proportions; they do not use
+   the sq ft / sq m segmented toggle as a sizing reference. */
+:where(.jj-header-icon-control) {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+}
+:where(.jj-header-selector-control) {
+  min-height: 44px !important;
+  height: 44px !important;
+  padding-inline: 16px !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+}
+
+/* Sidebar rhythm: one icon size, tile size, radius and label alignment across
+   backend, owner, broker, CRM and document shells. */
+:where([data-chrome="sidebar"], [data-sidebar], aside, .sidebar) :where(a, button, [role="button"]):not([data-sidebar-collapse-control]) {
+  min-height: 44px;
+  border-radius: 14px;
+  gap: 0.75rem;
+  align-items: center;
+}
+:where([data-chrome="sidebar"], [data-sidebar], aside, .sidebar) :where(svg[class*="lucide"], [data-lucide]) {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  stroke-width: 2.25 !important;
 }
 :where(button, a, [role="button"]):disabled,
 :where(button, a, [role="button"])[aria-disabled="true"],
@@ -17626,9 +17674,16 @@ body :where(a, button, [role="button"], [role="menuitem"], [role="option"], [dat
   box-shadow: 0 10px 26px rgba(10,10,10,0.08) !important;
 }
 
-body :where([aria-selected="true"], [data-selected="true"], [data-state="checked"], [data-state="active"], .active, .selected):not(:where([data-surface="light"], [data-surface="champagne"], [data-surface="cream"], .surface-light, .surface-champagne, .jj-surface-champagne)) {
+body :where([aria-selected="true"], [data-selected="true"], [data-state="checked"], [data-state="active"], .active, .selected):not(:where([data-surface="light"], [data-surface="champagne"], [data-surface="cream"], .surface-light, .surface-champagne, .jj-surface-champagne, [data-surface="light"] *, [data-surface="champagne"] *, [data-surface="cream"] *, .surface-light *, .surface-champagne *, .jj-surface-champagne *)) {
   color: var(--jbj-white) !important;
   -webkit-text-fill-color: var(--jbj-white) !important;
+}
+
+body :where([data-surface="light"], [data-surface="champagne"], [data-surface="cream"], .surface-light, .surface-champagne, .jj-surface-champagne) :where([aria-selected="true"], [data-selected="true"], [data-state="checked"], [data-state="active"], .active, .selected):not(:where([data-surface="emerald"], [data-surface="dark"], [data-cta="primary"], [data-cta="dark"], .jj-cta-primary, .jj-cta-emerald, .jj-surface-emerald)) {
+  color: var(--jbj-ink) !important;
+  -webkit-text-fill-color: var(--jbj-ink) !important;
+  background-color: rgba(6,78,59,0.10) !important;
+  border-color: rgba(184,149,85,0.42) !important;
 }
 
 /* Radix/dropdown/popover performance: no slow zoom/slide stacks on menu open. */

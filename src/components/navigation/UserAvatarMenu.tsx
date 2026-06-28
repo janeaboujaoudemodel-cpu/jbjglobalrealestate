@@ -161,7 +161,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           data-no-contrast-guard
           data-allow-dark-cta
           data-on-dark
-          className="allow-white relative h-9 w-9 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-transform hover:scale-[1.04]"
+          className="jj-header-icon-control allow-white relative h-11 w-11 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-transform hover:scale-[1.04]"
           style={{
             border: "1.5px solid rgba(255,255,255,0.45)",
             boxShadow:

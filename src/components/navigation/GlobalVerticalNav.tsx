@@ -1340,9 +1340,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                      className={`jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                      className={`jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-3.5 h-3.5" />
+                      <Icon className="w-4 h-4" strokeWidth={2.15} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1371,9 +1371,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                      className={`jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                      className={`jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-3.5 h-3.5" />
+                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1393,9 +1393,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
+                    className="jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center"
                   >
-                    <Headphones className="w-3.5 h-3.5" strokeWidth={2} />
+                    <Headphones className="w-4 h-4" strokeWidth={2.15} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1406,9 +1406,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-7 h-7 rounded-lg flex items-center justify-center"
+                    className="jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center"
                   >
-                    <Ticket className="w-3.5 h-3.5" strokeWidth={2} />
+                    <Ticket className="w-4 h-4" strokeWidth={2.15} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1458,7 +1458,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-7 h-7 rounded-lg flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-8 h-8 rounded-xl flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}
@@ -1468,7 +1468,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
                       />
                     )}
-                    <PanelLeftClose className="allow-white w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                    <PanelLeftClose className="allow-white w-4 h-4 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2.15} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">

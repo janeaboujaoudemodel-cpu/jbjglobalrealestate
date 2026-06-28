@@ -123,6 +123,7 @@ export default function PremiumJobCard({
   return (
     <div
       onClick={() => isOpenForApply && onSelect?.(id)}
+      data-surface="champagne"
       className={`group careers-card-strong relative rounded-2xl border p-6 transition-all overflow-hidden ${
         isOpenForApply ? "cursor-pointer" : "cursor-default"
       } ${
@@ -149,7 +150,7 @@ export default function PremiumJobCard({
 
       <div className="relative">
         <div className="flex items-start justify-between gap-3 mb-3">
-          <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#071B33] tracking-tight">
+          <h4 className="font-semibold text-lg md:text-[1.22rem] leading-snug text-[#1A1A1A] tracking-tight">
             {title}
           </h4>
           {selected && isOpenForApply && (
@@ -164,7 +165,7 @@ export default function PremiumJobCard({
         </div>
 
         {(computedTags.length > 0 || limitReached) && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             {computedTags.map((t) => {
               const cfg = TAG_STYLES[t];
               const Icon = cfg.icon;
@@ -172,9 +173,10 @@ export default function PremiumJobCard({
               return (
                 <span
                   key={t}
+                  data-jbj-label
                   data-no-contrast-guard={isFeatured ? "true" : undefined}
                   data-allow-dark-cta={isFeatured ? "true" : undefined}
-                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isFeatured ? "allow-white" : ""}`}
+                  className={`inline-flex min-h-[28px] items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isFeatured ? "allow-white" : ""}`}
                   style={isFeatured ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
                   <Icon className={`w-3 h-3 ${isFeatured ? "allow-white" : ""}`} style={isFeatured ? { color: "#FFFFFF" } : undefined} />
@@ -183,17 +185,17 @@ export default function PremiumJobCard({
               );
             })}
             {limitReached && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-2.5 py-1 text-[10px] font-semibold text-[#1A1A1A]">
+              <span className="inline-flex min-h-[26px] items-center gap-1.5 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-3 py-1 text-[10px] font-semibold text-[#1A1A1A]">
                 <Users className="w-3 h-3" /> Application Limit Reached
               </span>
             )}
             {status === "paused" && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-2.5 py-1 text-[10px] font-semibold text-[#1A1A1A]">
+              <span className="inline-flex min-h-[26px] items-center gap-1.5 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-3 py-1 text-[10px] font-semibold text-[#1A1A1A]">
                 <Pause className="w-3 h-3" /> Paused
               </span>
             )}
             {status === "closed" && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-2.5 py-1 text-[10px] font-semibold text-[#1A1A1A]">
+              <span className="inline-flex min-h-[26px] items-center gap-1.5 rounded-full border border-[#1A1A1A]/40 bg-[#EFE6D6] px-3 py-1 text-[10px] font-semibold text-[#1A1A1A]">
                 <XCircle className="w-3 h-3" /> Closed
               </span>
             )}
@@ -212,7 +214,7 @@ export default function PremiumJobCard({
             </span>
           )}
           {isCommissionBased || isBrokerRole ? (
-            <span className="rounded-full border border-[#BFA46A] bg-[#EDE1CD] px-2.5 py-1 font-semibold text-[#5E4314] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">Commission Basis</span>
+            <span className="inline-flex min-h-[26px] items-center rounded-full border border-[#BFA46A] bg-[#EDE1CD] px-3 py-1 font-semibold text-[#5E4314] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">Commission Basis</span>
           ) : null}
           {applicationCap ? (
             <span className="inline-flex items-center text-[#1A1A1A]/86">
@@ -230,7 +232,7 @@ export default function PremiumJobCard({
         )}
 
         <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#BFA46A]/60">
-          <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#071B33] pt-3">
+            <span className="text-[10px] tracking-[0.12em] uppercase font-semibold text-[#1A1A1A] pt-3">
             JBJ GLOBAL REAL ESTATE · Dubai
           </span>
           {isOpenForApply ? (
@@ -240,7 +242,7 @@ export default function PremiumJobCard({
               data-surface="emerald"
               data-allow-dark-cta
               data-no-contrast-guard
-              className={`jj-cta-emerald jj-pill-emerald-metallic h-10 rounded-xl px-5 font-semibold border border-[#B89555]/70 active:translate-y-[1px] transition-all ${selected ? "ring-2 ring-[#B89555]/70" : ""}`}
+              className={`jj-cta-emerald jj-pill-emerald-metallic h-11 rounded-xl px-5 font-semibold border border-[#B89555]/70 active:translate-y-[1px] transition-all ${selected ? "ring-2 ring-[#B89555]/70" : ""}`}
               onClick={(e) => {
                 e.stopPropagation();
                 onApply(id);
@@ -257,7 +259,7 @@ export default function PremiumJobCard({
               size="sm"
               disabled
               aria-disabled="true"
-              className="h-10 rounded-xl px-5 font-semibold bg-[#EFE6D6] text-[#1A1A1A]/70 border border-[#B89555]/60 cursor-not-allowed hover:bg-[#EFE6D6]"
+              className="min-h-10 rounded-xl px-5 font-semibold bg-[#EFE6D6] text-[#1A1A1A]/70 border border-[#B89555]/60 cursor-not-allowed hover:bg-[#EFE6D6]"
             >
               {CtaIcon ? <CtaIcon className="w-3.5 h-3.5 mr-1.5" /> : null}
               {ctaLabel}

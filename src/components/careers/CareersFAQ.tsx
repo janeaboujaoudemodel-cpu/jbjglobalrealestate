@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     q: "How long does the hiring process take?",
-    a: "Qualified candidates are usually contacted within a few business days. Priority applicants may receive accelerated screening through Jessica, our AI recruitment assistant.",
+    a: "Qualified candidates are usually contacted within a few business days. Priority applicants may receive accelerated screening through Jessica, our interview consultant.",
   },
   {
     q: "Can I apply from outside the UAE?",

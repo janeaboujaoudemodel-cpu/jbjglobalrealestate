@@ -82,7 +82,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               type={clickable ? "button" : undefined}
               onClick={clickable ? () => onStepClick!(idx) : undefined}
               className={cn(
-                "flex min-h-[40px] items-center gap-2 rounded-full border px-3.5 py-2.5 text-xs font-semibold transition-all",
+                "flex min-h-[42px] items-center gap-2 rounded-full border px-4 py-2.5 text-xs font-semibold transition-all",
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
                   ? "careers-pill-active allow-white !text-white"

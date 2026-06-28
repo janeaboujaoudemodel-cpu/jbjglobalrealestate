@@ -1,23 +1,21 @@
 import { Link } from "react-router-dom";
-import { Bot, Mic, MessageCircle, Sparkles, ShieldCheck } from "lucide-react";
+import { MessageCircle, ShieldCheck, UserCheck } from "lucide-react";
+import jessicaPortrait from "@/assets/team/jessica-interview-consultant.png";
 
 /**
  * JessicaAIPanel
- * Premium "live concierge" panel on the careers page.
- * - Animated avatar with online pulse
- * - "Typically replies instantly" + "Voice interview available" + AI interview assistant badge
- * - Subtle hover glow
- *
- * Brand: "Jessica" is the HR assistant persona. Champagne base, navy CTA only.
+ * Premium human interview consultant panel on the careers page.
  */
 export default function JessicaAIPanel() {
   return (
     <section
       aria-labelledby="jessica-panel-title"
       className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-0 mt-2 mb-10"
+      data-jessica-consultant-panel
     >
       <div
-        className="group relative overflow-hidden rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] shadow-[0_18px_44px_-28px_rgba(10,10,10,0.22)] transition-all hover:shadow-[0_22px_50px_-22px_rgba(10,10,10,0.32)] hover:-translate-y-[1px]"
+        className="group relative overflow-hidden rounded-[24px] border border-[#B89555]/55 bg-[linear-gradient(135deg,#FFFDF8_0%,#FDFBF7_44%,#F7F2EA_100%)] shadow-[0_18px_44px_-28px_rgba(10,10,10,0.22)] transition-all hover:shadow-[0_22px_50px_-22px_rgba(10,10,10,0.32)] hover:-translate-y-[1px]"
+        data-surface="champagne"
       >
         {/* Soft glow corner */}
         <div
@@ -25,27 +23,26 @@ export default function JessicaAIPanel() {
           className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full blur-3xl opacity-60 group-hover:opacity-80 transition-opacity"
           style={{
             background:
-              "radial-gradient(closest-side, rgba(10,10,10,0.18), rgba(10,10,10,0) 70%)",
+              "radial-gradient(closest-side, rgba(184,149,85,0.20), rgba(184,149,85,0) 70%)",
           }}
         />
 
         <div className="relative grid md:grid-cols-[auto,1fr,auto] items-center gap-6 p-6 md:p-7">
-          {/* Avatar with pulse */}
           <div className="relative flex-shrink-0 mx-auto md:mx-0">
             <span
               aria-hidden
-              className="absolute inset-0 rounded-full bg-[#0A0A0A]/30 careers-pulse"
+              className="absolute inset-0 rounded-full bg-[#B89555]/25 careers-pulse"
             />
-            <div
-              data-no-contrast-guard
-              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#0A0A0A] to-[#1F1F1F] border border-[#B89555]/70 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_10px_24px_-12px_rgba(10,10,10,0.55)]"
-            >
-              <Bot
-                className="w-10 h-10 allow-white"
-                style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+            <div className="relative h-24 w-24 overflow-hidden rounded-full border-2 border-[#B89555]/70 bg-[#F7F2EA] shadow-[0_14px_26px_-16px_rgba(26,26,26,0.45),inset_0_1px_0_rgba(255,255,255,0.75)]">
+              <img
+                src={jessicaPortrait}
+                alt="Jessica, interview consultant"
+                width={160}
+                height={160}
+                loading="lazy"
+                className="h-full w-full object-cover object-center"
               />
             </div>
-            {/* Online indicator */}
             <span className="absolute bottom-1 right-1 inline-flex items-center justify-center">
               <span className="absolute inline-flex h-3 w-3 rounded-full jj-surface-emerald opacity-70 animate-ping" />
               <span className="relative inline-flex h-3 w-3 rounded-full jj-surface-emerald border-2 border-[#FDFBF7]" />
@@ -57,19 +54,20 @@ export default function JessicaAIPanel() {
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
               <h3
                 id="jessica-panel-title"
-                className="text-xl md:text-2xl font-semibold text-[#1A1A1A] tracking-tight"
+              className="text-xl md:text-2xl font-semibold text-[#1A1A1A] tracking-tight"
               >
-                Meet Jessica
+                Jessica Interview Consultant
               </h3>
-              <span className="inline-flex items-center gap-1 rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-2.5 py-0.5 text-[10px] font-semibold tracking-[0.12em] uppercase text-[#1A1A1A]">
-                <Sparkles className="w-3 h-3 text-[#B89555]" />
-                AI Interview Assistant
+              <span className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-3 py-1 text-[10px] font-bold tracking-[0.12em] uppercase text-[#1A1A1A]">
+                <UserCheck className="w-3 h-3 text-[#B89555]" />
+                Interview Assistant
               </span>
             </div>
 
             <p className="text-sm md:text-[15px] text-[#1A1A1A]/80 leading-relaxed max-w-xl">
-              Your dedicated career concierge. Jessica reviews your CV, qualifies
-              your experience, and conducts the first interview — on your schedule.
+              Your dedicated interview consultant. Jessica reviews your CV, qualifies
+              your experience, and guides the first interview with a polished,
+              confidential process.
             </p>
 
             <div className="mt-3 flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5 text-[11px] font-medium">
@@ -78,8 +76,8 @@ export default function JessicaAIPanel() {
                 Typically replies instantly
               </span>
               <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/75">
-                <Mic className="w-3 h-3 text-[#B89555]" />
-                Voice interview available
+                <UserCheck className="w-3 h-3 text-[#B89555]" />
+                Human interview support
               </span>
               <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/75">
                 <ShieldCheck className="w-3 h-3 text-[#B89555]" />

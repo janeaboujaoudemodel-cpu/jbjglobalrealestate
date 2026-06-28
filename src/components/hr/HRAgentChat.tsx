@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase, MessageCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Send, User, Loader2, FileText, CheckCircle, Sparkles, Paperclip, X, Briefcase, MessageCircle, ArrowLeft, ArrowRight, UserCheck } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,7 +48,7 @@ const stageBadges: Record<string, { label: string; color: string; icon: React.Re
   greeting: { label: 'Welcome', color: 'bg-blue-500', icon: <Sparkles className="w-3 h-3" /> },
   cv_collection: { label: 'CV Collection', color: 'bg-amber-500', icon: <FileText className="w-3 h-3" /> },
   qualification: { label: 'Qualification', color: 'bg-purple-500', icon: <CheckCircle className="w-3 h-3" /> },
-  interview: { label: 'Interview', color: 'bg-[#EFE6D6]', icon: <Bot className="w-3 h-3" /> },
+  interview: { label: 'Interview', color: 'bg-[#EFE6D6]', icon: <UserCheck className="w-3 h-3" /> },
   assessment: { label: 'Assessment', color: 'jj-surface-emerald', icon: <CheckCircle className="w-3 h-3" /> },
   completed: { label: 'Completed', color: 'jj-surface-emerald', icon: <CheckCircle className="w-3 h-3" /> }
 };
@@ -430,7 +430,7 @@ export default function HRAgentChat() {
  ? 'bg-[#EFE6D6] text-[#1A1A1A]' 
  : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/20'
  }`}>
-                    {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-[#1A1A1A]" />}
+                    {message.role === 'user' ? <User className="w-4 h-4" /> : <UserCheck className="w-4 h-4 text-[#1A1A1A]" />}
                   </div>
                   <div className="flex flex-col max-w-[80%]">
                     <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
@@ -457,7 +457,7 @@ export default function HRAgentChat() {
                 className="flex gap-3"
               >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/20 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-[#1A1A1A]" />
+                  <UserCheck className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/20 rounded-2xl rounded-tl-none px-4 py-3">
                   <div className="flex gap-1">
@@ -631,7 +631,7 @@ export default function HRAgentChat() {
               </Button>
             </div>
             <p className="text-xs text-[#1A1A1A]/70 text-center">
-              Press Enter to send • AI-powered interview assistant
+              Press Enter to send • Jessica interview support
             </p>
           </div>
         )}

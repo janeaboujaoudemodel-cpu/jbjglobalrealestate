@@ -1,4 +1,4 @@
-import { Sparkles, Users, Bot, MapPin, Headphones, Building2 } from "lucide-react";
+import { Sparkles, Users, BriefcaseBusiness, MapPin, Headphones, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 /**
@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 export default function PremiumCareersHero() {
   const stats: { icon: any; label: string; value: string }[] = [
     { icon: Users, label: "Brokers in network", value: "5,000+" },
-    { icon: Bot, label: "AI-powered CRM", value: "24/7" },
+    { icon: BriefcaseBusiness, label: "Broker CRM", value: "24/7" },
     { icon: MapPin, label: "Dubai luxury market", value: "Tier-1" },
     { icon: Headphones, label: "Support", value: "24/7" },
     { icon: Building2, label: "Developer network", value: "Premium" },
@@ -101,7 +101,7 @@ export default function PremiumCareersHero() {
           className="allow-white mt-6 max-w-2xl mx-auto text-base md:text-lg leading-relaxed rounded-xl px-5 py-3 bg-[#0A0A0A] border border-[#B89555]/60 shadow-[0_10px_30px_-18px_rgba(10,10,10,0.55)]"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          Join an AI-powered brokerage ecosystem trusted by elite consultants,
+          Join a premium brokerage ecosystem trusted by elite consultants,
           institutional developers, and global investors. Apply in minutes — our
           executive assistant Jessica handles the rest.
         </p>
@@ -130,7 +130,7 @@ export default function PremiumCareersHero() {
             to="/hr-agent"
             className="inline-flex items-center justify-center gap-2 rounded-xl px-7 h-12 font-semibold text-[#1A1A1A] bg-[#FDFBF7] border border-[#B89555] hover:bg-[#F7F2EA] transition-colors"
           >
-            <Bot className="w-4 h-4 text-[#1A1A1A]" />
+            <BriefcaseBusiness className="w-4 h-4 text-[#1A1A1A]" />
             Chat with Jessica
           </Link>
         </div>
