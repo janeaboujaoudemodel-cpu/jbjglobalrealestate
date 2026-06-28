@@ -17941,8 +17941,7 @@ html body #root#root#root :is(
   [class*="bg-[#F7F2EA]"],
   [class*="bg-[#EFE6D6]"],
   [class*="bg-[#B89555]"]
-) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g)
-  :not(.jj-cta-primary):not(.jj-cta-primary *)
+) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g):not(.jj-cta-primary):not(.jj-cta-primary *)
   :not(.jj-cta-emerald):not(.jj-cta-emerald *)
   :not(.jj-emerald-action):not(.jj-emerald-action *)
   :not(.jj-pill-emerald):not(.jj-pill-emerald *)
@@ -18018,8 +18017,7 @@ html body #root#root#root :is(
 
 html body #root#root#root :is([data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-cta="dark"]),
 html body #root#root#root :is([data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-cta="dark"])
-  :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g)
-  :not([data-surface="champagne"]):not([data-surface="champagne"] *)
+  :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g):not([data-surface="champagne"]):not([data-surface="champagne"] *)
   :not([data-surface="cream"]):not([data-surface="cream"] *)
   :not([data-surface="page"]):not([data-surface="page"] *)
   :not([data-surface="light"]):not([data-surface="light"] *)
