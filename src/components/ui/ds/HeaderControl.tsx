@@ -33,13 +33,13 @@ const headerControl = cva(
   {
     variants: {
       shape: {
-        circle: "h-11 w-11 min-w-11 rounded-full p-0 text-[13px] [&_svg]:w-[18px] [&_svg]:h-[18px]",
+        circle: "jj-header-icon-control h-11 w-11 min-w-11 rounded-full p-0 text-base [&_svg]:w-4 [&_svg]:h-4",
         pill:   "h-10 min-w-[2.75rem] rounded-full px-4 text-[13px] [&_svg]:w-4 [&_svg]:h-4",
         segment:"h-9 min-w-[2.25rem] rounded-[10px] px-3 text-[12px] [&_svg]:w-[14px] [&_svg]:h-[14px]",
       },
       tone: {
         emerald:
-          "text-white [color:#fff] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0",
+          "text-white [color:#fff] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:brightness-110 active:translate-y-0",
         champagne:
           "text-[#1A1A1A] bg-[#F7F2EA] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:-translate-y-0.5 active:translate-y-0",
         ghost:
@@ -115,27 +115,37 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
   return (
     <div
       data-jjds-segmented=""
-      data-surface="light"
+      data-no-contrast-guard
+      data-on-dark
+      data-allow-dark-cta
+      data-jj-utility-pill
       className={cn(
-        "inline-flex items-center gap-1 h-10 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 p-1",
+        "allow-white inline-flex items-center h-9 rounded-full overflow-hidden relative shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]",
         className,
       )}
+      style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.18)" }}
     >
-      {options.map((opt) => {
+      {options.map((opt, index) => {
         const isActive = opt.value === value;
         return (
-          <HeaderControl
-            key={opt.value}
-            shape="segment"
-            tone={isActive ? "emerald" : "ghost"}
-            active={isActive}
-            aria-label={opt["aria-label"] ?? String(opt.label)}
-            aria-pressed={isActive}
-            onClick={() => onChange(opt.value)}
-            className="h-8 rounded-full px-3"
-          >
-            {opt.label}
-          </HeaderControl>
+          <React.Fragment key={opt.value}>
+            {index > 0 && <span aria-hidden className="w-px h-4 bg-white/25" />}
+            <button
+              type="button"
+              data-no-contrast-guard
+              data-active={isActive}
+              data-on-dark
+              data-allow-dark-cta
+              className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              aria-label={opt["aria-label"] ?? String(opt.label)}
+              aria-pressed={isActive}
+              onClick={() => onChange(opt.value)}
+            >
+              <span aria-hidden="true" className="jj-sqtoggle-sweep" />
+              <span>{opt.label}</span>
+            </button>
+          </React.Fragment>
         );
       })}
     </div>

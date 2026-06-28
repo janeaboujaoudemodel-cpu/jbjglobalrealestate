@@ -24,17 +24,36 @@ export type SidebarItemLevel = "root" | "sub" | "footer";
 
 export interface SidebarItemProps {
   icon?: LucideIcon;
+  iconRef?: React.Ref<SVGSVGElement>;
   label: string;
   to?: string;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLElement>;
+  onFocus?: React.FocusEventHandler<HTMLElement>;
   active?: boolean;
   collapsed?: boolean;
   level?: SidebarItemLevel;
   badge?: React.ReactNode;
   trailing?: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
+  iconWrapperClassName?: string;
+  iconClassName?: string;
+  iconWrapperStyle?: React.CSSProperties;
+  iconStyle?: React.CSSProperties;
+  iconWrapperData?: Record<`data-${string}`, unknown>;
+  iconStrokeWidth?: number;
+  iconData?: Record<`data-${string}`, unknown>;
+  labelClassName?: string;
+  labelStyle?: React.CSSProperties;
+  labelData?: Record<`data-${string}`, unknown>;
+  trailingClassName?: string;
+  /** Use only when migrating an already-approved live control: className/style are the visual source of truth. */
+  preserveVisual?: boolean;
   /** When true, render as a non-navigating button (e.g. Collapse, Sign Out). */
   asButton?: boolean;
+  [key: `data-${string}`]: unknown;
+  "aria-current"?: React.AriaAttributes["aria-current"];
 }
 
 const BASE =
@@ -65,7 +84,36 @@ function classesFor(active: boolean) {
 
 export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
   (
-    { icon: Icon, label, to, onClick, active = false, collapsed = false, level = "root", badge, trailing, className, asButton },
+    {
+      icon: Icon,
+      iconRef,
+      label,
+      to,
+      onClick,
+      onMouseEnter,
+      onFocus,
+      active = false,
+      collapsed = false,
+      level = "root",
+      badge,
+      trailing,
+      className,
+      style,
+      iconWrapperClassName,
+      iconClassName,
+      iconWrapperStyle,
+      iconStyle,
+      iconWrapperData,
+      iconStrokeWidth = 2.1,
+      iconData,
+      labelClassName,
+      labelStyle,
+      labelData,
+      trailingClassName,
+      preserveVisual = false,
+      asButton,
+      ...rest
+    },
     ref,
   ) => {
     const inner = (
@@ -73,22 +121,34 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
         {Icon && (
           <span
             data-jjds-sidebar-icon=""
+            {...iconWrapperData}
             className={cn(
-              "inline-flex items-center justify-center shrink-0",
-              ICON_SIZE[level],
-              active ? "text-white" : "text-[#1A1A1A]",
+              iconWrapperClassName
+                ? iconWrapperClassName
+                : [
+                    "inline-flex items-center justify-center shrink-0",
+                    ICON_SIZE[level],
+                    active ? "text-white" : "text-[#1A1A1A]",
+                  ],
             )}
+            style={iconWrapperStyle}
             aria-hidden
           >
             <Icon
-              className={cn(ICON_SIZE[level], active && "allow-white")}
-              strokeWidth={2.1}
-              style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined}
+              ref={iconRef}
+              {...iconData}
+              className={cn(iconClassName ?? ICON_SIZE[level], active && "allow-white")}
+              strokeWidth={iconStrokeWidth}
+              style={iconStyle ?? (active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined)}
             />
           </span>
         )}
         {!collapsed && (
-          <span className="flex-1 min-w-0 truncate" style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>
+          <span
+            {...labelData}
+            className={cn(labelClassName ?? "flex-1 min-w-0 truncate")}
+            style={labelStyle ?? (active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined)}
+          >
             {label}
           </span>
         )}
@@ -96,21 +156,23 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
           <span className="ml-1 shrink-0">{badge}</span>
         )}
         {!collapsed && trailing && (
-          <span className="ml-1 shrink-0 inline-flex items-center">{trailing}</span>
+          <span className={cn("ml-1 shrink-0 inline-flex items-center", trailingClassName)}>{trailing}</span>
         )}
       </>
     );
 
-    const cls = cn(
-      BASE,
-      collapsed ? "justify-center px-0 w-10 h-10" : LEVEL[level],
-      classesFor(active),
-      className,
-    );
+    const cls = preserveVisual
+      ? className
+      : cn(
+          BASE,
+          collapsed ? "justify-center px-0 w-10 h-10" : LEVEL[level],
+          classesFor(active),
+          className,
+        );
 
-    const style: React.CSSProperties | undefined = active
+    const resolvedStyle: React.CSSProperties | undefined = style ?? (active
       ? { backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }
-      : undefined;
+      : undefined);
 
     const common = {
       "data-jjds-sidebar-item": "",
@@ -124,7 +186,17 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
 
     if (to && !asButton) {
       return (
-        <NavLink ref={ref as React.Ref<HTMLAnchorElement>} to={to} className={cls} style={style} {...common}>
+        <NavLink
+          ref={ref as React.Ref<HTMLAnchorElement>}
+          to={to}
+          className={cls}
+          style={resolvedStyle}
+          onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
+          onMouseEnter={onMouseEnter as React.MouseEventHandler<HTMLAnchorElement>}
+          onFocus={onFocus as React.FocusEventHandler<HTMLAnchorElement>}
+          {...common}
+          {...rest}
+        >
           {inner}
         </NavLink>
       );
@@ -133,10 +205,13 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
       <button
         ref={ref as React.Ref<HTMLButtonElement>}
         type="button"
-        onClick={onClick}
+        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
+        onMouseEnter={onMouseEnter as React.MouseEventHandler<HTMLButtonElement>}
+        onFocus={onFocus as React.FocusEventHandler<HTMLButtonElement>}
         className={cls}
-        style={style}
+        style={resolvedStyle}
         {...common}
+        {...rest}
       >
         {inner}
       </button>

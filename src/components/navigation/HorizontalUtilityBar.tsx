@@ -153,18 +153,17 @@ export default function HorizontalUtilityBar() {
           </Tooltip>
 
           {/* Sq ft / Sq m — DS segmented control */}
-          <div className="hidden sm:inline-flex" data-jj-utility-pill>
-            <HeaderSegmented
-              value={areaUnit}
-              onChange={(v) => {
-                if (v !== areaUnit) toggleAreaUnit();
-              }}
-              options={[
-                { value: "sqft", label: "sq ft", "aria-label": "Square feet" },
-                { value: "sqm", label: "sq m", "aria-label": "Square meters" },
-              ]}
-            />
-          </div>
+          <HeaderSegmented
+            className="hidden sm:inline-flex"
+            value={areaUnit}
+            onChange={(v) => {
+              if (v !== areaUnit) toggleAreaUnit();
+            }}
+            options={[
+              { value: "sqft", label: "sq ft", "aria-label": "Square feet" },
+              { value: "sqm", label: "sq m", "aria-label": "Square meters" },
+            ]}
+          />
 
           {/* Currency — flag + AED */}
           <CurrencySwitcher variant="flag" />

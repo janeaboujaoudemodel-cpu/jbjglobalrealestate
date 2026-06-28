@@ -33,6 +33,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 import SidebarModePortalBlock from "@/components/navigation/SidebarModePortalBlock";
+import { SidebarItem } from "@/components/ui/ds/SidebarItem";
 
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
@@ -1052,13 +1053,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               const highlightActive = activeMegaMenu ? isMenuOpen : routeActive;
               const Icon = item.icon;
               return (
-                <Link
+                <SidebarItem
                   key={item.href + item.label + i}
+                  preserveVisual
                   to={item.href}
+                  icon={Icon}
+                  iconRef={lockEmeraldGlyphWhite}
+                  label={item.label}
+                  active={highlightActive}
                   onMouseEnter={() => prefetchAITool(item.href)}
                   onFocus={() => prefetchAITool(item.href)}
                   onClick={(e) => {
-                    if (hasMega) handleNavClick(item.megaMenu, e);
+                    if (hasMega) handleNavClick(item.megaMenu, e as React.MouseEvent<HTMLAnchorElement>);
                     else handleNavClick(undefined);
                   }}
                   data-no-contrast-guard
@@ -1067,15 +1073,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   aria-current={highlightActive ? 'page' : undefined}
                   className={`group flex items-center gap-2.5 px-2.5 h-10 text-[12px] transition-all duration-200 rounded-lg ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
-                >
-                  <span data-sidebar-highlight-tile data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0`}>
-                    <Icon ref={lockEmeraldGlyphWhite} data-sidebar-highlight-icon className="w-[18px] h-[18px] transition-colors" strokeWidth={2.1} />
-                  </span>
-                  <span data-sidebar-highlight-label className="flex-1 text-left relative inline-block transition-colors duration-200" style={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}>{item.label}</span>
-                  {hasMega && (
-                    <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : undefined} />
-                  )}
-                </Link>
+                  iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true }}
+                  iconWrapperClassName="w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0"
+                  iconClassName="w-[18px] h-[18px] transition-colors"
+                  iconStrokeWidth={2.1}
+                  iconData={{ 'data-sidebar-highlight-icon': true }}
+                  labelClassName="flex-1 text-left relative inline-block transition-colors duration-200"
+                  labelStyle={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
+                  trailing={hasMega ? <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : undefined} /> : undefined}
+                  trailingClassName="ml-0"
+                />
 
 
               );
@@ -1094,8 +1101,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             return (
               <React.Fragment key={sectionKey}>
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
-                  <button
-                    onClick={(e) => toggleSection(sectionKey, e)}
+                  <SidebarItem
+                    preserveVisual
+                    asButton
+                    icon={SectionIcon}
+                    iconRef={lockEmeraldGlyphWhite}
+                    label={sectionKey}
+                    active={sectionHighlighted}
+                    onClick={(e) => toggleSection(sectionKey, e as React.MouseEvent)}
                     data-sidebar-section
                     data-active={sectionHighlighted ? 'true' : undefined}
                     data-no-contrast-guard
@@ -1104,27 +1117,30 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
                     className="w-full flex items-center gap-2.5 px-2.5 h-10 text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
-                  >
-                    <div data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
-                      <SectionIcon ref={lockEmeraldGlyphWhite} data-sidebar-section-icon className="w-[18px] h-[18px] transition-colors" strokeWidth={2.1} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                    </div>
-                    <span
-                      data-sidebar-section-label
-                      data-no-contrast-guard
-                      style={{
-                        color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
-                        WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
-                        background: 'none',
-                        backgroundImage: 'none',
-                      }}
-                      className={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
-                    >{sectionKey}</span>
-                    <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
-
-                    {!isOpen && hasActiveChild && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
+                    iconWrapperData={{ 'data-emerald-icon-surface': true }}
+                    iconWrapperClassName={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}
+                    iconClassName="w-[18px] h-[18px] transition-colors"
+                    iconStrokeWidth={2.1}
+                    iconData={{ 'data-sidebar-section-icon': true }}
+                    iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                    labelData={{ 'data-sidebar-section-label': true, 'data-no-contrast-guard': true }}
+                    labelClassName={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
+                    labelStyle={{
+                      color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
+                      WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
+                      background: 'none',
+                      backgroundImage: 'none',
+                    }}
+                    trailing={(
+                      <>
+                        <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
+                        {!isOpen && hasActiveChild && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
+                        )}
+                      </>
                     )}
-                  </button>
+                    trailingClassName="ml-0"
+                  />
 
 
 
@@ -1133,19 +1149,26 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   >
                     <div className="ml-4 pl-2.5 border-l border-[#B89555]/15 space-y-1 pt-1 pb-1.5">
                       {sectionKey === 'TOOLS & WORKSPACE' && (
-                        <Link
+                        <SidebarItem
+                          preserveVisual
                           to="/ai-hub"
+                          icon={Eye}
+                          iconRef={lockEmeraldGlyphWhite}
+                          label="View All Tools"
                           onClick={collapseAfterNavigation}
                           data-sidebar-subitem
                           data-no-contrast-guard
                           className="group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[12px] font-medium transition-all duration-150 hover:bg-[#EFE6D6]/40"
                           style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
-                        >
-                          <span data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}>
-                            <Eye ref={lockEmeraldGlyphWhite} className="w-[18px] h-[18px]" strokeWidth={2.1} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                          </span>
-                          <span data-sidebar-subitem-label className="flex-1" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>View All Tools</span>
-                        </Link>
+                          iconWrapperData={{ 'data-emerald-icon-surface': true }}
+                          iconWrapperClassName={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}
+                          iconClassName="w-[18px] h-[18px]"
+                          iconStrokeWidth={2.1}
+                          iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                          labelData={{ 'data-sidebar-subitem-label': true }}
+                          labelClassName="flex-1"
+                          labelStyle={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                        />
                       )}
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
@@ -1155,11 +1178,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
                         return (
                           <React.Fragment key={item.href + item.label + i}>
-                            <Link
+                            <SidebarItem
+                              preserveVisual
                               to={item.href}
+                              icon={Icon}
+                              iconRef={lockEmeraldGlyphWhite}
+                              label={item.label}
+                              active={subitemActive}
                               onMouseEnter={() => prefetchAITool(item.href)}
                               onFocus={() => prefetchAITool(item.href)}
-                              onClick={(e) => {
+                              onClick={() => {
                                 // Never open the full-screen mega drop-down overlay from inside
                                 // an expanded section — just navigate.
                                 collapseAfterNavigation();
@@ -1175,13 +1203,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               style={subitemActive
                                 ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                                 : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
-                            >
-                              <span data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                                <Icon ref={lockEmeraldGlyphWhite} data-sidebar-subitem-icon className="w-[18px] h-[18px] transition-colors" strokeWidth={2.1} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                              </span>
-                              <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}>{item.label}</span>
-
-                            </Link>
+                              iconWrapperData={{ 'data-emerald-icon-surface': true }}
+                              iconWrapperClassName={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
+                              iconClassName="w-[18px] h-[18px] transition-colors"
+                              iconStrokeWidth={2.1}
+                              iconData={{ 'data-sidebar-subitem-icon': true }}
+                              iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                              labelData={{ 'data-sidebar-subitem-label': true }}
+                              labelClassName="flex-1 relative transition-colors"
+                              labelStyle={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}
+                            />
                             {needsAccountDivider && (
                               <div className="my-1 mx-2 h-px bg-gradient-to-r from-transparent via-[#047857]/45 to-transparent" aria-hidden="true" />
                             )}
