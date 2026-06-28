@@ -18103,3 +18103,120 @@ html body #root#root#root#root#root [data-chrome="sidebar"][data-chrome="sidebar
   fill: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+/* PASS 68 — FINAL CHAMPAGNE / GOLD OWN-SURFACE INK CONTRACT.
+   Dark locks were matching Tailwind hover classes such as hover:bg-[#1A1A1A]
+   even while the rendered surface was still champagne/gold. Any actual
+   champagne/pearl/gold utility surface must render ink-black until it becomes
+   an actual emerald/dark control. */
+html body #root#root#root#root#root :is(
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="page"],
+  [data-surface="light"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  [data-studio-surface="champagne"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-page,
+  .surface-light,
+  .surface-raised,
+  .surface-gold,
+  .surface-pearl,
+  .jj-section-champagne,
+  .jj-card-champagne,
+  .jj-band--page,
+  .jj-band--surface,
+  .jj-band--raised,
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"],
+  [class*="from-[#fdfbf7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="via-[#f7f2ea]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="to-[#efe6d6]"],
+  [class*="from-champagne"],
+  [class*="via-champagne"],
+  [class*="to-champagne"],
+  [class*="bg-champagne"]
+):not(.jj-cta-primary):not(.jj-cta-emerald):not(.jj-emerald-action):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-icon-tile-emerald):not(.jj-side-tile):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-cta="primary"]):not([data-cta="dark"]):not([data-on-dark]),
+html body #root#root#root#root#root :is(
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="page"],
+  [data-surface="light"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  [data-studio-surface="champagne"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-page,
+  .surface-light,
+  .surface-raised,
+  .surface-gold,
+  .surface-pearl,
+  .jj-section-champagne,
+  .jj-card-champagne,
+  .jj-band--page,
+  .jj-band--surface,
+  .jj-band--raised,
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"],
+  [class*="from-[#fdfbf7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="via-[#f7f2ea]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="to-[#efe6d6]"],
+  [class*="from-champagne"],
+  [class*="via-champagne"],
+  [class*="to-champagne"],
+  [class*="bg-champagne"]
+):not(.jj-cta-primary):not(.jj-cta-emerald):not(.jj-emerald-action):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-icon-tile-emerald):not(.jj-side-tile):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-cta="primary"]):not([data-cta="dark"]):not([data-on-dark])
+  :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g)
+  :not(.jj-cta-primary):not(.jj-cta-primary *)
+  :not(.jj-cta-emerald):not(.jj-cta-emerald *)
+  :not(.jj-emerald-action):not(.jj-emerald-action *)
+  :not(.jj-pill-emerald):not(.jj-pill-emerald *)
+  :not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *)
+  :not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *)
+  :not(.jj-side-tile):not(.jj-side-tile *)
+  :not([data-surface="emerald"]):not([data-surface="emerald"] *)
+  :not([data-surface="dark"]):not([data-surface="dark"] *)
+  :not([data-surface="ink"]):not([data-surface="ink"] *)
+  :not([data-surface="navy"]):not([data-surface="navy"] *)
+  :not([data-cta="primary"]):not([data-cta="primary"] *)
+  :not([data-cta="dark"]):not([data-cta="dark"] *)
+  :not([data-on-dark]):not([data-on-dark] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root#root#root :is(
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"], [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"], [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="from-champagne"], [class*="via-champagne"], [class*="to-champagne"], [class*="bg-champagne"]
+) svg :is(path, line, polyline, polygon, rect, circle, ellipse, use, g)[fill]:not([fill="none"]):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *) {
+  fill: #1A1A1A !important;
+  fill-opacity: 1 !important;
+}
