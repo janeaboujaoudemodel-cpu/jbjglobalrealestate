@@ -18697,3 +18697,14 @@ html body #root [data-careers-faq-trigger] {
   align-items: center !important;
   text-align: left !important;
 }
+
+/* PASS 90 — AIHF criteria table "Your requirement" header — explicit ink lock.
+ * The wrapper is champagne (#EFE6D6) so the header must read solid ink black.
+ * Wins over any stray dark-surface inheritance via attribute-targeted rule. */
+html body #root .aihf-criteria-head,
+html body #root th.aihf-criteria-head,
+html body #root .aihf-criteria-head * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
