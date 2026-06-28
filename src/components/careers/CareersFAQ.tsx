@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, HelpCircle, CircleDot } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const FAQS = [
@@ -79,20 +79,18 @@ export function CareersFAQ() {
                         : "border-[#047857]/40 bg-[#F7F2EA]"
                     )}
                   >
-                    {open ? (
-                      <CircleDot
-                        className="h-4 w-4 allow-white"
-                        style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
-                      />
-                    ) : (
-                      <ChevronDown
-                        className="h-4 w-4"
-                        style={{ color: "#047857", stroke: "#047857", opacity: 1 }}
-                        strokeWidth={2.5}
-                      />
-                    )}
-
-
+                    <ChevronDown
+                      className={cn(
+                        "h-4 w-4 transition-transform duration-300",
+                        open ? "rotate-180" : "rotate-0"
+                      )}
+                      style={{
+                        color: open ? "#FFFFFF" : "#047857",
+                        stroke: open ? "#FFFFFF" : "#047857",
+                        opacity: 1,
+                      }}
+                      strokeWidth={2.5}
+                    />
                   </span>
                 </button>
                 <div
