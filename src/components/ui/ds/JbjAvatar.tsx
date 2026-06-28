@@ -52,6 +52,8 @@ export function NotificationBadge({ count, floating = false, className, ...props
     <span
       data-jbj-notification-badge
       data-surface="emerald"
+      data-emerald="true"
+      data-emerald-ok
       data-no-contrast-guard
       className={cn(
         "allow-white inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none !text-white ![color:#FFFFFF] ![-webkit-text-fill-color:#FFFFFF] shadow-[0_8px_18px_-9px_rgba(0,0,0,0.8)]",
@@ -61,7 +63,9 @@ export function NotificationBadge({ count, floating = false, className, ...props
       {...props}
       style={{ ...props.style, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
     >
-      {count > 9 ? "9+" : count}
+      <span data-emerald-ok className="text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
+        {count > 9 ? "9+" : count}
+      </span>
     </span>
   );
 }
