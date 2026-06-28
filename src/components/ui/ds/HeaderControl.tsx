@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
  *
  * Single primitive for every horizontal header control:
  *   - circle  (44x44): Search, Filter, Heart, Avatar trigger
- *   - pill    (h-10):  AED currency, Mode chip, any compact CTA chip
- *   - segment (h-9):   sq ft / sq m segmented control
+ *   - pill    (44px):  AED currency, Mode chip, any compact CTA chip
+ *   - segment (44px):  sq ft / sq m segmented control
  *
  * Contract:
  *   - tone="emerald" → emerald metallic surface, white fg/icons (locked)
@@ -34,12 +34,12 @@ const headerControl = cva(
     variants: {
       shape: {
         circle: "jj-header-icon-control h-11 w-11 min-w-11 rounded-full p-0 text-base [&_svg]:w-4 [&_svg]:h-4",
-        pill:   "h-10 min-w-[2.75rem] rounded-full px-4 text-[13px] [&_svg]:w-4 [&_svg]:h-4",
-        segment:"h-9 min-w-[2.25rem] rounded-[10px] px-3 text-[12px] [&_svg]:w-[14px] [&_svg]:h-[14px]",
+        pill:   "jj-header-selector-control h-11 min-w-[2.75rem] rounded-full px-4 text-[13px] [&_svg]:w-4 [&_svg]:h-4",
+        segment:"h-11 min-w-[2.75rem] rounded-full px-3 text-[12px] [&_svg]:w-[14px] [&_svg]:h-[14px]",
       },
       tone: {
         emerald:
-          "text-white [color:#fff] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:brightness-110 active:translate-y-0",
+          "text-white [color:#fff] shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)] hover:brightness-110 active:translate-y-0",
         champagne:
           "text-[#1A1A1A] bg-[#F7F2EA] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:-translate-y-0.5 active:translate-y-0",
         ghost:
@@ -81,11 +81,14 @@ export const HeaderControl = React.forwardRef<HTMLButtonElement, HeaderControlPr
         data-jjds-tone={tone ?? "emerald"}
         data-no-contrast-guard
         data-surface={emerald ? "emerald" : "light"}
-        className={cn("allow-white", headerControl({ shape, tone, active }), className)}
+        className={cn("allow-white jj-header-premium-control", headerControl({ shape, tone, active }), className)}
         style={
           emerald
             ? {
                 backgroundImage: "var(--jj-emerald-ombre)",
+                border: "0",
+                boxShadow:
+                  "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
                 ...style,
@@ -103,7 +106,7 @@ HeaderControl.displayName = "HeaderControl";
 
 /**
  * HeaderSegmented — paired segment control (e.g. sq ft / sq m).
- * Renders two HeaderControl segment buttons inside a champagne shell.
+ * Uses the same 44px emerald control family as AED and Mode.
  */
 export interface HeaderSegmentedProps {
   value: string;
@@ -119,24 +122,30 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
       data-on-dark
       data-allow-dark-cta
       data-jj-utility-pill
+      data-header-control-family="segmented"
       className={cn(
-        "allow-white inline-flex items-center h-9 rounded-full overflow-hidden relative shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]",
+        "allow-white jj-header-premium-control inline-flex items-center h-11 rounded-full overflow-hidden relative shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
         className,
       )}
-      style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.18)" }}
+      style={{
+        backgroundImage: "var(--jj-emerald-ombre)",
+        border: 0,
+        boxShadow:
+          "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+      }}
     >
       {options.map((opt, index) => {
         const isActive = opt.value === value;
         return (
           <React.Fragment key={opt.value}>
-            {index > 0 && <span aria-hidden className="w-px h-4 bg-white/25" />}
+            {index > 0 && <span aria-hidden className="w-px h-5 bg-white/20" />}
             <button
               type="button"
               data-no-contrast-guard
               data-active={isActive}
               data-on-dark
               data-allow-dark-cta
-              className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
+              className="allow-white jj-sqtoggle relative px-3.5 h-full text-[11px] font-bold tracking-wide transition-all duration-200"
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               aria-label={opt["aria-label"] ?? String(opt.label)}
               aria-pressed={isActive}
