@@ -17218,20 +17218,27 @@ html body #root .jj-page-shell {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   ULTIMATE DROPDOWN HOVER LOCK (winning rule)
-   Standardize ALL Radix dropdowns/menus/selects/popovers to a
-   soft-emerald hover with emerald ink text. No dark gradients,
-   no pure-white text repaint, no opacity flicker.
+   ULTIMATE DROPDOWN HOVER LOCK (winning rule) — CHAMPAGNE EDITION
+   Standardize ALL Radix dropdowns/menus/selects/popovers to a soft
+   champagne hover with ink-black text + a gold hairline. NO emerald
+   background painting. NO white-on-light text. NO green rectangles.
    ════════════════════════════════════════════════════════════════ */
 html body [data-radix-popper-content-wrapper]
-  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]):not([data-no-emerald-hover]),
+  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]):not([data-no-emerald-hover]) {
+  background-color: #F7F1E6 !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F2E7CF 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: inset 0 0 0 1px rgba(184,149,85,0.55) !important;
+  border-radius: 10px !important;
+}
 html body [data-radix-popper-content-wrapper]
-  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]):not([data-no-emerald-hover]) * {
-  background-color: var(--emerald-soft-bg, #E8F2EC) !important;
+  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]):not([data-no-emerald-hover]) *:not([data-keep-color]):not(.allow-white) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
   background-image: none !important;
-  color: var(--emerald-1, #064E3B) !important;
-  -webkit-text-fill-color: var(--emerald-1, #064E3B) !important;
-  stroke: var(--emerald-1, #064E3B) !important;
+  background-color: transparent !important;
 }
 /* Re-allow dark-surface dropdowns to keep white text on hover */
 html body [data-radix-popper-content-wrapper] [data-on-dark]
@@ -17242,6 +17249,7 @@ html body [data-radix-popper-content-wrapper] [data-on-dark]
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
 
 /* ════════════════════════════════════════════════════════════════
    FULL-BLEED BAND — must respect the fixed vertical sidebar.
