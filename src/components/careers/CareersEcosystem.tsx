@@ -1,5 +1,5 @@
 import {
-  Building2, Users, Bot, GraduationCap, Globe2, Megaphone,
+  Building2, Users, Workflow, GraduationCap, Globe2, Megaphone,
   Sparkles, Award, Briefcase,
 } from "lucide-react";
 
@@ -17,10 +17,10 @@ const PILLARS: PillarTile[] = [
       "Tier-1 relationships with the most active Dubai developers — early off-plan allocations, exclusive inventory, and direct commercial channels.",
   },
   {
-    icon: Bot,
-    title: "AI Sales Infrastructure",
+    icon: Workflow,
+    title: "Broker Operating Infrastructure",
     description:
-      "CRM, lead routing, AI follow-ups, and Jessica-powered investor qualification engineered to multiply broker productivity from day one.",
+      "CRM, lead routing, guided follow-ups, and investor qualification workflows engineered to multiply broker productivity from day one.",
   },
   {
     icon: Globe2,
