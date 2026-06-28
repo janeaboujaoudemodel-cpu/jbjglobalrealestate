@@ -93,7 +93,8 @@ export default function JessicaAIPanel() {
               data-surface="emerald"
               data-allow-dark-cta
               data-no-contrast-guard
-              className="jj-cta-emerald jj-pill-emerald-metallic inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
+              data-careers-primary-pill
+              className="jj-cta-emerald jj-pill-emerald-metallic animated-border inline-flex items-center justify-center gap-2 rounded-xl px-5 h-11 font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
             >
               <MessageCircle className="w-4 h-4" />
               <span>Start Conversation</span>
