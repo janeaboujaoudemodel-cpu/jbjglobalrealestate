@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 // PRIMARY: locked JBJ Emerald gradient with white foreground.
 // Contrast is locked globally by .jj-cta-* primitives in index.css.
 const BRAND_PRIMARY =
-  "jj-cta-primary jj-cta-emerald allow-white border-transparent shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)] hover:-translate-y-0.5 active:translate-y-0";
+  "jj-cta-primary jj-cta-emerald animated-border allow-white border-transparent shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)] hover:-translate-y-0.5 active:translate-y-0";
 
 // SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
