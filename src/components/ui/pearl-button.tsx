@@ -55,7 +55,7 @@ const baseLayout =
   "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0";
 
 const primaryClass =
-  "jj-dual-cta-primary allow-white text-white border border-white/20 focus-visible:ring-[#064E3B]/70 focus-visible:ring-offset-[#064E3B]";
+  "jj-dual-cta-primary animated-border allow-white text-white border border-white/20 focus-visible:ring-[#064E3B]/70 focus-visible:ring-offset-[#064E3B]";
 
 const secondaryClass =
   "jj-dual-cta-secondary border border-[#064E3B]/35 focus-visible:ring-[#064E3B]/60 focus-visible:ring-offset-[#FDFBF7]";
