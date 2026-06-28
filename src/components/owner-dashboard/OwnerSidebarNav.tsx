@@ -260,7 +260,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             <>
               <span
                 className={cn(
-                  "flex-1 text-left truncate transition-colors duration-200",
+                  "min-w-0 flex-1 text-left whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15] transition-colors duration-200",
                   item.premium && "font-semibold",
                   active ? "text-white" : "text-[#1A1A1A] group-hover:text-[#064E3B]"
                 )}

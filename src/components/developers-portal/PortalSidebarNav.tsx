@@ -38,7 +38,7 @@ export default function PortalSidebarNav({ onNavigate }: { onNavigate?: () => vo
           onClick={onNavigate}
           className={({ isActive }) =>
             cn(
-              "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors border",
+              "w-full flex items-center gap-3 px-3 py-2 min-h-10 rounded-md text-sm transition-colors border",
               isActive
                 ? "bg-[#EFE6D6] text-[#1A1A1A] font-semibold border-[#B89555]/60"
                 : "text-[#1A1A1A]/75 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/60 border-transparent"
@@ -46,7 +46,7 @@ export default function PortalSidebarNav({ onNavigate }: { onNavigate?: () => vo
           }
         >
           <item.icon className="h-4 w-4 flex-shrink-0" strokeWidth={1.75} />
-          <span className="truncate">{item.label}</span>
+          <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]">{item.label}</span>
         </NavLink>
       ))}
     </nav>

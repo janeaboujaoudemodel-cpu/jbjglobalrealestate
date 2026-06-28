@@ -55,7 +55,7 @@ export default function DeveloperHubSidebarNav({ collapsed, onNavigate }: Props)
               <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-6 h-6 rounded-md flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
                 <item.icon className="allow-white w-3.5 h-3.5 flex-shrink-0 text-white" strokeWidth={2.1} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </span>
-              {!collapsed && <span className={cn("truncate", isActive ? "text-white" : "text-[#1A1A1A]")}>{item.label}</span>}
+              {!collapsed && <span className={cn("min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]", isActive ? "text-white" : "text-[#1A1A1A]")}>{item.label}</span>}
             </button>
           );
         })}

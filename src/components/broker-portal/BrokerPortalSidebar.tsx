@@ -85,7 +85,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
           />
           {!collapsed && (
-            <div className="min-w-0 text-[10px] uppercase tracking-[0.13em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate">
+            <div className="min-w-0 text-[9px] uppercase tracking-[0.08em] text-[#1A1A1A] font-extrabold whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.08] text-left">
               JBJ Global Real Estate L.L.C S.O.C.
             </div>
           )}
@@ -108,7 +108,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               data-allow-dark-cta={active ? "" : undefined}
               data-emerald={active ? "true" : undefined}
               className={cn(
-                "group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-all border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
+                "group flex items-center gap-2.5 rounded-lg px-3 py-2 min-h-10 text-sm transition-all border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
                 active
                   ? "allow-white font-semibold border-[rgba(255,255,255,0.18)] shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
                   : "border-transparent text-[#1A1A1A]/85 hover:text-[#1A1A1A] hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
@@ -123,7 +123,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
                 />
               </span>
               {!collapsed && (
-                <span className="truncate" style={active ? { color: "#FFFFFF" } : undefined}>
+                <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]" style={active ? { color: "#FFFFFF" } : undefined}>
                   {label}
                 </span>
               )}
@@ -150,7 +150,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
           >
             <ArrowLeft className="h-5 w-5 shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-            {!collapsed && <span className="truncate" style={{ color: "#FFFFFF" }}>Back to JBJ Owner</span>}
+            {!collapsed && <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]" style={{ color: "#FFFFFF" }}>Back to JBJ Owner</span>}
             {!collapsed && <Crown className="h-3.5 w-3.5 ml-auto opacity-90" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
           </Link>
         )}
@@ -161,7 +161,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-[#1A1A1A] bg-[#EFE6D6] hover:bg-[#E6DAC2] border border-[#B89555]/40"
         >
           <Home className="h-5 w-5 shrink-0 text-[#1A1A1A]" />
-          {!collapsed && <span className="truncate">Return to Site</span>}
+          {!collapsed && <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]">Return to Site</span>}
         </Link>
         <button
           type="button"
@@ -188,7 +188,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             )}
           >
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-            {!collapsed && <span className="truncate">Collapse</span>}
+            {!collapsed && <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]">Collapse</span>}
           </button>
         )}
       </div>

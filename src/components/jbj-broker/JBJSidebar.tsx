@@ -44,7 +44,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] fixed h-screen flex flex-col border-r border-[#B89555]/30">
+    <aside data-backend-sidebar="legacy-broker" className="w-64 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] fixed h-screen flex flex-col border-r border-[#B89555]/30">
       {/* Header - Company Name on ONE LINE */}
       <div className="p-4 border-b border-[#B89555]/30">
         <h1 className="text-[#1A1A1A] font-bold tracking-wide text-lg">
@@ -63,10 +63,10 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-[#1A1A1A] font-medium truncate">
+              <p className="text-[#1A1A1A] font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]">
                 {brokerProfile.name}
               </p>
-              <p className="text-[#1A1A1A]/60 text-xs truncate">
+              <p className="text-[#1A1A1A]/60 text-xs whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]">
                 {brokerProfile.email}
               </p>
               <Badge
@@ -116,8 +116,8 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
  : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
  }`}
           >
-            <item.icon className="h-5 w-5" />
-            {item.label}
+            <item.icon className="h-5 w-5 shrink-0" />
+            <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15] text-left">{item.label}</span>
           </Button>
         ))}
       </nav>
@@ -129,24 +129,24 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
           onClick={() => navigate("/jbj-broker-admin")}
           className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
-          <Settings className="h-5 w-5" />
-          Owner Panel
+          <Settings className="h-5 w-5 shrink-0" />
+          <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15] text-left">Owner Panel</span>
         </Button>
         <Button
           variant="ghost"
           onClick={() => navigate("/")}
           className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
-          <Home className="h-5 w-5" />
-          Back to Site
+          <Home className="h-5 w-5 shrink-0" />
+          <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15] text-left">Back to Site</span>
         </Button>
         <Button
           variant="ghost"
           onClick={handleLogout}
           className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
-          <LogOut className="h-5 w-5" />
-          Sign Out
+          <LogOut className="h-5 w-5 shrink-0" />
+          <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15] text-left">Sign Out</span>
         </Button>
       </div>
     </aside>

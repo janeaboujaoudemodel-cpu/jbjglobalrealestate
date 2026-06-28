@@ -7,7 +7,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
  * top of the vertical sidebar.
  *
  * Visual contract (locked to match every other vertical-sidebar row):
- *   • h-10 row, gap-2.5, px-2.5
+ *   • min-h-10 row, gap-2.5, px-2.5
  *   • w-6 h-6 emerald-ombre icon tile, white glyph
  *   • ChevronRight trailing (same as section headers / mega items)
  *   • Always emerald-filled icon tile (same in collapsed + expanded states)
@@ -77,7 +77,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}
         aria-current={active ? "page" : undefined}
-        className={`group flex items-center gap-2.5 px-2.5 h-10 rounded-lg transition-all duration-200 ${
+        className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg transition-all duration-200 ${
           active ? "" : "hover:bg-[#1A1A1A]/[0.045]"
         }`}
         style={
@@ -101,7 +101,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
           />
         </span>
         <span
-          className="flex-1 min-w-0 text-left text-[9.5px] uppercase tracking-[0.10em] leading-[1.18] font-bold whitespace-nowrap truncate"
+          className="flex-1 min-w-0 text-left text-[9px] uppercase tracking-[0.055em] leading-[1.18] font-bold whitespace-normal break-words [overflow-wrap:anywhere]"
           style={{
             color: active ? "#FFFFFF" : "#1A1A1A",
             WebkitTextFillColor: active ? "#FFFFFF" : "#1A1A1A",
