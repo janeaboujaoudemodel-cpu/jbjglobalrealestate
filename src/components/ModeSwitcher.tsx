@@ -379,20 +379,20 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       data-mode-selected-pill={config.surface}
                       className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
                       style={{
-                        '--mode-base': config.base,
-                        '--mode-on-base': config.onBase,
-                        backgroundColor: config.base,
-                        color: config.onBase,
-                        WebkitTextFillColor: config.onBase,
-                        borderColor: config.base,
+                        '--mode-base': 'var(--jj-emerald-ombre)',
+                        '--mode-on-base': '#FFFFFF',
+                        background: 'var(--jj-emerald-ombre)',
+                        color: '#FFFFFF',
+                        WebkitTextFillColor: '#FFFFFF',
+                        borderColor: 'transparent',
                       } as CSSProperties}
                     >
                       <Check
                         data-no-contrast-guard
                         className="mode-switcher-selected-icon w-3 h-3 shrink-0 allow-white"
-                        style={{ color: config.onBase, stroke: config.onBase }}
+                        style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                       />
-                      <span style={{ color: config.onBase, WebkitTextFillColor: config.onBase }}>Selected</span>
+                      <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Selected</span>
                     </span>
                   ) : (
                     <span
