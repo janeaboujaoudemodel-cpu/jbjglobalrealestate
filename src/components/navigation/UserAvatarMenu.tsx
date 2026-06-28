@@ -163,7 +163,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           style={{
             border: 0,
             backgroundImage:
-              "radial-gradient(130% 130% at 26% 20%, #0d8b63 0%, #064E3B 34%, #042c1c 66%, #000000 100%)",
+              "radial-gradient(130% 130% at 26% 20%, #087052 0%, #064E3B 34%, #042c1c 66%, #000000 100%)",
             boxShadow:
               "0 14px 30px -13px rgba(6,78,59,1), 0 4px 10px -6px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -10px 18px rgba(0,0,0,0.34)",
           }}
@@ -184,7 +184,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             className="absolute inset-0 rounded-full flex items-center justify-center overflow-hidden"
             style={{
               background:
-                "radial-gradient(120% 120% at 28% 20%, #0d8b63 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
+                "radial-gradient(120% 120% at 28% 20%, #087052 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
             }}
           >
             <span
@@ -223,7 +223,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             style={{
               border: 0,
               background:
-                "radial-gradient(120% 120% at 28% 20%, #0d8b63 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
+                "radial-gradient(120% 120% at 28% 20%, #087052 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
               boxShadow:
                 "0 8px 18px -12px rgba(6,78,59,0.9), inset 0 1px 0 rgba(255,255,255,0.26), inset 0 -8px 14px rgba(0,0,0,0.28)",
             }}
