@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, HelpCircle, CircleDot } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const FAQS = [
