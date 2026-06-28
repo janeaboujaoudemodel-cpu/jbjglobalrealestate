@@ -1123,6 +1123,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     iconStrokeWidth={2.1}
                     iconData={{ 'data-sidebar-section-icon': true }}
                     iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                    labelData={{ 'data-sidebar-section-label': true, 'data-no-contrast-guard': true }}
                     labelClassName={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     labelStyle={{
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
