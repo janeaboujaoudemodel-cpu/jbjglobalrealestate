@@ -27,34 +27,9 @@
   z-index: 1;
 }
 
-.animated-border::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1.5px;
-  border-radius: inherit;
-  background: conic-gradient(
-    from var(--border-angle),
-    transparent 0deg,
-    hsl(var(--gold)) 90deg,
-    hsl(var(--accent)) 180deg,
-    hsl(var(--secondary)) 270deg,
-    transparent 360deg
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-          mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  animation: border-spin 4s linear infinite;
-  pointer-events: none;
-  z-index: 0;
-}
+.animated-border::before { content: none; display: none; }
+.animated-border-thick::before { content: none; display: none; }
 
-.animated-border-thick::before {
-  padding: 3px;
-  animation-duration: 6s;
-}
 
 @tailwind base;
 @tailwind components;
@@ -18556,40 +18531,25 @@ html body #root [data-surface="champagne"] svg:not(.allow-white):not([data-no-co
 }
 
 /* =====================================================================
-   PASS 90 — ANIMATED BORDER VISIBILITY LOCK
-   Re-asserts the reusable utility after legacy glow/CTA pseudo-element
-   locks, using only existing theme tokens already defined in this file.
+   PASS 90 — ANIMATED BORDER GLOBAL KILL
+   Per user direction: the rotating gradient border animation is removed
+   site-wide. .animated-border now renders as a plain container with no
+   spinning pseudo-element. Existing classNames remain harmless.
    ===================================================================== */
-html body #root .animated-border::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  padding: 1.5px !important;
-  border-radius: inherit !important;
-  background: conic-gradient(
-    from var(--border-angle),
-    transparent 0deg,
-    hsl(var(--gold)) 90deg,
-    hsl(var(--accent)) 180deg,
-    hsl(var(--secondary)) 270deg,
-    transparent 360deg
-  ) !important;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0) !important;
-          mask-composite: exclude !important;
-  -webkit-mask-composite: xor !important;
-  animation: border-spin 4s linear infinite !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-  display: block !important;
-  filter: none !important;
+.animated-border::before,
+html body #root .animated-border::before,
+html body #root .animated-border.animated-border-thick::before {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  background: none !important;
+  -webkit-mask: none !important;
+          mask: none !important;
+}
+.animated-border {
+  animation: none !important;
 }
 
-html body #root .animated-border.animated-border-thick::before {
-  padding: 3px !important;
-  animation-duration: 6s !important;
-}
 
 /* =====================================================================
    CAREERS FINAL CONTRAST LOCK — shared careers primitives only.
