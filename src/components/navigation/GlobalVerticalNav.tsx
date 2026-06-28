@@ -1065,14 +1065,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   data-sidebar-highlight
                   data-active={highlightActive ? 'true' : undefined}
                   aria-current={highlightActive ? 'page' : undefined}
-                  className={`group flex items-center gap-2 px-2.5 h-[34px] text-[12px] transition-all duration-200 rounded-lg hover:bg-[#EFE6D6]/60 ${getItemStyle(item)}`}
+                  className={`group flex items-center gap-2.5 px-2.5 h-10 text-[12px] transition-all duration-200 rounded-lg hover:bg-[#EFE6D6]/60 ${getItemStyle(item)}`}
                 >
-                  <span data-sidebar-highlight-tile data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0`}>
-                    <Icon ref={lockEmeraldGlyphWhite} data-sidebar-highlight-icon className="w-3 h-3 transition-colors" />
+                  <span data-sidebar-highlight-tile data-emerald-icon-surface className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0`}>
+                    <Icon ref={lockEmeraldGlyphWhite} data-sidebar-highlight-icon className="w-5 h-5 transition-colors" />
                   </span>
                   <span data-sidebar-highlight-label className="flex-1 text-left relative inline-block transition-colors duration-200">{item.label}</span>
                   {hasMega && (
-                    <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} />
+                    <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} />
                   )}
                 </Link>
 
@@ -1101,10 +1101,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
-                    className="w-full flex items-center gap-2 px-2.5 h-[34px] text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
+                    className="w-full flex items-center gap-2.5 px-2.5 h-10 text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
                   >
-                    <div data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}>
-                      <SectionIcon ref={lockEmeraldGlyphWhite} data-sidebar-section-icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                    <div data-emerald-icon-surface className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${getIconTileClass()}`}>
+                      <SectionIcon ref={lockEmeraldGlyphWhite} data-sidebar-section-icon className="w-5 h-5 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </div>
                     <span
                       data-sidebar-section-label
@@ -1117,7 +1117,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       }}
                       className={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     >{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
+                    <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
 
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
@@ -1136,11 +1136,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           onClick={collapseAfterNavigation}
                           data-sidebar-subitem
                           data-no-contrast-guard
-                          className="group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 hover:bg-[#EFE6D6]/40"
+                          className="group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[12px] font-medium transition-all duration-150 hover:bg-[#EFE6D6]/40"
                           style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                         >
-                          <span data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}>
-                            <Eye ref={lockEmeraldGlyphWhite} className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          <span data-emerald-icon-surface className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}>
+                            <Eye ref={lockEmeraldGlyphWhite} className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                           </span>
                           <span data-sidebar-subitem-label className="flex-1" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>View All Tools</span>
                         </Link>
@@ -1169,11 +1169,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               data-active={subitemActive ? 'true' : undefined}
                               aria-current={subitemActive ? 'page' : undefined}
                               data-no-contrast-guard
-                              className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] transition-all duration-150 hover:bg-[#EFE6D6]/40 ${subitemActive ? 'font-semibold' : 'font-medium'}`}
+                              className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[12px] transition-all duration-150 hover:bg-[#EFE6D6]/40 ${subitemActive ? 'font-semibold' : 'font-medium'}`}
                               style={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}
                             >
-                              <span data-emerald-icon-surface className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                                <Icon ref={lockEmeraldGlyphWhite} data-sidebar-subitem-icon className="w-3 h-3 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                              <span data-emerald-icon-surface className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
+                                <Icon ref={lockEmeraldGlyphWhite} data-sidebar-subitem-icon className="w-5 h-5 transition-colors" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                               </span>
                               <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}>{item.label}</span>
 
@@ -1340,9 +1340,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                      className={`jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                      className={`jj-side-tile group w-9 h-9 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-4 h-4" strokeWidth={2.15} />
+                      <Icon className="w-5 h-5" strokeWidth={2.25} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1371,9 +1371,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                      className={`jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                      className={`jj-side-tile group w-9 h-9 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} />
+                      <SectionIcon className="w-5 h-5" strokeWidth={2.25} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1393,9 +1393,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center"
+                    className="jj-side-tile group w-9 h-9 rounded-xl flex items-center justify-center"
                   >
-                    <Headphones className="w-4 h-4" strokeWidth={2.15} />
+                    <Headphones className="w-5 h-5" strokeWidth={2.25} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1406,9 +1406,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-8 h-8 rounded-xl flex items-center justify-center"
+                    className="jj-side-tile group w-9 h-9 rounded-xl flex items-center justify-center"
                   >
-                    <Ticket className="w-4 h-4" strokeWidth={2.15} />
+                    <Ticket className="w-5 h-5" strokeWidth={2.25} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1422,9 +1422,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      className="group w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#FEE2E2] hover:border-[#DC2626]"
+                      className="group w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#FEE2E2] hover:border-[#DC2626]"
                     >
-                      <LogOut data-signout-icon data-no-contrast-guard className="w-3.5 h-3.5 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+                      <LogOut data-signout-icon data-no-contrast-guard className="w-5 h-5 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]" style={{ color: '#DC2626' }}>Sign Out</TooltipContent>
@@ -1432,8 +1432,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" data-no-contrast-guard className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
-                      <User className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+                    <Link to="/auth" data-no-contrast-guard className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
+                      <User className="w-5 h-5 text-[hsl(var(--gold))]" />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
@@ -1458,7 +1458,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-8 h-8 rounded-xl flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-9 h-9 rounded-xl flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}

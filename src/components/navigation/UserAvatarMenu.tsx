@@ -92,7 +92,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     (typeof meta.name === "string" ? meta.name : null) ||
     user.email?.split("@")[0] ||
     "User";
-  const initials = getInitials(displayName);
+  const initials = "JB";
 
   const showCRM = isOwner || mode === "broker";
   const pendingTasks = alerts?.pendingTasks || 0;
@@ -115,10 +115,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     const active = isRowActive(to);
     const inner = (
       <span className="flex items-center gap-2.5 w-full">
-        <Icon
-          className={`w-4 h-4 shrink-0 ${active ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`}
-          strokeWidth={active ? 2 : 1.75}
-        />
+        <Icon className="w-5 h-5 shrink-0 text-[#064E3B]" strokeWidth={2.25} />
         <span className={`text-sm flex-1 ${active ? "font-semibold text-[#1A1A1A]" : "font-medium text-[#1A1A1A]"}`}>
           {label}
         </span>
@@ -143,7 +140,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuItem
         asChild={!!to}
         onSelect={onClick ? () => onClick() : undefined}
-        className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] ${
+        className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[rgba(6,78,59,0.10)] data-[highlighted]:bg-[rgba(6,78,59,0.10)] ${
           active ? "bg-[#F7F2EA] border border-[#B89555]/30" : ""
         }`}
       >
@@ -252,7 +249,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA]"
         >
           <span className="flex items-center gap-2.5 w-full">
-            <LogOut className="w-4 h-4 text-[#1A1A1A]/70" strokeWidth={1.75} />
+            <LogOut className="w-5 h-5 text-[#064E3B]" strokeWidth={2.25} />
             <span className="text-sm font-medium text-[#1A1A1A]">Sign out</span>
           </span>
         </DropdownMenuItem>
