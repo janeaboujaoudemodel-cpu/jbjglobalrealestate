@@ -161,6 +161,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
+        data-account-menu-content
         align="end"
         sideOffset={12}
         className="z-[10100] w-[280px] p-2 rounded-xl border border-[#EFE6D6] bg-[#FDFBF7] shadow-2xl"
