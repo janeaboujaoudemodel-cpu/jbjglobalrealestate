@@ -41,6 +41,7 @@ export interface SidebarItemProps {
   iconClassName?: string;
   iconWrapperStyle?: React.CSSProperties;
   iconStyle?: React.CSSProperties;
+  iconWrapperData?: Record<`data-${string}`, unknown>;
   iconStrokeWidth?: number;
   iconData?: Record<`data-${string}`, unknown>;
   labelClassName?: string;
@@ -101,6 +102,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
       iconClassName,
       iconWrapperStyle,
       iconStyle,
+      iconWrapperData,
       iconStrokeWidth = 2.1,
       iconData,
       labelClassName,
@@ -117,6 +119,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
         {Icon && (
           <span
             data-jjds-sidebar-icon=""
+            {...iconWrapperData}
             className={cn(
               iconWrapperClassName
                 ? iconWrapperClassName
