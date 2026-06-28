@@ -1116,7 +1116,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
-                    className="w-full flex items-center gap-2.5 px-2.5 h-10 text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
+                    className="w-full flex items-center gap-2.5 px-2.5 min-h-[42px] text-[9.5px] uppercase tracking-[0.10em] leading-[1.18] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
                     iconWrapperData={{ 'data-emerald-icon-surface': true }}
                     iconWrapperClassName={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}
                     iconClassName="w-[18px] h-[18px] transition-colors"
@@ -1124,7 +1124,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     iconData={{ 'data-sidebar-section-icon': true }}
                     iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                     labelData={{ 'data-sidebar-section-label': true, 'data-no-contrast-guard': true }}
-                    labelClassName={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
+                    labelClassName={`flex-1 text-left relative inline-block whitespace-normal break-normal [word-break:normal] [overflow-wrap:normal] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     labelStyle={{
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',

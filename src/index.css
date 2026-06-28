@@ -18127,6 +18127,21 @@ html body #root [data-jj-utility-bar] .jj-avatar-metallic .jj-avatar-spinner {
   opacity: 1 !important;
 }
 
+html body #root [data-jj-utility-bar] {
+  min-height: 88px !important;
+  height: 88px !important;
+}
+
+html body #root [data-jj-utility-bar] .jj-avatar-metallic .jj-avatar-spinner {
+  filter: drop-shadow(0 0 4px rgba(184,149,85,0.28)) !important;
+}
+
+html body #root [data-chrome="sidebar"] [data-sidebar-section-label] {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: manual !important;
+}
+
 html body #root [data-jj-utility-bar] .jj-avatar-metallic span {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
