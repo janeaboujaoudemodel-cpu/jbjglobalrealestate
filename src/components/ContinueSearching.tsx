@@ -503,10 +503,15 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
         {/* Favorite button */}
         {item.type === "property" && (
-          <div className="absolute top-2 right-2 z-30 opacity-100 transition-opacity duration-200 overflow-visible" style={{ transform: "translateZ(30px)" }}>
-            <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
+          <div
+            className="absolute top-2 right-2 z-30 overflow-visible"
+            data-card-actions-overlay=""
+            style={{ transform: "translateZ(30px)" }}
+          >
+            <FavoriteButton projectId={item.id} showShortlist={false} size="md" />
           </div>
         )}
+
         {/* Bottom content — heavy opaque black plate guarantees project-name
             legibility over any image (light, dark, busy, washed out). */}
         <div className="absolute inset-x-0 bottom-0 h-[62%] z-10 bg-gradient-to-t from-black via-black/95 via-40% to-transparent pointer-events-none" />

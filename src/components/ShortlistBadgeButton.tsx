@@ -64,18 +64,21 @@ const ShortlistBadgeButton = ({
 
   const currentBadge = getBadge(projectId);
 
+  // Circular 44px control to visually match the header search/heart
+  // buttons and the FavoriteButton beside it. No elongated pill.
   const sizeClasses = {
-    sm: "h-7 px-2 text-xs",
-    md: "h-8 px-3 text-sm",
-    lg: "h-9 px-4 text-sm",
+    sm: "w-11 h-11",
+    md: "w-11 h-11",
+    lg: "w-12 h-12",
   };
 
   const iconSizes = {
-    sm: "w-3 h-3",
-    md: "w-4 h-4",
-    lg: "w-5 h-5",
+    sm: "w-[18px] h-[18px]",
+    md: "w-5 h-5",
+    lg: "w-[22px] h-[22px]",
   };
-  const actionClass = "jj-surface-emerald jj-favorite-trigger flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap";
+  const actionClass =
+    "jj-surface-emerald jj-favorite-trigger inline-flex items-center justify-center rounded-full aspect-square shrink-0 leading-none transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] overflow-hidden p-0";
 
   const handleSetBadge = (badge: ShortlistBadge | null) => {
     // Auto-add to shortlist if not already shortlisted
@@ -115,15 +118,22 @@ const ShortlistBadgeButton = ({
         <DropdownMenuTrigger asChild>
           <button
             onClick={(e) => e.stopPropagation()}
+            aria-label={currentBadge ? "Change badge" : "Add badge"}
             data-surface="emerald"
+            data-emerald="true"
             data-emerald-ok="button"
             data-card-action="badge-shortlist"
-            className={`${sizeClasses[size]} ${actionClass} ${className}`}
+            data-shortlist-button=""
+            className={`${sizeClasses[size]} ${actionClass}`}
           >
-            <Award className={iconSizes[size]} />
-            <span className="hidden sm:inline">{currentBadge ? "Change" : "Add Badge"}</span>
+            <Award
+              className={`${iconSizes[size]} allow-white`}
+              stroke="#FFFFFF"
+              style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+            />
           </button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuItem
             onClick={(e) => {

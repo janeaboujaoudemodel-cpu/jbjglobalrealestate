@@ -207,19 +207,20 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
       }
     >
-      {/* Top-Right: Favorite + Shortlist Buttons (stacked) — Always visible */}
-      <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5 opacity-100 transition-opacity duration-200" data-no-contrast-guard>
+      {/* Top-Right: Favorite + Shortlist Buttons (stacked) — visible on hover only via PASS 97 */}
+      <div
+        className="absolute top-3 right-3 z-20 flex flex-col gap-1.5"
+        data-no-contrast-guard
+        data-card-actions-overlay=""
+      >
         {showFavorite && (
-          <div>
-            <FavoriteButton projectId={project.id} size="sm" />
-          </div>
+          <FavoriteButton projectId={project.id} size="md" />
         )}
         {showBadgeButton && (
-          <div>
-            <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
-          </div>
+          <ShortlistBadgeButton projectId={project.id} size="md" showBadgeIndicator={true} />
         )}
       </div>
+
 
       {/* Owner edit affordance — top-right, below favorite stack. Owners only. */}
       <div className="absolute top-3 right-3 z-30" data-no-contrast-guard>
@@ -447,8 +448,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             data-emerald-ok="button"
             className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Email</span>
+            <Mail className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Email</span>
           </a>
           <a
             href={callHref}
@@ -458,8 +459,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             data-emerald-ok="button"
             className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Call</span>
+            <Phone className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Call</span>
           </a>
           <a
             href={whatsappHref}
@@ -469,8 +470,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             data-emerald-ok="button"
             className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Chat</span>
+            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Chat</span>
+
           </a>
         </div>
       </div>

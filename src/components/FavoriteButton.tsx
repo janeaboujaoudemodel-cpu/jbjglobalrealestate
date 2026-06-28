@@ -50,17 +50,20 @@ const FavoriteButton = ({
     ? userShortlist?.length || 0
     : guestShortlistCount;
 
+  // Match the horizontal-header circular controls (44px) so card icons
+  // never feel "compressed" against the header search/heart buttons.
   const sizeClasses = {
-    sm: "w-8 h-8",
-    md: "w-10 h-10",
+    sm: "w-11 h-11",
+    md: "w-11 h-11",
     lg: "w-12 h-12",
   };
 
   const iconSizes = {
-    sm: "w-4 h-4",
+    sm: "w-[18px] h-[18px]",
     md: "w-5 h-5",
-    lg: "w-6 h-6",
+    lg: "w-[22px] h-[22px]",
   };
+
 
   const actionClass = "jj-surface-emerald jj-emerald-action jj-favorite-trigger inline-flex items-center justify-center rounded-full aspect-square shrink-0 leading-none transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] overflow-hidden p-0";
   const emeraldIconStyle = {
