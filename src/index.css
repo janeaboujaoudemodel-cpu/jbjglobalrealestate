@@ -17103,3 +17103,16 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
     display: none !important;
   }
 }
+
+/* =====================================================================
+   PASS 59 — DESKTOP SCROLL ROOT LOCK
+   The browser document (HTML) is the only vertical page scroller. Do not let
+   PageShell's Tailwind `overflow-x-hidden` compute into `overflow-y:auto`,
+   because that creates a competing page-sized scroller and blocks/inconsistently
+   absorbs real wheel/trackpad input on desktop.
+   ===================================================================== */
+html body #root .jj-page-shell {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  overscroll-behavior-y: auto !important;
+}
