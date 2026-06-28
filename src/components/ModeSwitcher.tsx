@@ -295,16 +295,18 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               const isActive = mode === modeKey;
               const isHovered = hoveredMode === modeKey;
 
+              const rowIsEmerald = isActive || isHovered;
+              const rowTextColor = rowIsEmerald ? '#FFFFFF' : config.dark;
               const rowStyle: CSSProperties = {
-                backgroundImage: isActive
-                  ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
-                  : isHovered
-                  ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
+                backgroundImage: rowIsEmerald
+                  ? 'var(--jj-emerald-ombre)'
                   : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
-                borderColor: config.base,
-                color: config.dark,
+                borderColor: rowIsEmerald ? 'transparent' : config.base,
+                color: rowTextColor,
                 boxShadow: isActive
-                  ? `inset 3px 0 0 ${config.base}, 0 0 0 1px ${config.base}`
+                  ? '0 10px 24px -16px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.12)'
+                  : rowIsEmerald
+                  ? '0 10px 24px -18px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.12)'
                   : `inset 3px 0 0 ${config.base}`,
                 transform: 'none',
               };
@@ -336,34 +338,34 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       the global white-icon contrast guard since the badge is dark. */}
                   <div
                     data-no-contrast-guard
-                    data-on-dark={config.surface === 'gold' ? undefined : 'true'}
+                    data-on-dark={rowIsEmerald || config.surface !== 'gold' ? 'true' : undefined}
                     data-mode-icon-tile={config.surface}
                     className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0 allow-white"
                     style={{
                       '--mode-base': config.base,
                       '--mode-base-dark': config.baseDark,
                       '--mode-on-base': config.onBase,
-                      backgroundImage: `linear-gradient(135deg, ${config.base} 0%, ${config.baseDark} 100%)`,
-                      boxShadow: `0 0 0 1px ${config.base}, 0 2px 6px rgba(0,0,0,0.18)`,
+                      backgroundImage: rowIsEmerald ? 'linear-gradient(135deg, #042F22 0%, #064E3B 100%)' : `linear-gradient(135deg, ${config.base} 0%, ${config.baseDark} 100%)`,
+                      boxShadow: rowIsEmerald ? 'inset 0 1px 0 rgba(255,255,255,0.18)' : `0 0 0 1px ${config.base}, 0 2px 6px rgba(0,0,0,0.18)`,
                     } as CSSProperties}
                   >
                     <Icon
                       data-no-contrast-guard
-                      data-on-dark={config.surface === 'gold' ? undefined : 'true'}
+                      data-on-dark={rowIsEmerald || config.surface !== 'gold' ? 'true' : undefined}
                       className="mode-switcher-icon w-[18px] h-[18px] allow-white"
-                      style={{ color: config.onBase, stroke: config.onBase }}
+                      style={{ color: rowIsEmerald ? '#FFFFFF' : config.onBase, stroke: rowIsEmerald ? '#FFFFFF' : config.onBase }}
                       strokeWidth={2}
                     />
                   </div>
 
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-bold leading-tight break-words" style={{ color: config.dark }}>
+                    <p className="text-[13px] font-bold leading-tight break-words" style={{ color: rowTextColor, WebkitTextFillColor: rowTextColor }}>
                       {config.label}
                     </p>
                     <p
                       className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
-                      style={{ color: config.dark }}
+                      style={{ color: rowTextColor, WebkitTextFillColor: rowTextColor }}
                     >
                       {config.description}
                     </p>

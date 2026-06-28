@@ -18199,13 +18199,13 @@ html body [data-jbj-notification-badge] {
   -webkit-text-fill-color: #FFFFFF !important;
   border: 1px solid #FDFBF7 !important;
 }
-html body :is([role="menuitem"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"]):not([data-no-emerald-hover]) {
+html body :is([role="menuitem"], [role="option"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body :is([role="menuitem"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"]):not([data-no-emerald-hover]) :is(span, svg, path, circle, rect, line, polyline, polygon) {
+html body :is([role="menuitem"], [role="option"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) :is(span, svg, path, circle, rect, line, polyline, polygon) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
