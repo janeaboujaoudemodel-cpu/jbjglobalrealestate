@@ -38,6 +38,7 @@ export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
   ),
 );
 JbjAvatar.displayName = "JbjAvatar";
+export const HeaderAvatar = JbjAvatar;
 
 export interface NotificationBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   count: number;
@@ -53,7 +54,7 @@ export function NotificationBadge({ count, floating = false, className, ...props
       data-surface="emerald"
       data-no-contrast-guard
       className={cn(
-        "allow-white inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-extrabold leading-none text-white shadow-[0_6px_14px_-8px_rgba(0,0,0,0.75)]",
+        "allow-white inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-extrabold leading-none text-white shadow-[0_8px_18px_-9px_rgba(0,0,0,0.8)]",
         floating && "absolute -right-1 -top-1 z-[3]",
         className,
       )}
