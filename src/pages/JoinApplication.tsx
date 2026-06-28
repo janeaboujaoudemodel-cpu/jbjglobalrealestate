@@ -801,27 +801,26 @@ export default function JoinApplication() {
           {!positionsLoading && openPositions.length > 0 && (
             <Card
               id="open-positions"
-              data-no-contrast-guard
+              data-surface="emerald"
               className="careers-card-navy mb-8 rounded-2xl scroll-mt-24 overflow-hidden"
             >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
               <CardHeader className="pt-9 pb-5 relative z-[1]">
                 <div className="flex items-end justify-between flex-wrap gap-4">
                   <div className="min-w-0">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white mb-2">
+                    <span data-careers-emerald-label className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full border border-white/35 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white mb-2">
                       <Briefcase className="w-3 h-3 text-white" /> Live Roles
                     </span>
-                    <CardTitle className="text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
+                    <CardTitle data-careers-emerald-title className="text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
                       Open Positions
                     </CardTitle>
-                    <CardDescription className="text-white/80 font-medium mt-1.5">
+                    <CardDescription data-careers-emerald-subtitle className="text-white/85 font-medium mt-1.5">
                       Tap <strong className="text-white font-semibold">Apply</strong> on any role to auto-select it in the form below.
                     </CardDescription>
                   </div>
                   <Badge
                     data-surface="emerald"
                     data-allow-dark-cta
-                    data-no-contrast-guard
                     className="jj-cta-emerald jj-pill-emerald-metallic inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 self-start sm:self-end text-[12px] font-semibold border border-[#B89555]/70"
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
@@ -829,7 +828,7 @@ export default function JoinApplication() {
                   </Badge>
                 </div>
                 <div className="relative mt-5">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#0A0A0A] z-10 pointer-events-none" strokeWidth={2.5} />
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#1A1A1A] z-10 pointer-events-none" strokeWidth={2.25} />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
