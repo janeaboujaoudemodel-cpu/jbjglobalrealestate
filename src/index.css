@@ -19262,3 +19262,27 @@ html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root
   text-shadow: none !important;
   filter: none !important;
 }
+
+
+/* PASS 84 — COMPONENT-SAFE CONTRAST REPAIRS.
+   Do not let older broad page/light rules repaint dark heroes, dark investor
+   cards, or CRM emerald controls. Keep this as the last rule. */
+:where(.jj-hero-fullscreen, [data-hero-dark], [data-surface="dark"], .bg-\[\#1A1A1A\], .bg-black) :where(h1,h2,h3,h4,p,span,a,button,label,svg,[class*="lucide"],path,line,polyline,circle,rect) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+:where(.bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\], .surface-champagne, .surface-light, [data-surface="champagne"], [data-surface="light"]) :where(h1,h2,h3,h4,p,span,a,button,label,svg,[class*="lucide"],path,line,polyline,circle,rect) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  fill: none !important;
+}
+:where(.jj-surface-emerald, .jj-cta-dark, .jj-cta-primary, [data-cta="dark"], [data-cta="primary"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) :where(h1,h2,h3,h4,p,span,a,button,label,svg,[class*="lucide"],path,line,polyline,circle,rect),
+:where(.jj-surface-emerald, .jj-cta-dark, .jj-cta-primary, [data-cta="dark"], [data-cta="primary"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
