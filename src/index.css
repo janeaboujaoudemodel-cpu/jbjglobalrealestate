@@ -17776,3 +17776,185 @@ body :where(.filter, [class*="filter" i], [data-filter], .jj-search, [data-searc
   stroke: currentColor !important;
 }
 
+/* =====================================================================
+   JBJ FINAL SHARED DESIGN SYSTEM LOCK — surface-aware primitives only
+   Fixes legacy late rules that repainted emerald controls black and light
+   cards white. This is intentionally scoped to shared surfaces/controls,
+   not page backgrounds or one-off screenshots.
+   ===================================================================== */
+
+/* Emerald/dark action surfaces: pure white foreground at rest/hover/active. */
+body :where(
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-on-dark], [data-hero-dark], [data-emerald-action], [data-emerald-action="true"],
+  [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"], [data-cta="primary"], [data-cta="dark"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
+  .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-emerald-metallic,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
+  .jj-side-tile, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle],
+  [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"]
+),
+body :where(
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-on-dark], [data-hero-dark], [data-emerald-action], [data-emerald-action="true"],
+  [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"], [data-cta="primary"], [data-cta="dark"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
+  .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-emerald-metallic,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
+  .jj-side-tile, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle],
+  [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"]
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="champagne"] *, [data-surface="light"] *, [data-surface="page"] *, [data-surface="cream"] *, .surface-champagne *, .surface-light *, .surface-page *)) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+}
+
+body :where(
+  [data-surface="emerald"], [data-emerald-action], [data-emerald-action="true"],
+  [data-cta="primary"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
+  [data-icon-tile-tone="emerald"], [data-emerald-icon-surface], .jj-side-tile
+):where(:hover,:focus-visible,:active,[data-state="open"],[data-state="active"],[data-selected="true"],[aria-selected="true"]),
+body :where(
+  [data-surface="emerald"], [data-emerald-action], [data-emerald-action="true"],
+  [data-cta="primary"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
+  [data-icon-tile-tone="emerald"], [data-emerald-icon-surface], .jj-side-tile
+):where(:hover,:focus-visible,:active,[data-state="open"],[data-state="active"],[data-selected="true"],[aria-selected="true"]) :where(*) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Never use black or blue fills for shared buttons; convert them to emerald CTAs only. */
+body :where(button, a[role="button"], [data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action):where([class*="bg-black"], [class*="bg-blue-"], [class*="from-blue-"], [class*="to-blue-"]) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Champagne / pearl / beige / white components: charcoal text and emerald icons, including hover/selected. */
+body :where(
+  [data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="pearl"],
+  .surface-champagne, .surface-light, .surface-cream, .surface-page, .surface-raised, .surface-pearl,
+  .jj-card-champagne, .jj-surface-champagne, .jj-section-champagne, .bg-popover
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select):not(:where([data-surface="emerald"], [data-surface="dark"], [data-on-dark], [data-hero-dark], [data-cta="primary"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald, [data-emerald-icon-surface], [data-surface="emerald"] *, [data-surface="dark"] *, [data-on-dark] *, [data-hero-dark] *, [data-cta="primary"] *, .jj-cta-primary *, .jj-cta-emerald *, .jj-emerald-action *, .jj-pill-emerald *, .jj-pill-emerald-metallic *, .jj-chip-emerald *, .jj-icon-tile-emerald *, [data-emerald-icon-surface] *)) {
+  color: var(--jbj-ink) !important;
+  -webkit-text-fill-color: var(--jbj-ink) !important;
+  text-shadow: none !important;
+}
+
+body :where(
+  [data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="pearl"],
+  .surface-champagne, .surface-light, .surface-cream, .surface-page, .surface-raised, .surface-pearl,
+  .jj-card-champagne, .jj-surface-champagne, .jj-section-champagne, .bg-popover
+) :where(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"] *, [data-surface="dark"] *, [data-on-dark] *, [data-hero-dark] *, [data-cta="primary"] *, .jj-cta-primary *, .jj-cta-emerald *, .jj-emerald-action *, .jj-pill-emerald *, .jj-pill-emerald-metallic *, .jj-chip-emerald *, .jj-icon-tile-emerald *, [data-emerald-icon-surface] *)) {
+  color: var(--jbj-emerald) !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
+
+/* Button sizing: natural width, readable height, no label clipping; segmented sq unit remains compact. */
+body :where([data-jbj-button], button, a[role="button"]):not(:where(.jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [data-radix-collection-item])) {
+  min-height: 44px !important;
+  min-width: 0 !important;
+  width: auto;
+  white-space: normal !important;
+  line-height: 1.18 !important;
+  overflow: visible !important;
+}
+
+body :where(.jj-header-icon-control) {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+}
+
+body :where(.jj-header-selector-control) {
+  min-height: 44px !important;
+  height: 44px !important;
+  width: auto !important;
+  padding-inline: 16px !important;
+  border-radius: 999px !important;
+}
+
+body :where([data-jj-utility-pill]) {
+  height: 36px !important;
+  min-height: 36px !important;
+}
+
+body :where(.jj-sqtoggle, [data-jj-utility-pill] button) {
+  height: 100% !important;
+  min-height: 100% !important;
+  min-width: 0 !important;
+  padding-inline: 12px !important;
+  border-radius: 999px !important;
+}
+
+/* Sidebar rhythm: equal readable tiles/icons in expanded and collapsed rails. */
+body :where([data-sidebar-highlight-tile], [data-emerald-icon-surface], .jj-side-tile) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+}
+
+body :where(.jj-side-tile) {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 12px !important;
+}
+
+body :where([data-sidebar-highlight-tile], [data-sidebar-section] [data-emerald-icon-surface], [data-sidebar-subitem] [data-emerald-icon-surface]) {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 10px !important;
+}
+
+body :where(.jj-side-tile, [data-sidebar-highlight-tile], [data-sidebar-section] [data-emerald-icon-surface], [data-sidebar-subitem] [data-emerald-icon-surface]) :where(svg,[class*="lucide"],[data-lucide]) {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  stroke-width: 2.25 !important;
+}
+
+/* FAQ / accordion alignment and active icon contrast. */
+body :where([data-radix-accordion-trigger], .faq-trigger, [data-faq-trigger]) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  text-align: left !important;
+}
+
+body :where([data-radix-accordion-trigger], .faq-trigger, [data-faq-trigger]) > :where(svg,[class*="lucide"]) {
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 20px !important;
+  color: var(--jbj-emerald) !important;
+  stroke: currentColor !important;
+}
+
+body :where([data-radix-accordion-trigger][data-state="open"], .faq-trigger[data-state="open"], [data-faq-trigger][data-state="open"]) > :where(svg,[class*="lucide"]) {
+  color: var(--jbj-emerald) !important;
+  stroke: currentColor !important;
+}
+
