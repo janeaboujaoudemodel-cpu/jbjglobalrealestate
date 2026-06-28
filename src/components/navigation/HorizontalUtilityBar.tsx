@@ -1,16 +1,16 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, Heart } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 
-import { useUserMode } from "@/hooks/useUserMode";
 import { useAuth } from "@/contexts/AuthContext";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import UserAvatarMenu from "@/components/navigation/UserAvatarMenu";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import { HeaderControl, HeaderSegmented } from "@/components/ui/ds/HeaderControl";
 
 /** Encode filter state into URLSearchParams */
 function encodeFiltersToURL(f: ShortcutFilterState): URLSearchParams {
