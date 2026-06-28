@@ -10,7 +10,7 @@ const allBooks = INVESTOR_BOOKS.filter(
 
 export default function HomepageBookMarquee() {
   return (
-    <section className="jj-fullbleed-band bg-[#F7F2EA] py-10 md:py-14" data-fullbleed-band>
+    <section className="jj-bleed-allow jj-fullbleed-band bg-[#F7F2EA] py-10 md:py-14" data-fullbleed-band>
       {/* Header — padded */}
       <div className="jj-bleed-allow"><ContentTrack>
         <div className="flex items-center justify-between mb-6">
