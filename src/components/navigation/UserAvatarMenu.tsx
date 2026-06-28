@@ -116,8 +116,15 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     const active = isRowActive(to);
     const inner = (
       <span className="flex items-center gap-2.5 w-full">
-        <Icon className="w-5 h-5 shrink-0 text-[#064E3B]" strokeWidth={2.25} />
-        <span className={`text-sm flex-1 ${active ? "font-semibold text-[#1A1A1A]" : "font-medium text-[#1A1A1A]"}`}>
+        <Icon
+          className="w-5 h-5 shrink-0"
+          strokeWidth={2.25}
+          style={{ color: active ? "#FFFFFF" : "#1A1A1A", stroke: active ? "#FFFFFF" : "#1A1A1A" }}
+        />
+        <span
+          className={`text-sm flex-1 ${active ? "font-semibold" : "font-medium"}`}
+          style={{ color: active ? "#FFFFFF" : "#1A1A1A", WebkitTextFillColor: active ? "#FFFFFF" : "#1A1A1A" }}
+        >
           {label}
         </span>
         {badge && badge > 0 ? (
