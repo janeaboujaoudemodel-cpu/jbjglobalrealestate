@@ -18112,3 +18112,15 @@ html body #root [data-jj-utility-bar] :is(
   text-shadow: none !important;
 }
 
+
+/* ── Avatar metallic spinner shine (Header JB) ───────────────── */
+@keyframes jj-avatar-shine-rotate {
+  to { transform: rotate(360deg); }
+}
+.jj-avatar-spinner {
+  animation: jj-avatar-shine-rotate 6s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-avatar-spinner { animation: none; }
+}
