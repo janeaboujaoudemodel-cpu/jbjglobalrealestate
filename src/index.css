@@ -18163,6 +18163,7 @@ html body [data-jbj-avatar].jj-avatar-metallic {
   filter: saturate(1.08) contrast(1.05) !important;
 }
 html body [data-jbj-avatar] .jj-avatar-core {
+  z-index: 0 !important;
   background:
     radial-gradient(120% 120% at 24% 16%, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 23%),
     radial-gradient(120% 120% at 30% 18%, #0B6B4E 0%, #064E3B 38%, #042F22 72%, #07130E 100%) !important;
@@ -18182,6 +18183,11 @@ html body [data-jbj-avatar] .jj-avatar-core::after {
   pointer-events: none;
 }
 html body [data-jbj-avatar] .jj-avatar-spinner {
+  inset: 0 !important;
+  z-index: 2 !important;
+  display: block !important;
+  border-radius: inherit !important;
+  overflow: hidden !important;
   background-color: transparent !important;
   background-image:
     linear-gradient(115deg,
@@ -18196,9 +18202,11 @@ html body [data-jbj-avatar] .jj-avatar-spinner {
       rgba(3,20,15,0.00) 100%) !important;
   background-size: 220% 100% !important;
   background-repeat: no-repeat !important;
-  -webkit-mask: radial-gradient(circle, transparent 62%, #000 64%, #000 78%, transparent 80%) !important;
-  mask: radial-gradient(circle, transparent 62%, #000 64%, #000 78%, transparent 80%) !important;
-  filter: drop-shadow(0 0 4px rgba(16,185,129,0.26)) saturate(1.4) contrast(1.12) !important;
+  -webkit-mask: radial-gradient(circle, transparent 0 66%, #000 68%, #000 91%, transparent 93%) !important;
+  mask: radial-gradient(circle, transparent 0 66%, #000 68%, #000 91%, transparent 93%) !important;
+  mix-blend-mode: screen !important;
+  opacity: 1 !important;
+  filter: saturate(1.4) contrast(1.12) !important;
   animation: jj-sqtoggle-fast-3d-metal 1.15s linear infinite !important;
   will-change: background-position !important;
 }
