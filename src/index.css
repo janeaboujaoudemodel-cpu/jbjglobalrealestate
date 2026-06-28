@@ -18161,8 +18161,6 @@ html body [data-jbj-avatar].jj-avatar-metallic {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   filter: saturate(1.08) contrast(1.05) !important;
-  overflow: hidden !important;
-  isolation: isolate !important;
 }
 html body [data-jbj-avatar] .jj-avatar-core {
   background:
@@ -18184,10 +18182,6 @@ html body [data-jbj-avatar] .jj-avatar-core::after {
   pointer-events: none;
 }
 html body [data-jbj-avatar] .jj-avatar-spinner {
-  inset: 0 !important;
-  z-index: 2 !important;
-  border-radius: inherit !important;
-  pointer-events: none !important;
   background-color: transparent !important;
   background-image:
     linear-gradient(115deg,
@@ -18202,17 +18196,13 @@ html body [data-jbj-avatar] .jj-avatar-spinner {
       rgba(3,20,15,0.00) 100%) !important;
   background-size: 220% 100% !important;
   background-repeat: no-repeat !important;
-  -webkit-mask: radial-gradient(circle, transparent 48%, #000 52%, #000 73%, transparent 77%) !important;
-  mask: radial-gradient(circle, transparent 48%, #000 52%, #000 73%, transparent 77%) !important;
-  mix-blend-mode: screen !important;
-  opacity: 0.98 !important;
-  filter: saturate(1.4) contrast(1.12) !important;
+  -webkit-mask: radial-gradient(circle, transparent 62%, #000 64%, #000 78%, transparent 80%) !important;
+  mask: radial-gradient(circle, transparent 62%, #000 64%, #000 78%, transparent 80%) !important;
+  filter: drop-shadow(0 0 4px rgba(16,185,129,0.26)) saturate(1.4) contrast(1.12) !important;
   animation: jj-sqtoggle-fast-3d-metal 1.15s linear infinite !important;
   will-change: background-position !important;
 }
 html body [data-jbj-avatar] span {
-  position: relative !important;
-  z-index: 3 !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 1px 2px rgba(0,0,0,0.72) !important;
