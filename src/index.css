@@ -17122,3 +17122,45 @@ html body #root .jj-page-shell {
   overflow-y: visible !important;
   overscroll-behavior-y: auto !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   ULTIMATE DROPDOWN HOVER LOCK (winning rule)
+   Standardize ALL Radix dropdowns/menus/selects/popovers to a
+   soft-emerald hover with emerald ink text. No dark gradients,
+   no pure-white text repaint, no opacity flicker.
+   ════════════════════════════════════════════════════════════════ */
+html body [data-radix-popper-content-wrapper]
+  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]),
+html body [data-radix-popper-content-wrapper]
+  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]) * {
+  background-color: var(--emerald-soft-bg, #E8F2EC) !important;
+  background-image: none !important;
+  color: var(--emerald-1, #064E3B) !important;
+  -webkit-text-fill-color: var(--emerald-1, #064E3B) !important;
+  stroke: var(--emerald-1, #064E3B) !important;
+}
+/* Re-allow dark-surface dropdowns to keep white text on hover */
+html body [data-radix-popper-content-wrapper] [data-on-dark]
+  :is([role="menuitem"],[role="option"]):is(:hover,[data-highlighted]),
+html body [data-radix-popper-content-wrapper] [data-on-dark]
+  :is([role="menuitem"],[role="option"]):is(:hover,[data-highlighted]) * {
+  background-color: rgba(255,255,255,0.10) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FULL-BLEED BAND — must respect the fixed vertical sidebar.
+   When the sidebar is mounted (data-sidebar-mounted on <html> or
+   <body>), full-bleed bands extend from the sidebar's right edge to
+   the viewport right edge — never behind the sidebar.
+   ════════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  html body main .jj-fullbleed-band,
+  html body main [data-fullbleed-band] {
+    width: auto !important;
+    margin-left: calc(-1 * var(--jj-content-gutter-l, 0px)) !important;
+    margin-right: calc(-1 * var(--jj-content-gutter-r, 0px)) !important;
+    max-width: none !important;
+  }
+}
