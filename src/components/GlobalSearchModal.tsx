@@ -475,19 +475,24 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             onClick={onClose}
           />
 
-          {/* Modal — viewport-safe, never clipped on any device */}
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.12, ease: "easeOut" }}
-            className="fixed z-[10001] left-1/2 -translate-x-1/2 top-[12px] sm:top-[56px]"
+          {/* Modal — viewport-safe, never clipped on any device.
+              NOTE: outer wrapper handles fixed centering so framer-motion's transform
+              cannot override our translate. Inner motion.div animates opacity/y only. */}
+          <div
+            className="fixed z-[10001] top-[12px] sm:top-[56px] left-1/2"
             style={{
               width: "min(48rem, calc(100vw - 24px))",
-              maxHeight: "calc(100dvh - 80px)",
+              transform: "translateX(-50%)",
             }}
           >
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.12, ease: "easeOut" }}
+              style={{ maxHeight: "calc(100dvh - 80px)" }}
+            >
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-[#B89555]/30 flex-shrink-0">
                 <IconTile icon={Search} tone="emerald" size="sm" className="absolute left-4 top-1/2 -translate-y-1/2" />
