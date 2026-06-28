@@ -17286,7 +17286,6 @@ html body h6.jj-title-emerald * {
    ===================================================================== */
 html body #root#root#root :is(
   .jj-surface-emerald,
-  .jj-surface-emerald-soft,
   .jj-cta-primary,
   .jj-cta-emerald,
   .jj-emerald-action,
@@ -17306,7 +17305,6 @@ html body #root#root#root :is(
   [data-cta="primary"],
   [data-emerald="true"],
   [data-emerald-filled],
-  [data-emerald-card],
   [data-emerald-band],
   [data-emerald-icon-surface],
   [data-icon-tile-tone="emerald"],
@@ -17351,7 +17349,6 @@ html body #root#root#root :is(
 ):not([data-ink-emerald-opt-out]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="raised"]):not([data-surface="gold"]),
 html body #root#root#root :is(
   .jj-surface-emerald,
-  .jj-surface-emerald-soft,
   .jj-cta-primary,
   .jj-cta-emerald,
   .jj-emerald-action,
@@ -17371,7 +17368,6 @@ html body #root#root#root :is(
   [data-cta="primary"],
   [data-emerald="true"],
   [data-emerald-filled],
-  [data-emerald-card],
   [data-emerald-band],
   [data-emerald-icon-surface],
   [data-icon-tile-tone="emerald"],
@@ -17425,7 +17421,6 @@ html body #root#root#root :is(
 
 html body #root#root#root :is(
   .jj-surface-emerald,
-  .jj-surface-emerald-soft,
   .jj-cta-primary,
   .jj-cta-emerald,
   .jj-emerald-action,
@@ -17445,7 +17440,6 @@ html body #root#root#root :is(
   [data-cta="primary"],
   [data-emerald="true"],
   [data-emerald-filled],
-  [data-emerald-card],
   [data-emerald-band],
   [data-emerald-icon-surface],
   [data-icon-tile-tone="emerald"],
@@ -17499,7 +17493,6 @@ html body #root#root#root :is(
 
 html body #root#root#root :is(
   .jj-surface-emerald,
-  .jj-surface-emerald-soft,
   .jj-cta-primary,
   .jj-cta-emerald,
   .jj-emerald-action,
@@ -17519,7 +17512,6 @@ html body #root#root#root :is(
   [data-cta="primary"],
   [data-emerald="true"],
   [data-emerald-filled],
-  [data-emerald-card],
   [data-emerald-band],
   [data-emerald-icon-surface],
   [data-icon-tile-tone="emerald"],
@@ -17568,7 +17560,6 @@ html body #root#root#root :is(
 
 html body #root#root#root :is(
   .jj-surface-emerald,
-  .jj-surface-emerald-soft,
   .jj-cta-primary,
   .jj-cta-emerald,
   .jj-emerald-action,
@@ -17588,7 +17579,6 @@ html body #root#root#root :is(
   [data-cta="primary"],
   [data-emerald="true"],
   [data-emerald-filled],
-  [data-emerald-card],
   [data-emerald-band],
   [data-emerald-icon-surface],
   [data-icon-tile-tone="emerald"],
