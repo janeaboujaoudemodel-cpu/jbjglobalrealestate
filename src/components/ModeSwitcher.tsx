@@ -344,6 +344,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   data-no-contrast-guard
                   data-no-emerald-hover
                   data-mode-row={isEmerald ? 'active' : 'idle'}
+                  {...(isEmerald ? { 'data-surface': 'emerald', 'data-emerald-action': 'true', 'data-on-dark': 'true' } : {})}
                   className={cn(
                     "mode-switcher-item",
                     "relative flex items-start gap-3 pl-4 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-150 border w-full",
