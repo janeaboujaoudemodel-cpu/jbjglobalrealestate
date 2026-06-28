@@ -812,37 +812,37 @@ export default function JoinApplication() {
             >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
               <CardHeader className="pt-9 pb-8 relative z-[1]">
-                <div className="flex items-end justify-between flex-wrap gap-4">
-                  <div className="min-w-0">
-                    <span
-                      data-careers-emerald-label
-                      data-surface="emerald"
-                      data-allow-dark-cta
-                      data-no-contrast-guard
-                      className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex h-7 items-center gap-1.5 rounded-full border border-[#B89555]/70 px-3 text-[10px] font-bold uppercase tracking-[0.22em] mb-2"
-                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                    >
-                      <Briefcase className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Live Roles
-                    </span>
-                    <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
-                      Open Positions
-                    </CardTitle>
-                    <CardDescription data-careers-emerald-subtitle data-no-contrast-guard className="allow-white text-white font-medium mt-1.5">
-                      Tap <strong data-no-contrast-guard className="allow-white text-white font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Apply</strong> on any role to auto-select it in the form below.
-                    </CardDescription>
-                  </div>
-                  <Badge
+                <div className="min-w-0">
+                  <span
+                    data-careers-emerald-label
                     data-surface="emerald"
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    data-open-positions-count
-                    data-careers-primary-pill
-                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 self-start sm:self-end text-[12px] font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex h-7 items-center gap-1.5 rounded-full border border-[#B89555]/70 px-3 text-[10px] font-bold uppercase tracking-[0.22em] mb-2"
                     style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
-                    <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-                    <span>{filteredPositions.length} Open Positions</span>
-                  </Badge>
+                    <Briefcase className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Live Roles
+                  </span>
+                  <div className="flex items-center flex-wrap gap-x-4 gap-y-2">
+                    <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
+                      Open Positions
+                    </CardTitle>
+                    <Badge
+                      data-surface="emerald"
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      data-open-positions-count
+                      data-careers-primary-pill
+                      className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-[12px] font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
+                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                      <span>{filteredPositions.length} Open Positions</span>
+                    </Badge>
+                  </div>
+                  <CardDescription data-careers-emerald-subtitle data-no-contrast-guard className="allow-white text-white font-medium mt-1.5">
+                    Tap <strong data-no-contrast-guard className="allow-white text-white font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Apply</strong> on any role to auto-select it in the form below.
+                  </CardDescription>
                 </div>
                 <div className="relative mt-8">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#1A1A1A] z-10 pointer-events-none" strokeWidth={2.25} />
