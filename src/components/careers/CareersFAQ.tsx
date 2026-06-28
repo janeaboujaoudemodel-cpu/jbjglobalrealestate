@@ -34,7 +34,7 @@ export function CareersFAQ() {
 
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto" data-surface="champagne">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]">
             <HelpCircle className="h-3 w-3 text-[#B89555]" /> Frequently Asked
@@ -71,12 +71,11 @@ export function CareersFAQ() {
                 >
                   <span className={cn("text-base font-semibold leading-snug", open ? "text-[#1A1A1A]" : "text-[#1A1A1A]")}>{f.q}</span>
                   <span
-                    data-allow-dark-cta
-                    data-no-contrast-guard
+                    data-surface={open ? "emerald" : "champagne"}
                     className={cn(
-                      "allow-white grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+                      "grid h-10 w-10 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
                       open
-                        ? "border-[#047857] bg-[image:var(--jj-emerald-ombre)] shadow-[0_12px_22px_-12px_rgba(6,78,59,0.45)]"
+                        ? "allow-white border-transparent bg-[image:var(--jj-emerald-ombre)] shadow-[0_12px_22px_-12px_rgba(6,78,59,0.45)]"
                         : "border-[#047857]/40 bg-[#F7F2EA]"
                     )}
                   >
@@ -84,13 +83,10 @@ export function CareersFAQ() {
                       <CircleDot
                         className="h-4 w-4 allow-white"
                         style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
-                        data-allow-dark-cta
-                        data-no-contrast-guard
                       />
                     ) : (
                       <ChevronDown
                         className="h-4 w-4"
-                        data-no-contrast-guard
                         style={{ color: "#047857", stroke: "#047857", opacity: 1 }}
                         strokeWidth={2.5}
                       />

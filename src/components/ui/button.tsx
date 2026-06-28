@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 // PRIMARY: locked JBJ Emerald gradient with white foreground.
 // Contrast is locked globally by .jj-cta-* primitives in index.css.
 const BRAND_PRIMARY =
-  "jj-cta-primary jj-cta-emerald allow-white shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)] hover:-translate-y-0.5 active:translate-y-0";
+  "jj-cta-primary jj-cta-emerald allow-white border-transparent shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)] hover:-translate-y-0.5 active:translate-y-0";
 
 // SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
@@ -32,7 +32,7 @@ const BRAND_GOLD =
 
 // HERO: transparent with white border on dark images (dark hero overlays)
 const BRAND_HERO =
-  "surface-dark bg-transparent text-white border-2 border-white/60 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-white/10 hover:text-white hover:border-white hover:-translate-y-0.5 active:translate-y-0";
+  "surface-dark bg-transparent text-white border-2 border-white/45 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-white/10 hover:text-white hover:border-white/70 hover:-translate-y-0.5 active:translate-y-0";
 
 const BRAND_MEDIA = BRAND_HERO;
 
@@ -51,7 +51,7 @@ const DARK_SURFACE_VARIANTS = new Set(["hero", "media", "dark", "dark-ghost", "d
 const LIGHT_CTA_VARIANTS = new Set(["primary", "secondary", "tertiary", "gold", "default", "destructive", "outline", "ghost", "link"]);
 
 const buttonVariants = cva(
-  "inline-flex min-h-11 items-center justify-center text-center gap-2 whitespace-normal [word-break:normal] rounded-xl text-sm font-semibold leading-[1.15] ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em] min-w-0 max-w-full",
+  "inline-flex min-h-11 items-center justify-center text-center gap-2 whitespace-normal [word-break:normal] rounded-xl text-sm font-semibold leading-[1.25] ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em] min-w-0 max-w-full overflow-visible",
   {
     variants: {
       variant: {
@@ -94,10 +94,10 @@ const buttonVariants = cva(
         "dark-outline": DARK_OUTLINE,
       },
       size: {
-        default: "h-11 px-6 py-2.5",
-        sm: "h-10 rounded-xl px-4",
-        lg: "h-12 rounded-xl px-8 text-base",
-        icon: "h-11 w-11 !translate-y-0 hover:!translate-y-0 active:!translate-y-0",
+        default: "min-h-11 px-6 py-2.5",
+        sm: "min-h-10 rounded-xl px-4 py-2",
+        lg: "min-h-12 rounded-xl px-8 py-3 text-base",
+        icon: "h-11 w-11 min-w-11 p-0 !translate-y-0 hover:!translate-y-0 active:!translate-y-0",
       },
     },
     defaultVariants: {
@@ -139,7 +139,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-cta={cta}
         ref={ref}
         {...props}
-        style={{ color: isPrimaryCta ? "#FFFFFF" : undefined, ...(props.style ?? {}) }}
+        style={{ ...(props.style ?? {}), color: isPrimaryCta ? "#FFFFFF" : props.style?.color, WebkitTextFillColor: isPrimaryCta ? "#FFFFFF" : (props.style as React.CSSProperties | undefined)?.WebkitTextFillColor }}
       />
     );
   },

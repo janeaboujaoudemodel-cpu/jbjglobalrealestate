@@ -43,10 +43,10 @@ const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
 };
 
 const SIZE: Record<IconTileSize, { box: string; icon: string }> = {
-  sm: { box: "w-9 h-9 rounded-xl",   icon: "w-4 h-4" },
+  sm: { box: "w-9 h-9 rounded-xl", icon: "w-4 h-4" },
   md: { box: "w-11 h-11 rounded-xl", icon: "w-5 h-5" },
   lg: { box: "w-12 h-12 rounded-xl", icon: "w-5 h-5" },
-  xl: { box: "w-16 h-16 rounded-2xl",icon: "w-7 h-7" },
+  xl: { box: "w-16 h-16 rounded-2xl", icon: "w-7 h-7" },
 };
 
 interface IconTileProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -76,9 +76,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         el.style.setProperty("stroke-opacity", "1", "important");
         el.style.setProperty("fill-opacity", "1", "important");
         el.style.setProperty("mix-blend-mode", "normal", "important");
-        if (isDark) {
-          el.style.setProperty("filter", "brightness(0) invert(1)", "important");
-        }
+        el.style.setProperty("filter", "none", "important");
         el.querySelectorAll("path, circle, rect, line, polyline, polygon, ellipse, use, g").forEach((part) => {
           const svgPart = part as SVGElement;
           svgPart.style.setProperty("color", glyphColor, "important");
@@ -98,7 +96,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         data-icon-tile-tone={tone}
         data-surface="emerald"
         className={cn(
-          "inline-flex items-center justify-center flex-shrink-0 leading-none",
+          "inline-flex items-center justify-center flex-shrink-0 leading-none overflow-visible",
           s.box,
           t.tile,
           isDark && "allow-white",
@@ -109,7 +107,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         <Icon
           ref={setGlyphStyle as unknown as React.Ref<SVGSVGElement>}
           className={cn(s.icon, t.icon, isDark && "allow-white", iconClassName)}
-          strokeWidth={2}
+          strokeWidth={2.25}
         />
       </div>
     );
