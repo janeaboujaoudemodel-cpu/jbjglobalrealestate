@@ -19296,3 +19296,147 @@ html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root
   stroke:#FFFFFF !important;
   fill:none !important;
 }
+
+
+/* PASS 86 — CANONICAL TWO-SURFACE CONTRAST CONTRACT.
+   Final override after the older contrast passes. Rule: dark/emerald/ink surfaces
+   render white foregrounds; champagne/gold/cream own-surfaces render ink; exact
+   dark controls inside light panels are re-whitened. This avoids hover/text-class
+   false positives and fixes inline light buttons such as guide CTAs. */
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-hero-dark], .jj-hero-fullscreen, .jj-hero-neon,
+  [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta,
+  .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-cta="primary"], [data-cta="dark"], [data-on-dark], [data-residency-active="true"],
+  [data-backend-sidebar-icon-tile], [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control,
+  .bg-\[\#064E3B\], .bg-\[\#064e3b\], .bg-\[\#042C1C\], .bg-\[\#042c1c\], .bg-\[\#022C22\], .bg-\[\#022c22\],
+  .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\], .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\], .bg-black,
+  .from-black, .via-black, .to-black, .from-zinc-950, .via-zinc-950, .to-zinc-950
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-hero-dark], .jj-hero-fullscreen, .jj-hero-neon,
+  [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta,
+  .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-cta="primary"], [data-cta="dark"], [data-on-dark], [data-residency-active="true"],
+  [data-backend-sidebar-icon-tile], [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control,
+  .bg-\[\#064E3B\], .bg-\[\#064e3b\], .bg-\[\#042C1C\], .bg-\[\#042c1c\], .bg-\[\#022C22\], .bg-\[\#022c22\],
+  .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\], .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\], .bg-black,
+  .from-black, .via-black, .to-black, .from-zinc-950, .via-zinc-950, .to-zinc-950
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,time,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-surface-champagne, .jj-section-champagne, .jj-card-champagne, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active, .jj-gold-metallic,
+  .bg-\[\#FDFBF7\], .bg-\[\#fdfbf7\], .bg-\[\#F7F2EA\], .bg-\[\#f7f2ea\], .bg-\[\#EFE6D6\], .bg-\[\#efe6d6\],
+  .from-\[\#FDFBF7\], .from-\[\#fdfbf7\], .via-\[\#F7F2EA\], .via-\[\#f7f2ea\], .to-\[\#EFE6D6\], .to-\[\#efe6d6\],
+  [style*="background: rgb(253, 251, 247)"], [style*="background:rgb(253, 251, 247)"],
+  [style*="background: rgb(247, 242, 234)"], [style*="background:rgb(247, 242, 234)"],
+  [style*="background: rgb(239, 230, 214)"], [style*="background:rgb(239, 230, 214)"],
+  [style*="background: #FDFBF7"], [style*="background:#FDFBF7"], [style*="background: #F7F2EA"], [style*="background:#F7F2EA"],
+  [style*="background: #EFE6D6"], [style*="background:#EFE6D6"]
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-surface-champagne, .jj-section-champagne, .jj-card-champagne, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active, .jj-gold-metallic,
+  .bg-\[\#FDFBF7\], .bg-\[\#fdfbf7\], .bg-\[\#F7F2EA\], .bg-\[\#f7f2ea\], .bg-\[\#EFE6D6\], .bg-\[\#efe6d6\],
+  .from-\[\#FDFBF7\], .from-\[\#fdfbf7\], .via-\[\#F7F2EA\], .via-\[\#f7f2ea\], .to-\[\#EFE6D6\], .to-\[\#efe6d6\],
+  [style*="background: rgb(253, 251, 247)"], [style*="background:rgb(253, 251, 247)"],
+  [style*="background: rgb(247, 242, 234)"], [style*="background:rgb(247, 242, 234)"],
+  [style*="background: rgb(239, 230, 214)"], [style*="background:rgb(239, 230, 214)"],
+  [style*="background: #FDFBF7"], [style*="background:#FDFBF7"], [style*="background: #F7F2EA"], [style*="background:#F7F2EA"],
+  [style*="background: #EFE6D6"], [style*="background:#EFE6D6"]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,time,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"], button[data-state="active"],
+  [data-residency-active="true"],
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta,
+  .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-cta="primary"], [data-cta="dark"], [data-on-dark],
+  [data-backend-sidebar-icon-tile], [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"], button[data-state="active"],
+  [data-residency-active="true"],
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta,
+  .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-cta="primary"], [data-cta="dark"], [data-on-dark],
+  [data-backend-sidebar-icon-tile], [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,time,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* PASS 87 — RENDERED BACKDROP MATERIALIZATION
+   Dark/video hero and emerald active controls must have a real computed
+   background-color, not only overlays/background-images, so text/icons never
+   appear white over inherited champagne during slow media or CSS fallback. */
+html body .jj-hero-fullscreen,
+html body [data-hero-dark],
+html body [data-surface="dark"],
+html body [data-surface="ink"],
+html body [data-surface="navy"] {
+  background-color: #0A0A0A !important;
+}
+
+html body :is(
+  [data-surface="emerald"], [data-emerald="true"], [data-emerald-action="true"], [data-emerald-filled],
+  .jj-surface-emerald, .jj-emerald-metallic, .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark,
+  [role="tab"][data-state="active"], button[data-state="active"], [data-jj-segmented-trigger][data-state="active"],
+  [data-residency-active="true"], [data-backend-sidebar-icon-tile], [data-icon-tile-tone="emerald"]
+) {
+  background-color: #064E3B !important;
+}
+
+html body .jj-utility-shell :is(.w-1\.5.h-1\.5, [class*="w-1.5"][class*="h-1.5"]) {
+  background-color: #064E3B !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}

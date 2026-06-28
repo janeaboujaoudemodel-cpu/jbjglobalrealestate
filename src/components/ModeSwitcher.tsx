@@ -208,9 +208,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
     <div
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
-      // data-surface="light" defeats the global [data-surface="dark"]
-      // color override so the trigger chip stays legible on dark surfaces.
-      data-surface="light"
+      data-mode-switcher-root="true"
     >
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
         <DropdownMenuTrigger asChild>
@@ -219,6 +217,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             style={triggerStyle}
             data-no-contrast-guard
             data-emerald-action="true"
+            data-surface="emerald"
             data-allow-dark-cta
             data-on-dark
             data-mode-trigger="header"

@@ -50,6 +50,7 @@ export const AIShellCard = forwardRef<HTMLElement, Props>(
     return (
       <Tag
         ref={ref}
+        data-surface="light"
         className={`${TONE[tone]} rounded-2xl ${PADDING[padding]} relative overflow-hidden ${className}`}
         {...rest}
       >
