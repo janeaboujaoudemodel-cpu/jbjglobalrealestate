@@ -1342,11 +1342,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       >
       {collapsed ? (
         <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
-          {/* Logo header (88px) — collapsed: just icon */}
-          {/* Logo header — MUST match expanded (88px) so the under-monogram divider lines up exactly with the horizontal header hairline */}
-          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
+          {/* Logo header — MUST stay 88px so collapsed sidebar aligns with the horizontal header hairline */}
+          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-7 h-7 object-contain" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
             </Link>
           </div>
 
