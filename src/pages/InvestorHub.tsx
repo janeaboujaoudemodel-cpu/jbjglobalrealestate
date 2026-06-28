@@ -112,7 +112,7 @@ const InvestorHub = () => {
               </Link>
               <Link
                 to="/compare"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/30 text-[#1A1A1A] hover:border-amber-400 hover:bg-amber-500/20 transition-all text-sm font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/30 text-amber-300 hover:border-amber-400 hover:bg-amber-500/20 transition-all text-sm font-medium"
               >
                 <Star className="w-4 h-4" />
                 My Shortlist
@@ -126,7 +126,7 @@ const InvestorHub = () => {
         {/* Points & Tier */}
         {user && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Card className="bg-[#FDFBF7]/60 border border-fuchsia-500/20 overflow-hidden">
+            <Card className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/95 border border-fuchsia-500/30 overflow-hidden">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${tier.color} flex items-center justify-center flex-shrink-0`}>
@@ -199,7 +199,7 @@ const InvestorHub = () => {
                 <button
                   key={tool.title}
                   onClick={() => navigate(tool.href)}
-                  className="bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all group"
+                  className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/95 border border-fuchsia-500/30 rounded-xl p-4 text-left hover:border-fuchsia-400/60 transition-all group"
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>
@@ -223,7 +223,7 @@ const InvestorHub = () => {
               <Ticket className="w-5 h-5 text-fuchsia-400" />
               Support Tickets
             </h2>
-            <Card className="bg-[#FDFBF7]/60 border border-[#1A1A1A]">
+            <Card className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/95 border border-fuchsia-500/30">
               <CardContent className="p-6">
                 {supportTickets.length === 0 ? (
                   <div className="text-center py-8">
@@ -252,7 +252,7 @@ const InvestorHub = () => {
                       <button
                         key={ticket.id}
                         onClick={() => navigate(`/support?ticket=${ticket.id}`)}
-                        className="w-full flex items-center justify-between p-3 bg-[#F7F2EA]/50 rounded-lg hover:bg-[#1A1A1A] transition-colors text-left"
+                        className="w-full flex items-center justify-between p-3 bg-zinc-900/80 rounded-lg hover:bg-zinc-800 transition-colors text-left border border-fuchsia-500/20"
                       >
                         <div>
                           <p className="text-sm text-white">{ticket.subject}</p>
@@ -280,7 +280,7 @@ const InvestorHub = () => {
             <FolderOpen className="w-5 h-5 text-fuchsia-400" />
             My Documents
           </h2>
-          <Card className="bg-[#FDFBF7]/60 border border-fuchsia-500/20">
+          <Card className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/95 border border-fuchsia-500/30">
             <CardContent className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 {[
@@ -289,7 +289,7 @@ const InvestorHub = () => {
                   { label: 'SPA / Contracts', icon: FileText },
                   { label: 'Other Documents', icon: Award },
                 ].map(doc => (
-                  <div key={doc.label} className="p-4 bg-[#F7F2EA]/50 rounded-xl text-center border border-[#1A1A1A]/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
+                  <div key={doc.label} className="p-4 bg-zinc-900/80 rounded-xl text-center border border-fuchsia-500/25 hover:border-fuchsia-400/50 transition-colors cursor-pointer">
                     <doc.icon className="w-8 h-8 mx-auto text-fuchsia-400 mb-2" />
                     <p className="text-xs text-white/70">{doc.label}</p>
                   </div>
