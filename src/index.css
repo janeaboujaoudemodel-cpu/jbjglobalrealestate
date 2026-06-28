@@ -18646,3 +18646,22 @@ html body #root [data-open-positions-count][data-open-positions-count] {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+html body #root [data-careers-faq-trigger][data-careers-faq-trigger] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 40px !important;
+  justify-content: stretch !important;
+  justify-items: stretch !important;
+  align-items: center !important;
+  text-align: left !important;
+}
+
+html body #root [data-careers-faq-trigger][data-careers-faq-trigger] > span:first-child {
+  justify-self: start !important;
+  width: 100% !important;
+  text-align: left !important;
+}
+
+html body #root [data-careers-faq-trigger][data-careers-faq-trigger] > span:last-child {
+  justify-self: end !important;
+}

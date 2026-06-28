@@ -63,11 +63,12 @@ export function CareersFAQ() {
                   "overflow-hidden rounded-2xl border bg-[linear-gradient(180deg,rgba(255,253,249,0.98),rgba(243,235,221,0.96))] backdrop-blur-sm transition-all duration-300",
                   open
                     ? "careers-faq-open"
-                    : "careers-faq-closed hover:border-[#047857]/35 hover:shadow-[0_18px_36px_-24px_rgba(6,78,59,0.20)]"
+                    : "careers-faq-closed hover:border-[#B89555]/55 hover:shadow-[0_18px_36px_-24px_rgba(6,78,59,0.20)]"
                 )}
               >
                 <button
                   type="button"
+                  data-careers-faq-trigger
                   onClick={() => setOpenIdx(open ? null : i)}
                   className={cn(
                     "grid w-full grid-cols-[1fr_auto] items-center gap-4 px-5 py-4 text-left transition-colors",
