@@ -229,14 +229,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             )}
             <span
-              className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block tracking-wide"
+              className="mode-switcher-trigger-label text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block tracking-wide"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
               {triggerLabel}
             </span>
             <ChevronDown
               data-no-contrast-guard
-              className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
+              className={cn("mode-switcher-trigger-chevron w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
               style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
             />
           </button>
