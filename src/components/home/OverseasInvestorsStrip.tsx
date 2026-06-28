@@ -119,7 +119,16 @@ const OverseasInvestorsStrip = () => {
         .oi-band, .oi-band * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         .oi-band .oi-muted, .oi-band .oi-muted * { color: rgba(255,255,255,0.72) !important; -webkit-text-fill-color: rgba(255,255,255,0.72) !important; }
         .oi-band .oi-faint, .oi-band .oi-faint * { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
-        .oi-band svg { stroke: currentColor !important; color: inherit !important; }
+        .oi-band svg,
+        .oi-band svg *,
+        .oi-band svg.oi-muted,
+        .oi-band svg.oi-muted *,
+        .oi-band .oi-muted svg,
+        .oi-band .oi-muted svg * {
+          stroke: #FFFFFF !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
         @media (prefers-reduced-motion: reduce) {
           .oi-orb, .oi-stat, .oi-metallic::after { animation: none !important; }
         }

@@ -89,7 +89,6 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         "fixed z-[55] pointer-events-auto bottom-5 md:bottom-6 jj-page-nav-anchor",
         isRTL ? "jj-page-nav-anchor--right" : "jj-page-nav-anchor--left",
       )}
-      data-no-contrast-guard
     >
       <button
         type="button"
@@ -97,9 +96,10 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         aria-label={label}
         title={label}
         data-jj-page-nav-arrow
-        data-no-contrast-guard
+        data-on-dark
+        data-allow-dark-cta
         className={cn(
-          "allow-white group inline-flex items-center justify-center h-10 w-10 rounded-full",
+          "allow-white group inline-flex items-center justify-center h-10 w-10 rounded-full !text-white",
           "transition-all duration-300 hover:-translate-y-1 active:scale-95",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70",
         )}
@@ -112,9 +112,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         }}
       >
         <Icon
-          className="h-5 w-5 allow-white transition-transform duration-300 group-hover:scale-110"
+          className="h-5 w-5 allow-white !text-white transition-transform duration-300 group-hover:scale-110"
           strokeWidth={2.5}
-          data-no-contrast-guard
           style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
         />
       </button>

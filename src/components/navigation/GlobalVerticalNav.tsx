@@ -1262,7 +1262,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
           {/* Collapse — gold pill, glow + 3D lift on hover */}
           <button
-            data-no-contrast-guard
             data-sidebar-collapse-control
             data-on-dark
             data-allow-dark-cta
@@ -1291,7 +1290,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             }}
           >
             <PanelLeftClose className="allow-white w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-            <span className="allow-white" data-no-contrast-guard data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
+            <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
           </button>
 
         </div>
@@ -1447,8 +1446,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    data-no-contrast-guard
                     data-sidebar-collapse-control
+                    data-on-dark
+                    data-allow-dark-cta
                     data-tour-target="sidebar-expand"
                     onClick={() => {
                       setShowExpandPulse(false);
@@ -1468,7 +1468,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         className="pointer-events-none absolute -inset-[4px] rounded-lg jbj-sidebar-teaching-pulse"
                       />
                     )}
-                    <PanelLeftClose className="w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
+                    <PanelLeftClose className="allow-white w-3.5 h-3.5 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10} className="text-xs z-[10100]">
