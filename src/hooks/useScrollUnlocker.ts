@@ -108,7 +108,7 @@ export function useScrollUnlocker(): void {
     };
 
     const onWheel = (event: WheelEvent) => {
-      if (hasOpenModal() || event.defaultPrevented || event.ctrlKey || event.metaKey) return;
+      if (hasOpenModal() || event.ctrlKey || event.metaKey) return;
       if (Math.abs(event.deltaY) < 1 || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
 
       const deltaY = normalizeWheelDelta(event);
@@ -126,7 +126,7 @@ export function useScrollUnlocker(): void {
         if (Math.abs(window.scrollY - before) < 1) {
           window.scrollBy({ top: deltaY, left: 0, behavior: "auto" });
         }
-      }, 56);
+      }, 32);
     };
 
     window.addEventListener("focus", onFocus);
