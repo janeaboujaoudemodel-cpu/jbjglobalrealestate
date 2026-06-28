@@ -102,5 +102,12 @@ export const StandaloneRoutes = () => (
         </Suspense>
       </RouteErrorBoundary>
     } />
+    <Route path="/ds-preview" element={
+      <RouteErrorBoundary routeName="DsPreview">
+        <Suspense fallback={<PageLoader />}>
+          {React.createElement(React.lazy(() => import("@/pages/DsPreview")))}
+        </Suspense>
+      </RouteErrorBoundary>
+    } />
   </>
 );
