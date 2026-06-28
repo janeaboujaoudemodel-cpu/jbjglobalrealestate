@@ -85,10 +85,9 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
                 "flex min-h-[40px] items-center gap-2 rounded-full border px-3.5 py-2.5 text-xs font-semibold transition-all",
                 clickable && "cursor-pointer hover:-translate-y-0.5",
                 isActive
-                  ? "careers-pill-active allow-white data-[allow-dark-cta]:text-white"
+                  ? "careers-pill-active allow-white !text-white"
                   : "careers-pill-inactive hover:border-[#BFA46A] hover:shadow-[0_14px_22px_-18px_rgba(7,27,51,0.4)]"
               )}
-
               style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
               data-allow-dark-cta={isActive ? "" : undefined}
               data-no-contrast-guard={isActive ? "" : undefined}
@@ -96,9 +95,14 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               {s.done && !isActive ? (
                 <CheckCircle2 className="h-3.5 w-3.5 text-[#0A0A0A]" />
               ) : (
-                <span className="grid h-4.5 w-4.5 place-items-center text-[#1A1A1A]" style={isActive ? { color: "#FFFFFF" } : undefined}>{s.icon}</span>
+                <span
+                  className="grid h-4.5 w-4.5 place-items-center"
+                  style={{ color: isActive ? "#FFFFFF" : "#1A1A1A" }}
+                >
+                  {s.icon}
+                </span>
               )}
-              <span style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>
+              <span style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { color: "#1A1A1A" }}>
                 <span className="mr-1">{idx + 1}.</span>
                 {s.label}
               </span>
