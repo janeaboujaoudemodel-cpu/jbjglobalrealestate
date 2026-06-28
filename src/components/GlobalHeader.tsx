@@ -307,7 +307,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     const apply = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-      const state = window.scrollY > 80 ? "scrolled" : "atrest";
+        const state = window.scrollY > 80 ? "scrolled" : "atrest";
         if (state !== lastState) {
           lastState = state;
           document.body.setAttribute("data-home-hero-state", state);
