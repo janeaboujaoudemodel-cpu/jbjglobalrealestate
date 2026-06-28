@@ -17208,6 +17208,11 @@ html body #root main.jj-main-shell :is(.jj-fullbleed-band, [data-fullbleed-band]
   }
 }
 
+/* PASS 62.1 — Single winning emerald → pure-white rule.
+   Any element that opts into the emerald/dark surface family (via any of the
+   markers below) AND every descendant text node / svg path inside it MUST
+   render pure white. This is the ONE rule — do not duplicate elsewhere.
+   Opt-out for a specific descendant: [data-ink-emerald-opt-out]. */
 html body :is(
   [data-jj-page-nav-arrow],
   [data-sidebar-collapse-control],
@@ -17222,6 +17227,7 @@ html body :is(
   [data-surface="emerald"],
   [data-surface="dark"],
   [data-on-dark],
+  [data-ink-emerald],
   [data-emerald="true"],
   [data-emerald-filled],
   [data-emerald-ok="button"],
@@ -17241,6 +17247,7 @@ html body :is(
   [data-surface="emerald"],
   [data-surface="dark"],
   [data-on-dark],
+  [data-ink-emerald],
   [data-emerald="true"],
   [data-emerald-filled],
   [data-emerald-ok="button"],
@@ -17260,11 +17267,12 @@ html body :is(
   [data-surface="emerald"],
   [data-surface="dark"],
   [data-on-dark],
+  [data-ink-emerald],
   [data-emerald="true"],
   [data-emerald-filled],
   [data-emerald-ok="button"],
   [data-allow-dark-cta]
-) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -17273,6 +17281,7 @@ html body :is(
   text-shadow: none !important;
   mix-blend-mode: normal !important;
 }
+
 
 html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) {
   background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
