@@ -342,6 +342,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   style={rowStyle}
                   unstyled
                   data-no-contrast-guard
+                  data-no-emerald-hover
                   data-mode-row={isEmerald ? 'active' : 'idle'}
                   className={cn(
                     "mode-switcher-item",
