@@ -42,7 +42,7 @@ export default function HomepageBookMarquee() {
       </ContentTrack></div>
 
       {/* Canonical book strip — full-bleed, smooth CSS marquee, titles engraved on covers */}
-      <BookCarousel books={allBooks} size="sm" durationSec={38} compact />
+      <div className="jj-bleed-allow"><BookCarousel books={allBooks} size="sm" durationSec={38} compact /></div>
 
       {/* Mobile link */}
       <div className="jj-bleed-allow"><ContentTrack>
