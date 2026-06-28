@@ -36,8 +36,14 @@ export function CareersFAQ() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
       <div className="max-w-3xl mx-auto" data-surface="champagne">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]">
-            <HelpCircle className="h-3 w-3 text-[#B89555]" /> Frequently Asked
+          <div
+            data-surface="emerald"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border-transparent px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <HelpCircle className="h-3 w-3 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Frequently Asked
           </div>
           <h2 className="mt-5 text-3xl md:text-4xl font-semibold text-[#1A1A1A] tracking-tight">
             Questions, answered
@@ -64,19 +70,19 @@ export function CareersFAQ() {
                   type="button"
                   onClick={() => setOpenIdx(open ? null : i)}
                   className={cn(
-                    "flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors",
+                    "grid w-full grid-cols-[1fr_auto] items-center gap-4 px-5 py-4 text-left transition-colors",
                     open ? "bg-[#EEF7F1]" : "bg-transparent"
                   )}
                   aria-expanded={open}
                 >
-                  <span className={cn("text-base font-semibold leading-snug", open ? "text-[#1A1A1A]" : "text-[#1A1A1A]")}>{f.q}</span>
+                  <span className="block min-w-0 pr-2 text-base font-semibold leading-snug text-[#1A1A1A]">{f.q}</span>
                   <span
                     data-surface={open ? "emerald" : "champagne"}
                     className={cn(
                       "grid h-10 w-10 shrink-0 place-items-center rounded-full border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
                       open
                         ? "allow-white border-transparent bg-[image:var(--jj-emerald-ombre)] shadow-[0_12px_22px_-12px_rgba(6,78,59,0.45)]"
-                        : "border-[#047857]/40 bg-[#F7F2EA]"
+                        : "border-[#B89555]/55 bg-[#F7F2EA]"
                     )}
                   >
                     <ChevronDown
@@ -85,8 +91,8 @@ export function CareersFAQ() {
                         open ? "rotate-180" : "rotate-0"
                       )}
                       style={{
-                        color: open ? "#FFFFFF" : "#047857",
-                        stroke: open ? "#FFFFFF" : "#047857",
+                        color: open ? "#FFFFFF" : "#1A1A1A",
+                        stroke: open ? "#FFFFFF" : "#1A1A1A",
                         opacity: 1,
                       }}
                       strokeWidth={2.5}

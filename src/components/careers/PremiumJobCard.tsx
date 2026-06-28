@@ -67,9 +67,9 @@ const TAG_STYLES: Record<
   partner: {
     label: "Partner",
     icon: Star,
-    bg: "bg-[#F7F2EA]",
-    ring: "border-[#B89555]",
-    text: "text-[#1A1A1A]",
+    bg: "bg-[image:var(--jj-emerald-ombre)]",
+    ring: "border-transparent",
+    text: "!text-white",
   },
   featured: {
     label: "Featured",
@@ -170,18 +170,20 @@ export default function PremiumJobCard({
             {computedTags.map((t) => {
               const cfg = TAG_STYLES[t];
               const Icon = cfg.icon;
-              const isFeatured = t === "featured";
+              const isDarkTag = t === "featured" || t === "partner";
               return (
                 <span
                   key={t}
                   data-jbj-label
-                  data-no-contrast-guard={isFeatured ? "true" : undefined}
-                  data-allow-dark-cta={isFeatured ? "true" : undefined}
-                  className={`inline-flex min-h-[28px] items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isFeatured ? "allow-white" : ""}`}
-                  style={isFeatured ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+                  data-careers-partner-label={t === "partner" ? "true" : undefined}
+                  data-surface={isDarkTag ? "emerald" : "champagne"}
+                  data-no-contrast-guard={isDarkTag ? "true" : undefined}
+                  data-allow-dark-cta={isDarkTag ? "true" : undefined}
+                  className={`inline-flex min-h-[28px] items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isDarkTag ? "allow-white" : ""}`}
+                  style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
-                  <Icon className={`w-3 h-3 ${isFeatured ? "allow-white" : ""}`} style={isFeatured ? { color: "#FFFFFF" } : undefined} />
-                  <span className={isFeatured ? "allow-white" : ""} style={isFeatured ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
+                  <Icon className={`w-3 h-3 ${isDarkTag ? "allow-white" : ""}`} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined} />
+                  <span className={isDarkTag ? "allow-white" : ""} style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
                 </span>
               );
             })}
@@ -243,7 +245,9 @@ export default function PremiumJobCard({
               data-surface="emerald"
               data-allow-dark-cta
               data-no-contrast-guard
-              className={`jj-cta-emerald jj-pill-emerald-metallic min-h-11 rounded-xl px-5 py-2 font-semibold border-transparent active:translate-y-[1px] transition-all ${selected ? "ring-2 ring-[#064E3B]/30" : ""}`}
+              data-careers-apply-cta
+              className={`jj-cta-emerald jj-pill-emerald-metallic allow-white min-h-11 rounded-xl px-5 py-2 font-semibold border-transparent active:translate-y-[1px] transition-all ${selected ? "ring-2 ring-[#064E3B]/30" : ""}`}
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (selected) onSelect?.(id);

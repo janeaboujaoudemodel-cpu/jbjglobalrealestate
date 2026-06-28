@@ -823,10 +823,13 @@ export default function JoinApplication() {
                   <Badge
                     data-surface="emerald"
                     data-allow-dark-cta
-                    className="jj-cta-emerald jj-pill-emerald-metallic inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 self-start sm:self-end text-[12px] font-semibold border border-[#B89555]/70"
+                    data-no-contrast-guard
+                    data-open-positions-count
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex h-11 items-center gap-2 rounded-xl px-5 self-start sm:self-end text-[12px] font-semibold border border-[#B89555]/70 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.14)]"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-                    <span>{filteredPositions.length} open</span>
+                    <span>{filteredPositions.length} Open Positions</span>
                   </Badge>
                 </div>
                 <div className="relative mt-5">

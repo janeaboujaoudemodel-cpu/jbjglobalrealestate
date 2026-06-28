@@ -55,7 +55,7 @@ export default function HRAgent() {
       <section className="py-16 bg-gradient-to-b from-primary/5 to-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 border border-[#B89555]/45 bg-[#F7F2EA] text-[#1A1A1A] px-4 py-2 rounded-full text-sm font-medium mb-4">
               <UserCheck className="w-4 h-4" />
               Available 24/7 to support you
             </div>
@@ -81,7 +81,7 @@ export default function HRAgent() {
                 <Card key={index} className="hover:shadow-md transition-shadow">
                   <CardContent className="flex items-start gap-3 p-4">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <feature.icon className="w-5 h-5 text-primary" />
+                      <feature.icon className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <div>
                       <h3 className="font-medium">{feature.title}</h3>
@@ -108,10 +108,10 @@ export default function HRAgent() {
               <Card className="jj-emerald-soft dark:bg-green-950/20 border-[color:var(--emerald-1)]/30 dark:border-green-800">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-[color:var(--emerald-1)] flex-shrink-0 mt-0.5" />
+                    <Shield className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                     <div>
-                      <h3 className="font-medium text-[color:var(--emerald-1)] dark:text-[color:var(--emerald-on)]">Secure & Private</h3>
-                      <p className="text-sm text-[color:var(--emerald-1)] dark:text-[color:var(--emerald-on)]">
+                      <h3 className="font-medium text-[#1A1A1A]">Secure & Private</h3>
+                      <p className="text-sm text-[#1A1A1A]">
                         Your data is encrypted and only shared with our HR team
                       </p>
                     </div>

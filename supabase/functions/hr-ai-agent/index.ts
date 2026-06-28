@@ -53,6 +53,12 @@ const QUALIFICATION_QUESTIONS = [
   { key: 'specializations', question: "What property types do you specialize in? (e.g., residential, commercial, luxury)" }
 ];
 
+const APPLICANT_FORBIDDEN_REQUEST = /\b(job\s*offer|offer\s*letter|employment\s*contract|salary\s*offer|make\s+me\s+an\s+offer|generate\s+(an?\s+)?offer|confidential\s+(data|information|records)|candidate\s+data|applicant\s+data|payroll|internal\s+(file|files|records|documents)|approval|approve\s+me)\b/i;
+
+function applicantSafetyReply() {
+  return "I can help you apply for open roles, upload your CV, and answer career or application questions. I can’t create job offers, approve employment, access confidential company data, or share internal applicant records; only the authorized HR team can handle those steps.";
+}
+
 async function callLovableAI(systemPrompt: string, userMessage: string, conversationHistory: Message[] = []) {
   const messages = [
     { role: 'system', content: systemPrompt },
@@ -403,7 +409,33 @@ Guidelines:
 - Keep responses concise (2-3 sentences max)
 - Ask one question at a time
 - Guide the conversation naturally
-- If they provide unclear answers, politely ask for clarification`;
+- If they provide unclear answers, politely ask for clarification
+
+Applicant safety rules:
+- Never generate, draft, promise, approve, or simulate a job offer, offer letter, employment contract, salary offer, hiring approval, or onboarding authorization.
+- Never reveal confidential company data, internal documents, other applicants' data, payroll information, assessment records, or private HR files.
+- Applicants may only ask career/open-position questions, receive application guidance, submit a CV/application, and answer screening/interview questions.
+- If asked for restricted content, refuse briefly and redirect to applying or asking career questions.`;
+
+        if (APPLICANT_FORBIDDEN_REQUEST.test(message)) {
+          responseMessage = applicantSafetyReply();
+          messages.push({
+            role: 'assistant',
+            content: responseMessage,
+            timestamp: new Date().toISOString()
+          });
+          await supabase
+            .from('hr_agent_conversations')
+            .update({ messages, stage, qualification_data: qualificationData })
+            .eq('id', conversationId);
+          return new Response(JSON.stringify({
+            message: responseMessage,
+            stage,
+            conversationId
+          }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
 
         if (stage === 'cv_collection') {
           systemPrompt += `\n\nYou're helping the candidate submit their CV. Guide them to the /join page to complete their application. Once they confirm they've submitted, move to qualification stage.`;

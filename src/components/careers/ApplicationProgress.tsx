@@ -38,7 +38,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
     <div className="rounded-2xl border border-[#047857]/25 bg-[linear-gradient(180deg,rgba(253,251,247,0.98),rgba(247,242,234,0.96))] p-5 shadow-[0_18px_42px_-30px_rgba(6,78,59,0.18)]">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#047857]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#1A1A1A]">
             Application Progress
           </p>
           <p
@@ -58,7 +58,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
           </p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-[#047857] leading-none">{pct}%</p>
+          <p className="text-2xl font-bold text-[#1A1A1A] leading-none">{pct}%</p>
         </div>
       </div>
 
@@ -98,7 +98,7 @@ export function ApplicationProgress({ steps, activeStep, onStepClick }: Applicat
               data-surface={isActive ? "emerald" : undefined}
             >
               {s.done && !isActive ? (
-                <CheckCircle2 className="h-3.5 w-3.5" style={{ color: "#047857" }} />
+                <CheckCircle2 className="h-3.5 w-3.5" style={{ color: "#1A1A1A" }} />
               ) : (
                 <span
                   className="grid h-4.5 w-4.5 place-items-center"
