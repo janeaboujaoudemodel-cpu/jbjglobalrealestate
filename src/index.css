@@ -18343,3 +18343,33 @@ html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item] [data-jbj
 @media (prefers-reduced-motion: reduce) {
   .jj-avatar-spinner { animation: jj-avatar-ring-pulse 3.8s ease-in-out infinite; }
 }
+
+/* =====================================================================
+   PASS 89 — CHAMPAGNE SURFACE RE-ASSERT (defeats descendant emerald-band ink)
+   When a [data-surface="champagne"] card is nested inside an emerald band,
+   its own text/icons must remain dark. Higher specificity than the
+   [data-emerald-band] descendant rule. Honors opt-outs:
+   [data-no-contrast-guard], [data-allow-dark-cta], .allow-white.
+   ===================================================================== */
+html body #root [data-surface="champagne"]:not([data-no-contrast-guard]),
+html body #root [data-surface="light"]:not([data-no-contrast-guard]),
+html body #root [data-surface="mop"]:not([data-no-contrast-guard]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white),
+html body #root [data-surface="light"]    :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white),
+html body #root [data-surface="mop"]      :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-surface="champagne"] span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]),
+html body #root [data-surface="light"]    span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]),
+html body #root [data-surface="mop"]      span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]) {
+  color: inherit !important;
+  -webkit-text-fill-color: inherit !important;
+}
+html body #root [data-surface="champagne"] svg:not(.allow-white):not([data-no-contrast-guard]) {
+  color: #1A1A1A !important;
+  stroke: currentColor;
+}
