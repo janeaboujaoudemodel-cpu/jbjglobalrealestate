@@ -210,11 +210,6 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         <DropdownMenuTrigger asChild>
           <button
             disabled={isLoading}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsOpen((open) => !open);
-            }}
             style={triggerStyle}
             data-no-contrast-guard
             data-emerald-action="true"
