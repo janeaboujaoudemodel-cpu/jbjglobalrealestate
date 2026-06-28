@@ -148,7 +148,7 @@ const ContinueSearching = ({
   const eyebrow = hasUserHistory ? "Recently viewed" : "Editor's picks";
 
   return (
-    <section className={`py-10 md:py-14 relative overflow-hidden w-full ${className}`}>
+    <section className={`jj-fullbleed-band py-10 md:py-14 relative overflow-hidden w-full ${className}`} data-fullbleed-band>
       {/* Premium champagne backdrop — full-bleed edge to edge */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
