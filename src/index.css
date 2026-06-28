@@ -16449,7 +16449,22 @@ html body :where(
   .jj-surface-champagne,
   .jj-gold-metallic
 ):not([data-no-contrast-guard]):not([data-no-contrast-guard] *)
-  :is(h1, h2, h3, h4, h5, h6, p, span, a:not(:hover), button, label, li, td, th, strong, em, small, time, dt, dd, bdi) {
+  :is(h1, h2, h3, h4, h5, h6, p, span, a:not(:hover), button, label, li, td, th, strong, em, small, time, dt, dd, bdi):not(
+    [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+    [data-on-dark], [data-hero-dark], [data-cta="primary"], [data-cta="dark"],
+    [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-ok],
+    .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .careers-navy-cta,
+    .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+    .jj-icon-tile-emerald, .jj-surface-emerald, .surface-dark, .surface-ink, .surface-navy,
+    .allow-white, [data-allow-dark-cta],
+    [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *,
+    [data-on-dark] *, [data-hero-dark] *, [data-cta="primary"] *, [data-cta="dark"] *,
+    [data-emerald-action] *, [data-emerald="true"] *, [data-emerald-filled] *, [data-emerald-ok] *,
+    .jj-cta-primary *, .jj-cta-emerald *, .jj-cta-dark *, .jj-navy-cta *, .careers-navy-cta *,
+    .jj-emerald-action *, .jj-emerald-metallic *, .jj-pill-emerald *, .jj-pill-emerald-metallic *,
+    .jj-icon-tile-emerald *, .jj-surface-emerald *, .surface-dark *, .surface-ink *, .surface-navy *,
+    .allow-white *, [data-allow-dark-cta] *
+  ) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -16458,7 +16473,15 @@ html body :where(
   [data-surface="gold"],
   .jj-surface-champagne,
   .jj-gold-metallic
-):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) svg:not([data-keep-color]) {
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) svg:not([data-keep-color]):not(
+  [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *,
+  [data-on-dark] *, [data-hero-dark] *, [data-cta="primary"] *, [data-cta="dark"] *,
+  [data-emerald-action] *, [data-emerald="true"] *, [data-emerald-filled] *, [data-emerald-ok] *,
+  .jj-cta-primary *, .jj-cta-emerald *, .jj-cta-dark *, .jj-navy-cta *, .careers-navy-cta *,
+  .jj-emerald-action *, .jj-emerald-metallic *, .jj-pill-emerald *, .jj-pill-emerald-metallic *,
+  .jj-icon-tile-emerald *, .jj-surface-emerald *, .surface-dark *, .surface-ink *, .surface-navy *,
+  .allow-white *, [data-allow-dark-cta] *
+) {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
