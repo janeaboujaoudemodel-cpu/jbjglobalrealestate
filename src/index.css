@@ -18756,3 +18756,21 @@ html body #root#root [data-careers-position-search-wrap][data-careers-position-s
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* PASS 94 — ModeSwitcher active row lock: emerald card → white content */
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"],
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] p,
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] span,
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] [data-mode-active-pill] {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+html body [data-mode-switcher-panel="true"] [data-mode-row="active"] [data-mode-active-pill] svg {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+}
