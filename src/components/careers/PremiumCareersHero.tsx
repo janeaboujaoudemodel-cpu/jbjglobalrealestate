@@ -67,9 +67,15 @@ export default function PremiumCareersHero() {
 
       <div className="relative max-w-6xl mx-auto text-center">
         {/* Pill eyebrow */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/55 bg-[#FDFBF7]/80 backdrop-blur-sm px-4 py-1.5 mb-7 shadow-[0_1px_0_rgba(184,149,85,0.18)]">
-          <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
-          <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
+        <div
+          data-surface="emerald"
+          data-allow-dark-cta
+          data-no-contrast-guard
+          className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 px-4 py-1.5 mb-7 shadow-[0_4px_18px_-8px_rgba(6,78,59,0.45)]"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
+          <Sparkles className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span className="allow-white text-[11px] font-semibold tracking-[0.18em] uppercase" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
             Careers · JBJ Global Real Estate
           </span>
         </div>
@@ -140,16 +146,20 @@ export default function PremiumCareersHero() {
           {stats.map(({ icon: Icon, label, value }, i) => (
             <div
               key={label}
-              className="group relative rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7]/85 backdrop-blur-sm px-4 py-5 text-left transition-all hover:-translate-y-[2px] hover:shadow-[0_18px_40px_-22px_rgba(10,10,10,0.35)] hover:border-[#B89555]"
+              className="group relative rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]/95 backdrop-blur-sm px-4 py-5 text-left transition-all hover:-translate-y-[2px] hover:shadow-[0_18px_40px_-22px_rgba(184,149,85,0.55)] hover:border-[#B89555] shadow-[0_2px_0_rgba(184,149,85,0.18),0_10px_28px_-18px_rgba(10,10,10,0.25)]"
               style={{
                 animation: `careersHeroFloat 6s ease-in-out ${i * 0.4}s infinite`,
               }}
             >
               <div className="flex items-center gap-2 mb-2">
-                <div className="inline-flex items-center justify-center w-7 h-7 rounded-lg border border-[#B89555]/55 bg-[#F7F2EA]">
-                  <Icon className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                <div
+                  data-surface="emerald"
+                  data-no-contrast-guard
+                  className="jj-icon-tile-emerald allow-white inline-flex items-center justify-center w-8 h-8 rounded-lg border border-[#B89555]/60"
+                >
+                  <Icon className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.25} />
                 </div>
-                <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#1A1A1A]/65">
+                <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#1A1A1A]/75">
                   {label}
                 </p>
               </div>

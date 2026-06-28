@@ -74,8 +74,8 @@ const TAG_STYLES: Record<
   featured: {
     label: "Featured",
     icon: Star,
-    bg: "bg-[#0A0A0A]",
-    ring: "border-[#B89555]",
+    bg: "bg-[image:var(--jj-emerald-ombre)]",
+    ring: "border-transparent",
     text: "!text-white",
   },
 };
@@ -157,10 +157,10 @@ export default function PremiumJobCard({
             <span
               data-no-contrast-guard
               data-surface="emerald"
-              className="allow-white flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[image:var(--jj-emerald-ombre)] border-transparent"
+              className="allow-white flex-shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[image:var(--jj-emerald-ombre)] border border-[#B89555]/70 shadow-[0_2px_8px_-2px_rgba(6,78,59,0.45)]"
               aria-label="Selected"
             >
-              <CheckCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
+              <CheckCircle className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </span>
           )}
         </div>
