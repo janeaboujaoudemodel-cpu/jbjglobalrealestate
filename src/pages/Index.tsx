@@ -399,12 +399,14 @@ const Index = () => {
         </LazyVisible>
       </PremiumSectionCard>
 
-      {/* OVERSEAS INVESTORS — full-bleed edge-to-edge */}
-      <LazyVisible minHeight={300}>
-        <Suspense fallback={<SectionLoader />}>
-          <OverseasInvestorsBanner />
-        </Suspense>
-      </LazyVisible>
+      {/* OVERSEAS INVESTORS — full-bleed edge-to-edge (post-sidebar) */}
+      <div className="jj-fullbleed-band cv-auto" data-fullbleed-band>
+        <LazyVisible minHeight={300}>
+          <Suspense fallback={<SectionLoader />}>
+            <OverseasInvestorsBanner />
+          </Suspense>
+        </LazyVisible>
+      </div>
 
 
       {/* EXPLORE OUR GUIDES & REPORTS — full-bleed band */}
