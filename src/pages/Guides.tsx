@@ -78,7 +78,7 @@ const Guides = () => {
       />
 
       {/* Hero */}
-      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
+      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Drone zoom effect on poster image while video loads */}
           <div className="absolute inset-0 overflow-hidden">

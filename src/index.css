@@ -19286,3 +19286,13 @@ html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root
   stroke: #FFFFFF !important;
   fill: none !important;
 }
+
+
+/* PASS 85 — LAST WORD EMERALD CONTROL LOCK */
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(.jj-surface-emerald,.jj-cta-primary,.jj-cta-dark,[data-cta="primary"],[data-cta="dark"],[data-jj-segmented-trigger][data-state="active"],[role="tab"][data-state="active"],button[data-state="active"]),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(.jj-surface-emerald,.jj-cta-primary,.jj-cta-dark,[data-cta="primary"],[data-cta="dark"],[data-jj-segmented-trigger][data-state="active"],[role="tab"][data-state="active"],button[data-state="active"]) :is(span,svg,path,line,polyline,circle,rect,p,div) {
+  color:#FFFFFF !important;
+  -webkit-text-fill-color:#FFFFFF !important;
+  stroke:#FFFFFF !important;
+  fill:none !important;
+}
