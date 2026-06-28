@@ -114,10 +114,24 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     onClick?: () => void;
   }) => {
     const active = isRowActive(to);
+    const activeInkStyle = active
+      ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
+      : { color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" };
+    const activeIconStyle = active
+      ? { color: "#FFFFFF", stroke: "#FFFFFF" }
+      : { color: "#1A1A1A", stroke: "#1A1A1A" };
+
     const inner = (
-      <span className="flex items-center gap-2.5 w-full">
-        <Icon className="w-5 h-5 shrink-0 text-[#064E3B]" strokeWidth={2.25} />
-        <span className={`text-sm flex-1 ${active ? "font-semibold text-[#1A1A1A]" : "font-medium text-[#1A1A1A]"}`}>
+      <span className="flex items-center gap-2.5 w-full" style={activeInkStyle}>
+        <Icon
+          className="w-5 h-5 shrink-0"
+          strokeWidth={2.25}
+          style={activeIconStyle}
+        />
+        <span
+          className={`text-sm flex-1 ${active ? "font-semibold" : "font-medium"}`}
+          style={activeInkStyle}
+        >
           {label}
         </span>
         {badge && badge > 0 ? (
@@ -134,7 +148,15 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         onSelect={onClick ? () => onClick() : undefined}
         className="cursor-pointer rounded-md px-2.5 py-2 my-0.5"
       >
-        {to ? <Link to={to}>{inner}</Link> : inner}
+        {to ? (
+          <Link
+            to={to}
+            data-surface={active ? "emerald" : undefined}
+            data-on-dark={active ? "true" : undefined}
+          >
+            {inner}
+          </Link>
+        ) : inner}
       </DropdownMenuItem>
     );
   };
@@ -161,6 +183,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
+        data-account-menu-content
         align="end"
         sideOffset={12}
         className="z-[10100] w-[280px] p-2 rounded-xl border border-[#EFE6D6] bg-[#FDFBF7] shadow-2xl"
