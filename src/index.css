@@ -17208,81 +17208,6 @@ html body #root main.jj-main-shell :is(.jj-fullbleed-band, [data-fullbleed-band]
   }
 }
 
-/* PASS 62.1 — Single winning emerald → pure-white rule.
-   Any element that opts into the emerald/dark surface family (via any of the
-   markers below) AND every descendant text node / svg path inside it MUST
-   render pure white. This is the ONE rule — do not duplicate elsewhere.
-   Opt-out for a specific descendant: [data-ink-emerald-opt-out]. */
-html body :is(
-  [data-jj-page-nav-arrow],
-  [data-sidebar-collapse-control],
-  [data-jj-nav-collapse-toggle],
-  .jbj-sidebar-collapse-control,
-  .jj-side-tile,
-  .jj-cta-emerald,
-  .jj-emerald-metallic,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-surface-emerald,
-  [data-surface="emerald"],
-  [data-surface="dark"],
-  [data-on-dark],
-  [data-ink-emerald],
-  [data-emerald="true"],
-  [data-emerald-filled],
-  [data-emerald-ok="button"],
-  [data-allow-dark-cta]
-),
-html body :is(
-  [data-jj-page-nav-arrow],
-  [data-sidebar-collapse-control],
-  [data-jj-nav-collapse-toggle],
-  .jbj-sidebar-collapse-control,
-  .jj-side-tile,
-  .jj-cta-emerald,
-  .jj-emerald-metallic,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-surface-emerald,
-  [data-surface="emerald"],
-  [data-surface="dark"],
-  [data-on-dark],
-  [data-ink-emerald],
-  [data-emerald="true"],
-  [data-emerald-filled],
-  [data-emerald-ok="button"],
-  [data-allow-dark-cta]
-):is(:hover, :focus, :focus-visible, :active, [data-state="active"], [aria-selected="true"]),
-html body :is(
-  [data-jj-page-nav-arrow],
-  [data-sidebar-collapse-control],
-  [data-jj-nav-collapse-toggle],
-  .jbj-sidebar-collapse-control,
-  .jj-side-tile,
-  .jj-cta-emerald,
-  .jj-emerald-metallic,
-  .jj-pill-emerald,
-  .jj-pill-emerald-metallic,
-  .jj-surface-emerald,
-  [data-surface="emerald"],
-  [data-surface="dark"],
-  [data-on-dark],
-  [data-ink-emerald],
-  [data-emerald="true"],
-  [data-emerald-filled],
-  [data-emerald-ok="button"],
-  [data-allow-dark-cta]
-) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  stroke-opacity: 1 !important;
-  opacity: 1 !important;
-  text-shadow: none !important;
-  mix-blend-mode: normal !important;
-}
-
-
 html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) {
   background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
   background-color: #064E3B !important;
@@ -17346,3 +17271,606 @@ html body h6.jj-title-emerald * {
   text-fill-color: #1A1A1A !important;
 }
 
+
+/* =====================================================================
+   PASS 64 — EMERALD / DARK FILLED SURFACE WINNING RULE (FINAL).
+   One global contract: any emerald, ink, navy, or dark filled surface paints
+   every text node and every SVG glyph pure white. This rule intentionally
+   lives last so older Tailwind utilities, title locks, hover rules, and
+   sidebar/backend rescue rules cannot repaint emerald content black.
+
+   Authoring rule: mark future emerald/dark filled UI with .jj-surface-emerald,
+   .jj-cta-emerald, .jj-emerald-metallic, [data-ink-emerald], or
+   [data-surface="emerald"]. Use [data-ink-emerald-opt-out] only on a nested
+   LIGHT card that must keep ink text.
+   ===================================================================== */
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white.jj-emerald-metallic,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  button[style*="--jj-emerald-ombre" i],
+  a[style*="--jj-emerald-ombre" i],
+  [role="button"][style*="--jj-emerald-ombre" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="linear-gradient" i][style*="#064e3b" i],
+  [style*="linear-gradient" i][style*="#042c1c" i],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  [class*="via-emerald-"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022c22]"],
+  [class*="from-[#064E3B]"],
+  [class*="from-[#064e3b]"],
+  [class*="from-[#042c1c]"],
+  [class*="to-[#000000]"],
+  [class*="to-black"],
+  [class*="bg-[#0A0A0A]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#1a1a1a]"],
+  [class*="bg-black"],
+  [class*="bg-[image:var(--jj-emerald-ombre)]"]
+):not([data-ink-emerald-opt-out]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="raised"]):not([data-surface="gold"]),
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white.jj-emerald-metallic,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  button[style*="--jj-emerald-ombre" i],
+  a[style*="--jj-emerald-ombre" i],
+  [role="button"][style*="--jj-emerald-ombre" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="linear-gradient" i][style*="#064e3b" i],
+  [style*="linear-gradient" i][style*="#042c1c" i],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  [class*="via-emerald-"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022c22]"],
+  [class*="from-[#064E3B]"],
+  [class*="from-[#064e3b]"],
+  [class*="from-[#042c1c]"],
+  [class*="to-[#000000]"],
+  [class*="to-black"],
+  [class*="bg-[#0A0A0A]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#1a1a1a]"],
+  [class*="bg-black"],
+  [class*="bg-[image:var(--jj-emerald-ombre)]"]
+):not([data-ink-emerald-opt-out]):not([data-surface="champagne"]):not([data-surface="cream"]):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="raised"]):not([data-surface="gold"]) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="raised"]):not([data-surface="raised"] *):not([data-surface="gold"]):not([data-surface="gold"] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  opacity: 1 !important;
+  text-shadow: none;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white.jj-emerald-metallic,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  button[style*="--jj-emerald-ombre" i],
+  a[style*="--jj-emerald-ombre" i],
+  [role="button"][style*="--jj-emerald-ombre" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="linear-gradient" i][style*="#064e3b" i],
+  [style*="linear-gradient" i][style*="#042c1c" i],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  [class*="via-emerald-"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022c22]"],
+  [class*="from-[#064E3B]"],
+  [class*="from-[#064e3b]"],
+  [class*="from-[#042c1c]"],
+  [class*="to-[#000000]"],
+  [class*="to-black"],
+  [class*="bg-[#0A0A0A]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#1a1a1a]"],
+  [class*="bg-black"],
+  [class*="bg-[image:var(--jj-emerald-ombre)]"]
+):not([data-ink-emerald-opt-out]) :is(svg, [class*="lucide"], [data-lucide], svg *, path, circle, rect, line, polyline, polygon, ellipse, use, g):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  caret-color: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white.jj-emerald-metallic,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  button[style*="--jj-emerald-ombre" i],
+  a[style*="--jj-emerald-ombre" i],
+  [role="button"][style*="--jj-emerald-ombre" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="linear-gradient" i][style*="#064e3b" i],
+  [style*="linear-gradient" i][style*="#042c1c" i],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  [class*="via-emerald-"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022c22]"],
+  [class*="from-[#064E3B]"],
+  [class*="from-[#064e3b]"],
+  [class*="from-[#042c1c]"],
+  [class*="to-[#000000]"],
+  [class*="to-black"],
+  [class*="bg-[#0A0A0A]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#1a1a1a]"],
+  [class*="bg-black"],
+  [class*="bg-[image:var(--jj-emerald-ombre)]"]
+):not([data-ink-emerald-opt-out]) svg :is(path, line, polyline, polygon, rect, circle, ellipse, use, g)[fill]:not([fill="none"]):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *) {
+  fill: #FFFFFF !important;
+  fill-opacity: 1 !important;
+}
+
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white.jj-emerald-metallic,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  button[style*="--jj-emerald-ombre" i],
+  a[style*="--jj-emerald-ombre" i],
+  [role="button"][style*="--jj-emerald-ombre" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="linear-gradient" i][style*="#064e3b" i],
+  [style*="linear-gradient" i][style*="#042c1c" i],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  [class*="via-emerald-"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022c22]"],
+  [class*="from-[#064E3B]"],
+  [class*="from-[#064e3b]"],
+  [class*="from-[#042c1c]"],
+  [class*="to-[#000000]"],
+  [class*="to-black"],
+  [class*="bg-[#0A0A0A]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#1a1a1a]"],
+  [class*="bg-black"],
+  [class*="bg-[image:var(--jj-emerald-ombre)]"]
+):not([data-ink-emerald-opt-out]) svg :is(path, line, polyline, polygon, rect, circle, ellipse, use, g):not([fill]):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *) {
+  fill: none !important;
+}
+
+/* =====================================================================
+   PASS 65 — VERIFIED EMERALD/DARK CONTRAST CONTRACT.
+   Previous locks excluded any content inside a page/champagne ancestor;
+   that broke dark hero sections and emerald CTAs that correctly live on
+   normal light pages. This final contract keys off the REAL filled surface
+   itself, then restores nested light cards afterwards. It is intentionally
+   the last contrast rule in the file.
+   ===================================================================== */
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  [style*="--jj-emerald-ombre" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="linear-gradient" i][style*="#064e3b" i],
+  [style*="linear-gradient" i][style*="#042c1c" i],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  [class*="via-emerald-"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022c22]"],
+  [class*="from-[#064E3B]"],
+  [class*="from-[#064e3b]"],
+  [class*="from-[#042c1c]"],
+  [class*="to-[#000000]"],
+  [class*="to-black"],
+  [class*="bg-[#0A0A0A]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#1a1a1a]"],
+  [class*="bg-black"],
+  [class*="bg-[image:var(--jj-emerald-ombre)]"]
+):not([data-ink-emerald-opt-out]),
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  [style*="--jj-emerald-ombre" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#047857" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022c22" i],
+  [style*="background" i][style*="#0a0a0a" i],
+  [style*="background" i][style*="#1a1a1a" i],
+  [style*="linear-gradient" i][style*="#064e3b" i],
+  [style*="linear-gradient" i][style*="#042c1c" i],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  [class*="via-emerald-"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022c22]"],
+  [class*="from-[#064E3B]"],
+  [class*="from-[#064e3b]"],
+  [class*="from-[#042c1c]"],
+  [class*="to-[#000000]"],
+  [class*="to-black"],
+  [class*="bg-[#0A0A0A]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#1a1a1a]"],
+  [class*="bg-black"],
+  [class*="bg-[image:var(--jj-emerald-ombre)]"]
+):not([data-ink-emerald-opt-out]) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g):not([data-ink-emerald-opt-out]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band]
+) :is(svg, [class*="lucide"], [data-lucide], svg *, path, circle, rect, line, polyline, polygon, ellipse, use, g):not([data-ink-emerald-opt-out]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band]
+) svg :is(path, line, polyline, polygon, rect, circle, ellipse, use, g)[fill]:not([fill="none"]):not([data-ink-emerald-opt-out]) {
+  fill: #FFFFFF !important;
+  fill-opacity: 1 !important;
+}
+
+html body #root#root#root :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  .allow-white,
+  [data-ink-emerald],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-surface="navy"],
+  [data-cta="dark"],
+  [data-cta="primary"],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-band]
+) svg :is(path, line, polyline, polygon, rect, circle, ellipse, use, g):not([fill]):not([data-ink-emerald-opt-out]) {
+  fill: none !important;
+}
+
+/* Nested light cards inside dark/emerald bands return to ink, while true
+   emerald CTAs/icons inside those cards are re-locked immediately below. */
+html body #root#root#root :is([data-surface="dark"], [data-surface="emerald"], [data-on-dark], [data-hero-dark], [data-ink-emerald], .jj-surface-emerald)
+  :is([data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, [data-ink-emerald-opt-out]),
+html body #root#root#root :is([data-surface="dark"], [data-surface="emerald"], [data-on-dark], [data-hero-dark], [data-ink-emerald], .jj-surface-emerald)
+  :is([data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, [data-ink-emerald-opt-out]) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+}
+
+/* Absolute last word for emerald controls even when nested inside light cards. */
+html body #root#root#root :is(.jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-surface="emerald"], [data-cta="primary"], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control),
+html body #root#root#root :is(.jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-surface="emerald"], [data-cta="primary"], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
