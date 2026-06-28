@@ -122,6 +122,7 @@ const OverseasInvestorsStrip = () => {
         .oi-band svg,
         .oi-band svg *,
         .oi-band svg.oi-muted,
+        .oi-band svg.oi-muted *,
         .oi-band .oi-muted svg,
         .oi-band .oi-muted svg * {
           stroke: #FFFFFF !important;
