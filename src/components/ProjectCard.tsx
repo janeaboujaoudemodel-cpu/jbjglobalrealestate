@@ -448,8 +448,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             data-emerald-ok="button"
             className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Email</span>
+            <Mail className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Email</span>
           </a>
           <a
             href={callHref}
@@ -459,8 +459,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             data-emerald-ok="button"
             className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Call</span>
+            <Phone className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Call</span>
           </a>
           <a
             href={whatsappHref}
@@ -470,8 +470,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             data-emerald-ok="button"
             className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
-            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold">Chat</span>
+            <MessageCircle className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Chat</span>
+
           </a>
         </div>
       </div>
