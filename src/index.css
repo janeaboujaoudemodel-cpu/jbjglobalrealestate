@@ -8494,21 +8494,24 @@ html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="cham
 html body .jj-hero-search-premium .jj-hero-search-action[data-variant="primary"]:hover {
   filter: brightness(1.08) saturate(1.05) !important;
 }
-/* Champagne secondary pill — preserve inline champagne fill + emerald ink */
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"],
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover,
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:focus,
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:active {
+/* Champagne secondary pill — preserve inline champagne fill + emerald ink.
+   Uses ultra-high specificity (#root#root#root) to defeat the global
+   white-on-dark contrast guards that target [data-ink-emerald] descendants. */
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"],
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover,
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:focus,
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:active,
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] *,
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover *,
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg,
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg *,
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] span {
   color: #0E4A38 !important;
   -webkit-text-fill-color: #0E4A38 !important;
+  stroke: #0E4A38 !important;
   border-left: 0 !important;
 }
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg,
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg * {
-  color: #0E4A38 !important;
-  stroke: #0E4A38 !important;
-}
-html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover {
+html body #root#root#root .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover {
   filter: brightness(1.02) !important;
 }
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]),
