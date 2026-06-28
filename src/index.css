@@ -18661,3 +18661,24 @@ html body #root .aihf-criteria-head * {
   -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* PASS 91 — Careers/open-positions champagne cards: icons next to
+   Top Opportunity, department (Marketing/Finance/IT/etc.) and Dubai/UAE
+   must render black, not inherited white from emerald CTA closures. */
+html body #root [data-careers-job-card] :is(
+  [data-careers-icon="tag"],
+  [data-careers-icon="tag"] *,
+  [data-careers-icon="department"],
+  [data-careers-icon="department"] *,
+  [data-careers-icon="location"],
+  [data-careers-icon="location"] *
+):not(.allow-white):not(.allow-white *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  fill: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
