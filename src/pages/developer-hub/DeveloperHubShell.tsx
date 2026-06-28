@@ -87,11 +87,11 @@ const DeveloperHubShell = () => {
               </Button>
             )}
             <div className="min-w-0">
-              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-tight truncate">
+              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-tight leading-[1.15] whitespace-normal break-words [overflow-wrap:anywhere]">
                 Developer Hub
               </h1>
               {user?.email && (
-                <p className="text-[#1A1A1A]/60 text-xs hidden md:block truncate">
+                <p className="text-[#1A1A1A]/60 text-xs hidden md:block leading-[1.15] whitespace-normal break-words [overflow-wrap:anywhere]">
                   Signed in
                 </p>
               )}
