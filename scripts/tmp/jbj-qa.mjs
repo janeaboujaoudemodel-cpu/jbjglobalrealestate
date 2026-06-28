@@ -31,7 +31,7 @@ async function safeHover(locator) {
 }
 function slug(s){ return s.replace(/[^a-z0-9]+/gi,'-').toLowerCase(); }
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium' });
 const report = [];
 for (const [vpName, viewport] of viewports) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
