@@ -844,16 +844,17 @@ export default function JoinApplication() {
                     Tap <strong data-no-contrast-guard className="allow-white font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Apply</strong> on any role to auto-select it in the form below.
                   </CardDescription>
                 </div>
-                <div className="relative mt-8">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white z-10 pointer-events-none allow-white" strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} aria-hidden />
+                <div data-careers-position-search-wrap className="relative mt-8">
+                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-white z-10 pointer-events-none allow-white" strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} aria-hidden />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
+                    data-careers-position-search
                     data-surface="emerald"
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white pl-12 pr-4 h-12 rounded-xl text-base font-semibold border-0 text-white placeholder:text-white placeholder:font-medium placeholder:opacity-100 focus-visible:ring-2 focus-visible:ring-white/50 text-left"
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white pl-16 pr-5 h-12 rounded-xl text-base font-semibold border-0 text-white placeholder:text-white placeholder:font-semibold placeholder:opacity-100 focus-visible:ring-2 focus-visible:ring-white/50 text-left"
                     style={{
                       color: "#FFFFFF",
                       WebkitTextFillColor: "#FFFFFF",

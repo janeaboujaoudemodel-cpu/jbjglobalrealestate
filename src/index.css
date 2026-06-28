@@ -18672,7 +18672,7 @@ html body #root [data-careers-job-card] :is(
   [data-careers-icon="department"] *,
   [data-careers-icon="location"],
   [data-careers-icon="location"] *
-):not(.allow-white):not(.allow-white *) {
+) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -18681,4 +18681,78 @@ html body #root [data-careers-job-card] :is(
   opacity: 1 !important;
   filter: none !important;
   mix-blend-mode: normal !important;
+}
+
+/* PASS 92 — enforce readable black career card icons and rows on champagne cards.
+   This specifically overrides late emerald/white closures that were repainting
+   Briefcase/MapPin/Award strokes white on the positions list. */
+html body #root [data-careers-job-card] :is([data-careers-ink-row], [data-careers-ink-row] *, [data-careers-ink-icon], [data-careers-ink-icon] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  fill: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root [data-careers-position-search-wrap] {
+  display: block !important;
+}
+
+html body #root input[data-careers-position-search][data-careers-position-search] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+  padding-left: 4rem !important;
+  padding-right: 1.25rem !important;
+  border: 0 !important;
+  opacity: 1 !important;
+}
+
+html body #root input[data-careers-position-search][data-careers-position-search]::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-careers-position-search-wrap] > svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* PASS 93 — Final careers card ink override.
+   The positions grid sits inside an emerald band, and older global emerald
+   contrast guards used very high specificity to paint every nested SVG white.
+   These icons are on champagne job cards, so they must win as solid black. */
+html body #root#root [data-careers-job-card][data-careers-job-card] svg[data-careers-ink-icon][data-careers-ink-icon],
+html body #root#root [data-careers-job-card][data-careers-job-card] svg[data-careers-ink-icon][data-careers-ink-icon] :is(path, circle, rect, line, polyline, polygon, ellipse, g, use),
+html body #root#root [data-careers-job-card][data-careers-job-card] [data-careers-ink-row][data-careers-ink-row],
+html body #root#root [data-careers-job-card][data-careers-job-card] [data-careers-ink-row][data-careers-ink-row] :is(span, strong) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  fill: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root [data-careers-position-search-wrap][data-careers-position-search-wrap] input[data-careers-position-search][data-careers-position-search] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+  padding-left: 4rem !important;
+}
+
+html body #root#root [data-careers-position-search-wrap][data-careers-position-search-wrap] input[data-careers-position-search][data-careers-position-search]::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
 }
