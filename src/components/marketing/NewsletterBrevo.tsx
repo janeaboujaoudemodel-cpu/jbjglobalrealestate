@@ -207,23 +207,27 @@ export const NewsletterBrevo = ({
       <>
         <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Input
-              type="text"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="flex-1 bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20 h-12"
-              disabled={isSubmitting}
-            />
-            <Input
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20 h-12"
-              required
-              disabled={isSubmitting}
-            />
+            <div className="animated-border flex-1 rounded-lg">
+              <Input
+                type="text"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20 h-12"
+                disabled={isSubmitting}
+              />
+            </div>
+            <div className="animated-border flex-1 rounded-lg">
+              <Input
+                type="email"
+                placeholder="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20 h-12"
+                required
+                disabled={isSubmitting}
+              />
+            </div>
           </div>
           <Button
             type="submit"
@@ -256,15 +260,17 @@ export const NewsletterBrevo = ({
   return (
     <>
       <form onSubmit={handleSubmit} className={`space-y-3 ${className}`}>
-        <Input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20"
-          required
-          disabled={isSubmitting}
-        />
+        <div className="animated-border rounded-lg">
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20"
+            required
+            disabled={isSubmitting}
+          />
+        </div>
         <Button
           type="submit"
           disabled={isSubmitting}
