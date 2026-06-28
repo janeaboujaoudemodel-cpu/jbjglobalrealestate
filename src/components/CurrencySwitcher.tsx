@@ -109,26 +109,32 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
           <p className="text-xs font-semibold text-[#1A1A1A]/60 uppercase tracking-wider">Select Currency</p>
         </div>
         <div className="p-2 max-h-80 overflow-y-auto">
-          {SUPPORTED_CURRENCIES.map((curr) => (
-            <DropdownMenuItem 
-              key={curr.code}
-              active={currency === curr.code}
-              data-currency-row
-              data-currency-active={currency === curr.code ? "true" : "false"}
-              data-no-emerald-hover={currency === curr.code ? undefined : "true"}
-              onClick={() => setCurrency(curr.code)}
-              className="flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5"
-            >
+          {SUPPORTED_CURRENCIES.map((curr) => {
+            const active = currency === curr.code;
+
+            return (
+              <DropdownMenuItem 
+                key={curr.code}
+                active={active}
+                data-currency-row
+                data-currency-active={active ? "true" : "false"}
+                data-surface={active ? "emerald" : undefined}
+                data-on-dark={active ? "true" : undefined}
+                data-no-emerald-hover={active ? undefined : "true"}
+                onClick={() => setCurrency(curr.code)}
+                className="flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5"
+              >
               <span className="flex items-center gap-3">
                 <span className="text-lg">{curr.flag}</span>
                 <span className="text-sm font-semibold">{curr.name}</span>
               </span>
               <span className="flex items-center gap-2">
                 <span className="text-sm">{curr.symbol}</span>
-                {currency === curr.code && <Check className="w-4 h-4" />}
+                {active && <Check className="w-4 h-4" />}
               </span>
-            </DropdownMenuItem>
-          ))}
+              </DropdownMenuItem>
+            );
+          })}
         </div>
         
       </DropdownMenuContent>
