@@ -156,7 +156,8 @@ export default function PremiumJobCard({
           {selected && isOpenForApply && (
             <span
               data-no-contrast-guard
-              className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0A0A0A] border border-[#B89555]/60"
+              data-surface="emerald"
+              className="allow-white flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[image:var(--jj-emerald-ombre)] border-transparent"
               aria-label="Selected"
             >
               <CheckCircle className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
@@ -242,10 +243,11 @@ export default function PremiumJobCard({
               data-surface="emerald"
               data-allow-dark-cta
               data-no-contrast-guard
-              className={`jj-cta-emerald jj-pill-emerald-metallic h-11 rounded-xl px-5 font-semibold border border-[#B89555]/70 active:translate-y-[1px] transition-all ${selected ? "ring-2 ring-[#B89555]/70" : ""}`}
+              className={`jj-cta-emerald jj-pill-emerald-metallic min-h-11 rounded-xl px-5 py-2 font-semibold border-transparent active:translate-y-[1px] transition-all ${selected ? "ring-2 ring-[#064E3B]/30" : ""}`}
               onClick={(e) => {
                 e.stopPropagation();
-                onApply(id);
+                if (selected) onSelect?.(id);
+                else onApply(id);
               }}
             >
               {CtaIcon ? (

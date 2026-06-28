@@ -869,7 +869,7 @@ export default function JoinApplication() {
                           applicationCap={pos.application_cap ?? null}
                           selected={selected}
                           onApply={handleApplyPosition}
-                          onSelect={(id) => setFormData({ ...formData, positionApplied: id })}
+                          onSelect={(id) => setFormData((prev) => ({ ...prev, positionApplied: prev.positionApplied === id ? "" : id }))}
                         />
                       );
                     })}

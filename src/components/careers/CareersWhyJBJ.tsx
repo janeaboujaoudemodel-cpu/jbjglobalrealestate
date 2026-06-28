@@ -1,4 +1,5 @@
 import { Crown, TrendingUp, Globe2, Headphones, Rocket, ShieldCheck } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 const BENEFITS = [
   {
@@ -61,9 +62,7 @@ export function CareersWhyJBJ() {
                 <div className="pointer-events-none absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[#047857]/[0.07] blur-3xl group-hover:bg-[#047857]/[0.12] transition" />
 
                 <div className="relative">
-                  <div className="grid h-14 w-14 place-items-center rounded-2xl border border-[#047857]/35 bg-[#FDFBF7] shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_10px_22px_-18px_rgba(6,78,59,0.35)]">
-                    <Icon className="h-7 w-7 text-[#047857]" strokeWidth={2} />
-                  </div>
+                  <IconTile icon={Icon} tone="emerald" size="lg" />
                   <h3 className="mt-4 text-xl font-bold text-[#1A1A1A] leading-snug">{b.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{b.description}</p>
                 </div>
