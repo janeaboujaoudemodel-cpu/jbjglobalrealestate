@@ -815,7 +815,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 </p>
               </div>
             </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
