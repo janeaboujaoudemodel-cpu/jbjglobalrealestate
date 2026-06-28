@@ -18997,6 +18997,23 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-
   background-image: none !important;
 }
 
+html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item][data-jbj-dropdown-selected="true"],
+html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item][data-jbj-dropdown-selected="true"]:is(:hover, :focus, [data-highlighted]) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -18px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item][data-jbj-dropdown-selected="true"] *,
+html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item][data-jbj-dropdown-selected="true"] :is(svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+}
+
 /* (2) Hover-reveal: card-action overlays appear only on hover/focus */
 @media (hover: hover) and (pointer: fine) {
   html body .group [data-card-action],
