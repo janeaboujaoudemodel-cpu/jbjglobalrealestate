@@ -120,7 +120,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         <span className={`text-sm flex-1 ${active ? "font-semibold text-[#1A1A1A]" : "font-medium text-[#1A1A1A]"}`}>
           {label}
         </span>
-        {badge && badge > 0 ? <NotificationBadge count={badge} /> : null}
+        {badge && badge > 0 ? (
+          <span data-no-contrast-guard className="shrink-0 text-white [color:#FFFFFF] [-webkit-text-fill-color:#FFFFFF]">
+            <NotificationBadge count={badge} />
+          </span>
+        ) : null}
       </span>
     );
     return (
