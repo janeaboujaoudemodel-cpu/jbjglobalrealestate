@@ -18608,3 +18608,41 @@ html body #root .animated-border.animated-border-thick::before {
   padding: 3px !important;
   animation-duration: 6s !important;
 }
+
+/* =====================================================================
+   CAREERS FINAL CONTRAST LOCK — shared careers primitives only.
+   Partner labels and apply/send/next CTAs are emerald surfaces and must
+   always render pure white content, even inside champagne cards.
+   ===================================================================== */
+html body #root :is([data-careers-partner-label="true"], [data-careers-apply-cta], .careers-pill-active)[data-careers-partner-label="true"],
+html body #root :is([data-careers-partner-label="true"], [data-careers-apply-cta], .careers-pill-active).jj-cta-emerald,
+html body #root :is([data-careers-partner-label="true"], [data-careers-apply-cta], .careers-pill-active).jj-pill-emerald-metallic,
+html body #root :is([data-careers-partner-label="true"], [data-careers-apply-cta], .careers-pill-active)[data-surface="emerald"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is([data-careers-partner-label="true"], [data-careers-apply-cta], .careers-pill-active, .jj-cta-emerald, .jj-pill-emerald-metallic) :is(span, svg, path, circle, rect, line, polyline, polygon, ellipse),
+html body #root :is([data-careers-partner-label="true"], [data-careers-apply-cta], .careers-pill-active, .jj-cta-emerald, .jj-pill-emerald-metallic).allow-white :is(span, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+}
+
+html body #root [data-careers-partner-label="true"] :is(svg, path, circle, rect, line, polyline, polygon, ellipse),
+html body #root [data-careers-apply-cta] :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+html body #root [data-open-positions-count][data-open-positions-count] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
