@@ -1,295 +1,97 @@
-# Phase 1 — JBJ Global Design System Foundation (Final)
 
-## Objective
+# Global JBJ Design System Correction — Phased Execution Plan
 
-Build ONE clean global design system that becomes the single source of truth for the entire website.
+Goal: fix the **shared primitives and global CSS** (not page-by-page patches) so contrast, button system, header, sidebar, cards, badges, dropdowns and forms behave consistently across every page, portal, tool and viewport. After every phase I will manually navigate the live preview with Playwright, capture screenshots, and only then move to the next phase.
 
-This phase is NOT about fixing individual pages.
+## Guardrails (apply to all phases)
 
-This phase is about eliminating the technical debt that created inconsistent UI across the project.
-
-Nothing may be changed unless it becomes globally consistent.
-
----
-
-## 1. Global Audit (READ ONLY)
-
-Before writing a single line of code:
-
-• Audit every shared component.
-
-• Audit every CSS contract.
-
-• Audit every token.
-
-• Audit every primitive.
-
-• Audit every repeated PASS block.
-
-• Audit every duplicated override.
-
-• Audit every hardcoded color.
-
-• Audit every hardcoded button.
-
-• Audit every hardcoded icon style.
-
-• Audit every duplicated spacing rule.
-
-Create a complete delete list first.
-
-Nothing is deleted until the audit is finished.
+- No redesign, no layout changes beyond fixing alignment / spacing / clipping / contrast.
+- No new colors. Palette = Emerald gradient · Champagne / Gold-champagne · Mother-of-pearl · White · Charcoal.
+- Contrast contract:
+  - Emerald / dark gradient → pure white text + pure white icons only.
+  - Champagne / beige / MOP / white → charcoal or dark-emerald only.
+- Preserve every LOCKED standard: Signature row, Mortgage slider, Phone+cmdk, Document Studio, Hero rule, sq ft / sq m toggle, JB metallic avatar.
+- Consolidate conflicting CSS instead of stacking another override layer.
 
 ---
 
-## 2. Preserve Locked Standards
+## Phase 1 — Audit & CSS consolidation (foundation)
 
-The following are ABSOLUTELY LOCKED.
+1. Inventory conflicting rules in `src/index.css` (PASS 1–88, emerald-pill, surface contract, hero-search, ink-emerald guards).
+2. Build a single **Surface Contract** map (emerald / dark / champagne / light / mop / white) using `:where()` so component-level styles can win.
+3. Remove duplicate / fighting rules; keep one canonical contrast lock.
+4. Define canonical CSS custom props for: button height tiers (h-9 chip, h-11 control, h-12 CTA), radii, paddings, icon sizes, badge sizes.
 
-Do NOT modify.
+Validation: diff CSS size, build passes, Playwright screenshots of Home / Careers / Market Intel before continuing.
 
-Do NOT refactor.
+## Phase 2 — Shared primitive rebuild
 
-Do NOT rewrite.
+Update **shared components only** (no page edits yet):
 
-Do NOT optimize.
+- `Button` (variants: emerald-primary, champagne-secondary, ghost-light, ghost-dark, icon-circle, icon-square).
+- `Badge` / chip (emerald-solid, champagne-solid, outline-dark, outline-light).
+- `IconTile` (emerald → white glyph; champagne → emerald glyph).
+- `Card` (light / emerald / mop variants; single border, no duplicate inner border).
+- `HeaderControl`, `HeaderSegmented`, `SidebarItem`, `JbjAvatar`, `NotificationBadge` already exist — verify and harden.
+- `DropdownMenu` / `Select` / `Popover` hover = soft champagne hover with charcoal text, OR emerald with white. Remove green / blue / navy.
+- `FAQAccordion` arrow tile primitive.
 
-Do NOT replace.
+Validation: `/ds-preview` screenshots + Playwright visit Home, Careers, Market Intel, Broker Portal.
 
-Only preserve them exactly as they currently work.
+## Phase 3 — Header + Sidebar live migration
 
-Examples include:
+- Confirm all header controls use the new primitives at the same h-11 baseline; circular for Search / Filter / Heart / JB, pill for AED / Mode, segmented for sq ft / sq m (restore previous clean shape).
+- JB avatar = emerald metallic + spinner, dropdown opens instantly, hover rows = emerald-fill + white content.
+- Sidebar: every item — including Broker Portal, AI Home Finder, List Your Property, Careers, Resale, Contact, Support, Sign Out, Collapse — uses the same `SidebarItem` primitive (small icon, same axis, single active). No oversized boxes. Collapsed state stays aligned.
 
-• Signature Row
+Validation: Desktop + iPad + iPhone screenshots, expanded + collapsed, dropdowns opened.
 
-• Phone + CmdK
+## Phase 4 — Homepage corrections
 
-• Hero rules
+Hero search, Explore Our Services, Handpicked For You (titles charcoal, Ad badge smaller, heart/shortlist aligned), Continue Searching icon-only buttons, Explore Our Guides (View Library), Explore JBJ Tools, AI Property Comparison (Start Exploring white icon), Compare to Bank Rates (remove duplicate inner border), Top Areas in Dubai title.
 
-• Mortgage slider
+Validation: full Home scroll screenshots Desktop / iPad / iPhone.
 
-• Document Studio
+## Phase 5 — Careers page
 
-• Emerald Box Lock
+Jessica card (real assistant visual, label "Interview Assistant"), Open Positions emerald section with white content, search input without gold border, job cards (dark titles on light, unified Featured/Partner/Top-Opportunity/Selected/Apply badge system, single-select Selected), Application Form (emerald step pill, white Continue text/icon, no navy), FAQ arrows aligned + emerald-active, Why JBJ / Broker Growth icon tiles unified.
 
-• Champagne Band System
+Validation: full Careers walk-through, every step of application form, every FAQ row.
 
-• Active Card Sheen
+## Phase 6 — Market Intelligence / Dashboards
 
-• Universal Contrast Guard
+Metric card alignment, delta-chip spacing, Quarterly Trends icon, animated bars, area cards alignment (Downtown / Marina / Palm / Business Bay / JVC / Creek Harbour / Arabian Ranches), unified "View Area Details" button position, Demand/Supply emerald fills.
 
-• Every previous LOCKED standard
+Validation: Market Intel and Owner Dashboard screenshots.
 
-These are protected.
+## Phase 7 — AI Home Finder + AI Tools visibility
 
----
+- Restore correct surfaces (no all-black page).
+- Add `published` filter to public AI tools registry so unpublished tools are hidden on Web, mobile menu, hamburger, and sitemap. Backend admin still sees all.
 
-## 3. Global CSS Consolidation
+Validation: public vs admin view of AI tools list on Desktop + Mobile.
 
-The current project contains accumulated CSS passes.
+## Phase 8 — Property cards / Listings / Global labels
 
-Replace conflicting visual overrides with ONE clean global source of truth.
+Unified badge + heart + shortlist + add-badge + contact pill system; no overlapping image labels; consistent spacing across Resale, Off-Plan, Handpicked, Favorites, Compare.
 
-Never stack more overrides.
+Validation: each listing surface screenshot.
 
-Delete obsolete visual overrides only after verifying they are completely superseded.
+## Phase 9 — Responsive + performance + document QA
 
-Never remove CSS blindly.
+- Walk Desktop / MacBook / iPad / Tablet / iPhone / Android viewports through: Home, Careers, AI Home Finder, Market Intel, Broker Portal, Owner Portal, Documents & Forms, Services, Insights & Guides, Broker & Academy, Company & Legal, Sitemap, hamburger menu.
+- Verify dropdown open latency, no horizontal overflow, no clipped labels.
+- Export one document (Offer Letter) + download one PDF report; compare preview vs export pixel-for-pixel.
 
-Every deletion must be validated manually.
-
----
-
-## 4. Design Tokens
-
-There must only be ONE definition for:
-
-• Colors
-
-• Radius
-
-• Heights
-
-• Shadows
-
-• Typography
-
-• Spacing
-
-• Hover
-
-• Active
-
-• Focus
-
-• Disabled
-
-No duplicate tokens.
-
-No duplicated variables.
-
-No duplicated color definitions.
+Final deliverable: a screenshot index in `/mnt/documents/global-audit/` grouped by phase and viewport, with a short pass/fail table per acceptance criterion.
 
 ---
 
-## 5. Shared Components
+## Technical notes
 
-Every reusable component becomes the only source of truth.
+- Touch points: `src/index.css` (consolidation), `src/components/ui/*` (Button, Badge, Card, DropdownMenu, Select, Popover), `src/components/ui/ds/*` (HeaderControl, SidebarItem, JbjAvatar, NotificationBadge, FAQAccordion), `src/components/layout/GlobalVerticalNav.tsx`, `src/components/layout/HorizontalUtilityBar.tsx`, careers / market-intel / home section components, AI tools registry (`published` flag filter on public query).
+- No business-logic changes outside the AI-tools `published` filter (required to satisfy the "hide unpublished tools" rule).
+- Validation harness: Playwright scripts under `/tmp/browser/global-audit/<phase>/` writing PNGs to `/mnt/documents/global-audit/<phase>/`.
+- Each phase ends with: (a) build green, (b) screenshots captured, (c) pass/fail table, (d) explicit "ready for next phase" note — no phase skipping.
 
-Buttons
-
-Badges
-
-Labels
-
-Pills
-
-Cards
-
-Sidebar Items
-
-Dropdowns
-
-Header Controls
-
-FAQ Rows
-
-Forms
-
-Progress Steps
-
-Avatar
-
-Icon Tiles
-
-Everything must inherit from the shared primitives.
-
-No page-specific implementations.
-
----
-
-## 6. Global UI Rules
-
-Every future page must inherit the same rules automatically.
-
-That includes:
-
-Button height
-
-Button radius
-
-Button padding
-
-Icon sizes
-
-Label sizes
-
-Typography
-
-Hover
-
-Active state
-
-Focus state
-
-Disabled state
-
-Spacing
-
-Border thickness
-
-Shadows
-
-Animations
-
-Surface colors
-
-Foreground colors
-
-Everything.
-
-No page may override these rules unless absolutely required.
-
----
-
-## 7. Global Validation (MANDATORY)
-
-Completion is NOT based on compiling successfully.
-
-Completion is NOT based on zero TypeScript errors.
-
-Completion is NOT based on screenshots only.
-
-Completion requires manual validation.
-
-Navigate the ENTIRE website manually as if you are a real user.
-
-Desktop
-
-Tablet
-
-Mobile
-
-Every page.
-
-Every section.
-
-Every button.
-
-Every dropdown.
-
-Every modal.
-
-Every tooltip.
-
-Every hover.
-
-Every active state.
-
-Every sidebar state.
-
-Every hamburger menu.
-
-Every download.
-
-Every upload.
-
-Every search.
-
-Every filter.
-
-Every form.
-
-Every CTA.
-
-Every component.
-
-Every responsive breakpoint.
-
-Nothing may be skipped.
-
-Nothing may be assumed.
-
-Nothing may be claimed complete without manual verification.
-
----
-
-## 8. Completion Criteria
-
-Phase 1 is complete ONLY when:
-
-• There are no duplicated visual CSS contracts.
-
-• There are no conflicting overrides.
-
-• Every primitive has a single implementation.
-
-• Every shared component follows the same design system.
-
-• All LOCKED standards remain untouched.
-
-• Manual validation confirms the website is visually and technically consistent across Desktop, Tablet and Mobile.
-
-If any inconsistency remains, Phase 1 is NOT complete.
-
-Never move to Phase 2 until Phase 1 satisfies every requirement above.
+If you approve, I will start Phase 1 immediately and report back with screenshots before moving to Phase 2.
