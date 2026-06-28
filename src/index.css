@@ -18220,3 +18220,29 @@ html body #root#root#root#root#root :is(
   fill: #1A1A1A !important;
   fill-opacity: 1 !important;
 }
+
+/* PASS 69 — DAMAGE REPAIR: champagne/gold badge descendants.
+   Explicitly restores nested spans/icons inside actual champagne/gold utility
+   pills/cards that were accidentally painted white by the dark-surface lock. */
+html body #root#root#root#root#root#root#root :is(
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"],
+  [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"],
+  [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"]
+) :is(span, strong, small, p, h1, h2, h3, h4, h5, h6, a, button, label, li, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, use, g)
+  :not(.jj-cta-primary):not(.jj-cta-primary *)
+  :not(.jj-cta-emerald):not(.jj-cta-emerald *)
+  :not(.jj-emerald-action):not(.jj-emerald-action *)
+  :not([data-surface="emerald"]):not([data-surface="emerald"] *)
+  :not([data-surface="dark"]):not([data-surface="dark"] *)
+  :not([data-on-dark]):not([data-on-dark] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
