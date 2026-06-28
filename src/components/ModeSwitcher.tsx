@@ -382,7 +382,6 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <p
                       className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
                       style={{
-                        color: isEmerald ? 'rgba(255,255,255,0.85)' : '#3F3F46',
                         color: rowDescriptionColor,
                         WebkitTextFillColor: rowDescriptionColor,
                       }}
