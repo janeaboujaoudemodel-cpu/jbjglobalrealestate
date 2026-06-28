@@ -580,9 +580,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   <div className="space-y-6">
                     {/* Role-aware shortcuts */}
                     <div>
-                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
+                      <div className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
                         <IconTile icon={Compass} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" /> For {roleLabel}s
-                      </p>
+                      </div>
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                         {roleShortcuts.map((shortcut) => (
                           <button
@@ -638,9 +638,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     {/* Your Pinned Shortcuts */}
                     {shortcuts.length > 0 && (
                       <div>
-                        <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
+                        <div className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
                           <IconTile icon={Pin} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" /> Your Shortcuts
-                        </p>
+                        </div>
                         <div className="flex flex-wrap gap-2">
                           {shortcuts.map((search, i) => (
                             <div
