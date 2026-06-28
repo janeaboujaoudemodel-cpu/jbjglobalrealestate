@@ -18067,3 +18067,39 @@ html body #root#root#root [data-chrome="sidebar"] [data-sidebar-emerald] :is(
   background-clip: initial !important;
   -webkit-background-clip: initial !important;
 }
+
+/* PASS 67 — FINAL SIDEBAR CHAMPAGNE TEXT OVERRIDE.
+   Beats the earlier repeated emerald locks by using higher specificity on the
+   actual champagne sidebar labels, not broad light-page ancestors. */
+html body #root#root#root#root#root [data-chrome="sidebar"][data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald]
+  :is([data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label],
+      a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
+      a[data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label]),
+html body #root#root#root#root#root [data-chrome="sidebar"][data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald]
+  :is([data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-icon],
+      a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-icon],
+      a[data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon],
+      [data-sidebar-section]:not([data-active="true"]) svg,
+      a[data-sidebar-highlight]:not([data-active="true"]) svg,
+      a[data-sidebar-subitem]:not([data-active="true"]) svg) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root#root#root [data-chrome="sidebar"][data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald]
+  :is([data-sidebar-section]:not([data-active="true"]) svg [fill]:not([fill="none"]),
+      a[data-sidebar-highlight]:not([data-active="true"]) svg [fill]:not([fill="none"]),
+      a[data-sidebar-subitem]:not([data-active="true"]) svg [fill]:not([fill="none"])) {
+  fill: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
