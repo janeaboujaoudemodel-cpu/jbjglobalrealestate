@@ -105,20 +105,14 @@ export default function HorizontalUtilityBar() {
         <div className="flex items-center gap-3 shrink-0">
           <Tooltip>
             <TooltipTrigger asChild>
-              <button
-                data-no-contrast-guard
-                data-emerald-action="true"
-                onClick={() => setSearchOpen(true)}
-                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="jj-header-icon-control allow-white h-11 w-11 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+              <HeaderControl
+                shape="circle"
+                tone="emerald"
                 aria-label="Search"
+                onClick={() => setSearchOpen(true)}
               >
-                <Search
-                  data-no-contrast-guard
-                  className="allow-white w-4 h-4"
-                  style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
-                />
-              </button>
+                <Search />
+              </HeaderControl>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Search anything</TooltipContent>
           </Tooltip>
@@ -129,20 +123,14 @@ export default function HorizontalUtilityBar() {
           {/* Filter */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <button
-                data-no-contrast-guard
-                data-emerald-action="true"
-                onClick={() => setFilterOpen(true)}
-                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="jj-header-icon-control allow-white h-11 w-11 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+              <HeaderControl
+                shape="circle"
+                tone="emerald"
                 aria-label="Filter"
+                onClick={() => setFilterOpen(true)}
               >
-                <SlidersHorizontal
-                  data-no-contrast-guard
-                  className="allow-white w-4 h-4"
-                  style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
-                />
-              </button>
+                <SlidersHorizontal />
+              </HeaderControl>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Advanced filters</TooltipContent>
           </Tooltip>
@@ -150,68 +138,33 @@ export default function HorizontalUtilityBar() {
           {/* Favorites */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                to="/favorites"
-                data-no-contrast-guard
-                data-emerald-action="true"
-                style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="jj-header-icon-control allow-white h-11 w-11 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
-                aria-label="Favorites"
-              >
-                <Heart
-                  data-no-contrast-guard
-                  className="allow-white w-4 h-4"
-                  style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }}
-                />
+              <Link to="/favorites" aria-label="Favorites" className="contents">
+                <HeaderControl
+                  shape="circle"
+                  tone="emerald"
+                  aria-label="Favorites"
+                  onClick={(e) => { e.preventDefault(); navigate("/favorites"); }}
+                >
+                  <Heart style={{ fill: "none" }} />
+                </HeaderControl>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs">Favorites</TooltipContent>
           </Tooltip>
 
-          {/* Sq ft / Sq m — emerald pill to match Search/Filter/Heart */}
-          <div
-            data-no-contrast-guard
-            data-emerald-action="true"
-            data-on-dark
-            data-allow-dark-cta
-            data-jj-utility-pill
-            className="allow-white hidden sm:inline-flex items-center h-9 rounded-full overflow-hidden relative shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
-            style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(255,255,255,0.18)" }}
-          >
-            <button
-              data-no-contrast-guard
-                data-emerald-action="true"
-              onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
-              data-active={areaUnit === 'sqft'}
-              data-on-dark
-              data-allow-dark-cta
-              className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-              aria-label="Square feet"
-            >
-              <span aria-hidden="true" className="jj-sqtoggle-sweep" />
-              <span>sq ft</span>
-            </button>
-            <span aria-hidden className="w-px h-4 bg-white/25" />
-            <button
-              data-no-contrast-guard
-                data-emerald-action="true"
-              onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
-              data-active={areaUnit === 'sqm'}
-              data-on-dark
-              data-allow-dark-cta
-              className="allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-300"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-              aria-label="Square meters"
-            >
-              <span aria-hidden="true" className="jj-sqtoggle-sweep" />
-              <span>sq m</span>
-            </button>
-
+          {/* Sq ft / Sq m — DS segmented control */}
+          <div className="hidden sm:inline-flex" data-jj-utility-pill>
+            <HeaderSegmented
+              value={areaUnit}
+              onChange={(v) => {
+                if (v !== areaUnit) toggleAreaUnit();
+              }}
+              options={[
+                { value: "sqft", label: "sq ft", "aria-label": "Square feet" },
+                { value: "sqm", label: "sq m", "aria-label": "Square meters" },
+              ]}
+            />
           </div>
-
-
-
 
           {/* Currency — flag + AED */}
           <CurrencySwitcher variant="flag" />
@@ -223,19 +176,20 @@ export default function HorizontalUtilityBar() {
           {user ? (
             <UserAvatarMenu onOpenFilters={() => setFilterOpen(true)} />
           ) : (
-            <Link
-              to="/auth"
-              data-surface="emerald"
-              data-no-contrast-guard
-              className="jj-header-selector-control allow-white h-11 inline-flex items-center gap-1.5 px-4 rounded-full border border-white/30 hover:border-white/55 transition-colors text-[12px] font-semibold tracking-wide text-white uppercase"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            <HeaderControl
+              shape="pill"
+              tone="emerald"
+              aria-label="Sign in"
+              onClick={() => navigate("/auth")}
+              className="uppercase tracking-wide"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-white/85" />
-              <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign in</span>
-            </Link>
+              <span>Sign in</span>
+            </HeaderControl>
           )}
         </div>
       </div>
+
 
       <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />
 
