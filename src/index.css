@@ -18988,7 +18988,7 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-
 }
 
 html body [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row][data-currency-active="false"] *,
-html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item] * {
+html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item]:not([data-jbj-dropdown-selected="true"]) * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
