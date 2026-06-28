@@ -222,7 +222,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             onClick={openBooking}
             aria-label="Book your free consultation now"
             data-no-contrast-guard
-            className="allow-white jj-hero-search-action hidden sm:flex relative my-1.5 sm:my-2 items-center justify-center gap-2 h-[44px] rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98]"
+            className="allow-white jj-hero-search-action hidden sm:flex relative my-2 items-center justify-center gap-2 h-[44px] py-0 leading-none rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98]"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
