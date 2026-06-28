@@ -210,6 +210,10 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         <DropdownMenuTrigger asChild>
           <button
             disabled={isLoading}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen(true);
+            }}
             style={triggerStyle}
             data-no-contrast-guard
             data-emerald-action="true"
@@ -229,14 +233,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             )}
             <span
-              className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block tracking-wide"
+              className="mode-switcher-trigger-label text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block tracking-wide"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
               {triggerLabel}
             </span>
             <ChevronDown
               data-no-contrast-guard
-              className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
+              className={cn("mode-switcher-trigger-chevron w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
               style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
             />
           </button>
@@ -295,34 +299,35 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               const isActive = mode === modeKey;
               const isHovered = hoveredMode === modeKey;
 
-              // NEW: rows render as emerald by default. Active row renders as
-              // champagne with emerald content (inverted), so the selected row
-              // is unmistakably distinct without ever producing low-contrast
-              // black-on-emerald or white-on-champagne combinations.
-              // Default: champagne/gold rows with gold border.
-              // Active row: emerald ombre with white content.
+              // One-card mode system: the row itself owns all hover/active
+              // styling. Children are transparent so global dropdown hover
+              // rules can never create nested rectangles inside a card.
               const isEmerald = isActive;
               const rowTextColor = isEmerald ? '#FFFFFF' : '#1A1A1A';
+              const rowDescriptionColor = isEmerald ? '#FFFFFF' : '#1A1A1A';
               const rowIconBg = isEmerald
                 ? 'linear-gradient(135deg, #042F22 0%, #064E3B 100%)'
                 : 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)';
-              const rowIconColor = isEmerald ? '#FFFFFF' : '#064E3B';
+              const rowIconColor = isEmerald ? '#FFFFFF' : '#1A1A1A';
 
               const rowStyle: CSSProperties = {
-                backgroundImage: isEmerald
+                ['--mode-row-bg' as string]: isEmerald
                   ? 'var(--jj-emerald-ombre)'
-                  : isHovered
-                  ? 'linear-gradient(135deg, #F7EFDC 0%, #EADFC4 100%)'
                   : 'linear-gradient(135deg, #FDFBF7 0%, #F2E8D2 100%)',
-                borderColor: '#B89555',
-                borderWidth: isEmerald ? 1.5 : 1,
-                color: rowTextColor,
-                boxShadow: isEmerald
+                ['--mode-row-border' as string]: isHovered ? '#A9823E' : '#B89555',
+                ['--mode-row-shadow' as string]: isEmerald
                   ? '0 10px 24px -14px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18)'
                   : isHovered
-                  ? '0 8px 22px -12px rgba(184,149,85,0.6), inset 0 1px 0 rgba(255,255,255,0.7)'
+                  ? '0 12px 26px -16px rgba(184,149,85,0.72), inset 0 1px 0 rgba(255,255,255,0.72)'
                   : '0 6px 18px -14px rgba(184,149,85,0.45), inset 0 1px 0 rgba(255,255,255,0.6)',
-                transform: 'none',
+                ['--mode-row-transform' as string]: isHovered ? 'translateY(-1px)' : 'translateY(0)',
+                background: 'var(--mode-row-bg)',
+                backgroundImage: 'var(--mode-row-bg)',
+                borderColor: 'var(--mode-row-border)',
+                borderWidth: isEmerald ? 1.5 : 1,
+                color: rowTextColor,
+                boxShadow: 'var(--mode-row-shadow)',
+                transform: 'var(--mode-row-transform)',
               };
 
               return (
@@ -344,6 +349,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   data-no-contrast-guard
                   data-no-emerald-hover
                   data-mode-row={isEmerald ? 'active' : 'idle'}
+                  data-mode-card="true"
                   {...(isEmerald ? { 'data-surface': 'emerald', 'data-emerald-action': 'true', 'data-on-dark': 'true' } : {})}
                   className={cn(
                     "mode-switcher-item",
@@ -353,7 +359,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 >
                   <div
                     data-no-contrast-guard
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    data-mode-icon-tile={isEmerald ? 'active' : 'idle'}
+                    className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       backgroundImage: rowIconBg,
                       boxShadow: isEmerald
@@ -379,8 +386,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <p
                       className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
                       style={{
-                        color: isEmerald ? 'rgba(255,255,255,0.85)' : '#3F3F46',
-                        WebkitTextFillColor: isEmerald ? 'rgba(255,255,255,0.85)' : '#3F3F46',
+                        color: rowDescriptionColor,
+                        WebkitTextFillColor: rowDescriptionColor,
                       }}
                     >
                       {config.description}
@@ -391,7 +398,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <span
                       data-no-contrast-guard
                       data-mode-active-pill=""
-                      className="ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
+                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
                         background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
                         color: '#064E3B',
@@ -411,7 +418,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   ) : (
                     <span
                       data-no-contrast-guard
-                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
+                      data-mode-select-pill=""
+                      className="mode-switcher-select-pill ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
                         color: '#FFFFFF',
                         WebkitTextFillColor: '#FFFFFF',

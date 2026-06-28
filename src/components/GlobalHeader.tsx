@@ -34,6 +34,7 @@ import { UserAvatarPremium } from "@/components/account/UserAvatarPremium";
 import { BrandMonogram } from "@/components/BrandMonogram";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import ModeSwitcher from "@/components/ModeSwitcher";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import MobileMenuWalkthrough, { useAutoWalkthrough } from "@/components/MobileMenuWalkthrough";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -925,6 +926,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   </Link>
                   <LanguageSwitcher variant="mobile" />
                   <CurrencySwitcher variant="mobile" />
+                  <ModeSwitcher variant="header" showForUnselected />
                 </div>
 
                 {/* My Shortcuts */}
