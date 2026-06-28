@@ -11334,7 +11334,11 @@ h3.text-muted-foreground,
   --ink-emerald-3: #000000;
 }
 
-html body :is(.jj-cta-primary, .jj-cta-champagne, [data-cta="primary"], [data-surface="emerald"], .jj-emerald-solid, .jj-badge-dark, .jj-pill-active, .jj-icon-tile-emerald, .jj-card-emerald, .jj-sidebar-item-active, [data-sidebar-subitem][data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-owner-item][data-emerald="true"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) {
+/* PASS XX-D FIX: Removed .jj-cta-champagne and .jj-pill-active from this emerald-forcing rule.
+   Both are CHAMPAGNE (light) primitives per their definitions at line 5182 and 11089.
+   They were being incorrectly forced to emerald gradient, producing dark ink text on dark
+   emerald bg (unreadable). Champagne CTAs keep their light bg + ink text. */
+html body :is(.jj-cta-primary, [data-cta="primary"], [data-surface="emerald"], .jj-emerald-solid, .jj-badge-dark, .jj-icon-tile-emerald, .jj-card-emerald, .jj-sidebar-item-active, [data-sidebar-subitem][data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-owner-item][data-emerald="true"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) {
   background: var(--gradient-emerald) !important;
   background-image: var(--gradient-emerald) !important;
   background-color: var(--emerald-1) !important;
@@ -11345,15 +11349,15 @@ html body :is(.jj-cta-primary, .jj-cta-champagne, [data-cta="primary"], [data-su
   opacity: 1 !important;
 }
 
-html body :is(.jj-cta-primary, .jj-cta-champagne, [data-cta="primary"], [data-surface="emerald"], .jj-emerald-solid, .jj-badge-dark, .jj-pill-active, .jj-icon-tile-emerald, .jj-card-emerald, .jj-sidebar-item-active, [data-sidebar-subitem][data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-owner-item][data-emerald="true"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
-html body :is(.jj-cta-primary, .jj-cta-champagne, [data-cta="primary"], [data-surface="emerald"], .jj-emerald-solid, .jj-badge-dark, .jj-pill-active, .jj-icon-tile-emerald, .jj-card-emerald, .jj-sidebar-item-active, [data-sidebar-subitem][data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-owner-item][data-emerald="true"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) :is(svg, [class*="lucide"]) * {
+html body :is(.jj-cta-primary, [data-cta="primary"], [data-surface="emerald"], .jj-emerald-solid, .jj-badge-dark, .jj-icon-tile-emerald, .jj-card-emerald, .jj-sidebar-item-active, [data-sidebar-subitem][data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-owner-item][data-emerald="true"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) :is(span, p, strong, small, em, b, a, button, label, svg, [class*="lucide"]),
+html body :is(.jj-cta-primary, [data-cta="primary"], [data-surface="emerald"], .jj-emerald-solid, .jj-badge-dark, .jj-icon-tile-emerald, .jj-card-emerald, .jj-sidebar-item-active, [data-sidebar-subitem][data-active="true"], [data-sidebar-section][data-active="true"], [data-sidebar-owner-item][data-emerald="true"], [role="tab"][data-state="active"], [data-jj-segmented-trigger][data-state="active"]) :is(svg, [class*="lucide"]) * {
   color: var(--emerald-on) !important;
   -webkit-text-fill-color: var(--emerald-on) !important;
   stroke: var(--emerald-on) !important;
   opacity: 1 !important;
 }
 
-html body :is(.jj-cta-primary, .jj-cta-champagne, [data-cta="primary"], [data-surface="emerald"]):is(:hover, :focus, :focus-visible, :active) {
+html body :is(.jj-cta-primary, [data-cta="primary"], [data-surface="emerald"]):is(:hover, :focus, :focus-visible, :active) {
   background: var(--gradient-emerald-hover) !important;
   background-image: var(--gradient-emerald-hover) !important;
   color: var(--emerald-on) !important;
@@ -17122,9 +17126,9 @@ html body :is(
   [style*="background-color:#fff"],
   [style*="background: white"],
   [style*="background:#fff"]
-):not([data-surface="emerald"]):not([data-on-dark]):not([data-hero-dark])
+):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-on-dark]):not([data-hero-dark]):not(.jj-cta-dark):not(.jj-cta-emerald):not(.jj-cta-primary):not(.careers-navy-cta):not(.surface-dark):not(.surface-ink):not(.surface-navy)
   :is(.text-white, [class*="text-white"], [style*="color: rgb(255, 255, 255)"], [style*="color:#fff"], [style*="color: #fff"], svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse)
-  :not(:is([data-surface="emerald"], [data-emerald="true"], [data-emerald-ok], [data-emerald-action="true"], [data-emerald-icon-surface], [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-on-dark], [data-hero-dark], .jj-side-tile, .jbj-sidebar-collapse-control, .jj-emerald-metallic, .jj-cta-emerald, .jj-cta-primary, .jj-surface-emerald, .jj-icon-tile-emerald, .jj-pill-emerald, .jj-pill-emerald-metallic) *) {
+  :not(:is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-emerald="true"], [data-emerald-ok], [data-emerald-action="true"], [data-emerald-icon-surface], [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-on-dark], [data-hero-dark], .jj-side-tile, .jbj-sidebar-collapse-control, .jj-emerald-metallic, .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .careers-navy-cta, .jj-surface-emerald, .surface-dark, .surface-ink, .surface-navy, .jj-icon-tile-emerald, .jj-pill-emerald, .jj-pill-emerald-metallic) *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -17157,7 +17161,7 @@ html body :is(
   [style*="background-color:#fff"],
   [style*="background: white"],
   [style*="background:#fff"]
-):is(.text-white, [class*="text-white"]):not([data-surface="emerald"]):not([data-on-dark]):not([data-hero-dark]):not(.jj-emerald-metallic):not(.jj-cta-emerald):not(.jj-cta-primary):not(.jj-surface-emerald) {
+):is(.text-white, [class*="text-white"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-on-dark]):not([data-hero-dark]):not(.jj-emerald-metallic):not(.jj-cta-emerald):not(.jj-cta-primary):not(.jj-cta-dark):not(.careers-navy-cta):not(.surface-dark):not(.surface-ink):not(.surface-navy):not(.jj-surface-emerald) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
