@@ -17987,7 +17987,7 @@ body :where(
 
 /* Careers position cards: all icons sitting on champagne/gold job-card surfaces
    must be solid black, including Top Opportunity, department and Dubai/UAE rows. */
-body [data-careers-job-card] :where(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"] *, .jj-cta-emerald *, .jj-pill-emerald-metallic *, [data-emerald-icon-surface] *, .allow-white, .allow-white *)) {
+body [data-careers-job-card] :where(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"] *, .jj-cta-emerald *, [data-emerald-icon-surface] *, .allow-white, .allow-white *)) {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   fill: none !important;
