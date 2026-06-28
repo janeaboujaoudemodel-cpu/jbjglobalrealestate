@@ -153,7 +153,7 @@ export default function HorizontalUtilityBar() {
           </Tooltip>
 
           {/* Sq ft / Sq m — DS segmented control */}
-          <div className="hidden sm:inline-flex" data-jj-utility-pill>
+          <div className="hidden sm:inline-flex">
             <HeaderSegmented
               value={areaUnit}
               onChange={(v) => {
