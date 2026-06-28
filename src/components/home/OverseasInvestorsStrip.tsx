@@ -44,17 +44,20 @@ const AnimatedStat = ({ stat, start, index }: { stat: Stat; start: boolean; inde
   const val = useCountUp(stat.target, start);
   return (
     <div
-      className="oi-stat group/stat flex flex-col items-center gap-1.5 px-3 py-2 text-center"
+      className="oi-stat group/stat relative flex min-w-0 flex-col items-center gap-1.5 px-1.5 py-2 text-center sm:px-3 transition-transform duration-500 hover:-translate-y-0.5"
       style={{ animationDelay: `${index * 70}ms` }}
     >
-      <Icon className="oi-muted h-4 w-4" strokeWidth={1.75} />
-      <span className="text-[1.5rem] font-bold leading-none tabular-nums sm:text-[1.75rem]" style={{ letterSpacing: "-0.02em" }}>
+      <Icon className="oi-muted h-4 w-4 transition-transform duration-500 group-hover/stat:scale-110" strokeWidth={1.75} />
+      <span
+        className="text-[1.15rem] font-bold leading-none tabular-nums sm:text-[1.55rem] md:text-[1.75rem]"
+        style={{ letterSpacing: "-0.02em" }}
+      >
         {stat.prefix ?? ""}{val}{stat.suffix ?? ""}
       </span>
       <span className="oi-meter" aria-hidden="true">
         <span style={{ transform: start ? "scaleX(1)" : "scaleX(0)", transitionDelay: `${index * 80 + 120}ms` }} />
       </span>
-      <span className="oi-faint text-[9.5px] font-semibold uppercase tracking-[0.22em]">
+      <span className="oi-faint text-[8.5px] font-semibold uppercase tracking-[0.18em] sm:text-[9.5px] sm:tracking-[0.22em] whitespace-nowrap">
         {stat.label}
       </span>
     </div>
