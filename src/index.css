@@ -18363,11 +18363,11 @@ html body #root [data-surface="mop"]      :is(h1,h2,h3,h4,h5,h6,p,a,li,label,str
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body #root [data-surface="champagne"] span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]),
-html body #root [data-surface="light"]    span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]),
-html body #root [data-surface="mop"]      span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]) {
-  color: inherit !important;
-  -webkit-text-fill-color: inherit !important;
+html body #root [data-surface="champagne"] span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]),
+html body #root [data-surface="light"]    span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]),
+html body #root [data-surface="mop"]      span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 html body #root [data-surface="champagne"] svg:not(.allow-white):not([data-no-contrast-guard]) {
   color: #1A1A1A !important;
