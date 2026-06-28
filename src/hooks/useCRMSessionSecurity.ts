@@ -44,11 +44,28 @@ export function useCRMSessionSecurity(): UseCRMSessionSecurityReturn {
 
   useEffect(() => {
     const events = ["mousedown", "keydown", "scroll", "touchstart"];
-    events.forEach(e => document.addEventListener(e, resetIdleTimer, { passive: true }));
+    let lastResetAt = 0;
+    let idleResetTimer: ReturnType<typeof setTimeout> | undefined;
+    const throttledResetIdleTimer = () => {
+      const now = Date.now();
+      if (now - lastResetAt > 1000) {
+        lastResetAt = now;
+        resetIdleTimer();
+        return;
+      }
+      if (idleResetTimer) return;
+      idleResetTimer = setTimeout(() => {
+        idleResetTimer = undefined;
+        lastResetAt = Date.now();
+        resetIdleTimer();
+      }, 1000 - (now - lastResetAt));
+    };
+    events.forEach(e => document.addEventListener(e, throttledResetIdleTimer, { passive: true }));
     resetIdleTimer();
 
     return () => {
-      events.forEach(e => document.removeEventListener(e, resetIdleTimer));
+      events.forEach(e => document.removeEventListener(e, throttledResetIdleTimer));
+      if (idleResetTimer) clearTimeout(idleResetTimer);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     };
   }, [resetIdleTimer]);
