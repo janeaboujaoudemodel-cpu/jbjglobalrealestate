@@ -18234,6 +18234,32 @@ html body :is([data-jbj-dropdown-item], [role="menuitem"], [role="option"], [dat
   stroke: currentColor !important;
   fill: none !important;
 }
+html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item]:is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]),
+html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-selected="true"]:not([data-no-emerald-hover]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item]:is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) *,
+html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-selected="true"]:not([data-no-emerald-hover]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.28) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item]:is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) :is(svg, path, circle, rect, line, polyline, polygon),
+html body [data-radix-popper-content-wrapper] [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-selected="true"]:not([data-no-emerald-hover]) :is(svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+}
+html body [data-jbj-notification-badge][data-jbj-notification-badge] {
+  min-width: 22px !important;
+  width: auto !important;
+  height: 22px !important;
+  padding-inline: 6px !important;
+}
 @media (prefers-reduced-motion: reduce) {
   .jj-avatar-spinner { animation: none; }
 }

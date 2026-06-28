@@ -29,6 +29,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     data-jbj-dropdown-item=""
+    data-no-contrast-guard=""
     data-jbj-dropdown-selected={active ? "true" : undefined}
     className={cn(
       "flex min-h-10 cursor-default select-none items-center rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-150 ease-out data-[state=open]:text-white focus:text-white hover:text-white",
@@ -94,6 +95,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     data-jbj-dropdown-item=""
+    data-no-contrast-guard=""
     data-jbj-dropdown-selected={active ? "true" : undefined}
     className={cn(
       "relative flex cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -114,6 +116,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     data-jbj-dropdown-item=""
+    data-no-contrast-guard=""
     className={cn(
       "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-150 ease-out data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:text-white focus:text-white",
       className,
@@ -138,6 +141,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     data-jbj-dropdown-item=""
+    data-no-contrast-guard=""
     className={cn(
       "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-150 ease-out data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:text-white",
