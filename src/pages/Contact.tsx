@@ -542,11 +542,11 @@ END:VCARD`;
                             <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                <SelectTrigger data-surface="light" className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                    <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
+                              <SelectContent data-surface="light">
                                 {SERVICE_OPTIONS.map((option) => (
                                   <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
                                     {option.label}
@@ -568,11 +568,11 @@ END:VCARD`;
                               <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                   <SelectTrigger data-surface="light" className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
+                                <SelectContent data-surface="light">
                                   {BUDGET_OPTIONS.map((option) => (
                                     <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
                                       {option.label}
@@ -592,11 +592,11 @@ END:VCARD`;
                               <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                   <SelectTrigger data-surface="light" className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
+                                <SelectContent data-surface="light">
                                   {TIMELINE_OPTIONS.map((option) => (
                                     <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
                                       {option.label}

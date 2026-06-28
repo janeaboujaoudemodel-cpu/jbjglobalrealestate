@@ -221,6 +221,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
         <button
           ref={setActiveRefCallback(item.path)}
           data-sidebar-owner-item
+          data-surface={active ? "emerald" : "light"}
           data-emerald={active ? "true" : undefined}
           onClick={() => {
             // Always navigate to the parent's own path. Expansion is automatic
@@ -293,7 +294,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   };
 
   return (
-    <nav data-no-contrast-guard className="p-2 space-y-4 overflow-y-auto flex-1 jj-scrollbar-gold">
+    <nav data-no-contrast-guard data-surface="light" className="p-2 space-y-4 overflow-y-auto flex-1 jj-scrollbar-gold">
       {NAV_SECTIONS.map((section) => (
         <div key={section.label}>
           {!collapsed && (
