@@ -143,8 +143,8 @@ const CookiesConsentBanner = () => {
                     <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 items-stretch">
                       <Button
                         onClick={handleAcceptAll}
-                        className="jj-official-emerald allow-white shadow-md px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] !flex-none !w-auto"
-                        style={{ color: "#FFFFFF", minWidth: "max-content", flex: "0 0 auto" }}
+                        className="jj-official-emerald allow-white shadow-md px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] !flex-none"
+                        style={{ color: "#FFFFFF", width: "max-content", flex: "0 0 auto" }}
                         data-cta="primary"
                         data-surface="emerald"
                         data-emerald-icon-surface
@@ -155,16 +155,16 @@ const CookiesConsentBanner = () => {
                       <Button
                         onClick={handleRejectNonEssential}
                         variant="outline"
-                        className="jj-cta-outline shadow-sm px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] !flex-none !w-auto"
-                        style={{ minWidth: "max-content", flex: "0 0 auto" }}
+                        className="jj-cta-outline shadow-sm px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] !flex-none"
+                        style={{ width: "max-content", flex: "0 0 auto" }}
                         data-cta="outline"
                       >
                         <span className="!whitespace-nowrap">Reject All</span>
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        className="jj-official-emerald allow-white shadow-md px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] !flex-none !w-auto"
-                        style={{ color: "#FFFFFF", minWidth: "max-content", flex: "0 0 auto" }}
+                        className="jj-official-emerald allow-white shadow-md px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] !flex-none"
+                        style={{ color: "#FFFFFF", width: "max-content", flex: "0 0 auto" }}
                         data-cta="primary"
                         data-surface="emerald"
                         data-emerald-icon-surface
@@ -173,6 +173,7 @@ const CookiesConsentBanner = () => {
                         <span className="allow-white !whitespace-nowrap" style={{ color: "#FFFFFF" }}>Manage Preferences</span>
                       </Button>
                     </div>
+
 
 
                     <p className="text-[#1A1A1A]/70 text-[10px] sm:text-xs mt-3">
