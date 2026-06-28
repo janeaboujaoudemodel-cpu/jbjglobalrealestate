@@ -16423,25 +16423,26 @@ html body .mortgage-compare-card {
     0 12px 34px -24px rgba(6,78,59,0.55) !important;
 }
 
-/* PASS 48 — True viewport edge-to-edge bleed for the Overseas Investors strip.
-   Overrides the main-shell tame on .jj-fullbleed-band so the emerald band runs
-   from viewport x=0 to the right viewport edge, regardless of sidebar state. */
+/* PASS 48 — Rail-safe bleed for the Overseas Investors strip.
+   The fixed sidebar owns real viewport width; this band must start at the
+   main-shell left edge and run to the right edge of that remaining viewport.
+   Never use 100vw here or it slides behind the vertical sidebar and crops. */
 html body #root main.jj-main-shell section.oi-band,
 html body #root main.jj-main-shell [data-content-gutter="1"] section.oi-band,
 html body #root section.oi-band[data-fullbleed-band] {
   position: relative !important;
   left: auto !important;
   right: auto !important;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  margin-left: calc(var(--jj-shell-main-w, 100vw) - 100vw) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
   margin-right: 0 !important;
   box-sizing: border-box !important;
 }
 html body #root main.jj-main-shell section.oi-band > a,
 html body #root section.oi-band[data-fullbleed-band] > a {
   width: 100% !important;
-  max-width: 100vw !important;
+  max-width: 100% !important;
 }
 
 /* ============================================================
@@ -17184,4 +17185,107 @@ html body [data-radix-popper-content-wrapper] [data-on-dark]
   /* Collapsed sidebar (48px rail). */
   body.jj-vertical-nav-collapsed .jj-page-nav-anchor--left  { left: 64px; }
   body.jj-vertical-nav-collapsed .jj-page-nav-anchor--right { right: 64px; }
+}
+
+/* =========================================================
+ * PASS 62 — FINAL RAIL + EMERALD CONTRAST ROOT FIX
+ * 1) No full-bleed band inside the main shell may measure from 100vw;
+ *    it measures from the post-sidebar content viewport only.
+ * 2) Any real emerald/dark action surface keeps pure white text/icons at
+ *    rest, hover, active, focus, and selected states — even when older
+ *    components still carry data-no-contrast-guard.
+ * ========================================================= */
+html body #root main.jj-main-shell :is(.jj-fullbleed-band, [data-fullbleed-band], .jj-band, .jj-project-band) {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 640px) {
+  html body #root main.jj-main-shell :is(.jj-fullbleed-band, [data-fullbleed-band], .jj-band, .jj-project-band) {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+html body :is(
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  .jj-side-tile,
+  .jj-cta-emerald,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-on-dark],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [data-allow-dark-cta]
+),
+html body :is(
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  .jj-side-tile,
+  .jj-cta-emerald,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-on-dark],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [data-allow-dark-cta]
+):is(:hover, :focus, :focus-visible, :active, [data-state="active"], [aria-selected="true"]),
+html body :is(
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control,
+  .jj-side-tile,
+  .jj-cta-emerald,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-surface-emerald,
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-on-dark],
+  [data-emerald="true"],
+  [data-emerald-filled],
+  [data-emerald-ok="button"],
+  [data-allow-dark-cta]
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) {
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(52,211,153,0.55) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) :is(svg, [class*="lucide"]),
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  filter: none !important;
 }
