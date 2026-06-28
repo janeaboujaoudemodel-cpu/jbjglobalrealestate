@@ -1178,11 +1178,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
                         return (
                           <React.Fragment key={item.href + item.label + i}>
-                            <Link
+                            <SidebarItem
+                              preserveVisual
                               to={item.href}
+                              icon={Icon}
+                              iconRef={lockEmeraldGlyphWhite}
+                              label={item.label}
+                              active={subitemActive}
                               onMouseEnter={() => prefetchAITool(item.href)}
                               onFocus={() => prefetchAITool(item.href)}
-                              onClick={(e) => {
+                              onClick={() => {
                                 // Never open the full-screen mega drop-down overlay from inside
                                 // an expanded section — just navigate.
                                 collapseAfterNavigation();
@@ -1198,13 +1203,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               style={subitemActive
                                 ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                                 : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
-                            >
-                              <span data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
-                                <Icon ref={lockEmeraldGlyphWhite} data-sidebar-subitem-icon className="w-[18px] h-[18px] transition-colors" strokeWidth={2.1} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                              </span>
-                              <span data-sidebar-subitem-label className="flex-1 relative transition-colors" style={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}>{item.label}</span>
-
-                            </Link>
+                              iconWrapperData={{ 'data-emerald-icon-surface': true }}
+                              iconWrapperClassName={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
+                              iconClassName="w-[18px] h-[18px] transition-colors"
+                              iconStrokeWidth={2.1}
+                              iconData={{ 'data-sidebar-subitem-icon': true }}
+                              iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                              labelData={{ 'data-sidebar-subitem-label': true }}
+                              labelClassName="flex-1 relative transition-colors"
+                              labelStyle={{ color: subitemActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: subitemActive ? '#FFFFFF' : '#1A1A1A' }}
+                            />
                             {needsAccountDivider && (
                               <div className="my-1 mx-2 h-px bg-gradient-to-r from-transparent via-[#047857]/45 to-transparent" aria-hidden="true" />
                             )}
