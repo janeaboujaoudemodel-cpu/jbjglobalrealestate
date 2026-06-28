@@ -824,7 +824,7 @@ export default function JoinApplication() {
                     <Briefcase className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Live Roles
                   </span>
                   <div className="flex w-full items-center gap-4">
-                    <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
+                    <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-bold tracking-tight leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1, textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}>
                       Open Positions
                     </CardTitle>
                     <Badge
