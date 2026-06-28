@@ -207,19 +207,20 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
       }
     >
-      {/* Top-Right: Favorite + Shortlist Buttons (stacked) — Always visible */}
-      <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5 opacity-100 transition-opacity duration-200" data-no-contrast-guard>
+      {/* Top-Right: Favorite + Shortlist Buttons (stacked) — visible on hover only via PASS 97 */}
+      <div
+        className="absolute top-3 right-3 z-20 flex flex-col gap-1.5"
+        data-no-contrast-guard
+        data-card-actions-overlay=""
+      >
         {showFavorite && (
-          <div>
-            <FavoriteButton projectId={project.id} size="sm" />
-          </div>
+          <FavoriteButton projectId={project.id} size="md" />
         )}
         {showBadgeButton && (
-          <div>
-            <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
-          </div>
+          <ShortlistBadgeButton projectId={project.id} size="md" showBadgeIndicator={true} />
         )}
       </div>
+
 
       {/* Owner edit affordance — top-right, below favorite stack. Owners only. */}
       <div className="absolute top-3 right-3 z-30" data-no-contrast-guard>
