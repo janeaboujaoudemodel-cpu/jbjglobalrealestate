@@ -28,7 +28,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "flex min-h-9 cursor-default select-none items-center rounded-lg px-3 py-2 text-sm text-[#1A1A1A] outline-none transition-colors duration-75 data-[state=open]:bg-[#EFE6D6]/70 focus:bg-[#EFE6D6]/70 hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
+      "flex min-h-10 cursor-default select-none items-center rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[state=open]:bg-[rgba(6,78,59,0.10)] data-[state=open]:text-[#064E3B] focus:bg-[rgba(6,78,59,0.10)] focus:text-[#064E3B] hover:bg-[rgba(6,78,59,0.10)] hover:text-[#064E3B]",
       inset && "pl-8",
       className,
     )}
@@ -48,7 +48,7 @@ const DropdownMenuSubContent = React.forwardRef<
     ref={ref}
     data-surface="light"
     className={cn(
-      "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 duration-75",
+      "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-75",
       className,
     )}
     {...props}
@@ -66,7 +66,7 @@ const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       data-surface="light"
       className={cn(
-        "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 duration-75",
+        "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-75",
         className,
       )}
       {...props}
@@ -92,7 +92,7 @@ const DropdownMenuItem = React.forwardRef<
     className={cn(
       "relative flex cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       !unstyled &&
-        "min-h-9 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-colors duration-75 hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)] data-[highlighted]:bg-[color:var(--emerald-soft-bg)] data-[highlighted]:text-[color:var(--emerald-1)]",
+        "min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-colors duration-75 hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)] data-[highlighted]:bg-[color:var(--emerald-soft-bg)] data-[highlighted]:text-[color:var(--emerald-1)]",
       inset && "pl-8",
       className,
     )}
@@ -108,7 +108,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex min-h-9 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)]",
       className,
     )}
@@ -117,7 +117,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   >
     <span className="absolute left-2 flex h-4 w-4 items-center justify-center rounded border border-[color:var(--emerald-1)]/45 bg-[#FDFBF7] data-[state=checked]:bg-[color:var(--emerald-1)]">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className="h-3 w-3 text-[color:var(--emerald-1)]" />
+        <Check className="h-3 w-3 text-white" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -132,7 +132,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={cn(
-      "relative flex min-h-9 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-[rgba(6,78,59,0.10)] hover:text-[#064E3B]",
       "focus:bg-[rgba(6,78,59,0.10)] focus:text-[#064E3B]",
       className,
