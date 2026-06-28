@@ -18854,3 +18854,16 @@ html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] 
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+html body [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="active"] [data-mode-active-pill][data-mode-active-pill],
+html body [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="active"] [data-mode-active-pill][data-mode-active-pill] :is(span, svg, path, circle, rect, line, polyline, polygon) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+  opacity: 1 !important;
+}
+
+html body [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="idle"]:is(:hover, :focus, [data-highlighted]) :is(div, p, span):not([data-mode-icon-tile]):not([data-mode-select-pill]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
