@@ -71,11 +71,11 @@ export default function PremiumCareersHero() {
           data-surface="emerald"
           data-allow-dark-cta
           data-no-contrast-guard
-          className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 px-4 py-1.5 mb-7 shadow-[0_4px_18px_-8px_rgba(6,78,59,0.45)]"
+          className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 px-3.5 py-1 mb-7 shadow-[0_4px_18px_-8px_rgba(6,78,59,0.45)]"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          <Sparkles className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-          <span className="allow-white text-[11px] font-semibold tracking-[0.18em] uppercase" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+          <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span className="allow-white text-[11px] font-bold tracking-[0.22em] uppercase" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
             Careers · JBJ Global Real Estate
           </span>
         </div>
