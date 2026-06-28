@@ -192,6 +192,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             type="button"
             onClick={onSubmit as unknown as React.MouseEventHandler<HTMLButtonElement>}
             aria-label="Search properties now"
+            data-variant="primary"
             disabled={searching}
             data-no-contrast-guard
             className="allow-white jj-hero-search-action group/sb relative my-1.5 sm:my-2 flex items-center justify-center gap-2 h-[calc(100%-12px)] sm:h-[calc(100%-16px)] rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-[1.08] active:scale-[0.98]"
@@ -219,6 +220,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             type="button"
             onClick={openBooking}
             aria-label="Book your free consultation now"
+            data-variant="champagne"
             data-no-contrast-guard
             className="jj-hero-search-action hidden sm:flex relative my-1.5 sm:my-2 items-center justify-center gap-1.5 h-[calc(100%-12px)] sm:h-[calc(100%-16px)] rounded-full px-4 sm:px-5 lg:px-6 text-[12.5px] sm:text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-[1.03] active:scale-[0.98]"
             style={{
