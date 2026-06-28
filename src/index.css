@@ -17349,7 +17349,8 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
 
 /* Buttons / CTAs: one height, one radius, one icon rhythm; no cropped labels. */
 :where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])) {
-  min-height: var(--jbj-control-h);
+  min-height: var(--jbj-control-h) !important;
+  min-width: var(--jbj-control-h);
   border-radius: var(--jbj-radius-md);
   display: inline-flex;
   align-items: center;
