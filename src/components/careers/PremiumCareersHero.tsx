@@ -155,9 +155,9 @@ export default function PremiumCareersHero() {
                 <div
                   data-surface="emerald"
                   data-no-contrast-guard
-                  className="jj-icon-tile-emerald allow-white inline-flex items-center justify-center w-8 h-8 rounded-lg border border-[#B89555]/60"
+                  className="jj-icon-tile-emerald jj-pill-emerald-metallic allow-white inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/60 shadow-[0_2px_6px_-2px_rgba(10,10,10,0.35)]"
                 >
-                  <Icon className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.25} />
+                  <Icon className="w-[18px] h-[18px] allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.25} />
                 </div>
                 <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#1A1A1A]/75">
                   {label}
