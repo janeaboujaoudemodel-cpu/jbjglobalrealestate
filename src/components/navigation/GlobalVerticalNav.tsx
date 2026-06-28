@@ -767,17 +767,12 @@ export default function GlobalVerticalNav() {
     const goingUp = event.deltaY < 0;
     const goingDown = event.deltaY > 0;
 
-    // Fixed desktop chrome must never trap the page. Let the browser try its
-    // native wheel first; only if scrollY did not move do we pass the exact
-    // delta to the document. This avoids the old "boost/jump" bug.
+    // Fixed desktop chrome must never trap the page. If the sidebar has no
+    // local scroll room, or it is already at the edge in the wheel direction,
+    // pass the exact native wheel delta to the document once. No boosting.
     if (!hasLocalScroll || (goingUp && atTop) || (goingDown && atBottom)) {
-      const before = window.scrollY;
-      const deltaY = event.deltaY;
-      window.requestAnimationFrame(() => {
-        if (Math.abs(window.scrollY - before) < 1) {
-          window.scrollBy({ top: deltaY, left: 0, behavior: "auto" });
-        }
-      });
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
     }
   }, []);
 
