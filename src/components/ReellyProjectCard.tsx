@@ -126,19 +126,21 @@ const ReellyProjectCard = ({
           "hover:-translate-y-1"
         }
       >
-       {/* Favorite Button - always visible for reliable touch/click interaction */}
-       {showFavorite && (
-          <div className="absolute top-3 right-3 z-20 transition-opacity duration-200 opacity-100">
-           <FavoriteButton projectId={String(project.id)} size="sm" />
+       {/* Top-right card actions — hover-revealed via PASS 97 */}
+       {(showFavorite || showBadgeButton) && (
+         <div
+           className="absolute top-3 right-3 z-20 flex flex-col gap-1.5"
+           data-card-actions-overlay=""
+         >
+           {showFavorite && (
+             <FavoriteButton projectId={String(project.id)} size="md" />
+           )}
+           {showBadgeButton && (
+             <ShortlistBadgeButton projectId={String(project.id)} size="md" showBadgeIndicator={true} />
+           )}
          </div>
        )}
- 
-       {/* Badge Button - always visible for reliable touch/click interaction */}
-       {showBadgeButton && (
-          <div className="absolute top-12 right-3 z-20 transition-opacity duration-200 opacity-100">
-           <ShortlistBadgeButton projectId={String(project.id)} size="sm" showBadgeIndicator={true} />
-         </div>
-       )}
+
  
        <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
          {/* Image with Carousel */}
