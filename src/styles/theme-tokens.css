@@ -334,36 +334,53 @@ label[data-required]::after {
   box-shadow: none !important;
 }
 
+.careers-pill-inactive,
 [data-careers-page] .careers-pill-inactive {
-  background: var(--t-careers-cream) !important;
+  background: var(--t-careers-cream, #F7F2EA) !important;
   border-color: rgba(4,120,87,0.38) !important;
-  color: var(--t-ink);
-  -webkit-text-fill-color: var(--t-ink);
+  color: var(--t-ink, #1A1A1A) !important;
+  -webkit-text-fill-color: var(--t-ink, #1A1A1A) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.72),
     0 8px 22px -18px rgba(6, 78, 59, 0.18) !important;
 }
 
+.careers-pill-active,
 [data-careers-page] .careers-pill-active {
-  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  border-color: rgba(4,120,87,0.88) !important;
-  color: #FFFFFF;
-  -webkit-text-fill-color: #FFFFFF;
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #042c1c 100%) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #042c1c 100%)) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   box-shadow:
     0 14px 24px -12px rgba(6, 78, 59, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
 }
 
+.careers-pill-active,
+.careers-pill-active *,
+[data-careers-page] .careers-pill-active,
+[data-careers-page] .careers-pill-active * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.careers-pill-active svg,
+[data-careers-page] .careers-pill-active svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
 
+.careers-pill-complete,
 [data-careers-page] .careers-pill-complete {
-  background: linear-gradient(180deg, #F3E8D6 0%, var(--t-careers-complete) 100%) !important;
-  border-color: var(--t-careers-border-strong) !important;
-  color: var(--t-ink);
-  -webkit-text-fill-color: var(--t-ink);
+  background: linear-gradient(180deg, #F3E8D6 0%, var(--t-careers-complete, #E8D8B8) 100%) !important;
+  border-color: var(--t-careers-border-strong, #B89555) !important;
+  color: var(--t-ink, #1A1A1A) !important;
+  -webkit-text-fill-color: var(--t-ink, #1A1A1A) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.68),
     0 10px 20px -16px rgba(120, 88, 32, 0.35) !important;
 }
+
 
 [data-careers-page] .careers-card-strong {
   background: linear-gradient(180deg, var(--t-careers-card-top) 0%, var(--t-careers-card-bottom) 100%) !important;

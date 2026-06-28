@@ -15284,13 +15284,13 @@ html body #root [data-slot="button"] {
   min-width: 0;
 }
 
-html body #root button > span,
-html body #root a[role="button"] > span,
-html body #root [data-slot="button"] > span {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+html body #root button > span:not([data-jbj-allow-shrink]),
+html body #root a[role="button"] > span:not([data-jbj-allow-shrink]),
+html body #root [data-slot="button"] > span:not([data-jbj-allow-shrink]) {
+  min-width: max-content;
 }
+
+
 
 html body #root :where(input, textarea, select, [data-jbj-field], .jbj-form-field) {
   max-width: 100%;
@@ -17915,12 +17915,13 @@ body :where(
 /* Button sizing: natural width, readable height, no label clipping; segmented sq unit remains compact. */
 body :where([data-jbj-button], button, a[role="button"]):not(:where(.jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [data-radix-collection-item])) {
   min-height: 44px !important;
-  min-width: 0 !important;
+  min-width: max-content;
   width: auto;
-  white-space: normal !important;
+  white-space: nowrap;
   line-height: 1.18 !important;
   overflow: visible !important;
 }
+
 
 body :where(.jj-header-icon-control) {
   width: 44px !important;
