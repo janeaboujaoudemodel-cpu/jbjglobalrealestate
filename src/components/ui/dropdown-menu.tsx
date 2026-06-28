@@ -23,12 +23,15 @@ const DropdownMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
     inset?: boolean;
+    active?: boolean;
   }
->(({ className, inset, children, ...props }, ref) => (
+>(({ className, inset, active, children, ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
+    data-jbj-dropdown-item=""
+    data-jbj-dropdown-selected={active ? "true" : undefined}
     className={cn(
-      "flex min-h-10 cursor-default select-none items-center rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[state=open]:text-white focus:text-white hover:text-white",
+      "flex min-h-10 cursor-default select-none items-center rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-150 ease-out data-[state=open]:text-white focus:text-white hover:text-white",
       inset && "pl-8",
       className,
     )}
@@ -85,14 +88,17 @@ const DropdownMenuItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean;
     unstyled?: boolean;
+    active?: boolean;
   }
->(({ className, inset, unstyled, ...props }, ref) => (
+>(({ className, inset, unstyled, active, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
+    data-jbj-dropdown-item=""
+    data-jbj-dropdown-selected={active ? "true" : undefined}
     className={cn(
       "relative flex cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       !unstyled &&
-        "min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-colors duration-75 hover:text-white focus:text-white data-[highlighted]:text-white",
+        "min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-colors duration-150 ease-out hover:text-white focus:text-white data-[highlighted]:text-white",
       inset && "pl-8",
       className,
     )}
@@ -107,9 +113,9 @@ const DropdownMenuCheckboxItem = React.forwardRef<
 >(({ className, children, checked, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
+    data-jbj-dropdown-item=""
     className={cn(
-      "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)]",
+      "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-150 ease-out data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:text-white focus:text-white",
       className,
     )}
     checked={checked}
@@ -131,8 +137,9 @@ const DropdownMenuRadioItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
+    data-jbj-dropdown-item=""
     className={cn(
-      "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-150 ease-out data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:text-white",
       "focus:text-white",
       className,

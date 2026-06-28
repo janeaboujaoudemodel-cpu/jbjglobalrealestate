@@ -111,12 +111,9 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
           {SUPPORTED_CURRENCIES.map((curr) => (
             <DropdownMenuItem 
               key={curr.code}
+              active={currency === curr.code}
               onClick={() => setCurrency(curr.code)}
-              className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 ${
-                currency === curr.code 
-                  ? 'bg-[#EFE6D6]/15 border border-[#B89555]/30' 
-                  : 'hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]'
-              }`}
+              className="flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5"
             >
               <span className="flex items-center gap-3">
                 <span className="text-lg">{curr.flag}</span>

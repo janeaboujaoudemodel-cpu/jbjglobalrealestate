@@ -14,7 +14,7 @@
  */
 export { HeaderControl, HeaderSegmented } from "./HeaderControl";
 export type { HeaderControlProps, HeaderSegmentedProps } from "./HeaderControl";
-export { JbjAvatar, NotificationBadge } from "./JbjAvatar";
+export { HeaderAvatar, JbjAvatar, NotificationBadge } from "./JbjAvatar";
 export type { JbjAvatarProps, NotificationBadgeProps } from "./JbjAvatar";
 export { SidebarItem } from "./SidebarItem";
 export type { SidebarItemProps, SidebarItemLevel } from "./SidebarItem";
