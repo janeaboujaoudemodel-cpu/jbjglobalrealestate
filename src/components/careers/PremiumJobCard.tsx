@@ -157,10 +157,12 @@ export default function PremiumJobCard({
             <span
               data-no-contrast-guard
               data-surface="emerald"
-              className="allow-white flex-shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-[image:var(--jj-emerald-ombre)] border border-[#B89555]/70 shadow-[0_2px_8px_-2px_rgba(6,78,59,0.45)]"
+              data-emerald-icon-surface
+              className="allow-white flex-shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full border border-[#B89555]/70 shadow-[0_2px_8px_-2px_rgba(6,78,59,0.45)]"
+              style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B" }}
               aria-label="Selected"
             >
-              <CheckCircle className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <CheckCircle className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
             </span>
           )}
         </div>
