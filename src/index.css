@@ -19070,3 +19070,94 @@ html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root
   text-shadow: none !important;
   filter: none !important;
 }
+
+/* PASS 80 — ROOT PAGE WRAPPER REPAIR.
+   [data-surface="page"] is a layout wrapper, not a foreground contract. It was
+   overriding dark hero/backend surfaces. This final pass repairs dark visual
+   regions first, then only repairs elements with their OWN champagne/gold fill. */
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-hero-dark], .jj-hero-fullscreen, .jj-hero-neon,
+  [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
+  .from-zinc-950, .from-zinc-900, .from-zinc-800, .via-zinc-950, .via-zinc-900, .via-black, .to-zinc-950, .to-zinc-900, .to-black,
+  .from-\[\#064E3B\], .from-\[\#064e3b\], .via-\[\#042C1C\], .via-\[\#042c1c\], .to-\[\#022C22\], .to-\[\#022c22\],
+  .bg-\[\#064E3B\], .bg-\[\#064e3b\], .bg-\[\#042C1C\], .bg-\[\#042c1c\], .bg-\[\#022C22\], .bg-\[\#022c22\],
+  .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\], .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\], .bg-black
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-hero-dark], .jj-hero-fullscreen, .jj-hero-neon,
+  [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
+  .from-zinc-950, .from-zinc-900, .from-zinc-800, .via-zinc-950, .via-zinc-900, .via-black, .to-zinc-950, .to-zinc-900, .to-black,
+  .from-\[\#064E3B\], .from-\[\#064e3b\], .via-\[\#042C1C\], .via-\[\#042c1c\], .to-\[\#022C22\], .to-\[\#022c22\],
+  .bg-\[\#064E3B\], .bg-\[\#064e3b\], .bg-\[\#042C1C\], .bg-\[\#042c1c\], .bg-\[\#022C22\], .bg-\[\#022c22\],
+  .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\], .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\], .bg-black
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,time,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-surface-champagne, .jj-card-champagne, .jj-layer-2, .jj-layer-active, .jj-gold-metallic,
+  .bg-\[\#FDFBF7\], .bg-\[\#fdfbf7\], .bg-\[\#F7F2EA\], .bg-\[\#f7f2ea\], .bg-\[\#EFE6D6\], .bg-\[\#efe6d6\],
+  .from-\[\#FDFBF7\], .from-\[\#fdfbf7\], .via-\[\#F7F2EA\], .via-\[\#f7f2ea\], .to-\[\#EFE6D6\], .to-\[\#efe6d6\]
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-surface-champagne, .jj-card-champagne, .jj-layer-2, .jj-layer-active, .jj-gold-metallic,
+  .bg-\[\#FDFBF7\], .bg-\[\#fdfbf7\], .bg-\[\#F7F2EA\], .bg-\[\#f7f2ea\], .bg-\[\#EFE6D6\], .bg-\[\#efe6d6\],
+  .from-\[\#FDFBF7\], .from-\[\#fdfbf7\], .via-\[\#F7F2EA\], .via-\[\#f7f2ea\], .to-\[\#EFE6D6\], .to-\[\#efe6d6\]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,time,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"], button[data-state="active"],
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta,
+  .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-cta="primary"], [data-cta="dark"], [data-on-dark],
+  [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"], [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"], button[data-state="active"],
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta,
+  .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface],
+  [data-cta="primary"], [data-cta="dark"], [data-on-dark],
+  [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"], [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,button,div,time,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
