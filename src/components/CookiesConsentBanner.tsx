@@ -140,38 +140,39 @@ const CookiesConsentBanner = () => {
                     <p className="text-[#1A1A1A]/90 text-xs sm:text-sm leading-relaxed mb-3">
                       We use cookies to enhance your experience. Essential cookies are required for the website to function.
                     </p>
-                    <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2 sm:gap-3">
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="jj-official-emerald allow-white shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="jj-official-emerald allow-white shadow-md px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] flex-none w-auto"
                         data-cta="primary"
                         data-surface="emerald"
                         data-emerald-icon-surface
                         data-no-contrast-guard
                         style={{ color: "#FFFFFF" }}
                       >
-                        <span className="allow-white" style={{ color: "#FFFFFF" }}>Accept All</span>
+                        <span className="allow-white !whitespace-nowrap" style={{ color: "#FFFFFF" }}>Accept All</span>
                       </Button>
                       <Button
                         onClick={handleRejectNonEssential}
                         variant="outline"
-                        className="jj-cta-outline shadow-sm px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="jj-cta-outline shadow-sm px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] flex-none w-auto"
                         data-cta="outline"
                       >
-                        Reject All
+                        <span className="!whitespace-nowrap">Reject All</span>
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        className="jj-official-emerald allow-white shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="jj-official-emerald allow-white shadow-md px-5 sm:px-6 text-sm !whitespace-nowrap [word-break:keep-all] flex-none w-auto"
                         data-cta="primary"
                         data-surface="emerald"
                         data-emerald-icon-surface
                         data-no-contrast-guard
                         style={{ color: "#FFFFFF" }}
                       >
-                        <span className="allow-white" style={{ color: "#FFFFFF" }}>Manage Preferences</span>
+                        <span className="allow-white !whitespace-nowrap" style={{ color: "#FFFFFF" }}>Manage Preferences</span>
                       </Button>
                     </div>
+
                     <p className="text-[#1A1A1A]/70 text-[10px] sm:text-xs mt-3">
                       <Link to="/cookies" className="text-[#8A6F3F] hover:text-[#6F5930] underline underline-offset-2 font-semibold">
                         Cookies Policy
