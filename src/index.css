@@ -7819,9 +7819,9 @@ html body footer p:last-child {
 .jj-emerald-pill input:focus,
 .jj-emerald-pill input:focus-visible,
 .jj-emerald-pill input:hover,
-.jj-emerald-pill button,
-.jj-emerald-pill button:focus,
-.jj-emerald-pill button:focus-visible {
+.jj-emerald-pill button:not([data-variant]),
+.jj-emerald-pill button:not([data-variant]):focus,
+.jj-emerald-pill button:not([data-variant]):focus-visible {
   border: 0 !important;
   outline: none !important;
   box-shadow: none !important;
@@ -7830,6 +7830,13 @@ html body footer p:last-child {
   background-image: var(--jj-emerald-ombre) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+}
+/* Variant buttons inside emerald pill: keep their inline gradient, drop the global emerald override */
+.jj-emerald-pill button[data-variant],
+.jj-emerald-pill button[data-variant]:focus,
+.jj-emerald-pill button[data-variant]:focus-visible {
+  border: 0 !important;
+  outline: none !important;
 }
 .jj-emerald-pill input::placeholder {
   color: rgba(255,255,255,0.78) !important;
