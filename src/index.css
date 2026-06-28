@@ -230,7 +230,10 @@ body,
 html {
   min-width: 100vw;
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  /* Keep native wheel/trackpad scrolling instant and responsive.
+     Smooth scrolling must only be used by explicit button/anchor actions;
+     a global smooth rule throttles real user wheel input on long pages. */
+  scroll-behavior: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
