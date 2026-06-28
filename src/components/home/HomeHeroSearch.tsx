@@ -195,14 +195,15 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             data-variant="primary"
             disabled={searching}
             data-no-contrast-guard
-            className="allow-white jj-hero-search-action group/sb relative my-1.5 sm:my-2 flex items-center justify-center gap-2 h-[calc(100%-12px)] sm:h-[calc(100%-16px)] rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-[1.08] active:scale-[0.98]"
+            className="allow-white jj-hero-search-action group/sb relative my-1.5 sm:my-2 flex items-center justify-center gap-2 h-[44px] rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98]"
             style={{
               color: "#FFFFFF",
               WebkitTextFillColor: "#FFFFFF",
+              border: 0,
               backgroundImage:
-                "linear-gradient(180deg, #1F8A6A 0%, #16664E 55%, #0E4A38 100%)",
+                "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
               boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.32), 0 0 0 1px rgba(255,255,255,0.08)",
+                "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
             }}
           >
             {searching ? (
@@ -215,28 +216,29 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             </span>
           </button>
 
-          {/* FREE CONSULTATION — SECONDARY champagne pill with emerald ink for clear hierarchy. */}
+          {/* FREE CONSULTATION — matches header AED pill (emerald ombre + white text/icon). */}
           <button
             type="button"
             onClick={openBooking}
             aria-label="Book your free consultation now"
-            data-variant="champagne"
             data-no-contrast-guard
-            className="jj-hero-search-action hidden sm:flex relative my-1.5 sm:my-2 items-center justify-center gap-1.5 h-[calc(100%-12px)] sm:h-[calc(100%-16px)] rounded-full px-4 sm:px-5 lg:px-6 text-[12.5px] sm:text-[13px] lg:text-[13.5px] font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-[1.03] active:scale-[0.98]"
+            className="allow-white jj-hero-search-action hidden sm:flex relative my-1.5 sm:my-2 items-center justify-center gap-2 h-[44px] rounded-full px-5 sm:px-6 lg:px-7 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98]"
             style={{
-              color: "#0E4A38",
-              WebkitTextFillColor: "#0E4A38",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              border: 0,
               backgroundImage:
-                "linear-gradient(180deg, #FDFBF7 0%, #F3EADB 100%)",
+                "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
               boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(184,149,85,0.25), 0 6px 14px rgba(0,0,0,0.28), 0 0 0 1px rgba(184,149,85,0.45)",
+                "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
             }}
           >
-            <CalendarCheck className="w-4 h-4" strokeWidth={2.2} style={{ color: "#0E4A38" }} />
-            <span className="whitespace-nowrap" style={{ color: "#0E4A38", WebkitTextFillColor: "#0E4A38" }}>
+            <CalendarCheck className="w-4 h-4" strokeWidth={2.4} style={{ color: "#FFFFFF" }} />
+            <span className="whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               Free Consultation
             </span>
           </button>
+
 
         </div>
         </div>
