@@ -17299,3 +17299,41 @@ html body #root#root#root :is([data-jj-page-nav-arrow], [data-sidebar-collapse-c
   opacity: 1 !important;
   mix-blend-mode: normal !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 63 — TITLE INK LOCK (FINAL).
+   User directive: section titles must never render in emerald green.
+   `.jj-title-emerald` is now hard-pinned to ink #1A1A1A across the
+   site (was emerald gradient/solid). Highest-specificity final-tier
+   override beats all prior PASS rules (7082, 7179, 9208, 9265, 10794).
+   `.jj-text-emerald` (small accent labels) and `.jj-icon-emerald`
+   are intentionally untouched.
+   To add a new section title: use `.jj-title-ink` or any heading —
+   never reintroduce emerald color on titles.
+   ──────────────────────────────────────────────────────────────── */
+html body :is(h1, h2, h3, h4, h5, h6, .jj-title-emerald, .jj-title-ink),
+html body :is(h1, h2, h3, h4, h5, h6, .jj-title-emerald, .jj-title-ink) * {
+}
+html body .jj-title-emerald,
+html body .jj-title-emerald *,
+html body h1.jj-title-emerald,
+html body h1.jj-title-emerald *,
+html body h2.jj-title-emerald,
+html body h2.jj-title-emerald *,
+html body h3.jj-title-emerald,
+html body h3.jj-title-emerald *,
+html body h4.jj-title-emerald,
+html body h4.jj-title-emerald *,
+html body h5.jj-title-emerald,
+html body h5.jj-title-emerald *,
+html body h6.jj-title-emerald,
+html body h6.jj-title-emerald * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  text-fill-color: #1A1A1A !important;
+}
+
