@@ -1141,8 +1141,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           className="group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[12px] font-medium transition-all duration-150 hover:bg-[#EFE6D6]/40"
                           style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                         >
-                          <span data-emerald-icon-surface className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}>
-                            <Eye ref={lockEmeraldGlyphWhite} className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          <span data-emerald-icon-surface className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}>
+                            <Eye ref={lockEmeraldGlyphWhite} className="w-[18px] h-[18px]" strokeWidth={2.1} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                           </span>
                           <span data-sidebar-subitem-label className="flex-1" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>View All Tools</span>
                         </Link>
