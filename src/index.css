@@ -19440,3 +19440,20 @@ html body .jj-utility-shell :is(.w-1\.5.h-1\.5, [class*="w-1.5"][class*="h-1.5"]
   color: #064E3B !important;
   -webkit-text-fill-color: #064E3B !important;
 }
+
+/* PASS 88 — EXACT LIGHT CTA + INACTIVE TAB REPAIR */
+html body #root#root#root#root#root#root#root#root#root#root [data-surface="light"]:is(a,button),
+html body #root#root#root#root#root#root#root#root#root#root [data-surface="light"]:is(a,button) :is(span,svg,[class*="lucide"],path,line,polyline,circle,rect) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+}
+html body #root#root#root#root#root#root#root#root#root#root [data-surface="champagne"] [role="tab"][data-state="inactive"],
+html body #root#root#root#root#root#root#root#root#root#root [data-surface="champagne"] button[data-state="inactive"] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  text-shadow: none !important;
+}

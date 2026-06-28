@@ -130,8 +130,9 @@ const Guides = () => {
             <a
               href="#guides-library"
               data-no-contrast-guard
-              className="allow-white inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
-              style={{ background: "#F7F2EA", color: "#1A1A1A", boxShadow: "0 0 0 1px #B89555 inset, 0 8px 24px rgba(0,0,0,0.35)" }}
+              data-surface="light"
+              className="inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
+              style={{ background: "#F7F2EA", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", boxShadow: "0 0 0 1px #B89555 inset, 0 8px 24px rgba(0,0,0,0.35)" }}
             >
               Browse Guides
             </a>
