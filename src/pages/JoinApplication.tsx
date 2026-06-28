@@ -840,8 +840,8 @@ export default function JoinApplication() {
                       <span>{filteredPositions.length} Open Positions</span>
                     </Badge>
                   </div>
-                  <CardDescription data-careers-emerald-subtitle data-no-contrast-guard className="allow-white text-white font-medium mt-1.5">
-                    Tap <strong data-no-contrast-guard className="allow-white text-white font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Apply</strong> on any role to auto-select it in the form below.
+                  <CardDescription data-careers-emerald-subtitle data-no-contrast-guard className="allow-white font-medium mt-1.5" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
+                    Tap <strong data-no-contrast-guard className="allow-white font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Apply</strong> on any role to auto-select it in the form below.
                   </CardDescription>
                 </div>
                 <div className="relative mt-8">
