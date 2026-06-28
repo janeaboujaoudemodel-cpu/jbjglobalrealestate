@@ -15284,11 +15284,12 @@ html body #root [data-slot="button"] {
   min-width: 0;
 }
 
-html body #root button > span,
-html body #root a[role="button"] > span,
-html body #root [data-slot="button"] > span {
-  min-width: 0;
+html body #root button > span:not([data-jbj-allow-shrink]),
+html body #root a[role="button"] > span:not([data-jbj-allow-shrink]),
+html body #root [data-slot="button"] > span:not([data-jbj-allow-shrink]) {
+  min-width: max-content;
 }
+
 
 
 html body #root :where(input, textarea, select, [data-jbj-field], .jbj-form-field) {
