@@ -77,7 +77,7 @@ export function ToolkitShowcaseCard() {
 
         <div
           data-emerald-card
-          className="rounded-2xl border border-[#047857]/35 bg-[#FDFBF7] overflow-hidden shadow-[0_10px_36px_-18px_rgba(4,120,87,0.30)]"
+          className="animated-border animated-border-thick rounded-2xl border border-[#047857]/35 bg-[#FDFBF7] overflow-hidden shadow-[0_10px_36px_-18px_rgba(4,120,87,0.30)]"
         >
           {/* Header — emerald band, white text, NO gold */}
           <div

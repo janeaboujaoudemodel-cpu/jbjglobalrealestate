@@ -3,6 +3,57 @@
 @tailwind utilities;
 
 /* =====================================================================
+   ANIMATED ROTATING BORDER — uses existing theme tokens only.
+   Apply with className="animated-border" (or add "animated-border-thick").
+   ===================================================================== */
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-spin {
+  0%   { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+.animated-border {
+  position: relative;
+  isolation: isolate;
+  border-radius: inherit;
+}
+
+.animated-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg,
+    hsl(var(--primary)) 90deg,
+    hsl(var(--accent)) 180deg,
+    hsl(var(--secondary)) 270deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+          mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  animation: border-spin 4s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.animated-border-thick::before {
+  padding: 3px;
+  animation-duration: 6s;
+}
+
+
+/* =====================================================================
    PASS 55 — DOCUMENT STUDIO SURFACE CONTRACT (scoped)
    Anything wrapped in [data-studio-surface="champagne"] forces ink
    foreground; [data-studio-surface="emerald"] forces white foreground.

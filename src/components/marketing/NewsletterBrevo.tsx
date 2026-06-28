@@ -143,7 +143,7 @@ export const NewsletterBrevo = ({
               no halo, no overflowing placeholder). */}
           <div
             data-no-contrast-guard
-            className="jj-emerald-pill jj-emerald-glow-wrap jj-newsletter-emerald relative flex items-stretch h-12 rounded-xl overflow-hidden"
+            className="jj-emerald-pill jj-emerald-glow-wrap jj-newsletter-emerald animated-border relative flex items-stretch h-12 rounded-xl overflow-hidden"
             style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
           >
             <div className="relative flex-1 min-w-0 cursor-text">
