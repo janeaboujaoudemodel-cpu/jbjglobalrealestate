@@ -116,7 +116,6 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
     <div
       data-jjds-segmented=""
       data-no-contrast-guard
-      data-emerald-action="true"
       data-on-dark
       data-allow-dark-cta
       data-jj-utility-pill
@@ -134,7 +133,6 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
             <button
               type="button"
               data-no-contrast-guard
-              data-emerald-action="true"
               data-active={isActive}
               data-on-dark
               data-allow-dark-cta
