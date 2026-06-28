@@ -42,7 +42,7 @@ const MarketAreaDetail = () => {
       case 'bullish':
         return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45 text-lg px-4 py-1">Bullish</Badge>;
       case 'bearish':
-        return <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
+        return <Badge variant="secondary" className="text-lg px-4 py-1">Bearish</Badge>;
       default:
         return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30 text-lg px-4 py-1">Neutral</Badge>;
     }
@@ -117,9 +117,9 @@ const MarketAreaDetail = () => {
               {area.yoyChange > 0 ? (
                 <TrendingUp className="w-5 h-5 text-[#B89555]" />
               ) : (
-                <TrendingDown className="w-5 h-5 text-red-400" />
+                <TrendingDown className="w-5 h-5 text-[#F7F2EA]" />
               )}
-              <span className={`text-lg font-semibold ${area.yoyChange > 0 ? 'text-[#F7F2EA]' : 'text-red-300'}`}>
+              <span className="text-lg font-semibold text-[#F7F2EA]">
                 {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}% YoY
               </span>
             </div>

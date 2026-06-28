@@ -26,16 +26,16 @@ const fadeInUp = {
 };
 
 const TrendIcon = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
-  if (trend === 'bullish') return <TrendingUp className="w-3.5 h-3.5 text-[color:var(--emerald-1)]" />;
-  if (trend === 'bearish') return <TrendingDown className="w-3.5 h-3.5 text-red-700" />;
-  return <Minus className="w-3.5 h-3.5 text-amber-700" />;
+  if (trend === 'bullish') return <TrendingUp className="w-3.5 h-3.5 text-[#064E3B]" />;
+  if (trend === 'bearish') return <TrendingDown className="w-3.5 h-3.5 text-[#064E3B]" />;
+  return <Minus className="w-3.5 h-3.5 text-[#064E3B]" />;
 };
 
 const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
   const colors = {
-    bullish: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30',
-    bearish: 'bg-red-100 text-red-800 border-red-300',
-    neutral: 'bg-amber-100 text-amber-800 border-amber-300',
+    bullish: 'jj-badge-champagne text-[#1A1A1A] border-[#B89555]/35',
+    bearish: 'jj-badge-champagne text-[#1A1A1A] border-[#B89555]/35',
+    neutral: 'jj-badge-champagne text-[#1A1A1A] border-[#B89555]/35',
   };
 
   return (
@@ -104,9 +104,9 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
                 <span className="font-semibold text-[color:var(--emerald-1)]">Demand Score</span>
                 <span className="font-bold text-[color:var(--emerald-1)]">{area.demandScore}/100</span>
               </div>
-              <div className="h-2.5 rounded-full overflow-hidden shadow-inner jj-emerald-soft">
+              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-[#064E3B]/10" data-score-bar>
                 <div
-                  className="h-full rounded-full bg-gradient-to-r"
+                  className="h-full rounded-full bg-gradient-to-r from-[#064E3B] to-[#047857]"
                   style={{ width: `${area.demandScore}%` }}
                 />
               </div>
@@ -116,9 +116,9 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
                 <span className="font-semibold text-[#1A1A1A]">Supply Score</span>
                 <span className="font-bold text-[#1A1A1A]">{area.supplyScore}/100</span>
               </div>
-              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-[#EFE6D6]">
+              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-[#064E3B]/10" data-score-bar>
                 <div
-                  className="h-full rounded-full bg-[#B89555]"
+                  className="h-full rounded-full bg-gradient-to-r from-[#064E3B] to-[#047857]"
                   style={{ width: `${area.supplyScore}%` }}
                 />
               </div>
@@ -128,7 +128,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* YoY Change */}
           <div className="flex items-center justify-between py-3 border-t border-border/60">
             <span className={MI_BODY}>Year-over-Year</span>
-            <span className={`text-sm font-bold leading-none tracking-tight ${area.yoyChange >= 0 ? 'text-[color:var(--emerald-1)]' : 'text-red-700'}`}>
+            <span className="text-sm font-bold leading-none tracking-tight text-[#1A1A1A]">
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
           </div>

@@ -68,8 +68,8 @@ const StatCard = ({
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
-            <div className={`flex items-center gap-1 ${MI_CHIP} rounded-full border px-2 py-0.5 ${isPositive ? 'border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]' : 'border-red-700/30 bg-red-50 text-red-800'}`}>
-              {isPositive ? <TrendingUp className="w-4 h-4 text-[#B89555]" /> : <TrendingDown className="w-4 h-4" />}
+            <div className={`flex items-center gap-1 ${MI_CHIP} rounded-full border px-2 py-0.5 border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]`}>
+              {isPositive ? <TrendingUp className="w-4 h-4 text-[#064E3B]" /> : <TrendingDown className="w-4 h-4 text-[#064E3B]" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </div>
           </div>
