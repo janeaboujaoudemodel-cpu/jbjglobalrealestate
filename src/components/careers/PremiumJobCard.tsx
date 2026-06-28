@@ -48,7 +48,7 @@ const TAG_STYLES: Record<
     icon: Flame,
     bg: "bg-[#FEF3F2]",
     ring: "border-[#C04A2B]/60",
-    text: "text-[#C04A2B]",
+    text: "text-[#1A1A1A]",
   },
   "most-applied": {
     label: "Most Applied",
@@ -182,7 +182,7 @@ export default function PremiumJobCard({
                   className={`inline-flex min-h-[28px] items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isDarkTag ? "allow-white" : ""}`}
                   style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
-                  <Icon className={`w-3 h-3 ${isDarkTag ? "allow-white" : ""}`} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined} />
+                  <Icon className={`w-3 h-3 ${isDarkTag ? "allow-white" : ""}`} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF", fill: t === "partner" ? "#FFFFFF" : "none" } : undefined} />
                   <span className={isDarkTag ? "allow-white" : ""} style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
                 </span>
               );
