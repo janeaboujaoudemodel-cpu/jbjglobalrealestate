@@ -8470,18 +8470,39 @@ html body .jj-hero-search-premium input:hover {
   -webkit-text-fill-color: #FFFFFF !important;
   caret-color: #FFFFFF !important;
 }
-html body .jj-hero-search-premium .jj-hero-search-action,
-html body .jj-hero-search-premium .jj-hero-search-action:hover,
-html body .jj-hero-search-premium .jj-hero-search-action:focus,
-html body .jj-hero-search-premium .jj-hero-search-action:active {
+html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]),
+html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):hover,
+html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):focus,
+html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):active {
   background: linear-gradient(135deg, rgba(4, 120, 87, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%) !important;
   background-image: linear-gradient(135deg, rgba(4, 120, 87, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%) !important;
   border-left: 1px solid rgba(255,255,255,0.16) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body .jj-hero-search-premium .jj-hero-search-action:hover {
+html body .jj-hero-search-premium .jj-hero-search-action:not([data-variant="champagne"]):not([data-variant="primary"]):hover {
   filter: brightness(1.12) saturate(1.08) !important;
+}
+/* Primary metallic emerald pill — keep inline gradient, just brighten on hover */
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="primary"]:hover {
+  filter: brightness(1.08) saturate(1.05) !important;
+}
+/* Champagne secondary pill — preserve inline champagne fill + emerald ink */
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"],
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover,
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:focus,
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:active {
+  color: #0E4A38 !important;
+  -webkit-text-fill-color: #0E4A38 !important;
+  border-left: 0 !important;
+}
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg,
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"] svg * {
+  color: #0E4A38 !important;
+  stroke: #0E4A38 !important;
+}
+html body .jj-hero-search-premium .jj-hero-search-action[data-variant="champagne"]:hover {
+  filter: brightness(1.02) !important;
 }
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]),
 html body [data-jj-utility-bar] :is(button[aria-label="Search"], button[aria-label="Filter"], a[aria-label="Favorites"]):hover {
