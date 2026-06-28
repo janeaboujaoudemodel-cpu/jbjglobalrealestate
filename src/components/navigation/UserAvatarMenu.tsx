@@ -127,7 +127,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuItem
         asChild={!!to}
         onSelect={onClick ? () => onClick() : undefined}
-        className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[rgba(6,78,59,0.10)] data-[highlighted]:bg-[rgba(6,78,59,0.10)] ${
+          className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 ${
           active ? "bg-[#F7F2EA] border border-[#B89555]/30" : ""
         }`}
       >

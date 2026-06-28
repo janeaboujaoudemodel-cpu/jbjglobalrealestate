@@ -28,7 +28,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "flex min-h-10 cursor-default select-none items-center rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[state=open]:bg-[rgba(6,78,59,0.10)] data-[state=open]:text-[#064E3B] focus:bg-[rgba(6,78,59,0.10)] focus:text-[#064E3B] hover:bg-[rgba(6,78,59,0.10)] hover:text-[#064E3B]",
+      "flex min-h-10 cursor-default select-none items-center rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[state=open]:text-white focus:text-white hover:text-white",
       inset && "pl-8",
       className,
     )}
@@ -92,7 +92,7 @@ const DropdownMenuItem = React.forwardRef<
     className={cn(
       "relative flex cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       !unstyled &&
-        "min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-colors duration-75 hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus:bg-[color:var(--emerald-soft-bg)] focus:text-[color:var(--emerald-1)] data-[highlighted]:bg-[color:var(--emerald-soft-bg)] data-[highlighted]:text-[color:var(--emerald-1)]",
+        "min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-colors duration-75 hover:text-white focus:text-white data-[highlighted]:text-white",
       inset && "pl-8",
       className,
     )}
@@ -133,8 +133,8 @@ const DropdownMenuRadioItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex min-h-10 cursor-default select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-[#1A1A1A] outline-none transition-colors duration-75 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-[rgba(6,78,59,0.10)] hover:text-[#064E3B]",
-      "focus:bg-[rgba(6,78,59,0.10)] focus:text-[#064E3B]",
+      "hover:text-white",
+      "focus:text-white",
       className,
     )}
     {...props}
