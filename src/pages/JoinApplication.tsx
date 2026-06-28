@@ -823,7 +823,7 @@ export default function JoinApplication() {
                   >
                     <Briefcase className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Live Roles
                   </span>
-                  <div className="flex items-center flex-wrap gap-x-4 gap-y-2">
+                  <div className="flex w-full items-center gap-4">
                     <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
                       Open Positions
                     </CardTitle>
@@ -833,7 +833,7 @@ export default function JoinApplication() {
                       data-no-contrast-guard
                       data-open-positions-count
                       data-careers-primary-pill
-                      className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-[12px] font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
+                      className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border ml-auto inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-[12px] font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
                       style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
