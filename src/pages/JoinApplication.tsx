@@ -845,14 +845,19 @@ export default function JoinApplication() {
                   </CardDescription>
                 </div>
                 <div className="relative mt-8">
-                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#1A1A1A] z-10 pointer-events-none" strokeWidth={2.25} />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white z-10 pointer-events-none allow-white" strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} aria-hidden />
                   <Input
                     value={positionSearch}
                     onChange={(e) => setPositionSearch(e.target.value)}
                     placeholder="Search positions by title, department, or location"
-                    className="careers-blue-field careers-blue-placeholder pl-12 pr-4 h-12 rounded-lg text-base"
+                    data-surface="emerald"
+                    data-allow-dark-cta
+                    data-no-contrast-guard
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white pl-12 pr-4 h-12 rounded-xl text-base font-medium border-0 text-white placeholder:text-white/75 focus-visible:ring-2 focus-visible:ring-white/40"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   />
                 </div>
+
               </CardHeader>
               <CardContent>
                 {visiblePositions.length === 0 ? (
