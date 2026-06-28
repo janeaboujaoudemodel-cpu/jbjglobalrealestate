@@ -825,7 +825,8 @@ export default function JoinApplication() {
                     data-allow-dark-cta
                     data-no-contrast-guard
                     data-open-positions-count
-                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border inline-flex h-11 items-center gap-2 rounded-xl px-5 self-start sm:self-end text-[12px] font-semibold border-transparent shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_10px_28px_-8px_rgba(6,78,59,0.55),inset_0_1px_0_rgba(255,255,255,0.22)]"
+                    data-careers-primary-pill
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 self-start sm:self-end text-[12px] font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
                     style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
