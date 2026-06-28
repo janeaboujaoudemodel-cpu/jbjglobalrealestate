@@ -18246,3 +18246,19 @@ html body #root#root#root#root#root#root#root :is(
   opacity: 1 !important;
   mix-blend-mode: normal !important;
 }
+
+/* PASS 70 — NUCLEAR CHAMPAGNE PILL DESCENDANT FIX.
+   Required because earlier dark locks were still winning on nested spans in
+   champagne Tailwind-gradient pills. */
+html body #root#root#root#root#root#root#root#root :is(
+  button[class*="from-[#FDFBF7]"], a[class*="from-[#FDFBF7]"], div[class*="from-[#FDFBF7]"],
+  button[class*="via-[#F7F2EA]"], a[class*="via-[#F7F2EA]"], div[class*="via-[#F7F2EA]"],
+  button[class*="to-[#EFE6D6]"], a[class*="to-[#EFE6D6]"], div[class*="to-[#EFE6D6]"]
+) :is(span, strong, small, p, h1, h2, h3, h4, h5, h6, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
