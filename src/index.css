@@ -182,6 +182,72 @@
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
 }
+
+/* PASS 74 — FINAL LIGHT-OWN-SURFACE WINS + DARK-OWN-CONTROL WINS.
+   Last rule set only. It restores champagne/gold cards/popups nested in dark
+   sections, then only re-whitens elements that are themselves dark controls. */
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [aria-labelledby="pending-tasks-title"],
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-surface-champagne, .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"], [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"], [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="from-champagne"], [class*="via-champagne"], [class*="to-champagne"], [class*="bg-champagne"], .jj-gold-metallic
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  [aria-labelledby="pending-tasks-title"],
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-surface-champagne, .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised, .jj-layer-2, .jj-layer-active,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"], [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"], [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="from-champagne"], [class*="via-champagne"], [class*="to-champagne"], [class*="bg-champagne"], .jj-gold-metallic
+) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  button[data-state="active"], [role="tab"][data-state="active"],
+  .jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-champagne, .jj-emerald-action, .jj-emerald-metallic,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface], [data-cta="primary"], [data-cta="dark"],
+  [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"], [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control,
+  [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"], [class*="bg-[#2A2A2A]"], [class*="bg-[#2a2a2a]"], [class*="bg-[#0A0A0A]"], [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"], [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"], [class*="bg-[#022C22]"], [class*="bg-[#022c22]"],
+  [class*="bg-black"], [class*="from-black"], [class*="to-black"], [class*="bg-emerald"], [class*="from-emerald"], [class*="via-emerald"], [class*="to-emerald"],
+  [class*="from-[#064E3B]"], [class*="from-[#064e3b]"], [class*="from-[#042C1C]"], [class*="from-[#042c1c]"], [class*="to-[#000000]"]
+),
+html body #root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root#root :is(
+  button[data-state="active"], [role="tab"][data-state="active"],
+  .jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-champagne, .jj-emerald-action, .jj-emerald-metallic,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, .jj-side-tile, .jj-sqtoggle[data-active="true"],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-filled], [data-emerald-band], [data-emerald-icon-surface], [data-cta="primary"], [data-cta="dark"],
+  [data-icon-tile-tone="emerald"], [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"], [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control,
+  [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"], [class*="bg-[#2A2A2A]"], [class*="bg-[#2a2a2a]"], [class*="bg-[#0A0A0A]"], [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"], [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"], [class*="bg-[#022C22]"], [class*="bg-[#022c22]"],
+  [class*="bg-black"], [class*="from-black"], [class*="to-black"], [class*="bg-emerald"], [class*="from-emerald"], [class*="via-emerald"], [class*="to-emerald"],
+  [class*="from-[#064E3B]"], [class*="from-[#064e3b]"], [class*="from-[#042C1C]"], [class*="from-[#042c1c]"], [class*="to-[#000000]"]
+) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
 [data-document-studio-overlay] [data-document-page="true"] :is(footer, footer *, .jbj-doc-footer, .jbj-doc-footer *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
