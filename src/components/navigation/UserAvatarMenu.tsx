@@ -28,7 +28,7 @@ interface Props {
 }
 
 /**
- * UserAvatarMenu — mother-of-pearl circle with gold border and user initials.
+ * UserAvatarMenu — emerald metallic circle with white JB initials.
  * Opens a dropdown housing everything that used to live in the header.
  */
 export default function UserAvatarMenu({ onOpenFilters }: Props) {
@@ -162,8 +162,10 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           className="jj-header-icon-control jj-header-premium-control jj-avatar-metallic allow-white relative h-11 w-11 rounded-full border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-[filter] hover:brightness-110"
           style={{
             border: 0,
+            backgroundImage:
+              "radial-gradient(130% 130% at 26% 20%, #0d8b63 0%, #064E3B 34%, #042c1c 66%, #000000 100%)",
             boxShadow:
-              "0 10px 28px -10px rgba(6,78,59,0.95), 0 2px 6px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.35)",
+              "0 14px 30px -13px rgba(6,78,59,1), 0 4px 10px -6px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -10px 18px rgba(0,0,0,0.34)",
           }}
         >
           {/* Rotating metallic shine ring */}
@@ -172,7 +174,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             className="jj-avatar-spinner absolute -inset-[2px] rounded-full pointer-events-none"
             style={{
               background:
-                "conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.55) 40deg, rgba(184,149,85,0.35) 90deg, rgba(255,255,255,0) 160deg, rgba(255,255,255,0) 360deg)",
+                "conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.74) 36deg, rgba(6,78,59,0.95) 72deg, rgba(255,255,255,0.26) 116deg, rgba(255,255,255,0) 168deg, rgba(255,255,255,0) 360deg)",
               WebkitMask:
                 "radial-gradient(circle, transparent 58%, #000 60%)",
               mask: "radial-gradient(circle, transparent 58%, #000 60%)",
@@ -182,7 +184,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             className="absolute inset-0 rounded-full flex items-center justify-center overflow-hidden"
             style={{
               background:
-                "radial-gradient(120% 120% at 28% 22%, #0a7a55 0%, #064E3B 38%, #042c1c 72%, #021410 100%)",
+                "radial-gradient(120% 120% at 28% 20%, #0d8b63 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
             }}
           >
             <span
@@ -190,14 +192,14 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0.32), rgba(255,255,255,0) 25%, rgba(52,211,153,0.22) 55%, rgba(255,255,255,0.28) 80%, rgba(255,255,255,0) 100%)",
-                opacity: 0.75,
+                  "conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0.42), rgba(255,255,255,0) 24%, rgba(6,78,59,0.26) 55%, rgba(255,255,255,0.36) 80%, rgba(255,255,255,0) 100%)",
+                opacity: 0.86,
                 mixBlendMode: "soft-light",
               }}
             />
             <span
               className="relative text-[12px] font-extrabold tracking-[-0.01em]"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: "0 1px 1px rgba(0,0,0,0.45)" }}
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: "0 1px 2px rgba(0,0,0,0.72)" }}
             >
               {initials}
             </span>
@@ -224,7 +226,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
                 "radial-gradient(120% 120% at 30% 25%, #FFFDF8 0%, #F5ECDC 38%, #E8D8B8 70%, #D9C291 100%)",
             }}
           >
-            <span className="text-[13px] font-bold text-[#1A1A1A]">{initials}</span>
+            <span className="text-[13px] font-extrabold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.72)' }}>{initials}</span>
           </span>
           <div className="min-w-0 flex-1">
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{displayName}</div>
