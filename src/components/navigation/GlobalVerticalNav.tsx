@@ -197,7 +197,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
 
   // ── Broker & Academy ──
-  { label: "Broker Portal", href: "/broker/portal", icon: BriefcaseIcon, section: "BROKER & ACADEMY", megaMenu: 'broker' },
+  { label: "Broker Portal", href: "/broker/portal", icon: Handshake, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
   // Broker Hub removed — duplicates Broker Portal.
   // Note: "Broker Dashboard" removed from this section — it's the user's personal dashboard, not a broker-only tool.
@@ -440,7 +440,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'CP Center', icon: Compass, href: '/owner' },
     { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
     { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
-    { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
+    { label: 'Broker Dashboard', icon: Handshake, href: '/broker-dashboard' },
     { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
     { label: 'Support Tickets', icon: Ticket, href: '/my-tickets' },
     { label: 'My Profile', icon: User, href: '/profile' },
@@ -449,7 +449,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'AI History', icon: Bot, href: '/my-ai-history' },
   ],
   broker: [
-    { label: 'Broker Portal', icon: BriefcaseIcon, href: '/broker/portal' },
+    { label: 'Broker Portal', icon: Handshake, href: '/broker/portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
     { label: 'Broker Dashboard', icon: LayoutDashboard, href: '/broker-dashboard' },
@@ -476,7 +476,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Suites Hub', icon: Boxes, href: '/suites' },
     { label: 'All Tools Suite', icon: Package, href: '/business-suite/all' },
     { label: 'Real Estate Suite', icon: Building2, href: '/business-suite/real-estate' },
-    { label: 'Broker Suite', icon: BriefcaseIcon, href: '/business-suite/broker' },
+    { label: 'Broker Suite', icon: Handshake, href: '/business-suite/broker' },
     { label: 'Creative Suite', icon: Palette, href: '/business-suite/creative' },
     { label: 'Productivity Suite', icon: Cog, href: '/business-suite/productivity' },
   ],
@@ -1043,7 +1043,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {!collapsed && <SidebarModePortalBlock />}
           {/* All categories (highlights + sections) share one flex-column with justify-between
               so spacing between AI Home Finder → MY ACCOUNT is visually balanced. */}
-          <div className="flex-1 flex flex-col justify-between gap-1">
+          <div className="flex flex-col gap-1">
           {/* Highlight hubs (gold labels) */}
 
           {highlightItems.map((item, i) => {
@@ -1374,9 +1374,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                  className={`jj-side-tile group w-9 h-9 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                    className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-5 h-5" strokeWidth={2.25} />
+                      <Icon className="w-4 h-4" strokeWidth={2.15} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1405,9 +1405,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                      className={`jj-side-tile group w-9 h-9 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                      className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-5 h-5" strokeWidth={2.25} />
+                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1427,9 +1427,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-9 h-9 rounded-[10px] flex items-center justify-center"
+                    className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Headphones className="w-5 h-5" strokeWidth={2.25} />
+                    <Headphones className="w-4 h-4" strokeWidth={2.15} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1440,9 +1440,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-9 h-9 rounded-[10px] flex items-center justify-center"
+                    className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Ticket className="w-5 h-5" strokeWidth={2.25} />
+                    <Ticket className="w-4 h-4" strokeWidth={2.15} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1456,9 +1456,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      className="group w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#FEE2E2] hover:border-[#DC2626]"
+                      className="group w-8 h-8 rounded-[10px] flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#FEE2E2] hover:border-[#DC2626]"
                     >
-                      <LogOut data-signout-icon data-no-contrast-guard className="w-5 h-5 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+                      <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.15} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]" style={{ color: '#DC2626' }}>Sign Out</TooltipContent>
@@ -1466,8 +1466,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" data-no-contrast-guard className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
-                      <User className="w-5 h-5 text-[hsl(var(--gold))]" />
+                    <Link to="/auth" data-no-contrast-guard className="w-8 h-8 rounded-[10px] flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
+                      <User className="w-4 h-4 text-[hsl(var(--gold))]" />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
@@ -1492,7 +1492,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-9 h-9 rounded-[10px] flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-8 h-8 rounded-[10px] flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}

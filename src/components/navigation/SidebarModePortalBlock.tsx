@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { ChevronRight, Briefcase, TrendingUp, Building2 } from "lucide-react";
+import { ChevronRight, Handshake, TrendingUp, Building2 } from "lucide-react";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 
 /**
@@ -14,7 +14,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
  */
 const MODE_CONFIG = {
   broker: {
-    icon: Briefcase,
+    icon: Handshake,
     label: "Broker Portal",
     href: "/broker/portal",
     matchPrefix: "/broker",
