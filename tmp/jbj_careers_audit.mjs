@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const browser = await chromium.launch({ headless: true, chromiumSandbox: false });
+const browser = await chromium.launch({ headless: true, chromiumSandbox: false, executablePath: '/bin/chromium' });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 }, deviceScaleFactor: 1 });
 await page.goto('http://localhost:8080/careers', { waitUntil: 'networkidle', timeout: 60000 });
 await page.screenshot({ path: '/mnt/documents/jbj-ui-audit/careers-before.png', fullPage: true });
