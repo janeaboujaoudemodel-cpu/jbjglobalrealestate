@@ -221,6 +221,15 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     }
   }, [isOpen, initialQuery]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isOpen, onClose]);
+
   const handleSelect = (route: string) => {
     if (query.trim()) {
       saveRecentSearch(query.trim());

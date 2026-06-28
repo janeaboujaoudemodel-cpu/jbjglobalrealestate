@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { HeaderControl } from '@/components/ui/ds';
 
 // Unified currency list - same across the entire platform
 export const SUPPORTED_CURRENCIES = [
@@ -85,19 +86,11 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             <DollarSign className="w-4 h-4 text-[#1A1A1A] group-hover:text-white group-hover:scale-110 transition-all" />
           </button>
         ) : isFlag ? (
-          <button
-            data-surface="emerald"
-            data-emerald-ok="button"
-            data-emerald-action="true"
-            data-header-control-family="pill"
-            className="jj-header-selector-control jj-header-premium-control jj-emerald-action jj-surface-emerald h-11 inline-flex items-center gap-1.5 px-4 rounded-full border-0 transition-colors duration-150 hover:brightness-110"
-            style={{ border: 0 }}
-            aria-label="Currency"
-          >
+          <HeaderControl shape="pill" tone="emerald" aria-label="Currency" className="gap-1.5 px-4">
             <DollarSign className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <span className="text-[12px] font-semibold tracking-wide" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.code}</span>
             <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-          </button>
+          </HeaderControl>
         ) : (
           <button className="h-11 px-4 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#B89555]/20 hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/10 flex items-center gap-2">
             <DollarSign className="w-4 h-4" />
