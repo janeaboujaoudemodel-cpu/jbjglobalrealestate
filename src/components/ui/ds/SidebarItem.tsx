@@ -46,6 +46,7 @@ export interface SidebarItemProps {
   iconData?: Record<`data-${string}`, unknown>;
   labelClassName?: string;
   labelStyle?: React.CSSProperties;
+  labelData?: Record<`data-${string}`, unknown>;
   trailingClassName?: string;
   /** Use only when migrating an already-approved live control: className/style are the visual source of truth. */
   preserveVisual?: boolean;
@@ -107,6 +108,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
       iconData,
       labelClassName,
       labelStyle,
+      labelData,
       trailingClassName,
       preserveVisual = false,
       asButton,
@@ -143,6 +145,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
         )}
         {!collapsed && (
           <span
+            {...labelData}
             className={cn(labelClassName ?? "flex-1 min-w-0 truncate")}
             style={labelStyle ?? (active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined)}
           >
