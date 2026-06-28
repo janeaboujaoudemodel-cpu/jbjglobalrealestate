@@ -162,18 +162,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // Closed header trigger: emerald-ombre with white text/icons to match
   // the search/filter/favorite utility controls.
   // ─────────────────────────────────────────────────────────────────
-  // Closed-trigger: uniform champagne chip with a gold hairline + thin
-  // accent rail on the leading edge in the active mode's tone. Same look
-  // whether selected or not — classy, consistent, no rainbow.
+  // Closed-trigger: same emerald premium control family as AED/filter/favorites.
   const triggerStyle: CSSProperties = {
     backgroundColor: 'transparent',
     backgroundImage: 'var(--jj-emerald-ombre)',
-    borderColor: 'rgba(255,255,255,0.18)',
-    borderWidth: 1,
-    borderStyle: 'solid',
+    border: 0,
     color: '#FFFFFF',
     WebkitTextFillColor: '#FFFFFF',
-    boxShadow: '0 8px 18px -12px rgba(6,78,59,0.85)',
+    boxShadow: '0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)',
   };
 
 
@@ -221,8 +217,9 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             data-allow-dark-cta
             data-on-dark
             data-mode-trigger="header"
+            data-header-control-family="pill"
           className={cn(
-              "jj-header-selector-control allow-white h-11 flex items-center gap-1.5 px-4 py-1.5 rounded-full border transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110 whitespace-nowrap shrink-0",
+              "jj-header-selector-control jj-header-premium-control allow-white h-11 flex items-center gap-1.5 px-4 py-1.5 rounded-full border-0 transition-all duration-150 hover:brightness-110 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
               isOpen && "ring-2",
               className
