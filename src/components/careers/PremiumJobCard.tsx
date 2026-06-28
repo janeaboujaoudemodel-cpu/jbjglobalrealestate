@@ -185,7 +185,13 @@ export default function PremiumJobCard({
                   className={`inline-flex min-h-[28px] items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isDarkTag ? "allow-white" : ""}`}
                   style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
-                  <Icon data-careers-icon="tag" className={`w-3.5 h-3.5 shrink-0 ${isDarkTag ? "allow-white" : ""}`} strokeWidth={2.5} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF", fill: t === "partner" ? "#FFFFFF" : "none" } : { color: "#1A1A1A", stroke: "#1A1A1A" }} />
+                  <Icon
+                    data-careers-icon={isDarkTag ? undefined : "tag"}
+                    data-careers-ink-icon={isDarkTag ? undefined : "true"}
+                    className={`w-3.5 h-3.5 shrink-0 ${isDarkTag ? "allow-white" : ""}`}
+                    strokeWidth={2.75}
+                    style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF", fill: t === "partner" ? "#FFFFFF" : "none" } : { color: "#1A1A1A", stroke: "#1A1A1A", fill: "none" }}
+                  />
                   <span className={isDarkTag ? "allow-white" : ""} style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
                 </span>
               );
@@ -209,13 +215,13 @@ export default function PremiumJobCard({
         )}
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
-          <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-            <Briefcase data-careers-icon="department" className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
+          <span data-careers-ink-row="department" className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
+            <Briefcase data-careers-icon="department" data-careers-ink-icon="true" className="w-4 h-4 shrink-0" strokeWidth={2.75} style={{ color: "#1A1A1A", stroke: "#1A1A1A", fill: "none" }} aria-hidden />
             {department}
           </span>
           {location && (
-            <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-              <MapPin data-careers-icon="location" className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
+            <span data-careers-ink-row="location" className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
+              <MapPin data-careers-icon="location" data-careers-ink-icon="true" className="w-4 h-4 shrink-0" strokeWidth={2.75} style={{ color: "#1A1A1A", stroke: "#1A1A1A", fill: "none" }} aria-hidden />
               {location}
             </span>
           )}
