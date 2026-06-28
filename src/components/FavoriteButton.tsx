@@ -62,7 +62,7 @@ const FavoriteButton = ({
     lg: "w-6 h-6",
   };
 
-  const actionClass = "jj-surface-emerald jj-emerald-action jj-favorite-trigger flex items-center justify-center rounded-full transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-none";
+  const actionClass = "jj-surface-emerald jj-emerald-action jj-favorite-trigger inline-flex items-center justify-center rounded-full aspect-square shrink-0 leading-none transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] overflow-hidden p-0";
   const emeraldIconStyle = {
     color: "#FFFFFF",
     stroke: "#FFFFFF",
