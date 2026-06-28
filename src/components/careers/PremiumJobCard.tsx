@@ -184,7 +184,7 @@ export default function PremiumJobCard({
                   className={`inline-flex min-h-[28px] items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isDarkTag ? "allow-white" : ""}`}
                   style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
-                  <Icon className={`w-3 h-3 ${isDarkTag ? "allow-white" : ""}`} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF", fill: t === "partner" ? "#FFFFFF" : "none" } : undefined} />
+                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isDarkTag ? "allow-white" : ""}`} strokeWidth={2.5} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF", fill: t === "partner" ? "#FFFFFF" : "none" } : { color: "#1A1A1A", stroke: "#1A1A1A" }} />
                   <span className={isDarkTag ? "allow-white" : ""} style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
                 </span>
               );
