@@ -1,7 +1,7 @@
-import { Crown, TrendingUp, Globe2, Headphones, Rocket, ShieldCheck } from "lucide-react";
+import { Crown, TrendingUp, Globe2, Headphones, Rocket, ShieldCheck, type LucideIcon } from "lucide-react";
 import { IconTile } from "@/components/ui/icon-tile";
 
-const BENEFITS = [
+const BENEFITS: Array<{ icon: LucideIcon; title: string; description: string }> = [
   {
     icon: Crown,
     title: "Elite Clientele",

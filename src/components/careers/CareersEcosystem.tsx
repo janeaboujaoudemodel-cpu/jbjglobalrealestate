@@ -1,11 +1,12 @@
 import {
   Building2, Users, Workflow, GraduationCap, Globe2, Megaphone,
   Sparkles, Award, Briefcase,
+  type LucideIcon,
 } from "lucide-react";
 import { IconTile } from "@/components/ui/icon-tile";
 
 interface PillarTile {
-  icon: React.ElementType;
+  icon: LucideIcon;
   title: string;
   description: string;
 }
