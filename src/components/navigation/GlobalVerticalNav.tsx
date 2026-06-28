@@ -33,6 +33,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
 import { ACCOUNT_SHORTCUTS_SIDEBAR } from "@/config/accountShortcuts";
 import SidebarModePortalBlock from "@/components/navigation/SidebarModePortalBlock";
+import { SidebarItem } from "@/components/ui/ds/SidebarItem";
 
 import { useTeamVisibility } from "@/hooks/useTeamVisibility";
 import { useCompareAccess } from "@/hooks/useCompareAccess";
