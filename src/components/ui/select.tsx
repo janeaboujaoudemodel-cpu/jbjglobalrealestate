@@ -217,11 +217,11 @@ const SelectItem = React.forwardRef<
     className={cn(
       "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#0A0A0A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-       "hover:bg-[rgba(6,78,59,0.10)] hover:text-[#064E3B]",
-       "focus:bg-[rgba(6,78,59,0.10)] focus:text-[#064E3B]",
-       "data-[highlighted]:bg-[rgba(6,78,59,0.10)] data-[highlighted]:text-[#064E3B]",
+       "hover:text-white",
+       "focus:text-white",
+       "data-[highlighted]:text-white",
       "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
-      "data-[state=checked]:text-[color:var(--emerald-1)] data-[state=checked]:font-semibold",
+      "data-[state=checked]:text-white data-[state=checked]:font-semibold",
       className,
     )}
     {...props}

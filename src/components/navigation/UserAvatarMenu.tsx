@@ -10,6 +10,7 @@ import {
   DropdownMenuItem, DropdownMenuSeparator,
   DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
+import { JbjAvatar, NotificationBadge } from "@/components/ui/ds";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserMode } from "@/hooks/useUserMode";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
@@ -119,28 +120,14 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         <span className={`text-sm flex-1 ${active ? "font-semibold text-[#1A1A1A]" : "font-medium text-[#1A1A1A]"}`}>
           {label}
         </span>
-        {badge && badge > 0 ? (
-          <span
-            data-on-dark
-            data-no-contrast-guard
-            className="min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold flex items-center justify-center"
-            style={{
-              background: "var(--jj-emerald-ombre, linear-gradient(135deg, #042c1c 0%, #0b5132 100%))",
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              textShadow: "none",
-            }}
-          >
-            {badge > 9 ? "9+" : badge}
-          </span>
-        ) : null}
+        {badge && badge > 0 ? <NotificationBadge count={badge} /> : null}
       </span>
     );
     return (
       <DropdownMenuItem
         asChild={!!to}
         onSelect={onClick ? () => onClick() : undefined}
-        className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[rgba(6,78,59,0.10)] data-[highlighted]:bg-[rgba(6,78,59,0.10)] ${
+          className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 ${
           active ? "bg-[#F7F2EA] border border-[#B89555]/30" : ""
         }`}
       >
@@ -159,56 +146,15 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           data-allow-dark-cta
           data-on-dark
           data-header-control-family="circle"
-          className="jj-header-icon-control jj-header-premium-control jj-avatar-metallic allow-white relative h-11 w-11 rounded-full border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-[filter] hover:brightness-110"
+          className="jj-header-icon-control jj-header-premium-control allow-white relative h-11 w-11 rounded-full border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-[filter] hover:brightness-110"
           style={{
             border: 0,
-            backgroundImage:
-              "radial-gradient(130% 130% at 26% 20%, #087052 0%, #064E3B 34%, #042c1c 66%, #000000 100%)",
-            boxShadow:
-              "0 14px 30px -13px rgba(6,78,59,1), 0 4px 10px -6px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -10px 18px rgba(0,0,0,0.34)",
+            background: "transparent",
+            boxShadow: "none",
           }}
         >
-          {/* Rotating metallic shine ring */}
-          <span
-            aria-hidden="true"
-            className="jj-avatar-spinner absolute -inset-[3px] rounded-full pointer-events-none"
-            style={{
-              background:
-                "conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.58) 28deg, rgba(184,149,85,0.46) 50deg, rgba(255,255,255,0.18) 78deg, rgba(255,255,255,0) 132deg, rgba(255,255,255,0) 360deg)",
-              WebkitMask:
-                "radial-gradient(circle, transparent 66%, #000 68%, #000 76%, transparent 78%)",
-              mask: "radial-gradient(circle, transparent 66%, #000 68%, #000 76%, transparent 78%)",
-            }}
-          />
-          <span
-            className="absolute inset-0 rounded-full flex items-center justify-center overflow-hidden"
-            style={{
-              background:
-                "radial-gradient(120% 120% at 28% 20%, #087052 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
-            }}
-          >
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background:
-                  "conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0.42), rgba(255,255,255,0) 24%, rgba(6,78,59,0.26) 55%, rgba(255,255,255,0.36) 80%, rgba(255,255,255,0) 100%)",
-                opacity: 0.86,
-                mixBlendMode: "soft-light",
-              }}
-            />
-            <span
-              className="relative text-[12px] font-extrabold tracking-[-0.01em]"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: "0 1px 2px rgba(0,0,0,0.72)" }}
-            >
-              {initials}
-            </span>
-          </span>
-          {activityCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-[#064E3B] text-white text-[9px] font-bold flex items-center justify-center px-1 border border-[#FDFBF7] shadow-[0_3px_8px_rgba(0,0,0,0.35)]">
-              {activityCount > 9 ? "9+" : activityCount}
-            </span>
-          )}
+          <JbjAvatar initials={initials} size="md" />
+          <NotificationBadge count={activityCount} floating />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -218,18 +164,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       >
         {/* Header */}
         <div className="flex items-center gap-3 px-2 py-2.5">
-          <span
-            className="relative h-10 w-10 rounded-full flex items-center justify-center shrink-0"
-            style={{
-              border: 0,
-              background:
-                "radial-gradient(120% 120% at 28% 20%, #087052 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
-              boxShadow:
-                "0 8px 18px -12px rgba(6,78,59,0.9), inset 0 1px 0 rgba(255,255,255,0.26), inset 0 -8px 14px rgba(0,0,0,0.28)",
-            }}
-          >
-            <span className="text-[13px] font-extrabold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.72)' }}>{initials}</span>
-          </span>
+          <JbjAvatar initials={initials} size="sm" />
           <div className="min-w-0 flex-1">
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{displayName}</div>
             <div className="text-[11px] text-[#1A1A1A]/55 truncate">JBJ account</div>
@@ -253,11 +188,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
-        <div className="h-px mx-2 my-1 bg-[#047857]/45" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-[#EFE6D6]" aria-hidden="true" />
         <Row to="/favorites" icon={Heart} label="Favorites" />
-        <div className="h-px mx-2 my-1 bg-[#047857]/45" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-[#EFE6D6]" aria-hidden="true" />
         <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
-        <div className="h-px mx-2 my-1 bg-[#047857]/45" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-[#EFE6D6]" aria-hidden="true" />
         <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
 
 

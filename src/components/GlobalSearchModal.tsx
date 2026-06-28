@@ -221,6 +221,15 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     }
   }, [isOpen, initialQuery]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isOpen, onClose]);
+
   const handleSelect = (route: string) => {
     if (query.trim()) {
       saveRecentSearch(query.trim());
@@ -475,14 +484,15 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               have transform-based centering overridden by animation libraries. */}
           <div
             data-global-search-modal
-            className="fixed z-[10001] left-1/2 top-[12px] sm:top-[88px]"
+            className="fixed z-[10001] left-1/2"
             style={{
               width: "min(48rem, calc(100vw - 20px))",
               transform: "translateX(-50%)",
               maxWidth: "calc(100vw - 20px)",
+              top: "clamp(12px, 9dvh, 88px)",
             }}
           >
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'min(720px, calc(100dvh - 108px))' }}>
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'min(720px, calc(100dvh - clamp(44px, 18dvh, 176px)))' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-[#B89555]/30 flex-shrink-0">
                 <IconTile icon={Search} tone="emerald" size="sm" className="absolute left-4 top-1/2 -translate-y-1/2" />
@@ -503,7 +513,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               </div>
 
               {/* Main Content - Scrollable */}
-              <div className="overflow-y-auto p-4 flex-1" style={{ maxHeight: 'min(640px, calc(100dvh - 188px))' }}>
+              <div className="overflow-y-auto p-4 flex-1" style={{ maxHeight: 'min(640px, calc(100dvh - clamp(124px, 28dvh, 256px)))' }}>
                 {/* Show search results when typing */}
                 {query.trim() ? (
                   <div className="space-y-4">

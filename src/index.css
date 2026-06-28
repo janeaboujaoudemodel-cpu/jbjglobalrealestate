@@ -18156,9 +18156,59 @@ html body #root [data-jj-utility-bar] .jj-avatar-metallic > span:not(.jj-avatar-
 @keyframes jj-avatar-shine-rotate {
   to { transform: rotate(360deg); }
 }
-.jj-avatar-spinner {
-  animation: jj-avatar-shine-rotate 6s linear infinite;
+html body [data-jbj-avatar].jj-avatar-metallic {
+  background: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-jbj-avatar] .jj-avatar-core {
+  background:
+    radial-gradient(120% 120% at 24% 16%, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 23%),
+    radial-gradient(120% 120% at 30% 18%, #0B6B4E 0%, #064E3B 38%, #042F22 72%, #07130E 100%) !important;
+  box-shadow:
+    0 14px 30px -13px rgba(6,78,59,1),
+    0 5px 12px -7px rgba(0,0,0,0.78),
+    inset 0 1px 0 rgba(255,255,255,0.34),
+    inset 0 -10px 18px rgba(0,0,0,0.36) !important;
+}
+html body [data-jbj-avatar] .jj-avatar-core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0) 34%, rgba(184,149,85,0.18) 62%, rgba(255,255,255,0.08));
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+html body [data-jbj-avatar] .jj-avatar-spinner {
+  background: conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.56) 28deg, rgba(184,149,85,0.42) 54deg, rgba(255,255,255,0.12) 82deg, rgba(255,255,255,0) 138deg, rgba(255,255,255,0) 360deg) !important;
+  -webkit-mask: radial-gradient(circle, transparent 66%, #000 68%, #000 76%, transparent 78%) !important;
+  mask: radial-gradient(circle, transparent 66%, #000 68%, #000 76%, transparent 78%) !important;
+  filter: drop-shadow(0 0 4px rgba(184,149,85,0.24)) !important;
+  animation: jj-avatar-shine-rotate 9s linear infinite;
   will-change: transform;
+}
+html body [data-jbj-avatar] span {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.72) !important;
+}
+html body [data-jbj-notification-badge] {
+  background: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid #FDFBF7 !important;
+}
+html body :is([role="menuitem"], [role="option"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body :is([role="menuitem"], [role="option"], [data-radix-collection-item]):is(:hover, :focus, [data-highlighted], [data-state="open"], [data-state="checked"]):not([data-no-emerald-hover]) :is(span, svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
 }
 @media (prefers-reduced-motion: reduce) {
   .jj-avatar-spinner { animation: none; }
