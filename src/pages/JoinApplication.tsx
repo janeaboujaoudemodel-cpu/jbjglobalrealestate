@@ -698,7 +698,7 @@ export default function JoinApplication() {
                 )}
                 <div className="pt-2">
                   <Link to="/hr-agent" className="text-[#1A1A1A] underline hover:opacity-80 text-sm font-medium">
-                    Need help? Chat with Jessica, our HR Assistant
+                    Need help? Chat with Jessica, our Interview Assistant
                   </Link>
                 </div>
               </CardContent>
@@ -765,7 +765,7 @@ export default function JoinApplication() {
 
       <section className="px-4 sm:px-6 lg:px-10 pb-12 md:pb-16">
         <div className="max-w-5xl mx-auto">
-          {/* Jessica AI live concierge panel */}
+          {/* Jessica interview consultant panel */}
           <JessicaAIPanel />
 
 
@@ -801,20 +801,22 @@ export default function JoinApplication() {
           {!positionsLoading && openPositions.length > 0 && (
             <Card
               id="open-positions"
+              surface="emerald"
               data-surface="emerald"
+              data-emerald-band
               className="careers-card-navy mb-8 rounded-2xl scroll-mt-24 overflow-hidden"
             >
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
               <CardHeader className="pt-9 pb-5 relative z-[1]">
                 <div className="flex items-end justify-between flex-wrap gap-4">
                   <div className="min-w-0">
-                    <span data-careers-emerald-label className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full border border-white/35 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white mb-2">
-                      <Briefcase className="w-3 h-3 text-white" /> Live Roles
+                    <span data-careers-emerald-label data-no-contrast-guard className="allow-white inline-flex min-h-[30px] items-center gap-1.5 rounded-full border border-white/35 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white mb-2">
+                      <Briefcase className="w-3.5 h-3.5 text-white" /> Live Roles
                     </span>
-                    <CardTitle data-careers-emerald-title className="text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
+                    <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">
                       Open Positions
                     </CardTitle>
-                    <CardDescription data-careers-emerald-subtitle className="text-white/85 font-medium mt-1.5">
+                    <CardDescription data-careers-emerald-subtitle data-no-contrast-guard className="allow-white text-white font-medium mt-1.5">
                       Tap <strong className="text-white font-semibold">Apply</strong> on any role to auto-select it in the form below.
                     </CardDescription>
                   </div>

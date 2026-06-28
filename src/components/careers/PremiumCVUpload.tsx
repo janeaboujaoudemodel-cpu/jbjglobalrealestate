@@ -64,7 +64,7 @@ export function PremiumCVUpload({
                 <span>{formatSize(file.size)}</span>
                 <span className="h-1 w-1 rounded-full bg-[#1A1A1A]/40" />
                 <span className="flex items-center gap-1 font-semibold text-[#0A0A0A]">
-                  <Sparkles className="h-3 w-3" /> Ready for Jessica AI review
+                  <Sparkles className="h-3 w-3" /> Ready for Jessica review
                 </span>
               </div>
             </div>
@@ -126,7 +126,7 @@ export function PremiumCVUpload({
             </div>
             <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-[#0A0A0A]/70">
               <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
-                AI-parsed
+                CV review ready
               </span>
               <span className="rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-2.5 py-0.5">
                 Auto-fill enabled

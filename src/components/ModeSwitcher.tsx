@@ -222,7 +222,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             data-on-dark
             data-mode-trigger="header"
           className={cn(
-              "jj-header-selector-control allow-white h-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110 whitespace-nowrap shrink-0",
+              "jj-header-selector-control allow-white h-11 flex items-center gap-1.5 px-4 py-1.5 rounded-full border transition-all duration-150 hover:-translate-y-0.5 hover:brightness-110 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
               isOpen && "ring-2",
               className

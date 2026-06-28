@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { MessageCircle, Sparkles, ShieldCheck, UserCheck } from "lucide-react";
-import jessicaPortrait from "@/assets/team/elizabeth-bennett-hr-v3.png";
+import { MessageCircle, ShieldCheck, UserCheck } from "lucide-react";
+import jessicaPortrait from "@/assets/team/jessica-interview-consultant.png";
 
 /**
  * JessicaAIPanel
@@ -11,9 +11,11 @@ export default function JessicaAIPanel() {
     <section
       aria-labelledby="jessica-panel-title"
       className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-0 mt-2 mb-10"
+      data-jessica-consultant-panel
     >
       <div
-        className="group relative overflow-hidden rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] shadow-[0_18px_44px_-28px_rgba(10,10,10,0.22)] transition-all hover:shadow-[0_22px_50px_-22px_rgba(10,10,10,0.32)] hover:-translate-y-[1px]"
+        className="group relative overflow-hidden rounded-[24px] border border-[#B89555]/55 bg-[linear-gradient(135deg,#FFFDF8_0%,#FDFBF7_44%,#F7F2EA_100%)] shadow-[0_18px_44px_-28px_rgba(10,10,10,0.22)] transition-all hover:shadow-[0_22px_50px_-22px_rgba(10,10,10,0.32)] hover:-translate-y-[1px]"
+        data-surface="champagne"
       >
         {/* Soft glow corner */}
         <div
@@ -31,7 +33,7 @@ export default function JessicaAIPanel() {
               aria-hidden
               className="absolute inset-0 rounded-full bg-[#B89555]/25 careers-pulse"
             />
-            <div className="relative h-20 w-20 overflow-hidden rounded-full border border-[#B89555]/70 bg-[#F7F2EA] shadow-[0_14px_26px_-16px_rgba(26,26,26,0.45),inset_0_1px_0_rgba(255,255,255,0.75)]">
+            <div className="relative h-24 w-24 overflow-hidden rounded-full border-2 border-[#B89555]/70 bg-[#F7F2EA] shadow-[0_14px_26px_-16px_rgba(26,26,26,0.45),inset_0_1px_0_rgba(255,255,255,0.75)]">
               <img
                 src={jessicaPortrait}
                 alt="Jessica, interview consultant"
@@ -52,19 +54,20 @@ export default function JessicaAIPanel() {
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
               <h3
                 id="jessica-panel-title"
-                className="text-xl md:text-2xl font-semibold text-[#1A1A1A] tracking-tight"
+              className="text-xl md:text-2xl font-semibold text-[#1A1A1A] tracking-tight"
               >
-                Meet Jessica
+                Jessica Interview Consultant
               </h3>
-              <span className="inline-flex min-h-[26px] items-center gap-1.5 rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-3 py-1 text-[10px] font-semibold tracking-[0.12em] uppercase text-[#1A1A1A]">
-                <Sparkles className="w-3 h-3 text-[#B89555]" />
+              <span className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full border border-[#B89555]/55 bg-[#F7F2EA] px-3 py-1 text-[10px] font-bold tracking-[0.12em] uppercase text-[#1A1A1A]">
+                <UserCheck className="w-3 h-3 text-[#B89555]" />
                 Interview Assistant
               </span>
             </div>
 
             <p className="text-sm md:text-[15px] text-[#1A1A1A]/80 leading-relaxed max-w-xl">
               Your dedicated interview consultant. Jessica reviews your CV, qualifies
-              your experience, and conducts the first interview — on your schedule.
+              your experience, and guides the first interview with a polished,
+              confidential process.
             </p>
 
             <div className="mt-3 flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5 text-[11px] font-medium">
@@ -74,7 +77,7 @@ export default function JessicaAIPanel() {
               </span>
               <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/75">
                 <UserCheck className="w-3 h-3 text-[#B89555]" />
-                Human-led interview support
+                Human interview support
               </span>
               <span className="inline-flex items-center gap-1.5 text-[#1A1A1A]/75">
                 <ShieldCheck className="w-3 h-3 text-[#B89555]" />

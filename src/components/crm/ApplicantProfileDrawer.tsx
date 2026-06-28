@@ -13,7 +13,7 @@ import {
 import {
   X, Mail, Phone, MessageSquare, Video, Eye, CheckCircle2,
   XCircle, Clock, FileText, Briefcase, MapPin, Languages,
-  Tag, User, Calendar, Sparkles, Bot, Save, Loader2, Link2,
+  Tag, User, Calendar, Sparkles, UserCheck, Save, Loader2, Link2,
   History, Send, StickyNote, ShieldCheck, FileSignature, MailCheck,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
@@ -684,15 +684,15 @@ export default function ApplicantProfileDrawer({
               className="rounded-xl border border-dashed border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]/40 p-5"
             >
               <h3 className={SECTION_TITLE_CLS}>
-                <Bot className="h-3.5 w-3.5" /> Jessica — AI Interview
+                <UserCheck className="h-3.5 w-3.5" /> Jessica — Interview Review
               </h3>
               <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0" data-allow-dark-cta>
-                  <Sparkles className="h-5 w-5 text-[#EFE6D6]" />
+                <div className="h-10 w-10 rounded-full bg-[#F7F2EA] border border-[#B89555]/50 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-5 w-5 text-[#B89555]" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-sm text-[#1A1A1A] font-medium">
-                    AI interview architecture arrives in Batch 4
+                    Jessica interview review arrives in Batch 4
                   </p>
                   <p className="text-xs text-[#1A1A1A]/65 mt-1">
                     Once enabled, Jessica will conduct the first-round interview,

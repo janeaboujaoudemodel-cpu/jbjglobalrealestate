@@ -110,7 +110,7 @@ export default function HorizontalUtilityBar() {
                 data-emerald-action="true"
                 onClick={() => setSearchOpen(true)}
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="jj-header-icon-control allow-white h-10 w-10 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                className="jj-header-icon-control allow-white h-11 w-11 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Search"
               >
                 <Search
@@ -134,7 +134,7 @@ export default function HorizontalUtilityBar() {
                 data-emerald-action="true"
                 onClick={() => setFilterOpen(true)}
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="jj-header-icon-control allow-white h-10 w-10 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                className="jj-header-icon-control allow-white h-11 w-11 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Filter"
               >
                 <SlidersHorizontal
@@ -155,7 +155,7 @@ export default function HorizontalUtilityBar() {
                 data-no-contrast-guard
                 data-emerald-action="true"
                 style={{ color: "#FFFFFF", backgroundImage: "var(--jj-emerald-ombre)" }}
-                className="jj-header-icon-control allow-white h-10 w-10 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                className="jj-header-icon-control allow-white h-11 w-11 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none hover:brightness-110 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                 aria-label="Favorites"
               >
                 <Heart
@@ -227,7 +227,7 @@ export default function HorizontalUtilityBar() {
               to="/auth"
               data-surface="emerald"
               data-no-contrast-guard
-              className="jj-header-selector-control allow-white h-10 inline-flex items-center gap-1.5 px-3.5 rounded-full border border-white/30 hover:border-white/55 transition-colors text-[12px] font-semibold tracking-wide text-white uppercase"
+              className="jj-header-selector-control allow-white h-11 inline-flex items-center gap-1.5 px-4 rounded-full border border-white/30 hover:border-white/55 transition-colors text-[12px] font-semibold tracking-wide text-white uppercase"
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-white/85" />

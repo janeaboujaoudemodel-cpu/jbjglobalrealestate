@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Bot, Shield, Clock, Star, Users, FileCheck } from 'lucide-react';
+import { MessageCircle, Shield, Clock, Star, Users, FileCheck, UserCheck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import MainLayout from '@/components/MainLayout';
@@ -19,9 +19,9 @@ const features = [
     description: 'Smart qualification questions based on role requirements'
   },
   {
-    icon: Bot,
-    title: 'AI Interview',
-    description: 'Comprehensive interview with industry-specific questions'
+    icon: UserCheck,
+    title: 'Interview Guidance',
+    description: 'Professional interview support with role-specific questions'
   },
   {
     icon: Star,
@@ -56,15 +56,15 @@ export default function HRAgent() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Bot className="w-4 h-4" />
+              <UserCheck className="w-4 h-4" />
               Available 24/7 to support you
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#1A1A1A]">
-              Meet Jessica
+              Jessica Interview Consultant
             </h1>
             <p className="text-xl text-[#1A1A1A]/80 max-w-2xl mx-auto">
               Complete your broker partner application with Jessica.
-              She'll guide you through CV submission, qualification, and interview.
+              She will guide you through CV submission, qualification, and interview preparation.
             </p>
           </div>
 
