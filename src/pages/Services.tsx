@@ -260,10 +260,13 @@ const Services = () => {
             </PremiumHeroButton>
             <Link 
               to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-[#FDFBF7]/10 transition-colors"
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="allow-white inline-flex items-center gap-2 px-6 py-3 border-2 border-white/40 !text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <MessageSquare className="w-5 h-5" />
-              Contact Support
+              <MessageSquare className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Support</span>
             </Link>
           </motion.div>
         </motion.div>

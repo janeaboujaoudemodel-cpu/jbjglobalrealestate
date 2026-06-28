@@ -1352,9 +1352,11 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="jj-cta-dark careers-navy-cta sm:w-48 h-12 rounded-xl font-semibold"
+                      className="jj-cta-dark careers-navy-cta allow-white sm:w-48 h-12 rounded-xl font-semibold !text-white"
+                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     >
-                      Continue <ArrowRight className="w-4 h-4 ml-1.5" />
+                      <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Continue</span>
+                      <ArrowRight className="w-4 h-4 ml-1.5 allow-white" style={{ color: "#FFFFFF" }} />
                     </Button>
                   ) : (
                     <Button
@@ -1363,18 +1365,18 @@ export default function JoinApplication() {
                       disabled={loading}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="jj-cta-dark careers-navy-cta sm:flex-1 h-14 rounded-xl font-bold text-base sm:text-lg"
-
+                      className="jj-cta-dark careers-navy-cta allow-white sm:flex-1 h-14 rounded-xl font-bold text-base sm:text-lg !text-white"
+                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     >
                       {loading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
-                          <span>Submitting...</span>
+                          <span style={{ color: "#FFFFFF" }}>Submitting...</span>
                         </>
                       ) : user ? (
-                        <span>Submit Application</span>
+                        <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Submit Application</span>
                       ) : (
-                        <span>Continue & Sign In to Submit</span>
+                        <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Continue & Sign In to Submit</span>
                       )}
                     </Button>
                   )}
