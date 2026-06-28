@@ -140,10 +140,12 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white oi-metallic group relative block w-full overflow-hidden px-6 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
+        className="jj-bleed-allow allow-white oi-metallic group relative block w-full overflow-hidden px-5 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
         style={{
           background: "var(--jj-emerald-ombre)",
           color: "#FFFFFF",
+          marginLeft: 0,
+          marginRight: 0,
         }}
       >
         {/* Ambient orbs */}
