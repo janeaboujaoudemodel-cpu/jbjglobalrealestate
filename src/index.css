@@ -17975,3 +17975,135 @@ body :where([data-radix-accordion-trigger][data-state="open"], .faq-trigger[data
   stroke: currentColor !important;
 }
 
+/* Phase 1.B header-only control family lock.
+   Scope is intentionally limited to the live horizontal utility bar. AED and
+   Mode are the reference: 44px height, full pill radius, emerald/dark-emerald
+   gradient, white text/icons, and no gold/white border on emerald controls. */
+html body #root [data-jj-utility-bar] :is(
+  .jj-header-premium-control,
+  .jj-header-icon-control,
+  .jj-header-selector-control,
+  [data-jj-utility-pill],
+  button[aria-label="Filter"],
+  button[aria-label="Favorites"],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"]
+) {
+  min-height: 44px !important;
+  height: 44px !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 999px !important;
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+  text-shadow: none !important;
+  transform: none !important;
+}
+
+html body #root [data-jj-utility-bar] :is(.jj-header-icon-control, button[aria-label="Filter"], button[aria-label="Favorites"], button[aria-label="Account menu"]) {
+  width: 44px !important;
+  min-width: 44px !important;
+  padding: 0 !important;
+}
+
+html body #root [data-jj-utility-bar] :is(.jj-header-selector-control, button[aria-label="Currency"], button[data-mode-trigger="header"]) {
+  width: auto !important;
+  padding-inline: 16px !important;
+}
+
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: auto !important;
+  min-width: 104px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle,
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle:hover,
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle:focus-visible,
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle:active {
+  min-height: 44px !important;
+  height: 44px !important;
+  min-width: 52px !important;
+  padding-inline: 14px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:focus-visible,
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:active {
+  background: rgba(255,255,255,0.16) !important;
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16) !important;
+  transform: none !important;
+}
+
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="false"],
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="false"]:hover {
+  background: transparent !important;
+  background-image: none !important;
+  color: rgba(255,255,255,0.72) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.72) !important;
+}
+
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle .jj-sqtoggle-sweep {
+  display: none !important;
+  animation: none !important;
+}
+
+html body #root [data-jj-utility-bar] :is(
+  .jj-header-premium-control,
+  .jj-header-icon-control,
+  .jj-header-selector-control,
+  [data-jj-utility-pill],
+  button[aria-label="Filter"],
+  button[aria-label="Favorites"],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"]
+):is(:hover, :focus-visible, [data-state="open"]) {
+  background: var(--jj-emerald-ombre-hover, var(--jj-emerald-ombre)) !important;
+  background-image: var(--jj-emerald-ombre-hover, var(--jj-emerald-ombre)) !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  filter: brightness(1.06) !important;
+  transform: none !important;
+}
+
+html body #root [data-jj-utility-bar] :is(
+  .jj-header-premium-control,
+  .jj-header-icon-control,
+  .jj-header-selector-control,
+  [data-jj-utility-pill],
+  button[aria-label="Filter"],
+  button[aria-label="Favorites"],
+  button[aria-label="Currency"],
+  button[data-mode-trigger="header"],
+  button[aria-label="Account menu"]
+) :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+  text-shadow: none !important;
+}
+
