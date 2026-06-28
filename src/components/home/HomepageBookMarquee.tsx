@@ -12,7 +12,7 @@ export default function HomepageBookMarquee() {
   return (
     <section className="jj-fullbleed-band bg-[#F7F2EA] py-10 md:py-14" data-fullbleed-band>
       {/* Header — padded */}
-      <ContentTrack>
+      <div className="jj-bleed-allow"><ContentTrack>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#E8F2EC] border border-[#064E3B]/30 flex items-center justify-center">
