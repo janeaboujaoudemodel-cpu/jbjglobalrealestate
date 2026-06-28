@@ -70,8 +70,8 @@ export function useScrollUnlocker(): void {
     const onPop = () => release();
 
     const normalizeWheelDelta = (event: WheelEvent): number => {
-      if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return event.deltaY * 16;
-      if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return event.deltaY * window.innerHeight;
+      if (event.deltaMode === 1) return event.deltaY * 16;
+      if (event.deltaMode === 2) return event.deltaY * window.innerHeight;
       return event.deltaY;
     };
 
