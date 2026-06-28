@@ -17641,8 +17641,7 @@ html body #root#root#root :is(
   .jj-pill-emerald,
   .jj-pill-emerald-metallic,
   .jj-icon-tile-emerald,
-  .jj-side-tile,
-  .allow-white,
+   .jj-side-tile,
   [data-ink-emerald],
   [data-on-dark],
   [data-hero-dark],
@@ -17703,8 +17702,7 @@ html body #root#root#root :is(
   .jj-pill-emerald,
   .jj-pill-emerald-metallic,
   .jj-icon-tile-emerald,
-  .jj-side-tile,
-  .allow-white,
+   .jj-side-tile,
   [data-ink-emerald],
   [data-on-dark],
   [data-hero-dark],
@@ -17774,8 +17772,7 @@ html body #root#root#root :is(
   .jj-pill-emerald,
   .jj-pill-emerald-metallic,
   .jj-icon-tile-emerald,
-  .jj-side-tile,
-  .allow-white,
+   .jj-side-tile,
   [data-ink-emerald],
   [data-on-dark],
   [data-hero-dark],
@@ -17806,8 +17803,7 @@ html body #root#root#root :is(
   .jj-pill-emerald,
   .jj-pill-emerald-metallic,
   .jj-icon-tile-emerald,
-  .jj-side-tile,
-  .allow-white,
+   .jj-side-tile,
   [data-ink-emerald],
   [data-on-dark],
   [data-hero-dark],
@@ -17834,8 +17830,7 @@ html body #root#root#root :is(
   .jj-pill-emerald,
   .jj-pill-emerald-metallic,
   .jj-icon-tile-emerald,
-  .jj-side-tile,
-  .allow-white,
+   .jj-side-tile,
   [data-ink-emerald],
   [data-on-dark],
   [data-hero-dark],
@@ -17873,4 +17868,397 @@ html body #root#root#root :is(.jj-cta-primary, .jj-cta-emerald, .jj-emerald-acti
   stroke-opacity: 1 !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
+}
+
+/* =====================================================================
+   PASS 66 — CHAMPAGNE / GOLD LIGHT-SURFACE INK RESTORE.
+   PASS 64/65 correctly fixed emerald filled controls, but their broad
+   white-foreground lock also caught legitimate champagne/gold sections
+   and the pearl sidebar. This is the final light-surface contract:
+   champagne, cream, raised, gold and sidebar pearl surfaces always render
+   ink #1A1A1A, then actual emerald/dark own-surfaces are re-locked below.
+   ===================================================================== */
+html body #root#root#root :is(
+  [data-sidebar-emerald],
+  [data-studio-surface="champagne"],
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="page"],
+  [data-surface="light"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-page,
+  .surface-light,
+  .surface-raised,
+  .surface-gold,
+  .surface-pearl,
+  .jj-layer-2,
+  .jj-layer-active,
+  .jj-section-champagne,
+  .jj-card-champagne,
+  .jj-band--page,
+  .jj-band--surface,
+  .jj-band--raised,
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#B89555]"]
+),
+html body #root#root#root :is(
+  [data-sidebar-emerald],
+  [data-studio-surface="champagne"],
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="page"],
+  [data-surface="light"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-page,
+  .surface-light,
+  .surface-raised,
+  .surface-gold,
+  .surface-pearl,
+  .jj-layer-2,
+  .jj-layer-active,
+  .jj-section-champagne,
+  .jj-card-champagne,
+  .jj-band--page,
+  .jj-band--surface,
+  .jj-band--raised,
+  [class*="from-[#FDFBF7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#B89555]"]
+) :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g):not(.jj-cta-primary):not(.jj-cta-primary *)
+  :not(.jj-cta-emerald):not(.jj-cta-emerald *)
+  :not(.jj-emerald-action):not(.jj-emerald-action *)
+  :not(.jj-pill-emerald):not(.jj-pill-emerald *)
+  :not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *)
+  :not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *)
+  :not(.jj-side-tile):not(.jj-side-tile *)
+  :not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *)
+  :not([data-surface="emerald"]):not([data-surface="emerald"] *)
+  :not([data-surface="dark"]):not([data-surface="dark"] *)
+  :not([data-surface="ink"]):not([data-surface="ink"] *)
+  :not([data-surface="navy"]):not([data-surface="navy"] *)
+  :not([data-cta="primary"]):not([data-cta="primary"] *)
+  :not([data-cta="dark"]):not([data-cta="dark"] *)
+  :not([data-hero-dark]):not([data-hero-dark] *)
+  :not([data-on-dark]):not([data-on-dark] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root :is(
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  [data-emerald-icon-surface],
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control
+),
+html body #root#root#root :is(
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-icon-tile-emerald,
+  .jj-side-tile,
+  [data-emerald-icon-surface],
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-icon-tile-tone="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-backend-sidebar-icon-tile],
+  [data-jj-page-nav-arrow],
+  [data-sidebar-collapse-control],
+  [data-jj-nav-collapse-toggle],
+  .jbj-sidebar-collapse-control
+) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root :is([data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-cta="dark"]),
+html body #root#root#root :is([data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-cta="dark"])
+  :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g):not([data-surface="champagne"]):not([data-surface="champagne"] *)
+  :not([data-surface="cream"]):not([data-surface="cream"] *)
+  :not([data-surface="page"]):not([data-surface="page"] *)
+  :not([data-surface="light"]):not([data-surface="light"] *)
+  :not([data-surface="raised"]):not([data-surface="raised"] *)
+  :not([data-surface="gold"]):not([data-surface="gold"] *)
+  :not(.surface-champagne):not(.surface-champagne *)
+  :not(.surface-cream):not(.surface-cream *)
+  :not(.surface-page):not(.surface-page *)
+  :not(.surface-light):not(.surface-light *)
+  :not(.surface-raised):not(.surface-raised *)
+  :not(.surface-gold):not(.surface-gold *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+/* Sidebar pearl/champagne row labels are light-surface text. They must never
+   inherit gradient/white text unless the actual row is the active emerald pill. */
+html body #root#root#root [data-chrome="sidebar"] [data-sidebar-emerald] :is(
+  [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label],
+  a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
+  a[data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label]
+) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body #root#root#root [data-chrome="sidebar"] [data-sidebar-emerald] :is(
+  [data-sidebar-section][data-active="true"] [data-sidebar-section-label],
+  a[data-sidebar-highlight][data-active="true"] [data-sidebar-highlight-label],
+  a[data-sidebar-subitem][data-active="true"] [data-sidebar-subitem-label]
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+}
+
+/* PASS 67 — FINAL SIDEBAR CHAMPAGNE TEXT OVERRIDE.
+   Beats the earlier repeated emerald locks by using higher specificity on the
+   actual champagne sidebar labels, not broad light-page ancestors. */
+html body #root#root#root#root#root [data-chrome="sidebar"][data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald]
+  :is([data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label],
+      a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
+      a[data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label]),
+html body #root#root#root#root#root [data-chrome="sidebar"][data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald]
+  :is([data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-icon],
+      a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-icon],
+      a[data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-icon],
+      [data-sidebar-section]:not([data-active="true"]) svg,
+      a[data-sidebar-highlight]:not([data-active="true"]) svg,
+      a[data-sidebar-subitem]:not([data-active="true"]) svg) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root#root#root [data-chrome="sidebar"][data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald]
+  :is([data-sidebar-section]:not([data-active="true"]) svg [fill]:not([fill="none"]),
+      a[data-sidebar-highlight]:not([data-active="true"]) svg [fill]:not([fill="none"]),
+      a[data-sidebar-subitem]:not([data-active="true"]) svg [fill]:not([fill="none"])) {
+  fill: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* PASS 68 — FINAL CHAMPAGNE / GOLD OWN-SURFACE INK CONTRACT.
+   Dark locks were matching Tailwind hover classes such as hover:bg-[#1A1A1A]
+   even while the rendered surface was still champagne/gold. Any actual
+   champagne/pearl/gold utility surface must render ink-black until it becomes
+   an actual emerald/dark control. */
+html body #root#root#root#root#root :is(
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="page"],
+  [data-surface="light"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  [data-studio-surface="champagne"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-page,
+  .surface-light,
+  .surface-raised,
+  .surface-gold,
+  .surface-pearl,
+  .jj-section-champagne,
+  .jj-card-champagne,
+  .jj-band--page,
+  .jj-band--surface,
+  .jj-band--raised,
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"],
+  [class*="from-[#fdfbf7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="via-[#f7f2ea]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="to-[#efe6d6]"],
+  [class*="from-champagne"],
+  [class*="via-champagne"],
+  [class*="to-champagne"],
+  [class*="bg-champagne"]
+):not(.jj-cta-primary):not(.jj-cta-emerald):not(.jj-emerald-action):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-icon-tile-emerald):not(.jj-side-tile):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-cta="primary"]):not([data-cta="dark"]):not([data-on-dark]),
+html body #root#root#root#root#root :is(
+  [data-surface="champagne"],
+  [data-surface="cream"],
+  [data-surface="page"],
+  [data-surface="light"],
+  [data-surface="raised"],
+  [data-surface="gold"],
+  [data-surface="pearl"],
+  [data-studio-surface="champagne"],
+  .surface-champagne,
+  .surface-cream,
+  .surface-page,
+  .surface-light,
+  .surface-raised,
+  .surface-gold,
+  .surface-pearl,
+  .jj-section-champagne,
+  .jj-card-champagne,
+  .jj-band--page,
+  .jj-band--surface,
+  .jj-band--raised,
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"],
+  [class*="from-[#fdfbf7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="via-[#f7f2ea]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="to-[#efe6d6]"],
+  [class*="from-champagne"],
+  [class*="via-champagne"],
+  [class*="to-champagne"],
+  [class*="bg-champagne"]
+):not(.jj-cta-primary):not(.jj-cta-emerald):not(.jj-emerald-action):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-icon-tile-emerald):not(.jj-side-tile):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-cta="primary"]):not([data-cta="dark"]):not([data-on-dark])
+  :is(*, h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, b, button, div, time, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g)
+  :not(.jj-cta-primary):not(.jj-cta-primary *)
+  :not(.jj-cta-emerald):not(.jj-cta-emerald *)
+  :not(.jj-emerald-action):not(.jj-emerald-action *)
+  :not(.jj-pill-emerald):not(.jj-pill-emerald *)
+  :not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *)
+  :not(.jj-icon-tile-emerald):not(.jj-icon-tile-emerald *)
+  :not(.jj-side-tile):not(.jj-side-tile *)
+  :not([data-surface="emerald"]):not([data-surface="emerald"] *)
+  :not([data-surface="dark"]):not([data-surface="dark"] *)
+  :not([data-surface="ink"]):not([data-surface="ink"] *)
+  :not([data-surface="navy"]):not([data-surface="navy"] *)
+  :not([data-cta="primary"]):not([data-cta="primary"] *)
+  :not([data-cta="dark"]):not([data-cta="dark"] *)
+  :not([data-on-dark]):not([data-on-dark] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root#root#root#root#root :is(
+  [data-surface="champagne"], [data-surface="cream"], [data-surface="page"], [data-surface="light"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-cream, .surface-page, .surface-light, .surface-raised, .surface-gold, .surface-pearl,
+  .jj-section-champagne, .jj-card-champagne, .jj-band--page, .jj-band--surface, .jj-band--raised,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"], [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"], [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="from-champagne"], [class*="via-champagne"], [class*="to-champagne"], [class*="bg-champagne"]
+) svg :is(path, line, polyline, polygon, rect, circle, ellipse, use, g)[fill]:not([fill="none"]):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *) {
+  fill: #1A1A1A !important;
+  fill-opacity: 1 !important;
+}
+
+/* PASS 69 — DAMAGE REPAIR: champagne/gold badge descendants.
+   Explicitly restores nested spans/icons inside actual champagne/gold utility
+   pills/cards that were accidentally painted white by the dark-surface lock. */
+html body #root#root#root#root#root#root#root :is(
+  [class*="from-[#FDFBF7]"], [class*="from-[#fdfbf7]"],
+  [class*="via-[#F7F2EA]"], [class*="via-[#f7f2ea]"],
+  [class*="to-[#EFE6D6]"], [class*="to-[#efe6d6]"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"]
+) :is(span, strong, small, p, h1, h2, h3, h4, h5, h6, a, button, label, li, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, use, g)
+  :not(.jj-cta-primary):not(.jj-cta-primary *)
+  :not(.jj-cta-emerald):not(.jj-cta-emerald *)
+  :not(.jj-emerald-action):not(.jj-emerald-action *)
+  :not([data-surface="emerald"]):not([data-surface="emerald"] *)
+  :not([data-surface="dark"]):not([data-surface="dark"] *)
+  :not([data-on-dark]):not([data-on-dark] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* PASS 70 — NUCLEAR CHAMPAGNE PILL DESCENDANT FIX.
+   Required because earlier dark locks were still winning on nested spans in
+   champagne Tailwind-gradient pills. */
+html body #root#root#root#root#root#root#root#root :is(
+  button[class*="from-[#FDFBF7]"], a[class*="from-[#FDFBF7]"], div[class*="from-[#FDFBF7]"],
+  button[class*="via-[#F7F2EA]"], a[class*="via-[#F7F2EA]"], div[class*="via-[#F7F2EA]"],
+  button[class*="to-[#EFE6D6]"], a[class*="to-[#EFE6D6]"], div[class*="to-[#EFE6D6]"]
+) :is(span, strong, small, p, h1, h2, h3, h4, h5, h6, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
 }
