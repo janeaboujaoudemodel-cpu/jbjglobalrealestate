@@ -17494,3 +17494,230 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   }
 }
 
+/* =====================================================================
+   JBJ PLATFORM AUDIT HARDENING — GLOBAL, NOT SCREENSHOT-SCOPED
+   This pass intentionally targets legacy pages that never opted into the
+   surface contract. It normalizes every page, backend area, modal, dropdown,
+   form, badge, table, card, filter, search box, CTA, and floating control
+   without runtime repaint observers or selector specificity wars.
+   ===================================================================== */
+
+html,
+body,
+#root {
+  background: var(--jbj-page);
+  color: var(--jbj-ink);
+  text-rendering: geometricPrecision;
+}
+
+/* Legacy dark-surface detection: emerald/black/navy/zinc/slate/neutral Tailwind
+   classes and arbitrary dark hexes all become white-on-dark, including icons. */
+:where(
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-on-dark], [data-hero-dark], [data-ink-emerald], [data-studio-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald, .jj-hero-fullscreen, .jj-hero-neon,
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-emerald-action,
+  [data-cta="primary"], [data-cta="dark"], [data-emerald-action], [data-emerald="true"], [data-emerald-filled],
+  [class*="bg-emerald-"], [class*="bg-green-9"], [class*="bg-green-8"], [class*="bg-teal-9"],
+  [class*="bg-slate-9"], [class*="bg-gray-9"], [class*="bg-zinc-9"], [class*="bg-neutral-9"],
+  [class*="from-emerald-"], [class*="via-emerald-"], [class*="to-emerald-"],
+  [class*="from-green-9"], [class*="via-green-9"], [class*="to-green-9"],
+  [class*="from-slate-9"], [class*="via-slate-9"], [class*="to-slate-9"],
+  [class*="from-gray-9"], [class*="via-gray-9"], [class*="to-gray-9"],
+  [class*="from-zinc-9"], [class*="via-zinc-9"], [class*="to-zinc-9"],
+  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"], [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"],
+  [class*="bg-[#022C22]"], [class*="bg-[#022c22]"], [class*="bg-[#0F172A]"], [class*="bg-[#0f172a]"],
+  [class*="bg-[#111827]"], [class*="bg-[#111827]"], [class*="bg-[#18181B]"], [class*="bg-[#18181b]"],
+  [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"], [class*="bg-[#0A0A0A]"], [class*="bg-[#0a0a0a]"],
+  [class*="bg-black"], [class*="from-[#064E3B]"], [class*="from-[#064e3b]"], [class*="from-[#042C1C]"],
+  [class*="from-[#042c1c]"], [class*="to-[#000000]"]
+) {
+  color: var(--jbj-white) !important;
+  -webkit-text-fill-color: var(--jbj-white) !important;
+}
+
+:where(
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-on-dark], [data-hero-dark], [data-ink-emerald], [data-studio-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald, .jj-hero-fullscreen, .jj-hero-neon,
+  .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-emerald-action,
+  [data-cta="primary"], [data-cta="dark"], [data-emerald-action], [data-emerald="true"], [data-emerald-filled],
+  [class*="bg-emerald-"], [class*="bg-green-9"], [class*="bg-green-8"], [class*="bg-teal-9"],
+  [class*="bg-slate-9"], [class*="bg-gray-9"], [class*="bg-zinc-9"], [class*="bg-neutral-9"],
+  [class*="from-emerald-"], [class*="via-emerald-"], [class*="to-emerald-"],
+  [class*="from-green-9"], [class*="via-green-9"], [class*="to-green-9"],
+  [class*="from-slate-9"], [class*="via-slate-9"], [class*="to-slate-9"],
+  [class*="from-gray-9"], [class*="via-gray-9"], [class*="to-gray-9"],
+  [class*="from-zinc-9"], [class*="via-zinc-9"], [class*="to-zinc-9"],
+  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"], [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"],
+  [class*="bg-[#022C22]"], [class*="bg-[#022c22]"], [class*="bg-[#0F172A]"], [class*="bg-[#0f172a]"],
+  [class*="bg-[#111827]"], [class*="bg-[#18181B]"], [class*="bg-[#18181b]"],
+  [class*="bg-[#1A1A1A]"], [class*="bg-[#1a1a1a]"], [class*="bg-[#0A0A0A]"], [class*="bg-[#0a0a0a]"],
+  [class*="bg-black"], [class*="from-[#064E3B]"], [class*="from-[#064e3b]"], [class*="from-[#042C1C]"],
+  [class*="from-[#042c1c]"], [class*="to-[#000000]"]
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="light"] *, [data-surface="champagne"] *, [data-surface="cream"] *, [data-surface="page"] *, [data-surface="raised"] *, [data-surface="gold"] *, [data-surface="pearl"] *, .surface-light *, .surface-champagne *, .surface-cream *, .surface-page *, .surface-raised *, .surface-gold *, .surface-pearl *, .jj-surface-champagne *, .jj-section-champagne *, .jj-card-champagne *, .jj-layer-2 *, .jj-layer-active *, .jj-gold-metallic *)) {
+  color: var(--jbj-white) !important;
+  -webkit-text-fill-color: var(--jbj-white) !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Legacy light-surface detection: white/champagne/gold/beige backgrounds never
+   carry white text or white icons. Icons become dark emerald, text charcoal. */
+body :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,time,dt,dd,th,td,button,input,textarea,select):not(:where(
+  [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *,
+  [data-on-dark] *, [data-hero-dark] *, [data-studio-surface="emerald"] *, .surface-dark *, .surface-ink *, .surface-navy *,
+  .jj-surface-emerald *, .jj-hero-fullscreen *, .jj-hero-neon *, .jj-cta-primary *, .jj-cta-emerald *, .jj-cta-dark *,
+  .jj-navy-cta *, .jj-emerald-action *, [data-cta="primary"] *, [data-cta="dark"] *, [data-emerald-action] *,
+  [data-emerald="true"] *, [data-emerald-filled] *, [class*="bg-emerald-"] *, [class*="bg-green-9"] *,
+  [class*="bg-green-8"] *, [class*="bg-teal-9"] *, [class*="bg-slate-9"] *, [class*="bg-gray-9"] *,
+  [class*="bg-zinc-9"] *, [class*="bg-neutral-9"] *, [class*="bg-[#064E3B]"] *, [class*="bg-[#064e3b]"] *,
+  [class*="bg-[#042C1C]"] *, [class*="bg-[#042c1c]"] *, [class*="bg-[#022C22]"] *, [class*="bg-[#022c22]"] *,
+  [class*="bg-[#0F172A]"] *, [class*="bg-[#0f172a]"] *, [class*="bg-[#111827]"] *, [class*="bg-[#18181B]"] *,
+  [class*="bg-[#18181b]"] *, [class*="bg-[#1A1A1A]"] *, [class*="bg-[#1a1a1a]"] *, [class*="bg-[#0A0A0A]"] *,
+  [class*="bg-[#0a0a0a]"] *, [class*="bg-black"] *
+)) {
+  color: var(--jbj-ink) !important;
+  -webkit-text-fill-color: var(--jbj-ink) !important;
+}
+
+body :where(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where(
+  [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *,
+  [data-on-dark] *, [data-hero-dark] *, [data-studio-surface="emerald"] *, .surface-dark *, .surface-ink *, .surface-navy *,
+  .jj-surface-emerald *, .jj-hero-fullscreen *, .jj-hero-neon *, .jj-cta-primary *, .jj-cta-emerald *, .jj-cta-dark *,
+  .jj-navy-cta *, .jj-emerald-action *, [data-cta="primary"] *, [data-cta="dark"] *, [data-emerald-action] *,
+  [data-emerald="true"] *, [data-emerald-filled] *, [class*="bg-emerald-"] *, [class*="bg-green-9"] *,
+  [class*="bg-green-8"] *, [class*="bg-teal-9"] *, [class*="bg-slate-9"] *, [class*="bg-gray-9"] *,
+  [class*="bg-zinc-9"] *, [class*="bg-neutral-9"] *, [class*="bg-[#064E3B]"] *, [class*="bg-[#064e3b]"] *,
+  [class*="bg-[#042C1C]"] *, [class*="bg-[#042c1c]"] *, [class*="bg-[#022C22]"] *, [class*="bg-[#022c22]"] *,
+  [class*="bg-[#0F172A]"] *, [class*="bg-[#0f172a]"] *, [class*="bg-[#111827]"] *, [class*="bg-[#18181B]"] *,
+  [class*="bg-[#18181b]"] *, [class*="bg-[#1A1A1A]"] *, [class*="bg-[#1a1a1a]"] *, [class*="bg-[#0A0A0A]"] *,
+  [class*="bg-[#0a0a0a]"] *, [class*="bg-black"] *
+)) {
+  color: var(--jbj-emerald) !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Kill isolated legacy signal palettes on light/champagne pages. Status can be
+   communicated by text, not by random red/green/blue/purple visual systems. */
+body :where([class*="text-red-"], [class*="text-green-"], [class*="text-lime-"], [class*="text-blue-"], [class*="text-purple-"], [class*="text-pink-"], [class*="text-orange-"], [class*="text-yellow-"], [class*="text-amber-"], [class*="text-rose-"], [class*="text-cyan-"], [class*="text-sky-"], [class*="text-indigo-"], [class*="text-teal-"]):not(:where([data-surface="emerald"] *, [data-surface="dark"] *, [data-on-dark] *, [data-hero-dark] *, .surface-dark *, .jj-surface-emerald *, .jj-hero-fullscreen *, [data-cta="primary"] *, [data-cta="dark"] *)) {
+  color: var(--jbj-ink) !important;
+  -webkit-text-fill-color: var(--jbj-ink) !important;
+}
+
+body :where([class*="bg-red-"], [class*="bg-green-"], [class*="bg-lime-"], [class*="bg-blue-"], [class*="bg-purple-"], [class*="bg-pink-"], [class*="bg-orange-"], [class*="bg-yellow-"], [class*="bg-amber-"], [class*="bg-rose-"], [class*="bg-cyan-"], [class*="bg-sky-"], [class*="bg-indigo-"], [class*="bg-teal-"]):not(:where([class*="bg-emerald-"], [data-surface="emerald"], [data-surface="dark"], [data-on-dark], [data-hero-dark], .surface-dark, .jj-surface-emerald, .jj-hero-fullscreen, [data-cta="primary"], [data-cta="dark"])) {
+  background-color: var(--jbj-raised) !important;
+  background-image: none !important;
+}
+
+body :where([class*="border-red-"], [class*="border-green-"], [class*="border-lime-"], [class*="border-blue-"], [class*="border-purple-"], [class*="border-pink-"], [class*="border-orange-"], [class*="border-yellow-"], [class*="border-amber-"], [class*="border-rose-"], [class*="border-cyan-"], [class*="border-sky-"], [class*="border-indigo-"], [class*="border-teal-"]):not(:where([data-surface="emerald"], [data-surface="dark"], [data-on-dark], [data-hero-dark], .surface-dark, .jj-surface-emerald, .jj-hero-fullscreen, [data-cta="primary"], [data-cta="dark"])) {
+  border-color: var(--jbj-gold-soft) !important;
+}
+
+/* Unified hover/active/selected/focus behavior for any legacy interactive row. */
+body :where(a, button, [role="button"], [role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option):not(:where([data-surface="emerald"], [data-surface="dark"], [data-on-dark], [data-hero-dark], .surface-dark, .jj-surface-emerald, [data-cta="primary"], [data-cta="dark"])):where(:hover, :focus-visible, [data-highlighted], [data-state="open"]) {
+  border-color: rgba(184,149,85,0.46) !important;
+  box-shadow: 0 10px 26px rgba(10,10,10,0.08) !important;
+}
+
+body :where([aria-selected="true"], [data-selected="true"], [data-state="checked"], [data-state="active"], .active, .selected):not(:where([data-surface="light"], [data-surface="champagne"], [data-surface="cream"], .surface-light, .surface-champagne, .jj-surface-champagne)) {
+  color: var(--jbj-white) !important;
+  -webkit-text-fill-color: var(--jbj-white) !important;
+}
+
+/* Radix/dropdown/popover performance: no slow zoom/slide stacks on menu open. */
+:where([data-radix-popper-content-wrapper], [role="menu"], [role="listbox"], [cmdk-root], .jbj-form-popover, [data-jbj-dropdown]) {
+  contain: layout style paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+:where([data-radix-popper-content-wrapper] *, [role="menu"], [role="listbox"], .jbj-form-popover, [data-jbj-dropdown]) :where([data-state="open"], [data-state="closed"]),
+:where([role="menu"], [role="listbox"], .jbj-form-popover, [data-jbj-dropdown])[data-state="open"],
+:where([role="menu"], [role="listbox"], .jbj-form-popover, [data-jbj-dropdown])[data-state="closed"] {
+  animation-duration: 70ms !important;
+  transition-duration: 90ms !important;
+}
+
+/* Platform icon rhythm. */
+body :where(svg[class*="lucide"], [data-lucide]) {
+  width: var(--jbj-icon-size);
+  height: var(--jbj-icon-size);
+  min-width: var(--jbj-icon-size);
+  stroke-width: 2.25;
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+}
+
+/* Cards, tables, filters, forms, and search components share premium spacing. */
+body :where([data-jbj-card], .jj-card, .jj-card-inner, .card, table, [role="table"]) {
+  border-radius: var(--jbj-radius-lg) !important;
+  border-color: rgba(184,149,85,0.28) !important;
+  box-shadow: var(--jbj-shadow-soft) !important;
+}
+
+body :where(th, td) {
+  padding: 0.875rem 1rem;
+  vertical-align: middle;
+}
+
+body :where(.filter, [class*="filter" i], [data-filter], .jj-search, [data-search], [class*="search" i]) :where(button, input, [role="combobox"]) {
+  min-height: var(--jbj-control-h) !important;
+  border-radius: var(--jbj-radius-md) !important;
+}
+
+/* Progress bars and market-intelligence score bars. */
+@keyframes jbj-progress-reveal {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+:where([role="progressbar"], .jj-progress, [data-jj-progress], [class*="progress" i], [data-score-bar]) {
+  height: 10px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background: rgba(6,78,59,0.12) !important;
+  border: 1px solid rgba(6,78,59,0.08) !important;
+}
+
+:where([role="progressbar"] > *, .jj-progress > *, [data-jj-progress] > *, [class*="progress" i] > *, [data-score-bar] > *) {
+  height: 100% !important;
+  border-radius: inherit !important;
+  background: linear-gradient(90deg, #064E3B 0%, #047857 100%) !important;
+  transform-origin: left center;
+  animation: jbj-progress-reveal 720ms cubic-bezier(.22, 1, .36, 1) both;
+  transition: width 720ms cubic-bezier(.22, 1, .36, 1), transform 720ms cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+/* Floating action controls — one placement, one size, one motion system. */
+:where(.jj-floating-action, [data-floating-action], [data-jj-floating-action], .jbj-floating-action-button) {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  border-radius: 999px !important;
+  padding: 0 !important;
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B, #042C1C)) !important;
+  color: var(--jbj-white) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 16px 38px rgba(6,78,59,0.26) !important;
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease !important;
+}
+
+:where(.jj-floating-action, [data-floating-action], [data-jj-floating-action], .jbj-floating-action-button):hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 20px 44px rgba(6,78,59,0.32) !important;
+}
+
+:where(.jj-floating-action, [data-floating-action], [data-jj-floating-action], .jbj-floating-action-button) :where(svg, [class*="lucide"], span) {
+  color: var(--jbj-white) !important;
+  -webkit-text-fill-color: var(--jbj-white) !important;
+  stroke: currentColor !important;
+}
+
