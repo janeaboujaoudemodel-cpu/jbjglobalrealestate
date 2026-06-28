@@ -18357,19 +18357,19 @@ html body #root [data-surface="mop"]:not([data-no-contrast-guard]) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body #root [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white),
-html body #root [data-surface="light"]    :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white),
-html body #root [data-surface="mop"]      :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white) {
+html body #root [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-no-contrast-guard] *):not([data-allow-dark-cta] *):not(.allow-white *):not(button *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
+html body #root [data-surface="light"]    :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-no-contrast-guard] *):not([data-allow-dark-cta] *):not(.allow-white *):not(button *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
+html body #root [data-surface="mop"]      :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b):not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-no-contrast-guard] *):not([data-allow-dark-cta] *):not(.allow-white *):not(button *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body #root [data-surface="champagne"] span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]),
-html body #root [data-surface="light"]    span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]),
-html body #root [data-surface="mop"]      span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]) {
+html body #root [data-surface="champagne"] span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-no-contrast-guard] *):not([data-allow-dark-cta] *):not(.allow-white *):not(button *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
+html body #root [data-surface="light"]    span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-no-contrast-guard] *):not([data-allow-dark-cta] *):not(.allow-white *):not(button *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *),
+html body #root [data-surface="mop"]      span:not([data-no-contrast-guard]):not([data-allow-dark-cta]):not(.allow-white):not([class*="text-white"]):not([class*="text-[#FFFFFF]"]):not([data-surface="emerald"] *):not([data-surface="dark"] *):not([data-no-contrast-guard] *):not([data-allow-dark-cta] *):not(.allow-white *):not(button *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-pill-emerald *):not(.jj-surface-emerald *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body #root [data-surface="champagne"] svg:not(.allow-white):not([data-no-contrast-guard]) {
+html body #root [data-surface="champagne"] svg:not(.allow-white):not([data-no-contrast-guard]):not([data-surface="emerald"] *):not(button *):not(.jj-pill-emerald-metallic *):not(.jj-cta-emerald *):not(.jj-surface-emerald *) {
   color: #1A1A1A !important;
   stroke: currentColor;
 }
