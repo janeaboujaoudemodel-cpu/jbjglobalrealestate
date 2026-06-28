@@ -89,7 +89,9 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             data-surface="emerald"
             data-emerald-ok="button"
             data-emerald-action="true"
-            className="jj-header-selector-control jj-emerald-action jj-surface-emerald h-11 inline-flex items-center gap-1.5 px-4 rounded-full transition-colors duration-150 hover:brightness-110"
+            data-header-control-family="pill"
+            className="jj-header-selector-control jj-header-premium-control jj-emerald-action jj-surface-emerald h-11 inline-flex items-center gap-1.5 px-4 rounded-full border-0 transition-colors duration-150 hover:brightness-110"
+            style={{ border: 0 }}
             aria-label="Currency"
           >
             <span className="text-sm leading-none" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.flag}</span>
