@@ -18811,6 +18811,14 @@ html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] 
   box-shadow: none !important;
 }
 
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card][data-mode-card] :is(svg, path, circle, rect, line, polyline, polygon) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
 html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] [data-mode-icon-tile="active"] {
   background: linear-gradient(135deg, #042F22 0%, #064E3B 100%) !important;
   background-image: linear-gradient(135deg, #042F22 0%, #064E3B 100%) !important;
