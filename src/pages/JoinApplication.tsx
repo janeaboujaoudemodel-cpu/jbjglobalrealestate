@@ -833,7 +833,7 @@ export default function JoinApplication() {
                       data-no-contrast-guard
                       data-open-positions-count
                       data-careers-primary-pill
-                      className="jj-cta-emerald jj-pill-emerald-metallic allow-white animated-border ml-auto inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-[12px] font-semibold whitespace-nowrap border border-[#B89555]/70 active:translate-y-[1px] transition-all"
+                      className="jj-cta-emerald jj-pill-emerald-metallic allow-white ml-auto inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl px-5 text-[12px] font-semibold whitespace-nowrap border-0 active:translate-y-[1px] transition-all"
                       style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
