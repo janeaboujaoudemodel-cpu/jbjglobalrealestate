@@ -23,13 +23,13 @@ export const JbjAvatar = React.forwardRef<HTMLSpanElement, JbjAvatarProps>(
       data-surface="emerald"
       data-no-contrast-guard
       className={cn(
-        "jj-avatar-metallic allow-white relative inline-flex shrink-0 items-center justify-center rounded-full overflow-visible",
+        "jj-avatar-metallic allow-white relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden",
         sizeClass[size],
         className,
       )}
       {...props}
     >
-      <span aria-hidden="true" className="jj-avatar-spinner absolute -inset-[3px] rounded-full pointer-events-none" />
+      <span aria-hidden="true" className="jj-avatar-spinner absolute inset-0 rounded-full pointer-events-none" />
       <span aria-hidden="true" className="jj-avatar-core absolute inset-0 rounded-full overflow-hidden" />
       <span className="relative z-[1] font-extrabold leading-none tracking-[0.01em] text-white">
         {initials}
