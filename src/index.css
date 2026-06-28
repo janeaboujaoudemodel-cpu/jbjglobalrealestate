@@ -18533,3 +18533,39 @@ html body #root [data-surface="champagne"] svg:not(.allow-white):not([data-no-co
   color: #1A1A1A !important;
   stroke: currentColor;
 }
+
+/* =====================================================================
+   PASS 90 — ANIMATED BORDER VISIBILITY LOCK
+   Re-asserts the reusable utility after legacy glow/CTA pseudo-element
+   locks, using only existing theme tokens already defined in this file.
+   ===================================================================== */
+html body #root .animated-border::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  padding: 1.5px !important;
+  border-radius: inherit !important;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg,
+    hsl(var(--gold)) 90deg,
+    hsl(var(--accent)) 180deg,
+    hsl(var(--secondary)) 270deg,
+    transparent 360deg
+  ) !important;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) !important;
+          mask-composite: exclude !important;
+  -webkit-mask-composite: xor !important;
+  animation: border-spin 4s linear infinite !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  display: block !important;
+  filter: none !important;
+}
+
+html body #root .animated-border.animated-border-thick::before {
+  padding: 3px !important;
+  animation-duration: 6s !important;
+}
