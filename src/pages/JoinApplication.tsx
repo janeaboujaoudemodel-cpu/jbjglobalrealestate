@@ -853,9 +853,15 @@ export default function JoinApplication() {
                     data-surface="emerald"
                     data-allow-dark-cta
                     data-no-contrast-guard
-                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white pl-12 pr-4 h-12 rounded-xl text-base font-medium border-0 text-white placeholder:text-white/75 focus-visible:ring-2 focus-visible:ring-white/40"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white pl-12 pr-4 h-12 rounded-xl text-base font-semibold border-0 text-white placeholder:text-white placeholder:font-medium placeholder:opacity-100 focus-visible:ring-2 focus-visible:ring-white/50 text-left"
+                    style={{
+                      color: "#FFFFFF",
+                      WebkitTextFillColor: "#FFFFFF",
+                      boxShadow:
+                        "0 10px 22px -10px rgba(0,0,0,0.55), 0 4px 10px -4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.35)",
+                    }}
                   />
+
                 </div>
 
               </CardHeader>
