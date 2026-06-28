@@ -359,9 +359,11 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
         <thead>
           <tr>
             <th
-              className="text-left text-xs font-semibold uppercase tracking-wide p-3 sticky left-0"
+              data-no-contrast-guard
+              className="aihf-criteria-head text-left text-xs font-semibold uppercase tracking-wide p-3 sticky left-0 !text-[#1A1A1A]"
               style={{
                 color: "#1A1A1A",
+                WebkitTextFillColor: "#1A1A1A",
                 background: "#EFE6D6",
                 minWidth: 170,
               }}
