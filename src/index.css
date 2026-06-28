@@ -18922,3 +18922,50 @@ html body [data-mode-switcher-root="true"] [data-mode-trigger="header"] .mode-sw
     margin-right: 0 !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PASS 97 — PROJECT CARD ACTIONS
+   1) CTA buttons (Email/Call/Chat) stay WHITE ink on emerald at all
+      states — never paint child text dark.
+   2) Top-right Favorite + Shortlist + Badge controls are revealed
+      only on card hover/focus, across every grid (Handpicked,
+      Continue Searching, Featured, Favorites).
+   ════════════════════════════════════════════════════════════════ */
+
+/* (1) Card CTA — force white ink on the emerald metallic tile */
+html body a.jj-emerald-metallic[data-emerald-ok="button"],
+html body a.jj-emerald-metallic[data-emerald-ok="button"] :is(span, svg, path, p, strong, em) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body a.jj-emerald-metallic[data-emerald-ok="button"]:hover,
+html body a.jj-emerald-metallic[data-emerald-ok="button"]:hover :is(span, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* (2) Hover-reveal: card-action overlays appear only on hover/focus */
+@media (hover: hover) and (pointer: fine) {
+  html body .group [data-card-action],
+  html body .group [data-favorite-button],
+  html body .group [data-shortlist-button],
+  html body .group [data-card-actions-overlay] {
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity 200ms ease, transform 200ms ease;
+  }
+  html body .group:hover [data-card-action],
+  html body .group:hover [data-favorite-button],
+  html body .group:hover [data-shortlist-button],
+  html body .group:hover [data-card-actions-overlay],
+  html body .group:focus-within [data-card-action],
+  html body .group:focus-within [data-favorite-button],
+  html body .group:focus-within [data-shortlist-button],
+  html body .group:focus-within [data-card-actions-overlay] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
