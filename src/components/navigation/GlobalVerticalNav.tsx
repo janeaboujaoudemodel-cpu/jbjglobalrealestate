@@ -759,6 +759,23 @@ export default function GlobalVerticalNav() {
 
   // Auto-open is now handled by the route-change effect above
 
+  const passSidebarBoundaryWheelToPage = useCallback((event: React.WheelEvent<HTMLElement>) => {
+    const target = event.currentTarget;
+    const hasLocalScroll = target.scrollHeight > target.clientHeight + 2;
+    const atTop = target.scrollTop <= 0;
+    const atBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 2;
+    const goingUp = event.deltaY < 0;
+    const goingDown = event.deltaY > 0;
+
+    // Fixed desktop chrome must never trap the page. If the sidebar has no
+    // local scroll room, or it is already at the edge in the wheel direction,
+    // pass the exact native wheel delta to the document once. No boosting.
+    if (!hasLocalScroll || (goingUp && atTop) || (goingDown && atBottom)) {
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, left: 0, behavior: "auto" });
+    }
+  }, []);
+
   // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
     e?.stopPropagation();
