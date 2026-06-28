@@ -295,19 +295,30 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               const isActive = mode === modeKey;
               const isHovered = hoveredMode === modeKey;
 
-              const rowIsEmerald = isActive || isHovered;
-              const rowTextColor = rowIsEmerald ? '#FFFFFF' : config.dark;
+              // NEW: rows render as emerald by default. Active row renders as
+              // champagne with emerald content (inverted), so the selected row
+              // is unmistakably distinct without ever producing low-contrast
+              // black-on-emerald or white-on-champagne combinations.
+              const isChampagne = isActive;
+              const rowTextColor = isChampagne ? '#064E3B' : '#FFFFFF';
+              const rowIconBg = isChampagne
+                ? 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)'
+                : 'linear-gradient(135deg, #042F22 0%, #064E3B 100%)';
+              const rowIconColor = isChampagne ? '#064E3B' : '#FFFFFF';
+
               const rowStyle: CSSProperties = {
-                backgroundImage: rowIsEmerald
-                  ? 'var(--jj-emerald-ombre)'
-                  : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
-                borderColor: rowIsEmerald ? 'transparent' : config.base,
+                backgroundImage: isChampagne
+                  ? 'linear-gradient(135deg, #FDFBF7 0%, #F2E8D2 100%)'
+                  : 'var(--jj-emerald-ombre)',
+                borderColor: isChampagne ? '#B89555' : 'transparent',
+                borderWidth: isChampagne ? 1.5 : 1,
                 color: rowTextColor,
-                boxShadow: isActive
-                  ? '0 10px 24px -16px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.12)'
-                  : rowIsEmerald
-                  ? '0 10px 24px -18px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.12)'
-                  : `inset 3px 0 0 ${config.base}`,
+                boxShadow: isChampagne
+                  ? '0 6px 18px -10px rgba(184,149,85,0.55), inset 0 1px 0 rgba(255,255,255,0.6)'
+                  : isHovered
+                  ? '0 12px 26px -14px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18)'
+                  : '0 8px 20px -16px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12)',
+                filter: isHovered && !isChampagne ? 'brightness(1.06)' : 'none',
                 transform: 'none',
               };
 
@@ -327,78 +338,79 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   onBlur={() => setHoveredMode(null)}
                   style={rowStyle}
                   unstyled
+                  data-no-contrast-guard
+                  data-mode-row={isChampagne ? 'active' : 'idle'}
                   className={cn(
                     "mode-switcher-item",
-                    "relative flex items-start gap-3 pl-5 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-75 border w-full",
+                    "relative flex items-start gap-3 pl-4 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-150 border w-full",
                     "focus:outline-none",
                   )}
                 >
-                  {/* Uniform ink icon badge with champagne-gold hairline ring.
-                      Icon stays crisp white on both default and hover; opt-out of
-                      the global white-icon contrast guard since the badge is dark. */}
                   <div
                     data-no-contrast-guard
-                    data-on-dark={rowIsEmerald || config.surface !== 'gold' ? 'true' : undefined}
-                    data-mode-icon-tile={config.surface}
-                    className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0 allow-white"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
-                      '--mode-base': config.base,
-                      '--mode-base-dark': config.baseDark,
-                      '--mode-on-base': config.onBase,
-                      backgroundImage: rowIsEmerald ? 'linear-gradient(135deg, #042F22 0%, #064E3B 100%)' : `linear-gradient(135deg, ${config.base} 0%, ${config.baseDark} 100%)`,
-                      boxShadow: rowIsEmerald ? 'inset 0 1px 0 rgba(255,255,255,0.18)' : `0 0 0 1px ${config.base}, 0 2px 6px rgba(0,0,0,0.18)`,
-                    } as CSSProperties}
+                      backgroundImage: rowIconBg,
+                      boxShadow: isChampagne
+                        ? '0 0 0 1px rgba(6,78,59,0.18)'
+                        : 'inset 0 1px 0 rgba(255,255,255,0.18)',
+                    }}
                   >
                     <Icon
                       data-no-contrast-guard
-                      data-on-dark={rowIsEmerald || config.surface !== 'gold' ? 'true' : undefined}
-                      className="mode-switcher-icon w-[18px] h-[18px] allow-white"
-                      style={{ color: rowIsEmerald ? '#FFFFFF' : config.onBase, stroke: rowIsEmerald ? '#FFFFFF' : config.onBase }}
+                      className="w-[18px] h-[18px]"
+                      style={{ color: rowIconColor, stroke: rowIconColor }}
                       strokeWidth={2}
                     />
                   </div>
 
-
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-bold leading-tight break-words" style={{ color: rowTextColor, WebkitTextFillColor: rowTextColor }}>
+                    <p
+                      className="text-[13px] font-bold leading-tight break-words"
+                      style={{ color: rowTextColor, WebkitTextFillColor: rowTextColor }}
+                    >
                       {config.label}
                     </p>
                     <p
                       className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
-                      style={{ color: rowTextColor, WebkitTextFillColor: rowTextColor }}
+                      style={{
+                        color: isChampagne ? '#3F3F46' : 'rgba(255,255,255,0.85)',
+                        WebkitTextFillColor: isChampagne ? '#3F3F46' : 'rgba(255,255,255,0.85)',
+                      }}
                     >
                       {config.description}
                     </p>
                   </div>
 
-                  {isActive ? (
+                  {isChampagne ? (
                     <span
                       data-no-contrast-guard
-                      data-mode-selected-pill={config.surface}
-                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
+                      className="ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
-                        '--mode-base': 'var(--jj-emerald-ombre)',
-                        '--mode-on-base': '#FFFFFF',
                         background: 'var(--jj-emerald-ombre)',
                         color: '#FFFFFF',
                         WebkitTextFillColor: '#FFFFFF',
                         borderColor: 'transparent',
-                      } as CSSProperties}
+                      }}
                     >
                       <Check
                         data-no-contrast-guard
-                        className="mode-switcher-selected-icon w-3 h-3 shrink-0 allow-white"
+                        className="w-3 h-3 shrink-0"
                         style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                       />
                       <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Selected</span>
                     </span>
                   ) : (
                     <span
-                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
+                      data-no-contrast-guard
+                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
-                        color: '#1A1A1A',
-                        borderColor: 'rgba(26,26,26,0.25)',
-                        backgroundColor: 'rgba(255,255,255,0.6)',
+                        color: '#064E3B',
+                        WebkitTextFillColor: '#064E3B',
+                        background: '#FDFBF7',
+                        borderColor: '#B89555',
+                        borderWidth: 1,
+                        borderStyle: 'solid',
                       }}
                     >
                       Select
