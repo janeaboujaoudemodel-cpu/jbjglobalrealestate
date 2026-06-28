@@ -470,20 +470,29 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.12 }}
             className="fixed inset-0 bg-[#1A1A1A]/80 backdrop-blur-sm z-[10000]"
             onClick={onClose}
           />
 
-          {/* Modal - LARGE Premium Panel */}
-          <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed left-1/2 -translate-x-1/2 [body.jj-vertical-nav-active_&]:lg:left-[calc(50%+100px)] [body.jj-vertical-nav-collapsed_&]:lg:left-[calc(50%+24px)] w-full max-w-3xl z-[10001] px-3 sm:px-6 lg:px-8 top-[12px] sm:top-[56px]"
-            style={{ maxHeight: 'calc(100dvh - 80px)' }}
+          {/* Modal — viewport-safe, never clipped on any device.
+              NOTE: outer wrapper handles fixed centering so framer-motion's transform
+              cannot override our translate. Inner motion.div animates opacity/y only. */}
+          <div
+            className="fixed z-[10001] top-[12px] sm:top-[56px] left-1/2"
+            style={{
+              width: "min(48rem, calc(100vw - 24px))",
+              transform: "translateX(-50%)",
+            }}
           >
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.12, ease: "easeOut" }}
+              style={{ maxHeight: "calc(100dvh - 80px)" }}
+            >
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-[#B89555]/30 flex-shrink-0">
                 <IconTile icon={Search} tone="emerald" size="sm" className="absolute left-4 top-1/2 -translate-y-1/2" />
@@ -806,7 +815,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 </p>
               </div>
             </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
