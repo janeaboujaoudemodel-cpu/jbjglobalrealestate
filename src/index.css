@@ -15288,9 +15288,8 @@ html body #root button > span,
 html body #root a[role="button"] > span,
 html body #root [data-slot="button"] > span {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
+
 
 html body #root :where(input, textarea, select, [data-jbj-field], .jbj-form-field) {
   max-width: 100%;
