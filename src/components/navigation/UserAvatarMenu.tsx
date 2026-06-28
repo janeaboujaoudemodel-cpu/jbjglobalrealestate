@@ -171,13 +171,13 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           {/* Rotating metallic shine ring */}
           <span
             aria-hidden="true"
-            className="jj-avatar-spinner absolute -inset-[2px] rounded-full pointer-events-none"
+            className="jj-avatar-spinner absolute -inset-[3px] rounded-full pointer-events-none"
             style={{
               background:
-                "conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.74) 36deg, rgba(6,78,59,0.95) 72deg, rgba(255,255,255,0.26) 116deg, rgba(255,255,255,0) 168deg, rgba(255,255,255,0) 360deg)",
+                "conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.58) 28deg, rgba(184,149,85,0.46) 50deg, rgba(255,255,255,0.18) 78deg, rgba(255,255,255,0) 132deg, rgba(255,255,255,0) 360deg)",
               WebkitMask:
-                "radial-gradient(circle, transparent 58%, #000 60%)",
-              mask: "radial-gradient(circle, transparent 58%, #000 60%)",
+                "radial-gradient(circle, transparent 66%, #000 68%, #000 76%, transparent 78%)",
+              mask: "radial-gradient(circle, transparent 66%, #000 68%, #000 76%, transparent 78%)",
             }}
           />
           <span
@@ -205,7 +205,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             </span>
           </span>
           {activityCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-[#1A1A1A] text-white text-[9px] font-bold flex items-center justify-center px-1 border border-[#FDFBF7]">
+            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-[#064E3B] text-white text-[9px] font-bold flex items-center justify-center px-1 border border-[#FDFBF7] shadow-[0_3px_8px_rgba(0,0,0,0.35)]">
               {activityCount > 9 ? "9+" : activityCount}
             </span>
           )}

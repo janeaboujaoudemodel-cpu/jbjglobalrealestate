@@ -1116,7 +1116,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
-                    className="w-full flex items-center gap-2.5 px-2.5 h-10 text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
+                    className="w-full flex items-center gap-2.5 px-2.5 min-h-[42px] text-[9.5px] uppercase tracking-[0.10em] leading-[1.18] font-bold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-lg"
                     iconWrapperData={{ 'data-emerald-icon-surface': true }}
                     iconWrapperClassName={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${getIconTileClass()}`}
                     iconClassName="w-[18px] h-[18px] transition-colors"
@@ -1124,7 +1124,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     iconData={{ 'data-sidebar-section-icon': true }}
                     iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                     labelData={{ 'data-sidebar-section-label': true, 'data-no-contrast-guard': true }}
-                    labelClassName={`flex-1 text-left relative inline-block transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
+                    labelClassName={`flex-1 text-left relative inline-block whitespace-normal break-normal [word-break:normal] [overflow-wrap:normal] transition-colors duration-200 after:bottom-[-3px] after:h-[1.5px] ${navHoverUnderline}`}
                     labelStyle={{
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
@@ -1342,11 +1342,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       >
       {collapsed ? (
         <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
-          {/* Logo header (88px) — collapsed: just icon */}
-          {/* Logo header — MUST match expanded (88px) so the under-monogram divider lines up exactly with the horizontal header hairline */}
-          <div className="h-[48px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
+          {/* Logo header — MUST stay 88px so collapsed sidebar aligns with the horizontal header hairline */}
+          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-7 h-7 object-contain" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
             </Link>
           </div>
 
