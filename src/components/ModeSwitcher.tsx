@@ -299,26 +299,29 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               // champagne with emerald content (inverted), so the selected row
               // is unmistakably distinct without ever producing low-contrast
               // black-on-emerald or white-on-champagne combinations.
-              const isChampagne = isActive;
-              const rowTextColor = isChampagne ? '#064E3B' : '#FFFFFF';
-              const rowIconBg = isChampagne
-                ? 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)'
-                : 'linear-gradient(135deg, #042F22 0%, #064E3B 100%)';
-              const rowIconColor = isChampagne ? '#064E3B' : '#FFFFFF';
+              // Default: champagne/gold rows with gold border.
+              // Active row: emerald ombre with white content.
+              const isEmerald = isActive;
+              const rowTextColor = isEmerald ? '#FFFFFF' : '#1A1A1A';
+              const rowIconBg = isEmerald
+                ? 'linear-gradient(135deg, #042F22 0%, #064E3B 100%)'
+                : 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)';
+              const rowIconColor = isEmerald ? '#FFFFFF' : '#064E3B';
 
               const rowStyle: CSSProperties = {
-                backgroundImage: isChampagne
-                  ? 'linear-gradient(135deg, #FDFBF7 0%, #F2E8D2 100%)'
-                  : 'var(--jj-emerald-ombre)',
-                borderColor: isChampagne ? '#B89555' : 'transparent',
-                borderWidth: isChampagne ? 1.5 : 1,
-                color: rowTextColor,
-                boxShadow: isChampagne
-                  ? '0 6px 18px -10px rgba(184,149,85,0.55), inset 0 1px 0 rgba(255,255,255,0.6)'
+                backgroundImage: isEmerald
+                  ? 'var(--jj-emerald-ombre)'
                   : isHovered
-                  ? '0 12px 26px -14px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18)'
-                  : '0 8px 20px -16px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.12)',
-                filter: isHovered && !isChampagne ? 'brightness(1.06)' : 'none',
+                  ? 'linear-gradient(135deg, #F7EFDC 0%, #EADFC4 100%)'
+                  : 'linear-gradient(135deg, #FDFBF7 0%, #F2E8D2 100%)',
+                borderColor: '#B89555',
+                borderWidth: isEmerald ? 1.5 : 1,
+                color: rowTextColor,
+                boxShadow: isEmerald
+                  ? '0 10px 24px -14px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18)'
+                  : isHovered
+                  ? '0 8px 22px -12px rgba(184,149,85,0.6), inset 0 1px 0 rgba(255,255,255,0.7)'
+                  : '0 6px 18px -14px rgba(184,149,85,0.45), inset 0 1px 0 rgba(255,255,255,0.6)',
                 transform: 'none',
               };
 
@@ -339,7 +342,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   style={rowStyle}
                   unstyled
                   data-no-contrast-guard
-                  data-mode-row={isChampagne ? 'active' : 'idle'}
+                  data-mode-row={isEmerald ? 'active' : 'idle'}
                   className={cn(
                     "mode-switcher-item",
                     "relative flex items-start gap-3 pl-4 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-150 border w-full",
@@ -351,9 +354,9 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       backgroundImage: rowIconBg,
-                      boxShadow: isChampagne
-                        ? '0 0 0 1px rgba(6,78,59,0.18)'
-                        : 'inset 0 1px 0 rgba(255,255,255,0.18)',
+                      boxShadow: isEmerald
+                        ? 'inset 0 1px 0 rgba(255,255,255,0.18)'
+                        : '0 0 0 1px rgba(184,149,85,0.35)',
                     }}
                   >
                     <Icon
@@ -374,48 +377,49 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <p
                       className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
                       style={{
-                        color: isChampagne ? '#3F3F46' : 'rgba(255,255,255,0.85)',
-                        WebkitTextFillColor: isChampagne ? '#3F3F46' : 'rgba(255,255,255,0.85)',
+                        color: isEmerald ? 'rgba(255,255,255,0.85)' : '#3F3F46',
+                        WebkitTextFillColor: isEmerald ? 'rgba(255,255,255,0.85)' : '#3F3F46',
                       }}
                     >
                       {config.description}
                     </p>
                   </div>
 
-                  {isChampagne ? (
+                  {isEmerald ? (
                     <span
                       data-no-contrast-guard
                       className="ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
-                        background: 'var(--jj-emerald-ombre)',
-                        color: '#FFFFFF',
-                        WebkitTextFillColor: '#FFFFFF',
-                        borderColor: 'transparent',
+                        background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
+                        color: '#064E3B',
+                        WebkitTextFillColor: '#064E3B',
+                        borderColor: '#B89555',
+                        borderWidth: 1,
+                        borderStyle: 'solid',
                       }}
                     >
                       <Check
                         data-no-contrast-guard
                         className="w-3 h-3 shrink-0"
-                        style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                        style={{ color: '#064E3B', stroke: '#064E3B' }}
                       />
-                      <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Selected</span>
+                      <span style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>Active</span>
                     </span>
                   ) : (
                     <span
                       data-no-contrast-guard
                       className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
-                        color: '#064E3B',
-                        WebkitTextFillColor: '#064E3B',
-                        background: '#FDFBF7',
-                        borderColor: '#B89555',
-                        borderWidth: 1,
-                        borderStyle: 'solid',
+                        color: '#FFFFFF',
+                        WebkitTextFillColor: '#FFFFFF',
+                        background: 'var(--jj-emerald-ombre)',
+                        borderColor: 'transparent',
                       }}
                     >
                       Select
                     </span>
                   )}
+
                 </DropdownMenuItem>
               );
             })}
