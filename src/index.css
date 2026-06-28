@@ -17224,9 +17224,9 @@ html body #root .jj-page-shell {
    no pure-white text repaint, no opacity flicker.
    ════════════════════════════════════════════════════════════════ */
 html body [data-radix-popper-content-wrapper]
-  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]),
+  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]):not([data-no-emerald-hover]),
 html body [data-radix-popper-content-wrapper]
-  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]) * {
+  :is([role="menuitem"],[role="option"],[role="menuitemcheckbox"],[role="menuitemradio"],[cmdk-item]):is(:hover,[data-highlighted],[data-state="checked"],[data-selected="true"]):not([data-no-emerald-hover]) * {
   background-color: var(--emerald-soft-bg, #E8F2EC) !important;
   background-image: none !important;
   color: var(--emerald-1, #064E3B) !important;
