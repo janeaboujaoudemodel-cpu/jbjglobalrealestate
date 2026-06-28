@@ -185,8 +185,8 @@ const OverseasInvestorsStrip = () => {
         {/* Hairline divider */}
         <div className="relative z-[1] mx-auto mt-6 h-px w-full max-w-[1500px]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
 
-        {/* Stats row */}
-        <div className="relative z-[1] mx-auto mt-4 grid w-full max-w-[1500px] grid-cols-2 gap-y-3 sm:grid-cols-3 lg:grid-cols-5">
+        {/* Stats row — always 5 on one line, premium animated */}
+        <div className="relative z-[1] mx-auto mt-4 grid w-full max-w-[1500px] grid-cols-5 gap-x-1 sm:gap-x-3">
           {microStats.map((s, i) => (
             <AnimatedStat key={s.label} stat={s} start={inView} index={i} />
           ))}
