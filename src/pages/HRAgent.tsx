@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MessageCircle, Shield, Clock, Star, Users, FileCheck, UserCheck } from 'lucide-react';
+import { Shield, Clock, Star, Users, FileCheck, UserCheck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import MainLayout from '@/components/MainLayout';

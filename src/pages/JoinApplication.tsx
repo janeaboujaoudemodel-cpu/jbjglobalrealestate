@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
-  Loader2, Upload, CheckCircle, FileText, MessageCircle, Briefcase,
+  Loader2, Upload, CheckCircle, FileText, Briefcase,
   User, Phone, Mail, MapPin, Star, Search, ChevronDown, ChevronUp,
   ArrowLeft, ArrowRight, Sparkles,
 } from "lucide-react";
