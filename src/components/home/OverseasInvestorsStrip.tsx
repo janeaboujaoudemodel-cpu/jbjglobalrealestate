@@ -44,17 +44,20 @@ const AnimatedStat = ({ stat, start, index }: { stat: Stat; start: boolean; inde
   const val = useCountUp(stat.target, start);
   return (
     <div
-      className="oi-stat group/stat flex flex-col items-center gap-1.5 px-3 py-2 text-center"
+      className="oi-stat group/stat relative flex min-w-0 flex-col items-center gap-1.5 px-1.5 py-2 text-center sm:px-3 transition-transform duration-500 hover:-translate-y-0.5"
       style={{ animationDelay: `${index * 70}ms` }}
     >
-      <Icon className="oi-muted h-4 w-4" strokeWidth={1.75} />
-      <span className="text-[1.5rem] font-bold leading-none tabular-nums sm:text-[1.75rem]" style={{ letterSpacing: "-0.02em" }}>
+      <Icon className="oi-muted h-4 w-4 transition-transform duration-500 group-hover/stat:scale-110" strokeWidth={1.75} />
+      <span
+        className="text-[1.15rem] font-bold leading-none tabular-nums sm:text-[1.55rem] md:text-[1.75rem]"
+        style={{ letterSpacing: "-0.02em" }}
+      >
         {stat.prefix ?? ""}{val}{stat.suffix ?? ""}
       </span>
       <span className="oi-meter" aria-hidden="true">
         <span style={{ transform: start ? "scaleX(1)" : "scaleX(0)", transitionDelay: `${index * 80 + 120}ms` }} />
       </span>
-      <span className="oi-faint text-[9.5px] font-semibold uppercase tracking-[0.22em]">
+      <span className="oi-faint text-[8.5px] font-semibold uppercase tracking-[0.18em] sm:text-[9.5px] sm:tracking-[0.22em] whitespace-nowrap">
         {stat.label}
       </span>
     </div>
@@ -81,7 +84,7 @@ const OverseasInvestorsStrip = () => {
   return (
     <section
       ref={sectionRef}
-      className="jj-fullbleed-band oi-band relative w-full overflow-hidden"
+      className="jj-bleed-allow jj-fullbleed-band oi-band relative w-full overflow-hidden"
       data-fullbleed-band
       data-surface="dark"
       data-on-dark
@@ -140,10 +143,12 @@ const OverseasInvestorsStrip = () => {
         data-surface="dark"
         data-on-dark
         data-no-contrast-guard
-        className="allow-white oi-metallic group relative block w-full overflow-hidden px-6 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
+        className="jj-bleed-allow allow-white oi-metallic group relative block w-full overflow-hidden px-5 py-7 sm:px-10 md:px-14 md:py-8 lg:px-16"
         style={{
           background: "var(--jj-emerald-ombre)",
           color: "#FFFFFF",
+          marginLeft: 0,
+          marginRight: 0,
         }}
       >
         {/* Ambient orbs */}
@@ -180,8 +185,8 @@ const OverseasInvestorsStrip = () => {
         {/* Hairline divider */}
         <div className="relative z-[1] mx-auto mt-6 h-px w-full max-w-[1500px]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
 
-        {/* Stats row */}
-        <div className="relative z-[1] mx-auto mt-4 grid w-full max-w-[1500px] grid-cols-2 gap-y-3 sm:grid-cols-3 lg:grid-cols-5">
+        {/* Stats row — always 5 on one line, premium animated */}
+        <div className="relative z-[1] mx-auto mt-4 grid w-full max-w-[1500px] grid-cols-5 gap-x-1 sm:gap-x-3">
           {microStats.map((s, i) => (
             <AnimatedStat key={s.label} stat={s} start={inView} index={i} />
           ))}

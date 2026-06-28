@@ -148,15 +148,15 @@ const ContinueSearching = ({
   const eyebrow = hasUserHistory ? "Recently viewed" : "Editor's picks";
 
   return (
-    <section className={`py-10 md:py-14 relative overflow-hidden w-full ${className}`}>
+    <section className={`jj-bleed-allow jj-fullbleed-band py-10 md:py-14 relative overflow-hidden w-full ${className}`} data-fullbleed-band>
       {/* Premium champagne backdrop — full-bleed edge to edge */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="jj-bleed-allow absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
       </div>
 
-      <div className="relative z-20">
+      <div className="jj-bleed-allow relative z-20">
         <ContentTrack>
 
 

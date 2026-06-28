@@ -10,9 +10,9 @@ const allBooks = INVESTOR_BOOKS.filter(
 
 export default function HomepageBookMarquee() {
   return (
-    <section className="bg-[#F7F2EA] py-10 md:py-14">
+    <section className="jj-bleed-allow jj-fullbleed-band bg-[#F7F2EA] py-10 md:py-14" data-fullbleed-band>
       {/* Header — padded */}
-      <ContentTrack>
+      <div className="jj-bleed-allow"><ContentTrack>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#E8F2EC] border border-[#064E3B]/30 flex items-center justify-center">
@@ -39,13 +39,13 @@ export default function HomepageBookMarquee() {
             <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </Link>
         </div>
-      </ContentTrack>
+      </ContentTrack></div>
 
       {/* Canonical book strip — full-bleed, smooth CSS marquee, titles engraved on covers */}
-      <BookCarousel books={allBooks} size="sm" durationSec={38} compact />
+      <div className="jj-bleed-allow"><BookCarousel books={allBooks} size="sm" durationSec={38} compact /></div>
 
       {/* Mobile link */}
-      <ContentTrack>
+      <div className="jj-bleed-allow"><ContentTrack>
         <div className="mt-4 sm:hidden text-center">
           <Link
             to="/guides"
@@ -56,7 +56,7 @@ export default function HomepageBookMarquee() {
             <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </Link>
         </div>
-      </ContentTrack>
+      </ContentTrack></div>
     </section>
   );
 }
