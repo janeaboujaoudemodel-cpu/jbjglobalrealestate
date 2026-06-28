@@ -69,10 +69,71 @@ export function useScrollUnlocker(): void {
     const onPointer = () => release();
     const onPop = () => release();
 
+    const normalizeWheelDelta = (event: WheelEvent): number => {
+      if (event.deltaMode === 1) return event.deltaY * 16;
+      if (event.deltaMode === 2) return event.deltaY * window.innerHeight;
+      return event.deltaY;
+    };
+
+    const canAncestorScroll = (target: EventTarget | null, deltaY: number): boolean => {
+      if (!(target instanceof Element)) return false;
+
+      if (
+        target.closest(
+          'input[type="range"],' +
+            '[role="slider"],' +
+            '[aria-modal="true"],' +
+            '[role="dialog"],' +
+            '[data-jbj-modal-open="true"],' +
+            '[data-no-page-wheel],' +
+            '[data-scroll-x]',
+        )
+      ) {
+        return true;
+      }
+
+      let node: Element | null = target;
+      while (node && node !== body && node !== html) {
+        const style = window.getComputedStyle(node);
+        const overflowY = style.overflowY;
+        const isScrollable = /(auto|scroll|overlay)/.test(overflowY) && node.scrollHeight > node.clientHeight + 2;
+        if (isScrollable) {
+          const atTop = node.scrollTop <= 0;
+          const atBottom = node.scrollTop + node.clientHeight >= node.scrollHeight - 2;
+          if ((deltaY < 0 && !atTop) || (deltaY > 0 && !atBottom)) return true;
+        }
+        node = node.parentElement;
+      }
+      return false;
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      if (hasOpenModal() || event.ctrlKey || event.metaKey) return;
+      if (Math.abs(event.deltaY) < 1 || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+
+      const deltaY = normalizeWheelDelta(event);
+      if (canAncestorScroll(event.target, deltaY)) return;
+
+      const before = window.scrollY;
+      const maxScroll = Math.max(0, html.scrollHeight - window.innerHeight);
+      if ((deltaY < 0 && before <= 0) || (deltaY > 0 && before >= maxScroll - 1)) return;
+
+      // Chromium can occasionally drop the first wheel delta while a section is
+      // lazy-mounting or repainting. Wait for native scrolling first; only if
+      // the document has not moved do we replay the same delta once.
+      window.setTimeout(() => {
+        if (hasOpenModal()) return;
+        if (Math.abs(window.scrollY - before) < 1) {
+          window.scrollBy({ top: deltaY, left: 0, behavior: "auto" });
+        }
+      }, 32);
+    };
+
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onVis);
     window.addEventListener("pointerdown", onPointer, { passive: true });
     window.addEventListener("popstate", onPop);
+    window.addEventListener("wheel", onWheel, { passive: true });
 
     const obs = new MutationObserver(release);
     obs.observe(body, { attributes: true, attributeFilter: ["style", "class"] });
@@ -87,6 +148,7 @@ export function useScrollUnlocker(): void {
       document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("pointerdown", onPointer);
       window.removeEventListener("popstate", onPop);
+      window.removeEventListener("wheel", onWheel);
       obs.disconnect();
       window.clearInterval(interval);
     };
