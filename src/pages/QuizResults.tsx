@@ -1168,9 +1168,9 @@ const QuizResults = () => {
                     <div className="px-5 pb-5">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="aihf-outline w-full text-xs">
-                            <Award className="w-3 h-3 mr-1" />
-                            {badge ? 'Change Badge' : 'Add Badge'}
+                          <Button variant="outline" size="sm" className="aihf-outline w-full text-xs inline-flex items-center justify-center gap-2 px-3 h-10 whitespace-nowrap">
+                            <Award className="w-3.5 h-3.5 shrink-0" />
+                            <span className="whitespace-nowrap">{badge ? 'Change Badge' : 'Add Badge'}</span>
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
