@@ -74,8 +74,8 @@ const TAG_STYLES: Record<
   featured: {
     label: "Featured",
     icon: Star,
-    bg: "bg-[#0A0A0A]",
-    ring: "border-[#B89555]",
+    bg: "bg-[image:var(--jj-emerald-ombre)]",
+    ring: "border-transparent",
     text: "!text-white",
   },
 };
