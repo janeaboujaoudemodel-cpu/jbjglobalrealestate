@@ -16984,7 +16984,7 @@ html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend
   stroke: #FFFFFF !important;
 }
 
-html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) {
+html body :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
@@ -16993,7 +16993,7 @@ html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [da
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root#root#root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
+html body :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-icon-tile], .jj-icon-tile-emerald) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -17225,8 +17225,8 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   filter: none !important;
 }
 
-html body #root#root#root :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile),
-html body #root#root#root :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile),
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
