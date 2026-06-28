@@ -33,7 +33,7 @@ const headerControl = cva(
   {
     variants: {
       shape: {
-        circle: "jj-header-icon-control h-11 w-11 min-w-11 rounded-full p-0 text-[13px] [&_svg]:w-4 [&_svg]:h-4",
+        circle: "jj-header-icon-control h-11 w-11 min-w-11 rounded-full p-0 text-base [&_svg]:w-4 [&_svg]:h-4",
         pill:   "h-10 min-w-[2.75rem] rounded-full px-4 text-[13px] [&_svg]:w-4 [&_svg]:h-4",
         segment:"h-9 min-w-[2.25rem] rounded-[10px] px-3 text-[12px] [&_svg]:w-[14px] [&_svg]:h-[14px]",
       },
