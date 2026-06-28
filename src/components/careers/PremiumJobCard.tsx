@@ -209,15 +209,16 @@ export default function PremiumJobCard({
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
           <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-            <Briefcase className="w-3.5 h-3.5 text-[#0A0A0A]" />
+            <Briefcase className="w-4 h-4 text-[#064E3B] shrink-0" strokeWidth={2.5} aria-hidden />
             {department}
           </span>
           {location && (
             <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-              <MapPin className="w-3.5 h-3.5 text-[#0A0A0A]" />
+              <MapPin className="w-4 h-4 text-[#064E3B] shrink-0" strokeWidth={2.5} aria-hidden />
               {location}
             </span>
           )}
+
           {isCommissionBased || isBrokerRole ? (
             <span className="inline-flex min-h-[26px] items-center rounded-full border border-[#BFA46A] bg-[#EDE1CD] px-3 py-1 font-semibold text-[#5E4314] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">Commission Basis</span>
           ) : null}
