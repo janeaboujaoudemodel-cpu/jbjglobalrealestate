@@ -149,7 +149,7 @@ async function contrastAudit(page) {
   });
 }
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', args: ['--no-sandbox'] });
 const manifest = [];
 for (const [vpName, viewport] of viewports) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
