@@ -17164,3 +17164,24 @@ html body [data-radix-popper-content-wrapper] [data-on-dark]
     max-width: none !important;
   }
 }
+
+/* =========================================================
+ * Page-Nav Floating Arrow — anchored clear of the vertical sidebar
+ * at every viewport so the circle is NEVER hidden behind the rail.
+ *   mobile  (<640px)            : sidebar hidden        → 16px gutter
+ *   sm+ collapsed sidebar (48px) : button starts at 64px
+ *   sm+ expanded  sidebar (200px): button starts at 216px
+ * Mirrors for RTL.
+ * ========================================================= */
+.jj-page-nav-anchor--left  { left: 16px; right: auto; }
+.jj-page-nav-anchor--right { right: 16px; left: auto; }
+
+@media (min-width: 640px) {
+  /* Default = expanded sidebar (200px rail). */
+  .jj-page-nav-anchor--left  { left: 216px; }
+  .jj-page-nav-anchor--right { right: 216px; }
+
+  /* Collapsed sidebar (48px rail). */
+  body.jj-vertical-nav-collapsed .jj-page-nav-anchor--left  { left: 64px; }
+  body.jj-vertical-nav-collapsed .jj-page-nav-anchor--right { right: 64px; }
+}

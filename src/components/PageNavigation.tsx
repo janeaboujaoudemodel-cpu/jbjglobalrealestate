@@ -82,10 +82,12 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     <div
       ref={ref}
       className={cn(
-        // Always bottom-left corner across all viewports; SupportLauncher
-        // owns the right-side rail (mobile phone pill / desktop vertical tag).
-        "fixed z-[55] pointer-events-auto bottom-5 md:bottom-6",
-        isRTL ? "right-4 md:right-6" : "left-4 md:left-6",
+        // Always clear of the vertical sidebar at every viewport.
+        // Mobile (<sm): sidebar hidden → 16px gutter.
+        // sm+ collapsed sidebar = 48px → 64px from edge.
+        // sm+ expanded sidebar = 200px → 216px from edge.
+        "fixed z-[55] pointer-events-auto bottom-5 md:bottom-6 jj-page-nav-anchor",
+        isRTL ? "jj-page-nav-anchor--right" : "jj-page-nav-anchor--left",
       )}
       data-no-contrast-guard
     >
