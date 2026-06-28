@@ -113,7 +113,7 @@ export default function BrokerPortalLayout() {
               </button>
             )}
             <div className="min-w-0 flex items-center">
-              <h1 className="font-display text-[#1A1A1A] font-semibold text-base md:text-lg tracking-tight truncate">
+              <h1 className="font-display text-[#1A1A1A] font-semibold text-base md:text-lg tracking-tight leading-[1.15] whitespace-normal break-words [overflow-wrap:anywhere]">
                 Broker Workspace
               </h1>
             </div>
