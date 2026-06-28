@@ -221,9 +221,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           <span
             className="relative h-10 w-10 rounded-full flex items-center justify-center shrink-0"
             style={{
-              border: "1.5px solid hsl(var(--gold))",
+              border: 0,
               background:
-                "radial-gradient(120% 120% at 30% 25%, #FFFDF8 0%, #F5ECDC 38%, #E8D8B8 70%, #D9C291 100%)",
+                "radial-gradient(120% 120% at 28% 20%, #0d8b63 0%, #064E3B 34%, #042c1c 68%, #000000 100%)",
+              boxShadow:
+                "0 8px 18px -12px rgba(6,78,59,0.9), inset 0 1px 0 rgba(255,255,255,0.26), inset 0 -8px 14px rgba(0,0,0,0.28)",
             }}
           >
             <span className="text-[13px] font-extrabold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 1px 2px rgba(0,0,0,0.72)' }}>{initials}</span>
