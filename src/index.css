@@ -3435,8 +3435,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 
 /* ── Scroll Performance: content-visibility for offscreen sections ── */
 .cv-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
+  /* Native scroll must remain continuous across section boundaries. Chromium can
+     temporarily freeze wheel/trackpad deltas when `content-visibility:auto`
+     sections inflate during real scrolling, especially on the homepage where
+     below-fold sections lazy-mount. Keep the class as a harmless marker only. */
+  content-visibility: visible !important;
+  contain-intrinsic-size: none !important;
 }
 
 /* ── GPU-promote large blur decorative elements to prevent repaint during scroll ── */
