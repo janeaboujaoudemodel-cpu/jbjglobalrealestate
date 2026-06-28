@@ -18035,3 +18035,35 @@ html body #root#root#root :is([data-surface="dark"], [data-surface="ink"], [data
   stroke: currentColor !important;
   opacity: 1 !important;
 }
+
+/* Sidebar pearl/champagne row labels are light-surface text. They must never
+   inherit gradient/white text unless the actual row is the active emerald pill. */
+html body #root#root#root [data-chrome="sidebar"] [data-sidebar-emerald] :is(
+  [data-sidebar-section]:not([data-active="true"]) [data-sidebar-section-label],
+  a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
+  a[data-sidebar-subitem]:not([data-active="true"]) [data-sidebar-subitem-label]
+) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body #root#root#root [data-chrome="sidebar"] [data-sidebar-emerald] :is(
+  [data-sidebar-section][data-active="true"] [data-sidebar-section-label],
+  a[data-sidebar-highlight][data-active="true"] [data-sidebar-highlight-label],
+  a[data-sidebar-subitem][data-active="true"] [data-sidebar-subitem-label]
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+}
