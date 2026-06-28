@@ -650,7 +650,7 @@ export default function JoinApplication() {
             <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 shadow-2xl p-8 md:p-12 rounded-2xl">
               <CardHeader className="text-center pb-6">
                 <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br /20 /10 border-2 border-[color:var(--emerald-1)]/30/40 flex items-center justify-center shadow-lg shadow-emerald-500/10">
-                  <CheckCircle className="h-12 w-12 text-[color:var(--emerald-1)]" />
+                  <CheckCircle className="h-12 w-12 text-[#1A1A1A]" />
                 </div>
                 <CardTitle className="text-3xl md:text-4xl text-[#1A1A1A] mb-4">Welcome Back</CardTitle>
                 <CardDescription className="text-lg text-[#1A1A1A]/70">
@@ -666,7 +666,7 @@ export default function JoinApplication() {
                     <div className="pt-4">
                       <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
                         <Link to="/onboarding">
-                          <span className="text-[#1A1A1A]">Go to Onboarding Dashboard</span>
+                          <span className="text-white">Go to Onboarding Dashboard</span>
                         </Link>
                       </Button>
                     </div>
