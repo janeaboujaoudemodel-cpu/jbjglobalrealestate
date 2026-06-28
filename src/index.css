@@ -17985,6 +17985,17 @@ body :where(
   opacity: 1 !important;
 }
 
+/* Careers position cards: all icons sitting on champagne/gold job-card surfaces
+   must be solid black, including Top Opportunity, department and Dubai/UAE rows. */
+body [data-careers-job-card] :where(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"] *, .jj-cta-emerald *, [data-emerald-icon-surface] *, .allow-white, .allow-white *)) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
 /* Button sizing: natural width, readable height, no label clipping; segmented sq unit remains compact. */
 body :where([data-jbj-button], button, a[role="button"]):not(:where(.jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [data-radix-collection-item])) {
   min-height: 44px !important;
@@ -18649,4 +18660,25 @@ html body #root .aihf-criteria-head * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
+}
+
+/* PASS 91 — Careers/open-positions champagne cards: icons next to
+   Top Opportunity, department (Marketing/Finance/IT/etc.) and Dubai/UAE
+   must render black, not inherited white from emerald CTA closures. */
+html body #root [data-careers-job-card] :is(
+  [data-careers-icon="tag"],
+  [data-careers-icon="tag"] *,
+  [data-careers-icon="department"],
+  [data-careers-icon="department"] *,
+  [data-careers-icon="location"],
+  [data-careers-icon="location"] *
+):not(.allow-white):not(.allow-white *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  fill: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
 }

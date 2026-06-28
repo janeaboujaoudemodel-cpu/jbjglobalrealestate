@@ -123,6 +123,7 @@ export default function PremiumJobCard({
   return (
     <div
       onClick={() => isOpenForApply && onSelect?.(id)}
+      data-careers-job-card
       data-surface="champagne"
       className={`group careers-card-strong relative rounded-2xl border p-6 transition-all overflow-hidden ${
         isOpenForApply ? "cursor-pointer" : "cursor-default"
@@ -184,7 +185,7 @@ export default function PremiumJobCard({
                   className={`inline-flex min-h-[28px] items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-bold whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${cfg.bg} ${cfg.ring} ${cfg.text} ${isDarkTag ? "allow-white" : ""}`}
                   style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                 >
-                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isDarkTag ? "allow-white" : ""}`} strokeWidth={2.5} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF", fill: t === "partner" ? "#FFFFFF" : "none" } : { color: "#1A1A1A", stroke: "#1A1A1A" }} />
+                  <Icon data-careers-icon="tag" className={`w-3.5 h-3.5 shrink-0 ${isDarkTag ? "allow-white" : ""}`} strokeWidth={2.5} style={isDarkTag ? { color: "#FFFFFF", stroke: "#FFFFFF", fill: t === "partner" ? "#FFFFFF" : "none" } : { color: "#1A1A1A", stroke: "#1A1A1A" }} />
                   <span className={isDarkTag ? "allow-white" : ""} style={isDarkTag ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{cfg.label}</span>
                 </span>
               );
@@ -209,12 +210,12 @@ export default function PremiumJobCard({
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] mb-4">
           <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-            <Briefcase className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
+            <Briefcase data-careers-icon="department" className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
             {department}
           </span>
           {location && (
             <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] font-semibold">
-              <MapPin className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
+              <MapPin data-careers-icon="location" className="w-4 h-4 shrink-0" strokeWidth={2.5} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} aria-hidden />
               {location}
             </span>
           )}
