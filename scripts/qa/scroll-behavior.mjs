@@ -9,8 +9,8 @@ const assertNormalScroll = async (page, route) => {
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "auto" }));
   await page.waitForTimeout(80);
 
-  const scrollHeight = await page.evaluate(() => document.documentElement.scrollHeight);
-  if (scrollHeight <= window.innerHeight) return;
+  const canScroll = await page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight + 20);
+  if (!canScroll) return { route, moves: [], totalMove: 0, skipped: true };
 
   const moves = [];
   for (let i = 0; i < 6; i += 1) {
