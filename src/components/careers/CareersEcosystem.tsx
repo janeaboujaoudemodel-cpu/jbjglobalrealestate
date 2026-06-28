@@ -73,8 +73,14 @@ export function CareersEcosystem() {
     <section data-surface="champagne" className="surface-champagne relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]">
-            <Sparkles className="h-3 w-3 text-[#B89555]" /> Broker Growth Ecosystem
+          <div
+            data-surface="emerald"
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em]"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <Sparkles className="h-3 w-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Broker Growth Ecosystem
           </div>
           <h2 className="mt-5 text-3xl md:text-5xl font-semibold text-[#1A1A1A] tracking-tight">
             The JBJ Broker Growth Ecosystem
