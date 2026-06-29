@@ -316,7 +316,6 @@ export default function BrokerLearning() {
                 >
                   <Sparkles className="h-4 w-4" strokeWidth={2.8} />
                 </motion.div>
-                />
                 {[
                   { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
                   { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
