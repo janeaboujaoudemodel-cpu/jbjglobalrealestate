@@ -112,8 +112,10 @@ export function Book3DCard({
             >
               {effectivelyLocked ? (
                 <>
-                  <Lock className="w-3 h-3 mr-2" />
-                  {onRequestAccess ? "Request Access" : book.is_restricted ? "Restricted" : "Preview Book"}
+                  <Lock className="w-3 h-3 mr-2 text-white" strokeWidth={2.7} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    {onRequestAccess ? "Request Access" : book.is_restricted ? "Restricted" : "Preview Book"}
+                  </span>
                 </>
               ) : (
                 <>

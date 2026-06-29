@@ -72,7 +72,7 @@ function splitCoverTitle(title: string) {
   let current = "";
   words.forEach((word) => {
     const next = current ? `${current} ${word}` : word;
-    if (next.length > 18 && current) {
+    if (next.length > 14 && current) {
       lines.push(current);
       current = word;
     } else {
@@ -80,7 +80,7 @@ function splitCoverTitle(title: string) {
     }
   });
   if (current) lines.push(current);
-  return lines.slice(0, 4);
+  return lines.slice(0, 5);
 }
 
 export function PremiumBook3DStyles() {
@@ -101,13 +101,13 @@ export function PremiumBook3D({
   );
   const titleLines = useMemo(() => splitCoverTitle(title), [title]);
   const titleSize = titleLines.length >= 4
-    ? "clamp(10px, 1.55vw, 14px)"
+    ? "clamp(16px, 7.2cqw, 30px)"
     : compact
-      ? "clamp(11px, 1.75vw, 15px)"
-      : "clamp(14px, 2.2vw, 19px)";
+      ? "clamp(17px, 8.2cqw, 34px)"
+      : "clamp(18px, 8.8cqw, 38px)";
 
   return (
-    <div className={cn("jj-book-stage", className)} data-no-contrast-guard>
+    <div className={cn("jj-book-stage", className)} data-no-contrast-guard style={{ containerType: "inline-size" }}>
       <div className="jj-book">
         {/* Back cover */}
         <div
@@ -181,10 +181,10 @@ export function PremiumBook3D({
               style={{
                 color: compact ? '#FFFFFF' : palette.ink,
                 fontSize: titleSize,
-                fontWeight: 800,
-                letterSpacing: "0.005em",
+                fontWeight: 850,
+                letterSpacing: "0.002em",
                 fontFamily: "Inter, system-ui, sans-serif",
-                textShadow: compact ? "0 1px 0 rgba(0,0,0,.85), 0 0 14px rgba(0,0,0,.5)" : "0 3px 10px rgba(0,0,0,.72)",
+                textShadow: compact ? "0 2px 0 rgba(0,0,0,.82), 0 0 18px rgba(0,0,0,.62)" : "0 3px 12px rgba(0,0,0,.78), 0 0 22px rgba(0,0,0,.38)",
                 textWrap: "balance",
               }}
             >
