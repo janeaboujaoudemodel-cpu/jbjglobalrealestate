@@ -20781,3 +20781,21 @@ html body #root [data-surface="champagne"]:not([data-careers-job-card]) :is(h1,h
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+
+/* PASS 126 — Careers job-card icons: force solid black on champagne body.
+   Defeats every late emerald-band/emerald-surface descendant guard that was
+   painting child <path> nodes white via `[data-emerald-band] svg *` and
+   `[data-surface="emerald"] svg *`. Specificity inflated with :not() chains. */
+html body #root [data-careers-job-card]:not(#p126a):not(#p126b):not(#p126c):not(#p126d):not(#p126e):not(#p126f):not(#p126g):not(#p126h):not(#p126i):not(#p126j) svg[data-careers-ink-icon],
+html body #root [data-careers-job-card]:not(#p126a):not(#p126b):not(#p126c):not(#p126d):not(#p126e):not(#p126f):not(#p126g):not(#p126h):not(#p126i):not(#p126j) svg[data-careers-ink-icon] *,
+html body #root [data-careers-job-card]:not(#p126a):not(#p126b):not(#p126c):not(#p126d):not(#p126e):not(#p126f):not(#p126g):not(#p126h):not(#p126i):not(#p126j) svg[data-careers-icon] ,
+html body #root [data-careers-job-card]:not(#p126a):not(#p126b):not(#p126c):not(#p126d):not(#p126e):not(#p126f):not(#p126g):not(#p126h):not(#p126i):not(#p126j) svg[data-careers-icon] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  fill: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
