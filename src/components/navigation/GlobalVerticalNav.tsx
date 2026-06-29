@@ -1270,13 +1270,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-signout-action
               data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
+              title="Sign Out"
+              aria-label="Sign Out"
+              className="flex items-center justify-center gap-1 text-[9px] font-semibold uppercase tracking-[0.08em] transition-all px-1.5 h-6 rounded-md border w-full group"
               style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#DC2626'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626', 'important'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626', 'important'); }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626'); }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.borderColor = '#DC2626'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = '#B89555'; }}
             >
-              <LogOut data-signout-icon data-no-contrast-guard className="w-3 h-3 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
-              <span data-signout-label className="!text-[#DC2626]" style={{ color: '#DC2626' }}>Sign Out</span>
+              <LogOut data-signout-icon data-no-contrast-guard className="w-2.5 h-2.5 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.5} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+              <span data-signout-label className="!text-[#DC2626] leading-none" style={{ color: '#DC2626' }}>Sign Out</span>
             </button>
           ) : (
             <Link
