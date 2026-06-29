@@ -19166,3 +19166,31 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-a
   text-shadow: none !important;
 }
 
+html body [data-radix-popper-content-wrapper]
+  :is([data-currency-row], [data-account-menu-content] [data-jbj-dropdown-item], [data-jbj-dropdown-item], [role="menuitem"], [role="option"]):is(:hover, :focus, [data-highlighted], [data-state="checked"], [data-selected="true"], [data-jbj-dropdown-selected="true"]):not([data-mode-card]):not(#jj-dropdown-contrast-override#jj-dropdown-contrast-override#jj-dropdown-contrast-override),
+html body [data-radix-popper-content-wrapper]
+  [data-currency-row][data-currency-active="true"]:not(#jj-dropdown-contrast-override#jj-dropdown-contrast-override#jj-dropdown-contrast-override) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow:
+    0 14px 28px -18px rgba(6,78,59,0.88),
+    0 6px 14px -12px rgba(0,0,0,0.52),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+  transform: translateY(-1px) !important;
+}
+
+html body [data-radix-popper-content-wrapper]
+  :is([data-currency-row], [data-account-menu-content] [data-jbj-dropdown-item], [data-jbj-dropdown-item], [role="menuitem"], [role="option"]):is(:hover, :focus, [data-highlighted], [data-state="checked"], [data-selected="true"], [data-jbj-dropdown-selected="true"]):not([data-mode-card]):not(#jj-dropdown-contrast-override#jj-dropdown-contrast-override#jj-dropdown-contrast-override) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label),
+html body [data-radix-popper-content-wrapper]
+  [data-currency-row][data-currency-active="true"]:not(#jj-dropdown-contrast-override#jj-dropdown-contrast-override#jj-dropdown-contrast-override) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
