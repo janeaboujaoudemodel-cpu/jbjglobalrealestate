@@ -20205,3 +20205,37 @@ html body select[data-no-contrast-guard]:not(#jj-ink-honour):not(#jj-ink-honour)
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════
+   FINAL LOCK — Sidebar inactive tiles (terminates all prior emerald
+   force-fills on .jj-side-tile). Active tiles stay emerald-on-white.
+   ════════════════════════════════════════════════════════════════ */
+html body #root .jj-side-tile:not(.is-active),
+html body .jj-side-tile:not(.is-active) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: rgba(184, 149, 85, 0.20) !important;
+  box-shadow: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root .jj-side-tile:not(.is-active):hover,
+html body #root .jj-side-tile:not(.is-active):focus-visible,
+html body .jj-side-tile:not(.is-active):hover,
+html body .jj-side-tile:not(.is-active):focus-visible {
+  background: rgba(216, 204, 178, 0.70) !important;
+  background-color: rgba(216, 204, 178, 0.70) !important;
+  background-image: none !important;
+  border-color: rgba(184, 149, 85, 0.35) !important;
+}
+html body #root .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, g),
+html body #root .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) *,
+html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, g),
+html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
