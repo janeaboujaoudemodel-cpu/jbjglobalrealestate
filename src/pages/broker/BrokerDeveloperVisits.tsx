@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { IconTile } from "@/components/ui/icon-tile";
+import BrokerEmptyState from "@/components/broker-portal/BrokerEmptyState";
 
 type Developer = { id: string; name: string; slug: string | null; logo_url: string | null };
 type Visit = {
@@ -177,9 +179,7 @@ export default function BrokerDeveloperVisits() {
       {/* Header card */}
       <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 grid place-items-center rounded-md bg-[#EFE6D6] border border-[#B89555]/35">
-            <Building2 className="h-5 w-5 text-[#1A1A1A]" />
-          </div>
+          <IconTile icon={Building2} tone="emerald" size="md" className="!h-11 !w-11 !rounded-xl" iconClassName="!h-5 !w-5" />
           <div className="min-w-0">
             <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 font-semibold">
               JBJ Global Real Estate
@@ -411,14 +411,12 @@ export default function BrokerDeveloperVisits() {
         {visits.isLoading ? (
           <div className="px-5 py-10 text-center text-sm text-[#1A1A1A]/60">Loading…</div>
         ) : (visits.data?.length ?? 0) === 0 ? (
-          <div className="px-5 py-12 text-center">
-            <Building2 className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
-            <div className="text-sm font-semibold text-[#1A1A1A]">No visits logged yet</div>
-            <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
-              Pick a developer above, fill in the date, briefing, and the sales rep you met — your first
-              visit will appear here.
-            </p>
-          </div>
+          <BrokerEmptyState
+            icon={<Building2 className="h-6 w-6" />}
+            title="No visits logged yet"
+            description="Pick a developer above, fill in the date, briefing, and the sales rep you met — your first visit will appear here."
+            className="rounded-none border-0 bg-transparent shadow-none"
+          />
         ) : (
           <div className="divide-y divide-[#B89555]/15">
             {(visits.data ?? []).map((v) => (
