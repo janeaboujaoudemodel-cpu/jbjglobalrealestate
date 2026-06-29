@@ -51,15 +51,16 @@ function Kpi({
     <button
       type="button"
       onClick={onClick}
-      className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-5 py-5 w-full focus:outline-none"
+      className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-4 py-4 sm:px-5 sm:py-5 w-full min-w-0 focus:outline-none"
     >
       <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
-      <div className="mt-4 text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none">{value}</div>
-      <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold">{label}</div>
-      {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
+      <div className="mt-3 sm:mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none truncate">{value}</div>
+      <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold truncate">{label}</div>
+      {sub && <div className="text-[10px] sm:text-[11px] text-[#1A1A1A]/55 mt-1 truncate">{sub}</div>}
     </button>
   );
 }
+
 
 
 
@@ -383,7 +384,8 @@ export default function BrokerCRM() {
 
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-w-0 w-full max-w-full overflow-x-hidden">
+
       {/* Header */}
       <PremiumCard>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -417,13 +419,14 @@ export default function BrokerCRM() {
       </PremiumCard>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 min-w-0">
         <Kpi icon={Users} label="Assigned leads" value={totalLeads} onClick={() => setTab("leads")} />
         <Kpi icon={Database} label="Databases" value={dbs.data?.length ?? 0} onClick={() => setTab("databases")} />
         <Kpi icon={Phone} label="Calls logged" value={callsLogged} onClick={() => setTab("calls")} />
         <Kpi icon={ClipboardList} label="Pending follow-ups" value={followUps} onClick={() => setTab("activity")} />
         <Kpi icon={TrendingUp} label="Conversion" value={`${conversion}%`} sub={`${wonStage} won`} onClick={() => setTab("insights")} />
       </div>
+
 
       {/* Tabs */}
       <nav className="flex flex-wrap gap-1.5 p-1.5 rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/22 shadow-[0_6px_18px_-16px_rgba(6,78,59,0.35)]">
@@ -466,20 +469,21 @@ export default function BrokerCRM() {
               </span>
               <span className="text-xs text-[#1A1A1A]/60">{totalLeads} total leads</span>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 min-w-0">
               {stageCounts.map((s) => (
                 <button
                   key={s.key}
                   type="button"
                   onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
-                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-4 py-4 focus:outline-none"
+                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-3 py-3 sm:px-4 sm:py-4 min-w-0 focus:outline-none"
                 >
                   <IconTile icon={BarChart3} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mt-3 font-semibold">{s.label}</div>
-                  <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mt-3 font-semibold truncate">{s.label}</div>
+                  <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1 truncate">{s.count}</div>
                 </button>
               ))}
             </div>
+
           </PremiumCard>
 
           {/* Kanban board — premium lead-card columns per stage */}
