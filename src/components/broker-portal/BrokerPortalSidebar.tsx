@@ -52,8 +52,15 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
   const navigate = useNavigate();
   const { isOwner: modeOwner } = useUserRole();
   const { isOwner: appOwner } = useIsAppOwner();
+  const { mode } = useUserMode();
+  // Owner-only chrome (Back-to-Owner pill) appears ONLY when the user is
+  // actively in "owner" mode. When the app owner switches mode to "broker",
+  // they want a pixel-true mirror of what a real broker sees — no owner
+  // shortcuts. They can return via the mode switcher in the header.
+  const showOwnerChrome = (modeOwner || appOwner) && mode === "owner";
   const isOwner = modeOwner || appOwner;
   const { signOut } = useAuth();
+
 
   const handleSignOut = async () => {
     try {
