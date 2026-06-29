@@ -409,8 +409,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
                         background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
-                        color: '#064E3B',
-                        WebkitTextFillColor: '#064E3B',
+                        color: '#1A1A1A',
+                        WebkitTextFillColor: '#1A1A1A',
                         borderColor: '#B89555',
                         borderWidth: 1,
                         borderStyle: 'solid',
@@ -419,23 +419,25 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       <Check
                         data-no-contrast-guard
                         className="w-3 h-3 shrink-0"
-                        style={{ color: '#064E3B', stroke: '#064E3B' }}
+                        style={{ color: '#1A1A1A', stroke: '#1A1A1A' }}
+                        strokeWidth={3}
                       />
-                      <span style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>Active</span>
+                      <span style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>Active</span>
                     </span>
                   ) : (
                     <span
                       data-no-contrast-guard
                       data-mode-select-pill=""
-                      className="mode-switcher-select-pill ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
+                      className="mode-switcher-select-pill ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
                       style={{
                         color: '#FFFFFF',
                         WebkitTextFillColor: '#FFFFFF',
                         background: 'var(--jj-emerald-ombre)',
                         borderColor: 'transparent',
+                        textShadow: '0 1px 0 rgba(0,0,0,0.25)',
                       }}
                     >
-                      Select
+                      <span className="allow-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Select</span>
                     </span>
                   )}
 

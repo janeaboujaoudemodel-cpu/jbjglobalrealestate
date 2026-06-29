@@ -17394,26 +17394,28 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   mix-blend-mode: normal !important;
 }
 
-/* Inactive sidebar tiles: champagne wash + ink glyph (final lock, beats all). */
+/* Sidebar tiles: ALWAYS emerald box with pure white icons (PASS 127 — restore emerald). */
 html body .jj-side-tile:not(.is-active) {
-  background: rgba(231, 223, 207, 0.55) !important;
-  background-image: none !important;
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
   background-color: transparent !important;
-  border-color: rgba(184, 149, 85, 0.22) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  box-shadow: none !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 html body .jj-side-tile:not(.is-active):hover {
-  background: rgba(216, 204, 178, 0.70) !important;
-  background-color: rgba(216, 204, 178, 0.70) !important;
-  background-image: none !important;
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important;
 }
-html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]),
-html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) * {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
+html body .jj-side-tile :is(svg, [class*="lucide"]),
+html body .jj-side-tile :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
   fill: none !important;
   opacity: 1 !important;
 }
@@ -20251,35 +20253,39 @@ html body select[data-no-contrast-guard]:not(#jj-ink-honour):not(#jj-ink-honour)
 
 
 /* ════════════════════════════════════════════════════════════════
-   FINAL LOCK — Sidebar inactive tiles (terminates all prior emerald
-   force-fills on .jj-side-tile). Active tiles stay emerald-on-white.
+   PASS 127 FINAL LOCK — Sidebar tiles ALWAYS emerald metallic with
+   pure white glyphs (active = adds gold ring). Wins all prior rules.
    ════════════════════════════════════════════════════════════════ */
-html body #root .jj-side-tile:not(.is-active),
-html body .jj-side-tile:not(.is-active) {
-  background: rgba(231, 223, 207, 0.55) !important;
-  background-image: none !important;
-  background-color: rgba(231, 223, 207, 0.55) !important;
-  border-color: rgba(184, 149, 85, 0.28) !important;
-  box-shadow: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+html body #root .jj-side-tile,
+html body .jj-side-tile {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
-html body #root .jj-side-tile:not(.is-active):hover,
-html body #root .jj-side-tile:not(.is-active):focus-visible,
-html body .jj-side-tile:not(.is-active):hover,
-html body .jj-side-tile:not(.is-active):focus-visible {
-  background: rgba(216, 204, 178, 0.70) !important;
-  background-color: rgba(216, 204, 178, 0.70) !important;
-  background-image: none !important;
-  border-color: rgba(184, 149, 85, 0.35) !important;
+html body #root .jj-side-tile:hover,
+html body #root .jj-side-tile:focus-visible,
+html body .jj-side-tile:hover,
+html body .jj-side-tile:focus-visible {
+  border-color: rgba(184,149,85,0.55) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 22px -12px rgba(4,120,87,0.78), inset 0 1px 0 rgba(255,255,255,0.24) !important;
 }
-html body #root .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, g),
-html body #root .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) *,
-html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, g),
-html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) * {
-  color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+html body #root .jj-side-tile.is-active,
+html body .jj-side-tile.is-active {
+  border-color: #B89555 !important;
+  box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.5) !important;
+}
+html body #root .jj-side-tile :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, g),
+html body #root .jj-side-tile :is(svg, [class*="lucide"]) *,
+html body .jj-side-tile :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse, g),
+html body .jj-side-tile :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   fill: none !important;
   opacity: 1 !important;
 }

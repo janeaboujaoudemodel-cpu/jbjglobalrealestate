@@ -142,28 +142,30 @@ export default function PremiumCareersHero() {
           </Link>
         </div>
 
-        {/* Floating stat strip */}
-        <div className="mt-14 grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 max-w-5xl mx-auto">
+        {/* Floating stat strip — uniform grid, premium glass cards */}
+        <div className="mt-14 grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 max-w-5xl mx-auto items-stretch">
           {stats.map(({ icon: Icon, label, value }, i) => (
             <div
               key={label}
-              className="group relative rounded-2xl border-2 border-[#B89555] bg-[#FDFBF7]/95 backdrop-blur-sm px-4 py-5 text-left transition-all hover:-translate-y-[2px] hover:shadow-[0_18px_40px_-22px_rgba(184,149,85,0.55)] hover:border-[#B89555] shadow-[0_2px_0_rgba(184,149,85,0.18),0_10px_28px_-18px_rgba(10,10,10,0.25)]"
+              className="group relative h-full min-h-[148px] flex flex-col justify-between rounded-2xl border-2 border-[#B89555] bg-gradient-to-b from-[#FFFCF6] to-[#F5ECD8] backdrop-blur-sm px-4 py-5 text-left transition-all hover:-translate-y-[3px] hover:shadow-[0_22px_46px_-22px_rgba(184,149,85,0.65)] hover:border-[#A9823E] shadow-[0_2px_0_rgba(184,149,85,0.22),0_12px_32px_-20px_rgba(10,10,10,0.28),inset_0_1px_0_rgba(255,255,255,0.7)] overflow-hidden"
               style={{
                 animation: `careersHeroFloat 6s ease-in-out ${i * 0.4}s infinite`,
               }}
             >
-              <div className="flex items-center gap-2 mb-2">
+              {/* subtle gold sheen */}
+              <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D9C292] to-transparent" />
+              <div className="flex flex-col items-start gap-2.5">
                 <IconTile
                   icon={Icon}
                   tone="navy"
                   size="md"
                   className="shadow-[0_6px_14px_-8px_rgba(10,10,10,0.55)] transition-transform duration-300 group-hover:scale-105"
                 />
-                <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#1A1A1A]/75">
+                <p className="min-h-[28px] text-[10px] font-semibold tracking-[0.14em] uppercase text-[#1A1A1A]/80 leading-snug line-clamp-2">
                   {label}
                 </p>
               </div>
-              <p className="text-xl md:text-2xl font-semibold text-[#0A0A0A] tracking-tight">
+              <p className="mt-3 text-xl md:text-2xl font-semibold text-[#0A0A0A] tracking-tight">
                 {value}
               </p>
             </div>

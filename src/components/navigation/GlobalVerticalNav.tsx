@@ -1071,10 +1071,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   className={`group flex items-center gap-2.5 px-2.5 h-10 text-[12px] transition-all duration-200 rounded-lg ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
                   iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true }}
-                  iconWrapperClassName="w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0"
+                  iconWrapperClassName={`w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
                   iconClassName="w-[14px] h-[14px] transition-colors"
                   iconStrokeWidth={2.1}
-                  iconData={{ 'data-sidebar-highlight-icon': true }}
+                  iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                  iconData={{ 'data-sidebar-highlight-icon': true, 'data-no-contrast-guard': true }}
                   labelClassName="flex-1 text-left relative inline-block transition-colors duration-200"
                   labelStyle={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
                   trailing={hasMega ? <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : undefined} /> : undefined}
@@ -1269,13 +1270,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-signout-action
               data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
+              title="Sign Out"
+              aria-label="Sign Out"
+              className="flex items-center justify-center gap-1 text-[9px] font-semibold uppercase tracking-[0.08em] transition-all px-1.5 h-6 rounded-md border w-full group"
               style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#DC2626'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626', 'important'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626', 'important'); }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#B89555'; (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('color', '#DC2626'); (e.currentTarget.querySelector('[data-signout-icon]') as HTMLElement | null)?.style.setProperty('stroke', '#DC2626'); }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.borderColor = '#DC2626'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = '#B89555'; }}
             >
-              <LogOut data-signout-icon data-no-contrast-guard className="w-3 h-3 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.25} style={{ color: '#DC2626', stroke: '#DC2626' }} />
-              <span data-signout-label className="!text-[#DC2626]" style={{ color: '#DC2626' }}>Sign Out</span>
+              <LogOut data-signout-icon data-no-contrast-guard className="w-2.5 h-2.5 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.5} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+              <span data-signout-label className="!text-[#DC2626] leading-none" style={{ color: '#DC2626' }}>Sign Out</span>
             </button>
           ) : (
             <Link
@@ -1343,22 +1346,25 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
 
-          {/* Section icons — inactive = champagne/ink, active = emerald/white */}
+          {/* Section icons — ALWAYS emerald tile with pure white glyph (active = brighter ring) */}
           <style>{`
-            .jj-side-tile {
-              background: rgba(253,251,247,0.44) !important;
-              border: 1px solid rgba(184,149,85,0.16) !important;
-              color: #1A1A1A !important;
-              box-shadow: none !important;
+            html body .jj-side-tile,
+            html body button.jj-side-tile,
+            html body a.jj-side-tile {
+              background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+              background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+              border: 1px solid rgba(255,255,255,0.14) !important;
+              color: #FFFFFF !important;
+              box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
               filter: none !important;
-              transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease !important;
+              transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease !important;
             }
-            .jj-side-tile svg,
-            .jj-side-tile svg * { color: #1A1A1A !important; stroke: #1A1A1A !important; opacity: 1 !important; transition: none !important; }
-            .jj-side-tile:hover { background: rgba(216,204,178,0.72) !important; border-color: rgba(184,149,85,0.34) !important; filter: none !important; transform: none !important; box-shadow: 0 8px 18px -16px rgba(26,26,26,0.28) !important; }
-            .jj-side-tile.is-active { background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important; border-color: transparent !important; color: #FFFFFF !important; box-shadow: 0 10px 22px -11px rgba(4,120,87,0.82), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 14px rgba(0,0,0,0.22) !important; }
-            .jj-side-tile.is-active svg,
-            .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
+            html body .jj-side-tile svg,
+            html body .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; fill: none !important; opacity: 1 !important; transition: none !important; }
+            html body .jj-side-tile:hover { border-color: rgba(184,149,85,0.55) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
+            html body .jj-side-tile.is-active { border-color: #B89555 !important; box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.45) !important; }
+            html body .jj-side-tile.is-active svg,
+            html body .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
@@ -1373,7 +1379,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-no-contrast-guard
                     className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(isActive)} />
+                      <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1407,7 +1413,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       }}
                       className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(isActive)} />
+                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1429,7 +1435,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(false)} />
+                    <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1442,7 +1448,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(false)} />
+                    <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
