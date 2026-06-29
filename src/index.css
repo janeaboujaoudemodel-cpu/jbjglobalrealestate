@@ -18037,6 +18037,28 @@ body :where([data-jj-utility-pill]) {
   min-height: 36px !important;
 }
 
+/* PASS 113 — Investor vault emerald banner hard lock.
+   Nested champagne/page wrappers were overpowering [data-surface="emerald"] descendants.
+   This target is intentionally narrow and late: the Secure Document Vault banner and every
+   text/icon child must stay pure white at rest, hover, active, and focus. */
+body [data-investor-vault-banner],
+body [data-investor-vault-banner]:where(:hover, :focus-within, :active),
+body [data-investor-vault-banner] :where(h1,h2,h3,h4,h5,h6,p,span,strong,em,small,b,div,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+}
+
+body [data-investor-vault-banner] :where(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  fill: none !important;
+}
+
 body :where(.jj-sqtoggle, [data-jj-utility-pill] button) {
   height: 100% !important;
   min-height: 100% !important;
