@@ -20160,19 +20160,19 @@ html body #root :is([data-surface="emerald"], [data-emerald-action], [data-cta="
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body .jj-investor-tab.is-active svg,
-html body .jj-investor-tab:hover svg,
-html body .jj-investor-tab:focus-visible svg,
-html body .jj-investor-tab.is-active svg *,
-html body .jj-investor-tab:hover svg *,
-html body .jj-investor-tab:focus-visible svg * {
+html body .jj-investor-tab.jj-investor-tab.is-active svg,
+html body .jj-investor-tab.jj-investor-tab:hover svg,
+html body .jj-investor-tab.jj-investor-tab:focus-visible svg,
+html body .jj-investor-tab.jj-investor-tab.is-active svg *,
+html body .jj-investor-tab.jj-investor-tab:hover svg *,
+html body .jj-investor-tab.jj-investor-tab:focus-visible svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
 }
 /* Idle (inactive, not hovered): ink stroke on champagne */
-html body .jj-investor-tab:not(.is-active):not(:hover):not(:focus-visible) svg,
-html body .jj-investor-tab:not(.is-active):not(:hover):not(:focus-visible) svg * {
+html body .jj-investor-tab.jj-investor-tab:not(.is-active):not(:hover):not(:focus-visible) svg,
+html body .jj-investor-tab.jj-investor-tab:not(.is-active):not(:hover):not(:focus-visible) svg * {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
