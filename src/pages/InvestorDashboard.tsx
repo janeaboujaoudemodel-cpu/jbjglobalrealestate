@@ -20,7 +20,7 @@ import {
   LayoutDashboard, Building2, FileText, TrendingUp, Bell, User, Heart, Search, ListChecks,
   Calendar, Shield, MessageCircle, BarChart3, Briefcase, Clock, MapPin, Eye, CheckCircle2,
   Mail, Phone, Globe, Languages, Stamp, ImageIcon, CreditCard, Star, History, StickyNote,
-  FileEdit, ArrowRight
+  FileEdit, Bot, Plus, Send, Link2, ClipboardList
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -29,6 +29,51 @@ const TAB_STYLE = "text-[10px] md:text-xs font-semibold data-[state=active]:bg-[
 const fadeIn = {
   hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
+type InvestorListingSummary = {
+  id: string;
+  title: string;
+  status: string;
+  approvalStatus: string;
+  createdAt: string;
+  price?: number | null;
+  location?: string | null;
+  source: "portal" | "seller";
+};
+
+type InvestorCalendarEvent = {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  type: string;
+  location: string;
+  notes: string;
+  emailReminder: boolean;
+};
+
+type InvestorTask = {
+  id: string;
+  title: string;
+  due: string;
+  done: boolean;
+};
+
+const formatLocalDate = (date: Date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
+const buildCalendarDays = (month: Date) => {
+  const first = new Date(month.getFullYear(), month.getMonth(), 1);
+  const last = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+  const days: Array<Date | null> = [];
+  for (let i = 0; i < first.getDay(); i += 1) days.push(null);
+  for (let d = 1; d <= last.getDate(); d += 1) days.push(new Date(month.getFullYear(), month.getMonth(), d));
+  return days;
 };
 
 export default function InvestorDashboard() {
@@ -41,6 +86,21 @@ export default function InvestorDashboard() {
   const [favorites, setFavorites] = useState<any[]>([]);
   const [stats, setStats] = useState({ watchlist: 0, savedSearches: 0, reports: 0, requests: 0 });
   const [activities, setActivities] = useState<any[]>([]);
+  const [submittedListings, setSubmittedListings] = useState<InvestorListingSummary[]>([]);
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
+  const [calendarEvents, setCalendarEvents] = useState<InvestorCalendarEvent[]>([]);
+  const [tasks, setTasks] = useState<InvestorTask[]>([]);
+  const [taskDraft, setTaskDraft] = useState("");
+  const [assistantPrompt, setAssistantPrompt] = useState("");
+  const [eventForm, setEventForm] = useState({
+    title: "",
+    date: formatLocalDate(new Date()),
+    time: "12:00",
+    type: "Property viewing",
+    location: "",
+    notes: "",
+    emailReminder: true,
+  });
   const { invitations, respondToInvitation } = useMyEventInvitations();
 
   // Profile form state
@@ -56,6 +116,18 @@ export default function InvestorDashboard() {
 
   useEffect(() => {
     if (user) fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    try {
+      const events = localStorage.getItem(`jj_investor_calendar_${user.id}`);
+      const savedTasks = localStorage.getItem(`jj_investor_tasks_${user.id}`);
+      if (events) setCalendarEvents(JSON.parse(events));
+      if (savedTasks) setTasks(JSON.parse(savedTasks));
+    } catch (error) {
+      console.error("Failed to load investor calendar data", error);
+    }
   }, [user]);
 
   const fetchData = async () => {
@@ -87,8 +159,130 @@ export default function InvestorDashboard() {
         })));
         setStats(prev => ({ ...prev, requests: tickets.filter((t: any) => t.status !== "closed").length }));
       }
+
+      const [portalResult, sellerResult] = await Promise.all([
+        (supabase as any)
+          .from("portal_listings")
+          .select("id,title,status,approval_status,created_at,approved_at,listing_type,price,location")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(25),
+        (supabase as any)
+          .from("seller_listings")
+          .select("id,property_location,property_type,status,approval_status,submitted_at,created_at,target_selling_price")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(25),
+      ]);
+
+      const portalListings: InvestorListingSummary[] = (portalResult.data || []).map((listing: any) => ({
+        id: listing.id,
+        title: listing.title || listing.listing_type || "Submitted listing",
+        status: listing.status || "submitted",
+        approvalStatus: listing.approval_status || listing.status || "submitted",
+        createdAt: listing.created_at,
+        price: listing.price,
+        location: listing.location,
+        source: "portal" as const,
+      }));
+
+      const sellerListings: InvestorListingSummary[] = (sellerResult.data || []).map((listing: any) => ({
+        id: listing.id,
+        title: `${listing.property_type || "Property"} · ${listing.property_location || "Submitted listing"}`,
+        status: listing.status || "submitted",
+        approvalStatus: listing.approval_status || listing.status || "submitted",
+        createdAt: listing.submitted_at || listing.created_at,
+        price: listing.target_selling_price,
+        location: listing.property_location,
+        source: "seller" as const,
+      }));
+
+      setSubmittedListings([...portalListings, ...sellerListings]);
     } catch (e) { console.error(e); }
     setLoading(false);
+  };
+
+  const persistCalendar = (next: InvestorCalendarEvent[]) => {
+    setCalendarEvents(next);
+    if (user) localStorage.setItem(`jj_investor_calendar_${user.id}`, JSON.stringify(next));
+  };
+
+  const persistTasks = (next: InvestorTask[]) => {
+    setTasks(next);
+    if (user) localStorage.setItem(`jj_investor_tasks_${user.id}`, JSON.stringify(next));
+  };
+
+  const handleAddEvent = (override?: Partial<InvestorCalendarEvent>) => {
+    const title = override?.title || eventForm.title.trim();
+    if (!title) {
+      toast.error("Add an event title first");
+      return;
+    }
+    const nextEvent: InvestorCalendarEvent = {
+      id: `${Date.now()}`,
+      title,
+      date: override?.date || eventForm.date,
+      time: override?.time || eventForm.time,
+      type: override?.type || eventForm.type,
+      location: override?.location ?? eventForm.location,
+      notes: override?.notes ?? eventForm.notes,
+      emailReminder: override?.emailReminder ?? eventForm.emailReminder,
+    };
+    persistCalendar([...calendarEvents, nextEvent]);
+    setEventForm((prev) => ({ ...prev, title: "", location: "", notes: "" }));
+    toast.success(nextEvent.emailReminder ? "Event booked with email reminder" : "Event booked");
+  };
+
+  const handleAddTask = (title = taskDraft.trim(), due = formatLocalDate(new Date())) => {
+    if (!title) {
+      toast.error("Add a task note first");
+      return;
+    }
+    persistTasks([{ id: `${Date.now()}`, title, due, done: false }, ...tasks]);
+    setTaskDraft("");
+    toast.success("Task note added");
+  };
+
+  const handleAssistantCommand = () => {
+    const prompt = assistantPrompt.trim();
+    if (!prompt) {
+      toast.error("Tell the assistant what to schedule");
+      return;
+    }
+    const tomorrow = /tomorrow/i.test(prompt);
+    const date = tomorrow ? new Date(Date.now() + 24 * 60 * 60 * 1000) : new Date();
+    const timeMatch = prompt.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+    let hour = timeMatch ? Number(timeMatch[1]) : 12;
+    const minute = timeMatch?.[2] || "00";
+    const meridiem = timeMatch?.[3]?.toLowerCase();
+    if (meridiem === "pm" && hour < 12) hour += 12;
+    if (meridiem === "am" && hour === 12) hour = 0;
+    const time = `${String(hour).padStart(2, "0")}:${minute}`;
+    const isViewing = /viewing|property/i.test(prompt);
+    handleAddEvent({
+      title: isViewing ? "Property viewing" : "Investor appointment",
+      date: formatLocalDate(date),
+      time,
+      type: isViewing ? "Property viewing" : "Meeting",
+      notes: prompt,
+      emailReminder: true,
+    });
+    handleAddTask(`Reminder: ${prompt}`, formatLocalDate(date));
+    setAssistantPrompt("");
+  };
+
+  const handleShareInventory = async () => {
+    if (submittedListings.length === 0) {
+      toast.info("Add and submit a listing before sharing inventory");
+      return;
+    }
+    const approved = submittedListings.filter((listing) => /approved|live|published/i.test(`${listing.approvalStatus} ${listing.status}`));
+    const shareRows = (approved.length ? approved : submittedListings).map((listing) => {
+      const link = `${window.location.origin}/${listing.source === "portal" ? "resale-properties" : "list-property"}/${listing.id}`;
+      return `${listing.title} — ${listing.approvalStatus || listing.status} — ${link}`;
+    });
+    await navigator.clipboard?.writeText(shareRows.join("\n"));
+    toast.success("Inventory links copied for your JBJ consultant");
   };
 
   const handleSaveProfile = async () => {
@@ -140,6 +334,12 @@ export default function InvestorDashboard() {
             </TabsTrigger>
             <TabsTrigger value="calendar" className={TAB_STYLE}>
               <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" /> Calendar
+            </TabsTrigger>
+            <TabsTrigger value="tasks" className={TAB_STYLE}>
+              <ClipboardList className="w-3.5 h-3.5 mr-1 hidden md:block" /> Tasks
+            </TabsTrigger>
+            <TabsTrigger value="assistant" className={TAB_STYLE}>
+              <Bot className="w-3.5 h-3.5 mr-1 hidden md:block" /> AI Assistant
             </TabsTrigger>
           </TabsList>
 
@@ -194,6 +394,40 @@ export default function InvestorDashboard() {
                     </Link>
                   ))}
                 </div>
+              </div>
+
+              <div className="grid lg:grid-cols-[1.4fr_1fr] gap-4">
+                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA]">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Bot className="w-4 h-4 text-[hsl(36,40%,70%)]" /> AI Calendar Assistant
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Textarea
+                      value={assistantPrompt}
+                      onChange={(e) => setAssistantPrompt(e.target.value)}
+                      placeholder="Add for me notes that I need to meet Jane tomorrow at 12 PM for a property viewing."
+                      className="min-h-[92px] border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]"
+                    />
+                    <Button onClick={handleAssistantCommand} data-emerald-action="true" className="jj-cta-emerald w-full">
+                      <Send className="w-4 h-4 mr-2" /> Book, note, and remind me
+                    </Button>
+                  </CardContent>
+                </Card>
+                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA]">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Link2 className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Inventory Sharing
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-muted-foreground">Approved listings generate share links automatically. Send your inventory list to your JBJ consultant when ready.</p>
+                    <Button onClick={handleShareInventory} variant="outline" className="w-full border-[hsl(36,40%,70%)]/40 text-[#064E3B]">
+                      Share inventory with JBJ consultant
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
 
               {/* Recent Activity */}
@@ -465,16 +699,38 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Sample Approval Timeline */}
               <Card className="border-[hsl(36,40%,70%)]/20">
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Submission Approvals
+                    <Shield className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Listing Submission Approvals
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">Your submissions go through our 3-step approval process:</p>
-                  <ApprovalTimeline steps={JBJ_APPROVAL_STEPS} />
+                  {submittedListings.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Shield className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
+                      <p className="text-sm font-semibold text-foreground">No listings submitted for approval</p>
+                      <p className="text-xs text-muted-foreground mt-1">Pending approval status only appears after you submit a listing.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {submittedListings.map((listing) => {
+                        const approved = /approved|live|published/i.test(`${listing.approvalStatus} ${listing.status}`);
+                        const rejected = /reject/i.test(`${listing.approvalStatus} ${listing.status}`);
+                        return (
+                          <div key={`${listing.source}-${listing.id}`} className="grid grid-cols-[1fr_auto] items-center gap-3 p-4 rounded-xl border border-[hsl(36,40%,70%)]/20 bg-background/50">
+                            <div className="min-w-0">
+                              <p className="font-semibold text-sm text-foreground truncate">{listing.title}</p>
+                              <p className="text-[10px] text-muted-foreground">Submitted {format(new Date(listing.createdAt), "dd MMM yyyy")}{listing.location ? ` · ${listing.location}` : ""}</p>
+                            </div>
+                            <Badge className={`w-24 justify-center rounded-full ${approved ? "jj-surface-emerald-soft text-[#064E3B] border-[color:var(--emerald-1)]/30" : rejected ? "bg-red-500/10 text-red-500 border-red-500/30" : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40"}`}>
+                              {approved ? "Approved" : rejected ? "Rejected" : "Pending"}
+                            </Badge>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
@@ -482,39 +738,128 @@ export default function InvestorDashboard() {
 
           {/* ── CALENDAR ── */}
           <TabsContent value="calendar">
-            <motion.div initial="hidden" animate="visible" variants={fadeIn}>
+            <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-4">
               <Card className="border-[hsl(36,40%,70%)]/20">
                 <CardHeader>
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Events & Calendar
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {invitations.length === 0 ? (
-                    <div className="text-center py-8">
-                      <Calendar className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
-                      <p className="text-sm text-muted-foreground">No upcoming events</p>
-                      <p className="text-[10px] text-muted-foreground/60 mt-1">Events from JBJ Global Real Estate will appear here</p>
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Full Calendar & Bookings
+                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1))}>Previous</Button>
+                      <span className="min-w-[140px] text-center text-sm font-semibold text-foreground">{format(calendarMonth, "MMMM yyyy")}</span>
+                      <Button variant="outline" size="sm" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1))}>Next</Button>
                     </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {invitations.filter((inv) => (inv.event as any)?.event_date).map((inv) => (
-                        <div key={inv.id} className="flex items-center gap-4 p-4 rounded-xl border border-[hsl(36,40%,70%)]/20 bg-background/50">
-                          <div className="w-14 h-14 rounded-xl bg-[hsl(36,40%,70%)]/10 flex flex-col items-center justify-center">
-                            <span className="text-lg font-bold text-[hsl(36,40%,70%)]">{format(new Date((inv.event as any).event_date), "dd")}</span>
-                            <span className="text-[10px] text-muted-foreground">{format(new Date((inv.event as any).event_date), "MMM")}</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="grid lg:grid-cols-[1.5fr_0.9fr] gap-5">
+                  <div>
+                    <div className="grid grid-cols-7 gap-1 mb-2">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => <div key={day} className="text-center text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground py-2">{day}</div>)}
+                    </div>
+                    <div className="grid grid-cols-7 gap-1">
+                      {buildCalendarDays(calendarMonth).map((day, idx) => {
+                        const dateKey = day ? formatLocalDate(day) : `blank-${idx}`;
+                        const dayEvents = day ? calendarEvents.filter((event) => event.date === dateKey) : [];
+                        return (
+                          <div key={dateKey} className={`min-h-[92px] rounded-lg border p-2 ${day ? "bg-[#FDFBF7] border-[hsl(36,40%,70%)]/20" : "bg-transparent border-transparent"}`}>
+                            {day && (
+                              <>
+                                <div className="text-xs font-bold text-foreground">{format(day, "d")}</div>
+                                <div className="mt-1 space-y-1">
+                                  {dayEvents.slice(0, 2).map((event) => (
+                                    <div key={event.id} className="rounded-md bg-[#064E3B] px-1.5 py-1 text-[9px] font-semibold text-white truncate" title={event.title}>{event.time} {event.title}</div>
+                                  ))}
+                                  {dayEvents.length > 2 && <div className="text-[9px] text-muted-foreground">+{dayEvents.length - 2} more</div>}
+                                </div>
+                              </>
+                            )}
                           </div>
-                          <div className="flex-1">
-                            <p className="font-semibold text-sm text-foreground">{(inv.event as any)?.title}</p>
-                            <p className="text-[10px] text-muted-foreground">{(inv.event as any)?.location || "Location TBA"}</p>
-                          </div>
-                          <Badge className={inv.status === "accepted" ? "jj-surface-emerald-soft text-emerald-500" : "bg-amber-500/10 text-amber-500"}>
-                            {inv.status}
-                          </Badge>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="rounded-xl border border-[hsl(36,40%,70%)]/25 bg-[#F7F2EA] p-4 space-y-3">
+                      <h4 className="text-sm font-bold text-foreground flex items-center gap-2"><Plus className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Book appointment</h4>
+                      <Input value={eventForm.title} onChange={(e) => setEventForm((p) => ({ ...p, title: e.target.value }))} placeholder="Property viewing with Jane" className="border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]" />
+                      <div className="grid grid-cols-2 gap-2">
+                        <Input type="date" value={eventForm.date} onChange={(e) => setEventForm((p) => ({ ...p, date: e.target.value }))} className="border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]" />
+                        <Input type="time" value={eventForm.time} onChange={(e) => setEventForm((p) => ({ ...p, time: e.target.value }))} className="border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]" />
+                      </div>
+                      <Input value={eventForm.location} onChange={(e) => setEventForm((p) => ({ ...p, location: e.target.value }))} placeholder="Location or property link" className="border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]" />
+                      <Textarea value={eventForm.notes} onChange={(e) => setEventForm((p) => ({ ...p, notes: e.target.value }))} placeholder="Notes for this booking" className="border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]" />
+                      <Button onClick={() => handleAddEvent()} data-emerald-action="true" className="jj-cta-emerald w-full"><Calendar className="w-4 h-4 mr-2" /> Add to calendar</Button>
+                    </div>
+
+                    <div className="rounded-xl border border-[hsl(36,40%,70%)]/25 bg-[#FDFBF7] p-4">
+                      <h4 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2"><Bell className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Upcoming reminders</h4>
+                      {calendarEvents.length === 0 ? <p className="text-xs text-muted-foreground">No bookings yet</p> : (
+                        <div className="space-y-2 max-h-[180px] overflow-y-auto jj-scrollbar-gold">
+                          {calendarEvents.slice(-5).reverse().map((event) => (
+                            <div key={event.id} className="flex items-center justify-between gap-2 rounded-lg border border-[hsl(36,40%,70%)]/15 p-2">
+                              <div className="min-w-0">
+                                <p className="text-xs font-semibold text-foreground truncate">{event.title}</p>
+                                <p className="text-[10px] text-muted-foreground">{format(new Date(event.date), "dd MMM")} · {event.time}</p>
+                              </div>
+                              {event.emailReminder && <Mail className="w-4 h-4 text-[#064E3B] shrink-0" />}
+                            </div>
+                          ))}
                         </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="tasks">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn} className="grid lg:grid-cols-[1fr_1fr] gap-4">
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader><CardTitle className="text-base flex items-center gap-2"><StickyNote className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Task Notes</CardTitle></CardHeader>
+                <CardContent className="space-y-3">
+                  <Textarea value={taskDraft} onChange={(e) => setTaskDraft(e.target.value)} placeholder="Add a note or task for your property inventory..." className="min-h-[120px] border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]" />
+                  <Button onClick={() => handleAddTask()} data-emerald-action="true" className="jj-cta-emerald w-full"><Plus className="w-4 h-4 mr-2" /> Add task note</Button>
+                </CardContent>
+              </Card>
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader><CardTitle className="text-base flex items-center gap-2"><ListChecks className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Active Tasks</CardTitle></CardHeader>
+                <CardContent>
+                  {tasks.length === 0 ? <p className="text-center text-sm text-muted-foreground py-8">No task notes yet</p> : (
+                    <div className="space-y-2">
+                      {tasks.map((task) => (
+                        <button key={task.id} onClick={() => persistTasks(tasks.map((t) => t.id === task.id ? { ...t, done: !t.done } : t))} className="w-full grid grid-cols-[24px_1fr_auto] items-center gap-3 p-3 rounded-xl border border-[hsl(36,40%,70%)]/20 bg-background/50 text-left">
+                          <span className={`w-5 h-5 rounded-full border flex items-center justify-center ${task.done ? "bg-[#064E3B] border-[#064E3B]" : "border-[#B89555]"}`}>{task.done && <CheckCircle2 className="w-3 h-3 text-white" />}</span>
+                          <span className={`text-sm font-medium ${task.done ? "line-through text-muted-foreground" : "text-foreground"}`}>{task.title}</span>
+                          <span className="text-[10px] text-muted-foreground">{format(new Date(task.due), "dd MMM")}</span>
+                        </button>
                       ))}
                     </div>
                   )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+
+          <TabsContent value="assistant">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn}>
+              <Card className="border-[hsl(36,40%,70%)]/20 bg-gradient-to-br from-[#F7F2EA] to-[#FDFBF7]">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2"><Bot className="w-4 h-4 text-[hsl(36,40%,70%)]" /> AI Assistant</CardTitle>
+                </CardHeader>
+                <CardContent className="grid lg:grid-cols-[1.2fr_0.8fr] gap-4">
+                  <div className="space-y-3">
+                    <Textarea value={assistantPrompt} onChange={(e) => setAssistantPrompt(e.target.value)} placeholder="Tell me to book a viewing, add notes, create a task, or remind you by email..." className="min-h-[180px] border-[hsl(36,40%,70%)]/30 bg-[#FDFBF7]" />
+                    <Button onClick={handleAssistantCommand} data-emerald-action="true" className="jj-cta-emerald w-full"><Send className="w-4 h-4 mr-2" /> Run assistant command</Button>
+                  </div>
+                  <div className="rounded-xl border border-[hsl(36,40%,70%)]/25 bg-[#FDFBF7] p-4 space-y-3">
+                    <h4 className="text-sm font-bold text-foreground">What I can manage</h4>
+                    {["Calendar bookings", "Viewing reminders", "Task notes", "Alert follow-ups", "Inventory share links"].map((item) => (
+                      <div key={item} className="flex items-center gap-2 text-sm text-foreground"><CheckCircle2 className="w-4 h-4 text-[#064E3B]" /> {item}</div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
