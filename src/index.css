@@ -20823,7 +20823,7 @@ html body #root :is(
     .surface-ink *, .surface-navy *, .jj-surface-emerald *, .jj-cta-primary *, .jj-cta-emerald *,
     .jj-cta-dark *, .jj-navy-cta *, .jj-emerald-action *, .jj-emerald-metallic *, .jj-pill-emerald *,
     .jj-pill-emerald-metallic *, .jj-icon-tile-emerald *,
-    [data-emerald-filled] *, [data-cta="primary"] *,
+    [data-cta="primary"] *,
     [data-cta="dark"] *, [data-jj-segmented-trigger][data-state="active"] *, [role="tab"][data-state="active"] *
   )) {
   color: #1A1A1A !important;
