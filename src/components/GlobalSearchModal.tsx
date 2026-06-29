@@ -588,28 +588,30 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 ) : (
                   /* Show shortcuts and suggestions when NOT typing */
                   <div className="space-y-6">
-                    {/* Role-aware shortcuts */}
+                    {/* Role-aware shortcuts — premium uniform tiles */}
                     <div>
-                      <div className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-2">
-                        <IconTile icon={Compass} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" /> For {roleLabel}s
+                      <div className="text-[11px] font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-[0.14em] flex items-center gap-2">
+                        <IconTile icon={Compass} tone="emerald" size="sm" className="!h-6 !w-6 !rounded-md" iconClassName="!h-3 !w-3" />
+                        <span>For {roleLabel}s</span>
+                        <span className="ml-1 inline-flex items-center px-1.5 h-[18px] rounded-full bg-[#FBF4E1] text-[#6B5424] border border-[#D9C292] text-[9px] tracking-wider">MODE</span>
                       </div>
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                         {roleShortcuts.map((shortcut) => (
                           <button
                             key={shortcut.route + shortcut.label}
                             onClick={() => handleSelect(shortcut.route)}
-                              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group jj-hover-emerald"
+                            className="h-[96px] flex flex-col items-center justify-center gap-2 px-2 py-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/65 hover:shadow-md transition-all group jj-hover-emerald"
                           >
                             <IconTile icon={shortcut.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
-                            <span className="text-xs font-medium text-[#1A1A1A] text-center leading-tight">{shortcut.label}</span>
+                            <span className="text-[11px] font-semibold text-[#1A1A1A] text-center leading-tight line-clamp-2">{shortcut.label}</span>
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Quick Access */}
+                    {/* Quick Access — identical tile grid for visual rhythm */}
                     <div>
-                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
+                      <p className="text-[11px] font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-[0.14em]">
                         Quick Access
                       </p>
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -617,33 +619,34 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <button
                             key={shortcut.route}
                             onClick={() => handleSelect(shortcut.route)}
-                              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 hover:shadow-md transition-all group jj-hover-emerald"
+                            className="h-[96px] flex flex-col items-center justify-center gap-2 px-2 py-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-md transition-all group jj-hover-emerald"
                           >
                             <IconTile icon={shortcut.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
-                            <span className="text-xs font-medium text-[#1A1A1A] text-center">{shortcut.label}</span>
+                            <span className="text-[11px] font-semibold text-[#1A1A1A] text-center leading-tight line-clamp-2">{shortcut.label}</span>
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Popular Pages */}
+                    {/* Popular Pages — same square tile pattern, identical rhythm */}
                     <div>
-                      <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
+                      <p className="text-[11px] font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-[0.14em]">
                         Popular Pages
                       </p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                         {POPULAR_PAGES.map((page) => (
                           <button
                             key={page.route}
                             onClick={() => handleSelect(page.route)}
-                              className="grid grid-cols-[auto_1fr] items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all jj-hover-emerald text-left"
+                            className="h-[96px] flex flex-col items-center justify-center gap-2 px-2 py-3 rounded-xl bg-[#FDFBF7]/80 border border-[#B89555]/20 hover:border-[#B89555]/55 hover:shadow-md transition-all group jj-hover-emerald"
                           >
-                            <IconTile icon={page.icon} tone="emerald" size="sm" />
-                            <span className="text-sm font-medium text-[#1A1A1A] truncate">{page.label}</span>
+                            <IconTile icon={page.icon} tone="emerald" size="md" className="group-hover:scale-105 transition-transform" />
+                            <span className="text-[11px] font-semibold text-[#1A1A1A] text-center leading-tight line-clamp-2">{page.label}</span>
                           </button>
                         ))}
                       </div>
                     </div>
+
 
                     {/* Your Pinned Shortcuts */}
                     {shortcuts.length > 0 && (

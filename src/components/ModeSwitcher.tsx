@@ -124,31 +124,49 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   if (isUnselected && !showForUnselected) return null;
 
   const handleModeChange = async (newMode: UserMode) => {
+    // 🔒 SECURITY: Only the registered app owner may enter Owner mode.
+    // Owner mode is the ONLY mode that exposes the back-end command center,
+    // and it must never be reachable from a non-owner account regardless of
+    // any UI bypass.
+    if (newMode === 'owner' && !isAppOwner) {
+      toast.error('Owner mode is restricted', {
+        description: 'This mode is only available to the registered app owner.',
+      });
+      setIsOpen(false);
+      return;
+    }
+
     await setMode(newMode);
     window.dispatchEvent(new CustomEvent('userModeChange', { detail: newMode }));
     toast.success(`Switched to ${MODE_CONFIG[newMode].label}`, {
       description: MODE_CONFIG[newMode].description,
     });
 
-    // Route to the correct portal for the selected mode. Owner mode must
-    // ALWAYS land in the Owner Command Center — never the broker portal.
-    // Other modes only auto-route when the user is currently sitting on a
-    // portal that doesn't match the new mode (so casual page browsing isn't
-    // hijacked).
+    // 🔒 NON-REDIRECT POLICY:
+    // Switching mode must NEVER auto-navigate Investor / Broker / Developer
+    // to a portal — especially not the back-end. The user stays on whatever
+    // page they're on; the surrounding UI (dashboard widgets, sidebar tools,
+    // search shortcuts) adapts to the new mode via UserModeContext.
+    // Owner mode is the ONLY mode permitted to auto-route, and only for the
+    // registered app owner. If a non-owner is already sitting on a protected
+    // route, bounce them back to the homepage so the back-end is never shown.
     const path = location.pathname;
-    const onBrokerPortal = path.startsWith('/broker');
-    const onOwnerPortal = path.startsWith('/owner') || path.startsWith('/admin');
-    const onDeveloperPortal = path.startsWith('/developers-portal') || path.startsWith('/developer');
+    const onBackend =
+      path.startsWith('/owner') ||
+      path.startsWith('/admin') ||
+      path.startsWith('/developers-portal') ||
+      path.startsWith('/developer-hub');
 
-    if (newMode === 'owner' && !onOwnerPortal) {
-      navigate('/owner');
-    } else if (newMode === 'broker' && onOwnerPortal) {
-      navigate('/broker-dashboard');
-    } else if (newMode === 'investor' && (onBrokerPortal || onOwnerPortal || onDeveloperPortal)) {
-      navigate('/my-dashboard');
-    } else if (newMode === 'developer' && !onDeveloperPortal) {
-      navigate('/developers-portal');
+    if (newMode === 'owner' && isAppOwner) {
+      if (!path.startsWith('/owner') && !path.startsWith('/admin')) {
+        navigate('/owner');
+      }
+    } else if (newMode !== 'owner' && onBackend) {
+      // Stepping out of owner mode while sitting on a back-end route → home.
+      navigate('/');
     }
+    // All other cases: stay on the current page. The dashboard/sidebar
+    // re-renders the correct mode-specific tools via context.
 
     setIsOpen(false);
   };
