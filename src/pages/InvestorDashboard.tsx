@@ -576,8 +576,6 @@ export default function InvestorDashboard() {
                     >
                       <Icon
                         className="jj-investor-tab-ico w-3.5 h-3.5 hidden sm:inline-block transition-colors"
-                        stroke="currentColor"
-                        style={{ color: active ? "#FFFFFF" : "#1A1A1A" }}
                       />
                       <span
                         className="jj-investor-tab-label"
