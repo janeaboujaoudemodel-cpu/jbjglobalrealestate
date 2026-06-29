@@ -181,8 +181,27 @@ export default function InvestorDashboard() {
 
       const { data: favs } = await supabase.from("favorites").select("id, project_id, created_at").eq("user_id", user.id).limit(50);
       if (favs) {
-        setFavorites(favs);
-        setStats(prev => ({ ...prev, watchlist: favs.length }));
+        // Enrich with project name + slug so the card is meaningful and links to the real detail page
+        const ids = Array.from(new Set(favs.map((f: any) => f.project_id).filter(Boolean)));
+        let projectMap: Record<string, { name: string; slug: string; cover_image_url: string | null }> = {};
+        if (ids.length) {
+          const { data: projects } = await supabase
+            .from("projects")
+            .select("id, name, slug, cover_image_url, is_published")
+            .in("id", ids);
+          if (projects) {
+            projectMap = projects.reduce((acc: any, p: any) => {
+              acc[p.id] = { name: p.name, slug: p.slug, cover_image_url: p.cover_image_url, is_published: p.is_published };
+              return acc;
+            }, {});
+          }
+        }
+        // Drop favorites whose project no longer exists / is unpublished so we never link to "Project not found"
+        const enriched = favs
+          .map((f: any) => ({ ...f, project: projectMap[f.project_id] }))
+          .filter((f: any) => f.project && f.project.slug && f.project.is_published !== false);
+        setFavorites(enriched);
+        setStats(prev => ({ ...prev, watchlist: enriched.length }));
       }
 
       const { data: tickets } = await supabase
