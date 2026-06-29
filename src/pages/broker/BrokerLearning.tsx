@@ -292,20 +292,43 @@ export default function BrokerLearning() {
 
           <Card className="bg-[#F7F2EA] border-[#B89555]/30">
             <CardContent className="p-6 md:p-8">
-              <h3 className="text-[#1A1A1A] text-lg font-bold mb-5 text-center">Golden Rules for Market Conversations</h3>
+              <h3 className="text-[#1A1A1A] text-lg font-bold mb-6 text-center">Golden Rules for Market Conversations</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
                   { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
                   { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
                   { n: 3, t: "Cite Sources",            d: "Always reference Open Data origins." },
-                ].map(({ n, t, d }) => (
-                  <div key={n} className="text-center">
-                    <div className="w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center mx-auto mb-3">
-                      <span className="text-[#1A1A1A] font-bold">{n}</span>
+                ].map(({ n, t, d }, i) => (
+                  <motion.div
+                    key={n}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ delay: i * 0.18, duration: 0.5, ease: "easeOut" }}
+                    className="text-center"
+                  >
+                    <div
+                      data-surface="emerald"
+                      data-emerald-ok="icon"
+                      className="jj-surface-emerald relative overflow-hidden w-14 h-14 rounded-full grid place-items-center mx-auto mb-3 shadow-[0_10px_24px_-12px_rgba(6,78,59,0.6)] ring-1 ring-[#B89555]/40"
+                    >
+                      <span className="text-white font-bold text-lg leading-none tabular-nums" style={{ color: "#FFFFFF" }}>{n}</span>
+                      <motion.span
+                        aria-hidden
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background:
+                            "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%)",
+                        }}
+                        initial={{ x: "-120%" }}
+                        whileInView={{ x: "120%" }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.18 + 0.35, duration: 1.1, ease: "easeInOut" }}
+                      />
                     </div>
                     <p className="text-[#1A1A1A] font-semibold mb-1">{t}</p>
                     <p className="text-[#1A1A1A]/70 text-sm">{d}</p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </CardContent>
