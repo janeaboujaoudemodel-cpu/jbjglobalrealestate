@@ -20865,3 +20865,18 @@ html body #root :is([data-radix-popper-content-wrapper], [role="menu"], [role="l
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+/* PASS 127 — nested bright cards inside emerald bands still own ink contrast. */
+html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="page"], [data-surface="light"], [data-surface="cream"], [data-surface="raised"], .surface-champagne, .surface-gold, .surface-pearl, .surface-page, .surface-light, .surface-cream, .surface-raised, .jj-card-champagne, .jj-surface-champagne, .jj-layer-2, .jj-layer-active, .jj-icon-tile-champagne):not(#pass127-a):not(#pass127-b):not(#pass127-c):not(#pass127-d):not(#pass127-e):not(#pass127-f):not(#pass127-g):not(#pass127-h)
+  :is(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *, [data-on-dark] *, [data-hero-dark] *, .jj-cta-emerald *, .jj-cta-primary *, .jj-cta-dark *, .jj-navy-cta *, .jj-emerald-metallic *, .jj-pill-emerald-metallic *, .jj-icon-tile-emerald *, [data-emerald="true"] *, [data-emerald-action] *, [data-emerald-filled] *, [data-emerald-icon-surface] *, [role="tab"][data-state="active"] *)) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
+html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="page"], [data-surface="light"], [data-surface="cream"], [data-surface="raised"], .surface-champagne, .surface-gold, .surface-pearl, .surface-page, .surface-light, .surface-cream, .surface-raised, .jj-card-champagne, .jj-surface-champagne, .jj-layer-2, .jj-layer-active):not(#pass127-text-a):not(#pass127-text-b):not(#pass127-text-c):not(#pass127-text-d):not(#pass127-text-e):not(#pass127-text-f):not(#pass127-text-g):not(#pass127-text-h)
+  :is(.text-white, [class*="text-white"], [style*="color: rgb(255, 255, 255)"], [style*="color:#fff"], [style*="color: #fff"]):not(:where([data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *, [data-on-dark] *, [data-hero-dark] *, .jj-cta-emerald *, .jj-cta-primary *, .jj-cta-dark *, .jj-navy-cta *, .jj-emerald-metallic *, .jj-pill-emerald-metallic *, .jj-icon-tile-emerald *, [data-emerald="true"] *, [data-emerald-action] *, [data-emerald-filled] *, [data-emerald-icon-surface] *)) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
