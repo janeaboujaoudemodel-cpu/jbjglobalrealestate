@@ -9,8 +9,10 @@ import { cn } from "@/lib/utils";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useUserMode } from "@/hooks/useUserMode";
 import { toast } from "sonner";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+
 
 type Item = { to: string; label: string; icon: any };
 
