@@ -53,18 +53,14 @@ function Kpi({
       onClick={onClick}
       className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-5 py-5 w-full focus:outline-none"
     >
-      <div className="flex items-center justify-between">
-        <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
-        <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">
-          <ArrowRight className="h-4 w-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
-        </span>
-      </div>
+      <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
       <div className="mt-4 text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none">{value}</div>
       <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold">{label}</div>
       {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
     </button>
   );
 }
+
 
 
 const STAGE_GROUPS: Array<{ key: string; label: string; match: string[] }> = [
@@ -391,8 +387,11 @@ export default function BrokerCRM() {
       <PremiumCard>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
-            <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-1">CRM Pipeline</h1>
+            <span data-section-label="" className="jj-section-eyebrow inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.22em]">
+              <BarChart3 className="h-3.5 w-3.5" strokeWidth={2.6} /> JBJ Global Real Estate
+            </span>
+            <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-2">CRM Pipeline</h1>
+
             <p className="text-sm text-[#1A1A1A]/70 mt-1">
               Your assigned databases, leads, calls, and pipeline insights — all in one premium workspace.
             </p>
@@ -461,8 +460,10 @@ export default function BrokerCRM() {
         <div className="space-y-4">
           <PremiumCard>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-[0.14em]">Pipeline by stage</h2>
-              <span className="text-xs text-[#1A1A1A]/55">{totalLeads} total leads</span>
+              <span data-section-label="" className="jj-section-eyebrow inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.22em]">
+                <BarChart3 className="h-3.5 w-3.5" strokeWidth={2.6} /> Pipeline by stage
+              </span>
+              <span className="text-xs text-[#1A1A1A]/60">{totalLeads} total leads</span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
               {stageCounts.map((s) => (
@@ -472,18 +473,14 @@ export default function BrokerCRM() {
                   onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
                   className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-4 py-4 focus:outline-none"
                 >
-                  <div className="flex items-center justify-between">
-                    <IconTile icon={BarChart3} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
-                    <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">
-                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
-                    </span>
-                  </div>
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 mt-3 font-semibold">{s.label}</div>
+                  <IconTile icon={BarChart3} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mt-3 font-semibold">{s.label}</div>
                   <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
                 </button>
               ))}
             </div>
           </PremiumCard>
+
 
 
           {/* Leads table — always visible on Pipeline tab so the empty state guides the broker */}

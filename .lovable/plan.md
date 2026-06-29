@@ -1,97 +1,51 @@
+## Goal
+Lift the Broker CRM to a premium standard, mirror the same shell into Developer and Investor portals (CRM + dashboard parity), then run a final global pass to eliminate any remaining black-on-emerald / wrong-eyebrow contrast issues across the site.
 
-# Global JBJ Design System Correction — Phased Execution Plan
+## Phase 1 — Broker CRM restyle (`/broker/crm` + pipeline)
+1. Page shell
+   - Wrap in `PremiumSectionCard` blocks, champagne band background, consistent 24/32px rhythm.
+   - Unified emerald eyebrow pill at the top of every panel (`Pipeline`, `Filters`, `AI Suggestions`, `Stage column headers`) using the locked `data-section-label` / `data-no-contrast-guard` / `data-allow-dark-cta` / `data-surface="emerald"` chain so they always render white-on-emerald.
+2. Kanban
+   - Stage column header → small emerald chip with white count badge (no black text on emerald, no arrows).
+   - Lead card → champagne raised card, 1px gold hairline, ink title, price pill, emerald CTA "Open lead" with white icon. Hover: gentle lift + champagne wash, never flips text to black.
+   - Empty states: emerald `IconTile` + ink heading + ink helper, matching "No leads in your scope yet" pattern.
+3. Filters & toolbar
+   - Replace bare selects with champagne pills; active filter chip = emerald metallic with white text.
+   - "AI Next-Best-Action" sidebar — same component as dashboard, white-on-emerald confirmed.
+4. Lead drawer
+   - Tabs (Overview / Timeline / Notes / Files) → champagne strap with emerald active = white icon+label, idle = ink.
+   - Stage progress, action buttons (Call / Email / WhatsApp / Schedule) → emerald pill with white icon + white label, never black.
 
-Goal: fix the **shared primitives and global CSS** (not page-by-page patches) so contrast, button system, header, sidebar, cards, badges, dropdowns and forms behave consistently across every page, portal, tool and viewport. After every phase I will manually navigate the live preview with Playwright, capture screenshots, and only then move to the next phase.
+## Phase 2 — Developer Portal parity
+Mirror the Broker shell into `/developers-portal/*`:
+- Dashboard: same KPI strip (no arrows), `ConciergeGreeting` (Sarah voice), `NextBestActionCard` wired to developer leads, eyebrow pills (`DEVELOPER WORKSPACE`, `INVENTORY PULSE`, `LIVE ENQUIRIES`, `BROKER NETWORK`, `DATA ACCESS`).
+- CRM (developer enquiries): same Kanban primitives as broker, lead source = inbound enquiries from project pages.
+- Sidebar uses the smaller-icon emerald tiles already locked in `BrokerPortalSidebar`.
 
-## Guardrails (apply to all phases)
+## Phase 3 — Investor Portal parity
+Mirror the same shell into `/investor-dashboard`:
+- Replace ad-hoc tab strap and panels with the standardized `SectionHeader` eyebrow + `PremiumSectionCard`.
+- KPI tiles match broker (no arrows, emerald glyph, ink number, ink label).
+- `ConciergeGreeting` + `NextBestActionCard` (investor variant: next viewing, next payment, next milestone).
+- Vault / Favorites / Browsing History panels reuse the same shell.
 
-- No redesign, no layout changes beyond fixing alignment / spacing / clipping / contrast.
-- No new colors. Palette = Emerald gradient · Champagne / Gold-champagne · Mother-of-pearl · White · Charcoal.
-- Contrast contract:
-  - Emerald / dark gradient → pure white text + pure white icons only.
-  - Champagne / beige / MOP / white → charcoal or dark-emerald only.
-- Preserve every LOCKED standard: Signature row, Mortgage slider, Phone+cmdk, Document Studio, Hero rule, sq ft / sq m toggle, JB metallic avatar.
-- Consolidate conflicting CSS instead of stacking another override layer.
-
----
-
-## Phase 1 — Audit & CSS consolidation (foundation)
-
-1. Inventory conflicting rules in `src/index.css` (PASS 1–88, emerald-pill, surface contract, hero-search, ink-emerald guards).
-2. Build a single **Surface Contract** map (emerald / dark / champagne / light / mop / white) using `:where()` so component-level styles can win.
-3. Remove duplicate / fighting rules; keep one canonical contrast lock.
-4. Define canonical CSS custom props for: button height tiers (h-9 chip, h-11 control, h-12 CTA), radii, paddings, icon sizes, badge sizes.
-
-Validation: diff CSS size, build passes, Playwright screenshots of Home / Careers / Market Intel before continuing.
-
-## Phase 2 — Shared primitive rebuild
-
-Update **shared components only** (no page edits yet):
-
-- `Button` (variants: emerald-primary, champagne-secondary, ghost-light, ghost-dark, icon-circle, icon-square).
-- `Badge` / chip (emerald-solid, champagne-solid, outline-dark, outline-light).
-- `IconTile` (emerald → white glyph; champagne → emerald glyph).
-- `Card` (light / emerald / mop variants; single border, no duplicate inner border).
-- `HeaderControl`, `HeaderSegmented`, `SidebarItem`, `JbjAvatar`, `NotificationBadge` already exist — verify and harden.
-- `DropdownMenu` / `Select` / `Popover` hover = soft champagne hover with charcoal text, OR emerald with white. Remove green / blue / navy.
-- `FAQAccordion` arrow tile primitive.
-
-Validation: `/ds-preview` screenshots + Playwright visit Home, Careers, Market Intel, Broker Portal.
-
-## Phase 3 — Header + Sidebar live migration
-
-- Confirm all header controls use the new primitives at the same h-11 baseline; circular for Search / Filter / Heart / JB, pill for AED / Mode, segmented for sq ft / sq m (restore previous clean shape).
-- JB avatar = emerald metallic + spinner, dropdown opens instantly, hover rows = emerald-fill + white content.
-- Sidebar: every item — including Broker Portal, AI Home Finder, List Your Property, Careers, Resale, Contact, Support, Sign Out, Collapse — uses the same `SidebarItem` primitive (small icon, same axis, single active). No oversized boxes. Collapsed state stays aligned.
-
-Validation: Desktop + iPad + iPhone screenshots, expanded + collapsed, dropdowns opened.
-
-## Phase 4 — Homepage corrections
-
-Hero search, Explore Our Services, Handpicked For You (titles charcoal, Ad badge smaller, heart/shortlist aligned), Continue Searching icon-only buttons, Explore Our Guides (View Library), Explore JBJ Tools, AI Property Comparison (Start Exploring white icon), Compare to Bank Rates (remove duplicate inner border), Top Areas in Dubai title.
-
-Validation: full Home scroll screenshots Desktop / iPad / iPhone.
-
-## Phase 5 — Careers page
-
-Jessica card (real assistant visual, label "Interview Assistant"), Open Positions emerald section with white content, search input without gold border, job cards (dark titles on light, unified Featured/Partner/Top-Opportunity/Selected/Apply badge system, single-select Selected), Application Form (emerald step pill, white Continue text/icon, no navy), FAQ arrows aligned + emerald-active, Why JBJ / Broker Growth icon tiles unified.
-
-Validation: full Careers walk-through, every step of application form, every FAQ row.
-
-## Phase 6 — Market Intelligence / Dashboards
-
-Metric card alignment, delta-chip spacing, Quarterly Trends icon, animated bars, area cards alignment (Downtown / Marina / Palm / Business Bay / JVC / Creek Harbour / Arabian Ranches), unified "View Area Details" button position, Demand/Supply emerald fills.
-
-Validation: Market Intel and Owner Dashboard screenshots.
-
-## Phase 7 — AI Home Finder + AI Tools visibility
-
-- Restore correct surfaces (no all-black page).
-- Add `published` filter to public AI tools registry so unpublished tools are hidden on Web, mobile menu, hamburger, and sitemap. Backend admin still sees all.
-
-Validation: public vs admin view of AI tools list on Desktop + Mobile.
-
-## Phase 8 — Property cards / Listings / Global labels
-
-Unified badge + heart + shortlist + add-badge + contact pill system; no overlapping image labels; consistent spacing across Resale, Off-Plan, Handpicked, Favorites, Compare.
-
-Validation: each listing surface screenshot.
-
-## Phase 9 — Responsive + performance + document QA
-
-- Walk Desktop / MacBook / iPad / Tablet / iPhone / Android viewports through: Home, Careers, AI Home Finder, Market Intel, Broker Portal, Owner Portal, Documents & Forms, Services, Insights & Guides, Broker & Academy, Company & Legal, Sitemap, hamburger menu.
-- Verify dropdown open latency, no horizontal overflow, no clipped labels.
-- Export one document (Offer Letter) + download one PDF report; compare preview vs export pixel-for-pixel.
-
-Final deliverable: a screenshot index in `/mnt/documents/global-audit/` grouped by phase and viewport, with a short pass/fail table per acceptance criterion.
-
----
+## Phase 4 — Global contrast & eyebrow sweep
+1. Add `data-section-label` + the lock chain to every remaining eyebrow across:
+   - Owner back-end (DMS, Marketing Hub, Meetings, Legal Hub, Document Studio)
+   - Broker sub-pages (Listings, Smart Inbox, Email Setup, Team & HR, Calendar, Tasks, Deals & Commission, Developer Visits, Forms & Agreements, JBJ Academy, Marketing Toolkit, AI Sales Assistant, Notifications, Brand Profile, Settings)
+   - Developer & Investor sub-pages
+   - Marketing pages eyebrows (News, Intel, Guides, FAQ)
+2. Promote the working `.jj-section-eyebrow` block in `index.css` to also auto-apply the white-ink-on-emerald lock without needing every consumer to add the attribute chain — by raising the rule's class-specificity above the global Ink Lock (using a long `:is(...).jj-section-eyebrow` chain that out-specifies the `:not()` ladder).
+3. E2E drive via Playwright headless across: `/broker/portal`, `/broker/crm`, `/broker/listings`, `/developers-portal`, `/developers-portal/crm`, `/investor-dashboard`, `/owner`, `/`, `/projects`, `/news`, `/guides`. Screenshot each, scan eyebrows + KPI tiles + CTAs for black-on-emerald, patch any offender.
 
 ## Technical notes
+- All work is presentation-only. No schema, no edge function changes.
+- Reuses existing primitives: `PremiumSectionCard`, `SectionHeader`, `IconTile`, `NextBestActionCard`, `ConciergeGreeting`, `.jj-section-eyebrow`, `.jj-pill-emerald-metallic`.
+- New tiny primitive: `CrmKanbanColumn` + `CrmLeadCard` shared by broker and developer CRMs (in `src/components/crm/`).
+- Specificity-raise for `.jj-section-eyebrow` lives at the end of `src/index.css` (no new file).
+- Verification: Playwright screenshots saved under `/tmp/browser/crm-pass/` per route.
 
-- Touch points: `src/index.css` (consolidation), `src/components/ui/*` (Button, Badge, Card, DropdownMenu, Select, Popover), `src/components/ui/ds/*` (HeaderControl, SidebarItem, JbjAvatar, NotificationBadge, FAQAccordion), `src/components/layout/GlobalVerticalNav.tsx`, `src/components/layout/HorizontalUtilityBar.tsx`, careers / market-intel / home section components, AI tools registry (`published` flag filter on public query).
-- No business-logic changes outside the AI-tools `published` filter (required to satisfy the "hide unpublished tools" rule).
-- Validation harness: Playwright scripts under `/tmp/browser/global-audit/<phase>/` writing PNGs to `/mnt/documents/global-audit/<phase>/`.
-- Each phase ends with: (a) build green, (b) screenshots captured, (c) pass/fail table, (d) explicit "ready for next phase" note — no phase skipping.
-
-If you approve, I will start Phase 1 immediately and report back with screenshots before moving to Phase 2.
+## Out of scope
+- No backend, schema, edge function, RLS, or data model changes.
+- No new features beyond presentation parity.
+- Owner portal restyle (already done in earlier passes) — only contrast fixes here.
