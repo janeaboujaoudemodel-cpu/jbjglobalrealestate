@@ -508,7 +508,7 @@ export default function BrokerCRM() {
                         <button
                           key={l.id}
                           type="button"
-                          onClick={() => setLeadHub(l)}
+                          onClick={() => setHubLead(l)}
                           className="jj-hover-emerald w-full text-left rounded-lg bg-white border border-[#B89555]/25 px-3 py-2.5 focus:outline-none transition-shadow hover:shadow-[0_8px_20px_-14px_rgba(6,78,59,0.35)]"
                         >
                           <div className="flex items-center gap-2">
