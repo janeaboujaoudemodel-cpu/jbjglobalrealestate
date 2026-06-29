@@ -125,12 +125,24 @@ describe("CRM layout regression — no horizontal overflow", () => {
           const offenders = await page.evaluate((tolerance) => {
             const vw = document.documentElement.clientWidth;
             const out: Array<{ tag: string; cls: string; right: number; width: number }> = [];
+            const isScrollable = (el: Element) => {
+              const s = window.getComputedStyle(el);
+              return s.overflowX === "auto" || s.overflowX === "scroll" || s.overflow === "auto" || s.overflow === "scroll";
+            };
+            const hasScrollableAncestor = (el: Element) => {
+              let p: Element | null = el.parentElement;
+              while (p && p !== document.body) {
+                if (isScrollable(p)) return true;
+                p = p.parentElement;
+              }
+              return false;
+            };
             const nodes = document.querySelectorAll<HTMLElement>("main *, [data-crm] *");
             nodes.forEach((el) => {
               const style = window.getComputedStyle(el);
               if (style.position === "fixed" || style.position === "absolute") return;
-              if (style.overflowX === "auto" || style.overflowX === "scroll") return;
               if (style.display === "none" || style.visibility === "hidden") return;
+              if (isScrollable(el) || hasScrollableAncestor(el)) return;
               const r = el.getBoundingClientRect();
               if (r.width === 0) return;
               if (r.right - vw > tolerance) {
