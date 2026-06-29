@@ -46,6 +46,4 @@ export default function OwnerRedirectGuard({ children }: { children: ReactNode }
 
   const target = location.pathname.startsWith("/broker/crm") ? "/owner/crm" : "/owner";
   return <Navigate to={target} replace />;
-
-  return <>{children}</>;
 }
