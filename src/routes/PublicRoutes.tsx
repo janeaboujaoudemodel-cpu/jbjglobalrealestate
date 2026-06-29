@@ -17,6 +17,7 @@ import { toolThemes } from "@/components/tools/toolThemes";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
+const MyVault = lazy(() => import("@/pages/MyVault"));
 const PropertiesReelly = lazy(() => import("@/pages/PropertiesReelly"));
 const Properties = lazy(() => import("@/pages/Properties"));
 const ProjectDetail = lazy(() => import("@/pages/ProjectDetail"));
