@@ -454,22 +454,7 @@ export default function BrokerDashboardLanding() {
         </PremiumCard>
 
         <div className="lg:col-span-2 space-y-4 md:space-y-6">
-          <PremiumCard>
-            <SectionHeader icon={Brain} eyebrow="JBJ Intelligence" title="Smart next action" />
-            <p className="text-[13px] text-[#1A1A1A]/75 leading-[1.7]">
-              Your assistant suggests the highest-priority follow-up
-              based on lead freshness, last contact, and pipeline stage.
-            </p>
-            <Link
-              to="/broker/ai"
-              data-surface="emerald"
-              data-emerald-ok="button"
-              className="jj-surface-emerald mt-5 inline-flex items-center gap-2 h-10 px-4 rounded-xl text-xs font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-all duration-300"
-            >
-              <Sparkles className="h-3.5 w-3.5" strokeWidth={2.2} />
-              <span>Open assistant</span>
-            </Link>
-          </PremiumCard>
+          <NextBestActionCard />
 
           <PremiumCard>
             <SectionHeader
