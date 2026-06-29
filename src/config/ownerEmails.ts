@@ -11,7 +11,22 @@ export const OWNER_EMAILS: string[] = [
   "infoo.jane@gmail.com",
 ];
 
+/**
+ * The single email allowed to open the Owner back end.
+ *
+ * Keep OWNER_EMAILS above as the broader alias list used for CRM filtering and
+ * duplicate-prevention. Do NOT use that alias list for route/admin access.
+ */
+export const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
+
+export const OWNER_BACKEND_EMAILS: string[] = [PRIMARY_OWNER_EMAIL];
+
 export const OWNER_EMAILS_LC = OWNER_EMAILS.map((e) => e.toLowerCase());
+
+export const OWNER_BACKEND_EMAILS_LC = OWNER_BACKEND_EMAILS.map((e) => e.toLowerCase());
 
 export const isOwnerEmail = (email?: string | null) =>
   !!email && OWNER_EMAILS_LC.includes(email.toLowerCase().trim());
+
+export const isOwnerBackendEmail = (email?: string | null) =>
+  !!email && OWNER_BACKEND_EMAILS_LC.includes(email.toLowerCase().trim());
