@@ -12,6 +12,37 @@ import type { SearchItem } from "@/config/globalSearchIndex";
 import { SafeImage } from "@/components/SafeImage";
 import { IconTile } from "@/components/ui/icon-tile";
 import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
+import useDisplayFirstName from "@/hooks/useDisplayFirstName";
+import { Inbox, ListChecks, Bell, CalendarClock } from "lucide-react";
+
+// Per-mode "prime shortcuts" — the user's most-used daily destinations.
+// Surfaced as "{FirstName}'s Shortcuts" in the search modal for every signed-in user.
+const PRIME_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
+  investor: [
+    { label: "My Dashboard", route: "/investor-dashboard", icon: LayoutDashboard },
+    { label: "Favorites", route: "/favorites", icon: Heart },
+    { label: "Inbox", route: "/my-dashboard#inbox", icon: Inbox },
+    { label: "My Tasks", route: "/my-dashboard#tasks", icon: ListChecks },
+    { label: "Notifications", route: "/my-dashboard#notifications", icon: Bell },
+    { label: "My Calendar", route: "/my-calendar", icon: CalendarClock },
+  ],
+  broker: [
+    { label: "My Dashboard", route: "/broker-dashboard", icon: LayoutDashboard },
+    { label: "My Listings", route: "/broker/portal", icon: Building2 },
+    { label: "Broker CRM", route: "/crm", icon: Users },
+    { label: "Email Inbox", route: "/my-dashboard#inbox", icon: Mail },
+    { label: "My Tasks", route: "/my-dashboard#tasks", icon: ListChecks },
+    { label: "My Calendar", route: "/my-calendar", icon: CalendarClock },
+  ],
+  developer: [
+    { label: "My Dashboard", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "My Projects", route: "/developers-portal", icon: Building2 },
+    { label: "Submit Project", route: "/developers-portal/new-project", icon: Sparkles },
+    { label: "Inbox", route: "/my-dashboard#inbox", icon: Inbox },
+    { label: "My Tasks", route: "/my-dashboard#tasks", icon: ListChecks },
+    { label: "My Calendar", route: "/my-calendar", icon: CalendarClock },
+  ],
+};
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
