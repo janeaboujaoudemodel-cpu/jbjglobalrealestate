@@ -883,20 +883,14 @@ export default function InvestorDashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="border-[hsl(36,40%,70%)]/20">
-                <CardHeader>
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Listing Submission Approvals
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {submittedListings.length === 0 ? (
-                    <div className="text-center py-8">
-                      <Shield className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
-                      <p className="text-sm font-semibold text-foreground">No listings submitted for approval</p>
-                      <p className="text-xs text-muted-foreground mt-1">Pending approval status only appears after you submit a listing.</p>
-                    </div>
-                  ) : (
+              {submittedListings.length > 0 && (
+                <Card className="border-[hsl(36,40%,70%)]/20">
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Listing Submission Approvals
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
                     <div className="space-y-3">
                       {submittedListings.map((listing) => {
                         const approved = /approved|live|published/i.test(`${listing.approvalStatus} ${listing.status}`);
@@ -914,9 +908,9 @@ export default function InvestorDashboard() {
                         );
                       })}
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              )}
             </motion.div>
           </TabsContent>
 
