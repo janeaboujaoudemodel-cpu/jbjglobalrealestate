@@ -6,6 +6,8 @@ import {
   ArrowRight, Plus, Phone, Brain, Sparkles, Activity, ChevronRight, Briefcase,
   ChevronDown, User as UserIcon, Settings as SettingsIcon, LogOut,
 } from "lucide-react";
+import ConciergeGreeting from "@/components/broker-portal/ConciergeGreeting";
+import NextBestActionCard from "@/components/broker-portal/NextBestActionCard";
 import { IconTile, type IconTileTone } from "@/components/ui/icon-tile";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
