@@ -575,17 +575,15 @@ export default function InvestorDashboard() {
                       style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                     >
                       <Icon
-                        data-no-contrast-guard
                         className="jj-investor-tab-ico w-3.5 h-3.5 hidden sm:inline-block transition-colors"
-                        stroke={active ? "#FFFFFF" : "#1A1A1A"}
+                        stroke="currentColor"
                         style={{ color: active ? "#FFFFFF" : "#1A1A1A" }}
                       />
                       <span
-                        data-no-contrast-guard
                         className="jj-investor-tab-label"
                         style={{
-                          color: active ? "#FFFFFF" : undefined,
-                          WebkitTextFillColor: active ? "#FFFFFF" : undefined,
+                          color: active ? "#FFFFFF" : "#1A1A1A",
+                          WebkitTextFillColor: active ? "#FFFFFF" : "#1A1A1A",
                         }}
                       >
                         {label}
