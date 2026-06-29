@@ -115,7 +115,7 @@ const mapDbCalendarEvent = (event: any): InvestorCalendarEvent => {
 export default function InvestorDashboard() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, loading: authLoading } = useAuth();
+  const { user, isOwner, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "dashboard");
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
