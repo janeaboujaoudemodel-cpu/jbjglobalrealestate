@@ -481,9 +481,7 @@ export default function BrokerDashboardLanding() {
               </div>
             ) : meetingsToday === 0 ? (
               <div className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] px-4 py-6 text-center shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]">
-                <div className="mx-auto w-10 h-10 rounded-xl bg-[#EFE6D6] border border-[#B89555]/45 grid place-items-center mb-3">
-                  <Calendar className="h-4 w-4 text-[#1A1A1A]" strokeWidth={2} />
-                </div>
+                <IconTile icon={Calendar} tone="emerald" size="md" className="mx-auto mb-3 !h-11 !w-11 !rounded-xl" iconClassName="!h-5 !w-5" />
                 <p className="text-sm font-semibold text-[#1A1A1A]">No meetings today</p>
                 <p className="text-[11.5px] text-[#1A1A1A]/65 mt-1 leading-relaxed">
                   Your calendar is clear. New bookings will appear here automatically.

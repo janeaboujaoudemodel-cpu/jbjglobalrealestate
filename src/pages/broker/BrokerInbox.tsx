@@ -1,5 +1,6 @@
 import { Inbox } from "lucide-react";
 import { Link } from "react-router-dom";
+import BrokerEmptyState from "@/components/broker-portal/BrokerEmptyState";
 
 export default function BrokerInbox() {
   return (
@@ -11,16 +12,17 @@ export default function BrokerInbox() {
         </p>
       </header>
 
-      <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 p-12 text-center">
-        <Inbox className="h-10 w-10 mx-auto text-[#1A1A1A]/40 mb-3" />
-        <h2 className="text-sm font-semibold">Inbox coming online</h2>
-        <p className="text-xs text-[#1A1A1A]/70 mt-2 max-w-md mx-auto">
-          Your messages will appear here once your account is wired into the team chat
-          and email channels. In the meantime, use{" "}
-          <Link className="underline" to="/broker/crm?tab=notes">Notes</Link> and{" "}
-          <Link className="underline" to="/broker/crm?tab=tasks">Tasks</Link> to capture follow-ups.
-        </p>
-      </div>
+      <BrokerEmptyState
+        icon={<Inbox className="h-6 w-6" />}
+        title="Inbox coming online"
+        description="Your messages will appear here once your account is wired into the team chat and email channels."
+        action={(
+          <div className="text-xs text-[#1A1A1A]/70">
+            Use <Link className="underline decoration-[#B89555]/70 underline-offset-4" to="/broker/crm?tab=notes">Notes</Link> and{" "}
+            <Link className="underline decoration-[#B89555]/70 underline-offset-4" to="/broker/crm?tab=tasks">Tasks</Link> to capture follow-ups.
+          </div>
+        )}
+      />
     </div>
   );
 }
