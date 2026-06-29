@@ -1377,7 +1377,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-no-contrast-guard
                     className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(isActive)} />
+                      <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1411,7 +1411,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       }}
                       className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(isActive)} />
+                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1433,7 +1433,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(false)} />
+                    <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1446,7 +1446,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(false)} />
+                    <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
