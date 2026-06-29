@@ -20901,3 +20901,26 @@ html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-sur
   filter: none !important;
   mix-blend-mode: normal !important;
 }
+
+/* PASS 129 — absolute sitewide bright-card lock, with emerald CTAs restored after. */
+html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="cream"], [data-surface="raised"], [data-studio-surface="champagne"], .surface-champagne, .surface-gold, .surface-pearl, .surface-cream, .surface-raised, .jj-card-champagne, .jj-surface-champagne, .jj-layer-2, .jj-layer-active, .jj-icon-tile-champagne):not(#pass129-a):not(#pass129-b):not(#pass129-c):not(#pass129-d):not(#pass129-e):not(#pass129-f):not(#pass129-g):not(#pass129-h):not(#pass129-i):not(#pass129-j):not(#pass129-k):not(#pass129-l)
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-on-dark], [data-hero-dark], .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-navy-cta, .jj-emerald-metallic, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-emerald-action], [data-emerald-filled], [data-emerald-icon-surface], [role="tab"][data-state="active"])) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="cream"], [data-surface="raised"], [data-studio-surface="champagne"], .surface-champagne, .surface-gold, .surface-pearl, .surface-cream, .surface-raised, .jj-card-champagne, .jj-surface-champagne, .jj-layer-2, .jj-layer-active):not(#pass129-cta-a):not(#pass129-cta-b):not(#pass129-cta-c):not(#pass129-cta-d):not(#pass129-cta-e):not(#pass129-cta-f)
+  :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-navy-cta, .jj-emerald-metallic, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-emerald-action], [data-emerald-filled], [data-emerald-icon-surface], [role="tab"][data-state="active"]),
+html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="cream"], [data-surface="raised"], [data-studio-surface="champagne"], .surface-champagne, .surface-gold, .surface-pearl, .surface-cream, .surface-raised, .jj-card-champagne, .jj-surface-champagne, .jj-layer-2, .jj-layer-active):not(#pass129-cta-a):not(#pass129-cta-b):not(#pass129-cta-c):not(#pass129-cta-d):not(#pass129-cta-e):not(#pass129-cta-f)
+  :is([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-navy-cta, .jj-emerald-metallic, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-emerald-action], [data-emerald-filled], [data-emerald-icon-surface], [role="tab"][data-state="active"])
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+}
