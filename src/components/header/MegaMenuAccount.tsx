@@ -201,6 +201,22 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     } catch { return []; }
   }, []);
 
+  const dashboardHref = ownerBackendActive
+    ? '/owner'
+    : mode === 'broker'
+      ? '/broker-dashboard'
+    : mode === 'developer'
+      ? '/developers-portal'
+      : '/investor-dashboard';
+  const dashboardLabel = ownerBackendActive
+    ? t('account.ownerDashboard', 'Owner Dashboard')
+    : mode === 'broker'
+      ? 'Broker Dashboard'
+    : mode === 'developer'
+      ? 'Developer Portal'
+      : 'Investor Dashboard';
+  const dashboardDescription = ownerBackendActive ? t('account.commandCenter', 'Command Center') : t('account.myDashboardDesc', 'Your personalized dashboard');
+
   const quickSearchResults = useMemo(() => {
     const q = searchQuery.trim();
 
@@ -239,22 +255,6 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     const unique = merged.filter((item, idx, arr) => arr.findIndex((x) => x.path === item.path) === idx);
     return unique.slice(0, 12);
   }, [searchQuery, ownerBackendActive, isOwner, hasCRMAccess, hasListingAdminAccess, mode, user, dashboardHref, dashboardLabel]);
-
-  const dashboardHref = ownerBackendActive
-    ? '/owner'
-    : mode === 'broker'
-      ? '/broker-dashboard'
-    : mode === 'developer'
-      ? '/developers-portal'
-      : '/investor-dashboard';
-  const dashboardLabel = ownerBackendActive
-    ? t('account.ownerDashboard', 'Owner Dashboard')
-    : mode === 'broker'
-      ? 'Broker Dashboard'
-    : mode === 'developer'
-      ? 'Developer Portal'
-      : 'Investor Dashboard';
-  const dashboardDescription = ownerBackendActive ? t('account.commandCenter', 'Command Center') : t('account.myDashboardDesc', 'Your personalized dashboard');
 
   const accountLinks = [
     { href: dashboardHref, label: dashboardLabel, icon: LayoutDashboard, description: dashboardDescription, badge: 0 },
