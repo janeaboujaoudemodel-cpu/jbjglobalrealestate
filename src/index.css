@@ -19782,36 +19782,20 @@ html body :is(
   [data-hero-dark]
 ):not(#jj-dark-white-lock)
   :is(
-    *, span, p, h1, h2, h3, h4, h5, h6, strong, em, b, i, small, label, a, button, li,
-    svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]
-  ):not(#jj-dark-white-lock-child):not(:where(
-    [data-surface="champagne"] *,
-    [data-surface="champagne"],
-    [data-surface="cream"] *,
-    [data-surface="cream"],
-    [data-surface="raised"] *,
-    [data-surface="raised"],
-    [data-surface="light"] *,
-    [data-surface="light"],
-    .jj-card-champagne *,
-    .jj-card-champagne,
-    .jj-surface-champagne *,
-    .jj-surface-champagne,
-    .bg-white *,
-    .bg-white,
-    [class*="bg-[#FDFBF7]"] *,
-    [class*="bg-[#FDFBF7]"],
-    [class*="bg-[#F7F2EA]"] *,
-    [class*="bg-[#F7F2EA]"],
-    [class*="bg-[#EFE6D6]"] *,
-    [class*="bg-[#EFE6D6]"],
-    [class*="bg-champagne"] *,
-    [class*="bg-champagne"]
-  )) {
+    h1, h2, h3, h4, h5, h6, p, span, a, button, li, strong, em, b, i, small, label, dt, dd, th, td, figcaption, blockquote,
+    [class*="text-[#1A1A1A]"],
+    [class*="text-[#0A0A0A]"],
+    [class~="text-black"],
+    [class~="text-neutral-900"],
+    [class~="text-zinc-900"],
+    [class~="text-slate-900"],
+    [class~="text-gray-900"]
+  ):not(#jj-dark-white-lock-child):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
+/* SVG icons inside dark surfaces — force white stroke. */
 html body :is(
   [class*="bg-[#1A1A1A]"],
   [class*="bg-[#0F172A]"],
@@ -19828,20 +19812,9 @@ html body :is(
   [data-surface="ink"],
   [data-hero-dark]
 ):not(#jj-dark-white-lock)
-  :is(svg, path, circle, rect, line, polyline, polygon):not(:where(
-    [data-surface="champagne"] *,
-    [data-surface="cream"] *,
-    [data-surface="raised"] *,
-    [data-surface="light"] *,
-    .jj-card-champagne *,
-    .jj-surface-champagne *,
-    .bg-white *,
-    [class*="bg-[#FDFBF7]"] *,
-    [class*="bg-[#F7F2EA]"] *,
-    [class*="bg-[#EFE6D6]"] *,
-    [class*="bg-champagne"] *
-  )) {
+  :is(svg, path, circle, rect, line, polyline, polygon):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
   stroke: #FFFFFF !important;
   stroke-opacity: 1 !important;
 }
+
 
