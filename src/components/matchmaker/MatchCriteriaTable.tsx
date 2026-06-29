@@ -504,11 +504,13 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
               >
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span
-                    className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
-                      style={{ background: verdictStyles.match.bg, border: `1px solid ${verdictStyles.match.ring}`, color: verdictStyles.match.fg }}
+                    data-surface="emerald"
+                    data-no-contrast-guard
+                    className="allow-white inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
+                    style={{ backgroundImage: "var(--jj-emerald-ombre)", border: "1px solid rgba(184,149,85,0.55)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                   >
-                    <Check className="w-3 h-3" style={{ stroke: verdictStyles.match.fg }} />
-                    {t.match} matched
+                    <Check className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{t.match} matched</span>
                   </span>
                   {t.close > 0 && (
                     <span
