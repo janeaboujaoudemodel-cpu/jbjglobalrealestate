@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import InvestorDocumentVault from "@/components/investor/InvestorDocumentVault";
 import { useMyEventInvitations } from "@/hooks/useEventManagement";
+import { getUserInitials } from "@/lib/userInitials";
 import { toast } from "sonner";
 import {
   LayoutDashboard, Building2, FileText, TrendingUp, Bell, User, Heart, Search, ListChecks,
@@ -114,7 +115,7 @@ const mapDbCalendarEvent = (event: any): InvestorCalendarEvent => {
 export default function InvestorDashboard() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, loading: authLoading } = useAuth();
+  const { user, isOwner, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "dashboard");
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -464,87 +465,127 @@ export default function InvestorDashboard() {
   }
 
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "Investor";
+  const userInitials = getUserInitials({ displayName: profile?.full_name || displayName, email: user?.email, isOwner });
   const nextBooking = [...calendarEvents]
     .filter((event) => new Date(`${event.date}T${event.time}:00+04:00`).getTime() >= Date.now() - 60 * 60 * 1000)
     .sort((a, b) => new Date(`${a.date}T${a.time}:00+04:00`).getTime() - new Date(`${b.date}T${b.time}:00+04:00`).getTime())[0];
   const openTaskCount = tasks.filter((task) => !task.done).length;
+  const hasInventory = submittedListings.length > 0;
+
+  // Reusable champagne→emerald hover tile (matches search dropdown style)
+  const quickTileBase =
+    "group rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] p-3 text-left transition-all duration-200 " +
+    "hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-12px_rgba(6,78,59,0.55)] " +
+    "hover:bg-[image:var(--jj-emerald-ombre)] hover:border-transparent";
+  const quickTileIcon =
+    "w-4 h-4 mb-2 text-[#064E3B] group-hover:text-white transition-colors";
+  const quickTileTitle =
+    "text-[10px] font-bold uppercase tracking-[0.06em] text-[#1A1A1A] group-hover:text-white truncate";
+  const quickTileSub =
+    "text-[10px] text-muted-foreground group-hover:text-white/85 truncate";
 
   return (
     <div data-backend-portal="investor" className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,28%,94%)] to-[hsl(36,22%,88%)]">
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-6xl mx-auto px-4 pt-10 md:pt-12 pb-8">
         <Card className="mb-5 overflow-hidden border-[hsl(36,40%,70%)]/35 bg-gradient-to-br from-[#FFFCF6] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_18px_45px_-32px_rgba(26,26,26,0.65)]">
           <CardContent className="p-4 md:p-5">
-            <div className="grid lg:grid-cols-[1.25fr_1fr] gap-4 items-center">
+            <div className="space-y-4">
               <div className="flex items-center gap-3 min-w-0">
-                <Avatar className="w-12 h-12 border-2 border-[#B89555]/45 shadow-sm">
+                <Avatar className="w-12 h-12 border-2 border-[#B89555]/45 shadow-sm" data-surface="emerald" data-no-contrast-guard>
                   <AvatarImage src={profile?.avatar_url || ""} />
-                  <AvatarFallback className="bg-[image:var(--jj-emerald-ombre)] text-white font-bold">
-                    {displayName.slice(0, 2).toUpperCase()}
+                  <AvatarFallback
+                    data-surface="emerald"
+                    data-no-contrast-guard
+                    data-emerald-ok
+                    className="allow-white bg-[image:var(--jj-emerald-ombre)] !text-white font-bold"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                  >
+                    {userInitials}
                   </AvatarFallback>
                 </Avatar>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#064E3B]">Investor portal command center</p>
                   <h1 className="text-xl md:text-2xl font-bold text-[#1A1A1A] truncate">Welcome, {displayName}</h1>
                   <p className="text-xs text-muted-foreground">Manage inventory, approvals, documents, bookings, reminders, and JBJ consultant sharing in one place.</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <button onClick={() => setActiveTab("calendar")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <Calendar className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Calendar</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{nextBooking ? `${nextBooking.time} · ${nextBooking.title}` : "No bookings"}</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <button onClick={() => setActiveTab("calendar")} className={quickTileBase}>
+                  <Calendar className={quickTileIcon} />
+                  <p className={quickTileTitle}>Calendar</p>
+                  <p className={quickTileSub}>{nextBooking ? `${nextBooking.time} · ${nextBooking.title}` : "No bookings"}</p>
                 </button>
-                <button onClick={() => setActiveTab("tasks")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <ClipboardList className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Task notes</p>
-                  <p className="text-[10px] text-muted-foreground">{openTaskCount} open</p>
+                <button onClick={() => setActiveTab("tasks")} className={quickTileBase}>
+                  <ClipboardList className={quickTileIcon} />
+                  <p className={quickTileTitle}>Tasks</p>
+                  <p className={quickTileSub}>{openTaskCount} open</p>
                 </button>
-                <button onClick={() => setActiveTab("assistant")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <Bot className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">AI assistant</p>
-                  <p className="text-[10px] text-muted-foreground">Book + remind</p>
+                <button onClick={() => setActiveTab("assistant")} className={quickTileBase}>
+                  <Bot className={quickTileIcon} />
+                  <p className={quickTileTitle}>Assistant</p>
+                  <p className={quickTileSub}>Book + remind</p>
                 </button>
-                <button onClick={handleShareInventory} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <Link2 className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Share links</p>
-                  <p className="text-[10px] text-muted-foreground">{submittedListings.length} listings</p>
+                <button onClick={hasInventory ? handleShareInventory : () => setActiveTab("properties")} className={quickTileBase}>
+                  <Link2 className={quickTileIcon} />
+                  <p className={quickTileTitle}>Share</p>
+                  <p className={quickTileSub}>{hasInventory ? `${submittedListings.length} listings` : "Register first"}</p>
                 </button>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Tabs */}
+
+
+        {/* Tabs — custom segmented strap (bypasses legacy TabsList CSS that crushed widths) */}
+        {(() => {
+          const TABS = [
+            { v: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+            { v: "properties", label: "My Properties", Icon: Building2 },
+            { v: "documents", label: "Documents", Icon: FileText },
+            { v: "profile", label: "Update Profile", Icon: User },
+            { v: "inbox", label: "Inbox", Icon: Mail },
+            { v: "alerts", label: "Alerts", Icon: Bell },
+            { v: "calendar", label: "Calendar", Icon: Calendar },
+            { v: "tasks", label: "Tasks", Icon: ClipboardList },
+            { v: "assistant", label: "AI Assistant", Icon: Bot },
+          ] as const;
+          return (
+            <div className="mb-6 -mx-1 overflow-x-auto jj-scrollbar-gold">
+              <div
+                role="tablist"
+                data-no-contrast-guard
+                className="flex flex-nowrap gap-1.5 p-1.5 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-max min-w-full"
+              >
+                {TABS.map(({ v, label, Icon }) => {
+                  const active = activeTab === v;
+                  return (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setActiveTab(v)}
+                      data-no-contrast-guard
+                      className={`shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[11px] md:text-xs font-semibold transition-colors ${
+                        active
+                          ? "bg-[image:var(--jj-emerald-ombre)] !text-white shadow-md"
+                          : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      }`}
+                      style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+                    >
+                      <Icon className={`w-3.5 h-3.5 hidden sm:inline-block ${active ? "text-white" : ""}`} />
+                      <span>{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="flex flex-wrap gap-1.5 bg-transparent p-0 mb-6 h-auto">
-            <TabsTrigger value="dashboard" className={TAB_STYLE}>
-              <LayoutDashboard className="w-3.5 h-3.5 mr-1 hidden md:block" /> Dashboard
-            </TabsTrigger>
-            <TabsTrigger value="properties" className={TAB_STYLE}>
-              <Building2 className="w-3.5 h-3.5 mr-1 hidden md:block" /> My Properties
-            </TabsTrigger>
-            <TabsTrigger value="documents" className={TAB_STYLE}>
-              <FileText className="w-3.5 h-3.5 mr-1 hidden md:block" /> Documents
-            </TabsTrigger>
-            <TabsTrigger value="profile" className={TAB_STYLE}>
-              <User className="w-3.5 h-3.5 mr-1 hidden md:block" /> Update Profile
-            </TabsTrigger>
-            <TabsTrigger value="inbox" className={TAB_STYLE}>
-              <Mail className="w-3.5 h-3.5 mr-1 hidden md:block" /> Inbox
-            </TabsTrigger>
-            <TabsTrigger value="alerts" className={TAB_STYLE}>
-              <Bell className="w-3.5 h-3.5 mr-1 hidden md:block" /> Alerts
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className={TAB_STYLE}>
-              <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" /> Calendar
-            </TabsTrigger>
-            <TabsTrigger value="tasks" className={TAB_STYLE}>
-              <ClipboardList className="w-3.5 h-3.5 mr-1 hidden md:block" /> Tasks
-            </TabsTrigger>
-            <TabsTrigger value="assistant" className={TAB_STYLE}>
-              <Bot className="w-3.5 h-3.5 mr-1 hidden md:block" /> AI Assistant
-            </TabsTrigger>
-          </TabsList>
+
+
+
+
 
           {/* ── DASHBOARD ── */}
           <TabsContent value="dashboard">
@@ -600,10 +641,11 @@ export default function InvestorDashboard() {
               </div>
 
               <div className="grid lg:grid-cols-[1.4fr_1fr] gap-4">
-                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA]">
+                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA] overflow-hidden">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Bot className="w-4 h-4 text-[hsl(36,40%,70%)]" /> AI Calendar Assistant
+                    <CardTitle className="text-base flex items-center gap-2 flex-wrap">
+                      <Bot className="w-4 h-4 text-[hsl(36,40%,70%)] shrink-0" />
+                      <span className="min-w-0 break-words">AI Full Schedule &amp; Task Assistant</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -618,20 +660,49 @@ export default function InvestorDashboard() {
                     </Button>
                   </CardContent>
                 </Card>
-                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA]">
+                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA] overflow-hidden">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Link2 className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Inventory Sharing
+                    <CardTitle className="text-base flex items-center gap-2 flex-wrap">
+                      <Link2 className="w-4 h-4 text-[hsl(36,40%,70%)] shrink-0" />
+                      <span className="min-w-0 break-words">Share inventory with JBJ</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <p className="text-sm text-muted-foreground">Approved listings generate share links automatically. Send your inventory list to your JBJ consultant when ready.</p>
-                    <Button onClick={handleShareInventory} variant="outline" className="w-full border-[hsl(36,40%,70%)]/40 text-[#064E3B]">
-                      Share inventory with JBJ consultant
-                    </Button>
+                    {hasInventory ? (
+                      <>
+                        <p className="text-sm text-muted-foreground">
+                          Approved listings generate share links automatically. Send your inventory list to your JBJ consultant when ready.
+                        </p>
+                        <Button onClick={handleShareInventory} variant="outline" className="w-full border-[hsl(36,40%,70%)]/40 text-[#064E3B]">
+                          Share inventory with JBJ consultant
+                        </Button>
+                      </>
+                    ) : (
+                      <div className="rounded-xl border border-dashed border-[#B89555]/45 bg-[#FDFBF7] p-4 space-y-3">
+                        <p className="text-sm font-semibold text-[#1A1A1A]">You haven't connected any inventory yet</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          Register your inventory first. As an investor, tell us:
+                        </p>
+                        <ul className="text-xs text-[#1A1A1A] space-y-1 pl-4 list-disc marker:text-[#B89555]">
+                          <li>Where in Dubai did you buy?</li>
+                          <li>Which units are for sale, and which are for rent?</li>
+                          <li>Your selling / rental price</li>
+                          <li>Title deed and full documents for each unit</li>
+                        </ul>
+                        <p className="text-[11px] text-muted-foreground">Once registered &amp; approved, share links generate automatically.</p>
+                        <Button
+                          onClick={() => navigate("/list-your-property")}
+                          data-emerald-action="true"
+                          className="jj-cta-emerald w-full"
+                        >
+                          <Plus className="w-4 h-4 mr-2" /> Register my inventory
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>
+
 
               {/* Recent Activity */}
               <Card className="border-[hsl(36,40%,70%)]/20">
