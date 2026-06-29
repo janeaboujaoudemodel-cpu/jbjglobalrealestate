@@ -35337,6 +35337,223 @@ export type Database = {
           },
         ]
       }
+      vault_access_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          document_id: string | null
+          id: number
+          ip: unknown
+          meta: Json | null
+          owner_id: string
+          signed_url_expires_at: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          document_id?: string | null
+          id?: number
+          ip?: unknown
+          meta?: Json | null
+          owner_id: string
+          signed_url_expires_at?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          document_id?: string | null
+          id?: number
+          ip?: unknown
+          meta?: Json | null
+          owner_id?: string
+          signed_url_expires_at?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vault_access_log_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "vault_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vault_documents: {
+        Row: {
+          category: Database["public"]["Enums"]["vault_doc_category"]
+          created_at: string
+          display_name: string
+          doc_number_last4: string | null
+          doc_type: string | null
+          expiry_date: string | null
+          id: string
+          issue_date: string | null
+          issuing_country: string | null
+          mime_type: string | null
+          notes: string | null
+          sha256: string | null
+          size_bytes: number | null
+          storage_path: string
+          updated_at: string
+          user_id: string
+          verified: boolean
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["vault_doc_category"]
+          created_at?: string
+          display_name: string
+          doc_number_last4?: string | null
+          doc_type?: string | null
+          expiry_date?: string | null
+          id?: string
+          issue_date?: string | null
+          issuing_country?: string | null
+          mime_type?: string | null
+          notes?: string | null
+          sha256?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          updated_at?: string
+          user_id: string
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["vault_doc_category"]
+          created_at?: string
+          display_name?: string
+          doc_number_last4?: string | null
+          doc_type?: string | null
+          expiry_date?: string | null
+          id?: string
+          issue_date?: string | null
+          issuing_country?: string | null
+          mime_type?: string | null
+          notes?: string | null
+          sha256?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          updated_at?: string
+          user_id?: string
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
+      vault_investor_ranking: {
+        Row: {
+          last_calculated_at: string
+          property_count: number
+          rank_position: number | null
+          total_invested_aed: number
+          user_id: string
+          verified_count: number
+          vip_tier: Database["public"]["Enums"]["vault_vip_tier"]
+        }
+        Insert: {
+          last_calculated_at?: string
+          property_count?: number
+          rank_position?: number | null
+          total_invested_aed?: number
+          user_id: string
+          verified_count?: number
+          vip_tier?: Database["public"]["Enums"]["vault_vip_tier"]
+        }
+        Update: {
+          last_calculated_at?: string
+          property_count?: number
+          rank_position?: number | null
+          total_invested_aed?: number
+          user_id?: string
+          verified_count?: number
+          vip_tier?: Database["public"]["Enums"]["vault_vip_tier"]
+        }
+        Relationships: []
+      }
+      vault_properties: {
+        Row: {
+          area: string | null
+          bedrooms: number | null
+          created_at: string
+          developer_name: string | null
+          emirate: string | null
+          handover_date: string | null
+          id: string
+          project_name: string
+          purchase_date: string | null
+          purchase_price_aed: number
+          size_sqft: number | null
+          status: string
+          title_deed_doc_id: string | null
+          unit_number: string | null
+          updated_at: string
+          user_id: string
+          verified: boolean
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          area?: string | null
+          bedrooms?: number | null
+          created_at?: string
+          developer_name?: string | null
+          emirate?: string | null
+          handover_date?: string | null
+          id?: string
+          project_name: string
+          purchase_date?: string | null
+          purchase_price_aed: number
+          size_sqft?: number | null
+          status?: string
+          title_deed_doc_id?: string | null
+          unit_number?: string | null
+          updated_at?: string
+          user_id: string
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          area?: string | null
+          bedrooms?: number | null
+          created_at?: string
+          developer_name?: string | null
+          emirate?: string | null
+          handover_date?: string | null
+          id?: string
+          project_name?: string
+          purchase_date?: string | null
+          purchase_price_aed?: number
+          size_sqft?: number | null
+          status?: string
+          title_deed_doc_id?: string | null
+          unit_number?: string | null
+          updated_at?: string
+          user_id?: string
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vault_properties_title_deed_doc_id_fkey"
+            columns: ["title_deed_doc_id"]
+            isOneToOne: false
+            referencedRelation: "vault_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       verification_audit_log: {
         Row: {
           actor_user_id: string | null
@@ -39809,6 +40026,7 @@ export type Database = {
         Args: { p_transcript: string }
         Returns: string
       }
+      refresh_vault_ranking: { Args: never; Returns: undefined }
       rel_followup_due_sends: {
         Args: never
         Returns: {
@@ -40357,6 +40575,13 @@ export type Database = {
         | "Partially Verified"
         | "Not Verified"
       user_mode: "client" | "broker"
+      vault_doc_category:
+        | "identity"
+        | "property"
+        | "contract"
+        | "financial"
+        | "other"
+      vault_vip_tier: "bronze" | "silver" | "gold" | "platinum" | "diamond"
       vip_category:
         | "government_official"
         | "doctor"
@@ -41030,6 +41255,14 @@ export const Constants = {
         "Not Verified",
       ],
       user_mode: ["client", "broker"],
+      vault_doc_category: [
+        "identity",
+        "property",
+        "contract",
+        "financial",
+        "other",
+      ],
+      vault_vip_tier: ["bronze", "silver", "gold", "platinum", "diamond"],
       vip_category: [
         "government_official",
         "doctor",
