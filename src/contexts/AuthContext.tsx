@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback, ReactNode 
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 
 /**
  * Owner verification
@@ -55,6 +56,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const verifyOwner = useCallback(async (currentSession: Session | null): Promise<boolean> => {
     if (!currentSession?.access_token) {
+      return false;
+    }
+
+    // Absolute front-end lock: only the registered owner email may ever be
+    // treated as Owner. Role rows, cached flags, aliases, and mode selection
+    // cannot elevate any other account into the back end.
+    if (!isOwnerBackendEmail(currentSession.user?.email)) {
+      const userId = currentSession.user?.id;
+      try {
+        if (userId) localStorage.removeItem(`owner_v2_${userId}`);
+        sessionStorage.removeItem("owner_verified_once");
+      } catch { /* ignore */ }
+      setIsOwner(false);
+      setOwnerLoading(false);
+      setOwnerError(null);
       return false;
     }
 
