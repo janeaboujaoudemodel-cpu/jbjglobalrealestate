@@ -272,7 +272,7 @@ export default function MortgageParityPanel({
                   onChange={(e) => picker.set(e.target.value)}
                   data-no-contrast-guard
                   aria-label={`${picker.label} — choose UAE bank`}
-                  className="allow-white w-full appearance-none bg-transparent rounded-lg px-3 py-2.5 pr-9 text-sm font-semibold cursor-pointer outline-none"
+                  className={`${isNavy ? "allow-white " : ""}w-full appearance-none bg-transparent rounded-lg px-3 py-2.5 pr-9 text-sm font-semibold cursor-pointer outline-none`}
                   style={{
                     color: isNavy ? "#FFFFFF" : "#1A1A1A",
                     WebkitTextFillColor: isNavy ? "#FFFFFF" : "#1A1A1A",
@@ -369,7 +369,7 @@ export default function MortgageParityPanel({
           type="button"
           onClick={() => setShowSchedule((s) => !s)}
           data-no-contrast-guard
-          className="allow-white w-full rounded-xl px-4 py-3 flex items-center justify-between text-sm font-semibold"
+          className={`${isNavy ? "allow-white " : ""}w-full rounded-xl px-4 py-3 flex items-center justify-between text-sm font-semibold`}
           style={{ background: cardBg, border: cardBorder, color: isNavy ? "#FFFFFF" : "#1A1A1A" }}
         >
           <span>Amortization Schedule (yearly)</span>

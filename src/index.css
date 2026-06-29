@@ -20126,3 +20126,44 @@ html body #root :is([data-surface="emerald"], [data-emerald-action], [data-cta="
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================
+   PASS 117 — INLINE INK HONOUR LOCK (GLOBAL, SITEWIDE)
+   Some prior passes (PASS 105/106/107/110/115) match `.allow-white`
+   or generic emerald-fill keywords and force pure white text, even
+   on champagne/cream/light surfaces where the component author has
+   already opted out via [data-no-contrast-guard] and an inline
+   `color: #1A1A1A` / `color: rgb(26, 26, 26)` declaration.
+   This final pass uses the harmless triple-id `:not()` trick to
+   outrank any earlier !important rule, and ONLY targets elements
+   whose own inline style explicitly requests ink. It restores the
+   author's intent without touching any genuine emerald-on-dark CTA.
+   ============================================================ */
+html body :where([data-no-contrast-guard], .allow-white)[style*="#1A1A1A" i]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26, 26, 26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
+html body :where([data-no-contrast-guard], .allow-white)[style*="#0A0A0A" i]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+}
+
+html body :where([data-no-contrast-guard], .allow-white)[style*="#1A1A1A" i]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26, 26, 26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g),
+html body :where([data-no-contrast-guard], .allow-white)[style*="rgb(26,26,26)"]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) :where(span, p, strong, em, b, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+}
+
+/* Native <select>/<option>: many browsers paint the closed select using the
+   computed color of the SELECT element itself. Make sure data-no-contrast-guard
+   selects on light backgrounds always paint ink, regardless of any global
+   `.allow-white` force-white rule above. */
+html body select[data-no-contrast-guard]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour),
+html body select[data-no-contrast-guard]:not(#jj-ink-honour):not(#jj-ink-honour):not(#jj-ink-honour) option {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
