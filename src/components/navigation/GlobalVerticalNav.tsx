@@ -1346,20 +1346,21 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
 
-          {/* Section icons — inactive = champagne/ink, active = emerald/white */}
+          {/* Section icons — ALWAYS emerald tile with pure white glyph (active = brighter ring) */}
           <style>{`
             .jj-side-tile {
-              background: rgba(253,251,247,0.44) !important;
-              border: 1px solid rgba(184,149,85,0.16) !important;
-              color: #1A1A1A !important;
-              box-shadow: none !important;
+              background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+              background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+              border: 1px solid rgba(255,255,255,0.14) !important;
+              color: #FFFFFF !important;
+              box-shadow: 0 6px 14px -10px rgba(4,120,87,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
               filter: none !important;
-              transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease !important;
+              transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease !important;
             }
             .jj-side-tile svg,
-            .jj-side-tile svg * { color: #1A1A1A !important; stroke: #1A1A1A !important; opacity: 1 !important; transition: none !important; }
-            .jj-side-tile:hover { background: rgba(216,204,178,0.72) !important; border-color: rgba(184,149,85,0.34) !important; filter: none !important; transform: none !important; box-shadow: 0 8px 18px -16px rgba(26,26,26,0.28) !important; }
-            .jj-side-tile.is-active { background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important; border-color: transparent !important; color: #FFFFFF !important; box-shadow: 0 10px 22px -11px rgba(4,120,87,0.82), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 14px rgba(0,0,0,0.22) !important; }
+            .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; transition: none !important; }
+            .jj-side-tile:hover { border-color: rgba(184,149,85,0.55) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
+            .jj-side-tile.is-active { border-color: #B89555 !important; box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.45) !important; }
             .jj-side-tile.is-active svg,
             .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
