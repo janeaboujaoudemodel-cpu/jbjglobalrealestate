@@ -292,6 +292,17 @@ export default function ReportPreviewModal({
             color: #064E3B !important;
             -webkit-text-fill-color: #064E3B !important;
           }
+          /* LIVE PREVIEW — lock pure white on any emerald/dark surface inside the engine */
+          html body [data-aihf-preview] [data-on-dark],
+          html body [data-aihf-preview] [data-on-dark] *,
+          html body [data-aihf-preview] [data-surface="emerald"],
+          html body [data-aihf-preview] [data-surface="emerald"] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          html body [data-aihf-preview] [data-aihf-scope-dot] {
+            background: #FFFFFF !important;
+          }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
           <DialogTitle className="text-xl font-bold" style={{ color: C.ink }}>
