@@ -208,7 +208,7 @@ export default function BrokerLearning() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 items-stretch w-full">
             <KpiCard tone="gold" icon={BookOpen} label="Library books" value={books.length || "—"} />
-            <KpiCard tone="blue" icon={GraduationCap} label="Training modules" value={TRAINING.length} />
+            <KpiCard tone="emerald" icon={GraduationCap} label="Training modules" value={TRAINING.length} />
             <KpiCard
               tone="amber"
               icon={Award}
@@ -292,20 +292,43 @@ export default function BrokerLearning() {
 
           <Card className="bg-[#F7F2EA] border-[#B89555]/30">
             <CardContent className="p-6 md:p-8">
-              <h3 className="text-[#1A1A1A] text-lg font-bold mb-5 text-center">Golden Rules for Market Conversations</h3>
+              <h3 className="text-[#1A1A1A] text-lg font-bold mb-6 text-center">Golden Rules for Market Conversations</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
                   { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
                   { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
                   { n: 3, t: "Cite Sources",            d: "Always reference Open Data origins." },
-                ].map(({ n, t, d }) => (
-                  <div key={n} className="text-center">
-                    <div className="w-11 h-11 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 grid place-items-center mx-auto mb-3">
-                      <span className="text-[#1A1A1A] font-bold">{n}</span>
+                ].map(({ n, t, d }, i) => (
+                  <motion.div
+                    key={n}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ delay: i * 0.18, duration: 0.5, ease: "easeOut" }}
+                    className="text-center"
+                  >
+                    <div
+                      data-surface="emerald"
+                      data-emerald-ok="icon"
+                      className="jj-surface-emerald relative overflow-hidden w-14 h-14 rounded-full grid place-items-center mx-auto mb-3 shadow-[0_10px_24px_-12px_rgba(6,78,59,0.6)] ring-1 ring-[#B89555]/40"
+                    >
+                      <span className="text-white font-bold text-lg leading-none tabular-nums" style={{ color: "#FFFFFF" }}>{n}</span>
+                      <motion.span
+                        aria-hidden
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background:
+                            "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%)",
+                        }}
+                        initial={{ x: "-120%" }}
+                        whileInView={{ x: "120%" }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.18 + 0.35, duration: 1.1, ease: "easeInOut" }}
+                      />
                     </div>
                     <p className="text-[#1A1A1A] font-semibold mb-1">{t}</p>
                     <p className="text-[#1A1A1A]/70 text-sm">{d}</p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </CardContent>
@@ -688,19 +711,32 @@ function TrainingCard({
 function ReferenceCard({ title, items, tone, icon }: {
   title: string; items: string[]; tone: "red" | "emerald"; icon: React.ReactNode;
 }) {
-  const mark = tone === "red"
-    ? <span className="text-[#7A1F1F] font-bold">✕</span>
-    : <span className="text-[#1F5132] font-bold">✓</span>;
+  const isRed = tone === "red";
+  const mark = (
+    <span
+      data-no-contrast-guard
+      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
+      style={{
+        background: isRed
+          ? "linear-gradient(135deg,#7A1F1F 0%,#A02828 100%)"
+          : "linear-gradient(135deg,#064E3B 0%,#0B7A5B 100%)",
+      }}
+    >
+      {isRed
+        ? <X className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        : <Check className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
+    </span>
+  );
   return (
     <Card className="bg-[#F7F2EA] border-[#B89555]/30">
       <CardContent className="p-5 md:p-6">
         <h3 className="text-[#1A1A1A] font-semibold flex items-center gap-2 mb-3">
           {icon}{title}
         </h3>
-        <ul className="space-y-1.5">
+        <ul className="space-y-2">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/85 text-sm">
-              <span className="mt-0.5">{mark}</span>
+            <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/90 text-sm leading-relaxed">
+              {mark}
               <span>{p}</span>
             </li>
           ))}
