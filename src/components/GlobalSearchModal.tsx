@@ -31,30 +31,33 @@ const QUICK_SHORTCUTS = [
 ];
 
 // Role-aware shortcuts surfaced when no query is typed
+// Role-aware shortcuts surfaced when no query is typed.
+// Every mode MUST surface its own Dashboard + Portal + Account so the
+// "For {Role}s" section always reflects the active mode's workspace.
 const MODE_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
   investor: [
+    { label: "Investor Dashboard", route: "/my-dashboard", icon: LayoutDashboard },
+    { label: "Investor Portal", route: "/my-dashboard", icon: Briefcase },
+    { label: "My Account", route: "/account", icon: User },
     { label: "AI Home Finder", route: "/ai-home-finder", icon: Sparkles },
-    { label: "Off-Plan", route: "/properties?status=off-plan", icon: Building2 },
-    { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
-    { label: "Concierge", route: "/concierge", icon: Sparkles },
     { label: "Favorites", route: "/favorites", icon: Heart },
-    { label: "Buyer Guide", route: "/buyer-guide", icon: BookOpen },
+    { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
   ],
   broker: [
-    { label: "Broker Portal", route: "/broker-dashboard", icon: LayoutDashboard },
-    { label: "Broker Toolkit", route: "/broker-toolkit", icon: Briefcase },
-    { label: "Resources", route: "/broker-resources", icon: BookOpen },
+    { label: "Broker Dashboard", route: "/broker-dashboard", icon: LayoutDashboard },
+    { label: "Broker Portal", route: "/broker-dashboard", icon: Briefcase },
+    { label: "My Account", route: "/account", icon: User },
+    { label: "Broker Toolkit", route: "/broker-toolkit", icon: Sparkles },
     { label: "Academy", route: "/broker-education", icon: GraduationCap },
-    { label: "All Projects", route: "/properties", icon: Building2 },
     { label: "Market Intel", route: "/market-intelligence", icon: TrendingUp },
   ],
   developer: [
-    { label: "Developer Portal", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "Developer Dashboard", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "Developer Portal", route: "/developers-portal", icon: Briefcase },
+    { label: "My Account", route: "/account", icon: User },
     { label: "Submit Project", route: "/developers-portal/projects/new", icon: Building2 },
     { label: "Insights", route: "/market-intelligence", icon: TrendingUp },
     { label: "Reports", route: "/market-report", icon: FileText },
-    { label: "Areas", route: "/areas", icon: Map },
-    { label: "Contact", route: "/contact", icon: Phone },
   ],
 };
 
