@@ -2,12 +2,9 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
-import { useAuditorPasswordChange } from "@/hooks/useAuditorPasswordChange";
-import { supabase } from "@/integrations/supabase/client";
 import { isOwnerBackendEmail } from "@/config/ownerEmails";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, LogOut, Shield, AlertTriangle, CheckCircle2, XCircle, Ban } from "lucide-react";
-import AuditorForcePasswordChange from "@/components/auth/AuditorForcePasswordChange";
+import { RefreshCw, LogOut, Shield, AlertTriangle } from "lucide-react";
 
 interface OwnerGuardProps {
   children: ReactNode;
@@ -15,8 +12,9 @@ interface OwnerGuardProps {
 }
 
 /**
- * OwnerGuard - Restricts routes to Owner or Auditor (read-only) access.
- * Auditors must change password on first login and are blocked if suspended.
+ * OwnerGuard - Restricts all owner/back-end routes to the single registered
+ * owner email only. Roles, auditors, admins, aliases, and cached flags are not
+ * sufficient unless the authenticated email matches the owner backend email.
  */
 const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const { 
@@ -25,7 +23,6 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     ownerLoading, 
     ownerError, 
     isOwner,
-    isAuditor,
     refreshOwnerVerification,
     signOut,
   } = useAuth();
@@ -66,54 +63,9 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
   }, [isOwner]);
 
-  // Auditor suspend check
-  const [isSuspended, setIsSuspended] = useState(false);
-  const [suspendChecked, setSuspendChecked] = useState(false);
-
-  // Auditor password change
-  const {
-    needsPasswordChange,
-    isLoading: pwLoading,
-    displayName,
-    changePassword,
-  } = useAuditorPasswordChange();
-
   useEffect(() => {
     intendedRoute.current = location.pathname + location.search;
   }, [location.pathname, location.search]);
-
-  // Check if auditor is suspended
-  useEffect(() => {
-    if (!user || !isAuditor || isOwner) {
-      setSuspendChecked(true);
-      return;
-    }
-
-    const checkSuspend = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("auditor_profiles")
-          .select("is_suspended, access_expires_at")
-          .eq("user_id", user.id)
-          .single();
-
-        if (error || !data) {
-          setSuspendChecked(true);
-          return;
-        }
-
-        const suspended = (data as any).is_suspended === true;
-        const expired = (data as any).access_expires_at && new Date((data as any).access_expires_at) < new Date();
-        setIsSuspended(suspended || !!expired);
-      } catch {
-        // silent
-      } finally {
-        setSuspendChecked(true);
-      }
-    };
-
-    checkSuspend();
-  }, [user, isAuditor, isOwner]);
 
   useEffect(() => {
     if (isOwner && retryStatus === "success") {
@@ -306,52 +258,6 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   // AUTHENTICATED but NOT THE REGISTERED OWNER → AccessDenied
   if (!isOwner || !isRegisteredOwnerEmail) {
     return <Navigate to="/403" replace />;
-  }
-
-  // AUDITOR: Check if suspended
-  if (isAuditor && !isOwner) {
-    if (!suspendChecked || pwLoading) {
-      return (
-        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-          <div className="text-center px-6">
-            <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
-            <p className="text-gray-200 font-medium">Checking access status…</p>
-          </div>
-        </div>
-      );
-    }
-
-    if (isSuspended) {
-      return (
-        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
-          <div className="max-w-md text-center">
-            <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-              <Ban className="w-10 h-10 text-red-500" />
-            </div>
-            <h1 className="text-2xl font-bold text-white mb-3">Access Suspended</h1>
-            <p className="text-white/70 mb-6">
-              Your access has been suspended or expired by the administrator. Please contact Jane for assistance.
-            </p>
-            <Button
-              onClick={() => signOut()}
-              className="bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] border-2 border-white font-semibold"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
-        </div>
-      );
-    }
-
-    if (needsPasswordChange) {
-      return (
-        <AuditorForcePasswordChange
-          displayName={displayName}
-          onPasswordChanged={changePassword}
-        />
-      );
-    }
   }
 
   // REGISTERED OWNER → allowed
