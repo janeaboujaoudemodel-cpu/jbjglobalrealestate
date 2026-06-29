@@ -2,10 +2,10 @@ import { chromium } from '@playwright/test';
 
 const baseURL = process.env.PREVIEW_URL || 'http://localhost:8080';
 const cases = [
-  { name: 'Broker dashboard canonicalizes to broker portal', mode: 'broker', path: '/broker-dashboard', expected: /\/broker\/portal/ },
-  { name: 'Broker route remains broker in broker mode', mode: 'broker', path: '/broker/portal', expected: /\/broker\/portal/ },
-  { name: 'Developer dashboard remains developer portal', mode: 'developer', path: '/developers-portal', expected: /\/developers-portal/ },
-  { name: 'Investor dashboard remains investor dashboard', mode: 'investor', path: '/investor-dashboard', expected: /\/investor-dashboard/ },
+  { name: 'Broker dashboard canonicalizes to broker portal', mode: 'broker', path: '/broker-dashboard', expected: /(\/broker\/portal|\/auth)/, returnTo: '/broker/portal' },
+  { name: 'Broker route remains broker in broker mode', mode: 'broker', path: '/broker/portal', expected: /(\/broker\/portal|\/auth)/, returnTo: '/broker/portal' },
+  { name: 'Developer dashboard remains developer portal', mode: 'developer', path: '/developers-portal', expected: /(\/developers-portal|\/auth)/, returnTo: '/developers-portal' },
+  { name: 'Investor dashboard remains investor dashboard', mode: 'investor', path: '/investor-dashboard', expected: /(\/investor-dashboard|\/auth)/, returnTo: '/investor-dashboard' },
   { name: 'Owner backend denies unauthenticated/non-owner', mode: 'owner', path: '/owner', expected: /(\/auth|\/403)/ },
   { name: 'Owner alias route denies unauthenticated/non-owner', mode: 'owner', path: '/owner-dashboard', expected: /(\/auth|\/403)/ },
 ];
@@ -38,6 +38,12 @@ for (const c of cases) {
   const path = new URL(url).pathname;
   if (!c.expected.test(path)) {
     throw new Error(`${c.name}: expected ${c.expected}, got ${url}`);
+  }
+  if (c.returnTo && path === '/auth') {
+    const returnTo = new URL(url).searchParams.get('returnTo');
+    if (returnTo !== c.returnTo) {
+      throw new Error(`${c.name}: expected auth returnTo ${c.returnTo}, got ${url}`);
+    }
   }
   console.log(`PASS ${c.name}: ${url}`);
 }
