@@ -7,12 +7,11 @@ const corsHeaders = {
 };
 
 /**
- * verify-owner v2 — DB-based owner check
- * 
- * Sources of truth (checked in order):
- * 1. user_roles table: user has 'admin' or 'owner' role
- * 2. app_settings table: owner_email matches user email
- * 3. Env var OWNER_EMAIL (legacy fallback only)
+ * verify-owner v3 — email-locked owner check
+ *
+ * The Owner back end is locked to ONE registered owner email. A database
+ * `owner`/`admin` role alone must never grant access to /owner or owner edge
+ * functions.
  */
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -49,7 +48,35 @@ serve(async (req) => {
     // Service-role client for DB lookups (bypasses RLS)
     const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Check 1: user_roles table
+    const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
+    const userEmailLower = (user.email || "").toLowerCase().trim();
+
+    // Source 1: app_settings.owner_email, but only when it resolves to the
+    // registered owner address. This lets deployment config stay compatible
+    // without allowing arbitrary admin/owner rows to open the back end.
+    const { data: setting } = await serviceClient
+      .from("app_settings")
+      .select("value")
+      .eq("key", "owner_email")
+      .maybeSingle();
+
+    const configuredOwnerEmail = String(setting?.value || "").toLowerCase().trim();
+    const authorizedOwnerEmail = configuredOwnerEmail === PRIMARY_OWNER_EMAIL
+      ? configuredOwnerEmail
+      : PRIMARY_OWNER_EMAIL;
+
+    if (userEmailLower !== authorizedOwnerEmail) {
+      return new Response(
+        JSON.stringify({
+          isOwner: false,
+          reason: "email_mismatch",
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Email matched. Roles are now only an additional sanity check/source label;
+    // the email above is the real gate.
     const { data: roles } = await serviceClient
       .from("user_roles")
       .select("role")
@@ -61,56 +88,15 @@ serve(async (req) => {
 
     if (hasOwnerRole) {
       return new Response(
-        JSON.stringify({ isOwner: true, source: "user_roles" }),
+        JSON.stringify({ isOwner: true, source: "owner_email_and_role" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Check 2: app_settings.owner_email
-    const { data: setting } = await serviceClient
-      .from("app_settings")
-      .select("value")
-      .eq("key", "owner_email")
-      .maybeSingle();
-
-    const dbOwnerEmail = setting?.value;
-
-    if (dbOwnerEmail && user.email?.toLowerCase() === dbOwnerEmail.toLowerCase()) {
-      return new Response(
-        JSON.stringify({ isOwner: true, source: "app_settings" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Check 3: Hardcoded approved owner emails (Jane's known login addresses)
-    const APPROVED_OWNER_EMAILS = [
-      "janeaboujaoudenails@gmail.com",
-      "janeaboujaoudemodel@gmail.com",
-      "infoo.jane@gmail.com",
-    ];
-    const userEmailLower = (user.email || "").toLowerCase();
-    if (APPROVED_OWNER_EMAILS.includes(userEmailLower)) {
-      return new Response(
-        JSON.stringify({ isOwner: true, source: "approved_emails" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Check 4: Env var fallback (legacy)
-    const envOwnerEmail = Deno.env.get("OWNER_EMAIL");
-    if (envOwnerEmail && user.email?.toLowerCase() === envOwnerEmail.toLowerCase()) {
-      return new Response(
-        JSON.stringify({ isOwner: true, source: "env_fallback" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Definitively not owner
+    // The registered owner email still opens Owner mode even before a role row
+    // exists (first registration / migration state).
     return new Response(
-      JSON.stringify({
-        isOwner: false,
-        reason: "email_mismatch",
-      }),
+      JSON.stringify({ isOwner: true, source: "registered_owner_email" }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {

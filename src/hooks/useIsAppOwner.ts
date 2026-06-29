@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 
 /**
  * Checks whether the current user has the `owner` app_role (real RLS owner —
  * NOT the visitor "mode" picker). Used to gate on-page owner editing.
  */
 export function useIsAppOwner() {
-  const { user } = useAuth();
+  const { user, isOwner: authIsOwner, ownerLoading } = useAuth();
+  const ownerEmailMatched = isOwnerBackendEmail(user?.email);
   const { data, isLoading } = useQuery({
     queryKey: ["is-app-owner", user?.id],
-    enabled: !!user?.id,
+    enabled: !!user?.id && ownerEmailMatched && !authIsOwner,
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
@@ -24,5 +26,8 @@ export function useIsAppOwner() {
       return !!data;
     },
   });
-  return { isOwner: !!data, isLoading };
+  return {
+    isOwner: ownerEmailMatched && (authIsOwner || !!data),
+    isLoading: ownerEmailMatched && !authIsOwner && (ownerLoading || isLoading),
+  };
 }

@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useUserModeContext, UserMode } from '@/contexts/UserModeContext';
+import { useIsAppOwner } from '@/hooks/useIsAppOwner';
 
 interface ModeRequiredRouteProps {
   /** Modes allowed to view this route. */
@@ -31,6 +32,7 @@ const MODE_LABEL: Record<UserMode, string> = {
  */
 const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
   const { mode, hasMadeInitialSelection, setMode } = useUserModeContext();
+  const { isOwner, isLoading: ownerLoading } = useIsAppOwner();
   const didSwitchRef = useRef(false);
   const location = useLocation();
   const previewQuery = new URLSearchParams(location.search).get('preview');
@@ -38,12 +40,16 @@ const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
 
   const matches = modes.includes(mode) || isExplicitOwnerPreview;
   const target = modes[0];
-
-  if (hasMadeInitialSelection && mode === 'owner' && !modes.includes('owner') && !isExplicitOwnerPreview) {
-    return <Navigate to="/owner" replace state={{ from: location }} />;
-  }
+  const shouldRedirectOwnerToOwnerDashboard =
+    hasMadeInitialSelection &&
+    mode === 'owner' &&
+    isOwner &&
+    !modes.includes('owner') &&
+    !isExplicitOwnerPreview;
 
   useEffect(() => {
+    if (ownerLoading) return;
+    if (shouldRedirectOwnerToOwnerDashboard) return;
     if (matches) return;
     if (!hasMadeInitialSelection) return;
     if (didSwitchRef.current) return;
@@ -53,7 +59,13 @@ const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
       description: 'You can change your mode anytime from the account menu.',
       duration: 4500,
     });
-  }, [matches, hasMadeInitialSelection, setMode, target]);
+  }, [matches, hasMadeInitialSelection, ownerLoading, setMode, shouldRedirectOwnerToOwnerDashboard, target]);
+
+  if (ownerLoading) return null;
+
+  if (shouldRedirectOwnerToOwnerDashboard) {
+    return <Navigate to="/owner" replace state={{ from: location }} />;
+  }
 
   return <>{children}</>;
 };
