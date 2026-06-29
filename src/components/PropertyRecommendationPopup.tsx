@@ -357,7 +357,7 @@ const PropertyRecommendationPopup = () => {
                       className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-[#EFE6D6]/10"
                       loading="eager"
                       decoding="sync"
-                      fetchpriority="high"
+                      fetchPriority="high"
                     />
                   ) : (
                     <div className="w-14 h-14 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">

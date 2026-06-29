@@ -302,7 +302,7 @@ const DigitalCard = () => {
                       className="w-full h-full object-cover"
                       style={{ objectPosition: "center top" }}
                       loading="eager"
-                      fetchpriority="high"
+                      fetchPriority="high"
                     />
                   </div>
                 </div>

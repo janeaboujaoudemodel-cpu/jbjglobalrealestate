@@ -41,7 +41,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
         alt={`${area.name} - Real Estate Area`}
         className="absolute inset-0 w-full h-full object-cover"
         loading="eager"
-        fetchpriority="high"
+        fetchPriority="high"
       />
       
       {/* Gradient Overlay */}

@@ -77,7 +77,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         loading={loadingAttr}
         decoding={props.decoding ?? "async"}
         // @ts-ignore - fetchpriority is a valid HTML attribute
-        fetchpriority={fetchPriority}
+        fetchPriority={fetchPriority}
         referrerPolicy="strict-origin-when-cross-origin"
         onLoad={(e) => {
           const img = e.currentTarget;

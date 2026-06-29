@@ -204,7 +204,7 @@ const JBJPodcastSection = () => {
                     alt={selectedEpisode.title}
                     className="absolute inset-0 w-full h-full object-cover"
                     loading="eager"
-                    fetchpriority="high"
+                    fetchPriority="high"
                     fallbackSrc="/placeholder.svg"
                   />
                   
@@ -426,7 +426,7 @@ const JBJPodcastSection = () => {
                               alt={episode.title}
                               className="w-full h-full object-cover object-center"
                               loading={index < 6 ? "eager" : "lazy"}
-                              fetchpriority={index < 3 ? "high" : "auto"}
+                              fetchPriority={index < 3 ? "high" : "auto"}
                               fallbackSrc="/placeholder.svg"
                             />
                           </div>

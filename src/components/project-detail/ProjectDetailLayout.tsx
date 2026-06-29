@@ -680,7 +680,7 @@ export default function ProjectDetailLayout({
               alt={heroImage.alt || project.name}
               className="w-full h-full object-cover"
               loading="eager"
-              fetchpriority="high"
+              fetchPriority="high"
               decoding="async"
               fallbackSrc="/placeholder.svg"
             />

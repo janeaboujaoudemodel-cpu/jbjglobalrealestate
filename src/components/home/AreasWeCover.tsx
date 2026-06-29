@@ -100,7 +100,7 @@ const AreasWeCover = () => {
                   alt={area.name || ""}
                   loading="eager"
                   decoding="async"
-                  fetchpriority="high"
+                  fetchPriority="high"
                   width={520}
                   height={260}
                   className="absolute inset-0 w-full h-full object-cover transform-gpu will-change-transform transition-transform duration-700 ease-out group-hover:scale-[1.06]"

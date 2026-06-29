@@ -107,7 +107,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick, isO
               }}
               loading="lazy"
               decoding="async"
-              fetchpriority="low"
+              fetchPriority="low"
             />
           </div>
 
