@@ -260,7 +260,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             <Button
               asChild
               size="lg"
-              className="w-full bg-[#1A1A1A] hover:bg-black text-white border border-[#B89555]/50"
+              className="w-full jj-pill-emerald-metallic"
             >
               <Link to={`/broker/learning/book/${book.id}`} onClick={onClose}>
                 <BookOpen className="w-4 h-4 mr-2" />
