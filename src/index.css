@@ -11578,24 +11578,46 @@ html body [data-icon-tile][data-icon-tile-tone="gold"] :is(svg, [class*="lucide"
   fill: none !important;
 }
 
-/* 2. Eyebrow / section-label plaques — small uppercase chips with the
-      gold hairline pattern get an Emerald inner badge + Emerald label
-      accent automatically. The pages don't have to set this. */
+/* 2. Eyebrow / section-label plaques — UNIFIED EMERALD STANDARD.
+      Every section eyebrow across broker / developer / investor / owner
+      back-ends renders as a solid emerald-ombre pill with WHITE label +
+      WHITE icon, mirroring the "AI NEXT-BEST-ACTION" badge. The pages
+      never have to set this manually. */
 html body :is(
   .jj-section-eyebrow,
   [data-section-label],
   [data-eyebrow]
 ) {
-  border-color: rgba(6, 78, 59, 0.35) !important;
+  background-color: transparent !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    0 8px 18px -12px rgba(6, 78, 59, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
-html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) :is(svg, [class*="lucide"]) {
-  color: var(--emerald-1) !important;
-  stroke: var(--emerald-1) !important;
+html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) > * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
-html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) > span:first-child {
-  background-color: var(--emerald-soft-bg) !important;
-  border-color: rgba(6, 78, 59, 0.30) !important;
+html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) :is(svg, [class*="lucide"]),
+html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
 }
+/* Neutralise the inner IconTile / first-child plaque so the emerald pill
+   reads as a single seamless surface — no nested boxes. */
+html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) > span:first-child,
+html body :is(.jj-section-eyebrow, [data-section-label], [data-eyebrow]) [data-icon-tile] {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
 
 /* 3. Section headers / "All updates >" / "→" arrows used as nav cues
       inherit Emerald, not muted ink. Scoped to elements that opt in
