@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import InvestorDocumentVault from "@/components/investor/InvestorDocumentVault";
-import ApprovalTimeline, { JBJ_APPROVAL_STEPS } from "@/components/shared/ApprovalTimeline";
 import { useMyEventInvitations } from "@/hooks/useEventManagement";
 import { toast } from "sonner";
 import {
@@ -44,6 +43,7 @@ type InvestorListingSummary = {
 
 type InvestorCalendarEvent = {
   id: string;
+  dbEventId?: string;
   title: string;
   date: string;
   time: string;
@@ -74,6 +74,41 @@ const buildCalendarDays = (month: Date) => {
   for (let i = 0; i < first.getDay(); i += 1) days.push(null);
   for (let d = 1; d <= last.getDate(); d += 1) days.push(new Date(month.getFullYear(), month.getMonth(), d));
   return days;
+};
+
+const dubaiDateTimeToIso = (date: string, time: string) => new Date(`${date}T${time || "00:00"}:00+04:00`).toISOString();
+
+const getDubaiParts = (iso: string) => {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Dubai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(new Date(iso));
+  const pick = (type: string) => parts.find((part) => part.type === type)?.value || "";
+  return {
+    date: `${pick("year")}-${pick("month")}-${pick("day")}`,
+    time: `${pick("hour")}:${pick("minute")}`,
+  };
+};
+
+const mapDbCalendarEvent = (event: any): InvestorCalendarEvent => {
+  const parts = getDubaiParts(event.start_at);
+  const metadata = event.metadata || {};
+  return {
+    id: event.id,
+    dbEventId: event.id,
+    title: event.title || "Investor booking",
+    date: parts.date,
+    time: parts.time,
+    type: metadata.type || metadata.portal_type || "Property viewing",
+    location: event.location || "",
+    notes: event.description || metadata.notes || "",
+    emailReminder: metadata.email_reminder !== false,
+  };
 };
 
 export default function InvestorDashboard() {
@@ -175,6 +210,18 @@ export default function InvestorDashboard() {
           .limit(25),
       ]);
 
+      const { data: dbEvents } = await (supabase as any)
+        .from("owner_calendar_events")
+        .select("id,title,description,location,start_at,end_at,metadata,created_at")
+        .eq("owner_id", user.id)
+        .eq("metadata->>portal", "investor")
+        .order("start_at", { ascending: true })
+        .limit(100);
+
+      if (dbEvents) {
+        setCalendarEvents(dbEvents.map(mapDbCalendarEvent));
+      }
+
       const portalListings: InvestorListingSummary[] = (portalResult.data || []).map((listing: any) => ({
         id: listing.id,
         title: listing.title || listing.listing_type || "Submitted listing",
@@ -212,25 +259,91 @@ export default function InvestorDashboard() {
     if (user) localStorage.setItem(`jj_investor_tasks_${user.id}`, JSON.stringify(next));
   };
 
-  const handleAddEvent = (override?: Partial<InvestorCalendarEvent>) => {
+  const sendBookingConfirmation = async (event: InvestorCalendarEvent) => {
+    if (!user?.email || !event.emailReminder) return;
+    try {
+      await supabase.functions.invoke("email-send-gateway", {
+        body: {
+          from: "JBJ GLOBAL REAL ESTATE <bookings@jbj.ae>",
+          to: [user.email],
+          subject: `Reminder scheduled · ${event.title}`,
+          html: `
+            <div style="font-family:Inter,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
+              <h2 style="color:#064E3B">Your JBJ calendar reminder is scheduled</h2>
+              <p><strong>${event.title}</strong></p>
+              <p>Date: ${event.date}<br/>Time: ${event.time} Dubai time</p>
+              ${event.location ? `<p>Location: ${event.location}</p>` : ""}
+              ${event.notes ? `<p>Notes: ${event.notes}</p>` : ""}
+              <p>JBJ AI Assistant will keep this in your portal task inbox and remind you before the event.</p>
+            </div>
+          `,
+          text: `Your JBJ calendar reminder is scheduled: ${event.title} on ${event.date} at ${event.time} Dubai time. ${event.notes || ""}`,
+        },
+      });
+    } catch (error) {
+      console.warn("Booking confirmation email could not be sent", error);
+    }
+  };
+
+  const handleAddEvent = async (override?: Partial<InvestorCalendarEvent>) => {
     const title = override?.title || eventForm.title.trim();
     if (!title) {
       toast.error("Add an event title first");
       return;
     }
+    const resolvedDate = override?.date || eventForm.date;
+    const resolvedTime = override?.time || eventForm.time;
     const nextEvent: InvestorCalendarEvent = {
       id: `${Date.now()}`,
       title,
-      date: override?.date || eventForm.date,
-      time: override?.time || eventForm.time,
+      date: resolvedDate,
+      time: resolvedTime,
       type: override?.type || eventForm.type,
       location: override?.location ?? eventForm.location,
       notes: override?.notes ?? eventForm.notes,
       emailReminder: override?.emailReminder ?? eventForm.emailReminder,
     };
-    persistCalendar([...calendarEvents, nextEvent]);
+
+    let savedEvent = nextEvent;
+    if (user) {
+      const startAt = dubaiDateTimeToIso(resolvedDate, resolvedTime);
+      const endAt = new Date(new Date(startAt).getTime() + 60 * 60 * 1000).toISOString();
+      const { data, error } = await (supabase as any)
+        .from("owner_calendar_events")
+        .insert({
+          owner_id: user.id,
+          title,
+          description: nextEvent.notes,
+          location: nextEvent.location,
+          start_at: startAt,
+          end_at: endAt,
+          metadata: {
+            portal: "investor",
+            portal_type: "investor_calendar",
+            type: nextEvent.type,
+            notes: nextEvent.notes,
+            email_reminder: nextEvent.emailReminder,
+            attendee_email: user.email,
+            attendee_name: profile?.full_name || user.email?.split("@")[0] || "Investor",
+            owner_email: user.email,
+            reminders: [1440, 30],
+            sent_reminders: [],
+          },
+        })
+        .select("id,title,description,location,start_at,end_at,metadata")
+        .maybeSingle();
+      if (error) {
+        console.warn("Investor calendar database save failed; keeping local event", error);
+        toast.warning("Saved locally. Email reminder will activate after portal sync.");
+      } else if (data) {
+        savedEvent = mapDbCalendarEvent(data);
+      }
+    }
+
+    persistCalendar([...calendarEvents, savedEvent]);
     setEventForm((prev) => ({ ...prev, title: "", location: "", notes: "" }));
-    toast.success(nextEvent.emailReminder ? "Event booked with email reminder" : "Event booked");
+    void sendBookingConfirmation(savedEvent);
+    toast.success(savedEvent.emailReminder ? "Event booked with email reminder" : "Event booked");
   };
 
   const handleAddTask = (title = taskDraft.trim(), due = formatLocalDate(new Date())) => {
@@ -259,7 +372,7 @@ export default function InvestorDashboard() {
     if (meridiem === "am" && hour === 12) hour = 0;
     const time = `${String(hour).padStart(2, "0")}:${minute}`;
     const isViewing = /viewing|property/i.test(prompt);
-    handleAddEvent({
+    void handleAddEvent({
       title: isViewing ? "Property viewing" : "Investor appointment",
       date: formatLocalDate(date),
       time,
@@ -278,7 +391,9 @@ export default function InvestorDashboard() {
     }
     const approved = submittedListings.filter((listing) => /approved|live|published/i.test(`${listing.approvalStatus} ${listing.status}`));
     const shareRows = (approved.length ? approved : submittedListings).map((listing) => {
-      const link = `${window.location.origin}/${listing.source === "portal" ? "resale-properties" : "list-property"}/${listing.id}`;
+      const link = listing.source === "portal"
+        ? `${window.location.origin}/resale-properties?listing=${listing.id}`
+        : `${window.location.origin}/listing-portal/my-listings?listing=${listing.id}`;
       return `${listing.title} — ${listing.approvalStatus || listing.status} — ${link}`;
     });
     await navigator.clipboard?.writeText(shareRows.join("\n"));
@@ -307,11 +422,57 @@ export default function InvestorDashboard() {
   }
 
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "Investor";
+  const nextBooking = [...calendarEvents]
+    .filter((event) => new Date(`${event.date}T${event.time}:00+04:00`).getTime() >= Date.now() - 60 * 60 * 1000)
+    .sort((a, b) => new Date(`${a.date}T${a.time}:00+04:00`).getTime() - new Date(`${b.date}T${b.time}:00+04:00`).getTime())[0];
+  const openTaskCount = tasks.filter((task) => !task.done).length;
 
   return (
     <div data-backend-portal="investor" className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,28%,94%)] to-[hsl(36,22%,88%)]">
-      {/* Tabs */}
       <div className="max-w-6xl mx-auto px-4 py-6">
+        <Card className="mb-5 overflow-hidden border-[hsl(36,40%,70%)]/35 bg-gradient-to-br from-[#FFFCF6] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_18px_45px_-32px_rgba(26,26,26,0.65)]">
+          <CardContent className="p-4 md:p-5">
+            <div className="grid lg:grid-cols-[1.25fr_1fr] gap-4 items-center">
+              <div className="flex items-center gap-3 min-w-0">
+                <Avatar className="w-12 h-12 border-2 border-[#B89555]/45 shadow-sm">
+                  <AvatarImage src={profile?.avatar_url || ""} />
+                  <AvatarFallback className="bg-[image:var(--jj-emerald-ombre)] text-white font-bold">
+                    {displayName.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#064E3B]">Investor portal command center</p>
+                  <h1 className="text-xl md:text-2xl font-bold text-[#1A1A1A] truncate">Welcome, {displayName}</h1>
+                  <p className="text-xs text-muted-foreground">Manage inventory, approvals, documents, bookings, reminders, and JBJ consultant sharing in one place.</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <button onClick={() => setActiveTab("calendar")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
+                  <Calendar className="w-4 h-4 text-[#064E3B] mb-2" />
+                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Calendar</p>
+                  <p className="text-[10px] text-muted-foreground truncate">{nextBooking ? `${nextBooking.time} · ${nextBooking.title}` : "No bookings"}</p>
+                </button>
+                <button onClick={() => setActiveTab("tasks")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
+                  <ClipboardList className="w-4 h-4 text-[#064E3B] mb-2" />
+                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Task notes</p>
+                  <p className="text-[10px] text-muted-foreground">{openTaskCount} open</p>
+                </button>
+                <button onClick={() => setActiveTab("assistant")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
+                  <Bot className="w-4 h-4 text-[#064E3B] mb-2" />
+                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">AI assistant</p>
+                  <p className="text-[10px] text-muted-foreground">Book + remind</p>
+                </button>
+                <button onClick={handleShareInventory} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
+                  <Link2 className="w-4 h-4 text-[#064E3B] mb-2" />
+                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Share links</p>
+                  <p className="text-[10px] text-muted-foreground">{submittedListings.length} listings</p>
+                </button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="flex flex-wrap gap-1.5 bg-transparent p-0 mb-6 h-auto">
             <TabsTrigger value="dashboard" className={TAB_STYLE}>
