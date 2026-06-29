@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useRef } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useUserModeContext, UserMode } from '@/contexts/UserModeContext';
 
@@ -31,9 +32,14 @@ const MODE_LABEL: Record<UserMode, string> = {
 const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
   const { mode, hasMadeInitialSelection, setMode } = useUserModeContext();
   const didSwitchRef = useRef(false);
+  const location = useLocation();
 
   const matches = modes.includes(mode);
   const target = modes[0];
+
+  if (hasMadeInitialSelection && mode === 'owner' && !modes.includes('owner')) {
+    return <Navigate to="/owner" replace state={{ from: location }} />;
+  }
 
   useEffect(() => {
     if (matches) return;
