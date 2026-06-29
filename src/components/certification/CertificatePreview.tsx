@@ -300,16 +300,19 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                 disabled
                 data-cta="cert-locked"
                 data-surface="emerald"
-                className="jj-pill-emerald-metallic opacity-100 cursor-not-allowed disabled:opacity-100"
+                className="jj-pill-emerald-metallic opacity-100 cursor-not-allowed disabled:opacity-100 [&_svg]:!text-white [&_svg]:!stroke-white [&_*]:!text-white"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
-                <Lock className="w-4 h-4 mr-2" />
-                Complete Certification to Download
+                <Lock className="w-4 h-4 mr-2 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  Complete Certification to Download
+                </span>
               </Button>
             ) : (
               <>
-                <Button data-cta="cert-download" className="jj-pill-emerald-metallic">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Certificate
+                <Button data-cta="cert-download" data-surface="emerald" className="jj-pill-emerald-metallic [&_svg]:!text-white [&_svg]:!stroke-white [&_*]:!text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  <Download className="w-4 h-4 mr-2 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Download Certificate</span>
                 </Button>
                 <Button data-cta="cert-share" className="jj-cta-outline">
                   <Share2 className="w-4 h-4 mr-2" />
