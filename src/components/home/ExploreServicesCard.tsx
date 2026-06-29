@@ -249,7 +249,7 @@ const ExploreServicesCard = () => {
               alt={service.title}
               className="w-full h-full object-cover"
               loading={idx < 3 ? "eager" : "lazy"}
-              fetchPriority={idx < 3 ? "high" : "low"}
+              fetchpriority={idx < 3 ? "high" : "low"}
               decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
