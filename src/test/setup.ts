@@ -32,4 +32,6 @@ global.DOMRect = class DOMRect {
   static fromRect() { return new DOMRect(); }
   toJSON() { return {}; }
 };
+}
+
 
