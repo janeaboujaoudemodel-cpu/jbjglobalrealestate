@@ -20598,3 +20598,103 @@ html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-l
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* ==============================================================
+   PASS 122 — GLOBAL BLUE→EMERALD MIGRATION LOCK
+   Design memory bans blue as a brand color (reserved only for
+   data-viz semantic series). Any utility blue must render as
+   the JBJ emerald token. Triple-ID specificity crush.
+   Opt-out only via [data-allow-blue].
+   ============================================================== */
+:where(html) body :is(
+  .text-blue-50,.text-blue-100,.text-blue-200,.text-blue-300,.text-blue-400,
+  .text-blue-500,.text-blue-600,.text-blue-700,.text-blue-800,.text-blue-900
+):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+  color: var(--emerald-1, #064E3B) !important;
+  -webkit-text-fill-color: var(--emerald-1, #064E3B) !important;
+}
+:where(html) body :is(
+  .text-blue-50,.text-blue-100,.text-blue-200,.text-blue-300,.text-blue-400,
+  .text-blue-500,.text-blue-600,.text-blue-700,.text-blue-800,.text-blue-900
+):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) :is(svg,[class*="lucide"],path) {
+  stroke: var(--emerald-1, #064E3B) !important;
+}
+:where(html) body :is(
+  .bg-blue-50,.bg-blue-100,.bg-blue-200,.bg-blue-300,.bg-blue-400,
+  .bg-blue-500,.bg-blue-600,.bg-blue-700,.bg-blue-800,.bg-blue-900,
+  .hover\:bg-blue-50:hover,.hover\:bg-blue-100:hover,.hover\:bg-blue-500:hover,
+  .hover\:bg-blue-600:hover,.hover\:bg-blue-700:hover
+):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+  background-color: var(--emerald-1, #064E3B) !important;
+  color: #FFFFFF !important;
+}
+/* Faint blue tints (Tailwind /10 /15 /20 /30 opacity) → champagne wash */
+:where(html) body :is(
+  [class*="bg-blue-500/1"],[class*="bg-blue-500/2"],[class*="bg-blue-500/3"],
+  [class*="bg-blue-600/1"],[class*="bg-blue-600/2"],
+  [class*="bg-blue-100"]
+):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+  background-color: rgba(6, 78, 59, 0.10) !important;
+  color: var(--emerald-1, #064E3B) !important;
+}
+:where(html) body :is(
+  [class*="border-blue-"]
+):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+  border-color: rgba(6, 78, 59, 0.32) !important;
+}
+:where(html) body :is(
+  .ring-blue-500,.ring-blue-600,.focus\:ring-blue-500:focus,.focus\:ring-blue-600:focus,
+  .focus-visible\:ring-blue-500:focus-visible,.focus-visible\:ring-blue-600:focus-visible
+):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+  --tw-ring-color: var(--emerald-1, #064E3B) !important;
+}
+/* Gradients written with from-blue-* / to-blue-* — flatten to emerald. */
+:where(html) body :is(
+  [class*="from-blue-"],[class*="to-blue-"],[class*="via-blue-"]
+):not([data-allow-blue]):not(#jj-blue-lock):not(#jj-blue-lock):not(#jj-blue-lock) {
+  --tw-gradient-from: var(--emerald-1, #064E3B) !important;
+  --tw-gradient-to:   var(--emerald-2, #0F6E55) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+/* ==============================================================
+   PASS 123 — DATE-PICKER / SHADCN CALENDAR EMERALD LOCK
+   react-day-picker selected/today/range/hover states must
+   render emerald, never the default Tailwind blue/primary blue.
+   ============================================================== */
+:where(html) body .rdp,
+:where(html) body [class*="rdp-"] {
+  --rdp-accent-color: var(--emerald-1, #064E3B) !important;
+  --rdp-accent-color-dark: var(--emerald-2, #0F6E55) !important;
+  --rdp-background-color: rgba(6, 78, 59, 0.08) !important;
+}
+:where(html) body .rdp-day_selected,
+:where(html) body .rdp-day_selected:focus-visible,
+:where(html) body .rdp-day_selected:hover,
+:where(html) body [aria-selected="true"].rdp-day,
+:where(html) body .rdp-day[aria-selected="true"] {
+  background-color: var(--emerald-1, #064E3B) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+:where(html) body .rdp-day_today:not(.rdp-day_selected) {
+  color: var(--emerald-1, #064E3B) !important;
+  font-weight: 700 !important;
+}
+:where(html) body .rdp-day_range_middle {
+  background-color: rgba(6, 78, 59, 0.12) !important;
+  color: var(--emerald-1, #064E3B) !important;
+}
+:where(html) body .rdp-day:not(.rdp-day_selected):hover {
+  background-color: rgba(6, 78, 59, 0.10) !important;
+  color: var(--emerald-1, #064E3B) !important;
+}
+/* Native <input type="date"|"datetime-local"|"time"|"month"|"week"> accent. */
+:where(html) body input[type="date"],
+:where(html) body input[type="datetime-local"],
+:where(html) body input[type="month"],
+:where(html) body input[type="week"],
+:where(html) body input[type="time"] {
+  accent-color: var(--emerald-1, #064E3B) !important;
+  color-scheme: light;
+}
