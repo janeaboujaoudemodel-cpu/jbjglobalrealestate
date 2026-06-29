@@ -28,6 +28,8 @@ const corsHeaders = {
 
 interface EventMeta {
   booking_id?: string;
+  portal?: string;
+  portal_type?: string;
   attendee_name?: string;
   attendee_phone?: string;
   attendee_email?: string;
@@ -100,6 +102,7 @@ Deno.serve(async (req) => {
 
     const offset = Math.max(...dueOffsets);
     const when = fmtDubai(ev.start_at);
+    const isInvestorPortalEvent = meta.portal === "investor" || String(meta.portal_type || "").includes("investor");
 
     // Pull the booking for location_link, status, cancel_token, etc.
     let locationLink: string | null = null;
@@ -124,7 +127,9 @@ Deno.serve(async (req) => {
       status: "REMINDER",
       preheader: `${ev.title} — ${when} (Dubai)`,
       greeting: `Dear ${meta.attendee_name || "guest"},`,
-      intro: `A friendly reminder about your meeting with Jane Bou Jaoude in ${humanOffset(offset)}.`,
+      intro: isInvestorPortalEvent
+        ? `A friendly reminder about your upcoming JBJ calendar event in ${humanOffset(offset)}.`
+        : `A friendly reminder about your meeting with Jane Bou Jaoude in ${humanOffset(offset)}.`,
       detailRows: [
         { label: "Subject",  value: ev.title },
         { label: "When",     value: `${when} (Dubai time)` },
@@ -142,8 +147,10 @@ Deno.serve(async (req) => {
       title: `Reminder · ${meta.attendee_name} in ${humanOffset(offset)}`,
       status: "REMINDER",
       preheader: `${ev.title} — ${when} (Dubai)`,
-      greeting: "Jane,",
-      intro: `Reminder for your upcoming meeting with ${meta.attendee_name} (${meta.attendee_email}).`,
+      greeting: isInvestorPortalEvent ? `Dear ${meta.attendee_name || "investor"},` : "Jane,",
+      intro: isInvestorPortalEvent
+        ? `Reminder for your upcoming JBJ calendar event.`
+        : `Reminder for your upcoming meeting with ${meta.attendee_name} (${meta.attendee_email}).`,
       detailRows: [
         { label: "Visitor",  value: meta.attendee_name || "—" },
         { label: "Email",    value: meta.attendee_email || "—" },
@@ -154,15 +161,19 @@ Deno.serve(async (req) => {
       ],
       ctaText: locationLink ? (locationLabel || "Open meeting link") : undefined,
       ctaUrl:  locationLink ?? undefined,
-      closing: `Manage this booking at ${SITE_URL}/owner/meetings.`,
+      closing: isInvestorPortalEvent
+        ? `Manage this booking in your Investor Portal calendar at ${SITE_URL}/investor-dashboard?tab=calendar.`
+        : `Manage this booking at ${SITE_URL}/owner/meetings.`,
     });
 
     const subjectVisitor = `Reminder · ${ev.title} in ${humanOffset(offset)}`;
     const subjectOwner   = `Reminder · ${htmlEscape(meta.attendee_name || "guest")} in ${humanOffset(offset)}`;
 
+    const ownerRecipient = meta.owner_email || OWNER_EMAIL;
+    const ownerSameAsAttendee = ownerRecipient.trim().toLowerCase() === attendee.trim().toLowerCase();
     const [v, o] = await Promise.all([
       sendEmail(attendee, subjectVisitor, visitorHtml),
-      sendEmail(meta.owner_email || OWNER_EMAIL, subjectOwner, ownerHtml),
+      ownerSameAsAttendee ? Promise.resolve(false) : sendEmail(ownerRecipient, subjectOwner, ownerHtml),
     ]);
     if (v || o) sent++;
 

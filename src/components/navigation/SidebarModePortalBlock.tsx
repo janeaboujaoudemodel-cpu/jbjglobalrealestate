@@ -23,7 +23,7 @@ const MODE_CONFIG = {
     icon: TrendingUp,
     label: "Investor Portal",
     href: "/investor-dashboard",
-    matchPrefix: "/investor",
+    matchPrefix: "/investor-dashboard",
   },
   developer: {
     icon: Building2,
@@ -42,7 +42,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
   const cfg = (mode && MODE_CONFIG[mode as keyof typeof MODE_CONFIG]) || MODE_CONFIG.investor;
   const Icon = cfg.icon;
   const active =
-    pathname === cfg.href || pathname.startsWith(cfg.matchPrefix + "/") || pathname === cfg.matchPrefix;
+    pathname === cfg.href || pathname.startsWith(cfg.matchPrefix + "/");
 
   if (collapsed) {
     return (

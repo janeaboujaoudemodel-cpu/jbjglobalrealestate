@@ -600,6 +600,10 @@ export default function GlobalVerticalNav() {
       if (item.label === "Career Portal") return false;
     }
     if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
+    // The pinned Investor Portal block owns /investor-dashboard highlighting.
+    // Do not duplicate it inside the INVESTOR accordion, otherwise the sidebar
+    // shows two emerald active states at the same time.
+    if (showInvestorSurfaces && sectionKey === "INVESTOR" && item.href.startsWith("/investor-dashboard")) return false;
     return true;
   }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible, canCompare, canSeeCardScanner]);
 
@@ -1096,7 +1100,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             const isOpen = openSection === sectionKey;
             const hasActiveChild = items.some(item => isRouteActive(item.href));
             const hasMegaActive = sectionHasActiveMega(sectionKey);
-            const sectionHighlighted = isOpen || hasActiveChild || hasMegaActive;
+            const sectionHighlighted = false;
             const SectionIcon = SECTION_ICONS[sectionKey];
 
             return (
@@ -1391,8 +1395,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               const SectionIcon = SECTION_ICONS[sectionKey];
               const items = sectionGroups[sectionKey];
               if (!items || items.length === 0) return null;
-              const hasActiveChild = items?.some(item => isRouteActive(item.href)) || false;
-              const hasMegaActive = sectionHasActiveMega(sectionKey);
+              const portalOwnsActiveRoute =
+                (sectionKey === 'INVESTOR' && location.pathname.startsWith('/investor-dashboard')) ||
+                (sectionKey === 'BROKER & ACADEMY' && location.pathname.startsWith('/broker/portal'));
+              const hasActiveChild = portalOwnsActiveRoute ? false : (items?.some(item => isRouteActive(item.href)) || false);
+              const hasMegaActive = portalOwnsActiveRoute ? false : sectionHasActiveMega(sectionKey);
               const isActive = hasActiveChild || hasMegaActive;
 
               return (
