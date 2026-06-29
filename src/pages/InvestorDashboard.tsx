@@ -465,22 +465,42 @@ export default function InvestorDashboard() {
   }
 
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "Investor";
+  const userInitials = getUserInitials({ displayName: profile?.full_name || displayName, email: user?.email, isOwner });
   const nextBooking = [...calendarEvents]
     .filter((event) => new Date(`${event.date}T${event.time}:00+04:00`).getTime() >= Date.now() - 60 * 60 * 1000)
     .sort((a, b) => new Date(`${a.date}T${a.time}:00+04:00`).getTime() - new Date(`${b.date}T${b.time}:00+04:00`).getTime())[0];
   const openTaskCount = tasks.filter((task) => !task.done).length;
+  const hasInventory = submittedListings.length > 0;
+
+  // Reusable champagne→emerald hover tile (matches search dropdown style)
+  const quickTileBase =
+    "group rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] p-3 text-left transition-all duration-200 " +
+    "hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-12px_rgba(6,78,59,0.55)] " +
+    "hover:bg-[image:var(--jj-emerald-ombre)] hover:border-transparent";
+  const quickTileIcon =
+    "w-4 h-4 mb-2 text-[#064E3B] group-hover:text-white transition-colors";
+  const quickTileTitle =
+    "text-[10px] font-bold uppercase tracking-[0.06em] text-[#1A1A1A] group-hover:text-white truncate";
+  const quickTileSub =
+    "text-[10px] text-muted-foreground group-hover:text-white/85 truncate";
 
   return (
     <div data-backend-portal="investor" className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,28%,94%)] to-[hsl(36,22%,88%)]">
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-6xl mx-auto px-4 pt-10 md:pt-12 pb-8">
         <Card className="mb-5 overflow-hidden border-[hsl(36,40%,70%)]/35 bg-gradient-to-br from-[#FFFCF6] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_18px_45px_-32px_rgba(26,26,26,0.65)]">
           <CardContent className="p-4 md:p-5">
             <div className="grid lg:grid-cols-[1.25fr_1fr] gap-4 items-center">
               <div className="flex items-center gap-3 min-w-0">
-                <Avatar className="w-12 h-12 border-2 border-[#B89555]/45 shadow-sm">
+                <Avatar className="w-12 h-12 border-2 border-[#B89555]/45 shadow-sm" data-surface="emerald" data-no-contrast-guard>
                   <AvatarImage src={profile?.avatar_url || ""} />
-                  <AvatarFallback className="bg-[image:var(--jj-emerald-ombre)] text-white font-bold">
-                    {displayName.slice(0, 2).toUpperCase()}
+                  <AvatarFallback
+                    data-surface="emerald"
+                    data-no-contrast-guard
+                    data-emerald-ok
+                    className="allow-white bg-[image:var(--jj-emerald-ombre)] !text-white font-bold"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                  >
+                    {userInitials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0">
@@ -489,35 +509,37 @@ export default function InvestorDashboard() {
                   <p className="text-xs text-muted-foreground">Manage inventory, approvals, documents, bookings, reminders, and JBJ consultant sharing in one place.</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <button onClick={() => setActiveTab("calendar")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <Calendar className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Calendar</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{nextBooking ? `${nextBooking.time} · ${nextBooking.title}` : "No bookings"}</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 min-w-0">
+                <button onClick={() => setActiveTab("calendar")} className={quickTileBase}>
+                  <Calendar className={quickTileIcon} />
+                  <p className={quickTileTitle}>Calendar</p>
+                  <p className={quickTileSub}>{nextBooking ? `${nextBooking.time} · ${nextBooking.title}` : "No bookings"}</p>
                 </button>
-                <button onClick={() => setActiveTab("tasks")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <ClipboardList className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Task notes</p>
-                  <p className="text-[10px] text-muted-foreground">{openTaskCount} open</p>
+                <button onClick={() => setActiveTab("tasks")} className={quickTileBase}>
+                  <ClipboardList className={quickTileIcon} />
+                  <p className={quickTileTitle}>Tasks</p>
+                  <p className={quickTileSub}>{openTaskCount} open</p>
                 </button>
-                <button onClick={() => setActiveTab("assistant")} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <Bot className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">AI assistant</p>
-                  <p className="text-[10px] text-muted-foreground">Book + remind</p>
+                <button onClick={() => setActiveTab("assistant")} className={quickTileBase}>
+                  <Bot className={quickTileIcon} />
+                  <p className={quickTileTitle}>Assistant</p>
+                  <p className={quickTileSub}>Book + remind</p>
                 </button>
-                <button onClick={handleShareInventory} className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-left hover:-translate-y-0.5 hover:shadow-md transition-all">
-                  <Link2 className="w-4 h-4 text-[#064E3B] mb-2" />
-                  <p className="text-[10px] font-bold text-[#1A1A1A] uppercase">Share links</p>
-                  <p className="text-[10px] text-muted-foreground">{submittedListings.length} listings</p>
+                <button onClick={hasInventory ? handleShareInventory : () => setActiveTab("properties")} className={quickTileBase}>
+                  <Link2 className={quickTileIcon} />
+                  <p className={quickTileTitle}>Share</p>
+                  <p className={quickTileSub}>{hasInventory ? `${submittedListings.length} listings` : "Register first"}</p>
                 </button>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Tabs */}
+        {/* Tabs — horizontally scrollable strap so they never crash into the header */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="flex flex-wrap gap-1.5 bg-transparent p-0 mb-6 h-auto">
+          <div className="mb-6 -mx-1 overflow-x-auto jj-scrollbar-gold">
+          <TabsList className="flex flex-nowrap gap-1.5 bg-transparent p-1 h-auto w-max min-w-full">
+
             <TabsTrigger value="dashboard" className={TAB_STYLE}>
               <LayoutDashboard className="w-3.5 h-3.5 mr-1 hidden md:block" /> Dashboard
             </TabsTrigger>
