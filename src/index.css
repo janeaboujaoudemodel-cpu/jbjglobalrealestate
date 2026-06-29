@@ -10738,8 +10738,8 @@ html body input.mortgage-range-input::-moz-range-track {
  * Final override: force white icons/text inside any emerald-fill
  * sidebar tile or emerald-band card. Wins over all prior rules.
  * ============================================================ */
-html body .jj-side-tile,
-html body .jj-side-tile *,
+html body .jj-side-tile.is-active,
+html body .jj-side-tile.is-active *,
 html body [data-sidebar-emerald] a.group > span.w-5.h-5 > svg,
 html body [data-sidebar-emerald] [data-sidebar-section] svg[data-sidebar-section-icon],
 html body [data-sidebar-emerald] a[data-sidebar-subitem] svg[data-sidebar-subitem-icon] {
@@ -10747,8 +10747,8 @@ html body [data-sidebar-emerald] a[data-sidebar-subitem] svg[data-sidebar-subite
   stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body .jj-side-tile svg,
-html body .jj-side-tile svg * {
+html body .jj-side-tile.is-active svg,
+html body .jj-side-tile.is-active svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
@@ -12734,13 +12734,13 @@ html body :is(
    making tiles visually read as light green. */
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ),
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ):is(:hover, :focus, :focus-visible, :active, :disabled) {
@@ -12755,13 +12755,13 @@ html body :is(
 }
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ) :is(svg, [class*="lucide"], [data-lucide]),
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ) :is(svg, [class*="lucide"], [data-lucide]) * {
@@ -12824,13 +12824,13 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald][data-sidebar-emerald] [
    the light treatment and forces the canonical ombre everywhere. */
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ),
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ):is(:hover, :focus, :focus-visible, :active, :disabled) {
@@ -12845,13 +12845,13 @@ html body :is(
 }
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ) :is(svg, [class*="lucide"], [data-lucide]),
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ) :is(svg, [class*="lucide"], [data-lucide]) * {
@@ -12869,13 +12869,13 @@ html body :is(
    green-filled instead of official dark emerald. */
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ),
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ):is(:hover, :focus, :focus-visible, :active, :disabled) {
@@ -12890,13 +12890,13 @@ html body :is(
 }
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ) :is(svg, [class*="lucide"], [data-lucide]),
 html body :is(
   [data-chrome="sidebar"] [data-emerald-icon-surface],
-  [data-chrome="sidebar"] .jj-side-tile,
+  [data-chrome="sidebar"] .jj-side-tile.is-active,
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald
 ) :is(svg, [class*="lucide"], [data-lucide]) * {

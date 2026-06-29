@@ -1354,19 +1354,22 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
 
-          {/* Section icons — emerald-ombre tiles with white icons */}
+          {/* Section icons — inactive = champagne/ink, active = emerald/white */}
           <style>{`
             .jj-side-tile {
-              background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-              border: 0 !important;
-              color: #FFFFFF !important;
-              box-shadow: 0 9px 20px -13px rgba(6,78,59,0.9), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-              transition: filter 120ms ease, box-shadow 120ms ease !important;
+              background: rgba(253,251,247,0.44) !important;
+              border: 1px solid rgba(184,149,85,0.16) !important;
+              color: #1A1A1A !important;
+              box-shadow: none !important;
+              filter: none !important;
+              transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease !important;
             }
             .jj-side-tile svg,
-            .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; transition: none !important; }
-            .jj-side-tile:hover { background: var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%)) !important; filter: brightness(1.06) !important; transform: none !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.78), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
-            .jj-side-tile.is-active { box-shadow: 0 10px 22px -11px rgba(4,120,87,0.82), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 14px rgba(0,0,0,0.22) !important; }
+            .jj-side-tile svg * { color: #1A1A1A !important; stroke: #1A1A1A !important; opacity: 1 !important; transition: none !important; }
+            .jj-side-tile:hover { background: rgba(216,204,178,0.72) !important; border-color: rgba(184,149,85,0.34) !important; filter: none !important; transform: none !important; box-shadow: 0 8px 18px -16px rgba(26,26,26,0.28) !important; }
+            .jj-side-tile.is-active { background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important; border-color: transparent !important; color: #FFFFFF !important; box-shadow: 0 10px 22px -11px rgba(4,120,87,0.82), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 14px rgba(0,0,0,0.22) !important; }
+            .jj-side-tile.is-active svg,
+            .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
@@ -1500,7 +1503,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-8 h-8 rounded-[10px] flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-8 h-8 rounded-[10px] flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}
