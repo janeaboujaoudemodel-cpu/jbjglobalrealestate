@@ -556,7 +556,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12 }}>
               {["Client requirements", "Matched properties", "Comparison matrix", "Consultant next steps"].map((item) => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, color: WHITE, WebkitTextFillColor: WHITE }}>
-                  <span style={{ width: 6, height: 6, borderRadius: 999, background: T.gold, flexShrink: 0 }} />
+                  <span data-aihf-scope-dot style={{ width: 6, height: 6, borderRadius: 999, background: WHITE, flexShrink: 0 }} />
                   <span style={{ fontSize: 12, fontWeight: 800, color: WHITE, WebkitTextFillColor: WHITE }}>{item}</span>
                 </div>
               ))}

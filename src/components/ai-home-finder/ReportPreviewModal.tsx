@@ -292,6 +292,17 @@ export default function ReportPreviewModal({
             color: #064E3B !important;
             -webkit-text-fill-color: #064E3B !important;
           }
+          /* LIVE PREVIEW — lock pure white on any emerald/dark surface inside the engine */
+          html body [data-aihf-preview] [data-on-dark],
+          html body [data-aihf-preview] [data-on-dark] *,
+          html body [data-aihf-preview] [data-surface="emerald"],
+          html body [data-aihf-preview] [data-surface="emerald"] * {
+            color: #FFFFFF !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+          }
+          html body [data-aihf-preview] [data-aihf-scope-dot] {
+            background: #FFFFFF !important;
+          }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
           <DialogTitle className="text-xl font-bold" style={{ color: C.ink }}>
@@ -315,12 +326,12 @@ export default function ReportPreviewModal({
                 aria-label={`Active role: ${ROLE_LABELS[activeRole]}`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: C.gold }} />
-                  <span className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
+                  <span className="inline-block w-2 h-2 rounded-full" style={{ background: "#FFFFFF", boxShadow: "0 0 0 2px rgba(255,255,255,0.25)" }} />
+                  <span className="text-sm font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                     {ROLE_LABELS[activeRole]}
                   </span>
                 </div>
-                <span className="text-[10px] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.75)" }}>
+                <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.92 }}>
                   Active mode
                 </span>
               </div>
@@ -347,7 +358,7 @@ export default function ReportPreviewModal({
                       data-active={active ? "true" : "false"}
                       onClick={() => update({ mode: opt.v })}
                       className={`text-xs font-semibold rounded-md px-3 py-2 transition ${active ? "allow-white" : ""}`}
-                      style={active ? primaryBtn : secondaryBtn}
+                      style={active ? { ...primaryBtn, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : secondaryBtn}
                     >
                       {opt.l}
                     </button>
