@@ -568,6 +568,9 @@ export default function InvestorDashboard() {
               <Bot className="w-3.5 h-3.5 mr-1 hidden md:block" /> AI Assistant
             </TabsTrigger>
           </TabsList>
+          </div>
+
+
 
           {/* ── DASHBOARD ── */}
           <TabsContent value="dashboard">
