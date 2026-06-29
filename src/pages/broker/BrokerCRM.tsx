@@ -491,15 +491,16 @@ export default function BrokerCRM() {
                 </span>
                 <span className="text-[11px] text-[#1A1A1A]/60">Click any card to open the lead</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+              <div className="-mx-2 px-2 overflow-x-auto pb-2 jj-kanban-scroll">
+                <div className="flex gap-3 min-w-max xl:grid xl:grid-cols-6 xl:min-w-0">
                 {stageCounts.map((s) => (
                   <div
                     key={s.key}
-                    className="rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 flex flex-col min-h-[220px]"
+                    className="w-[240px] xl:w-auto shrink-0 rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 flex flex-col min-h-[220px]"
                   >
                     <div className="flex items-center justify-between px-3 py-2.5 border-b border-[color:var(--emerald-1)]/15">
-                      <div className="text-[10px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]">{s.label}</div>
-                      <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-[color:var(--emerald-1)] text-white text-[10px] font-bold tabular-nums">
+                      <div className="text-[10px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A] truncate">{s.label}</div>
+                      <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-[color:var(--emerald-1)] text-white text-[10px] font-bold tabular-nums shrink-0">
                         {s.count}
                       </span>
                     </div>
@@ -520,11 +521,11 @@ export default function BrokerCRM() {
                               <div className="text-[10px] text-[#1A1A1A]/60 truncate">{getLeadEmail(l) || getLeadPhone(l) || "—"}</div>
                             </div>
                           </div>
-                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#B89555]/15">
-                            <span className="text-[9px] uppercase tracking-[0.14em] text-[#1A1A1A]/55 truncate">
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#B89555]/15 gap-2">
+                            <span className="text-[9px] uppercase tracking-[0.14em] text-[#1A1A1A]/55 truncate min-w-0">
                               {l.source || l.lead_source_type || "Direct"}
                             </span>
-                            <span className="text-[9px] text-[#1A1A1A]/55 tabular-nums">{formatDisplayDate(l.updated_at)}</span>
+                            <span className="text-[9px] text-[#1A1A1A]/55 tabular-nums shrink-0">{formatDisplayDate(l.updated_at)}</span>
                           </div>
                         </button>
                       ))}
@@ -543,6 +544,7 @@ export default function BrokerCRM() {
                     </div>
                   </div>
                 ))}
+                </div>
               </div>
             </PremiumCard>
           )}
