@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
+  GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield, Sparkles,
   CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
@@ -748,7 +748,7 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
         </h3>
         <ul className="space-y-2.5">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/8 px-3 py-2 text-white text-sm leading-relaxed shadow-[inset_0_1px_0_rgba(255,255,255,.08)]">
+            <li key={i} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-white text-sm leading-relaxed shadow-[inset_0_1px_0_rgba(255,255,255,.08)]">
               {mark}
               <span>{p}</span>
             </li>
