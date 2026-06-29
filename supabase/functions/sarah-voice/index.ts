@@ -11,8 +11,10 @@ serve(async (req) => {
   }
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
-    
+    // Prefer the connector-managed key; fall back to the legacy manual secret
+    const ELEVENLABS_API_KEY =
+      Deno.env.get("ELEVENLABS_API_KEY_1") ?? Deno.env.get("ELEVENLABS_API_KEY");
+
     if (!ELEVENLABS_API_KEY) {
       throw new Error("ElevenLabs API key not configured");
     }
