@@ -373,13 +373,14 @@ export default function BrokerCRM() {
   const conversion = totalLeads > 0 ? Math.round((wonStage / totalLeads) * 100) : 0;
 
   const stageCounts = useMemo(() => {
-    return STAGE_GROUPS.map((g) => ({
-      ...g,
-      count: leadsData.filter((l: any) =>
+    return STAGE_GROUPS.map((g) => {
+      const items = leadsData.filter((l: any) =>
         g.match.includes(((l.pipeline_stage ?? l.status) ?? "").toString().toLowerCase()),
-      ).length,
-    }));
+      );
+      return { ...g, count: items.length, items };
+    });
   }, [leadsData]);
+
 
   return (
     <div className="space-y-6">
