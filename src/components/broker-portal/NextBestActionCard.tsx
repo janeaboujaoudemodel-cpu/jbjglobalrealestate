@@ -93,10 +93,16 @@ export default function NextBestActionCard() {
         </div>
         <Link
           to="/broker/crm"
-          className="hidden md:inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md text-[#1A1A1A] hover:bg-[#EFE6D6] border border-[#B89555]/40 transition-colors"
+          data-no-contrast-guard
+          data-allow-dark-cta
+          data-surface="emerald"
+          className="allow-white shrink-0 hidden md:inline-flex items-center gap-1.5 text-[11.5px] font-semibold leading-none whitespace-nowrap px-3 py-2 rounded-md border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-12px_rgba(6,78,59,0.95)] transition-all"
+          style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
         >
-          Full pipeline <ArrowRight className="h-3.5 w-3.5" />
+          <span style={{ color: "#FFFFFF" }}>Full pipeline</span>
+          <ArrowRight className="h-3.5 w-3.5 shrink-0" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
         </Link>
+
       </div>
 
       {loading && (
