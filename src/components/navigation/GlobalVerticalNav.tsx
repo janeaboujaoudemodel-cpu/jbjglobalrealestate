@@ -825,19 +825,12 @@ export default function GlobalVerticalNav() {
 
   const getIconStyle = () => 'text-white';
 
-  const lockEmeraldGlyphWhite = useCallback((el: SVGSVGElement | null) => {
-    if (!el) return;
-    el.style.setProperty('color', '#FFFFFF', 'important');
-    el.style.setProperty('stroke', '#FFFFFF', 'important');
-    el.style.setProperty('-webkit-text-fill-color', '#FFFFFF', 'important');
-    el.style.setProperty('opacity', '1', 'important');
-    el.querySelectorAll('path, line, polyline, polygon, rect, circle, ellipse, use, g').forEach((part) => {
-      const svgPart = part as SVGElement;
-      svgPart.style.setProperty('color', '#FFFFFF', 'important');
-      svgPart.style.setProperty('stroke', '#FFFFFF', 'important');
-      svgPart.style.setProperty('opacity', '1', 'important');
-    });
-  }, []);
+  const getSidebarIconStyle = (onEmerald: boolean): React.CSSProperties => ({
+    color: onEmerald ? '#FFFFFF' : '#1A1A1A',
+    stroke: onEmerald ? '#FFFFFF' : '#1A1A1A',
+    WebkitTextFillColor: onEmerald ? '#FFFFFF' : '#1A1A1A',
+    opacity: 1,
+  });
 
   const navHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#0A0A0A]";
   const subNavHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#0A0A0A]";
@@ -1063,7 +1056,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   preserveVisual
                   to={item.href}
                   icon={Icon}
-                  iconRef={lockEmeraldGlyphWhite}
                   label={item.label}
                   active={highlightActive}
                   onMouseEnter={() => prefetchAITool(item.href)}
@@ -1110,7 +1102,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     preserveVisual
                     asButton
                     icon={SectionIcon}
-                    iconRef={lockEmeraldGlyphWhite}
                     label={sectionKey}
                     active={sectionHighlighted}
                     onClick={(e) => toggleSection(sectionKey, e as React.MouseEvent)}
@@ -1158,7 +1149,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           preserveVisual
                           to="/ai-hub"
                           icon={Eye}
-                          iconRef={lockEmeraldGlyphWhite}
                           label="View All Tools"
                           onClick={collapseAfterNavigation}
                           data-sidebar-subitem
@@ -1187,7 +1177,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               preserveVisual
                               to={item.href}
                               icon={Icon}
-                              iconRef={lockEmeraldGlyphWhite}
                               label={item.label}
                               active={subitemActive}
                               onMouseEnter={() => prefetchAITool(item.href)}
