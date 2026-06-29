@@ -10108,24 +10108,37 @@ html body [data-jj-utility-bar] .jj-sqtoggle[data-active="false"] {
 }
 
 
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight],
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:focus-visible {
-  background-image:
-    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 50%, rgba(255,255,255,0) 100%),
-    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-color: #064E3B !important;
-  background-size: 100% 100% !important;
-  background-blend-mode: normal !important;
-  border: 1px solid rgba(4,120,87,.95) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 22px -14px rgba(6,78,59,.90) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+/* ── Sidebar Highlight Unification (Pass) ──
+   AI Home Finder / List Your Property / Careers / Resale Properties must
+   render with the SAME idle + hover style as every other sidebar row
+   (transparent background, ink label, subtle champagne wash on hover).
+   The emerald-filled treatment is reserved exclusively for the
+   [data-active="true"] state, which is handled by the active rule above. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):focus-visible {
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:hover *,
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] :is(svg, [class*="lucide"]),
-html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] :is(svg, [class*="lucide"]) * {
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover {
+  background-image: none !important;
+  background-color: rgba(26,26,26,0.045) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]) [data-sidebar-highlight-label],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight]:not([data-active="true"]):hover [data-sidebar-highlight-label] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+/* Keep the emerald icon tile + white glyph inside the tile regardless of row state. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child :is(svg, [class*="lucide"]),
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-highlight] > span:first-child :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
