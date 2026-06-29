@@ -87,7 +87,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     (typeof meta.name === "string" ? meta.name : null) ||
     user.email?.split("@")[0] ||
     "User";
-  const initials = "JB";
+  const initials = getUserInitials({ displayName, email: user.email, isOwner });
 
   const showCRM = (isOwner && mode === "owner") || mode === "broker";
   const pendingTasks = alerts?.pendingTasks || 0;
