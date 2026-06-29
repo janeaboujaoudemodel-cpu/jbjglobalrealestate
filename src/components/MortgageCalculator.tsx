@@ -572,7 +572,7 @@ const MortgageCalculator = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label className="text-foreground flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                  <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
                   Interest Rate (Annual)
                 </Label>
                 <span className="text-[#1A1A1A] font-semibold">{interestRate}%</span>
