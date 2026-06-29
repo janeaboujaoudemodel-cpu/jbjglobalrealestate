@@ -270,7 +270,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             </Button>
             <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-lg p-4">
               <p className="text-muted-foreground text-xs text-center">
-                This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
+                This content is proprietary academy material. Internal recognition only — not for external certification.
               </p>
             </div>
           </div>

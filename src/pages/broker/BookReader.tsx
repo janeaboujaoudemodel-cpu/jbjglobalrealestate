@@ -511,8 +511,8 @@ function CoverFace({
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
       <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-9">
-        <div className="text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
-          JBJ Global Real Estate · Book {book.book_number}
+        <div className="allow-white text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
+          Broker Academy · Book {book.book_number}
         </div>
         <h1 className="allow-white text-white text-2xl md:text-3xl font-bold leading-tight mb-2 drop-shadow">
           {book.title}
@@ -554,7 +554,7 @@ function BackCoverFace({ book, onRestart }: { book: EducationBook; onRestart: ()
       <div className="flex-1" />
       <div className="rounded-md border border-[#B89555]/40 bg-black/30 p-4 mb-5">
         <p className="allow-white text-white/85 text-xs leading-relaxed">
-          Proprietary to JBJ GLOBAL REAL ESTATE — internal recognition only, not for external certification.
+          Proprietary academy content — internal recognition only, not for external certification.
         </p>
       </div>
       <div className="flex flex-wrap gap-2">

@@ -267,7 +267,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                     Founder &amp; CEO
                   </div>
                   <div className="text-[10px] text-[#B89555] tracking-wide mt-0.5">
-                    JBJ Global Real Estate
+                    Broker Academy
                   </div>
                 </div>
               </div>

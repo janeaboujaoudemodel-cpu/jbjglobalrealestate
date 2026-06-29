@@ -111,11 +111,12 @@ export default function AcademyAccessRequestModal({ open, onOpenChange, item }: 
             className="jj-pill-emerald-metallic disabled:opacity-100"
             data-cta="aa-submit"
             data-surface="emerald"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
             {submitting ? (
-              <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> Sending…</>
+              <><Loader2 className="w-4 h-4 mr-1.5 animate-spin text-white" strokeWidth={2.6} /> <span className="text-white">Sending…</span></>
             ) : (
-              <><GraduationCap className="w-4 h-4 mr-1.5" /> Send Request</>
+              <><GraduationCap className="w-4 h-4 mr-1.5 text-white" strokeWidth={2.6} /> <span className="text-white">Send Request</span></>
             )}
           </Button>
         </div>
