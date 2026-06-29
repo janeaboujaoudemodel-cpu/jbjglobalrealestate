@@ -61,7 +61,7 @@ export default function BrokerCalendar() {
         </div>
         <button
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#1A1A1A] text-[#F7F2EA] text-sm hover:opacity-90"
+          className="jj-pill-emerald-metallic inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm"
         >
           <Plus className="h-4 w-4" /> New event
         </button>
