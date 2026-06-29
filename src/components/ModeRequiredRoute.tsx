@@ -41,13 +41,8 @@ const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
   const matches = modes.includes(mode) || isExplicitOwnerPreview;
   const target = modes[0];
 
-  if (ownerLoading) return null;
-
-  if (hasMadeInitialSelection && mode === 'owner' && isOwner && !modes.includes('owner') && !isExplicitOwnerPreview) {
-    return <Navigate to="/owner" replace state={{ from: location }} />;
-  }
-
   useEffect(() => {
+    if (ownerLoading) return;
     if (matches) return;
     if (!hasMadeInitialSelection) return;
     if (didSwitchRef.current) return;
@@ -57,7 +52,13 @@ const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
       description: 'You can change your mode anytime from the account menu.',
       duration: 4500,
     });
-  }, [matches, hasMadeInitialSelection, setMode, target]);
+  }, [matches, hasMadeInitialSelection, ownerLoading, setMode, target]);
+
+  if (ownerLoading) return null;
+
+  if (hasMadeInitialSelection && mode === 'owner' && isOwner && !modes.includes('owner') && !isExplicitOwnerPreview) {
+    return <Navigate to="/owner" replace state={{ from: location }} />;
+  }
 
   return <>{children}</>;
 };
