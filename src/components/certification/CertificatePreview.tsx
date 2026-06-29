@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Share2, Lock, Award, Medal, BadgeCheck } from "lucide-react";
+import { Download, Share2, Lock, Award, Medal, BadgeCheck, GraduationCap } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
@@ -188,13 +188,13 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
 
             {/* Content */}
             <div className="relative z-10 px-8 sm:px-14 py-10 sm:py-14 text-center">
-              {/* Brand wordmark */}
-              <div className="text-[15px] sm:text-base font-semibold tracking-[0.32em] text-[#1A1A1A]">
-                JBJ GLOBAL REAL ESTATE
+              {/* Clean academy crest — no wordmark underline on the plate */}
+              <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-[#B89555]/55 bg-[#FDFBF7]/80 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#1A1A1A] shadow-[0_10px_28px_-24px_rgba(26,26,26,.55)]">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-[image:var(--jj-emerald-ombre)]" data-surface="emerald">
+                  <GraduationCap className="h-3.5 w-3.5 text-white" strokeWidth={2.6} />
+                </span>
+                Broker Academy
               </div>
-
-              {/* Gold rule */}
-              <div className="mx-auto mt-3 mb-6 h-px w-24 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
 
               {/* Eyebrow */}
               <div className="text-[11px] sm:text-xs tracking-[0.34em] uppercase text-[#B89555] mb-6">
@@ -213,8 +213,8 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
               </div>
 
               <div className="text-[#1A1A1A]/85 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-                has successfully completed all phases of the JBJ Global Real Estate
-                Broker Certification Program and is hereby recognised as a
+                has successfully completed all phases of the broker academy
+                certification program and is hereby recognised as a
               </div>
 
               {/* Title */}
