@@ -1,4 +1,5 @@
 import { Sparkles, Users, BriefcaseBusiness, MapPin, Headphones, Building2 } from "lucide-react";
+import IconTile from "@/components/ui/icon-tile";
 import { Link } from "react-router-dom";
 
 /**
