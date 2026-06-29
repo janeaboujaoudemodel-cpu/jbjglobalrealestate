@@ -36,7 +36,7 @@ export default function BrokerMessages() {
               key={t.id}
               type="button"
               onClick={() => setTab(t.id)}
-              className={`px-3 py-2 text-sm rounded-t-md inline-flex items-center gap-2 border-b-2 ${active ? "border-[#B89555] text-[#1A1A1A] bg-[#EFE6D6]/60" : "border-transparent text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+              className={`px-3 py-2 text-sm rounded-t-md inline-flex items-center gap-2 border-b-2 ${active ? "jj-surface-emerald allow-white border-[color:var(--emerald-1)] text-white shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "border-transparent text-[#1A1A1A]/65 hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"}`}
             >
               <Icon className="h-3.5 w-3.5" /> {t.label}
             </button>

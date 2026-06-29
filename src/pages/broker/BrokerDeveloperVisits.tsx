@@ -359,8 +359,8 @@ export default function BrokerDeveloperVisits() {
                             <Star
                               className="h-5 w-5"
                               style={{
-                                color: filled ? "#B89555" : "#1A1A1A33",
-                                fill: filled ? "#B89555" : "transparent",
+                                color: filled ? "#064E3B" : "#1A1A1A33",
+                                fill: filled ? "#064E3B" : "transparent",
                               }}
                             />
                           </button>
@@ -393,7 +393,7 @@ export default function BrokerDeveloperVisits() {
             type="button"
             disabled={!picked || createMut.isPending}
             onClick={() => createMut.mutate()}
-            className="inline-flex items-center gap-2 h-11 px-5 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold border border-[#B89555]/55 hover:bg-[#1F1F1F] shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="jj-surface-emerald allow-white inline-flex items-center gap-2 h-11 px-5 rounded-md text-white text-sm font-semibold border border-white/20 hover:-translate-y-0.5 hover:brightness-110 shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             data-allow-dark-cta
             data-no-contrast-guard
           >

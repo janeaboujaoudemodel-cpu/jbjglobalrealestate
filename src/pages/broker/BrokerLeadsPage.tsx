@@ -33,7 +33,7 @@ export default function BrokerLeadsPage() {
     setAddOpen(false);
     if (params.get("action")) {
       params.delete("action");
-      setParams(params, { replace: true });
+      setParams(new URLSearchParams(params), { replace: true });
     }
   };
 
@@ -53,14 +53,14 @@ export default function BrokerLeadsPage() {
         <button
           type="button"
           onClick={() => setAddOpen(true)}
-          className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] transition-colors allow-white"
-          data-allow-dark-cta
+          className="jj-surface-emerald allow-white inline-flex items-center gap-2 h-10 px-4 rounded-md text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-all"
+          data-surface="emerald"
         >
           <Plus className="h-4 w-4" /> Add Lead
         </button>
       </header>
 
-      <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 overflow-hidden">
+      <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 overflow-x-auto">
         {leads.isLoading ? (
           <div className="p-10 text-center text-sm text-[#1A1A1A]/60 flex items-center justify-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" /> Loading…
@@ -113,6 +113,7 @@ export default function BrokerLeadsPage() {
 
       {user?.id && (
         <CRMLeadModal
+          key={addOpen ? "lead-open" : "lead-closed"}
           open={addOpen}
           onClose={closeAdd}
           onSuccess={() => { leads.refetch(); }}

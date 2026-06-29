@@ -263,7 +263,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
-      <DialogContent className="w-[calc(100vw-1rem)] sm:max-w-[960px] max-h-[calc(100dvh-1rem)] overflow-hidden bg-[#FDFBF7] border border-[#B89555]/35 p-0 shadow-[0_28px_80px_-42px_rgba(26,26,26,0.75)]">
+      <DialogContent key={open ? "open" : "closed"} className="w-[calc(100vw-1rem)] sm:max-w-[960px] max-h-[calc(100dvh-1rem)] overflow-hidden bg-[#FDFBF7] border border-[#B89555]/35 p-0 shadow-[0_28px_80px_-42px_rgba(26,26,26,0.75)]">
         <DialogHeader className="px-6 pt-5 pb-3 border-b border-[#B89555]/20">
           <DialogTitle className="text-[#1A1A1A] text-lg">Add Lead / Client</DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/70">
@@ -627,7 +627,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </div>
                 <div className="space-y-1.5">
                   <Label className="flex items-center gap-1.5 mb-0">
-                    <Users2 className="h-3.5 w-3.5 text-blue-500" />
+                    <Users2 className="h-3.5 w-3.5 text-[color:var(--emerald-1)]" />
                     Pool
                   </Label>
                   <div className="inline-flex w-full rounded-lg border border-[#1A1A1A]/15 overflow-hidden bg-[#FDFBF7]">
