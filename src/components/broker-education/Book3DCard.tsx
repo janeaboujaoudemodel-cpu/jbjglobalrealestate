@@ -97,6 +97,7 @@ export function Book3DCard({
               size="sm"
               data-cta="book-open"
               data-surface={effectivelyLocked ? "emerald" : undefined}
+              style={effectivelyLocked ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
               disabled={effectivelyLocked && !!onRequestAccess && requestAccessDisabled}
               className={effectivelyLocked ? "jj-pill-emerald-metallic w-full disabled:opacity-100" : "jj-cta-outline w-full"}
               onClick={(e) => {

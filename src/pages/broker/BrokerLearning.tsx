@@ -682,9 +682,10 @@ function TrainingCard({
               title={lockReason ?? "Locked"}
               className="jj-pill-emerald-metallic shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold disabled:opacity-100 leading-none"
               data-surface="emerald"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <Lock className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-              <span className="whitespace-nowrap">Request Access</span>
+              <Lock className="w-3 h-3 shrink-0 text-white" strokeWidth={2.6} />
+              <span className="whitespace-nowrap text-white">Request Access</span>
             </button>
           ) : (
             <button

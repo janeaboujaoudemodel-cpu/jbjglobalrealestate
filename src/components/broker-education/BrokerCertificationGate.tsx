@@ -364,8 +364,9 @@ export default function BrokerCertificationGate() {
               className="jj-pill-emerald-metallic disabled:opacity-100"
               data-cta="cert-submit"
               data-surface="emerald"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting…</> : <><ShieldCheck className="h-4 w-4 mr-2" /> Request Certification</>}
+              {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> <span className="text-white">Submitting…</span></> : <><ShieldCheck className="h-4 w-4 mr-2 text-white" /> <span className="text-white">Request Certification</span></>}
             </Button>
           </div>
         )}
@@ -389,7 +390,7 @@ export default function BrokerCertificationGate() {
                 will flag the attempt for owner review.
               </span>
             </p>
-            <Button onClick={startQuiz} disabled={quizLoading} className="jj-pill-emerald-metallic" data-cta="cert-start-quiz">
+            <Button onClick={startQuiz} disabled={quizLoading} className="jj-pill-emerald-metallic" data-cta="cert-start-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {quizLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Loading quiz…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Start AI Quiz</>}
             </Button>
           </div>
@@ -425,7 +426,7 @@ export default function BrokerCertificationGate() {
                 </li>
               ))}
             </ol>
-            <Button onClick={submitQuiz} disabled={grading} className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz">
+            <Button onClick={submitQuiz} disabled={grading} className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Grading…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Submit Quiz</>}
             </Button>
           </div>
