@@ -19207,10 +19207,12 @@ html body [data-radix-popper-content-wrapper]
    emerald hover from PASS 100/101 remains untouched.
 ============================================================ */
 
-/* Currency: inactive row hover/focus/highlight = champagne lift + ink */
+/* Currency: inactive row hover/focus/highlight = champagne lift + ink.
+   Uses the same :not(#id#id#id#id) specificity trick as PASS 101 so this
+   block out-specifies the global emerald hover applied earlier. */
 html body [data-radix-popper-content-wrapper]
-  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]) {
+  [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]):not(#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne) {
   background: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
   background-color: #F2EADB !important;
   background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
@@ -19226,11 +19228,11 @@ html body [data-radix-popper-content-wrapper]
 }
 
 html body [data-radix-popper-content-wrapper]
-  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]) *,
+  [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]):not(#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne) *,
 html body [data-radix-popper-content-wrapper]
-  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]) :is(span, p, small, strong, em, b, label, svg, path, circle, rect, line, polyline, polygon) {
+  [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]):not(#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne) :is(span, p, small, strong, em, b, label, svg, path, circle, rect, line, polyline, polygon) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
