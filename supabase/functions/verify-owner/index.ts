@@ -60,8 +60,10 @@ serve(async (req) => {
       .eq("key", "owner_email")
       .maybeSingle();
 
-    const configuredOwnerEmail = String(setting?.value || PRIMARY_OWNER_EMAIL).toLowerCase().trim();
-    const authorizedOwnerEmail = configuredOwnerEmail || PRIMARY_OWNER_EMAIL;
+    const configuredOwnerEmail = String(setting?.value || "").toLowerCase().trim();
+    const authorizedOwnerEmail = configuredOwnerEmail === PRIMARY_OWNER_EMAIL
+      ? configuredOwnerEmail
+      : PRIMARY_OWNER_EMAIL;
 
     if (userEmailLower !== authorizedOwnerEmail) {
       return new Response(
