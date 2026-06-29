@@ -890,14 +890,6 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 )}
               </div>
 
-              {/* Footer hint */}
-              <div className="p-4 border-t border-[#B89555]/30 bg-[#FDFBF7]/50 flex-shrink-0">
-                <p className="text-[#1A1A1A]/70 text-sm text-center">
-                  <kbd className="px-2 py-1 bg-[#1A1A1A]/10 rounded text-[#1A1A1A] font-mono text-xs">Enter</kbd> to select first result 
-                  <span className="mx-3">•</span>
-                  <kbd className="px-2 py-1 bg-[#1A1A1A]/10 rounded text-[#1A1A1A] font-mono text-xs">Esc</kbd> to close
-                </p>
-              </div>
             </div>
           </div>
         </>
