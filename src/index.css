@@ -19290,3 +19290,40 @@ html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================
+   PASS 105 — GLOBAL EMERALD-SURFACE WHITE-INK LOCK
+   Any element marked data-surface="emerald" (or carrying the
+   emerald token classes) MUST render white text and white SVG
+   strokes at all states. Catches stragglers where black ink
+   leaked onto an emerald-filled pill/tile/card.
+   Scope guards:
+     - Skip when [data-no-contrast-guard] is set on an ancestor
+       that explicitly opts out (already handled by other passes)
+     - Skip [data-account-role-label] only inside currency rows
+       (handled elsewhere)
+   ============================================================ */
+html body [data-surface="emerald"]:not([data-allow-ink]),
+html body [data-surface="emerald"]:not([data-allow-ink]) :where(span, p, h1, h2, h3, h4, h5, h6, strong, em, b, i, small, label, div, a, button, li),
+html body .jj-emerald-solid:not([data-allow-ink]),
+html body .jj-emerald-solid:not([data-allow-ink]) :where(span, p, h1, h2, h3, h4, h5, h6, strong, em, b, i, small, label, div, a, button, li),
+html body .jj-pill-emerald-metallic:not([data-allow-ink]),
+html body .jj-pill-emerald-metallic:not([data-allow-ink]) :where(span, p, h1, h2, h3, h4, h5, h6, strong, em, b, i, small, label, div, a, button, li),
+html body .jj-cta-emerald:not([data-allow-ink]),
+html body .jj-cta-emerald:not([data-allow-ink]) :where(span, p, h1, h2, h3, h4, h5, h6, strong, em, b, i, small, label, div, a, button, li) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-surface="emerald"]:not([data-allow-ink]) svg,
+html body [data-surface="emerald"]:not([data-allow-ink]) svg *,
+html body .jj-emerald-solid:not([data-allow-ink]) svg,
+html body .jj-emerald-solid:not([data-allow-ink]) svg *,
+html body .jj-pill-emerald-metallic:not([data-allow-ink]) svg,
+html body .jj-pill-emerald-metallic:not([data-allow-ink]) svg *,
+html body .jj-cta-emerald:not([data-allow-ink]) svg,
+html body .jj-cta-emerald:not([data-allow-ink]) svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+}
