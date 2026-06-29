@@ -247,13 +247,14 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
           <div
             data-investor-vault-banner
             data-surface="emerald"
-            className="p-4 rounded-lg flex items-start gap-3"
-            style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            data-emerald-action="true"
+            className="jj-investor-vault-banner p-4 rounded-lg flex items-start gap-3"
+            style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
           >
-            <Shield className="w-5 h-5 flex-shrink-0 mt-0.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <Shield className="w-5 h-5 flex-shrink-0 mt-0.5 allow-white" />
             <div>
-              <p className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Secure Document Vault</p>
-              <p className="text-xs mt-1" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+              <p className="text-sm font-medium">Secure Document Vault</p>
+              <p className="text-xs mt-1">
                 Your documents are encrypted and visible only to you and authorized JBJ advisors.
                 Upload them once and they'll be available across all your transactions.
               </p>
