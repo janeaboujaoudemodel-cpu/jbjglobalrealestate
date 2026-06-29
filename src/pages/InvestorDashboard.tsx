@@ -786,10 +786,19 @@ export default function InvestorDashboard() {
                       { label: "Logo", icon: ImageIcon },
                       { label: "Business Card", icon: CreditCard },
                     ].map((asset) => (
-                      <div key={asset.label} className="text-center p-4 rounded-lg border border-border/30 bg-background/50">
-                        <asset.icon className="w-8 h-8 text-muted-foreground/60 mx-auto mb-2" aria-hidden="true" data-decorative="true" />
-                        <p className="text-xs text-muted-foreground">{asset.label}</p>
-                        <p className="text-[10px] text-muted-foreground/60 mt-1">Not uploaded</p>
+                      <div
+                        key={asset.label}
+                        className="group text-center p-4 rounded-xl border border-[hsl(36,40%,70%)]/40 bg-[#F7F2EA] transition-all duration-200 cursor-default hover:-translate-y-0.5 hover:shadow-[0_10px_28px_-12px_rgba(6,78,59,0.45)]"
+                      >
+                        <div className="mx-auto mb-2 w-12 h-12 rounded-xl flex items-center justify-center bg-[#EFE6D6] border border-[hsl(36,40%,70%)]/40 transition-colors duration-200 group-hover:bg-[var(--emerald-1,#064e3b)] group-hover:border-[var(--emerald-1,#064e3b)]">
+                          <asset.icon
+                            className="w-6 h-6 text-[#1A1A1A] transition-colors duration-200 group-hover:text-white"
+                            aria-hidden="true"
+                            data-decorative="true"
+                          />
+                        </div>
+                        <p className="text-xs font-semibold text-[#1A1A1A]">{asset.label}</p>
+                        <p className="text-[10px] text-muted-foreground/70 mt-1">Not uploaded</p>
                       </div>
                     ))}
                   </div>
