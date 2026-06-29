@@ -19737,3 +19737,13 @@ html body :is(.jj-header-premium-control, .jj-side-tile, .jj-side-tile.is-active
   stroke-opacity: 1 !important;
   opacity: 1 !important;
 }
+
+/* PASS 109 — Unbreak primary emerald CTA descendants even inside legacy light panels. */
+html body :is([data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta):not(#jj-cta-white-lock-a):not(#jj-cta-white-lock-b):not(#jj-cta-white-lock-c),
+html body :is([data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta):not(#jj-cta-white-lock-a):not(#jj-cta-white-lock-b):not(#jj-cta-white-lock-c) :is(*, span, p, strong, em, b, i, small, label, div, a, button, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-cta-white-lock-child-a):not(#jj-cta-white-lock-child-b):not(#jj-cta-white-lock-child-c) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
