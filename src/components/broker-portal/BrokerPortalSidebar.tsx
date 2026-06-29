@@ -88,16 +88,17 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           <img
             src={jbjMonogramNobuffer}
             alt="JBJ"
-            width={collapsed ? 36 : 42}
-            height={collapsed ? 36 : 42}
+            width={collapsed ? 44 : 56}
+            height={collapsed ? 44 : 56}
             className="object-contain flex-shrink-0"
-            style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
+            style={{ width: collapsed ? 44 : 56, height: collapsed ? 44 : 56 }}
           />
           {!collapsed && (
-            <div className="min-w-0 text-[9px] uppercase tracking-[0.08em] text-[#1A1A1A] font-extrabold whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.08] text-left">
-              JBJ Global Real Estate L.L.C S.O.C.
-            </div>
+            <span className="min-w-0 text-[#1A1A1A] font-semibold text-[13px] tracking-[0.12em] uppercase leading-[1.15] whitespace-normal break-words [overflow-wrap:anywhere] text-left">
+              Global Real Estate
+            </span>
           )}
+
         </Link>
       </div>
 
