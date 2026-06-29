@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin, MessageCircle, Mail, LifeBuoy, Compass, TrendingUp } from "lucide-react";
+import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin, MessageCircle, Mail, LifeBuoy, Compass, TrendingUp, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -31,30 +31,33 @@ const QUICK_SHORTCUTS = [
 ];
 
 // Role-aware shortcuts surfaced when no query is typed
+// Role-aware shortcuts surfaced when no query is typed.
+// Every mode MUST surface its own Dashboard + Portal + Account so the
+// "For {Role}s" section always reflects the active mode's workspace.
 const MODE_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
   investor: [
+    { label: "Investor Dashboard", route: "/my-dashboard", icon: LayoutDashboard },
+    { label: "Investor Portal", route: "/my-dashboard", icon: Briefcase },
+    { label: "My Account", route: "/account", icon: User },
     { label: "AI Home Finder", route: "/ai-home-finder", icon: Sparkles },
-    { label: "Off-Plan", route: "/properties?status=off-plan", icon: Building2 },
-    { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
-    { label: "Concierge", route: "/concierge", icon: Sparkles },
     { label: "Favorites", route: "/favorites", icon: Heart },
-    { label: "Buyer Guide", route: "/buyer-guide", icon: BookOpen },
+    { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
   ],
   broker: [
-    { label: "Broker Portal", route: "/broker-dashboard", icon: LayoutDashboard },
-    { label: "Broker Toolkit", route: "/broker-toolkit", icon: Briefcase },
-    { label: "Resources", route: "/broker-resources", icon: BookOpen },
+    { label: "Broker Dashboard", route: "/broker-dashboard", icon: LayoutDashboard },
+    { label: "Broker Portal", route: "/broker-dashboard", icon: Briefcase },
+    { label: "My Account", route: "/account", icon: User },
+    { label: "Broker Toolkit", route: "/broker-toolkit", icon: Sparkles },
     { label: "Academy", route: "/broker-education", icon: GraduationCap },
-    { label: "All Projects", route: "/properties", icon: Building2 },
     { label: "Market Intel", route: "/market-intelligence", icon: TrendingUp },
   ],
   developer: [
-    { label: "Developer Portal", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "Developer Dashboard", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "Developer Portal", route: "/developers-portal", icon: Briefcase },
+    { label: "My Account", route: "/account", icon: User },
     { label: "Submit Project", route: "/developers-portal/projects/new", icon: Building2 },
     { label: "Insights", route: "/market-intelligence", icon: TrendingUp },
     { label: "Reports", route: "/market-report", icon: FileText },
-    { label: "Areas", route: "/areas", icon: Map },
-    { label: "Contact", route: "/contact", icon: Phone },
   ],
 };
 
@@ -489,7 +492,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               width: "min(48rem, calc(100vw - 20px))",
               transform: "translateX(-50%)",
               maxWidth: "calc(100vw - 20px)",
-              top: "clamp(12px, 9dvh, 88px)",
+              top: "calc(var(--app-content-top, 88px) + 12px)",
             }}
           >
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'min(720px, calc(100dvh - clamp(44px, 18dvh, 176px)))' }}>
