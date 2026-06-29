@@ -469,20 +469,21 @@ export default function BrokerCRM() {
               </span>
               <span className="text-xs text-[#1A1A1A]/60">{totalLeads} total leads</span>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 min-w-0">
               {stageCounts.map((s) => (
                 <button
                   key={s.key}
                   type="button"
                   onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
-                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-4 py-4 focus:outline-none"
+                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-3 py-3 sm:px-4 sm:py-4 min-w-0 focus:outline-none"
                 >
                   <IconTile icon={BarChart3} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mt-3 font-semibold">{s.label}</div>
-                  <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mt-3 font-semibold truncate">{s.label}</div>
+                  <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1 truncate">{s.count}</div>
                 </button>
               ))}
             </div>
+
           </PremiumCard>
 
           {/* Kanban board — premium lead-card columns per stage */}
