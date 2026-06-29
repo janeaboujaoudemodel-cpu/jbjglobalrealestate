@@ -537,38 +537,38 @@ export default function InvestorDashboard() {
 
         {/* Tabs — horizontally scrollable strap so they never crash into the header */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="mb-6 -mx-1 overflow-x-auto jj-scrollbar-gold">
-          <TabsList className="flex flex-nowrap gap-1.5 bg-transparent p-1 h-auto w-max min-w-full">
-
-            <TabsTrigger value="dashboard" className={TAB_STYLE}>
-              <LayoutDashboard className="w-3.5 h-3.5 mr-1 hidden md:block" /> Dashboard
-            </TabsTrigger>
-            <TabsTrigger value="properties" className={TAB_STYLE}>
-              <Building2 className="w-3.5 h-3.5 mr-1 hidden md:block" /> My Properties
-            </TabsTrigger>
-            <TabsTrigger value="documents" className={TAB_STYLE}>
-              <FileText className="w-3.5 h-3.5 mr-1 hidden md:block" /> Documents
-            </TabsTrigger>
-            <TabsTrigger value="profile" className={TAB_STYLE}>
-              <User className="w-3.5 h-3.5 mr-1 hidden md:block" /> Update Profile
-            </TabsTrigger>
-            <TabsTrigger value="inbox" className={TAB_STYLE}>
-              <Mail className="w-3.5 h-3.5 mr-1 hidden md:block" /> Inbox
-            </TabsTrigger>
-            <TabsTrigger value="alerts" className={TAB_STYLE}>
-              <Bell className="w-3.5 h-3.5 mr-1 hidden md:block" /> Alerts
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className={TAB_STYLE}>
-              <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" /> Calendar
-            </TabsTrigger>
-            <TabsTrigger value="tasks" className={TAB_STYLE}>
-              <ClipboardList className="w-3.5 h-3.5 mr-1 hidden md:block" /> Tasks
-            </TabsTrigger>
-            <TabsTrigger value="assistant" className={TAB_STYLE}>
-              <Bot className="w-3.5 h-3.5 mr-1 hidden md:block" /> AI Assistant
-            </TabsTrigger>
-          </TabsList>
+          <div className="mb-6 overflow-x-auto jj-scrollbar-gold rounded-xl">
+            <TabsList className="!inline-flex !flex-nowrap !h-auto gap-1.5 bg-[#F7F2EA] p-1.5 whitespace-nowrap w-max min-w-full">
+              <TabsTrigger value="dashboard" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <LayoutDashboard className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Dashboard
+              </TabsTrigger>
+              <TabsTrigger value="properties" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <Building2 className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> My Properties
+              </TabsTrigger>
+              <TabsTrigger value="documents" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <FileText className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Documents
+              </TabsTrigger>
+              <TabsTrigger value="profile" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <User className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Update Profile
+              </TabsTrigger>
+              <TabsTrigger value="inbox" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <Mail className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Inbox
+              </TabsTrigger>
+              <TabsTrigger value="alerts" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <Bell className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Alerts
+              </TabsTrigger>
+              <TabsTrigger value="calendar" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <Calendar className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Calendar
+              </TabsTrigger>
+              <TabsTrigger value="tasks" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <ClipboardList className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Tasks
+              </TabsTrigger>
+              <TabsTrigger value="assistant" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
+                <Bot className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> AI Assistant
+              </TabsTrigger>
+            </TabsList>
           </div>
+
 
 
 
