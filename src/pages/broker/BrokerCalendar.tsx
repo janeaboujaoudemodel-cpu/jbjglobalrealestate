@@ -3,18 +3,11 @@ import {
   useBrokerPersonalCalendar, useCreateBrokerEvent, useSoftDeleteBrokerEvent,
   useRestoreBrokerEvent, useDeleteBrokerEvent, type BrokerEvent,
 } from "@/hooks/useBrokerPersonalCalendar";
-import { Plus, Trash2, MapPin, RotateCcw, Copy, Bell, Bot, Repeat, CalendarDays } from "lucide-react";
+import { Plus, Trash2, MapPin, RotateCcw, Copy, Bell, Bot, CalendarDays } from "lucide-react";
 
 function startOfMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth(), 1); }
 function endOfMonth(d: Date)   { return new Date(d.getFullYear(), d.getMonth() + 1, 0); }
 function addMonths(d: Date, n: number) { return new Date(d.getFullYear(), d.getMonth() + n, 1); }
-function localDateTime(iso?: string) {
-  if (!iso) return "";
-  const d = new Date(iso);
-  const p = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
-}
-
 const emptyDraft = {
   title: "", starts_at: "", ends_at: "", location: "", description: "",
   repeat: "none", reminder: "email_30", ai_instruction: "",
