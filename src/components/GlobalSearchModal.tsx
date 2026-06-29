@@ -134,6 +134,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const { mode } = useUserModeContext();
   const ownerBackendActive = isOwner && mode === 'owner';
   const roleShortcuts = MODE_SHORTCUTS[mode] ?? MODE_SHORTCUTS.investor;
+  const firstName = useDisplayFirstName("");
+  const primeShortcuts = PRIME_SHORTCUTS[mode] ?? PRIME_SHORTCUTS.investor;
   const roleLabel = mode === 'broker' ? 'Broker' : mode === 'developer' ? 'Developer' : 'Investor';
   const activeWorkspaceRoute =
     ownerBackendActive ? '/owner' :
