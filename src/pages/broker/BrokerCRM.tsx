@@ -53,18 +53,14 @@ function Kpi({
       onClick={onClick}
       className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-5 py-5 w-full focus:outline-none"
     >
-      <div className="flex items-center justify-between">
-        <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
-        <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">
-          <ArrowRight className="h-4 w-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
-        </span>
-      </div>
+      <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
       <div className="mt-4 text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none">{value}</div>
       <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold">{label}</div>
       {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
     </button>
   );
 }
+
 
 
 const STAGE_GROUPS: Array<{ key: string; label: string; match: string[] }> = [
