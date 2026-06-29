@@ -19878,3 +19878,68 @@ html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"
   stroke: #FFFFFF !important;
   color: #FFFFFF !important;
 }
+
+/* ============================================================
+   PASS 113 — ACTIVE EMERALD ARROW + BANNER CONTRAST LOCK.
+   Fixes remaining black arrow/text leaks on active emerald rows,
+   search hover rows, and investor vault banners without changing
+   champagne/light surfaces.
+   ============================================================ */
+html body :is(
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-icon-surface],
+  [data-sidebar-mode-portal][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-highlight][data-active="true"],
+  [data-sidebar-subitem][data-active="true"],
+  .jj-hover-emerald:hover,
+  .jj-hover-emerald:focus-visible,
+  .jj-hover-emerald[data-active="true"]
+):not([data-no-contrast-guard="hard-opt-out"]),
+html body :is(
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-emerald-icon-surface],
+  [data-sidebar-mode-portal][data-active="true"],
+  [data-sidebar-section][data-active="true"],
+  [data-sidebar-highlight][data-active="true"],
+  [data-sidebar-subitem][data-active="true"],
+  .jj-hover-emerald:hover,
+  .jj-hover-emerald:focus-visible,
+  .jj-hover-emerald[data-active="true"]
+):not([data-no-contrast-guard="hard-opt-out"]) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g,[data-search-arrow]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:hover [data-search-arrow],
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:focus-visible [data-search-arrow],
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] [data-search-arrow],
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:hover [data-search-arrow] *,
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:focus-visible [data-search-arrow] *,
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] [data-search-arrow] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+html body [data-investor-vault-banner][data-investor-vault-banner],
+html body [data-investor-vault-banner][data-investor-vault-banner] *,
+html body [data-investor-vault-banner][data-investor-vault-banner] :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
