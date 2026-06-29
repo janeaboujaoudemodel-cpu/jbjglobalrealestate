@@ -79,11 +79,9 @@ function SectionHeader({
       <div className="min-w-0">
         <div
           data-section-label=""
-          className="jj-section-eyebrow inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+          className="jj-section-eyebrow inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
         >
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#EFE6D6] border border-[#B89555]/45">
-            <Icon className="h-3 w-3 text-[#1A1A1A]" strokeWidth={2.2} />
-          </span>
+          <IconTile icon={Icon} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
           <span className="text-[9.5px] font-semibold uppercase tracking-[0.24em] text-[#1A1A1A]">
             {eyebrow}
           </span>
@@ -124,7 +122,13 @@ function Kpi({
       <div className="flex items-center justify-between">
         <IconTile icon={Icon} tone={tone} size="md" />
         {to && (
-          <ArrowRight className="h-4 w-4 text-[#1A1A1A]/35 group-hover:text-[#1A1A1A] group-hover:translate-x-0.5 transition-all" />
+          <span
+            data-surface="emerald"
+            data-allow-dark-cta
+            className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)] group-hover:translate-x-0.5 group-hover:shadow-[0_12px_24px_-12px_rgba(6,78,59,0.95)] transition-all"
+          >
+            <ArrowRight className="h-4 w-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+          </span>
         )}
       </div>
       <div className="mt-5 text-[2rem] md:text-[2.4rem] font-display font-semibold tabular-nums tracking-tight text-[#1A1A1A] leading-none">
