@@ -58,7 +58,8 @@ export function BrokerToolkitAcademy() {
           <Link
             to="/jbj-academy"
             data-cta="academy-open"
-            className="jj-cta-dark inline-flex items-center gap-2 h-11 px-6 rounded-full text-sm font-medium"
+            data-surface="emerald"
+            className="jj-pill-emerald-metallic inline-flex items-center gap-2 h-11 px-6 rounded-full text-sm font-medium"
           >
             Open JBJ Academy
             <ArrowUpRight className="w-4 h-4" />

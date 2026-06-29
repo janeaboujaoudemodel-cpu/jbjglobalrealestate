@@ -96,8 +96,10 @@ export function Book3DCard({
             <Button
               size="sm"
               data-cta="book-open"
+              data-surface={effectivelyLocked ? "emerald" : undefined}
+              style={effectivelyLocked ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
               disabled={effectivelyLocked && !!onRequestAccess && requestAccessDisabled}
-              className="jj-cta-outline w-full"
+              className={effectivelyLocked ? "jj-pill-emerald-metallic w-full disabled:opacity-100" : "jj-cta-outline w-full"}
               onClick={(e) => {
                 e.stopPropagation();
                 if (effectivelyLocked) {
@@ -110,8 +112,10 @@ export function Book3DCard({
             >
               {effectivelyLocked ? (
                 <>
-                  <Lock className="w-3 h-3 mr-2" />
-                  {onRequestAccess ? "Request Access" : book.is_restricted ? "Restricted" : "Preview Book"}
+                  <Lock className="w-3 h-3 mr-2 text-white" strokeWidth={2.7} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    {onRequestAccess ? "Request Access" : book.is_restricted ? "Restricted" : "Preview Book"}
+                  </span>
                 </>
               ) : (
                 <>

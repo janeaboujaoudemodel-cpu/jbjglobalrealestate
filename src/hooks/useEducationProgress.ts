@@ -31,6 +31,55 @@ export function useEducationProgress() {
   const [summary, setSummary] = useState<EducationSummary>(EMPTY);
   const [loading, setLoading] = useState(true);
 
+  const buildClientSummaryFallback = useCallback(async (): Promise<EducationSummary> => {
+    if (!user) return EMPTY;
+
+    const [modulesRes, booksRes, progressRes, pointsRes] = await Promise.all([
+      (supabase as any).from("broker_education_modules").select("id, book_id"),
+      (supabase as any).from("broker_education_books").select("id"),
+      (supabase as any)
+        .from("broker_education_progress")
+        .select("book_id, module_id, status")
+        .eq("user_id", user.id),
+      (supabase as any)
+        .from("broker_points")
+        .select("total_points_earned, level, current_streak_days")
+        .eq("user_id", user.id)
+        .maybeSingle(),
+    ]);
+
+    const modules = modulesRes.data ?? [];
+    const books = booksRes.data ?? [];
+    const progress = progressRes.data ?? [];
+    const points = pointsRes.data ?? null;
+
+    const completed = progress.filter((p: any) => p.status === "completed");
+    const inProgress = progress.filter((p: any) => p.status === "in_progress");
+    const completedModuleIds = new Set(completed.map((p: any) => p.module_id).filter(Boolean));
+    const modulesByBook = new Map<string, string[]>();
+    modules.forEach((m: any) => {
+      if (!modulesByBook.has(m.book_id)) modulesByBook.set(m.book_id, []);
+      modulesByBook.get(m.book_id)!.push(m.id);
+    });
+
+    const booksCompleted = Array.from(modulesByBook.values()).filter(
+      (ids) => ids.length > 0 && ids.every((id) => completedModuleIds.has(id)),
+    ).length;
+
+    return {
+      ...EMPTY,
+      total_lessons: modules.length,
+      completed_lessons: completed.length,
+      in_progress_lessons: inProgress.length,
+      total_books: books.length,
+      books_completed: booksCompleted,
+      total_points: Number(points?.total_points_earned ?? 0),
+      level: Number(points?.level ?? 1),
+      current_streak_days: Number(points?.current_streak_days ?? 0),
+      is_certified: modules.length > 0 && completed.length >= modules.length,
+    };
+  }, [user]);
+
   const refresh = useCallback(async () => {
     if (!user) {
       setSummary(EMPTY);
@@ -44,11 +93,15 @@ export function useEducationProgress() {
       const row = Array.isArray(data) ? data[0] : data;
       if (row) setSummary({ ...EMPTY, ...row });
     } catch (e) {
-      console.error("[useEducationProgress] failed", e);
+      try {
+        setSummary(await buildClientSummaryFallback());
+      } catch (fallbackError) {
+        console.warn("[useEducationProgress] fallback failed", fallbackError);
+      }
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, buildClientSummaryFallback]);
 
   useEffect(() => {
     refresh();

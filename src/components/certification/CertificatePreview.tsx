@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Share2, Lock, Award, Medal, BadgeCheck } from "lucide-react";
+import { Download, Share2, Lock, Award, Medal, BadgeCheck, GraduationCap } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
@@ -32,13 +32,13 @@ function CertificateMedallion({ size = 64 }: { size?: number }) {
           maskComposite: "exclude",
         }}
       />
-      {/* Inner champagne disc with subtle warm core */}
+      {/* Inner emerald disc with pure-white award glyph */}
       <span
         className="absolute inset-[6px] rounded-full"
         style={{
           background:
-            "radial-gradient(circle at 30% 25%, #FFF6E0 0%, #F1E2B8 55%, #C8A65A 100%)",
-          boxShadow: "inset 0 0 10px rgba(184,149,85,0.45)",
+            "radial-gradient(circle at 30% 25%, #0B7A5B 0%, #064E3B 58%, #032F24 100%)",
+          boxShadow: "inset 0 0 10px rgba(255,255,255,0.12), 0 8px 22px rgba(6,78,59,0.28)",
         }}
       />
       <Award
@@ -46,14 +46,14 @@ function CertificateMedallion({ size = 64 }: { size?: number }) {
         style={{
           width: size * 0.5,
           height: size * 0.5,
-          color: "#1A1A1A",
-          filter: "drop-shadow(0 1px 0 rgba(255,244,216,0.6))",
+          color: "#FFFFFF",
+          filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.35))",
         }}
         strokeWidth={2}
       />
       <Medal
         className="absolute bottom-0 right-0"
-        style={{ width: size * 0.28, height: size * 0.28, color: "#B89555" }}
+        style={{ width: size * 0.28, height: size * 0.28, color: "#FFFFFF" }}
         strokeWidth={2.2}
       />
     </span>
@@ -145,22 +145,22 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
             <h3 className="text-2xl font-semibold text-[#1A1A1A] mt-4">
               {isLocked ? "Certificate Preview" : "Congratulations!"}
             </h3>
-            <p className="text-[#1A1A1A]/70 text-sm mt-1 max-w-md">
+            <p className="text-[#1A1A1A]/75 text-sm mt-1 max-w-md leading-relaxed">
               {isLocked
                 ? "Complete every training module to unlock and download your certificate."
                 : "You've completed the JBJ Broker Certification Program."}
             </p>
           </div>
 
-          {/* Certificate plate — champagne (compliant with global theme) */}
+            {/* Certificate plate — institutional champagne certificate */}
           <div
             className={cn(
-              "relative rounded-2xl overflow-hidden mb-6 border border-[#B89555]/55",
-              "shadow-[0_24px_60px_-28px_rgba(26,26,26,0.35)]",
+                "relative rounded-2xl overflow-hidden mb-6 border border-[#B89555]/65",
+                "shadow-[0_30px_75px_-34px_rgba(26,26,26,0.55)]",
             )}
             style={{
-              background:
-                "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
+                background:
+                  "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 42%, #EFE6D6 100%)",
             }}
           >
             {/* Subtle champagne fleck texture */}
@@ -188,13 +188,13 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
 
             {/* Content */}
             <div className="relative z-10 px-8 sm:px-14 py-10 sm:py-14 text-center">
-              {/* Brand wordmark */}
-              <div className="text-[15px] sm:text-base font-semibold tracking-[0.32em] text-[#1A1A1A]">
-                JBJ GLOBAL REAL ESTATE
+              {/* Clean academy crest — no wordmark underline on the plate */}
+              <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-[#B89555]/55 bg-[#FDFBF7]/80 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#1A1A1A] shadow-[0_10px_28px_-24px_rgba(26,26,26,.55)]">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-[image:var(--jj-emerald-ombre)]" data-surface="emerald">
+                  <GraduationCap className="h-3.5 w-3.5 text-white" strokeWidth={2.6} />
+                </span>
+                Broker Academy
               </div>
-
-              {/* Gold rule */}
-              <div className="mx-auto mt-3 mb-6 h-px w-24 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
 
               {/* Eyebrow */}
               <div className="text-[11px] sm:text-xs tracking-[0.34em] uppercase text-[#B89555] mb-6">
@@ -207,14 +207,14 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
 
               {/* Recipient name */}
               <div className="inline-block pb-2 mb-6 border-b border-[#B89555]/70">
-                <div className="text-3xl sm:text-4xl font-serif text-[#1A1A1A] tracking-wide">
+                <div className="text-3xl sm:text-4xl font-semibold text-[#1A1A1A] tracking-wide">
                   {userName}
                 </div>
               </div>
 
               <div className="text-[#1A1A1A]/85 text-sm max-w-md mx-auto mb-6 leading-relaxed">
-                has successfully completed all phases of the JBJ Global Real Estate
-                Broker Certification Program and is hereby recognised as a
+                has successfully completed all phases of the broker academy
+                certification program and is hereby recognised as a
               </div>
 
               {/* Title */}
@@ -267,7 +267,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                     Founder &amp; CEO
                   </div>
                   <div className="text-[10px] text-[#B89555] tracking-wide mt-0.5">
-                    JBJ Global Real Estate
+                    Broker Academy
                   </div>
                 </div>
               </div>
@@ -299,16 +299,20 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
               <Button
                 disabled
                 data-cta="cert-locked"
-                className="jj-cta-outline opacity-60 cursor-not-allowed"
+                data-surface="emerald"
+                className="jj-pill-emerald-metallic opacity-100 cursor-not-allowed disabled:opacity-100 [&_svg]:!text-white [&_svg]:!stroke-white [&_*]:!text-white"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
-                <Lock className="w-4 h-4 mr-2" />
-                Complete Certification to Download
+                <Lock className="w-4 h-4 mr-2 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  Complete Certification to Download
+                </span>
               </Button>
             ) : (
               <>
-                <Button data-cta="cert-download" className="jj-pill-emerald-metallic">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Certificate
+                <Button data-cta="cert-download" data-surface="emerald" className="jj-pill-emerald-metallic [&_svg]:!text-white [&_svg]:!stroke-white [&_*]:!text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  <Download className="w-4 h-4 mr-2 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Download Certificate</span>
                 </Button>
                 <Button data-cta="cert-share" className="jj-cta-outline">
                   <Share2 className="w-4 h-4 mr-2" />

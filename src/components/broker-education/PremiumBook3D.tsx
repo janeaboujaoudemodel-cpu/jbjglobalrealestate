@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
  * Two presentation modes:
  *   - `compact` (homepage marquee): clean cover, ONLY the engraved title;
  *     no wordmark, no underline, no subtitle, no number tag.
- *   - default (library / detail): adds wordmark, subtitle and a small classic
- *     foil corner badge (top-right) with the book number.
+ *   - default (library / detail): adds subtitle and a small classic foil
+ *     corner badge (top-right) with the book number. No brand wordmark.
  */
 
 const PALETTES: Array<{
@@ -22,7 +22,7 @@ const PALETTES: Array<{
   { spine: "#071a33", cover: "#0e2848", cover2: "#071a33", foil: "#d8b86a", ink: "#F4E9CC" }, // midnight navy
   { spine: "#142a1f", cover: "#1f4030", cover2: "#142a1f", foil: "#d8b86a", ink: "#F4E9CC" }, // forest
   { spine: "#1c1330", cover: "#2c1d4a", cover2: "#1c1330", foil: "#d8b86a", ink: "#F4E9CC" }, // aubergine
-  { spine: "#2a1408", cover: "#41241500", cover2: "#2a1408", foil: "#d8b86a", ink: "#F4E9CC" }, // cognac
+  { spine: "#2a1408", cover: "#4B2713", cover2: "#2a1408", foil: "#d8b86a", ink: "#F4E9CC" }, // cognac
   { spine: "#0d0d0d", cover: "#1a1a1a", cover2: "#0d0d0d", foil: "#c9a84c", ink: "#F4E9CC" }, // obsidian
   { spine: "#0a2a2a", cover: "#103f3d", cover2: "#0a2a2a", foil: "#d8b86a", ink: "#F4E9CC" }, // teal
   { spine: "#481228", cover: "#681c39", cover2: "#481228", foil: "#d8b86a", ink: "#F4E9CC" }, // burgundy
@@ -66,6 +66,23 @@ const STYLES = `
 .jj-book-pages-right  { position:absolute; top:0; bottom:0; right:0; width:8px; transform: rotateY(90deg) translateZ(4px); background: repeating-linear-gradient(0deg,#f3e7c8 0 2px,#e9d9b0 2px 3px); }
 `;
 
+function splitCoverTitle(title: string) {
+  const words = title.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+  words.forEach((word) => {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length > 14 && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = next;
+    }
+  });
+  if (current) lines.push(current);
+  return lines.slice(0, 5);
+}
+
 export function PremiumBook3DStyles() {
   return <style dangerouslySetInnerHTML={{ __html: STYLES }} />;
 }
@@ -82,9 +99,15 @@ export function PremiumBook3D({
     () => pickPalette(paletteIndex ?? bookNumber ?? Math.floor(Math.random() * PALETTES.length)),
     [paletteIndex, bookNumber],
   );
+  const titleLines = useMemo(() => splitCoverTitle(title), [title]);
+  const titleSize = titleLines.length >= 4
+    ? "clamp(16px, 7.2cqw, 30px)"
+    : compact
+      ? "clamp(17px, 8.2cqw, 34px)"
+      : "clamp(18px, 8.8cqw, 38px)";
 
   return (
-    <div className={cn("jj-book-stage", className)} data-no-contrast-guard>
+    <div className={cn("jj-book-stage", className)} data-no-contrast-guard style={{ containerType: "inline-size" }}>
       <div className="jj-book">
         {/* Back cover */}
         <div
@@ -132,24 +155,12 @@ export function PremiumBook3D({
             style={{ border: `1px solid ${palette.foil}44` }}
           />
 
-          {/* Wordmark + underline + subtitle — ONLY non-compact.
-              Wordmark is kept clear of the foil corner badge (top-right) by
-              insetting left/right and shrinking type. */}
+          {/* Subtitle only — brand wordmark and underline removed for readability. */}
           {!compact && (
             <>
-              <div
-                className="absolute top-[10%] left-[14%] right-[22%] text-left text-[6.5px] tracking-[0.22em] font-semibold whitespace-nowrap overflow-hidden"
-                style={{ color: palette.foil }}
-              >
-                JBJ GLOBAL
-              </div>
-              <div
-                className="absolute top-[16%] left-[14%] h-px w-[22%]"
-                style={{ background: `${palette.foil}` }}
-              />
               {subtitle && (
                 <div
-                  className="absolute inset-x-[14%] bottom-[18%] text-center text-[9px] italic"
+                  className="absolute inset-x-[12%] bottom-[14%] rounded-full px-2 py-1 text-center text-[8.5px] font-semibold uppercase tracking-[0.12em]"
                   style={{ color: palette.foil }}
                 >
                   {subtitle}
@@ -162,22 +173,24 @@ export function PremiumBook3D({
           <div
             className={cn(
               "absolute inset-x-[14%] grid place-items-center",
-              compact ? "top-[18%] bottom-[18%]" : "top-[32%] bottom-[28%]"
+              compact ? "top-[18%] bottom-[18%]" : "top-[20%] bottom-[28%]"
             )}
           >
             <div
-              className="allow-white text-center leading-[1.18]"
+              className="allow-white text-center leading-[1.12]"
               style={{
                 color: compact ? '#FFFFFF' : palette.ink,
-                fontSize: compact ? "clamp(10px, 1.55vw, 14px)" : "clamp(11px, 1.8vw, 16px)",
-                fontWeight: 500,
-                letterSpacing: "0.06em",
-                fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
-                textShadow: compact ? "0 1px 0 rgba(0,0,0,.78), 0 0 12px rgba(0,0,0,.42)" : "0 1px 0 rgba(0,0,0,.45)",
+                fontSize: titleSize,
+                fontWeight: 850,
+                letterSpacing: "0.002em",
+                fontFamily: "Inter, system-ui, sans-serif",
+                textShadow: compact ? "0 2px 0 rgba(0,0,0,.82), 0 0 18px rgba(0,0,0,.62)" : "0 3px 12px rgba(0,0,0,.78), 0 0 22px rgba(0,0,0,.38)",
+                textWrap: "balance",
               }}
             >
-              {title}
-
+              {titleLines.map((line) => (
+                <span key={line} className="block">{line}</span>
+              ))}
             </div>
           </div>
 

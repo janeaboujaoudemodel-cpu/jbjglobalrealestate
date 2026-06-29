@@ -51,9 +51,10 @@ function splitTitle(title: string) {
 
 /**
  * Premium book cover — minimal & legible.
- * Removed: skyline silhouette, JBJ medallion, double frame, bottom wordmark.
+ * Removed: skyline silhouette, JBJ medallion, double frame, bottom wordmark,
+ *          eyebrow wordmark and title underlines.
  * Kept: dark gradient, single hairline frame, left spine, optional No. tag,
- *       eyebrow wordmark, engraved title, gold rule, subtitle.
+ *       engraved readable title and learning-path subtitle.
  */
 export function PremiumBookCover({
   title,
@@ -66,8 +67,9 @@ export function PremiumBookCover({
   const resolvedTone: BookTone = tone ?? pickBookTone(title);
 
   return (
-    <div
-      data-surface="dark"
+      <div
+        data-surface="dark"
+        data-no-contrast-guard
       className={cn("surface-dark relative h-full w-full overflow-hidden bg-[#10100f] text-[#EFE6D6]", className)}
       style={{ containerType: "inline-size" }}
     >
@@ -93,36 +95,21 @@ export function PremiumBookCover({
         </div>
       )}
 
-      {/* Centered content — vertically balanced */}
-      <div className="absolute inset-x-[12%] top-1/2 -translate-y-1/2 flex flex-col items-center text-center">
-        {/* Eyebrow wordmark */}
-        <div
-          className="font-semibold uppercase tracking-[0.28em] text-[#B89555]"
-          style={{ fontSize: "clamp(6px, 3.2cqw, 13px)" }}
-        >
-          JBJ GLOBAL REAL ESTATE
-        </div>
-
-        {/* Gold rule above title */}
-        <div className="mt-[6%] mb-[6%] h-px w-[40%] bg-[#B89555]/70" />
-
-        {/* Engraved title */}
+        {/* Centered content — no wordmark, no underline; title gets priority */}
+        <div className="absolute inset-x-[11%] top-1/2 -translate-y-1/2 flex flex-col items-center text-center">
         <h3
-          className="font-bold uppercase tracking-[0.02em] text-[#FFF4D8] drop-shadow-[0_2px_10px_rgba(0,0,0,.55)] px-[2cqw]"
-          style={{ fontSize: "clamp(10px, 9.5cqw, 44px)", lineHeight: 1.15 }}
+            className="allow-white font-[750] uppercase tracking-[0.015em] text-[#FFF4D8] drop-shadow-[0_3px_12px_rgba(0,0,0,.72)] px-[1cqw]"
+            style={{ fontSize: "clamp(12px, 10.8cqw, 50px)", lineHeight: 1.08, textWrap: "balance" }}
         >
           {lines.map((line) => (
             <span key={line} className="block">{line}</span>
           ))}
         </h3>
 
-        {/* Gold rule below title */}
-        <div className="mt-[6%] h-px w-[40%] bg-[#B89555]/70" />
-
         {subtitle && (
           <p
-            className="mt-[5%] italic text-[#EFE6D6]/85 px-[3cqw]"
-            style={{ fontSize: "clamp(7px, 4.4cqw, 18px)", lineHeight: 1.25 }}
+              className="allow-white mt-[7%] rounded-full border border-[#B89555]/45 bg-black/20 px-[5cqw] py-[1.4cqw] text-[#EFE6D6] shadow-[inset_0_1px_0_rgba(255,255,255,.08)]"
+              style={{ fontSize: "clamp(7px, 4.2cqw, 17px)", lineHeight: 1.2 }}
           >
             {subtitle}
           </p>

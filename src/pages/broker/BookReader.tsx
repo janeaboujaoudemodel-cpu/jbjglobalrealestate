@@ -11,6 +11,7 @@ import { useBookAudio } from "@/hooks/useBookAudio";
 import { useEducationProgress } from "@/hooks/useEducationProgress";
 import { toast } from "sonner";
 import type { EducationBook, EducationModule } from "@/hooks/useBrokerEducation";
+import { PremiumBookCover } from "@/components/books/PremiumBookCover";
 
 
 type Page =
@@ -499,20 +500,17 @@ function CoverFace({
 }) {
   return (
     <div className="absolute inset-0">
-      {book.cover_image_url ? (
-        <img
-          src={book.cover_image_url}
-          alt={`${book.title} cover`}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="eager"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A1A] via-[#2a2118] to-[#15110b]" />
-      )}
+      <PremiumBookCover
+        title={book.title}
+        number={book.book_number}
+        subtitle={book.learning_path}
+        tone="black"
+        className="absolute inset-0"
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
       <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-9">
-        <div className="text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
-          JBJ Global Real Estate · Book {book.book_number}
+        <div className="allow-white text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
+          Book {book.book_number} · {book.learning_path}
         </div>
         <h1 className="allow-white text-white text-2xl md:text-3xl font-bold leading-tight mb-2 drop-shadow">
           {book.title}
@@ -554,7 +552,7 @@ function BackCoverFace({ book, onRestart }: { book: EducationBook; onRestart: ()
       <div className="flex-1" />
       <div className="rounded-md border border-[#B89555]/40 bg-black/30 p-4 mb-5">
         <p className="allow-white text-white/85 text-xs leading-relaxed">
-          Proprietary to JBJ GLOBAL REAL ESTATE — internal recognition only, not for external certification.
+          Proprietary academy content — internal recognition only, not for external certification.
         </p>
       </div>
       <div className="flex flex-wrap gap-2">

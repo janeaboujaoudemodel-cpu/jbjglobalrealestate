@@ -2,9 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CertificationPhase, UserCertificationProgress } from "@/hooks/useCertification";
-import { Lock, CheckCircle, BookOpen, ArrowRight, Clock } from "lucide-react";
+import { Lock, CheckCircle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { IconTile } from "@/components/ui/icon-tile";
 
 interface PhaseCardProps {
   phase: CertificationPhase;
@@ -31,7 +32,7 @@ export function PhaseCard({
     switch (status) {
       case 'completed':
         return (
-          <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30">
+          <Badge className="jj-surface-emerald text-white border-0">
             Completed
           </Badge>
         );
@@ -43,7 +44,7 @@ export function PhaseCard({
         );
       case 'test_pending':
         return (
-          <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">
+          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40">
             Test Ready
           </Badge>
         );
@@ -75,15 +76,14 @@ export function PhaseCard({
         <CardContent className="p-6 flex flex-col h-full">
           {/* Phase Number */}
           <div className="flex items-center justify-between mb-4">
-            <div className={cn(
-              "w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg",
-              status === 'completed' 
-                ? "jj-surface-emerald-soft text-[color:var(--emerald-1)]"
-                : status === 'in_progress' || status === 'test_pending'
-                  ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
-                  : "bg-[#EFE6D6]/10 text-[#1A1A1A]/40"
-            )}>
-              {phase.phase_number}
+            <div className="relative">
+              {status === 'completed' ? (
+                <IconTile icon={CheckCircle} tone="emerald" size="md" className="!h-10 !w-10 !rounded-lg" iconClassName="!h-4 !w-4" />
+              ) : (
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
+                  {phase.phase_number}
+                </div>
+              )}
             </div>
             {getStatusBadge()}
           </div>
@@ -123,7 +123,8 @@ export function PhaseCard({
             ) : status === 'test_pending' ? (
               <Button 
                 size="sm" 
-                className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
+                className="w-full jj-pill-emerald-metallic"
+                data-surface="emerald"
               >
                 Take Test
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -132,7 +133,8 @@ export function PhaseCard({
               <Button 
                 onClick={onStart}
                 size="sm" 
-                className="w-full bg-[#EFE6D6]/20 hover:bg-[#EFE6D6]/30 text-[#1A1A1A] border border-[#B89555]/30"
+                className="w-full jj-pill-emerald-metallic"
+                data-surface="emerald"
               >
                 Start Phase
                 <ArrowRight className="w-4 h-4 ml-2" />

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield,
+  GraduationCap, BookOpen, Lock, BarChart3, MessageSquare, Shield, Sparkles,
   CheckCircle, Clock, Play, ChevronRight, ChevronLeft, Award, X, Check,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
@@ -279,21 +279,43 @@ export default function BrokerLearning() {
             <ReferenceCard
               title="NEVER Say"
               tone="red"
-              icon={<Shield className="w-4 h-4" />}
+              icon={X}
               items={NEVER_SAY.map((p) => `"${p}"`)}
             />
             <ReferenceCard
               title="ALWAYS Use"
               tone="emerald"
-              icon={<CheckCircle className="w-4 h-4" />}
+              icon={CheckCircle}
               items={ALWAYS_USE.map((p) => `"${p}"`)}
             />
           </div>
 
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <Card className="relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border-[#B89555]/55 shadow-[0_28px_72px_-42px_rgba(26,26,26,0.62)]">
             <CardContent className="p-6 md:p-8">
-              <h3 className="text-[#1A1A1A] text-lg font-bold mb-6 text-center">Golden Rules for Market Conversations</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center mb-7">
+                <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 mb-3">
+                  <Sparkles className="w-3 h-3 mr-1.5" /> Market conversation standard
+                </Badge>
+                <h3 className="text-[#1A1A1A] text-xl md:text-2xl font-bold">Golden Rules for Market Conversations</h3>
+              </div>
+              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-7 h-px bg-gradient-to-r from-transparent via-[#B89555]/75 to-transparent" />
+                <motion.div
+                  aria-hidden
+                  className="hidden md:block pointer-events-none absolute top-[18px] left-[15%] h-5 w-16 rounded-full blur-[1px]"
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.95), rgba(184,149,85,.9), transparent)" }}
+                  animate={{ left: ["15%", "48%", "81%", "48%", "15%"], opacity: [0, 1, 1, 1, 0] }}
+                  transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.div
+                  aria-hidden
+                  data-no-contrast-guard
+                  className="hidden md:grid pointer-events-none absolute top-[11px] left-[17%] h-8 w-8 place-items-center rounded-full bg-[#FDFBF7] text-[#B89555] shadow-[0_0_22px_rgba(255,255,255,.95),0_0_28px_rgba(184,149,85,.42)]"
+                  animate={{ left: ["17%", "50%", "83%", "50%", "17%"], scale: [0.72, 1.08, 1.08, 1.08, 0.72], opacity: [0, 1, 1, 1, 0] }}
+                  transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Sparkles className="h-4 w-4" strokeWidth={2.8} />
+                </motion.div>
                 {[
                   { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
                   { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
@@ -305,8 +327,14 @@ export default function BrokerLearning() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ delay: i * 0.18, duration: 0.5, ease: "easeOut" }}
-                    className="text-center"
+                    className="relative overflow-hidden text-center rounded-2xl bg-[#FDFBF7]/82 border border-[#B89555]/45 p-5 shadow-[0_16px_36px_-24px_rgba(26,26,26,0.48)]"
                   >
+                    <motion.div
+                      aria-hidden
+                      className="absolute inset-0 pointer-events-none rounded-2xl ring-2 ring-[#F4D58D]/80"
+                      animate={{ opacity: [0, 0.88, 0], scale: [0.985, 1.012, 1] }}
+                      transition={{ duration: 1.25, repeat: Infinity, repeatDelay: 4.95, delay: i * 1.55, ease: "easeInOut" }}
+                    />
                     <div
                       data-surface="emerald"
                       data-emerald-ok="icon"
@@ -339,53 +367,50 @@ export default function BrokerLearning() {
         <section className="flex flex-col gap-6 pb-2">
           <SectionTitle eyebrow="Your Record" title="Certificates & Progress" />
 
-          {/* Top row — KPI tiles */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
-                  <Award className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                </span>
-                Certificates earned
+          <div className="relative overflow-hidden rounded-3xl border border-[#B89555]/55 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 md:p-6 shadow-[0_30px_78px_-46px_rgba(26,26,26,0.62)]" data-gold-hairline>
+            <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F4D58D] to-transparent" />
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-6">
+              <div className="flex items-center gap-3">
+                <IconTile icon={Award} tone="emerald" size="lg" className="!h-12 !w-12 !rounded-2xl" />
+                <div>
+                  <div className="text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/58 font-semibold">Certificate Journey</div>
+                  <h3 className="text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">Progress, proof, and certification unlock</h3>
+                </div>
               </div>
-              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
-                {certificatesEarned}
+              <div className="rounded-2xl border border-[#B89555]/45 bg-[#FDFBF7]/70 px-4 py-3 min-w-[170px] text-center shadow-[inset_0_1px_0_rgba(255,255,255,.45)]">
+                <div className="text-3xl font-bold text-[#1A1A1A] tabular-nums">{Math.round(totalProgress)}%</div>
+                <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Training complete</div>
               </div>
-              <p className="mt-1 text-xs text-[#1A1A1A]/60">
-                Complete every lesson in a module to earn its certificate. Certificates appear here automatically and can be downloaded from your Account.
-              </p>
             </div>
-            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
-                  <GraduationCap className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                </span>
-                Training progress
-              </div>
-              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">{Math.round(totalProgress)}%</div>
-              <Progress value={totalProgress} className="h-1.5 w-full mt-3 bg-[#FDFBF7] [&>div]:bg-[#B89555]" />
-              <p className="mt-2 text-xs text-[#1A1A1A]/60">
-                Across {TRAINING.length} core modules. Resume any module above.
-              </p>
-            </div>
-            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
-                  <BookOpen className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                </span>
-                Books in progress
-              </div>
-              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
-                {Object.values(progressMap || {}).filter((p: any) => p && p.progress_pct > 0 && p.progress_pct < 100).length}
-              </div>
-              <p className="mt-1 text-xs text-[#1A1A1A]/60">
-                Pick any book back up — your last page is remembered.
-              </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              {[
+                { label: "Read", value: `${Object.values(progressMap || {}).filter((p: any) => p?.status === "in_progress" || p?.status === "completed").length} books`, icon: BookOpen, done: Object.values(progressMap || {}).some((p: any) => p?.status === "in_progress" || p?.status === "completed") },
+                { label: "Complete", value: `${certificatesEarned}/${TRAINING.length} modules`, icon: CheckCircle, done: totalProgress >= 25 },
+                { label: "Validate", value: "Owner review", icon: Shield, done: allModulesComplete },
+                { label: "Certify", value: allModulesComplete ? "Unlocked" : "Locked", icon: Award, done: allModulesComplete },
+              ].map((step, index) => (
+                <div key={step.label} className="relative overflow-hidden rounded-2xl border border-[#B89555]/35 bg-[#FDFBF7]/62 p-4 shadow-[0_12px_30px_-24px_rgba(26,26,26,.5)]">
+                  <div className="flex items-center gap-3">
+                    <IconTile icon={step.icon} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" />
+                    <div className="min-w-0">
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A]/58">Step {index + 1}</div>
+                      <div className="text-sm font-bold text-[#1A1A1A] truncate">{step.label}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-2">
+                    <span className="text-xs text-[#1A1A1A]/70">{step.value}</span>
+                    <span className={step.done ? "text-[#064E3B]" : "text-[#1A1A1A]/45"}>
+                      {step.done ? <CheckCircle className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Certificate panel — locked until all training modules complete */}
-          <div className="relative">
+          <div className="relative rounded-3xl border border-[#B89555]/55 bg-[#FDFBF7] p-3 md:p-4 shadow-[0_32px_86px_-48px_rgba(26,26,26,0.68)]" data-gold-hairline>
             {!allModulesComplete && (
               <div className="pointer-events-none absolute top-3 right-3 z-20">
                 <PremiumLockBadge
@@ -673,11 +698,12 @@ function TrainingCard({
               onClick={onRequestAccess}
               disabled={requestAccessDisabled || !onRequestAccess}
               title={lockReason ?? "Locked"}
-              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/65 disabled:opacity-60 leading-none shadow-[0_6px_16px_rgba(184,149,85,0.16),inset_0_1px_0_rgba(255,255,255,0.8)]"
-              data-no-contrast-guard
+              className="jj-pill-emerald-metallic shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold disabled:opacity-100 leading-none"
+              data-surface="emerald"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <Lock className="w-3 h-3 shrink-0" strokeWidth={2.2} />
-              <span className="whitespace-nowrap">Request Access</span>
+              <Lock className="w-3 h-3 shrink-0 text-white" strokeWidth={2.6} />
+              <span className="whitespace-nowrap text-white">Request Access</span>
             </button>
           ) : (
             <button
@@ -708,18 +734,18 @@ function TrainingCard({
 
 
 
-function ReferenceCard({ title, items, tone, icon }: {
-  title: string; items: string[]; tone: "red" | "emerald"; icon: React.ReactNode;
+function ReferenceCard({ title, items, tone, icon: Icon }: {
+  title: string; items: string[]; tone: "red" | "emerald"; icon: import("lucide-react").LucideIcon;
 }) {
   const isRed = tone === "red";
-  const mark = (
+  const renderMark = () => (
     <span
       data-no-contrast-guard
-      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
+      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full border border-white/20 shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
       style={{
         background: isRed
-          ? "linear-gradient(135deg,#7A1F1F 0%,#A02828 100%)"
-          : "linear-gradient(135deg,#064E3B 0%,#0B7A5B 100%)",
+          ? "linear-gradient(135deg,#5E1414 0%,#A02828 100%)"
+          : "linear-gradient(135deg,#032F24 0%,#0B7A5B 100%)",
       }}
     >
       {isRed
@@ -727,17 +753,31 @@ function ReferenceCard({ title, items, tone, icon }: {
         : <Check className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
     </span>
   );
+  const shell = isRed
+    ? "from-[#3A0B0B] via-[#7A1F1F] to-[#B73535]"
+    : "from-[#021F18] via-[#064E3B] to-[#0B7A5B]";
   return (
-    <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-      <CardContent className="p-5 md:p-6">
-        <h3 className="text-[#1A1A1A] font-semibold flex items-center gap-2 mb-3">
-          {icon}{title}
+    <Card className={`relative overflow-hidden border-[#B89555]/45 bg-gradient-to-br ${shell} shadow-[0_26px_70px_-42px_rgba(26,26,26,0.82)]`} data-no-contrast-guard>
+      <div aria-hidden className="absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_20%_12%,rgba(255,255,255,.18),transparent_26%),radial-gradient(circle_at_86%_88%,rgba(184,149,85,.20),transparent_34%)]" />
+      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F4D58D]/80 to-transparent" />
+      <motion.span
+        aria-hidden
+        className="absolute -left-24 top-0 h-full w-20 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-[1px]"
+        animate={{ x: [0, 720] }}
+        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: isRed ? 0 : 1.1 }}
+      />
+      <CardContent className="relative p-5 md:p-6">
+        <h3 className="allow-white text-white font-bold flex items-center gap-2 mb-4 tracking-tight">
+          <span className="grid h-10 w-10 place-items-center rounded-xl border border-white/25 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.75)]">
+            <Icon className="h-[18px] w-[18px] text-white" strokeWidth={2.8} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          </span>
+          <span className="allow-white text-white">{title}</span>
         </h3>
-        <ul className="space-y-2">
+        <ul className="space-y-2.5">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/90 text-sm leading-relaxed">
-              {mark}
-              <span>{p}</span>
+            <li key={i} className="allow-white flex items-start gap-2 rounded-xl border border-white/12 bg-white/10 px-3 py-2 text-white text-sm leading-relaxed shadow-[inset_0_1px_0_rgba(255,255,255,.10),0_10px_22px_-20px_rgba(0,0,0,.75)] backdrop-blur-sm">
+              {renderMark()}
+              <span className="allow-white text-white">{p}</span>
             </li>
           ))}
         </ul>

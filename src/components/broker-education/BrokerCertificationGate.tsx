@@ -31,6 +31,7 @@ import {
   GraduationCap, Loader2, ShieldCheck, ClipboardCheck, AlertTriangle,
   CheckCircle2, XCircle, BrainCircuit, FileQuestion,
 } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 type SubmissionStatus =
   | "none" | "pending" | "approved" | "rejected"
@@ -72,9 +73,9 @@ const StatusBadge = ({ status }: { status: SubmissionStatus }) => {
   const cfg: Record<SubmissionStatus, { label: string; cls: string; Icon: any }> = {
     none:              { label: "Not requested",  cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",      Icon: ClipboardCheck },
     pending:           { label: "Pending review", cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",      Icon: Loader2 },
-    approved:          { label: "Approved — take quiz", cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30", Icon: CheckCircle2 },
+    approved:          { label: "Approved — take quiz", cls: "jj-surface-emerald text-white border-0", Icon: CheckCircle2 },
     quiz_in_progress:  { label: "Quiz in progress", cls: "bg-amber-50 text-amber-900 border-amber-200",         Icon: BrainCircuit },
-    quiz_passed:       { label: "Certified",      cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",    Icon: ShieldCheck },
+    quiz_passed:       { label: "Certified",      cls: "jj-surface-emerald text-white border-0",    Icon: ShieldCheck },
     quiz_failed:       { label: "Quiz failed",    cls: "bg-red-50 text-red-900 border-red-200",                Icon: XCircle },
     rejected:          { label: "Rejected",       cls: "bg-red-50 text-red-900 border-red-200",                Icon: XCircle },
     locked:            { label: "Locked",         cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]",             Icon: AlertTriangle },
@@ -296,11 +297,15 @@ export default function BrokerCertificationGate() {
   const status: SubmissionStatus = (submission?.status as SubmissionStatus) ?? "none";
 
   return (
-    <Card className="border-[#B89555]/40 bg-[#FDFBF7]">
-      <CardHeader className="flex flex-row items-center justify-between gap-3">
+    <Card className="relative overflow-hidden border-[#B89555]/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_30px_80px_-48px_rgba(26,26,26,0.65)]">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#064E3B] via-[#B89555] to-[#064E3B]" />
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4">
         <div className="flex items-center gap-2">
-          <GraduationCap className="h-5 w-5 text-[#B89555]" />
-          <CardTitle className="text-[#1A1A1A] text-lg">JBJ Academy Certification</CardTitle>
+          <IconTile icon={GraduationCap} tone="emerald" size="sm" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-4.5 !w-4.5" />
+          <div>
+            <CardTitle className="text-[#1A1A1A] text-lg leading-tight">JBJ Academy Certification</CardTitle>
+            <p className="text-xs text-[#1A1A1A]/65 mt-0.5">Reflection, owner approval, AI quiz and certificate unlock.</p>
+          </div>
         </div>
         <StatusBadge status={status} />
       </CardHeader>
@@ -356,10 +361,12 @@ export default function BrokerCertificationGate() {
               type="button"
               onClick={handleSubmit}
               disabled={submitting || reflection.trim().length < 120 || !attest}
-              className="jj-pill-emerald-metallic"
+              className="jj-pill-emerald-metallic disabled:opacity-100"
               data-cta="cert-submit"
+              data-surface="emerald"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting…</> : "Request Certification"}
+              {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin text-white" /> <span className="text-white">Submitting…</span></> : <><ShieldCheck className="h-4 w-4 mr-2 text-white" /> <span className="text-white">Request Certification</span></>}
             </Button>
           </div>
         )}
@@ -383,7 +390,7 @@ export default function BrokerCertificationGate() {
                 will flag the attempt for owner review.
               </span>
             </p>
-            <Button onClick={startQuiz} disabled={quizLoading} className="jj-pill-emerald-metallic" data-cta="cert-start-quiz">
+            <Button onClick={startQuiz} disabled={quizLoading} className="jj-pill-emerald-metallic" data-cta="cert-start-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {quizLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Loading quiz…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Start AI Quiz</>}
             </Button>
           </div>
@@ -419,8 +426,8 @@ export default function BrokerCertificationGate() {
                 </li>
               ))}
             </ol>
-            <Button onClick={submitQuiz} disabled={grading} className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz">
-              {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Grading…</> : "Submit Quiz"}
+            <Button onClick={submitQuiz} disabled={grading} className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz" data-surface="emerald" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+              {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Grading…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Submit Quiz</>}
             </Button>
           </div>
         )}

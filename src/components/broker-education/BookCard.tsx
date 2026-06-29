@@ -18,10 +18,10 @@ const fadeInUp = {
 };
 
 const LEARNING_PATH_COLORS: Record<string, string> = {
-  'Foundations': 'bg-blue-500/20 text-blue-700 border-blue-500/30',
-  'Buyer & Investor Advisory': 'jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30',
+  'Foundations': 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40',
+  'Buyer & Investor Advisory': 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40',
   'Seller & Landlord Advisory': 'bg-amber-500/20 text-amber-700 border-amber-500/30',
-  'Market Intelligence': 'bg-purple-500/20 text-purple-700 border-purple-500/30',
+  'Market Intelligence': 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40',
   'Advanced (Restricted)': 'bg-red-500/20 text-red-700 border-red-500/30',
 };
 
@@ -118,8 +118,8 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
           <Button
             onClick={() => onOpen(book)}
             disabled={book.is_restricted}
-            variant="secondary"
-            className="w-full"
+            className={book.is_restricted ? "w-full jj-pill-emerald-metallic disabled:opacity-100" : "w-full jj-cta-outline"}
+            data-surface={book.is_restricted ? "emerald" : undefined}
           >
             {book.is_restricted ? (
               <>
