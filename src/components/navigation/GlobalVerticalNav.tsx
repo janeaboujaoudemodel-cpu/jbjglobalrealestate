@@ -825,19 +825,12 @@ export default function GlobalVerticalNav() {
 
   const getIconStyle = () => 'text-white';
 
-  const lockEmeraldGlyphWhite = useCallback((el: SVGSVGElement | null) => {
-    if (!el) return;
-    el.style.setProperty('color', '#FFFFFF', 'important');
-    el.style.setProperty('stroke', '#FFFFFF', 'important');
-    el.style.setProperty('-webkit-text-fill-color', '#FFFFFF', 'important');
-    el.style.setProperty('opacity', '1', 'important');
-    el.querySelectorAll('path, line, polyline, polygon, rect, circle, ellipse, use, g').forEach((part) => {
-      const svgPart = part as SVGElement;
-      svgPart.style.setProperty('color', '#FFFFFF', 'important');
-      svgPart.style.setProperty('stroke', '#FFFFFF', 'important');
-      svgPart.style.setProperty('opacity', '1', 'important');
-    });
-  }, []);
+  const getSidebarIconStyle = (onEmerald: boolean): React.CSSProperties => ({
+    color: onEmerald ? '#FFFFFF' : '#1A1A1A',
+    stroke: onEmerald ? '#FFFFFF' : '#1A1A1A',
+    WebkitTextFillColor: onEmerald ? '#FFFFFF' : '#1A1A1A',
+    opacity: 1,
+  });
 
   const navHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full after:bg-[#0A0A0A]";
   const subNavHoverUnderline = "group-hover:!text-[#0A0A0A] after:content-[''] after:absolute after:left-0 after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-[50%] after:bg-[#0A0A0A]";
@@ -1063,7 +1056,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   preserveVisual
                   to={item.href}
                   icon={Icon}
-                  iconRef={lockEmeraldGlyphWhite}
                   label={item.label}
                   active={highlightActive}
                   onMouseEnter={() => prefetchAITool(item.href)}
@@ -1110,7 +1102,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     preserveVisual
                     asButton
                     icon={SectionIcon}
-                    iconRef={lockEmeraldGlyphWhite}
                     label={sectionKey}
                     active={sectionHighlighted}
                     onClick={(e) => toggleSection(sectionKey, e as React.MouseEvent)}
@@ -1158,7 +1149,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           preserveVisual
                           to="/ai-hub"
                           icon={Eye}
-                          iconRef={lockEmeraldGlyphWhite}
                           label="View All Tools"
                           onClick={collapseAfterNavigation}
                           data-sidebar-subitem
@@ -1187,7 +1177,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               preserveVisual
                               to={item.href}
                               icon={Icon}
-                              iconRef={lockEmeraldGlyphWhite}
                               label={item.label}
                               active={subitemActive}
                               onMouseEnter={() => prefetchAITool(item.href)}
@@ -1354,19 +1343,22 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           </div>
 
-          {/* Section icons — emerald-ombre tiles with white icons */}
+          {/* Section icons — inactive = champagne/ink, active = emerald/white */}
           <style>{`
             .jj-side-tile {
-              background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-              border: 0 !important;
-              color: #FFFFFF !important;
-              box-shadow: 0 9px 20px -13px rgba(6,78,59,0.9), inset 0 1px 0 rgba(255,255,255,0.16) !important;
-              transition: filter 120ms ease, box-shadow 120ms ease !important;
+              background: rgba(253,251,247,0.44) !important;
+              border: 1px solid rgba(184,149,85,0.16) !important;
+              color: #1A1A1A !important;
+              box-shadow: none !important;
+              filter: none !important;
+              transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease !important;
             }
             .jj-side-tile svg,
-            .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; transition: none !important; }
-            .jj-side-tile:hover { background: var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #031B12 100%)) !important; filter: brightness(1.06) !important; transform: none !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.78), inset 0 1px 0 rgba(255,255,255,0.22) !important; }
-            .jj-side-tile.is-active { box-shadow: 0 10px 22px -11px rgba(4,120,87,0.82), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 14px rgba(0,0,0,0.22) !important; }
+            .jj-side-tile svg * { color: #1A1A1A !important; stroke: #1A1A1A !important; opacity: 1 !important; transition: none !important; }
+            .jj-side-tile:hover { background: rgba(216,204,178,0.72) !important; border-color: rgba(184,149,85,0.34) !important; filter: none !important; transform: none !important; box-shadow: 0 8px 18px -16px rgba(26,26,26,0.28) !important; }
+            .jj-side-tile.is-active { background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important; border-color: transparent !important; color: #FFFFFF !important; box-shadow: 0 10px 22px -11px rgba(4,120,87,0.82), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 14px rgba(0,0,0,0.22) !important; }
+            .jj-side-tile.is-active svg,
+            .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
@@ -1381,7 +1373,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-no-contrast-guard
                     className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <Icon className="w-4 h-4" strokeWidth={2.15} />
+                      <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(isActive)} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{item.label}</TooltipContent>
@@ -1415,7 +1407,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       }}
                       className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
-                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} />
+                      <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(isActive)} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
@@ -1437,7 +1429,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Headphones className="w-4 h-4" strokeWidth={2.15} />
+                    <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(false)} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
@@ -1450,7 +1442,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-no-contrast-guard
                     className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
                   >
-                    <Ticket className="w-4 h-4" strokeWidth={2.15} />
+                    <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(false)} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1500,7 +1492,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile group relative w-8 h-8 rounded-[10px] flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-8 h-8 rounded-[10px] flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}
