@@ -121,8 +121,6 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
       data-no-contrast-guard
       data-on-dark
       data-allow-dark-cta
-      data-surface="emerald"
-      data-emerald-action="true"
       data-jj-utility-pill
       data-header-control-family="segmented"
       className={cn(
@@ -144,8 +142,6 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
             <button
               type="button"
               data-no-contrast-guard
-              data-surface="emerald"
-              data-emerald-action="true"
               data-active={isActive}
               data-on-dark
               data-allow-dark-cta

@@ -405,13 +405,12 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   {isEmerald ? (
                     <span
                       data-no-contrast-guard
-                      data-surface="champagne"
                       data-mode-active-pill=""
                       className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
                         background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
-                        color: '#1A1A1A',
-                        WebkitTextFillColor: '#1A1A1A',
+                        color: '#064E3B',
+                        WebkitTextFillColor: '#064E3B',
                         borderColor: '#B89555',
                         borderWidth: 1,
                         borderStyle: 'solid',
@@ -420,9 +419,9 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       <Check
                         data-no-contrast-guard
                         className="w-3 h-3 shrink-0"
-                        style={{ color: '#1A1A1A', stroke: '#1A1A1A' }}
+                        style={{ color: '#064E3B', stroke: '#064E3B' }}
                       />
-                      <span style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>Active</span>
+                      <span style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>Active</span>
                     </span>
                   ) : (
                     <span

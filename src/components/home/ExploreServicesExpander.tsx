@@ -126,8 +126,6 @@ const ExploreServicesExpander = () => {
       <div
         ref={tabsRef}
         data-ink-emerald
-        data-surface="emerald"
-        data-emerald-action="true"
         data-on-dark
         data-no-contrast-guard
         className="allow-white flex items-stretch overflow-x-auto no-scrollbar"
@@ -142,8 +140,6 @@ const ExploreServicesExpander = () => {
             <button
               key={s.id}
               data-tab-id={s.id}
-              data-surface="emerald"
-              data-emerald-action="true"
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
