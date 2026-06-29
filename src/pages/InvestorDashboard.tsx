@@ -565,15 +565,31 @@ export default function InvestorDashboard() {
                       type="button"
                       onClick={() => setActiveTab(v)}
                       data-no-contrast-guard
-                      className={`shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[11px] md:text-xs font-semibold transition-colors ${
+                      data-surface={active ? "emerald" : undefined}
+                      data-emerald-ok={active ? "true" : undefined}
+                      className={`jj-investor-tab group shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[11px] md:text-xs font-semibold transition-all ${
                         active
-                          ? "bg-[image:var(--jj-emerald-ombre)] !text-white shadow-md"
-                          : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                          ? "is-active bg-[image:var(--jj-emerald-ombre)] shadow-md"
+                          : "text-[#1A1A1A] hover:bg-[image:var(--jj-emerald-ombre)] hover:shadow-md"
                       }`}
                       style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                     >
-                      <Icon className={`w-3.5 h-3.5 hidden sm:inline-block ${active ? "text-white" : ""}`} />
-                      <span>{label}</span>
+                      <Icon
+                        data-no-contrast-guard
+                        className="jj-investor-tab-ico w-3.5 h-3.5 hidden sm:inline-block transition-colors"
+                        stroke={active ? "#FFFFFF" : "#1A1A1A"}
+                        style={{ color: active ? "#FFFFFF" : "#1A1A1A" }}
+                      />
+                      <span
+                        data-no-contrast-guard
+                        className="jj-investor-tab-label"
+                        style={{
+                          color: active ? "#FFFFFF" : undefined,
+                          WebkitTextFillColor: active ? "#FFFFFF" : undefined,
+                        }}
+                      >
+                        {label}
+                      </span>
                     </button>
                   );
                 })}
