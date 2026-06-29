@@ -19727,3 +19727,13 @@ html body :is(
   fill: #FFFFFF !important;
   fill-opacity: 1 !important;
 }
+
+/* PASS 108 — Header emerald controls are also emerald own-surfaces. */
+html body :is(.jj-header-premium-control, [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock),
+html body :is(.jj-header-premium-control, [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock) :is(*, span, p, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-header-emerald-white-lock-child) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
