@@ -51,12 +51,12 @@ function Kpi({
     <button
       type="button"
       onClick={onClick}
-      className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-4 py-4 sm:px-5 sm:py-5 w-full min-w-0 focus:outline-none"
+      className="jj-hover-emerald group flex flex-col items-start text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-3 py-3 sm:px-4 sm:py-4 w-full min-w-0 max-w-full overflow-hidden focus:outline-none"
     >
-      <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
-      <div className="mt-3 sm:mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none truncate">{value}</div>
-      <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold truncate">{label}</div>
-      {sub && <div className="text-[10px] sm:text-[11px] text-[#1A1A1A]/55 mt-1 truncate">{sub}</div>}
+      <IconTile icon={Icon} tone="emerald" size="md" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-[18px] !w-[18px]" />
+      <div className="mt-3 text-xl sm:text-2xl md:text-[26px] font-semibold tabular-nums text-[#1A1A1A] leading-none break-words">{value}</div>
+      <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/65 mt-2 font-semibold leading-tight break-words">{label}</div>
+      {sub && <div className="text-[10px] sm:text-[11px] text-[#1A1A1A]/55 mt-1 leading-tight break-words">{sub}</div>}
     </button>
   );
 }
@@ -469,17 +469,17 @@ export default function BrokerCRM() {
               </span>
               <span className="text-xs text-[#1A1A1A]/60">{totalLeads} total leads</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 min-w-0">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 min-w-0">
               {stageCounts.map((s) => (
                 <button
                   key={s.key}
                   type="button"
                   onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
-                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-3 py-3 sm:px-4 sm:py-4 min-w-0 focus:outline-none"
+                  className="jj-hover-emerald group flex flex-col items-start text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-3 py-3 min-w-0 max-w-full overflow-hidden focus:outline-none"
                 >
                   <IconTile icon={BarChart3} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65 mt-3 font-semibold truncate">{s.label}</div>
-                  <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1 truncate">{s.count}</div>
+                  <div className="text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/65 mt-3 font-semibold leading-tight break-words">{s.label}</div>
+                  <div className="text-xl sm:text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1 leading-none break-words">{s.count}</div>
                 </button>
               ))}
             </div>
@@ -558,7 +558,7 @@ export default function BrokerCRM() {
 
 
           {/* Leads table — always visible on Pipeline tab so the empty state guides the broker */}
-          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
+          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-x-auto">
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/20">
               <h3 className="text-sm font-semibold text-[#1A1A1A]">Your leads</h3>
               <button
@@ -573,7 +573,7 @@ export default function BrokerCRM() {
               <Loading />
             ) : leadsData.length === 0 ? (
               <div>
-                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                <div className="grid grid-cols-[40px_minmax(180px,1fr)_140px_140px_120px] gap-3 px-4 py-2.5 min-w-[620px] bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
                   <div></div>
                   <div>Lead</div>
                   <div>Stage</div>
@@ -611,7 +611,7 @@ export default function BrokerCRM() {
               </div>
             ) : (
               <div>
-                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                <div className="grid grid-cols-[40px_minmax(180px,1fr)_140px_140px_120px] gap-3 px-4 py-2.5 min-w-[620px] bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
                   <div></div>
                   <div>Lead</div>
                   <div>Stage</div>
@@ -620,7 +620,7 @@ export default function BrokerCRM() {
                 </div>
                 <div className="divide-y divide-[#B89555]/15">
                   {leadsData.slice(0, 8).map((l: any) => (
-                    <div key={l.id} className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 items-center px-4 py-3">
+                    <div key={l.id} className="grid grid-cols-[40px_minmax(180px,1fr)_140px_140px_120px] gap-3 items-center px-4 py-3 min-w-[620px]">
                       <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
                         {(l.full_name || "?").slice(0, 1).toUpperCase()}
                       </div>
@@ -729,13 +729,13 @@ export default function BrokerCRM() {
               className="pl-9 bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]"
             />
           </div>
-          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
+          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-x-auto">
             {leads.isLoading ? (
               <Loading />
             ) : filteredLeads.length === 0 ? (
               <div>
                 {/* Table header so the layout reads as a real table even when empty */}
-                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                <div className="grid grid-cols-[40px_minmax(180px,1fr)_120px_120px_100px_90px] gap-3 px-4 py-2.5 min-w-[700px] bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
                   <div></div>
                   <div>Lead</div>
                   <div>Stage</div>
@@ -778,12 +778,13 @@ export default function BrokerCRM() {
               </div>
             ) : (
               <div>
-                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                <div className="grid grid-cols-[40px_minmax(180px,1fr)_120px_120px_100px_90px] gap-3 px-4 py-2.5 min-w-[700px] bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
                   <div></div>
                   <div>Lead</div>
                   <div>Stage</div>
                   <div>Source</div>
                   <div className="text-right">Updated</div>
+                  <div className="text-right">Actions</div>
                 </div>
                 <div className="divide-y divide-[#B89555]/15">
                   {filteredLeads.map((l: any) => (
@@ -793,7 +794,7 @@ export default function BrokerCRM() {
                       tabIndex={0}
                       onClick={() => setHubLead(l)}
                       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setHubLead(l); } }}
-                      className="grid grid-cols-[40px_1fr_120px_120px_100px_90px] gap-3 items-center px-4 py-3 cursor-pointer hover:bg-[#EFE6D6]/40 transition-colors focus:outline-none focus:bg-[#EFE6D6]/60"
+                      className="grid grid-cols-[40px_minmax(180px,1fr)_120px_120px_100px_90px] gap-3 items-center px-4 py-3 min-w-[700px] cursor-pointer hover:bg-[#EFE6D6]/40 transition-colors focus:outline-none focus:bg-[#EFE6D6]/60"
                       title="Open lead hub (calendar, tasks, notes)"
                     >
                       <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
