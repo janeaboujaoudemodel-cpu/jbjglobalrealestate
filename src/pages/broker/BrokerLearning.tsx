@@ -711,19 +711,32 @@ function TrainingCard({
 function ReferenceCard({ title, items, tone, icon }: {
   title: string; items: string[]; tone: "red" | "emerald"; icon: React.ReactNode;
 }) {
-  const mark = tone === "red"
-    ? <span className="text-[#7A1F1F] font-bold">✕</span>
-    : <span className="text-[#1F5132] font-bold">✓</span>;
+  const isRed = tone === "red";
+  const mark = (
+    <span
+      data-no-contrast-guard
+      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
+      style={{
+        background: isRed
+          ? "linear-gradient(135deg,#7A1F1F 0%,#A02828 100%)"
+          : "linear-gradient(135deg,#064E3B 0%,#0B7A5B 100%)",
+      }}
+    >
+      {isRed
+        ? <X className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        : <Check className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
+    </span>
+  );
   return (
     <Card className="bg-[#F7F2EA] border-[#B89555]/30">
       <CardContent className="p-5 md:p-6">
         <h3 className="text-[#1A1A1A] font-semibold flex items-center gap-2 mb-3">
           {icon}{title}
         </h3>
-        <ul className="space-y-1.5">
+        <ul className="space-y-2">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/85 text-sm">
-              <span className="mt-0.5">{mark}</span>
+            <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/90 text-sm leading-relaxed">
+              {mark}
               <span>{p}</span>
             </li>
           ))}
