@@ -23,6 +23,7 @@ const OwnerCommSettings = lazy(() => import("@/pages/OwnerCommSettings"));
 const OwnerAgenda = lazy(() => import("@/pages/OwnerAgenda"));
 const OwnerFeatureRegistry = lazy(() => import("@/pages/OwnerFeatureRegistry"));
 const OwnerAuditPage = lazy(() => import("@/pages/owner/OwnerAuditPage"));
+const OwnerVaultPanel = lazy(() => import("@/pages/OwnerVaultPanel"));
 const OwnerIntegrationsPage = lazy(() => import("@/pages/owner/OwnerIntegrationsPage"));
 const OwnerSafetyPage = lazy(() => import("@/pages/owner/OwnerSafetyPage"));
 const OwnerFounderSettings = lazy(() => import("@/pages/owner/OwnerFounderSettings"));
@@ -113,6 +114,7 @@ export const OwnerRoutes = () => (
     <Route path="meetings" element={<OwnerMeetings />} />
     <Route path="features" element={<OwnerFeatureRegistry />} />
     <Route path="audit" element={<OwnerAuditPage />} />
+    <Route path="vault" element={<OwnerVaultPanel />} />
     <Route path="integrations" element={<OwnerIntegrationsPage />} />
     <Route path="safety" element={<OwnerSafetyPage />} />
     <Route path="founder-settings" element={<OwnerFounderSettings />} />
