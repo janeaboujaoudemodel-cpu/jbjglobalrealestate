@@ -19194,3 +19194,52 @@ html body [data-radix-popper-content-wrapper]
   text-shadow: none !important;
 }
 
+
+/* ============================================================
+   PASS 102 — DROPDOWN HOVER RULE BY TYPE (FINAL)
+   - Dropdowns WITH an active/selected row (Currency, Mode):
+       Inactive row hover = CHAMPAGNE lift + ink text (never emerald),
+       so the single emerald active row stays unmistakable.
+   - Dropdowns WITHOUT an active row (Account/User menu):
+       Keep the existing emerald metallic hover with white text.
+   This block is appended last so it wins the cascade for the
+   inactive-row champagne hover on Currency. The account-menu
+   emerald hover from PASS 100/101 remains untouched.
+============================================================ */
+
+/* Currency: inactive row hover/focus/highlight = champagne lift + ink */
+html body [data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]) {
+  background: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
+  background-color: #F2EADB !important;
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184, 149, 85, 0.32) !important;
+  box-shadow:
+    0 10px 22px -16px rgba(184,149,85,0.55),
+    0 4px 10px -8px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  transform: translateY(-1px) scale(1.012) !important;
+  filter: none !important;
+}
+
+html body [data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]) *,
+html body [data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]) :is(span, p, small, strong, em, b, label, svg, path, circle, rect, line, polyline, polygon) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Mode picker idle hover already champagne-lift via PASS 95/100 — no change. */
+
+/* Account menu hover remains emerald (PASS 100/101) — no override here. */
