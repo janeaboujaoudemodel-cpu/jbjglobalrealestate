@@ -15,14 +15,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserMode } from "@/hooks/useUserMode";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
 import { supabase } from "@/integrations/supabase/client";
+import { getUserInitials } from "@/lib/userInitials";
 
-const getInitials = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((n) => n.charAt(0).toUpperCase())
-    .slice(0, 2)
-    .join("") || "U";
 
 interface Props {
   onOpenFilters?: () => void;
