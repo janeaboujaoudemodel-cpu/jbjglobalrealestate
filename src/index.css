@@ -19263,3 +19263,30 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content]
   background: transparent !important;
   background-image: none !important;
 }
+
+/* PASS 104 — Kill nested background rectangles inside dropdown rows.
+   Inner spans/divs must never paint their own background — only the row
+   itself carries the emerald (active/hover) or champagne (hover) fill. */
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row] *:not([data-account-role-label]):not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon),
+html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item] *:not([data-account-role-label]):not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon),
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] *:not([data-mode-icon-tile]):not([data-mode-active-pill]):not([data-mode-select-pill]):not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Active currency/account row: force WHITE on every descendant text node */
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
+  [data-currency-row][data-currency-active="true"],
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
+  [data-currency-row][data-currency-active="true"] *,
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
+  [data-currency-row]:is(:hover, :focus, [data-highlighted])[data-currency-active="true"],
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
+  [data-currency-row]:is(:hover, :focus, [data-highlighted])[data-currency-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
