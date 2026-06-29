@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { toast } from "sonner";
 import { Loader2, GraduationCap } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 interface Props {
   open: boolean;
@@ -66,8 +67,8 @@ export default function AcademyAccessRequestModal({ open, onOpenChange, item }: 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md bg-[#FDFBF7] border-[#B89555]/40">
         <DialogHeader>
-          <div className="flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-[#B89555]" />
+          <div className="flex items-center gap-3">
+            <IconTile icon={GraduationCap} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" />
             <DialogTitle className="text-[#1A1A1A]">Request Academy Access</DialogTitle>
           </div>
           <DialogDescription className="text-[#1A1A1A]/70">
@@ -108,15 +109,15 @@ export default function AcademyAccessRequestModal({ open, onOpenChange, item }: 
           <Button
             onClick={submit}
             disabled={submitting}
-            className="jj-pill-emerald-metallic disabled:opacity-100"
+            className="jj-pill-emerald-metallic disabled:opacity-100 [&_svg]:!text-white [&_svg]:!stroke-white [&_*]:!text-white"
             data-cta="aa-submit"
             data-surface="emerald"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
             {submitting ? (
-              <><Loader2 className="w-4 h-4 mr-1.5 animate-spin text-white" strokeWidth={2.6} /> <span className="text-white">Sending…</span></>
+              <><Loader2 className="w-4 h-4 mr-1.5 animate-spin text-white" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sending…</span></>
             ) : (
-              <><GraduationCap className="w-4 h-4 mr-1.5 text-white" strokeWidth={2.6} /> <span className="text-white">Send Request</span></>
+              <><GraduationCap className="w-4 h-4 mr-1.5 text-white" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> <span className="text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Send Request</span></>
             )}
           </Button>
         </div>

@@ -769,7 +769,7 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
       <CardContent className="relative p-5 md:p-6">
         <h3 className="allow-white text-white font-bold flex items-center gap-2 mb-4 tracking-tight">
           <span className="grid h-10 w-10 place-items-center rounded-xl border border-white/25 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.75)]">
-            <Icon className="w-4.5 h-4.5 text-white" strokeWidth={2.8} />
+            <Icon className="h-[18px] w-[18px] text-white" strokeWidth={2.8} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </span>
           <span className="allow-white text-white">{title}</span>
         </h3>

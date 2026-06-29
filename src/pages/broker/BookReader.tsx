@@ -510,7 +510,7 @@ function CoverFace({
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
       <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-9">
         <div className="allow-white text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
-          Broker Academy · Book {book.book_number}
+          Book {book.book_number} · {book.learning_path}
         </div>
         <h1 className="allow-white text-white text-2xl md:text-3xl font-bold leading-tight mb-2 drop-shadow">
           {book.title}
