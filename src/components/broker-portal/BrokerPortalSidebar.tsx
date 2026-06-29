@@ -109,10 +109,17 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             to === "/broker/portal" || to === "/broker/email"
               ? pathname === to
               : pathname === to || pathname.startsWith(to + "/");
+          // Force exact-match routes (`end`) for parents whose child routes
+          // would otherwise trigger NavLink's default prefix match and double-
+          // light the parent row. `/broker/email` is the canonical case —
+          // `/broker/email/setup` was lighting both "Smart Inbox" and "Email
+          // Setup". Always pass `end` so NavLink's internal `.active` class is
+          // governed only by our explicit `active` boolean above.
           return (
             <NavLink
               key={to}
               to={to}
+              end
               onClick={onNavigate}
               title={collapsed ? label : undefined}
               data-allow-dark-cta={active ? "" : undefined}
