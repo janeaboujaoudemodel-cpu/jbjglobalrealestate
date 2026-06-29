@@ -51,7 +51,7 @@ export default function BrokerNotes() {
           <button
             onClick={submit}
             disabled={!draft.body.trim() || create.isPending}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#1A1A1A] text-[#F7F2EA] text-xs hover:opacity-90 disabled:opacity-40"
+            className="jj-pill-emerald-metallic inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs disabled:opacity-40"
           >
             <Plus className="h-3.5 w-3.5" /> Add note
           </button>

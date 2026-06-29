@@ -61,7 +61,7 @@ export default function BrokerCalendar() {
         </div>
         <button
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#1A1A1A] text-[#F7F2EA] text-sm hover:opacity-90"
+          className="jj-pill-emerald-metallic inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm"
         >
           <Plus className="h-4 w-4" /> New event
         </button>
@@ -96,7 +96,7 @@ export default function BrokerCalendar() {
                     <div className="text-[11px] text-[#1A1A1A]/70 mb-1">{d.getDate()}</div>
                     <div className="space-y-1">
                       {list.map((e: any) => (
-                        <div key={e.id} className="group bg-[#1A1A1A] text-[#F7F2EA] text-[10px] px-1.5 py-0.5 rounded truncate flex items-center justify-between gap-1">
+                        <div key={e.id} className="group bg-[color:var(--emerald-1)] text-white text-[10px] px-1.5 py-0.5 rounded truncate flex items-center justify-between gap-1">
                           <span className="truncate" title={e.title}>{e.title}</span>
                           <button
                             onClick={() => del.mutate(e.id)}
@@ -168,7 +168,7 @@ export default function BrokerCalendar() {
             </div>
             <div className="flex justify-end gap-2 mt-4">
               <button onClick={() => setOpen(false)} className="px-3 py-1.5 rounded-md text-sm border border-[#B89555]/20">Cancel</button>
-              <button onClick={submit} className="px-3 py-1.5 rounded-md text-sm bg-[#1A1A1A] text-[#F7F2EA]">Create</button>
+              <button onClick={submit} className="jj-pill-emerald-metallic px-3 py-1.5 rounded-md text-sm">Create</button>
             </div>
           </div>
         </div>
