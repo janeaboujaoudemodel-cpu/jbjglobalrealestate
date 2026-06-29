@@ -602,7 +602,9 @@ function TrainingCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
             <div
-              className="shrink-0 w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555]/60 grid place-items-center text-[#1A1A1A] shadow-[0_2px_6px_rgba(184,149,85,0.18)]"
+              data-icon-tile=""
+              data-surface="emerald"
+              className="allow-white shrink-0 w-12 h-12 rounded-xl jj-icon-tile-emerald grid place-items-center shadow-[0_10px_24px_-14px_rgba(6,78,59,0.65)] [&_svg]:!text-white [&_svg]:!stroke-white"
             >
               {m.icon}
             </div>
@@ -618,7 +620,9 @@ function TrainingCard({
           {locked ? (
             <PremiumLockBadge size="sm" title={lockReason ?? "Locked"} />
           ) : (
-            <ChevronRight className="w-5 h-5 text-[#1A1A1A]/40 shrink-0" />
+            <span data-surface="emerald" data-allow-dark-cta className="allow-white shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
+              <ChevronRight className="w-4 h-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+            </span>
           )}
         </div>
 

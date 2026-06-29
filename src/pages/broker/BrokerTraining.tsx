@@ -217,7 +217,7 @@ export default function BrokerTraining({ embedded = true }: Props) {
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center text-[#1A1A1A]">
+                        <div data-icon-tile="" data-surface="emerald" className="allow-white w-12 h-12 rounded-xl jj-icon-tile-emerald flex items-center justify-center [&_svg]:!text-white [&_svg]:!stroke-white">
                           {module.icon}
                         </div>
                         <div>
@@ -235,7 +235,9 @@ export default function BrokerTraining({ embedded = true }: Props) {
                       {module.completed ? (
                         <CheckCircle className="w-6 h-6 text-[color:var(--emerald-1)]" />
                       ) : (
-                        <ChevronRight className="w-6 h-6 text-[#1A1A1A]/40" />
+                        <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
+                          <ChevronRight className="w-4 h-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+                        </span>
                       )}
                     </div>
 

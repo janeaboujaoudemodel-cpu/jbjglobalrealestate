@@ -23,6 +23,7 @@ import BrokerDatabaseSheet from "@/components/broker-crm/BrokerDatabaseSheet";
 import MarkJunkDialog from "@/components/broker-crm/MarkJunkDialog";
 import LeadHubSheet from "@/components/broker-crm/LeadHubSheet";
 import { AlertTriangle } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 // CRM is the unified hub — these surfaces also remain in the sidebar but are
 // embedded here as tabs for a single-pane workflow (matches owner CRM hub).
@@ -53,10 +54,10 @@ function Kpi({
       className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-5 py-5 w-full focus:outline-none"
     >
       <div className="flex items-center justify-between">
-        <div className="h-10 w-10 grid place-items-center rounded-xl jj-icon-tile-emerald" data-icon-tile="">
-          <Icon className="h-5 w-5 text-white" />
-        </div>
-        <ArrowRight className="h-4 w-4 text-[color:var(--emerald-1)]/70 group-hover:text-white transition-colors" />
+        <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
+        <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">
+          <ArrowRight className="h-4 w-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+        </span>
       </div>
       <div className="mt-4 text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none">{value}</div>
       <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold">{label}</div>
@@ -472,10 +473,10 @@ export default function BrokerCRM() {
                   className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-4 py-4 focus:outline-none"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="h-8 w-8 grid place-items-center rounded-lg jj-icon-tile-emerald" data-icon-tile="">
-                      <BarChart3 className="h-4 w-4 text-white" />
-                    </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-[color:var(--emerald-1)]/60 group-hover:text-white transition-colors" />
+                    <IconTile icon={BarChart3} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
+                    <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">
+                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+                    </span>
                   </div>
                   <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 mt-3 font-semibold">{s.label}</div>
                   <div className="text-2xl font-semibold tabular-nums text-[#1A1A1A] mt-1">{s.count}</div>
@@ -625,9 +626,7 @@ export default function BrokerCRM() {
                 className="jj-hover-emerald group block w-full text-left p-4 rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/24"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl jj-icon-tile-emerald grid place-items-center" data-icon-tile="">
-                    <Database className="h-5 w-5 text-white" />
-                  </div>
+                  <IconTile icon={Database} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-[#1A1A1A] truncate">{d.database_name}</div>
                     <div className="text-[11px] text-[#1A1A1A]/65">
@@ -635,7 +634,9 @@ export default function BrokerCRM() {
                       {d.date_window_mode !== "all" && ` · window: ${d.date_window_mode}`}
                     </div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-[color:var(--emerald-1)]/70 group-hover:text-white" />
+                  <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">
+                    <ArrowRight className="h-4 w-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+                  </span>
                 </div>
               </button>
             ))

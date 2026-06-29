@@ -125,11 +125,12 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               )}
               style={active ? { backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" } : undefined}
             >
-              <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-6 h-6 rounded-md flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
+              <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
                 <Icon
-                  className="allow-white h-3.5 w-3.5 shrink-0 text-white"
-                  strokeWidth={2.1}
-                  style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+                  className="allow-white h-4 w-4 shrink-0 text-white"
+                  strokeWidth={2.55}
+                  absoluteStrokeWidth
+                  style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }}
                 />
               </span>
               {!collapsed && (

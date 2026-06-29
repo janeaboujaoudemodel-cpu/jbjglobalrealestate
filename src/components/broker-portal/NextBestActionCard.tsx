@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Phone, MessageSquare, Mail, CalendarPlus, Trophy, Clock, Sparkles, ArrowRight } from "lucide-react";
+import { Phone, Mail, CalendarPlus, Trophy, Clock, Sparkles, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useBrokerScopedLeads } from "@/hooks/useBrokerScopedLeads";
+import { IconTile } from "@/components/ui/icon-tile";
 
 type AiSuggestion = {
   leadId: string;
@@ -74,10 +75,11 @@ export default function NextBestActionCard() {
           <div
             data-no-contrast-guard
             data-allow-dark-cta
+            data-surface="emerald"
             className="allow-white inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.65)]"
             style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
           >
-            <Sparkles className="h-3 w-3" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <Sparkles className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
             <span className="text-[9.5px] font-semibold uppercase tracking-[0.22em]" style={{ color: "#FFFFFF" }}>
               AI Next-Best-Action
             </span>
@@ -124,14 +126,7 @@ export default function NextBestActionCard() {
                 key={s.leadId}
                 className="group flex items-center gap-3 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/60 hover:shadow-[0_10px_24px_-18px_rgba(10,10,10,0.35)] transition-all p-2.5 pr-3"
               >
-                <span
-                  data-no-contrast-guard
-                  data-allow-dark-cta
-                  className="allow-white shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-[12px] font-bold border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.65)]"
-                  style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
-                >
-                  {idx + 1}
-                </span>
+                <IconTile icon={Sparkles} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-lg" iconClassName="!h-4 !w-4" aria-label={`Priority ${idx + 1}`} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[14px] font-semibold text-[#1A1A1A] truncate">
@@ -148,10 +143,11 @@ export default function NextBestActionCard() {
                   aria-label={meta.label}
                   data-no-contrast-guard
                   data-allow-dark-cta
+                  data-surface="emerald"
                   className="allow-white inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-3 py-1.5 rounded-md border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-12px_rgba(6,78,59,0.95),0_0_16px_rgba(52,211,153,0.22)] transition-all"
                   style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
                 >
-                  <Icon className="h-3.5 w-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <Icon className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
                   {meta.label}
                 </Link>
               </li>

@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { IconTile } from "@/components/ui/icon-tile";
+import BrokerEmptyState from "@/components/broker-portal/BrokerEmptyState";
 
 type Developer = { id: string; name: string; slug: string | null; logo_url: string | null };
 type Visit = {
@@ -177,9 +179,7 @@ export default function BrokerDeveloperVisits() {
       {/* Header card */}
       <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 grid place-items-center rounded-md bg-[#EFE6D6] border border-[#B89555]/35">
-            <Building2 className="h-5 w-5 text-[#1A1A1A]" />
-          </div>
+          <IconTile icon={Building2} tone="emerald" size="md" className="!h-11 !w-11 !rounded-xl" iconClassName="!h-5 !w-5" />
           <div className="min-w-0">
             <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/55 font-semibold">
               JBJ Global Real Estate
@@ -213,7 +213,7 @@ export default function BrokerDeveloperVisits() {
               {picked.logo_url ? (
                 <img src={picked.logo_url} alt={picked.name} className="h-8 w-8 object-contain rounded bg-[#EFE6D6] p-0.5" />
               ) : (
-                <div className="h-8 w-8 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A]">
+                <div data-surface="emerald" data-allow-dark-cta className="allow-white h-8 w-8 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 grid place-items-center text-[10px] font-bold text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
                   {picked.name.slice(0, 2).toUpperCase()}
                 </div>
               )}
@@ -258,7 +258,7 @@ export default function BrokerDeveloperVisits() {
                       {d.logo_url ? (
                         <img src={d.logo_url} alt={d.name} className="h-7 w-7 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0" />
                       ) : (
-                        <div className="h-7 w-7 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A] flex-shrink-0">
+                        <div data-surface="emerald" data-allow-dark-cta className="allow-white h-8 w-8 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 grid place-items-center text-[10px] font-bold text-white flex-shrink-0 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
                           {d.name.slice(0, 2).toUpperCase()}
                         </div>
                       )}
@@ -411,14 +411,12 @@ export default function BrokerDeveloperVisits() {
         {visits.isLoading ? (
           <div className="px-5 py-10 text-center text-sm text-[#1A1A1A]/60">Loading…</div>
         ) : (visits.data?.length ?? 0) === 0 ? (
-          <div className="px-5 py-12 text-center">
-            <Building2 className="h-8 w-8 mx-auto text-[#1A1A1A]/55 mb-3" />
-            <div className="text-sm font-semibold text-[#1A1A1A]">No visits logged yet</div>
-            <p className="text-xs text-[#1A1A1A]/65 mt-1 max-w-md mx-auto">
-              Pick a developer above, fill in the date, briefing, and the sales rep you met — your first
-              visit will appear here.
-            </p>
-          </div>
+          <BrokerEmptyState
+            icon={<Building2 className="h-6 w-6" />}
+            title="No visits logged yet"
+            description="Pick a developer above, fill in the date, briefing, and the sales rep you met — your first visit will appear here."
+            className="rounded-none border-0 bg-transparent shadow-none"
+          />
         ) : (
           <div className="divide-y divide-[#B89555]/15">
             {(visits.data ?? []).map((v) => (
@@ -426,7 +424,7 @@ export default function BrokerDeveloperVisits() {
                 {v.developer?.logo_url ? (
                   <img src={v.developer.logo_url} alt="" className="h-9 w-9 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0" />
                 ) : (
-                  <div className="h-9 w-9 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A] flex-shrink-0">
+                  <div data-surface="emerald" data-allow-dark-cta className="allow-white h-9 w-9 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 grid place-items-center text-[10px] font-bold text-white flex-shrink-0 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
                     {(v.developer?.name ?? "?").slice(0, 2).toUpperCase()}
                   </div>
                 )}

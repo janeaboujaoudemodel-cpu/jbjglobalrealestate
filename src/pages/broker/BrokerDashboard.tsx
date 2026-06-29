@@ -5,13 +5,16 @@ import { useBrokerPersonalTasks } from "@/hooks/useBrokerPersonalTasks";
 import { useBrokerPersonalNotes } from "@/hooks/useBrokerPersonalNotes";
 import { useBrokerPersonalCalendar } from "@/hooks/useBrokerPersonalCalendar";
 import { Database, Users, ListTodo, StickyNote, Calendar, ArrowRight } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 function Stat({ icon: Icon, label, value, to }: any) {
   return (
-    <Link to={to} className="block p-5 rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 hover:border-[#B89555]/50 transition">
+    <Link to={to} className="group block p-5 rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 hover:border-[#B89555]/50 transition">
       <div className="flex items-center justify-between">
-        <Icon className="h-5 w-5 text-[#1A1A1A]/60" />
-        <ArrowRight className="h-4 w-4 text-[#1A1A1A]/40" />
+        <IconTile icon={Icon} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
+        <span data-surface="emerald" data-allow-dark-cta className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)] group-hover:translate-x-0.5 transition-all">
+          <ArrowRight className="h-4 w-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+        </span>
       </div>
       <div className="mt-3 text-3xl font-semibold tabular-nums">{value}</div>
       <div className="text-xs text-[#1A1A1A]/70 mt-1">{label}</div>
