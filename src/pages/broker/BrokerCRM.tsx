@@ -620,7 +620,7 @@ export default function BrokerCRM() {
                 </div>
                 <div className="divide-y divide-[#B89555]/15">
                   {leadsData.slice(0, 8).map((l: any) => (
-                    <div key={l.id} className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 items-center px-4 py-3">
+                    <div key={l.id} className="grid grid-cols-[40px_minmax(180px,1fr)_140px_140px_120px] gap-3 items-center px-4 py-3 min-w-[620px]">
                       <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
                         {(l.full_name || "?").slice(0, 1).toUpperCase()}
                       </div>
