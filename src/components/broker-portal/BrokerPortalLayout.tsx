@@ -149,17 +149,7 @@ export default function BrokerPortalLayout() {
           </div>
         </header>
 
-        {/* Owner preview banner (slim, sticky under the header) */}
-        {showOwnerChrome && (
-          <div
-            className="bg-[#EFE6D6] border-b border-[#B89555]/40 px-4 md:px-8 py-2 text-xs text-[#1A1A1A]/85 flex items-center gap-2 sticky z-20"
-            style={{ top: "var(--shell-header-h)" }}
-          >
-            <Crown className="h-3.5 w-3.5" />
-            <span className="font-semibold">Owner preview</span>
-            <span className="text-muted-foreground">— you're viewing the broker portal exactly as your registered brokers see it.</span>
-          </div>
-        )}
+        {/* Owner preview banner removed — owner-mode users no longer land here. */}
 
         <main className="flex-1 min-w-0" role="main">
           <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto">
