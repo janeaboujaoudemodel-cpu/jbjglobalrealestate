@@ -78,7 +78,7 @@ const ContentImage = React.forwardRef<HTMLImageElement, ContentImageProps>(
         )}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
-        fetchPriority={priority ? "high" : "low"}
+        fetchpriority={priority ? "high" : "low"}
         {...props}
       />
     );

@@ -263,7 +263,7 @@ const Index = () => {
             src={heroFallbackDubai}
             alt=""
             aria-hidden="true"
-            fetchPriority="high"
+            fetchpriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover z-[1]"
           />
