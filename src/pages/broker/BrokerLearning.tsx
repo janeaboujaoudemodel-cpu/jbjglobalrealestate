@@ -304,8 +304,18 @@ export default function BrokerLearning() {
                   aria-hidden
                   className="hidden md:block pointer-events-none absolute top-[18px] left-[15%] h-5 w-16 rounded-full blur-[1px]"
                   style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.95), rgba(184,149,85,.9), transparent)" }}
-                  animate={{ left: ["15%", "48%", "81%", "15%"], opacity: [0, 1, 1, 0] }}
-                  transition={{ duration: 4.8, times: [0, 0.34, 0.68, 1], repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ left: ["15%", "48%", "81%", "48%", "15%"], opacity: [0, 1, 1, 1, 0] }}
+                  transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.div
+                  aria-hidden
+                  data-no-contrast-guard
+                  className="hidden md:grid pointer-events-none absolute top-[11px] left-[17%] h-8 w-8 place-items-center rounded-full bg-[#FDFBF7] text-[#B89555] shadow-[0_0_22px_rgba(255,255,255,.95),0_0_28px_rgba(184,149,85,.42)]"
+                  animate={{ left: ["17%", "50%", "83%", "50%", "17%"], scale: [0.72, 1.08, 1.08, 1.08, 0.72], opacity: [0, 1, 1, 1, 0] }}
+                  transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Sparkles className="h-4 w-4" strokeWidth={2.8} />
+                </motion.div>
                 />
                 {[
                   { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
@@ -720,14 +730,14 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
   title: string; items: string[]; tone: "red" | "emerald"; icon: import("lucide-react").LucideIcon;
 }) {
   const isRed = tone === "red";
-  const mark = (
+  const renderMark = () => (
     <span
       data-no-contrast-guard
-      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
+      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full border border-white/20 shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
       style={{
         background: isRed
-          ? "linear-gradient(135deg,#7A1F1F 0%,#A02828 100%)"
-          : "linear-gradient(135deg,#064E3B 0%,#0B7A5B 100%)",
+          ? "linear-gradient(135deg,#5E1414 0%,#A02828 100%)"
+          : "linear-gradient(135deg,#032F24 0%,#0B7A5B 100%)",
       }}
     >
       {isRed
@@ -736,22 +746,30 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
     </span>
   );
   const shell = isRed
-    ? "from-[#4B1111] via-[#7A1F1F] to-[#A02828]"
-    : "from-[#032F24] via-[#064E3B] to-[#0B7A5B]";
+    ? "from-[#3A0B0B] via-[#7A1F1F] to-[#B73535]"
+    : "from-[#021F18] via-[#064E3B] to-[#0B7A5B]";
   return (
-    <Card className={`relative overflow-hidden border-[#B89555]/45 bg-gradient-to-br ${shell} shadow-[0_20px_55px_-34px_rgba(26,26,26,0.7)]`} data-surface="emerald">
-      <CardContent className="p-5 md:p-6">
-        <h3 className="text-white font-semibold flex items-center gap-2 mb-4">
-          <span className="grid h-9 w-9 place-items-center rounded-xl border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,.18)]">
-            <Icon className="w-4 h-4 text-white" strokeWidth={2.6} />
+    <Card className={`relative overflow-hidden border-[#B89555]/45 bg-gradient-to-br ${shell} shadow-[0_26px_70px_-42px_rgba(26,26,26,0.82)]`} data-no-contrast-guard>
+      <div aria-hidden className="absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_20%_12%,rgba(255,255,255,.18),transparent_26%),radial-gradient(circle_at_86%_88%,rgba(184,149,85,.20),transparent_34%)]" />
+      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F4D58D]/80 to-transparent" />
+      <motion.span
+        aria-hidden
+        className="absolute -left-24 top-0 h-full w-20 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-[1px]"
+        animate={{ x: [0, 720] }}
+        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: isRed ? 0 : 1.1 }}
+      />
+      <CardContent className="relative p-5 md:p-6">
+        <h3 className="allow-white text-white font-bold flex items-center gap-2 mb-4 tracking-tight">
+          <span className="grid h-10 w-10 place-items-center rounded-xl border border-white/25 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.75)]">
+            <Icon className="w-4.5 h-4.5 text-white" strokeWidth={2.8} />
           </span>
-          {title}
+          <span className="allow-white text-white">{title}</span>
         </h3>
         <ul className="space-y-2.5">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-white text-sm leading-relaxed shadow-[inset_0_1px_0_rgba(255,255,255,.08)]">
-              {mark}
-              <span>{p}</span>
+            <li key={i} className="allow-white flex items-start gap-2 rounded-xl border border-white/12 bg-white/10 px-3 py-2 text-white text-sm leading-relaxed shadow-[inset_0_1px_0_rgba(255,255,255,.10),0_10px_22px_-20px_rgba(0,0,0,.75)] backdrop-blur-sm">
+              {renderMark()}
+              <span className="allow-white text-white">{p}</span>
             </li>
           ))}
         </ul>
