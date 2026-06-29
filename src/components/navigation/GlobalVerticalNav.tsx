@@ -1348,7 +1348,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
           {/* Section icons — ALWAYS emerald tile with pure white glyph (active = brighter ring) */}
           <style>{`
-            .jj-side-tile {
+            html body .jj-side-tile,
+            html body button.jj-side-tile,
+            html body a.jj-side-tile {
               background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
               background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
               border: 1px solid rgba(255,255,255,0.14) !important;
@@ -1357,12 +1359,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               filter: none !important;
               transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease !important;
             }
-            .jj-side-tile svg,
-            .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; transition: none !important; }
-            .jj-side-tile:hover { border-color: rgba(184,149,85,0.55) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
-            .jj-side-tile.is-active { border-color: #B89555 !important; box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.45) !important; }
-            .jj-side-tile.is-active svg,
-            .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
+            html body .jj-side-tile svg,
+            html body .jj-side-tile svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; fill: none !important; opacity: 1 !important; transition: none !important; }
+            html body .jj-side-tile:hover { border-color: rgba(184,149,85,0.55) !important; transform: translateY(-1px) !important; box-shadow: 0 10px 22px -12px rgba(4,120,87,0.75), inset 0 1px 0 rgba(255,255,255,0.24) !important; }
+            html body .jj-side-tile.is-active { border-color: #B89555 !important; box-shadow: 0 12px 26px -11px rgba(4,120,87,0.9), inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -8px 14px rgba(0,0,0,0.22), 0 0 0 1px rgba(184,149,85,0.45) !important; }
+            html body .jj-side-tile.is-active svg,
+            html body .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
           <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
             {highlightItems.map((item, i) => {
