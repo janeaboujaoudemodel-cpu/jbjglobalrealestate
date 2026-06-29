@@ -271,16 +271,17 @@ export default function BrokerDashboardLanding() {
                     {/* eyebrow plaque */}
                     <div
                       data-section-label=""
-                      className="jj-section-eyebrow inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#FDFBF7] border border-[#B89555]/45 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset]"
+                      data-no-contrast-guard
+                      data-allow-dark-cta
+                      data-surface="emerald"
+                      className="jj-section-eyebrow allow-white inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
                     >
-                      <span className="relative inline-flex items-center justify-center w-3.5 h-3.5">
-                        <span className="absolute inset-0 rotate-45 rounded-[3px] border border-[color:var(--emerald-1)]/70" aria-hidden="true" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-[color:var(--emerald-1)]" aria-hidden="true" />
-                      </span>
-                      <span className="text-[9.5px] font-semibold uppercase tracking-[0.28em] text-[#1A1A1A]">
+                      <Briefcase className="h-3.5 w-3.5 shrink-0" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
+                      <span className="text-[9.5px] font-semibold uppercase tracking-[0.28em]" style={{ color: "#FFFFFF" }}>
                         Broker Workspace
                       </span>
                     </div>
+
                     <h1 className="font-display text-[28px] md:text-[40px] lg:text-[44px] font-semibold text-[#1A1A1A] truncate leading-[1.04] tracking-[-0.02em] mt-2.5 flex items-center gap-2">
                       <span className="truncate">Welcome, {profileLoading ? "…" : firstName}</span>
                       <ChevronDown className="h-5 w-5 md:h-6 md:w-6 text-[#1A1A1A]/45 group-hover:text-[#1A1A1A] transition-transform group-data-[state=open]:rotate-180 shrink-0" strokeWidth={2.2} />
