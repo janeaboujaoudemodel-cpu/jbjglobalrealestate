@@ -565,15 +565,31 @@ export default function InvestorDashboard() {
                       type="button"
                       onClick={() => setActiveTab(v)}
                       data-no-contrast-guard
-                      className={`shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[11px] md:text-xs font-semibold transition-colors ${
+                      data-surface={active ? "emerald" : undefined}
+                      data-emerald-ok={active ? "true" : undefined}
+                      className={`jj-investor-tab group shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[11px] md:text-xs font-semibold transition-all ${
                         active
-                          ? "bg-[image:var(--jj-emerald-ombre)] !text-white shadow-md"
-                          : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                          ? "is-active bg-[image:var(--jj-emerald-ombre)] shadow-md"
+                          : "text-[#1A1A1A] hover:bg-[image:var(--jj-emerald-ombre)] hover:shadow-md"
                       }`}
                       style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                     >
-                      <Icon className={`w-3.5 h-3.5 hidden sm:inline-block ${active ? "text-white" : ""}`} />
-                      <span>{label}</span>
+                      <Icon
+                        data-no-contrast-guard
+                        className="jj-investor-tab-ico w-3.5 h-3.5 hidden sm:inline-block transition-colors"
+                        stroke={active ? "#FFFFFF" : "#1A1A1A"}
+                        style={{ color: active ? "#FFFFFF" : "#1A1A1A" }}
+                      />
+                      <span
+                        data-no-contrast-guard
+                        className="jj-investor-tab-label"
+                        style={{
+                          color: active ? "#FFFFFF" : undefined,
+                          WebkitTextFillColor: active ? "#FFFFFF" : undefined,
+                        }}
+                      >
+                        {label}
+                      </span>
                     </button>
                   );
                 })}
@@ -752,11 +768,12 @@ export default function InvestorDashboard() {
                           <p className="font-semibold text-sm text-foreground truncate">{f.project?.name || `Project #${f.project_id?.slice(0, 8)}`}</p>
                           <p className="text-[10px] text-muted-foreground">Added {format(new Date(f.created_at), "dd MMM yyyy")}</p>
                         </div>
-                        <Link to={`/project/${f.project?.slug || f.project_id}`} aria-label="View property">
+                        <Link to={`/project/${f.project?.slug || f.project_id}`} aria-label={`View ${f.project?.name || "project"}`} title={`View ${f.project?.name || "project"}`}>
                           <button
                             type="button"
                             data-surface="emerald"
                             data-emerald-ok="button"
+                            title={`View ${f.project?.name || "project"}`}
                             className="jj-surface-emerald inline-flex items-center justify-center w-11 h-11 rounded-full shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] transition-all duration-200 hover:scale-105 hover:shadow-[0_8px_24px_-6px_rgba(6,78,59,0.55)] hover:brightness-110"
                           >
                             <Eye className="w-5 h-5 allow-white" stroke="#FFFFFF" style={{ color: "#FFFFFF" }} />
@@ -770,11 +787,12 @@ export default function InvestorDashboard() {
 
               {/* Browsing History */}
               <h3 className="text-lg font-semibold text-foreground flex items-center gap-2 pt-4">
-                <History className="w-5 h-5" style={{ color: "var(--emerald-1, #064e3b)" }} /> Browsing History
+                <History className="w-5 h-5" stroke="#064E3B" style={{ color: "#064E3B" }} /> Browsing History
               </h3>
               <Card className="border-[hsl(36,40%,70%)]/20">
                 <CardContent className="p-6 text-center">
-                  <History className="w-10 h-10 mx-auto mb-2" style={{ color: "var(--emerald-1, #064e3b)" }} />
+                  <History className="w-10 h-10 mx-auto mb-2" stroke="#064E3B" style={{ color: "#064E3B" }} />
+
                   <p className="text-sm text-muted-foreground">Property viewing history will appear here</p>
                 </CardContent>
               </Card>

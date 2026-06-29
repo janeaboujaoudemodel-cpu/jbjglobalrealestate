@@ -20093,3 +20093,23 @@ html body #root :is([data-surface="emerald"], [data-emerald-action], [data-cta="
   -webkit-text-fill-color: #1A1A1A !important;
   text-fill-color: #1A1A1A !important;
 }
+
+/* PASS 116 — Investor dashboard tab strap: bullet-proof white ink on emerald (active + hover). */
+.jj-investor-tab.is-active,
+.jj-investor-tab:hover {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background-image: var(--jj-emerald-ombre) !important;
+}
+.jj-investor-tab.is-active *,
+.jj-investor-tab:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jj-investor-tab.is-active svg,
+.jj-investor-tab:hover svg,
+.jj-investor-tab.is-active svg *,
+.jj-investor-tab:hover svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
