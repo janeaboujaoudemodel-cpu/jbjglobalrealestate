@@ -19245,3 +19245,21 @@ html body [data-radix-popper-content-wrapper]
 /* Mode picker idle hover already champagne-lift via PASS 95/100 — no change. */
 
 /* Account menu hover remains emerald (PASS 100/101) — no override here. */
+
+/* PASS 103 — Account role label (Owner/Broker/etc.) — force WHITE on emerald */
+html body [data-radix-popper-content-wrapper] [data-account-menu-content]
+  [data-account-role-label]:not(#jj-role-label#jj-role-label#jj-role-label#jj-role-label),
+html body [data-radix-popper-content-wrapper] [data-account-menu-content]
+  [data-account-role-label]:not(#jj-role-label#jj-role-label#jj-role-label#jj-role-label) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body [data-radix-popper-content-wrapper] [data-account-menu-content]
+  [data-account-role-label]:not(#jj-role-label#jj-role-label#jj-role-label#jj-role-label) * {
+  background: transparent !important;
+  background-image: none !important;
+}
