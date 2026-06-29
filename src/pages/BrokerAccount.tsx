@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useUserMode } from "@/hooks/useUserMode";
 import { AdminTasksPanel } from "@/components/crm/AdminTasksPanel";
 import {
   GraduationCap,
@@ -78,6 +79,7 @@ const BrokerAccount = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { isOwner: isAppOwner, isLoading: appOwnerLoading } = useIsAppOwner();
+  const { mode } = useUserMode();
   const { isBroker, isLoading: roleLoading } = useUserRole();
   const [modules, setModules] = useState<TrainingModule[]>([]);
   const [progress, setProgress] = useState<TrainingProgress[]>([]);
@@ -161,11 +163,11 @@ const BrokerAccount = () => {
   }, [authLoading, roleLoading, loading, user, navigate]);
 
   useEffect(() => {
-    if (!authLoading && !appOwnerLoading && user && isAppOwner) {
+    if (!authLoading && !appOwnerLoading && user && isAppOwner && mode === "owner") {
       try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
       navigate('/owner', { replace: true });
     }
-  }, [authLoading, appOwnerLoading, user, isAppOwner, navigate]);
+  }, [authLoading, appOwnerLoading, user, isAppOwner, mode, navigate]);
 
   const completedModules = progress.filter(p => p.is_completed).length;
   const totalModules = modules.length;
@@ -201,7 +203,7 @@ const BrokerAccount = () => {
   }
 
 
-  if (!user || isAppOwner) return null;
+  if (!user || (isAppOwner && mode === "owner")) return null;
 
   return (
     <div>

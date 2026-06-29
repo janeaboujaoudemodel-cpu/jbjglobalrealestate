@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useAuditorPasswordChange } from "@/hooks/useAuditorPasswordChange";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     refreshOwnerVerification,
     signOut,
   } = useAuth();
+  const { mode } = useUserModeContext();
   const location = useLocation();
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
@@ -148,20 +150,29 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
   }, [ownerLoading, isOwner, ownerError]);
 
+  // HARD BACK-END VISIBILITY LOCK — evaluated BEFORE any optimistic owner render.
+  // A cached owner verification must never leak /owner or /admin while the active
+  // perspective is Investor/Broker/Developer.
+  if (user && mode !== "owner") {
+    const destination =
+      mode === "broker" ? "/broker-dashboard" :
+      mode === "developer" ? "/developers-portal" :
+      "/investor-dashboard";
+    return <Navigate to={destination} replace />;
+  }
+
   // During the 250ms grace window, render nothing (avoid splash flash)
   if ((authLoading || ownerLoading) && showLoading && !showSplash) {
     return null;
   }
 
-  // Optimistic render — if we already trust this user as owner (current flag,
-  // a previous successful verify this session, a persisted localStorage cache,
-  // or we have already rendered the children once on this guard instance),
-  // never block the route on a re-verification round-trip. The verify-owner
-  // call continues in the background and can still downgrade on a real
-  // email_mismatch.
+  // Optimistic render — Owner mode only. If we already trust this user as owner
+  // (current flag, session cache, persistent cache, or this guard rendered once),
+  // never block the owner route on a re-verification round-trip.
   if (
     showLoading &&
     !!user &&
+    mode === "owner" &&
     (isOwner || ownerVerifiedOnce.current || hasCachedOwner || hasRenderedRef.current)
   ) {
     hasRenderedRef.current = true;
@@ -169,9 +180,9 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   }
 
   // If we've already rendered children at least once and we're still loading
-  // (e.g. a token refresh briefly cleared `user`), keep showing the children
-  // instead of flashing the dark splash.
-  if (showLoading && hasRenderedRef.current && (authLoading || ownerLoading)) {
+  // (e.g. a token refresh briefly cleared `user`), keep showing children only
+  // while still in Owner mode.
+  if (showLoading && mode === "owner" && hasRenderedRef.current && (authLoading || ownerLoading)) {
     return <>{children}</>;
   }
 

@@ -86,17 +86,17 @@ export const SHORTCUT_GROUPS: ShortcutGroup[] = [
 export type DashboardMode = 'owner' | 'broker' | 'investor' | 'developer' | null | undefined;
 
 export function getDashboardHref(opts: { isOwner?: boolean; mode?: DashboardMode }): string {
-  if (opts.isOwner) return '/owner';
+  if (opts.isOwner && opts.mode === 'owner') return '/owner';
   switch (opts.mode) {
     case 'broker': return '/broker-dashboard';
     case 'investor': return '/investor-dashboard';
-    case 'developer': return '/developer-portal';
+    case 'developer': return '/developers-portal';
     default: return '/my-dashboard';
   }
 }
 
-export function getInboxHref(opts: { isOwner?: boolean }): string {
-  return opts.isOwner ? '/owner/inbox' : '/my-dashboard#inbox';
+export function getInboxHref(opts: { isOwner?: boolean; mode?: DashboardMode }): string {
+  return opts.isOwner && opts.mode === 'owner' ? '/owner/inbox' : '/my-dashboard#inbox';
 }
 
 /**
@@ -113,9 +113,9 @@ export function filterShortcutGroups(groups: ShortcutGroup[], opts: {
   return groups.filter((group) => {
     if (group.visibility.includes('public')) return true;
     if (group.visibility.includes('authenticated') && opts.isAuthenticated) return true;
-    if (group.visibility.includes('owner') && opts.isOwner && !opts.isDeveloperMode) return true;
-    if (group.visibility.includes('broker') && (opts.isBroker || opts.isOwner) && !opts.isDeveloperMode) return true;
-    if (group.visibility.includes('investor') && (opts.isInvestor || opts.isOwner)) return true;
+    if (group.visibility.includes('owner') && opts.isOwner && opts.mode === 'owner') return true;
+    if (group.visibility.includes('broker') && (opts.mode === 'broker' || (!opts.isOwner && opts.isBroker))) return true;
+    if (group.visibility.includes('investor') && (opts.mode === 'investor' || (!opts.isOwner && opts.isInvestor))) return true;
     return false;
   }).map((group) => {
     const items = group.items.map((item) => {
@@ -123,7 +123,7 @@ export function filterShortcutGroups(groups: ShortcutGroup[], opts: {
         return { ...item, href: getDashboardHref({ isOwner: opts.isOwner, mode: opts.mode }) };
       }
       if (item.label === 'Inbox') {
-        return { ...item, href: getInboxHref({ isOwner: opts.isOwner }) };
+        return { ...item, href: getInboxHref({ isOwner: opts.isOwner, mode: opts.mode }) };
       }
       return item;
     });

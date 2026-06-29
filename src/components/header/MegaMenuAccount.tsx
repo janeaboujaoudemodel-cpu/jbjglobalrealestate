@@ -44,6 +44,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { t, language, setLanguage } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode, isDeveloperMode } = useUserModeContext();
+  const ownerBackendActive = isOwner && mode === 'owner';
   const { data: alertCounts } = useUserAlerts();
 
   // Currency & unit state synced with localStorage
@@ -200,16 +201,42 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     } catch { return []; }
   }, []);
 
+  const dashboardHref = ownerBackendActive
+    ? '/owner'
+    : mode === 'broker'
+      ? '/broker-dashboard'
+    : mode === 'developer'
+      ? '/developers-portal'
+      : '/investor-dashboard';
+  const dashboardLabel = ownerBackendActive
+    ? t('account.ownerDashboard', 'Owner Dashboard')
+    : mode === 'broker'
+      ? 'Broker Dashboard'
+    : mode === 'developer'
+      ? 'Developer Portal'
+      : 'Investor Dashboard';
+  const dashboardDescription = ownerBackendActive ? t('account.commandCenter', 'Command Center') : t('account.myDashboardDesc', 'Your personalized dashboard');
+
   const quickSearchResults = useMemo(() => {
     const q = searchQuery.trim();
 
-    if (!q) return SEARCH_SHORTCUTS.slice(0, 10);
+    const modeShortcut = {
+      path: dashboardHref,
+      label: dashboardLabel,
+      icon: LayoutDashboard,
+      keywords: ['dashboard', 'portal', mode],
+    };
+    const safeStaticShortcuts = [modeShortcut, ...SEARCH_SHORTCUTS]
+      .filter((s) => ownerBackendActive || !s.path.startsWith('/owner'))
+      .filter((s, idx, arr) => arr.findIndex((x) => x.path === s.path && x.label === s.label) === idx);
+
+    if (!q) return safeStaticShortcuts.slice(0, 10);
 
     const dynamic = searchItems(q, {
-      isOwner,
-      hasCRMAccess: !!hasCRMAccess,
-      hasListingAdminAccess: !!hasListingAdminAccess,
-      isBroker: false,
+      isOwner: ownerBackendActive,
+      hasCRMAccess: ownerBackendActive || (!isOwner && !!hasCRMAccess),
+      hasListingAdminAccess: ownerBackendActive || (!isOwner && !!hasListingAdminAccess),
+      isBroker: mode === 'broker',
       isAuthenticated: !!user,
       limit: 20,
     }).map((item) => ({
@@ -219,7 +246,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       keywords: item.keywords,
     }));
 
-    const staticMatches = SEARCH_SHORTCUTS.filter((s) =>
+    const staticMatches = safeStaticShortcuts.filter((s) =>
       s.label.toLowerCase().includes(q.toLowerCase()) ||
       s.keywords.some((k) => k.toLowerCase().includes(q.toLowerCase()))
     );
@@ -227,11 +254,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     const merged = [...dynamic, ...staticMatches];
     const unique = merged.filter((item, idx, arr) => arr.findIndex((x) => x.path === item.path) === idx);
     return unique.slice(0, 12);
-  }, [searchQuery, isOwner, hasCRMAccess, hasListingAdminAccess, user]);
-
-  const dashboardHref = isOwner ? '/owner' : '/my-dashboard';
-  const dashboardLabel = isOwner ? t('account.ownerDashboard', 'Owner Dashboard') : t('account.myDashboard', 'My Dashboard');
-  const dashboardDescription = isOwner ? t('account.commandCenter', 'Command Center') : t('account.myDashboardDesc', 'Your personalized dashboard');
+  }, [searchQuery, ownerBackendActive, isOwner, hasCRMAccess, hasListingAdminAccess, mode, user, dashboardHref, dashboardLabel]);
 
   const accountLinks = [
     { href: dashboardHref, label: dashboardLabel, icon: LayoutDashboard, description: dashboardDescription, badge: 0 },
@@ -251,9 +274,11 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     // In developer mode, show Developer Center shortcut instead of owner tools
     if (isDeveloperMode) {
       return [
-        { href: '/developer-hub', label: 'Developer Center', icon: Building2, requiresOwner: false },
+        { href: '/developers-portal', label: 'Developer Portal', icon: Building2, requiresOwner: false },
       ];
     }
+
+    if (!ownerBackendActive) return [];
 
     const ownerLinks = [
       { href: '/owner', label: 'Command Center', icon: Shield, requiresOwner: true },
@@ -280,12 +305,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     const all = [...ownerLinks, ...sharedLinks];
     
     return all.filter(link => {
-      if ((link as any).requiresOwner) return isOwner;
+      if ((link as any).requiresOwner) return ownerBackendActive;
       if ((link as any).requiresListingAdmin) return hasListingAdminAccess && !isOwner;
-      if ((link as any).requiresAdmin) return isOwner || hasCRMAccess;
+      if ((link as any).requiresAdmin) return ownerBackendActive || (!isOwner && hasCRMAccess);
       return false;
     });
-  }, [isOwner, hasCRMAccess, hasListingAdminAccess, isDeveloperMode, t]);
+  }, [ownerBackendActive, isOwner, hasCRMAccess, hasListingAdminAccess, isDeveloperMode, t]);
 
   const getModeLabel = () => {
     switch (mode) {
@@ -469,11 +494,11 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               )}
               
               {/* LOCK: Do not remove owner shortcuts - Show when owner verified */}
-              {!isDataLoading && (isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
+              {!isDataLoading && (ownerBackendActive || (!isOwner && (hasCRMAccess || hasListingAdminAccess))) && adminLinks.length > 0 && (
                   <>
                     <div className="space-y-1">
                       {/* Owner Dashboard - Primary Link */}
-                      {isOwner && (
+                      {ownerBackendActive && (
                         <Link 
                           to="/owner" 
                           onClick={onClose} 
@@ -492,7 +517,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         </Link>
                       )}
                       {/* Admin Panel */}
-                      {isOwner && (
+                      {ownerBackendActive && (
                         <Link 
                           to="/admin" 
                           onClick={onClose} 
@@ -511,7 +536,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         </Link>
                       )}
                       {/* Customer Happiness Hub */}
-                      {isOwner && (
+                      {ownerBackendActive && (
                         <Link 
                           to="/admin?tab=customer-happiness" 
                           onClick={onClose} 

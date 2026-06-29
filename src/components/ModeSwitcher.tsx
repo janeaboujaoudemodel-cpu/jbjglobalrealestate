@@ -162,8 +162,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         navigate('/owner');
       }
     } else if (newMode !== 'owner' && onBackend) {
-      // Stepping out of owner mode while sitting on a back-end route → home.
-      navigate('/');
+      // Stepping out of Owner/back-end perspective must immediately land in
+      // the selected user's real workspace — never leave the owner panel visible.
+      const destination =
+        newMode === 'broker' ? '/broker-dashboard' :
+        newMode === 'developer' ? '/developers-portal' :
+        '/investor-dashboard';
+      navigate(destination, { replace: true });
     }
     // All other cases: stay on the current page. The dashboard/sidebar
     // re-renders the correct mode-specific tools via context.
