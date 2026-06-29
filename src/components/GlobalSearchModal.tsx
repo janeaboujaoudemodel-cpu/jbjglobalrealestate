@@ -797,35 +797,46 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       </div>
                     )}
 
-                    {/* Admin Shortcuts - Only for authenticated users with access */}
-                    {(ownerBackendActive || searchCRMAccess || searchListingAdminAccess) && (
+                    {/* {FirstName}'s Shortcuts — per-user prime shortcuts based on active mode + access */}
+                    {user && (
                       <div>
                         <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
-                          Admin Shortcuts
+                          {firstName ? `${firstName}'s Shortcuts` : 'Your Shortcuts'}
                         </p>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                          {ownerBackendActive && (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                          {primeShortcuts.map((s) => (
                             <button
-                              onClick={() => handleSelect('/owner')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
+                              key={s.route + s.label}
+                              onClick={() => handleSelect(s.route)}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
                             >
-                              <IconTile icon={LayoutDashboard} tone="emerald" size="sm" />
-                              <span className="text-sm font-semibold text-[#1A1A1A]">Owner</span>
+                              <IconTile icon={s.icon} tone="emerald" size="sm" />
+                              <span className="text-sm font-semibold text-[#1A1A1A] truncate">{s.label}</span>
                             </button>
-                          )}
+                          ))}
+                          {/* Owner-only tiles appended when owner backend is active */}
                           {ownerBackendActive && (
-                            <button
-                              onClick={() => handleSelect('/admin')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
-                            >
-                              <IconTile icon={Briefcase} tone="emerald" size="sm" />
-                              <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
-                            </button>
+                            <>
+                              <button
+                                onClick={() => handleSelect('/owner')}
+                                className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
+                              >
+                                <IconTile icon={LayoutDashboard} tone="emerald" size="sm" />
+                                <span className="text-sm font-semibold text-[#1A1A1A]">Owner</span>
+                              </button>
+                              <button
+                                onClick={() => handleSelect('/admin')}
+                                className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
+                              >
+                                <IconTile icon={Briefcase} tone="emerald" size="sm" />
+                                <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
+                              </button>
+                            </>
                           )}
-                          {searchCRMAccess && (
+                          {searchCRMAccess && !primeShortcuts.some(s => s.route === '/crm') && (
                             <button
                               onClick={() => handleSelect('/crm')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
                             >
                               <IconTile icon={Users} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">CRM</span>
@@ -834,7 +845,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           {searchListingAdminAccess && (
                             <button
                               onClick={() => handleSelect('/listing-admin')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
                             >
                               <IconTile icon={Building2} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">Listings</span>
