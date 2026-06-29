@@ -373,13 +373,14 @@ export default function BrokerCRM() {
   const conversion = totalLeads > 0 ? Math.round((wonStage / totalLeads) * 100) : 0;
 
   const stageCounts = useMemo(() => {
-    return STAGE_GROUPS.map((g) => ({
-      ...g,
-      count: leadsData.filter((l: any) =>
+    return STAGE_GROUPS.map((g) => {
+      const items = leadsData.filter((l: any) =>
         g.match.includes(((l.pipeline_stage ?? l.status) ?? "").toString().toLowerCase()),
-      ).length,
-    }));
+      );
+      return { ...g, count: items.length, items };
+    });
   }, [leadsData]);
+
 
   return (
     <div className="space-y-6">
@@ -480,6 +481,73 @@ export default function BrokerCRM() {
               ))}
             </div>
           </PremiumCard>
+
+          {/* Kanban board — premium lead-card columns per stage */}
+          {leadsData.length > 0 && (
+            <PremiumCard>
+              <div className="flex items-center justify-between mb-4">
+                <span data-section-label="" className="jj-section-eyebrow inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.22em]">
+                  <Activity className="h-3.5 w-3.5" strokeWidth={2.6} /> Kanban board
+                </span>
+                <span className="text-[11px] text-[#1A1A1A]/60">Click any card to open the lead</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+                {stageCounts.map((s) => (
+                  <div
+                    key={s.key}
+                    className="rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 flex flex-col min-h-[220px]"
+                  >
+                    <div className="flex items-center justify-between px-3 py-2.5 border-b border-[color:var(--emerald-1)]/15">
+                      <div className="text-[10px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]">{s.label}</div>
+                      <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-[color:var(--emerald-1)] text-white text-[10px] font-bold tabular-nums">
+                        {s.count}
+                      </span>
+                    </div>
+                    <div className="p-2 space-y-2 flex-1 overflow-y-auto max-h-[420px]">
+                      {s.items.slice(0, 12).map((l: any) => (
+                        <button
+                          key={l.id}
+                          type="button"
+                          onClick={() => setHubLead(l)}
+                          className="jj-hover-emerald w-full text-left rounded-lg bg-white border border-[#B89555]/25 px-3 py-2.5 focus:outline-none transition-shadow hover:shadow-[0_8px_20px_-14px_rgba(6,78,59,0.35)]"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="h-7 w-7 shrink-0 rounded-full bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
+                              {(l.full_name || "?").slice(0, 1).toUpperCase()}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-[12px] font-semibold text-[#1A1A1A] truncate">{l.full_name || "Unnamed lead"}</div>
+                              <div className="text-[10px] text-[#1A1A1A]/60 truncate">{getLeadEmail(l) || getLeadPhone(l) || "—"}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#B89555]/15">
+                            <span className="text-[9px] uppercase tracking-[0.14em] text-[#1A1A1A]/55 truncate">
+                              {l.source || l.lead_source_type || "Direct"}
+                            </span>
+                            <span className="text-[9px] text-[#1A1A1A]/55 tabular-nums">{formatDisplayDate(l.updated_at)}</span>
+                          </div>
+                        </button>
+                      ))}
+                      {s.items.length === 0 && (
+                        <div className="text-[10px] text-[#1A1A1A]/45 italic text-center py-6">No leads in this stage</div>
+                      )}
+                      {s.items.length > 12 && (
+                        <button
+                          type="button"
+                          onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
+                          className="w-full text-[10px] text-[color:var(--emerald-1)] font-semibold py-1.5 hover:underline"
+                        >
+                          + {s.items.length - 12} more
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </PremiumCard>
+          )}
+
+
 
 
 
