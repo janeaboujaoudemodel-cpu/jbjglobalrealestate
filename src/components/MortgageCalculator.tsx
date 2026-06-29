@@ -518,7 +518,7 @@ const MortgageCalculator = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label className="text-foreground flex items-center gap-2">
-                  <DollarSign className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                  <DollarSign className="w-4 h-4 text-[#1A1A1A]" />
                   Property Price
                 </Label>
                 <span className="text-[#1A1A1A] font-semibold">{formatCurrency(propertyPrice)}</span>
