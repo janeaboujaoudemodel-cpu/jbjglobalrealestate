@@ -19965,3 +19965,20 @@ html body [data-investor-vault-banner][data-investor-vault-banner] :is(span,p,sm
   filter: none !important;
   mix-blend-mode: normal !important;
 }
+
+/* PASS 114 — emergency vault readability override.
+   The investor document card sits inside several light-surface locks with
+   high specificity. This ID-weighted selector is intentionally scoped only
+   to the emerald vault banner so its title/body can never render ink/black. */
+html body #root [data-investor-vault-banner][data-investor-vault-banner][data-investor-vault-banner]:not(#jj-vault-white-a):not(#jj-vault-white-b):not(#jj-vault-white-c),
+html body #root [data-investor-vault-banner][data-investor-vault-banner][data-investor-vault-banner]:not(#jj-vault-white-a):not(#jj-vault-white-b):not(#jj-vault-white-c) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#jj-vault-white-child-a):not(#jj-vault-white-child-b):not(#jj-vault-white-child-c) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+}
