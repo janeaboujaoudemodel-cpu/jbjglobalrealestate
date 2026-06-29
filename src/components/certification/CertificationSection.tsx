@@ -6,6 +6,7 @@ import { Loader2, Award, CheckCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PhaseCard } from "./PhaseCard";
 import { CertificatePreview } from "./CertificatePreview";
+import { IconTile } from "@/components/ui/icon-tile";
 
 interface CertificationSectionProps {
   className?: string;
@@ -58,16 +59,7 @@ export function CertificationSection({ className, isLocked = false }: Certificat
           <CardContent className="py-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className={cn(
-                  "w-14 h-14 rounded-xl flex items-center justify-center",
-                  certified ? "jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30" : "jj-icon-box-active"
-                )}>
-                  {certified ? (
-                    <CheckCircle className="w-7 h-7 text-[color:var(--emerald-1)]" />
-                  ) : (
-                    <Award className="w-7 h-7 text-[#1A1A1A]" />
-                  )}
-                </div>
+                <IconTile icon={certified ? CheckCircle : Award} tone="emerald" size="xl" className="!h-14 !w-14 !rounded-xl" iconClassName="!h-7 !w-7" />
                 <div>
                   <h3 className="text-[#1A1A1A] font-semibold text-lg">
                     {certified ? "Certification Complete!" : "Your Progress"}

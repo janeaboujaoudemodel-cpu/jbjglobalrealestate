@@ -31,6 +31,7 @@ import {
   GraduationCap, Loader2, ShieldCheck, ClipboardCheck, AlertTriangle,
   CheckCircle2, XCircle, BrainCircuit, FileQuestion,
 } from "lucide-react";
+import { IconTile } from "@/components/ui/icon-tile";
 
 type SubmissionStatus =
   | "none" | "pending" | "approved" | "rejected"
@@ -72,9 +73,9 @@ const StatusBadge = ({ status }: { status: SubmissionStatus }) => {
   const cfg: Record<SubmissionStatus, { label: string; cls: string; Icon: any }> = {
     none:              { label: "Not requested",  cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",      Icon: ClipboardCheck },
     pending:           { label: "Pending review", cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40",      Icon: Loader2 },
-    approved:          { label: "Approved — take quiz", cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30", Icon: CheckCircle2 },
+    approved:          { label: "Approved — take quiz", cls: "jj-surface-emerald text-white border-0", Icon: CheckCircle2 },
     quiz_in_progress:  { label: "Quiz in progress", cls: "bg-amber-50 text-amber-900 border-amber-200",         Icon: BrainCircuit },
-    quiz_passed:       { label: "Certified",      cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30",    Icon: ShieldCheck },
+    quiz_passed:       { label: "Certified",      cls: "jj-surface-emerald text-white border-0",    Icon: ShieldCheck },
     quiz_failed:       { label: "Quiz failed",    cls: "bg-red-50 text-red-900 border-red-200",                Icon: XCircle },
     rejected:          { label: "Rejected",       cls: "bg-red-50 text-red-900 border-red-200",                Icon: XCircle },
     locked:            { label: "Locked",         cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]",             Icon: AlertTriangle },
@@ -296,10 +297,10 @@ export default function BrokerCertificationGate() {
   const status: SubmissionStatus = (submission?.status as SubmissionStatus) ?? "none";
 
   return (
-    <Card className="border-[#B89555]/40 bg-[#FDFBF7]">
+    <Card className="border-[#B89555]/45 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_24px_70px_-44px_rgba(26,26,26,0.55)] overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <GraduationCap className="h-5 w-5 text-[#B89555]" />
+          <IconTile icon={GraduationCap} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
           <CardTitle className="text-[#1A1A1A] text-lg">JBJ Academy Certification</CardTitle>
         </div>
         <StatusBadge status={status} />
@@ -359,7 +360,7 @@ export default function BrokerCertificationGate() {
               className="jj-pill-emerald-metallic"
               data-cta="cert-submit"
             >
-              {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting…</> : "Request Certification"}
+              {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting…</> : <><ShieldCheck className="h-4 w-4 mr-2" /> Request Certification</>}
             </Button>
           </div>
         )}
@@ -420,7 +421,7 @@ export default function BrokerCertificationGate() {
               ))}
             </ol>
             <Button onClick={submitQuiz} disabled={grading} className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz">
-              {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Grading…</> : "Submit Quiz"}
+              {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Grading…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Submit Quiz</>}
             </Button>
           </div>
         )}
