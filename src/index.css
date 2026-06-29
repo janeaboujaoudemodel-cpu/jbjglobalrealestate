@@ -20758,13 +20758,21 @@ html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-l
    to white-on-cream. Restore ink with strictly higher specificity, scoped to
    the cards themselves so emerald CTAs/badges inside them stay white.
    ====================================================================== */
-html body #root [data-careers-job-card][data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,em,small,label,b,li,time,figcaption,dt,dd):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.allow-white *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-careers-apply-cta]):not([data-careers-apply-cta] *):not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *):not([data-on-dark]):not([data-on-dark] *) {
+/* Specificity booster: chain :not(#fake-id) to outrank the global emerald
+   override (rule uses 6 fake-ID :not()s = 6 ID points). We use 10 fake IDs
+   to guarantee win without affecting selector match. */
+html body #root [data-careers-job-card][data-surface="champagne"]:not(#pass125-a):not(#pass125-b):not(#pass125-c):not(#pass125-d):not(#pass125-e):not(#pass125-f):not(#pass125-g):not(#pass125-h):not(#pass125-i):not(#pass125-j) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,em,small,label,b,li,time,figcaption,dt,dd,div,button):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-careers-apply-cta]):not([data-careers-apply-cta] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body #root [data-careers-job-card][data-surface="champagne"] :is(svg,[class*="lucide"]):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-careers-apply-cta]):not([data-careers-apply-cta] *):not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+html body #root [data-careers-job-card][data-surface="champagne"]:not(#pass125-a):not(#pass125-b):not(#pass125-c):not(#pass125-d):not(#pass125-e):not(#pass125-f):not(#pass125-g):not(#pass125-h):not(#pass125-i):not(#pass125-j) :is(svg,[class*="lucide"]):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-careers-apply-cta]):not([data-careers-apply-cta] *):not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *):not(.jj-cta-emerald):not(.jj-cta-emerald *) {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
+}
+/* Global champagne ink — also boosted to outrank emerald-descendant cascade */
+html body #root [data-surface="champagne"]:not(#pass125g-a):not(#pass125g-b):not(#pass125g-c):not(#pass125g-d):not(#pass125g-e):not(#pass125g-f):not(#pass125g-g):not(#pass125g-h):not(#pass125g-i):not(#pass125g-j) :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b,figcaption):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-surface="emerald"]):not([data-emerald-icon-surface]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 /* Global champagne-on-emerald rescue — any card explicitly tagged
