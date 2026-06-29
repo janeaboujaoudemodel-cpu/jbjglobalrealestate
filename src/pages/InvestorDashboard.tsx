@@ -677,12 +677,19 @@ export default function InvestorDashboard() {
                   {favorites.map((f: any) => (
                     <Card key={f.id} className="border-[hsl(36,40%,70%)]/20">
                       <CardContent className="p-4 flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold text-sm text-foreground">Project #{f.project_id?.slice(0, 8)}</p>
+                        <div className="min-w-0 pr-3">
+                          <p className="font-semibold text-sm text-foreground truncate">{f.project?.name || `Project #${f.project_id?.slice(0, 8)}`}</p>
                           <p className="text-[10px] text-muted-foreground">Added {format(new Date(f.created_at), "dd MMM yyyy")}</p>
                         </div>
-                        <Link to={`/projects/${f.project_id}`}>
-                          <Button size="sm" variant="ghost" className="text-[hsl(36,40%,70%)]"><Eye className="w-4 h-4" /></Button>
+                        <Link to={`/project/${f.project?.slug || f.project_id}`} aria-label="View property">
+                          <button
+                            type="button"
+                            data-surface="emerald"
+                            data-emerald-ok="button"
+                            className="jj-surface-emerald inline-flex items-center justify-center w-11 h-11 rounded-full shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] transition-all duration-200 hover:scale-105 hover:shadow-[0_8px_24px_-6px_rgba(6,78,59,0.55)] hover:brightness-110"
+                          >
+                            <Eye className="w-5 h-5 allow-white" stroke="#FFFFFF" style={{ color: "#FFFFFF" }} />
+                          </button>
                         </Link>
                       </CardContent>
                     </Card>
@@ -692,11 +699,11 @@ export default function InvestorDashboard() {
 
               {/* Browsing History */}
               <h3 className="text-lg font-semibold text-foreground flex items-center gap-2 pt-4">
-                <History className="w-5 h-5 text-[hsl(36,40%,70%)]" /> Browsing History
+                <History className="w-5 h-5" style={{ color: "var(--emerald-1, #064e3b)" }} /> Browsing History
               </h3>
               <Card className="border-[hsl(36,40%,70%)]/20">
                 <CardContent className="p-6 text-center">
-                  <History className="w-10 h-10 text-muted-foreground/60 mx-auto mb-2" />
+                  <History className="w-10 h-10 mx-auto mb-2" style={{ color: "var(--emerald-1, #064e3b)" }} />
                   <p className="text-sm text-muted-foreground">Property viewing history will appear here</p>
                 </CardContent>
               </Card>
