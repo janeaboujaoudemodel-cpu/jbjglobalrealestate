@@ -168,7 +168,7 @@ export default function BrokerCalendar() {
             </div>
             <div className="flex justify-end gap-2 mt-4">
               <button onClick={() => setOpen(false)} className="px-3 py-1.5 rounded-md text-sm border border-[#B89555]/20">Cancel</button>
-              <button onClick={submit} className="px-3 py-1.5 rounded-md text-sm bg-[#1A1A1A] text-[#F7F2EA]">Create</button>
+              <button onClick={submit} className="jj-pill-emerald-metallic px-3 py-1.5 rounded-md text-sm">Create</button>
             </div>
           </div>
         </div>
