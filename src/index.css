@@ -20212,10 +20212,10 @@ html body select[data-no-contrast-guard]:not(#jj-ink-honour):not(#jj-ink-honour)
    ════════════════════════════════════════════════════════════════ */
 html body #root .jj-side-tile:not(.is-active),
 html body .jj-side-tile:not(.is-active) {
-  background: transparent !important;
+  background: rgba(231, 223, 207, 0.55) !important;
   background-image: none !important;
-  background-color: transparent !important;
-  border-color: rgba(184, 149, 85, 0.20) !important;
+  background-color: rgba(231, 223, 207, 0.55) !important;
+  border-color: rgba(184, 149, 85, 0.28) !important;
   box-shadow: none !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
