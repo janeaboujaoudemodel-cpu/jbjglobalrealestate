@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  Users, Database, Calendar, ListTodo, Handshake, BadgeDollarSign,
+  Users, Database, Calendar, ListTodo, Handshake, TrendingUp,
   ArrowRight, Plus, Phone, Brain, Sparkles, Activity, ChevronRight, Briefcase,
   ChevronDown, User as UserIcon, Settings as SettingsIcon, LogOut,
 } from "lucide-react";
@@ -392,7 +392,7 @@ export default function BrokerDashboardLanding() {
           <Kpi icon={Handshake}       tone="emerald" label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
           <Kpi icon={Calendar}        tone="emerald" label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
           <Kpi icon={Sparkles}        tone="emerald" label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
-          <Kpi icon={BadgeDollarSign} tone="emerald" label="Commission pipeline"  value="—"              to="/broker/deals"        />
+          <Kpi icon={TrendingUp}      tone="emerald" label="Commission pipeline"  value="—"              to="/broker/deals"        />
           <Kpi icon={ListTodo}        tone="emerald" label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
 
         </div>

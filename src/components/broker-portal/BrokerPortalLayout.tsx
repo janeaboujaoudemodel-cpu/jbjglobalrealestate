@@ -52,6 +52,16 @@ export default function BrokerPortalLayout() {
     return () => window.removeEventListener("beforeunload", handler);
   }, []);
 
+  // When the user is in Owner mode they must never see the broker portal —
+  // route them straight to /owner. They can return by flipping the mode
+  // picker back to "broker" in the header.
+  useEffect(() => {
+    if (mode === "owner") {
+      try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+      navigate("/owner", { replace: true });
+    }
+  }, [mode, navigate]);
+
   const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
   const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");
 
@@ -130,23 +140,7 @@ export default function BrokerPortalLayout() {
             >
               <Home className="h-3.5 w-3.5" /> Site
             </Link>
-            {showOwnerChrome && (
-
-              <button
-                type="button"
-                onClick={() => {
-                  try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
-                  navigate("/owner");
-                }}
-                data-no-contrast-guard
-                data-allow-dark-cta
-                className="allow-white inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md border border-[rgba(255,255,255,0.18)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-12px_rgba(6,78,59,0.95),0_0_16px_rgba(52,211,153,0.25)] hover:brightness-110 transition-all"
-                style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
-              >
-                <ArrowLeft className="h-3.5 w-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> JBJ Owner
-                <Crown className="h-3 w-3 opacity-90" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              </button>
-            )}
+            {/* "Back to JBJ Owner" pill removed — owner-mode users are redirected to /owner. */}
             <div className="hidden sm:flex items-center gap-1.5 bg-[#EFE6D6] border border-[#B89555] rounded-md px-2.5 py-1 text-xs font-bold text-[#1A1A1A] tracking-wide">
               <ModeIcon className="h-3.5 w-3.5" /> {modeLabel}
             </div>
@@ -155,17 +149,7 @@ export default function BrokerPortalLayout() {
           </div>
         </header>
 
-        {/* Owner preview banner (slim, sticky under the header) */}
-        {showOwnerChrome && (
-          <div
-            className="bg-[#EFE6D6] border-b border-[#B89555]/40 px-4 md:px-8 py-2 text-xs text-[#1A1A1A]/85 flex items-center gap-2 sticky z-20"
-            style={{ top: "var(--shell-header-h)" }}
-          >
-            <Crown className="h-3.5 w-3.5" />
-            <span className="font-semibold">Owner preview</span>
-            <span className="text-muted-foreground">— you're viewing the broker portal exactly as your registered brokers see it.</span>
-          </div>
-        )}
+        {/* Owner preview banner removed — owner-mode users no longer land here. */}
 
         <main className="flex-1 min-w-0" role="main">
           <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto">
