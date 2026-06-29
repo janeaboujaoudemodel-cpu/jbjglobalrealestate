@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useAuditorPasswordChange } from "@/hooks/useAuditorPasswordChange";
 import { supabase } from "@/integrations/supabase/client";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, LogOut, Shield, AlertTriangle, CheckCircle2, XCircle, Ban } from "lucide-react";
 import AuditorForcePasswordChange from "@/components/auth/AuditorForcePasswordChange";
@@ -30,6 +31,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   } = useAuth();
   const { mode } = useUserModeContext();
   const location = useLocation();
+  const isRegisteredOwnerEmail = isOwnerBackendEmail(user?.email);
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
   const [retryStatus, setRetryStatus] = useState<"idle" | "success" | "failed">("idle");
@@ -151,6 +153,15 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   }, [ownerLoading, isOwner, ownerError]);
 
   // HARD BACK-END VISIBILITY LOCK — evaluated BEFORE any optimistic owner render.
+  // Only the registered owner email may ever see OwnerGuard content. Cached
+  // flags, auditor/admin rows, aliases, and stale owner mode cannot bypass this.
+  if (user && !isRegisteredOwnerEmail) {
+    if (mode === "broker") return <Navigate to="/broker-dashboard" replace />;
+    if (mode === "developer") return <Navigate to="/developers-portal" replace />;
+    if (mode === "investor") return <Navigate to="/investor-dashboard" replace />;
+    return <Navigate to="/403" replace />;
+  }
+
   // A cached owner verification must never leak /owner or /admin while the active
   // perspective is Investor/Broker/Developer.
   if (user && mode !== "owner") {
@@ -173,6 +184,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     showLoading &&
     !!user &&
     mode === "owner" &&
+    isRegisteredOwnerEmail &&
     (isOwner || ownerVerifiedOnce.current || hasCachedOwner || hasRenderedRef.current)
   ) {
     hasRenderedRef.current = true;
@@ -238,7 +250,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   }
 
   // Owner verification failed — auto-retry up to 3 times silently
-  if (ownerError && !isOwner && !isAuditor) {
+  if (ownerError && !isOwner) {
     if (autoRetryCount.current < 3) {
       if (!autoRetryTimer.current) {
         autoRetryTimer.current = setTimeout(() => {
@@ -291,8 +303,8 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     );
   }
 
-  // AUTHENTICATED but NOT OWNER and NOT AUDITOR → AccessDenied
-  if (!isOwner && !isAuditor) {
+  // AUTHENTICATED but NOT THE REGISTERED OWNER → AccessDenied
+  if (!isOwner || !isRegisteredOwnerEmail) {
     return <Navigate to="/403" replace />;
   }
 
@@ -342,7 +354,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
   }
 
-  // OWNER or AUDITOR → allowed
+  // REGISTERED OWNER → allowed
   return <>{children}</>;
 };
 
