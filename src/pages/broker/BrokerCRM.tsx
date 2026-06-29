@@ -51,15 +51,16 @@ function Kpi({
     <button
       type="button"
       onClick={onClick}
-      className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-5 py-5 w-full focus:outline-none"
+      className="jj-hover-emerald group text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-4 py-4 sm:px-5 sm:py-5 w-full min-w-0 focus:outline-none"
     >
       <IconTile icon={Icon} tone="emerald" size="md" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-5 !w-5" />
-      <div className="mt-4 text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none">{value}</div>
-      <div className="text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold">{label}</div>
-      {sub && <div className="text-[11px] text-[#1A1A1A]/55 mt-1">{sub}</div>}
+      <div className="mt-3 sm:mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold tabular-nums text-[#1A1A1A] leading-none truncate">{value}</div>
+      <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-[#1A1A1A]/65 mt-2 font-semibold truncate">{label}</div>
+      {sub && <div className="text-[10px] sm:text-[11px] text-[#1A1A1A]/55 mt-1 truncate">{sub}</div>}
     </button>
   );
 }
+
 
 
 
