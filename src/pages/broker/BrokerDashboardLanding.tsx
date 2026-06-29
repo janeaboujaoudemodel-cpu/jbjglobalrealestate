@@ -359,6 +359,21 @@ export default function BrokerDashboardLanding() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════════
+          CONCIERGE GREETING — Amanda reads your morning brief (ElevenLabs)
+          ════════════════════════════════════════════════════════════════ */}
+      <ConciergeGreeting
+        firstName={firstName}
+        userId={user?.id ?? null}
+        metrics={{
+          totalLeads,
+          activeDeals,
+          meetingsToday,
+          followUps,
+          newAssignments,
+        }}
+      />
+
+      {/* ════════════════════════════════════════════════════════════════
           KPI ROW
           ════════════════════════════════════════════════════════════════ */}
       <div>
