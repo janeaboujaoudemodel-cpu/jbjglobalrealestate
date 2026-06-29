@@ -489,7 +489,7 @@ export default function InvestorDashboard() {
       <div className="max-w-6xl mx-auto px-4 pt-10 md:pt-12 pb-8">
         <Card className="mb-5 overflow-hidden border-[hsl(36,40%,70%)]/35 bg-gradient-to-br from-[#FFFCF6] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_18px_45px_-32px_rgba(26,26,26,0.65)]">
           <CardContent className="p-4 md:p-5">
-            <div className="grid lg:grid-cols-[1.25fr_1fr] gap-4 items-center">
+            <div className="space-y-4">
               <div className="flex items-center gap-3 min-w-0">
                 <Avatar className="w-12 h-12 border-2 border-[#B89555]/45 shadow-sm" data-surface="emerald" data-no-contrast-guard>
                   <AvatarImage src={profile?.avatar_url || ""} />
@@ -503,13 +503,13 @@ export default function InvestorDashboard() {
                     {userInitials}
                   </AvatarFallback>
                 </Avatar>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#064E3B]">Investor portal command center</p>
                   <h1 className="text-xl md:text-2xl font-bold text-[#1A1A1A] truncate">Welcome, {displayName}</h1>
                   <p className="text-xs text-muted-foreground">Manage inventory, approvals, documents, bookings, reminders, and JBJ consultant sharing in one place.</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 min-w-0">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <button onClick={() => setActiveTab("calendar")} className={quickTileBase}>
                   <Calendar className={quickTileIcon} />
                   <p className={quickTileTitle}>Calendar</p>
