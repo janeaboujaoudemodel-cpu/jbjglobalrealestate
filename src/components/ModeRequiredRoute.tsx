@@ -33,11 +33,13 @@ const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
   const { mode, hasMadeInitialSelection, setMode } = useUserModeContext();
   const didSwitchRef = useRef(false);
   const location = useLocation();
+  const previewQuery = new URLSearchParams(location.search).get('preview');
+  const isExplicitOwnerPreview = mode === 'owner' && previewQuery === '1';
 
-  const matches = modes.includes(mode);
+  const matches = modes.includes(mode) || isExplicitOwnerPreview;
   const target = modes[0];
 
-  if (hasMadeInitialSelection && mode === 'owner' && !modes.includes('owner')) {
+  if (hasMadeInitialSelection && mode === 'owner' && !modes.includes('owner') && !isExplicitOwnerPreview) {
     return <Navigate to="/owner" replace state={{ from: location }} />;
   }
 
