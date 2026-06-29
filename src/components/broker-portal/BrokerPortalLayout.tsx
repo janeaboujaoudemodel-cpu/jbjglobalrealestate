@@ -151,13 +151,14 @@ export default function BrokerPortalLayout() {
 
         {/* Owner preview banner removed — owner-mode users no longer land here. */}
 
-        <main className="flex-1 min-w-0" role="main">
-          <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto">
+        <main className="flex-1 min-w-0 w-full overflow-x-hidden" role="main">
+          <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto min-w-0 w-full">
             <Suspense fallback={<PageLoader />}>
               <Outlet />
             </Suspense>
           </div>
         </main>
+
       </div>
     </div>
   );
