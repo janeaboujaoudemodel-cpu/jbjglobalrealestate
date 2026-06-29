@@ -372,8 +372,10 @@ export default function InvestorDashboard() {
     if (meridiem === "am" && hour === 12) hour = 0;
     const time = `${String(hour).padStart(2, "0")}:${minute}`;
     const isViewing = /viewing|property/i.test(prompt);
+    const guestMatch = prompt.match(/(?:meet|with)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/);
+    const guestName = guestMatch?.[1];
     void handleAddEvent({
-      title: isViewing ? "Property viewing" : "Investor appointment",
+      title: isViewing ? `Property viewing${guestName ? ` with ${guestName}` : ""}` : `Investor appointment${guestName ? ` with ${guestName}` : ""}`,
       date: formatLocalDate(date),
       time,
       type: isViewing ? "Property viewing" : "Meeting",
@@ -396,8 +398,29 @@ export default function InvestorDashboard() {
         : `${window.location.origin}/listing-portal/my-listings?listing=${listing.id}`;
       return `${listing.title} — ${listing.approvalStatus || listing.status} — ${link}`;
     });
-    await navigator.clipboard?.writeText(shareRows.join("\n"));
-    toast.success("Inventory links copied for your JBJ consultant");
+    const bodyText = shareRows.join("\n");
+    await navigator.clipboard?.writeText(bodyText);
+    try {
+      await supabase.functions.invoke("email-send-gateway", {
+        body: {
+          from: "JBJ GLOBAL REAL ESTATE <bookings@jbj.ae>",
+          to: ["contact@jbj.ae"],
+          subject: `Investor inventory share · ${displayName}`,
+          html: `
+            <div style="font-family:Inter,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
+              <h2 style="color:#064E3B">Investor inventory shared from portal</h2>
+              <p><strong>Investor:</strong> ${displayName}<br/><strong>Email:</strong> ${user?.email || "—"}</p>
+              <pre style="white-space:pre-wrap;background:#F7F2EA;border:1px solid #B89555;padding:14px;border-radius:12px">${bodyText}</pre>
+            </div>
+          `,
+          text: `Investor: ${displayName}\nEmail: ${user?.email || "—"}\n\n${bodyText}`,
+        },
+      });
+      toast.success("Inventory links sent to JBJ and copied");
+    } catch (error) {
+      console.warn("Inventory email failed", error);
+      toast.success("Inventory links copied for your JBJ consultant");
+    }
   };
 
   const handleSaveProfile = async () => {
