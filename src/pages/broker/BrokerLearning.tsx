@@ -279,21 +279,34 @@ export default function BrokerLearning() {
             <ReferenceCard
               title="NEVER Say"
               tone="red"
-              icon={<Shield className="w-4 h-4" />}
+              icon={X}
               items={NEVER_SAY.map((p) => `"${p}"`)}
             />
             <ReferenceCard
               title="ALWAYS Use"
               tone="emerald"
-              icon={<CheckCircle className="w-4 h-4" />}
+              icon={CheckCircle}
               items={ALWAYS_USE.map((p) => `"${p}"`)}
             />
           </div>
 
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <Card className="relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border-[#B89555]/45 shadow-[0_20px_55px_-34px_rgba(26,26,26,0.55)]">
             <CardContent className="p-6 md:p-8">
-              <h3 className="text-[#1A1A1A] text-lg font-bold mb-6 text-center">Golden Rules for Market Conversations</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center mb-7">
+                <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 mb-3">
+                  <Sparkles className="w-3 h-3 mr-1.5" /> Market conversation standard
+                </Badge>
+                <h3 className="text-[#1A1A1A] text-xl md:text-2xl font-bold">Golden Rules for Market Conversations</h3>
+              </div>
+              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-7 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+                <motion.div
+                  aria-hidden
+                  className="hidden md:block pointer-events-none absolute top-[18px] left-[15%] h-5 w-16 rounded-full blur-[1px]"
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.95), rgba(184,149,85,.9), transparent)" }}
+                  animate={{ left: ["15%", "48%", "81%", "15%"], opacity: [0, 1, 1, 0] }}
+                  transition={{ duration: 4.8, times: [0, 0.34, 0.68, 1], repeat: Infinity, ease: "easeInOut" }}
+                />
                 {[
                   { n: 1, t: "Describe, Don't Predict", d: "Explain what data shows, never what will happen." },
                   { n: 2, t: "Insight, Not Advice",     d: "Share market context, let clients decide." },
@@ -305,7 +318,7 @@ export default function BrokerLearning() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ delay: i * 0.18, duration: 0.5, ease: "easeOut" }}
-                    className="text-center"
+                    className="relative text-center rounded-2xl bg-[#FDFBF7]/70 border border-[#B89555]/35 p-5 shadow-[0_12px_28px_-22px_rgba(26,26,26,0.4)]"
                   >
                     <div
                       data-surface="emerald"
@@ -341,11 +354,9 @@ export default function BrokerLearning() {
 
           {/* Top row — KPI tiles */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
+            <div className="rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border border-[#B89555]/45 p-6 shadow-[0_14px_34px_-26px_rgba(26,26,26,0.45)]" data-gold-hairline>
               <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
-                  <Award className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                </span>
+                <IconTile icon={Award} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
                 Certificates earned
               </div>
               <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
@@ -355,11 +366,9 @@ export default function BrokerLearning() {
                 Complete every lesson in a module to earn its certificate. Certificates appear here automatically and can be downloaded from your Account.
               </p>
             </div>
-            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
+            <div className="rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border border-[#B89555]/45 p-6 shadow-[0_14px_34px_-26px_rgba(26,26,26,0.45)]" data-gold-hairline>
               <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
-                  <GraduationCap className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                </span>
+                <IconTile icon={GraduationCap} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
                 Training progress
               </div>
               <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">{Math.round(totalProgress)}%</div>
@@ -368,11 +377,9 @@ export default function BrokerLearning() {
                 Across {TRAINING.length} core modules. Resume any module above.
               </p>
             </div>
-            <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-6" data-gold-hairline>
+            <div className="rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border border-[#B89555]/45 p-6 shadow-[0_14px_34px_-26px_rgba(26,26,26,0.45)]" data-gold-hairline>
               <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40">
-                  <BookOpen className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                </span>
+                <IconTile icon={BookOpen} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
                 Books in progress
               </div>
               <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
@@ -673,8 +680,8 @@ function TrainingCard({
               onClick={onRequestAccess}
               disabled={requestAccessDisabled || !onRequestAccess}
               title={lockReason ?? "Locked"}
-              className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/65 disabled:opacity-60 leading-none shadow-[0_6px_16px_rgba(184,149,85,0.16),inset_0_1px_0_rgba(255,255,255,0.8)]"
-              data-no-contrast-guard
+              className="jj-pill-emerald-metallic shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 h-9 px-3.5 rounded-md text-sm font-semibold disabled:opacity-100 leading-none"
+              data-surface="emerald"
             >
               <Lock className="w-3 h-3 shrink-0" strokeWidth={2.2} />
               <span className="whitespace-nowrap">Request Access</span>
@@ -708,8 +715,8 @@ function TrainingCard({
 
 
 
-function ReferenceCard({ title, items, tone, icon }: {
-  title: string; items: string[]; tone: "red" | "emerald"; icon: React.ReactNode;
+function ReferenceCard({ title, items, tone, icon: Icon }: {
+  title: string; items: string[]; tone: "red" | "emerald"; icon: import("lucide-react").LucideIcon;
 }) {
   const isRed = tone === "red";
   const mark = (
@@ -727,15 +734,21 @@ function ReferenceCard({ title, items, tone, icon }: {
         : <Check className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
     </span>
   );
+  const shell = isRed
+    ? "from-[#4B1111] via-[#7A1F1F] to-[#A02828]"
+    : "from-[#032F24] via-[#064E3B] to-[#0B7A5B]";
   return (
-    <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+    <Card className={`relative overflow-hidden border-[#B89555]/45 bg-gradient-to-br ${shell} shadow-[0_20px_55px_-34px_rgba(26,26,26,0.7)]`} data-surface="emerald">
       <CardContent className="p-5 md:p-6">
-        <h3 className="text-[#1A1A1A] font-semibold flex items-center gap-2 mb-3">
-          {icon}{title}
+        <h3 className="text-white font-semibold flex items-center gap-2 mb-4">
+          <span className="grid h-9 w-9 place-items-center rounded-xl border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,.18)]">
+            <Icon className="w-4 h-4 text-white" strokeWidth={2.6} />
+          </span>
+          {title}
         </h3>
-        <ul className="space-y-2">
+        <ul className="space-y-2.5">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/90 text-sm leading-relaxed">
+            <li key={i} className="flex items-start gap-2 rounded-xl border border-white/10 bg-white/8 px-3 py-2 text-white text-sm leading-relaxed shadow-[inset_0_1px_0_rgba(255,255,255,.08)]">
               {mark}
               <span>{p}</span>
             </li>
