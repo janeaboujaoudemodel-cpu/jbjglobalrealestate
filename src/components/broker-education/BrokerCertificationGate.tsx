@@ -356,7 +356,7 @@ export default function BrokerCertificationGate() {
               type="button"
               onClick={handleSubmit}
               disabled={submitting || reflection.trim().length < 120 || !attest}
-              className="jj-cta-dark"
+              className="jj-pill-emerald-metallic"
               data-cta="cert-submit"
             >
               {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting…</> : "Request Certification"}
@@ -383,7 +383,7 @@ export default function BrokerCertificationGate() {
                 will flag the attempt for owner review.
               </span>
             </p>
-            <Button onClick={startQuiz} disabled={quizLoading} className="jj-cta-dark" data-cta="cert-start-quiz">
+            <Button onClick={startQuiz} disabled={quizLoading} className="jj-pill-emerald-metallic" data-cta="cert-start-quiz">
               {quizLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Loading quiz…</> : <><FileQuestion className="h-4 w-4 mr-2" /> Start AI Quiz</>}
             </Button>
           </div>
@@ -419,7 +419,7 @@ export default function BrokerCertificationGate() {
                 </li>
               ))}
             </ol>
-            <Button onClick={submitQuiz} disabled={grading} className="jj-cta-dark" data-cta="cert-submit-quiz">
+            <Button onClick={submitQuiz} disabled={grading} className="jj-pill-emerald-metallic" data-cta="cert-submit-quiz">
               {grading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Grading…</> : "Submit Quiz"}
             </Button>
           </div>

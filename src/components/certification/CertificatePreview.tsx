@@ -306,7 +306,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
               </Button>
             ) : (
               <>
-                <Button data-cta="cert-download" className="jj-cta-dark">
+                <Button data-cta="cert-download" className="jj-pill-emerald-metallic">
                   <Download className="w-4 h-4 mr-2" />
                   Download Certificate
                 </Button>

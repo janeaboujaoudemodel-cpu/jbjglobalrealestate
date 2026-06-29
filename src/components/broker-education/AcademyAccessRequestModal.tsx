@@ -105,7 +105,7 @@ export default function AcademyAccessRequestModal({ open, onOpenChange, item }: 
           <Button variant="outline" onClick={() => onOpenChange(false)} className="jj-cta-outline" data-cta="aa-cancel">
             Cancel
           </Button>
-          <Button onClick={submit} disabled={submitting} className="jj-cta-dark" data-cta="aa-submit">
+          <Button onClick={submit} disabled={submitting} className="jj-pill-emerald-metallic" data-cta="aa-submit">
             {submitting ? <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> Sending…</> : "Send Request"}
           </Button>
         </div>
