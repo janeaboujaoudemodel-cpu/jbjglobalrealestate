@@ -12,6 +12,37 @@ import type { SearchItem } from "@/config/globalSearchIndex";
 import { SafeImage } from "@/components/SafeImage";
 import { IconTile } from "@/components/ui/icon-tile";
 import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
+import useDisplayFirstName from "@/hooks/useDisplayFirstName";
+import { Inbox, ListChecks, Bell, CalendarClock } from "lucide-react";
+
+// Per-mode "prime shortcuts" — the user's most-used daily destinations.
+// Surfaced as "{FirstName}'s Shortcuts" in the search modal for every signed-in user.
+const PRIME_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
+  investor: [
+    { label: "My Dashboard", route: "/investor-dashboard", icon: LayoutDashboard },
+    { label: "Favorites", route: "/favorites", icon: Heart },
+    { label: "Inbox", route: "/my-dashboard#inbox", icon: Inbox },
+    { label: "My Tasks", route: "/my-dashboard#tasks", icon: ListChecks },
+    { label: "Notifications", route: "/my-dashboard#notifications", icon: Bell },
+    { label: "My Calendar", route: "/my-calendar", icon: CalendarClock },
+  ],
+  broker: [
+    { label: "My Dashboard", route: "/broker-dashboard", icon: LayoutDashboard },
+    { label: "My Listings", route: "/broker/portal", icon: Building2 },
+    { label: "Broker CRM", route: "/crm", icon: Users },
+    { label: "Email Inbox", route: "/my-dashboard#inbox", icon: Mail },
+    { label: "My Tasks", route: "/my-dashboard#tasks", icon: ListChecks },
+    { label: "My Calendar", route: "/my-calendar", icon: CalendarClock },
+  ],
+  developer: [
+    { label: "My Dashboard", route: "/developers-portal", icon: LayoutDashboard },
+    { label: "My Projects", route: "/developers-portal", icon: Building2 },
+    { label: "Submit Project", route: "/developers-portal/new-project", icon: Sparkles },
+    { label: "Inbox", route: "/my-dashboard#inbox", icon: Inbox },
+    { label: "My Tasks", route: "/my-dashboard#tasks", icon: ListChecks },
+    { label: "My Calendar", route: "/my-calendar", icon: CalendarClock },
+  ],
+};
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -103,6 +134,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const { mode } = useUserModeContext();
   const ownerBackendActive = isOwner && mode === 'owner';
   const roleShortcuts = MODE_SHORTCUTS[mode] ?? MODE_SHORTCUTS.investor;
+  const firstName = useDisplayFirstName("");
+  const primeShortcuts = PRIME_SHORTCUTS[mode] ?? PRIME_SHORTCUTS.investor;
   const roleLabel = mode === 'broker' ? 'Broker' : mode === 'developer' ? 'Developer' : 'Investor';
   const activeWorkspaceRoute =
     ownerBackendActive ? '/owner' :
@@ -764,35 +797,46 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       </div>
                     )}
 
-                    {/* Admin Shortcuts - Only for authenticated users with access */}
-                    {(ownerBackendActive || searchCRMAccess || searchListingAdminAccess) && (
+                    {/* {FirstName}'s Shortcuts — per-user prime shortcuts based on active mode + access */}
+                    {user && (
                       <div>
                         <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
-                          Admin Shortcuts
+                          {firstName ? `${firstName}'s Shortcuts` : 'Your Shortcuts'}
                         </p>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                          {ownerBackendActive && (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                          {primeShortcuts.map((s) => (
                             <button
-                              onClick={() => handleSelect('/owner')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
+                              key={s.route + s.label}
+                              onClick={() => handleSelect(s.route)}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
                             >
-                              <IconTile icon={LayoutDashboard} tone="emerald" size="sm" />
-                              <span className="text-sm font-semibold text-[#1A1A1A]">Owner</span>
+                              <IconTile icon={s.icon} tone="emerald" size="sm" />
+                              <span className="text-sm font-semibold text-[#1A1A1A] truncate">{s.label}</span>
                             </button>
-                          )}
+                          ))}
+                          {/* Owner-only tiles appended when owner backend is active */}
                           {ownerBackendActive && (
-                            <button
-                              onClick={() => handleSelect('/admin')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
-                            >
-                              <IconTile icon={Briefcase} tone="emerald" size="sm" />
-                              <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
-                            </button>
+                            <>
+                              <button
+                                onClick={() => handleSelect('/owner')}
+                                className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
+                              >
+                                <IconTile icon={LayoutDashboard} tone="emerald" size="sm" />
+                                <span className="text-sm font-semibold text-[#1A1A1A]">Owner</span>
+                              </button>
+                              <button
+                                onClick={() => handleSelect('/admin')}
+                                className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
+                              >
+                                <IconTile icon={Briefcase} tone="emerald" size="sm" />
+                                <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
+                              </button>
+                            </>
                           )}
-                          {searchCRMAccess && (
+                          {searchCRMAccess && !primeShortcuts.some(s => s.route === '/crm') && (
                             <button
                               onClick={() => handleSelect('/crm')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
                             >
                               <IconTile icon={Users} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">CRM</span>
@@ -801,7 +845,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           {searchListingAdminAccess && (
                             <button
                               onClick={() => handleSelect('/listing-admin')}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald text-left"
                             >
                               <IconTile icon={Building2} tone="emerald" size="sm" />
                               <span className="text-sm font-semibold text-[#1A1A1A]">Listings</span>
