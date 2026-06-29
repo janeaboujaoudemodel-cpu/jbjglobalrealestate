@@ -6,9 +6,8 @@ import { createClient } from "npm:@supabase/supabase-js@2";
  * Verifies the caller is the platform Owner via:
  * 1. JWT presence + validity
  * 2. Token expiry check (prevents stale token reuse)
- * 3. Role check (user_roles table: 'owner' or 'admin')
- * 4. Fallback: app_settings.owner_email match
- * 5. Logs denied attempts to api_security_events
+ * 3. Registered owner email match
+ * 4. Logs denied attempts to api_security_events
  */
 
 interface OwnerAuthResult {
@@ -71,8 +70,29 @@ export async function requireOwnerAuth(
   const userId = claimsData.claims.sub as string;
   const userEmail = (claimsData.claims.email as string) || "";
 
-  // 4. Check user_roles for 'owner' or 'admin' role
+  const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
+
+  // 4. Registered owner email is the gate. A user_roles owner/admin row alone
+  // must never grant access to owner edge functions.
   const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
+
+  const { data: ownerSetting } = await serviceClient
+    .from("app_settings")
+    .select("value")
+    .eq("key", "owner_email")
+    .maybeSingle();
+
+  const registeredOwnerEmail = String(ownerSetting?.value || PRIMARY_OWNER_EMAIL).toLowerCase().trim();
+  if (userEmail.toLowerCase().trim() !== registeredOwnerEmail) {
+    await logDenied(req, "owner_email_mismatch", userId, userEmail);
+    return denied(403, "Owner-only access. This action has been logged.");
+  }
+
+  // Optional sanity check/source compatibility: registered owner email can enter
+  // even during first registration before user_roles has been seeded.
+  return { response: null, userId, email: userEmail };
+
+  /* Legacy role-only gate intentionally disabled.
 
   const { data: roles } = await serviceClient
     .from("user_roles")
@@ -101,6 +121,7 @@ export async function requireOwnerAuth(
   // 6. Denied — not owner
   await logDenied(req, "privilege_escalation_attempt", userId, userEmail);
   return denied(403, "Owner-only access. This action has been logged.");
+  */
 }
 
 async function logDenied(
