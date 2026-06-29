@@ -324,12 +324,22 @@ const ProjectDetail = () => {
 
   if (!mapped) {
     return (
-      <section className="relative w-full min-h-screen pt-32 pb-16 flex items-center justify-center bg-premium-bg">
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full border-2 border-[#B89555]/50 flex items-center justify-center bg-[#1A1A1A]/5">
-            <span className="text-[#1A1A1A] font-bold text-2xl" style={{ fontFamily: "serif" }}>J</span>
+      <section
+        data-no-contrast-guard
+        className="relative w-full min-h-[calc(100vh-var(--app-content-top,88px))] flex items-center justify-center bg-premium-bg px-6"
+      >
+        <div className="text-center mx-auto" style={{ maxWidth: 520 }}>
+          <div
+            className="w-20 h-20 mx-auto mb-6 rounded-full border-2 border-[#B89555]/60 flex items-center justify-center bg-white shadow-[0_8px_24px_-12px_rgba(184,149,85,0.4)]"
+          >
+            <span
+              className="font-bold text-3xl"
+              style={{ fontFamily: "serif", color: "#1A1A1A" }}
+            >
+              J
+            </span>
           </div>
-          <h1 className="text-foreground text-2xl font-bold mb-2">Project not found</h1>
+          <h1 className="text-[#1A1A1A] text-2xl font-bold mb-2">Project not found</h1>
           <p className="text-muted-foreground mb-6">This project may have been removed or the link is incorrect.</p>
           <Link to="/properties">
             <Button variant="primary" className="px-8">Back to Properties</Button>

@@ -181,8 +181,27 @@ export default function InvestorDashboard() {
 
       const { data: favs } = await supabase.from("favorites").select("id, project_id, created_at").eq("user_id", user.id).limit(50);
       if (favs) {
-        setFavorites(favs);
-        setStats(prev => ({ ...prev, watchlist: favs.length }));
+        // Enrich with project name + slug so the card is meaningful and links to the real detail page
+        const ids = Array.from(new Set(favs.map((f: any) => f.project_id).filter(Boolean)));
+        let projectMap: Record<string, { name: string; slug: string; cover_image_url: string | null }> = {};
+        if (ids.length) {
+          const { data: projects } = await supabase
+            .from("projects")
+            .select("id, name, slug, cover_image_url, is_published")
+            .in("id", ids);
+          if (projects) {
+            projectMap = projects.reduce((acc: any, p: any) => {
+              acc[p.id] = { name: p.name, slug: p.slug, cover_image_url: p.cover_image_url, is_published: p.is_published };
+              return acc;
+            }, {});
+          }
+        }
+        // Drop favorites whose project no longer exists / is unpublished so we never link to "Project not found"
+        const enriched = favs
+          .map((f: any) => ({ ...f, project: projectMap[f.project_id] }))
+          .filter((f: any) => f.project && f.project.slug && f.project.is_published !== false);
+        setFavorites(enriched);
+        setStats(prev => ({ ...prev, watchlist: enriched.length }));
       }
 
       const { data: tickets } = await supabase
@@ -658,12 +677,19 @@ export default function InvestorDashboard() {
                   {favorites.map((f: any) => (
                     <Card key={f.id} className="border-[hsl(36,40%,70%)]/20">
                       <CardContent className="p-4 flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold text-sm text-foreground">Project #{f.project_id?.slice(0, 8)}</p>
+                        <div className="min-w-0 pr-3">
+                          <p className="font-semibold text-sm text-foreground truncate">{f.project?.name || `Project #${f.project_id?.slice(0, 8)}`}</p>
                           <p className="text-[10px] text-muted-foreground">Added {format(new Date(f.created_at), "dd MMM yyyy")}</p>
                         </div>
-                        <Link to={`/projects/${f.project_id}`}>
-                          <Button size="sm" variant="ghost" className="text-[hsl(36,40%,70%)]"><Eye className="w-4 h-4" /></Button>
+                        <Link to={`/project/${f.project?.slug || f.project_id}`} aria-label="View property">
+                          <button
+                            type="button"
+                            data-surface="emerald"
+                            data-emerald-ok="button"
+                            className="jj-surface-emerald inline-flex items-center justify-center w-11 h-11 rounded-full shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] transition-all duration-200 hover:scale-105 hover:shadow-[0_8px_24px_-6px_rgba(6,78,59,0.55)] hover:brightness-110"
+                          >
+                            <Eye className="w-5 h-5 allow-white" stroke="#FFFFFF" style={{ color: "#FFFFFF" }} />
+                          </button>
                         </Link>
                       </CardContent>
                     </Card>
@@ -673,11 +699,11 @@ export default function InvestorDashboard() {
 
               {/* Browsing History */}
               <h3 className="text-lg font-semibold text-foreground flex items-center gap-2 pt-4">
-                <History className="w-5 h-5 text-[hsl(36,40%,70%)]" /> Browsing History
+                <History className="w-5 h-5" style={{ color: "var(--emerald-1, #064e3b)" }} /> Browsing History
               </h3>
               <Card className="border-[hsl(36,40%,70%)]/20">
                 <CardContent className="p-6 text-center">
-                  <History className="w-10 h-10 text-muted-foreground/60 mx-auto mb-2" />
+                  <History className="w-10 h-10 mx-auto mb-2" style={{ color: "var(--emerald-1, #064e3b)" }} />
                   <p className="text-sm text-muted-foreground">Property viewing history will appear here</p>
                 </CardContent>
               </Card>
@@ -760,10 +786,19 @@ export default function InvestorDashboard() {
                       { label: "Logo", icon: ImageIcon },
                       { label: "Business Card", icon: CreditCard },
                     ].map((asset) => (
-                      <div key={asset.label} className="text-center p-4 rounded-lg border border-border/30 bg-background/50">
-                        <asset.icon className="w-8 h-8 text-muted-foreground/60 mx-auto mb-2" aria-hidden="true" data-decorative="true" />
-                        <p className="text-xs text-muted-foreground">{asset.label}</p>
-                        <p className="text-[10px] text-muted-foreground/60 mt-1">Not uploaded</p>
+                      <div
+                        key={asset.label}
+                        className="group text-center p-4 rounded-xl border border-[hsl(36,40%,70%)]/40 bg-[#F7F2EA] transition-all duration-200 cursor-default hover:-translate-y-0.5 hover:shadow-[0_10px_28px_-12px_rgba(6,78,59,0.45)]"
+                      >
+                        <div className="mx-auto mb-2 w-12 h-12 rounded-xl flex items-center justify-center bg-[#EFE6D6] border border-[hsl(36,40%,70%)]/40 transition-colors duration-200 group-hover:bg-[var(--emerald-1,#064e3b)] group-hover:border-[var(--emerald-1,#064e3b)]">
+                          <asset.icon
+                            className="w-6 h-6 text-[#1A1A1A] transition-colors duration-200 group-hover:text-white"
+                            aria-hidden="true"
+                            data-decorative="true"
+                          />
+                        </div>
+                        <p className="text-xs font-semibold text-[#1A1A1A]">{asset.label}</p>
+                        <p className="text-[10px] text-muted-foreground/70 mt-1">Not uploaded</p>
                       </div>
                     ))}
                   </div>
