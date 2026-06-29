@@ -297,11 +297,15 @@ export default function BrokerCertificationGate() {
   const status: SubmissionStatus = (submission?.status as SubmissionStatus) ?? "none";
 
   return (
-    <Card className="border-[#B89555]/45 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_24px_70px_-44px_rgba(26,26,26,0.55)] overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between gap-3">
+    <Card className="relative overflow-hidden border-[#B89555]/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_30px_80px_-48px_rgba(26,26,26,0.65)]">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#064E3B] via-[#B89555] to-[#064E3B]" />
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4">
         <div className="flex items-center gap-2">
-          <IconTile icon={GraduationCap} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
-          <CardTitle className="text-[#1A1A1A] text-lg">JBJ Academy Certification</CardTitle>
+          <IconTile icon={GraduationCap} tone="emerald" size="sm" className="!h-10 !w-10 !rounded-xl" iconClassName="!h-4.5 !w-4.5" />
+          <div>
+            <CardTitle className="text-[#1A1A1A] text-lg leading-tight">JBJ Academy Certification</CardTitle>
+            <p className="text-xs text-[#1A1A1A]/65 mt-0.5">Reflection, owner approval, AI quiz and certificate unlock.</p>
+          </div>
         </div>
         <StatusBadge status={status} />
       </CardHeader>
@@ -357,8 +361,9 @@ export default function BrokerCertificationGate() {
               type="button"
               onClick={handleSubmit}
               disabled={submitting || reflection.trim().length < 120 || !attest}
-              className="jj-pill-emerald-metallic"
+              className="jj-pill-emerald-metallic disabled:opacity-100"
               data-cta="cert-submit"
+              data-surface="emerald"
             >
               {submitting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Submitting…</> : <><ShieldCheck className="h-4 w-4 mr-2" /> Request Certification</>}
             </Button>
