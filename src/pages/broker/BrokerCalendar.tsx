@@ -96,7 +96,7 @@ export default function BrokerCalendar() {
                     <div className="text-[11px] text-[#1A1A1A]/70 mb-1">{d.getDate()}</div>
                     <div className="space-y-1">
                       {list.map((e: any) => (
-                        <div key={e.id} className="group bg-[#1A1A1A] text-[#F7F2EA] text-[10px] px-1.5 py-0.5 rounded truncate flex items-center justify-between gap-1">
+                        <div key={e.id} className="group bg-[color:var(--emerald-1)] text-white text-[10px] px-1.5 py-0.5 rounded truncate flex items-center justify-between gap-1">
                           <span className="truncate" title={e.title}>{e.title}</span>
                           <button
                             onClick={() => del.mutate(e.id)}
