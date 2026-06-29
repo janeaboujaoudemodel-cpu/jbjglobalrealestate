@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import InvestorDocumentVault from "@/components/investor/InvestorDocumentVault";
 import { useMyEventInvitations } from "@/hooks/useEventManagement";
+import { getUserInitials } from "@/lib/userInitials";
 import { toast } from "sonner";
 import {
   LayoutDashboard, Building2, FileText, TrendingUp, Bell, User, Heart, Search, ListChecks,
