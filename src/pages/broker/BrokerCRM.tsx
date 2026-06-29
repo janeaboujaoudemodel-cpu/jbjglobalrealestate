@@ -418,13 +418,14 @@ export default function BrokerCRM() {
       </PremiumCard>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 min-w-0">
         <Kpi icon={Users} label="Assigned leads" value={totalLeads} onClick={() => setTab("leads")} />
         <Kpi icon={Database} label="Databases" value={dbs.data?.length ?? 0} onClick={() => setTab("databases")} />
         <Kpi icon={Phone} label="Calls logged" value={callsLogged} onClick={() => setTab("calls")} />
         <Kpi icon={ClipboardList} label="Pending follow-ups" value={followUps} onClick={() => setTab("activity")} />
         <Kpi icon={TrendingUp} label="Conversion" value={`${conversion}%`} sub={`${wonStage} won`} onClick={() => setTab("insights")} />
       </div>
+
 
       {/* Tabs */}
       <nav className="flex flex-wrap gap-1.5 p-1.5 rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/22 shadow-[0_6px_18px_-16px_rgba(6,78,59,0.35)]">
