@@ -51,7 +51,17 @@ beforeAll(async () => {
   }
   if (!serverReachable) return;
 
-  browser = await chromium.launch({ headless: true });
+  // Prefer the sandbox's pre-installed chromium when the bundled revision is missing.
+  const fs = await import("node:fs");
+  const candidates = [
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+    "/chromium_headless_shell-1194/chrome-linux/headless_shell",
+    "/chromium-1194/chrome-linux/chrome",
+  ].filter(Boolean) as string[];
+  const executablePath = candidates.find((p) => {
+    try { return fs.statSync(p).isFile(); } catch { return false; }
+  });
+  browser = await chromium.launch({ headless: true, executablePath });
 }, 30_000);
 
 afterAll(async () => {
