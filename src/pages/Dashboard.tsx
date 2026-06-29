@@ -33,9 +33,10 @@ const Dashboard = () => {
   if (authLoading || modeLoading || ownerLoading || roleOwnerLoading) return <Spinner />;
   if (!user) return <VisitorDashboard />;
 
-  // Owner cockpit lives at /owner — always send verified owner there, regardless
-  // of route. Also clear any stale broker-preview flag so the redirect sticks.
-  if (isOwner || roleIsOwner) {
+  // Owner cockpit lives at /owner ONLY when the active perspective is Owner.
+  // If Jane chooses Investor/Broker/Developer, she must see that user's portal,
+  // not the back-end command center.
+  if ((isOwner || roleIsOwner) && mode === 'owner') {
     if (typeof window !== "undefined") {
       try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
       window.location.replace("/owner");

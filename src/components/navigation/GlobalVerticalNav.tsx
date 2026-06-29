@@ -560,7 +560,7 @@ export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
   const { isInvestor, isOwner } = useUserRole();
-  const { isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
+  const { mode, isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [, setMobileOpen] = useState(false);
@@ -580,8 +580,9 @@ export default function GlobalVerticalNav() {
     catch { return true; }
   });
 
+  const isOwnerMode = isOwner && mode === 'owner';
   const showBrokerSurfaces = isBrokerMode;
-  const showInvestorSurfaces = isInvestorMode || isInvestor || isOwner;
+  const showInvestorSurfaces = isInvestorMode;
   const { isPageVisible: isTeamPageVisible } = useTeamVisibility();
   const { allowed: canCompare } = useCompareAccess();
   const { visible: canSeeCardScanner } = useGatedToolAccess("business-card-scanner");
@@ -592,7 +593,7 @@ export default function GlobalVerticalNav() {
     // Property Comparison + Business Card Scanner are broker/owner only — hidden from investor/developer.
     if (item.href === "/compare" && !canCompare) return false;
     if (item.href === "/business-card-scanner" && !canSeeCardScanner) return false;
-    if (!showBrokerSurfaces && !isOwner) {
+    if (!showBrokerSurfaces) {
       if (item.href === "/join") return false;
       if (sectionKey === "BROKER & ACADEMY") return false;
       if (item.href.startsWith("/broker") || item.href === "/broker-toolkit" || item.href === "/jbj-academy") return false;
@@ -600,14 +601,14 @@ export default function GlobalVerticalNav() {
     }
     if (!showInvestorSurfaces && sectionKey === "INVESTOR") return false;
     return true;
-  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible, isOwner, canCompare, canSeeCardScanner]);
+  }, [showBrokerSurfaces, showInvestorSurfaces, isTeamPageVisible, canCompare, canSeeCardScanner]);
 
   const shouldShowSection = useCallback((sectionKey: SectionKey) => {
-    if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return false;
-    if (sectionKey === 'BROKER & ACADEMY' && !showBrokerSurfaces && !isOwner) return false;
+    if (sectionKey === 'ADMIN & OWNER' && !isOwnerMode) return false;
+    if (sectionKey === 'BROKER & ACADEMY' && !showBrokerSurfaces) return false;
     if (sectionKey === 'INVESTOR' && !showInvestorSurfaces) return false;
     return true;
-  }, [isDeveloperMode, isOwner, showBrokerSurfaces, showInvestorSurfaces]);
+  }, [isOwnerMode, showBrokerSurfaces, showInvestorSurfaces]);
 
   // Collapsible sections state — accordion: only one open at a time
   const [openSection, setOpenSection] = useState<SectionKey | null>(null);

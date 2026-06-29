@@ -45,12 +45,12 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       : mode === "investor"
       ? "/investor-dashboard"
       : mode === "developer"
-      ? "/developer-portal"
-      : isOwner
+      ? "/developers-portal"
+    : isOwner && mode === "owner"
       ? "/owner"
       : "/my-dashboard";
 
-  const roleLabel = isOwner
+  const roleLabel = isOwner && mode === "owner"
     ? "Owner"
     : mode === "broker"
     ? "Broker"
@@ -95,7 +95,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     "User";
   const initials = "JB";
 
-  const showCRM = isOwner || mode === "broker";
+  const showCRM = (isOwner && mode === "owner") || mode === "broker";
   const pendingTasks = alerts?.pendingTasks || 0;
   const activityCount = pendingTasks + (alerts?.totalNotificationAlerts || 0);
 
@@ -215,11 +215,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
         <Row to="/profile" icon={User} label="My Profile" />
-        {(mode === "broker" || isOwner) && (
+        {(mode === "broker" || (isOwner && mode === "owner")) && (
           <Row to="/broker/brand" icon={Palette} label="Brand Profile" />
         )}
         {mode === "developer" && (
-          <Row to="/developer-hub/company-registration" icon={Palette} label="Brand Profile" />
+          <Row to="/developers-portal/company-registration" icon={Palette} label="Brand Profile" />
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 

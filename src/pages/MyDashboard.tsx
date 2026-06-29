@@ -259,10 +259,10 @@ const MyDashboard = () => {
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
-    if (!authLoading && !ownerLoading && !roleOwnerLoading && user && (isOwner || roleIsOwner)) {
+    if (!authLoading && !ownerLoading && !roleOwnerLoading && user && (isOwner || roleIsOwner) && mode === 'owner') {
       navigate('/owner', { replace: true });
     }
-  }, [authLoading, ownerLoading, roleOwnerLoading, user, isOwner, roleIsOwner, navigate]);
+  }, [authLoading, ownerLoading, roleOwnerLoading, user, isOwner, roleIsOwner, mode, navigate]);
 
   if (authLoading || ownerLoading || roleOwnerLoading || roleLoading) {
     return (
@@ -272,7 +272,7 @@ const MyDashboard = () => {
     );
   }
 
-  if (!user || isOwner || roleIsOwner) {
+  if (!user || ((isOwner || roleIsOwner) && mode === 'owner')) {
     return null;
   }
 

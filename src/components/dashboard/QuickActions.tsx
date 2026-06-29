@@ -99,8 +99,8 @@ export function QuickActions() {
   const { mode } = useUserModeContext();
   const { isOwner } = useOwnerVerification();
 
-  // Owner cockpit short-circuits (existing rule).
-  if (isOwner) {
+  // Owner cockpit short-circuits ONLY in explicit Owner mode.
+  if (isOwner && mode === "owner") {
     return (
       <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
         <CardHeader className="pb-3">

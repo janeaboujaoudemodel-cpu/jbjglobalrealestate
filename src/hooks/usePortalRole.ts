@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 export type PortalRole = "owner" | "portal_developer" | "portal_rep" | null;
 
@@ -14,14 +15,16 @@ export type PortalRole = "owner" | "portal_developer" | "portal_rep" | null;
  */
 export function usePortalRole() {
   const { user, isOwner } = useAuth();
+  const { mode } = useUserModeContext();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["portal-role", user?.id],
+    queryKey: ["portal-role", user?.id, mode],
     enabled: !!user?.id,
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<PortalRole> => {
       if (!user?.id) return null;
-      if (isOwner) return "owner";
+      if (isOwner && mode === "owner") return "owner";
+      if (isOwner && mode === "developer") return "portal_developer";
 
       const { data: roles } = await supabase
         .from("user_roles")
@@ -29,7 +32,7 @@ export function usePortalRole() {
         .eq("user_id", user.id);
 
       const list = (roles ?? []).map((r: any) => r.role as string);
-      if (list.includes("owner") || list.includes("admin")) return "owner";
+      if (mode === "owner" && (list.includes("owner") || list.includes("admin"))) return "owner";
       if (list.includes("portal_developer")) return "portal_developer";
       if (list.includes("portal_rep")) return "portal_rep";
       return null;

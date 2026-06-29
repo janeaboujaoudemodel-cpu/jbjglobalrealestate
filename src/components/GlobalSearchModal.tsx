@@ -36,17 +36,17 @@ const QUICK_SHORTCUTS = [
 // "For {Role}s" section always reflects the active mode's workspace.
 const MODE_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: string; route: string; icon: any }[]> = {
   investor: [
-    { label: "Investor Dashboard", route: "/my-dashboard", icon: LayoutDashboard },
-    { label: "Investor Portal", route: "/my-dashboard", icon: Briefcase },
-    { label: "My Account", route: "/account", icon: User },
+    { label: "Investor Dashboard", route: "/investor-dashboard", icon: LayoutDashboard },
+    { label: "Investor Portal", route: "/investor-dashboard", icon: Briefcase },
+    { label: "My Account", route: "/profile", icon: User },
     { label: "AI Home Finder", route: "/ai-home-finder", icon: Sparkles },
     { label: "Favorites", route: "/favorites", icon: Heart },
     { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
   ],
   broker: [
     { label: "Broker Dashboard", route: "/broker-dashboard", icon: LayoutDashboard },
-    { label: "Broker Portal", route: "/broker-dashboard", icon: Briefcase },
-    { label: "My Account", route: "/account", icon: User },
+    { label: "Broker Portal", route: "/broker/portal", icon: Briefcase },
+    { label: "My Account", route: "/profile", icon: User },
     { label: "Broker Toolkit", route: "/broker-toolkit", icon: Sparkles },
     { label: "Academy", route: "/broker-education", icon: GraduationCap },
     { label: "Market Intel", route: "/market-intelligence", icon: TrendingUp },
@@ -54,8 +54,8 @@ const MODE_SHORTCUTS: Record<'investor' | 'broker' | 'developer', { label: strin
   developer: [
     { label: "Developer Dashboard", route: "/developers-portal", icon: LayoutDashboard },
     { label: "Developer Portal", route: "/developers-portal", icon: Briefcase },
-    { label: "My Account", route: "/account", icon: User },
-    { label: "Submit Project", route: "/developers-portal/projects/new", icon: Building2 },
+    { label: "My Account", route: "/profile", icon: User },
+    { label: "Submit Project", route: "/developers-portal/new-project", icon: Building2 },
     { label: "Insights", route: "/market-intelligence", icon: TrendingUp },
     { label: "Reports", route: "/market-report", icon: FileText },
   ],
@@ -101,6 +101,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const navigate = useNavigate();
   const { user, isOwner } = useAuth();
   const { mode } = useUserModeContext();
+  const ownerBackendActive = isOwner && mode === 'owner';
   const roleShortcuts = MODE_SHORTCUTS[mode] ?? MODE_SHORTCUTS.investor;
   const roleLabel = mode === 'broker' ? 'Broker' : mode === 'developer' ? 'Developer' : 'Investor';
 
@@ -188,13 +189,16 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
 
   const isBroker = crmProfile?.crm_role === 'broker_member';
+  const searchCRMAccess = ownerBackendActive || (!isOwner && !!hasCRMAccess);
+  const searchListingAdminAccess = ownerBackendActive || (!isOwner && !!hasListingAdminAccess);
+  const searchBrokerAccess = mode === 'broker' || (!isOwner && isBroker);
 
   // Get filtered results - filter out any items without valid icons
   const results = searchItems(query, {
-    isOwner: isOwner,
-    hasCRMAccess: hasCRMAccess || false,
-    hasListingAdminAccess: hasListingAdminAccess || false,
-    isBroker: isBroker,
+    isOwner: ownerBackendActive,
+    hasCRMAccess: searchCRMAccess,
+    hasListingAdminAccess: searchListingAdminAccess,
+    isBroker: searchBrokerAccess,
     isAuthenticated: !!user,
     limit: 12,
   }).filter(item => item.icon && typeof item.icon === 'function');
@@ -205,10 +209,10 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   // Nearest-match fallback — always returns something so the user never sees an empty screen.
   const nearest = totalResults === 0 && query.trim().length >= 2
     ? nearestSearchItems(query, {
-        isOwner,
-        hasCRMAccess: hasCRMAccess || false,
-        hasListingAdminAccess: hasListingAdminAccess || false,
-        isBroker,
+        isOwner: ownerBackendActive,
+        hasCRMAccess: searchCRMAccess,
+        hasListingAdminAccess: searchListingAdminAccess,
+        isBroker: searchBrokerAccess,
         isAuthenticated: !!user,
         limit: 6,
       }).filter(item => item.icon && typeof item.icon === 'function')
@@ -729,13 +733,13 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     )}
 
                     {/* Admin Shortcuts - Only for authenticated users with access */}
-                    {(isOwner || hasCRMAccess || hasListingAdminAccess) && (
+                    {(ownerBackendActive || searchCRMAccess || searchListingAdminAccess) && (
                       <div>
                         <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider">
                           Admin Shortcuts
                         </p>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                          {isOwner && (
+                          {ownerBackendActive && (
                             <button
                               onClick={() => handleSelect('/owner')}
                               className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
@@ -744,7 +748,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               <span className="text-sm font-semibold text-[#1A1A1A]">Owner</span>
                             </button>
                           )}
-                          {isOwner && (
+                          {ownerBackendActive && (
                             <button
                               onClick={() => handleSelect('/admin')}
                               className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
@@ -753,7 +757,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               <span className="text-sm font-semibold text-[#1A1A1A]">Admin</span>
                             </button>
                           )}
-                          {(hasCRMAccess || isOwner) && (
+                          {searchCRMAccess && (
                             <button
                               onClick={() => handleSelect('/crm')}
                               className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
@@ -762,7 +766,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               <span className="text-sm font-semibold text-[#1A1A1A]">CRM</span>
                             </button>
                           )}
-                          {(hasListingAdminAccess || isOwner) && (
+                          {searchListingAdminAccess && (
                             <button
                               onClick={() => handleSelect('/listing-admin')}
                               className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
