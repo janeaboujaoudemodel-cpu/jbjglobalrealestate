@@ -63,30 +63,31 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
     const s = SIZE[size];
     const isDark = tone === "emerald" || tone === "navy" || tone === "ink";
 
-    // Force the glyph color with !important via inline style so it beats the
-    // long descendant repaint sweeps in index.css. Bright tiles are ink;
-    // emerald/dark own-surfaces are white.
+    // Seed the glyph color, but do NOT lock it with inline !important.
+    // Global surface arbitration must be able to flip a tile that becomes
+    // emerald on hover/active from ink to pure white without fighting React
+    // inline priority.
     const glyphColor = isDark ? "#FFFFFF" : "#1A1A1A";
     const setGlyphStyle = React.useCallback(
       (el: SVGSVGElement | null) => {
         if (!el || !glyphColor) return;
-        el.style.setProperty("color", glyphColor, "important");
-        el.style.setProperty("stroke", glyphColor, "important");
+        el.style.setProperty("color", glyphColor);
+        el.style.setProperty("stroke", glyphColor);
         // Lucide icons are stroke-based — force fill:none so global
         // `fill:#FFFFFF !important` rules don't turn outline glyphs into
         // solid white blocks (e.g. BadgeDollarSign disappearing on emerald).
-        el.style.setProperty("fill", "none", "important");
-        el.style.setProperty("opacity", "1", "important");
-        el.style.setProperty("stroke-opacity", "1", "important");
-        el.style.setProperty("mix-blend-mode", "normal", "important");
-        el.style.setProperty("filter", "none", "important");
+        el.style.setProperty("fill", "none");
+        el.style.setProperty("opacity", "1");
+        el.style.setProperty("stroke-opacity", "1");
+        el.style.setProperty("mix-blend-mode", "normal");
+        el.style.setProperty("filter", "none");
         el.querySelectorAll("path, circle, rect, line, polyline, polygon, ellipse, use, g").forEach((part) => {
           const svgPart = part as SVGElement;
-          svgPart.style.setProperty("color", glyphColor, "important");
-          svgPart.style.setProperty("stroke", glyphColor, "important");
-          svgPart.style.setProperty("fill", "none", "important");
-          svgPart.style.setProperty("opacity", "1", "important");
-          svgPart.style.setProperty("stroke-opacity", "1", "important");
+          svgPart.style.setProperty("color", glyphColor);
+          svgPart.style.setProperty("stroke", glyphColor);
+          svgPart.style.setProperty("fill", "none");
+          svgPart.style.setProperty("opacity", "1");
+          svgPart.style.setProperty("stroke-opacity", "1");
         });
       },
       [glyphColor, isDark],

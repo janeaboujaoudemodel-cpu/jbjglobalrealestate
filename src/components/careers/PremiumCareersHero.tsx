@@ -105,6 +105,7 @@ export default function PremiumCareersHero() {
 
         <p
           data-no-contrast-guard
+          data-surface="dark"
           className="allow-white mt-6 max-w-2xl mx-auto text-base md:text-lg leading-relaxed rounded-xl px-5 py-3 bg-[#0A0A0A] border border-[#B89555]/60 shadow-[0_10px_30px_-18px_rgba(10,10,10,0.55)]"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
