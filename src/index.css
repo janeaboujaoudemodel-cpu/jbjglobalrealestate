@@ -8773,7 +8773,7 @@ html body :is(
   [class~="bg-white"], [class~="bg-[#FFFFFF]"], [class~="bg-[#FFF]"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="bg-[#FAF5EC]"], [class*="bg-[#F5F0E6]"], [class*="bg-[#F2EADB]"]
-) :is(svg, [class*="lucide"]):not(.allow-white):not(.allow-white *):not(.jj-hover-emerald):not(.jj-hover-emerald *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-primary):not(.jj-cta-primary *):not([data-on-dark] *):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-cta="dark"] *):not([data-cta="primary"] *):not([data-cta="primary"]):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not([data-surface="black"] *):not([data-surface="emerald"] *):not([data-surface="emerald"]):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not(.surface-black *):not([data-emerald] *):not([data-emerald="true"] *):not([data-jj-emerald] *):not(.jj-pill-emerald *):not(.jj-emerald-chip *):not(.jj-emerald-metallic *):not(.jj-emerald-card *):not(.jj-tab-active-metallic *):not(.jj-emerald-fill *):not(.jj-bg-emerald *):not(.jj-side-tile *):not(.careers-card-navy *):not(.jj-cta-primary *):not(.jj-cta-primary):not(.jj-emerald-solid *):not(.jj-emerald-solid):not(.jj-icon-tile-emerald *):not(.jj-icon-tile-emerald):not([data-icon-tile-tone="emerald"] *):not([data-icon-tile-tone="emerald"]):not([data-icon-tile][data-surface="emerald"] *):not([data-icon-tile][data-surface="emerald"]):not([role="tab"][data-state="active"] *):not([data-jj-segmented-trigger][data-state="active"] *):not([data-chrome="sidebar"] [data-active="true"] *) {
+) :is(svg, [class*="lucide"]):not(.allow-white):not(.allow-white *):not(.jj-hover-emerald):not(.jj-hover-emerald *):not(.jj-cta-champagne):not(.jj-cta-champagne *):not(.jj-cta-primary):not(.jj-cta-primary *):not([data-on-dark] *):not([data-allow-dark-cta] *):not(.jj-cta-dark *):not(.jj-navy-cta *):not([data-cta="dark"] *):not([data-cta="primary"] *):not([data-cta="primary"]):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="navy"] *):not([data-surface="black"] *):not([data-surface="emerald"] *):not([data-surface="emerald"]):not(.surface-dark *):not(.surface-ink *):not(.surface-navy *):not(.surface-black *):not([data-emerald] *):not([data-emerald="true"] *):not([data-jj-emerald] *):not(.jj-pill-emerald *):not(.jj-emerald-chip *):not(.jj-emerald-metallic *):not(.jj-emerald-card *):not(.jj-tab-active-metallic *):not(.jj-emerald-fill *):not(.jj-bg-emerald *):not(.jj-side-tile *):not(.careers-card-navy *):not(.jj-cta-primary *):not(.jj-cta-primary):not(.jj-emerald-solid *):not(.jj-emerald-solid):not(.jj-icon-tile-emerald *):not(.jj-icon-tile-emerald):not([data-icon-tile-tone="emerald"] *):not([data-icon-tile-tone="emerald"]):not([data-icon-tile][data-surface="emerald"] *):not([data-icon-tile][data-surface="emerald"]):not([role="tab"][data-state="active"] *):not([data-jj-segmented-trigger][data-state="active"] *):not([data-chrome="sidebar"] [data-active="true"] *):not(.jj-investor-tab:hover *):not(.jj-investor-tab.is-active *):not(.jj-investor-tab:focus-visible *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
@@ -20148,22 +20148,33 @@ html body #root :is([data-surface="emerald"], [data-emerald-action], [data-cta="
 
 /* PASS 116 — Investor dashboard tab strap: bullet-proof white ink on emerald (active + hover). */
 .jj-investor-tab.is-active,
-.jj-investor-tab:hover {
+.jj-investor-tab:hover,
+.jj-investor-tab:focus-visible {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   background-image: var(--jj-emerald-ombre) !important;
 }
 .jj-investor-tab.is-active *,
-.jj-investor-tab:hover * {
+.jj-investor-tab:hover *,
+.jj-investor-tab:focus-visible * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-.jj-investor-tab.is-active svg,
-.jj-investor-tab:hover svg,
-.jj-investor-tab.is-active svg *,
-.jj-investor-tab:hover svg * {
+html body .jj-investor-tab.jj-investor-tab.is-active svg,
+html body .jj-investor-tab.jj-investor-tab:hover svg,
+html body .jj-investor-tab.jj-investor-tab:focus-visible svg,
+html body .jj-investor-tab.jj-investor-tab.is-active svg *,
+html body .jj-investor-tab.jj-investor-tab:hover svg *,
+html body .jj-investor-tab.jj-investor-tab:focus-visible svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+  fill: none !important;
+}
+/* Idle (inactive, not hovered): ink stroke on champagne */
+html body .jj-investor-tab.jj-investor-tab:not(.is-active):not(:hover):not(:focus-visible) svg,
+html body .jj-investor-tab.jj-investor-tab:not(.is-active):not(:hover):not(:focus-visible) svg * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
 }
 
 /* ============================================================
