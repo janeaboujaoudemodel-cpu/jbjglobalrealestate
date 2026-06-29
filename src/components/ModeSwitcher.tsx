@@ -142,36 +142,21 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
       description: MODE_CONFIG[newMode].description,
     });
 
-    // 🔒 NON-REDIRECT POLICY:
-    // Switching mode must NEVER auto-navigate Investor / Broker / Developer
-    // to a portal — especially not the back-end. The user stays on whatever
-    // page they're on; the surrounding UI (dashboard widgets, sidebar tools,
-    // search shortcuts) adapts to the new mode via UserModeContext.
-    // Owner mode is the ONLY mode permitted to auto-route, and only for the
-    // registered app owner. If a non-owner is already sitting on a protected
-    // route, bounce them back to the homepage so the back-end is never shown.
-    const path = location.pathname;
-    const onBackend =
-      path.startsWith('/owner') ||
-      path.startsWith('/admin') ||
-      path.startsWith('/developers-portal') ||
-      path.startsWith('/developer-hub');
+    // 🔒 MODE → DASHBOARD REDIRECT POLICY:
+    // Every mode switch lands the user in that mode's own dashboard.
+    // Owner mode is gated above to the registered app owner only — no other
+    // account can ever reach /owner. Broker/Developer/Investor each go to
+    // their respective workspace with no conflicts.
+    const destination =
+      newMode === 'owner' ? '/owner' :
+      newMode === 'broker' ? '/broker-dashboard' :
+      newMode === 'developer' ? '/developers-portal' :
+      '/investor-dashboard';
 
-    if (newMode === 'owner' && isAppOwner) {
-      if (!path.startsWith('/owner') && !path.startsWith('/admin')) {
-        navigate('/owner');
-      }
-    } else if (newMode !== 'owner' && onBackend) {
-      // Stepping out of Owner/back-end perspective must immediately land in
-      // the selected user's real workspace — never leave the owner panel visible.
-      const destination =
-        newMode === 'broker' ? '/broker-dashboard' :
-        newMode === 'developer' ? '/developers-portal' :
-        '/investor-dashboard';
+    if (location.pathname !== destination) {
       navigate(destination, { replace: true });
     }
-    // All other cases: stay on the current page. The dashboard/sidebar
-    // re-renders the correct mode-specific tools via context.
+
 
     setIsOpen(false);
   };
