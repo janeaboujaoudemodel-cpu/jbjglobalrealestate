@@ -1,4 +1,5 @@
 import { Briefcase, X, Sparkles, CheckCircle2 } from "lucide-react";
+import IconTile from "@/components/ui/icon-tile";
 
 interface SelectedRoleChipProps {
   label: string | null;
