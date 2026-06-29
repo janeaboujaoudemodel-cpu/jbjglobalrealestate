@@ -20781,3 +20781,87 @@ html body #root [data-surface="champagne"]:not([data-careers-job-card]) :is(h1,h
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+
+/* ========================================================================
+   PASS 126 — SITEWIDE BRIGHT-SURFACE INK LOCK
+   Gold / champagne / cream / pearl / white own-backgrounds must never show
+   white text or white icons at rest or hover. Only true emerald/dark own
+   surfaces are excluded and remain white-on-dark.
+   ====================================================================== */
+html body #root :is(
+  [data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"],
+  [data-surface="page"], [data-surface="light"], [data-surface="cream"], [data-surface="raised"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-gold, .surface-pearl,
+  .surface-page, .surface-light, .surface-cream, .surface-raised, .jj-surface-champagne,
+  .jj-section-champagne, .jj-card-champagne, .jj-layer-2, .jj-layer-active,
+  .jj-gold-metallic, .jj-icon-tile-champagne, [data-icon-tile-tone="gold"],
+  .bg-background, .bg-popover, [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"], [class*="bg-white"]
+):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-on-dark]):not([data-hero-dark]):not(.jj-cta-emerald):not(.jj-cta-primary):not(.jj-cta-dark):not(.jj-navy-cta):not(.jj-emerald-metallic):not(.jj-icon-tile-emerald):not([data-emerald="true"]):not([data-emerald-action]):not([data-emerald-filled]):not([data-emerald-icon-surface]):not([role="tab"][data-state="active"]):not([data-jj-segmented-trigger][data-state="active"]):not(#pass126-a):not(#pass126-b):not(#pass126-c):not(#pass126-d):not(#pass126-e):not(#pass126-f):not(#pass126-g):not(#pass126-h):not(#pass126-i):not(#pass126-j):not(#pass126-k):not(#pass126-l),
+html body #root :is(
+  [data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"],
+  [data-surface="page"], [data-surface="light"], [data-surface="cream"], [data-surface="raised"],
+  [data-studio-surface="champagne"], .surface-champagne, .surface-gold, .surface-pearl,
+  .surface-page, .surface-light, .surface-cream, .surface-raised, .jj-surface-champagne,
+  .jj-section-champagne, .jj-card-champagne, .jj-layer-2, .jj-layer-active,
+  .jj-gold-metallic, .jj-icon-tile-champagne, [data-icon-tile-tone="gold"],
+  .bg-background, .bg-popover, [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"], [class*="bg-white"]
+):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]):not([data-on-dark]):not([data-hero-dark]):not(.jj-cta-emerald):not(.jj-cta-primary):not(.jj-cta-dark):not(.jj-navy-cta):not(.jj-emerald-metallic):not(.jj-icon-tile-emerald):not([data-emerald="true"]):not([data-emerald-action]):not([data-emerald-filled]):not([data-emerald-icon-surface]):not([role="tab"][data-state="active"]):not([data-jj-segmented-trigger][data-state="active"]):not(#pass126-a):not(#pass126-b):not(#pass126-c):not(#pass126-d):not(#pass126-e):not(#pass126-f):not(#pass126-g):not(#pass126-h):not(#pass126-i):not(#pass126-j):not(#pass126-k):not(#pass126-l)
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where(
+    [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+    [data-on-dark], [data-hero-dark], [data-studio-surface="emerald"], .surface-dark, .surface-ink,
+    .surface-navy, .jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta,
+    .jj-emerald-action, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic,
+    .jj-icon-tile-emerald, [data-emerald-action], [data-emerald="true"], [data-emerald-filled],
+    [data-emerald-band], [data-emerald-icon-surface], [data-cta="primary"], [data-cta="dark"],
+    [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"],
+    [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *,
+    [data-on-dark] *, [data-hero-dark] *, [data-studio-surface="emerald"] *, .surface-dark *,
+    .surface-ink *, .surface-navy *, .jj-surface-emerald *, .jj-cta-primary *, .jj-cta-emerald *,
+    .jj-cta-dark *, .jj-navy-cta *, .jj-emerald-action *, .jj-emerald-metallic *, .jj-pill-emerald *,
+    .jj-pill-emerald-metallic *, .jj-icon-tile-emerald *, [data-emerald-action] *, [data-emerald="true"] *,
+    [data-emerald-filled] *, [data-emerald-band] *, [data-emerald-icon-surface] *, [data-cta="primary"] *,
+    [data-cta="dark"] *, [data-jj-segmented-trigger][data-state="active"] *, [role="tab"][data-state="active"] *
+  )) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+}
+
+html body #root :is(.jj-icon-tile-champagne, [data-icon-tile-tone="gold"]):not([data-surface="emerald"]):not(#pass126-icon-a):not(#pass126-icon-b):not(#pass126-icon-c) {
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
+  background-color: #FDFBF7 !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.44) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: 0 8px 18px -14px rgba(26,26,26,0.26), inset 0 1px 0 rgba(255,255,255,0.72) !important;
+}
+html body #root :is(.jj-icon-tile-champagne, [data-icon-tile-tone="gold"]):not([data-surface="emerald"]):not(#pass126-icon-a):not(#pass126-icon-b):not(#pass126-icon-c) :is(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
+
+html body #root :is([data-radix-popper-content-wrapper], [role="menu"], [role="listbox"], [data-radix-select-content], [data-radix-dropdown-menu-content], [cmdk-root], .bg-popover):not(#pass126-menu-a):not(#pass126-menu-b):not(#pass126-menu-c) :is([role="menuitem"], [role="option"], [data-radix-collection-item], [cmdk-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([aria-selected="true"]):not([data-state="checked"]) {
+  background: linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.42) !important;
+  box-shadow: 0 8px 18px -16px rgba(26,26,26,0.28), inset 0 1px 0 rgba(255,255,255,0.72) !important;
+}
+html body #root :is([data-radix-popper-content-wrapper], [role="menu"], [role="listbox"], [data-radix-select-content], [data-radix-dropdown-menu-content], [cmdk-root], .bg-popover):not(#pass126-menu-a):not(#pass126-menu-b):not(#pass126-menu-c) :is([role="menuitem"], [role="option"], [data-radix-collection-item], [cmdk-item], .jbj-form-option):where(:hover, :focus, [data-highlighted]):not([aria-selected="true"]):not([data-state="checked"]) :is(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}

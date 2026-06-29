@@ -25,19 +25,19 @@ export type IconTileTone =
 
 export type IconTileSize = "sm" | "md" | "lg" | "xl";
 
+const CHAMPAGNE_TILE = { tile: "jj-icon-tile-champagne", icon: "text-[#1A1A1A]" };
 const EMERALD_TILE = { tile: "jj-icon-tile-emerald", icon: "text-white" };
 
 const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
-  // Global UI contract: every IconTile uses the approved JBJ emerald → black
-  // ombre container with pure white Lucide glyphs. Legacy tone names remain so
-  // older call sites inherit the locked style automatically instead of forking.
-  gold: EMERALD_TILE,
+  // Global UI contract: champagne/gold/light icon tiles use ink glyphs;
+  // only emerald/dark own-surfaces keep pure white glyphs.
+  gold: CHAMPAGNE_TILE,
   emerald: EMERALD_TILE,
-  red: EMERALD_TILE,
-  blue: EMERALD_TILE,
-  amber: EMERALD_TILE,
-  purple: EMERALD_TILE,
-  rose: EMERALD_TILE,
+  red: CHAMPAGNE_TILE,
+  blue: CHAMPAGNE_TILE,
+  amber: CHAMPAGNE_TILE,
+  purple: CHAMPAGNE_TILE,
+  rose: CHAMPAGNE_TILE,
   navy: EMERALD_TILE,
   ink: EMERALD_TILE,
 };
@@ -58,15 +58,15 @@ interface IconTileProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
-  ({ icon: Icon, tone = "emerald", size = "md", className, iconClassName, ...rest }, ref) => {
+  ({ icon: Icon, tone = "gold", size = "md", className, iconClassName, ...rest }, ref) => {
     const t = TONE[tone];
     const s = SIZE[size];
-    const isDark = true;
+    const isDark = tone === "emerald" || tone === "navy" || tone === "ink";
 
     // Force the glyph color with !important via inline style so it beats the
-    // long :not() descendant repaint sweeps in index.css. This is the only way
-    // to guarantee "Emerald tile = white icon" across every nested ancestor.
-    const glyphColor = "#FFFFFF";
+    // long descendant repaint sweeps in index.css. Bright tiles are ink;
+    // emerald/dark own-surfaces are white.
+    const glyphColor = isDark ? "#FFFFFF" : "#1A1A1A";
     const setGlyphStyle = React.useCallback(
       (el: SVGSVGElement | null) => {
         if (!el || !glyphColor) return;
@@ -98,7 +98,7 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         ref={ref}
         data-icon-tile=""
         data-icon-tile-tone={tone}
-        data-surface="emerald"
+        data-surface={isDark ? "emerald" : "champagne"}
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0 leading-none overflow-visible",
           s.box,
