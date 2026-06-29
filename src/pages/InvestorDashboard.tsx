@@ -626,10 +626,11 @@ export default function InvestorDashboard() {
               </div>
 
               <div className="grid lg:grid-cols-[1.4fr_1fr] gap-4">
-                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA]">
+                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA] overflow-hidden">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Bot className="w-4 h-4 text-[hsl(36,40%,70%)]" /> AI Calendar Assistant
+                    <CardTitle className="text-base flex items-center gap-2 flex-wrap">
+                      <Bot className="w-4 h-4 text-[hsl(36,40%,70%)] shrink-0" />
+                      <span className="min-w-0 break-words">AI Full Schedule &amp; Task Assistant</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -644,20 +645,49 @@ export default function InvestorDashboard() {
                     </Button>
                   </CardContent>
                 </Card>
-                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA]">
+                <Card className="border-[hsl(36,40%,70%)]/20 bg-[#F7F2EA] overflow-hidden">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Link2 className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Inventory Sharing
+                    <CardTitle className="text-base flex items-center gap-2 flex-wrap">
+                      <Link2 className="w-4 h-4 text-[hsl(36,40%,70%)] shrink-0" />
+                      <span className="min-w-0 break-words">Share inventory with JBJ</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <p className="text-sm text-muted-foreground">Approved listings generate share links automatically. Send your inventory list to your JBJ consultant when ready.</p>
-                    <Button onClick={handleShareInventory} variant="outline" className="w-full border-[hsl(36,40%,70%)]/40 text-[#064E3B]">
-                      Share inventory with JBJ consultant
-                    </Button>
+                    {hasInventory ? (
+                      <>
+                        <p className="text-sm text-muted-foreground">
+                          Approved listings generate share links automatically. Send your inventory list to your JBJ consultant when ready.
+                        </p>
+                        <Button onClick={handleShareInventory} variant="outline" className="w-full border-[hsl(36,40%,70%)]/40 text-[#064E3B]">
+                          Share inventory with JBJ consultant
+                        </Button>
+                      </>
+                    ) : (
+                      <div className="rounded-xl border border-dashed border-[#B89555]/45 bg-[#FDFBF7] p-4 space-y-3">
+                        <p className="text-sm font-semibold text-[#1A1A1A]">You haven't connected any inventory yet</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          Register your inventory first. As an investor, tell us:
+                        </p>
+                        <ul className="text-xs text-[#1A1A1A] space-y-1 pl-4 list-disc marker:text-[#B89555]">
+                          <li>Where in Dubai did you buy?</li>
+                          <li>Which units are for sale, and which are for rent?</li>
+                          <li>Your selling / rental price</li>
+                          <li>Title deed and full documents for each unit</li>
+                        </ul>
+                        <p className="text-[11px] text-muted-foreground">Once registered &amp; approved, share links generate automatically.</p>
+                        <Button
+                          onClick={() => navigate("/list-your-property")}
+                          data-emerald-action="true"
+                          className="jj-cta-emerald w-full"
+                        >
+                          <Plus className="w-4 h-4 mr-2" /> Register my inventory
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>
+
 
               {/* Recent Activity */}
               <Card className="border-[hsl(36,40%,70%)]/20">
