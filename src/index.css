@@ -19747,3 +19747,74 @@ html body :is([data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-su
   stroke-opacity: 1 !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+   PASS 110 — DARK-SURFACE WHITE FOREGROUND LOCK (GLOBAL)
+   Many sections use a near-black surface (bg-[#1A1A1A], bg-[#0F172A],
+   bg-black, bg-neutral-900/950, dark hero sections) but their child
+   components ship hard-coded `text-[#1A1A1A]` (from light templates)
+   or have inherited the Title Ink Lock, causing black-on-black text
+   and invisible SVG icons. This pass forces pure white on every
+   descendant text, link, and icon stroke/fill inside any dark own-
+   surface — at idle, hover, focus, active, and selected states.
+   Exclusions: nested champagne / soft / light cards keep their ink
+   so cards-inside-dark-sections still read correctly.
+   ============================================================ */
+html body :is(
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#0F172A]"],
+  [class*="bg-[#0B0B0B]"],
+  [class*="bg-[#111111]"],
+  [class*="bg-[#121212]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#0A0A0A]"],
+  [class~="bg-black"],
+  [class~="bg-neutral-900"],
+  [class~="bg-neutral-950"],
+  [class~="bg-zinc-900"],
+  [class~="bg-zinc-950"],
+  [class~="bg-slate-900"],
+  [class~="bg-slate-950"],
+  [class~="bg-gray-900"],
+  [class~="bg-gray-950"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-hero-dark]
+):not(#jj-dark-white-lock)
+  :is(
+    h1, h2, h3, h4, h5, h6, p, span, a, button, li, strong, em, b, i, small, label, dt, dd, th, td, figcaption, blockquote,
+    [class*="text-[#1A1A1A]"],
+    [class*="text-[#0A0A0A]"],
+    [class~="text-black"],
+    [class~="text-neutral-900"],
+    [class~="text-zinc-900"],
+    [class~="text-slate-900"],
+    [class~="text-gray-900"]
+  ):not(#jj-dark-white-lock-child):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* SVG icons inside dark surfaces — force white stroke. */
+html body :is(
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#0F172A]"],
+  [class~="bg-black"],
+  [class~="bg-neutral-900"],
+  [class~="bg-neutral-950"],
+  [class~="bg-zinc-900"],
+  [class~="bg-zinc-950"],
+  [class~="bg-slate-900"],
+  [class~="bg-slate-950"],
+  [class~="bg-gray-900"],
+  [class~="bg-gray-950"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-hero-dark]
+):not(#jj-dark-white-lock)
+  :is(svg, path, circle, rect, line, polyline, polygon):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+}
+
+
