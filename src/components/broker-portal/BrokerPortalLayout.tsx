@@ -1,4 +1,4 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
 import { Crown, ArrowLeft, Menu, X, Shield, Home, User, Briefcase, Building2 } from "lucide-react";
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
@@ -20,6 +20,7 @@ import { useUserMode } from "@/hooks/useUserMode";
  */
 export default function BrokerPortalLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isOwner } = useUserRole();
   const { user } = useAuth();
   const isMobile = useIsMobile();
@@ -39,6 +40,7 @@ export default function BrokerPortalLayout() {
   // mode. When the app owner picks broker/investor/developer in the mode
   // switcher, they want a pixel-true mirror of the real portal experience.
   const showOwnerChrome = isOwner && mode === "owner";
+  const isExplicitOwnerPreview = new URLSearchParams(location.search).get("preview") === "1";
 
 
   // If an owner lands on /broker without explicit preview flag, the
@@ -56,11 +58,11 @@ export default function BrokerPortalLayout() {
   // route them straight to /owner. They can return by flipping the mode
   // picker back to "broker" in the header.
   useEffect(() => {
-    if (mode === "owner") {
+    if (mode === "owner" && !isExplicitOwnerPreview) {
       try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
       navigate("/owner", { replace: true });
     }
-  }, [mode, navigate]);
+  }, [mode, isExplicitOwnerPreview, navigate]);
 
   const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
   const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");

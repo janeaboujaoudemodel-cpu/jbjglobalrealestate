@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 export const BROKER_PREVIEW_PARAM = "preview";
 
@@ -11,12 +12,18 @@ export const BROKER_PREVIEW_PARAM = "preview";
  */
 export default function OwnerRedirectGuard({ children }: { children: ReactNode }) {
   const { isOwner, isLoading } = useIsAppOwner();
+  const { mode } = useUserModeContext();
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
   const previewQuery = params.get(BROKER_PREVIEW_PARAM);
 
-  if (isLoading) return <>{children}</>;
+  // Broker/Investor/Developer mode must render its own portal, even for the
+  // real app owner. Redirecting owner-role users regardless of mode created the
+  // /broker-dashboard ⇄ /owner blink and left the preview blank.
+  if (mode !== "owner") return <>{children}</>;
+
+  if (isLoading) return null;
   if (!isOwner) return <>{children}</>;
 
   const isPreview = previewQuery === "1";

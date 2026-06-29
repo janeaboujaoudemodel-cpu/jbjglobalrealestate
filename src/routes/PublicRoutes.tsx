@@ -12,6 +12,7 @@ import OwnerGuard from "@/components/OwnerGuard";
 import { BrokerPortalRoutes } from "@/routes/BrokerPortalRoutes";
 import TeamRouteGate from "@/routes/TeamRouteGate";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 import GatedToolRoute from "@/components/access/GatedToolRoute";
 import { toolThemes } from "@/components/tools/toolThemes";
 
@@ -206,6 +207,14 @@ const CVBuilder = lazy(() => import("@/pages/CVBuilder"));
 
 const OwnerAwareBrokerRedirect = () => {
   const { isOwner, isLoading } = useIsAppOwner();
+  const { mode } = useUserModeContext();
+
+  // The dashboard target is driven by the selected workspace mode. Previously
+  // owner-role users in Broker mode bounced /broker-dashboard → /owner while
+  // OwnerGuard bounced them back to /broker-dashboard, causing a blank/blinking
+  // preview. Only Owner mode should resolve to the owner dashboard.
+  if (mode !== "owner") return <Navigate to="/broker/portal" replace />;
+
   if (isLoading) return null;
   if (isOwner) {
     try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
