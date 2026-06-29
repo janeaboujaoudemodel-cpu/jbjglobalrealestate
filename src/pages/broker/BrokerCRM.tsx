@@ -387,8 +387,11 @@ export default function BrokerCRM() {
       <PremiumCard>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
-            <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-1">CRM Pipeline</h1>
+            <span data-section-label="" className="jj-section-eyebrow inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.22em]">
+              <BarChart3 className="h-3.5 w-3.5" strokeWidth={2.6} /> JBJ Global Real Estate
+            </span>
+            <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-2">CRM Pipeline</h1>
+
             <p className="text-sm text-[#1A1A1A]/70 mt-1">
               Your assigned databases, leads, calls, and pipeline insights — all in one premium workspace.
             </p>
