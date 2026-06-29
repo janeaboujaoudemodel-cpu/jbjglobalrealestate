@@ -1,9 +1,7 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 
-const PREVIEW_KEY = "jbj_broker_portal_preview";
-const PREVIEW_VALUE = "explicit";
 export const BROKER_PREVIEW_PARAM = "preview";
 
 /**
@@ -18,29 +16,10 @@ export default function OwnerRedirectGuard({ children }: { children: ReactNode }
   const params = new URLSearchParams(location.search);
   const previewQuery = params.get(BROKER_PREVIEW_PARAM);
 
-  // Set the preview flag synchronously during render, not only in useEffect.
-  // Otherwise a fast click from /broker/portal?preview=1 to /broker/crm can
-  // happen before the effect writes sessionStorage and owners get bounced back.
-  if (previewQuery === "1") {
-    try { sessionStorage.setItem(PREVIEW_KEY, PREVIEW_VALUE); } catch {}
-  } else if (previewQuery === "0") {
-    try { sessionStorage.removeItem(PREVIEW_KEY); } catch {}
-  }
-
-  useEffect(() => {
-    if (previewQuery === "1") {
-      try { sessionStorage.setItem(PREVIEW_KEY, PREVIEW_VALUE); } catch {}
-    } else if (previewQuery === "0") {
-      try { sessionStorage.removeItem(PREVIEW_KEY); } catch {}
-    }
-  }, [previewQuery]);
-
   if (isLoading) return <>{children}</>;
   if (!isOwner) return <>{children}</>;
 
-  const isPreview = previewQuery === "1" || (() => {
-    try { return sessionStorage.getItem(PREVIEW_KEY) === PREVIEW_VALUE; } catch { return false; }
-  })();
+  const isPreview = previewQuery === "1";
 
   if (isPreview) return <>{children}</>;
 
