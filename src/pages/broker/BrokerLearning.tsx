@@ -290,7 +290,7 @@ export default function BrokerLearning() {
             />
           </div>
 
-          <Card className="relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border-[#B89555]/45 shadow-[0_20px_55px_-34px_rgba(26,26,26,0.55)]">
+          <Card className="relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border-[#B89555]/55 shadow-[0_28px_72px_-42px_rgba(26,26,26,0.62)]">
             <CardContent className="p-6 md:p-8">
               <div className="text-center mb-7">
                 <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/50 mb-3">
@@ -299,7 +299,7 @@ export default function BrokerLearning() {
                 <h3 className="text-[#1A1A1A] text-xl md:text-2xl font-bold">Golden Rules for Market Conversations</h3>
               </div>
               <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-7 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
+                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-7 h-px bg-gradient-to-r from-transparent via-[#B89555]/75 to-transparent" />
                 <motion.div
                   aria-hidden
                   className="hidden md:block pointer-events-none absolute top-[18px] left-[15%] h-5 w-16 rounded-full blur-[1px]"
@@ -327,8 +327,14 @@ export default function BrokerLearning() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ delay: i * 0.18, duration: 0.5, ease: "easeOut" }}
-                    className="relative text-center rounded-2xl bg-[#FDFBF7]/70 border border-[#B89555]/35 p-5 shadow-[0_12px_28px_-22px_rgba(26,26,26,0.4)]"
+                    className="relative overflow-hidden text-center rounded-2xl bg-[#FDFBF7]/82 border border-[#B89555]/45 p-5 shadow-[0_16px_36px_-24px_rgba(26,26,26,0.48)]"
                   >
+                    <motion.div
+                      aria-hidden
+                      className="absolute inset-0 pointer-events-none rounded-2xl ring-2 ring-[#F4D58D]/80"
+                      animate={{ opacity: [0, 0.88, 0], scale: [0.985, 1.012, 1] }}
+                      transition={{ duration: 1.25, repeat: Infinity, repeatDelay: 4.95, delay: i * 1.55, ease: "easeInOut" }}
+                    />
                     <div
                       data-surface="emerald"
                       data-emerald-ok="icon"
@@ -361,47 +367,50 @@ export default function BrokerLearning() {
         <section className="flex flex-col gap-6 pb-2">
           <SectionTitle eyebrow="Your Record" title="Certificates & Progress" />
 
-          {/* Top row — KPI tiles */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border border-[#B89555]/45 p-6 shadow-[0_14px_34px_-26px_rgba(26,26,26,0.45)]" data-gold-hairline>
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <IconTile icon={Award} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
-                Certificates earned
+          <div className="relative overflow-hidden rounded-3xl border border-[#B89555]/55 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 md:p-6 shadow-[0_30px_78px_-46px_rgba(26,26,26,0.62)]" data-gold-hairline>
+            <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F4D58D] to-transparent" />
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-6">
+              <div className="flex items-center gap-3">
+                <IconTile icon={Award} tone="emerald" size="lg" className="!h-12 !w-12 !rounded-2xl" />
+                <div>
+                  <div className="text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/58 font-semibold">Certificate Journey</div>
+                  <h3 className="text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">Progress, proof, and certification unlock</h3>
+                </div>
               </div>
-              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
-                {certificatesEarned}
+              <div className="rounded-2xl border border-[#B89555]/45 bg-[#FDFBF7]/70 px-4 py-3 min-w-[170px] text-center shadow-[inset_0_1px_0_rgba(255,255,255,.45)]">
+                <div className="text-3xl font-bold text-[#1A1A1A] tabular-nums">{Math.round(totalProgress)}%</div>
+                <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Training complete</div>
               </div>
-              <p className="mt-1 text-xs text-[#1A1A1A]/60">
-                Complete every lesson in a module to earn its certificate. Certificates appear here automatically and can be downloaded from your Account.
-              </p>
             </div>
-            <div className="rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border border-[#B89555]/45 p-6 shadow-[0_14px_34px_-26px_rgba(26,26,26,0.45)]" data-gold-hairline>
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <IconTile icon={GraduationCap} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
-                Training progress
-              </div>
-              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">{Math.round(totalProgress)}%</div>
-              <Progress value={totalProgress} className="h-1.5 w-full mt-3 bg-[#FDFBF7] [&>div]:bg-[#B89555]" />
-              <p className="mt-2 text-xs text-[#1A1A1A]/60">
-                Across {TRAINING.length} core modules. Resume any module above.
-              </p>
-            </div>
-            <div className="rounded-2xl bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border border-[#B89555]/45 p-6 shadow-[0_14px_34px_-26px_rgba(26,26,26,0.45)]" data-gold-hairline>
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-                <IconTile icon={BookOpen} tone="emerald" size="sm" className="!h-7 !w-7 !rounded-lg" iconClassName="!h-3.5 !w-3.5" />
-                Books in progress
-              </div>
-              <div className="mt-3 text-3xl font-bold text-[#1A1A1A] tabular-nums">
-                {Object.values(progressMap || {}).filter((p: any) => p && p.progress_pct > 0 && p.progress_pct < 100).length}
-              </div>
-              <p className="mt-1 text-xs text-[#1A1A1A]/60">
-                Pick any book back up — your last page is remembered.
-              </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              {[
+                { label: "Read", value: `${Object.values(progressMap || {}).filter((p: any) => p?.status === "in_progress" || p?.status === "completed").length} books`, icon: BookOpen, done: Object.values(progressMap || {}).some((p: any) => p?.status === "in_progress" || p?.status === "completed") },
+                { label: "Complete", value: `${certificatesEarned}/${TRAINING.length} modules`, icon: CheckCircle, done: totalProgress >= 25 },
+                { label: "Validate", value: "Owner review", icon: Shield, done: allModulesComplete },
+                { label: "Certify", value: allModulesComplete ? "Unlocked" : "Locked", icon: Award, done: allModulesComplete },
+              ].map((step, index) => (
+                <div key={step.label} className="relative overflow-hidden rounded-2xl border border-[#B89555]/35 bg-[#FDFBF7]/62 p-4 shadow-[0_12px_30px_-24px_rgba(26,26,26,.5)]">
+                  <div className="flex items-center gap-3">
+                    <IconTile icon={step.icon} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" />
+                    <div className="min-w-0">
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A]/58">Step {index + 1}</div>
+                      <div className="text-sm font-bold text-[#1A1A1A] truncate">{step.label}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-2">
+                    <span className="text-xs text-[#1A1A1A]/70">{step.value}</span>
+                    <span className={step.done ? "text-[#064E3B]" : "text-[#1A1A1A]/45"}>
+                      {step.done ? <CheckCircle className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Certificate panel — locked until all training modules complete */}
-          <div className="relative">
+          <div className="relative rounded-3xl border border-[#B89555]/55 bg-[#FDFBF7] p-3 md:p-4 shadow-[0_32px_86px_-48px_rgba(26,26,26,0.68)]" data-gold-hairline>
             {!allModulesComplete && (
               <div className="pointer-events-none absolute top-3 right-3 z-20">
                 <PremiumLockBadge
