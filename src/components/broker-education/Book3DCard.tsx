@@ -96,8 +96,9 @@ export function Book3DCard({
             <Button
               size="sm"
               data-cta="book-open"
+              data-surface={effectivelyLocked ? "emerald" : undefined}
               disabled={effectivelyLocked && !!onRequestAccess && requestAccessDisabled}
-              className="jj-cta-outline w-full"
+              className={effectivelyLocked ? "jj-pill-emerald-metallic w-full disabled:opacity-100" : "jj-cta-outline w-full"}
               onClick={(e) => {
                 e.stopPropagation();
                 if (effectivelyLocked) {
