@@ -8,11 +8,11 @@ import { isOwnerBackendEmail } from "@/config/ownerEmails";
  * NOT the visitor "mode" picker). Used to gate on-page owner editing.
  */
 export function useIsAppOwner() {
-  const { user } = useAuth();
+  const { user, isOwner: authIsOwner, ownerLoading } = useAuth();
   const ownerEmailMatched = isOwnerBackendEmail(user?.email);
   const { data, isLoading } = useQuery({
     queryKey: ["is-app-owner", user?.id],
-    enabled: !!user?.id && ownerEmailMatched,
+    enabled: !!user?.id && ownerEmailMatched && !authIsOwner,
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase
@@ -26,5 +26,8 @@ export function useIsAppOwner() {
       return !!data;
     },
   });
-  return { isOwner: ownerEmailMatched && !!data, isLoading: ownerEmailMatched && isLoading };
+  return {
+    isOwner: ownerEmailMatched && (authIsOwner || !!data),
+    isLoading: ownerEmailMatched && !authIsOwner && (ownerLoading || isLoading),
+  };
 }
