@@ -11401,11 +11401,15 @@ html body [cmdk-item] > span:first-child:empty {
    emerald icon-tile surface with the official emerald ombre and keeps the
    glyph pure white in expanded, collapsed, active, and hover states.
    ════════════════════════════════════════════════════════════════ */
+/* Scope: only intentionally-emerald tiles. For .jj-side-tile, ONLY .is-active
+   gets the emerald fill + white glyph. Inactive tiles inherit their component
+   styling (champagne wash + ink icon). This prevents the sidebar from forcing
+   every tile to emerald-white regardless of state. */
 html body :is(
   [data-emerald-icon-surface],
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald,
-  .jj-side-tile,
+  .jj-side-tile.is-active,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
@@ -11415,7 +11419,7 @@ html body :is(
   [data-emerald-icon-surface],
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald,
-  .jj-side-tile,
+  .jj-side-tile.is-active,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
@@ -11432,7 +11436,7 @@ html body :is(
   [data-emerald-icon-surface],
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald,
-  .jj-side-tile,
+  .jj-side-tile.is-active,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
@@ -11442,7 +11446,7 @@ html body :is(
   [data-emerald-icon-surface],
   [data-icon-tile][data-icon-tile-tone="emerald"],
   .jj-icon-tile-emerald,
-  .jj-side-tile,
+  .jj-side-tile.is-active,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-highlight-tile],
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-section] > div:first-child,
   [data-chrome="sidebar"] [data-sidebar-emerald] [data-sidebar-subitem] > span:first-child,
@@ -11451,6 +11455,16 @@ html body :is(
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+/* Inactive sidebar tiles: ink glyph on champagne wash (component-defined bg). */
+html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]),
+html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
   fill: none !important;
   opacity: 1 !important;
 }
@@ -17322,7 +17336,7 @@ html body #root main.jj-main-shell :is(.jj-fullbleed-band, [data-fullbleed-band]
   }
 }
 
-html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) {
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile.is-active) {
   background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
   background-color: #064E3B !important;
   border-color: rgba(52,211,153,0.55) !important;
@@ -17330,22 +17344,46 @@ html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-j
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) :is(svg, [class*="lucide"]),
-html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) :is(svg, [class*="lucide"]) * {
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile.is-active) :is(svg, [class*="lucide"]),
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile.is-active) :is(svg, [class*="lucide"]) * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
   filter: none !important;
 }
 
-html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile),
-html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile.is-active),
+html body :is([data-jj-page-nav-arrow], [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], .jbj-sidebar-collapse-control, .jj-side-tile.is-active) :is(*, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   stroke-opacity: 1 !important;
   opacity: 1 !important;
   mix-blend-mode: normal !important;
+}
+
+/* Inactive sidebar tiles: champagne wash + ink glyph (final lock, beats all). */
+html body .jj-side-tile:not(.is-active) {
+  background: rgba(231, 223, 207, 0.55) !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: rgba(184, 149, 85, 0.22) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
+}
+html body .jj-side-tile:not(.is-active):hover {
+  background: rgba(216, 204, 178, 0.70) !important;
+  background-color: rgba(216, 204, 178, 0.70) !important;
+  background-image: none !important;
+}
+html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]),
+html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+  opacity: 1 !important;
 }
 
 
