@@ -17972,7 +17972,7 @@ body :where(
   .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
   .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-emerald-metallic,
   .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
-  .jj-side-tile, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle],
+  .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle],
   [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"]
 ),
 body :where(
@@ -17983,7 +17983,7 @@ body :where(
   .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald,
   .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, .jj-emerald-metallic,
   .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
-  .jj-side-tile, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle],
+  .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle],
   [data-jj-segmented-trigger][data-state="active"], [role="tab"][data-state="active"]
 ) :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="champagne"] *, [data-surface="light"] *, [data-surface="page"] *, [data-surface="cream"] *, .surface-champagne *, .surface-light *, .surface-page *)) {
   color: #FFFFFF !important;
@@ -18001,13 +18001,13 @@ body :where(
   [data-surface="emerald"], [data-emerald-action], [data-emerald-action="true"],
   [data-cta="primary"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action,
   .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
-  [data-icon-tile-tone="emerald"], [data-emerald-icon-surface], .jj-side-tile
+  [data-icon-tile-tone="emerald"], [data-emerald-icon-surface], .jj-side-tile.is-active
 ):where(:hover,:focus-visible,:active,[data-state="open"],[data-state="active"],[data-selected="true"],[aria-selected="true"]),
 body :where(
   [data-surface="emerald"], [data-emerald-action], [data-emerald-action="true"],
   [data-cta="primary"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action,
   .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-icon-tile-emerald,
-  [data-icon-tile-tone="emerald"], [data-emerald-icon-surface], .jj-side-tile
+  [data-icon-tile-tone="emerald"], [data-emerald-icon-surface], .jj-side-tile.is-active
 ):where(:hover,:focus-visible,:active,[data-state="open"],[data-state="active"],[data-selected="true"],[aria-selected="true"]) :where(*) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
