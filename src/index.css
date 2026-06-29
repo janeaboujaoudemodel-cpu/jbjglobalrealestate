@@ -20301,3 +20301,29 @@ html body
   opacity: 1 !important;
   stroke-opacity: 1 !important;
 }
+
+/* ─── PASS 119 — Broker portal icon/action clarity lock ─────────────
+   Broker dashboard icons must match the "No activity yet" reference:
+   emerald metallic tile, pure-white Lucide outline, no faded opacity. */
+html body #root [data-backend-portal="broker"] :is(.jj-icon-tile-emerald, [data-icon-tile], [data-backend-sidebar-icon-tile], [data-surface="emerald"]) :is(svg, [class*="lucide"]),
+html body #root [data-backend-portal="broker"] :is(.jj-icon-tile-emerald, [data-icon-tile], [data-backend-sidebar-icon-tile], [data-surface="emerald"]) :is(svg, [class*="lucide"]) :is(path, circle, rect, line, polyline, polygon, ellipse, use, g),
+html body #root [data-backend-sidebar="broker"] :is(.jj-icon-tile-emerald, [data-icon-tile], [data-backend-sidebar-icon-tile], [data-surface="emerald"]) :is(svg, [class*="lucide"]),
+html body #root [data-backend-sidebar="broker"] :is(.jj-icon-tile-emerald, [data-icon-tile], [data-backend-sidebar-icon-tile], [data-surface="emerald"]) :is(svg, [class*="lucide"]) :is(path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+html body #root [data-backend-sidebar="broker"] [data-backend-sidebar-icon-tile] {
+  width: 2rem !important;
+  height: 2rem !important;
+  min-width: 2rem !important;
+  border-radius: 0.75rem !important;
+}
+html body #root [data-backend-sidebar="broker"] [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"]) {
+  width: 1rem !important;
+  height: 1rem !important;
+}

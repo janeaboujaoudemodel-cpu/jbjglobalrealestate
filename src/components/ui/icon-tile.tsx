@@ -111,7 +111,8 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
         <Icon
           ref={setGlyphStyle as unknown as React.Ref<SVGSVGElement>}
           className={cn(s.icon, t.icon, isDark && "allow-white", iconClassName)}
-          strokeWidth={2.25}
+          strokeWidth={2.55}
+          absoluteStrokeWidth
         />
       </div>
     );

@@ -15,6 +15,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import BrokerEmptyState from "@/components/broker-portal/BrokerEmptyState";
+import { IconTile } from "@/components/ui/icon-tile";
 
 type DealRow = {
   id: string;
@@ -145,25 +146,25 @@ export default function BrokerDealsPage({ variant = "deals" }: Props) {
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Kpi
-          icon={<TrendingUp className="w-4 h-4" />}
+          icon={TrendingUp}
           label="Active pipeline"
           value={formatMoney(totals.projected)}
           sub={`${active.length} deal${active.length === 1 ? "" : "s"}`}
         />
         <Kpi
-          icon={<Wallet className="w-4 h-4" />}
+          icon={Wallet}
           label="Projected commission"
           value={formatMoney(totals.projectedCommission)}
           sub={`@ ${(COMMISSION_RATE * 100).toFixed(0)}% indicative`}
         />
         <Kpi
-          icon={<CheckCircle2 className="w-4 h-4" />}
+          icon={CheckCircle2}
           label="Earned (won)"
           value={formatMoney(totals.earnedCommission)}
           sub={`${won.length} closed deal${won.length === 1 ? "" : "s"}`}
         />
         <Kpi
-          icon={<Clock className="w-4 h-4" />}
+          icon={Clock}
           label="Win rate"
           value={`${totals.winRate}%`}
           sub={`${won.length} won · ${lost.length} lost`}
@@ -197,12 +198,12 @@ export default function BrokerDealsPage({ variant = "deals" }: Props) {
 }
 
 function Kpi({
-  icon,
+  icon: Icon,
   label,
   value,
   sub,
 }: {
-  icon: React.ReactNode;
+  icon: any;
   label: string;
   value: string;
   sub?: string;
@@ -210,9 +211,7 @@ function Kpi({
   return (
     <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 p-5" data-gold-hairline>
       <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65">
-        <span className="grid place-items-center w-6 h-6 rounded-md bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A]">
-          {icon}
-        </span>
+        <IconTile icon={Icon} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
         {label}
       </div>
       <div className="mt-3 text-2xl md:text-3xl font-bold text-[#1A1A1A] tabular-nums">{value}</div>
