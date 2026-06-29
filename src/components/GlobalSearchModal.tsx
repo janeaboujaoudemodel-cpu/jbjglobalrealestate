@@ -636,10 +636,10 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <button
                             key={page.route}
                             onClick={() => handleSelect(page.route)}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all jj-hover-emerald"
+                              className="grid grid-cols-[auto_1fr] items-center gap-3 p-3 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all jj-hover-emerald text-left"
                           >
                             <IconTile icon={page.icon} tone="emerald" size="sm" />
-                            <span className="text-sm font-medium text-[#1A1A1A]">{page.label}</span>
+                            <span className="text-sm font-medium text-[#1A1A1A] truncate">{page.label}</span>
                           </button>
                         ))}
                       </div>
@@ -759,12 +759,10 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           {(hasListingAdminAccess || isOwner) && (
                             <button
                               onClick={() => handleSelect('/listing-admin')}
-                              data-surface="emerald"
-                              data-emerald-ok="button"
-                              className="jj-surface-emerald flex items-center gap-3 p-3 rounded-xl hover:shadow-md transition-all"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/25 hover:border-[#B89555]/55 hover:shadow-md transition-all jj-hover-emerald"
                             >
                               <IconTile icon={Building2} tone="emerald" size="sm" />
-                              <span className="text-sm font-semibold">Listings</span>
+                              <span className="text-sm font-semibold text-[#1A1A1A]">Listings</span>
                             </button>
                           )}
                         </div>
