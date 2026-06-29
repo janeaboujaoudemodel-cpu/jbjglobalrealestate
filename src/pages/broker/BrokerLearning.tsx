@@ -208,7 +208,7 @@ export default function BrokerLearning() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 items-stretch w-full">
             <KpiCard tone="gold" icon={BookOpen} label="Library books" value={books.length || "—"} />
-            <KpiCard tone="blue" icon={GraduationCap} label="Training modules" value={TRAINING.length} />
+            <KpiCard tone="emerald" icon={GraduationCap} label="Training modules" value={TRAINING.length} />
             <KpiCard
               tone="amber"
               icon={Award}
