@@ -47,6 +47,7 @@ import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent
 import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import ListingNotificationBell from "@/components/ListingNotificationBell";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 // Mega Menu Components
 import MegaMenuBuy from "@/components/header/MegaMenuBuy";
@@ -70,6 +71,22 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const { user, isOwner: authIsOwner, signOut } = useAuth();
   const { isOwner: roleIsOwner } = useIsAppOwner();
   const isOwner = authIsOwner || roleIsOwner;
+  const { mode } = useUserModeContext();
+  const ownerBackendActive = isOwner && mode === "owner";
+  const modeDashboardHref = ownerBackendActive
+    ? "/owner"
+    : mode === "broker"
+      ? "/broker-dashboard"
+    : mode === "developer"
+      ? "/developers-portal"
+      : "/investor-dashboard";
+  const modeDashboardLabel = ownerBackendActive
+    ? "Owner Dashboard"
+    : mode === "broker"
+      ? "Broker Dashboard"
+    : mode === "developer"
+      ? "Developer Portal"
+      : "Investor Dashboard";
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -948,8 +965,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <Heart className="w-4 h-4 text-[#1A1A1A]/70" />My Favorites
                     </Link>
-                    <Link to={isOwner ? "/owner" : "/my-dashboard"} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70" />My Dashboard
+                    <Link to={modeDashboardHref} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70" />{modeDashboardLabel}
                     </Link>
                     <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
                       <CalendarClock className="w-4 h-4 text-[#1A1A1A]/70" />AI Calendar
@@ -1131,24 +1148,30 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                                 <p className="text-sm font-medium text-[#1A1A1A] truncate">{accountDisplayName}</p>
                               </div>
                             </div>
-                            <Link to={isOwner ? "/owner" : "/my-dashboard"} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
-                              <Home className="w-4 h-4 text-[#1A1A1A]" />{isOwner ? "Owner Dashboard" : "My Dashboard"}
+                            <Link to={modeDashboardHref} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                              <Home className="w-4 h-4 text-[#1A1A1A]" />{modeDashboardLabel}
                             </Link>
                             <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                               <User className="w-4 h-4 text-[#1A1A1A]" />My Profile
                             </Link>
-                            {(isOwner || hasCRMAccess) && (
+                            {(ownerBackendActive || (!isOwner && hasCRMAccess)) && (
                               <>
-                                <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">Owner Shortcuts</p>
-                                <Link to="/owner/founder-assistant" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
-                                  <Sparkles className="w-4 h-4 text-[#1A1A1A]" />My Assistant
-                                </Link>
-                                <Link to="/employee-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
-                                  <Briefcase className="w-4 h-4 text-[#1A1A1A]" />Employee Hub
-                                </Link>
-                                <Link to="/crm" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
-                                  <Users className="w-4 h-4 text-[#1A1A1A]" />CRM Dashboard
-                                </Link>
+                                <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">{ownerBackendActive ? "Owner Shortcuts" : "Workspace Shortcuts"}</p>
+                                {ownerBackendActive && (
+                                  <>
+                                    <Link to="/owner/founder-assistant" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                                      <Sparkles className="w-4 h-4 text-[#1A1A1A]" />My Assistant
+                                    </Link>
+                                    <Link to="/employee-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                                      <Briefcase className="w-4 h-4 text-[#1A1A1A]" />Employee Hub
+                                    </Link>
+                                  </>
+                                )}
+                                {!isOwner && hasCRMAccess && (
+                                  <Link to="/crm" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                                    <Users className="w-4 h-4 text-[#1A1A1A]" />CRM Dashboard
+                                  </Link>
+                                )}
                                 {isOwner && (
                                   <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                                     <Settings className="w-4 h-4 text-[#1A1A1A]" />Owner Panel

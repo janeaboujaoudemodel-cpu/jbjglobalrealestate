@@ -44,6 +44,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { t, language, setLanguage } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode, isDeveloperMode } = useUserModeContext();
+  const ownerBackendActive = isOwner && mode === 'owner';
   const { data: alertCounts } = useUserAlerts();
 
   // Currency & unit state synced with localStorage
@@ -206,10 +207,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     if (!q) return SEARCH_SHORTCUTS.slice(0, 10);
 
     const dynamic = searchItems(q, {
-      isOwner,
-      hasCRMAccess: !!hasCRMAccess,
-      hasListingAdminAccess: !!hasListingAdminAccess,
-      isBroker: false,
+      isOwner: ownerBackendActive,
+      hasCRMAccess: ownerBackendActive || (!isOwner && !!hasCRMAccess),
+      hasListingAdminAccess: ownerBackendActive || (!isOwner && !!hasListingAdminAccess),
+      isBroker: mode === 'broker',
       isAuthenticated: !!user,
       limit: 20,
     }).map((item) => ({
@@ -227,11 +228,23 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     const merged = [...dynamic, ...staticMatches];
     const unique = merged.filter((item, idx, arr) => arr.findIndex((x) => x.path === item.path) === idx);
     return unique.slice(0, 12);
-  }, [searchQuery, isOwner, hasCRMAccess, hasListingAdminAccess, user]);
+  }, [searchQuery, ownerBackendActive, isOwner, hasCRMAccess, hasListingAdminAccess, mode, user]);
 
-  const dashboardHref = isOwner ? '/owner' : '/my-dashboard';
-  const dashboardLabel = isOwner ? t('account.ownerDashboard', 'Owner Dashboard') : t('account.myDashboard', 'My Dashboard');
-  const dashboardDescription = isOwner ? t('account.commandCenter', 'Command Center') : t('account.myDashboardDesc', 'Your personalized dashboard');
+  const dashboardHref = ownerBackendActive
+    ? '/owner'
+    : mode === 'broker'
+      ? '/broker-dashboard'
+    : mode === 'developer'
+      ? '/developers-portal'
+      : '/investor-dashboard';
+  const dashboardLabel = ownerBackendActive
+    ? t('account.ownerDashboard', 'Owner Dashboard')
+    : mode === 'broker'
+      ? 'Broker Dashboard'
+    : mode === 'developer'
+      ? 'Developer Portal'
+      : 'Investor Dashboard';
+  const dashboardDescription = ownerBackendActive ? t('account.commandCenter', 'Command Center') : t('account.myDashboardDesc', 'Your personalized dashboard');
 
   const accountLinks = [
     { href: dashboardHref, label: dashboardLabel, icon: LayoutDashboard, description: dashboardDescription, badge: 0 },
@@ -251,9 +264,11 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     // In developer mode, show Developer Center shortcut instead of owner tools
     if (isDeveloperMode) {
       return [
-        { href: '/developer-hub', label: 'Developer Center', icon: Building2, requiresOwner: false },
+        { href: '/developers-portal', label: 'Developer Portal', icon: Building2, requiresOwner: false },
       ];
     }
+
+    if (!ownerBackendActive) return [];
 
     const ownerLinks = [
       { href: '/owner', label: 'Command Center', icon: Shield, requiresOwner: true },
@@ -280,12 +295,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     const all = [...ownerLinks, ...sharedLinks];
     
     return all.filter(link => {
-      if ((link as any).requiresOwner) return isOwner;
+      if ((link as any).requiresOwner) return ownerBackendActive;
       if ((link as any).requiresListingAdmin) return hasListingAdminAccess && !isOwner;
-      if ((link as any).requiresAdmin) return isOwner || hasCRMAccess;
+      if ((link as any).requiresAdmin) return ownerBackendActive || (!isOwner && hasCRMAccess);
       return false;
     });
-  }, [isOwner, hasCRMAccess, hasListingAdminAccess, isDeveloperMode, t]);
+  }, [ownerBackendActive, isOwner, hasCRMAccess, hasListingAdminAccess, isDeveloperMode, t]);
 
   const getModeLabel = () => {
     switch (mode) {
