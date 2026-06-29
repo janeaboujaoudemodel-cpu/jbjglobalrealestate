@@ -19747,3 +19747,101 @@ html body :is([data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-su
   stroke-opacity: 1 !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+   PASS 110 — DARK-SURFACE WHITE FOREGROUND LOCK (GLOBAL)
+   Many sections use a near-black surface (bg-[#1A1A1A], bg-[#0F172A],
+   bg-black, bg-neutral-900/950, dark hero sections) but their child
+   components ship hard-coded `text-[#1A1A1A]` (from light templates)
+   or have inherited the Title Ink Lock, causing black-on-black text
+   and invisible SVG icons. This pass forces pure white on every
+   descendant text, link, and icon stroke/fill inside any dark own-
+   surface — at idle, hover, focus, active, and selected states.
+   Exclusions: nested champagne / soft / light cards keep their ink
+   so cards-inside-dark-sections still read correctly.
+   ============================================================ */
+html body :is(
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#0F172A]"],
+  [class*="bg-[#0B0B0B]"],
+  [class*="bg-[#111111]"],
+  [class*="bg-[#121212]"],
+  [class*="bg-[#0a0a0a]"],
+  [class*="bg-[#0A0A0A]"],
+  [class~="bg-black"],
+  [class~="bg-neutral-900"],
+  [class~="bg-neutral-950"],
+  [class~="bg-zinc-900"],
+  [class~="bg-zinc-950"],
+  [class~="bg-slate-900"],
+  [class~="bg-slate-950"],
+  [class~="bg-gray-900"],
+  [class~="bg-gray-950"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-hero-dark]
+):not(#jj-dark-white-lock)
+  :is(
+    *, span, p, h1, h2, h3, h4, h5, h6, strong, em, b, i, small, label, a, button, li,
+    svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]
+  ):not(#jj-dark-white-lock-child):not(:where(
+    [data-surface="champagne"] *,
+    [data-surface="champagne"],
+    [data-surface="cream"] *,
+    [data-surface="cream"],
+    [data-surface="raised"] *,
+    [data-surface="raised"],
+    [data-surface="light"] *,
+    [data-surface="light"],
+    .jj-card-champagne *,
+    .jj-card-champagne,
+    .jj-surface-champagne *,
+    .jj-surface-champagne,
+    .bg-white *,
+    .bg-white,
+    [class*="bg-[#FDFBF7]"] *,
+    [class*="bg-[#FDFBF7]"],
+    [class*="bg-[#F7F2EA]"] *,
+    [class*="bg-[#F7F2EA]"],
+    [class*="bg-[#EFE6D6]"] *,
+    [class*="bg-[#EFE6D6]"],
+    [class*="bg-champagne"] *,
+    [class*="bg-champagne"]
+  )) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is(
+  [class*="bg-[#1A1A1A]"],
+  [class*="bg-[#0F172A]"],
+  [class~="bg-black"],
+  [class~="bg-neutral-900"],
+  [class~="bg-neutral-950"],
+  [class~="bg-zinc-900"],
+  [class~="bg-zinc-950"],
+  [class~="bg-slate-900"],
+  [class~="bg-slate-950"],
+  [class~="bg-gray-900"],
+  [class~="bg-gray-950"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-hero-dark]
+):not(#jj-dark-white-lock)
+  :is(svg, path, circle, rect, line, polyline, polygon):not(:where(
+    [data-surface="champagne"] *,
+    [data-surface="cream"] *,
+    [data-surface="raised"] *,
+    [data-surface="light"] *,
+    .jj-card-champagne *,
+    .jj-surface-champagne *,
+    .bg-white *,
+    [class*="bg-[#FDFBF7]"] *,
+    [class*="bg-[#F7F2EA]"] *,
+    [class*="bg-[#EFE6D6]"] *,
+    [class*="bg-champagne"] *
+  )) {
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+}
+
