@@ -20557,3 +20557,44 @@ html body #root [data-eyebrow][data-eyebrow][data-eyebrow][data-eyebrow][data-ey
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* ============================================================
+   PASS 121 — TRIPLE-ID FINAL DARK-BG WHITE-INK LOCK
+   Uses the established triple :not(#x) hack to out-specify any
+   prior ink-forcing pass on buttons/elements whose own background
+   is genuine black/dark. Targets both the element and descendants.
+   ============================================================ */
+html body :is(
+  .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\],
+  .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\],
+  .bg-black, .bg-neutral-900, .bg-neutral-950,
+  .bg-zinc-900, .bg-zinc-950, .bg-slate-900, .bg-slate-950
+):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock),
+html body :is(
+  .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\],
+  .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\],
+  .bg-black, .bg-neutral-900, .bg-neutral-950,
+  .bg-zinc-900, .bg-zinc-950, .bg-slate-900, .bg-slate-950
+):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock) :is(span, p, strong, em, small, label, a, button, h1, h2, h3, h4, h5, h6, li, dt, dd, th, td, svg, [class*="lucide"], [data-lucide], path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
+html body :is(
+  .bg-\[\#0A0A0A\], .bg-\[\#0a0a0a\],
+  .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\],
+  .bg-black
+):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock):not(#jj-dark-bg-lock) :is(svg, [class*="lucide"]) {
+  fill: none !important;
+}
+
+/* Avatar fallback initials on emerald primary background. */
+html body span[data-radix-collection-item],
+html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-lock),
+html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-lock) > * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
