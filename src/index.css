@@ -19154,3 +19154,15 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-a
   opacity: 1 !important;
 }
 
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]) *,
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content]
+  [data-jbj-dropdown-item][data-jbj-dropdown-item]:not([data-jbj-dropdown-selected="true"]):is(:hover, :focus, [data-highlighted]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
