@@ -121,16 +121,8 @@ function Kpi({
       <span className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/55 to-transparent" />
       <div className="flex items-center justify-between">
         <IconTile icon={Icon} tone={tone} size="md" />
-        {to && (
-          <span
-            data-surface="emerald"
-            data-allow-dark-cta
-            className="allow-white inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)] group-hover:translate-x-0.5 group-hover:shadow-[0_12px_24px_-12px_rgba(6,78,59,0.95)] transition-all"
-          >
-            <ArrowRight className="h-4 w-4" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />
-          </span>
-        )}
       </div>
+
       <div className="mt-5 text-[2rem] md:text-[2.4rem] font-display font-semibold tabular-nums tracking-tight text-[#1A1A1A] leading-none">
         {loading && (value === undefined || value === null || value === "") ? (
           <span className="inline-block h-8 w-12 bg-[#EFE6D6] rounded animate-pulse" />
