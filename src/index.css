@@ -20491,3 +20491,55 @@ html body #root [data-eyebrow][data-eyebrow][data-eyebrow][data-eyebrow][data-ey
   opacity: 1 !important;
 }
 
+
+/* ============================================================
+   PASS 120 — FINAL BLACK/DARK ARBITRARY-FILL WHITE INK LOCK
+   Fixes residual hits where buttons/avatars use Tailwind arbitrary
+   black fills (bg-[#0A0A0A], bg-[#1A1A1A], bg-black, bg-primary
+   when primary is emerald) but the title ink lock forces ink.
+   Uses #root chain for higher specificity than the Title Ink Lock.
+   ============================================================ */
+#root :is(
+  .bg-\[\#0A0A0A\],
+  .bg-\[\#1A1A1A\],
+  .bg-\[\#0a0a0a\],
+  .bg-\[\#1a1a1a\],
+  .bg-black,
+  .bg-neutral-900,
+  .bg-neutral-950,
+  .bg-zinc-900,
+  .bg-zinc-950,
+  .bg-slate-900,
+  .bg-slate-950
+):not([data-no-contrast-guard]),
+#root :is(
+  .bg-\[\#0A0A0A\],
+  .bg-\[\#1A1A1A\],
+  .bg-\[\#0a0a0a\],
+  .bg-\[\#1a1a1a\],
+  .bg-black,
+  .bg-neutral-900,
+  .bg-neutral-950,
+  .bg-zinc-900,
+  .bg-zinc-950,
+  .bg-slate-900,
+  .bg-slate-950
+):not([data-no-contrast-guard]) :is(span, p, h1, h2, h3, h4, h5, h6, a, button, li, label, svg, [data-lucide]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+#root :is(
+  .bg-\[\#0A0A0A\],
+  .bg-\[\#1A1A1A\],
+  .bg-black
+) :is(svg, [data-lucide]) {
+  stroke: #FFFFFF !important;
+}
+
+/* Avatar primary (emerald) — initials must be white */
+#root .bg-primary > span,
+#root [data-radix-avatar-fallback].bg-primary,
+#root span.bg-primary {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
