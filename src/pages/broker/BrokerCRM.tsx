@@ -794,7 +794,7 @@ export default function BrokerCRM() {
                       tabIndex={0}
                       onClick={() => setHubLead(l)}
                       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setHubLead(l); } }}
-                      className="grid grid-cols-[40px_1fr_120px_120px_100px_90px] gap-3 items-center px-4 py-3 cursor-pointer hover:bg-[#EFE6D6]/40 transition-colors focus:outline-none focus:bg-[#EFE6D6]/60"
+                      className="grid grid-cols-[40px_minmax(180px,1fr)_120px_120px_100px_90px] gap-3 items-center px-4 py-3 min-w-[700px] cursor-pointer hover:bg-[#EFE6D6]/40 transition-colors focus:outline-none focus:bg-[#EFE6D6]/60"
                       title="Open lead hub (calendar, tasks, notes)"
                     >
                       <div className="h-8 w-8 rounded-full bg-[#EFE6D6] border border-[#B89555]/25 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
