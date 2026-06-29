@@ -155,7 +155,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   // perspective is Investor/Broker/Developer.
   if (user && mode !== "owner") {
     const destination =
-      mode === "broker" ? "/broker/portal" :
+      mode === "broker" ? "/broker-dashboard" :
       mode === "developer" ? "/developers-portal" :
       "/investor-dashboard";
     return <Navigate to={destination} replace />;

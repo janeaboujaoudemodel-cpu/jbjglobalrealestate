@@ -104,6 +104,11 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const ownerBackendActive = isOwner && mode === 'owner';
   const roleShortcuts = MODE_SHORTCUTS[mode] ?? MODE_SHORTCUTS.investor;
   const roleLabel = mode === 'broker' ? 'Broker' : mode === 'developer' ? 'Developer' : 'Investor';
+  const activeWorkspaceRoute =
+    ownerBackendActive ? '/owner' :
+    mode === 'broker' ? '/broker-dashboard' :
+    mode === 'developer' ? '/developers-portal' :
+    '/investor-dashboard';
 
   const debouncedQuery = useDebouncedValue(query.trim(), 300);
 
@@ -194,14 +199,38 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const searchBrokerAccess = mode === 'broker' || (!isOwner && isBroker);
 
   // Get filtered results - filter out any items without valid icons
-  const results = searchItems(query, {
+  const modeWorkspaceResults = query.trim()
+    ? roleShortcuts
+        .filter((item) => {
+          const q = query.trim().toLowerCase();
+          return item.label.toLowerCase().includes(q) || `${roleLabel} dashboard portal account`.toLowerCase().includes(q);
+        })
+        .map((item, index) => ({
+          id: `mode-${mode}-${index}-${item.label}`,
+          label: item.label,
+          route: item.route,
+          keywords: [roleLabel.toLowerCase(), 'dashboard', 'portal', 'account'],
+          description: `${roleLabel} workspace`,
+          icon: item.icon,
+          access: 'authenticated' as const,
+          category: 'page' as const,
+        }))
+    : [];
+
+  const results = [
+    ...modeWorkspaceResults,
+    ...searchItems(query, {
     isOwner: ownerBackendActive,
     hasCRMAccess: searchCRMAccess,
     hasListingAdminAccess: searchListingAdminAccess,
     isBroker: searchBrokerAccess,
     isAuthenticated: !!user,
     limit: 12,
-  }).filter(item => item.icon && typeof item.icon === 'function');
+    }).filter(item => item.icon && typeof item.icon === 'function')
+  ].filter((item, idx, arr) => {
+    if (!ownerBackendActive && (item.route.startsWith('/owner') || item.route.startsWith('/admin'))) return false;
+    return arr.findIndex((x) => x.route === item.route && x.label === item.label) === idx;
+  }).slice(0, 12);
 
   const hasDbResults = dbDevelopers.length > 0 || dbProjects.length > 0 || dbAreas.length > 0;
   const totalResults = results.length + dbDevelopers.length + dbProjects.length + dbAreas.length;
@@ -242,7 +271,10 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       saveRecentSearch(query.trim());
       setRecentSearches(getRecentSearches());
     }
-    navigate(route);
+    const safeRoute = (!ownerBackendActive && (route.startsWith('/owner') || route.startsWith('/admin')))
+      ? activeWorkspaceRoute
+      : route;
+    navigate(safeRoute);
     onClose();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

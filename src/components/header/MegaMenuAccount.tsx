@@ -204,7 +204,17 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const quickSearchResults = useMemo(() => {
     const q = searchQuery.trim();
 
-    if (!q) return SEARCH_SHORTCUTS.slice(0, 10);
+    const modeShortcut = {
+      path: dashboardHref,
+      label: dashboardLabel,
+      icon: LayoutDashboard,
+      keywords: ['dashboard', 'portal', mode],
+    };
+    const safeStaticShortcuts = [modeShortcut, ...SEARCH_SHORTCUTS]
+      .filter((s) => ownerBackendActive || !s.path.startsWith('/owner'))
+      .filter((s, idx, arr) => arr.findIndex((x) => x.path === s.path && x.label === s.label) === idx);
+
+    if (!q) return safeStaticShortcuts.slice(0, 10);
 
     const dynamic = searchItems(q, {
       isOwner: ownerBackendActive,
@@ -220,7 +230,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       keywords: item.keywords,
     }));
 
-    const staticMatches = SEARCH_SHORTCUTS.filter((s) =>
+    const staticMatches = safeStaticShortcuts.filter((s) =>
       s.label.toLowerCase().includes(q.toLowerCase()) ||
       s.keywords.some((k) => k.toLowerCase().includes(q.toLowerCase()))
     );
@@ -228,7 +238,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     const merged = [...dynamic, ...staticMatches];
     const unique = merged.filter((item, idx, arr) => arr.findIndex((x) => x.path === item.path) === idx);
     return unique.slice(0, 12);
-  }, [searchQuery, ownerBackendActive, isOwner, hasCRMAccess, hasListingAdminAccess, mode, user]);
+  }, [searchQuery, ownerBackendActive, isOwner, hasCRMAccess, hasListingAdminAccess, mode, user, dashboardHref, dashboardLabel]);
 
   const dashboardHref = ownerBackendActive
     ? '/owner'
@@ -484,11 +494,11 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               )}
               
               {/* LOCK: Do not remove owner shortcuts - Show when owner verified */}
-              {!isDataLoading && (isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
+              {!isDataLoading && (ownerBackendActive || (!isOwner && (hasCRMAccess || hasListingAdminAccess))) && adminLinks.length > 0 && (
                   <>
                     <div className="space-y-1">
                       {/* Owner Dashboard - Primary Link */}
-                      {isOwner && (
+                      {ownerBackendActive && (
                         <Link 
                           to="/owner" 
                           onClick={onClose} 
@@ -507,7 +517,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         </Link>
                       )}
                       {/* Admin Panel */}
-                      {isOwner && (
+                      {ownerBackendActive && (
                         <Link 
                           to="/admin" 
                           onClick={onClose} 
@@ -526,7 +536,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         </Link>
                       )}
                       {/* Customer Happiness Hub */}
-                      {isOwner && (
+                      {ownerBackendActive && (
                         <Link 
                           to="/admin?tab=customer-happiness" 
                           onClick={onClose} 
