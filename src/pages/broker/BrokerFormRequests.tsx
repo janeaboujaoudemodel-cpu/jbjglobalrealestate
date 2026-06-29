@@ -8,10 +8,10 @@ import { useMyBrokerFormRequests, BFRStatus } from "@/hooks/useBrokerFormRequest
 import NewFormRequestDialog from "@/components/broker-portal/NewFormRequestDialog";
 
 const STATUS_STYLE: Record<BFRStatus, { label: string; cls: string; icon: any }> = {
-  pending:   { label: "Pending review", cls: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45", icon: Clock },
-  approved:  { label: "Approved",       cls: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45", icon: CheckCircle2 },
+  pending:   { label: "Pending review", cls: "jj-surface-emerald allow-white text-white border border-white/20", icon: Clock },
+  approved:  { label: "Approved",       cls: "jj-surface-emerald allow-white text-white border border-white/20", icon: CheckCircle2 },
   rejected:  { label: "Rejected",       cls: "bg-[#FBECEC] text-[#7A1F1F] border border-[#7A1F1F]/25", icon: XCircle },
-  delivered: { label: "Delivered",      cls: "bg-[#E8F1EA] text-[#1F5132] border border-[#1F5132]/30", icon: CheckCircle2 },
+  delivered: { label: "Delivered",      cls: "jj-surface-emerald allow-white text-white border border-white/20", icon: CheckCircle2 },
 };
 
 export default function BrokerFormRequests() {
@@ -55,7 +55,7 @@ export default function BrokerFormRequests() {
           type="button"
           onClick={() => setOpen(true)}
           data-allow-dark-cta
-          className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] border border-[#B89555]/40 transition-colors self-start md:self-end"
+          className="jj-surface-emerald allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 border border-white/20 transition-all self-start md:self-end"
         >
           <Plus className="w-4 h-4" /> New request
         </button>
@@ -77,7 +77,7 @@ export default function BrokerFormRequests() {
             type="button"
             onClick={() => setOpen(true)}
             data-allow-dark-cta
-            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] border border-[#B89555]/40 transition-colors"
+            className="jj-surface-emerald allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 border border-white/20 transition-all"
           >
             <Plus className="w-4 h-4" /> Submit your first request
           </button>

@@ -15,19 +15,23 @@ export interface BrokerEvent {
   color: string | null;
   created_at: string;
   updated_at: string;
+  deleted_at?: string | null;
 }
 
-export function useBrokerPersonalCalendar(opts?: { from?: string; to?: string }) {
+export function useBrokerPersonalCalendar(opts?: { from?: string; to?: string; deleted?: boolean }) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ["broker-personal-calendar", user?.id, opts?.from, opts?.to],
+    queryKey: ["broker-personal-calendar", user?.id, opts?.from, opts?.to, !!opts?.deleted],
     enabled: !!user?.id,
     queryFn: async () => {
       let q = (supabase.from as any)("broker_personal_calendar")
         .select("*")
-        .order("starts_at", { ascending: true });
-      if (opts?.from) q = q.gte("starts_at", opts.from);
-      if (opts?.to) q = q.lte("starts_at", opts.to);
+        .eq("broker_user_id", user!.id)
+        .order(opts?.deleted ? "deleted_at" : "starts_at", { ascending: opts?.deleted ? false : true });
+      if (opts?.deleted) q = q.not("deleted_at", "is", null);
+      else q = q.is("deleted_at", null);
+      if (!opts?.deleted && opts?.from) q = q.gte("starts_at", opts.from);
+      if (!opts?.deleted && opts?.to) q = q.lte("starts_at", opts.to);
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as BrokerEvent[];
@@ -55,7 +59,31 @@ export function useUpdateBrokerEvent() {
   return useMutation({
     mutationFn: async ({ id, ...patch }: Partial<BrokerEvent> & { id: string }) => {
       const { error } = await (supabase.from as any)("broker_personal_calendar")
-        .update(patch).eq("id", id);
+        .update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["broker-personal-calendar"] }),
+  });
+}
+
+export function useSoftDeleteBrokerEvent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase.from as any)("broker_personal_calendar")
+        .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["broker-personal-calendar"] }),
+  });
+}
+
+export function useRestoreBrokerEvent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase.from as any)("broker_personal_calendar")
+        .update({ deleted_at: null, updated_at: new Date().toISOString() }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["broker-personal-calendar"] }),

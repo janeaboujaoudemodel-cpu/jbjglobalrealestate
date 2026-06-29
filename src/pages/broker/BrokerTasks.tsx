@@ -16,9 +16,9 @@ import {
 import { toast } from "sonner";
 
 const COLUMNS: { id: TaskStatus; label: string; accent: string }[] = [
-  { id: "todo",  label: "To Do",       accent: "#0A0A0A" },
-  { id: "doing", label: "In Progress", accent: "#B89555" },
-  { id: "done",  label: "Done",        accent: "#1F5132" },
+  { id: "todo",  label: "To Do",       accent: "#064E3B" },
+  { id: "doing", label: "In Progress", accent: "#064E3B" },
+  { id: "done",  label: "Done",        accent: "#064E3B" },
 ];
 
 const PRIORITY_RING: Record<string, string> = {
@@ -126,7 +126,7 @@ export default function BrokerTasks() {
             onChange={(e) => setDraft({ ...draft, title: e.target.value })}
             onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
             placeholder="New task title…"
-            className="flex-1 bg-[#FDFBF7] border border-[#B89555]/30 rounded-md px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 focus:outline-none focus:border-[#0A0A0A]"
+            className="flex-1 bg-[#FDFBF7] border border-[#B89555]/30 rounded-md px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/45 focus:outline-none focus:border-[color:var(--emerald-1)]"
           />
           <select
             value={draft.priority}
@@ -149,7 +149,7 @@ export default function BrokerTasks() {
             onClick={submit}
             disabled={!draft.title.trim() || create.isPending}
             data-allow-dark-cta
-            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] border border-[#B89555]/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="jj-surface-emerald allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             <Plus className="h-4 w-4" /> Add task
           </button>
@@ -162,9 +162,9 @@ export default function BrokerTasks() {
           <button
             type="button"
             onClick={toggleAllVisible}
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1A1A1A] hover:text-[#0A0A0A]"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1A1A1A] hover:text-[color:var(--emerald-1)]"
           >
-            {allVisibleSelected ? <CheckCircle2 className="h-4 w-4 text-[#0A0A0A]" /> : <Circle className="h-4 w-4" />}
+            {allVisibleSelected ? <CheckCircle2 className="h-4 w-4 text-[color:var(--emerald-1)]" /> : <Circle className="h-4 w-4" />}
             {allVisibleSelected ? "Deselect all" : "Select all"}
           </button>
           <span className="text-xs text-[#1A1A1A]/55">
@@ -204,12 +204,12 @@ export default function BrokerTasks() {
             const items = active.filter((t) => t.status === col.id);
             return (
               <div key={col.id} className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 min-h-[420px] flex flex-col">
-                <div className="px-4 py-3 border-b border-[#B89555]/25 flex items-center justify-between">
+                <div className="jj-surface-emerald allow-white px-4 py-3 border-b border-white/15 flex items-center justify-between rounded-t-xl">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full" style={{ background: col.accent }} />
-                    <span className="text-xs uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]">{col.label}</span>
+                    <span className="text-xs uppercase tracking-[0.18em] font-semibold text-white">{col.label}</span>
                   </div>
-                  <span className="text-[11px] text-[#1A1A1A]/60 tabular-nums">{items.length}</span>
+                  <span className="text-[11px] text-white/85 tabular-nums">{items.length}</span>
                 </div>
                 <div className="p-3 space-y-2 flex-1">
                   {items.map((t) => (
@@ -243,7 +243,7 @@ export default function BrokerTasks() {
                 <li key={t.id} className="flex items-center gap-3 px-4 py-3">
                   <button onClick={() => toggleOne(t.id)} aria-label="Select task">
                     {selected.has(t.id)
-                      ? <CheckCircle2 className="h-4 w-4 text-[#0A0A0A]" />
+                      ? <CheckCircle2 className="h-4 w-4 text-[color:var(--emerald-1)]" />
                       : <Circle className="h-4 w-4 text-[#1A1A1A]/45" />}
                   </button>
                   <div className="flex-1 min-w-0">
@@ -288,13 +288,13 @@ function TaskCard({
   return (
     <div
       className={`bg-[#FDFBF7] rounded-md p-3 border border-[#B89555]/25 border-l-4 ${PRIORITY_RING[t.priority]} ${
-        selected ? "ring-2 ring-[#0A0A0A]/40" : ""
+        selected ? "ring-2 ring-[color:var(--emerald-1)]/45" : ""
       }`}
     >
       <div className="flex items-start gap-2">
         <button onClick={onToggle} className="mt-0.5 shrink-0" aria-label="Select task">
           {selected
-            ? <CheckCircle2 className="h-4 w-4 text-[#0A0A0A]" />
+            ? <CheckCircle2 className="h-4 w-4 text-[color:var(--emerald-1)]" />
             : <Circle className="h-4 w-4 text-[#1A1A1A]/40" />}
         </button>
         <div className="flex-1 min-w-0">
@@ -316,7 +316,7 @@ function TaskCard({
         <select
           value={t.status}
           onChange={(e) => onStatus(e.target.value as TaskStatus)}
-          className="text-[11px] bg-[#FDFBF7] border border-[#B89555]/35 rounded px-2 py-1 text-[#1A1A1A] focus:outline-none focus:border-[#0A0A0A]"
+          className="text-[11px] bg-[#FDFBF7] border border-[#B89555]/35 rounded px-2 py-1 text-[#1A1A1A] focus:outline-none focus:border-[color:var(--emerald-1)]"
         >
           <option value="todo">To Do</option>
           <option value="doing">In Progress</option>
@@ -343,7 +343,7 @@ function TabBtn({
       onClick={onClick}
       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
         active
-          ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/45 shadow-sm"
+          ? "jj-surface-emerald allow-white text-white border border-white/20 shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]"
           : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
       }`}
     >

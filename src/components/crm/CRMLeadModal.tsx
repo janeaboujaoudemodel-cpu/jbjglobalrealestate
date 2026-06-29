@@ -98,7 +98,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     property_type: "",
     bedroom_requirement: "",
     buying_purpose: "",
-    source: "Website",
+    source: "manual",
     pipeline_stage: "new",
     priority: "medium",
     lead_score_band: "warm",
@@ -263,7 +263,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
-      <DialogContent className="sm:max-w-4xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] border border-[#1A1A1A]/10 p-0">
+      <DialogContent key={open ? "open" : "closed"} className="w-[calc(100vw-1rem)] sm:max-w-[960px] max-h-[calc(100dvh-1rem)] overflow-hidden bg-[#FDFBF7] border border-[#B89555]/35 p-0 shadow-[0_28px_80px_-42px_rgba(26,26,26,0.75)]">
         <DialogHeader className="px-6 pt-5 pb-3 border-b border-[#B89555]/20">
           <DialogTitle className="text-[#1A1A1A] text-lg">Add Lead / Client</DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/70">
@@ -271,9 +271,10 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={submitWithValidation} className="space-y-4 px-6 pb-4 pt-4">
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
-            <TabsList className="bg-[#F7F2EA] p-1 rounded-lg">
+        <form onSubmit={submitWithValidation} className="flex max-h-[calc(100dvh-8rem)] min-h-0 flex-col">
+          <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-6 pb-4 pt-4 jj-scrollbar-gold">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)} className="min-w-0">
+            <TabsList className="bg-[#F7F2EA] border border-[#B89555]/25 p-1 rounded-xl h-auto flex flex-wrap justify-start gap-1">
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="requirements">Requirements</TabsTrigger>
               <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
@@ -284,7 +285,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
             {/* CONTACT */}
             <TabsContent value="contact" className="space-y-3 pt-3">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <Label>Lead Name *</Label>
                   <Input
@@ -305,7 +306,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
                   <Label>Phone</Label>
                   <PhoneInputWithCountry
@@ -333,7 +334,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
                   <Label>Preferred Language</Label>
                   <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
@@ -453,7 +454,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
             {/* REQUIREMENTS */}
             <TabsContent value="requirements" className="space-y-3 pt-3">
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
                   <Label>Budget Min</Label>
                   <Input
@@ -483,7 +484,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <Label>Preferred Location</Label>
                   <Input
@@ -502,7 +503,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
                   <Label>Property Type</Label>
                   <Select value={formData.property_type} onValueChange={(v) => setFormData({ ...formData, property_type: v })}>
@@ -535,7 +536,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
             {/* PIPELINE */}
             <TabsContent value="pipeline" className="space-y-3 pt-3">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <Label>Lead Source</Label>
                   <Select value={formData.source} onValueChange={(v) => setFormData({ ...formData, source: v })}>
@@ -562,7 +563,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                       {(['positive','neutral','negative'] as const).map((cat) => {
                         const items = PIPELINE_STATUSES.filter(s => s.category === cat);
                         if (!items.length) return null;
-                        const dot = cat === 'positive' ? 'jj-surface-emerald' : cat === 'negative' ? 'bg-red-500' : 'bg-blue-500';
+                        const dot = cat === 'negative' ? 'bg-red-500' : 'jj-surface-emerald';
                         const label = cat === 'positive' ? 'Positive' : cat === 'negative' ? 'Negative' : 'Neutral';
                         return (
                           <div key={cat}>
@@ -598,7 +599,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               />
 
               {/* Tier (Standard / VIP) and Pool (Pool / Non-pool) — independent */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label className="flex items-center gap-1.5 mb-0">
                     <Crown className="h-3.5 w-3.5 text-amber-500" />
@@ -614,8 +615,8 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                           "flex-1 px-3 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors",
                           formData.tier === t
                             ? t === 'vip'
-                              ? "bg-amber-400/25 text-amber-900 border-r border-[#B89555]/40"
-                              : "bg-[#EFE6D6] text-[#1A1A1A] border-r border-[#B89555]/40"
+                              ? "jj-surface-emerald allow-white text-white border-r border-white/20"
+                              : "jj-surface-emerald allow-white text-white border-r border-white/20"
                             : "text-[#1A1A1A]/60 hover:bg-[#F7F2EA] border-r border-[#1A1A1A]/10 last:border-r-0"
                         )}
                       >
@@ -626,7 +627,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </div>
                 <div className="space-y-1.5">
                   <Label className="flex items-center gap-1.5 mb-0">
-                    <Users2 className="h-3.5 w-3.5 text-blue-500" />
+                    <Users2 className="h-3.5 w-3.5 text-[color:var(--emerald-1)]" />
                     Pool
                   </Label>
                   <div className="inline-flex w-full rounded-lg border border-[#1A1A1A]/15 overflow-hidden bg-[#FDFBF7]">
@@ -639,8 +640,8 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                           "flex-1 px-3 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors",
                           formData.pool === p
                             ? p === 'pool'
-                              ? "bg-blue-500/15 text-blue-800 border-r border-[#B89555]/40"
-                              : "bg-[#EFE6D6] text-[#1A1A1A] border-r border-[#B89555]/40"
+                              ? "jj-surface-emerald allow-white text-white border-r border-white/20"
+                              : "jj-surface-emerald allow-white text-white border-r border-white/20"
                             : "text-[#1A1A1A]/60 hover:bg-[#F7F2EA] border-r border-[#1A1A1A]/10 last:border-r-0"
                         )}
                       >
@@ -652,7 +653,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               </div>
 
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
                   <Label>Priority</Label>
                   <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
@@ -737,7 +738,8 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
             </TabsContent>
           </Tabs>
 
-          <div className="sticky bottom-0 -mx-6 px-6 pt-3 pb-3 mt-2 bg-[#FDFBF7]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FDFBF7]/85 border-t border-[#B89555]/20 flex gap-3">
+          </div>
+          <div className="shrink-0 px-4 sm:px-6 pt-3 pb-3 bg-[#FDFBF7]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FDFBF7]/85 border-t border-[#B89555]/20 flex flex-col sm:flex-row gap-3">
             <Button type="button" variant="outline" onClick={handleClose} className="flex-1">
               Cancel
             </Button>

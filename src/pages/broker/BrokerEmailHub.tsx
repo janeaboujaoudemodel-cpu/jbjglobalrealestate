@@ -49,24 +49,24 @@ export default function BrokerEmailHub() {
           <div className="flex flex-wrap gap-2">
             <Button
               asChild
-              variant="outline"
-              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+              variant="primary"
+              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Link to={setupPath}><KeyRound className="h-4 w-4 mr-1.5" /> Email Setup</Link>
             </Button>
             <Button
               onClick={() => tryConnect("gmail")}
               disabled={connect.isPending}
-              className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white"
-              data-allow-dark-cta
+              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
+              data-surface="emerald"
             >
               <Plug className="h-4 w-4 mr-1.5" /> Connect Gmail
             </Button>
             <Button
               onClick={() => tryConnect("outlook")}
               disabled={connect.isPending}
-              variant="outline"
-              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+              variant="primary"
+              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Plug className="h-4 w-4 mr-1.5" /> Connect Outlook
             </Button>
@@ -105,7 +105,7 @@ export default function BrokerEmailHub() {
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`text-[11px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-md border ${active ? "bg-[#EFE6D6] border-[#B89555]/55 text-[#1A1A1A]" : "bg-white border-[#B89555]/25 text-[#1A1A1A]/65 hover:text-[#1A1A1A]"}`}
+              className={`text-[11px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-md border ${active ? "jj-surface-emerald allow-white border-white/20 text-white shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "bg-white border-[#B89555]/25 text-[#1A1A1A]/65 hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"}`}
             >
               {c.replace(/_/g, " ")}
             </button>
@@ -157,7 +157,7 @@ export default function BrokerEmailHub() {
                     {!e.ai_category && (
                       <button
                         onClick={(ev) => { ev.stopPropagation(); classify.mutate(e.id); }}
-                        className="mt-2 inline-flex items-center gap-1.5 text-[11px] px-2 py-1 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                        className="jj-surface-emerald allow-white mt-2 inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-md border border-white/20 text-white hover:-translate-y-0.5 hover:brightness-110 transition-all"
                       >
                         <Sparkles className="h-3 w-3" /> Categorise with AI
                       </button>

@@ -496,15 +496,15 @@ export default function BrokerCRM() {
                 <span className="text-[11px] text-[#1A1A1A]/60">Click any card to open the lead</span>
               </div>
               <div className="-mx-2 px-2 overflow-x-auto pb-2 jj-kanban-scroll">
-                <div className="flex gap-3 min-w-max xl:grid xl:grid-cols-6 xl:min-w-0">
+                <div className="grid grid-cols-[repeat(6,minmax(190px,1fr))] gap-3 min-w-[1180px] xl:min-w-0">
                 {stageCounts.map((s) => (
                   <div
                     key={s.key}
-                    className="w-[240px] xl:w-auto shrink-0 rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 flex flex-col min-h-[220px]"
+                    className="min-w-0 rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 flex flex-col min-h-[220px]"
                   >
                     <div className="flex items-center justify-between px-3 py-2.5 border-b border-[color:var(--emerald-1)]/15">
                       <div className="text-[10px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A] truncate">{s.label}</div>
-                      <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-[color:var(--emerald-1)] text-white text-[10px] font-bold tabular-nums shrink-0">
+                      <span className="allow-white inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-[color:var(--emerald-1)] text-white text-[10px] font-bold tabular-nums shrink-0">
                         {s.count}
                       </span>
                     </div>
@@ -514,7 +514,7 @@ export default function BrokerCRM() {
                           key={l.id}
                           type="button"
                           onClick={() => setHubLead(l)}
-                          className="jj-hover-emerald w-full text-left rounded-lg bg-white border border-[#B89555]/25 px-3 py-2.5 focus:outline-none transition-shadow hover:shadow-[0_8px_20px_-14px_rgba(6,78,59,0.35)]"
+                          className="jj-hover-emerald w-full max-w-full min-w-0 text-left rounded-lg bg-white border border-[#B89555]/25 px-3 py-2.5 focus:outline-none transition-shadow hover:shadow-[0_8px_20px_-14px_rgba(6,78,59,0.35)] overflow-hidden"
                         >
                           <div className="flex items-center gap-2">
                             <div className="h-7 w-7 shrink-0 rounded-full bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-semibold text-[#1A1A1A]">
@@ -592,8 +592,8 @@ export default function BrokerCRM() {
                   </p>
                   <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                     <Link
-                      to="/broker/leads"
-                      className="jj-cta-primary jj-cta-champagne inline-flex items-center gap-2 h-10 px-5 rounded-md text-sm font-semibold shadow-sm transition-colors"
+                      to="/broker/leads?action=new"
+                      className="jj-surface-emerald allow-white inline-flex items-center gap-2 h-10 px-5 rounded-md text-sm font-semibold shadow-sm hover:-translate-y-0.5 hover:brightness-110 transition-all"
                       data-surface="emerald"
                       data-cta="primary"
                     >
@@ -758,8 +758,8 @@ export default function BrokerCRM() {
                   {!search && (
                     <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                       <Link
-                        to="/broker/leads"
-                        className="jj-cta-primary jj-cta-champagne inline-flex items-center gap-2 h-10 px-5 rounded-md text-sm font-semibold shadow-sm transition-colors"
+                        to="/broker/leads?action=new"
+                        className="jj-surface-emerald allow-white inline-flex items-center gap-2 h-10 px-5 rounded-md text-sm font-semibold shadow-sm hover:-translate-y-0.5 hover:brightness-110 transition-all"
                         data-surface="emerald"
                         data-cta="primary"
                       >

@@ -89,7 +89,7 @@ export default function RequestDatabaseDialog({ open, onOpenChange }: Props) {
           <Button
             onClick={submit}
             disabled={submitting || !title.trim()}
-            className="bg-[#0A0A0A] text-white hover:bg-[#1F1F1F]"
+            className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
             data-allow-dark-cta
           >
             {submitting ? "Sending…" : "Send request"}

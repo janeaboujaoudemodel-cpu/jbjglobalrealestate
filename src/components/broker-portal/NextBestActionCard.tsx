@@ -96,7 +96,7 @@ export default function NextBestActionCard() {
           data-no-contrast-guard
           data-allow-dark-cta
           data-surface="emerald"
-          className="allow-white shrink-0 hidden md:inline-flex items-center gap-1.5 text-[11.5px] font-semibold leading-none whitespace-nowrap px-3 py-2 rounded-md border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-12px_rgba(6,78,59,0.95)] transition-all"
+          className="allow-white shrink-0 hidden md:inline-flex min-h-9 items-center justify-center gap-1.5 text-[12px] font-semibold leading-none whitespace-nowrap px-3.5 py-2 rounded-lg border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-12px_rgba(6,78,59,0.95)] transition-all"
           style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
         >
           <span style={{ color: "#FFFFFF" }}>Full pipeline</span>
@@ -150,7 +150,7 @@ export default function NextBestActionCard() {
                   data-no-contrast-guard
                   data-allow-dark-cta
                   data-surface="emerald"
-                  className="allow-white inline-flex items-center gap-1.5 text-[11.5px] font-semibold px-3 py-1.5 rounded-md border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-12px_rgba(6,78,59,0.95),0_0_16px_rgba(52,211,153,0.22)] transition-all"
+                  className="allow-white inline-flex min-h-9 items-center justify-center gap-1.5 text-[12px] font-semibold px-3.5 py-2 rounded-lg border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-12px_rgba(6,78,59,0.95),0_0_16px_rgba(52,211,153,0.22)] transition-all"
                   style={{ backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" }}
                 >
                   <Icon className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }} />

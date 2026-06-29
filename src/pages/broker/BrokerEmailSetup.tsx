@@ -26,7 +26,7 @@ export default function BrokerEmailSetup() {
   };
 
   return (
-    <div className="space-y-5 p-4 md:p-6">
+    <div className="space-y-5 p-4 md:p-6 min-h-0 overflow-y-auto jj-scrollbar-gold">
       <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6">
         <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
         <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-1 flex items-center gap-2">
@@ -52,7 +52,7 @@ export default function BrokerEmailSetup() {
       </div>
 
       <Tabs defaultValue="gmail" className="space-y-4">
-        <TabsList className="bg-[#F7F2EA] border border-[#B89555]/25">
+        <TabsList className="bg-[#F7F2EA] border border-[#B89555]/25 p-1 rounded-xl">
           <TabsTrigger value="gmail">Gmail</TabsTrigger>
           <TabsTrigger value="outlook">Outlook</TabsTrigger>
         </TabsList>
@@ -166,7 +166,7 @@ function ProviderPanel({
           <Input id={`${provider}-label`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="My work Google project" className="bg-white" />
         </div>
         <div className="flex gap-2 pt-1">
-          <Button type="submit" disabled={saving} className="bg-[#0A0A0A] hover:bg-[#1F1F1F] text-white" data-allow-dark-cta>
+          <Button type="submit" disabled={saving} className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110" data-surface="emerald">
             {existing ? "Update" : "Save credentials"}
           </Button>
           {existing && (

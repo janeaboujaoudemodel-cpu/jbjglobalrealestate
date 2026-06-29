@@ -287,9 +287,9 @@ export default function BrokerDashboardLanding() {
                       <ChevronDown className="h-5 w-5 md:h-6 md:w-6 text-[#1A1A1A]/45 group-hover:text-[#1A1A1A] transition-transform group-data-[state=open]:rotate-180 shrink-0" strokeWidth={2.2} />
                     </h1>
                     <div className="mt-2 flex items-center gap-3" aria-hidden="true">
-                      <span className="block h-px w-10 bg-gradient-to-r from-[#B89555]/80 to-transparent" />
-                      <span className="block w-1 h-1 rotate-45 bg-[#B89555]/70" />
-                      <span className="block h-px w-3 bg-[#B89555]/40" />
+                      <span className="block h-px w-10 bg-gradient-to-r from-[color:var(--emerald-1)]/75 to-transparent" />
+                      <span className="block w-1 h-1 rotate-45 bg-[color:var(--emerald-1)]/75" />
+                      <span className="block h-px w-3 bg-[color:var(--emerald-1)]/35" />
                     </div>
                     <div className="flex items-center gap-2 mt-3 flex-wrap">
                       {profile?.title && (
@@ -389,7 +389,7 @@ export default function BrokerDashboardLanding() {
           <Kpi icon={Handshake}       tone="emerald" label="Active deals"         value={activeDeals}    to="/broker/deals"        loading={leads.isLoading} />
           <Kpi icon={Calendar}        tone="emerald" label="Meetings today"       value={meetingsToday}  to="/broker/calendar"     loading={cal.isLoading} />
           <Kpi icon={Sparkles}        tone="emerald" label="New assignments"      value={newAssignments} to="/broker/leads"        loading={leads.isLoading} />
-          <Kpi icon={TrendingUp}      tone="emerald" label="Commission pipeline"  value="—"              to="/broker/deals"        />
+          <Kpi icon={TrendingUp}      tone="emerald" label="Commission pipeline"  value="0"              to="/broker/deals"        />
           <Kpi icon={ListTodo}        tone="emerald" label="Pending follow-ups"   value={followUps}      to="/broker/tasks"        loading={tasks.isLoading} />
 
         </div>

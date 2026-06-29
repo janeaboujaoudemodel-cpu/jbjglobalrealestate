@@ -20698,3 +20698,43 @@ html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-l
   accent-color: var(--emerald-1, #064E3B) !important;
   color-scheme: light;
 }
+
+
+/* ==============================================================
+   PASS 124 — BROKER PORTAL EMERALD SAFETY NET
+   Broker back-office emerald/blue replacement, white-on-emerald
+   contrast, calendar/date controls, and active-tab lock.
+   ============================================================== */
+:where(html) body [data-surface="emerald"],
+:where(html) body .jj-surface-emerald,
+:where(html) body .jj-pill-emerald-metallic,
+:where(html) body .jj-cta-emerald,
+:where(html) body .jj-cta-primary {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+:where(html) body [data-surface="emerald"] :is(svg,path,span,p,div,small,strong),
+:where(html) body .jj-surface-emerald :is(svg,path,span,p,div,small,strong),
+:where(html) body .jj-pill-emerald-metallic :is(svg,path,span,p,div,small,strong),
+:where(html) body .jj-cta-primary :is(svg,path,span,p,div,small,strong) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+:where(html) body input[type="date"]:focus,
+:where(html) body input[type="datetime-local"]:focus,
+:where(html) body input[type="month"]:focus,
+:where(html) body input[type="time"]:focus,
+:where(html) body select:focus,
+:where(html) body textarea:focus,
+:where(html) body input:focus {
+  border-color: var(--emerald-1, #064E3B) !important;
+  --tw-ring-color: rgba(6,78,59,.22) !important;
+  outline-color: var(--emerald-1, #064E3B) !important;
+}
+:where(html) body .rdp-button:hover:not([aria-selected="true"]),
+:where(html) body .rdp-nav_button:hover,
+:where(html) body [class*="day_"]:hover:not([aria-selected="true"]) {
+  background-color: rgba(6, 78, 59, 0.10) !important;
+  color: var(--emerald-1, #064E3B) !important;
+}
