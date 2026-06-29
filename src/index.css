@@ -16620,9 +16620,19 @@ html body [data-radix-popper-content-wrapper] [role="option"] *,
 html body [data-radix-popper-content-wrapper] [role="menuitem"] * {
   color: inherit;
 }
-html body [data-radix-popper-content-wrapper] [role="option"][data-disabled],
-html body [data-radix-popper-content-wrapper] [role="menuitem"][data-disabled] {
+/* Faded state must only apply when truly disabled — cmdk emits data-disabled="false"
+   on enabled items, and `[data-disabled]` matches that too. Restrict to "true". */
+html body [data-radix-popper-content-wrapper] [role="option"][data-disabled="true"],
+html body [data-radix-popper-content-wrapper] [role="menuitem"][data-disabled="true"],
+html body [data-radix-popper-content-wrapper] [cmdk-item][data-disabled="true"],
+html body [cmdk-list] [cmdk-item][data-disabled="true"] {
   opacity: 0.55 !important;
+}
+/* Belt + braces: any cmdk-item that is enabled must render at full opacity. */
+html body [cmdk-item][data-disabled="false"],
+html body [data-radix-popper-content-wrapper] [role="option"][data-disabled="false"],
+html body [data-radix-popper-content-wrapper] [role="menuitem"][data-disabled="false"] {
+  opacity: 1 !important;
 }
 
 /* Notification / count badges — champagne or gold fill = ink text */
@@ -20737,4 +20747,29 @@ html body .bg-primary:not(#jj-avatar-lock):not(#jj-avatar-lock):not(#jj-avatar-l
 :where(html) body [class*="day_"]:hover:not([aria-selected="true"]) {
   background-color: rgba(6, 78, 59, 0.10) !important;
   color: var(--emerald-1, #064E3B) !important;
+}
+
+/* ========================================================================
+   PASS 125 — Champagne card ink rescue (careers + global)
+   Some emerald page wrappers carry `[data-emerald-band]`, `[data-emerald-icon-surface]`,
+   etc., and their descendant-text rules win source-order against the champagne
+   surface rule, repainting nested ink cards (e.g. PremiumJobCard, Compare cards,
+   any `[data-surface="champagne"]` block sitting inside an emerald section)
+   to white-on-cream. Restore ink with strictly higher specificity, scoped to
+   the cards themselves so emerald CTAs/badges inside them stay white.
+   ====================================================================== */
+html body #root [data-careers-job-card][data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,em,small,label,b,li,time,figcaption,dt,dd):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.allow-white *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-careers-apply-cta]):not([data-careers-apply-cta] *):not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *):not([data-on-dark]):not([data-on-dark] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-careers-job-card][data-surface="champagne"] :is(svg,[class*="lucide"]):not(.allow-white):not(.allow-white *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([data-careers-apply-cta]):not([data-careers-apply-cta] *):not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* Global champagne-on-emerald rescue — any card explicitly tagged
+   data-surface="champagne" must render ink regardless of ancestor emerald. */
+html body #root [data-surface="champagne"]:not([data-careers-job-card]) :is(h1,h2,h3,h4,h5,h6,p,a,li,label,strong,em,small,time,dt,dd,b,figcaption):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not(.allow-white):not(.allow-white *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not(.jj-cta-emerald):not(.jj-cta-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
