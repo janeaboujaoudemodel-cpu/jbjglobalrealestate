@@ -52,6 +52,16 @@ export default function BrokerPortalLayout() {
     return () => window.removeEventListener("beforeunload", handler);
   }, []);
 
+  // When the user is in Owner mode they must never see the broker portal —
+  // route them straight to /owner. They can return by flipping the mode
+  // picker back to "broker" in the header.
+  useEffect(() => {
+    if (mode === "owner") {
+      try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
+      navigate("/owner", { replace: true });
+    }
+  }, [mode, navigate]);
+
   const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
   const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");
 
