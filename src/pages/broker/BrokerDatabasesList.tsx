@@ -47,7 +47,7 @@ export default function BrokerDatabasesList() {
           <button
             type="button"
             onClick={() => setUploadOpen(true)}
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] transition-colors"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-md jj-surface-emerald allow-white text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-colors"
             data-allow-dark-cta
           >
             <Upload className="h-4 w-4" /> Import Database
@@ -75,7 +75,7 @@ export default function BrokerDatabasesList() {
             <button
               type="button"
               onClick={() => setUploadOpen(true)}
-              className="inline-flex items-center gap-2 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-md jj-surface-emerald allow-white text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-colors"
               data-allow-dark-cta
             >
               <Upload className="h-4 w-4" /> Import Database

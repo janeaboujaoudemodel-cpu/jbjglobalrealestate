@@ -360,7 +360,7 @@ export default function NewFormRequestDialog({ open, onOpenChange }: Props) {
             onClick={submit}
             disabled={create.isPending || !formType}
             data-allow-dark-cta
-            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#1F1F1F] disabled:opacity-50 disabled:cursor-not-allowed border border-[#B89555]/40 transition-colors"
+            className="allow-white inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-md jj-surface-emerald allow-white text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed border border-[#B89555]/40 transition-colors"
           >
             {create.isPending ? "Sending…" : "Send request"}
           </button>
