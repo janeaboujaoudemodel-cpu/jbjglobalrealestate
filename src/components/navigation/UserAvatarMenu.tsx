@@ -195,7 +195,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{displayName}</div>
             <div className="text-[11px] text-[#1A1A1A]/55 truncate">JBJ account</div>
             {roleLabel && (
-              <span className="inline-flex items-center mt-1 px-1.5 py-[1px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] text-[#1A1A1A] bg-[#EFE6D6] border border-[#B89555]/40">
+              <span
+                data-account-role-label
+                className="inline-flex items-center mt-1 px-2 py-[2px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] text-white border border-[#B89555]/40"
+                style={{
+                  background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%))",
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  boxShadow: "0 6px 14px -10px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18)",
+                }}
+              >
                 {roleLabel}
               </span>
             )}
