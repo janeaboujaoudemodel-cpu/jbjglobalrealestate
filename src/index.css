@@ -20924,3 +20924,79 @@ html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-sur
   stroke: currentColor !important;
   stroke-opacity: 1 !important;
 }
+
+/* PASS 130 — TERMINAL OWN-SURFACE ARBITRATION.
+   The final bright-surface lock above intentionally repairs champagne/gold,
+   but it must never repaint emerald own-surfaces black. This block restores
+   the core rule with higher specificity: emerald/dark own background = pure
+   white foreground/icon. The only exception immediately below is a nested
+   champagne badge/pill that explicitly owns a bright surface. */
+html body #root :is(
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-studio-surface="emerald"], [data-emerald-action], [data-emerald-action="true"],
+  [data-emerald-filled], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"],
+  [data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald, .jj-emerald-solid,
+  .jj-emerald-fill, .jj-emerald-metallic, .jj-emerald-action, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-cta-emerald, .jj-cta-primary,
+  .jj-cta-dark, .jj-navy-cta, .jj-icon-tile-emerald, .jj-pill-active,
+  [class~="bg-emerald-950"], [class~="bg-emerald-900"], [class~="bg-emerald-800"],
+  [class~="bg-emerald-700"], [class~="bg-emerald-600"], [class~="bg-green-950"],
+  [class~="bg-green-900"], [class~="bg-green-800"], [class~="bg-green-700"],
+  [class~="bg-green-600"], [class*="bg-[#064E3B]"], [class*="bg-[#042c1c]"],
+  [class*="bg-[#042C1C]"], [class*="bg-[#0A6B53]"], [class*="bg-[#047857]"],
+  [class*="bg-[#065F46]"], [class*="bg-[#022C22]"]
+):not(#pass130-emerald-a):not(#pass130-emerald-b):not(#pass130-emerald-c):not(#pass130-emerald-d):not(#pass130-emerald-e):not(#pass130-emerald-f):not(#pass130-emerald-g):not(#pass130-emerald-h):not(#pass130-emerald-i):not(#pass130-emerald-j):not(#pass130-emerald-k):not(#pass130-emerald-l):not(#pass130-emerald-m):not(#pass130-emerald-n):not([data-allow-ink]),
+html body #root :is(
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"],
+  [data-studio-surface="emerald"], [data-emerald-action], [data-emerald-action="true"],
+  [data-emerald-filled], [data-emerald-icon-surface], [data-icon-tile-tone="emerald"],
+  [data-cta="primary"], [data-cta="dark"], [data-jbj-button][data-surface="emerald"],
+  .surface-dark, .surface-ink, .surface-navy, .jj-surface-emerald, .jj-emerald-solid,
+  .jj-emerald-fill, .jj-emerald-metallic, .jj-emerald-action, .jj-pill-emerald,
+  .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-cta-emerald, .jj-cta-primary,
+  .jj-cta-dark, .jj-navy-cta, .jj-icon-tile-emerald, .jj-pill-active,
+  [class~="bg-emerald-950"], [class~="bg-emerald-900"], [class~="bg-emerald-800"],
+  [class~="bg-emerald-700"], [class~="bg-emerald-600"], [class~="bg-green-950"],
+  [class~="bg-green-900"], [class~="bg-green-800"], [class~="bg-green-700"],
+  [class~="bg-green-600"], [class*="bg-[#064E3B]"], [class*="bg-[#042c1c]"],
+  [class*="bg-[#042C1C]"], [class*="bg-[#0A6B53]"], [class*="bg-[#047857]"],
+  [class*="bg-[#065F46]"], [class*="bg-[#022C22]"]
+):not(#pass130-emerald-a):not(#pass130-emerald-b):not(#pass130-emerald-c):not(#pass130-emerald-d):not(#pass130-emerald-e):not(#pass130-emerald-f):not(#pass130-emerald-g):not(#pass130-emerald-h):not(#pass130-emerald-i):not(#pass130-emerald-j):not(#pass130-emerald-k):not(#pass130-emerald-l):not(#pass130-emerald-m):not(#pass130-emerald-n):not([data-allow-ink])
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="cream"], [data-surface="raised"], [data-mode-active-pill], [data-mode-active-pill] *)) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+}
+
+html body #root :is(
+  [data-surface="emerald"], [data-emerald-action], [data-emerald-action="true"],
+  [data-emerald-icon-surface], [data-icon-tile-tone="emerald"], .jj-icon-tile-emerald,
+  .jj-emerald-metallic, .jj-surface-emerald, .jj-cta-emerald, .jj-cta-primary
+):not(#pass130-svg-a):not(#pass130-svg-b):not(#pass130-svg-c):not(#pass130-svg-d):not(#pass130-svg-e):not(#pass130-svg-f):not(#pass130-svg-g):not(#pass130-svg-h):not(#pass130-svg-i):not(#pass130-svg-j):not(#pass130-svg-k):not(#pass130-svg-l):not(#pass130-svg-m):not(#pass130-svg-n)
+  :is(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="champagne"] *, [data-mode-active-pill] *)) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+}
+
+/* Nested bright badge/pill inside an emerald row still follows the bright rule:
+   champagne/gold own background = ink text/icon, never white. */
+html body #root [data-mode-active-pill][data-surface="champagne"]:not(#pass130-mode-pill-a):not(#pass130-mode-pill-b):not(#pass130-mode-pill-c):not(#pass130-mode-pill-d):not(#pass130-mode-pill-e):not(#pass130-mode-pill-f):not(#pass130-mode-pill-g):not(#pass130-mode-pill-h):not(#pass130-mode-pill-i):not(#pass130-mode-pill-j):not(#pass130-mode-pill-k):not(#pass130-mode-pill-l):not(#pass130-mode-pill-m):not(#pass130-mode-pill-n),
+html body #root [data-mode-active-pill][data-surface="champagne"]:not(#pass130-mode-pill-a):not(#pass130-mode-pill-b):not(#pass130-mode-pill-c):not(#pass130-mode-pill-d):not(#pass130-mode-pill-e):not(#pass130-mode-pill-f):not(#pass130-mode-pill-g):not(#pass130-mode-pill-h):not(#pass130-mode-pill-i):not(#pass130-mode-pill-j):not(#pass130-mode-pill-k):not(#pass130-mode-pill-l):not(#pass130-mode-pill-m):not(#pass130-mode-pill-n)
+  :is(span,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
