@@ -475,7 +475,7 @@ export default function BrokerCRM() {
                   key={s.key}
                   type="button"
                   onClick={() => { setSearch(s.label.toLowerCase()); setTab("leads"); }}
-                  className="jj-hover-emerald group text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-3 py-3 min-w-0 max-w-full overflow-hidden focus:outline-none"
+                  className="jj-hover-emerald group flex flex-col items-start text-left rounded-xl bg-[#FDFBF7] border border-[color:var(--emerald-1)]/22 px-3 py-3 min-w-0 max-w-full overflow-hidden focus:outline-none"
                 >
                   <IconTile icon={BarChart3} tone="emerald" size="sm" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-4 !w-4" />
                   <div className="text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/65 mt-3 font-semibold leading-tight break-words">{s.label}</div>
