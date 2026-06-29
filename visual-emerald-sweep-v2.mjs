@@ -46,7 +46,7 @@ const allReports = [];
 for (const [device, viewport] of contexts) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
   const page = await context.newPage();
-  page.setDefaultTimeout(7000);
+  page.setDefaultTimeout(15000);
 
   for (const [label, route] of routes) {
     const url = 'http://localhost:8080' + route;
@@ -63,14 +63,14 @@ for (const [device, viewport] of contexts) {
         const aed = page.getByText(/^AED$/).first();
         await aed.click({ timeout: 2500 });
         await page.waitForTimeout(400);
-        await page.screenshot({ path: path.join(outDir, `${device}-${label}-currency-open.png`), fullPage: false });
+        await page.screenshot({ path: path.join(outDir, `${device}-${label}-currency-open.png`), fullPage: false, timeout: 30000 });
         await page.keyboard.press('Escape');
       } catch {}
       try {
         const mode = page.getByText(/Select your mode|Broker|Owner|Investor|Developer/i).first();
         await mode.click({ timeout: 2500 });
         await page.waitForTimeout(400);
-        await page.screenshot({ path: path.join(outDir, `${device}-${label}-mode-open.png`), fullPage: false });
+        await page.screenshot({ path: path.join(outDir, `${device}-${label}-mode-open.png`), fullPage: false, timeout: 30000 });
         await page.keyboard.press('Escape');
       } catch {}
     }
@@ -184,7 +184,7 @@ for (const [device, viewport] of contexts) {
     }, { label, route, device });
     report.navError = navError;
     allReports.push(report);
-    await page.screenshot({ path: path.join(outDir, `${device}-${label}.png`), fullPage: true });
+    await page.screenshot({ path: path.join(outDir, `${device}-${label}.png`), fullPage: true, timeout: 30000 });
   }
   await context.close();
 }
