@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useUserModeContext, UserMode } from '@/contexts/UserModeContext';
+import { useIsAppOwner } from '@/hooks/useIsAppOwner';
 
 interface ModeRequiredRouteProps {
   /** Modes allowed to view this route. */
@@ -31,6 +32,7 @@ const MODE_LABEL: Record<UserMode, string> = {
  */
 const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
   const { mode, hasMadeInitialSelection, setMode } = useUserModeContext();
+  const { isOwner, isLoading: ownerLoading } = useIsAppOwner();
   const didSwitchRef = useRef(false);
   const location = useLocation();
   const previewQuery = new URLSearchParams(location.search).get('preview');
@@ -39,7 +41,9 @@ const ModeRequiredRoute = ({ modes, children }: ModeRequiredRouteProps) => {
   const matches = modes.includes(mode) || isExplicitOwnerPreview;
   const target = modes[0];
 
-  if (hasMadeInitialSelection && mode === 'owner' && !modes.includes('owner') && !isExplicitOwnerPreview) {
+  if (ownerLoading) return null;
+
+  if (hasMadeInitialSelection && mode === 'owner' && isOwner && !modes.includes('owner') && !isExplicitOwnerPreview) {
     return <Navigate to="/owner" replace state={{ from: location }} />;
   }
 
