@@ -27,8 +27,18 @@ export function SelectedRoleChip({
       <div className="flex items-center gap-3 rounded-[15px] bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] px-5 py-3.5">
         <div className="relative shrink-0">
           <div className="absolute inset-0 rounded-xl jj-surface-emerald-soft blur-lg" />
-          <div className="relative grid h-10 w-10 place-items-center rounded-xl bg-[#0A0A0A] border border-[#B89555]">
-            <CheckCircle2 className="h-5 w-5 text-white" />
+          <div
+            data-surface="emerald"
+            data-on-dark="true"
+            data-no-contrast-guard=""
+            className="relative grid h-10 w-10 place-items-center rounded-xl border border-[#B89555]"
+            style={{ background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%))" }}
+          >
+            <CheckCircle2
+              className="h-5 w-5"
+              strokeWidth={2.25}
+              style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }}
+            />
           </div>
         </div>
         <div className="flex-1 min-w-0">
