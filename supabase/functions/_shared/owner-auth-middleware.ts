@@ -82,7 +82,10 @@ export async function requireOwnerAuth(
     .eq("key", "owner_email")
     .maybeSingle();
 
-  const registeredOwnerEmail = String(ownerSetting?.value || PRIMARY_OWNER_EMAIL).toLowerCase().trim();
+  const configuredOwnerEmail = String(ownerSetting?.value || "").toLowerCase().trim();
+  const registeredOwnerEmail = configuredOwnerEmail === PRIMARY_OWNER_EMAIL
+    ? configuredOwnerEmail
+    : PRIMARY_OWNER_EMAIL;
   if (userEmail.toLowerCase().trim() !== registeredOwnerEmail) {
     await logDenied(req, "owner_email_mismatch", userId, userEmail);
     return denied(403, "Owner-only access. This action has been logged.");
