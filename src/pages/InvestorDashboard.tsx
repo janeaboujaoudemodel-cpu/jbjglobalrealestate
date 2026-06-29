@@ -535,8 +535,8 @@ export default function InvestorDashboard() {
           </CardContent>
         </Card>
 
-        {/* Tabs — horizontally scrollable strap so they never crash into the header */}
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+
+
         {/* Tabs — custom segmented strap (bypasses legacy TabsList CSS that crushed widths) */}
         {(() => {
           const TABS = [
