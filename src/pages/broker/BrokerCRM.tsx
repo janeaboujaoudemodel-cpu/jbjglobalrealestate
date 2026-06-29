@@ -405,7 +405,7 @@ export default function BrokerCRM() {
               <Inbox className="w-4 h-4 mr-1.5" /> Request database
             </Button>
             <Button asChild variant="primary">
-              <Link to="/broker/leads">
+              <Link to="/broker/leads?action=new">
                 <Plus className="h-4 w-4 mr-1.5" /> Add lead
               </Link>
             </Button>
