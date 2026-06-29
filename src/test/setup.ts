@@ -1,5 +1,9 @@
 import "@testing-library/jest-dom";
 
+// Skip DOM mocks when running in a node environment (e.g. Playwright-driven specs).
+if (typeof window === "undefined") {
+  // No-op: setup file requires a DOM. Tests opting into `node` env handle their own setup.
+} else {
 // Mock matchMedia (not available in jsdom)
 Object.defineProperty(window, "matchMedia", {
   writable: true,
