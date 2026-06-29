@@ -130,7 +130,8 @@ export default function BrokerPortalLayout() {
             >
               <Home className="h-3.5 w-3.5" /> Site
             </Link>
-            {isOwner && (
+            {showOwnerChrome && (
+
               <button
                 type="button"
                 onClick={() => {
