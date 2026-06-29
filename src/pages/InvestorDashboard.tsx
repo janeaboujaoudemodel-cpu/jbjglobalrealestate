@@ -537,37 +537,52 @@ export default function InvestorDashboard() {
 
         {/* Tabs — horizontally scrollable strap so they never crash into the header */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="mb-6 overflow-x-auto jj-scrollbar-gold rounded-xl">
-            <TabsList className="!inline-flex !flex-nowrap !h-auto gap-1.5 bg-[#F7F2EA] p-1.5 whitespace-nowrap w-max min-w-full">
-              <TabsTrigger value="dashboard" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <LayoutDashboard className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Dashboard
-              </TabsTrigger>
-              <TabsTrigger value="properties" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <Building2 className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> My Properties
-              </TabsTrigger>
-              <TabsTrigger value="documents" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <FileText className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Documents
-              </TabsTrigger>
-              <TabsTrigger value="profile" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <User className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Update Profile
-              </TabsTrigger>
-              <TabsTrigger value="inbox" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <Mail className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Inbox
-              </TabsTrigger>
-              <TabsTrigger value="alerts" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <Bell className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Alerts
-              </TabsTrigger>
-              <TabsTrigger value="calendar" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <Calendar className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Calendar
-              </TabsTrigger>
-              <TabsTrigger value="tasks" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <ClipboardList className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> Tasks
-              </TabsTrigger>
-              <TabsTrigger value="assistant" className={`${TAB_STYLE} whitespace-nowrap px-3 py-2`}>
-                <Bot className="w-3.5 h-3.5 mr-1 hidden sm:inline-block" /> AI Assistant
-              </TabsTrigger>
-            </TabsList>
-          </div>
+        {/* Tabs — custom segmented strap (bypasses legacy TabsList CSS that crushed widths) */}
+        {(() => {
+          const TABS = [
+            { v: "dashboard", label: "Dashboard", Icon: LayoutDashboard },
+            { v: "properties", label: "My Properties", Icon: Building2 },
+            { v: "documents", label: "Documents", Icon: FileText },
+            { v: "profile", label: "Update Profile", Icon: User },
+            { v: "inbox", label: "Inbox", Icon: Mail },
+            { v: "alerts", label: "Alerts", Icon: Bell },
+            { v: "calendar", label: "Calendar", Icon: Calendar },
+            { v: "tasks", label: "Tasks", Icon: ClipboardList },
+            { v: "assistant", label: "AI Assistant", Icon: Bot },
+          ] as const;
+          return (
+            <div className="mb-6 -mx-1 overflow-x-auto jj-scrollbar-gold">
+              <div
+                role="tablist"
+                data-no-contrast-guard
+                className="flex flex-nowrap gap-1.5 p-1.5 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-max min-w-full"
+              >
+                {TABS.map(({ v, label, Icon }) => {
+                  const active = activeTab === v;
+                  return (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setActiveTab(v)}
+                      data-no-contrast-guard
+                      className={`shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[11px] md:text-xs font-semibold transition-colors ${
+                        active
+                          ? "bg-[image:var(--jj-emerald-ombre)] !text-white shadow-md"
+                          : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      }`}
+                      style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+                    >
+                      <Icon className={`w-3.5 h-3.5 hidden sm:inline-block ${active ? "text-white" : ""}`} />
+                      <span>{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+
 
 
 
