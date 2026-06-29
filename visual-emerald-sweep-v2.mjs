@@ -100,6 +100,13 @@ for (const [device, viewport] of contexts) {
         const rect = el.getBoundingClientRect();
         return cs.display !== 'none' && cs.visibility !== 'hidden' && parseFloat(cs.opacity || '1') > 0.04 && rect.width > 1 && rect.height > 1;
       }
+      function isEmeraldRgbLocal(rgb) {
+        const m = String(rgb || '').match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/i);
+        if (!m) return false;
+        const r = +m[1], g = +m[2], b = +m[3], a = m[4] == null ? 1 : +m[4];
+        if (a < 0.45) return false;
+        return g >= 35 && g > r * 1.18 && g > b * 1.08 && r <= 35 && b <= 95;
+      }
       function hasEmeraldToken(el) {
         const cls = String(el.className || '');
         const style = String(el.getAttribute('style') || '');
@@ -115,7 +122,7 @@ for (const [device, viewport] of contexts) {
         const cs = getComputedStyle(el);
         const bg = cs.backgroundColor;
         const bgImg = cs.backgroundImage || '';
-        const own = hasEmeraldToken(el) || (${isEmeraldRgb.toString()})(bg) || /#064E3B|#042c1c|#042C1C|#0A6B53|#047857|#065F46|#022C22|emerald|green/i.test(bgImg);
+        const own = hasEmeraldToken(el) || isEmeraldRgbLocal(bg) || /#064E3B|#042c1c|#042C1C|#0A6B53|#047857|#065F46|#022C22|emerald|green/i.test(bgImg);
         if (!own) return false;
         // Skip champagne gradient cards that accidentally carry legacy emerald class names.
         const cls = String(el.className || '');
