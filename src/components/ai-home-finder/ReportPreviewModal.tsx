@@ -235,61 +235,50 @@ export default function ReportPreviewModal({
             Selectors prefixed with html body + multiple attributes to win specificity over
             the global champagne/gold text-color rules. */}
         <style>{`
-          /* Specificity boosters: repeat attribute selectors to outrank index.css guards */
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-darkband][data-aihf-darkband],
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-darkband][data-aihf-darkband] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
+          /* :not(#x) chain × 4 = (4,0,0) specificity boost to outrank index.css ink-honour guards */
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-darkband],
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-darkband] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
           }
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-prepared-by][data-aihf-prepared-by] {
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-prepared-by] {
             color: #064E3B !important; -webkit-text-fill-color: #064E3B !important;
           }
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-website][data-aihf-website] {
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-website] {
             color: #064E3B !important; -webkit-text-fill-color: #064E3B !important;
           }
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-price][data-aihf-price] {
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-price] {
             color: #B89555 !important; -webkit-text-fill-color: #B89555 !important;
           }
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-rank][data-aihf-rank] {
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-rank] {
             color: #B89555 !important; -webkit-text-fill-color: #B89555 !important;
           }
           /* Role chip — pure white inside emerald pill */
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-role-chip][data-aihf-role-chip],
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-role-chip][data-aihf-role-chip] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            stroke: #FFFFFF !important;
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-role-chip],
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-role-chip] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
-          /* Include-in-report toggle — active = white on emerald, inactive = ink */
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-include-btn][data-active="true"],
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-include-btn][data-active="true"] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            stroke: #FFFFFF !important;
+          /* Include-in-report toggle — active = white on emerald, inactive = ink, hover-inactive = emerald */
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-include-btn][data-active="true"],
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-include-btn][data-active="true"] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-include-btn][data-active="false"],
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-include-btn][data-active="false"] * {
-            color: #1A1A1A !important;
-            -webkit-text-fill-color: #1A1A1A !important;
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-include-btn][data-active="false"],
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-include-btn][data-active="false"] * {
+            color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important;
           }
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover,
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover * {
-            color: #064E3B !important;
-            -webkit-text-fill-color: #064E3B !important;
-            border-color: #064E3B !important;
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover,
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover * {
+            color: #064E3B !important; -webkit-text-fill-color: #064E3B !important; border-color: #064E3B !important;
           }
           /* LIVE PREVIEW — pure white on every emerald/dark surface inside the engine */
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-on-dark][data-on-dark],
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-on-dark][data-on-dark] *,
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-surface="emerald"][data-surface="emerald"],
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-surface="emerald"][data-surface="emerald"] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            stroke: #FFFFFF !important;
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-on-dark],
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-on-dark] *,
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-surface="emerald"],
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-surface="emerald"] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
-          html body [data-aihf-preview][data-aihf-preview][data-aihf-preview] [data-aihf-scope-dot][data-aihf-scope-dot] {
-            background: #FFFFFF !important;
-            background-color: #FFFFFF !important;
+          html body :not(#jbjz):not(#jbjz):not(#jbjz):not(#jbjz) [data-aihf-preview] [data-aihf-scope-dot] {
+            background: #FFFFFF !important; background-color: #FFFFFF !important;
           }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
