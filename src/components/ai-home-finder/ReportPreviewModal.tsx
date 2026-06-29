@@ -326,12 +326,12 @@ export default function ReportPreviewModal({
                 aria-label={`Active role: ${ROLE_LABELS[activeRole]}`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: C.gold }} />
-                  <span className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
+                  <span className="inline-block w-2 h-2 rounded-full" style={{ background: "#FFFFFF", boxShadow: "0 0 0 2px rgba(255,255,255,0.25)" }} />
+                  <span className="text-sm font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                     {ROLE_LABELS[activeRole]}
                   </span>
                 </div>
-                <span className="text-[10px] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.75)" }}>
+                <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.92 }}>
                   Active mode
                 </span>
               </div>
