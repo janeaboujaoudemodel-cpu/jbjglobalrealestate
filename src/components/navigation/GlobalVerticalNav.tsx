@@ -1071,10 +1071,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   className={`group flex items-center gap-2.5 px-2.5 h-10 text-[12px] transition-all duration-200 rounded-lg ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
                   iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true }}
-                  iconWrapperClassName="w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0"
+                  iconWrapperClassName={`w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
                   iconClassName="w-[14px] h-[14px] transition-colors"
                   iconStrokeWidth={2.1}
-                  iconData={{ 'data-sidebar-highlight-icon': true }}
+                  iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                  iconData={{ 'data-sidebar-highlight-icon': true, 'data-no-contrast-guard': true }}
                   labelClassName="flex-1 text-left relative inline-block transition-colors duration-200"
                   labelStyle={highlightActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
                   trailing={hasMega ? <ChevronRight data-no-contrast-guard data-sidebar-highlight-chev className={`w-4 h-4 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 opacity-100" : "opacity-60"}`} style={highlightActive ? { color: '#FFFFFF', stroke: '#FFFFFF' } : undefined} /> : undefined}
