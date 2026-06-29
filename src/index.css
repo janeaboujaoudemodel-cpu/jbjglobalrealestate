@@ -19729,8 +19729,8 @@ html body :is(
 }
 
 /* PASS 108 — Header emerald controls are also emerald own-surfaces. */
-html body :is(.jj-header-premium-control, [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock),
-html body :is(.jj-header-premium-control, [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock) :is(*, span, p, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-header-emerald-white-lock-child) {
+html body :is(.jj-header-premium-control, .jj-side-tile, .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock),
+html body :is(.jj-header-premium-control, .jj-side-tile, .jj-side-tile.is-active, .jbj-sidebar-collapse-control, [data-sidebar-collapse-control], [data-jj-nav-collapse-toggle], [data-emerald-header], [data-header-control="emerald"]):not(#jj-header-emerald-white-lock) :is(*, span, p, svg, path, circle, rect, line, polyline, polygon, [class*="lucide"], [data-lucide]):not(#jj-header-emerald-white-lock-child) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
