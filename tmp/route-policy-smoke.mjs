@@ -25,6 +25,7 @@ await page.addInitScript(({ mode }) => {
   } catch {}
 }, { mode: 'broker' });
 
+await page.goto(baseURL, { waitUntil: 'domcontentloaded', timeout: 60_000 });
 for (const c of cases) {
   await page.evaluate((mode) => {
     localStorage.setItem('jj_user_mode', mode);
