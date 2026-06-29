@@ -66,6 +66,23 @@ const STYLES = `
 .jj-book-pages-right  { position:absolute; top:0; bottom:0; right:0; width:8px; transform: rotateY(90deg) translateZ(4px); background: repeating-linear-gradient(0deg,#f3e7c8 0 2px,#e9d9b0 2px 3px); }
 `;
 
+function splitCoverTitle(title: string) {
+  const words = title.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+  words.forEach((word) => {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length > 18 && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = next;
+    }
+  });
+  if (current) lines.push(current);
+  return lines.slice(0, 4);
+}
+
 export function PremiumBook3DStyles() {
   return <style dangerouslySetInnerHTML={{ __html: STYLES }} />;
 }
@@ -82,6 +99,12 @@ export function PremiumBook3D({
     () => pickPalette(paletteIndex ?? bookNumber ?? Math.floor(Math.random() * PALETTES.length)),
     [paletteIndex, bookNumber],
   );
+  const titleLines = useMemo(() => splitCoverTitle(title), [title]);
+  const titleSize = titleLines.length >= 4
+    ? "clamp(10px, 1.55vw, 14px)"
+    : compact
+      ? "clamp(11px, 1.75vw, 15px)"
+      : "clamp(14px, 2.2vw, 19px)";
 
   return (
     <div className={cn("jj-book-stage", className)} data-no-contrast-guard>
@@ -157,15 +180,17 @@ export function PremiumBook3D({
               className="allow-white text-center leading-[1.12]"
               style={{
                 color: compact ? '#FFFFFF' : palette.ink,
-                fontSize: compact ? "clamp(10px, 1.55vw, 14px)" : "clamp(13px, 2.05vw, 18px)",
-                fontWeight: 750,
-                letterSpacing: "0.02em",
+                fontSize: titleSize,
+                fontWeight: 800,
+                letterSpacing: "0.005em",
                 fontFamily: "Inter, system-ui, sans-serif",
-                textShadow: compact ? "0 1px 0 rgba(0,0,0,.78), 0 0 12px rgba(0,0,0,.42)" : "0 2px 6px rgba(0,0,0,.55)",
+                textShadow: compact ? "0 1px 0 rgba(0,0,0,.85), 0 0 14px rgba(0,0,0,.5)" : "0 3px 10px rgba(0,0,0,.72)",
+                textWrap: "balance",
               }}
             >
-              {title}
-
+              {titleLines.map((line) => (
+                <span key={line} className="block">{line}</span>
+              ))}
             </div>
           </div>
 
