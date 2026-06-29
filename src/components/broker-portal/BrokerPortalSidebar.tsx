@@ -146,7 +146,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       {/* Pinned footer — seals the sidebar. Collapse button lives at the very bottom
           BELOW Sign Out per owner directive — never at the top of the sidebar. */}
       <div className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
-        {isOwner && (
+        {showOwnerChrome && (
           <Link
             to="/owner"
             onClick={() => {
