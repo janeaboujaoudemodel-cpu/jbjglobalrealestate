@@ -35,6 +35,11 @@ export default function BrokerPortalLayout() {
     : mode === "investor"
     ? "Investor"
     : "Broker";
+  // Owner-only chrome (banner + "JBJ Owner" header pill) shows ONLY in owner
+  // mode. When the app owner picks broker/investor/developer in the mode
+  // switcher, they want a pixel-true mirror of the real portal experience.
+  const showOwnerChrome = isOwner && mode === "owner";
+
 
   // If an owner lands on /broker without explicit preview flag, the
   // OwnerRedirectGuard already routes them away. Defensive: clear any
@@ -125,7 +130,8 @@ export default function BrokerPortalLayout() {
             >
               <Home className="h-3.5 w-3.5" /> Site
             </Link>
-            {isOwner && (
+            {showOwnerChrome && (
+
               <button
                 type="button"
                 onClick={() => {
@@ -150,7 +156,7 @@ export default function BrokerPortalLayout() {
         </header>
 
         {/* Owner preview banner (slim, sticky under the header) */}
-        {isOwner && (
+        {showOwnerChrome && (
           <div
             className="bg-[#EFE6D6] border-b border-[#B89555]/40 px-4 md:px-8 py-2 text-xs text-[#1A1A1A]/85 flex items-center gap-2 sticky z-20"
             style={{ top: "var(--shell-header-h)" }}

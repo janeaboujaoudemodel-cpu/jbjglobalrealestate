@@ -9,8 +9,10 @@ import { cn } from "@/lib/utils";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useUserMode } from "@/hooks/useUserMode";
 import { toast } from "sonner";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+
 
 type Item = { to: string; label: string; icon: any };
 
@@ -50,8 +52,15 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
   const navigate = useNavigate();
   const { isOwner: modeOwner } = useUserRole();
   const { isOwner: appOwner } = useIsAppOwner();
+  const { mode } = useUserMode();
+  // Owner-only chrome (Back-to-Owner pill) appears ONLY when the user is
+  // actively in "owner" mode. When the app owner switches mode to "broker",
+  // they want a pixel-true mirror of what a real broker sees — no owner
+  // shortcuts. They can return via the mode switcher in the header.
+  const showOwnerChrome = (modeOwner || appOwner) && mode === "owner";
   const isOwner = modeOwner || appOwner;
   const { signOut } = useAuth();
+
 
   const handleSignOut = async () => {
     try {
@@ -79,16 +88,17 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           <img
             src={jbjMonogramNobuffer}
             alt="JBJ"
-            width={collapsed ? 36 : 42}
-            height={collapsed ? 36 : 42}
+            width={collapsed ? 44 : 56}
+            height={collapsed ? 44 : 56}
             className="object-contain flex-shrink-0"
-            style={{ width: collapsed ? 36 : 42, height: collapsed ? 36 : 42 }}
+            style={{ width: collapsed ? 44 : 56, height: collapsed ? 44 : 56 }}
           />
           {!collapsed && (
-            <div className="min-w-0 text-[9px] uppercase tracking-[0.08em] text-[#1A1A1A] font-extrabold whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.08] text-left">
-              JBJ Global Real Estate L.L.C S.O.C.
-            </div>
+            <span className="min-w-0 text-[#1A1A1A] font-semibold text-[13px] tracking-[0.12em] uppercase leading-[1.15] whitespace-normal break-words [overflow-wrap:anywhere] text-left">
+              Global Real Estate
+            </span>
           )}
+
         </Link>
       </div>
 
@@ -136,7 +146,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       {/* Pinned footer — seals the sidebar. Collapse button lives at the very bottom
           BELOW Sign Out per owner directive — never at the top of the sidebar. */}
       <div className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
-        {isOwner && (
+        {showOwnerChrome && (
           <Link
             to="/owner"
             onClick={() => {

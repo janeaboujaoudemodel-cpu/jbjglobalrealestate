@@ -20267,3 +20267,37 @@ html body [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none
   fill: none !important;
   opacity: 1 !important;
 }
+
+/* ─── PASS 118 — Emerald tile Lucide outline lock ─────────────────
+   Lucide icons are stroke-based and ship with fill="none". Earlier
+   global rules force `fill: #FFFFFF !important` on every SVG node
+   inside emerald-tile surfaces, which collapses outline icons like
+   BadgeDollarSign, Inbox, KeyRound into solid white/emerald blocks.
+   Re-assert fill:none for outline glyphs inside every emerald tile so
+   the stroke is visible again. */
+html body
+  :is(
+    .jj-icon-tile-emerald,
+    [data-icon-tile-tone="emerald"],
+    [data-icon-tile][data-surface="emerald"],
+    [data-emerald-icon-surface],
+    [data-backend-sidebar-icon-tile],
+    [data-surface="emerald"]
+  )
+  :is(svg, [class*="lucide"]),
+html body
+  :is(
+    .jj-icon-tile-emerald,
+    [data-icon-tile-tone="emerald"],
+    [data-icon-tile][data-surface="emerald"],
+    [data-emerald-icon-surface],
+    [data-backend-sidebar-icon-tile],
+    [data-surface="emerald"]
+  )
+  :is(svg, [class*="lucide"]) :is(path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  fill: none !important;
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  stroke-opacity: 1 !important;
+}
