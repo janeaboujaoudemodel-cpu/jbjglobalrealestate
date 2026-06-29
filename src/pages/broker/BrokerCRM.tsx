@@ -558,7 +558,7 @@ export default function BrokerCRM() {
 
 
           {/* Leads table — always visible on Pipeline tab so the empty state guides the broker */}
-          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
+          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-x-auto">
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/20">
               <h3 className="text-sm font-semibold text-[#1A1A1A]">Your leads</h3>
               <button
