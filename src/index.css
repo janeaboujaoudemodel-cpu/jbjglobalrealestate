@@ -19982,3 +19982,114 @@ html body #root [data-investor-vault-banner][data-investor-vault-banner][data-in
   mix-blend-mode: normal !important;
   text-shadow: none !important;
 }
+
+/* PASS 115 — GLOBAL EMERALD OWN-SURFACE WHITE CONTRACT.
+   Fixes the root cause: emerald components placed inside champagne/light
+   parents were inheriting later ink locks. If an element itself declares an
+   emerald/dark action surface, its visible foreground is always pure white.
+   Nested light/champagne own-surfaces are restored immediately after. */
+html body #root :is(
+  [data-surface="emerald"],
+  [data-studio-surface="emerald"],
+  [data-emerald-action],
+  [data-emerald-action="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-cta="primary"],
+  [data-cta="dark"],
+  [data-jbj-button][data-surface="emerald"],
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-fill,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-cta-dark,
+  .jj-navy-cta,
+  .jj-icon-tile-emerald,
+  .jj-pill-active,
+  [class~="bg-emerald-950"],
+  [class~="bg-emerald-900"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-600"],
+  [class~="bg-green-950"],
+  [class~="bg-green-900"],
+  [class~="bg-green-800"],
+  [class~="bg-green-700"],
+  [class~="bg-green-600"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#042C1C]"],
+  [class*="bg-[#0A6B53]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#065F46]"],
+  [class*="bg-[#022C22]"]
+):not(#jj-global-emerald-own-a):not(#jj-global-emerald-own-b):not(#jj-global-emerald-own-c):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-allow-ink]),
+html body #root :is(
+  [data-surface="emerald"],
+  [data-studio-surface="emerald"],
+  [data-emerald-action],
+  [data-emerald-action="true"],
+  [data-emerald-filled],
+  [data-emerald-band],
+  [data-emerald-icon-surface],
+  [data-icon-tile-tone="emerald"],
+  [data-cta="primary"],
+  [data-cta="dark"],
+  [data-jbj-button][data-surface="emerald"],
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-fill,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-cta-dark,
+  .jj-navy-cta,
+  .jj-icon-tile-emerald,
+  .jj-pill-active,
+  [class~="bg-emerald-950"],
+  [class~="bg-emerald-900"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-600"],
+  [class~="bg-green-950"],
+  [class~="bg-green-900"],
+  [class~="bg-green-800"],
+  [class~="bg-green-700"],
+  [class~="bg-green-600"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#042C1C]"],
+  [class*="bg-[#0A6B53]"],
+  [class*="bg-[#047857]"],
+  [class*="bg-[#065F46]"],
+  [class*="bg-[#022C22]"]
+):not(#jj-global-emerald-own-a):not(#jj-global-emerald-own-b):not(#jj-global-emerald-own-c):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-allow-ink]) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,li,dt,dd,th,td,svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#jj-global-emerald-own-child-a):not(#jj-global-emerald-own-child-b):not(#jj-global-emerald-own-child-c) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+}
+
+html body #root :is([data-surface="emerald"], [data-emerald-action], [data-cta="primary"], .jj-surface-emerald, .jj-cta-emerald, .jj-cta-primary) :is([data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], .jj-surface-champagne, .surface-champagne, .surface-light),
+html body #root :is([data-surface="emerald"], [data-emerald-action], [data-cta="primary"], .jj-surface-emerald, .jj-cta-emerald, .jj-cta-primary) :is([data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], .jj-surface-champagne, .surface-champagne, .surface-light) :is(span,p,small,strong,em,b,label,div,button,a,h1,h2,h3,h4,h5,h6,li,dt,dd,th,td) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+}
