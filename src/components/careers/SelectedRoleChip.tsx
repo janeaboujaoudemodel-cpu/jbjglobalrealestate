@@ -1,4 +1,5 @@
 import { Briefcase, X, Sparkles, CheckCircle2 } from "lucide-react";
+import IconTile from "@/components/ui/icon-tile";
 
 interface SelectedRoleChipProps {
   label: string | null;
@@ -25,22 +26,12 @@ export function SelectedRoleChip({
   return (
     <div className="relative overflow-hidden rounded-2xl border-2 border-[#B89555] bg-gradient-to-r from-[#0A0A0A] via-[#1F1F1F] to-[#0A0A0A] p-[1px] shadow-[0_10px_30px_-12px_rgba(184,149,85,0.45)]">
       <div className="flex items-center gap-3 rounded-[15px] bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] px-5 py-3.5">
-        <div className="relative shrink-0">
-          <div className="absolute inset-0 rounded-xl jj-surface-emerald-soft blur-lg" />
-          <div
-            data-surface="emerald"
-            data-on-dark="true"
-            data-no-contrast-guard=""
-            className="relative grid h-10 w-10 place-items-center rounded-xl border border-[#B89555]"
-            style={{ background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%))" }}
-          >
-            <CheckCircle2
-              className="h-5 w-5"
-              strokeWidth={2.25}
-              style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }}
-            />
-          </div>
-        </div>
+        <IconTile
+          icon={CheckCircle2}
+          tone="navy"
+          size="md"
+          className="shadow-[0_6px_14px_-8px_rgba(10,10,10,0.55)]"
+        />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#0A0A0A]/70">

@@ -1,4 +1,5 @@
 import { Sparkles, Users, BriefcaseBusiness, MapPin, Headphones, Building2 } from "lucide-react";
+import IconTile from "@/components/ui/icon-tile";
 import { Link } from "react-router-dom";
 
 /**
@@ -152,13 +153,12 @@ export default function PremiumCareersHero() {
               }}
             >
               <div className="flex items-center gap-2 mb-2">
-                <div
-                  data-surface="emerald"
-                  data-no-contrast-guard
-                  className="jj-icon-tile-emerald jj-pill-emerald-metallic allow-white inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/60 shadow-[0_2px_6px_-2px_rgba(10,10,10,0.35)]"
-                >
-                  <Icon className="w-[18px] h-[18px] allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.25} />
-                </div>
+                <IconTile
+                  icon={Icon}
+                  tone="navy"
+                  size="md"
+                  className="shadow-[0_6px_14px_-8px_rgba(10,10,10,0.55)] transition-transform duration-300 group-hover:scale-105"
+                />
                 <p className="text-[10px] font-semibold tracking-[0.14em] uppercase text-[#1A1A1A]/75">
                   {label}
                 </p>
