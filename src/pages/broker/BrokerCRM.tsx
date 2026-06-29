@@ -735,7 +735,7 @@ export default function BrokerCRM() {
             ) : filteredLeads.length === 0 ? (
               <div>
                 {/* Table header so the layout reads as a real table even when empty */}
-                <div className="grid grid-cols-[40px_1fr_140px_140px_120px] gap-3 px-4 py-2.5 bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
+                <div className="grid grid-cols-[40px_minmax(180px,1fr)_120px_120px_100px_90px] gap-3 px-4 py-2.5 min-w-[700px] bg-[#EFE6D6]/60 border-b border-[#B89555]/20 text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70 font-semibold">
                   <div></div>
                   <div>Lead</div>
                   <div>Stage</div>
