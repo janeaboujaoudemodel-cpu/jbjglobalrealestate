@@ -20880,3 +20880,24 @@ html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-sur
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+
+/* PASS 128 — closest bright own-surface wins over outer emerald bands. */
+html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="cream"], [data-surface="raised"], [data-studio-surface="champagne"], .surface-champagne, .surface-gold, .surface-pearl, .surface-cream, .surface-raised, .jj-card-champagne, .jj-surface-champagne, .jj-layer-2, .jj-layer-active, .jj-icon-tile-champagne):not(#pass128-a):not(#pass128-b):not(#pass128-c):not(#pass128-d):not(#pass128-e):not(#pass128-f):not(#pass128-g):not(#pass128-h):not(#pass128-i):not(#pass128-j)
+  :is(svg,[class*="lucide"],[data-lucide],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-on-dark], [data-hero-dark], .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-navy-cta, .jj-emerald-metallic, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-emerald-action], [data-emerald-filled], [data-emerald-icon-surface], [role="tab"][data-state="active"], [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *, [data-on-dark] *, [data-hero-dark] *, .jj-cta-emerald *, .jj-cta-primary *, .jj-cta-dark *, .jj-navy-cta *, .jj-emerald-metallic *, .jj-pill-emerald-metallic *, .jj-icon-tile-emerald *, [data-emerald-action] *, [data-emerald-filled] *, [data-emerald-icon-surface] *, [role="tab"][data-state="active"] *)) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is([data-surface="champagne"], [data-surface="gold"], [data-surface="pearl"], [data-surface="cream"], [data-surface="raised"], [data-studio-surface="champagne"], .surface-champagne, .surface-gold, .surface-pearl, .surface-cream, .surface-raised, .jj-card-champagne, .jj-surface-champagne, .jj-layer-2, .jj-layer-active):not(#pass128-text-a):not(#pass128-text-b):not(#pass128-text-c):not(#pass128-text-d):not(#pass128-text-e):not(#pass128-text-f):not(#pass128-text-g):not(#pass128-text-h):not(#pass128-text-i):not(#pass128-text-j)
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,b,div,time,dt,dd,th,td,button,input,textarea,select):not(:where([data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-surface="navy"], [data-on-dark], [data-hero-dark], .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-navy-cta, .jj-emerald-metallic, .jj-pill-emerald-metallic, .jj-icon-tile-emerald, [data-emerald-action], [data-emerald-filled], [data-emerald-icon-surface], [role="tab"][data-state="active"], [data-surface="emerald"] *, [data-surface="dark"] *, [data-surface="ink"] *, [data-surface="navy"] *, [data-on-dark] *, [data-hero-dark] *, .jj-cta-emerald *, .jj-cta-primary *, .jj-cta-dark *, .jj-navy-cta *, .jj-emerald-metallic *, .jj-pill-emerald-metallic *, .jj-icon-tile-emerald *, [data-emerald-action] *, [data-emerald-filled] *, [data-emerald-icon-surface] *, [role="tab"][data-state="active"] *)) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
