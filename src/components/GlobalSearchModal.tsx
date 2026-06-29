@@ -333,7 +333,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.name}</p>
       </div>
-      <ArrowRight className="w-4 h-4 text-[#064E3B] flex-shrink-0" />
+      <ArrowRight data-search-arrow className="w-4 h-4 text-[#064E3B] flex-shrink-0" />
     </button>
   );
 
@@ -414,7 +414,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
                           {item.category && <p className="text-xs text-[#1A1A1A]">{item.category}</p>}
                         </div>
-                        <ArrowRight className="w-4 h-4 text-[#064E3B]" />
+                        <ArrowRight data-search-arrow className="w-4 h-4 text-[#064E3B]" />
                       </button>
                     ))}
                   </div>
@@ -438,7 +438,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
                           </div>
-                          <ArrowRight className="w-4 h-4 text-[#064E3B]" />
+                          <ArrowRight data-search-arrow className="w-4 h-4 text-[#064E3B]" />
                         </button>
                       ))}
                     </div>
@@ -581,7 +581,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                                 <p className="font-semibold text-[#1A1A1A]">{item.label}</p>
                                 <p className="text-[#1A1A1A] text-sm truncate">{item.description}</p>
                               </div>
-                              <ArrowRight className="w-5 h-5 flex-shrink-0 text-[#064E3B]" />
+                              <ArrowRight data-search-arrow className="w-5 h-5 flex-shrink-0 text-[#064E3B]" />
                             </button>
                           ))}
                         </div>
@@ -609,7 +609,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                                   <p className="font-semibold text-[#1A1A1A] truncate">{item.label}</p>
                                   <p className="text-[#1A1A1A]/70 text-sm truncate">{item.description}</p>
                                 </div>
-                                <ArrowRight className="w-5 h-5 text-[#064E3B] flex-shrink-0" />
+                                <ArrowRight data-search-arrow className="w-5 h-5 text-[#064E3B] flex-shrink-0" />
                               </button>
                             ))}
                           </div>
