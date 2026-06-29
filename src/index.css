@@ -20240,3 +20240,30 @@ html body .jj-side-tile:not(.is-active) :is(svg, [class*="lucide"]) * {
   fill: none !important;
   opacity: 1 !important;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   FINAL LOCK — Active tab Lucide outline icons.
+   Earlier sitewide emerald locks correctly force active tab text/icons
+   pure white, but some legacy passes also set `fill: currentColor` on
+   SVG children. Lucide outline glyphs then render as solid white blocks
+   (e.g. Support Ticket Hub / My Tickets). Keep the contrast white while
+   preserving the intended outlined glyph shape.
+   ════════════════════════════════════════════════════════════════ */
+html body #root [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock),
+html body #root [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock),
+html body [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock),
+html body [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+html body #root [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
+html body #root [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
+html body [role="tab"][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g),
+html body [data-jj-segmented-trigger][data-state="active"] svg.lucide[fill="none"]:not(#jj-tab-outline-lock):not(#jj-tab-outline-lock) :where(path, circle, rect, line, polyline, polygon, ellipse, g) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
