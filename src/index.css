@@ -19817,4 +19817,64 @@ html body :is(
   stroke-opacity: 1 !important;
 }
 
+/* ============================================================
+   PASS 111 — JJ-HOVER-EMERALD WHITE-INK FINAL OVERRIDE
+   When a .jj-hover-emerald button is hovered/focused/active it
+   becomes an emerald surface — every descendant text and icon
+   MUST flip to pure white, beating champagne ancestor locks
+   (PASS 89/91-93/102/104) regardless of inherited classes.
+   ============================================================ */
+html body .jj-hover-emerald:hover,
+html body .jj-hover-emerald:focus-visible,
+html body .jj-hover-emerald[data-active="true"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-hover-emerald:hover *,
+html body .jj-hover-emerald:focus-visible *,
+html body .jj-hover-emerald[data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+html body .jj-hover-emerald:hover :is(svg, path, circle, rect, line, polyline, polygon),
+html body .jj-hover-emerald:focus-visible :is(svg, path, circle, rect, line, polyline, polygon),
+html body .jj-hover-emerald[data-active="true"] :is(svg, path, circle, rect, line, polyline, polygon) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+/* Keep IconTile inner glyph crisp white on hover even if the tile
+   background is repainted by PASS XX-E. */
+html body .jj-hover-emerald:hover [data-icon-tile] svg,
+html body .jj-hover-emerald:focus-visible [data-icon-tile] svg,
+html body .jj-hover-emerald[data-active="true"] [data-icon-tile] svg {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+  fill: none !important;
+}
 
+
+/* ============================================================
+   PASS 112 — JJ-HOVER-EMERALD ULTRA-SPECIFICITY WHITE INK.
+   Defeats the champagne descendant ink lock (which combines
+   :is()/:not() chains worth ~(0,0,2,3)) by repeating the
+   .jj-hover-emerald class to push specificity to (0,0,4,2).
+   ============================================================ */
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:hover,
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:focus-visible,
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:hover :is(span, p, h1, h2, h3, h4, h5, h6, a, li, label, strong, em, small, b, div, button),
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:focus-visible :is(span, p, h1, h2, h3, h4, h5, h6, a, li, label, strong, em, small, b, div, button),
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] :is(span, p, h1, h2, h3, h4, h5, h6, a, li, label, strong, em, small, b, div, button) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:hover :is(svg, path, circle, rect, line, polyline, polygon),
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald:focus-visible :is(svg, path, circle, rect, line, polyline, polygon),
+html body .jj-hover-emerald.jj-hover-emerald.jj-hover-emerald[data-active="true"] :is(svg, path, circle, rect, line, polyline, polygon) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
