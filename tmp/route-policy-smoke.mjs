@@ -10,7 +10,7 @@ const cases = [
   { name: 'Owner alias route denies unauthenticated/non-owner', mode: 'owner', path: '/owner-dashboard', expected: /(\/auth|\/403)/ },
 ];
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || '/bin/chromium' });
 const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await context.newPage();
 await page.addInitScript(({ mode }) => {
