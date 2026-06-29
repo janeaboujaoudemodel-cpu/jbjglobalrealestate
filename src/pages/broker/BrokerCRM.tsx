@@ -729,7 +729,7 @@ export default function BrokerCRM() {
               className="pl-9 bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]"
             />
           </div>
-          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-hidden">
+          <section className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/25 overflow-x-auto">
             {leads.isLoading ? (
               <Loading />
             ) : filteredLeads.length === 0 ? (
