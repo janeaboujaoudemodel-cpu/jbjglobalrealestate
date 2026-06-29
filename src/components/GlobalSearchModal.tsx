@@ -492,7 +492,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               width: "min(48rem, calc(100vw - 20px))",
               transform: "translateX(-50%)",
               maxWidth: "calc(100vw - 20px)",
-              top: "clamp(12px, 9dvh, 88px)",
+              top: "calc(var(--app-content-top, 88px) + 12px)",
             }}
           >
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'min(720px, calc(100dvh - clamp(44px, 18dvh, 176px)))' }}>
