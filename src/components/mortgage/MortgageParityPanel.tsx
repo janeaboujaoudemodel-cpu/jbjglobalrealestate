@@ -369,7 +369,7 @@ export default function MortgageParityPanel({
           type="button"
           onClick={() => setShowSchedule((s) => !s)}
           data-no-contrast-guard
-          className="allow-white w-full rounded-xl px-4 py-3 flex items-center justify-between text-sm font-semibold"
+          className={`${isNavy ? "allow-white " : ""}w-full rounded-xl px-4 py-3 flex items-center justify-between text-sm font-semibold`}
           style={{ background: cardBg, border: cardBorder, color: isNavy ? "#FFFFFF" : "#1A1A1A" }}
         >
           <span>Amortization Schedule (yearly)</span>
