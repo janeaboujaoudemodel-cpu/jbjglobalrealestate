@@ -60,6 +60,7 @@ const MarketReport = () => {
               className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center shadow-[0_8px_22px_rgba(6,78,59,0.28)]"
               style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
               data-no-contrast-guard
+              data-icon-tone="emerald"
             >
               <Check className="w-10 h-10" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={3} />
             </div>
@@ -120,7 +121,7 @@ const MarketReport = () => {
       )}
 
       {/* ============== HERO ============== */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 bg-[#FDFBF7]">
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-[#FDFBF7]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Book Visual — image fills the full cover */}
@@ -158,9 +159,9 @@ const MarketReport = () => {
                     transform: "rotateY(-10deg) rotateX(4deg)",
                   }}
                 >
-                  {/* Book body */}
+                  {/* Book body — no gold/emerald border, photo fills edge-to-edge */}
                   <div
-                    className="relative w-full h-full rounded-md overflow-hidden border border-[#0B5132]/40"
+                    className="relative w-full h-full rounded-md overflow-hidden"
                     style={{
                       boxShadow:
                         "18px 22px 50px rgba(0,0,0,0.28), -3px -3px 14px rgba(184,149,85,0.10)",
@@ -174,18 +175,15 @@ const MarketReport = () => {
                       loading="lazy"
                       decoding="async"
                     />
-                    {/* Emerald gradient overlay so title is legible */}
+                    {/* Bottom-only gradient so title is legible without darkening the photo */}
                     <div
-                      className="absolute inset-0"
+                      className="absolute inset-x-0 bottom-0 h-2/3"
                       style={{
                         background:
-                          "linear-gradient(180deg, rgba(6,78,59,0.05) 0%, rgba(6,78,59,0.30) 45%, rgba(4,30,20,0.92) 100%)",
+                          "linear-gradient(180deg, rgba(4,30,20,0) 0%, rgba(4,30,20,0.55) 55%, rgba(2,18,12,0.95) 100%)",
                       }}
                     />
-                    {/* Gold spine on the left edge — no empty band */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[10px] bg-gradient-to-b from-[#B89555] via-[#9c7d3f] to-[#7a6230]" />
-                    {/* Page-edge highlight on the right */}
-                    <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#EFE6D6]/70 via-[#EFE6D6]/40 to-[#EFE6D6]/70" />
+
 
                     {/* Cover content */}
                     <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-7">
@@ -294,8 +292,9 @@ const MarketReport = () => {
                         className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
+                        data-icon-tone="emerald"
                       >
-                        <Icon className="w-[18px] h-[18px]" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                        <Icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                       </div>
                       <span className="text-[#1A1A1A] text-sm font-semibold">{item.text}</span>
                     </div>
@@ -388,6 +387,7 @@ const MarketReport = () => {
                     className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center shadow-[0_10px_28px_rgba(6,78,59,0.30)]"
                     style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                     data-no-contrast-guard
+                    data-icon-tone="emerald"
                   >
                     <Check
                       className="w-10 h-10"
@@ -427,6 +427,7 @@ const MarketReport = () => {
                       className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-[0_8px_22px_rgba(6,78,59,0.28)]"
                       style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                       data-no-contrast-guard
+                      data-icon-tone="emerald"
                     >
                       <Unlock className="w-6 h-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </div>
@@ -564,6 +565,7 @@ const MarketReport = () => {
                         className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-[0_3px_10px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
+                        data-icon-tone="emerald"
                       >
                         <Check
                           className="w-4 h-4"
