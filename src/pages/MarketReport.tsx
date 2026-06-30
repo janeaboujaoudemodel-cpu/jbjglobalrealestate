@@ -133,38 +133,112 @@ const MarketReport = () => {
             >
               <div
                 className="relative mx-auto w-[280px] md:w-[340px] group"
-                style={{ perspective: "1200px" }}
+                style={{ perspective: "1800px" }}
                 onMouseMove={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   const x = e.clientX - rect.left;
                   const centerX = rect.width / 2;
-                  const rotateY = x < centerX ? 18 : -18;
+                  const rotateY = x < centerX ? -8 : -28;
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
                     ?.style.setProperty(
                       "transform",
-                      `rotateY(${rotateY}deg) rotateX(3deg) translateZ(40px) scale(1.04)`
+                      `rotateY(${rotateY}deg) rotateX(2deg) translateY(-4px)`
                     );
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
-                    ?.style.setProperty("transform", "rotateY(-10deg) rotateX(4deg)");
+                    ?.style.setProperty("transform", "rotateY(-22deg) rotateX(3deg)");
                 }}
               >
                 <div
-                  className="book-inner relative transition-transform duration-500 ease-out aspect-[3/4]"
+                  className="book-inner relative transition-transform duration-700 ease-out aspect-[3/4]"
                   style={{
                     transformStyle: "preserve-3d",
-                    transform: "rotateY(-10deg) rotateX(4deg)",
+                    transform: "rotateY(-22deg) rotateX(3deg)",
                   }}
                 >
-                  {/* Book body — no gold/emerald border, photo fills edge-to-edge */}
+                  {/* ============ BACK COVER ============ */}
+                  <div
+                    className="absolute inset-0 rounded-md"
+                    style={{
+                      transform: "translateZ(-36px)",
+                      background:
+                        "linear-gradient(135deg, #0B5132 0%, #052e1c 100%)",
+                      boxShadow: "inset 0 0 50px rgba(0,0,0,.55)",
+                    }}
+                  />
+
+                  {/* ============ SPINE (left edge) ============ */}
+                  <div
+                    className="absolute top-0 bottom-0 left-0 rounded-l-md overflow-hidden"
+                    style={{
+                      width: "36px",
+                      transform: "rotateY(-90deg) translateZ(18px)",
+                      transformOrigin: "left center",
+                      background:
+                        "linear-gradient(180deg, #052e1c 0%, #0B5132 50%, #052e1c 100%)",
+                      boxShadow:
+                        "inset 2px 0 6px rgba(0,0,0,.55), inset -2px 0 4px rgba(255,255,255,.06)",
+                    }}
+                  >
+                    <div
+                      className="absolute inset-x-1 top-2 bottom-2 border-y"
+                      style={{ borderColor: "rgba(184,149,85,0.45)" }}
+                    />
+                    <div
+                      className="absolute inset-0 grid place-items-center text-[9px] font-semibold tracking-[0.32em] uppercase"
+                      style={{
+                        color: "#B89555",
+                        writingMode: "vertical-rl",
+                        transform: "rotate(180deg)",
+                      }}
+                    >
+                      UAE Market Intelligence
+                    </div>
+                  </div>
+
+                  {/* ============ PAGE EDGES (right, top, bottom) ============ */}
+                  <div
+                    className="absolute top-0 bottom-0 right-0"
+                    style={{
+                      width: "36px",
+                      transform: "rotateY(90deg) translateZ(18px)",
+                      transformOrigin: "right center",
+                      background:
+                        "repeating-linear-gradient(0deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
+                      boxShadow: "inset 0 0 6px rgba(0,0,0,.25)",
+                    }}
+                  />
+                  <div
+                    className="absolute left-0 right-0 top-0"
+                    style={{
+                      height: "36px",
+                      transform: "rotateX(90deg) translateZ(18px)",
+                      transformOrigin: "top center",
+                      background:
+                        "repeating-linear-gradient(90deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
+                    }}
+                  />
+                  <div
+                    className="absolute left-0 right-0 bottom-0"
+                    style={{
+                      height: "36px",
+                      transform: "rotateX(-90deg) translateZ(18px)",
+                      transformOrigin: "bottom center",
+                      background:
+                        "repeating-linear-gradient(90deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
+                    }}
+                  />
+
+                  {/* ============ FRONT COVER (photo, unchanged) ============ */}
                   <div
                     className="relative w-full h-full rounded-md overflow-hidden"
                     style={{
+                      transform: "translateZ(0px)",
                       boxShadow:
-                        "18px 22px 50px rgba(0,0,0,0.28), -3px -3px 14px rgba(184,149,85,0.10)",
+                        "22px 28px 60px rgba(0,0,0,0.35), -3px -3px 14px rgba(184,149,85,0.10)",
                     }}
                   >
                     {/* Full-bleed cover image */}
@@ -183,7 +257,6 @@ const MarketReport = () => {
                           "linear-gradient(180deg, rgba(4,30,20,0) 0%, rgba(4,30,20,0.55) 55%, rgba(2,18,12,0.95) 100%)",
                       }}
                     />
-
 
                     {/* Cover content */}
                     <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-7">
@@ -229,7 +302,7 @@ const MarketReport = () => {
                   </div>
 
                   {/* Drop shadow under the book */}
-                  <div className="absolute -bottom-4 left-6 right-6 h-6 bg-[#1A1A1A]/35 blur-2xl rounded-full" />
+                  <div className="absolute -bottom-6 left-8 right-8 h-8 bg-[#1A1A1A]/40 blur-2xl rounded-full" style={{ transform: "translateZ(-40px)" }} />
                 </div>
               </div>
 
