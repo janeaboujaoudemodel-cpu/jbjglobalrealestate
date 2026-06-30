@@ -19,7 +19,11 @@ export const OWNER_EMAILS: string[] = [
  */
 export const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
 
-export const OWNER_BACKEND_EMAILS: string[] = [PRIMARY_OWNER_EMAIL];
+// All founder aliases are treated as backend owners so the Owner mode picker
+// and /owner routes work from any of Jane's verified inboxes.
+export const OWNER_BACKEND_EMAILS: string[] = Array.from(
+  new Set<string>([PRIMARY_OWNER_EMAIL, ...OWNER_EMAILS]),
+);
 
 export const OWNER_EMAILS_LC = OWNER_EMAILS.map((e) => e.toLowerCase());
 
