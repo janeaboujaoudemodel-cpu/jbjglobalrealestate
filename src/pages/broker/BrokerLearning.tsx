@@ -299,10 +299,12 @@ export default function BrokerLearning() {
                 <h3 className="text-[#1A1A1A] text-xl md:text-2xl font-bold">Golden Rules for Market Conversations</h3>
               </div>
               <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-7 h-px bg-gradient-to-r from-transparent via-[#B89555]/75 to-transparent" />
+                {/* Connector + traveling sparkle ride at the VERTICAL CENTER
+                    of the number circles (card p-5 = 20px + circle 56px → 48px center). */}
+                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-[48px] -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-[#B89555]/75 to-transparent" />
                 <motion.div
                   aria-hidden
-                  className="hidden md:block pointer-events-none absolute top-[18px] left-[15%] h-5 w-16 rounded-full blur-[1px]"
+                  className="hidden md:block pointer-events-none absolute top-[48px] -translate-y-1/2 left-[15%] h-5 w-16 rounded-full blur-[1px]"
                   style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.95), rgba(184,149,85,.9), transparent)" }}
                   animate={{ left: ["15%", "48%", "81%", "48%", "15%"], opacity: [0, 1, 1, 1, 0] }}
                   transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
@@ -310,7 +312,7 @@ export default function BrokerLearning() {
                 <motion.div
                   aria-hidden
                   data-no-contrast-guard
-                  className="hidden md:grid pointer-events-none absolute top-[11px] left-[17%] h-8 w-8 place-items-center rounded-full bg-[#FDFBF7] text-[#B89555] shadow-[0_0_22px_rgba(255,255,255,.95),0_0_28px_rgba(184,149,85,.42)]"
+                  className="hidden md:grid pointer-events-none absolute top-[48px] -translate-y-1/2 left-[17%] h-8 w-8 place-items-center rounded-full bg-[#FDFBF7] text-[#B89555] shadow-[0_0_22px_rgba(255,255,255,.95),0_0_28px_rgba(184,149,85,.42)]"
                   animate={{ left: ["17%", "50%", "83%", "50%", "17%"], scale: [0.72, 1.08, 1.08, 1.08, 0.72], opacity: [0, 1, 1, 1, 0] }}
                   transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
                 >
@@ -753,13 +755,35 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
       style={{ background: markBg }}
     >
       {isRed
-        ? <X className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-        : <Check className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
+        ? <X className="w-3 h-3" strokeWidth={3.2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        : <Check className="w-3 h-3" strokeWidth={3.2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
     </span>
   );
+  // Corner-only gold frame (matches Compare Projects card on the homepage):
+  // champagne premium gradient, NO full border, only 4 gold L-corners.
+  const cornerColor = "rgba(184,149,85,0.78)";
+  const Corner = ({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) => {
+    const base: React.CSSProperties = {
+      position: "absolute",
+      width: 22,
+      height: 22,
+      pointerEvents: "none",
+      borderColor: cornerColor,
+      borderStyle: "solid",
+      borderWidth: 0,
+    };
+    if (pos === "tl") Object.assign(base, { top: 0, left: 0, borderTopWidth: 1.5, borderLeftWidth: 1.5, borderTopLeftRadius: 18 });
+    if (pos === "tr") Object.assign(base, { top: 0, right: 0, borderTopWidth: 1.5, borderRightWidth: 1.5, borderTopRightRadius: 18 });
+    if (pos === "bl") Object.assign(base, { bottom: 0, left: 0, borderBottomWidth: 1.5, borderLeftWidth: 1.5, borderBottomLeftRadius: 18 });
+    if (pos === "br") Object.assign(base, { bottom: 0, right: 0, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomRightRadius: 18 });
+    return <span aria-hidden style={base} />;
+  };
   return (
-    <Card className="relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border-[#B89555]/55 shadow-[0_28px_72px_-42px_rgba(26,26,26,0.62)]">
-      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+    <Card className="relative overflow-hidden rounded-[18px] border-0 bg-gradient-to-br from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_28px_72px_-42px_rgba(26,26,26,0.62)]">
+      <Corner pos="tl" />
+      <Corner pos="tr" />
+      <Corner pos="bl" />
+      <Corner pos="br" />
       <motion.span
         aria-hidden
         className="absolute -left-24 top-0 h-full w-20 bg-gradient-to-r from-transparent via-white/45 to-transparent blur-[1px]"
@@ -778,9 +802,9 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
           </span>
           <span className="text-[#1A1A1A]">{title}</span>
         </h3>
-        <ul className="space-y-2.5">
+        <ul className="space-y-2">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 rounded-xl bg-[#FDFBF7]/70 px-3 py-2 text-[#1A1A1A] text-sm leading-relaxed">
+            <li key={i} className="flex items-start gap-2 rounded-lg bg-[#FDFBF7]/80 px-3 py-2 text-[#1A1A1A] text-sm leading-relaxed">
               {renderMark()}
               <span className="text-[#1A1A1A]">{p}</span>
             </li>
