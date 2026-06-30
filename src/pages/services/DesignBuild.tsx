@@ -184,7 +184,7 @@ const DesignBuild = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Services</span>
+            <SectionEyebrow className="mb-4">Our Services</SectionEyebrow>
             <h2 
               className="text-white text-3xl md:text-4xl font-bold mb-4"
             >

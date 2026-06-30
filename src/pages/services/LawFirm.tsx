@@ -169,9 +169,7 @@ const LawFirm = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Expertise
-              </span>
+              <SectionEyebrow className="mb-4">Expertise</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Practice Areas" />
               </h2>
@@ -225,9 +223,7 @@ const LawFirm = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Our Advantage
-              </span>
+              <SectionEyebrow className="mb-4">Our Advantage</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Why Choose Us" />
               </h2>

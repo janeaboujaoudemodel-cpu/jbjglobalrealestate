@@ -170,9 +170,7 @@ const InteriorDesign = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Our Services
-              </span>
+              <SectionEyebrow className="mb-4">Our Services</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Design Services" />
               </h2>
@@ -226,9 +224,7 @@ const InteriorDesign = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Portfolio
-              </span>
+              <SectionEyebrow className="mb-4">Portfolio</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Our Work" />
               </h2>
@@ -272,9 +268,7 @@ const InteriorDesign = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                How We Work
-              </span>
+              <SectionEyebrow className="mb-4">How We Work</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Our Process" />
               </h2>
