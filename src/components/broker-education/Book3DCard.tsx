@@ -68,7 +68,6 @@ export function Book3DCard({
         <div className="relative px-1 pb-4">
           <PremiumBook3D
             title={book.title}
-            bookNumber={book.book_number}
             paletteIndex={book.book_number}
           />
           {statusBadge && (

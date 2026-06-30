@@ -55,7 +55,6 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             <div className="relative flex-shrink-0 w-28 aspect-[3/4] overflow-hidden rounded-r-[4px] rounded-l-[2px] shadow-[8px_10px_22px_rgba(0,0,0,0.32),inset_0_0_0_1px_rgba(184,149,85,0.4)]">
               <PremiumBookCover
                 title={book.title}
-                subtitle={book.learning_path}
                 tone="black"
               />
               <div className="absolute inset-y-0 left-0 w-[6%] pointer-events-none bg-gradient-to-r from-[#030303]/90 via-[#1A1A1A]/60 to-transparent" />

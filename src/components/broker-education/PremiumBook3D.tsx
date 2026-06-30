@@ -38,7 +38,6 @@ interface PremiumBook3DProps {
   title: string;
   /** Deprecated: subtitles are never rendered on covers. */
   subtitle?: string;
-  bookNumber?: number;
   paletteIndex?: number;
   className?: string;
   /** When true, render the clean homepage variant (title only). */
@@ -98,14 +97,13 @@ export function PremiumBook3DStyles() {
 
 export function PremiumBook3D({
   title,
-  bookNumber,
   paletteIndex,
   className,
   compact = false,
 }: PremiumBook3DProps) {
   const palette = useMemo(
-    () => pickPalette(paletteIndex ?? bookNumber ?? Math.floor(Math.random() * PALETTES.length)),
-    [paletteIndex, bookNumber],
+    () => pickPalette(paletteIndex ?? 0),
+    [paletteIndex],
   );
   const titleLines = useMemo(() => splitCoverTitle(title), [title]);
   const titleSize = titleLines.length >= 4
