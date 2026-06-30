@@ -136,7 +136,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <Link
             to={`/area/${slugify(area.area)}`}
             data-no-contrast-guard
-            className="mi-cta-emerald w-full py-2 text-sm rounded-lg"
+            className="mi-cta-emerald w-full py-2 text-sm rounded-lg mt-auto"
           >
             <span>View Area Details</span>
             <ArrowUpRight className="w-4 h-4" />
