@@ -738,46 +738,47 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
   title: string; items: string[]; tone: "red" | "emerald"; icon: import("lucide-react").LucideIcon;
 }) {
   const isRed = tone === "red";
+  const markBg = isRed
+    ? "linear-gradient(135deg,#5E1414 0%,#A02828 100%)"
+    : "linear-gradient(135deg,#032F24 0%,#0B7A5B 100%)";
   const renderMark = () => (
     <span
       data-no-contrast-guard
-      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full border border-white/20 shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
-      style={{
-        background: isRed
-          ? "linear-gradient(135deg,#5E1414 0%,#A02828 100%)"
-          : "linear-gradient(135deg,#032F24 0%,#0B7A5B 100%)",
-      }}
+      data-emerald-ok="icon"
+      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
+      style={{ background: markBg }}
     >
       {isRed
         ? <X className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
         : <Check className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
     </span>
   );
-  const shell = isRed
-    ? "from-[#3A0B0B] via-[#7A1F1F] to-[#B73535]"
-    : "from-[#021F18] via-[#064E3B] to-[#0B7A5B]";
   return (
-    <Card className={`relative overflow-hidden border-[#B89555]/45 bg-gradient-to-br ${shell} shadow-[0_26px_70px_-42px_rgba(26,26,26,0.82)]`} data-no-contrast-guard>
-      <div aria-hidden className="absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_20%_12%,rgba(255,255,255,.18),transparent_26%),radial-gradient(circle_at_86%_88%,rgba(184,149,85,.20),transparent_34%)]" />
-      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F4D58D]/80 to-transparent" />
+    <Card className="relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border-[#B89555]/55 shadow-[0_28px_72px_-42px_rgba(26,26,26,0.62)]">
+      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
       <motion.span
         aria-hidden
-        className="absolute -left-24 top-0 h-full w-20 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-[1px]"
+        className="absolute -left-24 top-0 h-full w-20 bg-gradient-to-r from-transparent via-white/45 to-transparent blur-[1px]"
         animate={{ x: [0, 720] }}
         transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: isRed ? 0 : 1.1 }}
       />
       <CardContent className="relative p-5 md:p-6">
-        <h3 className="allow-white text-white font-bold flex items-center gap-2 mb-4 tracking-tight">
-          <span className="grid h-10 w-10 place-items-center rounded-xl border border-white/25 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.75)]">
-            <Icon className="h-[18px] w-[18px] text-white" strokeWidth={2.8} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        <h3 className="text-[#1A1A1A] font-bold flex items-center gap-2 mb-4 tracking-tight">
+          <span
+            data-no-contrast-guard
+            data-emerald-ok="icon"
+            className="grid h-10 w-10 place-items-center rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.55)]"
+            style={{ background: markBg }}
+          >
+            <Icon className="h-[18px] w-[18px]" strokeWidth={2.8} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </span>
-          <span className="allow-white text-white">{title}</span>
+          <span className="text-[#1A1A1A]">{title}</span>
         </h3>
         <ul className="space-y-2.5">
           {items.map((p, i) => (
-            <li key={i} className="allow-white flex items-start gap-2 rounded-xl border border-white/12 bg-white/10 px-3 py-2 text-white text-sm leading-relaxed shadow-[inset_0_1px_0_rgba(255,255,255,.10),0_10px_22px_-20px_rgba(0,0,0,.75)] backdrop-blur-sm">
+            <li key={i} className="flex items-start gap-2 rounded-xl bg-[#FDFBF7]/70 px-3 py-2 text-[#1A1A1A] text-sm leading-relaxed">
               {renderMark()}
-              <span className="allow-white text-white">{p}</span>
+              <span className="text-[#1A1A1A]">{p}</span>
             </li>
           ))}
         </ul>
@@ -785,6 +786,7 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
     </Card>
   );
 }
+
 
 function LockedTraining({ hasUser }: { hasUser: boolean }) {
   return (
