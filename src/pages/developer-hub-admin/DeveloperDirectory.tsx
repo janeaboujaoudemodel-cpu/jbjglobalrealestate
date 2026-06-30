@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2 } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
@@ -20,6 +20,35 @@ interface Row {
   website_url: string | null;
   description: string | null;
   last_enriched_at: string | null;
+  ceo_name: string | null;
+  founded_year: number | null;
+  headquarters: string | null;
+  completed_projects: number | null;
+  offplan_projects: number | null;
+  total_units_delivered: number | null;
+  upcoming_units: number | null;
+  logo_status: string | null;
+  project_count: number;
+  projects_for_sale: number;
+  total_project_units: number;
+  avg_price_from: number | null;
+  coverage: string[];
+}
+
+interface ProjectStatRow {
+  id: string;
+  developer_id: string | null;
+  emirate: string | null;
+  location: string | null;
+  is_published: boolean | null;
+  is_sold_out: boolean | null;
+  sale_status: string | null;
+  availability_status: string | null;
+  status: string | null;
+  price_from: number | null;
+  price_to: number | null;
+  total_units: number | null;
+  available_units: number | null;
 }
 
 const PAGE_SIZE = 60;
