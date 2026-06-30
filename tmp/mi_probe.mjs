@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 const url = process.env.URL || 'http://localhost:5173/market-intelligence';
-const browser = await chromium.launch({ headless: true, chromiumSandbox: false });
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', chromiumSandbox: false });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
 page.on('console', msg => { if (msg.type()==='error') console.log('console-error', msg.text()); });
 await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
