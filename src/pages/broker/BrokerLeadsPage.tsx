@@ -5,6 +5,7 @@ import { useBrokerScopedLeads } from "@/hooks/useBrokerScopedLeads";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { useAuth } from "@/contexts/AuthContext";
 import CRMLeadModal from "@/components/crm/CRMLeadModal";
+import { Button } from "@/components/ui/button";
 
 export default function BrokerLeadsPage() {
   const leads = useBrokerScopedLeads();
