@@ -4,7 +4,6 @@ import {
   ExternalLink
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { OPEN_DATA_SOURCES } from "@/config/open-data-config";
 import {
   MI_EYEBROW,
@@ -89,8 +88,8 @@ export const DataSourcesPanel = () => {
                       </div>
 
                       <div className="flex items-center gap-2 text-xs font-semibold leading-none text-[#1A1A1A] mb-4">
-                        <Shield className="w-4 h-4 text-[#064E3B]" />
-                        Official Government Source
+                        <span className="mi-mini-icon"><Shield className="w-3.5 h-3.5" /></span>
+                        <span>Official Government Source</span>
                       </div>
 
                       {source.url && (

@@ -126,14 +126,12 @@ const MarketReportsPage = () => {
         description="Monthly, quarterly, and annual Dubai real estate market reports with clear charts, government Open Data attribution, and editorial analysis for BUY · SELL · RENT decisions."
       />
 
-      {/* Premium Hero with Video */}
+      {/* Premium Hero */}
       <MarketIntelligenceHero
         badge="Market Intelligence"
         badgeIcon={FileText}
         title="Market Reports"
         description="Downloadable reports with clear charts, government Open Data attribution, and editorial analysis for informed decisions."
-        videoSrc="/__l5e/assets-v1/7946e43d-6faf-4450-8730-d79ee0d2cc12/mi-market-reports.mp4"
-        videoPoster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
       />
 
       {/* Main Content with TOC Sidebar */}

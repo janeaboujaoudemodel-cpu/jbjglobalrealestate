@@ -159,7 +159,7 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card className="mi-card-hover-emerald mi-gold-frame group h-full rounded-2xl">
+                <Card className="mi-gold-frame h-full rounded-2xl">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                       <IconBox icon={insight.icon} className="shrink-0" />
@@ -197,13 +197,13 @@ export const AIMarketInsights = () => {
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="mb-6 rounded-lg bg-[#EFE6D6] border border-[#B89555]/35 p-1 gap-1">
+                  <TabsList className="mb-6 mx-auto flex h-auto w-full max-w-3xl justify-center rounded-2xl bg-[#EFE6D6] border border-[#B89555]/35 p-1.5 gap-2">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
                         value={opt.id}
                         data-no-contrast-guard
-                        className="flex items-center gap-2 rounded-md text-[#1A1A1A] data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:shadow-[0_6px_16px_rgba(3,48,38,0.28)] [&[data-state=active]_svg]:!text-white [&[data-state=active]_svg]:!stroke-white"
+                         className="mi-tab-emerald flex items-center gap-2 rounded-xl"
                       >
                         <opt.icon className="w-4 h-4" />
                         <span className="hidden sm:inline">{opt.label}</span>
@@ -238,7 +238,7 @@ export const AIMarketInsights = () => {
                         {generatedNarratives[opt.id] && (
                            <div className="p-6 rounded-lg bg-[#EFE6D6] border border-[#B89555]/30">
                             <div className={`${MI_H4} flex items-center gap-2 mb-3`}>
-                              <MessageSquare className="w-4 h-4" />
+                              <span className="mi-mini-icon"><MessageSquare className="w-3.5 h-3.5" /></span>
                               AI Market Analysis
                             </div>
                             <div className={MI_BODY}>
@@ -257,13 +257,8 @@ export const AIMarketInsights = () => {
           {/* Disclaimer */}
           <motion.div
             data-no-contrast-guard
-            className="mt-8 flex items-start gap-3 p-5 max-w-3xl mx-auto rounded-2xl"
-            style={{
-              background: "linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)",
-              border: "1px solid rgba(184,149,85,0.55)",
-              boxShadow: "0 14px 32px rgba(3,48,38,0.28)",
-              color: "#ffffff",
-            }}
+            data-surface="emerald"
+            className="mi-emerald-panel mt-8 flex items-start gap-3 p-5 max-w-3xl mx-auto rounded-2xl"
             variants={fadeInUp}
           >
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 border border-white/25">

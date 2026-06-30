@@ -5,8 +5,6 @@ import {
   ArrowUpRight, BarChart2, Home, Building2, ChevronRight
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { DUBAI_AREAS_MARKET_DATA, type AreaMarketSnapshot } from "@/config/open-data-config";
 import {
   MI_EYEBROW,
@@ -32,10 +30,11 @@ const TrendIcon = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
 };
 
 const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
+  const label = trend === 'bullish' ? 'Rising Market' : trend === 'bearish' ? 'Cooling Market' : 'Stable Market';
   return (
     <span className="mi-chip-emerald whitespace-nowrap shrink-0">
       <TrendIcon trend={trend} />
-      <span className="capitalize">{trend}</span>
+      <span>{label}</span>
     </span>
   );
 };
@@ -90,12 +89,12 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <div className="space-y-3 mb-4">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[#064E3B]">Demand Score</span>
-                <span className="font-bold text-[#064E3B]">{area.demandScore}/100</span>
+                <span className="font-semibold text-[#1A1A1A]">Demand Score</span>
+                <span className="font-bold text-[#1A1A1A]">{area.demandScore}/100</span>
               </div>
               <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-[#064E3B]/10" data-score-bar>
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#064E3B] to-[#047857]"
+                  className="h-full rounded-full mi-bar-emerald"
                   style={{ width: `${area.demandScore}%` }}
                 />
               </div>
@@ -107,7 +106,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
               </div>
               <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-[#064E3B]/10" data-score-bar>
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#064E3B] to-[#047857]"
+                  className="h-full rounded-full mi-bar-emerald"
                   style={{ width: `${area.supplyScore}%` }}
                 />
               </div>
