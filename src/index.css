@@ -21883,6 +21883,14 @@ html body #root [data-mi-page] {
   overflow-x: clip !important;
 }
 
+html:has([data-mi-page]),
+body:has([data-mi-page]),
+#root:has([data-mi-page]),
+html body #root main.jj-main-shell:has([data-mi-page]) {
+  overflow-y: auto !important;
+  overflow-x: clip !important;
+}
+
 html body #root [data-mi-page] [data-mi-hero],
 html body #root [data-insights-page] [data-mi-page] [data-mi-hero],
 html body #root main.jj-main-shell [data-mi-page] [data-mi-hero] {
