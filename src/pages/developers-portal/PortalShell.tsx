@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LogOut, Home, Building2, Menu } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -25,13 +25,14 @@ const ITEMS: Item[] = [
   { to: "/developers-portal/deals", label: "Deals", icon: Briefcase, roles: ["owner"] },
   { to: "/developers-portal/calendar", label: "Calendar", icon: Calendar, roles: ["owner", "portal_developer", "portal_rep"] },
   { to: "/developers-portal/access-requests", label: "Access Requests", icon: ShieldCheck, roles: ["owner"] },
-  { to: "/developers-portal/enrichment", label: "Site Rebuild", icon: Sparkles, roles: ["owner"] },
+  { to: "/developers-portal/enrichment", label: "Profile Rebuild", icon: Sparkles, roles: ["owner"] },
   { to: "/developers-portal/missing-logos", label: "Missing Logos", icon: ImageOff, roles: ["owner"] },
   { to: "/developers-portal/settings", label: "Settings", icon: Settings, roles: ["owner"] },
 ];
 
 export default function PortalShell() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { signOut } = useAuth();
   const { role } = usePortalRole();
   const isMobile = useIsMobile();
@@ -43,6 +44,9 @@ export default function PortalShell() {
     : "Developers Portal";
 
   const visible = ITEMS.filter((i) => role && i.roles.includes(role));
+  const activeItem = [...visible]
+    .filter((item) => item.end ? location.pathname === item.to : location.pathname === item.to || location.pathname.startsWith(`${item.to}/`))
+    .sort((a, b) => b.to.length - a.to.length)[0];
 
   const handleSignOut = async () => {
     try { await signOut(); toast.success("Signed out"); navigate("/"); }
@@ -74,21 +78,21 @@ export default function PortalShell() {
             end={item.end}
             onClick={onNavigate}
             data-sidebar-owner-item
-            className={({ isActive }) =>
+            className={() =>
               cn(
                 "group min-h-12 w-full flex items-center gap-3.5 px-4 rounded-xl border text-[15px] font-extrabold transition-colors",
-                isActive
+                activeItem?.to === item.to
                   ? "jj-emerald-metallic allow-white !text-white border-transparent shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
                   : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/55"
               )
             }
           >
-            {({ isActive }) => (
+            {() => (
               <>
                 <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
                   <item.icon className="allow-white w-[13px] h-[13px]" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 </span>
-                <span className={cn("min-w-0 flex-1 text-left leading-[1.15]", isActive ? "text-white" : "text-[#1A1A1A]")}>{item.label}</span>
+                <span className={cn("min-w-0 flex-1 text-left leading-[1.15]", activeItem?.to === item.to ? "text-white" : "text-[#1A1A1A]")}>{item.label}</span>
               </>
             )}
           </NavLink>
