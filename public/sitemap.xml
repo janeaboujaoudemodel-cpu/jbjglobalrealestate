@@ -414,13 +414,13 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/beyond</loc>
+    <loc>https://www.jbj.ae/developer/damac-properties</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/damac-properties</loc>
+    <loc>https://www.jbj.ae/developer/beyond</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -768,13 +768,13 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/arada-properties</loc>
+    <loc>https://www.jbj.ae/developer/emaar-properties</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/emaar-properties</loc>
+    <loc>https://www.jbj.ae/developer/arada-properties</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -1008,12 +1008,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/danube-properties</loc>
-    <lastmod>2026-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://www.jbj.ae/developer/mag-group</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -1022,6 +1016,12 @@
   <url>
     <loc>https://www.jbj.ae/developer/mesab-limited</loc>
     <lastmod>2026-04-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/developer/danube-properties</loc>
+    <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -3175,7 +3175,7 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/majid-al-futtaim</loc>
-    <lastmod>2026-06-28</lastmod>
+    <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -3210,14 +3210,14 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/object-1</loc>
-    <lastmod>2026-06-30</lastmod>
+    <loc>https://www.jbj.ae/developer/oro-24</loc>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/developer/oro-24</loc>
-    <lastmod>2026-04-24</lastmod>
+    <loc>https://www.jbj.ae/developer/object-1</loc>
+    <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
