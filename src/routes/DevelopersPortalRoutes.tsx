@@ -6,9 +6,10 @@
  * Public sub-route: /developers-portal/reps/apply (no auth)
  */
 import { lazy, Suspense } from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Route, Navigate, Outlet, useLocation } from "react-router-dom";
 import PageLoader from "@/components/PageLoader";
 import PortalGuard from "@/components/developers-portal/PortalGuard";
+import { usePortalRole } from "@/hooks/usePortalRole";
 
 const PortalShell = lazy(() => import("@/pages/developers-portal/PortalShell"));
 const PortalOverview = lazy(() => import("@/pages/developers-portal/PortalOverview"));
@@ -35,6 +36,32 @@ const Self = () => (
   </Suspense>
 );
 
+const ownerDestinationFor = (pathname: string) => {
+  if (pathname === "/developers-portal" || pathname === "/developers-portal/") return "/owner/developers";
+  if (pathname.startsWith("/developers-portal/directory")) return "/owner/developers";
+  if (pathname.startsWith("/developers-portal/developers/")) {
+    return pathname.replace("/developers-portal/developers/", "/owner/developers/");
+  }
+  if (pathname.startsWith("/developers-portal/enrichment")) return "/owner/developers/profile-rebuild";
+  if (pathname.startsWith("/developers-portal/missing-logos")) return "/owner/developers/missing-logos";
+  if (pathname.startsWith("/developers-portal/reps/by-emirate")) return "/owner/developers/reps/by-emirate";
+  if (pathname.startsWith("/developers-portal/reps")) return pathname.replace("/developers-portal/reps", "/owner/developers/reps");
+  if (pathname.startsWith("/developers-portal/projects")) return "/owner/developers/projects";
+  if (pathname.startsWith("/developers-portal/calendar")) return "/owner/developers/calendar";
+  if (pathname.startsWith("/developers-portal/access-requests")) return "/owner/developers/access-requests";
+  return "/owner/developers";
+};
+
+const PortalEntry = () => {
+  const { role, isLoading } = usePortalRole();
+  const location = useLocation();
+  if (isLoading) return <PageLoader />;
+  if (role === "owner") {
+    return <Navigate to={ownerDestinationFor(location.pathname)} replace />;
+  }
+  return <PortalShell />;
+};
+
 export const DevelopersPortalRoutes = () => (
   <>
     {/* Public — no guard */}
@@ -48,6 +75,7 @@ export const DevelopersPortalRoutes = () => (
       element={
         <PortalGuard>
           <Suspense fallback={<PageLoader />}><PortalShell /></Suspense>
+          <Suspense fallback={<PageLoader />}><PortalEntry /></Suspense>
         </PortalGuard>
       }
     >
@@ -75,10 +103,10 @@ export const DevelopersPortalRoutes = () => (
     {/* Redirects: old hub URLs → new portal */}
     <Route path="/developer-hub" element={<Navigate to="/developers-portal" replace />} />
     <Route path="/developer-hub/*" element={<Navigate to="/developers-portal" replace />} />
-    <Route path="/developer-hub-admin" element={<Navigate to="/developers-portal" replace />} />
-    <Route path="/developer-hub-admin/directory" element={<Navigate to="/developers-portal/directory" replace />} />
-    <Route path="/developer-hub-admin/missing-logos" element={<Navigate to="/developers-portal/missing-logos" replace />} />
-    <Route path="/developer-hub-admin/enrichment" element={<Navigate to="/developers-portal/enrichment" replace />} />
-    <Route path="/developer-hub-admin/*" element={<Navigate to="/developers-portal" replace />} />
+    <Route path="/developer-hub-admin" element={<Navigate to="/owner/developers" replace />} />
+    <Route path="/developer-hub-admin/directory" element={<Navigate to="/owner/developers" replace />} />
+    <Route path="/developer-hub-admin/missing-logos" element={<Navigate to="/owner/developers/missing-logos" replace />} />
+    <Route path="/developer-hub-admin/enrichment" element={<Navigate to="/owner/developers/profile-rebuild" replace />} />
+    <Route path="/developer-hub-admin/*" element={<Navigate to="/owner/developers" replace />} />
   </>
 );
