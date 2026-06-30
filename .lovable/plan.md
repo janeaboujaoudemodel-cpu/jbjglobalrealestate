@@ -1,51 +1,44 @@
 ## Goal
-Lift the Broker CRM to a premium standard, mirror the same shell into Developer and Investor portals (CRM + dashboard parity), then run a final global pass to eliminate any remaining black-on-emerald / wrong-eyebrow contrast issues across the site.
+Rebuild every page reachable from the **Insights** branch of the vertical sidebar so it conforms to the locked brand contract (champagne surfaces, emerald CTAs, white-on-emerald, ink-on-champagne, gold hairline only as corners, IconTile, PremiumSectionCard, full-bleed bands, no gray, no white-svg-on-light, white-svg-on-emerald). Consolidate the duplicate "Guides Library" / "Books Library" into a single canonical page. Then sweep any pages reachable from the sidebar that I find drifted from the contract.
 
-## Phase 1 — Broker CRM restyle (`/broker/crm` + pipeline)
-1. Page shell
-   - Wrap in `PremiumSectionCard` blocks, champagne band background, consistent 24/32px rhythm.
-   - Unified emerald eyebrow pill at the top of every panel (`Pipeline`, `Filters`, `AI Suggestions`, `Stage column headers`) using the locked `data-section-label` / `data-no-contrast-guard` / `data-allow-dark-cta` / `data-surface="emerald"` chain so they always render white-on-emerald.
-2. Kanban
-   - Stage column header → small emerald chip with white count badge (no black text on emerald, no arrows).
-   - Lead card → champagne raised card, 1px gold hairline, ink title, price pill, emerald CTA "Open lead" with white icon. Hover: gentle lift + champagne wash, never flips text to black.
-   - Empty states: emerald `IconTile` + ink heading + ink helper, matching "No leads in your scope yet" pattern.
-3. Filters & toolbar
-   - Replace bare selects with champagne pills; active filter chip = emerald metallic with white text.
-   - "AI Next-Best-Action" sidebar — same component as dashboard, white-on-emerald confirmed.
-4. Lead drawer
-   - Tabs (Overview / Timeline / Notes / Files) → champagne strap with emerald active = white icon+label, idle = ink.
-   - Stage progress, action buttons (Call / Email / WhatsApp / Schedule) → emerald pill with white icon + white label, never black.
+## Step 1 — Audit (one turn, no UI changes)
+- Map every Insights route in `GlobalVerticalNav.tsx` to its component.
+- Diff the route list against `src/pages/*` to flag orphan pages that are linked from nav but missing, or built but unlinked.
+- Identify the canonical file for each of the 17 targets and note which currently violate the contract.
+- Decide: **keep "Guides Library" as canonical, redirect "Books Library"** (or vice versa — confirm with you below).
 
-## Phase 2 — Developer Portal parity
-Mirror the Broker shell into `/developers-portal/*`:
-- Dashboard: same KPI strip (no arrows), `ConciergeGreeting` (Sarah voice), `NextBestActionCard` wired to developer leads, eyebrow pills (`DEVELOPER WORKSPACE`, `INVENTORY PULSE`, `LIVE ENQUIRIES`, `BROKER NETWORK`, `DATA ACCESS`).
-- CRM (developer enquiries): same Kanban primitives as broker, lead source = inbound enquiries from project pages.
-- Sidebar uses the smaller-icon emerald tiles already locked in `BrokerPortalSidebar`.
+Deliverable: a short table (route → component → status → planned action) posted back in chat, no commits.
 
-## Phase 3 — Investor Portal parity
-Mirror the same shell into `/investor-dashboard`:
-- Replace ad-hoc tab strap and panels with the standardized `SectionHeader` eyebrow + `PremiumSectionCard`.
-- KPI tiles match broker (no arrows, emerald glyph, ink number, ink label).
-- `ConciergeGreeting` + `NextBestActionCard` (investor variant: next viewing, next payment, next milestone).
-- Vault / Favorites / Browsing History panels reuse the same shell.
+## Step 2 — Shared primitives (one turn)
+Before touching pages, lock the shared scaffolding so each page rebuild is a small edit, not a bespoke redesign:
+- `InsightsPageShell` — full-bleed champagne band, hero with IconTile + eyebrow + title (ink #1A1A1A) + lede, breadcrumb, `<PremiumSectionCard>` children slot.
+- `InsightsHero` variant of the shell with emerald CTA pair (`jj-pill-emerald-metallic` primary, champagne+emerald-ink secondary).
+- `GuideCard`, `ReportCard`, `FAQAccordion` primitives so Buyer/Seller/Tenant/Landlord/Investor/Golden-Visa guides all render through the same component.
 
-## Phase 4 — Global contrast & eyebrow sweep
-1. Add `data-section-label` + the lock chain to every remaining eyebrow across:
-   - Owner back-end (DMS, Marketing Hub, Meetings, Legal Hub, Document Studio)
-   - Broker sub-pages (Listings, Smart Inbox, Email Setup, Team & HR, Calendar, Tasks, Deals & Commission, Developer Visits, Forms & Agreements, JBJ Academy, Marketing Toolkit, AI Sales Assistant, Notifications, Brand Profile, Settings)
-   - Developer & Investor sub-pages
-   - Marketing pages eyebrows (News, Intel, Guides, FAQ)
-2. Promote the working `.jj-section-eyebrow` block in `index.css` to also auto-apply the white-ink-on-emerald lock without needing every consumer to add the attribute chain — by raising the rule's class-specificity above the global Ink Lock (using a long `:is(...).jj-section-eyebrow` chain that out-specifies the `:not()` ladder).
-3. E2E drive via Playwright headless across: `/broker/portal`, `/broker/crm`, `/broker/listings`, `/developers-portal`, `/developers-portal/crm`, `/investor-dashboard`, `/owner`, `/`, `/projects`, `/news`, `/guides`. Screenshot each, scan eyebrows + KPI tiles + CTAs for black-on-emerald, patch any offender.
+## Step 3 — Page rebuilds, in waves
+Each page = (1) refactor to shared primitives, (2) Playwright screenshot at 1280×1800, (3) zoom-inspect hero + one card grid + one CTA, (4) post the screenshot, (5) only then move on. If a page fails inspection I patch and re-shoot before advancing.
 
-## Technical notes
-- All work is presentation-only. No schema, no edge function changes.
-- Reuses existing primitives: `PremiumSectionCard`, `SectionHeader`, `IconTile`, `NextBestActionCard`, `ConciergeGreeting`, `.jj-section-eyebrow`, `.jj-pill-emerald-metallic`.
-- New tiny primitive: `CrmKanbanColumn` + `CrmLeadCard` shared by broker and developer CRMs (in `src/components/crm/`).
-- Specificity-raise for `.jj-section-eyebrow` lives at the end of `src/index.css` (no new file).
-- Verification: Playwright screenshots saved under `/tmp/browser/crm-pass/` per route.
+**Wave A — Intelligence (5):** Market Intelligence · Market Overview · Market Report · Area Intelligence · Reports Archive
+**Wave B — Editorial (2):** News · Methodology
+**Wave C — Guides hub + buyer/seller side (4):** Guides Library (canonical, absorbs Books Library) · Buyer's Guides · Seller's Guides · Golden Visa Guide
+**Wave D — Rental side + education (4):** Rental Guides · Tenant Guide · Landlord Guide · Investor Education
+**Wave E — Help (1):** FAQ Hub
+**Wave F — Orphan sweep:** any sidebar-linked page from Step 1 that isn't one of the 17 but drifts from contract gets the same shell treatment.
 
-## Out of scope
-- No backend, schema, edge function, RLS, or data model changes.
-- No new features beyond presentation parity.
-- Owner portal restyle (already done in earlier passes) — only contrast fixes here.
+Books Library route is kept as a 301-style redirect to Guides Library so existing links don't 404.
+
+## Step 4 — Final verification
+- Playwright pass over every rebuilt route, full-page screenshot, posted as a contact-sheet.
+- Run `src/test/global-x-overflow.regression.test.ts` adding the new routes.
+
+## Technical details
+- No business logic / data-fetching changes — visual + structural only, per your standing rule.
+- All color values come from existing tokens / `index.css` utilities (`jj-band`, `jj-pill-emerald-metallic`, `jj-corner-card`, `PremiumSectionCard`, `IconTile`, `SectionEyebrow`). Zero new hex.
+- `data-no-contrast-guard` only where a token surface legitimately demands an override (e.g. emerald CTA inside a champagne card).
+- Guides/Books consolidation: keep `/guides-library` (or whichever route you confirm), delete the duplicate page component, add a `<Navigate replace>` in `App.tsx` for the retired path.
+
+## Two quick confirmations before I start Step 1
+1. **Canonical name** — keep **Guides Library** and retire Books Library, or the reverse?
+2. **Validation cadence** — screenshot + post **every** page (17 round-trips), or screenshot every page but batch-post per wave (5 round-trips)? Batched is ~3× faster with the same coverage.
+
+Reply with the two answers and I'll start Step 1 immediately.
