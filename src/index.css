@@ -21450,13 +21450,26 @@ html body .jj-text-emerald * {
 }
 .mi-hero-orbit {
   position: absolute;
-  border: 1px solid rgba(184,149,85,.48);
+  border: 1px solid rgba(255,255,255,.35);
   border-radius: 9999px;
   transform: rotate(-12deg);
-  box-shadow: inset 0 0 45px rgba(184,149,85,.08), 0 0 55px rgba(6,78,59,.18);
+  box-shadow: inset 0 0 60px rgba(255,255,255,.06), 0 0 80px rgba(255,255,255,.08);
+  animation: mi-hero-orbit-spin 42s linear infinite;
 }
-.mi-hero-orbit-one { width: min(64vw, 820px); height: min(64vw, 820px); right: -12vw; top: 12vh; }
-.mi-hero-orbit-two { width: min(44vw, 560px); height: min(44vw, 560px); right: 16vw; bottom: -18vh; opacity: .72; }
+.mi-hero-orbit::before, .mi-hero-orbit::after {
+  content: "";
+  position: absolute;
+  width: 10px; height: 10px; border-radius: 9999px;
+  background: #FFFFFF;
+  box-shadow: 0 0 18px rgba(255,255,255,.85), 0 0 38px rgba(255,255,255,.45);
+}
+.mi-hero-orbit::before { top: -5px; left: 50%; }
+.mi-hero-orbit::after { bottom: -5px; left: 32%; opacity: .7; }
+.mi-hero-orbit-one { width: min(64vw, 820px); height: min(64vw, 820px); right: -12vw; top: 12vh; animation-duration: 48s; }
+.mi-hero-orbit-two { width: min(44vw, 560px); height: min(44vw, 560px); right: 16vw; bottom: -18vh; opacity: .72; animation-duration: 32s; animation-direction: reverse; }
+@keyframes mi-hero-orbit-spin {
+  to { transform: rotate(348deg); }
+}
 .mi-hero-data-stack {
   position: absolute;
   right: clamp(18px, 6vw, 96px);
