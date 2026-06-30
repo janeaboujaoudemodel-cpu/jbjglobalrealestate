@@ -259,6 +259,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
           {!collapsed && (
             <>
               <span
+                data-jbj-allow-shrink
                 className={cn(
                   "min-w-0 flex-1 text-left whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.16] transition-colors duration-200",
                   item.premium && "font-semibold",

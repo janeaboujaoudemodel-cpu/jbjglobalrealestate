@@ -71,7 +71,7 @@ export default function QuickActionsGrid() {
                   <div data-backend-icon-tile="emerald-soft" className="allow-white w-10 h-10 rounded-lg bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center shrink-0 group-hover:bg-[#064E3B]/15 group-hover:border-[#064E3B]/35 transition-colors">
                     <action.icon className={cn("allow-white h-5 w-5 flex-shrink-0 text-white transition-colors")} strokeWidth={2.15} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <span className="text-[12px] text-[#1A1A1A]/85 group-hover:text-[#1A1A1A] transition-colors text-center font-semibold leading-tight max-w-full break-words">
+                  <span data-jbj-allow-shrink className="text-[12px] text-[#1A1A1A]/85 group-hover:text-[#1A1A1A] transition-colors text-center font-semibold leading-tight max-w-full break-words">
                     {action.label}
                   </span>
                 </button>
