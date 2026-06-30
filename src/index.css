@@ -21417,6 +21417,27 @@ html body .jj-text-emerald * {
   text-shadow: none !important;
 }
 
+/* ============================================================
+   PASS 142 — BARE SECTION HEADINGS DEFAULT TO INK
+   Plain <h2>/<h3> section titles that have no explicit Tailwind
+   text-color utility render in ink #1A1A1A on light surfaces.
+   Excludes dark heroes, emerald surfaces, and any element that
+   opts out via [data-no-contrast-guard] or already declares a
+   text-* color class.
+   ============================================================ */
+html body :is(h2, h3):not([class*="text-"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([data-hero-dark] *):not(.mi-hero-scene *):not([data-icon-tone="emerald"] *):not([data-surface="emerald"] *):not(.jj-pill-emerald-metallic *):not([class*="bg-[#06"] *):not([class*="bg-emerald"] *):not([class*="bg-black"] *):not([class*="bg-neutral-9"] *) {
+  color: #1A1A1A;
+  -webkit-text-fill-color: #1A1A1A;
+  background: none;
+  background-image: none;
+  background-clip: initial;
+  -webkit-background-clip: initial;
+  text-shadow: none;
+}
+
+
+
+
 
 
 
