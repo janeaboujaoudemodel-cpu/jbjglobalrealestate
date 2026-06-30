@@ -17565,7 +17565,7 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
-:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])):not([data-icon-only]):not(.aspect-square) {
+:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([role="checkbox"]):not([role="radio"]):not([role="switch"]):not([data-radix-collection-item])):not([data-icon-only]):not(.aspect-square) {
   padding-inline: var(--jbj-control-x);
   padding-block: 0.55rem;
 }
