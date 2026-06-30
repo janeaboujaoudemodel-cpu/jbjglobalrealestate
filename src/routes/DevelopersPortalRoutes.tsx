@@ -6,7 +6,7 @@
  * Public sub-route: /developers-portal/reps/apply (no auth)
  */
 import { lazy, Suspense } from "react";
-import { Route, Navigate, Outlet, useLocation } from "react-router-dom";
+import { Route, Navigate, useLocation } from "react-router-dom";
 import PageLoader from "@/components/PageLoader";
 import PortalGuard from "@/components/developers-portal/PortalGuard";
 import { usePortalRole } from "@/hooks/usePortalRole";
@@ -74,7 +74,6 @@ export const DevelopersPortalRoutes = () => (
       path="/developers-portal"
       element={
         <PortalGuard>
-          <Suspense fallback={<PageLoader />}><PortalShell /></Suspense>
           <Suspense fallback={<PageLoader />}><PortalEntry /></Suspense>
         </PortalGuard>
       }
