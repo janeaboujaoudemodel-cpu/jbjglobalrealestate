@@ -195,34 +195,8 @@ const MarketReport = () => {
                     <div className="absolute inset-0 opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent)" }} />
                   </div>
 
-                  {/* ============ PAGE BLOCK — connected book edges, not detached panels ============ */}
-                  <div
-                    className="absolute top-5 bottom-5 -right-7 w-9 rounded-r-[14px] overflow-hidden"
-                    style={{
-                      transform: "translate3d(9px, 2px, -18px) skewY(1.5deg)",
-                      background:
-                        "repeating-linear-gradient(0deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
-                      boxShadow: "inset 8px 0 14px rgba(0,0,0,.18), inset -2px 0 10px rgba(255,255,255,.45)",
-                    }}
-                  />
-                  <div
-                    className="absolute left-10 -right-4 -top-3 h-8 rounded-tr-[18px] overflow-hidden"
-                    style={{
-                      transform: "translate3d(7px, 4px, -20px) skewX(-5deg)",
-                      background:
-                        "repeating-linear-gradient(90deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
-                      boxShadow: "inset 0 -8px 12px rgba(0,0,0,.16)",
-                    }}
-                  />
-                  <div
-                    className="absolute left-10 -right-5 -bottom-3 h-8 rounded-br-[18px] overflow-hidden"
-                    style={{
-                      transform: "translate3d(8px, -2px, -20px) skewX(5deg)",
-                      background:
-                        "repeating-linear-gradient(90deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
-                      boxShadow: "inset 0 8px 12px rgba(0,0,0,.14)",
-                    }}
-                  />
+                  {/* Page block removed — book renders clean with back cover + front cover only */}
+
 
                   {/* ============ FRONT COVER (photo, unchanged) ============ */}
                   <div
