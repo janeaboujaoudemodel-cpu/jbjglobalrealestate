@@ -419,7 +419,7 @@ export default function BrokerCRM() {
       </PremiumCard>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 min-w-0">
+      <div className="grid gap-3 md:gap-4 min-w-0 [grid-template-columns:repeat(auto-fit,minmax(168px,1fr))]">
         <Kpi icon={Users} label="Assigned leads" value={totalLeads} onClick={() => setTab("leads")} />
         <Kpi icon={Database} label="Databases" value={dbs.data?.length ?? 0} onClick={() => setTab("databases")} />
         <Kpi icon={Phone} label="Calls logged" value={callsLogged} onClick={() => setTab("calls")} />
@@ -469,7 +469,7 @@ export default function BrokerCRM() {
               </span>
               <span className="text-xs text-[#1A1A1A]/60">{totalLeads} total leads</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 min-w-0">
+            <div className="grid gap-3 min-w-0 [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))]">
               {stageCounts.map((s) => (
                 <button
                   key={s.key}
