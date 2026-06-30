@@ -90,6 +90,12 @@ const webPageSchema = {
 const MarketIntelligence = () => {
   // Inject structured data
   useEffect(() => {
+    // Route-scoped body flag used by the Market Intelligence scroll contract.
+    // This replaces expensive root `:has([data-mi-page])` CSS selectors that
+    // forced browser style recalculation whenever a Radix dropdown/portal opened
+    // from the horizontal header.
+    document.body.setAttribute("data-mi-page-active", "true");
+
     const schemas = [organizationSchema, breadcrumbSchema, webPageSchema];
     
     // Remove existing schema scripts
@@ -106,6 +112,7 @@ const MarketIntelligence = () => {
     });
 
     return () => {
+      document.body.removeAttribute("data-mi-page-active");
       const scripts = document.querySelectorAll('script[data-schema="market-intelligence-main"]');
       scripts.forEach(script => script.remove());
     };
