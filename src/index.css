@@ -21328,3 +21328,31 @@ html body #root [data-insights-page] section :is(
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
+/* Neutralise the legacy ".jj-box-active" navy gradient tiles and any
+ * inline linear-gradient(rgba(...dark...)) within insights — these
+ * predate the champagne contract and were unreadable on the new sheet.
+ * Repaint them as soft cream Compare-card sub-tiles with gold hairline. */
+html body #root [data-insights-page] section :is(.jj-box-active, .jj-box-inactive, .jj-neon-tile, .jj-guide-card, [class*="bg-[linear-gradient"]):not([data-keep-dark]):not([data-hero-dark]) {
+  background-color: #FDFBF7 !important;
+  background-image: none !important;
+  border: 1px solid rgba(184, 149, 85, 0.28) !important;
+  box-shadow: 0 4px 14px rgba(26, 26, 26, 0.04) !important;
+}
+
+html body #root [data-insights-page] section :is(.jj-box-active, .jj-box-inactive, .jj-neon-tile, .jj-guide-card, [class*="bg-[linear-gradient"]):not([data-keep-dark]):not([data-hero-dark]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,div) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* Emerald icon tiles inside those repainted cards keep their white glyphs */
+html body #root [data-insights-page] section .jj-icon-tile-emerald,
+html body #root [data-insights-page] section [data-icon-tone="emerald"] {
+  background-color: #0B5132 !important;
+}
+html body #root [data-insights-page] section .jj-icon-tile-emerald svg,
+html body #root [data-insights-page] section [data-icon-tone="emerald"] svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+
