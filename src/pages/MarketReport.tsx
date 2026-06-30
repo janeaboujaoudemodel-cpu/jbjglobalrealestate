@@ -15,11 +15,11 @@ import { useMarketReport } from "./useMarketReport";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 
 /**
- * Market Report — Champagne contract rebuild.
+ * Market Report — white-page premium book rebuild.
  *
  * Brand rules applied (per mem://index.md):
- *  - Page = champagne #FDFBF7 with ink #1A1A1A text. No navy/neon shell.
- *  - Cards match the homepage "Compare Your Property" panel: surface #F7F2EA,
+ *  - Page = pure white with ink #1A1A1A text. No navy/neon shell.
+ *  - Cards match the homepage "Compare Your Property" panel: white surface,
  *    gold #B89555 1px hairline, rounded-3xl, soft elevation, generous padding.
  *  - CTAs use .jj-pill-emerald-metallic with WHITE foreground (no black).
  *  - Feature/check tiles = emerald square with WHITE glyph + ink label.
@@ -45,6 +45,7 @@ const MarketReport = () => {
   return (
     <div
       data-insights-page
+      data-market-report-page
       data-marketing-page
       className="min-h-screen bg-white text-[#1A1A1A]"
     >
@@ -61,6 +62,7 @@ const MarketReport = () => {
               style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
               data-no-contrast-guard
               data-icon-tone="emerald"
+              data-emerald-icon-surface
             >
               <Check className="w-10 h-10" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={3} />
             </div>
@@ -380,10 +382,11 @@ const MarketReport = () => {
                       className="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30"
                     >
                       <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
+                        className="jj-icon-tile-emerald w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
                         data-icon-tone="emerald"
+                        data-emerald-icon-surface
                       >
                         <Icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                       </div>
@@ -479,6 +482,7 @@ const MarketReport = () => {
                     style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                     data-no-contrast-guard
                     data-icon-tone="emerald"
+                    data-emerald-icon-surface
                   >
                     <Check
                       className="w-10 h-10"
@@ -519,6 +523,7 @@ const MarketReport = () => {
                       style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                       data-no-contrast-guard
                       data-icon-tone="emerald"
+                      data-emerald-icon-surface
                     >
                       <Unlock className="w-6 h-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </div>
@@ -657,6 +662,7 @@ const MarketReport = () => {
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
                         data-icon-tone="emerald"
+                        data-emerald-icon-surface
                       >
                         <Check
                           className="w-4 h-4"
