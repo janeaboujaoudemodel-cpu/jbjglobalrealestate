@@ -55,7 +55,7 @@ interface KPICardProps {
 function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) {
   return (
     <Card 
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-gold/10 ${onClick ? 'cursor-pointer' : ''}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-gold/10 overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -63,8 +63,8 @@ function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) 
       aria-label={onClick ? `View ${title}` : undefined}
     >
       <CardContent className="p-5">
-        <div className="flex items-start justify-between">
-          <div>
+        <div className="flex items-center justify-between gap-4 min-w-0">
+          <div className="min-w-0 flex-1">
             {loading ? (
               <Skeleton className="h-8 w-16 bg-[#B89555]/10 mb-1" />
             ) : (
@@ -72,7 +72,7 @@ function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) 
             )}
             <p className="text-sm text-[#1A1A1A]/70 mt-1 font-medium">{title}</p>
           </div>
-          <div data-backend-icon-tile="emerald-soft" className="w-12 h-12 rounded-xl bg-[#064E3B]/10 flex items-center justify-center border border-[#064E3B]/15 shadow-sm">
+          <div data-backend-icon-tile="emerald-soft" className="allow-white w-12 h-12 rounded-xl bg-[#064E3B]/10 flex items-center justify-center border border-[#064E3B]/15 shadow-sm shrink-0">
             {icon}
           </div>
         </div>
