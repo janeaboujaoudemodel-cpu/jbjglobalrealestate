@@ -797,10 +797,11 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
           <span
             data-no-contrast-guard
             data-emerald-ok="icon"
-            className="grid h-10 w-10 place-items-center rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.55)] [&_svg]:!text-white [&_svg]:!stroke-white"
+            data-jbj-white-glyph
+            className="allow-white grid h-10 w-10 place-items-center rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.55)]"
             style={{ background: markBg }}
           >
-            <Icon className="h-[18px] w-[18px]" strokeWidth={2.8} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <Icon data-no-contrast-guard className="allow-white h-[18px] w-[18px]" strokeWidth={2.8} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </span>
           <span className="text-[#1A1A1A]">{title}</span>
         </h3>
