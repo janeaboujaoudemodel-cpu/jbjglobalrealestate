@@ -103,7 +103,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
       </div>
 
       {/* Nav — tight stack, scrolls if overflow */}
-      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2 jj-scrollbar-gold space-y-1">
+      <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-2.5 jj-scrollbar-gold space-y-1.5">
         {ITEMS.filter((it) => it.to !== "/broker/forms" || isOwner).map(({ to, label, icon: Icon }) => {
           const active =
             to === "/broker/portal" || to === "/broker/email"
@@ -125,23 +125,23 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
               data-allow-dark-cta={active ? "" : undefined}
               data-emerald={active ? "true" : undefined}
               className={cn(
-                "group flex items-center gap-2.5 rounded-lg px-3 py-2 min-h-10 text-sm transition-all border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
+                "group flex items-center gap-3 rounded-xl px-3.5 py-2 min-h-11 text-[14px] font-semibold transition-all border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0",
                 active
                   ? "allow-white font-semibold border-[rgba(255,255,255,0.18)] shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
                   : "border-transparent text-[#1A1A1A]/85 hover:text-[#1A1A1A] hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
               )}
               style={active ? { backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" } : undefined}
             >
-              <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
+              <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
                 <Icon
-                  className="allow-white shrink-0 text-white"
-                  strokeWidth={2.2}
+                  className="allow-white shrink-0 text-white w-4 h-4"
+                  strokeWidth={2.15}
                   absoluteStrokeWidth
-                  style={{ width: 13, height: 13, color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }}
+                  style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none", opacity: 1 }}
                 />
               </span>
               {!collapsed && (
-                <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]" style={active ? { color: "#FFFFFF" } : undefined}>
+                 <span data-jbj-allow-shrink className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]" style={active ? { color: "#FFFFFF" } : undefined}>
                   {label}
                 </span>
               )}
@@ -153,12 +153,12 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
 
       {/* Pinned footer — seals the sidebar. Collapse button lives at the very bottom
           BELOW Sign Out per owner directive — never at the top of the sidebar. */}
-      <div className="p-2 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
+      <div className="p-2.5 border-t border-[#B89555]/40 flex-shrink-0 space-y-1.5 bg-[#F7F2EA]">
         <Link
           to="/"
           onClick={onNavigate}
           title={collapsed ? "Return to Site" : undefined}
-          className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors text-[#1A1A1A] bg-[#EFE6D6] hover:bg-[#E6DAC2] border border-[#B89555]/40"
+          className="w-full flex items-center gap-2.5 px-3 min-h-10 rounded-xl text-[13px] font-semibold transition-colors text-[#1A1A1A] bg-[#EFE6D6] hover:bg-[#E6DAC2] border border-[#B89555]/40"
         >
           <Home className="h-3.5 w-3.5 shrink-0 text-[#1A1A1A]" />
           {!collapsed && <span className="min-w-0 flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]">Return to Site</span>}
@@ -168,7 +168,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
           onClick={handleSignOut}
           title={collapsed ? "Sign Out" : undefined}
           data-signout-action
-          className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[#DC2626] bg-[#FDFBF7] border border-[#DC2626]/30 hover:bg-red-50 hover:border-[#DC2626]/50 transition-colors"
+          className="w-full flex items-center gap-2.5 px-3 min-h-10 rounded-xl text-[13px] font-semibold text-[#DC2626] bg-[#FDFBF7] border border-[#DC2626]/30 hover:bg-red-50 hover:border-[#DC2626]/50 transition-colors"
         >
           <LogOut data-signout-icon className="h-3.5 w-3.5 shrink-0 jj-signout-icon" />
           {!collapsed && <span data-signout-label>Sign Out</span>}
@@ -182,7 +182,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             className={cn(
-              "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors",
+              "w-full flex items-center gap-2 px-3 min-h-10 rounded-xl text-[11px] font-extrabold uppercase tracking-[0.2em] transition-colors",
               "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6] border border-[#B89555]/30",
               collapsed && "justify-center"
             )}

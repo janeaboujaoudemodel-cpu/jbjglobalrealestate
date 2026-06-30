@@ -22323,3 +22323,10 @@ html body #root [data-chrome="sidebar"] [data-backend-sidebar-icon-tile] :is(svg
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+html body #root [data-backend-portal] [data-backend-sidebar-icon-tile] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 10px !important;
+}

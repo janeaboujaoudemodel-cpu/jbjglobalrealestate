@@ -66,8 +66,8 @@ export default function BrokerPortalLayout() {
     }
   }, [isResolving, mode, isExplicitOwnerPreview, navigate]);
 
-  const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
-  const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");
+  const sidebarWidth = collapsed ? "w-[72px]" : "w-[280px]";
+  const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[280px]");
 
   // Non-blocking resolving state: keep the broker portal chrome/surface visible.
   // Never cover the app with a dark/emerald full-screen loader.
@@ -88,12 +88,12 @@ export default function BrokerPortalLayout() {
             data-backend-sidebar="broker"
             data-surface="champagne"
             data-no-contrast-guard
-            className="fixed left-0 top-0 h-screen z-40 bg-[#F7F2EA] border-r border-[#B89555]/40 flex flex-col shadow-xl shadow-[#B89555]/5 w-[260px]"
+            className="fixed left-0 top-0 h-screen z-40 bg-[#F7F2EA] border-r border-[#B89555]/40 flex flex-col shadow-xl shadow-[#B89555]/5 w-[280px]"
           >
             <BrokerPortalSidebar collapsed={false} onToggle={() => {}} />
           </aside>
         )}
-        <div className={cn("transition-[margin] duration-200 min-h-screen flex flex-col", isMobile ? "ml-0" : "ml-[260px]")}> 
+        <div className={cn("transition-[margin] duration-200 min-h-screen flex flex-col", isMobile ? "ml-0" : "ml-[280px]")}> 
           <header
             data-no-contrast-guard
             className="bg-[#F7F2EA] border-b border-[#B89555]/40 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm"
@@ -135,7 +135,7 @@ export default function BrokerPortalLayout() {
           <SheetContent
             side="left"
             data-surface="champagne"
-            className="w-[260px] p-0 bg-[#F7F2EA] border-r border-[#B89555]/40"
+            className="w-[280px] p-0 bg-[#F7F2EA] border-r border-[#B89555]/40"
           >
             <BrokerPortalSidebar
               collapsed={false}
