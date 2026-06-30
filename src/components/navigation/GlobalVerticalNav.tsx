@@ -1043,13 +1043,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
-        <div className="px-3 pt-2 pb-3 flex flex-col flex-1">
+        <div className="px-3 pt-2 pb-3 flex flex-col">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
-          {/* All categories (highlights + sections) share one flex-column.
-              Use justify-start with consistent gap so content fills naturally
-              from the top — no large empty gap below Company/Legal. */}
-          <div className={`flex flex-col gap-2 ${openSection ? 'justify-start' : 'justify-evenly flex-1'}`}>
+          {/* Items stack from the top with a consistent compact gap so the
+              sidebar never shows a big empty area below Company/Legal. */}
+          <div className="flex flex-col gap-1 justify-start">
 
           {/* Highlight hubs (gold labels) */}
 
@@ -1245,11 +1244,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         </div>
       </nav>
 
-      {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
+      {/* ━━━ BOTTOM — Support + Sign Out (compact half-height) ━━━ */}
       <div className="flex-shrink-0">
-        <div className="h-px mb-1.5 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.4) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
-        <div className="px-2 py-1.5 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
-          <div className="flex gap-1.5 mb-1">
+        <div className="h-px mb-1 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.4) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
+        <div className="px-2 py-1 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
+          <div className="flex gap-1 mb-1">
             {(() => {
               const contactActive = isRouteActive('/contact');
               const supportActive = isRouteActive('/ticket-hub');
@@ -1261,10 +1260,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-sidebar-bottom-cta
                     data-active={contactActive ? 'true' : undefined}
                     aria-current={contactActive ? 'page' : undefined}
-                    className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
+                    className="flex-1 flex items-center justify-center gap-1 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1.5 h-6 rounded-md border will-change-transform"
                   >
-                    <span data-emerald-icon-surface className="w-5 h-5 rounded-md flex items-center justify-center">
-                      <Headphones className="w-3 h-3" strokeWidth={2.2} />
+                    <span data-emerald-icon-surface className="w-3.5 h-3.5 rounded-[4px] flex items-center justify-center">
+                      <Headphones className="w-2.5 h-2.5" strokeWidth={2.2} />
                     </span>
                     <span>Contact</span>
                   </Link>
@@ -1274,10 +1273,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-sidebar-bottom-cta
                     data-active={supportActive ? 'true' : undefined}
                     aria-current={supportActive ? 'page' : undefined}
-                    className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1 rounded-lg border will-change-transform"
+                    className="flex-1 flex items-center justify-center gap-1 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1.5 h-6 rounded-md border will-change-transform"
                   >
-                    <span data-emerald-icon-surface className="w-5 h-5 rounded-md flex items-center justify-center">
-                      <Ticket className="w-3 h-3" strokeWidth={2.2} />
+                    <span data-emerald-icon-surface className="w-3.5 h-3.5 rounded-[4px] flex items-center justify-center">
+                      <Ticket className="w-2.5 h-2.5" strokeWidth={2.2} />
                     </span>
                     <span>Support</span>
                   </Link>
@@ -1293,19 +1292,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               onClick={() => { supabase.auth.signOut(); }}
               title="Sign Out"
               aria-label="Sign Out"
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.09em] transition-all px-2 h-8 rounded-lg border w-full group"
+              className="flex items-center justify-center gap-1 text-[10px] font-semibold uppercase tracking-[0.09em] transition-all px-2 h-6 rounded-md border w-full group"
               style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.borderColor = '#DC2626'; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = '#B89555'; }}
             >
-              <LogOut data-signout-icon data-no-contrast-guard className="w-3.5 h-3.5 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.5} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+              <LogOut data-signout-icon data-no-contrast-guard className="w-3 h-3 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.5} style={{ color: '#DC2626', stroke: '#DC2626' }} />
               <span data-signout-label className="!text-[#DC2626] leading-none" style={{ color: '#DC2626' }}>Sign Out</span>
             </button>
           ) : (
             <Link
               to="/auth"
               data-no-contrast-guard
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[4px] rounded-lg border w-full group"
+              className="flex items-center justify-center gap-1 text-[10px] font-semibold transition-all px-2 h-6 rounded-md border w-full group"
               style={{ color: '#000000', borderColor: 'rgba(0,0,0,0.25)', backgroundColor: '#ffffff' }}
             >
               <User className="w-3 h-3" style={{ color: '#000000' }} />
@@ -1320,7 +1319,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             data-allow-dark-cta
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="allow-white jbj-sidebar-collapse-control group mt-1.5 flex items-center justify-center gap-2 w-full px-3 min-h-10 rounded-xl text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
+            className="allow-white jbj-sidebar-collapse-control group mt-1 flex items-center justify-center gap-1.5 w-full px-3 h-6 rounded-md text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
             style={{
               color: '#FFFFFF',
               background: 'var(--jj-emerald-ombre)',
@@ -1342,7 +1341,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               e.currentTarget.style.transform = 'none';
             }}
           >
-            <PanelLeftClose className="allow-white w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <PanelLeftClose className="allow-white w-3 h-3 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
           </button>
 
