@@ -97,8 +97,9 @@ const WhiteRank = ({ children }: { children: React.ReactNode }) => {
 };
 
 // Reusable champagne card with PREMIUM gold border (double hairline + soft glow).
-const BlackCard: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className = "" }) => (
+const BlackCard: React.FC<React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>> = ({ children, className = "", ...rest }) => (
   <div
+    {...rest}
     data-surface="light"
     className={`surface-light relative overflow-hidden rounded-2xl ${className}`}
     style={{
