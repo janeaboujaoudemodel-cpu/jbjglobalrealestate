@@ -536,7 +536,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             </div>
           </div>
         )}
-        <div className="grid md:grid-cols-2 gap-3">
+        <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))] min-w-0">
           {rows.map((e: any) => {
             const cName = clientNameOf(e);
             const initials = clientInitials(cName);
@@ -565,8 +565,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               : mode === "generated" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
               : "bg-[#F7F2EA] text-[#1A1A1A]/80 border-[#B89555]/30";
             return (
-              <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
+              <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30 min-w-0 overflow-hidden">
+                <div className="flex flex-col sm:flex-row items-start gap-3 min-w-0">
                   {selectable && (
                     <Checkbox
                       className="mt-1"
@@ -599,10 +599,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                     )}
                     <div className="text-[11px] text-[#1A1A1A]/55 mt-0.5">{new Date(e.created_at).toLocaleString()}</div>
                   </div>
-                  <div className="flex flex-col gap-2 items-end shrink-0">
-                    <Button size="sm" variant="gold" onClick={() => navigate(`/owner/documents/forms/${e.id}`)}>Open</Button>
+                  <div className="flex flex-row sm:flex-col flex-wrap gap-2 items-stretch sm:items-end shrink-0 w-full sm:w-auto min-w-0">
+                    <Button size="sm" variant="gold" className="flex-1 sm:flex-none min-w-0" onClick={() => navigate(`/owner/documents/forms/${e.id}`)}>Open</Button>
                     {e.signed_document_url && (
-                      <Button size="sm" variant="outline" asChild>
+                      <Button size="sm" variant="outline" className="flex-1 sm:flex-none min-w-0" asChild>
                         <a href={brandedDownloadHref(e.signed_document_url, e.document_filename || `${e.name || "document"}.pdf`)} target="_blank" rel="noreferrer">
                           <Download className="w-3 h-3 mr-1" /> Download document
                         </a>
@@ -710,7 +710,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
         </header>
 
         <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
-          <TabsList className="w-full justify-start bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1 overflow-x-auto">
+          <TabsList className="w-full min-w-0 justify-start bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1 overflow-x-hidden">
             <TabsTrigger value="templates">Templates</TabsTrigger>
             <TabsTrigger value="documents">Live Editor</TabsTrigger>
             <TabsTrigger value="esign">E-signature</TabsTrigger>
@@ -746,7 +746,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                 />
               </div>
 
-              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))] min-w-0">
                 {TEMPLATE_CATEGORIES.map((item) => {
                   const Icon = item.icon;
                   const active = activeTemplateCategory === item.key;
@@ -756,13 +756,13 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       type="button"
                       onClick={() => showCategory(item.key)}
                       data-surface={active ? "emerald" : "champagne"}
-                      className={["text-left rounded-lg border px-3 py-3 transition min-w-0", active ? "border-transparent bg-[var(--jj-emerald-ombre)] shadow-lg" : "border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#EFE6D6]"].join(" ")}
+                      className={["text-left rounded-lg border px-3 py-3 transition min-w-0 max-w-full overflow-hidden", active ? "border-transparent bg-[var(--jj-emerald-ombre)] shadow-lg" : "border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#EFE6D6]"].join(" ")}
                     >
                       <div className="flex items-start gap-2 min-w-0">
                         <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />
-                        <div className="min-w-0">
-                          <div className={active ? "text-sm font-semibold text-[#FFFFFF]" : "text-sm font-semibold text-[#1A1A1A]"}>{item.label}</div>
-                          <div className={active ? "text-[11px] text-[#FFFFFF]/85 leading-tight mt-0.5" : "text-[11px] text-[#1A1A1A]/65 leading-tight mt-0.5"}>{item.description}</div>
+                        <div className="min-w-0 max-w-full overflow-hidden">
+                          <div className={active ? "text-sm font-semibold text-[#FFFFFF] truncate" : "text-sm font-semibold text-[#1A1A1A] truncate"}>{item.label}</div>
+                          <div className={active ? "text-[11px] text-[#FFFFFF]/85 leading-tight mt-0.5 break-words line-clamp-2" : "text-[11px] text-[#1A1A1A]/65 leading-tight mt-0.5 break-words line-clamp-2"}>{item.description}</div>
                         </div>
                       </div>
                     </button>

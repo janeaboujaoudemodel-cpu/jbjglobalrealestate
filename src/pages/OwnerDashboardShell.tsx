@@ -173,11 +173,12 @@ const OwnerDashboardShell = () => {
   // the whole viewport.
   const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "72px" : "320px";
   const contentTop = "var(--shell-header-h)";
+  const mainWidth = isMobile || fullscreen ? "100%" : sidebarCollapsed ? "calc(100vw - 72px)" : "calc(100vw - 320px)";
 
   return (
     <div
       data-surface="champagne"
-      className="owner-dashboard-shell owner-shell-surface min-h-screen bg-[#F7F2EA] flex"
+      className="owner-dashboard-shell owner-shell-surface min-h-screen bg-[#F7F2EA] flex overflow-x-hidden"
       style={{ ["--app-content-left" as never]: contentLeft, ["--app-content-top" as never]: contentTop }}
     >
       {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
@@ -215,9 +216,10 @@ const OwnerDashboardShell = () => {
       {/* Main Content */}
       <main 
         className={cn(
-          "flex-1 transition-all duration-300 overscroll-contain",
+          "flex-1 min-w-0 overflow-x-hidden transition-all duration-300 overscroll-contain",
           isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-[72px]" : "ml-[320px]")
         )}
+        style={{ width: mainWidth, maxWidth: mainWidth }}
         role="main"
       >
         {/* Top Bar — height locked to --shell-header-h so its bottom border aligns
@@ -245,7 +247,7 @@ const OwnerDashboardShell = () => {
             </div>
           </div>
           
-          <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
+          <div className="flex items-center justify-end gap-2 md:gap-3 flex-wrap min-w-0 max-w-[62vw]">
             {/* Owner Badge */}
             <div className="flex items-center gap-1.5 md:gap-2 bg-[#EFE6D6] border border-[#B89555] rounded-xl px-2 md:px-3 py-1.5 md:py-2 shadow-sm whitespace-nowrap">
               <span data-backend-icon-tile="emerald" data-surface="emerald" className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
@@ -265,7 +267,7 @@ const OwnerDashboardShell = () => {
         </header>
 
         {/* Page Content */}
-        <div className={cn("transition-all", fullscreen ? "p-2 md:p-3 max-w-none" : "p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto")}>
+        <div className={cn("transition-all min-w-0 w-full overflow-x-hidden", fullscreen ? "p-2 md:p-3 max-w-none" : "p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto")}>
           <Outlet />
         </div>
       </main>

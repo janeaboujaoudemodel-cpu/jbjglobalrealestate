@@ -118,7 +118,7 @@ export default function CRMGlobalExportButton() {
       <button
         type="button"
         onClick={() => setPickerOpen(true)}
-        className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+        className="shrink-0 inline-flex h-10 items-center gap-2 px-3 rounded-xl text-xs font-semibold border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
       >
         <Download className="h-3.5 w-3.5" />
         Export
