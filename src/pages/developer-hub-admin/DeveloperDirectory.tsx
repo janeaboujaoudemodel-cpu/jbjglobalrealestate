@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2 } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2 } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
@@ -294,7 +294,7 @@ export default function DeveloperDirectory() {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div className="flex items-start gap-4 min-w-0">
             <span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center shadow-[0_16px_34px_-20px_rgba(6,78,59,0.9)]">
-              <BuildingIcon className="size-5 text-white" />
+              <Building2 className="size-5 text-white" />
             </span>
             <div className="min-w-0">
               <p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Developers</p>
