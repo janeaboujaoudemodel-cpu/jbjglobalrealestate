@@ -15,6 +15,7 @@ import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import GatedToolRoute from "@/components/access/GatedToolRoute";
 import { toolThemes } from "@/components/tools/toolThemes";
+import { InsightsPageScope } from "@/components/insights/InsightsPageScope";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
