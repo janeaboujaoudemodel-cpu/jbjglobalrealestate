@@ -106,6 +106,14 @@ const BOOK_3D_CSS = `
 }
 .book-3d__rule { margin-top:auto; height:1px; background: currentColor; opacity:.7; }
 .book-3d__author { margin-top: 8px; font-size: 10px; letter-spacing:.22em; text-transform:uppercase; opacity:.9; }
+.book-3d__lock {
+  position:absolute; top:8%; right:8%; width: 26px; height: 26px; border-radius: 999px;
+  display:grid; place-items:center;
+  background: radial-gradient(circle at 35% 30%, #fff2c4 0%, var(--foil) 45%, #8a6a25 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,244,210,.55), 0 2px 4px rgba(0,0,0,.45);
+  color: #3a2a08;
+  z-index: 3;
+}
 `;
 
 
