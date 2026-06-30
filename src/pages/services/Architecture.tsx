@@ -100,7 +100,7 @@ const Architecture = () => {
             src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80" 
             alt="Architecture"
             className="w-full h-full object-cover opacity-30"
-          />
+           loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
         
@@ -239,7 +239,7 @@ const Architecture = () => {
                         src={project.image} 
                         alt={project.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                       loading="lazy" decoding="async" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
                     <CardContent className="p-4">

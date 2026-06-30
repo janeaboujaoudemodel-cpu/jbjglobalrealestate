@@ -95,7 +95,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     isTopTier ? "border-2 border-[#B89555] shadow-[0_4px_16px_rgba(200,167,102,0.3)]" : "border-2 border-[#B89555]/40"
                   }`}>
                     {isValidDeveloperLogoUrl(developer.logo_url) ? (
-                      <img src={developer.logo_url as string} alt={developer.name} className="w-full h-full object-contain" />
+                      <img src={developer.logo_url as string} alt={developer.name} className="w-full h-full object-contain"  loading="lazy" decoding="async" />
                     ) : (
                       <Building2 className={`w-7 h-7 ${isTopTier ? "text-[#1A1A1A]" : "text-white/90"}`} />
                     )}

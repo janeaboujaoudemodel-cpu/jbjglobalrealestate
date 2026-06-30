@@ -390,7 +390,7 @@ export default function MatchCriteriaTable({ answers, projects }: Props) {
                         alt=""
                         className="w-10 h-10 rounded-lg object-cover"
                         style={{ border: "1px solid rgba(184,149,85,0.45)" }}
-                      />
+                       loading="lazy" decoding="async" />
                     ) : null}
                     <div className="flex flex-col gap-1">
                       <span

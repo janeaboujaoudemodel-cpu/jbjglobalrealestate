@@ -205,7 +205,7 @@ const VideoTimelineEditor = ({ project, onUpdate }: VideoTimelineEditorProps) =>
                           src={item.url}
                           alt={`Clip ${index + 1}`}
                           className="w-full h-full object-cover"
-                        />
+                         loading="lazy" decoding="async" />
                       ) : (
                         <video
                           src={item.url}

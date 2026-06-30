@@ -38,7 +38,7 @@ export function ShareModal({
         <div className="space-y-4">
           <div className="flex justify-center">
             <div className="p-3 bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm">
-              <img src={qrUrl} alt="Share QR Code" className="w-40 h-40 rounded-lg" />
+              <img src={qrUrl} alt="Share QR Code" className="w-40 h-40 rounded-lg"  loading="lazy" decoding="async" />
             </div>
           </div>
 

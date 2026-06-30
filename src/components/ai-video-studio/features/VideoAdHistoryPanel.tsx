@@ -180,7 +180,7 @@ function DetailDrawer({ ad, isPlaying, onPlay, onClose, onRestore, onLoadAndExpo
         {/* Thumbnail strip */}
         <div className="relative h-32 overflow-hidden" style={{ background: '#0A0A0F' }}>
           {ad.thumbnail_url ? (
-            <img src={ad.thumbnail_url} alt={ad.project_name} className="w-full h-full object-cover opacity-60" />
+            <img src={ad.thumbnail_url} alt={ad.project_name} className="w-full h-full object-cover opacity-60"  loading="lazy" decoding="async" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Film className="w-10 h-10" style={{ color: '#18181F' }} />
@@ -366,7 +366,7 @@ function GridCard({
             alt={ad.project_name}
             className={`w-full h-full object-cover transition-transform duration-300 ${hovered ? 'scale-105' : 'scale-100'}`}
             loading="lazy"
-          />
+           decoding="async" />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-1" style={{ background: 'linear-gradient(135deg, #111118, #0A0A0F)' }}>
             <Film className="w-8 h-8" style={{ color: '#252530' }} />

@@ -146,7 +146,7 @@ export default function PropertiesVerticalNav() {
       >
         {/* Logo - Links to homepage */}
         <Link to="/" className="p-4 border-b border-[#B89555]/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
+          <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain"  loading="lazy" decoding="async" />
           <div className="flex flex-col">
             <span className="text-[11px] font-bold text-[#1A1A1A] tracking-wide leading-tight">JBJ GLOBAL</span>
             <span className="text-[11px] font-bold text-[#1A1A1A] tracking-wide leading-tight">REAL ESTATE</span>

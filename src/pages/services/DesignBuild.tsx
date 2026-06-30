@@ -215,7 +215,7 @@ const DesignBuild = () => {
                       src={service.image}
                       alt={service.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                     loading="lazy" decoding="async" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     
                     <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-[#B89555]/30">

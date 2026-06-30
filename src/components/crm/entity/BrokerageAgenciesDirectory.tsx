@@ -239,7 +239,7 @@ export default function BrokerageAgenciesDirectory() {
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded bg-[#F7F2EA] border border-[#B89555]/20 flex items-center justify-center overflow-hidden flex-none">
                       {r.logo_url
-                        ? <img src={r.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                        ? <img src={r.logo_url} alt="" className="max-w-full max-h-full object-contain"  loading="lazy" decoding="async" />
                         : <Building2 className="h-4 w-4 text-[#1A1A1A]/40" />}
                     </div>
                     <span className="font-semibold text-[#1A1A1A]">{r.company_name}</span>

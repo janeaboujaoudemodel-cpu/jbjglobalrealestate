@@ -108,7 +108,7 @@ export default function BrokerAdminAssistant() {
                       src={sarahThompsonPortrait} 
                       alt="Sarah Thompson" 
                       className="w-full h-full object-cover"
-                    />
+                     loading="lazy" decoding="async" />
                   </div>
                   <span className="absolute bottom-0 right-0 w-4 h-4 jj-surface-emerald border-2 border-[#0A0A0A] rounded-full animate-pulse" />
                 </div>

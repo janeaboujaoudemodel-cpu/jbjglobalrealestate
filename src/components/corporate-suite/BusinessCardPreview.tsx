@@ -652,7 +652,7 @@ export function CardCanvas({
         <img
           src={logoUrl}
           alt="logo"
-          onMouseDown={e => startDrag("logo", e)}
+          onMouseDown={e = loading="lazy" decoding="async"> startDrag("logo", e)}
           onTouchStart={e => startTouchDrag("logo", e)}
           style={{
             position: "absolute",
@@ -678,7 +678,7 @@ export function CardCanvas({
         <img
           src={stampUrl}
           alt="stamp"
-          onMouseDown={e => startDrag("logo", e)}
+          onMouseDown={e = loading="lazy" decoding="async"> startDrag("logo", e)}
           style={{
             position: "absolute",
             left: `${(stampPos?.x ?? 70)}%`,
@@ -765,7 +765,7 @@ export function CardCanvas({
           <img
             src={qrUrl}
             alt="QR Code"
-            onLoad={() => setQrLoaded(true)}
+            onLoad={() = loading="lazy" decoding="async"> setQrLoaded(true)}
             onError={() => setQrError(true)}
             style={{
               width: qrSize, height: qrSize,

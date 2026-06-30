@@ -183,7 +183,7 @@ function AssetSection({ kind, title, description, uploadHint }: AssetSectionProp
               className="w-full bg-[#FDFBF7] border-2 border-dashed border-[#B89555]/35 hover:border-[#B89555] rounded-xl p-6 flex flex-col items-center justify-center gap-2 transition min-h-[180px]"
             >
               {uploaded ? (
-                <img src={uploaded} alt={`${kind} preview`} className="max-h-[140px] w-auto" />
+                <img src={uploaded} alt={`${kind} preview`} className="max-h-[140px] w-auto"  loading="lazy" decoding="async" />
               ) : (
                 <>
                   <Upload className="h-8 w-8 text-[#B89555]" />
@@ -228,7 +228,7 @@ function AssetSection({ kind, title, description, uploadHint }: AssetSectionProp
                     (a.is_default ? "border-[#B89555] ring-1 ring-[#B89555]/40" : "border-[#B89555]/20")
                   }
                 >
-                  <img src={a.image_url} alt={a.kind} className="h-14 w-auto object-contain" />
+                  <img src={a.image_url} alt={a.kind} className="h-14 w-auto object-contain"  loading="lazy" decoding="async" />
                   {a.is_default ? (
                     <span className="text-[10px] font-bold tracking-wide text-[#B89555] uppercase">
                       Default

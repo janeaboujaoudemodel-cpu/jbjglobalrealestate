@@ -202,7 +202,7 @@ function LetterheadPreview({ logo, colors, name, font, layout, stampUrl }: {
             src={stampUrl}
             alt="Company Stamp"
             style={{ height: 24, objectFit: "contain", mixBlendMode: "multiply", opacity: 0.8 }}
-          />
+           loading="lazy" decoding="async" />
         )}
       </div>
     </div>

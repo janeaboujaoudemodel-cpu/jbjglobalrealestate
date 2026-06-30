@@ -376,7 +376,7 @@ export default function StudioEditor() {
                         src={selectedProperty.cover_image_url}
                         alt={selectedProperty.name}
                         className="w-full h-full object-cover"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <Building2 className="w-8 h-8 text-muted-foreground" />
@@ -700,7 +700,7 @@ export default function StudioEditor() {
                       <div className="flex gap-4">
                         <div className="w-24 h-16 rounded-lg bg-background overflow-hidden flex-shrink-0">
                           {property.cover_image_url ? (
-                            <img src={property.cover_image_url} alt={property.name} className="w-full h-full object-cover" />
+                            <img src={property.cover_image_url} alt={property.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <Building2 className="w-6 h-6 text-muted-foreground" />

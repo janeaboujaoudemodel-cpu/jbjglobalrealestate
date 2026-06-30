@@ -281,7 +281,7 @@ export function ChartOverlayPanel({ onAddToTimeline }: ChartOverlayPanelProps) {
       {previewSvg && (
         <div className="space-y-2">
           <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}` }}>
-            <img src={svgToDataUrl(previewSvg)} alt="Chart preview" className="w-full" />
+            <img src={svgToDataUrl(previewSvg)} alt="Chart preview" className="w-full"  loading="lazy" decoding="async" />
           </div>
           <div className="flex gap-2">
             <button onClick={handleDownload} className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium" style={{ background: C.bgButton, border: `1px solid ${C.borderSubtle}`, color: C.textPrimary }}>

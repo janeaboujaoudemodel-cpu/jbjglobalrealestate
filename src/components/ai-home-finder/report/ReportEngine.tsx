@@ -307,7 +307,7 @@ function ImageFallback({ alt }: { alt: string }) {
         boxShadow: `inset 0 0 0 1px ${T.goldHair}`,
       }}
     >
-      <img src={jbjMonogram} alt="" aria-hidden style={{ width: 44, height: 44, objectFit: "contain", opacity: 0.55 }} />
+      <img src={jbjMonogram} alt="" aria-hidden style={{ width: 44, height: 44, objectFit: "contain", opacity: 0.55 }}  loading="lazy" decoding="async" />
       <span style={{ ...TYPE.micro, color: T.mutedSoft, WebkitTextFillColor: T.mutedSoft }}>Imagery on request</span>
     </div>
   );
@@ -937,7 +937,7 @@ function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pag
                 <img src={branding.photoDataUrl} alt="Prepared by" crossOrigin="anonymous" loading="eager" decoding="sync" style={{ width: 84, height: 84, borderRadius: 999, objectFit: "cover", border: `2px solid ${T.gold}` }} />
               ) : (
                 <div style={{ width: 84, height: 84, borderRadius: 999, background: T.raised, border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <img src={jbjMonogram} alt="JBJ" style={{ width: 70, height: 70, objectFit: "contain" }} />
+                  <img src={jbjMonogram} alt="JBJ" style={{ width: 70, height: 70, objectFit: "contain" }}  loading="lazy" decoding="async" />
                 </div>
               )}
             </div>

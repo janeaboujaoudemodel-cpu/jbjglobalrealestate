@@ -303,7 +303,7 @@ const DigitalCard = () => {
                       style={{ objectPosition: "center top" }}
                       loading="eager"
                       fetchPriority="high"
-                    />
+                     decoding="async" />
                   </div>
                 </div>
 

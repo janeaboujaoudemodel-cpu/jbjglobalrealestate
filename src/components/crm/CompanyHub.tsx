@@ -385,7 +385,7 @@ export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: Co
             <div className="flex items-center gap-3 px-4 py-3 overflow-x-auto whitespace-nowrap jj-scrollbar-gold">
               <div className="h-12 w-12 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center overflow-hidden flex-none">
                 {logo
-                  ? <img src={logo} alt="" className="max-w-full max-h-full object-contain" />
+                  ? <img src={logo} alt="" className="max-w-full max-h-full object-contain"  loading="lazy" decoding="async" />
                   : <Building2 className="h-6 w-6 text-[#1A1A1A]/60" />}
               </div>
               <div className="flex-none">

@@ -92,7 +92,7 @@ export default function BrokerPortalSidebar({ collapsed = false, onToggle, onNav
             height={collapsed ? 44 : 56}
             className="object-contain flex-shrink-0"
             style={{ width: collapsed ? 44 : 56, height: collapsed ? 44 : 56 }}
-          />
+           loading="lazy" decoding="async" />
           {!collapsed && (
             <span className="min-w-0 text-[#1A1A1A] font-semibold text-[13px] tracking-[0.12em] uppercase leading-[1.15] whitespace-normal break-words [overflow-wrap:anywhere] text-left">
               Global Real Estate

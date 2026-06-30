@@ -231,7 +231,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
                         alt={project.name}
                         className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <ImageIcon className="h-10 w-10 text-muted-foreground/60" />

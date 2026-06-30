@@ -258,7 +258,7 @@ function SubmissionDetail({ submission }: { submission: Submission }) {
             className="flex items-center gap-3 p-3 rounded-xl bg-[#031E18] border border-[#B89555]/30 hover:border-[#B89555]"
           >
             {p.cover_image_url && (
-              <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded-lg object-cover" />
+              <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded-lg object-cover"  loading="lazy" decoding="async" />
             )}
             <div className="flex-1 min-w-0">
               <div className="text-xs text-[#67E8F9]">#{i + 1} · {p.developer?.name || "—"}</div>

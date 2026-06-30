@@ -850,7 +850,7 @@ const HeroSearchBar = () => {
               <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
                 {developerId !== 'all' && developers?.find(d => d.id === developerId)?.logo_url ? (
                   <img
-                    src={developers.find(d => d.id === developerId)?.logo_url!}
+                    src={developers.find(d = loading="lazy" decoding="async"> d.id === developerId)?.logo_url!}
                     alt=""
                     className="w-4 h-4 object-contain rounded-sm bg-[#FDFBF7]"
                   />

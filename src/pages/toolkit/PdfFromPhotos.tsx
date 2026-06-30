@@ -550,7 +550,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                                 style={{ background: "rgba(0,0,0,0.5)", border: `1px solid rgba(200,167,102,0.12)` }}>
                                 {page.type === "image" && page.url ? (
                                   <img src={page.url} alt={page.name} className="w-full h-full object-cover"
-                                    style={{ transform: `rotate(${page.rotation ?? 0}deg)`, transition: "transform 0.3s" }} />
+                                    style={{ transform: `rotate(${page.rotation ?? 0}deg)`, transition: "transform 0.3s" }}  loading="lazy" decoding="async" />
                                 ) : (
                                   <div className="flex flex-col items-center gap-0.5">
                                     <FileText className="h-4 w-4" style={{ color: G.gold }} />
@@ -635,7 +635,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                                 style={{ background: "rgba(0,0,0,0.5)" }}>
                                 {page.type === "image" && page.url ? (
                                   <img src={page.url} alt={page.name} className="w-full h-full object-cover"
-                                    style={{ transform: `rotate(${page.rotation ?? 0}deg)` }} />
+                                    style={{ transform: `rotate(${page.rotation ?? 0}deg)` }}  loading="lazy" decoding="async" />
                                 ) : (
                                   <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                                     <FileText className="h-10 w-10" style={{ color: G.gold }} />

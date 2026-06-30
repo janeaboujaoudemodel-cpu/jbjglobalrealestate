@@ -311,7 +311,7 @@ const BriefingAttendance = () => {
                 <h3 className="text-xl font-bold text-[color:var(--emerald-1)]">Attendance Confirmed!</h3>
                 <p className="text-sm text-[color:var(--emerald-1)] mt-1">+{attendance?.points_earned || 10} points earned</p>
                 {attendance?.selfie_url && (
-                  <img src={attendance.selfie_url} alt="Attendance selfie" className="w-32 h-32 object-cover rounded-xl mx-auto mt-4 border-2 border-[color:var(--emerald-1)]/30" />
+                  <img src={attendance.selfie_url} alt="Attendance selfie" className="w-32 h-32 object-cover rounded-xl mx-auto mt-4 border-2 border-[color:var(--emerald-1)]/30"  loading="lazy" decoding="async" />
                 )}
               </CardContent>
             </Card>
@@ -392,7 +392,7 @@ const BriefingAttendance = () => {
                     </div>
                   ) : capturedPhoto ? (
                     <div className="relative">
-                      <img src={capturedPhoto} alt="Captured selfie" className="w-full rounded-xl border-2 border-[#B89555]/30" />
+                      <img src={capturedPhoto} alt="Captured selfie" className="w-full rounded-xl border-2 border-[#B89555]/30"  loading="lazy" decoding="async" />
                       <Button onClick={() => { setCapturedPhoto(null); startCamera(); }} size="sm" variant="outline" className="absolute top-2 right-2">
                         Retake
                       </Button>

@@ -99,7 +99,7 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
                     src={project.property.images[0]}
                     alt={project.property.name}
                     className="w-full h-full object-cover"
-                  />
+                   loading="lazy" decoding="async" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <ImageIcon className="h-8 w-8 text-muted-foreground" />
@@ -136,7 +136,7 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
               >
                 <div className="w-12 h-12 rounded bg-muted flex-shrink-0 overflow-hidden">
                   {p.images?.[0]?.image_url ? (
-                    <img src={p.images[0].image_url} alt={p.name} className="w-full h-full object-cover" />
+                    <img src={p.images[0].image_url} alt={p.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                   ) : (
                     <ImageIcon className="w-6 h-6 m-3 text-muted-foreground" />
                   )}

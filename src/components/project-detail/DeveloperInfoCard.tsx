@@ -95,7 +95,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     src={developer.logo_url as string}
                     alt={`${developer.name} logo`}
                     className="w-full h-full object-contain p-3"
-                  />
+                   loading="lazy" decoding="async" />
                 ) : (
                   <span className="text-[#3a2a08] font-bold text-base text-center px-2">
                     {developer.name}

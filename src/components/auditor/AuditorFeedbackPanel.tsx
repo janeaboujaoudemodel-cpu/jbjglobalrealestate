@@ -209,7 +209,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
               </Button>
               {screenshotUrl && (
                 <div className="rounded-lg border border-[#B89555]/30 overflow-hidden">
-                  <img src={screenshotUrl} alt="Screenshot" className="w-full h-auto" />
+                  <img src={screenshotUrl} alt="Screenshot" className="w-full h-auto"  loading="lazy" decoding="async" />
                 </div>
               )}
               <Textarea

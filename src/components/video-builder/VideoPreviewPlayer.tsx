@@ -158,7 +158,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
                     ? `scale(${1 + (currentTime - currentMedia.startTime) * 0.02})` 
                     : undefined,
                 }}
-              />
+               loading="lazy" decoding="async" />
             ) : (
               <video
                 src={currentMedia.url}
@@ -180,7 +180,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
                   src={jbjLogo}
                   alt="JBJ GLOBAL REAL ESTATE"
                   className="h-16 mx-auto mb-4"
-                />
+                 loading="lazy" decoding="async" />
                 <p className="text-white/80 text-sm">presents</p>
               </div>
             </div>

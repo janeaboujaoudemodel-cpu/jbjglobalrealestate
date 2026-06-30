@@ -100,7 +100,7 @@ const DeveloperLiveEditor = () => {
                 <div className="flex items-start gap-4">
                   <div className="w-20 h-20 rounded bg-[#EFE6D6] border border-[#B89555]/40 flex-shrink-0 overflow-hidden">
                     {p.cover_image_url ? (
-                      <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-cover" />
+                      <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full grid place-items-center text-[10px] text-[#1A1A1A]/40">No cover</div>
                     )}

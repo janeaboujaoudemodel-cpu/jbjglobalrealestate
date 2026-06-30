@@ -301,7 +301,7 @@ const Guides = () => {
           >
             <div className="flex items-start gap-5 p-6 border-b border-[#B89555]/20">
               <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-[#B89555]/40">
-                <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" loading="eager" />
+                <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" loading="eager"  decoding="async" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">{selectedBook.title}</h3>

@@ -357,7 +357,7 @@ export default function ProjectNearbyPropertiesMap({
                     alt={p.name}
                     className="w-full h-24 object-cover"
                     loading="lazy"
-                  />
+                   decoding="async" />
                 )}
                 <div className="p-3 space-y-2">
                   {p.slug ? (

@@ -168,7 +168,7 @@ export default function OwnerBrokerVisits() {
               {topDevs.map((row) => (
                 <li key={row.dev?.id} className="px-5 py-3 flex items-center gap-3">
                   {row.dev?.logo_url ? (
-                    <img src={row.dev.logo_url} alt="" className="h-8 w-8 object-contain rounded bg-[#EFE6D6] p-0.5" />
+                    <img src={row.dev.logo_url} alt="" className="h-8 w-8 object-contain rounded bg-[#EFE6D6] p-0.5"  loading="lazy" decoding="async" />
                   ) : (
                     <div className="h-8 w-8 rounded bg-[#EFE6D6] border border-[#B89555]/30 grid place-items-center text-[10px] font-bold text-[#1A1A1A]">
                       {(row.dev?.name ?? "?").slice(0, 2).toUpperCase()}
@@ -220,7 +220,7 @@ export default function OwnerBrokerVisits() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         {r.developer?.logo_url ? (
-                          <img src={r.developer.logo_url} alt="" className="h-6 w-6 object-contain rounded bg-[#EFE6D6] p-0.5" />
+                          <img src={r.developer.logo_url} alt="" className="h-6 w-6 object-contain rounded bg-[#EFE6D6] p-0.5"  loading="lazy" decoding="async" />
                         ) : null}
                         <span className="text-[#1A1A1A]">{r.developer?.name ?? "—"}</span>
                       </div>

@@ -103,7 +103,7 @@ const LawFirm = () => {
             src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80" 
             alt="Legal services"
             className="w-full h-full object-cover opacity-30"
-          />
+           loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
         

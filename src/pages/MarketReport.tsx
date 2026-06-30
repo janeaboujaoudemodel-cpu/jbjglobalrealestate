@@ -102,7 +102,7 @@ const MarketReport = () => {
                       </div>
                     </div>
                     <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-gold/40 via-gold/20 to-transparent" />
-                    <img src={luxuryVilla1} alt="UAE Luxury Real Estate" className="w-full h-48 md:h-56 object-cover opacity-60" />
+                    <img src={luxuryVilla1} alt="UAE Luxury Real Estate" className="w-full h-48 md:h-56 object-cover opacity-60"  loading="lazy" decoding="async" />
                     <div className="p-6 md:p-8 relative">
                       <div className="w-16 h-1 bg-gradient-to-r from-gold to-gold-dark mb-4" />
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A] text-[10px] uppercase tracking-[0.2em] mb-4">
@@ -168,7 +168,7 @@ const MarketReport = () => {
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto text-center">
               <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-[#B89555]/50 mx-auto mb-6 bg-[#FDFBF7]">
-                <img src={founderCompanyProfile} alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE" className="w-full h-full" style={{ objectFit: 'contain', objectPosition: 'center top', transform: 'scaleX(1.08)' }} />
+                <img src={founderCompanyProfile} alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE" className="w-full h-full" style={{ objectFit: 'contain', objectPosition: 'center top', transform: 'scaleX(1.08)' }}  loading="lazy" decoding="async" />
               </div>
               <blockquote className="text-white text-xl md:text-2xl lg:text-3xl font-light leading-relaxed mb-6 italic">
                 "This book represents years of experience in UAE real estate, distilled into actionable frameworks. I created it so investors can make informed decisions with confidence."

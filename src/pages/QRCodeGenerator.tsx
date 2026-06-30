@@ -133,7 +133,7 @@ const QRCodeGenerator = () => {
           <div className="space-y-4">
             <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px]">
               {qrData ? (
-                <img src={qrUrl} alt="QR Code" className="max-w-full" style={{ width: Math.min(qrSize, 400), height: Math.min(qrSize, 400) }} />
+                <img src={qrUrl} alt="QR Code" className="max-w-full" style={{ width: Math.min(qrSize, 400), height: Math.min(qrSize, 400) }}  loading="lazy" decoding="async" />
               ) : (
                 <div className="text-center text-muted-foreground">
                   <QrCode className="h-16 w-16 mx-auto mb-3 opacity-30" />

@@ -393,7 +393,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                           src={url}
                           alt={`Project image ${i + 1}`}
                           className="w-32 h-24 object-cover rounded-lg border border-[#B89555]/30 hover:border-[#B89555]/30 transition-colors"
-                          onError={(e) => {
+                          onError={(e) = loading="lazy" decoding="async"> {
                             (e.target as HTMLImageElement).src = '/placeholder.svg';
                           }}
                         />

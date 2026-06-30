@@ -125,7 +125,7 @@ export function VisitHistory({ refreshTrigger }: VisitHistoryProps) {
                             src={photoUrl}
                             alt="Visit selfie"
                             className="w-16 h-16 rounded-lg object-cover border border-border"
-                            onError={(e) => {
+                            onError={(e) = loading="lazy" decoding="async"> {
                               (e.target as HTMLImageElement).style.display = 'none';
                             }}
                           />

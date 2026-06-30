@@ -44,7 +44,7 @@ export default function ProjectPicker({ value, onChange }: Props) {
         style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.55)" }}
       >
         {value.developer?.logo_url ? (
-          <img src={value.developer.logo_url} alt="" className="w-12 h-12 rounded-lg object-contain bg-white p-1" />
+          <img src={value.developer.logo_url} alt="" className="w-12 h-12 rounded-lg object-contain bg-white p-1"  loading="lazy" decoding="async" />
         ) : (
           <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ background: "#F7F2EA" }}>
             <Building2 className="w-6 h-6" style={{ color: "#B89555" }} />
@@ -104,7 +104,7 @@ export default function ProjectPicker({ value, onChange }: Props) {
               data-no-contrast-guard
             >
               {p.developer?.logo_url ? (
-                <img src={p.developer.logo_url} alt="" className="w-9 h-9 rounded object-contain bg-white p-0.5" />
+                <img src={p.developer.logo_url} alt="" className="w-9 h-9 rounded object-contain bg-white p-0.5"  loading="lazy" decoding="async" />
               ) : (
                 <div className="w-9 h-9 rounded flex items-center justify-center bg-[#F7F2EA]">
                   <Building2 className="w-4 h-4 text-[#B89555]" />

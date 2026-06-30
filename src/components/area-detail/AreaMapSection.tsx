@@ -196,12 +196,12 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                 <Popup>
                   <div className="min-w-[220px] max-w-[260px]">
                     {project.cover_image_url && (
-                      <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" />
+                      <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover"  loading="lazy" decoding="async" />
                     )}
                     <div className="p-3">
                       <div className="flex items-center gap-2 mb-1">
                         {project.developer_logo && (
-                          <img src={project.developer_logo} alt="" className="w-6 h-6 object-contain rounded" />
+                          <img src={project.developer_logo} alt="" className="w-6 h-6 object-contain rounded"  loading="lazy" decoding="async" />
                         )}
                         <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight">
                           {project.name}

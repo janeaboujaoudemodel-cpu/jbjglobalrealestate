@@ -843,7 +843,7 @@ const ListingPortalSubmit = () => {
                             {uploadedDocs.map(doc => (
                               <div key={doc.id} className="flex items-center gap-3 bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-lg p-3">
                                 {doc.preview ? (
-                                  <img src={doc.preview} alt="" className="w-10 h-10 rounded object-cover" />
+                                  <img src={doc.preview} alt="" className="w-10 h-10 rounded object-cover"  loading="lazy" decoding="async" />
                                 ) : doc.type === 'pdf' ? (
                                   <div className="w-10 h-10 bg-red-500/10 rounded flex items-center justify-center">
                                     <FileText className="w-5 h-5 text-red-500" />
@@ -1128,7 +1128,7 @@ const ListingPortalSubmit = () => {
                         <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl overflow-hidden shadow-sm">
                           <div className="relative">
                             {uploadedImageUrls.length > 0 ? (
-                              <img src={uploadedImageUrls[0]} alt="" className="w-full h-48 object-cover" />
+                              <img src={uploadedImageUrls[0]} alt="" className="w-full h-48 object-cover"  loading="lazy" decoding="async" />
                             ) : (
                               <div className="w-full h-48 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] flex items-center justify-center">
                                 <Image className="w-12 h-12 text-[#1A1A1A]/70" />
@@ -1167,7 +1167,7 @@ const ListingPortalSubmit = () => {
                           <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
                             {uploadedImageUrls.map((url, i) => (
                               <div key={i} className="aspect-square rounded-lg overflow-hidden border border-[#B89555]/20">
-                                <img src={url} alt="" className="w-full h-full object-cover" />
+                                <img src={url} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                               </div>
                             ))}
                           </div>
@@ -1469,7 +1469,7 @@ const ListingPortalSubmit = () => {
                           <div className="space-y-3">
                             {UNIFIED_APPROVAL_WORKFLOW.map((step) => (
                               <div key={step.step} className="flex items-center gap-3">
-                                <img src={step.approverPhoto} alt="" className="w-9 h-9 rounded-full object-cover border border-[#B89555]/30" />
+                                <img src={step.approverPhoto} alt="" className="w-9 h-9 rounded-full object-cover border border-[#B89555]/30"  loading="lazy" decoding="async" />
                                 <div className="flex-1">
                                   <p className="text-[#1A1A1A] text-sm font-medium">{step.name}</p>
                                   <p className="text-[#1A1A1A]/70 text-xs">{step.approverName} — {step.approverTitle}</p>

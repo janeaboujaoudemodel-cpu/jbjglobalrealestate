@@ -42,7 +42,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
         className="absolute inset-0 w-full h-full object-cover"
         loading="eager"
         fetchPriority="high"
-      />
+       decoding="async" />
       
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />

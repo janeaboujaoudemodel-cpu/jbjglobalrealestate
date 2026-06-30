@@ -175,7 +175,7 @@ const ListingsApproval = () => {
       >
         <div className="h-16 w-24 rounded-lg overflow-hidden bg-[#EFE6D6] flex items-center justify-center flex-shrink-0">
           {thumb ? (
-            <img src={thumb} alt="" className="h-full w-full object-cover" />
+            <img src={thumb} alt="" className="h-full w-full object-cover"  loading="lazy" decoding="async" />
           ) : (
             <ImageOff className="h-6 w-6 text-[#1A1A1A]/50" />
           )}

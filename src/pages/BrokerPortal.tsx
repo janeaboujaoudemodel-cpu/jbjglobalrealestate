@@ -97,7 +97,7 @@ function BrokerProfileHero() {
       <div className="relative">
         <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(36,40%,70%)]/40 to-[hsl(36,40%,70%)]/10 border-2 border-[hsl(36,40%,70%)] flex items-center justify-center overflow-hidden">
           {profile?.photo_url ? (
-            <img src={profile.photo_url} alt={firstName} className="w-full h-full object-cover" />
+            <img src={profile.photo_url} alt={firstName} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
           ) : (
             <span className="text-2xl font-bold text-[hsl(36,40%,70%)]">{firstName[0]}</span>
           )}

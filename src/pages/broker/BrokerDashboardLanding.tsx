@@ -260,7 +260,7 @@ export default function BrokerDashboardLanding() {
                 >
                   <div className="relative h-14 w-14 md:h-16 md:w-16 lg:h-[72px] lg:w-[72px] rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 grid place-items-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_22px_-12px_rgba(184,149,85,0.5)] shrink-0 mt-0.5">
                     {profile?.photo_url ? (
-                      <img src={profile.photo_url} alt="" className="h-full w-full object-cover" />
+                      <img src={profile.photo_url} alt="" className="h-full w-full object-cover"  loading="lazy" decoding="async" />
                     ) : (
                       <span className="font-display text-lg md:text-xl lg:text-2xl font-semibold tracking-[0.04em] text-[#1A1A1A] tabular-nums">
                         {initials}

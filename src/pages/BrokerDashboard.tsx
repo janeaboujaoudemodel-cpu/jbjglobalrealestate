@@ -239,7 +239,7 @@ export default function BrokerDashboard() {
                       src={profile.photo_url}
                       alt={displayName}
                       className="absolute inset-0 w-full h-full object-cover rounded-full"
-                    />
+                     loading="lazy" decoding="async" />
                   ) : (
                     <>
                       <span

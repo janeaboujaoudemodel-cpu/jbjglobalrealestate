@@ -78,7 +78,7 @@ const ResalePropertiesSection = () => {
                               alt={listing.title}
                               className="w-full h-full object-cover"
                               loading="lazy"
-                            />
+                             decoding="async" />
                           ) : (
                             <Building2 className="w-10 h-10 text-[#1A1A1A]/70" />
                           )}

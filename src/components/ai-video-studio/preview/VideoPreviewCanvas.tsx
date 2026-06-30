@@ -52,7 +52,7 @@ function InspirationCarousel() {
       <div className="relative rounded-lg overflow-hidden shadow-xl mb-1.5" style={{ height: 140, border: `1.5px solid ${EXAMPLE_VIDEOS[active].accent}55` }}>
         {EXAMPLE_VIDEOS.map((v, i) => (
           <div key={v.id} className="absolute inset-0 transition-opacity duration-700" style={{ opacity: i === active ? 1 : 0 }}>
-            <img src={v.img} alt={v.label} className="w-full h-full object-cover" loading="lazy" />
+            <img src={v.img} alt={v.label} className="w-full h-full object-cover" loading="lazy"  decoding="async" />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%)' }} />
             <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style={{ background: `${v.accent}cc` }}>
               <Play className="w-2.5 h-2.5 text-[#1A1A1A] ml-0.5" />
@@ -73,7 +73,7 @@ function InspirationCarousel() {
         {EXAMPLE_VIDEOS.map((v, i) => (
           <button key={v.id} onClick={() => setActive(i)} className="flex-1 rounded overflow-hidden transition-all duration-200 relative"
             style={{ outline: i === active ? `1.5px solid ${v.accent}` : '1.5px solid transparent', outlineOffset: 1, opacity: i === active ? 1 : 0.45 }}>
-            <img src={v.img} alt={v.label} className="w-full object-cover" style={{ aspectRatio: '16/9' }} loading="lazy" />
+            <img src={v.img} alt={v.label} className="w-full object-cover" style={{ aspectRatio: '16/9' }} loading="lazy"  decoding="async" />
           </button>
         ))}
       </div>
@@ -511,7 +511,7 @@ export function VideoPreviewCanvas({
                       alt={activeImageClip.id}
                       className="w-full h-full object-contain"
                       style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
-                    />
+                     loading="lazy" decoding="async" />
                   )}
 
                   {/* ── No media at playhead ── */}

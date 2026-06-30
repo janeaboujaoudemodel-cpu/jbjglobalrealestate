@@ -105,7 +105,7 @@ export function BrandAssetPicker({ filterType, onSelect, onClose }: BrandAssetPi
                     {asset.svg_content ? (
                       <StampSVGRenderer svgSource={asset.svg_content} tintColor="#1B3A8C" size={80} />
                     ) : asset.thumbnail_url ? (
-                      <img src={asset.thumbnail_url} alt={asset.name} className="max-h-[80px] object-contain" />
+                      <img src={asset.thumbnail_url} alt={asset.name} className="max-h-[80px] object-contain"  loading="lazy" decoding="async" />
                     ) : (
                       <Package size={24} className="text-[hsl(var(--muted-foreground))] opacity-30" />
                     )}

@@ -373,7 +373,7 @@ const AreaGuides = () => {
                               alt={area.name}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               loading={index < 8 ? "eager" : "lazy"}
-                              onError={(e) => {
+                              onError={(e) = decoding="async"> {
                                 // Fall back to raw URL if optimization endpoint fails
                                 const rawUrl = area.hero_image_url || area.image_url;
                                 if (rawUrl && e.currentTarget.src !== rawUrl) {
@@ -383,7 +383,7 @@ const AreaGuides = () => {
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
-                              <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10" />
+                              <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10"  loading="lazy" decoding="async" />
                             </div>
                           )}
 

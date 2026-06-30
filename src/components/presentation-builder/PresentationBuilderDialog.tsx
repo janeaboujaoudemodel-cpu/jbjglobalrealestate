@@ -172,7 +172,7 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
                   <div className="flex items-center gap-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/25 p-3">
                     {presenter.logoDataUrl ? (
                       <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-[#B89555]/50 bg-white">
-                        <img src={presenter.logoDataUrl} alt="" className="w-full h-full object-contain" />
+                        <img src={presenter.logoDataUrl} alt="" className="w-full h-full object-contain"  loading="lazy" decoding="async" />
                         <button
                           type="button"
                           onClick={() => setPresenter((p) => ({ ...p, logoDataUrl: undefined }))}
@@ -192,7 +192,7 @@ export const PresentationBuilderDialog: React.FC<Props> = ({ open, onOpenChange,
                   <div className="flex items-center gap-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/25 p-3">
                   {presenter.photoDataUrl ? (
                     <div className="relative w-16 h-16 rounded-full overflow-hidden border border-[#B89555]/50">
-                      <img src={presenter.photoDataUrl} alt="" className="w-full h-full object-cover" />
+                      <img src={presenter.photoDataUrl} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                       <button
                         type="button"
                         onClick={() => setPresenter((p) => ({ ...p, photoDataUrl: undefined }))}

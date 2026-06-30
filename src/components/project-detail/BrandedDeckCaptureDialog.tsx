@@ -178,7 +178,7 @@ export default function BrandedDeckCaptureDialog({ open, onOpenChange, onSubmit 
                 <div className="mt-2 rounded-xl p-3 flex flex-col items-center" style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)" }}>
                   <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-lg bg-white">
                     {row.logo_url ? (
-                      <img src={row.logo_url} alt="Logo preview" className="w-full h-full object-contain" />
+                      <img src={row.logo_url} alt="Logo preview" className="w-full h-full object-contain"  loading="lazy" decoding="async" />
                     ) : (
                       <span className="text-xs text-[#1A1A1A]/55">No logo yet</span>
                     )}
@@ -200,7 +200,7 @@ export default function BrandedDeckCaptureDialog({ open, onOpenChange, onSubmit 
                 <div className="mt-2 rounded-xl p-3 flex flex-col items-center" style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.4)" }}>
                   <div className="w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-lg bg-white">
                     {row.headshot_url ? (
-                      <img src={row.headshot_url} alt="Headshot preview" className="w-full h-full object-contain" />
+                      <img src={row.headshot_url} alt="Headshot preview" className="w-full h-full object-contain"  loading="lazy" decoding="async" />
                     ) : (
                       <span className="text-xs text-[#1A1A1A]/55">No photo yet</span>
                     )}

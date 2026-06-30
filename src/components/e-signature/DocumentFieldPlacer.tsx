@@ -653,7 +653,7 @@ export default function DocumentFieldPlacer({
                     alt={`Page ${pageNum}`}
                     className="w-full block object-cover"
                     draggable={false}
-                  />
+                   loading="lazy" decoding="async" />
                   {isActive && (
                     <div className="absolute inset-0 bg-[hsl(var(--gold)/.06)] pointer-events-none" />
                   )}

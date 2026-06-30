@@ -702,7 +702,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                             : "border-[#B89555]/30 hover:border-[#B89555]/50"
                         )}
                       >
-                        <img src={img.preview} alt={img.name} className="w-full h-full object-cover" />
+                        <img src={img.preview} alt={img.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         <button
                           onClick={(e) => { e.stopPropagation(); removeImage(img.id); }}
                           className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-red-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
@@ -732,7 +732,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                     {processedImages.map((p, i) => (
                       <div key={i} className="group relative">
                         <div className="aspect-square rounded-lg overflow-hidden bg-[#F7F2EA] border border-[#B89555]/30">
-                          <img src={p.dataUrl} alt={p.filename} className="w-full h-full object-contain" />
+                          <img src={p.dataUrl} alt={p.filename} className="w-full h-full object-contain"  loading="lazy" decoding="async" />
                         </div>
                         <button onClick={() => downloadSingle(p)}
                           className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-[#EFE6D6]/90 hover:bg-[#EFE6D6] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md">

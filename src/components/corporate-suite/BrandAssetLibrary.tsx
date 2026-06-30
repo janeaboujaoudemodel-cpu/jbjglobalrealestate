@@ -463,7 +463,7 @@ export function BrandAssetLibrary({
                     src={asset.file_url}
                     alt={asset.name}
                     className="w-full h-full object-contain"
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
 
                 {/* Name */}
@@ -529,7 +529,7 @@ export function BrandAssetLibrary({
             src={selectedUrl}
             alt="Selected"
             className="w-10 h-10 object-contain rounded"
-          />
+           loading="lazy" decoding="async" />
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Applied to design</p>
             <p className="text-[9px] text-[hsl(var(--muted-foreground))] truncate">{selectedUrl.split("/").pop()}</p>

@@ -621,7 +621,7 @@ export default function ScanSignPage() {
  selectedPageIndex === index ? 'border-[color:var(--emerald-1)]/30 shadow-sm shadow-emerald-500/20' : 'border-[#B89555]/30 hover:border-[color:var(--emerald-1)]/30'
  }`}>
                     <img src={page.imageData} alt={`Page ${index + 1}`} className="w-full h-14 object-cover"
-                      style={{ transform: `rotate(${page.rotation}deg)`, filter: `brightness(${page.brightness}%) contrast(${page.contrast}%)` }} />
+                      style={{ transform: `rotate(${page.rotation}deg)`, filter: `brightness(${page.brightness}%) contrast(${page.contrast}%)` }}  loading="lazy" decoding="async" />
                     <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 flex items-center justify-between bg-[#1A1A1A]/60">
                       <span className="text-white text-[9px] font-bold">{index + 1}</span>
                       {signatures.some(s => s.pageIndex === index) && <Pen className="w-2.5 h-2.5 text-emerald-400" />}
@@ -670,7 +670,7 @@ export default function ScanSignPage() {
                   <div className="relative rounded-xl overflow-hidden flex items-center justify-center bg-[#F7F2EA] border border-[#B89555]/30"
                     style={{ minHeight: 300 }}>
                     <img src={selectedPage.imageData} alt="Preview" className="max-w-full max-h-[380px] object-contain"
-                      style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }} />
+                      style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }}  loading="lazy" decoding="async" />
                     {selectedPage.rotation > 0 && (
                       <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-semibold jj-surface-emerald text-white">
                         {selectedPage.rotation}°

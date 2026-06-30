@@ -247,7 +247,7 @@ ${COMPANY_INFO.website}`;
                             src={item.property_data.image_url} 
                             alt={item.property_data?.name}
                             className="w-full h-full object-cover rounded-lg"
-                          />
+                           loading="lazy" decoding="async" />
                         ) : (
                           <Building2 className="h-6 w-6 text-muted-foreground" />
                         )}

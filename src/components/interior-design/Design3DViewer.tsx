@@ -104,7 +104,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
               : 'none',
             cursor: is3D ? (isDragging ? 'grabbing' : 'grab') : 'default',
           }}
-        />
+         loading="lazy" decoding="async" />
         {is3D && (
           <div className="absolute bottom-3 left-3 bg-[#1A1A1A]/70 text-[#1A1A1A] text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
             🎮 Drag to rotate • {rotateX.toFixed(0)}° × {rotateY.toFixed(0)}°

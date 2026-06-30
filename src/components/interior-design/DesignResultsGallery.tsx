@@ -251,7 +251,7 @@ const DesignResultsGallery = ({
                 src={images[0]}
                 alt="Generated interior design"
                 className="w-full h-auto cursor-zoom-in"
-                onClick={() => setSelectedImage(images[0])}
+                onClick={() = loading="lazy" decoding="async"> setSelectedImage(images[0])}
               />
             )}
             <button
@@ -333,7 +333,7 @@ const DesignResultsGallery = ({
             src={selectedImage}
             alt="Full size design"
             className="max-w-full max-h-full object-contain"
-          />
+           loading="lazy" decoding="async" />
         </motion.div>
       )}
     </div>

@@ -438,7 +438,7 @@ export default function ReferralAdmin() {
                           src={companySignature}
                           alt="Company Signature"
                           className="max-h-24 mx-auto"
-                        />
+                         loading="lazy" decoding="async" />
                       </div>
                       <Button
                         variant="secondary"

@@ -49,7 +49,7 @@ export function T({ children, domain = 'ui', as: As = 'span', className }: TProp
  * Hook form for attributes / dynamic strings.
  *   const t = useT();
  *   <input placeholder={t('Search properties')} />
- *   <img alt={t(project.name, 'project.title')} />
+ *   <img alt={t(project.name, 'project.title')}  loading="lazy" decoding="async" />
  */
 export function useT(domain: string = 'ui') {
   const { language } = useLanguage();

@@ -243,7 +243,7 @@ export function BackgroundRemoverPanel({ onAddToTimeline }: BackgroundRemoverPan
         <>
           {/* Preview */}
           <div className="relative rounded-lg overflow-hidden" style={{ border: `1px solid ${C.borderSubtle}`, background: 'repeating-conic-gradient(#1a1a24 0% 25%, #22222e 0% 50%) 50% / 16px 16px' }}>
-            <img src={displayImage!} alt="Preview" className="w-full max-h-48 object-contain" />
+            <img src={displayImage!} alt="Preview" className="w-full max-h-48 object-contain"  loading="lazy" decoding="async" />
             {resultImage && (
               <button
                 onMouseDown={() => setShowOriginal(true)}

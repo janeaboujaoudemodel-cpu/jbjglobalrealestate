@@ -71,7 +71,7 @@ const CollageItem: React.FC<CollageItemProps> = ({ member, index, size, delay })
           className="w-full h-full object-cover"
           style={{ objectPosition: "center 25%" }}
           loading="eager"
-        />
+         decoding="async" />
       </motion.div>
     </motion.div>
   );

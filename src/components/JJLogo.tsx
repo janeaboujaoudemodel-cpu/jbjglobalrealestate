@@ -34,7 +34,7 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         height={config.height}
         className="object-contain"
         style={{ width: config.width, height: config.height }}
-      />
+       loading="lazy" decoding="async" />
 
       {/* GLOBAL REAL ESTATE */}
       {showText && (
@@ -66,7 +66,7 @@ export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
       height={44}
       className="object-contain shrink-0"
       style={{ width: 44, height: 44 }}
-    />
+     loading="lazy" decoding="async" />
     
     {/* GLOBAL REAL ESTATE - Horizontal */}
     <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">

@@ -76,7 +76,7 @@ const CEOLeadershipShowcase = () => {
                   src={ceoLandscapeFlags}
                   alt="Jane Bou Jaoude - Founder & CEO at JBJ Global Real Estate with Lebanese and UAE flags"
                   className="w-full h-auto min-h-[200px] sm:min-h-[300px] md:min-h-[400px] object-contain md:object-cover bg-[#FDFBF7]"
-                />
+                 loading="lazy" decoding="async" />
                 {/* Overlay with name & title at bottom center only - no duplicate labels */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 sm:p-6 md:p-10">
                   <div className="text-center">

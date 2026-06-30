@@ -1443,7 +1443,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       alt={selectedImport.name}
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
-                      onError={(e) => {
+                      onError={(e) = loading="lazy" decoding="async"> {
                         (e.target as HTMLImageElement).src = '/placeholder.svg';
                       }}
                     />
@@ -1501,7 +1501,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                             alt=""
                             className="w-full h-full object-cover"
                             referrerPolicy="no-referrer"
-                            onError={(e) => {
+                            onError={(e) = loading="lazy" decoding="async"> {
                               (e.target as HTMLImageElement).src = '/placeholder.svg';
                             }}
                           />

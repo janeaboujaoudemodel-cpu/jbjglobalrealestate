@@ -45,7 +45,7 @@ export const JBJLogo = ({
         height={config.height}
         className="object-contain"
         style={{ width: config.width, height: config.height }}
-      />
+       loading="lazy" decoding="async" />
       {showText && (
         <span className="text-[#1A1A1A] text-[10px] md:text-xs tracking-[0.2em] uppercase mt-2">
           Real Estate
@@ -72,7 +72,7 @@ export const JBJLogoHeader = ({ className = '' }: { className?: string }) => (
         height: 44,
         imageRendering: 'auto'
       }}
-    />
+     loading="lazy" decoding="async" />
     {/* Text block */}
     <div className="flex flex-col justify-center leading-tight">
       <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">
@@ -95,7 +95,7 @@ export const JBJLogoFooter = ({
       src={variant === 'light' ? jbjFullLogoLight : jbjFullLogoDark} 
       alt="JBJ Global Real Estate" 
       className="h-32 md:h-40 w-auto object-contain"
-    />
+     loading="lazy" decoding="async" />
   </div>
 );
 

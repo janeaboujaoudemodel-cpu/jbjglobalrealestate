@@ -422,7 +422,7 @@ export default function ReportPreviewModal({
                   style={{ background: "#FFFFFF", border: `1px dashed ${C.goldSoft}` }}
                 >
                   {branding.photoDataUrl ? (
-                    <img src={branding.photoDataUrl} alt="photo" className="h-full w-full object-cover" />
+                    <img src={branding.photoDataUrl} alt="photo" className="h-full w-full object-cover"  loading="lazy" decoding="async" />
                   ) : (
                     <div className="flex flex-col items-center text-[10px]" style={{ color: "#7a7060" }}>
                       <UserIcon className="w-5 h-5 mb-1" />Upload
@@ -447,7 +447,7 @@ export default function ReportPreviewModal({
                   style={{ background: "#FFFFFF", border: `1px dashed ${C.goldSoft}` }}
                 >
                   {branding.logoDataUrl ? (
-                    <img src={branding.logoDataUrl} alt="logo" className="h-full w-full object-contain p-2" />
+                    <img src={branding.logoDataUrl} alt="logo" className="h-full w-full object-contain p-2"  loading="lazy" decoding="async" />
                   ) : (
                     <div className="flex flex-col items-center text-[10px]" style={{ color: "#7a7060" }}>
                       <Upload className="w-5 h-5 mb-1" />Upload

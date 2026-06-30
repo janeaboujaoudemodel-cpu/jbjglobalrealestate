@@ -26,7 +26,7 @@ export default function ReferralContract({
     <div className="bg-[#FDFBF7] text-[#1A1A1A] p-8 max-w-3xl mx-auto font-serif" id="referral-contract">
       {/* Header - Large logo only, no duplicate company name */}
       <div className="text-center border-b-2 border-[#B89555] pb-6 mb-8">
-        <img src={jbjFullLogoLight} alt="JBJ Global Real Estate" className="h-28 mx-auto mb-4" />
+        <img src={jbjFullLogoLight} alt="JBJ Global Real Estate" className="h-28 mx-auto mb-4"  loading="lazy" decoding="async" />
         <p className="text-sm text-[#1A1A1A]/70 mt-1">Real Estate Brokerage</p>
         <p className="text-xs text-[#1A1A1A]/70 mt-2">Dubai, United Arab Emirates</p>
       </div>
@@ -171,7 +171,7 @@ export default function ReferralContract({
           <p className="font-semibold text-sm mb-4">Referral Partner:</p>
           <div className="h-20 border-b border-[#B89555]/30 mb-2 flex items-end justify-center pb-2">
             {signatureDataUrl ? (
-              <img src={signatureDataUrl} alt="Signature" className="h-16 max-w-full object-contain" />
+              <img src={signatureDataUrl} alt="Signature" className="h-16 max-w-full object-contain"  loading="lazy" decoding="async" />
             ) : (
               <span className="text-[#1A1A1A]/70 italic text-sm">Sign here</span>
             )}

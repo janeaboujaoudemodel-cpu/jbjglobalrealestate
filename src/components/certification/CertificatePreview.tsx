@@ -254,7 +254,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                         alt="Signature"
                         draggable={false}
                         className="max-h-12 max-w-[220px] object-contain"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <span className="text-[#1A1A1A]/40 text-xs italic">
                         {isLocked ? "— signature on issue —" : ""}

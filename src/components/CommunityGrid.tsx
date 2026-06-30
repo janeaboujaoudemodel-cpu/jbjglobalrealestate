@@ -39,7 +39,7 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
                 src={community.image_url}
                 alt={community.name}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
+               loading="lazy" decoding="async" />
             ) : (
               <div className="w-full h-full bg-gradient-to-b from-premium-card to-premium-bg" aria-label={community.name} />
             )}

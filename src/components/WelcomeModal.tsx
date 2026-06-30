@@ -108,7 +108,7 @@ const WelcomeModal = () => {
                 src={jbjMonogramLightTransparent} 
                 alt="JBJ Global Real Estate" 
                 className="h-36 md:h-44 w-auto object-contain"
-              />
+               loading="lazy" decoding="async" />
             </div>
 
             {/* Full Company Name - Large and Prominent - Full Width */}

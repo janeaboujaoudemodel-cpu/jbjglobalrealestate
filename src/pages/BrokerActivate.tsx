@@ -128,7 +128,7 @@ export default function BrokerActivate() {
       <div className="w-full max-w-md bg-white border border-[#B89555] rounded-2xl shadow-[0_8px_28px_rgba(26,26,26,0.06)] overflow-hidden">
         {/* Header */}
         <div className="bg-[#F7F2EA] border-b border-[#B89555]/45 px-8 py-7 text-center">
-          <img src="/jbj-monogram-dark-on-light.png" alt="JBJ" className="h-20 w-20 mx-auto mb-4 object-contain" />
+          <img src="/jbj-monogram-dark-on-light.png" alt="JBJ" className="h-20 w-20 mx-auto mb-4 object-contain"  loading="lazy" decoding="async" />
           <div className="text-[11px] tracking-[0.32em] uppercase text-[#1A1A1A]">JBJ Global Real Estate</div>
           <div className="h-px w-10 bg-[#B89555] mx-auto mt-3" />
         </div>

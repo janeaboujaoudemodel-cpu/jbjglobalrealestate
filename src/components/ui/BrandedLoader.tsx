@@ -43,7 +43,7 @@ export function BrandedLoader({ text, className = "", variant = "light" }: Brand
           aria-hidden="true"
           className="relative w-12 h-12 object-contain"
           style={{ animation: "jbj-fade 1.6s ease-in-out infinite" }}
-        />
+         loading="lazy" decoding="async" />
       </div>
       {text ? (
         <span className="text-[10px] tracking-[0.25em] uppercase text-[#1A1A1A]/60">
@@ -81,6 +81,6 @@ export function BrandedLoaderInline({ size = 24, className = "", variant = "dark
         height: size,
         animation: "jbj-fade 1.6s ease-in-out infinite",
       }}
-    />
+     loading="lazy" decoding="async" />
   );
 }

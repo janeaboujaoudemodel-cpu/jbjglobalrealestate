@@ -79,7 +79,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
                   ? "invert(1) brightness(1)"
                   : "contrast(1.08) saturate(1.1)",
               }}
-            />
+             decoding="async" />
           ) : (
             <div className="flex flex-col items-center justify-center gap-2">
               <Building2 className="w-10 h-10 text-[#1A1A1A]/40" />

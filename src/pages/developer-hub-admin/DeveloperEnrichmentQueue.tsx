@@ -379,7 +379,7 @@ function DiffTable({ before, after }: { before: Record<string, unknown>; after: 
     if (f === "logo_url") {
       return (
         <div className="inline-flex items-center justify-center h-10 px-2 rounded bg-[#FDFBF7] border border-[#B89555]/30">
-          <img src={v} alt="" className="h-7 max-w-[160px] object-contain" />
+          <img src={v} alt="" className="h-7 max-w-[160px] object-contain"  loading="lazy" decoding="async" />
         </div>
       );
     }

@@ -65,7 +65,7 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
                     src={member.avatar} 
                     alt={member.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
 
                 {/* Overlay with actions */}

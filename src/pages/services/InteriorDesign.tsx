@@ -104,7 +104,7 @@ const InteriorDesign = () => {
             src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80" 
             alt="Interior Design"
             className="w-full h-full object-cover opacity-30"
-          />
+           loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
         
@@ -243,7 +243,7 @@ const InteriorDesign = () => {
                         src={project.image} 
                         alt={project.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                       loading="lazy" decoding="async" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
                     <CardContent className="p-4">

@@ -157,7 +157,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
               <Popup>
                 <div className="min-w-[220px] max-w-[260px]">
                   {project.cover_image_url && (
-                    <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" loading="lazy" />
+                    <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" loading="lazy"  decoding="async" />
                   )}
                   <div className="p-3">
                     <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight mb-1">

@@ -349,7 +349,7 @@ const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGe
             src={companyProfileBook.cover}
             alt={companyProfileBook.title}
             className="w-full aspect-[2/3] object-cover"
-          />
+           loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/10 z-10" />
         </div>
         <div
@@ -438,7 +438,7 @@ const CompanyProfile = () => {
       {/* 1. Hero Section */}
       <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={luxuryVillaHero} alt="JBJ Global Real Estate" className="w-full h-full object-cover" />
+          <img src={luxuryVillaHero} alt="JBJ Global Real Estate" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
         </div>
 
@@ -1166,7 +1166,7 @@ const CompanyProfile = () => {
                     src={founderCompanyProfile} 
                     alt={PROFILE_CONTENT.founderProfile.name}
                     className="w-full h-full object-cover object-top"
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-[#1A1A1A] text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>

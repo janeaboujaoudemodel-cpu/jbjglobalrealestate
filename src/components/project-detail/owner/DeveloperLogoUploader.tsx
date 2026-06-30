@@ -47,7 +47,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
       className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group"
     >
       {isValidDeveloperLogoUrl(logoUrl) ? (
-        <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3" />
+        <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
       ) : (
         <span className="text-[#1A1A1A] font-bold text-base text-center px-2">{developerName}</span>
       )}

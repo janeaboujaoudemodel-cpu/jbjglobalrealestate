@@ -492,7 +492,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
       </div>
       <div className="p-3 flex items-center justify-center min-h-[300px]">
         {showBefore && imagePreview
-          ? <img src={imagePreview} alt="Original" className="max-w-full max-h-[480px] object-contain rounded-lg" />
+          ? <img src={imagePreview} alt="Original" className="max-w-full max-h-[480px] object-contain rounded-lg"  loading="lazy" decoding="async" />
           : <canvas ref={canvasRef} className="max-w-full max-h-[480px] object-contain rounded-lg" />
         }
       </div>

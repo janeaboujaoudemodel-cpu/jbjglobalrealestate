@@ -147,7 +147,7 @@ export function PhotoClipPanel({ onAddToTimeline }: PhotoClipPanelProps) {
           {photos.map((photo, idx) => (
             <div key={photo.id} className="flex items-center gap-2 rounded-md p-2"
               style={{ background: C.bgCard, border: `1px solid ${C.borderSubtle}` }}>
-              <img src={photo.url} alt="" className="w-10 h-10 rounded object-cover flex-shrink-0" />
+              <img src={photo.url} alt="" className="w-10 h-10 rounded object-cover flex-shrink-0"  loading="lazy" decoding="async" />
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] truncate" style={{ color: C.textPrimary }}>{photo.file.name}</p>
                 <div className="flex items-center gap-2 mt-1">

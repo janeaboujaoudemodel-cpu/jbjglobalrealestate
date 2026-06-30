@@ -342,7 +342,7 @@ const VerificationRequests = () => {
             <DialogTitle>Document Preview</DialogTitle>
           </DialogHeader>
           {previewUrl && (
-            <img src={previewUrl} alt="Verification document" className="w-full rounded-lg" />
+            <img src={previewUrl} alt="Verification document" className="w-full rounded-lg"  loading="lazy" decoding="async" />
           )}
         </DialogContent>
       </Dialog>

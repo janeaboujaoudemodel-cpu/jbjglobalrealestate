@@ -141,7 +141,7 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
 
         {data.signatureUrl && (
           <div className="relative inline-block bg-[hsl(var(--muted)/0.3)] p-2 rounded-lg">
-            <img src={data.signatureUrl} alt="Signature" className="h-12 object-contain" />
+            <img src={data.signatureUrl} alt="Signature" className="h-12 object-contain"  loading="lazy" decoding="async" />
             <button
               onClick={() => onChange({ ...data, signatureUrl: undefined })}
               className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center"
@@ -174,7 +174,7 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
 
         {data.stampUrl && (
           <div className="relative inline-block bg-[hsl(var(--muted)/0.3)] p-2 rounded-lg">
-            <img src={data.stampUrl} alt="Stamp" className="h-16 object-contain" style={{ mixBlendMode: "multiply" }} />
+            <img src={data.stampUrl} alt="Stamp" className="h-16 object-contain" style={{ mixBlendMode: "multiply" }}  loading="lazy" decoding="async" />
             <button
               onClick={() => onChange({ ...data, stampUrl: undefined })}
               className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center"

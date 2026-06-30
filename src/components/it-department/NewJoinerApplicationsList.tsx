@@ -282,7 +282,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                                 src={application.photo_url} 
                                 alt={application.full_name}
                                 className="w-full h-full object-cover"
-                              />
+                               loading="lazy" decoding="async" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
                                 <User className="w-6 h-6 text-[#1A1A1A]" />
@@ -380,7 +380,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                       src={selectedApplication.photo_url} 
                       alt={selectedApplication.full_name}
                       className="w-full h-full object-cover"
-                    />
+                     loading="lazy" decoding="async" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <User className="w-10 h-10 text-[#1A1A1A]" />

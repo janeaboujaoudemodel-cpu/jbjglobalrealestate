@@ -393,7 +393,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
       />
       {preview ? (
         <div className="relative rounded-xl overflow-hidden border border-[#B89555]/60">
-          <img src={preview} alt="" className="w-full h-48 object-cover" />
+          <img src={preview} alt="" className="w-full h-48 object-cover"  loading="lazy" decoding="async" />
           <button
             type="button"
             onClick={() => inputRef.current?.click()}

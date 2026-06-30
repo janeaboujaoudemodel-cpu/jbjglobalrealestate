@@ -72,7 +72,7 @@ const ComingSoon = () => {
               src={jbjMonogramLightTransparent}
               alt="JBJ" 
               className="h-32 md:h-44 lg:h-56 w-auto mx-auto"
-            />
+             loading="lazy" decoding="async" />
           </motion.div>
 
           {/* Title */}

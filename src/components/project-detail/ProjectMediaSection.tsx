@@ -87,7 +87,7 @@ export default function ProjectMediaSection({
                 src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`}
                 alt={`${projectName} video`}
                 className="w-full h-full object-cover"
-                onError={(e) => {
+                onError={(e) = loading="lazy" decoding="async"> {
                   (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
                 }}
               />

@@ -482,7 +482,7 @@ ${COMPANY_CONTACTS.email}`;
                 alt={ASSISTANT_IDENTITY.name}
                 className="w-10 h-10 rounded-full border-2 border-[#B89555] bg-[#FDFBF7]"
                 style={{ objectFit: "cover", objectPosition: "center 15%" }}
-              />
+               loading="lazy" decoding="async" />
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 jj-surface-emerald rounded-full border-2 border-white" />
             </div>
             <div>

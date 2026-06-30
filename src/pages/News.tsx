@@ -312,7 +312,7 @@ const News = () => {
                           alt={filteredNews[0].title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           referrerPolicy="no-referrer"
-                          onError={(e) => {
+                          onError={(e) = loading="lazy" decoding="async"> {
                             const parent = e.currentTarget.parentElement;
                             if (parent) {
                               e.currentTarget.style.display = 'none';
@@ -387,7 +387,7 @@ const News = () => {
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       referrerPolicy="no-referrer"
-                      onError={(e) => {
+                      onError={(e) = loading="lazy" decoding="async"> {
                         const parent = e.currentTarget.parentElement;
                         if (parent) {
                           e.currentTarget.style.display = 'none';
@@ -724,7 +724,7 @@ const News = () => {
                       src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face" 
                       alt="Victoria Hayes - News Reporter"
                       className="w-full h-full object-cover"
-                    />
+                     loading="lazy" decoding="async" />
                   </div>
                   <div>
                     <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">Victoria Hayes</h3>

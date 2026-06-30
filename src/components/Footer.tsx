@@ -489,7 +489,7 @@ const Footer = () => {
                 alt="JBJ Global Real Estate"
                 className="h-14 w-14 object-contain transition-opacity group-hover:opacity-90 shrink-0"
                 style={{ filter: "drop-shadow(0 2px 6px rgba(200,167,102,0.45))" }}
-              />
+               loading="lazy" decoding="async" />
               <div className="flex flex-col items-start">
                 <span
                   className="text-[16px] font-semibold tracking-[0.22em] uppercase leading-tight"

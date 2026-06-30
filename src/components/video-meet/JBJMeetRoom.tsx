@@ -251,7 +251,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                       src={participant.photo} 
                       alt={participant.name}
                       className="w-full h-full object-cover"
-                    />
+                     loading="lazy" decoding="async" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <User className="w-8 h-8 text-white/90" />
@@ -319,7 +319,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                     src={participant.photo} 
                     alt={participant.name}
                     className="w-full h-full object-cover"
-                  />
+                   loading="lazy" decoding="async" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#1A1A1A]">
                     <User className="w-10 h-10 text-white/90" />

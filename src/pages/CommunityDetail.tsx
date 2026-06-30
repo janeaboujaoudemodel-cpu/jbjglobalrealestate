@@ -71,7 +71,7 @@ const CommunityDetail = () => {
             src={community.image_url}
             alt={community.name}
             className="w-full h-full object-cover"
-          />
+           loading="lazy" decoding="async" />
         ) : (
           <div className="w-full h-full bg-gradient-to-b from-premium-card to-premium-bg" aria-label={community.name} />
         )}

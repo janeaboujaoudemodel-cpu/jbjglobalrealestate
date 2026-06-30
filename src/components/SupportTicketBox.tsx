@@ -774,7 +774,7 @@ const SupportTicketBox = () => {
                                         alt="JBJ" 
                                         className="w-20 h-20 object-contain animate-pulse mb-6"
                                         style={{ filter: 'drop-shadow(0 0 12px rgba(200,167,102,0.5))' }}
-                                      />
+                                       loading="lazy" decoding="async" />
                                       
                                       {/* Upload progress for each file */}
                                       {attachments.length > 0 && submissionStep === 'uploading' && (
@@ -1065,7 +1065,7 @@ const SupportTicketBox = () => {
                                         <div className="flex items-center gap-2 min-w-0">
                                           {/* Thumbnail preview for images */}
                                           {previewUrl ? (
-                                            <img src={previewUrl} alt={file.name} className="w-10 h-10 rounded object-cover border border-[#B89555]/30 flex-shrink-0" />
+                                            <img src={previewUrl} alt={file.name} className="w-10 h-10 rounded object-cover border border-[#B89555]/30 flex-shrink-0"  loading="lazy" decoding="async" />
                                           ) : (
                                             getFileIcon(file)
                                           )}
@@ -1099,7 +1099,7 @@ const SupportTicketBox = () => {
                                               </DialogHeader>
                                               <div className="mt-2">
                                                 {isImage && previewUrl ? (
-                                                  <img src={previewUrl} alt={file.name} className="w-full rounded-lg" />
+                                                  <img src={previewUrl} alt={file.name} className="w-full rounded-lg"  loading="lazy" decoding="async" />
                                                 ) : file.type === 'application/pdf' ? (
                                                   <iframe
                                                     src={URL.createObjectURL(file)}

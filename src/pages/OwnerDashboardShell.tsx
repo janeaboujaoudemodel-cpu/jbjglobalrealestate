@@ -68,7 +68,7 @@ const OwnerDashboardShell = () => {
             alt="JBJ"
             className="object-contain flex-shrink-0"
             style={{ width: collapsed ? 34 : 38, height: collapsed ? 34 : 38 }}
-          />
+           loading="lazy" decoding="async" />
           {!collapsed && (
             <span
               className="min-w-0 flex-1 text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate"

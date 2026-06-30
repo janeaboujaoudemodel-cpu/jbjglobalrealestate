@@ -112,7 +112,7 @@ const ChatMessages = React.memo(({
                     src={agent.photo} 
                     alt={agent.name}
                     className="w-full h-full object-cover"
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
               )}
               <div className="flex flex-col max-w-[80%]">
@@ -150,7 +150,7 @@ const ChatMessages = React.memo(({
                   src={agent.photo} 
                   alt={agent.name}
                   className="w-full h-full object-cover"
-                />
+                 loading="lazy" decoding="async" />
               </div>
               <div className="flex flex-col gap-1">
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-[#B89555]/20 shadow-sm">

@@ -243,7 +243,7 @@ export function AttachmentChip({ attachment, onRemove }: { attachment: DocumentA
       style ? `${style.bg} ${style.border}` : "bg-[#FDFBF7] border-[#B89555]/20"
     )}>
       {style?.icon || (isImage && attachment.content ? (
-        <img src={attachment.content} alt={attachment.name} className="w-6 h-6 object-contain rounded" />
+        <img src={attachment.content} alt={attachment.name} className="w-6 h-6 object-contain rounded"  loading="lazy" decoding="async" />
       ) : (
         <FileText className="w-4 h-4 text-[#B89555]" />
       ))}
@@ -284,10 +284,10 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
         </div>
         {isSvgDataUri ? (
           <div className="flex justify-center">
-            <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain" />
+            <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain"  loading="lazy" decoding="async" />
           </div>
         ) : (
-          <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain rounded" />
+          <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain rounded"  loading="lazy" decoding="async" />
         )}
         <p className="text-[10px] text-muted-foreground mt-2 truncate">{attachment.name}</p>
       </div>
@@ -302,7 +302,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
           <Signature className="w-3 h-3 text-indigo-500" />
           <span className="text-[9px] font-semibold text-indigo-600 uppercase tracking-wider">Signature</span>
         </div>
-        <img src={attachment.content} alt={attachment.name} className="max-h-[80px] object-contain rounded opacity-90" style={{ filter: 'contrast(1.1)' }} />
+        <img src={attachment.content} alt={attachment.name} className="max-h-[80px] object-contain rounded opacity-90" style={{ filter: 'contrast(1.1)' }}  loading="lazy" decoding="async" />
         <p className="text-[10px] text-muted-foreground mt-2 truncate">{attachment.name}</p>
       </div>
     );
@@ -316,7 +316,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
           <CreditCard className="w-3 h-3 text-amber-600" />
           <span className="text-[9px] font-semibold text-amber-700 uppercase tracking-wider">Business Card</span>
         </div>
-        <img src={attachment.content} alt={attachment.name} className="w-full h-auto rounded-lg" />
+        <img src={attachment.content} alt={attachment.name} className="w-full h-auto rounded-lg"  loading="lazy" decoding="async" />
         <p className="text-[10px] text-muted-foreground mt-1.5 truncate">{attachment.name}</p>
       </div>
     );
@@ -331,7 +331,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
           <span className="text-[9px] font-semibold text-[#1A1A1A]/80 uppercase tracking-wider">Letterhead</span>
         </div>
         <div className="border-t-2 border-[#B89555] pt-2">
-          <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain rounded" />
+          <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain rounded"  loading="lazy" decoding="async" />
         </div>
         <p className="text-[10px] text-muted-foreground mt-2 truncate">{attachment.name}</p>
       </div>
@@ -346,7 +346,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
           <Image className="w-3 h-3 text-emerald-500" />
           <span className="text-[9px] font-semibold text-[color:var(--emerald-1)] uppercase tracking-wider">Logo</span>
         </div>
-        <img src={attachment.content} alt={attachment.name} className="max-h-[100px] object-contain" />
+        <img src={attachment.content} alt={attachment.name} className="max-h-[100px] object-contain"  loading="lazy" decoding="async" />
         <p className="text-[10px] text-muted-foreground mt-2 truncate self-start">{attachment.name}</p>
       </div>
     );
@@ -360,7 +360,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
           <Mail className="w-3 h-3 text-blue-500" />
           <span className="text-[9px] font-semibold text-blue-600 uppercase tracking-wider">Email Signature</span>
         </div>
-        <img src={attachment.content} alt={attachment.name} className="max-h-[100px] object-contain rounded" />
+        <img src={attachment.content} alt={attachment.name} className="max-h-[100px] object-contain rounded"  loading="lazy" decoding="async" />
         <p className="text-[10px] text-muted-foreground mt-2 truncate">{attachment.name}</p>
       </div>
     );
@@ -370,7 +370,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
   if (isImage && attachment.content) {
     return (
       <div className="mt-2 rounded-lg overflow-hidden border border-[#B89555]/15 bg-[#FDFBF7]/80 p-2 max-w-[200px]">
-        <img src={attachment.content} alt={attachment.name} className="max-h-[150px] object-contain rounded" />
+        <img src={attachment.content} alt={attachment.name} className="max-h-[150px] object-contain rounded"  loading="lazy" decoding="async" />
         <p className="text-[10px] text-muted-foreground mt-1 truncate">{attachment.name}</p>
       </div>
     );

@@ -29,6 +29,6 @@ export function StampOverlay({ src, size, className = "", style, opacity = 0.85 
         userSelect: "none",
         ...style,
       }}
-    />
+     loading="lazy" decoding="async" />
   );
 }

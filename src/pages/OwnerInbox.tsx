@@ -627,7 +627,7 @@ function ThreadListItem({
         <div className="relative">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">
             {thread.contact_avatar_url ? (
-              <img src={thread.contact_avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+              <img src={thread.contact_avatar_url} alt="" className="w-full h-full rounded-full object-cover"  loading="lazy" decoding="async" />
             ) : (
               <User className="h-5 w-5 text-[#1A1A1A]" />
             )}

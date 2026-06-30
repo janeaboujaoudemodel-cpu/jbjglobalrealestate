@@ -392,7 +392,7 @@ const ListingPortal = () => {
                       >
                         <div className="h-48 bg-[#F7F2EA] relative">
                           {listing.images[0] ? (
-                            <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
+                            <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <Building className="w-12 h-12 text-[#1A1A1A]/70" />

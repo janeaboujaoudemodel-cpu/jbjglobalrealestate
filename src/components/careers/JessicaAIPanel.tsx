@@ -41,7 +41,7 @@ export default function JessicaAIPanel() {
                 height={160}
                 loading="lazy"
                 className="h-full w-full object-cover object-center"
-              />
+               decoding="async" />
             </div>
             <span className="absolute bottom-1 right-1 inline-flex items-center justify-center">
               <span className="absolute inline-flex h-3 w-3 rounded-full jj-surface-emerald opacity-70 animate-ping" />

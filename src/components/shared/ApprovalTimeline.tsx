@@ -94,7 +94,7 @@ export default function ApprovalTimeline({ steps, className }: ApprovalTimelineP
             {/* Avatar / icon circle */}
             <div className={cn("relative z-10 flex-shrink-0 w-[48px] h-[48px] rounded-full border-2 flex items-center justify-center", style.border, style.bg)}>
               {step.photoUrl ? (
-                <img src={step.photoUrl} alt={step.name} className="w-full h-full rounded-full object-cover" />
+                <img src={step.photoUrl} alt={step.name} className="w-full h-full rounded-full object-cover"  loading="lazy" decoding="async" />
               ) : (
                 <span className="text-sm font-bold text-[hsl(36,30%,70%)]">
                   {step.name.split(" ").map((n) => n[0]).join("")}

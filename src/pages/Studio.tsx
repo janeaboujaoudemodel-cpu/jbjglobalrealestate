@@ -413,7 +413,7 @@ export default function Studio() {
                     <Link to={`/studio/editor/${project.id}`}>
                       <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2]">
                         {project.thumbnail_url ? (
-                          <img src={project.thumbnail_url} alt={project.name} className="w-full h-full object-cover" />
+                          <img src={project.thumbnail_url} alt={project.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#EFE6D6]/10 border border-[#B89555]/25">

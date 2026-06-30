@@ -267,7 +267,7 @@ const MortgageCalculator = ({
           }}
         >
           {selectedProject.developer?.logo_url ? (
-            <img src={selectedProject.developer.logo_url} alt="" className="w-10 h-10 rounded-xl object-contain bg-white/90 p-1" />
+            <img src={selectedProject.developer.logo_url} alt="" className="w-10 h-10 rounded-xl object-contain bg-white/90 p-1"  loading="lazy" decoding="async" />
           ) : (
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(184,149,85,0.18)" }}>
               <Building2 className="w-5 h-5 allow-white" style={{ color: "#BFDBFE" }} />
@@ -329,7 +329,7 @@ const MortgageCalculator = ({
                   data-no-contrast-guard
                 >
                   {project.developer?.logo_url ? (
-                    <img src={project.developer.logo_url} alt="" className="w-9 h-9 rounded-lg object-contain bg-white/90 p-1" />
+                    <img src={project.developer.logo_url} alt="" className="w-9 h-9 rounded-lg object-contain bg-white/90 p-1"  loading="lazy" decoding="async" />
                   ) : (
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(184,149,85,0.16)" }}>
                       <Building2 className="w-4 h-4 allow-white" style={{ color: "#BFDBFE" }} />

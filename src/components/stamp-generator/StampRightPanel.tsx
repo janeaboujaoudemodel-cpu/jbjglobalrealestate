@@ -686,7 +686,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
               <div key={asset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]/80 transition-all group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {asset.thumbnail_url ? (
-                    <img src={asset.thumbnail_url} alt="" className="w-full h-full object-contain" />
+                    <img src={asset.thumbnail_url} alt="" className="w-full h-full object-contain"  loading="lazy" decoding="async" />
                   ) : (
                     <Package size={10} className="text-[hsl(var(--muted-foreground))]" />
                   )}

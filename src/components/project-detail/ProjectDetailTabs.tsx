@@ -138,7 +138,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                   src={image.image_url} 
                   alt={image.alt_text || `${project.name} - Image ${idx + 1}`}
                   className="w-full h-full object-cover"
-                />
+                 loading="lazy" decoding="async" />
               </div>
             ))}
           </div>
@@ -174,7 +174,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                       src={doc.file_url} 
                       alt={doc.file_name || 'Floor Plan'}
                       className="w-full aspect-[4/3] object-contain bg-[#F7F2EA] rounded"
-                    />
+                     loading="lazy" decoding="async" />
                   )}
                 </div>
               ))}

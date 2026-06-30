@@ -211,7 +211,7 @@ export default function AdoptAndSignDialog({
               className="w-full border-2 border-dashed border-border rounded-xl py-10 hover:border-[hsl(var(--gold)/.5)] transition"
             >
               {uploadUrl ? (
-                <img src={uploadUrl} alt="signature" className="max-h-32 mx-auto" />
+                <img src={uploadUrl} alt="signature" className="max-h-32 mx-auto"  loading="lazy" decoding="async" />
               ) : (
                 <div className="flex flex-col items-center gap-2 text-muted-foreground">
                   <Upload className="w-8 h-8" />

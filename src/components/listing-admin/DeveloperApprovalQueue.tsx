@@ -377,7 +377,7 @@ export const DeveloperApprovalQueue = () => {
                           className="w-full h-full object-cover"
                           loading="lazy"
                           referrerPolicy="no-referrer"
-                          onError={(e) => {
+                          onError={(e) = decoding="async"> {
                             // Prevent broken image icon in admin UI
                             (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
                           }}
@@ -396,7 +396,7 @@ export const DeveloperApprovalQueue = () => {
                             alt={`${developer.name} logo`}
                             className="h-5 w-auto object-contain max-w-[80px]"
                             referrerPolicy="no-referrer"
-                            onError={(e) => {
+                            onError={(e) = loading="lazy" decoding="async"> {
                               (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
                             }}
                           />

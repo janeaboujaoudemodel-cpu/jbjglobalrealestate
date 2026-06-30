@@ -108,7 +108,7 @@ function CaptionPanel({
       {/* Preview thumbnail */}
       <div className="flex gap-3">
         <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0">
-          <img src={photo.url} alt="" className="w-full h-full object-cover" />
+          <img src={photo.url} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
         </div>
         <textarea
           value={draft}
@@ -524,7 +524,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                         }}>
                         {photo ? (
                           <>
-                            <img src={photo.url} alt="" className="w-full h-full object-cover" />
+                            <img src={photo.url} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
 
                             {/* Caption badge */}
                             {photo.caption && !isSelected && (
@@ -609,7 +609,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                     {photos.map((photo, idx) => (
                       <div key={photo.id} className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded overflow-hidden shrink-0">
-                          <img src={photo.url} alt="" className="w-full h-full object-cover" />
+                          <img src={photo.url} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <input
@@ -769,7 +769,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                     <div className="flex gap-3">
                       {/* Thumbnail */}
                       <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 relative">
-                        <img src={photo.url} alt="" className="w-full h-full object-cover" />
+                        <img src={photo.url} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         {posted && (
                           <div className="absolute inset-0 flex items-center justify-center"
                             style={{ background: "rgba(34,197,94,0.4)" }}>
@@ -1051,7 +1051,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                   <div key={post.id} className="flex items-center gap-3 py-2"
                     style={{ borderBottom: `1px solid ${I.border}` }}>
                     <div className="w-8 h-8 rounded overflow-hidden shrink-0">
-                      <img src={post.image_url} alt="" className="w-full h-full object-cover" />
+                      <img src={post.image_url} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[10px] text-white truncate">{post.caption || '(no caption)'}</p>

@@ -98,7 +98,7 @@ export function BeforeAfterSplitOverlay({
             preload="metadata"
           />
         ) : (
-          <img src={mediaSrc} alt="before" style={mediaStyle} />
+          <img src={mediaSrc} alt="before" style={mediaStyle}  loading="lazy" decoding="async" />
         )}
         {/* BEFORE label */}
         <div
@@ -123,7 +123,7 @@ export function BeforeAfterSplitOverlay({
             preload="metadata"
           />
         ) : (
-          <img src={mediaSrc} alt="after" style={{ ...mediaStyle, filter: filterCss }} />
+          <img src={mediaSrc} alt="after" style={{ ...mediaStyle, filter: filterCss }}  loading="lazy" decoding="async" />
         )}
         {/* Vignette */}
         {vignetteOpacity > 0 && (
