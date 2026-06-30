@@ -55,7 +55,7 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
   const scrollBy = (dir: 1 | -1) => {
     const el = ref.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.max(200, el.clientWidth * 0.6), behavior: "smooth" });
+    el.scrollBy({ left: dir * Math.max(200, el.clientWidth * 0.6), behavior: "auto" });
   };
 
   return (
@@ -88,7 +88,7 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
         ref={ref}
         role="tablist"
         aria-label={ariaLabel}
-        className="px-2 pr-12 flex gap-1 overflow-x-auto whitespace-nowrap jj-scrollbar-gold max-w-full min-w-0"
+        className="px-3 py-2 pr-12 flex gap-2 overflow-x-auto whitespace-nowrap jj-scrollbar-gold max-w-full min-w-0"
       >
         {children}
       </nav>
@@ -535,16 +535,16 @@ export default function UnifiedCRM() {
                 data-state={active ? "active" : "inactive"}
                 onClick={() => setEntity(it.id)}
                 className={[
-                  "shrink-0 inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
-                  "border-b-2 -mb-px transition-colors",
+                   "shrink-0 inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold rounded-xl",
+                   "border transition-colors",
                   active
-                    ? "jj-surface-emerald border-transparent"
-                    : "border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA]",
+                     ? "jj-surface-emerald allow-white border-transparent shadow-[0_10px_24px_-16px_rgba(6,78,59,0.85)]"
+                     : "border-[#B89555]/20 bg-[#FDFBF7] text-[#1A1A1A] hover:text-[#064E3B] hover:bg-[#EFE6D6]/65",
                 ].join(" ")}
                 data-surface={active ? "emerald" : undefined}
                 data-emerald-ok={active ? "tab" : undefined}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className={active ? "allow-white h-4 w-4 text-white" : "h-4 w-4 text-[#1A1A1A]"} style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined} />
                 {it.label}
                 {c !== null && c > 0 && (
                   <span
@@ -571,7 +571,7 @@ export default function UnifiedCRM() {
           <nav
             role="tablist"
             aria-label="CRM sub-sections"
-            className="px-2 md:px-4 flex flex-wrap items-center gap-1.5 py-2 overflow-x-hidden whitespace-normal jj-scrollbar-gold min-w-0 max-w-full"
+            className="px-3 md:px-6 flex items-center gap-2 py-2.5 overflow-x-auto whitespace-nowrap jj-scrollbar-gold min-w-0 max-w-full"
           >
             {(() => {
               const out: React.ReactNode[] = [];
@@ -593,10 +593,10 @@ export default function UnifiedCRM() {
                     data-state={active ? "active" : "inactive"}
                     onClick={() => setView(t.id)}
                     className={[
-                      "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border max-w-full",
+                      "shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13px] font-bold transition-colors border max-w-full",
                       active
-                        ? "jj-surface-emerald border-transparent"
-                        : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
+                        ? "jj-surface-emerald allow-white border-transparent shadow-[0_8px_20px_-16px_rgba(6,78,59,0.80)]"
+                        : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/20 hover:bg-[#EFE6D6]/70 hover:text-[#064E3B]",
                     ].join(" ")}
                     data-surface={active ? "emerald" : undefined}
                     data-emerald-ok={active ? "tab" : undefined}
@@ -625,8 +625,8 @@ export default function UnifiedCRM() {
 
       {/* Body */}
       <div className="px-3 md:px-6 py-5 min-w-0 overflow-x-hidden">
-        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden min-w-0 max-w-full">
-          <div className="p-3 md:p-5 min-w-0 overflow-x-hidden">
+        <div className="rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden min-w-0 max-w-full">
+          <div className="p-3 md:p-5 min-w-0 overflow-x-auto jj-scrollbar-gold">
             <CRMBodyErrorBoundary><Suspense fallback={<Fallback />}>{Body}</Suspense></CRMBodyErrorBoundary>
           </div>
         </div>
