@@ -274,7 +274,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Admin Onboarding", href: "/admin/onboarding", icon: UserPlus },
   { label: "Admin Roles", href: "/admin/roles", icon: Shield },
   { label: "Admin Intelligence", href: "/admin/intelligence", icon: Brain },
-  { label: "Admin Developers", href: "/admin/developers", icon: Building },
+  { label: "Developers Portal", href: "/owner/developers", icon: Building },
   { label: "Marketing Hub", href: "/admin/marketing-hub", icon: Megaphone },
   { label: "Media Ingestion", href: "/admin/media-ingestion", icon: Inbox },
   { label: "Admin Training Guide", href: "/admin/training-guide", icon: BookOpen },
@@ -287,7 +287,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Customer Happiness", href: "/customer-happiness", icon: SmilePlus },
   { label: "Security Console", href: "/security-console", icon: Shield },
   { label: "Company Comm", href: "/company-comm", icon: Mail },
-  { label: "Developer Hub", href: "/developer-portal", icon: Building },
+  { label: "Developer Access", href: "/developer-portal", icon: Building },
   { label: "Executive Assistant", href: "/executive-assistant", icon: Bot },
   { label: "Call Review", href: "/call-review", icon: Phone },
   { label: "Video Builder", href: "/video-builder", icon: Video },
@@ -848,7 +848,7 @@ export default function GlobalVerticalNav() {
   /* ─── RENDER MEGA MENU ─── */
   const renderMegaMenu = () => {
     if (!activeMegaMenu || collapsed) return null;
-    const sidebarWidth = '280px';
+    const sidebarWidth = '320px';
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
 
     // Shortcuts now render inline (accordion) inside the sidebar — never as a popout panel.
@@ -877,7 +877,7 @@ export default function GlobalVerticalNav() {
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto relative w-[min(600px,calc(100vw-280px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative w-[min(600px,calc(100vw-320px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -971,7 +971,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto relative w-[min(600px,calc(100vw-280px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto relative w-[min(600px,calc(100vw-320px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -1043,13 +1043,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
-        <div className="px-3 pt-2 pb-3 flex flex-col">
+        <div className="px-3 pt-2 pb-3 flex flex-col flex-1">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
           {/* All categories (highlights + sections) share one flex-column.
               Use justify-start with consistent gap so content fills naturally
               from the top — no large empty gap below Company/Legal. */}
-          <div className="flex flex-col justify-start gap-1.5">
+          <div className={`flex flex-col gap-2 ${openSection ? 'justify-start' : 'justify-evenly flex-1'}`}>
 
           {/* Highlight hubs (gold labels) */}
 
@@ -1359,11 +1359,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[72px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {/* Logo header — MUST stay 88px so collapsed sidebar aligns with the horizontal header hairline */}
           <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain"  loading="lazy" decoding="async" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain"  loading="lazy" decoding="async" />
             </Link>
           </div>
 
@@ -1387,7 +1387,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             html body .jj-side-tile.is-active svg,
             html body .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 w-full">
+          <div className="flex-1 flex flex-col items-center pt-3 pb-3 gap-2 w-full">
             {highlightItems.map((item, i) => {
               const Icon = item.icon;
               const isActive = isRouteActive(item.href);
@@ -1398,7 +1398,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                    className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                    className={`jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
                       <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
@@ -1432,7 +1432,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                      className={`jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                      className={`jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
                       <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </button>
@@ -1442,7 +1442,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               );
             })}
 
-            <div className="flex-1" />
+            <div className="h-2 shrink-0" />
 
             {/* Bottom pinned */}
             <div className="flex flex-col items-center gap-1 pt-1 w-full">
@@ -1454,7 +1454,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
+                    className="jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center"
                   >
                     <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
@@ -1467,7 +1467,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-8 h-8 rounded-[10px] flex items-center justify-center"
+                    className="jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center"
                   >
                     <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
@@ -1483,7 +1483,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      className="group w-8 h-8 rounded-[10px] flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#FEE2E2] hover:border-[#DC2626]"
+                      className="group w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 border border-[#B89555] bg-[#FDFBF7] hover:bg-[#FEE2E2] hover:border-[#DC2626]"
                     >
                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.15} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
@@ -1493,7 +1493,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" data-no-contrast-guard className="w-8 h-8 rounded-[10px] flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
+                    <Link to="/auth" data-no-contrast-guard className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
                       <User className="w-4 h-4 text-[hsl(var(--gold))]" />
                     </Link>
                   </TooltipTrigger>
@@ -1519,7 +1519,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-8 h-8 rounded-[10px] flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-10 h-10 rounded-xl flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}
@@ -1541,7 +1541,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[280px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div className="hidden sm:flex w-[320px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {renderNavContent()}
         </div>
       )}
