@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Share2, Lock, Award, Medal, BadgeCheck, GraduationCap } from "lucide-react";
+import { Download, Share2, Lock, Award, Medal, BadgeCheck, GraduationCap, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
@@ -11,55 +11,69 @@ interface CertificatePreviewProps {
   isLocked?: boolean;
 }
 
-/** Premium gold medallion — reads on champagne (ink center) */
+/** Premium gold-rimmed certificate medallion — pure white ShieldCheck on emerald */
 function CertificateMedallion({ size = 64 }: { size?: number }) {
+  const ringW = Math.max(3, Math.round(size * 0.06));
   return (
     <span
       className="relative inline-flex items-center justify-center"
       style={{ width: size, height: size }}
       data-no-contrast-guard
+      aria-hidden
     >
-      {/* Outer gold conic ring */}
+      {/* Outer gold conic ring (foil) */}
       <span
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            "conic-gradient(from 210deg, #B89555, #F1E2B8, #B89555, #8A6A35, #F1E2B8, #B89555)",
-          padding: 2,
+            "conic-gradient(from 210deg, #B89555 0%, #F1E2B8 18%, #B89555 36%, #8A6A35 54%, #F1E2B8 72%, #B89555 100%)",
+          padding: ringW,
           WebkitMask:
             "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
           WebkitMaskComposite: "xor",
           maskComposite: "exclude",
+          boxShadow:
+            "0 8px 20px -8px rgba(184,149,85,0.55), 0 1px 0 rgba(255,246,224,0.6) inset",
         }}
       />
-      {/* Inner emerald disc with pure-white award glyph */}
+      {/* Inner emerald disc */}
       <span
-        className="absolute inset-[6px] rounded-full"
+        className="absolute rounded-full"
         style={{
+          inset: ringW + 1,
           background:
-            "radial-gradient(circle at 30% 25%, #0B7A5B 0%, #064E3B 58%, #032F24 100%)",
-          boxShadow: "inset 0 0 10px rgba(255,255,255,0.12), 0 8px 22px rgba(6,78,59,0.28)",
+            "radial-gradient(circle at 32% 26%, #0E8A66 0%, #064E3B 55%, #032A1F 100%)",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -6px 14px rgba(0,0,0,0.35), 0 6px 18px rgba(6,78,59,0.35)",
         }}
       />
-      <Award
+      {/* Specular highlight */}
+      <span
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          inset: ringW + 2,
+          background:
+            "radial-gradient(ellipse 70% 35% at 50% 18%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%)",
+        }}
+      />
+      {/* White ShieldCheck glyph */}
+      <ShieldCheck
         className="relative !text-white !stroke-white"
         style={{
-          width: size * 0.5,
-          height: size * 0.5,
+          width: size * 0.52,
+          height: size * 0.52,
           color: "#FFFFFF",
           stroke: "#FFFFFF",
-          filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.35))",
+          fill: "none",
+          filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.45))",
         }}
-        strokeWidth={2}
-      />
-      <Medal
-        className="absolute bottom-0 right-0 !text-white !stroke-white"
-        style={{ width: size * 0.28, height: size * 0.28, color: "#FFFFFF", stroke: "#FFFFFF" }}
         strokeWidth={2.2}
       />
     </span>
   );
 }
+
+
 
 /** Gold-foil fallback seal when no owner stamp uploaded */
 function FoilSeal({ size = 130 }: { size?: number }) {

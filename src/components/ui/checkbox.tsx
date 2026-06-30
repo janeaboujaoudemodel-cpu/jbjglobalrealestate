@@ -12,10 +12,8 @@ const Checkbox = React.forwardRef<
     ref={ref}
     data-emerald-ok="checkbox"
     className={cn(
-      "peer h-5 w-5 shrink-0 rounded-[5px] border-[1.5px] border-[#B89555] bg-[#FDFBF7] ring-offset-background transition-all",
-      // 3D resting state — subtle inner highlight + soft drop shadow
+      "peer relative h-5 w-5 shrink-0 rounded-[5px] border-[1.5px] border-[#B89555] bg-[#FDFBF7] ring-offset-background transition-all",
       "shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(184,149,85,0.18)]",
-      // Checked: locked emerald → black gradient with pure white tick.
       "data-[state=checked]:border-[#064E3B] data-[state=checked]:bg-[image:var(--jj-emerald-ombre)]",
       "data-[state=checked]:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_3px_8px_rgba(6,78,59,0.45)]",
       "hover:border-[#B89555] focus:border-[#B89555]",
@@ -25,15 +23,22 @@ const Checkbox = React.forwardRef<
     )}
     {...props}
   >
-    <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center")}>
+    <CheckboxPrimitive.Indicator
+      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      forceMount={undefined}
+    >
       <Check
-        className="h-4 w-4"
+        className="!text-white !stroke-white"
         style={{
+          width: "70%",
+          height: "70%",
           color: "#FFFFFF",
           stroke: "#FFFFFF",
-          filter: "drop-shadow(0 1px 0 rgba(58,42,8,0.45))",
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.35))",
         }}
-        strokeWidth={4}
+        strokeWidth={3.5}
       />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
