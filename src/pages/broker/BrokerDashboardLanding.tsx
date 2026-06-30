@@ -249,7 +249,7 @@ export default function BrokerDashboardLanding() {
           <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.12),transparent_60%)]" />
 
-          <div className="relative flex flex-col md:flex-row md:items-center gap-6 md:gap-8 justify-between">
+          <div className="relative flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-8 justify-between">
             {/* Identity block — wrapped in account dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
