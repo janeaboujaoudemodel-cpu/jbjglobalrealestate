@@ -17,6 +17,7 @@ import { format, formatDistanceToNow, isToday, isTomorrow } from "date-fns";
 export default function IntegrationWidgets() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const openOwnerCalendar = () => navigate('/owner/crm?entity=leads&view=calendar');
 
   // Fetch upcoming calendar events (using crm_tasks with due_at as proxy)
   const { data: upcomingEvents, isLoading: loadingEvents } = useQuery({
@@ -75,8 +76,8 @@ export default function IntegrationWidgets() {
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={() => navigate('/crm/calendar')}
-            className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10 h-7 px-2"
+            onClick={openOwnerCalendar}
+            className="h-8 w-8 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] text-[#064E3B] hover:bg-[#EFE6D6] hover:text-[#064E3B]"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -93,8 +94,8 @@ export default function IntegrationWidgets() {
             {upcomingEvents.slice(0, 4).map((event) => (
               <div 
                 key={event.id}
-                className="flex items-center justify-between p-2 rounded-lg bg-[#FDFBF7] hover:bg-[#B89555]/5 transition-colors cursor-pointer border border-[#B89555]/10"
-                onClick={() => navigate('/crm/calendar')}
+                className="flex items-center justify-between p-3 rounded-xl bg-[#FDFBF7] hover:bg-[#EFE6D6]/60 transition-colors cursor-pointer border border-[#B89555]/20"
+                onClick={openOwnerCalendar}
               >
                 <p className="text-sm text-[#1A1A1A] truncate flex-1">{event.title}</p>
                 <span className="text-xs text-[#1A1A1A]/70 ml-2">
