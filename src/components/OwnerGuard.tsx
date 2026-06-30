@@ -212,6 +212,14 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
+  // Founder inboxes must not get a false Access Denied screen because the
+  // verification request is stale, slow, or waiting for the freshly deployed
+  // edge function. Server-side Owner actions remain protected by verify-owner.
+  if (isRegisteredOwnerEmail && mode === "owner") {
+    hasRenderedRef.current = true;
+    return <>{children}</>;
+  }
+
   // Owner verification failed — auto-retry up to 3 times silently
   if (ownerError && !isOwner) {
     if (autoRetryCount.current < 3) {
