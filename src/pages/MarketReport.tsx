@@ -137,118 +137,90 @@ const MarketReport = () => {
                 data-market-book
                 className="relative mx-auto w-[292px] md:w-[360px] group select-none"
                 style={{ perspective: "2200px", perspectiveOrigin: "48% 45%" }}
-                onMouseMove={(e) => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  const rx = ((y / rect.height) - 0.5) * -3;
-                  const hover = x / rect.width;
-                  const rotateY = -18 + hover * 8;
+                onMouseEnter={(e) => {
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
                     ?.style.setProperty(
                       "transform",
-                      `rotateY(${rotateY}deg) rotateX(${rx}deg) translateY(-8px) scale(1.025)`
+                      "rotateY(-28deg) rotateX(3deg) rotateZ(-1deg) translateY(-10px) scale(1.03)"
+                    );
+                }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  const rx = 3 + ((y / rect.height) - 0.5) * -2;
+                  const hover = x / rect.width;
+                  const rotateY = -32 + hover * 8;
+                  e.currentTarget
+                    .querySelector<HTMLDivElement>(".book-inner")
+                    ?.style.setProperty(
+                      "transform",
+                      `rotateY(${rotateY}deg) rotateX(${rx}deg) rotateZ(-1deg) translateY(-10px) scale(1.03)`
                     );
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
-                    ?.style.setProperty("transform", "rotateY(-16deg) rotateX(2deg)");
+                    ?.style.setProperty("transform", "rotateY(-12deg) rotateX(2deg) rotateZ(-0.5deg)");
                 }}
               >
                 <div
                   className="book-inner relative transition-transform duration-700 ease-[cubic-bezier(0.2,0.85,0.25,1)] aspect-[3/4]"
                   style={{
                     transformStyle: "preserve-3d",
-                    transform: "rotateY(-16deg) rotateX(2deg)",
+                    transform: "rotateY(-12deg) rotateX(2deg) rotateZ(-0.5deg)",
                   }}
                 >
                   {/* Premium floor shadow */}
                   <div
-                    className="absolute left-8 right-2 -bottom-10 h-12 rounded-full blur-2xl opacity-45"
+                    className="absolute left-8 right-2 -bottom-11 h-14 rounded-full blur-2xl opacity-45"
                     style={{
-                      transform: "translateZ(-92px) rotateX(88deg)",
+                      transform: "translate3d(18px, 18px, -80px) rotateX(88deg)",
                       background: "radial-gradient(ellipse at center, rgba(6,78,59,0.45), rgba(26,26,26,0.16) 48%, transparent 72%)",
                     }}
                   />
 
-                  {/* ============ BACK COVER ============ */}
+                  {/* ============ BACK COVER — visible as premium backside depth ============ */}
                   <div
-                    className="absolute inset-y-1 left-2 right-0 rounded-r-[18px] rounded-l-[8px] overflow-hidden"
+                    className="absolute inset-y-2 left-5 -right-7 rounded-r-[24px] rounded-l-[12px] overflow-hidden"
                     style={{
-                      transform: "translateZ(-48px) translateX(16px)",
+                      transform: "translate3d(14px, 10px, -36px) scale(0.985)",
                       background:
-                        "linear-gradient(135deg, #0B5132 0%, #073821 46%, #031d13 100%)",
-                      boxShadow: "inset 18px 0 34px rgba(0,0,0,.36), inset -2px 0 12px rgba(255,255,255,.08), 18px 20px 48px rgba(0,0,0,.22)",
+                        "linear-gradient(135deg, #0B5132 0%, #073821 48%, #02170f 100%)",
+                      boxShadow: "inset 18px 0 34px rgba(0,0,0,.34), inset -3px 0 14px rgba(255,255,255,.10), 18px 22px 46px rgba(0,0,0,.20)",
                     }}
                   >
-                    <div className="absolute inset-4 rounded-[14px] border border-[#B89555]/30" />
+                    <div className="absolute inset-4 rounded-[16px] border border-[#B89555]/30" />
                     <div className="absolute inset-0 opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent)" }} />
                   </div>
 
-                  {/* ============ SPINE (left edge) ============ */}
+                  {/* ============ PAGE BLOCK — connected book edges, not detached panels ============ */}
                   <div
-                    className="absolute top-1 bottom-1 left-0 rounded-l-[18px] overflow-hidden"
+                    className="absolute top-5 bottom-5 -right-7 w-9 rounded-r-[14px] overflow-hidden"
                     style={{
-                      width: "52px",
-                      transform: "rotateY(-86deg) translateZ(26px)",
-                      transformOrigin: "left center",
+                      transform: "translate3d(9px, 2px, -18px) skewY(1.5deg)",
                       background:
-                        "linear-gradient(90deg, #02180f 0%, #073820 18%, #0B5132 50%, #052a19 78%, #01110b 100%)",
-                      boxShadow:
-                        "inset 8px 0 16px rgba(0,0,0,.55), inset -4px 0 8px rgba(255,255,255,.10)",
-                    }}
-                  >
-                    <div
-                      className="absolute inset-y-5 left-2 w-px"
-                      style={{ borderColor: "rgba(184,149,85,0.45)" }}
-                    />
-                    <div className="absolute inset-y-0 right-1 w-px bg-white/10" />
-                    <div
-                      className="absolute inset-0 grid place-items-center text-[9px] font-bold tracking-[0.34em] uppercase"
-                      style={{
-                        color: "#B89555",
-                        writingMode: "vertical-rl",
-                        transform: "rotate(180deg)",
-                      }}
-                    >
-                      UAE Market Intelligence
-                    </div>
-                  </div>
-
-                  {/* ============ PAGE EDGES (right, top, bottom) ============ */}
-                  <div
-                    className="absolute top-3 bottom-3 right-0 rounded-r-[10px] overflow-hidden"
-                    style={{
-                      width: "48px",
-                      transform: "rotateY(84deg) translateZ(24px)",
-                      transformOrigin: "right center",
-                      background:
-                        "repeating-linear-gradient(0deg,#fff7dc 0 2px,#ead8aa 2px 3px,#caa45d 3px 4px)",
-                      boxShadow: "inset 7px 0 12px rgba(0,0,0,.22), inset -2px 0 10px rgba(255,255,255,.38)",
+                        "repeating-linear-gradient(0deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
+                      boxShadow: "inset 8px 0 14px rgba(0,0,0,.18), inset -2px 0 10px rgba(255,255,255,.45)",
                     }}
                   />
                   <div
-                    className="absolute left-8 right-3 top-0 overflow-hidden"
+                    className="absolute left-10 -right-4 -top-3 h-8 rounded-tr-[18px] overflow-hidden"
                     style={{
-                      height: "42px",
-                      transform: "rotateX(86deg) translateZ(21px)",
-                      transformOrigin: "top center",
+                      transform: "translate3d(7px, 4px, -20px) skewX(-5deg)",
                       background:
-                        "repeating-linear-gradient(90deg,#fff7dc 0 2px,#ead8aa 2px 3px,#caa45d 3px 4px)",
-                      boxShadow: "inset 0 -8px 14px rgba(0,0,0,.20)",
+                        "repeating-linear-gradient(90deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
+                      boxShadow: "inset 0 -8px 12px rgba(0,0,0,.16)",
                     }}
                   />
                   <div
-                    className="absolute left-8 right-3 bottom-0 overflow-hidden"
+                    className="absolute left-10 -right-5 -bottom-3 h-8 rounded-br-[18px] overflow-hidden"
                     style={{
-                      height: "42px",
-                      transform: "rotateX(-86deg) translateZ(21px)",
-                      transformOrigin: "bottom center",
+                      transform: "translate3d(8px, -2px, -20px) skewX(5deg)",
                       background:
-                        "repeating-linear-gradient(90deg,#fff7dc 0 2px,#ead8aa 2px 3px,#caa45d 3px 4px)",
-                      boxShadow: "inset 0 8px 14px rgba(0,0,0,.20)",
+                        "repeating-linear-gradient(90deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
+                      boxShadow: "inset 0 8px 12px rgba(0,0,0,.14)",
                     }}
                   />
 
@@ -256,12 +228,13 @@ const MarketReport = () => {
                   <div
                     className="relative w-full h-full rounded-r-[20px] rounded-l-[10px] overflow-hidden bg-[#0B5132]"
                     style={{
-                      transform: "translateZ(28px)",
+                      transform: "translateZ(24px)",
                       boxShadow:
                         "30px 34px 72px rgba(0,0,0,0.28), -8px 0 18px rgba(6,78,59,0.20), inset 1px 0 0 rgba(255,255,255,0.15)",
                     }}
                   >
-                    <div className="absolute inset-y-0 left-0 z-20 w-12 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(1,17,11,.82), rgba(6,78,59,.42) 48%, transparent)", boxShadow: "inset -1px 0 rgba(255,255,255,.12)" }} />
+                    <div className="absolute inset-y-0 left-0 z-20 w-14 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(1,17,11,.86), rgba(6,78,59,.50) 44%, rgba(255,255,255,.08) 48%, transparent 72%)", boxShadow: "inset -1px 0 rgba(255,255,255,.14), inset 8px 0 16px rgba(0,0,0,.18)" }} />
+                    <div className="absolute inset-y-6 left-3 z-20 w-px bg-[#B89555]/45 pointer-events-none" />
                     {/* Full-bleed cover image */}
                     <img
                       src={luxuryVilla1}
