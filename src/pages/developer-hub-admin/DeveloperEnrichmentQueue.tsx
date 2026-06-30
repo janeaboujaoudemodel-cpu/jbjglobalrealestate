@@ -273,7 +273,7 @@ export default function DeveloperEnrichmentQueue() {
                   <div className="min-w-0">
                     <h3 className="font-semibold text-[#1A1A1A]">{log.developers?.name ?? "(unknown)"}</h3>
                     <p className="text-xs text-[#1A1A1A]/60 mt-1">
-                      {new Date(log.created_at).toLocaleString()} · status: <span className="font-medium">{log.status}</span>
+                      {new Date(log.created_at).toLocaleString("en-GB", { timeZone: "Asia/Dubai", dateStyle: "short", timeStyle: "short" })} · status: <span className="font-medium">{log.status}</span>
                       {log.source_url && (
                         <> · source: <a href={log.source_url} target="_blank" rel="noreferrer" className="underline">{(() => { try { return new URL(log.source_url!).hostname; } catch { return log.source_url; } })()}</a></>
                       )}
@@ -415,8 +415,9 @@ function DiffTable({ before, after }: { before: Record<string, unknown>; after: 
   };
 
   return (
-    <div className="mt-4 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden">
-      <div className="grid grid-cols-[180px,1fr,1fr] bg-[#EFE6D6]/60 border-b border-[#B89555]/30">
+    <div className="mt-4 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] overflow-x-auto jj-scrollbar-gold">
+      <div className="min-w-[860px]">
+      <div className="grid grid-cols-[180px,minmax(0,1fr),minmax(0,1fr)] bg-[#EFE6D6]/60 border-b border-[#B89555]/30">
         <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20">Field</div>
         <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20">Current (live)</div>
         <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]">Proposed</div>
@@ -427,7 +428,7 @@ function DiffTable({ before, after }: { before: Record<string, unknown>; after: 
         return (
           <div
             key={r.f}
-            className={`grid grid-cols-[180px,1fr,1fr] ${i !== 0 ? "border-t border-[#B89555]/15" : ""} ${r.changed || r.isNew ? "bg-[#B89555]/[0.04]" : ""}`}
+            className={`grid grid-cols-[180px,minmax(0,1fr),minmax(0,1fr)] ${i !== 0 ? "border-t border-[#B89555]/15" : ""} ${r.changed || r.isNew ? "bg-[#B89555]/[0.04]" : ""}`}
           >
             <div className="px-4 py-3.5 border-r border-[#B89555]/15 flex flex-col gap-1.5">
               <span className="text-[13px] font-medium text-[#1A1A1A]">{FIELD_LABELS[r.f]}</span>
@@ -447,6 +448,7 @@ function DiffTable({ before, after }: { before: Record<string, unknown>; after: 
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
