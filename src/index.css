@@ -19140,27 +19140,26 @@ html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-
   stroke-opacity: 1 !important;
 }
 
-/* (2) Hover-reveal: card-action overlays appear only on hover/focus */
-@media (hover: hover) and (pointer: fine) {
-  html body .group [data-card-action],
-  html body .group [data-favorite-button],
-  html body .group [data-shortlist-button],
-  html body .group [data-card-actions-overlay] {
-    opacity: 0;
-    transform: translateY(-2px);
-    transition: opacity 200ms ease, transform 200ms ease;
-  }
-  html body .group:hover [data-card-action],
-  html body .group:hover [data-favorite-button],
-  html body .group:hover [data-shortlist-button],
-  html body .group:hover [data-card-actions-overlay],
-  html body .group:focus-within [data-card-action],
-  html body .group:focus-within [data-favorite-button],
-  html body .group:focus-within [data-shortlist-button],
-  html body .group:focus-within [data-card-actions-overlay] {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* (2) Hover-reveal: project-card actions are never visible at rest.
+   The whole overlay stays hidden/non-clickable until the card is hovered or
+   keyboard-focused, so badge controls cannot sit exposed over project photos. */
+html body .group [data-card-actions-overlay] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-2px);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+html body .group:hover [data-card-actions-overlay],
+html body .group:focus-within [data-card-actions-overlay] {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateY(0);
+}
+
+html body .group [data-card-actions-overlay] :is([data-card-action], [data-favorite-button], [data-shortlist-button]) {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* PASS 100 — SITEWIDE DROPDOWN PREMIUM HOVER + ACTIVE CONTRAST LOCK.
@@ -21022,5 +21021,37 @@ html body [data-jbj-white-glyph] :is(path, line, polyline, polygon, circle, rect
   -webkit-text-fill-color: #FFFFFF !important;
   stroke-opacity: 1 !important;
   opacity: 1 !important;
+}
+
+/* ============================================================
+   PASS 131 — PROJECT CARD ACTION HOVER LOCK (FINAL OVERRIDE)
+   Must sit after global contrast locks because those intentionally set
+   descendant opacity to 1 on emerald/champagne surfaces. Project card
+   favorite/shortlist/badge controls remain invisible and non-clickable until
+   the card is hovered or keyboard-focused; badge stays right-aligned under
+   shortlist via the component stack.
+   ============================================================ */
+html body #root#root#root#root#root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html body #root#root#root#root#root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) {
+  transform: translateY(-2px) !important;
+  transition: opacity 200ms ease, transform 200ms ease !important;
+}
+
+html body #root#root#root#root#root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g),
+html body #root#root#root#root#root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g) {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+html body #root#root#root#root#root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) {
+  transform: translateY(0) !important;
 }
 

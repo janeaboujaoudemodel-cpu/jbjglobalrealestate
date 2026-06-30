@@ -3,8 +3,6 @@ import { Suspense, useEffect, useState } from "react";
 import { Crown, ArrowLeft, Menu, X, Shield, Home, User, Briefcase, Building2 } from "lucide-react";
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
 import PageLoader from "@/components/PageLoader";
-import { BrandedLoader } from "@/components/ui/BrandedLoader";
-import { DelayedLoader } from "@/components/PageLoader";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -71,23 +69,54 @@ export default function BrokerPortalLayout() {
   const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
   const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");
 
-  // Loading fallback — prevents transient blank/flash while auth, role, and
-  // mode resolve, and while the owner→/owner redirect above is in flight.
+  // Non-blocking resolving state: keep the broker portal chrome/surface visible.
+  // Never cover the app with a dark/emerald full-screen loader.
   if (isResolving || (mode === "owner" && !isExplicitOwnerPreview)) {
     return (
       <div
         data-surface="champagne"
         data-broker-shell
         data-broker-loading
-        className="min-h-screen w-full bg-[#FDFBF7] relative"
+        className="min-h-screen w-full bg-[#FDFBF7] relative overflow-hidden"
         role="status"
         aria-live="polite"
         aria-busy="true"
       >
-        {/* Delay so the loader never flashes on fast auth/role resolves */}
-        <DelayedLoader delay={650}>
-          <BrandedLoader />
-        </DelayedLoader>
+        {!isMobile && (
+          <aside
+            data-chrome="sidebar"
+            data-backend-sidebar="broker"
+            data-surface="champagne"
+            data-no-contrast-guard
+            className="fixed left-0 top-0 h-screen z-40 bg-[#F7F2EA] border-r border-[#B89555]/40 flex flex-col shadow-xl shadow-[#B89555]/5 w-[260px]"
+          >
+            <BrokerPortalSidebar collapsed={false} onToggle={() => {}} />
+          </aside>
+        )}
+        <div className={cn("transition-[margin] duration-200 min-h-screen flex flex-col", isMobile ? "ml-0" : "ml-[260px]")}> 
+          <header
+            data-no-contrast-guard
+            className="bg-[#F7F2EA] border-b border-[#B89555]/40 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm"
+            style={{ height: "var(--shell-header-h)" }}
+          >
+            <div className="h-5 w-44 rounded-full bg-[#EFE6D6] border border-[#B89555]/30" />
+            <div className="flex items-center gap-2">
+              <div className="hidden sm:block h-7 w-20 rounded-md bg-[#EFE6D6] border border-[#B89555]/30" />
+              <div className="h-9 w-9 rounded-full bg-[#EFE6D6] border border-[#B89555]/40" />
+            </div>
+          </header>
+          <main className="flex-1 min-w-0 w-full overflow-x-hidden" role="main">
+            <PageLoader />
+            <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto min-w-0 w-full">
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="h-28 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 shadow-sm" />
+                <div className="h-28 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 shadow-sm" />
+                <div className="h-28 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30 shadow-sm" />
+              </div>
+              <div className="mt-5 h-[46vh] rounded-3xl bg-[#F7F2EA] border border-[#B89555]/30 shadow-sm" />
+            </div>
+          </main>
+        </div>
         <span className="sr-only">Loading Broker Workspace…</span>
       </div>
     );
