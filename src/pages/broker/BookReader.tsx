@@ -260,8 +260,8 @@ export default function BookReader() {
             <ArrowLeft className="w-4 h-4 mr-1.5" /> Library
           </Button>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-[#1A1A1A]/60 truncate">
-              Book {book.book_number} · {book.learning_path}
+            <div className="text-xs text-[#1A1A1A]/60 truncate inline-flex items-center gap-1.5">
+              <Lock className="w-3 h-3" /> {book.learning_path}
             </div>
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{book.title}</div>
           </div>
@@ -502,15 +502,14 @@ function CoverFace({
     <div className="absolute inset-0">
       <PremiumBookCover
         title={book.title}
-        number={book.book_number}
         subtitle={book.learning_path}
         tone="black"
         className="absolute inset-0"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
       <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-9">
-        <div className="allow-white text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
-          Book {book.book_number} · {book.learning_path}
+        <div className="allow-white inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
+          <Lock className="w-3 h-3" /> {book.learning_path}
         </div>
         <h1 className="allow-white text-white text-2xl md:text-3xl font-bold leading-tight mb-2 drop-shadow">
           {book.title}
@@ -563,8 +562,8 @@ function BackCoverFace({ book, onRestart }: { book: EducationBook; onRestart: ()
           <ArrowLeft className="w-4 h-4" /> Back to Cover
         </button>
       </div>
-      <div className="mt-5 text-[10px] tracking-[0.3em] text-[#EFE6D6]/60 uppercase">
-        Book {book.book_number} · {book.learning_path}
+      <div className="mt-5 inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#EFE6D6]/60 uppercase">
+        <Lock className="w-3 h-3" /> {book.learning_path}
       </div>
     </div>
   );

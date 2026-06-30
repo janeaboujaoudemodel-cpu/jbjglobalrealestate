@@ -1,10 +1,13 @@
 import { cn } from "@/lib/utils";
+import { Lock } from "lucide-react";
 
 export type BookTone = "black" | "emerald" | "navy" | "espresso" | "burgundy" | "forest";
 
 type PremiumBookCoverProps = {
   title: string;
+  /** Deprecated: numbers are no longer rendered on covers. */
   number?: number | string | null;
+  /** Deprecated: subtitles are no longer rendered on covers. */
   subtitle?: string | null;
   /** Kept for API compatibility; no longer rendered as a footer band. */
   footer?: string;
@@ -53,13 +56,13 @@ function splitTitle(title: string) {
  * Premium book cover — minimal & legible.
  * Removed: skyline silhouette, JBJ medallion, double frame, bottom wordmark,
  *          eyebrow wordmark and title underlines.
- * Kept: dark gradient, single hairline frame, left spine, optional No. tag,
- *       engraved readable title and learning-path subtitle.
+ * Kept: dark gradient, single hairline frame, left spine, corner lock,
+ *       and engraved readable title only.
  */
 export function PremiumBookCover({
   title,
-  number,
-  subtitle,
+  number: _number,
+  subtitle: _subtitle,
   tone,
   className,
 }: PremiumBookCoverProps) {
@@ -86,14 +89,19 @@ export function PremiumBookCover({
       {/* Single hairline frame */}
       <div className="absolute inset-[7%] border border-[#B89555]/55 rounded-[2px]" />
 
-      {/* No. tag — top right */}
-      {number !== null && number !== undefined && (
-        <div className="absolute right-[11%] top-[11%] rounded-[2px] border border-[#B89555]/70 bg-[#EFE6D6] px-[5cqw] py-[1.4cqw] shadow-[0_3px_12px_rgba(0,0,0,.4)]">
-          <span className="font-bold text-[#1A1A1A]" style={{ fontSize: "clamp(8px, 5cqw, 16px)" }}>
-            No. {number}
-          </span>
-        </div>
-      )}
+      {/* Gold foil lock — replaces all book numbering on covers */}
+      <div
+        className="absolute right-[11%] top-[11%] grid place-items-center rounded-full border border-[#B89555]/70 shadow-[0_3px_12px_rgba(0,0,0,.4)]"
+        style={{
+          width: "clamp(22px, 14cqw, 42px)",
+          height: "clamp(22px, 14cqw, 42px)",
+          background: "radial-gradient(circle at 35% 30%, #fff2c4 0%, #d8b86a 45%, #8a6a25 100%)",
+          boxShadow: "inset 0 0 0 1px rgba(255,244,210,.55), 0 3px 12px rgba(0,0,0,.42)",
+        }}
+        aria-label="Locked book"
+      >
+        <Lock className="relative" strokeWidth={2.5} style={{ width: "45%", height: "45%", color: "#3a2a08" }} />
+      </div>
 
         {/* Centered content — no wordmark, no underline; title gets priority */}
         <div className="absolute inset-x-[11%] top-1/2 -translate-y-1/2 flex flex-col items-center text-center">
@@ -106,14 +114,7 @@ export function PremiumBookCover({
           ))}
         </h3>
 
-        {subtitle && (
-          <p
-              className="allow-white mt-[7%] rounded-full border border-[#B89555]/45 bg-black/20 px-[5cqw] py-[1.4cqw] text-[#EFE6D6] shadow-[inset_0_1px_0_rgba(255,255,255,.08)]"
-              style={{ fontSize: "clamp(7px, 4.2cqw, 17px)", lineHeight: 1.2 }}
-          >
-            {subtitle}
-          </p>
-        )}
+        {/* Subtitle intentionally removed from all covers. */}
       </div>
     </div>
   );

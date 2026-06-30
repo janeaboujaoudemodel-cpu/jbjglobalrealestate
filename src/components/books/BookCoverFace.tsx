@@ -14,7 +14,7 @@ interface BookCoverFaceProps {
   compact?: boolean;
 }
 
-/** Stable deterministic number from title so each book keeps its color + tag. */
+/** Stable deterministic seed from title so each book keeps its color. */
 function stableSeed(input: string): number {
   let h = 0;
   for (let i = 0; i < input.length; i++) h = (h * 31 + input.charCodeAt(i)) | 0;
@@ -23,14 +23,12 @@ function stableSeed(input: string): number {
 
 export function BookCoverFace({ book, className, bare = false, compact = false }: BookCoverFaceProps) {
   const seed = stableSeed(book.title);
-  const bookNumber = (seed % 99) + 1;
 
   return (
     <div className={cn("relative w-full h-full", bare ? "" : "block", className)}>
       <PremiumBook3DStyles />
       <PremiumBook3D
         title={book.title}
-        bookNumber={bookNumber}
         paletteIndex={seed}
         compact={compact}
       />

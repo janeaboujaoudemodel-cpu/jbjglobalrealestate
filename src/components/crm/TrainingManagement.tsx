@@ -361,8 +361,8 @@ export default function TrainingManagement() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {sectionBooks.map(book => (
                           <div key={book.id} className="flex items-center gap-3 p-3 rounded-lg border border-crm-border bg-[#F7F2EA]/50">
-                            <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center flex-shrink-0">
-                              <span className="text-[#1A1A1A] text-xs font-bold">{book.book_number}</span>
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#fff2c4] via-[#d8b86a] to-[#8a6a25] border border-[#B89555]/60 flex items-center justify-center flex-shrink-0 shadow-sm">
+                              <Lock className="w-3.5 h-3.5" strokeWidth={2.4} style={{ color: "#3a2a08" }} />
                             </div>
                             <div className="min-w-0">
                               <p className="text-sm font-medium text-crm-text truncate">{book.title}</p>
@@ -598,7 +598,7 @@ export default function TrainingManagement() {
                           />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-crm-text">Book {book.book_number}: {book.title}</span>
+                              <span className="text-sm font-medium text-crm-text inline-flex items-center gap-1.5"><Lock className="w-3 h-3" /> {book.title}</span>
                               {book.is_restricted && <Badge className="bg-red-500/20 text-red-700 text-[10px]">Restricted</Badge>}
                             </div>
                             <p className="text-xs text-crm-text-muted">{book.learning_path} · Tier: {book.min_tier || 'any'}</p>

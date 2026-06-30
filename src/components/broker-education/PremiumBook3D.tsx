@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
  * Two presentation modes:
  *   - `compact` (homepage marquee): clean cover, ONLY the engraved title;
  *     no wordmark, no underline, no subtitle, no number tag.
- *   - default (library / detail): adds subtitle and a small classic foil
- *     corner badge (top-right) with the book number. No brand wordmark.
+ *   - default (library / detail): adds ONLY a small classic foil corner lock.
+ *     No subtitles, no labels, no numbers, no brand wordmark.
  */
 
 const PALETTES: Array<{
@@ -36,6 +36,7 @@ export function pickPalette(seed: number) {
 
 interface PremiumBook3DProps {
   title: string;
+  /** Deprecated: subtitles are never rendered on covers. */
   subtitle?: string;
   bookNumber?: number;
   paletteIndex?: number;
@@ -97,7 +98,7 @@ export function PremiumBook3DStyles() {
 
 export function PremiumBook3D({
   title,
-  subtitle,
+  subtitle: _subtitle,
   bookNumber,
   paletteIndex,
   className,
