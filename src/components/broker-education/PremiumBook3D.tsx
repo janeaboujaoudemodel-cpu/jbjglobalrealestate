@@ -161,18 +161,19 @@ export function PremiumBook3D({
           <div
             className={cn(
               "absolute inset-x-[14%] grid place-items-center",
-              compact ? "top-[18%] bottom-[18%]" : "top-[20%] bottom-[22%]"
+              compact ? "top-[18%] bottom-[18%]" : subtitle ? "top-[18%] bottom-[30%]" : "top-[20%] bottom-[22%]"
             )}
           >
             <div
               className="allow-white text-center leading-[1.12]"
               style={{
-                color: compact ? '#FFFFFF' : palette.ink,
+                color: '#FFFFFF',
+                WebkitTextFillColor: '#FFFFFF',
                 fontSize: titleSize,
                 fontWeight: 850,
                 letterSpacing: "0.002em",
                 fontFamily: "Inter, system-ui, sans-serif",
-                textShadow: compact ? "0 2px 0 rgba(0,0,0,.82), 0 0 18px rgba(0,0,0,.62)" : "0 3px 12px rgba(0,0,0,.78), 0 0 22px rgba(0,0,0,.38)",
+                textShadow: "0 2px 0 rgba(0,0,0,.85), 0 3px 14px rgba(0,0,0,.7), 0 0 22px rgba(0,0,0,.45)",
                 textWrap: "balance",
               }}
             >
@@ -181,6 +182,29 @@ export function PremiumBook3D({
               ))}
             </div>
           </div>
+
+          {/* Subtitle (learning path) — readable foil-framed strip */}
+          {!compact && subtitle && (
+            <div
+              className="allow-white absolute inset-x-[18%] bottom-[14%] text-center"
+              style={{
+                color: '#FFFFFF',
+                WebkitTextFillColor: '#FFFFFF',
+                fontSize: "clamp(9px, 2.6cqw, 12px)",
+                fontWeight: 700,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                fontFamily: "Inter, system-ui, sans-serif",
+                padding: "6px 10px",
+                borderTop: `1px solid ${palette.foil}aa`,
+                borderBottom: `1px solid ${palette.foil}aa`,
+                background: "rgba(0,0,0,.28)",
+                textShadow: "0 1px 0 rgba(0,0,0,.9), 0 2px 8px rgba(0,0,0,.6)",
+              }}
+            >
+              {subtitle}
+            </div>
+          )}
 
           {/* Foil corner lock badge — ONLY non-compact */}
           {!compact && (
