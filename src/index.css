@@ -21006,26 +21006,4 @@ html body [data-mode-switcher-panel="true"] [data-mode-active-pill][data-surface
   opacity: 1 !important;
 }
 
-/* =========================================================================
-   PASS 131 — AI Home Finder report scope contrast lock (preview parity).
-   The cover-page "Report scope" block sits inside an emerald [data-on-dark]
-   container, but a higher-specificity ink rule (html body :is([class~="bg-..."]))
-   was overriding the inline white color in the live preview. The exported
-   PDF already renders white (html2canvas clones, scoped selectors don't
-   match). This lock guarantees preview ↔ PDF parity in every state.
-   ========================================================================= */
-html body [data-aihf-scope-row],
-html body [data-aihf-scope-row] *,
-html body [data-aihf-scope-text],
-html body [data-aihf-scope-text]:hover,
-html body [data-aihf-scope-text]:focus,
-html body [data-aihf-scope-text]:active {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-aihf-scope-dot],
-html body [data-aihf-scope-dot]:hover {
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-}
 
