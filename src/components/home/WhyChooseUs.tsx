@@ -5,6 +5,7 @@
 
 import { Check, TrendingUp, Camera, MessageSquare, Network, Headphones, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 
 interface ValueProp {
   icon: React.ElementType;
@@ -30,10 +31,7 @@ const WhyChooseUs = () => {
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-              <Award className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-              <span className="text-[#1A1A1A]">{t('whyUs.ourCommitment', 'Our Commitment')}</span>
-            </span>
+            <SectionEyebrow icon={Award} className="mb-4">{t('whyUs.ourCommitment', 'Our Commitment')}</SectionEyebrow>
             <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A] mb-3">
               {t('whyUs.title', 'Why Choose Us')}
             </h2>

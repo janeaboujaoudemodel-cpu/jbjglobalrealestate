@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 as topAreas2025Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
 import { isRealEstateArticle } from "@/lib/news/realEstateFilter";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 
 interface MarketNews {
   id: string;
@@ -240,10 +241,7 @@ const News = () => {
             </Link>
 
             <div className="max-w-3xl">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A] font-semibold mb-5">
-                <Landmark className="w-3.5 h-3.5" />
-                Dubai Real Estate — Official Sources
-              </span>
+              <SectionEyebrow icon={Landmark} className="mb-5">Dubai Real Estate — Official Sources</SectionEyebrow>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] leading-[1.05] mb-5">
                 News &amp; Insights
               </h1>

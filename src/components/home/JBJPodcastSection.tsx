@@ -12,6 +12,7 @@ import {
   Radio,
   Loader2
 } from "lucide-react";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { 
   Select,
   SelectContent,
@@ -172,10 +173,7 @@ const JBJPodcastSection = () => {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold text-[#1A1A1A] mb-4">
-            <Radio className="w-4 h-4" />
-            <T>JBJ Podcast</T>
-          </span>
+          <SectionEyebrow icon={Radio} className="mb-4"><T>JBJ Podcast</T></SectionEyebrow>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0A0A0A] mb-4">
             <T>The JBJ</T> <span className="text-[#0A0A0A]/70"><T>Perspective</T></span>
           </h2>

@@ -6,6 +6,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { IconTile } from "@/components/ui/icon-tile";
 import { FounderPhotoEditOverlay } from "@/components/founder/FounderPhotoEditOverlay";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { useFounderPhoto } from "@/hooks/useFounderPhoto";
 
 // Cream divider used between marketing sections — replaces the heavy black bands.
@@ -137,10 +138,7 @@ const Founder = () => {
             variants={staggerContainer}
           >
             <motion.div className="mb-4" variants={fadeInUp}>
-              <span className="inline-flex items-center gap-2 bg-[#1A1A1A]/40 backdrop-blur-md border border-[#B89555]/40 text-[#FDFBF7] text-xs uppercase tracking-[0.3em] px-5 py-2.5 rounded-full shadow-lg shadow-gold/10">
-                <Building2 className="w-3.5 h-3.5" />
-                Executive Governance
-              </span>
+              <SectionEyebrow icon={Building2}>Executive Governance</SectionEyebrow>
             </motion.div>
             
             <motion.h1 
@@ -481,12 +479,8 @@ const Founder = () => {
                 variants={staggerContainer}
               >
                 {/* Badge */}
-                <motion.div 
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-[#B89555]/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
-                  variants={fadeInUp}
-                >
-                  <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#1A1A1A]" />
-                  Leadership Commitment
+                <motion.div variants={fadeInUp} className="mb-4 sm:mb-6">
+                  <SectionEyebrow icon={Sparkles}>Leadership Commitment</SectionEyebrow>
                 </motion.div>
                 
                 <motion.p 

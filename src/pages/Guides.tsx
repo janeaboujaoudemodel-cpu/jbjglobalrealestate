@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { 
   BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, Clock, ChevronRight, X
 } from "lucide-react";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { SEOHead } from "@/components/SEOHead";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -104,13 +105,8 @@ const Guides = () => {
           className="relative z-10 container mx-auto px-4 py-16 md:py-20 text-center max-w-4xl"
           initial="hidden" animate="visible" variants={staggerContainer}
         >
-          <motion.div
-            data-no-contrast-guard
-            className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/60 bg-[#1A1A1A]/60 backdrop-blur-md"
-            variants={fadeInUp}
-          >
-            <BookOpen className="w-4 h-4" style={{ color: "#F7F2EA" }} />
-            <span className="font-semibold text-xs uppercase tracking-[0.2em]" style={{ color: "#F7F2EA" }}>Guides</span>
+          <motion.div variants={fadeInUp} className="mb-6">
+          <SectionEyebrow icon={BookOpen}>Guides</SectionEyebrow>
           </motion.div>
           <motion.h1
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]"

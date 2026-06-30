@@ -1,4 +1,5 @@
 import { Mail, Phone, MessageCircle, Sparkles } from "lucide-react";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { CONTACT_INFO } from "@/constants/stats";
 import IconTile from "@/components/ui/icon-tile";
 
@@ -45,15 +46,7 @@ export default function CareersContactBlock() {
 
         <div className="relative">
           <div className="flex items-center gap-2 mb-3">
-            <span
-              data-surface="emerald"
-              data-allow-dark-cta
-              data-no-contrast-guard
-              className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-            >
-              <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Talk to us
-            </span>
+            <SectionEyebrow icon={Sparkles} className="mb-3">Talk to us</SectionEyebrow>
           </div>
           <h3 className="text-2xl sm:text-3xl font-semibold text-[#1A1A1A] tracking-tight">
             Questions before you apply?

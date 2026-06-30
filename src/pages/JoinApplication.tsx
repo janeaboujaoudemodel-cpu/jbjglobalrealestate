@@ -814,16 +814,7 @@ export default function JoinApplication() {
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
               <CardHeader className="pt-9 pb-8 relative z-[1]">
                 <div className="min-w-0">
-                  <span
-                    data-careers-emerald-label
-                    data-surface="emerald"
-                    data-allow-dark-cta
-                    data-no-contrast-guard
-                    className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex h-7 items-center gap-1.5 rounded-full border border-[#B89555]/70 px-3 text-[10px] font-bold uppercase tracking-[0.22em] mb-2"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-                  >
-                    <Briefcase className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Live Roles
-                  </span>
+                  <SectionEyebrow icon={Briefcase} className="mb-2">Live Roles</SectionEyebrow>
                   <div className="flex w-full items-center gap-4">
                     <CardTitle data-careers-emerald-title data-no-contrast-guard className="allow-white text-3xl md:text-4xl font-bold tracking-tight leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 1, textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}>
                       Open Positions
