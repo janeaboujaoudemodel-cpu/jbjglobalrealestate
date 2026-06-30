@@ -52,7 +52,7 @@ const DropdownMenuSubContent = React.forwardRef<
     ref={ref}
     data-surface="light"
     className={cn(
-      "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20",
+      "z-[120000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
       className,
     )}
     {...props}
@@ -70,7 +70,7 @@ const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       data-surface="light"
       className={cn(
-        "z-[10000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20",
+        "z-[120000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
         className,
       )}
       {...props}
