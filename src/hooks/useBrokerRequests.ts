@@ -1,3 +1,4 @@
+import { friendlyBackendMessage } from "@/utils/friendlyBackendError";
 import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,7 +87,7 @@ export function useCreateBrokerRequest() {
       toast.success("Request submitted");
       qc.invalidateQueries({ queryKey: ["broker-requests-mine", user?.id] });
     },
-    onError: (e: any) => toast.error(e?.message || "Could not submit request"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Could not submit request"),
   });
 }
 
@@ -104,6 +105,6 @@ export function useCancelBrokerRequest() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["broker-requests-mine", user?.id] });
     },
-    onError: (e: any) => toast.error(e?.message || "Could not cancel"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Could not cancel"),
   });
 }
