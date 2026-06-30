@@ -525,7 +525,7 @@ export default function OwnerDashboardOverview() {
         <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-2 mb-6 flex flex-wrap justify-center gap-1.5 rounded-xl shadow-sm h-auto">
           <TabsTrigger 
             value="overview" 
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
             data-surface={activeTab === "overview" ? "emerald" : undefined}
             data-emerald-ok={activeTab === "overview" ? "tab" : undefined}
           >
@@ -534,7 +534,7 @@ export default function OwnerDashboardOverview() {
           </TabsTrigger>
           <TabsTrigger 
             value="leads"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
             data-surface={activeTab === "leads" ? "emerald" : undefined}
             data-emerald-ok={activeTab === "leads" ? "tab" : undefined}
           >
@@ -543,7 +543,7 @@ export default function OwnerDashboardOverview() {
           </TabsTrigger>
           <TabsTrigger 
             value="flagged"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
             data-surface={activeTab === "flagged" ? "emerald" : undefined}
             data-emerald-ok={activeTab === "flagged" ? "tab" : undefined}
           >
@@ -552,7 +552,7 @@ export default function OwnerDashboardOverview() {
           </TabsTrigger>
           <TabsTrigger 
             value="vip"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
             data-surface={activeTab === "vip" ? "emerald" : undefined}
             data-emerald-ok={activeTab === "vip" ? "tab" : undefined}
           >
@@ -561,7 +561,7 @@ export default function OwnerDashboardOverview() {
           </TabsTrigger>
           <TabsTrigger 
             value="leads-management"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
             data-surface={activeTab === "leads-management" ? "emerald" : undefined}
             data-emerald-ok={activeTab === "leads-management" ? "tab" : undefined}
           >
@@ -570,7 +570,7 @@ export default function OwnerDashboardOverview() {
           </TabsTrigger>
           <TabsTrigger 
             value="employees"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
             data-surface={activeTab === "employees" ? "emerald" : undefined}
             data-emerald-ok={activeTab === "employees" ? "tab" : undefined}
           >
@@ -579,7 +579,7 @@ export default function OwnerDashboardOverview() {
           </TabsTrigger>
           <TabsTrigger 
             value="audit"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
             data-surface={activeTab === "audit" ? "emerald" : undefined}
             data-emerald-ok={activeTab === "audit" ? "tab" : undefined}
           >
