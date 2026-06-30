@@ -321,7 +321,7 @@ export default function DeveloperProfilePage() {
     return (
       <div className="p-12 text-center">
         <p className="text-[#1A1A1A]">Developer not found.</p>
-        <Button onClick={() => navigate("/admin/developers")} className="mt-4">Back</Button>
+        <Button onClick={() => navigate("/owner/developers")} className="mt-4">Back to Developers Portal</Button>
       </div>
     );
   }
@@ -334,8 +334,8 @@ export default function DeveloperProfilePage() {
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" onClick={() => navigate("/developers-portal/directory")}>
-              <ArrowLeft className="w-4 h-4 mr-1" /> Directory
+            <Button variant="outline" size="sm" onClick={() => navigate("/owner/developers")}>
+              <ArrowLeft className="w-4 h-4 mr-1" /> Developers Portal
             </Button>
           </div>
           <div className="flex items-center gap-2">

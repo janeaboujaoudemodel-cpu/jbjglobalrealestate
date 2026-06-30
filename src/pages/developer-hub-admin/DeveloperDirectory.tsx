@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2 } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
@@ -298,11 +298,20 @@ export default function DeveloperDirectory() {
             </span>
             <div className="min-w-0">
               <p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Developers</p>
-              <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Developer Registry</h1>
-              <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">One owner-console section for developer profiles, logos, project counts, reps, rebuild approvals and exports. Developer-mode users keep their separate limited portal.</p>
+              <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Developers Portal</h1>
+              <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">Owner-only command center for developers, projects, briefing requests, launch events, profile updates, sales reps, logo governance and Excel exports.</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/add")}>
+              <UserPlus className="size-4 mr-1" /> Add Developer
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/new-project")}>
+              <Plus className="size-4 mr-1" /> Add Project
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/briefings")}>
+              <CalendarDays className="size-4 mr-1" /> Apply Briefing
+            </Button>
             <Button size="sm" variant={viewMode === "cards" ? "gold" : "outline"} onClick={() => setViewMode("cards")}>
               <LayoutGrid className="size-4 mr-1" /> Cards
             </Button>
@@ -321,7 +330,7 @@ export default function DeveloperDirectory() {
 
       <Card className="p-5 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <p className="text-sm text-[#1A1A1A]/80">
-          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live owner-side developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/owner/developers/profile-rebuild" className="underline">Profile Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
+          <span className="font-semibold text-[#1A1A1A]">Developers Portal</span> = the live owner-side developer control surface. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/owner/developers/profile-rebuild" className="underline">Profile Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
 

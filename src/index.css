@@ -14914,16 +14914,16 @@ html body #root .jj-developer-logo-metallic img {
 @media (min-width: 640px) {
   body:not(.jj-vertical-nav-active):not(.jj-vertical-nav-collapsed),
   body.jj-vertical-nav-collapsed {
-    --jj-shell-sidebar-w: 48px;
-    --jj-shell-main-w: calc(100vw - 48px);
+    --jj-shell-sidebar-w: 72px;
+    --jj-shell-main-w: calc(100vw - 72px);
     --jj-content-gutter-l: 0px;
     --jj-content-gutter-r: 0px;
     --jj-content-gutter: 0px;
   }
 
   body.jj-vertical-nav-active {
-    --jj-shell-sidebar-w: 280px;
-    --jj-shell-main-w: calc(100vw - 280px);
+    --jj-shell-sidebar-w: 320px;
+    --jj-shell-main-w: calc(100vw - 320px);
     --jj-content-gutter-l: 0px;
     --jj-content-gutter-r: 0px;
     --jj-content-gutter: 0px;
