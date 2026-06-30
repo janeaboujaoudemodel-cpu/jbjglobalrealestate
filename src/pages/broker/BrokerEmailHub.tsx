@@ -50,15 +50,16 @@ export default function BrokerEmailHub() {
             <Button
               asChild
               variant="primary"
-              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
+              data-surface="emerald"
+              className="jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Link to={setupPath}><KeyRound className="h-4 w-4 mr-1.5" /> Email Setup</Link>
             </Button>
             <Button
               onClick={() => tryConnect("gmail")}
               disabled={connect.isPending}
-              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
               data-surface="emerald"
+              className="jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Plug className="h-4 w-4 mr-1.5" /> Connect Gmail
             </Button>
@@ -66,10 +67,12 @@ export default function BrokerEmailHub() {
               onClick={() => tryConnect("outlook")}
               disabled={connect.isPending}
               variant="primary"
-              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
+              data-surface="emerald"
+              className="jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Plug className="h-4 w-4 mr-1.5" /> Connect Outlook
             </Button>
+
           </div>
         </div>
         {!hasGmailApp && !hasOutlookApp && (
@@ -105,9 +108,11 @@ export default function BrokerEmailHub() {
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`text-[11px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-md border ${active ? "jj-surface-emerald allow-white border-white/20 text-white shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "bg-white border-[#B89555]/25 text-[#1A1A1A]/65 hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"}`}
+              data-surface={active ? "emerald" : undefined}
+              className={`text-[11px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-md border ${active ? "jj-surface-emerald allow-white border-white/20 text-white [&_svg]:text-white shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "bg-white border-[#B89555]/25 text-[#1A1A1A]/75 hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"}`}
             >
               {c.replace(/_/g, " ")}
+
             </button>
           );
         })}
@@ -157,7 +162,8 @@ export default function BrokerEmailHub() {
                     {!e.ai_category && (
                       <button
                         onClick={(ev) => { ev.stopPropagation(); classify.mutate(e.id); }}
-                        className="jj-surface-emerald allow-white mt-2 inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-md border border-white/20 text-white hover:-translate-y-0.5 hover:brightness-110 transition-all"
+                        data-surface="emerald"
+                        className="jj-surface-emerald allow-white mt-2 inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-md border border-white/20 text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110 transition-all"
                       >
                         <Sparkles className="h-3 w-3" /> Categorise with AI
                       </button>
