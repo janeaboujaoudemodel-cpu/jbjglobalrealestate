@@ -425,14 +425,14 @@ const MarketReport = () => {
               {canDirectDownload ? (
                 <div className="text-center py-6">
                   <div
-                    className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center shadow-[0_10px_28px_rgba(6,78,59,0.30)]"
+                    className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-[0_10px_28px_rgba(6,78,59,0.30)]"
                     style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                     data-no-contrast-guard
                     data-icon-tone="emerald"
                     data-emerald-icon-surface
                   >
                     <Check
-                      className="w-10 h-10"
+                      className="w-8 h-8"
                       style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                       strokeWidth={3}
                     />
