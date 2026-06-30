@@ -15,11 +15,11 @@ import { useMarketReport } from "./useMarketReport";
 import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 
 /**
- * Market Report — Champagne contract rebuild.
+ * Market Report — white-page premium book rebuild.
  *
  * Brand rules applied (per mem://index.md):
- *  - Page = champagne #FDFBF7 with ink #1A1A1A text. No navy/neon shell.
- *  - Cards match the homepage "Compare Your Property" panel: surface #F7F2EA,
+ *  - Page = pure white with ink #1A1A1A text. No navy/neon shell.
+ *  - Cards match the homepage "Compare Your Property" panel: white surface,
  *    gold #B89555 1px hairline, rounded-3xl, soft elevation, generous padding.
  *  - CTAs use .jj-pill-emerald-metallic with WHITE foreground (no black).
  *  - Feature/check tiles = emerald square with WHITE glyph + ink label.
@@ -40,13 +40,14 @@ const MarketReport = () => {
   // Shared classnames so every card on the page reads identically to the
   // homepage Compare Your Property card.
   const CARD_BASE =
-    "bg-[#F7F2EA] border border-[#B89555]/35 rounded-3xl shadow-[0_8px_28px_rgba(26,26,26,0.06)]";
+    "bg-white border border-[#B89555]/35 rounded-3xl shadow-[0_8px_28px_rgba(26,26,26,0.06)]";
 
   return (
     <div
       data-insights-page
+      data-market-report-page
       data-marketing-page
-      className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]"
+      className="min-h-screen bg-white text-[#1A1A1A]"
     >
       {/* Thank You Modal — champagne card, ink text, emerald tick */}
       {showThankYou && (
@@ -61,6 +62,7 @@ const MarketReport = () => {
               style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
               data-no-contrast-guard
               data-icon-tone="emerald"
+              data-emerald-icon-surface
             >
               <Check className="w-10 h-10" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={3} />
             </div>
@@ -82,7 +84,7 @@ const MarketReport = () => {
         <div className="fixed inset-0 z-[60] bg-[#1A1A1A]/70 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-6 h-full flex items-center justify-center">
             <div className={`${CARD_BASE} w-full max-w-6xl h-[88vh] overflow-hidden`}>
-              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#B89555]/30 bg-[#FDFBF7]">
+              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#B89555]/30 bg-white">
                 <div className="min-w-0">
                   <p className="text-xs text-[#1A1A1A]/65">JBJ Global Real Estate</p>
                   <h2 className="text-[#1A1A1A] font-semibold truncate">
@@ -112,7 +114,7 @@ const MarketReport = () => {
                 ref={bookFrameRef}
                 title="UAE Real Estate Market Intelligence 2026"
                 srcDoc={bookHtml}
-                className="w-full h-[calc(88vh-52px)] bg-[#FDFBF7]"
+                className="w-full h-[calc(88vh-52px)] bg-white"
                 sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
               />
             </div>
@@ -121,7 +123,7 @@ const MarketReport = () => {
       )}
 
       {/* ============== HERO ============== */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-[#FDFBF7]">
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Book Visual — image fills the full cover */}
@@ -129,118 +131,110 @@ const MarketReport = () => {
               initial={{ opacity: 0, x: -30, rotateY: -15 }}
               animate={{ opacity: 1, x: 0, rotateY: 0 }}
               transition={{ duration: 0.8 }}
-              className="relative"
+               className="relative"
             >
               <div
-                className="relative mx-auto w-[280px] md:w-[340px] group"
-                style={{ perspective: "1800px" }}
-                onMouseMove={(e) => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const centerX = rect.width / 2;
-                  const rotateY = x < centerX ? -8 : -28;
+                data-market-book
+                className="relative mx-auto w-[292px] md:w-[360px] group select-none"
+                style={{ perspective: "2200px", perspectiveOrigin: "48% 45%" }}
+                onMouseEnter={(e) => {
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
                     ?.style.setProperty(
                       "transform",
-                      `rotateY(${rotateY}deg) rotateX(2deg) translateY(-4px)`
+                      "rotateY(-28deg) rotateX(3deg) rotateZ(-1deg) translateY(-10px) scale(1.03)"
+                    );
+                }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  const rx = 3 + ((y / rect.height) - 0.5) * -2;
+                  const hover = x / rect.width;
+                  const rotateY = -32 + hover * 8;
+                  e.currentTarget
+                    .querySelector<HTMLDivElement>(".book-inner")
+                    ?.style.setProperty(
+                      "transform",
+                      `rotateY(${rotateY}deg) rotateX(${rx}deg) rotateZ(-1deg) translateY(-10px) scale(1.03)`
                     );
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
-                    ?.style.setProperty("transform", "rotateY(-22deg) rotateX(3deg)");
+                    ?.style.setProperty("transform", "rotateY(-12deg) rotateX(2deg) rotateZ(-0.5deg)");
                 }}
               >
                 <div
-                  className="book-inner relative transition-transform duration-700 ease-out aspect-[3/4]"
+                  className="book-inner relative transition-transform duration-700 ease-[cubic-bezier(0.2,0.85,0.25,1)] aspect-[3/4]"
                   style={{
                     transformStyle: "preserve-3d",
-                    transform: "rotateY(-22deg) rotateX(3deg)",
+                    transform: "rotateY(-12deg) rotateX(2deg) rotateZ(-0.5deg)",
                   }}
                 >
-                  {/* ============ BACK COVER ============ */}
+                  {/* Premium floor shadow */}
                   <div
-                    className="absolute inset-0 rounded-md"
+                    className="absolute left-8 right-2 -bottom-11 h-14 rounded-full blur-2xl opacity-45"
                     style={{
-                      transform: "translateZ(-36px)",
-                      background:
-                        "linear-gradient(135deg, #0B5132 0%, #052e1c 100%)",
-                      boxShadow: "inset 0 0 50px rgba(0,0,0,.55)",
+                      transform: "translate3d(18px, 18px, -80px) rotateX(88deg)",
+                      background: "radial-gradient(ellipse at center, rgba(6,78,59,0.45), rgba(26,26,26,0.16) 48%, transparent 72%)",
                     }}
                   />
 
-                  {/* ============ SPINE (left edge) ============ */}
+                  {/* ============ BACK COVER — visible as premium backside depth ============ */}
                   <div
-                    className="absolute top-0 bottom-0 left-0 rounded-l-md overflow-hidden"
+                    className="absolute inset-y-2 left-5 -right-7 rounded-r-[24px] rounded-l-[12px] overflow-hidden"
                     style={{
-                      width: "36px",
-                      transform: "rotateY(-90deg) translateZ(18px)",
-                      transformOrigin: "left center",
+                      transform: "translate3d(14px, 10px, -36px) scale(0.985)",
                       background:
-                        "linear-gradient(180deg, #052e1c 0%, #0B5132 50%, #052e1c 100%)",
-                      boxShadow:
-                        "inset 2px 0 6px rgba(0,0,0,.55), inset -2px 0 4px rgba(255,255,255,.06)",
+                        "linear-gradient(135deg, #0B5132 0%, #073821 48%, #02170f 100%)",
+                      boxShadow: "inset 18px 0 34px rgba(0,0,0,.34), inset -3px 0 14px rgba(255,255,255,.10), 18px 22px 46px rgba(0,0,0,.20)",
                     }}
                   >
-                    <div
-                      className="absolute inset-x-1 top-2 bottom-2 border-y"
-                      style={{ borderColor: "rgba(184,149,85,0.45)" }}
-                    />
-                    <div
-                      className="absolute inset-0 grid place-items-center text-[9px] font-semibold tracking-[0.32em] uppercase"
-                      style={{
-                        color: "#B89555",
-                        writingMode: "vertical-rl",
-                        transform: "rotate(180deg)",
-                      }}
-                    >
-                      UAE Market Intelligence
-                    </div>
+                    <div className="absolute inset-4 rounded-[16px] border border-[#B89555]/30" />
+                    <div className="absolute inset-0 opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent)" }} />
                   </div>
 
-                  {/* ============ PAGE EDGES (right, top, bottom) ============ */}
+                  {/* ============ PAGE BLOCK — connected book edges, not detached panels ============ */}
                   <div
-                    className="absolute top-0 bottom-0 right-0"
+                    className="absolute top-5 bottom-5 -right-7 w-9 rounded-r-[14px] overflow-hidden"
                     style={{
-                      width: "36px",
-                      transform: "rotateY(90deg) translateZ(18px)",
-                      transformOrigin: "right center",
+                      transform: "translate3d(9px, 2px, -18px) skewY(1.5deg)",
                       background:
-                        "repeating-linear-gradient(0deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
-                      boxShadow: "inset 0 0 6px rgba(0,0,0,.25)",
+                        "repeating-linear-gradient(0deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
+                      boxShadow: "inset 8px 0 14px rgba(0,0,0,.18), inset -2px 0 10px rgba(255,255,255,.45)",
                     }}
                   />
                   <div
-                    className="absolute left-0 right-0 top-0"
+                    className="absolute left-10 -right-4 -top-3 h-8 rounded-tr-[18px] overflow-hidden"
                     style={{
-                      height: "36px",
-                      transform: "rotateX(90deg) translateZ(18px)",
-                      transformOrigin: "top center",
+                      transform: "translate3d(7px, 4px, -20px) skewX(-5deg)",
                       background:
-                        "repeating-linear-gradient(90deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
+                        "repeating-linear-gradient(90deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
+                      boxShadow: "inset 0 -8px 12px rgba(0,0,0,.16)",
                     }}
                   />
                   <div
-                    className="absolute left-0 right-0 bottom-0"
+                    className="absolute left-10 -right-5 -bottom-3 h-8 rounded-br-[18px] overflow-hidden"
                     style={{
-                      height: "36px",
-                      transform: "rotateX(-90deg) translateZ(18px)",
-                      transformOrigin: "bottom center",
+                      transform: "translate3d(8px, -2px, -20px) skewX(5deg)",
                       background:
-                        "repeating-linear-gradient(90deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
+                        "repeating-linear-gradient(90deg,#fff9e6 0 2px,#ead8aa 2px 3px,#c9a45f 3px 4px)",
+                      boxShadow: "inset 0 8px 12px rgba(0,0,0,.14)",
                     }}
                   />
 
                   {/* ============ FRONT COVER (photo, unchanged) ============ */}
                   <div
-                    className="relative w-full h-full rounded-md overflow-hidden"
+                    className="relative w-full h-full rounded-r-[20px] rounded-l-[10px] overflow-hidden bg-[#0B5132]"
                     style={{
-                      transform: "translateZ(0px)",
+                      transform: "translateZ(24px)",
                       boxShadow:
-                        "22px 28px 60px rgba(0,0,0,0.35), -3px -3px 14px rgba(184,149,85,0.10)",
+                        "30px 34px 72px rgba(0,0,0,0.28), -8px 0 18px rgba(6,78,59,0.20), inset 1px 0 0 rgba(255,255,255,0.15)",
                     }}
                   >
+                    <div className="absolute inset-y-0 left-0 z-20 w-14 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(1,17,11,.86), rgba(6,78,59,.50) 44%, rgba(255,255,255,.08) 48%, transparent 72%)", boxShadow: "inset -1px 0 rgba(255,255,255,.14), inset 8px 0 16px rgba(0,0,0,.18)" }} />
+                    <div className="absolute inset-y-6 left-3 z-20 w-px bg-[#B89555]/45 pointer-events-none" />
                     {/* Full-bleed cover image */}
                     <img
                       src={luxuryVilla1}
@@ -251,15 +245,16 @@ const MarketReport = () => {
                     />
                     {/* Bottom-only gradient so title is legible without darkening the photo */}
                     <div
-                      className="absolute inset-x-0 bottom-0 h-2/3"
+                      className="absolute inset-x-0 bottom-0 h-[72%]"
                       style={{
                         background:
-                          "linear-gradient(180deg, rgba(4,30,20,0) 0%, rgba(4,30,20,0.55) 55%, rgba(2,18,12,0.95) 100%)",
+                          "linear-gradient(180deg, rgba(4,30,20,0) 0%, rgba(4,30,20,0.68) 48%, rgba(2,18,12,0.98) 100%)",
                       }}
                     />
+                    <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ background: "linear-gradient(105deg, transparent 0%, transparent 38%, rgba(255,255,255,.22) 48%, transparent 58%, transparent 100%)" }} />
 
                     {/* Cover content */}
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-7">
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-7 pl-9 md:pl-11 z-30">
                       <div
                         className="inline-flex self-start items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-3"
                         style={{
@@ -289,7 +284,7 @@ const MarketReport = () => {
                           By Founder &amp; CEO Jane Bou Jaoude
                         </p>
                       </FounderContent>
-                      <div className="mt-4 pt-3 border-t border-white/25">
+                      <div className="mt-4 pt-3 border-t border-white/35">
                         <p
                           className="text-[9px] tracking-[0.3em] uppercase"
                           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.85 }}
@@ -301,8 +296,6 @@ const MarketReport = () => {
                     </div>
                   </div>
 
-                  {/* Drop shadow under the book */}
-                  <div className="absolute -bottom-6 left-8 right-8 h-8 bg-[#1A1A1A]/40 blur-2xl rounded-full" style={{ transform: "translateZ(-40px)" }} />
                 </div>
               </div>
 
@@ -359,13 +352,14 @@ const MarketReport = () => {
                   return (
                     <div
                       key={i}
-                      className="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30"
+                      className="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-white border border-[#B89555]/30"
                     >
                       <div
-                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
+                        className="jj-icon-tile-emerald w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
                         data-icon-tone="emerald"
+                        data-emerald-icon-surface
                       >
                         <Icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                       </div>
@@ -398,7 +392,7 @@ const MarketReport = () => {
 
       {/* ============== FOUNDER QUOTE ============== */}
       <FounderContent fallback={null}>
-        <section className="py-14 md:py-20 bg-[#FDFBF7]">
+        <section className="py-14 md:py-20 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -414,7 +408,7 @@ const MarketReport = () => {
                   style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                   aria-hidden="true"
                 />
-                <div className="absolute inset-[3px] rounded-full overflow-hidden bg-[#FDFBF7]">
+                <div className="absolute inset-[3px] rounded-full overflow-hidden bg-white">
                   <img
                     src={founderCompanyProfile}
                     alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
@@ -442,7 +436,7 @@ const MarketReport = () => {
       </FounderContent>
 
       {/* ============== DOWNLOAD / FORM ============== */}
-      <section className="py-12 md:py-20 bg-[#FDFBF7]">
+      <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-5 gap-8 lg:gap-10 items-start">
             {/* Form / Welcome card */}
@@ -461,6 +455,7 @@ const MarketReport = () => {
                     style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                     data-no-contrast-guard
                     data-icon-tone="emerald"
+                    data-emerald-icon-surface
                   >
                     <Check
                       className="w-10 h-10"
@@ -501,6 +496,7 @@ const MarketReport = () => {
                       style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                       data-no-contrast-guard
                       data-icon-tone="emerald"
+                      data-emerald-icon-surface
                     >
                       <Unlock className="w-6 h-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </div>
@@ -519,7 +515,7 @@ const MarketReport = () => {
                         value={form.fullName}
                         onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
                         placeholder="Enter your full name"
-                        className="mt-2 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
+                        className="mt-2 bg-white border-[#B89555]/30 text-[#1A1A1A] h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
                       />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
@@ -530,7 +526,7 @@ const MarketReport = () => {
                           value={form.email}
                           onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
                           placeholder="your@email.com"
-                          className="mt-2 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
+                          className="mt-2 bg-white border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
                         />
                       </div>
                       <div>
@@ -540,7 +536,7 @@ const MarketReport = () => {
                           value={form.phone}
                           onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
                           placeholder="+971 50 123 4567"
-                          className="mt-2 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
+                          className="mt-2 bg-white border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
                         />
                       </div>
                     </div>
@@ -639,6 +635,7 @@ const MarketReport = () => {
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
                         data-icon-tone="emerald"
+                        data-emerald-icon-surface
                       >
                         <Check
                           className="w-4 h-4"
