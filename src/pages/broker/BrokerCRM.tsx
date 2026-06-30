@@ -51,12 +51,12 @@ function Kpi({
     <button
       type="button"
       onClick={onClick}
-      className="jj-hover-emerald group flex flex-col items-start text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-3 py-3 sm:px-4 sm:py-4 w-full min-w-0 max-w-full overflow-hidden focus:outline-none"
+      className="jj-hover-emerald group flex flex-col items-start text-left rounded-xl bg-[#F7F2EA] border border-[color:var(--emerald-1)]/28 px-3 py-3 sm:px-4 sm:py-4 w-full min-w-0 max-w-full focus:outline-none"
     >
       <IconTile icon={Icon} tone="emerald" size="md" className="!h-9 !w-9 !rounded-xl" iconClassName="!h-[18px] !w-[18px]" />
-      <div className="mt-3 text-xl sm:text-2xl md:text-[26px] font-semibold tabular-nums text-[#1A1A1A] leading-none break-words">{value}</div>
-      <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/65 mt-2 font-semibold leading-tight break-words">{label}</div>
-      {sub && <div className="text-[10px] sm:text-[11px] text-[#1A1A1A]/55 mt-1 leading-tight break-words">{sub}</div>}
+      <div className="mt-3 text-xl sm:text-2xl md:text-[26px] font-semibold tabular-nums text-[#1A1A1A] leading-none whitespace-nowrap">{value}</div>
+      <div className="text-[10px] sm:text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/65 mt-2 font-semibold leading-tight whitespace-normal break-words [overflow-wrap:anywhere]">{label}</div>
+      {sub && <div className="text-[10px] sm:text-[11px] text-[#1A1A1A]/55 mt-1 leading-tight whitespace-normal break-words">{sub}</div>}
     </button>
   );
 }
