@@ -189,7 +189,7 @@ const OwnerDashboardShell = () => {
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" data-surface="champagne" className="owner-shell-surface w-64 p-0 bg-[#F7F2EA] border-r border-[#B89555]/40">
+          <SheetContent side="left" data-surface="champagne" className="owner-shell-surface w-[280px] p-0 bg-[#F7F2EA] border-r border-[#B89555]/40">
             <div className="h-full flex flex-col">
               <SidebarContent collapsed={false} />
             </div>
@@ -205,7 +205,7 @@ const OwnerDashboardShell = () => {
           data-surface="champagne"
           className={cn(
             "owner-shell-surface fixed left-0 top-0 h-full bg-[#F7F2EA] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
-            sidebarCollapsed ? "w-16" : "w-64"
+            sidebarCollapsed ? "w-[72px]" : "w-[280px]"
           )}
           role="navigation"
           aria-label="Owner dashboard navigation"
@@ -218,7 +218,7 @@ const OwnerDashboardShell = () => {
       <main 
         className={cn(
           "flex-1 transition-all duration-300 overscroll-contain",
-          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-16" : "ml-64")
+          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-[72px]" : "ml-[280px]")
         )}
         role="main"
       >
