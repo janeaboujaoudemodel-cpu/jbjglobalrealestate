@@ -1,17 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { ChevronRight, Handshake, TrendingUp, Building2 } from "lucide-react";
+import { ChevronRight, Handshake, TrendingUp, Building2, Crown } from "lucide-react";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 
-/**
- * SidebarModePortalBlock — compact mode-aware portal CTA pinned at the
- * top of the vertical sidebar.
- *
- * Visual contract (locked to match every other vertical-sidebar row):
- *   • min-h-10 row, gap-2.5, px-2.5
- *   • w-6 h-6 emerald-ombre icon tile, white glyph
- *   • ChevronRight trailing (same as section headers / mega items)
- *   • Always emerald-filled icon tile (same in collapsed + expanded states)
- */
 const MODE_CONFIG = {
   broker: {
     icon: Handshake,
@@ -30,6 +20,12 @@ const MODE_CONFIG = {
     label: "Developer Portal",
     href: "/developers-portal",
     matchPrefix: "/developers-portal",
+  },
+  owner: {
+    icon: Crown,
+    label: "Owner Portal",
+    href: "/owner",
+    matchPrefix: "/owner",
   },
 } as const;
 
