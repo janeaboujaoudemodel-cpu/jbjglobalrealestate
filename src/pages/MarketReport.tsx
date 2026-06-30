@@ -40,13 +40,13 @@ const MarketReport = () => {
   // Shared classnames so every card on the page reads identically to the
   // homepage Compare Your Property card.
   const CARD_BASE =
-    "bg-[#F7F2EA] border border-[#B89555]/35 rounded-3xl shadow-[0_8px_28px_rgba(26,26,26,0.06)]";
+    "bg-white border border-[#B89555]/35 rounded-3xl shadow-[0_8px_28px_rgba(26,26,26,0.06)]";
 
   return (
     <div
       data-insights-page
       data-marketing-page
-      className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]"
+      className="min-h-screen bg-white text-[#1A1A1A]"
     >
       {/* Thank You Modal — champagne card, ink text, emerald tick */}
       {showThankYou && (
@@ -121,7 +121,7 @@ const MarketReport = () => {
       )}
 
       {/* ============== HERO ============== */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-[#FDFBF7]">
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Book Visual — image fills the full cover */}
@@ -129,66 +129,82 @@ const MarketReport = () => {
               initial={{ opacity: 0, x: -30, rotateY: -15 }}
               animate={{ opacity: 1, x: 0, rotateY: 0 }}
               transition={{ duration: 0.8 }}
-              className="relative"
+               className="relative"
             >
               <div
-                className="relative mx-auto w-[280px] md:w-[340px] group"
-                style={{ perspective: "1800px" }}
+                data-market-book
+                className="relative mx-auto w-[292px] md:w-[360px] group select-none"
+                style={{ perspective: "2200px", perspectiveOrigin: "48% 45%" }}
                 onMouseMove={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   const x = e.clientX - rect.left;
-                  const centerX = rect.width / 2;
-                  const rotateY = x < centerX ? -8 : -28;
+                  const y = e.clientY - rect.top;
+                  const rx = ((y / rect.height) - 0.5) * -3;
+                  const hover = x / rect.width;
+                  const rotateY = -18 + hover * 8;
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
                     ?.style.setProperty(
                       "transform",
-                      `rotateY(${rotateY}deg) rotateX(2deg) translateY(-4px)`
+                      `rotateY(${rotateY}deg) rotateX(${rx}deg) translateY(-8px) scale(1.025)`
                     );
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget
                     .querySelector<HTMLDivElement>(".book-inner")
-                    ?.style.setProperty("transform", "rotateY(-22deg) rotateX(3deg)");
+                    ?.style.setProperty("transform", "rotateY(-16deg) rotateX(2deg)");
                 }}
               >
                 <div
-                  className="book-inner relative transition-transform duration-700 ease-out aspect-[3/4]"
+                  className="book-inner relative transition-transform duration-700 ease-[cubic-bezier(0.2,0.85,0.25,1)] aspect-[3/4]"
                   style={{
                     transformStyle: "preserve-3d",
-                    transform: "rotateY(-22deg) rotateX(3deg)",
+                    transform: "rotateY(-16deg) rotateX(2deg)",
                   }}
                 >
-                  {/* ============ BACK COVER ============ */}
+                  {/* Premium floor shadow */}
                   <div
-                    className="absolute inset-0 rounded-md"
+                    className="absolute left-8 right-2 -bottom-10 h-12 rounded-full blur-2xl opacity-45"
                     style={{
-                      transform: "translateZ(-36px)",
-                      background:
-                        "linear-gradient(135deg, #0B5132 0%, #052e1c 100%)",
-                      boxShadow: "inset 0 0 50px rgba(0,0,0,.55)",
+                      transform: "translateZ(-92px) rotateX(88deg)",
+                      background: "radial-gradient(ellipse at center, rgba(6,78,59,0.45), rgba(26,26,26,0.16) 48%, transparent 72%)",
                     }}
                   />
 
+                  {/* ============ BACK COVER ============ */}
+                  <div
+                    className="absolute inset-y-1 left-2 right-0 rounded-r-[18px] rounded-l-[8px] overflow-hidden"
+                    style={{
+                      transform: "translateZ(-48px) translateX(16px)",
+                      background:
+                        "linear-gradient(135deg, #0B5132 0%, #073821 46%, #031d13 100%)",
+                      boxShadow: "inset 18px 0 34px rgba(0,0,0,.36), inset -2px 0 12px rgba(255,255,255,.08), 18px 20px 48px rgba(0,0,0,.22)",
+                    }}
+                  >
+                    <div className="absolute inset-4 rounded-[14px] border border-[#B89555]/30" />
+                    <div className="absolute inset-0 opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent)" }} />
+                  </div>
+
                   {/* ============ SPINE (left edge) ============ */}
                   <div
-                    className="absolute top-0 bottom-0 left-0 rounded-l-md overflow-hidden"
+                    className="absolute top-1 bottom-1 left-0 rounded-l-[18px] overflow-hidden"
                     style={{
-                      width: "36px",
-                      transform: "rotateY(-90deg) translateZ(18px)",
+                      width: "52px",
+                      transform: "rotateY(-86deg) translateZ(26px)",
                       transformOrigin: "left center",
                       background:
-                        "linear-gradient(180deg, #052e1c 0%, #0B5132 50%, #052e1c 100%)",
+                        "linear-gradient(90deg, #02180f 0%, #073820 18%, #0B5132 50%, #052a19 78%, #01110b 100%)",
                       boxShadow:
-                        "inset 2px 0 6px rgba(0,0,0,.55), inset -2px 0 4px rgba(255,255,255,.06)",
+                        "inset 8px 0 16px rgba(0,0,0,.55), inset -4px 0 8px rgba(255,255,255,.10)",
                     }}
                   >
                     <div
-                      className="absolute inset-x-1 top-2 bottom-2 border-y"
+                      className="absolute inset-y-5 left-2 w-px"
                       style={{ borderColor: "rgba(184,149,85,0.45)" }}
                     />
+                    <div className="absolute inset-y-0 right-1 w-px bg-white/10" />
                     <div
-                      className="absolute inset-0 grid place-items-center text-[9px] font-semibold tracking-[0.32em] uppercase"
+                      className="absolute inset-0 grid place-items-center text-[9px] font-bold tracking-[0.34em] uppercase"
                       style={{
                         color: "#B89555",
                         writingMode: "vertical-rl",
@@ -201,46 +217,49 @@ const MarketReport = () => {
 
                   {/* ============ PAGE EDGES (right, top, bottom) ============ */}
                   <div
-                    className="absolute top-0 bottom-0 right-0"
+                    className="absolute top-3 bottom-3 right-0 rounded-r-[10px] overflow-hidden"
                     style={{
-                      width: "36px",
-                      transform: "rotateY(90deg) translateZ(18px)",
+                      width: "48px",
+                      transform: "rotateY(84deg) translateZ(24px)",
                       transformOrigin: "right center",
                       background:
-                        "repeating-linear-gradient(0deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
-                      boxShadow: "inset 0 0 6px rgba(0,0,0,.25)",
+                        "repeating-linear-gradient(0deg,#fff7dc 0 2px,#ead8aa 2px 3px,#caa45d 3px 4px)",
+                      boxShadow: "inset 7px 0 12px rgba(0,0,0,.22), inset -2px 0 10px rgba(255,255,255,.38)",
                     }}
                   />
                   <div
-                    className="absolute left-0 right-0 top-0"
+                    className="absolute left-8 right-3 top-0 overflow-hidden"
                     style={{
-                      height: "36px",
-                      transform: "rotateX(90deg) translateZ(18px)",
+                      height: "42px",
+                      transform: "rotateX(86deg) translateZ(21px)",
                       transformOrigin: "top center",
                       background:
-                        "repeating-linear-gradient(90deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
+                        "repeating-linear-gradient(90deg,#fff7dc 0 2px,#ead8aa 2px 3px,#caa45d 3px 4px)",
+                      boxShadow: "inset 0 -8px 14px rgba(0,0,0,.20)",
                     }}
                   />
                   <div
-                    className="absolute left-0 right-0 bottom-0"
+                    className="absolute left-8 right-3 bottom-0 overflow-hidden"
                     style={{
-                      height: "36px",
-                      transform: "rotateX(-90deg) translateZ(18px)",
+                      height: "42px",
+                      transform: "rotateX(-86deg) translateZ(21px)",
                       transformOrigin: "bottom center",
                       background:
-                        "repeating-linear-gradient(90deg,#f3e7c8 0 2px,#e3d3a8 2px 3px)",
+                        "repeating-linear-gradient(90deg,#fff7dc 0 2px,#ead8aa 2px 3px,#caa45d 3px 4px)",
+                      boxShadow: "inset 0 8px 14px rgba(0,0,0,.20)",
                     }}
                   />
 
                   {/* ============ FRONT COVER (photo, unchanged) ============ */}
                   <div
-                    className="relative w-full h-full rounded-md overflow-hidden"
+                    className="relative w-full h-full rounded-r-[20px] rounded-l-[10px] overflow-hidden bg-[#0B5132]"
                     style={{
-                      transform: "translateZ(0px)",
+                      transform: "translateZ(28px)",
                       boxShadow:
-                        "22px 28px 60px rgba(0,0,0,0.35), -3px -3px 14px rgba(184,149,85,0.10)",
+                        "30px 34px 72px rgba(0,0,0,0.28), -8px 0 18px rgba(6,78,59,0.20), inset 1px 0 0 rgba(255,255,255,0.15)",
                     }}
                   >
+                    <div className="absolute inset-y-0 left-0 z-20 w-12 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(1,17,11,.82), rgba(6,78,59,.42) 48%, transparent)", boxShadow: "inset -1px 0 rgba(255,255,255,.12)" }} />
                     {/* Full-bleed cover image */}
                     <img
                       src={luxuryVilla1}
@@ -251,15 +270,16 @@ const MarketReport = () => {
                     />
                     {/* Bottom-only gradient so title is legible without darkening the photo */}
                     <div
-                      className="absolute inset-x-0 bottom-0 h-2/3"
+                      className="absolute inset-x-0 bottom-0 h-[72%]"
                       style={{
                         background:
-                          "linear-gradient(180deg, rgba(4,30,20,0) 0%, rgba(4,30,20,0.55) 55%, rgba(2,18,12,0.95) 100%)",
+                          "linear-gradient(180deg, rgba(4,30,20,0) 0%, rgba(4,30,20,0.68) 48%, rgba(2,18,12,0.98) 100%)",
                       }}
                     />
+                    <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ background: "linear-gradient(105deg, transparent 0%, transparent 38%, rgba(255,255,255,.22) 48%, transparent 58%, transparent 100%)" }} />
 
                     {/* Cover content */}
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-7">
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-7 pl-9 md:pl-11 z-30">
                       <div
                         className="inline-flex self-start items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-3"
                         style={{
@@ -289,7 +309,7 @@ const MarketReport = () => {
                           By Founder &amp; CEO Jane Bou Jaoude
                         </p>
                       </FounderContent>
-                      <div className="mt-4 pt-3 border-t border-white/25">
+                      <div className="mt-4 pt-3 border-t border-white/35">
                         <p
                           className="text-[9px] tracking-[0.3em] uppercase"
                           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.85 }}
@@ -301,8 +321,6 @@ const MarketReport = () => {
                     </div>
                   </div>
 
-                  {/* Drop shadow under the book */}
-                  <div className="absolute -bottom-6 left-8 right-8 h-8 bg-[#1A1A1A]/40 blur-2xl rounded-full" style={{ transform: "translateZ(-40px)" }} />
                 </div>
               </div>
 
@@ -398,7 +416,7 @@ const MarketReport = () => {
 
       {/* ============== FOUNDER QUOTE ============== */}
       <FounderContent fallback={null}>
-        <section className="py-14 md:py-20 bg-[#FDFBF7]">
+        <section className="py-14 md:py-20 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -414,7 +432,7 @@ const MarketReport = () => {
                   style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                   aria-hidden="true"
                 />
-                <div className="absolute inset-[3px] rounded-full overflow-hidden bg-[#FDFBF7]">
+                <div className="absolute inset-[3px] rounded-full overflow-hidden bg-white">
                   <img
                     src={founderCompanyProfile}
                     alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE"
@@ -442,7 +460,7 @@ const MarketReport = () => {
       </FounderContent>
 
       {/* ============== DOWNLOAD / FORM ============== */}
-      <section className="py-12 md:py-20 bg-[#FDFBF7]">
+      <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-5 gap-8 lg:gap-10 items-start">
             {/* Form / Welcome card */}
