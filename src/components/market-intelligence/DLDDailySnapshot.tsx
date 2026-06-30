@@ -62,20 +62,23 @@ const INK = "#0A0A0A";
 // Brand emerald metallic ombre — matches var(--jj-emerald-ombre) site-wide.
 const EMERALD_BAR = "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)";
 const EMERALD_DOT = "#064E3B";
+const PURE_WHITE = "#FFFFFF";
 
 const WhiteGlyphIcon = ({ Icon, className = "h-5 w-5" }: { Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; className?: string }) => {
   const forceWhite = React.useCallback((el: SVGSVGElement | null) => {
     if (!el) return;
-    el.style.setProperty("color", "#FFFFFF", "important");
-    el.style.setProperty("stroke", "#FFFFFF", "important");
+    el.style.setProperty("color", PURE_WHITE, "important");
+    el.style.setProperty("stroke", PURE_WHITE, "important");
     el.style.setProperty("fill", "none", "important");
     el.style.setProperty("opacity", "1", "important");
+    el.style.setProperty("stroke-opacity", "1", "important");
     el.querySelectorAll("path, circle, rect, line, polyline, polygon, ellipse").forEach((part) => {
       const node = part as SVGElement;
-      node.style.setProperty("color", "#FFFFFF", "important");
-      node.style.setProperty("stroke", "#FFFFFF", "important");
+      node.style.setProperty("color", PURE_WHITE, "important");
+      node.style.setProperty("stroke", PURE_WHITE, "important");
       node.style.setProperty("fill", "none", "important");
       node.style.setProperty("opacity", "1", "important");
+      node.style.setProperty("stroke-opacity", "1", "important");
     });
   }, []);
 
@@ -85,9 +88,9 @@ const WhiteGlyphIcon = ({ Icon, className = "h-5 w-5" }: { Icon: React.Component
 const WhiteRank = ({ children }: { children: React.ReactNode }) => {
   const forceWhite = React.useCallback((el: HTMLSpanElement | null) => {
     if (!el) return;
-    el.style.setProperty("color", "#FFFFFF", "important");
-    el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
-    el.style.setProperty("text-fill-color", "#FFFFFF", "important");
+    el.style.setProperty("color", PURE_WHITE, "important");
+    el.style.setProperty("-webkit-text-fill-color", PURE_WHITE, "important");
+    el.style.setProperty("text-fill-color", PURE_WHITE, "important");
     el.style.setProperty("opacity", "1", "important");
   }, []);
 
@@ -141,7 +144,7 @@ export const DLDDailySnapshot = () => {
   });
 
   return (
-    <section className="bg-background py-16" data-surface="light">
+    <section className="bg-background py-16" data-surface="light" data-dld-snapshot>
       <div className="container mx-auto px-4">
         {/* Section header */}
         <motion.div
@@ -184,7 +187,15 @@ export const DLDDailySnapshot = () => {
           ].map(({ label, value, Icon }) => (
             <BlackCard key={label} className="p-4 md:p-5">
               <div className="flex items-start justify-between gap-2">
-                <IconTile icon={Icon} tone="emerald" size="md" data-dld-emerald-tile className="mi-no-flip" />
+                <IconTile
+                  icon={Icon}
+                  tone="emerald"
+                  size="md"
+                  data-dld-emerald-tile
+                  className="mi-no-flip"
+                  iconClassName="text-white"
+                  style={{ background: EMERALD_BAR, color: PURE_WHITE, border: "1px solid rgba(184,149,85,0.62)" }}
+                />
                 <span
                   data-no-contrast-guard
                   data-allow-dark-cta
@@ -192,7 +203,7 @@ export const DLDDailySnapshot = () => {
                   className="inline-flex h-7 w-7 items-center justify-center rounded-md"
                   style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)" }}
                 >
-                  <WhiteGlyphIcon Icon={TrendingUp} className="h-4 w-4" />
+                    <WhiteGlyphIcon Icon={TrendingUp} className="h-4 w-4 text-white" />
                 </span>
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
@@ -231,11 +242,11 @@ export const DLDDailySnapshot = () => {
                     data-allow-dark-cta
                     data-dld-emerald-fill
                     className="dld-emerald-fill"
-                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(cashShare, 2)}%`, minWidth: cashShare > 0 ? 18 : 0, borderRadius: 9999, background: EMERALD_BAR }}
+                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(cashShare, 2)}%`, minWidth: cashShare > 0 ? 18 : 0, borderRadius: 9999, background: EMERALD_BAR, backgroundColor: EMERALD_DOT }}
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#042C1C]" /> Cash · {cashShare}% of all transactions
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: EMERALD_DOT }} /> Cash · {cashShare}% of all transactions
                 </p>
               </div>
 
@@ -257,11 +268,11 @@ export const DLDDailySnapshot = () => {
                     data-allow-dark-cta
                     data-dld-emerald-fill
                     className="dld-emerald-fill"
-                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(mortgageShare, 2)}%`, minWidth: mortgageShare > 0 ? 18 : 0, borderRadius: 9999, background: EMERALD_BAR }}
+                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(mortgageShare, 2)}%`, minWidth: mortgageShare > 0 ? 18 : 0, borderRadius: 9999, background: EMERALD_BAR, backgroundColor: EMERALD_DOT }}
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#042C1C]" /> Mortgage · {mortgageShare}% of all transactions
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: EMERALD_DOT }} /> Mortgage · {mortgageShare}% of all transactions
                 </p>
               </div>
             </div>
@@ -289,14 +300,15 @@ export const DLDDailySnapshot = () => {
                   <div
                     key={`${row.area}-${i}`}
                     data-dld-area-row
-                    className="grid grid-cols-[2.75rem_minmax(165px,1fr)_minmax(110px,1fr)_3.75rem] items-center gap-3 rounded-lg px-2 py-1.5"
+                    className="grid items-center gap-3 rounded-lg px-2 py-1.5"
+                    style={{ gridTemplateColumns: "2.75rem minmax(180px, 180px) minmax(0, 1fr) 3.75rem" }}
                   >
                     <span
                       data-no-contrast-guard
                       data-allow-dark-cta
                       data-dld-rank-badge
                       className="inline-flex h-7 w-9 items-center justify-center rounded-md text-[11px] font-bold tabular-nums shrink-0"
-                      style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                      style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.62)", color: PURE_WHITE, WebkitTextFillColor: PURE_WHITE }}
                     >
                       <WhiteRank>{String(rank).padStart(2, "0")}</WhiteRank>
                     </span>
