@@ -84,7 +84,7 @@ const MarketReport = () => {
         <div className="fixed inset-0 z-[60] bg-[#1A1A1A]/70 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-6 h-full flex items-center justify-center">
             <div className={`${CARD_BASE} w-full max-w-6xl h-[88vh] overflow-hidden`}>
-              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#B89555]/30 bg-[#FDFBF7]">
+              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#B89555]/30 bg-white">
                 <div className="min-w-0">
                   <p className="text-xs text-[#1A1A1A]/65">JBJ Global Real Estate</p>
                   <h2 className="text-[#1A1A1A] font-semibold truncate">
@@ -114,7 +114,7 @@ const MarketReport = () => {
                 ref={bookFrameRef}
                 title="UAE Real Estate Market Intelligence 2026"
                 srcDoc={bookHtml}
-                className="w-full h-[calc(88vh-52px)] bg-[#FDFBF7]"
+                className="w-full h-[calc(88vh-52px)] bg-white"
                 sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
               />
             </div>
@@ -379,7 +379,7 @@ const MarketReport = () => {
                   return (
                     <div
                       key={i}
-                      className="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F7F2EA] border border-[#B89555]/30"
+                      className="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-white border border-[#B89555]/30"
                     >
                       <div
                         className="jj-icon-tile-emerald w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
@@ -542,7 +542,7 @@ const MarketReport = () => {
                         value={form.fullName}
                         onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
                         placeholder="Enter your full name"
-                        className="mt-2 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
+                        className="mt-2 bg-white border-[#B89555]/30 text-[#1A1A1A] h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
                       />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
@@ -553,7 +553,7 @@ const MarketReport = () => {
                           value={form.email}
                           onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
                           placeholder="your@email.com"
-                          className="mt-2 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
+                          className="mt-2 bg-white border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
                         />
                       </div>
                       <div>
@@ -563,7 +563,7 @@ const MarketReport = () => {
                           value={form.phone}
                           onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
                           placeholder="+971 50 123 4567"
-                          className="mt-2 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
+                          className="mt-2 bg-white border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-12 rounded-xl focus:border-[#0B5132]/60 focus:ring-[#0B5132]/20"
                         />
                       </div>
                     </div>
