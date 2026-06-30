@@ -606,15 +606,14 @@ function TocPage({
 
 function ChapterOpenPage({
   module,
-  moduleIndex,
 }: {
   module: EducationModule;
   moduleIndex: number;
 }) {
   return (
     <div className="absolute inset-0 px-10 py-12 flex flex-col">
-      <div className="text-[10px] tracking-[0.4em] text-[#B89555] uppercase mb-3">
-        Chapter {String(moduleIndex + 1).padStart(2, "0")}
+      <div className="inline-flex items-center gap-2 text-[10px] tracking-[0.4em] text-[#B89555] uppercase mb-3">
+        <Lock className="w-3 h-3" /> Chapter
       </div>
       <div
         className="h-px w-16 bg-[#B89555]/60 mb-5"
