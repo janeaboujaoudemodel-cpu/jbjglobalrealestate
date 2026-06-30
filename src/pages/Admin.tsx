@@ -148,11 +148,24 @@ const Admin = () => {
                 { value: "founder", icon: Crown, label: "Founder" },
                 { value: "partnerships", icon: Handshake, label: "Partnerships" },
                 { value: "book-hub", icon: BookOpen, label: "Book Hub" },
-              ].map(tab => (
-                <TabsTrigger key={tab.value} value={tab.value} data-admin-tab-trigger className="text-[#1A1A1A] data-[state=active]:!text-white [&[data-state=active]_*]:!text-white">
-                  <tab.icon className="w-4 h-4 mr-2 data-[state=active]:!text-white" />{tab.label}
+              ].map(tab => {
+                const active = h.activeTab === tab.value;
+                return (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  data-admin-tab-trigger
+                  data-owner-admin-tab-active={active ? "true" : undefined}
+                  data-surface={active ? "emerald" : "champagne"}
+                  className="text-[#1A1A1A] data-[state=active]:!text-white [&[data-state=active]_*]:!text-white"
+                >
+                  <tab.icon
+                    className="w-4 h-4 mr-2 data-[state=active]:!text-white"
+                    style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined}
+                  />
+                  <span style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{tab.label}</span>
                 </TabsTrigger>
-              ))}
+              );})}
             </TabsList>
           </div>
 
