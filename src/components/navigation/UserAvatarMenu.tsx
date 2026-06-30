@@ -137,14 +137,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     );
     return (
       <DropdownMenuItem
+        data-account-menu-row="true"
         asChild={!!to}
         active={active}
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5"
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0"
       >
         {to ? (
           <Link
             to={to}
+            data-account-menu-row="true"
             data-surface={active ? "emerald" : undefined}
             data-on-dark={active ? "true" : undefined}
           >
