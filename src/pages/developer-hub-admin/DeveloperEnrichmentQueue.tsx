@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { Sparkles, Check, X, RefreshCw, Zap, CheckSquare, Square, ArrowRight } from "lucide-react";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface LogRow {
   id: string;
@@ -18,7 +19,7 @@ interface LogRow {
   status: string;
   created_at: string;
   error: string | null;
-  developers: { name: string; slug: string } | null;
+  developers: { name: string; slug: string; logo_url: string | null } | null;
 }
 
 const FIELDS = [
@@ -38,7 +39,7 @@ export default function DeveloperEnrichmentQueue() {
     queryFn: async () => {
       const q = supabase
         .from("developer_enrichment_log")
-        .select("id, developer_id, before_jsonb, after_jsonb, source_url, status, created_at, error, developers(name, slug)")
+        .select("id, developer_id, before_jsonb, after_jsonb, source_url, status, created_at, error, developers(name, slug, logo_url)")
         .order("created_at", { ascending: false })
         .limit(100);
       const { data, error } = await q;
@@ -159,14 +160,14 @@ export default function DeveloperEnrichmentQueue() {
   const selectedList = useMemo(() => Array.from(selected), [selected]);
 
   return (
-    <div className="space-y-4">
-      {/* Explainer: Directory vs Site Rebuild */}
+    <div className="space-y-4 max-w-full overflow-hidden">
+      {/* Explainer: Directory vs Profile Rebuild */}
       <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30">
         <div className="flex items-start gap-3">
           <Sparkles className="size-4 text-[#1A1A1A] mt-0.5 shrink-0" />
           <div className="text-sm text-[#1A1A1A]/80 space-y-1">
-            <p><span className="font-semibold text-[#1A1A1A]">Site Rebuild</span> = approval queue. Every scrape lands here first as a draft. Nothing reaches the public site until you click <span className="font-semibold">Apply</span>.</p>
-            <p><span className="font-semibold text-[#1A1A1A]">Directory</span> = the live list of developers — where you pick who to (re-)scrape. The "Rebuild 25 broken" button below does both in one click.</p>
+            <p><span className="font-semibold text-[#1A1A1A]">Profile Rebuild</span> = developer profile approval queue. Every scrape lands here first as a draft. Nothing reaches the public site until you click <span className="font-semibold">Apply</span>.</p>
+            <p><span className="font-semibold text-[#1A1A1A]">Developer Directory</span> = the live owner list — where you pick who to (re-)scrape. The "Rebuild 25 broken" button below does both in one click.</p>
           </div>
         </div>
       </Card>
@@ -174,7 +175,7 @@ export default function DeveloperEnrichmentQueue() {
       <Card className="p-4 bg-[#F7F2EA] border border-[#B89555]/30">
         <div className="flex items-center gap-3 flex-wrap">
           <Sparkles className="size-4 text-[#1A1A1A]" />
-          <h2 className="text-base font-semibold">Site Rebuild Queue</h2>
+          <h2 className="text-base font-semibold text-[#1A1A1A]">Profile Rebuild Queue</h2>
           <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
             {rows.length} entries · {stagedRows.length} staged
           </Badge>
@@ -195,7 +196,7 @@ export default function DeveloperEnrichmentQueue() {
               {rebuildAllBroken.isPending ? "Running…" : "Rebuild 25 broken"}
             </Button>
             <Button asChild variant="outline" size="sm">
-              <a href="/developers-portal/directory">Pick from directory →</a>
+              <a href="/owner/developers">Pick from directory →</a>
             </Button>
           </div>
         </div>
@@ -238,7 +239,7 @@ export default function DeveloperEnrichmentQueue() {
 
       {rows.length === 0 && !isLoading && (
         <Card className="p-8 text-center bg-[#F7F2EA] border border-[#B89555]/30">
-          <p className="text-[#1A1A1A]/70">No enrichment runs yet. Go to <a href="/developers-portal/directory" className="underline">Directory</a> and click "Rebuild from site" on any developer.</p>
+          <p className="text-[#1A1A1A]/70">No enrichment runs yet. Go to <a href="/owner/developers" className="underline">Developer Directory</a> and click "Rebuild from site" on any developer.</p>
         </Card>
       )}
 
@@ -249,7 +250,7 @@ export default function DeveloperEnrichmentQueue() {
           return (
             <Card
               key={log.id}
-              className={`p-4 bg-[#F7F2EA] border ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
+              className={`p-4 bg-[#F7F2EA] border rounded-2xl overflow-hidden ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
             >
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div className="flex items-start gap-3">
@@ -261,7 +262,15 @@ export default function DeveloperEnrichmentQueue() {
                       aria-label={`Select ${log.developers?.name ?? "log"}`}
                     />
                   )}
-                  <div>
+                  <DeveloperLogo
+                    src={log.developers?.logo_url ?? null}
+                    name={log.developers?.name ?? "Developer"}
+                    alt={`${log.developers?.name ?? "Developer"} logo`}
+                    variant="tile"
+                    renderFallback
+                    className="size-11 rounded-xl border-[#B89555]/40 bg-[#FDFBF7] shrink-0"
+                  />
+                  <div className="min-w-0">
                     <h3 className="font-semibold text-[#1A1A1A]">{log.developers?.name ?? "(unknown)"}</h3>
                     <p className="text-xs text-[#1A1A1A]/60 mt-1">
                       {new Date(log.created_at).toLocaleString()} · status: <span className="font-medium">{log.status}</span>
@@ -269,7 +278,7 @@ export default function DeveloperEnrichmentQueue() {
                         <> · source: <a href={log.source_url} target="_blank" rel="noreferrer" className="underline">{(() => { try { return new URL(log.source_url!).hostname; } catch { return log.source_url; } })()}</a></>
                       )}
                       {log.developers?.slug && (
-                        <> · <a href={`/developers-portal/developers/${log.developers.slug}`} className="underline">Open full profile</a></>
+                        <> · <a href={`/owner/developers/${log.developers.slug}`} className="underline">Open full profile</a></>
                       )}
                     </p>
                     {log.error && <p className="text-xs text-red-600 mt-1">{log.error}</p>}
