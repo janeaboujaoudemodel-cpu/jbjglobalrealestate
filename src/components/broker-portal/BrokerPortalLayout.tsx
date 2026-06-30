@@ -60,14 +60,34 @@ export default function BrokerPortalLayout() {
   // route them straight to /owner. They can return by flipping the mode
   // picker back to "broker" in the header.
   useEffect(() => {
+    if (isResolving) return;
     if (mode === "owner" && !isExplicitOwnerPreview) {
       try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
       navigate("/owner", { replace: true });
     }
-  }, [mode, isExplicitOwnerPreview, navigate]);
+  }, [isResolving, mode, isExplicitOwnerPreview, navigate]);
 
   const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
   const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");
+
+  // Loading fallback — prevents transient blank/flash while auth, role, and
+  // mode resolve, and while the owner→/owner redirect above is in flight.
+  if (isResolving || (mode === "owner" && !isExplicitOwnerPreview)) {
+    return (
+      <div
+        data-surface="champagne"
+        data-broker-shell
+        data-broker-loading
+        className="min-h-screen w-full bg-[#FDFBF7] relative"
+        role="status"
+        aria-live="polite"
+        aria-busy="true"
+      >
+        <BrandedLoader text="Loading Broker Workspace…" />
+        <span className="sr-only">Loading Broker Workspace…</span>
+      </div>
+    );
+  }
 
   return (
     <div
