@@ -26,74 +26,100 @@ export default function BrokerEmailSetup() {
   };
 
   return (
-    <div className="space-y-5 p-4 md:p-6 min-h-0 overflow-y-auto jj-scrollbar-gold">
-      <div className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/25 p-5 md:p-6">
-        <div className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">JBJ GLOBAL REAL ESTATE</div>
-        <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-1 flex items-center gap-2">
-          <KeyRound className="h-6 w-6" /> Email Setup
-        </h1>
-        <p className="text-sm text-[#1A1A1A]/75 mt-2 max-w-3xl">
-          To connect your <strong>own</strong> Gmail or Outlook mailbox to JBJ, you create a small OAuth app on
-          your Google or Microsoft developer console, then paste the <em>Client ID</em> and <em>Client Secret</em> below.
-          Each broker uses their own credentials — JBJ never sees your password.
-        </p>
+    <div className="h-full min-h-0 overflow-y-auto jj-scrollbar-gold">
+      <div className="space-y-5 p-4 md:p-6 pb-24">
+        {/* Hero — emerald metallic header strip */}
+        <div
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-[image:var(--jj-emerald-ombre)] p-5 md:p-7 text-white shadow-[0_24px_60px_-30px_rgba(6,78,59,0.65)]"
+          data-surface="emerald"
+          data-allow-dark-cta
+          data-no-contrast-guard
+        >
+          <div className="absolute inset-0 pointer-events-none opacity-[0.18] [background:radial-gradient(120%_60%_at_0%_0%,#FFFFFF_0%,transparent_55%)]" />
+          <div className="relative">
+            <div className="text-[10px] uppercase tracking-[0.22em] text-white/75">JBJ GLOBAL REAL ESTATE</div>
+            <h1 className="text-2xl md:text-3xl font-semibold text-white mt-1 flex items-center gap-2">
+              <KeyRound className="h-6 w-6 text-white" /> Email Setup
+            </h1>
+            <p className="text-sm text-white/85 mt-2 max-w-3xl">
+              To connect your <strong className="text-white">own</strong> Gmail or Outlook mailbox to JBJ, you create a small OAuth app on
+              your Google or Microsoft developer console, then paste the <em>Client ID</em> and <em>Client Secret</em> below.
+              Each broker uses their own credentials — JBJ never sees your password.
+            </p>
 
-        <div className="mt-4 rounded-lg bg-white border border-[#B89555]/25 p-4">
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">
-            <Shield className="h-3.5 w-3.5" /> Redirect URI (paste this into Google / Microsoft)
-          </div>
-          <div className="mt-2 flex items-center gap-2">
-            <code className="flex-1 text-xs md:text-sm bg-[#FDFBF7] border border-[#B89555]/25 rounded px-3 py-2 break-all text-[#1A1A1A]">{redirect}</code>
-            <Button size="sm" variant="outline" onClick={copyRedirect} className="border-[#B89555]/40">
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            </Button>
+            <div className="mt-4 rounded-lg bg-white/10 border border-white/15 p-4 backdrop-blur-sm">
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/80">
+                <Shield className="h-3.5 w-3.5 text-white" /> Redirect URI (paste this into Google / Microsoft)
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <code className="flex-1 text-xs md:text-sm bg-white/95 border border-white/20 rounded px-3 py-2 break-all text-[#1A1A1A]">{redirect}</code>
+                <Button
+                  size="sm"
+                  onClick={copyRedirect}
+                  className="jj-surface-emerald allow-white text-white border border-white/30 hover:brightness-110 shrink-0"
+                  data-allow-dark-cta
+                >
+                  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
+
+        <Tabs defaultValue="gmail" className="space-y-4">
+          <TabsList className="bg-[#F7F2EA] border border-[#B89555]/25 p-1 rounded-xl gap-1">
+            <TabsTrigger
+              value="gmail"
+              className="rounded-lg px-4 py-1.5 text-sm font-semibold text-[#1A1A1A]/70 data-[state=active]:bg-[image:var(--jj-emerald-ombre)] data-[state=active]:text-white data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] data-[state=active]:border data-[state=active]:border-white/20"
+            >
+              Gmail
+            </TabsTrigger>
+            <TabsTrigger
+              value="outlook"
+              className="rounded-lg px-4 py-1.5 text-sm font-semibold text-[#1A1A1A]/70 data-[state=active]:bg-[image:var(--jj-emerald-ombre)] data-[state=active]:text-white data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] data-[state=active]:border data-[state=active]:border-white/20"
+            >
+              Outlook
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="gmail">
+            <ProviderPanel
+              provider="gmail"
+              title="Connect Gmail (Google Workspace or personal Gmail)"
+              existing={gmailApp}
+              onSave={(v) => save.mutate(v)}
+              onDelete={(id) => del.mutate(id)}
+              steps={[
+                <>Open the <a className="underline text-[#B89555]" href="https://console.cloud.google.com/" target="_blank" rel="noreferrer">Google Cloud Console <ExternalLink className="inline h-3 w-3" /></a> and create a new project (or use an existing one).</>,
+                <>Go to <strong>APIs &amp; Services → Library</strong>, search for <em>Gmail API</em>, and click <strong>Enable</strong>.</>,
+                <>Go to <strong>APIs &amp; Services → OAuth consent screen</strong>. Choose <em>External</em>, fill in app name/email, and add yourself as a Test User.</>,
+                <>Go to <strong>APIs &amp; Services → Credentials → Create Credentials → OAuth client ID</strong>. Application type: <em>Web application</em>.</>,
+                <>Under <strong>Authorized redirect URIs</strong>, paste the redirect URI shown above and save.</>,
+                <>Copy the generated <strong>Client ID</strong> and <strong>Client Secret</strong> and paste them below.</>,
+              ]}
+              saving={save.isPending}
+            />
+          </TabsContent>
+
+          <TabsContent value="outlook">
+            <ProviderPanel
+              provider="outlook"
+              title="Connect Outlook (Microsoft 365 or personal Outlook.com)"
+              existing={outlookApp}
+              onSave={(v) => save.mutate(v)}
+              onDelete={(id) => del.mutate(id)}
+              steps={[
+                <>Open <a className="underline text-[#B89555]" href="https://entra.microsoft.com/" target="_blank" rel="noreferrer">Microsoft Entra admin center <ExternalLink className="inline h-3 w-3" /></a> → <strong>App registrations → New registration</strong>.</>,
+                <>Name it (e.g. "JBJ Email"), choose <em>Accounts in any organizational directory and personal Microsoft accounts</em>, and set the Redirect URI to <em>Web</em> + paste the URI above.</>,
+                <>Open the new app → <strong>Certificates &amp; secrets → New client secret</strong>. Copy the <strong>Value</strong> immediately (you can't see it again).</>,
+                <>Go to <strong>API permissions → Add a permission → Microsoft Graph → Delegated</strong>. Add: <code>Mail.ReadWrite</code>, <code>Mail.Send</code>, <code>User.Read</code>, <code>offline_access</code>.</>,
+                <>Copy the <strong>Application (client) ID</strong> from the app overview and paste both below.</>,
+              ]}
+              saving={save.isPending}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
-
-      <Tabs defaultValue="gmail" className="space-y-4">
-        <TabsList className="bg-[#F7F2EA] border border-[#B89555]/25 p-1 rounded-xl">
-          <TabsTrigger value="gmail">Gmail</TabsTrigger>
-          <TabsTrigger value="outlook">Outlook</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="gmail">
-          <ProviderPanel
-            provider="gmail"
-            title="Connect Gmail (Google Workspace or personal Gmail)"
-            existing={gmailApp}
-            onSave={(v) => save.mutate(v)}
-            onDelete={(id) => del.mutate(id)}
-            steps={[
-              <>Open the <a className="underline text-[#B89555]" href="https://console.cloud.google.com/" target="_blank" rel="noreferrer">Google Cloud Console <ExternalLink className="inline h-3 w-3" /></a> and create a new project (or use an existing one).</>,
-              <>Go to <strong>APIs &amp; Services → Library</strong>, search for <em>Gmail API</em>, and click <strong>Enable</strong>.</>,
-              <>Go to <strong>APIs &amp; Services → OAuth consent screen</strong>. Choose <em>External</em>, fill in app name/email, and add yourself as a Test User.</>,
-              <>Go to <strong>APIs &amp; Services → Credentials → Create Credentials → OAuth client ID</strong>. Application type: <em>Web application</em>.</>,
-              <>Under <strong>Authorized redirect URIs</strong>, paste the redirect URI shown above and save.</>,
-              <>Copy the generated <strong>Client ID</strong> and <strong>Client Secret</strong> and paste them below.</>,
-            ]}
-            saving={save.isPending}
-          />
-        </TabsContent>
-
-        <TabsContent value="outlook">
-          <ProviderPanel
-            provider="outlook"
-            title="Connect Outlook (Microsoft 365 or personal Outlook.com)"
-            existing={outlookApp}
-            onSave={(v) => save.mutate(v)}
-            onDelete={(id) => del.mutate(id)}
-            steps={[
-              <>Open <a className="underline text-[#B89555]" href="https://entra.microsoft.com/" target="_blank" rel="noreferrer">Microsoft Entra admin center <ExternalLink className="inline h-3 w-3" /></a> → <strong>App registrations → New registration</strong>.</>,
-              <>Name it (e.g. "JBJ Email"), choose <em>Accounts in any organizational directory and personal Microsoft accounts</em>, and set the Redirect URI to <em>Web</em> + paste the URI above.</>,
-              <>Open the new app → <strong>Certificates &amp; secrets → New client secret</strong>. Copy the <strong>Value</strong> immediately (you can't see it again).</>,
-              <>Go to <strong>API permissions → Add a permission → Microsoft Graph → Delegated</strong>. Add: <code>Mail.ReadWrite</code>, <code>Mail.Send</code>, <code>User.Read</code>, <code>offline_access</code>.</>,
-              <>Copy the <strong>Application (client) ID</strong> from the app overview and paste both below.</>,
-            ]}
-            saving={save.isPending}
-          />
-        </TabsContent>
-      </Tabs>
     </div>
   );
 }
