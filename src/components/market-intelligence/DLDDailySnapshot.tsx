@@ -57,6 +57,7 @@ const fadeIn = {
 
 const GOLD = "#B89555";
 const INK = "#0A0A0A";
+const EMERALD_BAR = "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)";
 
 // Reusable champagne card with gold hairline.
 const BlackCard: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className = "" }) => (
@@ -146,16 +147,17 @@ export const DLDDailySnapshot = () => {
           ].map(({ label, value, Icon }) => (
             <BlackCard key={label} className="p-4 md:p-5">
               <div className="flex items-start justify-between gap-2">
-                <div data-no-contrast-guard className="mi-icon-tile mi-no-flip">
-                  <Icon className="h-4 w-4" />
+                <div data-no-contrast-guard data-dld-emerald-tile className="mi-icon-tile mi-no-flip">
+                  <Icon data-dld-white-icon className="h-4 w-4" />
                 </div>
                 <span
                   data-no-contrast-guard
                   data-allow-dark-cta
-                  className="inline-flex h-6 w-6 items-center justify-center rounded-md"
-                  style={{ background: "var(--jj-emerald-ombre)", border: "1px solid rgba(184,149,85,0.5)" }}
+                  data-dld-emerald-tile
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-md"
+                  style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)" }}
                 >
-                  <TrendingUp className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} />
+                  <TrendingUp data-dld-white-icon className="h-4 w-4" />
                 </span>
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
@@ -189,14 +191,11 @@ export const DLDDailySnapshot = () => {
                   className="dld-bar-track"
                   style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
-                  <motion.div
+                  <div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)" }}
-                    initial={{ transform: "scaleX(0)" }}
-                    whileInView={{ transform: `scaleX(${cashShare / 100})` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.9, ease: "easeOut" }}
+                    className="dld-emerald-fill"
+                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${cashShare}%`, borderRadius: 9999, background: EMERALD_BAR }}
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
@@ -217,14 +216,11 @@ export const DLDDailySnapshot = () => {
                   className="dld-bar-track"
                   style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
-                  <motion.div
+                  <div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)" }}
-                    initial={{ transform: "scaleX(0)" }}
-                    whileInView={{ transform: `scaleX(${mortgageShare / 100})` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}
+                    className="dld-emerald-fill"
+                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${mortgageShare}%`, borderRadius: 9999, background: EMERALD_BAR }}
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
@@ -255,45 +251,40 @@ export const DLDDailySnapshot = () => {
                 return (
                   <div
                     key={`${row.area}-${i}`}
-                    className="grid grid-cols-[minmax(170px,1.2fr)_1fr_auto] items-center gap-3 rounded-lg px-2 py-1.5"
-                    style={isLeader ? { backgroundColor: "rgba(6,78,59,0.06)", boxShadow: "inset 0 0 0 1px rgba(6,78,59,0.20)" } : undefined}
+                    className="grid grid-cols-[minmax(190px,1.2fr)_1fr_3.5rem] items-center gap-3 rounded-lg px-2 py-1.5"
                   >
                     <span className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] min-w-0">
                       <span
                         data-no-contrast-guard
                         data-allow-dark-cta
+                        data-dld-rank-badge
                         className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums shrink-0"
-                        style={{ background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)", border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF" }}
+                        style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF" }}
                       >
                         {String(rank).padStart(2, "0")}
                       </span>
-                      <span className="whitespace-normal break-words leading-tight">{row.area}</span>
+                      <span className="whitespace-normal break-words leading-tight text-left">{row.area}</span>
                     </span>
                     <div
                       data-no-contrast-guard
                       className="relative h-2.5 overflow-hidden rounded-full"
                       style={{ backgroundColor: "#EFE6D6", border: `1px solid rgba(184,149,85,0.35)` }}
                     >
-                      <motion.div
+                      <div
                         data-no-contrast-guard
                         data-allow-dark-cta
                         className="absolute inset-y-0 left-0 h-full rounded-full"
                         style={{
-                          transformOrigin: "left center",
-                          width: "100%",
+                          width: `${pct * 100}%`,
                           background: isLeader
-                            ? "var(--jj-emerald-ombre)"
+                            ? EMERALD_BAR
                             : isPodium
-                              ? "var(--jj-emerald-ombre)"
-                              : "linear-gradient(90deg, rgba(11,107,79,0.55), rgba(6,78,59,0.55))",
+                              ? EMERALD_BAR
+                              : "linear-gradient(90deg, rgba(11,107,79,0.82), rgba(6,78,59,0.82))",
                         }}
-                        initial={{ transform: "scaleX(0)" }}
-                        whileInView={{ transform: `scaleX(${pct})` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.7, ease: "easeOut", delay: i * 0.03 }}
                       />
                     </div>
-                    <span className={`text-xs tabular-nums ${isLeader ? "font-bold text-[#064E3B]" : "text-[#1A1A1A]"}`}>{row.count}</span>
+                    <span className="text-right text-xs font-bold tabular-nums text-[#1A1A1A]">{row.count}</span>
                   </div>
                 );
               })}
