@@ -113,7 +113,6 @@ export default function BrokerLeadsPage() {
 
       {user?.id && (
         <CRMLeadModal
-          key={addOpen ? "lead-open" : "lead-closed"}
           open={addOpen}
           onClose={closeAdd}
           onSuccess={() => { leads.refetch(); }}
