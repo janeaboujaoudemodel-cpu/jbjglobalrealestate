@@ -197,7 +197,7 @@ export const AIMarketInsights = () => {
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="mb-6 mx-auto flex h-auto w-full max-w-3xl justify-center rounded-2xl bg-[#EFE6D6] border border-[#B89555]/35 p-1.5 gap-2">
+                  <TabsList className="mb-6 mx-auto flex h-auto w-full justify-center rounded-2xl bg-[#EFE6D6] border border-[#B89555]/35 p-1.5 gap-2">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
