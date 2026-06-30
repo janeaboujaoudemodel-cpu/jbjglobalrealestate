@@ -58,29 +58,9 @@ const AreasWeCover = () => {
           <span aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-12 w-12 border-b border-r border-[#B89555]/70 rounded-br-[28px]" />
 
           <div className="relative text-center mb-8 md:mb-10">
-            <span
-              data-no-contrast-guard
-              className="jj-emerald-chip mb-4"
-            >
-              <MapPin className="w-3 h-3" />
-              <span>{t("areas.topLabel", "Top Areas")}</span>
-            </span>
-
-
-            <h2 data-no-contrast-guard className="text-[#1A1A1A] text-2xl md:text-4xl font-bold tracking-tight uppercase tracking-[0.08em]">
+            <h2 data-no-contrast-guard className="text-[#1A1A1A] text-2xl md:text-4xl font-bold tracking-tight">
               {t("areas.topTitle", "Top Areas in Dubai")}
             </h2>
-            <div className="mx-auto mt-3 mb-3 flex items-center justify-center gap-3">
-              <span className="h-px w-12 bg-[#B89555]/70" />
-              <span className="text-[#B89555] text-xs tracking-[0.4em]">✦</span>
-              <span className="h-px w-12 bg-[#B89555]/70" />
-            </div>
-            <p className="mt-2 text-sm md:text-base text-[#1A1A1A]/75 max-w-xl mx-auto">
-              {t(
-                "areas.topSubtitle",
-                "The most trending and high-demand neighbourhoods our investors are watching right now."
-              )}
-            </p>
           </div>
 
 

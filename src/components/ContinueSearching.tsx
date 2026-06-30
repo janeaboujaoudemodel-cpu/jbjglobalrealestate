@@ -162,29 +162,9 @@ const ContinueSearching = ({
 
         {/* Header */}
         <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            <div
-              className="jj-surface-emerald jj-emerald-action jj-history-emerald-icon w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
-              data-surface="emerald"
-              data-emerald="true"
-              data-emerald-action="true"
-              data-emerald-ok="icon"
-            >
-              <History
-                className="allow-white w-5 h-5"
-                stroke="var(--ink-emerald-accent)"
-                style={{ color: "var(--ink-emerald-accent)", stroke: "var(--ink-emerald-accent)" }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
-                {eyebrow}
-              </span>
-              <h2 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] leading-tight">
-                {sectionTitle}
-              </h2>
-            </div>
-          </div>
+          <h2 data-no-contrast-guard className="text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-tight">
+            {sectionTitle}
+          </h2>
           {hasUserHistory && (
             <div className="flex items-center gap-2">
               <button

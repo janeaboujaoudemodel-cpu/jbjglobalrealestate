@@ -14,29 +14,21 @@ export default function HomepageBookMarquee() {
       {/* Header — padded */}
       <div className="jj-bleed-allow"><ContentTrack>
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#E8F2EC] border border-[#064E3B]/30 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 jj-icon-emerald" />
-            </div>
-            <div>
-              <h2
-                data-no-contrast-guard
-                className="text-lg md:text-xl font-bold"
-                style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' } as React.CSSProperties}
-              >
-                Explore Our Guides & Reports
-              </h2>
-              <p className="text-[#1A1A1A]/70 text-xs">Free educational resources for investors</p>
-            </div>
-          </div>
+          <h2
+            data-no-contrast-guard
+            className="text-2xl md:text-3xl font-bold"
+            style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' } as React.CSSProperties}
+          >
+            Explore Our Guides & Reports
+          </h2>
           <Link
             to="/guides"
             data-no-contrast-guard
             className="hidden sm:flex items-center gap-1.5 text-sm font-semibold transition-colors"
-            style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' } as React.CSSProperties}
+            style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' } as React.CSSProperties}
           >
-            <span style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>View Library</span>
-            <ArrowRight className="w-4 h-4" style={{ color: '#064E3B', stroke: '#064E3B' }} />
+            <span style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>View Library</span>
+            <ArrowRight className="w-4 h-4" style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
           </Link>
         </div>
       </ContentTrack></div>

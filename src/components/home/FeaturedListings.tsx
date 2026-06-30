@@ -27,18 +27,6 @@ const FeaturedListings = () => {
       <ContentTrack>
         {/* Section Header */}
         <div className="text-center mb-8 md:mb-10">
-          <span
-            data-surface="dark"
-            data-on-dark
-            data-no-contrast-guard
-            data-allow-dark-cta
-            data-cta="dark"
-            className="allow-white inline-flex items-center gap-2 px-4 py-2 border rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4 transition-colors"
-            style={{ backgroundColor: "#0A0A0A", borderColor: "rgba(184,149,85,0.5)", color: "#FFFFFF" }}
-          >
-            <Home className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-            <span className="allow-white" style={{ color: "#FFFFFF" }}>{t("featured.title", "Featured Properties")}</span>
-          </span>
           <h2 data-no-contrast-guard className="text-[#1A1A1A] text-2xl md:text-3xl font-bold">
             {t("featured.heading", "Handpicked For You")}
           </h2>
