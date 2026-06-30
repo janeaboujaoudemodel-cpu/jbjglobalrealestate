@@ -91,7 +91,8 @@ export function BrokerToolkitCRM() {
             type="button"
             onClick={handleCRMAccess}
             data-cta="crm-open"
-            className="jj-cta-dark inline-flex items-center gap-2 h-11 px-5 rounded-full text-sm font-medium"
+            data-surface="emerald"
+            className="jj-pill-emerald-metallic inline-flex items-center gap-2 h-11 px-5 rounded-full text-sm font-medium"
           >
             Open CRM Dashboard
             <ArrowUpRight className="w-4 h-4" />
