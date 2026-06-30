@@ -936,9 +936,9 @@ export default function JoinApplication() {
           <Card className="bg-[#FDFBF7] border-2 careers-blue-border shadow-[0_22px_60px_-40px_rgba(10,10,10,0.45)] overflow-hidden">
             <div className="h-px w-full bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
             <CardHeader className="text-center pt-10 pb-6">
-              <span className="inline-flex items-center justify-center gap-1.5 mx-auto rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#0A0A0A] mb-3 w-fit">
-                <Sparkles className="w-3 h-3" /> Five quick steps · ~3 min
-              </span>
+              <SectionEyebrow icon={Sparkles} className="mx-auto mb-3">
+                Five quick steps · ~3 min
+              </SectionEyebrow>
               <CardTitle className="text-4xl md:text-5xl font-semibold careers-navy tracking-tight">Application Form</CardTitle>
               <CardDescription className="careers-gold font-semibold text-base md:text-lg mt-1.5">
                 All fields are required · Your progress saves automatically.
