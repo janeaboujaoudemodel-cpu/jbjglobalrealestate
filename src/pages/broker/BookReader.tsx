@@ -502,7 +502,6 @@ function CoverFace({
     <div className="absolute inset-0">
       <PremiumBookCover
         title={book.title}
-        subtitle={book.learning_path}
         tone="black"
         className="absolute inset-0"
       />
