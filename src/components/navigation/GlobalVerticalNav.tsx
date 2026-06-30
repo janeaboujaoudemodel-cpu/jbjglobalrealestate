@@ -1043,13 +1043,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
-        <div className="px-3 pt-2 pb-3 flex flex-col flex-1">
+        <div className="px-3 pt-2 pb-3 flex flex-col">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
-          {/* All categories (highlights + sections) share one flex-column.
-              Use justify-start with consistent gap so content fills naturally
-              from the top — no large empty gap below Company/Legal. */}
-          <div className={`flex flex-col gap-2 ${openSection ? 'justify-start' : 'justify-evenly flex-1'}`}>
+          {/* Items stack from the top with a consistent compact gap so the
+              sidebar never shows a big empty area below Company/Legal. */}
+          <div className="flex flex-col gap-1 justify-start">
 
           {/* Highlight hubs (gold labels) */}
 
