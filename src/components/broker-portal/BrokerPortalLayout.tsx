@@ -3,6 +3,7 @@ import { Suspense, useEffect, useState } from "react";
 import { Crown, ArrowLeft, Menu, X, Shield, Home, User, Briefcase, Building2 } from "lucide-react";
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
 import PageLoader from "@/components/PageLoader";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -21,12 +22,13 @@ import { useUserMode } from "@/hooks/useUserMode";
 export default function BrokerPortalLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isOwner } = useUserRole();
-  const { user } = useAuth();
+  const { isOwner, isLoading: roleLoading } = useUserRole();
+  const { user, loading: authLoading } = useAuth();
   const isMobile = useIsMobile();
-  const { mode } = useUserMode();
+  const { mode, isLoading: modeLoading } = useUserMode();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isResolving = authLoading || roleLoading || modeLoading;
 
   const ModeIcon = mode === "developer" ? Building2 : mode === "investor" ? User : Briefcase;
   const modeLabel = isOwner
@@ -58,14 +60,34 @@ export default function BrokerPortalLayout() {
   // route them straight to /owner. They can return by flipping the mode
   // picker back to "broker" in the header.
   useEffect(() => {
+    if (isResolving) return;
     if (mode === "owner" && !isExplicitOwnerPreview) {
       try { sessionStorage.removeItem("jbj_broker_portal_preview"); } catch {}
       navigate("/owner", { replace: true });
     }
-  }, [mode, isExplicitOwnerPreview, navigate]);
+  }, [isResolving, mode, isExplicitOwnerPreview, navigate]);
 
   const sidebarWidth = collapsed ? "w-[72px]" : "w-[260px]";
   const contentOffset = isMobile ? "ml-0" : (collapsed ? "ml-[72px]" : "ml-[260px]");
+
+  // Loading fallback — prevents transient blank/flash while auth, role, and
+  // mode resolve, and while the owner→/owner redirect above is in flight.
+  if (isResolving || (mode === "owner" && !isExplicitOwnerPreview)) {
+    return (
+      <div
+        data-surface="champagne"
+        data-broker-shell
+        data-broker-loading
+        className="min-h-screen w-full bg-[#FDFBF7] relative"
+        role="status"
+        aria-live="polite"
+        aria-busy="true"
+      >
+        <BrandedLoader text="Loading Broker Workspace…" />
+        <span className="sr-only">Loading Broker Workspace…</span>
+      </div>
+    );
+  }
 
   return (
     <div
