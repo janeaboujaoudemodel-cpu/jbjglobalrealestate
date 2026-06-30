@@ -145,6 +145,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
         )}
         {!collapsed && (
           <span
+            data-jbj-allow-shrink=""
             {...labelData}
             className={cn(labelClassName ?? "flex-1 min-w-0 whitespace-normal break-words [overflow-wrap:anywhere]")}
             style={labelStyle ?? (active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined)}
