@@ -460,8 +460,8 @@ export default function BookReader() {
                       }}
                       className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-[#F7F2EA] text-[#1A1A1A]/85 flex items-start gap-3"
                     >
-                      <span className="text-[10px] text-[#1A1A1A]/50 mt-1 w-6">
-                        {String(m.module_number).padStart(2, "0")}
+                      <span className="text-[10px] text-[#1A1A1A]/50 mt-1 w-6 inline-flex justify-center">
+                        <Lock className="w-3 h-3" />
                       </span>
                       <span className="flex-1">{m.title}</span>
                     </button>
