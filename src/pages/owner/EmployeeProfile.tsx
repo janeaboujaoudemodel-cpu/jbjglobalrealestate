@@ -229,7 +229,7 @@ export default function EmployeeProfile() {
                           <td className="py-2 pr-4 max-w-xs truncate">{l.notes ?? "—"}</td>
                           <td className="py-2 pr-4">
                             <Button variant="ghost" size="sm" asChild>
-                              <Link to={`/owner/crm?section=leads&lead=${l.id}`}>Open</Link>
+                              <Link to={`/owner/crm?entity=leads&view=all&lead=${l.id}`}>Open</Link>
                             </Button>
                           </td>
                         </tr>
