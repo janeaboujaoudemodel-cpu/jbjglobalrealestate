@@ -285,53 +285,62 @@ export default function BrokerTraining({ embedded = true }: Props) {
       </section>
 
       {/* Compliance Quick Reference */}
-      <section className="py-10 border-t border-[#B89555]/20" data-gold-hairline>
+      <section className="py-10" data-gold-hairline>
         <div className="container mx-auto px-4 max-w-6xl">
           <h2 className="text-[#1A1A1A] text-2xl font-bold mb-8 text-center">
             Compliance Quick Reference
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <Card className="bg-[#F7F2EA] border border-[#B89555]/30" data-gold-hairline>
-              <CardHeader>
-                <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
+            <div className="jj-corner-card relative">
+              <span className="jj-corner-card__c jj-corner-card__c--tl" />
+              <span className="jj-corner-card__c jj-corner-card__c--tr" />
+              <span className="jj-corner-card__c jj-corner-card__c--bl" />
+              <span className="jj-corner-card__c jj-corner-card__c--br" />
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-[#1A1A1A] font-semibold mb-4">
                   <Shield className="w-5 h-5" />
-                  NEVER Say
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
+                  <span>NEVER Say</span>
+                </div>
+                <ul className="space-y-2.5">
                   {forbiddenPhrases.map((phrase, i) => (
-                    <li key={i} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm">
-                      <span className="text-red-600 font-bold">✕</span>
-                      "{phrase}"
+                    <li key={i} className="flex items-center gap-2.5 text-[#1A1A1A]/85 text-sm">
+                      <span className="inline-flex w-5 h-5 rounded-full bg-[#7A1F1F] items-center justify-center shrink-0" data-no-contrast-guard>
+                        <X data-no-contrast-guard className="allow-white w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                      </span>
+                      <span>"{phrase}"</span>
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="bg-[#F7F2EA] border border-[#B89555]/30" data-gold-hairline>
-              <CardHeader>
-                <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
+            <div className="jj-corner-card relative">
+              <span className="jj-corner-card__c jj-corner-card__c--tl" />
+              <span className="jj-corner-card__c jj-corner-card__c--tr" />
+              <span className="jj-corner-card__c jj-corner-card__c--bl" />
+              <span className="jj-corner-card__c jj-corner-card__c--br" />
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-[#1A1A1A] font-semibold mb-4">
                   <CheckCircle className="w-5 h-5" />
-                  ALWAYS Use
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
+                  <span>ALWAYS Use</span>
+                </div>
+                <ul className="space-y-2.5">
                   {approvedPhrases.map((phrase, i) => (
-                    <li key={i} className="flex items-center gap-2 text-[#1A1A1A]/80 text-sm">
-                      <span className="text-[color:var(--emerald-1)] font-bold">✓</span>
-                      "{phrase}"
+                    <li key={i} className="flex items-center gap-2.5 text-[#1A1A1A]/85 text-sm">
+                      <span className="inline-flex w-5 h-5 rounded-full bg-[color:var(--emerald-1,#064E3B)] items-center justify-center shrink-0" data-no-contrast-guard>
+                        <Check data-no-contrast-guard className="allow-white w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                      </span>
+                      <span>"{phrase}"</span>
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
 
       {/* Golden Rules */}
       <section className="py-10 border-t border-[#B89555]/20" data-gold-hairline>
