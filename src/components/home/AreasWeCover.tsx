@@ -67,7 +67,7 @@ const AreasWeCover = () => {
             </span>
 
 
-            <h2 data-no-contrast-guard className="jj-title-emerald text-2xl md:text-4xl font-bold tracking-tight uppercase tracking-[0.08em]">
+            <h2 data-no-contrast-guard className="text-[#1A1A1A] text-2xl md:text-4xl font-bold tracking-tight uppercase tracking-[0.08em]">
               {t("areas.topTitle", "Top Areas in Dubai")}
             </h2>
             <div className="mx-auto mt-3 mb-3 flex items-center justify-center gap-3">
@@ -135,7 +135,7 @@ const AreasWeCover = () => {
               <div className="absolute bottom-0 left-0 right-0 bg-[#FDFBF7]/95 backdrop-blur-md border-t border-[#B89555]/40 px-4 py-3">
                 <div className="flex items-end justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 data-no-contrast-guard className="jj-title-emerald font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
+                    <h3 data-no-contrast-guard className="text-[#1A1A1A] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
                       {area.name}
                     </h3>
                     <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1A1A1A]/70">
