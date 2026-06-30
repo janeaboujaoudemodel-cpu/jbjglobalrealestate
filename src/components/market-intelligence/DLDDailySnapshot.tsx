@@ -204,7 +204,7 @@ export const DLDDailySnapshot = () => {
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#064E3B]" /> Cash · {cashShare}% of all transactions
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#042C1C]" /> Cash · {cashShare}% of all transactions
                 </p>
               </div>
 
@@ -230,7 +230,7 @@ export const DLDDailySnapshot = () => {
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#064E3B]" /> Mortgage · {mortgageShare}% of all transactions
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#042C1C]" /> Mortgage · {mortgageShare}% of all transactions
                 </p>
               </div>
             </div>
@@ -284,7 +284,7 @@ export const DLDDailySnapshot = () => {
                             ? EMERALD_BAR
                             : isPodium
                               ? EMERALD_BAR
-                              : "linear-gradient(90deg, rgba(11,107,79,0.82), rgba(6,78,59,0.82))",
+                              : "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                         }}
                       />
                     </div>
