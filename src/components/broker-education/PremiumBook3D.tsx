@@ -172,7 +172,9 @@ export function PremiumBook3D({
             )}
           >
             <div
-              className="allow-white text-center leading-[1.12]"
+              data-no-contrast-guard
+              data-jbj-white-glyph
+              className="jj-book-title allow-white text-center leading-[1.12]"
               style={{
                 color: '#FFFFFF',
                 WebkitTextFillColor: '#FFFFFF',
@@ -185,7 +187,7 @@ export function PremiumBook3D({
               }}
             >
               {titleLines.map((line) => (
-                <span key={line} className="block">{line}</span>
+                <span key={line} className="block" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{line}</span>
               ))}
             </div>
           </div>
