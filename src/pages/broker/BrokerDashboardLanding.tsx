@@ -249,20 +249,20 @@ export default function BrokerDashboardLanding() {
           <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.12),transparent_60%)]" />
 
-          <div className="relative flex flex-col md:flex-row md:items-center gap-6 md:gap-8 justify-between">
+          <div className="relative flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-8 justify-between">
             {/* Identity block — wrapped in account dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
                   aria-label="Open account menu"
-                  className="group flex items-center gap-3 md:gap-5 min-w-0 w-full text-left rounded-2xl -m-1 p-1 transition-colors hover:bg-[#FDFBF7]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/60"
+                  className="group flex items-start gap-4 md:gap-5 min-w-0 w-full text-left rounded-2xl -m-1 p-1 transition-colors hover:bg-[#FDFBF7]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/60"
                 >
-                  <div className="relative h-14 w-14 md:h-20 md:w-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 grid place-items-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_22px_-12px_rgba(184,149,85,0.5)] shrink-0">
+                  <div className="relative h-14 w-14 md:h-16 md:w-16 lg:h-[72px] lg:w-[72px] rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 grid place-items-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_22px_-12px_rgba(184,149,85,0.5)] shrink-0 mt-0.5">
                     {profile?.photo_url ? (
                       <img src={profile.photo_url} alt="" className="h-full w-full object-cover" />
                     ) : (
-                      <span className="font-display text-lg md:text-2xl font-semibold tracking-[0.04em] text-[#1A1A1A] tabular-nums">
+                      <span className="font-display text-lg md:text-xl lg:text-2xl font-semibold tracking-[0.04em] text-[#1A1A1A] tabular-nums">
                         {initials}
                       </span>
                     )}
@@ -282,9 +282,9 @@ export default function BrokerDashboardLanding() {
                       </span>
                     </div>
 
-                    <h1 className="font-display text-[22px] md:text-[40px] lg:text-[44px] font-semibold text-[#1A1A1A] leading-[1.08] tracking-[-0.02em] mt-2.5 flex items-center gap-2 min-w-0">
+                    <h1 className="font-display text-[22px] md:text-[30px] lg:text-[40px] font-semibold text-[#1A1A1A] leading-[1.1] tracking-[-0.02em] mt-2 flex items-center gap-2 min-w-0">
                       <span className="truncate min-w-0">Welcome, {profileLoading ? "…" : firstName}</span>
-                      <ChevronDown className="h-4 w-4 md:h-6 md:w-6 text-[#1A1A1A]/45 group-hover:text-[#1A1A1A] transition-transform group-data-[state=open]:rotate-180 shrink-0" strokeWidth={2.2} />
+                      <ChevronDown className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6 text-[#1A1A1A]/45 group-hover:text-[#1A1A1A] transition-transform group-data-[state=open]:rotate-180 shrink-0" strokeWidth={2.2} />
                     </h1>
 
                     <div className="mt-2 flex items-center gap-3" aria-hidden="true">
