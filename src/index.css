@@ -21420,3 +21420,114 @@ html body .jj-text-emerald * {
 
 
 
+
+/* =====================================================================
+ * PASS 138 — MARKET INTELLIGENCE PREMIUM POLISH
+ * Reusable utilities for emerald icon tiles, hover→emerald cards,
+ * emerald pill badges, emerald CTA buttons, gold-bordered surfaces.
+ * Scroll perf: containment + GPU promotion on area cards.
+ * ===================================================================== */
+
+/* Emerald icon tile (white glyph) used across MI sections */
+.mi-icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 55%, #033026 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  box-shadow: 0 6px 16px rgba(3, 48, 38, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+}
+.mi-icon-tile.mi-icon-tile-lg { width: 3rem; height: 3rem; border-radius: 0.9rem; }
+.mi-icon-tile.mi-icon-tile-xl { width: 3.5rem; height: 3.5rem; border-radius: 1rem; }
+.mi-icon-tile > svg,
+.mi-icon-tile [data-lucide],
+.mi-icon-tile svg * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Emerald pill chip — white text + icon */
+.mi-chip-emerald {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(184, 149, 85, 0.5) !important;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.mi-chip-emerald > svg { color: #ffffff !important; stroke: #ffffff !important; }
+
+/* Emerald CTA button — white text, gold ring */
+.mi-cta-emerald {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.1rem;
+  border-radius: 0.625rem;
+  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 55%, #033026 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(184, 149, 85, 0.6) !important;
+  box-shadow: 0 8px 22px rgba(3, 48, 38, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  cursor: pointer;
+}
+.mi-cta-emerald:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.mi-cta-emerald > *, .mi-cta-emerald svg { color: #ffffff !important; stroke: #ffffff !important; }
+
+/* Card hover → emerald fill; all children white on hover */
+.mi-card-hover-emerald {
+  transition: background-color .28s ease, color .28s ease, box-shadow .28s ease, border-color .28s ease;
+  contain: layout paint;
+  will-change: transform;
+}
+.mi-card-hover-emerald:hover {
+  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 55%, #033026 100%) !important;
+  border-color: rgba(184, 149, 85, 0.7) !important;
+  box-shadow: 0 20px 44px rgba(3, 48, 38, 0.35) !important;
+  color: #ffffff !important;
+}
+.mi-card-hover-emerald:hover *:not(.mi-no-flip) {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+.mi-card-hover-emerald:hover svg:not(.mi-no-flip svg) {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+.mi-card-hover-emerald:hover .mi-icon-tile {
+  background: linear-gradient(135deg, #022C22 0%, #011B15 100%) !important;
+}
+
+/* Premium gold-bordered surface (matches "Compare Your Property" card) */
+.mi-gold-frame {
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(184, 149, 85, 0.15),
+    0 14px 32px rgba(26, 26, 26, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+  background: #FDFBF7 !important;
+  border-radius: 1rem;
+}
+
+/* Scroll perf hardening for the Area Intelligence grid */
+.mi-area-grid {
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
+}
+.mi-area-grid > * {
+  contain: layout paint;
+  will-change: transform;
+}

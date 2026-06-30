@@ -74,12 +74,10 @@ const REPORT_TYPES: MarketReportType[] = [
   },
 ];
 
-/* Icon box - champagne/gold standard */
+/* Icon box - emerald standard */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
-  >
-    <Icon className="w-6 h-6 text-[#1A1A1A]" />
+  <div className={`mi-icon-tile mi-icon-tile-lg mi-no-flip ${className}`}>
+    <Icon className="w-5 h-5" />
   </div>
 );
 
@@ -134,10 +132,10 @@ export const MarketReports = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className={`${MI_EYEBROW} mb-4 block`}>
+            <span className="mi-chip-emerald mb-4 inline-flex">
               Market Reports
             </span>
-            <h2 className={`${MI_H2} mb-4`}>
+            <h2 className={`${MI_H2} mb-4 mt-2 text-[#1A1A1A]`}>
               Downloadable Reports
             </h2>
             <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
@@ -150,17 +148,14 @@ export const MarketReports = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {REPORT_TYPES.map((report) => (
               <motion.div key={report.id} variants={fadeInUp} className="h-full">
-                <Card className="jj-card-inner transition-all h-full flex flex-col rounded-xl hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
+                <Card className="mi-gold-frame transition-all h-full flex flex-col rounded-2xl hover:shadow-[0_18px_40px_rgba(26,26,26,0.1)]">
                   <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <IconBox icon={report.icon} />
-                      <Badge
-                        variant="outline"
-                          className="whitespace-nowrap rounded-lg bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/35"
-                      >
-                        <Clock className="w-3 h-3 mr-1" />
-                        {report.frequency}
-                      </Badge>
+                      <span className="mi-chip-emerald shrink-0">
+                        <Clock className="w-3.5 h-3.5" />
+                        <span className="whitespace-nowrap">{report.frequency}</span>
+                      </span>
                     </div>
                     <CardTitle className={`${MI_CARD_TITLE} mt-4`}>{report.title}</CardTitle>
                   </CardHeader>
@@ -170,40 +165,38 @@ export const MarketReports = () => {
                     </p>
 
                     <div className="space-y-2 mb-6 flex-1">
-                      <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
-                        <CheckCircle className="w-4 h-4 text-[#B89555]" />
-                        Powered by official government sources
-                      </div>
-                      <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
-                        <CheckCircle className="w-4 h-4 text-[#B89555]" />
-                        AI-generated insights included
-                      </div>
-                      <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
-                        <CheckCircle className="w-4 h-4 text-[#B89555]" />
-                        Source attribution & timestamps
-                      </div>
+                      {[
+                        'Powered by official government sources',
+                        'AI-generated insights included',
+                        'Source attribution & timestamps',
+                      ].map((line) => (
+                        <div key={line} className={`${MI_CAPTION} flex items-center gap-2 text-[#1A1A1A]`}>
+                          <CheckCircle className="w-4 h-4 text-[#064E3B]" />
+                          {line}
+                        </div>
+                      ))}
                     </div>
 
-                    <Button
-                      variant="primary"
+                    <button
+                      type="button"
                       onClick={() => generateReport(report)}
                       disabled={generatingId === report.id}
-                      className="w-full mt-auto rounded-lg"
+                      className="mi-cta-emerald w-full mt-auto rounded-lg disabled:opacity-60"
                       data-no-contrast-guard
                     >
                       {generatingId === report.id ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin mr-2" />
+                          <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                           <span>Generating...</span>
                         </>
                       ) : (
                         <>
-                          <Download className="w-4 h-4 mr-2" />
+                          <Download className="w-4 h-4" />
                           <span>Generate Report</span>
-                          <ChevronRight className="w-4 h-4 ml-1" />
+                          <ChevronRight className="w-4 h-4" />
                         </>
                       )}
-                    </Button>
+                    </button>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -212,16 +205,25 @@ export const MarketReports = () => {
 
           {/* Report Disclaimer */}
           <motion.div
-            className="mt-8 p-6 max-w-3xl mx-auto text-center rounded-xl bg-[#FDFBF7] border border-[#B89555]/35"
+            data-no-contrast-guard
+            className="mt-8 p-6 max-w-3xl mx-auto text-center rounded-2xl"
+            style={{
+              background: "linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)",
+              border: "1px solid rgba(184,149,85,0.6)",
+              boxShadow: "0 16px 36px rgba(3,48,38,0.3)",
+              color: "#ffffff",
+            }}
             variants={fadeInUp}
           >
             <div className="flex justify-center mb-4">
-              <IconBox icon={FileText} />
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 border border-white/30">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
             </div>
-            <h4 className={`${MI_H4} mb-2`}>
+            <h4 className="text-base md:text-lg font-bold mb-2 text-white">
               Report Disclaimer
             </h4>
-            <p className={MI_BODY_MUTED}>
+            <p className="text-[13px] leading-relaxed text-white/90">
               All market reports are generated using AI-assisted analysis of official government sources.
               Reports are for informational purposes only and do not constitute investment advice.
               Data sources include Dubai Pulse, Dubai Statistics Center, and Dubai Land Department.

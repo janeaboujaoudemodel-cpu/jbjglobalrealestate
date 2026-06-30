@@ -26,35 +26,24 @@ const fadeInUp = {
 };
 
 const TrendIcon = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
-  if (trend === 'bullish') return <TrendingUp className="w-3.5 h-3.5 text-[#064E3B]" />;
-  if (trend === 'bearish') return <TrendingDown className="w-3.5 h-3.5 text-[#064E3B]" />;
-  return <Minus className="w-3.5 h-3.5 text-[#064E3B]" />;
+  if (trend === 'bullish') return <TrendingUp className="w-3.5 h-3.5" />;
+  if (trend === 'bearish') return <TrendingDown className="w-3.5 h-3.5" />;
+  return <Minus className="w-3.5 h-3.5" />;
 };
 
 const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
-  const colors = {
-    bullish: 'jj-badge-champagne text-[#1A1A1A] border-[#B89555]/35',
-    bearish: 'jj-badge-champagne text-[#1A1A1A] border-[#B89555]/35',
-    neutral: 'jj-badge-champagne text-[#1A1A1A] border-[#B89555]/35',
-  };
-
   return (
-    <Badge
-      className={`${colors[trend]} ${MI_CHIP} border whitespace-nowrap min-w-fit shrink-0 px-2 py-0.5`}
-      style={{ wordBreak: 'keep-all', overflowWrap: 'normal' }}
-    >
+    <span className="mi-chip-emerald whitespace-nowrap shrink-0">
       <TrendIcon trend={trend} />
-      <span className="ml-1 capitalize">{trend}</span>
-    </Badge>
+      <span className="capitalize">{trend}</span>
+    </span>
   );
 };
 
-/* Icon box — champagne/gold standard */
+/* Icon box — emerald standard */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div
-    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
-  >
-    <Icon className="w-5 h-5 text-[#1A1A1A]" />
+  <div className={`mi-icon-tile mi-no-flip ${className}`}>
+    <Icon className="w-5 h-5" />
   </div>
 );
 
@@ -63,14 +52,14 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="jj-card-inner transition-all group h-full rounded-xl hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
+      <Card className="mi-gold-frame group h-full rounded-2xl transition-shadow hover:shadow-[0_16px_38px_rgba(26,26,26,0.10)]">
         <CardContent className="p-6">
           {/* Header */}
-          <div className="flex items-start justify-between mb-4 gap-2">
-            <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-start justify-between mb-4 gap-3">
+            <div className="flex items-center gap-3 min-w-0">
               <IconBox icon={MapPin} />
               <div className="min-w-0">
-                <h3 className={`${MI_CARD_TITLE} truncate transition-colors`}>
+                <h3 className={`${MI_CARD_TITLE} whitespace-normal break-words leading-tight transition-colors`}>
                   {area.area}
                 </h3>
                 <p className="text-xs font-medium leading-relaxed text-[#B89555]">Dubai, UAE</p>
@@ -81,14 +70,14 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="rounded-lg p-3 bg-muted">
+            <div className="rounded-lg p-3 bg-[#F7F2EA] border border-[#B89555]/25">
               <div className={`${MI_CAPTION} flex items-center gap-1 mb-1`}>
                 <Home className="w-3 h-3" />
                 Price Index
               </div>
               <p className={MI_STAT}>{area.priceIndex}</p>
             </div>
-            <div className="rounded-lg p-3 bg-muted">
+            <div className="rounded-lg p-3 bg-[#F7F2EA] border border-[#B89555]/25">
               <div className={`${MI_CAPTION} flex items-center gap-1 mb-1`}>
                 <Building2 className="w-3 h-3" />
                 Rental Index
@@ -97,12 +86,12 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
             </div>
           </div>
 
-          {/* Progress Bars (data-viz: emerald = demand, blue = supply) */}
+          {/* Progress Bars (data-viz: emerald = demand) */}
           <div className="space-y-3 mb-4">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[color:var(--emerald-1)]">Demand Score</span>
-                <span className="font-bold text-[color:var(--emerald-1)]">{area.demandScore}/100</span>
+                <span className="font-semibold text-[#064E3B]">Demand Score</span>
+                <span className="font-bold text-[#064E3B]">{area.demandScore}/100</span>
               </div>
               <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-[#064E3B]/10" data-score-bar>
                 <div
@@ -126,7 +115,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           </div>
 
           {/* YoY Change */}
-          <div className="flex items-center justify-between py-3 border-t border-border/60">
+          <div className="flex items-center justify-between py-3 border-t border-[#B89555]/30">
             <span className={MI_BODY}>Year-over-Year</span>
             <span className="text-sm font-bold leading-none tracking-tight text-[#1A1A1A]">
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
@@ -137,19 +126,19 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <div className="space-y-2 mb-4 mt-3">
             {area.highlights.slice(0, 2).map((highlight, idx) => (
               <p key={idx} className={`${MI_CAPTION} flex items-start gap-2`}>
-                <span className="mt-0.5 font-bold text-foreground">•</span>
+                <span className="mt-0.5 font-bold text-[#064E3B]">•</span>
                 {highlight}
               </p>
             ))}
           </div>
 
           {/* Link */}
-            <Link
+          <Link
             to={`/area/${slugify(area.area)}`}
             data-no-contrast-guard
-            className="jj-cta-champagne flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-lg transition-colors"
+            className="mi-cta-emerald w-full py-2 text-sm rounded-lg"
           >
-            <span className="group-hover:allow-white">View Area Details</span>
+            <span>View Area Details</span>
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </CardContent>
@@ -185,7 +174,7 @@ export const AreaIntelligenceGrid = () => {
           </motion.div>
 
           {/* Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="mi-area-grid grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {DUBAI_AREAS_MARKET_DATA.map((area) => (
               <AreaCard key={area.area} area={area} />
             ))}
@@ -196,11 +185,11 @@ export const AreaIntelligenceGrid = () => {
             <Link
               to="/areas"
               data-no-contrast-guard
-              className="jj-cta-champagne inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg text-base font-semibold transition-colors shadow-lg"
+              className="mi-cta-emerald inline-flex px-8 py-4 rounded-lg text-base"
             >
-              <BarChart2 className="w-5 h-5 allow-white" />
-              <span className="allow-white">Explore All Area Guides</span>
-              <ChevronRight className="w-4 h-4 allow-white" />
+              <BarChart2 className="w-5 h-5" />
+              <span>Explore All Area Guides</span>
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </motion.div>
         </motion.div>
