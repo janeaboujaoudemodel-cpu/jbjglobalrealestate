@@ -96,7 +96,7 @@ export default function OwnerBrokerVisits() {
     <div className="space-y-6 p-4 md:p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <Link to="/owner/crm?section=employees" className="inline-flex items-center gap-1.5 text-xs text-[#1A1A1A]/65 hover:text-[#1A1A1A]">
+          <Link to="/owner/crm?entity=employees&view=roster" className="inline-flex items-center gap-1.5 text-xs text-[#1A1A1A]/65 hover:text-[#1A1A1A]">
             <ArrowLeft className="h-3.5 w-3.5" /> Employees
           </Link>
           <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mt-1">Broker Developer Visits</h1>
