@@ -10,17 +10,17 @@
  * the appropriate semantic color class alongside the token.
  */
 
-// Section eyebrow / kicker (above an H2) — gold accent
+// Section eyebrow / kicker (above an H2) — emerald label with white content
 export const MI_EYEBROW =
-  "text-xs font-semibold uppercase tracking-[0.3em] text-[#B89555]";
+  "mi-kicker-emerald";
 
 // Section H2 — navy blue accent
 export const MI_H2 =
   "text-3xl md:text-4xl font-bold leading-tight tracking-tight text-[#0A0A0A]";
 
-// Section lead paragraph (under H2) — gold
+// Section lead paragraph (under H2) — ink on champagne
 export const MI_LEAD =
-  "text-base md:text-lg font-normal leading-relaxed text-[#B89555]";
+  "text-base md:text-lg font-normal leading-relaxed text-[#1A1A1A]";
 
 // Card title / H3 / shadcn CardTitle — navy blue
 export const MI_CARD_TITLE =

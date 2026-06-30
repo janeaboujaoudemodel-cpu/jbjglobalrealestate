@@ -144,7 +144,7 @@ export const DLDDailySnapshot = () => {
             { label: "Cash Share", value: `${cashShare}%`, Icon: Banknote },
             { label: "Mortgage Share", value: `${mortgageShare}%`, Icon: Landmark },
           ].map(({ label, value, Icon }) => (
-            <BlackCard key={label} className="mi-card-hover-emerald p-4 md:p-5">
+            <BlackCard key={label} className="p-4 md:p-5">
               <div className="flex items-start justify-between gap-2">
                 <div data-no-contrast-guard className="mi-icon-tile mi-no-flip">
                   <Icon className="h-4 w-4" />
@@ -185,7 +185,7 @@ export const DLDDailySnapshot = () => {
                   <motion.div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)" }}
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "var(--jj-emerald-ombre)" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
@@ -200,7 +200,7 @@ export const DLDDailySnapshot = () => {
               {/* MORTGAGE */}
               <div>
                 <div className="mb-2 flex items-center justify-between text-sm">
-                  <span className="font-semibold text-[#B89555]">Mortgage buyers</span>
+                    <span className="font-semibold text-[#1A1A1A]">Mortgage buyers</span>
                   <span className="tabular-nums text-[#1A1A1A]">
                     {data.mortgage_count.toLocaleString("en-AE")} · {aed(data.mortgage_volume_aed)}
                   </span>
@@ -245,7 +245,6 @@ export const DLDDailySnapshot = () => {
                 const rank = i + 1;
                 const isLeader = rank === 1;
                 const isPodium = rank === 2 || rank === 3;
-                const barColor = isLeader ? "#0A0A0A" : isPodium ? GOLD : "rgba(184,149,85,0.55)";
                 return (
                   <div
                     key={`${row.area}-${i}`}
@@ -257,7 +256,7 @@ export const DLDDailySnapshot = () => {
                         data-no-contrast-guard
                         data-allow-dark-cta
                         className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums text-white shrink-0"
-                        style={{ background: "linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)", border: "1px solid rgba(184,149,85,0.5)" }}
+                        style={{ background: "var(--jj-emerald-ombre)", border: "1px solid rgba(184,149,85,0.5)" }}
                       >
                         {String(rank).padStart(2, "0")}
                       </span>
@@ -276,9 +275,9 @@ export const DLDDailySnapshot = () => {
                           transformOrigin: "left center",
                           width: "100%",
                           background: isLeader
-                            ? "linear-gradient(90deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)"
+                            ? "var(--jj-emerald-ombre)"
                             : isPodium
-                              ? "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)"
+                              ? "var(--jj-emerald-ombre)"
                               : "linear-gradient(90deg, rgba(11,107,79,0.55), rgba(6,78,59,0.55))",
                         }}
                         initial={{ transform: "scaleX(0)" }}
@@ -300,7 +299,7 @@ export const DLDDailySnapshot = () => {
 
         {/* Notice + Expert Consultation cards (item #9) */}
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-          <BlackCard className="mi-card-hover-emerald p-6">
+          <BlackCard className="p-6">
             <div className="flex items-start gap-4">
               <div data-no-contrast-guard className="mi-icon-tile mi-icon-tile-lg mi-no-flip">
                 <Flag className="h-5 w-5" />
@@ -323,7 +322,7 @@ export const DLDDailySnapshot = () => {
             </div>
           </BlackCard>
 
-          <BlackCard className="mi-card-hover-emerald p-6">
+          <BlackCard className="p-6">
             <div className="flex items-start gap-4">
               <div data-no-contrast-guard className="mi-icon-tile mi-icon-tile-lg mi-no-flip">
                 <PhoneCall className="h-5 w-5" />

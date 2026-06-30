@@ -52,14 +52,12 @@ const AreaIntelligence = () => {
         description="Deep dive into Dubai's prime neighborhoods with historical price trends, rent analysis, and demand indicators for informed BUY · SELL · RENT decisions."
       />
 
-      {/* Premium Hero with Video */}
+      {/* Premium Hero */}
       <MarketIntelligenceHero
         badge="Market Intelligence"
         badgeIcon={MapPin}
         title="Area Intelligence"
         description="Area Intelligence explains how individual locations in Dubai are evaluated using official, location-specific government data. This page shows how to read areas, not how to speculate on them. All insights are descriptive and based on registered activity."
-        videoSrc="/__l5e/assets-v1/4f157c6f-dc02-4bc4-8cfd-81a3537feb6f/mi-area-intelligence.mp4"
-        videoPoster="https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80"
       />
 
       {/* Main Content - Black background with 3-layer system */}

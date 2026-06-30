@@ -31,37 +31,19 @@ export const MarketIntelligenceHero = ({
   badgeIcon: BadgeIcon, 
   title, 
   description, 
-  videoSrc,
-  videoPoster,
-  backgroundImage,
   actions 
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen relative flex items-center overflow-hidden bg-[#0A0A0A]">
-
-      {/* Video or Image Background */}
-      <div className="absolute inset-0 z-0">
-        {videoSrc ? (
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="w-full h-full object-cover"
-            poster={videoPoster}
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </video>
-        ) : backgroundImage ? (
-          <div 
-            className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-          />
-        ) : null}
+    <section data-mi-hero data-surface="dark" className="mi-hero-scene relative flex min-h-[100svh] w-full items-center overflow-hidden">
+      <div className="mi-hero-grid" aria-hidden="true" />
+      <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
+      <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />
+      <div className="mi-hero-data-stack" aria-hidden="true">
+        <span>OFFICIAL DATA</span>
+        <span>AREA SIGNALS</span>
+        <span>MARKET REPORTS</span>
+        <span>SOURCE REVIEW</span>
       </div>
-
-      {/* Legibility overlay — light touch so the video/image stays visible, never washed out */}
-      <div className="absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.36)_0%,rgba(0,0,0,0.24)_48%,rgba(0,0,0,0.46)_100%)] pointer-events-none" />
 
       <motion.div 
         className="relative z-10 w-full py-20 md:py-24"

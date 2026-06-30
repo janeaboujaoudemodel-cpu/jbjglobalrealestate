@@ -6,8 +6,6 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -170,9 +168,9 @@ export const MarketReports = () => {
                         'AI-generated insights included',
                         'Source attribution & timestamps',
                       ].map((line) => (
-                        <div key={line} className={`${MI_CAPTION} flex items-center gap-2 text-[#1A1A1A]`}>
-                          <CheckCircle className="w-4 h-4 text-[#064E3B]" />
-                          {line}
+                          <div key={line} className={`${MI_CAPTION} flex items-center gap-2 text-[#1A1A1A]`}>
+                          <span className="mi-mini-icon"><CheckCircle className="w-3.5 h-3.5" /></span>
+                          <span>{line}</span>
                         </div>
                       ))}
                     </div>
@@ -206,13 +204,8 @@ export const MarketReports = () => {
           {/* Report Disclaimer */}
           <motion.div
             data-no-contrast-guard
-            className="mt-8 p-6 max-w-3xl mx-auto text-center rounded-2xl"
-            style={{
-              background: "linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)",
-              border: "1px solid rgba(184,149,85,0.6)",
-              boxShadow: "0 16px 36px rgba(3,48,38,0.3)",
-              color: "#ffffff",
-            }}
+            data-surface="emerald"
+            className="mi-emerald-panel mt-8 p-6 max-w-3xl mx-auto text-center rounded-2xl"
             variants={fadeInUp}
           >
             <div className="flex justify-center mb-4">

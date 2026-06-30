@@ -18,11 +18,7 @@ import {
   MI_BODY_MUTED,
 } from "@/components/market-intelligence/MarketIntelligenceTypography";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
-import VideoBackground from "@/components/VideoBackground";
 import { IconTile } from "@/components/ui/icon-tile";
-import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
-import marketIntelligenceVideoAsset from "@/assets/videos/burj-khalifa-day-to-night.mp4.asset.json";
-const marketIntelligenceVideo = marketIntelligenceVideoAsset.url;
 
 
 const fadeInUp = {
@@ -128,22 +124,25 @@ const MarketIntelligence = () => {
         canonicalPath="/market-intelligence"
       />
 
-      {/* Hero — full-screen video, no logo / no badges / no keyword strip / no founder card */}
-      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen relative flex w-full items-end pb-16 md:pb-24 lg:pb-28 overflow-hidden bg-[#0A0A0A]">
-        <VideoBackground
-          src={marketIntelligenceVideo}
-          poster={marketIntelligenceHero}
-          eager
-          opacity={1}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.46)_0%,rgba(0,0,0,0.22)_54%,rgba(0,0,0,0.12)_100%)]" />
+      {/* Hero — full-screen Market Intelligence data scene, no video */}
+      <section data-mi-hero data-surface="dark" className="mi-hero-scene relative flex min-h-[100svh] w-full items-end overflow-hidden">
+        <div className="mi-hero-grid" aria-hidden="true" />
+        <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
+        <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />
+        <div className="mi-hero-data-stack" aria-hidden="true">
+          <span>TRANSACTIONS</span>
+          <span>PRICE INDEX</span>
+          <span>RENT INDEX</span>
+          <span>DLD SOURCE</span>
+        </div>
 
         <motion.div
-          className="relative z-10 container mx-auto px-4"
+          className="relative z-10 w-full px-4 pb-16 md:px-10 md:pb-24 lg:px-16 lg:pb-28"
           initial="hidden"
           animate="visible"
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
+          <motion.div className="mi-hero-kicker" variants={fadeInUp}>Official Market Desk</motion.div>
           <motion.h1
             data-no-contrast-guard
             className="allow-white max-w-4xl text-left text-5xl font-bold leading-[0.95] !text-white md:text-7xl lg:text-8xl"
@@ -213,9 +212,9 @@ const MarketIntelligence = () => {
       <DataSourcesPanel />
 
       {/* Compliance Disclaimer */}
-      <section className="surface-light py-12 bg-muted" data-surface="light">
+      <section className="surface-light py-12 bg-[#FDFBF7]" data-surface="light">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+          <div className="mi-premium-corner-shell max-w-5xl mx-auto p-3">
             <div className="mi-gold-frame rounded-2xl p-10 text-center">
               <div className="mx-auto mb-4 flex justify-center">
                 <div className="mi-icon-tile mi-icon-tile-lg">

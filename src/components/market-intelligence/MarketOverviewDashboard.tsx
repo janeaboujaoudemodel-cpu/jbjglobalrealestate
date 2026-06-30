@@ -52,11 +52,11 @@ const StatCard = ({
 
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="mi-card-hover-emerald mi-gold-frame group h-full rounded-2xl">
+      <Card className="mi-gold-frame h-full rounded-2xl">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
-            <span className="mi-chip-emerald">
+            <span className="mi-chip-gold">
               {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </span>
@@ -94,7 +94,7 @@ export const MarketOverviewDashboard = () => {
             <h2 className={`${MI_H2} mb-4`}>
               Dubai Real Estate Dashboard
             </h2>
-            <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
+                  <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
               High-level market metrics refreshed daily from official government sources.
             </p>
           </motion.div>
@@ -152,7 +152,7 @@ export const MarketOverviewDashboard = () => {
                           <span className="text-sm font-semibold leading-none w-20 text-foreground">{quarter.quarter}</span>
                           <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-[#EFE6D6] border border-[#B89555]/30">
                             <motion.div
-                              className="h-full bg-[#1A1A1A]"
+                              className="h-full mi-bar-emerald"
                               initial={{ width: 0 }}
                               whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
                               viewport={{ once: true }}
@@ -181,7 +181,7 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="mi-chip-emerald inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 text-sm">
+            <div className="mi-kicker-emerald inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 text-sm normal-case tracking-normal">
               <Calendar className="w-4 h-4" />
               <span className="font-semibold">
                 Daily freshness check: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}

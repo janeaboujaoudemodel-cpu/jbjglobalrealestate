@@ -21428,6 +21428,73 @@ html body .jj-text-emerald * {
  * Scroll perf: containment + GPU promotion on area cards.
  * ===================================================================== */
 
+/* Full-screen Market Intelligence creative hero — no video/photo dependency */
+.mi-hero-scene {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 78% 24%, rgba(184,149,85,0.22), transparent 28%),
+    radial-gradient(circle at 18% 72%, rgba(6,78,59,0.42), transparent 34%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 52%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  isolation: isolate;
+}
+.mi-hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%);
+  opacity: .34;
+}
+.mi-hero-orbit {
+  position: absolute;
+  border: 1px solid rgba(184,149,85,.48);
+  border-radius: 9999px;
+  transform: rotate(-12deg);
+  box-shadow: inset 0 0 45px rgba(184,149,85,.08), 0 0 55px rgba(6,78,59,.18);
+}
+.mi-hero-orbit-one { width: min(64vw, 820px); height: min(64vw, 820px); right: -12vw; top: 12vh; }
+.mi-hero-orbit-two { width: min(44vw, 560px); height: min(44vw, 560px); right: 16vw; bottom: -18vh; opacity: .72; }
+.mi-hero-data-stack {
+  position: absolute;
+  right: clamp(18px, 6vw, 96px);
+  top: 24vh;
+  display: grid;
+  gap: 12px;
+  width: min(34vw, 420px);
+}
+.mi-hero-data-stack span {
+  display: block;
+  border: 1px solid rgba(184,149,85,.46);
+  border-radius: 14px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,.08);
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-align: right;
+  backdrop-filter: blur(18px);
+}
+.mi-hero-kicker {
+  display: inline-flex;
+  margin-bottom: 18px;
+  border: 1px solid rgba(184,149,85,.65);
+  border-radius: 9999px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,.08);
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  backdrop-filter: blur(16px);
+}
+
 /* Emerald icon tile (white glyph) used across MI sections */
 .mi-icon-tile {
   display: inline-flex;
@@ -21436,7 +21503,7 @@ html body .jj-text-emerald * {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 55%, #033026 100%) !important;
+  background: var(--jj-emerald-ombre) !important;
   border: 1px solid rgba(184, 149, 85, 0.55) !important;
   box-shadow: 0 6px 16px rgba(3, 48, 38, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   flex-shrink: 0;
@@ -21457,7 +21524,7 @@ html body .jj-text-emerald * {
   gap: 0.375rem;
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
-  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%) !important;
+  background: var(--jj-emerald-ombre) !important;
   color: #ffffff !important;
   border: 1px solid rgba(184, 149, 85, 0.5) !important;
   font-size: 11px;
@@ -21465,7 +21532,43 @@ html body .jj-text-emerald * {
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
-.mi-chip-emerald > svg { color: #ffffff !important; stroke: #ffffff !important; }
+.mi-chip-emerald, .mi-chip-emerald *, .mi-chip-emerald > svg { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; stroke: #ffffff !important; }
+
+.mi-kicker-emerald {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  border-radius: 9999px;
+  padding: .42rem .95rem;
+  background: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(184,149,85,.62) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 8px 22px rgba(3,48,38,.22), inset 0 1px 0 rgba(255,255,255,.16);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.mi-kicker-emerald *, .mi-kicker-emerald svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
+
+.mi-chip-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .28rem .65rem;
+  border-radius: 9999px;
+  background: #EFE6D6 !important;
+  border: 1px solid rgba(184,149,85,.62) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.mi-chip-gold *, .mi-chip-gold svg { color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; stroke: #1A1A1A !important; }
 
 /* Emerald CTA button — white text, gold ring */
 .mi-cta-emerald {
@@ -21475,7 +21578,7 @@ html body .jj-text-emerald * {
   gap: 0.5rem;
   padding: 0.625rem 1.1rem;
   border-radius: 0.625rem;
-  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 55%, #033026 100%) !important;
+  background: var(--jj-emerald-ombre) !important;
   color: #ffffff !important;
   border: 1px solid rgba(184, 149, 85, 0.6) !important;
   box-shadow: 0 8px 22px rgba(3, 48, 38, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
@@ -21484,8 +21587,8 @@ html body .jj-text-emerald * {
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
   cursor: pointer;
 }
-.mi-cta-emerald:hover { transform: translateY(-1px); filter: brightness(1.08); }
-.mi-cta-emerald > *, .mi-cta-emerald svg { color: #ffffff !important; stroke: #ffffff !important; }
+.mi-cta-emerald:hover { transform: translateY(-1px); filter: brightness(1.08); background: var(--jj-emerald-ombre-hover) !important; }
+.mi-cta-emerald, .mi-cta-emerald *, .mi-cta-emerald > *, .mi-cta-emerald svg { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; stroke: #ffffff !important; }
 
 /* Card hover → emerald fill; all children white on hover */
 .mi-card-hover-emerald {
@@ -21493,22 +21596,22 @@ html body .jj-text-emerald * {
   contain: layout paint;
   will-change: transform;
 }
-.mi-card-hover-emerald:hover {
-  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 55%, #033026 100%) !important;
+.mi-card-hover-emerald[data-clickable="true"]:hover {
+  background: var(--jj-emerald-ombre) !important;
   border-color: rgba(184, 149, 85, 0.7) !important;
   box-shadow: 0 20px 44px rgba(3, 48, 38, 0.35) !important;
   color: #ffffff !important;
 }
-.mi-card-hover-emerald:hover *:not(.mi-no-flip) {
+.mi-card-hover-emerald[data-clickable="true"]:hover *:not(.mi-no-flip) {
   color: #ffffff !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
 }
-.mi-card-hover-emerald:hover svg:not(.mi-no-flip svg) {
+.mi-card-hover-emerald[data-clickable="true"]:hover svg:not(.mi-no-flip svg) {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
-.mi-card-hover-emerald:hover .mi-icon-tile {
-  background: linear-gradient(135deg, #022C22 0%, #011B15 100%) !important;
+.mi-card-hover-emerald[data-clickable="true"]:hover .mi-icon-tile {
+  background: var(--jj-emerald-ombre) !important;
 }
 
 /* Premium gold-bordered surface (matches "Compare Your Property" card) */
@@ -21522,6 +21625,78 @@ html body .jj-text-emerald * {
   border-radius: 1rem;
 }
 
+.mi-premium-corner-shell {
+  position: relative;
+  border: 1px solid rgba(184,149,85,.5);
+  border-radius: 1.35rem;
+  background: #F7F2EA;
+  box-shadow: 0 18px 42px rgba(26,26,26,.08), inset 0 1px 0 rgba(255,255,255,.85);
+}
+.mi-premium-corner-shell::before,
+.mi-premium-corner-shell::after {
+  content: "";
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-color: #B89555;
+  pointer-events: none;
+}
+.mi-premium-corner-shell::before { left: 12px; top: 12px; border-left: 2px solid #B89555; border-top: 2px solid #B89555; border-radius: 14px 0 0 0; }
+.mi-premium-corner-shell::after { right: 12px; bottom: 12px; border-right: 2px solid #B89555; border-bottom: 2px solid #B89555; border-radius: 0 0 14px 0; }
+
+.mi-mini-icon {
+  display: inline-flex;
+  width: 1.55rem;
+  height: 1.55rem;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: .5rem;
+  background: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(184,149,85,.52) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.mi-mini-icon *, .mi-mini-icon svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
+
+.mi-bar-emerald { background: var(--jj-emerald-ombre) !important; }
+
+.mi-emerald-panel {
+  background: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(184,149,85,.62) !important;
+  box-shadow: 0 16px 36px rgba(3,48,38,.3), inset 0 1px 0 rgba(255,255,255,.14) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.mi-emerald-panel *, .mi-emerald-panel svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
+
+.mi-tab-emerald {
+  background: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(184,149,85,.56) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
+  min-height: 42px;
+  padding: .6rem 1rem !important;
+}
+.mi-tab-emerald[data-state="active"] {
+  background: var(--jj-emerald-ombre-hover) !important;
+  box-shadow: 0 8px 20px rgba(3,48,38,.28), inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+.mi-tab-emerald *, .mi-tab-emerald svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
+
+html body #root :is(.mi-icon-tile, .mi-chip-emerald, .mi-cta-emerald, .mi-kicker-emerald, .mi-emerald-panel, .mi-tab-emerald) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+@media (max-width: 768px) {
+  .mi-hero-data-stack { display: none; }
+  .mi-hero-orbit-one { width: 105vw; height: 105vw; right: -52vw; top: 18vh; }
+  .mi-hero-orbit-two { width: 86vw; height: 86vw; right: -28vw; bottom: -20vh; }
+}
+
 /* Scroll perf hardening for the Area Intelligence grid */
 .mi-area-grid {
   content-visibility: auto;
@@ -21530,4 +21705,31 @@ html body .jj-text-emerald * {
 .mi-area-grid > * {
   contain: layout paint;
   will-change: transform;
+}
+
+/* PASS 139 — MARKET INTELLIGENCE EMERALD WHITE-INK HARD LOCK
+   This intentionally sits last because older champagne-surface guards are very
+   specific and were forcing MI emerald chips/buttons/icons back to ink. */
+html body #root [data-surface="champagne"] :is(.mi-icon-tile, .mi-mini-icon, .mi-chip-emerald, .mi-cta-emerald, .mi-kicker-emerald, .mi-emerald-panel, .mi-tab-emerald):not(#mi-white-a):not(#mi-white-b):not(#mi-white-c):not(#mi-white-d):not(#mi-white-e):not(#mi-white-f):not(#mi-white-g):not(#mi-white-h):not(#mi-white-i):not(#mi-white-j):not(#mi-white-k):not(#mi-white-l):not(#mi-white-m):not(#mi-white-n):not(#mi-white-o),
+html body #root :is(.mi-icon-tile, .mi-mini-icon, .mi-chip-emerald, .mi-cta-emerald, .mi-kicker-emerald, .mi-emerald-panel, .mi-tab-emerald):not(#mi-white-a):not(#mi-white-b):not(#mi-white-c):not(#mi-white-d):not(#mi-white-e):not(#mi-white-f):not(#mi-white-g):not(#mi-white-h):not(#mi-white-i):not(#mi-white-j):not(#mi-white-k):not(#mi-white-l):not(#mi-white-m):not(#mi-white-n):not(#mi-white-o) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  background: var(--jj-emerald-ombre) !important;
+}
+
+html body #root [data-surface="champagne"] :is(.mi-icon-tile, .mi-mini-icon, .mi-chip-emerald, .mi-cta-emerald, .mi-kicker-emerald, .mi-emerald-panel, .mi-tab-emerald):not(#mi-white-a):not(#mi-white-b):not(#mi-white-c):not(#mi-white-d):not(#mi-white-e):not(#mi-white-f):not(#mi-white-g):not(#mi-white-h):not(#mi-white-i):not(#mi-white-j):not(#mi-white-k):not(#mi-white-l):not(#mi-white-m):not(#mi-white-n):not(#mi-white-o) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#mi-white-aa):not(#mi-white-bb):not(#mi-white-cc):not(#mi-white-dd):not(#mi-white-ee):not(#mi-white-ff):not(#mi-white-gg):not(#mi-white-hh):not(#mi-white-ii):not(#mi-white-jj):not(#mi-white-kk):not(#mi-white-ll):not(#mi-white-mm):not(#mi-white-nn):not(#mi-white-oo),
+html body #root :is(.mi-icon-tile, .mi-mini-icon, .mi-chip-emerald, .mi-cta-emerald, .mi-kicker-emerald, .mi-emerald-panel, .mi-tab-emerald):not(#mi-white-a):not(#mi-white-b):not(#mi-white-c):not(#mi-white-d):not(#mi-white-e):not(#mi-white-f):not(#mi-white-g):not(#mi-white-h):not(#mi-white-i):not(#mi-white-j):not(#mi-white-k):not(#mi-white-l):not(#mi-white-m):not(#mi-white-n):not(#mi-white-o) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(#mi-white-aa):not(#mi-white-bb):not(#mi-white-cc):not(#mi-white-dd):not(#mi-white-ee):not(#mi-white-ff):not(#mi-white-gg):not(#mi-white-hh):not(#mi-white-ii):not(#mi-white-jj):not(#mi-white-kk):not(#mi-white-ll):not(#mi-white-mm):not(#mi-white-nn):not(#mi-white-oo) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none;
+}
+
+html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):not(#mi-gold-d):not(#mi-gold-e):not(#mi-gold-f):not(#mi-gold-g):not(#mi-gold-h):not(#mi-gold-i):not(#mi-gold-j),
+html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):not(#mi-gold-d):not(#mi-gold-e):not(#mi-gold-f):not(#mi-gold-g):not(#mi-gold-h):not(#mi-gold-i):not(#mi-gold-j) :is(span,svg,[class*="lucide"],path,line,polyline,circle,rect) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
 }
