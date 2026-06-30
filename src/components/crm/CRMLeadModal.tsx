@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -137,7 +137,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     });
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setFormData(initial);
     setActiveTab("contact");
     setNationalityOpen(false);
@@ -147,8 +147,28 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     setCityOpen(false);
     setTagDraft("");
     setLoading(false);
+  };
+
+  const handleClose = () => {
     onClose();
   };
+
+  // Reset form whenever the dialog is closed externally and unlock body
+  // pointer-events as a safety net against any stuck Radix overlay state.
+  useEffect(() => {
+    if (!open) {
+      resetState();
+      // Defensive: if Radix left the body locked (rare race with portals),
+      // restore interactivity after the close animation finishes.
+      const t = window.setTimeout(() => {
+        if (document.body.style.pointerEvents === "none") {
+          document.body.style.pointerEvents = "";
+        }
+      }, 250);
+      return () => window.clearTimeout(t);
+    }
+  }, [open]);
+
 
   const cities = useMemo(
     () => getCitiesForCountry(formData.current_location_country),
@@ -263,7 +283,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
-      <DialogContent key={open ? "open" : "closed"} className="w-[calc(100vw-1rem)] sm:max-w-[960px] max-h-[calc(100dvh-1rem)] overflow-hidden bg-[#FDFBF7] border border-[#B89555]/35 p-0 shadow-[0_28px_80px_-42px_rgba(26,26,26,0.75)]">
+      <DialogContent className="w-[calc(100vw-1rem)] sm:max-w-[960px] max-h-[calc(100dvh-1rem)] overflow-hidden bg-[#FDFBF7] border border-[#B89555]/35 p-0 shadow-[0_28px_80px_-42px_rgba(26,26,26,0.75)]">
         <DialogHeader className="px-6 pt-5 pb-3 border-b border-[#B89555]/20">
           <DialogTitle className="text-[#1A1A1A] text-lg">Add Lead / Client</DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/70">
