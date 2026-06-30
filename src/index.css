@@ -14264,7 +14264,7 @@ html body #root :is(
   .surface-cream,
   .surface-raised,
   .surface-gold
-):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) :where(.text-white, [class*="text-white/"]):not(.allow-white):not([data-allow-dark-cta] *):not(.jj-emerald-metallic *):not(.jj-pill-emerald *):not(.jj-pill-emerald-metallic *):not(.jj-emerald-action *):not([data-emerald="true"] *):not([data-emerald-action="true"] *),
+):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) :where(.text-white, [class*="text-white/"]):not(.allow-white):not([data-allow-dark-cta] *):not(.jj-emerald-metallic *):not(.jj-pill-emerald *):not(.jj-pill-emerald-metallic *):not(.jj-emerald-action *):not([data-emerald="true"] *):not([data-emerald-action="true"] *):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-no-contrast-guard] *):not(.allow-white *),
 html body #root :is(
   [class~="bg-[#FDFBF7]"],
   [class~="bg-[#F7F2EA]"],
