@@ -39649,6 +39649,13 @@ export type Database = {
           client_secret: string
         }[]
       }
+      get_broker_oauth_app_secret: {
+        Args: { _provider: string; _user_id: string }
+        Returns: {
+          client_id: string
+          client_secret: string
+        }[]
+      }
       get_company_directory: {
         Args: never
         Returns: {
@@ -39748,6 +39755,16 @@ export type Database = {
         Returns: {
           count: number
           status: string
+        }[]
+      }
+      get_my_gmail_token: {
+        Args: { _email?: string; _user_id: string }
+        Returns: {
+          access_token: string
+          email_address: string
+          refresh_token: string
+          scopes: string[]
+          token_expires_at: string
         }[]
       }
       get_owner_email: { Args: never; Returns: string }
