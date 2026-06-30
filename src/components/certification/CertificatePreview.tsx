@@ -75,7 +75,7 @@ function CertificateMedallion({ size = 64 }: { size?: number }) {
 
 
 
-/** Gold-foil fallback seal when no owner stamp uploaded */
+/** Emerald medallion fallback when no owner stamp uploaded — white glyph, no gold border */
 function FoilSeal({ size = 130 }: { size?: number }) {
   return (
     <div
@@ -84,17 +84,25 @@ function FoilSeal({ size = 130 }: { size?: number }) {
         width: size,
         height: size,
         background:
-          "radial-gradient(circle at 30% 25%, #FFF6E0 0%, #F1E2B8 50%, #B89555 100%)",
+          "radial-gradient(circle at 32% 26%, #0E8A66 0%, #064E3B 55%, #032A1F 100%)",
         boxShadow:
-          "inset 0 0 14px rgba(138,106,53,0.45), 0 4px 14px rgba(184,149,85,0.25)",
+          "inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 18px rgba(0,0,0,0.35), 0 8px 22px rgba(6,78,59,0.35)",
       }}
       data-no-contrast-guard
+      data-surface="emerald"
     >
-      <div
-        className="absolute inset-[6px] rounded-full border border-[#8A6A35]/60"
-        style={{ boxShadow: "inset 0 0 8px rgba(255,246,224,0.4)" }}
+      <BadgeCheck
+        className="relative !text-white !stroke-white"
+        style={{
+          width: size * 0.5,
+          height: size * 0.5,
+          color: "#FFFFFF",
+          stroke: "#FFFFFF",
+          fill: "none",
+          filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.4))",
+        }}
+        strokeWidth={2.2}
       />
-      <BadgeCheck className="relative" style={{ width: size * 0.5, height: size * 0.5, color: "#1A1A1A" }} strokeWidth={2} />
     </div>
   );
 }
