@@ -232,6 +232,62 @@ export default function DeveloperDirectory() {
   const selectedList = useMemo(() => Array.from(selected), [selected]);
   const canLoadMore = rows.length < total;
 
+  const exportRows = useMemo(() => rows.map((d) => ({
+    "Developer Name": d.name,
+    "Founded Date": d.founded_year ?? "",
+    "Owner / Founder / CEO": d.ceo_name ?? "",
+    "Headquarters": d.headquarters ?? "",
+    "Countries / Emirates": d.coverage?.length ? d.coverage.join(", ") : "Dubai / UAE",
+    "Units Delivered": d.total_units_delivered ?? "",
+    "Total Projects": d.project_count || d.completed_projects || 0,
+    "Projects For Sale": d.projects_for_sale || d.offplan_projects || 0,
+    "Completed Projects": d.completed_projects ?? "",
+    "Upcoming Units": d.upcoming_units ?? "",
+    "Total Project Units": d.total_project_units || "",
+    "Average Starting Price": d.avg_price_from ?? "",
+    "Logo Status": d.logo_url ? "Logo available" : (d.logo_status ?? "missing"),
+    "Website": d.website_url ?? "",
+    "Profile Slug": d.slug,
+    "Last Enriched Dubai Time": d.last_enriched_at ? new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dubai", dateStyle: "medium", timeStyle: "short" }).format(new Date(d.last_enriched_at)) : "",
+  })), [rows]);
+
+  const exportFileStem = () => {
+    const stamp = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dubai", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    return `JBJ-developer-registry-${stamp}`;
+  };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportCsv = () => {
+    if (!exportRows.length) return;
+    const headers = Object.keys(exportRows[0]);
+    const escape = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+    const csv = [headers.map(escape).join(","), ...exportRows.map((row) => headers.map((h) => escape((row as Record<string, unknown>)[h])).join(","))].join("\n");
+    downloadBlob(new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" }), `${exportFileStem()}.csv`);
+    toast.success("Developer CSV downloaded");
+  };
+
+  const exportExcel = async () => {
+    if (!exportRows.length) return;
+    const XLSX = await import("xlsx");
+    const worksheet = XLSX.utils.json_to_sheet(exportRows);
+    worksheet["!cols"] = Object.keys(exportRows[0]).map((key) => ({ wch: Math.max(16, key.length + 4) }));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Developers");
+    const array = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    downloadBlob(new Blob([array], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), `${exportFileStem()}.xlsx`);
+    toast.success("Developer Excel downloaded");
+  };
+
   return (
     <div className="space-y-5">
       <Card className="p-5 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
