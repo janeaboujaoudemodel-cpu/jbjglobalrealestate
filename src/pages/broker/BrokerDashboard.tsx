@@ -24,6 +24,14 @@ function Stat({ icon: Icon, label, value, to }: any) {
 }
 
 export default function BrokerDashboard() {
+  return (
+    <LoggingErrorBoundary surface="BrokerDashboard">
+      <BrokerDashboardInner />
+    </LoggingErrorBoundary>
+  );
+}
+
+function BrokerDashboardInner() {
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
