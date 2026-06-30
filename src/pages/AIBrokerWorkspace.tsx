@@ -8,7 +8,7 @@ import {
   Users, MessageSquare, Mail, Phone, TrendingUp, RefreshCw,
   Sparkles, ArrowRight,
 } from "lucide-react";
-import { BrandedLoader } from "@/components/ui/BrandedLoader";
+import PageLoader from "@/components/PageLoader";
 import AssistantLeadList, { type ListLead } from "@/components/ai-broker/AssistantLeadList";
 import AssistantChat, { type ChatTurn } from "@/components/ai-broker/AssistantChat";
 
@@ -207,7 +207,17 @@ export default function AIBrokerWorkspace() {
   const selected = leads.find(l => l.id === selectedId) || null;
 
   if (authLoading || roleLoading || loading) {
-    return <BrandedLoader variant="dark" className="bg-[#1A1A1A]" />;
+    return (
+      <div className="min-h-[60vh] bg-[#F7F2EA] p-4 md:p-6">
+        <PageLoader />
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="h-28 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30" />
+          <div className="h-28 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30" />
+          <div className="h-28 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30" />
+        </div>
+        <div className="mt-5 h-[44vh] rounded-3xl bg-[#FDFBF7] border border-[#B89555]/30" />
+      </div>
+    );
   }
 
   return (

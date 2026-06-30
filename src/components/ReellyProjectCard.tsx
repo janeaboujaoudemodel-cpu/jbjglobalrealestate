@@ -126,17 +126,23 @@ const ReellyProjectCard = ({
           "hover:-translate-y-1"
         }
       >
-       {/* Top-right card actions — hover-revealed via PASS 97 */}
+       {/* Top-right card actions — hidden until card hover/focus.
+           Row 1: favorite + shortlist. Row 2: badge aligned exactly under shortlist. */}
        {(showFavorite || showBadgeButton) && (
          <div
-           className="absolute top-3 right-3 z-20 flex flex-col gap-1.5"
+           className="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5"
            data-card-actions-overlay=""
          >
            {showFavorite && (
              <FavoriteButton projectId={String(project.id)} size="md" />
            )}
            {showBadgeButton && (
-             <ShortlistBadgeButton projectId={String(project.id)} size="md" showBadgeIndicator={true} />
+             <ShortlistBadgeButton
+               projectId={String(project.id)}
+               size="md"
+               showBadgeIndicator={false}
+               className="justify-end"
+             />
            )}
          </div>
        )}

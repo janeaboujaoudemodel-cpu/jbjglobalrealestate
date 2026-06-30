@@ -14,19 +14,12 @@ interface BrandedLoaderProps {
 export function BrandedLoader({ text, className = "", variant = "light" }: BrandedLoaderProps) {
   const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
 
-  // Center inside the visible content area (right of sidebar, below header).
-  // CSS vars --app-content-left / --app-content-top are set by shell layouts
-  // (OwnerDashboardShell, BrokerPortalLayout, MainLayout). They fall back to
-  // 0 / 88px so public pages still center correctly under the global header.
+  // Content-area loader only. Never use fixed positioning or a full-screen
+  // emerald backdrop; the site shell/content must remain visible while data or
+  // lazy chunks resolve.
   return (
     <div
-      className={`fixed flex flex-col items-center justify-center gap-4 z-[60] pointer-events-none ${className}`}
-      style={{
-        top: "var(--app-content-top, 88px)",
-        left: "var(--app-content-left, 0px)",
-        right: 0,
-        bottom: 0,
-      }}
+      className={`relative flex min-h-[220px] w-full flex-col items-center justify-center gap-4 pointer-events-none ${className}`}
     >
       <div className="relative w-16 h-16 flex items-center justify-center">
         {/* Soft gold pulsing ring */}

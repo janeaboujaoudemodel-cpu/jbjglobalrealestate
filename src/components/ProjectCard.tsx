@@ -207,9 +207,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
       }
     >
-      {/* Top-Right: Favorite + Shortlist Buttons (stacked) — visible on hover only via PASS 97 */}
+      {/* Top-right project actions — hidden until card hover/focus.
+          Row 1: favorite + shortlist. Row 2: badge aligned exactly under shortlist. */}
       <div
-        className="absolute top-3 right-3 z-20 flex flex-col gap-1.5"
+        className="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5"
         data-no-contrast-guard
         data-card-actions-overlay=""
       >
@@ -217,7 +218,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <FavoriteButton projectId={project.id} size="md" />
         )}
         {showBadgeButton && (
-          <ShortlistBadgeButton projectId={project.id} size="md" showBadgeIndicator={true} />
+          <ShortlistBadgeButton
+            projectId={project.id}
+            size="md"
+            showBadgeIndicator={false}
+            className="justify-end"
+          />
         )}
       </div>
 
