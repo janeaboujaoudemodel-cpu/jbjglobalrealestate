@@ -21399,5 +21399,24 @@ html body #root [data-market-report-page] [data-market-book] [data-no-contrast-g
   stroke: #FFFFFF !important;
 }
 
+/* ============================================================
+   PASS 137 — RETIRE jj-title-emerald (FINAL INK LOCK)
+   All title/text emerald utilities now render ink #1A1A1A.
+   Eliminates emerald gradient titles on champagne pages.
+   ============================================================ */
+html body .jj-title-emerald,
+html body .jj-title-emerald *,
+html body .jj-text-emerald,
+html body .jj-text-emerald * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: initial !important;
+  -webkit-background-clip: initial !important;
+  text-shadow: none !important;
+}
+
+
 
 
