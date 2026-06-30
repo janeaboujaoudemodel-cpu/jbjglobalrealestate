@@ -21815,6 +21815,26 @@ html body #root :is(.mi-icon-tile, .mi-mini-icon, .mi-chip-emerald, .mi-cta-emer
   fill: none;
 }
 
+/* PASS 141 — MI tab active-state LOCK (re-asserts champagne-gold over PASS 139) */
+html body #root .mi-tab-emerald[data-state="active"],
+html body #root .mi-tab-emerald[aria-selected="true"],
+html body #root [data-surface="champagne"] .mi-tab-emerald[data-state="active"],
+html body #root [data-surface="champagne"] .mi-tab-emerald[aria-selected="true"] {
+  background: linear-gradient(135deg, #F5E6B8 0%, #E8D08A 50%, #D4B66A 100%) !important;
+  border: 1px solid #B89555 !important;
+  box-shadow: 0 10px 24px rgba(184,149,85,.35), inset 0 1px 0 rgba(255,255,255,.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root .mi-tab-emerald[data-state="active"] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g),
+html body #root .mi-tab-emerald[aria-selected="true"] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g),
+html body #root [data-surface="champagne"] .mi-tab-emerald[data-state="active"] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g),
+html body #root [data-surface="champagne"] .mi-tab-emerald[aria-selected="true"] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
 html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):not(#mi-gold-d):not(#mi-gold-e):not(#mi-gold-f):not(#mi-gold-g):not(#mi-gold-h):not(#mi-gold-i):not(#mi-gold-j),
 html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):not(#mi-gold-d):not(#mi-gold-e):not(#mi-gold-f):not(#mi-gold-g):not(#mi-gold-h):not(#mi-gold-i):not(#mi-gold-j) :is(span,svg,[class*="lucide"],path,line,polyline,circle,rect) {
   color: #1A1A1A !important;
