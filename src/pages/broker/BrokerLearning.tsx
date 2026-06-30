@@ -753,13 +753,35 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
       style={{ background: markBg }}
     >
       {isRed
-        ? <X className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-        : <Check className="w-3 h-3" strokeWidth={3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
+        ? <X className="w-3 h-3" strokeWidth={3.2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        : <Check className="w-3 h-3" strokeWidth={3.2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
     </span>
   );
+  // Corner-only gold frame (matches Compare Projects card on the homepage):
+  // champagne premium gradient, NO full border, only 4 gold L-corners.
+  const cornerColor = "rgba(184,149,85,0.78)";
+  const Corner = ({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) => {
+    const base: React.CSSProperties = {
+      position: "absolute",
+      width: 22,
+      height: 22,
+      pointerEvents: "none",
+      borderColor: cornerColor,
+      borderStyle: "solid",
+      borderWidth: 0,
+    };
+    if (pos === "tl") Object.assign(base, { top: 0, left: 0, borderTopWidth: 1.5, borderLeftWidth: 1.5, borderTopLeftRadius: 18 });
+    if (pos === "tr") Object.assign(base, { top: 0, right: 0, borderTopWidth: 1.5, borderRightWidth: 1.5, borderTopRightRadius: 18 });
+    if (pos === "bl") Object.assign(base, { bottom: 0, left: 0, borderBottomWidth: 1.5, borderLeftWidth: 1.5, borderBottomLeftRadius: 18 });
+    if (pos === "br") Object.assign(base, { bottom: 0, right: 0, borderBottomWidth: 1.5, borderRightWidth: 1.5, borderBottomRightRadius: 18 });
+    return <span aria-hidden style={base} />;
+  };
   return (
-    <Card className="relative overflow-hidden bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#FDFBF7] border-[#B89555]/55 shadow-[0_28px_72px_-42px_rgba(26,26,26,0.62)]">
-      <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/70 to-transparent" />
+    <Card className="relative overflow-hidden rounded-[18px] border-0 bg-gradient-to-br from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_28px_72px_-42px_rgba(26,26,26,0.62)]">
+      <Corner pos="tl" />
+      <Corner pos="tr" />
+      <Corner pos="bl" />
+      <Corner pos="br" />
       <motion.span
         aria-hidden
         className="absolute -left-24 top-0 h-full w-20 bg-gradient-to-r from-transparent via-white/45 to-transparent blur-[1px]"
@@ -778,9 +800,9 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
           </span>
           <span className="text-[#1A1A1A]">{title}</span>
         </h3>
-        <ul className="space-y-2.5">
+        <ul className="space-y-2">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 rounded-xl bg-[#FDFBF7]/70 px-3 py-2 text-[#1A1A1A] text-sm leading-relaxed">
+            <li key={i} className="flex items-start gap-2 rounded-lg bg-[#FDFBF7]/80 px-3 py-2 text-[#1A1A1A] text-sm leading-relaxed">
               {renderMark()}
               <span className="text-[#1A1A1A]">{p}</span>
             </li>
