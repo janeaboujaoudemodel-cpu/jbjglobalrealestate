@@ -177,7 +177,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                   src={webDevPhoto} 
                   alt="Marcus Chen - AI Web Developer"
                   className="w-full h-full object-cover"
-                  onError={(e) = loading="lazy" decoding="async"> {
+                  onError={(e) => {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop';
                   }}
                 />

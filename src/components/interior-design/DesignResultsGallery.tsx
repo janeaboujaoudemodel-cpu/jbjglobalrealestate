@@ -251,7 +251,7 @@ const DesignResultsGallery = ({
                 src={images[0]}
                 alt="Generated interior design"
                 className="w-full h-auto cursor-zoom-in"
-                onClick={() = loading="lazy" decoding="async"> setSelectedImage(images[0])}
+                onClick={() => setSelectedImage(images[0])}
               />
             )}
             <button

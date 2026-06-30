@@ -396,7 +396,7 @@ export const DeveloperApprovalQueue = () => {
                             alt={`${developer.name} logo`}
                             className="h-5 w-auto object-contain max-w-[80px]"
                             referrerPolicy="no-referrer"
-                            onError={(e) = loading="lazy" decoding="async"> {
+                            onError={(e) => {
                               (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
                             }}
                           />

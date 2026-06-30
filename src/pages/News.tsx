@@ -312,7 +312,7 @@ const News = () => {
                           alt={filteredNews[0].title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           referrerPolicy="no-referrer"
-                          onError={(e) = loading="lazy" decoding="async"> {
+                          onError={(e) => {
                             const parent = e.currentTarget.parentElement;
                             if (parent) {
                               e.currentTarget.style.display = 'none';
@@ -387,7 +387,7 @@ const News = () => {
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       referrerPolicy="no-referrer"
-                      onError={(e) = loading="lazy" decoding="async"> {
+                      onError={(e) => {
                         const parent = e.currentTarget.parentElement;
                         if (parent) {
                           e.currentTarget.style.display = 'none';

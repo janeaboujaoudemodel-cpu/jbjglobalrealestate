@@ -189,7 +189,7 @@ export default function DeveloperDirectory() {
                       src={d.logo_url!}
                       alt={d.name}
                       className="max-w-full max-h-full object-contain"
-                      onError={() = loading="lazy" decoding="async"> setBrokenImgs((s) => new Set(s).add(d.id))}
+                      onError={() => setBrokenImgs((s) => new Set(s).add(d.id))}
                     />
                   ) : (
                     <ImageOff className="size-6 text-[#1A1A1A]/40" />

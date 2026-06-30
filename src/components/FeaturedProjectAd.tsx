@@ -50,7 +50,7 @@ export const FeaturedProjectAd = ({
               src={imageUrl}
               alt={title}
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-              onError={(e) = loading="lazy" decoding="async"> {
+              onError={(e) => {
                 (e.currentTarget as HTMLImageElement).style.display = 'none';
               }}
             />
