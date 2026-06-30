@@ -21821,3 +21821,55 @@ html body #root .mi-chip-gold:not(#mi-gold-a):not(#mi-gold-b):not(#mi-gold-c):no
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+/* PASS 140 — DLD SNAPSHOT VISUAL LOCK
+   Explicitly protects the user-reported Market Intelligence snapshot defects:
+   emerald icon/rank boxes must render pure white glyphs/numbers, and the
+   Cash/Mortgage fills must remain emerald (not champagne/gold or transparent). */
+html body #root [data-dld-emerald-tile],
+html body #root [data-dld-rank-badge] {
+  background: linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-dld-emerald-tile] :is(svg, [class*="lucide"], path, line, polyline, polygon, rect, circle),
+html body #root [data-dld-white-icon],
+html body #root [data-dld-white-icon] :is(path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-dld-rank-badge],
+html body #root [data-dld-rank-badge] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+html body #root .dld-emerald-fill {
+  display: block !important;
+  min-width: 2px !important;
+  background: linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%) !important;
+  background-color: #064E3B !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root#root [data-dld-rank-badge][data-dld-rank-badge][data-dld-rank-badge] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+}
+
+html body #root#root#root#root#root#root#root#root#root#root [data-dld-emerald-tile][data-dld-emerald-tile] :is(svg, [class*="lucide"], path, line, polyline, polygon, rect, circle),
+html body #root#root#root#root#root#root#root#root#root#root [data-dld-white-icon][data-dld-white-icon],
+html body #root#root#root#root#root#root#root#root#root#root [data-dld-white-icon][data-dld-white-icon] :is(path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
