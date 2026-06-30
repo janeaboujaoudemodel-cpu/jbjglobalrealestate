@@ -12,10 +12,12 @@ export const OWNER_EMAILS: string[] = [
 ];
 
 /**
- * The single email allowed to open the Owner back end.
+ * The primary founder inbox plus verified founder aliases allowed to open the
+ * Owner back end.
  *
  * Keep OWNER_EMAILS above as the broader alias list used for CRM filtering and
- * duplicate-prevention. Do NOT use that alias list for route/admin access.
+ * duplicate-prevention. OWNER_BACKEND_EMAILS below is the explicit route/admin
+ * allow-list.
  */
 export const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
 

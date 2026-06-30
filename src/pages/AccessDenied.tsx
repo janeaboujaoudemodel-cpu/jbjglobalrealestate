@@ -6,11 +6,9 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 
 /**
- * AccessDenied (/403) - Shown when authenticated user is NOT the Owner
- * 
- * Features:
- * - Green success / red failure feedback on retry
- * - Auto-redirect back to intended page on success
+ * AccessDenied (/403) - Shown when authenticated user is not allowed into the
+ * private Owner portal. Styled as emerald + white + champagne, with a smaller
+ * inner card so the content never floats on the page background.
  */
 const AccessDenied = () => {
   const navigate = useNavigate();
@@ -18,15 +16,13 @@ const AccessDenied = () => {
   const { user, signOut, refreshOwnerVerification, ownerLoading, ownerError, isOwner } = useAuth();
   const [retryResult, setRetryResult] = useState<"idle" | "success" | "failed">("idle");
 
-  // Store where user came from (passed via state or fallback to "/")
-  const intendedRoute = (location.state as { from?: string })?.from || "/";
+  const intendedRoute = (location.state as { from?: string })?.from || "/owner";
 
-  // Auto-redirect on successful verification
   useEffect(() => {
     if (isOwner && retryResult === "success") {
       const timer = setTimeout(() => {
         navigate(intendedRoute, { replace: true });
-      }, 800);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [isOwner, retryResult, navigate, intendedRoute]);
@@ -36,7 +32,7 @@ const AccessDenied = () => {
       await signOut();
       toast.success("Signed out successfully");
       navigate("/");
-    } catch (error) {
+    } catch {
       toast.error("Failed to sign out");
     }
   };
@@ -46,14 +42,6 @@ const AccessDenied = () => {
     await refreshOwnerVerification();
   };
 
-  // Watch for result after retry
-  useEffect(() => {
-    if (ownerLoading) return;
-    if (retryResult !== "idle") return;
-    // Only update after a retry was triggered (not on initial render)
-  }, [ownerLoading]);
-
-  // After refreshOwnerVerification completes
   useEffect(() => {
     if (ownerLoading) return;
     if (isOwner) {
@@ -65,88 +53,113 @@ const AccessDenied = () => {
   }, [ownerLoading, isOwner, ownerError]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-6">
-      <div className="max-w-md w-full text-center">
-        {/* Icon */}
-        <div className="w-24 h-24 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto mb-8">
-          <ShieldX className="w-12 h-12 text-red-500" />
+    <div
+      data-access-denied-page
+      data-surface="emerald"
+      className="min-h-screen flex items-center justify-center p-4 sm:p-6"
+      style={{
+        background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))",
+        color: "#FFFFFF",
+      }}
+    >
+      <div
+        data-no-contrast-guard
+        data-surface="emerald"
+        className="w-full max-w-lg rounded-[28px] border p-5 sm:p-8 text-center shadow-2xl"
+        style={{
+          background: "linear-gradient(145deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 56%, rgba(0,0,0,0.86) 100%)",
+          borderColor: "rgba(184,149,85,0.62)",
+          boxShadow: "0 30px 80px -45px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.14)",
+          color: "#FFFFFF",
+        }}
+      >
+        <div
+          className="w-20 h-20 rounded-full border flex items-center justify-center mx-auto mb-6"
+          style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)", borderColor: "#B89555" }}
+        >
+          <ShieldX className="w-10 h-10" style={{ color: "#064E3B", stroke: "#064E3B" }} />
         </div>
 
-        {/* Title */}
-        <h1 
-          className="text-3xl font-bold text-white mb-4"
+        <h1
+          className="text-3xl font-bold mb-4"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           Access Denied
         </h1>
 
-        {/* Message */}
-        <p className="text-white/70 mb-6 leading-relaxed">
+        <p className="mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,0.86)" }}>
           This is an Owner-only system. The page you are trying to access is restricted.
         </p>
 
-        {/* User status — email hidden for security */}
         {user && (
-          <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-4 mb-6">
-            <p className="text-white/70 text-sm">You are signed in but do not have access to this page.</p>
+          <div className="border rounded-2xl p-4 mb-5" style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.42)" }}>
+            <p className="text-sm" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+              You are signed in but do not have access to this page.
+            </p>
           </div>
         )}
 
-        {/* Retry Result Feedback */}
         {retryResult === "success" && (
-          <div className="jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/40 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-            <p className="text-[color:var(--emerald-on)] text-sm">Verification successful! Redirecting…</p>
+          <div className="border rounded-2xl p-4 mb-5 flex items-center gap-3" style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.42)" }}>
+            <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <p className="text-sm" style={{ color: "#FFFFFF" }}>Verification successful! Redirecting…</p>
           </div>
         )}
 
         {retryResult === "failed" && (
-          <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
-            <p className="text-red-300 text-sm">
+          <div className="border rounded-2xl p-4 mb-5 flex items-center gap-3" style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.42)" }}>
+            <XCircle className="w-5 h-5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <p className="text-sm" style={{ color: "#FFFFFF" }}>
               Verification failed{ownerError ? `: ${ownerError}` : ". Please try again."}
             </p>
           </div>
         )}
 
-        {/* Error Info (only show if no retry result) */}
         {ownerError && retryResult === "idle" && (
-          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6">
-            <p className="text-amber-200 text-sm">
+          <div className="border rounded-2xl p-4 mb-5" style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.42)" }}>
+            <p className="text-sm" style={{ color: "#FFFFFF" }}>
               Verification issue: {ownerError}
             </p>
           </div>
         )}
 
-        {/* Notice */}
-        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-8">
-          <p className="text-amber-200 text-sm">
+        <div className="border rounded-2xl p-4 mb-7" style={{ background: "rgba(239,230,214,0.12)", borderColor: "rgba(184,149,85,0.48)" }}>
+          <p className="text-sm" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
             If you believe this is an error, try refreshing your verification or contact the system owner directly.
           </p>
         </div>
 
-        {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
             onClick={() => navigate("/")}
-            variant="primary"
+            data-no-contrast-guard
+            data-surface="champagne"
+            className="border font-bold"
+            style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)", borderColor: "#B89555", color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
           >
-            <Home className="w-4 h-4" />
+            <Home className="w-4 h-4" style={{ color: "#064E3B", stroke: "#064E3B" }} />
             Return Home
           </Button>
-          
+
           <Button
             onClick={handleRetry}
             disabled={ownerLoading}
-            variant="dark-outline"
+            data-no-contrast-guard
+            data-surface="emerald"
+            className="border font-bold"
+            style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.72)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <RefreshCw className={`w-4 h-4 ${ownerLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${ownerLoading ? "animate-spin" : ""}`} />
             Retry Verification
           </Button>
-          
+
           {user && (
             <Button
               onClick={handleSignOut}
-              variant="dark-outline"
+              data-no-contrast-guard
+              data-surface="emerald"
+              className="border font-bold"
+              style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.72)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
               <LogOut className="w-4 h-4" />
               Sign Out
@@ -154,8 +167,7 @@ const AccessDenied = () => {
           )}
         </div>
 
-        {/* Footer */}
-        <p className="text-[#1A1A1A]/70 text-xs mt-12">
+        <p className="text-xs mt-8" style={{ color: "rgba(255,255,255,0.72)" }}>
           © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
         </p>
       </div>

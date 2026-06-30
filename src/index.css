@@ -22238,3 +22238,31 @@ html body [data-account-menu-content] [data-account-menu-row][data-account-menu-
   stroke-opacity: 1 !important;
   opacity: 1 !important;
 }
+
+/* PASS 142 — OWNER ACCESS + FOUR CATEGORY BALANCE FINAL LOCK */
+html body [data-access-denied-page][data-surface="emerald"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+}
+
+html body [data-access-denied-page][data-surface="emerald"],
+html body [data-access-denied-page][data-surface="emerald"] :is(h1, h2, h3, h4, p, span, small, strong, em, b, li, button, svg, [class*="lucide"]):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([style*="color: #064E3B"]):not([style*="color:#064E3B"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body .mode-switcher-equal-card {
+  min-height: 92px !important;
+  height: 92px !important;
+}
+
+html body [data-mode-card="true"][data-mode-row="active"],
+html body [data-mode-card="true"][data-mode-row="active"] :is(p, span, svg, [class*="lucide"]):not([data-mode-active-pill]):not([data-mode-active-pill] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}

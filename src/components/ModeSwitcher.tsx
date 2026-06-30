@@ -4,6 +4,8 @@ import { Briefcase, User, ChevronDown, Check, Loader2, Users, Building2, Crown }
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useUserModeContext, UserMode } from "@/contexts/UserModeContext";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useAuth } from "@/contexts/AuthContext";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -112,11 +114,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   const { mode, isLoading, setMode, hasMadeInitialSelection } = useUserModeContext();
   const { hasSelectedRole } = useUserRole();
   const { isOwner: isAppOwner } = useIsAppOwner();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredMode, setHoveredMode] = useState<UserMode | null>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
+  const canDisplayOwnerMode = isOwnerBackendEmail(user?.email) || isAppOwner;
 
   // Hide the badge only when no selection has been made AND the placement
   // hasn't opted in to the unselected/"Select your mode" CTA.
@@ -124,13 +128,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   if (isUnselected && !showForUnselected) return null;
 
   const handleModeChange = async (newMode: UserMode) => {
-    // 🔒 SECURITY: Only the registered app owner may enter Owner mode.
+    // 🔒 SECURITY: Only registered founder owner inboxes may enter Owner mode.
     // Owner mode is the ONLY mode that exposes the back-end command center,
     // and it must never be reachable from a non-owner account regardless of
     // any UI bypass.
-    if (newMode === 'owner' && !isAppOwner) {
+    if (newMode === 'owner' && !canDisplayOwnerMode) {
       toast.error('Owner mode is restricted', {
-        description: 'This mode is only available to the registered app owner.',
+        description: 'This mode is only available to the registered owner inboxes.',
       });
       setIsOpen(false);
       return;
@@ -296,7 +300,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           {/* Tight premium stack — uniform row height */}
           <div className="flex flex-col gap-1.5">
             {(Object.entries(MODE_CONFIG) as [UserMode, ModePalette][])
-              .filter(([modeKey]) => modeKey !== 'owner' || isAppOwner)
+              .filter(([modeKey]) => modeKey !== 'owner' || canDisplayOwnerMode)
               .map(([modeKey, config]) => {
               const Icon = config.icon;
               const isActive = mode === modeKey;
@@ -356,7 +360,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   {...(isEmerald ? { 'data-surface': 'emerald', 'data-emerald-action': 'true', 'data-on-dark': 'true' } : {})}
                   className={cn(
                     "mode-switcher-item",
-                    "relative flex items-start gap-3 pl-4 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-150 border w-full",
+                    "mode-switcher-equal-card relative flex items-start gap-3 pl-4 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-150 border w-full min-h-[92px]",
                     "focus:outline-none",
                   )}
                 >

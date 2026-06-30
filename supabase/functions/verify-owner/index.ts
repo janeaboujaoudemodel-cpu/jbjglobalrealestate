@@ -7,9 +7,9 @@ const corsHeaders = {
 };
 
 /**
- * verify-owner v3 — email-locked owner check
+ * verify-owner v4 — email-locked owner check with founder aliases
  *
- * The Owner back end is locked to ONE registered owner email. A database
+ * The Owner back end is locked to the founder's registered inboxes. A database
  * `owner`/`admin` role alone must never grant access to /owner or owner edge
  * functions.
  */
@@ -48,12 +48,18 @@ serve(async (req) => {
     // Service-role client for DB lookups (bypasses RLS)
     const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
 
-    const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
+    const OWNER_BACKEND_EMAILS = new Set([
+      "janeaboujaoudemodel@gmail.com",
+      "janeaboujaoudenails@gmail.com",
+      "contact@janeaboujaoude.net",
+      "infoo.jane@gmail.com",
+    ]);
     const userEmailLower = (user.email || "").toLowerCase().trim();
 
-    // Source 1: app_settings.owner_email, but only when it resolves to the
-    // registered owner address. This lets deployment config stay compatible
-    // without allowing arbitrary admin/owner rows to open the back end.
+    // Source 1: app_settings.owner_email, but only when it resolves to one of
+    // the founder's registered backend inboxes. This lets deployment config
+    // stay compatible without allowing arbitrary admin/owner rows to open the
+    // back end.
     const { data: setting } = await serviceClient
       .from("app_settings")
       .select("value")
@@ -61,11 +67,11 @@ serve(async (req) => {
       .maybeSingle();
 
     const configuredOwnerEmail = String(setting?.value || "").toLowerCase().trim();
-    const authorizedOwnerEmail = configuredOwnerEmail === PRIMARY_OWNER_EMAIL
-      ? configuredOwnerEmail
-      : PRIMARY_OWNER_EMAIL;
+    if (configuredOwnerEmail && OWNER_BACKEND_EMAILS.has(configuredOwnerEmail)) {
+      OWNER_BACKEND_EMAILS.add(configuredOwnerEmail);
+    }
 
-    if (userEmailLower !== authorizedOwnerEmail) {
+    if (!OWNER_BACKEND_EMAILS.has(userEmailLower)) {
       return new Response(
         JSON.stringify({
           isOwner: false,

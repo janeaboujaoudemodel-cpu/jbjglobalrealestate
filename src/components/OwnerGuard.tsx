@@ -12,9 +12,9 @@ interface OwnerGuardProps {
 }
 
 /**
- * OwnerGuard - Restricts all owner/back-end routes to the single registered
- * owner email only. Roles, auditors, admins, aliases, and cached flags are not
- * sufficient unless the authenticated email matches the owner backend email.
+ * OwnerGuard - Restricts all owner/back-end routes to the founder's registered
+ * backend inboxes only. Roles, auditors, admins, and cached flags are not
+ * sufficient unless the authenticated email matches an owner backend email.
  */
 const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const { 
@@ -105,8 +105,8 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   }, [ownerLoading, isOwner, ownerError]);
 
   // HARD BACK-END VISIBILITY LOCK — evaluated BEFORE any optimistic owner render.
-  // Only the registered owner email may ever see OwnerGuard content. Cached
-  // flags, auditor/admin rows, aliases, and stale owner mode cannot bypass this.
+  // Only registered owner backend emails may ever see OwnerGuard content. Cached
+  // flags, auditor/admin rows, and stale owner mode cannot bypass this.
   if (user && !isRegisteredOwnerEmail) {
     if (mode === "broker") return <Navigate to="/broker-dashboard" replace />;
     if (mode === "developer") return <Navigate to="/developers-portal" replace />;
@@ -129,15 +129,16 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return null;
   }
 
-  // Optimistic render — Owner mode only. If we already trust this user as owner
-  // (current flag, session cache, persistent cache, or this guard rendered once),
-  // never block the owner route on a re-verification round-trip.
+  // Optimistic render — Owner mode only. If the signed-in email is one of the
+  // registered owner backend inboxes, do not show a false /403 while the Edge
+  // Function verification catches up. Backend writes/functions remain protected
+  // by verify-owner.
   if (
     showLoading &&
     !!user &&
     mode === "owner" &&
     isRegisteredOwnerEmail &&
-    (isOwner || ownerVerifiedOnce.current || hasCachedOwner || hasRenderedRef.current)
+    (isOwner || ownerVerifiedOnce.current || hasCachedOwner || hasRenderedRef.current || !ownerError)
   ) {
     hasRenderedRef.current = true;
     return <>{children}</>;
@@ -153,38 +154,48 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   if ((authLoading || ownerLoading) && showLoading && showSplash) {
     if (!loadingTimedOut) {
       return (
-        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+        <div
+          data-surface="emerald"
+          className="min-h-screen flex items-center justify-center"
+          style={{ background: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))' }}
+        >
           <div className="text-center px-6">
-            <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
-            <p className="text-gray-200 font-medium">Verifying access…</p>
-            <p className="text-white/70 text-sm mt-2">Please wait a moment.</p>
+            <Shield className="w-12 h-12 animate-pulse mx-auto mb-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <p className="font-medium" style={{ color: '#FFFFFF' }}>Verifying access…</p>
+            <p className="text-sm mt-2" style={{ color: 'rgba(255,255,255,0.72)' }}>Please wait a moment.</p>
           </div>
         </div>
       );
     }
 
     return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
-        <div className="max-w-md text-center">
-          <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
-            <AlertTriangle className="w-10 h-10 text-amber-500" />
+      <div
+        data-surface="emerald"
+        className="min-h-screen flex items-center justify-center p-6"
+        style={{ background: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))' }}
+      >
+        <div className="max-w-md text-center rounded-[28px] border p-6" style={{ borderColor: 'rgba(184,149,85,0.62)', background: 'rgba(6,78,59,0.72)' }}>
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)' }}>
+            <AlertTriangle className="w-10 h-10" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-3">Still verifying access</h1>
-          <p className="text-white/85 mb-6">The verification is taking longer than expected. You can retry now.</p>
+          <h1 className="text-2xl font-bold mb-3" style={{ color: '#FFFFFF' }}>Still verifying access</h1>
+          <p className="mb-6" style={{ color: 'rgba(255,255,255,0.85)' }}>The verification is taking longer than expected. You can retry now.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
                 setLoadingTimedOut(false);
                 refreshOwnerVerification();
               }}
-              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
+              className="font-semibold"
+              style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)', color: '#064E3B' }}
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Verification
             </Button>
             <Button
               onClick={() => signOut()}
-              className="bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] border-2 border-white font-semibold"
+              className="border font-semibold"
+              style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(184,149,85,0.72)', color: '#FFFFFF' }}
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -201,6 +212,14 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
+  // Founder inboxes must not get a false Access Denied screen because the
+  // verification request is stale, slow, or waiting for the freshly deployed
+  // edge function. Server-side Owner actions remain protected by verify-owner.
+  if (isRegisteredOwnerEmail && mode === "owner") {
+    hasRenderedRef.current = true;
+    return <>{children}</>;
+  }
+
   // Owner verification failed — auto-retry up to 3 times silently
   if (ownerError && !isOwner) {
     if (autoRetryCount.current < 3) {
@@ -212,39 +231,49 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
         }, 2000);
       }
       return (
-        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+        <div
+          data-surface="emerald"
+          className="min-h-screen flex items-center justify-center"
+          style={{ background: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))' }}
+        >
           <div className="text-center px-6">
-            <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
-            <p className="text-gray-200 font-medium">Verifying access…</p>
-            <p className="text-white/70 text-sm mt-2">Retrying ({autoRetryCount.current + 1}/3)…</p>
+            <Shield className="w-12 h-12 animate-pulse mx-auto mb-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <p className="font-medium" style={{ color: '#FFFFFF' }}>Verifying access…</p>
+            <p className="text-sm mt-2" style={{ color: 'rgba(255,255,255,0.72)' }}>Retrying ({autoRetryCount.current + 1}/3)…</p>
           </div>
         </div>
       );
     }
 
     return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
-        <div className="max-w-md text-center">
-          <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
-            <AlertTriangle className="w-10 h-10 text-amber-500" />
+      <div
+        data-surface="emerald"
+        className="min-h-screen flex items-center justify-center p-6"
+        style={{ background: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))' }}
+      >
+        <div className="max-w-md text-center rounded-[28px] border p-6" style={{ borderColor: 'rgba(184,149,85,0.62)', background: 'rgba(6,78,59,0.72)' }}>
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)' }}>
+            <AlertTriangle className="w-10 h-10" style={{ color: '#064E3B', stroke: '#064E3B' }} />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-3">Verification Temporarily Unavailable</h1>
-          <p className="text-white/70 mb-2">We couldn't verify your access at this time.</p>
-          <p className="text-white/90 text-sm mb-6">Error: {ownerError}</p>
+          <h1 className="text-2xl font-bold mb-3" style={{ color: '#FFFFFF' }}>Verification Temporarily Unavailable</h1>
+          <p className="mb-2" style={{ color: 'rgba(255,255,255,0.72)' }}>We couldn't verify your access at this time.</p>
+          <p className="text-sm mb-6" style={{ color: 'rgba(255,255,255,0.9)' }}>Error: {ownerError}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
                 autoRetryCount.current = 0;
                 refreshOwnerVerification();
               }}
-              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
+              className="font-semibold"
+              style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)', color: '#064E3B' }}
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Verification
             </Button>
             <Button
               onClick={() => signOut()}
-              className="bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] border-2 border-white font-semibold"
+              className="border font-semibold"
+              style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(184,149,85,0.72)', color: '#FFFFFF' }}
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -255,8 +284,12 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     );
   }
 
-  // AUTHENTICATED but NOT THE REGISTERED OWNER → AccessDenied
+  // AUTHENTICATED but NOT A REGISTERED OWNER BACKEND EMAIL → AccessDenied
   if (!isOwner || !isRegisteredOwnerEmail) {
+    if (isRegisteredOwnerEmail && mode === "owner") {
+      hasRenderedRef.current = true;
+      return <>{children}</>;
+    }
     return <Navigate to="/403" replace />;
   }
 
