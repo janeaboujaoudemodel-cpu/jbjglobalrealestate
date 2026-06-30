@@ -270,16 +270,11 @@ export default function MissingLogosQueue() {
     }
   }
 
-  // Auto-start the continuous sweep on mount so the owner doesn't have to
-  // click a button. Runs once per page visit, only on the "Needs Logo" tab.
+  // Manual only. Auto-starting this sweep caused background edge-function
+  // failures to pop over the owner console before the owner clicked anything.
   const autoStartedRef = useRef(false);
   useEffect(() => {
-    if (autoStartedRef.current) return;
-    if (tab !== "needs_logo") return;
-    if (isLoading) return;
-    if ((counts.data?.needs_logo ?? 0) === 0) return;
     autoStartedRef.current = true;
-    runUntilDone();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, isLoading, counts.data?.needs_logo]);
 
@@ -287,10 +282,10 @@ export default function MissingLogosQueue() {
   const visibleIds = rows.slice(0, 25).map((r) => r.id);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] pt-24 pb-12 px-4 md:px-8 lg:px-12">
+    <div className="bg-[#FDFBF7] pb-8 max-w-full overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <Link
-          to="/admin/developers"
+          to="/owner/developers"
           className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4 text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -372,10 +367,9 @@ export default function MissingLogosQueue() {
                   : `Auto-find next ${visibleIds.length}`}
               </Button>
               <Button
-                variant="outline"
+                variant="gold"
                 onClick={runUntilDone}
                 disabled={runAll || bulkBusy}
-                className="border-[#B89555]/60 text-[#1A1A1A]"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
                 {runAll
@@ -409,15 +403,14 @@ export default function MissingLogosQueue() {
               >
                 {/* Preview */}
                 <div className="shrink-0">
-                  {r.logo_url ? (
-                    <DeveloperLogo
-                      src={r.logo_url}
-                      alt={r.name}
-                      variant="tile"
-                    />
-                  ) : (
-                    <DeveloperLogo variant="nameplate" name={r.name} />
-                  )}
+                  <DeveloperLogo
+                    src={r.logo_url}
+                    alt={`${r.name} logo`}
+                    name={r.name}
+                    variant="tile"
+                    renderFallback
+                    className="size-16 rounded-xl border-[#B89555]/40 bg-[#FDFBF7]"
+                  />
                 </div>
 
                 {/* Identity */}
@@ -443,14 +436,14 @@ export default function MissingLogosQueue() {
                     )}
                   </div>
                   {r.slug && (
-                    <p className="text-xs text-[#1A1A1A]/60 truncate mt-0.5">
-                      /developers/{r.slug}
-                    </p>
+                    <Link to={`/owner/developers/${r.slug}`} className="text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline truncate mt-0.5 block">
+                      /owner/developers/{r.slug}
+                    </Link>
                   )}
                   {r.logo_last_attempt_at && (
                     <p className="text-xs text-[#1A1A1A]/50 mt-0.5">
                       Last auto-find:{" "}
-                      {new Date(r.logo_last_attempt_at).toLocaleString()}
+                      {new Date(r.logo_last_attempt_at).toLocaleString("en-GB", { timeZone: "Asia/Dubai", dateStyle: "short", timeStyle: "short" })}
                     </p>
                   )}
 
@@ -514,7 +507,7 @@ export default function MissingLogosQueue() {
                   </Button>
                   {r.logo_status === "unavailable" ? (
                     <Button
-                      variant="outline"
+                      variant="gold"
                       size="sm"
                       onClick={() => reopen(r.id)}
                       disabled={busyId === r.id}
@@ -523,7 +516,7 @@ export default function MissingLogosQueue() {
                     </Button>
                   ) : (
                     <Button
-                      variant="outline"
+                      variant="gold"
                       size="sm"
                       onClick={() => markUnavailable(r.id)}
                       disabled={busyId === r.id}
