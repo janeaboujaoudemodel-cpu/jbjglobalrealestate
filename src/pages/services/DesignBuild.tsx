@@ -1,3 +1,4 @@
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 

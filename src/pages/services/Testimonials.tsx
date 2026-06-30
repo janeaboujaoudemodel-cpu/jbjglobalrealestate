@@ -1,3 +1,4 @@
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { motion } from "framer-motion";
 import {
   Star,
