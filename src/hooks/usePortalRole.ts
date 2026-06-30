@@ -23,8 +23,7 @@ export function usePortalRole() {
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<PortalRole> => {
       if (!user?.id) return null;
-      if (isOwner && mode === "owner") return "owner";
-      if (isOwner && mode === "developer") return "portal_developer";
+      if (isOwner) return "owner";
 
       const { data: roles } = await supabase
         .from("user_roles")
