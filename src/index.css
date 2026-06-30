@@ -21006,4 +21006,21 @@ html body [data-mode-switcher-panel="true"] [data-mode-active-pill][data-surface
   opacity: 1 !important;
 }
 
+/* ============================================================
+   GLOBAL WHITE-GLYPH LOCK — for emerald/red metallic badges that
+   must render their SVG glyph in pure WHITE regardless of any
+   ancestor contrast guard. Highest-specificity override.
+   ============================================================ */
+html body [data-jbj-white-glyph],
+html body [data-jbj-white-glyph] *,
+html body [data-jbj-white-glyph] svg,
+html body [data-jbj-white-glyph] svg *,
+html body [data-jbj-white-glyph] :is(path, line, polyline, polygon, circle, rect, ellipse, use, g) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
 

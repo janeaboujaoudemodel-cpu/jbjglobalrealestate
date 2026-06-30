@@ -744,19 +744,21 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
   title: string; items: string[]; tone: "red" | "emerald"; icon: import("lucide-react").LucideIcon;
 }) {
   const isRed = tone === "red";
-  const markBg = isRed
-    ? "linear-gradient(135deg,#5E1414 0%,#A02828 100%)"
-    : "linear-gradient(135deg,#032F24 0%,#0B7A5B 100%)";
+  // Match the Compare Your Property cards on the homepage: champagne premium fill,
+  // emerald-metallic badge for BOTH tones (red/emerald becomes one unified system),
+  // with the X / Check rendered in pure white.
+  const markBg = "linear-gradient(135deg,#064E3B 0%,#042c1c 60%,#021b12 100%)";
   const renderMark = () => (
     <span
       data-no-contrast-guard
       data-emerald-ok="icon"
-      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
+      data-jbj-white-glyph
+      className="allow-white shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
       style={{ background: markBg }}
     >
       {isRed
-        ? <X className="w-3 h-3" strokeWidth={3.2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-        : <Check className="w-3 h-3" strokeWidth={3.2} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
+        ? <X data-no-contrast-guard className="allow-white w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        : <Check data-no-contrast-guard className="allow-white w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
     </span>
   );
   // Corner-only gold frame (matches Compare Projects card on the homepage):
@@ -795,16 +797,23 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
           <span
             data-no-contrast-guard
             data-emerald-ok="icon"
-            className="grid h-10 w-10 place-items-center rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.55)]"
+            data-jbj-white-glyph
+            className="allow-white grid h-10 w-10 place-items-center rounded-xl shadow-[inset_0_1px_0_rgba(255,255,255,.22),0_10px_22px_-16px_rgba(0,0,0,.55)]"
             style={{ background: markBg }}
           >
-            <Icon className="h-[18px] w-[18px]" strokeWidth={2.8} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <Icon data-no-contrast-guard className="allow-white h-[18px] w-[18px]" strokeWidth={2.8} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </span>
           <span className="text-[#1A1A1A]">{title}</span>
         </h3>
+        {/* List rows: champagne-tinted, no gold border around the "field" — matches the homepage Compare cards. */}
         <ul className="space-y-2">
           {items.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 rounded-lg bg-[#FDFBF7]/80 px-3 py-2 text-[#1A1A1A] text-sm leading-relaxed">
+            <li
+              key={i}
+              className="flex items-start gap-2 rounded-lg bg-[#FDFBF7]/85 px-3 py-2 text-[#1A1A1A] text-sm leading-relaxed border-0 ring-0 shadow-none"
+              style={{ border: "0", outline: "none", boxShadow: "none" }}
+              data-gold-hairline={undefined}
+            >
               {renderMark()}
               <span className="text-[#1A1A1A]">{p}</span>
             </li>
