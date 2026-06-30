@@ -51,14 +51,9 @@ export default function BrokerLeadsPage() {
             Click any lead to open it in JBJ Sales Assistant for context-aware help.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setAddOpen(true)}
-          className="jj-surface-emerald allow-white inline-flex items-center gap-2 h-10 px-4 rounded-md text-white text-sm font-semibold hover:-translate-y-0.5 hover:brightness-110 transition-all"
-          data-surface="emerald"
-        >
+        <Button variant="primary" onClick={() => setAddOpen(true)}>
           <Plus className="h-4 w-4" /> Add Lead
-        </button>
+        </Button>
       </header>
 
       <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 overflow-x-auto">
