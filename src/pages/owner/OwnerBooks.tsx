@@ -355,8 +355,10 @@ export default function OwnerBooks() {
                   >
                     <div className="book-3d__pages" />
                     <div className="book-3d__cover">
+                      <div className="book-3d__lock" aria-label="Owner-only book">
+                        <Lock size={12} strokeWidth={2.6} />
+                      </div>
                       <div className="book-3d__frame">
-                        <div className="book-3d__eyebrow">JBJ · Vol {b.book_number}</div>
                         <div className="book-3d__title">{b.title}</div>
                         <div className="book-3d__rule" />
                         <div className="book-3d__author">JBJ Global</div>
@@ -366,13 +368,6 @@ export default function OwnerBooks() {
                     </div>
                   </div>
                 </div>
-                <Input
-                  defaultValue={b.title}
-                  onBlur={(e) => {
-                    if (e.target.value !== b.title) renameInline(b.id, e.target.value);
-                  }}
-                  className="text-sm bg-white border-[#B89555]/30"
-                />
                 <div className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-2">
                   <span>{b.ai_generated_chapter_count ?? 0} chapters</span>
                   {b.source_file_name && (
