@@ -374,6 +374,69 @@ export default function DeveloperDirectory() {
 
       {isLoading && page === 0 && <p className="text-sm text-[#1A1A1A]/70">Loading…</p>}
 
+      {viewMode === "excel" ? (
+        <Card className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl overflow-hidden shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)]">
+          <div className="overflow-x-auto jj-scrollbar-gold">
+            <table className="w-full min-w-[1320px] text-sm">
+              <thead className="bg-[#EFE6D6] border-b border-[#B89555]/35">
+                <tr className="text-left text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/70">
+                  <th className="px-4 py-3 font-black">Developer</th>
+                  <th className="px-4 py-3 font-black">Founded</th>
+                  <th className="px-4 py-3 font-black">Owner / Founder</th>
+                  <th className="px-4 py-3 font-black">Units Delivered</th>
+                  <th className="px-4 py-3 font-black">For Sale</th>
+                  <th className="px-4 py-3 font-black">Total Projects</th>
+                  <th className="px-4 py-3 font-black">Coverage</th>
+                  <th className="px-4 py-3 font-black">Avg. Price</th>
+                  <th className="px-4 py-3 font-black">Logo</th>
+                  <th className="px-4 py-3 font-black">Website</th>
+                  <th className="px-4 py-3 font-black">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((d) => (
+                  <tr key={d.id} className="border-b border-[#B89555]/15 align-middle hover:bg-[#FDFBF7]">
+                    <td className="px-4 py-3 min-w-[260px]">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Checkbox checked={selected.has(d.id)} onCheckedChange={() => toggleOne(d.id)} aria-label={`Select ${d.name}`} />
+                        <DeveloperLogo
+                          src={!brokenImgs.has(d.id) ? d.logo_url : null}
+                          alt={`${d.name} logo`}
+                          name={d.name}
+                          variant="tile"
+                          renderFallback
+                          className="size-10 rounded-xl border-[#B89555]/40 bg-[#FDFBF7]"
+                          onError={() => setBrokenImgs((s) => new Set(s).add(d.id))}
+                        />
+                        <div className="min-w-0">
+                          <p className="font-black text-[#1A1A1A] truncate">{d.name}</p>
+                          <p className="text-xs text-[#1A1A1A]/55 truncate">{d.slug}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-[#1A1A1A]">{d.founded_year ?? "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] max-w-[170px] truncate">{d.ceo_name ?? "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.total_units_delivered ?? 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.project_count || d.completed_projects || 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
+                    <td className="px-4 py-3"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
+                    <td className="px-4 py-3 max-w-[170px] truncate">
+                      {d.website_url ? <a href={d.website_url} target="_blank" rel="noreferrer" className="text-[#1A1A1A] underline decoration-[#B89555]/50">Website</a> : <span className="text-[#1A1A1A]/45">—</span>}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Button asChild size="sm" variant="gold">
+                        <Link to={`/owner/developers/${d.slug}`}>Open</Link>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {rows.map((d) => {
           const isSel = selected.has(d.id);
@@ -409,12 +472,26 @@ export default function DeveloperDirectory() {
                   )}
                 </div>
               </div>
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">For Sale</p>
+                  <p className="text-[#1A1A1A] font-black">{(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}</p>
+                </div>
+                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Projects</p>
+                  <p className="text-[#1A1A1A] font-black">{(d.project_count || d.completed_projects || 0).toLocaleString()}</p>
+                </div>
+                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Units</p>
+                  <p className="text-[#1A1A1A] font-black">{(d.total_units_delivered ?? 0).toLocaleString()}</p>
+                </div>
+              </div>
               <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
               <div className="mt-3 flex gap-2 flex-wrap">
                 <Button asChild size="sm" variant="gold">
-                  <Link to={`/developers-portal/developers/${d.slug}`}>
+                  <Link to={`/owner/developers/${d.slug}`}>
                     <ExternalLink className="size-3 mr-1" /> Open profile
                   </Link>
                 </Button>
@@ -431,6 +508,7 @@ export default function DeveloperDirectory() {
           );
         })}
       </div>
+      )}
 
       {canLoadMore && (
         <div className="flex justify-center py-4">
