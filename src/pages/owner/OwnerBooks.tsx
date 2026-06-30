@@ -4,9 +4,9 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Upload, Loader2, Eye, Trash2, RefreshCcw } from "lucide-react";
+import { BookOpen, Upload, Loader2, Eye, Trash2, RefreshCcw, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -106,6 +106,14 @@ const BOOK_3D_CSS = `
 }
 .book-3d__rule { margin-top:auto; height:1px; background: currentColor; opacity:.7; }
 .book-3d__author { margin-top: 8px; font-size: 10px; letter-spacing:.22em; text-transform:uppercase; opacity:.9; }
+.book-3d__lock {
+  position:absolute; top:8%; right:8%; width: 26px; height: 26px; border-radius: 999px;
+  display:grid; place-items:center;
+  background: radial-gradient(circle at 35% 30%, #fff2c4 0%, var(--foil) 45%, #8a6a25 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,244,210,.55), 0 2px 4px rgba(0,0,0,.45);
+  color: #3a2a08;
+  z-index: 3;
+}
 `;
 
 
@@ -347,8 +355,10 @@ export default function OwnerBooks() {
                   >
                     <div className="book-3d__pages" />
                     <div className="book-3d__cover">
+                      <div className="book-3d__lock" aria-label="Owner-only book">
+                        <Lock size={12} strokeWidth={2.6} />
+                      </div>
                       <div className="book-3d__frame">
-                        <div className="book-3d__eyebrow">JBJ · Vol {b.book_number}</div>
                         <div className="book-3d__title">{b.title}</div>
                         <div className="book-3d__rule" />
                         <div className="book-3d__author">JBJ Global</div>
@@ -358,13 +368,6 @@ export default function OwnerBooks() {
                     </div>
                   </div>
                 </div>
-                <Input
-                  defaultValue={b.title}
-                  onBlur={(e) => {
-                    if (e.target.value !== b.title) renameInline(b.id, e.target.value);
-                  }}
-                  className="text-sm bg-white border-[#B89555]/30"
-                />
                 <div className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-2">
                   <span>{b.ai_generated_chapter_count ?? 0} chapters</span>
                   {b.source_file_name && (
