@@ -52,26 +52,26 @@ export default function QuickActionsGrid() {
   const navigate = useNavigate();
 
   return (
-    <div data-surface="champagne" className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+    <div data-surface="champagne" className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm overflow-hidden">
       <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4">Quick Actions</h3>
       <TooltipProvider delayDuration={200}>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
           {QUICK_ACTIONS.map((action) => (
             <Tooltip key={action.path}>
               <TooltipTrigger asChild>
                 <button
                   onClick={() => navigate(action.path)}
                   className={cn(
-                    "flex flex-col items-center justify-center gap-2 p-4 rounded-xl min-w-0",
+                    "flex flex-col items-center justify-center gap-2.5 p-3.5 rounded-xl min-w-0 min-h-[104px] overflow-hidden",
                     "bg-[#FDFBF7]/70 border border-[#B89555]/20",
                     "hover:border-[#B89555]/50 hover:bg-[#B89555]/10 hover:-translate-y-0.5 hover:shadow-md hover:shadow-[#B89555]/10",
                     "transition-all duration-200 cursor-pointer group active:scale-95"
                   )}
                 >
-                  <div data-backend-icon-tile="emerald-soft" className="w-10 h-10 rounded-lg bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center group-hover:bg-[#064E3B]/15 group-hover:border-[#064E3B]/35 transition-colors">
-                    <action.icon className={cn("h-5 w-5 flex-shrink-0 text-[#064E3B] group-hover:text-[#042C1C] transition-colors")} strokeWidth={2.15} />
+                  <div data-backend-icon-tile="emerald-soft" className="allow-white w-10 h-10 rounded-lg bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center shrink-0 group-hover:bg-[#064E3B]/15 group-hover:border-[#064E3B]/35 transition-colors">
+                    <action.icon className={cn("allow-white h-5 w-5 flex-shrink-0 text-white transition-colors")} strokeWidth={2.15} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <span className="text-xs text-[#1A1A1A]/80 group-hover:text-[#1A1A1A] transition-colors text-center font-medium leading-tight">
+                  <span className="text-[12px] text-[#1A1A1A]/85 group-hover:text-[#1A1A1A] transition-colors text-center font-semibold leading-tight max-w-full break-words">
                     {action.label}
                   </span>
                 </button>
