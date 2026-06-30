@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { User, Briefcase, ArrowRight, CheckCircle2, Building2, Sparkles, X } from 'lucide-react';
+import { User, Briefcase, ArrowRight, CheckCircle2, Building2, Sparkles, X, Crown } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useUserModeContext, UserMode } from '@/contexts/UserModeContext';
 import { usePopupVisibility } from '@/contexts/PopupCoordinatorContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { isOwnerBackendEmail } from '@/config/ownerEmails';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -38,12 +39,22 @@ const MODE_OPTIONS: ModeOption[] = [
   },
 ];
 
+const OWNER_MODE_OPTION: ModeOption = {
+  mode: 'owner',
+  label: 'Owner',
+  description: 'Open the private owner command center and executive controls',
+  icon: Crown,
+};
+
 export const ModeSelectionModal = () => {
   const { setMode, hasMadeInitialSelection } = useUserModeContext();
   const { isVisible, requestToShow, dismiss: rawDismiss } = usePopupVisibility('mode-selection-modal');
   const { user } = useAuth();
   const [selectedMode, setSelectedMode] = useState<UserMode | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const visibleModeOptions = isOwnerBackendEmail(user?.email)
+    ? [...MODE_OPTIONS, OWNER_MODE_OPTION]
+    : MODE_OPTIONS;
 
   // First-visit greeter: shown once per session if the user hasn't picked a
   // category yet. Fully dismissable — browsing is free. The mode picker stays
@@ -135,7 +146,8 @@ export const ModeSelectionModal = () => {
           </DialogHeader>
 
           <div className="p-4 sm:p-6 space-y-2.5 sm:space-y-3">
-            {MODE_OPTIONS.map((option) => {
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {visibleModeOptions.map((option) => {
               const Icon = option.icon;
               const isSelected = selectedMode === option.mode;
               return (
@@ -144,14 +156,14 @@ export const ModeSelectionModal = () => {
                   onClick={() => setSelectedMode(option.mode)}
                   aria-pressed={isSelected}
                   className={cn(
-                    'w-full p-3 sm:p-4 rounded-xl border-2 transition-all duration-300 text-left',
+                    'w-full h-full min-h-[128px] p-3 sm:p-4 rounded-xl border-2 transition-all duration-300 text-left',
                     'hover:shadow-lg hover:scale-[1.01]',
                     isSelected
                       ? 'bg-[#EFE6D6]/40 border-[#B89555] shadow-md'
                       : 'bg-[#FDFBF7]/80 backdrop-blur-sm border-[#B89555]/20 hover:border-[#B89555]/50'
                   )}
                 >
-                  <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="flex h-full items-start gap-3 sm:gap-4">
                     <div
                       data-emerald-action="true"
                       data-no-contrast-guard
@@ -174,6 +186,7 @@ export const ModeSelectionModal = () => {
                 </button>
               );
             })}
+            </div>
           </div>
         </div>
 
