@@ -63,7 +63,7 @@ const ownerActions: QuickAction[] = [
   { label: "AI Assistant",     description: "Founder helper",   icon: Sparkles,   href: "/owner/founder-assistant" },
   { label: "Studio",           description: "Media & content",  icon: FolderOpen, href: "/owner/studio" },
   { label: "Ticket Center",    description: "Customer happiness", icon: HelpCircle, href: "/ticket-hub" },
-  { label: "Calendar",         description: "Appointments",     icon: Calendar,   href: "/owner/crm/calendar" },
+  { label: "Calendar",         description: "Appointments",     icon: Calendar,   href: "/owner/crm?entity=leads&view=calendar" },
   { label: "Documents",        description: "Manage your files", icon: FolderOpen, href: "/owner/documents" },
 ];
 

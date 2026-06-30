@@ -33,8 +33,8 @@ const INTEGRATIONS: IntegrationCard[] = [
   { id: "facebook", name: "Facebook Messenger", icon: Facebook, description: "Page inbox via Messenger Platform", channelType: "facebook", connectHref: "/owner/settings/communication?channel=facebook" },
   { id: "voice", name: "Voice Calls", icon: Phone, description: "Inbound / outbound calling (Twilio / cloud telephony)", channelType: "voice", connectHref: "/owner/settings/communication?channel=voice" },
   { id: "elevenlabs", name: "ElevenLabs Voice Agent", icon: Mic, description: "Always-on AI voice concierge on the homepage", externalEnv: "ELEVENLABS_API_KEY", connectHref: "/owner/voice-agent" },
-  { id: "resend", name: "Resend Email API", icon: Send, description: "Transactional email + campaigns from jbj.ae", externalEnv: "RESEND_API_KEY", connectHref: "/owner/crm?section=campaigns" },
-  { id: "marketing", name: "Marketing Hub", icon: Megaphone, description: "Audience segmentation & branded campaign sender", channelType: undefined, externalEnv: "RESEND_API_KEY", connectHref: "/owner/crm?section=campaigns" },
+  { id: "resend", name: "Resend Email API", icon: Send, description: "Transactional email + campaigns from jbj.ae", externalEnv: "RESEND_API_KEY", connectHref: "/owner/crm?entity=leads&view=campaigns" },
+  { id: "marketing", name: "Marketing Hub", icon: Megaphone, description: "Audience segmentation & branded campaign sender", channelType: undefined, externalEnv: "RESEND_API_KEY", connectHref: "/owner/crm?entity=leads&view=campaigns" },
 ];
 
 const STATUS_STYLES: Record<IntegrationStatus, string> = {

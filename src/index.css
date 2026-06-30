@@ -22600,3 +22600,56 @@ html body #root .owner-dashboard-shell :is([data-surface="emerald"], [data-emera
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 148 — OWNER OVERVIEW + CRM PREMIUM RESPONSIVE LOCK
+   Fixes the reported active Overview tab where older champagne rules painted
+   black ink over an emerald active surface. Also preserves CRM/leads tables as
+   horizontal data grids on squeezed screens instead of crushing cells vertically. */
+html body #root .owner-dashboard-shell :is(
+  .tab-trigger-champagne[data-state="active"],
+  [data-sidebar-owner-item][data-surface="emerald"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"]
+) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  .tab-trigger-champagne[data-state="active"],
+  [data-sidebar-owner-item][data-surface="emerald"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"]
+) :is(*,span,div,p,strong,svg,[data-lucide],[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill-opacity: 1 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-portal="owner-crm"] table {
+  table-layout: fixed !important;
+  width: max-content !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-portal="owner-crm"] :is(th,td) {
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  white-space: nowrap !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-portal="owner-crm"] :is(td,th) :is(a,button,span,p,div) {
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}

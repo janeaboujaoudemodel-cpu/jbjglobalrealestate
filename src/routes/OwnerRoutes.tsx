@@ -159,15 +159,15 @@ export const OwnerRoutes = () => (
     <Route path="crm/academy" element={<OwnerAcademyApprovals />} />
     <Route path="hr/employee/:userId" element={<EmployeeProfile />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
-    <Route path="crm/leads" element={<Navigate to="/owner/crm?section=leads" replace />} />
-    <Route path="crm/tasks" element={<Navigate to="/owner/crm?section=tasks" replace />} />
-    <Route path="crm/calendar" element={<Navigate to="/owner/crm?section=calendar" replace />} />
-    <Route path="crm/notes" element={<Navigate to="/owner/crm?section=notes" replace />} />
-    <Route path="crm/reminders" element={<Navigate to="/owner/crm?section=notifications" replace />} />
-    <Route path="crm/inbox" element={<Navigate to="/owner/crm?section=inbox" replace />} />
-    <Route path="crm/contracts" element={<Navigate to="/owner/crm?section=contracts" replace />} />
-    <Route path="crm/automation" element={<Navigate to="/owner/crm?section=automation" replace />} />
-    <Route path="crm/employees" element={<Navigate to="/owner/crm?section=employees" replace />} />
+    <Route path="crm/leads" element={<Navigate to="/owner/crm?entity=leads&view=all" replace />} />
+    <Route path="crm/tasks" element={<Navigate to="/owner/crm?entity=leads&view=tasks" replace />} />
+    <Route path="crm/calendar" element={<Navigate to="/owner/crm?entity=leads&view=calendar" replace />} />
+    <Route path="crm/notes" element={<Navigate to="/owner/crm?entity=leads&view=notes" replace />} />
+    <Route path="crm/reminders" element={<Navigate to="/owner/crm?entity=leads&view=notifications" replace />} />
+    <Route path="crm/inbox" element={<Navigate to="/owner/crm?entity=leads&view=inbox" replace />} />
+    <Route path="crm/contracts" element={<Navigate to="/owner/crm?entity=leads&view=contracts" replace />} />
+    <Route path="crm/automation" element={<Navigate to="/owner/crm?entity=leads&view=automation" replace />} />
+    <Route path="crm/employees" element={<Navigate to="/owner/crm?entity=employees&view=roster" replace />} />
     <Route path="broker-visits" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerBrokerVisits")))}</Suspense>} />
     <Route path="crm/relationships" element={<Navigate to="/owner/crm/relationship-hub" replace />} />
     <Route path="crm/relationship-hub" element={<CRMRelationships />} />
@@ -261,10 +261,10 @@ export const OwnerRoutes = () => (
     <Route path="exclusive-documents" element={<ExclusiveDocuments />} />
     <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/AgencyActivityLog")))}</Suspense>} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
-    <Route path="crm/brokers" element={<Navigate to="/owner/crm?section=relationships&sub=brokers" replace />} />
+    <Route path="crm/brokers" element={<Navigate to="/owner/crm?entity=brokers&view=directory" replace />} />
     <Route path="crm/integrity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/DataIntegrityCheck")))}</Suspense>} />
-    <Route path="crm/network" element={<Navigate to="/owner/crm?section=relationships&sub=developers" replace />} />
-    <Route path="crm/campaigns" element={<Navigate to="/owner/crm?section=campaigns" replace />} />
+    <Route path="crm/network" element={<Navigate to="/owner/crm?entity=developers&view=registry" replace />} />
+    <Route path="crm/campaigns" element={<Navigate to="/owner/crm?entity=leads&view=campaigns" replace />} />
    <Route path="crm/company/:type/:name" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CompanyHubPage")))}</Suspense>} />
    <Route path="crm/person/:variant/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/PersonHubPage")))}</Suspense>} />
    <Route path="crm/brokers/:brokerId" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokerProfile")))}</Suspense>} />

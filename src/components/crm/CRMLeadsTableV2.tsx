@@ -478,7 +478,7 @@ export default function CRMLeadsTableV2({
         </div>
 
         {/* Search row */}
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] gap-3 items-center">
           <div className="flex-1">
             <Input
               value={search}
@@ -551,7 +551,7 @@ export default function CRMLeadsTableV2({
         })()}
 
         {/* Dropdown row — shadcn Select, evenly spaced, no overlap */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
           <SearchableMultiSelect
             label="All Statuses"
             placeholder="Search statuses…"
@@ -646,8 +646,8 @@ export default function CRMLeadsTableV2({
         onSuccess={() => { fetchLeads(); onRefresh(); }}
       />
 
-      <div className="w-full overflow-x-auto rounded-lg border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] [&_*]:[overflow-wrap:normal] [&_*]:[word-break:normal]">
-        <Table className="min-w-[1300px] [&_th]:whitespace-nowrap">
+      <div className="w-full max-w-full overflow-x-auto overscroll-x-contain rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] jj-scrollbar-gold [&_*]:[overflow-wrap:normal] [&_*]:[word-break:normal]">
+        <Table className="min-w-[1380px] table-fixed [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap">
           <TableHeader>
             <TableRow className="border-[#B89555]/20 hover:bg-transparent">
               <TableHead className="w-12">
@@ -659,15 +659,15 @@ export default function CRMLeadsTableV2({
                   }}
                 />
               </TableHead>
-              <TableHead className="text-[#1A1A1A]/70 font-bold">Name</TableHead>
-              <TableHead className="w-[140px] text-[#1A1A1A]/70 font-bold">Phone</TableHead>
-              <TableHead className="w-[240px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
-              <TableHead className="w-[140px] text-[#1A1A1A]/70 font-bold">Source</TableHead>
+              <TableHead className="w-[240px] text-[#1A1A1A]/70 font-bold">Name</TableHead>
+              <TableHead className="w-[150px] text-[#1A1A1A]/70 font-bold">Phone</TableHead>
+              <TableHead className="w-[290px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
+              <TableHead className="w-[190px] text-[#1A1A1A]/70 font-bold">Source</TableHead>
               <TableHead className="w-[210px] min-w-[210px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
               <TableHead className="w-[100px] text-[#1A1A1A]/70 font-bold">Date</TableHead>
               <TableHead className="w-20 text-[#1A1A1A]/70 font-bold">VIP</TableHead>
-              <TableHead className="text-[#1A1A1A]/70 font-bold">Assigned Broker</TableHead>
-              <TableHead className="text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
+              <TableHead className="w-[210px] text-[#1A1A1A]/70 font-bold">Assigned Broker</TableHead>
+              <TableHead className="w-[260px] text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -723,8 +723,8 @@ export default function CRMLeadsTableV2({
                         }}
                       />
                     </TableCell>
-                    <TableCell className={`font-semibold text-[#1A1A1A] whitespace-nowrap ${(lead as any).is_investor ? "border-l-2 border-[#B89555]" : ""}`}>
-                      <span className="inline-flex items-center gap-1.5">
+                    <TableCell className={`font-semibold text-[#1A1A1A] whitespace-nowrap min-w-0 ${(lead as any).is_investor ? "border-l-2 border-[#B89555]" : ""}`}>
+                      <span className="inline-flex items-center gap-1.5 max-w-full min-w-0">
                         {(lead as any).is_investor && (
                           <span
                             title="Investor"
@@ -736,7 +736,7 @@ export default function CRMLeadsTableV2({
                         <a
                           href={`/owner/crm/leads/${lead.id}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="hover:underline decoration-[#B89555] underline-offset-2"
+                            className="block max-w-[170px] truncate hover:underline decoration-[#B89555] underline-offset-2"
                           title="Open lead in CRM"
                         >
                           {lead.full_name || "—"}
@@ -749,23 +749,23 @@ export default function CRMLeadsTableV2({
                       </span>
                     </TableCell>
                     <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
-                    <TableCell className="min-w-[220px] max-w-[320px]">
+                    <TableCell className="w-[290px] min-w-0">
                       {lead.email_lower ? (
                         <Button
                           onClick={() => handleEmail(lead)}
                           variant="outline"
                           size="sm"
-                          className="h-8 w-full justify-start truncate rounded-full border-[#B89555]/25 bg-[#FDFBF7] px-3 text-sm font-medium text-[#1A1A1A]"
+                          className="h-8 w-full min-w-0 justify-start rounded-full border-[#B89555]/25 bg-[#FDFBF7] px-3 text-sm font-medium text-[#1A1A1A] overflow-hidden"
                           title={lead.email_lower}
                         >
-                          {lead.email_lower}
+                          <span className="block min-w-0 max-w-full truncate text-left">{lead.email_lower}</span>
                         </Button>
                       ) : (
                         <span className="text-[#1A1A1A]/40">—</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-sm text-[#1A1A1A]/80 min-w-[180px] max-w-[260px] whitespace-normal break-words leading-snug">
-                      <span className="inline-flex items-center px-2 py-1 rounded-md bg-[#EFE6D6]/60 border border-[#B89555]/25 text-[#1A1A1A]/85 text-xs font-medium">
+                    <TableCell className="w-[190px] text-sm text-[#1A1A1A]/80 min-w-0 leading-snug">
+                      <span className="inline-flex max-w-full items-center px-2 py-1 rounded-md bg-[#EFE6D6]/60 border border-[#B89555]/25 text-[#1A1A1A]/85 text-xs font-medium truncate">
                         {renderSource(lead)}
                       </span>
                     </TableCell>
@@ -797,8 +797,8 @@ export default function CRMLeadsTableV2({
                         ) : "VIP"}
                       </Button>
                     </TableCell>
-                    <TableCell className="text-sm min-w-[200px] whitespace-nowrap">
-                      <div className="inline-flex items-center gap-2 whitespace-nowrap">
+                    <TableCell className="w-[210px] text-sm whitespace-nowrap min-w-0">
+                      <div className="inline-flex max-w-full items-center gap-2 whitespace-nowrap min-w-0">
                         {assignedNames[lead.id] ? (
                           <span className="font-semibold text-[#1A1A1A] truncate max-w-[140px]" title={`Assigned: ${assignedNames[lead.id]}`}>
                             {assignedNames[lead.id]}
@@ -859,8 +859,8 @@ export default function CRMLeadsTableV2({
                         )}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <div className="inline-flex items-center justify-end gap-1 flex-wrap">
+                    <TableCell className="w-[260px] text-right">
+                      <div className="inline-flex items-center justify-end gap-1 whitespace-nowrap">
                         <LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} />
                         {/* Premium restrained action cluster — champagne + ink, gold hairline; red reserved for destructive */}
                         <div className="inline-flex items-center rounded-full border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden divide-x divide-[#B89555]/20 shadow-sm">

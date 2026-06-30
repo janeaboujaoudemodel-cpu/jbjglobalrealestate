@@ -32,7 +32,7 @@ interface QuickAction {
 
 const QUICK_ACTIONS: QuickAction[] = [
   { label: "Add Lead", description: "Create a new CRM lead", icon: UserPlus, path: "/owner/crm?action=new-lead" },
-  { label: "Calendar", description: "View appointments & schedule", icon: Calendar, path: "/owner/crm/calendar" },
+  { label: "Calendar", description: "View appointments & schedule", icon: Calendar, path: "/owner/crm?entity=leads&view=calendar" },
   { label: "Property Map", description: "Interactive UAE property map", icon: Map, path: "/owner/map" },
   { label: "AI Assistant", description: "Founder AI assistant", icon: Bot, path: "/owner/founder-assistant" },
   { label: "Studio", description: "Media & content studio", icon: Video, path: "/owner/studio" },
@@ -41,11 +41,11 @@ const QUICK_ACTIONS: QuickAction[] = [
   { label: "Marketing", description: "Marketing hub & campaigns", icon: Megaphone, path: "/owner/marketing-hub" },
   
   { label: "Employee Hub", description: "Team & HR management", icon: Building2, path: "/employee-hub" },
-  { label: "Leads Inbox", description: "All CRM leads inbox", icon: FileText, path: "/owner/crm/leads" },
+  { label: "Leads Inbox", description: "All CRM leads inbox", icon: FileText, path: "/owner/crm?entity=leads&view=all" },
   { label: "CRM Chat", description: "Client communications", icon: MessageSquare, path: "/owner/crm" },
   { label: "Contract Vault", description: "Developer agreements & AI contract upload", icon: FileSignature, path: "/owner/contracts" },
   { label: "Agency Activity", description: "Reminders, calls & notes logged on UAE agencies", icon: Bell, path: "/owner/crm/relationships/activity" },
-  { label: "Brokers Registry", description: "Every broker & company they work for", icon: Users, path: "/owner/crm/brokers" },
+  { label: "Brokers Registry", description: "Every broker & company they work for", icon: Users, path: "/owner/crm?entity=brokers&view=directory" },
 ];
 
 export default function QuickActionsGrid() {

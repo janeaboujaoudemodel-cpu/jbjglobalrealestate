@@ -161,28 +161,36 @@ interface ConversationRowProps {
 }
 
 function ConversationRow({ conversation }: ConversationRowProps) {
+  const title = conversation.user_name || conversation.user_email || "Website visitor";
+  const initials = title
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("") || "JB";
+
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#B89555]/10">
-      <div className="flex items-center gap-3 min-w-0">
-        <div data-backend-icon-tile="emerald-soft" className="w-8 h-8 rounded-full bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center flex-shrink-0">
-          <MessageSquare className="h-4 w-4 text-[#064E3B]" />
+    <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/25 shadow-[0_10px_24px_-22px_rgba(26,26,26,0.35)]">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <div data-backend-icon-tile="emerald" data-surface="emerald" className="allow-white w-10 h-10 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] flex items-center justify-center flex-shrink-0">
+          <span className="allow-white text-[11px] font-black tracking-wide" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{initials}</span>
         </div>
         <div className="min-w-0">
           <p className="font-medium text-[#1A1A1A] text-sm truncate">
-            {conversation.user_name || conversation.user_email}
+            {title}
           </p>
           <p className="text-xs text-[#1A1A1A]/70 truncate">
             {conversation.page_source || 'Website chat'}
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 shrink-0">
         <Badge 
           variant="secondary" 
-          className={`text-xs ${
+          className={`rounded-full border px-3 py-1 text-[11px] font-bold ${
  conversation.status === 'active' 
- ? 'jj-emerald-soft text-[color:var(--emerald-1)]' 
- : 'bg-[#F7F2EA] text-[#1A1A1A]/70'
+ ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/35' 
+ : 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/20'
  }`}
         >
           {conversation.status}
@@ -435,7 +443,13 @@ export default function OwnerDashboardOverview() {
           .order('created_at', { ascending: false })
           .limit(10);
         if (error) throw error;
-        return data || [];
+        const seen = new Set<string>();
+        return (data || []).filter((conversation) => {
+          const key = `${conversation.user_email || conversation.user_name || conversation.id}::${conversation.page_source || "chat"}`.toLowerCase();
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
       } catch {
         return [];
       }
@@ -517,49 +531,63 @@ export default function OwnerDashboardOverview() {
         <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-2 mb-6 flex flex-wrap justify-center gap-1.5 rounded-xl shadow-sm h-auto">
           <TabsTrigger 
             value="overview" 
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
+            data-surface={activeTab === "overview" ? "emerald" : undefined}
+            data-emerald-ok={activeTab === "overview" ? "tab" : undefined}
           >
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
           <TabsTrigger 
             value="leads"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
+            data-surface={activeTab === "leads" ? "emerald" : undefined}
+            data-emerald-ok={activeTab === "leads" ? "tab" : undefined}
           >
             <Users className="h-4 w-4 mr-2" />
             All Leads
           </TabsTrigger>
           <TabsTrigger 
             value="flagged"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
+            data-surface={activeTab === "flagged" ? "emerald" : undefined}
+            data-emerald-ok={activeTab === "flagged" ? "tab" : undefined}
           >
             <Flag className="h-4 w-4 mr-2" />
             Flagged
           </TabsTrigger>
           <TabsTrigger 
             value="vip"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
+            data-surface={activeTab === "vip" ? "emerald" : undefined}
+            data-emerald-ok={activeTab === "vip" ? "tab" : undefined}
           >
             <Crown className="h-4 w-4 mr-2" />
             VIP Leads
           </TabsTrigger>
           <TabsTrigger 
             value="leads-management"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
+            data-surface={activeTab === "leads-management" ? "emerald" : undefined}
+            data-emerald-ok={activeTab === "leads-management" ? "tab" : undefined}
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Leads Management
           </TabsTrigger>
           <TabsTrigger 
             value="employees"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
+            data-surface={activeTab === "employees" ? "emerald" : undefined}
+            data-emerald-ok={activeTab === "employees" ? "tab" : undefined}
           >
             <Briefcase className="h-4 w-4 mr-2" />
             Employees Hub
           </TabsTrigger>
           <TabsTrigger 
             value="audit"
-            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:shadow-sm px-4 py-2"
+            className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm px-4 py-2 [&[data-state=active]_svg]:!text-white"
+            data-surface={activeTab === "audit" ? "emerald" : undefined}
+            data-emerald-ok={activeTab === "audit" ? "tab" : undefined}
           >
             <Shield className="h-4 w-4 mr-2" />
             Audit Logs
@@ -677,13 +705,13 @@ export default function OwnerDashboardOverview() {
             </CardHeader>
             <CardContent className="pt-0">
               {loadingRecentConvos ? (
-                <div className="grid md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
                   {Array.from({ length: 4 }).map((_, i) => (
                     <Skeleton key={i} className="h-16 bg-[#B89555]/10" />
                   ))}
                 </div>
               ) : recentConversations && recentConversations.length > 0 ? (
-                <div className="grid md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
                   {recentConversations.map((convo) => (
                     <ConversationRow key={convo.id} conversation={convo} />
                   ))}
