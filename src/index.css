@@ -21880,7 +21880,15 @@ html body #root#root#root#root#root#root#root#root#root#root [data-dld-white-ico
 html body #root [data-mi-page] {
   width: 100% !important;
   max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   overflow-x: clip !important;
+}
+
+html body #root [data-insights-page] > [data-mi-page],
+html body #root [data-insights-page] > div[data-mi-page].min-h-screen {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 html:has([data-mi-page]),
