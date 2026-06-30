@@ -287,7 +287,9 @@ const MarketReport = () => {
                 data-no-contrast-guard
               >
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wider"
+                  data-no-contrast-guard
+                  data-jbj-white-glyph
+                  className="allow-white text-white text-[10px] font-bold uppercase tracking-wider"
                   style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                 >
                   Free Download
