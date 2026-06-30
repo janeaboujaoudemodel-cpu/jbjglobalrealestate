@@ -22483,3 +22483,120 @@ html body #root [data-backend-portal="developer-profile"] [data-backend-sidebar-
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 147 — BACKEND RESPONSIVE + OVERFLOW + EMERALD WHITE-INK PROOF LOCK
+   Visual regression source: broad champagne-surface rules were repainting nested
+   active emerald tabs/buttons black, and backend cards/scrollers could exceed the
+   owner shell width when the preview was squeezed. This is intentionally last. */
+html body #root .owner-dashboard-shell,
+html body #root .owner-dashboard-shell main,
+html body #root .owner-dashboard-shell [role="main"] {
+  min-width: 0 !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+html body #root .owner-dashboard-shell :is(section,article,header,main,nav,div,form,fieldset,[data-studio-workspace],[data-backend-portal="owner-crm"],[data-studio-card],[data-studio-card-grid]) {
+  min-width: 0 !important;
+}
+
+html body #root .owner-dashboard-shell :is([data-studio-card], [data-card], .crm-embed, [data-backend-portal="owner-crm"] .rounded-xl) {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+html body #root .owner-dashboard-shell :is([data-studio-card], [data-card], .crm-embed, [data-backend-portal="owner-crm"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,b,i,small,li,dt,dd,th,td,div,time) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+html body #root .owner-dashboard-shell [data-studio-workspace] [data-studio-card-grid] {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+html body #root .owner-dashboard-shell [data-studio-workspace] [role="tablist"] {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+}
+
+html body #root .owner-dashboard-shell [data-studio-workspace] [role="tab"] {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-portal="owner-crm"] nav[role="tablist"] {
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-portal="owner-crm"] :is(button, [role="tab"]) {
+  max-width: 100% !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-ok],
+  [data-emerald-action],
+  [data-jbj-button][data-surface="emerald"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"],
+  .jj-surface-emerald,
+  .jj-emerald-metallic,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .allow-white
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-ok],
+  [data-emerald-action],
+  [data-jbj-button][data-surface="emerald"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"],
+  .jj-surface-emerald,
+  .jj-emerald-metallic,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .allow-white
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,b,i,small,li,dt,dd,th,td,div,time,svg,[data-lucide],[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root .owner-dashboard-shell :is([data-surface="emerald"], [data-emerald="true"], [data-emerald-ok], [data-jbj-button][data-surface="emerald"], [role="tab"][data-state="active"], [role="tab"][aria-selected="true"], .jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald) :is(svg,[data-lucide],[class*="lucide"],svg *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
