@@ -8,6 +8,7 @@
  *    table via the DLD ingestion edge function or manual insert; the view
  *    here just renders whatever the most recent row contains.
  */
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
