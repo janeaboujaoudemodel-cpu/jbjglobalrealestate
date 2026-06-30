@@ -149,7 +149,14 @@ export const DLDDailySnapshot = () => {
                 <div data-no-contrast-guard className="mi-icon-tile mi-no-flip">
                   <Icon className="h-4 w-4" />
                 </div>
-                <TrendingUp className="h-3.5 w-3.5 text-[#B89555]" />
+                <span
+                  data-no-contrast-guard
+                  data-allow-dark-cta
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-md"
+                  style={{ background: "var(--jj-emerald-ombre)", border: "1px solid rgba(184,149,85,0.5)" }}
+                >
+                  <TrendingUp className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} />
+                </span>
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
                 {label}
@@ -185,7 +192,7 @@ export const DLDDailySnapshot = () => {
                   <motion.div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "var(--jj-emerald-ombre)" }}
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
@@ -208,12 +215,12 @@ export const DLDDailySnapshot = () => {
                 <div
                   data-no-contrast-guard
                   className="dld-bar-track"
-                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: `1px solid ${GOLD}` }}
+                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
                   <motion.div
                     data-no-contrast-guard
-                    className="dld-bar-fill-gold"
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center" }}
+                    data-allow-dark-cta
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${mortgageShare / 100})` }}
                     viewport={{ once: true }}
@@ -221,7 +228,7 @@ export const DLDDailySnapshot = () => {
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} /> Mortgage · {mortgageShare}% of all transactions
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#064E3B]" /> Mortgage · {mortgageShare}% of all transactions
                 </p>
               </div>
             </div>
@@ -248,15 +255,15 @@ export const DLDDailySnapshot = () => {
                 return (
                   <div
                     key={`${row.area}-${i}`}
-                    className={`grid grid-cols-[minmax(170px,1.2fr)_1fr_auto] items-center gap-3 rounded-lg ${isLeader ? "px-2 py-1.5 ring-1 ring-[#064E3B]/20" : ""}`}
-                    style={isLeader ? { backgroundColor: "rgba(6,78,59,0.06)" } : undefined}
+                    className="grid grid-cols-[minmax(170px,1.2fr)_1fr_auto] items-center gap-3 rounded-lg px-2 py-1.5"
+                    style={isLeader ? { backgroundColor: "rgba(6,78,59,0.06)", boxShadow: "inset 0 0 0 1px rgba(6,78,59,0.20)" } : undefined}
                   >
                     <span className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] min-w-0">
                       <span
                         data-no-contrast-guard
                         data-allow-dark-cta
-                        className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums text-white shrink-0"
-                        style={{ background: "var(--jj-emerald-ombre)", border: "1px solid rgba(184,149,85,0.5)" }}
+                        className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums shrink-0"
+                        style={{ background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)", border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF" }}
                       >
                         {String(rank).padStart(2, "0")}
                       </span>
