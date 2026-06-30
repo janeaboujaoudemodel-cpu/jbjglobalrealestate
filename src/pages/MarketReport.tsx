@@ -124,8 +124,8 @@ const MarketReport = () => {
 
       {/* ============== HERO ============== */}
       <section
-        className="relative pt-56 pb-16 md:pt-72 md:pb-24 bg-white"
-        style={{ marginTop: "calc(var(--shell-header-h, 88px) + 48px)" }}
+        className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-white"
+        style={{ marginTop: "calc(var(--shell-header-h, 88px) + 96px)" }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
