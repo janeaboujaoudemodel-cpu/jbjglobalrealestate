@@ -22,12 +22,13 @@ import { useUserMode } from "@/hooks/useUserMode";
 export default function BrokerPortalLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isOwner } = useUserRole();
-  const { user } = useAuth();
+  const { isOwner, isLoading: roleLoading } = useUserRole();
+  const { user, loading: authLoading } = useAuth();
   const isMobile = useIsMobile();
-  const { mode } = useUserMode();
+  const { mode, isLoading: modeLoading } = useUserMode();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isResolving = authLoading || roleLoading || modeLoading;
 
   const ModeIcon = mode === "developer" ? Building2 : mode === "investor" ? User : Briefcase;
   const modeLabel = isOwner
