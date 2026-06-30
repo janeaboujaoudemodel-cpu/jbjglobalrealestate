@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, ImageOff, Zap, CheckSquare, Square, ShieldCheck } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface Row {
   id: string;
@@ -22,6 +23,24 @@ interface Row {
 }
 
 const PAGE_SIZE = 60;
+
+const normalizeDeveloperKey = (row: Row) => {
+  const host = (() => {
+    if (!row.website_url) return "";
+    try {
+      return new URL(row.website_url.startsWith("http") ? row.website_url : `https://${row.website_url}`).hostname.replace(/^www\./, "").toLowerCase();
+    } catch {
+      return row.website_url.toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0];
+    }
+  })();
+  return (row.slug || host || row.name).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+};
+
+const preferRicherDeveloperRow = (a: Row, b: Row) => {
+  const aScore = (a.logo_url ? 10 : 0) + (a.website_url ? 4 : 0) + (a.description?.length ?? 0) / 300;
+  const bScore = (b.logo_url ? 10 : 0) + (b.website_url ? 4 : 0) + (b.description?.length ?? 0) / 300;
+  return bScore > aScore ? b : a;
+};
 
 export default function DeveloperDirectory() {
   const qc = useQueryClient();
@@ -65,7 +84,14 @@ export default function DeveloperDirectory() {
     });
   }, [data, page]);
 
-  const rows = accumulated;
+  const rows = useMemo(() => {
+    const map = new Map<string, Row>();
+    for (const row of accumulated) {
+      const key = normalizeDeveloperKey(row) || row.id;
+      map.set(key, map.has(key) ? preferRicherDeveloperRow(map.get(key)!, row) : row);
+    }
+    return Array.from(map.values());
+  }, [accumulated]);
   const total = data?.total ?? rows.length;
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
 
@@ -111,14 +137,14 @@ export default function DeveloperDirectory() {
   const canLoadMore = rows.length < total;
 
   return (
-    <div className="space-y-4">
-      <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30">
+    <div className="space-y-5">
+      <Card className="p-5 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <p className="text-sm text-[#1A1A1A]/80">
           <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developers-portal/enrichment" className="underline">Site Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
 
-      <Card className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap">
+      <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <Input
           placeholder="Search developer…"
           value={search}
@@ -167,14 +193,13 @@ export default function DeveloperDirectory() {
 
       {isLoading && page === 0 && <p className="text-sm text-[#1A1A1A]/70">Loading…</p>}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {rows.map((d) => {
           const isSel = selected.has(d.id);
-          const logoOk = d.logo_url && !brokenImgs.has(d.id);
           return (
             <Card
               key={d.id}
-              className={`p-4 bg-[#F7F2EA] border ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
+              className={`p-5 bg-[#F7F2EA] border rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
             >
               <div className="flex items-start gap-3">
                 <Checkbox
@@ -183,20 +208,17 @@ export default function DeveloperDirectory() {
                   className="mt-1"
                   aria-label={`Select ${d.name}`}
                 />
-                <div className="size-14 shrink-0 rounded border border-[#B89555]/30 bg-[#FDFBF7] p-1 flex items-center justify-center overflow-hidden">
-                  {logoOk ? (
-                    <img
-                      src={d.logo_url!}
-                      alt={d.name}
-                      className="max-w-full max-h-full object-contain"
-                      onError={() => setBrokenImgs((s) => new Set(s).add(d.id))}
-                    />
-                  ) : (
-                    <ImageOff className="size-6 text-[#1A1A1A]/40" />
-                  )}
-                </div>
+                <DeveloperLogo
+                  src={!brokenImgs.has(d.id) ? d.logo_url : null}
+                  alt={`${d.name} logo`}
+                  name={d.name}
+                  variant="tile"
+                  renderFallback
+                  className="size-16 rounded-xl border-[#B89555]/40 bg-[#FDFBF7] shadow-[0_10px_24px_-18px_rgba(26,26,26,0.55)]"
+                  onError={() => setBrokenImgs((s) => new Set(s).add(d.id))}
+                />
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-[#1A1A1A] truncate">{d.name}</p>
+                  <p className="font-black text-[#1A1A1A] text-[16px] leading-tight truncate">{d.name}</p>
                   <p className="text-xs text-[#1A1A1A]/60 truncate">{d.slug}</p>
                   {d.website_url && (
                     <a href={d.website_url} target="_blank" rel="noreferrer" className="text-xs text-[#1A1A1A]/70 underline flex items-center gap-1 mt-1">
@@ -206,7 +228,7 @@ export default function DeveloperDirectory() {
                   )}
                 </div>
               </div>
-              <p className="text-xs text-[#1A1A1A]/75 mt-2 line-clamp-2">
+              <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
               <div className="mt-3 flex gap-2 flex-wrap">
