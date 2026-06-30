@@ -67,11 +67,11 @@ const OwnerDashboardShell = () => {
             src={jbjMonogramNobuffer}
             alt="JBJ"
             className="object-contain flex-shrink-0"
-            style={{ width: collapsed ? 34 : 38, height: collapsed ? 34 : 38 }}
+            style={{ width: collapsed ? 38 : 44, height: collapsed ? 38 : 44 }}
            loading="lazy" decoding="async" />
           {!collapsed && (
             <span
-              className="min-w-0 flex-1 text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate"
+              className="min-w-0 flex-1 text-[12px] uppercase tracking-[0.18em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate"
             >
               JBJ GLOBAL REAL ESTATE
             </span>
@@ -173,7 +173,7 @@ const OwnerDashboardShell = () => {
   // Expose content-area offsets so the global BrandedLoader centers in the
   // visible main area (right of sidebar, below the top bar) rather than over
   // the whole viewport.
-  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "64px" : "256px";
+  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "72px" : "280px";
   const contentTop = "var(--shell-header-h)";
 
   return (
