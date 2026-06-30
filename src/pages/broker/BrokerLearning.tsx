@@ -684,13 +684,17 @@ function TrainingCard({
         )}
 
         <div className="mt-auto pt-5 pb-3 flex items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-1.5 min-w-0 flex-1 overflow-hidden">
+          <div className="flex flex-wrap gap-1.5 min-w-0 flex-1">
             {m.topics.slice(0, 2).map((t, i) => (
-              <span key={i} className="text-[11px] bg-[#FDFBF7] text-[#1A1A1A]/85 px-2 py-0.5 rounded border border-[#B89555]/30 max-w-full truncate">
+              <span
+                key={i}
+                title={t}
+                className="text-[11px] leading-snug bg-[#FDFBF7] text-[#1A1A1A]/85 px-2 py-1 rounded border border-[#B89555]/30 max-w-full whitespace-normal break-words"
+              >
                 {t}
               </span>
             ))}
-            {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55 whitespace-nowrap">+{m.topics.length - 2} more</span>}
+            {m.topics.length > 2 && <span className="text-[11px] text-[#1A1A1A]/55 whitespace-nowrap self-center">+{m.topics.length - 2} more</span>}
           </div>
           {locked ? (
             <button

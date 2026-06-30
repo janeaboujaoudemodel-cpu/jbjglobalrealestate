@@ -42,18 +42,19 @@ function CertificateMedallion({ size = 64 }: { size?: number }) {
         }}
       />
       <Award
-        className="relative"
+        className="relative !text-white !stroke-white"
         style={{
           width: size * 0.5,
           height: size * 0.5,
           color: "#FFFFFF",
+          stroke: "#FFFFFF",
           filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.35))",
         }}
         strokeWidth={2}
       />
       <Medal
-        className="absolute bottom-0 right-0"
-        style={{ width: size * 0.28, height: size * 0.28, color: "#FFFFFF" }}
+        className="absolute bottom-0 right-0 !text-white !stroke-white"
+        style={{ width: size * 0.28, height: size * 0.28, color: "#FFFFFF", stroke: "#FFFFFF" }}
         strokeWidth={2.2}
       />
     </span>
