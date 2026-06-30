@@ -13,10 +13,10 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import {
-  BadgeDollarSign,
   Banknote,
   Building2,
   CalendarCheck,
+  CircleDollarSign,
   Flag,
   Landmark,
   MailOpen,
@@ -141,14 +141,14 @@ export const DLDDailySnapshot = () => {
         >
           {[
             { label: "Total Transactions", value: total.toLocaleString("en-AE"), Icon: Building2 },
-            { label: "Total Volume (AED)", value: compact(data.total_volume_aed), Icon: BadgeDollarSign },
+            { label: "Total Volume (AED)", value: compact(data.total_volume_aed), Icon: CircleDollarSign },
             { label: "Cash Share", value: `${cashShare}%`, Icon: Banknote },
             { label: "Mortgage Share", value: `${mortgageShare}%`, Icon: Landmark },
           ].map(({ label, value, Icon }) => (
             <BlackCard key={label} className="p-4 md:p-5">
               <div className="flex items-start justify-between gap-2">
                 <div data-no-contrast-guard data-dld-emerald-tile className="mi-icon-tile mi-no-flip">
-                  <Icon data-dld-white-icon className="h-4 w-4" />
+                  <Icon data-dld-white-icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                 </div>
                 <span
                   data-no-contrast-guard
@@ -157,7 +157,7 @@ export const DLDDailySnapshot = () => {
                   className="inline-flex h-7 w-7 items-center justify-center rounded-md"
                   style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)" }}
                 >
-                  <TrendingUp data-dld-white-icon className="h-4 w-4" />
+                  <TrendingUp data-dld-white-icon className="h-4 w-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                 </span>
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
@@ -194,6 +194,7 @@ export const DLDDailySnapshot = () => {
                   <div
                     data-no-contrast-guard
                     data-allow-dark-cta
+                    data-dld-emerald-fill
                     className="dld-emerald-fill"
                     style={{ position: "absolute", insetBlock: 0, left: 0, width: `${cashShare}%`, borderRadius: 9999, background: EMERALD_BAR }}
                   />
@@ -219,6 +220,7 @@ export const DLDDailySnapshot = () => {
                   <div
                     data-no-contrast-guard
                     data-allow-dark-cta
+                    data-dld-emerald-fill
                     className="dld-emerald-fill"
                     style={{ position: "absolute", insetBlock: 0, left: 0, width: `${mortgageShare}%`, borderRadius: 9999, background: EMERALD_BAR }}
                   />
@@ -251,20 +253,18 @@ export const DLDDailySnapshot = () => {
                 return (
                   <div
                     key={`${row.area}-${i}`}
-                    className="grid grid-cols-[minmax(190px,1.2fr)_1fr_3.5rem] items-center gap-3 rounded-lg px-2 py-1.5"
+                    className="grid grid-cols-[2.75rem_minmax(0,1fr)_minmax(110px,1fr)_3.75rem] items-center gap-3 rounded-lg px-2 py-1.5"
                   >
-                    <span className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] min-w-0">
-                      <span
-                        data-no-contrast-guard
-                        data-allow-dark-cta
-                        data-dld-rank-badge
-                        className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums shrink-0"
-                        style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF" }}
-                      >
-                        {String(rank).padStart(2, "0")}
-                      </span>
-                      <span className="whitespace-normal break-words leading-tight text-left">{row.area}</span>
+                    <span
+                      data-no-contrast-guard
+                      data-allow-dark-cta
+                      data-dld-rank-badge
+                      className="inline-flex h-7 w-9 items-center justify-center rounded-md text-[11px] font-bold tabular-nums shrink-0"
+                      style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                    >
+                      {String(rank).padStart(2, "0")}
                     </span>
+                    <span className="min-w-0 whitespace-normal break-words text-left text-sm font-semibold leading-tight text-[#1A1A1A]">{row.area}</span>
                     <div
                       data-no-contrast-guard
                       className="relative h-2.5 overflow-hidden rounded-full"

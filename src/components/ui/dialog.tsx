@@ -22,7 +22,7 @@ const Dialog: typeof DialogPrimitive.Root = ({ open, onOpenChange, ...props }) =
           if (!stillOpen && document.body.style.pointerEvents === "none") {
             document.body.style.pointerEvents = "";
           }
-        }, 220);
+        }, 0);
       }
     },
     [onOpenChange],
@@ -44,7 +44,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-[10070] bg-[#1A1A1A]/60 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-[120000] bg-[#1A1A1A]/60 duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
       className,
     )}
     {...props}
@@ -84,7 +84,7 @@ const DialogContent = React.forwardRef<
         ref={ref}
         data-surface="light"
         className={cn(
-          "fixed left-[50%] top-[50%] z-[10071] grid w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-6 shadow-lg duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
+          "fixed left-[50%] top-[50%] z-[120001] grid w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
           className,
         )}
         onPointerDownOutside={handlePointerDownOutside}

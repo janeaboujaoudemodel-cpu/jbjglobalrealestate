@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { 
-  Database, RefreshCw, Shield, CheckCircle,
+  Database, RefreshCw, Shield,
   ExternalLink
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,9 +11,7 @@ import {
   MI_LEAD,
   MI_CARD_TITLE,
   MI_BODY,
-  MI_BODY_MUTED,
   MI_CAPTION,
-  MI_CHIP,
 } from "./MarketIntelligenceTypography";
 
 const fadeInUp = {
@@ -61,12 +59,12 @@ export const DataSourcesPanel = () => {
           </motion.div>
 
           {/* Data Sources Grid */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div data-mi-source-grid className="grid auto-rows-fr gap-6 md:grid-cols-2 xl:grid-cols-3 max-w-6xl mx-auto">
             {OPEN_DATA_SOURCES.map((source) => {
               return (
-                <motion.div key={source.id} variants={fadeInUp}>
-                  <Card className="mi-gold-frame h-full rounded-2xl transition-shadow hover:shadow-[0_18px_40px_rgba(26,26,26,0.10)]">
-                    <CardContent className="p-6">
+                <motion.div key={source.id} variants={fadeInUp} className="h-full">
+                  <Card data-mi-source-card className="mi-gold-frame h-full rounded-2xl transition-shadow hover:shadow-[0_18px_40px_rgba(26,26,26,0.10)]">
+                    <CardContent className="flex h-full min-h-[360px] flex-col p-6">
                       <div className="flex items-start justify-between gap-3 mb-4">
                         <IconBox icon={Database} />
                         <span className="mi-chip-emerald shrink-0 capitalize">
@@ -77,7 +75,7 @@ export const DataSourcesPanel = () => {
 
                       <h3 className={`${MI_CARD_TITLE} mb-1`}>{source.name}</h3>
                       <p className={`${MI_CAPTION} mb-3`}>{source.provider}</p>
-                      <p className={`${MI_BODY} mb-4`}>{source.description}</p>
+                      <p className={`${MI_BODY} mb-4 min-h-[3.4rem]`}>{source.description}</p>
 
                       <div className="flex flex-wrap gap-2 mb-4">
                         {source.dataTypes.map((type) => (
@@ -87,23 +85,22 @@ export const DataSourcesPanel = () => {
                         ))}
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs font-semibold leading-none text-[#1A1A1A] mb-4">
+                      <div className="mt-auto flex items-center gap-2 text-xs font-semibold leading-none text-[#1A1A1A] mb-4 pt-2">
                         <span className="mi-mini-icon"><Shield className="w-3.5 h-3.5" /></span>
                         <span>Official Government Source</span>
                       </div>
 
-                      {source.url && (
-                        <a
-                          href={source.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          data-no-contrast-guard
-                          className="mi-cta-emerald w-full text-sm rounded-lg"
-                        >
-                          <span>Visit Source</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      )}
+                      <a
+                        href={source.url || "#"}
+                        target={source.url ? "_blank" : undefined}
+                        rel={source.url ? "noopener noreferrer" : undefined}
+                        aria-disabled={!source.url}
+                        data-no-contrast-guard
+                        className="mi-cta-emerald w-full text-sm rounded-lg"
+                      >
+                        <span>Visit Source</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
                     </CardContent>
                   </Card>
                 </motion.div>
