@@ -17647,11 +17647,22 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
 
 /* Sidebar rhythm: one icon size, tile size, radius and label alignment across
    backend, owner, broker, CRM and document shells. */
-:where([data-chrome="sidebar"], [data-sidebar], aside, .sidebar) :where(a, button, [role="button"]):not([data-sidebar-collapse-control]) {
+:where([data-chrome="sidebar"], [data-sidebar], aside, .sidebar) :where(a, button, [role="button"]):not([data-sidebar-collapse-control]):not([data-sidebar-bottom-cta]):not([data-signout-action]) {
   min-height: 44px;
   border-radius: 14px;
   gap: 0.75rem;
   align-items: center;
+}
+/* Compact bottom CTAs (Contact, Support, Sign Out, Collapse) — half-height */
+:where([data-chrome="sidebar"], [data-sidebar], aside, .sidebar) :where([data-sidebar-bottom-cta], [data-signout-action], [data-sidebar-collapse-control]) {
+  min-height: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+}
+:where([data-chrome="sidebar"], [data-sidebar], aside, .sidebar) :where([data-sidebar-bottom-cta], [data-signout-action], [data-sidebar-collapse-control]) :where(svg[class*="lucide"], [data-lucide]) {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
 }
 :where([data-chrome="sidebar"], [data-sidebar], aside, .sidebar) :where(svg[class*="lucide"], [data-lucide]) {
   width: 20px !important;
