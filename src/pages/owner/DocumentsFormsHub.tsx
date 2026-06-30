@@ -710,7 +710,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
         </header>
 
         <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
-          <TabsList className="w-full justify-start bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1 overflow-x-auto">
+          <TabsList className="w-full min-w-0 justify-start bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto gap-1 p-1 overflow-x-hidden">
             <TabsTrigger value="templates">Templates</TabsTrigger>
             <TabsTrigger value="documents">Live Editor</TabsTrigger>
             <TabsTrigger value="esign">E-signature</TabsTrigger>
