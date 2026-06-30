@@ -165,6 +165,35 @@ export default function ReportPreviewModal({
     setBranding((prev) => ({ ...prev, ...stored, ...defaults, role: activeRole }));
   }, [open, defaults, activeRole]);
 
+  // Imperative white-ink enforcement: CSS specificity wars lose to global guards
+  // with massive :not() chains. Walk the modal DOM and force inline !important
+  // styles on every emerald/dark element. Runs on every render while open.
+  useEffect(() => {
+    if (!open) return;
+    const tick = () => {
+      const root = document.getElementById("jbj-aihf-preview-root");
+      if (!root) return;
+      const whiteSel = [
+        "[data-aihf-darkband]","[data-aihf-darkband] *",
+        "[data-aihf-role-chip]","[data-aihf-role-chip] *",
+        '[data-aihf-include-btn][data-active="true"]','[data-aihf-include-btn][data-active="true"] *',
+        "[data-on-dark]","[data-on-dark] *",
+        '[data-surface="emerald"]','[data-surface="emerald"] *',
+        "[data-aihf-scope-row]","[data-aihf-scope-row] *","[data-aihf-scope-text]",
+      ].join(",");
+      root.querySelectorAll<HTMLElement>(whiteSel).forEach((el) => {
+        el.style.setProperty("color", "#FFFFFF", "important");
+        el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+      });
+      root.querySelectorAll<HTMLElement>("[data-aihf-scope-dot]").forEach((el) => {
+        el.style.setProperty("background-color", "#FFFFFF", "important");
+      });
+    };
+    tick();
+    const id = window.setInterval(tick, 250);
+    return () => window.clearInterval(id);
+  }, [open]);
+
   const update = (patch: Partial<ReportBranding>) => {
     setBranding((prev) => {
       const next = { ...prev, ...patch, role: activeRole };
