@@ -255,15 +255,15 @@ export const DLDDailySnapshot = () => {
                 return (
                   <div
                     key={`${row.area}-${i}`}
-                    className={`grid grid-cols-[minmax(170px,1.2fr)_1fr_auto] items-center gap-3 rounded-lg ${isLeader ? "px-2 py-1.5 ring-1 ring-[#064E3B]/20" : ""}`}
-                    style={isLeader ? { backgroundColor: "rgba(6,78,59,0.06)" } : undefined}
+                    className="grid grid-cols-[minmax(170px,1.2fr)_1fr_auto] items-center gap-3 rounded-lg px-2 py-1.5"
+                    style={isLeader ? { backgroundColor: "rgba(6,78,59,0.06)", boxShadow: "inset 0 0 0 1px rgba(6,78,59,0.20)" } : undefined}
                   >
                     <span className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] min-w-0">
                       <span
                         data-no-contrast-guard
                         data-allow-dark-cta
-                        className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums text-white shrink-0"
-                        style={{ background: "var(--jj-emerald-ombre)", border: "1px solid rgba(184,149,85,0.5)" }}
+                        className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums shrink-0"
+                        style={{ background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)", border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF" }}
                       >
                         {String(rank).padStart(2, "0")}
                       </span>
