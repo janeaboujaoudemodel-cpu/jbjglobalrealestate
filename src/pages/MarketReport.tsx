@@ -123,7 +123,7 @@ const MarketReport = () => {
       )}
 
       {/* ============== HERO ============== */}
-      <section className="relative pt-44 pb-16 md:pt-56 md:pb-24 bg-white">
+      <section className="relative pt-56 pb-16 md:pt-72 md:pb-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Book Visual — image fills the full cover */}
@@ -278,16 +278,20 @@ const MarketReport = () => {
                 initial={{ opacity: 0, scale: 0.85 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="absolute -bottom-2 right-2 md:right-8 px-3.5 py-1.5 rounded-full shadow-[0_6px_18px_rgba(6,78,59,0.35)]"
+                className="jj-surface-emerald jj-pill-emerald-metallic absolute -bottom-2 right-2 md:right-8 px-3.5 py-1.5 rounded-full shadow-[0_6px_18px_rgba(6,78,59,0.35)]"
                 style={{
                   backgroundImage: "var(--jj-emerald-ombre)",
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
                 }}
+                data-surface="emerald"
+                data-emerald="true"
                 data-no-contrast-guard
               >
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wider"
+                  data-no-contrast-guard
+                  data-jbj-white-glyph
+                  className="allow-white text-white text-[10px] font-bold uppercase tracking-wider"
                   style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                 >
                   Free Download
