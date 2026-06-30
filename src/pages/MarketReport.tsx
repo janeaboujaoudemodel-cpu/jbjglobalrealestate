@@ -605,14 +605,14 @@ const MarketReport = () => {
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <div
-                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-[0_3px_10px_rgba(6,78,59,0.25)]"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
                         data-icon-tone="emerald"
                         data-emerald-icon-surface
                       >
                         <Check
-                          className="w-4 h-4"
+                          className="w-5 h-5"
                           style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                           strokeWidth={3}
                         />
