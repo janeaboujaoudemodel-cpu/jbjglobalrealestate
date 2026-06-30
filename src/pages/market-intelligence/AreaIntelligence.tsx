@@ -31,11 +31,11 @@ const AreaIntelligence = () => {
   const getTrendBadge = (trend: string) => {
     switch (trend) {
       case 'bullish':
-        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45">Bullish</Badge>;
+        return <Badge variant="secondary" className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45">Bullish</Badge>;
       case 'bearish':
-        return <Badge variant="secondary">Bearish</Badge>;
+        return <Badge variant="outline" className="bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/35">Bearish</Badge>;
       default:
-        return <Badge className="bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35">Neutral</Badge>;
+        return <Badge variant="secondary" className="bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/35">Neutral</Badge>;
     }
   };
 

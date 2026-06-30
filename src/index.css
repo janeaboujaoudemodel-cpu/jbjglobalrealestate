@@ -21251,3 +21251,80 @@ html body #root [data-insights-page] [data-neon-page] [class~="bg-cream"] {
  */
 
 
+/* ============================================================
+ * PASS 135 — INSIGHTS "COMPARE-CARD" SECTION FRAMING
+ *
+ * The user wants every section across the Insights / Guides /
+ * Market Intelligence / FAQ branch framed the same way as the
+ * homepage "Compare Your Property / Explore Our Services" card:
+ *   - champagne (#F7F2EA) fill
+ *   - rounded-2xl / md:rounded-3xl
+ *   - soft elevation shadow
+ *   - generous internal padding
+ *   - consistent vertical rhythm between cards
+ *
+ * Implemented globally so we don't have to touch ~17 page files.
+ * Scope is strictly [data-insights-page]. Opt-out per element with
+ * [data-no-compare-frame] (used by hero bands and TOC strips).
+ * ========================================================== */
+
+/* Frame every section element below the page's [data-insights-page] wrapper
+ * (excluding video heroes and any node that explicitly opts out). The page
+ * shells use a <div className="min-h-screen"> wrapper rather than <main>,
+ * so we target sections at any depth. */
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-no-compare-frame]):not([data-neon-page]):not(.jj-hero-fullscreen):not(.jj-band):not([data-no-section-frame]) {
+  background-color: #F7F2EA !important;
+  border-radius: 1.25rem !important;
+  box-shadow: 0 8px 28px rgba(26, 26, 26, 0.06) !important;
+  padding: clamp(20px, 3.5vw, 40px) clamp(20px, 4vw, 48px) !important;
+  margin-bottom: clamp(24px, 4vw, 48px) !important;
+  border: 1px solid rgba(184, 149, 85, 0.18) !important;
+  max-width: 1240px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (min-width: 768px) {
+  html body #root [data-insights-page] section:not([data-hero-dark]):not([data-no-compare-frame]):not([data-neon-page]):not(.jj-hero-fullscreen):not(.jj-band):not([data-no-section-frame]) {
+    border-radius: 1.5rem !important;
+  }
+}
+
+/* Add breathing room around the section column so framed cards sit on
+ * the champagne page surface like the homepage Compare card. */
+html body #root [data-insights-page] > div:first-child,
+html body #root [data-insights-page] > div.min-h-screen {
+  padding-left: clamp(12px, 3vw, 32px);
+  padding-right: clamp(12px, 3vw, 32px);
+}
+
+/* Keep nested raised panels inside framed sections readable */
+html body #root [data-insights-page] section :is(.bg-white, [class~="bg-[#FFFFFF]"]) {
+  background-color: #FDFBF7 !important;
+}
+
+/* Repaint legacy navy / glass tiles that live inside framed Insights
+ * sections so they read as soft champagne sub-cards (matching the
+ * homepage "Compare Your Property" panel). Excludes anything that is
+ * intentionally dark (hero, video, emerald CTA, neon page shells). */
+html body #root [data-insights-page] section :is(
+  [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-neutral-9"],
+  [class*="bg-zinc-9"], [class*="bg-gray-9"], [class*="bg-[#0"], [class*="bg-[#1"],
+  [class*="bg-black"]
+):not([data-hero-dark]):not(.jj-pill-emerald-metallic):not(.jj-cta-emerald):not([data-keep-dark]):not([class*="bg-emerald"]) {
+  background-color: #FDFBF7 !important;
+  background-image: none !important;
+  border: 1px solid rgba(184, 149, 85, 0.22) !important;
+}
+
+/* Force text inside those repainted sub-tiles back to ink so the
+ * white labels that were designed for navy don't disappear on cream. */
+html body #root [data-insights-page] section :is(
+  [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-neutral-9"],
+  [class*="bg-zinc-9"], [class*="bg-gray-9"], [class*="bg-[#0"], [class*="bg-[#1"],
+  [class*="bg-black"]
+):not([data-hero-dark]):not(.jj-pill-emerald-metallic):not(.jj-cta-emerald):not([data-keep-dark]):not([class*="bg-emerald"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,div) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
