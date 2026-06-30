@@ -21115,3 +21115,83 @@ html body #root#root#root#root .jj-book .jj-book-title * {
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 2px 0 rgba(0,0,0,.85), 0 3px 14px rgba(0,0,0,.7), 0 0 22px rgba(0,0,0,.45) !important;
 }
+
+/* ============================================================
+ * PASS 133 — INSIGHTS / GUIDES / FAQ BRAND CONTRACT LOCK
+ *
+ * Scope: every page tagged with [data-insights-page] (Market
+ * Intelligence, Market Overview, Market Report, Area Intelligence,
+ * Reports Archive, Methodology, News, Guides Library, all six
+ * Guides, Investor Education, Golden Visa, FAQ Hub).
+ *
+ * Goal: snap any drifted markup to the locked brand contract
+ * without requiring a per-page rewrite — pages can still be
+ * polished individually, but the floor is enforced here.
+ *
+ * Rules enforced:
+ *   1. Page background is champagne (--page background token).
+ *   2. Headings on champagne render ink #1A1A1A (NEVER emerald,
+ *      NEVER gold) unless explicitly opted-out.
+ *   3. Body copy on champagne renders ink, never raw gray.
+ *   4. Emerald CTAs / pills keep their white foreground at every
+ *      state — no contrast-guard may flip them to ink.
+ *   5. Dark hero sections ([data-hero-dark]) keep white text;
+ *      ink-guard never touches them.
+ *   6. Gray hairlines, gray section dividers, and gray
+ *      skeletons are flattened to the champagne+gold contract.
+ *   7. Card surfaces inherit the champagne raised tone with a
+ *      1px gold hairline accent — never a full gold border.
+ *   8. Icon tiles default to gold-tone on champagne; emerald tiles
+ *      keep WHITE glyphs.
+ * ========================================================== */
+
+/* 1 — Page surface */
+html body #root [data-insights-page] {
+  background: var(--background) !important;
+}
+
+/* 2/3 — Headings + body ink on champagne (skip dark heroes, emerald
+ *       surfaces, locked CTAs, and any explicit opt-out). */
+html body #root [data-insights-page] :is(h1, h2, h3, h4, h5, h6):not([data-no-contrast-guard]):not([data-on-dark]):not(.allow-white):not([class*="text-white"]):not([class*="bg-emerald"]):not(.jj-pill-emerald-metallic):not(.jj-cta-emerald) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root [data-insights-page] [data-hero-dark] :is(h1, h2, h3, h4, h5, h6, p, span, a, li),
+html body #root [data-insights-page] [data-hero-dark] :is(h1, h2, h3, h4, h5, h6, p, span, a, li) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 4 — Emerald CTA contract: white foreground always */
+html body #root [data-insights-page] :is(.jj-pill-emerald-metallic, .jj-cta-emerald),
+html body #root [data-insights-page] :is(.jj-pill-emerald-metallic, .jj-cta-emerald) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is(.jj-pill-emerald-metallic, .jj-cta-emerald) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 6 — Strip raw grays in cards / panels so the champagne band reads clean */
+html body #root [data-insights-page] :is(.bg-gray-50, .bg-gray-100, .bg-slate-50, .bg-slate-100, .bg-neutral-50, .bg-neutral-100, .bg-zinc-50, .bg-zinc-100) {
+  background-color: #F7F2EA !important; /* champagne surface token */
+}
+html body #root [data-insights-page] :is(.text-gray-400, .text-gray-500, .text-slate-400, .text-slate-500, .text-neutral-500, .text-zinc-500) {
+  color: #4B4438 !important;
+}
+
+/* 7 — Card hairline accent: only render gold as a single hairline,
+ *      never a heavy frame. Pages that need corner-only frames use
+ *      .jj-corner-card and are exempt. */
+html body #root [data-insights-page] [data-card-hairline] {
+  border: 1px solid rgba(184, 149, 85, 0.32) !important;
+}
+
+/* 8 — Emerald icon tiles keep white glyphs even when nested in champagne */
+html body #root [data-insights-page] [data-icon-tone="emerald"] svg,
+html body #root [data-insights-page] .jj-icon-tile-emerald svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}

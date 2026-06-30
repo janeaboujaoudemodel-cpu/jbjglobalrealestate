@@ -163,7 +163,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
   { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
-  { label: "Books Library", href: "/education-hub", icon: BookMarked },
+  // "Books Library" retired — merged into Guides Library above. /education-hub now 301s to /guides.
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
 
   // ── Services ──
@@ -376,7 +376,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Investor Education', icon: BookOpen, href: '/investor-education' },
     { label: 'JBJ Academy', icon: BookOpen, href: '/jbj-academy' },
     { label: 'Golden Visa Guide', icon: Award, href: '/guides/golden-visa-uae' },
-    { label: 'Books Library', icon: BookMarked, href: '/education-hub' },
+    // "Books Library" retired — single Guides Library hub at /guides.
   ],
   services: [
     { label: 'All Services', icon: Briefcase, href: '/services' },
