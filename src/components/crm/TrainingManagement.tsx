@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import {
   GraduationCap, Users, BookOpen, Shield, Crown, Search,
   Plus, Trash2, Eye, ChevronRight, Clock, CheckCircle,
-  AlertTriangle, UserPlus, Settings, Award, Loader2
+  AlertTriangle, UserPlus, Settings, Award, Loader2, Lock
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';

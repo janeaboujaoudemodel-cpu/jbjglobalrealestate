@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Headphones, ArrowLeft, Sparkles, Info } from "lucide-react";
+import { Headphones, ArrowLeft, Sparkles, Info, Lock } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

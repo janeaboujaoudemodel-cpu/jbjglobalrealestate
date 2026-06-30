@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X, Check, Sparkles, Trophy } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X, Check, Sparkles, Trophy, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
