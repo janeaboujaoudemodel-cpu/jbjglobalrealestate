@@ -50,15 +50,16 @@ export default function BrokerEmailHub() {
             <Button
               asChild
               variant="primary"
-              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
+              data-surface="emerald"
+              className="jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Link to={setupPath}><KeyRound className="h-4 w-4 mr-1.5" /> Email Setup</Link>
             </Button>
             <Button
               onClick={() => tryConnect("gmail")}
               disabled={connect.isPending}
-              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
               data-surface="emerald"
+              className="jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Plug className="h-4 w-4 mr-1.5" /> Connect Gmail
             </Button>
@@ -66,10 +67,12 @@ export default function BrokerEmailHub() {
               onClick={() => tryConnect("outlook")}
               disabled={connect.isPending}
               variant="primary"
-              className="jj-surface-emerald allow-white text-white hover:-translate-y-0.5 hover:brightness-110"
+              data-surface="emerald"
+              className="jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110"
             >
               <Plug className="h-4 w-4 mr-1.5" /> Connect Outlook
             </Button>
+
           </div>
         </div>
         {!hasGmailApp && !hasOutlookApp && (
