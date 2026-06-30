@@ -113,33 +113,63 @@ export const MarketIntelligenceTableOfContents = ({
               className="flex flex-col min-h-0 flex-1"
             >
               <nav className="px-2 py-2 space-y-0.5 overflow-y-auto flex-1 min-h-0">
-                {items.map((item, index) => (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    data-surface={activeId === item.id ? "ink" : "light"}
-                    data-no-contrast-guard={activeId === item.id ? "" : undefined}
-                    className={cn(
-                      "w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-left transition-all border text-[13px]",
-                        activeId === item.id
-                          ? "font-semibold shadow-sm bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                        : "border-transparent text-[#1A1A1A] bg-transparent hover:bg-[#EFE6D6]"
-                    )}
-                  >
-                    <span
+                {items.map((item, index) => {
+                  const isActive = activeId === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      data-surface={isActive ? "emerald" : "light"}
+                      data-allow-white={isActive ? "true" : undefined}
+                      data-no-contrast-guard
                       className={cn(
-                        "h-5 min-w-5 rounded-md border flex items-center justify-center px-1 text-[10px] font-semibold flex-shrink-0",
-                        activeId === item.id
-                          ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
-                          : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/25"
+                        "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-left transition-all border text-[13px]",
+                        isActive
+                          ? "font-semibold shadow-sm border-transparent"
+                          : "border-transparent bg-transparent hover:bg-[#EFE6D6]/60"
                       )}
+                      style={
+                        isActive
+                          ? {
+                              backgroundImage: 'var(--jj-emerald-ombre, linear-gradient(135deg,#0B5132 0%,#0F6B43 100%))',
+                              color: '#FFFFFF',
+                              WebkitTextFillColor: '#FFFFFF',
+                            }
+                          : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }
+                      }
                     >
-                      {index + 1}
-                    </span>
-                    {item.icon && <item.icon className="w-3.5 h-3.5" />}
-                    <span className="flex-1 truncate">{item.title}</span>
-                  </button>
-                ))}
+                      <span
+                        data-no-contrast-guard
+                        className={cn(
+                          "h-6 w-6 rounded-md flex items-center justify-center text-[11px] font-bold flex-shrink-0 leading-none",
+                          isActive
+                            ? "bg-[#FDFBF7] text-[#0B5132] border border-[#B89555]"
+                            : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30"
+                        )}
+                        style={
+                          isActive
+                            ? { color: '#0B5132', WebkitTextFillColor: '#0B5132' }
+                            : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }
+                        }
+                      >
+                        {index + 1}
+                      </span>
+                      {item.icon && (
+                        <item.icon
+                          className="w-3.5 h-3.5 flex-shrink-0"
+                          style={{ color: isActive ? '#FFFFFF' : '#1A1A1A', stroke: isActive ? '#FFFFFF' : '#1A1A1A' }}
+                        />
+                      )}
+                      <span
+                        className="flex-1 truncate"
+                        style={{ color: isActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: isActive ? '#FFFFFF' : '#1A1A1A' }}
+                      >
+                        {item.title}
+                      </span>
+                    </button>
+                  );
+                })}
+
               </nav>
 
               {/* Sticky CTA footer — never cropped */}
