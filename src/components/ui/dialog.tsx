@@ -4,7 +4,32 @@ import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const Dialog = DialogPrimitive.Root;
+/**
+ * Wrap Radix Dialog.Root with a body-lock safety net.
+ * If a portal teardown races with a parent unmount (e.g. when the parent
+ * remounts the modal mid-close), Radix can leave `pointer-events: none`
+ * on <body>, which freezes the whole UI. We re-check shortly after each
+ * close and clear the inline style if no other dialog is still open.
+ */
+const Dialog: typeof DialogPrimitive.Root = ({ open, onOpenChange, ...props }) => {
+  const handleOpenChange = React.useCallback(
+    (next: boolean) => {
+      onOpenChange?.(next);
+      if (!next && typeof document !== "undefined") {
+        window.setTimeout(() => {
+          // Only unlock when there are no Radix dialog overlays still mounted.
+          const stillOpen = document.querySelector('[data-radix-dialog-overlay][data-state="open"]');
+          if (!stillOpen && document.body.style.pointerEvents === "none") {
+            document.body.style.pointerEvents = "";
+          }
+        }, 220);
+      }
+    },
+    [onOpenChange],
+  );
+  return <DialogPrimitive.Root open={open} onOpenChange={handleOpenChange} {...props} />;
+};
+
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
