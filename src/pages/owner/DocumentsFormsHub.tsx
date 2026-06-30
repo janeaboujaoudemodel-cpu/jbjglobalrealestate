@@ -536,7 +536,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             </div>
           </div>
         )}
-        <div className="grid md:grid-cols-2 gap-3">
+        <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))] min-w-0">
           {rows.map((e: any) => {
             const cName = clientNameOf(e);
             const initials = clientInitials(cName);
@@ -565,8 +565,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
               : mode === "generated" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
               : "bg-[#F7F2EA] text-[#1A1A1A]/80 border-[#B89555]/30";
             return (
-              <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
+              <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30 min-w-0 overflow-hidden">
+                <div className="flex flex-col sm:flex-row items-start gap-3 min-w-0">
                   {selectable && (
                     <Checkbox
                       className="mt-1"
@@ -599,10 +599,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                     )}
                     <div className="text-[11px] text-[#1A1A1A]/55 mt-0.5">{new Date(e.created_at).toLocaleString()}</div>
                   </div>
-                  <div className="flex flex-col gap-2 items-end shrink-0">
-                    <Button size="sm" variant="gold" onClick={() => navigate(`/owner/documents/forms/${e.id}`)}>Open</Button>
+                  <div className="flex flex-row sm:flex-col flex-wrap gap-2 items-stretch sm:items-end shrink-0 w-full sm:w-auto min-w-0">
+                    <Button size="sm" variant="gold" className="flex-1 sm:flex-none min-w-0" onClick={() => navigate(`/owner/documents/forms/${e.id}`)}>Open</Button>
                     {e.signed_document_url && (
-                      <Button size="sm" variant="outline" asChild>
+                      <Button size="sm" variant="outline" className="flex-1 sm:flex-none min-w-0" asChild>
                         <a href={brandedDownloadHref(e.signed_document_url, e.document_filename || `${e.name || "document"}.pdf`)} target="_blank" rel="noreferrer">
                           <Download className="w-3 h-3 mr-1" /> Download document
                         </a>
