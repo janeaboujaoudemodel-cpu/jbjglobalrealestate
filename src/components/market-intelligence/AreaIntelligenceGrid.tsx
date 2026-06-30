@@ -52,7 +52,8 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   return (
     <motion.div variants={fadeInUp}>
       <Card className="mi-gold-frame group h-full rounded-2xl transition-shadow hover:shadow-[0_16px_38px_rgba(26,26,26,0.10)]">
-        <CardContent className="p-6">
+        <CardContent className="p-6 flex h-full flex-col">
+
           {/* Header */}
           <div className="flex items-start justify-between mb-4 gap-3">
             <div className="flex items-center gap-3 min-w-0">
