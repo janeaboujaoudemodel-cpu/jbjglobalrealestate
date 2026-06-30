@@ -18,7 +18,7 @@ const Dialog: typeof DialogPrimitive.Root = ({ open, onOpenChange, ...props }) =
       if (!next && typeof document !== "undefined") {
         window.setTimeout(() => {
           // Only unlock when there are no Radix dialog overlays still mounted.
-          const stillOpen = document.querySelector('[data-radix-dialog-overlay][data-state="open"]');
+          const stillOpen = document.querySelector('[role="dialog"][data-state="open"]');
           if (!stillOpen && document.body.style.pointerEvents === "none") {
             document.body.style.pointerEvents = "";
           }
