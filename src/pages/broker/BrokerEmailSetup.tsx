@@ -67,17 +67,11 @@ export default function BrokerEmailSetup() {
         </div>
 
         <Tabs defaultValue="gmail" className="space-y-4">
-          <TabsList className="bg-[#F7F2EA] border border-[#B89555]/25 p-1 rounded-xl gap-1">
-            <TabsTrigger
-              value="gmail"
-              className="rounded-lg px-4 py-1.5 text-sm font-semibold text-[#1A1A1A]/70 data-[state=active]:bg-[image:var(--jj-emerald-ombre)] data-[state=active]:text-white data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] data-[state=active]:border data-[state=active]:border-white/20"
-            >
+          <TabsList className="h-auto p-1 rounded-xl gap-1">
+            <TabsTrigger value="gmail" className="rounded-lg px-5 py-2 text-sm font-semibold">
               Gmail
             </TabsTrigger>
-            <TabsTrigger
-              value="outlook"
-              className="rounded-lg px-4 py-1.5 text-sm font-semibold text-[#1A1A1A]/70 data-[state=active]:bg-[image:var(--jj-emerald-ombre)] data-[state=active]:text-white data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] data-[state=active]:border data-[state=active]:border-white/20"
-            >
+            <TabsTrigger value="outlook" className="rounded-lg px-5 py-2 text-sm font-semibold">
               Outlook
             </TabsTrigger>
           </TabsList>
