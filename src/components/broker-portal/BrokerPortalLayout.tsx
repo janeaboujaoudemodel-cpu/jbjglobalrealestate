@@ -84,7 +84,10 @@ export default function BrokerPortalLayout() {
         aria-live="polite"
         aria-busy="true"
       >
-        <BrandedLoader text="Loading Broker Workspace…" />
+        {/* Delay so the loader never flashes on fast auth/role resolves */}
+        <DelayedLoader delay={650}>
+          <BrandedLoader />
+        </DelayedLoader>
         <span className="sr-only">Loading Broker Workspace…</span>
       </div>
     );
