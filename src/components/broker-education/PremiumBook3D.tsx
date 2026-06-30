@@ -1,5 +1,7 @@
 import { useMemo } from "react";
+import { Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+
 
 /**
  * PremiumBook3D — true 3D book: spine + front + back + page edges.
