@@ -21386,5 +21386,18 @@ html body #root [data-market-report-page] :is([data-icon-tone="emerald"], [data-
   opacity: 1 !important;
 }
 
+html body #root [data-market-report-page] [data-market-book] [data-no-contrast-guard],
+html body #root [data-market-report-page] [data-market-book] [data-no-contrast-guard] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55) !important;
+}
+
+html body #root [data-market-report-page] [data-market-book] [data-no-contrast-guard] :is(svg, [class*="lucide"]),
+html body #root [data-market-report-page] [data-market-book] [data-no-contrast-guard] :is(svg, [class*="lucide"]) :is(path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 
 
