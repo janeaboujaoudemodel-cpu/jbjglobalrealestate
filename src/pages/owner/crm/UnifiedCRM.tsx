@@ -450,23 +450,23 @@ export default function UnifiedCRM() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div className="min-h-screen bg-[#FDFBF7] min-w-0 max-w-full overflow-x-hidden" data-backend-portal="owner-crm">
       {/* Title row + Insights toggle */}
-      <div className="bg-[#FDFBF7] border-b border-[#B89555]/30 relative">
-        <div className="px-6 pt-5 pb-3 flex items-center justify-between gap-4">
-          <div>
+      <div className="bg-[#FDFBF7] border-b border-[#B89555]/30 relative min-w-0 overflow-hidden">
+        <div className="px-4 md:px-6 pt-5 pb-3 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 min-w-0">
+          <div className="min-w-0">
             <h1 className="text-2xl font-semibold tracking-tight text-[#1A1A1A]">JBJ CRM</h1>
             <p className="text-xs text-[#1A1A1A]/70">
               Unified relationship hub — leads, partners, employees, campaigns, calendar, contracts.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-start xl:justify-end gap-2 flex-wrap min-w-0 max-w-full">
             <button
               type="button"
               onClick={() => setAddLeadOpen(true)}
               data-surface="emerald"
               data-emerald-ok="button"
-              className="jj-surface-emerald shrink-0 inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold shadow-[0_10px_24px_-14px_rgba(4,44,28,0.86)] transition-transform hover:-translate-y-0.5"
+              className="jj-surface-emerald shrink-0 inline-flex h-10 min-w-[118px] items-center justify-center gap-2 rounded-xl px-3 text-xs font-semibold shadow-[0_10px_24px_-14px_rgba(4,44,28,0.86)] transition-transform hover:-translate-y-0.5"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Lead</span>
@@ -476,7 +476,7 @@ export default function UnifiedCRM() {
               onClick={() => setAddBrokerOpen(true)}
               data-surface="emerald"
               data-emerald-ok="button"
-              className="jj-surface-emerald shrink-0 inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold shadow-[0_10px_24px_-14px_rgba(4,44,28,0.86)] transition-transform hover:-translate-y-0.5"
+              className="jj-surface-emerald shrink-0 inline-flex h-10 min-w-[118px] items-center justify-center gap-2 rounded-xl px-3 text-xs font-semibold shadow-[0_10px_24px_-14px_rgba(4,44,28,0.86)] transition-transform hover:-translate-y-0.5"
             >
               <UserPlus className="h-3.5 w-3.5" />
               Add Broker
@@ -501,7 +501,7 @@ export default function UnifiedCRM() {
               aria-expanded={insightsOpen}
               data-surface="emerald"
               data-emerald-ok="button"
-              className="jj-surface-emerald allow-white shrink-0 inline-flex h-10 min-w-[126px] items-center justify-center gap-2 rounded-xl border-transparent px-4 text-xs font-semibold text-white transition-transform hover:-translate-y-0.5 [&_svg]:text-white"
+              className="jj-surface-emerald allow-white shrink-0 inline-flex h-10 min-w-[118px] items-center justify-center gap-2 rounded-xl border-transparent px-3 text-xs font-semibold text-white transition-transform hover:-translate-y-0.5 [&_svg]:text-white"
             >
               <BarChart3 className="h-3.5 w-3.5" />
               Insights
