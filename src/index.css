@@ -1512,10 +1512,7 @@ All colors MUST be HSL.
   border-bottom-right-radius: 18px;
 }
 
-  bottom: 0; right: 0;
-  border-bottom-width: 1px; border-right-width: 1px;
-  border-bottom-right-radius: 28px;
-}
+
 
 .jj-global-container,
 .jj-content-track,
