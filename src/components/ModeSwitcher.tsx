@@ -128,13 +128,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   if (isUnselected && !showForUnselected) return null;
 
   const handleModeChange = async (newMode: UserMode) => {
-    // 🔒 SECURITY: Only the registered app owner may enter Owner mode.
+    // 🔒 SECURITY: Only registered founder owner inboxes may enter Owner mode.
     // Owner mode is the ONLY mode that exposes the back-end command center,
     // and it must never be reachable from a non-owner account regardless of
     // any UI bypass.
     if (newMode === 'owner' && !canDisplayOwnerMode) {
       toast.error('Owner mode is restricted', {
-        description: 'This mode is only available to the registered app owner.',
+        description: 'This mode is only available to the registered owner inboxes.',
       });
       setIsOpen(false);
       return;
