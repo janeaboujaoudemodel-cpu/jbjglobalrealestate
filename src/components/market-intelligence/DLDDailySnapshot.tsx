@@ -149,7 +149,14 @@ export const DLDDailySnapshot = () => {
                 <div data-no-contrast-guard className="mi-icon-tile mi-no-flip">
                   <Icon className="h-4 w-4" />
                 </div>
-                <TrendingUp className="h-3.5 w-3.5 text-[#B89555]" />
+                <span
+                  data-no-contrast-guard
+                  data-allow-dark-cta
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-md"
+                  style={{ background: "var(--jj-emerald-ombre)", border: "1px solid rgba(184,149,85,0.5)" }}
+                >
+                  <TrendingUp className="h-3.5 w-3.5" style={{ color: "#FFFFFF" }} />
+                </span>
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
                 {label}
