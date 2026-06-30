@@ -1,6 +1,7 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertCircle } from 'lucide-react';
+import { logClientError } from '@/utils/clientErrorLogger';
 
 interface Props {
   children: ReactNode;
@@ -22,6 +23,9 @@ class DashboardCardErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    logClientError(`DashboardCard:${this.props.fallbackTitle ?? 'unnamed'}`, error, {
+      componentStack: errorInfo.componentStack ?? undefined,
+    });
     console.error('Dashboard card error:', error, errorInfo);
   }
 

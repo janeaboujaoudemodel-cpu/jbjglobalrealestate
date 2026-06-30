@@ -2,6 +2,7 @@ import React from "react";
 import { AlertTriangle, Home, RefreshCcw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { logClientError } from "@/utils/clientErrorLogger";
 
 type RouteErrorBoundaryProps = {
   children: React.ReactNode;
@@ -25,6 +26,9 @@ export default class RouteErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: unknown, info: unknown) {
+    logClientError(`Route:${this.props.routeName ?? "unknown"}`, error, {
+      componentStack: (info as React.ErrorInfo | undefined)?.componentStack ?? undefined,
+    });
     // eslint-disable-next-line no-console
     console.error(
       "RouteErrorBoundary caught error:",

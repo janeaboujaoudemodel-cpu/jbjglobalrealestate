@@ -233,7 +233,17 @@ export default function ReportPreviewModal({
 
   const run = async (key: string, fn: () => Promise<void> | void) => {
     setBusy(key);
-    try { await fn(); } finally { setBusy(null); }
+    try {
+      await fn();
+    } catch (err) {
+      // Surface preview-modal action failures into the QA error log so
+      // download / share / send regressions are visible without devtools.
+      const { logClientError } = await import("@/utils/clientErrorLogger");
+      logClientError("ReportPreviewModal", err, { action: key });
+      throw err;
+    } finally {
+      setBusy(null);
+    }
   };
 
   const previewProjects = useMemo(() => (projects || []).slice(0, 6), [projects]);

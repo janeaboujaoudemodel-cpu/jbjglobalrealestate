@@ -1,4 +1,5 @@
 import React from "react";
+import { logClientError } from "@/utils/clientErrorLogger";
 
 
 interface AppErrorBoundaryState {
@@ -25,6 +26,7 @@ class AppErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: unknown, info: React.ErrorInfo) {
+    logClientError("AppErrorBoundary", error, { componentStack: info.componentStack ?? undefined });
     // eslint-disable-next-line no-console
     console.error("AppErrorBoundary caught error:", error, info);
 

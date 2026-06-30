@@ -6,6 +6,7 @@ import { useBrokerPersonalNotes } from "@/hooks/useBrokerPersonalNotes";
 import { useBrokerPersonalCalendar } from "@/hooks/useBrokerPersonalCalendar";
 import { Database, Users, ListTodo, StickyNote, Calendar, ArrowRight } from "lucide-react";
 import { IconTile } from "@/components/ui/icon-tile";
+import LoggingErrorBoundary from "@/components/LoggingErrorBoundary";
 
 function Stat({ icon: Icon, label, value, to }: any) {
   return (
@@ -23,6 +24,14 @@ function Stat({ icon: Icon, label, value, to }: any) {
 }
 
 export default function BrokerDashboard() {
+  return (
+    <LoggingErrorBoundary surface="BrokerDashboard">
+      <BrokerDashboardInner />
+    </LoggingErrorBoundary>
+  );
+}
+
+function BrokerDashboardInner() {
   const dbs = useBrokerScopedDatabases();
   const leads = useBrokerScopedLeads();
   const tasks = useBrokerPersonalTasks();
