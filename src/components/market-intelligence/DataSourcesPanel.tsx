@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import { 
-  Database, RefreshCw, Shield,
-  ExternalLink
+import {
+  Database,
+  ExternalLink,
+  RefreshCw,
+  Shield,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { IconTile } from "@/components/ui/icon-tile";
 import { OPEN_DATA_SOURCES } from "@/config/open-data-config";
 import {
   MI_EYEBROW,
@@ -19,18 +21,8 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* Data-viz semantic palette for cadence (kept as Tailwind utilities, not inline hex). */
-const frequencyClasses: Record<string, string> = {
-  daily: 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45',
-  weekly: 'bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35',
-  monthly: 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/45',
-  quarterly: 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/45',
-};
-
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div className={`mi-icon-tile mi-icon-tile-lg mi-no-flip ${className}`}>
-    <Icon className="w-5 h-5" />
-  </div>
+  <IconTile icon={Icon as any} tone="emerald" size="lg" className={`mi-no-flip ${className}`} />
 );
 
 export const DataSourcesPanel = () => {
@@ -59,33 +51,38 @@ export const DataSourcesPanel = () => {
           </motion.div>
 
           {/* Data Sources Grid */}
-          <div data-mi-source-grid className="grid auto-rows-fr gap-6 md:grid-cols-2 xl:grid-cols-3 max-w-6xl mx-auto">
+          <div data-mi-source-grid className="grid auto-rows-fr gap-6 md:grid-cols-2 xl:grid-cols-3 max-w-6xl mx-auto items-stretch">
             {OPEN_DATA_SOURCES.map((source) => {
               return (
                 <motion.div key={source.id} variants={fadeInUp} className="h-full">
-                  <Card data-mi-source-card className="mi-gold-frame h-full rounded-2xl transition-shadow hover:shadow-[0_18px_40px_rgba(26,26,26,0.10)]">
-                    <CardContent className="flex h-full min-h-[360px] flex-col p-6">
-                      <div className="flex items-start justify-between gap-3 mb-4">
+                  <article
+                    data-mi-source-card
+                    data-surface="light"
+                    className="mi-source-card surface-light mi-gold-frame flex h-full min-h-[430px] flex-col rounded-2xl p-6"
+                  >
+                      <div className="flex items-start justify-between gap-3">
                         <IconBox icon={Database} />
-                        <span className="mi-chip-emerald shrink-0 capitalize">
+                        <span className="mi-chip-champagne shrink-0 capitalize">
                           <RefreshCw className="w-3.5 h-3.5" />
                           {source.updateFrequency}
                         </span>
                       </div>
 
-                      <h3 className={`${MI_CARD_TITLE} mb-1`}>{source.name}</h3>
-                      <p className={`${MI_CAPTION} mb-3`}>{source.provider}</p>
-                      <p className={`${MI_BODY} mb-4 min-h-[3.4rem]`}>{source.description}</p>
+                      <div className="mt-5 min-h-[9.75rem]">
+                        <h3 className={`${MI_CARD_TITLE} mb-1 min-h-[3.25rem]`}>{source.name}</h3>
+                        <p className={`${MI_CAPTION} mb-3 min-h-[1rem]`}>{source.provider}</p>
+                        <p className={`${MI_BODY} min-h-[4.75rem]`}>{source.description}</p>
+                      </div>
 
-                      <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="mt-4 grid min-h-[5.75rem] content-start grid-cols-2 gap-2">
                         {source.dataTypes.map((type) => (
-                          <span key={type} className="mi-chip-emerald capitalize">
+                          <span key={type} className="mi-chip-champagne justify-center capitalize">
                             {type}
                           </span>
                         ))}
                       </div>
 
-                      <div className="mt-auto flex items-center gap-2 text-xs font-semibold leading-none text-[#1A1A1A] mb-4 pt-2">
+                      <div className="mt-auto flex min-h-[2rem] items-center gap-2 pt-5 text-xs font-semibold leading-none text-[#1A1A1A]">
                         <span className="mi-mini-icon"><Shield className="w-3.5 h-3.5" /></span>
                         <span>Official Government Source</span>
                       </div>
@@ -96,13 +93,12 @@ export const DataSourcesPanel = () => {
                         rel={source.url ? "noopener noreferrer" : undefined}
                         aria-disabled={!source.url}
                         data-no-contrast-guard
-                        className="mi-cta-emerald w-full text-sm rounded-lg"
+                        className="mi-cta-emerald mt-4 w-full rounded-lg text-sm"
                       >
                         <span>Visit Source</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
-                    </CardContent>
-                  </Card>
+                  </article>
                 </motion.div>
               );
             })}
