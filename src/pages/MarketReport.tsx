@@ -123,7 +123,10 @@ const MarketReport = () => {
       )}
 
       {/* ============== HERO ============== */}
-      <section className="relative pt-56 pb-16 md:pt-72 md:pb-24 bg-white">
+      <section
+        className="relative pt-56 pb-16 md:pt-72 md:pb-24 bg-white"
+        style={{ marginTop: "calc(var(--shell-header-h, 88px) + 48px)" }}
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Book Visual — image fills the full cover */}
@@ -195,7 +198,31 @@ const MarketReport = () => {
                     <div className="absolute inset-0 opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent)" }} />
                   </div>
 
-                  {/* Page block removed — book renders clean with back cover + front cover only */}
+                  {/* White inner page block — fills only the visible gap between cover and back */}
+                  <div
+                    aria-hidden="true"
+                    data-market-book-pages
+                    className="absolute inset-y-4 -right-8 w-12 rounded-r-[20px] overflow-hidden pointer-events-none"
+                    style={{
+                      transform: "translate3d(9px, 8px, -8px) scaleY(0.975)",
+                      background:
+                        "linear-gradient(90deg, #EFE6D6 0%, #FFFDF8 16%, #FFFFFF 48%, #F7F2EA 100%)",
+                      boxShadow:
+                        "inset 5px 0 10px rgba(184,149,85,0.16), inset -8px 0 14px rgba(26,26,26,0.08), 10px 18px 26px rgba(26,26,26,0.10)",
+                    }}
+                  >
+                    <div
+                      className="absolute inset-0 opacity-70"
+                      style={{
+                        background:
+                          "repeating-linear-gradient(180deg, rgba(184,149,85,0.18) 0 1px, transparent 1px 7px)",
+                      }}
+                    />
+                    <div
+                      className="absolute inset-y-0 left-0 w-2"
+                      style={{ background: "linear-gradient(90deg, rgba(26,26,26,0.16), transparent)" }}
+                    />
+                  </div>
 
 
                   {/* ============ FRONT COVER (photo, unchanged) ============ */}
