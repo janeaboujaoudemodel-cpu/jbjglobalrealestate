@@ -1,3 +1,4 @@
+import { friendlyBackendMessage } from "@/utils/friendlyBackendError";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -18,7 +19,7 @@ export function useMarkLeadJunk() {
       qc.invalidateQueries({ queryKey: ["broker-database-leads"] });
       toast.success("Lead returned to JBJ owner as junk");
     },
-    onError: (e: any) => toast.error(e?.message || "Could not mark as junk"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Could not mark as junk"),
   });
 }
 
@@ -37,7 +38,7 @@ export function usePromoteLeadToMain() {
       qc.invalidateQueries({ queryKey: ["broker-database-leads"] });
       toast.success("Lead added to your main pipeline");
     },
-    onError: (e: any) => toast.error(e?.message || "Could not promote lead"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Could not promote lead"),
   });
 }
 
@@ -56,7 +57,7 @@ export function useRedistributeJunkLead() {
       qc.invalidateQueries({ queryKey: ["owner-junk-queue"] });
       toast.success("Lead reassigned");
     },
-    onError: (e: any) => toast.error(e?.message || "Reassign failed"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Reassign failed"),
   });
 }
 
@@ -73,6 +74,6 @@ export function useDeleteJunkLead() {
       qc.invalidateQueries({ queryKey: ["owner-junk-queue"] });
       toast.success("Lead permanently deleted");
     },
-    onError: (e: any) => toast.error(e?.message || "Delete failed"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Delete failed"),
   });
 }

@@ -1,3 +1,4 @@
+import { friendlyBackendMessage } from "@/utils/friendlyBackendError";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -71,7 +72,7 @@ export function useClassifyEmail() {
       qc.invalidateQueries({ queryKey: ["broker-emails"] });
       toast.success("Categorised by AI");
     },
-    onError: (e: any) => toast.error(e?.message || "Classification failed"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Classification failed"),
   });
 }
 
@@ -107,7 +108,7 @@ export function useConnectBrokerEmail() {
       qc.invalidateQueries({ queryKey: ["broker-email-accounts"] });
       supabase.functions.invoke("broker-email-sync", { body: { accountId: null } }).catch(() => {});
     },
-    onError: (e: any) => toast.error(e?.message || "Connect failed"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Connect failed"),
   });
 }
 
@@ -124,6 +125,6 @@ export function useSyncBrokerEmail() {
       qc.invalidateQueries({ queryKey: ["broker-emails"] });
       qc.invalidateQueries({ queryKey: ["broker-email-accounts"] });
     },
-    onError: (e: any) => toast.error(e?.message || "Sync failed"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Sync failed"),
   });
 }

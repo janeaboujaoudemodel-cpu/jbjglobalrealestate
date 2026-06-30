@@ -1,3 +1,4 @@
+import { friendlyBackendMessage } from "@/utils/friendlyBackendError";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -60,7 +61,7 @@ export function useSaveBrokerOAuthApp() {
       toast.success("Credentials saved");
       qc.invalidateQueries({ queryKey: ["broker-oauth-apps"] });
     },
-    onError: (e: any) => toast.error(e?.message || "Failed to save"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Failed to save"),
   });
 }
 
@@ -75,7 +76,7 @@ export function useDeleteBrokerOAuthApp() {
       toast.success("Credentials removed");
       qc.invalidateQueries({ queryKey: ["broker-oauth-apps"] });
     },
-    onError: (e: any) => toast.error(e?.message || "Failed to remove"),
+    onError: (e: any) => toast.error(friendlyBackendMessage(e) || "Failed to remove"),
   });
 }
 
