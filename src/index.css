@@ -21607,8 +21607,9 @@ html body .jj-text-emerald * {
 }
 .mi-chip-gold *, .mi-chip-gold svg { color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; stroke: #1A1A1A !important; }
 
-/* Emerald CTA button — white text, gold ring */
+/* Emerald CTA button — white text, gold ring, metallic sheen sweep */
 .mi-cta-emerald {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -21623,9 +21624,28 @@ html body .jj-text-emerald * {
   letter-spacing: 0.02em;
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
   cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mi-cta-emerald::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.38) 50%, transparent 65%);
+  transform: translateX(-130%);
+  pointer-events: none;
+  z-index: 0;
+  animation: mi-cta-sweep 4.5s ease-in-out infinite;
+}
+.mi-cta-emerald > * { position: relative; z-index: 1; }
+@keyframes mi-cta-sweep {
+  0% { transform: translateX(-130%); }
+  55% { transform: translateX(130%); }
+  100% { transform: translateX(130%); }
 }
 .mi-cta-emerald:hover { transform: translateY(-1px); filter: brightness(1.08); background: var(--jj-emerald-ombre-hover) !important; }
 .mi-cta-emerald, .mi-cta-emerald *, .mi-cta-emerald > *, .mi-cta-emerald svg { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; stroke: #ffffff !important; }
+
 
 /* Card hover → emerald fill; all children white on hover */
 .mi-card-hover-emerald {
