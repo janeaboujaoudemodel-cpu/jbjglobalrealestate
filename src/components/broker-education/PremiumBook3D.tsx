@@ -66,6 +66,12 @@ const STYLES = `
 .jj-book-pages-top    { position:absolute; top:0; left:30px; right:0; height:8px; transform: rotateX(90deg) translateZ(4px); background: linear-gradient(90deg,#f3e7c8,#fff7e0,#f3e7c8); }
 .jj-book-pages-bottom { position:absolute; bottom:0; left:30px; right:0; height:8px; transform: rotateX(-90deg) translateZ(4px); background: linear-gradient(90deg,#f3e7c8,#fff7e0,#f3e7c8); }
 .jj-book-pages-right  { position:absolute; top:0; bottom:0; right:0; width:8px; transform: rotateY(90deg) translateZ(4px); background: repeating-linear-gradient(0deg,#f3e7c8 0 2px,#e9d9b0 2px 3px); }
+/* LOCK: book cover titles are ALWAYS pure white. No global contrast guard
+   may flip these to ink — the cover background is deep leather. */
+.jj-book-title, .jj-book-title * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
 `;
 
 function splitCoverTitle(title: string) {
