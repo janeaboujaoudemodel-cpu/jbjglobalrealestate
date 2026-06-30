@@ -133,10 +133,11 @@ const AccessDenied = () => {
           <Button
             onClick={() => navigate("/")}
             data-no-contrast-guard
+            data-surface="champagne"
             className="border font-bold"
             style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)", borderColor: "#B89555", color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
           >
-            <Home className="w-4 h-4" />
+            <Home className="w-4 h-4" style={{ color: "#064E3B", stroke: "#064E3B" }} />
             Return Home
           </Button>
 
@@ -144,6 +145,7 @@ const AccessDenied = () => {
             onClick={handleRetry}
             disabled={ownerLoading}
             data-no-contrast-guard
+            data-surface="emerald"
             className="border font-bold"
             style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.72)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
@@ -155,6 +157,7 @@ const AccessDenied = () => {
             <Button
               onClick={handleSignOut}
               data-no-contrast-guard
+              data-surface="emerald"
               className="border font-bold"
               style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(184,149,85,0.72)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
