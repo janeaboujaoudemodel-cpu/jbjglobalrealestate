@@ -269,22 +269,22 @@ export const PublicRoutes = () => (
     <Route path="/projects/:slug" element={<RedirectWithParams to="/project" />} />
 
     {/* ── Guides & Education ── */}
-    <Route path="/buyer-guide" element={<BuyerGuide />} />
-    <Route path="/seller-guide" element={<SellerGuide />} />
+    <Route path="/buyer-guide" element={<InsightsPageScope><BuyerGuide /></InsightsPageScope>} />
+    <Route path="/seller-guide" element={<InsightsPageScope><SellerGuide /></InsightsPageScope>} />
     <Route path="/seller-listing" element={<Navigate to="/list-property?mode=manual" replace />} />
-    <Route path="/guides" element={<Guides />} />
-    <Route path="/guides/golden-visa-uae" element={<GoldenVisaGuide />} />
+    <Route path="/guides" element={<InsightsPageScope><Guides /></InsightsPageScope>} />
+    <Route path="/guides/golden-visa-uae" element={<InsightsPageScope><GoldenVisaGuide /></InsightsPageScope>} />
     <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
     {/* Books Library consolidated into Guides Library — single canonical hub. */}
     <Route path="/education-hub" element={<Navigate to="/guides" replace />} />
     <Route path="/books-library" element={<Navigate to="/guides" replace />} />
-    <Route path="/rent-guide" element={<RentGuide />} />
-    <Route path="/tenant-guide" element={<TenantGuide />} />
-    <Route path="/landlord-guide" element={<LandlordGuide />} />
+    <Route path="/rent-guide" element={<InsightsPageScope><RentGuide /></InsightsPageScope>} />
+    <Route path="/tenant-guide" element={<InsightsPageScope><TenantGuide /></InsightsPageScope>} />
+    <Route path="/landlord-guide" element={<InsightsPageScope><LandlordGuide /></InsightsPageScope>} />
     <Route path="/landlord-portal" element={<Navigate to="/dashboard/my-listings" replace />} />
-    <Route path="/investor-education" element={<InvestorEducation />} />
+    <Route path="/investor-education" element={<InsightsPageScope><InvestorEducation /></InsightsPageScope>} />
     {/* /broker-education retired — merged into /jbj-academy */}
-    <Route path="/faq" element={<FAQ />} />
+    <Route path="/faq" element={<InsightsPageScope><FAQ /></InsightsPageScope>} />
     <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
     <Route path="/buyer-faq" element={<BuyerFAQ />} />
     <Route path="/seller-faq" element={<SellerFAQ />} />
@@ -297,16 +297,16 @@ export const PublicRoutes = () => (
     <Route path="/guides/landlords" element={<Navigate to="/landlord-guide" replace />} />
 
     {/* ── Market Intelligence ── */}
-    <Route path="/market-report" element={<MarketReport />} />
-    <Route path="/market-intelligence" element={<MarketIntelligence />} />
-    <Route path="/market-intelligence/overview" element={<MarketOverview />} />
-    <Route path="/market-intelligence/areas" element={<AreaIntelligence />} />
-    <Route path="/market-intelligence/areas/:slug" element={<MarketAreaDetail />} />
-    <Route path="/market-intelligence/reports" element={<MarketReportsPage />} />
-    <Route path="/market-intelligence/reports/monthly/:period" element={<MonthlyMarketBrief />} />
-    <Route path="/market-intelligence/reports/quarterly/:period" element={<QuarterlyMarketReview />} />
-    <Route path="/market-intelligence/reports/annual/:year" element={<AnnualMarketSummary />} />
-    <Route path="/market-intelligence/methodology" element={<Methodology />} />
+    <Route path="/market-report" element={<InsightsPageScope><MarketReport /></InsightsPageScope>} />
+    <Route path="/market-intelligence" element={<InsightsPageScope><MarketIntelligence /></InsightsPageScope>} />
+    <Route path="/market-intelligence/overview" element={<InsightsPageScope><MarketOverview /></InsightsPageScope>} />
+    <Route path="/market-intelligence/areas" element={<InsightsPageScope><AreaIntelligence /></InsightsPageScope>} />
+    <Route path="/market-intelligence/areas/:slug" element={<InsightsPageScope><MarketAreaDetail /></InsightsPageScope>} />
+    <Route path="/market-intelligence/reports" element={<InsightsPageScope><MarketReportsPage /></InsightsPageScope>} />
+    <Route path="/market-intelligence/reports/monthly/:period" element={<InsightsPageScope><MonthlyMarketBrief /></InsightsPageScope>} />
+    <Route path="/market-intelligence/reports/quarterly/:period" element={<InsightsPageScope><QuarterlyMarketReview /></InsightsPageScope>} />
+    <Route path="/market-intelligence/reports/annual/:year" element={<InsightsPageScope><AnnualMarketSummary /></InsightsPageScope>} />
+    <Route path="/market-intelligence/methodology" element={<InsightsPageScope><Methodology /></InsightsPageScope>} />
     
 
     {/* ── Services ── */}
@@ -352,8 +352,8 @@ export const PublicRoutes = () => (
     <Route path="/awards" element={<Awards />} />
     <Route path="/press-kit" element={<Navigate to="/company-profile" replace />} />
     <Route path="/company-profile" element={<CompanyProfile />} />
-    <Route path="/news" element={<News />} />
-    <Route path="/news/:id" element={<NewsDetail />} />
+    <Route path="/news" element={<InsightsPageScope><News /></InsightsPageScope>} />
+    <Route path="/news/:id" element={<InsightsPageScope><NewsDetail /></InsightsPageScope>} />
     <Route path="/team" element={<TeamRouteGate />} />
     {/* /meet-the-team retired — gate via TeamRouteGate */}
     {/* /brokers and /our-brokers retired — no redirect; 404 via NotFound catch-all */}
