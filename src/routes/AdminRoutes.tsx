@@ -79,11 +79,11 @@ const LegacyEnvelopeRedirect = () => {
 };
 const DeveloperProfileSlugRedirect = () => {
   const { slug } = useParams();
-  return <Navigate to={`/developer-hub-admin/profile/${slug}`} replace />;
+  return <Navigate to={`/owner/developers/${slug}`} replace />;
 };
 const DeveloperProfileSlugPortalRedirect = () => {
   const { slug } = useParams();
-  return <Navigate to={`/developers-portal/developers/${slug}`} replace />;
+  return <Navigate to={`/owner/developers/${slug}`} replace />;
 };
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
@@ -106,27 +106,27 @@ export const AdminRoutes = () => (
     {/* /admin/onboarding redirected to Careers Portal below */}
     <Route path="/admin/roles" element={<Navigate to="/owner/admin" replace />} />
     <Route path="/admin/intelligence" element={<Navigate to="/owner/admin" replace />} />
-    {/* Legacy /admin/developers/* → redirect to new Developer Hub */}
-    <Route path="/admin/developers" element={<Navigate to="/developer-hub-admin/directory" replace />} />
+    {/* Legacy /admin/developers/* → canonical owner Developers Portal */}
+    <Route path="/admin/developers" element={<Navigate to="/owner/developers" replace />} />
     <Route path="/admin/developers/profile/:slug" element={<DeveloperProfileSlugRedirect />} />
-    <Route path="/admin/developers/missing-logos" element={<Navigate to="/developer-hub-admin/missing-logos" replace />} />
+    <Route path="/admin/developers/missing-logos" element={<Navigate to="/owner/developers/missing-logos" replace />} />
 
-    {/* Short alias → Developer Hub */}
-    <Route path="/dev-hub" element={<Navigate to="/developer-hub-admin" replace />} />
-    <Route path="/dev-hub/*" element={<Navigate to="/developer-hub-admin" replace />} />
+    {/* Short alias → owner Developers Portal */}
+    <Route path="/dev-hub" element={<Navigate to="/owner/developers" replace />} />
+    <Route path="/dev-hub/*" element={<Navigate to="/owner/developers" replace />} />
 
-    {/* Owner Developer Hub — REPLACED by /developers-portal (handled in DevelopersPortalRoutes) */}
-    <Route path="/developer-hub-admin" element={<Navigate to="/developers-portal" replace />} />
-    <Route path="/developer-hub-admin/directory" element={<Navigate to="/developers-portal/directory" replace />} />
-    <Route path="/developer-hub-admin/missing-logos" element={<Navigate to="/developers-portal/missing-logos" replace />} />
-    <Route path="/developer-hub-admin/enrichment" element={<Navigate to="/developers-portal/enrichment" replace />} />
-    <Route path="/developer-hub-admin/briefings" element={<Navigate to="/developers-portal/briefings" replace />} />
-    <Route path="/developer-hub-admin/deals" element={<Navigate to="/developers-portal/deals" replace />} />
-    <Route path="/developer-hub-admin/calendar" element={<Navigate to="/developers-portal/calendar" replace />} />
-    <Route path="/developer-hub-admin/projects" element={<Navigate to="/developers-portal/projects" replace />} />
-    <Route path="/developer-hub-admin/approval" element={<Navigate to="/developers-portal/access-requests" replace />} />
+    {/* Owner Developer Hub legacy URLs — always stay inside the owner shell */}
+    <Route path="/developer-hub-admin" element={<Navigate to="/owner/developers" replace />} />
+    <Route path="/developer-hub-admin/directory" element={<Navigate to="/owner/developers" replace />} />
+    <Route path="/developer-hub-admin/missing-logos" element={<Navigate to="/owner/developers/missing-logos" replace />} />
+    <Route path="/developer-hub-admin/enrichment" element={<Navigate to="/owner/developers/profile-rebuild" replace />} />
+    <Route path="/developer-hub-admin/briefings" element={<Navigate to="/owner/developers/briefings" replace />} />
+    <Route path="/developer-hub-admin/deals" element={<Navigate to="/owner/developers/briefings" replace />} />
+    <Route path="/developer-hub-admin/calendar" element={<Navigate to="/owner/developers/calendar" replace />} />
+    <Route path="/developer-hub-admin/projects" element={<Navigate to="/owner/developers/projects" replace />} />
+    <Route path="/developer-hub-admin/approval" element={<Navigate to="/owner/developers/access-requests" replace />} />
     <Route path="/developer-hub-admin/profile/:slug" element={<DeveloperProfileSlugPortalRedirect />} />
-    <Route path="/developer-hub-admin/*" element={<Navigate to="/developers-portal" replace />} />
+    <Route path="/developer-hub-admin/*" element={<Navigate to="/owner/developers" replace />} />
 
     {/* Owner-only legacy admin developer tools still reachable */}
     <Route path="/admin/developers-legacy" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />

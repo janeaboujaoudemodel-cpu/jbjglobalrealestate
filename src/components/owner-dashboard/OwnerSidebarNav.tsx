@@ -70,8 +70,9 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "DEVELOPERS",
     items: [
-      { label: "Developers Directory", icon: Building2, path: "/owner/developers" },
+      { label: "Developers Portal", icon: Building2, path: "/owner/developers" },
       { label: "Sales Reps", icon: Users, path: "/owner/developers/reps" },
+      { label: "Briefings", icon: UserCheck, path: "/owner/developers/briefings" },
       { label: "Projects", icon: ClipboardList, path: "/owner/developers/projects" },
       { label: "Calendar", icon: Calendar, path: "/owner/developers/calendar" },
       { label: "Access Requests", icon: Shield, path: "/owner/developers/access-requests" },
