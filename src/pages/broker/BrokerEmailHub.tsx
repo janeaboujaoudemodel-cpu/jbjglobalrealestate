@@ -108,9 +108,11 @@ export default function BrokerEmailHub() {
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`text-[11px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-md border ${active ? "jj-surface-emerald allow-white border-white/20 text-white shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "bg-white border-[#B89555]/25 text-[#1A1A1A]/65 hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"}`}
+              data-surface={active ? "emerald" : undefined}
+              className={`text-[11px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-md border ${active ? "jj-surface-emerald allow-white border-white/20 text-white [&_svg]:text-white shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "bg-white border-[#B89555]/25 text-[#1A1A1A]/75 hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"}`}
             >
               {c.replace(/_/g, " ")}
+
             </button>
           );
         })}
