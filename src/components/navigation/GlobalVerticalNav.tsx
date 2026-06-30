@@ -841,7 +841,7 @@ export default function GlobalVerticalNav() {
   /* ─── RENDER MEGA MENU ─── */
   const renderMegaMenu = () => {
     if (!activeMegaMenu || collapsed) return null;
-    const sidebarWidth = '200px';
+    const sidebarWidth = '240px';
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
 
     // Shortcuts now render inline (accordion) inside the sidebar — never as a popout panel.
