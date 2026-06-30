@@ -425,14 +425,14 @@ const MarketReport = () => {
               {canDirectDownload ? (
                 <div className="text-center py-6">
                   <div
-                    className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center shadow-[0_10px_28px_rgba(6,78,59,0.30)]"
+                    className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-[0_10px_28px_rgba(6,78,59,0.30)]"
                     style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                     data-no-contrast-guard
                     data-icon-tone="emerald"
                     data-emerald-icon-surface
                   >
                     <Check
-                      className="w-10 h-10"
+                      className="w-8 h-8"
                       style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                       strokeWidth={3}
                     />
@@ -605,14 +605,14 @@ const MarketReport = () => {
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <div
-                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-[0_3px_10px_rgba(6,78,59,0.25)]"
+                        className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
                         data-icon-tone="emerald"
                         data-emerald-icon-surface
                       >
                         <Check
-                          className="w-4 h-4"
+                          className="w-5 h-5"
                           style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
                           strokeWidth={3}
                         />
