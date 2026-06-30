@@ -274,7 +274,9 @@ export const PublicRoutes = () => (
     <Route path="/guides" element={<Guides />} />
     <Route path="/guides/golden-visa-uae" element={<GoldenVisaGuide />} />
     <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
-    <Route path="/education-hub" element={<EducationHub />} />
+    {/* Books Library consolidated into Guides Library — single canonical hub. */}
+    <Route path="/education-hub" element={<Navigate to="/guides" replace />} />
+    <Route path="/books-library" element={<Navigate to="/guides" replace />} />
     <Route path="/rent-guide" element={<RentGuide />} />
     <Route path="/tenant-guide" element={<TenantGuide />} />
     <Route path="/landlord-guide" element={<LandlordGuide />} />
