@@ -22438,3 +22438,48 @@ html body #root [data-backend-portal="owner-admin"] [role="tab"][data-state="act
   filter: none !important;
   mix-blend-mode: normal !important;
 }
+
+/* PASS 146 — DEVELOPERS PORTAL BACKEND SHELL LOCK
+   Developers Portal is now a backend shell page: vertical sidebar stays present
+   across directory/profile/sub-pages, active rows are emerald, and every emerald
+   descendant is pure white so older champagne contrast guards cannot regress it. */
+html body #root [data-backend-portal="developers"] [data-sidebar-owner-item].active,
+html body #root [data-backend-portal="developers"] [data-sidebar-owner-item][aria-current="page"],
+html body #root [data-backend-portal="developer-profile"] [role="tab"][data-state="active"],
+html body #root [data-backend-portal="developers"] [role="tab"][data-state="active"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is([data-backend-portal="developers"], [data-backend-portal="developer-profile"])
+  :is([data-sidebar-owner-item].active, [data-sidebar-owner-item][aria-current="page"], [role="tab"][data-state="active"], [data-surface="emerald"], .jj-emerald-metallic, .jj-surface-emerald)
+  :is(*,span,div,p,strong,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-backend-portal="developers"] [data-backend-sidebar-icon-tile],
+html body #root [data-backend-portal="developer-profile"] [data-backend-sidebar-icon-tile] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+}
+
+html body #root [data-backend-portal="developers"] [data-backend-sidebar-icon-tile] :is(svg,[class*="lucide"]),
+html body #root [data-backend-portal="developer-profile"] [data-backend-sidebar-icon-tile] :is(svg,[class*="lucide"]) {
+  width: 13px !important;
+  height: 13px !important;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
