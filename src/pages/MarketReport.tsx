@@ -278,12 +278,14 @@ const MarketReport = () => {
                 initial={{ opacity: 0, scale: 0.85 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="absolute -bottom-2 right-2 md:right-8 px-3.5 py-1.5 rounded-full shadow-[0_6px_18px_rgba(6,78,59,0.35)]"
+                className="jj-surface-emerald jj-pill-emerald-metallic absolute -bottom-2 right-2 md:right-8 px-3.5 py-1.5 rounded-full shadow-[0_6px_18px_rgba(6,78,59,0.35)]"
                 style={{
                   backgroundImage: "var(--jj-emerald-ombre)",
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
                 }}
+                data-surface="emerald"
+                data-emerald="true"
                 data-no-contrast-guard
               >
                 <span
