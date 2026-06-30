@@ -4115,7 +4115,7 @@ a[class*="bg-red-"]:hover {
 
 /* =====================================================================
    COOKIE BANNER — RESPONSIVE LAYOUT LOCK (sidebar-aware + mobile compact)
-   - Offsets the banner past the vertical sidebar (48px collapsed / 200px expanded)
+   - Offsets the banner past the vertical sidebar (48px collapsed / 240px expanded)
      so "We value your privacy" never sits under the rail.
    - Compacts the popup on phones so it does not consume half the screen.
    ===================================================================== */
@@ -4130,7 +4130,7 @@ a[class*="bg-red-"]:hover {
     padding-right: 1rem !important;
   }
   body.jj-vertical-nav-active [data-chrome="cookie-banner"] {
-    padding-left: calc(200px + 1.25rem) !important;
+    padding-left: calc(240px + 1.25rem) !important;
     padding-right: 1.25rem !important;
   }
 }
@@ -17376,16 +17376,16 @@ html body [data-radix-popper-content-wrapper] [data-on-dark]
  * at every viewport so the circle is NEVER hidden behind the rail.
  *   mobile  (<640px)            : sidebar hidden        → 16px gutter
  *   sm+ collapsed sidebar (48px) : button starts at 64px
- *   sm+ expanded  sidebar (200px): button starts at 216px
+ *   sm+ expanded  sidebar (240px): button starts at 256px
  * Mirrors for RTL.
  * ========================================================= */
 .jj-page-nav-anchor--left  { left: 16px; right: auto; }
 .jj-page-nav-anchor--right { right: 16px; left: auto; }
 
 @media (min-width: 640px) {
-  /* Default = expanded sidebar (200px rail). */
-  .jj-page-nav-anchor--left  { left: 216px; }
-  .jj-page-nav-anchor--right { right: 216px; }
+  /* Default = expanded sidebar (240px rail). */
+  .jj-page-nav-anchor--left  { left: 256px; }
+  .jj-page-nav-anchor--right { right: 256px; }
 
   /* Collapsed sidebar (48px rail). */
   body.jj-vertical-nav-collapsed .jj-page-nav-anchor--left  { left: 64px; }
