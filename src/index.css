@@ -14264,7 +14264,7 @@ html body #root :is(
   .surface-cream,
   .surface-raised,
   .surface-gold
-):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) :where(.text-white, [class*="text-white/"]):not(.allow-white):not([data-allow-dark-cta] *):not(.jj-emerald-metallic *):not(.jj-pill-emerald *):not(.jj-pill-emerald-metallic *):not(.jj-emerald-action *):not([data-emerald="true"] *):not([data-emerald-action="true"] *),
+):not(.jj-emerald-metallic):not(.jj-pill-emerald):not(.jj-pill-emerald-metallic):not(.jj-emerald-action):not([data-emerald="true"]):not([data-emerald-action="true"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not([data-surface="navy"]) :where(.text-white, [class*="text-white/"]):not(.allow-white):not([data-allow-dark-cta] *):not(.jj-emerald-metallic *):not(.jj-pill-emerald *):not(.jj-pill-emerald-metallic *):not(.jj-emerald-action *):not([data-emerald="true"] *):not([data-emerald-action="true"] *):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-no-contrast-guard] *):not(.allow-white *),
 html body #root :is(
   [class~="bg-[#FDFBF7]"],
   [class~="bg-[#F7F2EA]"],
@@ -15523,7 +15523,7 @@ html body #root :is(
   .surface-raised,
   .surface-gold,
   .owner-shell-surface
-) :where(.text-white, [class*="text-white/"], .allow-white):not([data-backend-icon-tile]):not([data-backend-icon-tile] *):not([data-backend-sidebar-icon-tile]):not([data-backend-sidebar-icon-tile] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-emerald-action="true"]):not([data-emerald-action="true"] *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([role="tab"][data-state="active"]):not([role="tab"][data-state="active"] *):not([data-jj-segmented-trigger][data-state="active"]):not([data-jj-segmented-trigger][data-state="active"] *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-action):not(.jj-emerald-action *):not(.jj-pill-emerald):not(.jj-pill-emerald *) {
+) :where(.text-white, [class*="text-white/"], .allow-white):not([data-hero-dark] *):not([data-on-dark] *):not([data-no-contrast-guard] *):not(.allow-white *):not([data-backend-icon-tile]):not([data-backend-icon-tile] *):not([data-backend-sidebar-icon-tile]):not([data-backend-sidebar-icon-tile] *):not([data-emerald="true"]):not([data-emerald="true"] *):not([data-emerald-action="true"]):not([data-emerald-action="true"] *):not([data-surface="emerald"]):not([data-surface="emerald"] *):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not([data-surface="navy"]):not([data-surface="navy"] *):not([data-allow-dark-cta]):not([data-allow-dark-cta] *):not([role="tab"][data-state="active"]):not([role="tab"][data-state="active"] *):not([data-jj-segmented-trigger][data-state="active"]):not([data-jj-segmented-trigger][data-state="active"] *):not(.jj-emerald-metallic):not(.jj-emerald-metallic *):not(.jj-emerald-action):not(.jj-emerald-action *):not(.jj-pill-emerald):not(.jj-pill-emerald *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-shadow: none !important;
@@ -16786,11 +16786,15 @@ html body :is([data-hero-dark], [data-on-dark]) :where(svg, [class*="lucide"]) {
   stroke: #FFFFFF !important;
 }
 
-/* Bright-background contract — white text on champagne/pearl/page is banned. */
-[data-surface="champagne"]:not([data-no-contrast-guard]) > .text-white,
-[data-surface="champagne"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-jbj-chat-open] *),
-[data-surface="page"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]),
-[data-surface="pearl"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]) {
+/* Bright-background contract — white text on champagne/pearl/page is banned.
+   Exception: descendants of any opted-out dark wrapper ([data-hero-dark],
+   [data-on-dark], [data-surface="dark"|"ink"|"emerald"], .allow-white,
+   [data-no-contrast-guard]) keep their white ink so dark heroes / featured
+   cards inside light page surfaces render correctly. */
+[data-surface="champagne"]:not([data-no-contrast-guard]) > .text-white:not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *),
+[data-surface="champagne"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-jbj-chat-open] *):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *),
+[data-surface="page"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *),
+[data-surface="pearl"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -21021,7 +21025,7 @@ html body :is([data-surface="emerald"], [data-studio-surface="emerald"], [data-e
 }
 
 html body :is([data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="pearl"], [data-mode-active-pill], [data-mode-icon-tile="idle"], .surface-champagne, .surface-light, .surface-cream, .surface-page, .surface-raised, .surface-pearl, .jj-card-champagne, .jj-surface-champagne, .jj-section-champagne, .tab-trigger-champagne[data-state="active"]):not([data-surface="emerald"]):not([data-surface="emerald"] *),
-html body :is([data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="pearl"], [data-mode-active-pill], [data-mode-icon-tile="idle"], .surface-champagne, .surface-light, .surface-cream, .surface-page, .surface-raised, .surface-pearl, .jj-card-champagne, .jj-surface-champagne, .jj-section-champagne, .tab-trigger-champagne[data-state="active"]):not([data-surface="emerald"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,b,i,small,li,dt,dd,th,td,div,time,svg,[data-lucide],[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"], [data-surface="emerald"] *, [data-emerald-action], [data-emerald-action] *, [data-emerald-icon-surface], [data-emerald-icon-surface] *, [data-mode-select-pill], [data-mode-select-pill] *, .allow-white, .allow-white *, .jj-cta-emerald, .jj-cta-emerald *, .jj-pill-emerald, .jj-pill-emerald *, .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *, .jj-icon-tile-emerald, .jj-icon-tile-emerald *)):not(#jj-champagne-lock-a):not(#jj-champagne-lock-b):not(#jj-champagne-lock-c):not(#jj-champagne-lock-d):not(#jj-champagne-lock-e):not(#jj-champagne-lock-f):not(#jj-champagne-lock-g):not(#jj-champagne-lock-h) {
+html body :is([data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="pearl"], [data-mode-active-pill], [data-mode-icon-tile="idle"], .surface-champagne, .surface-light, .surface-cream, .surface-page, .surface-raised, .surface-pearl, .jj-card-champagne, .jj-surface-champagne, .jj-section-champagne, .tab-trigger-champagne[data-state="active"]):not([data-surface="emerald"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,b,i,small,li,dt,dd,th,td,div,time,svg,[data-lucide],[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g):not(:where([data-surface="emerald"], [data-surface="emerald"] *, [data-emerald-action], [data-emerald-action] *, [data-emerald-icon-surface], [data-emerald-icon-surface] *, [data-mode-select-pill], [data-mode-select-pill] *, .allow-white, .allow-white *, .jj-cta-emerald, .jj-cta-emerald *, .jj-pill-emerald, .jj-pill-emerald *, .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *, .jj-icon-tile-emerald, .jj-icon-tile-emerald *, [data-hero-dark], [data-hero-dark] *, [data-on-dark], [data-on-dark] *, [data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, [data-no-contrast-guard], [data-no-contrast-guard] *)):not(#jj-champagne-lock-a):not(#jj-champagne-lock-b):not(#jj-champagne-lock-c):not(#jj-champagne-lock-d):not(#jj-champagne-lock-e):not(#jj-champagne-lock-f):not(#jj-champagne-lock-g):not(#jj-champagne-lock-h) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   text-fill-color: #1A1A1A !important;
