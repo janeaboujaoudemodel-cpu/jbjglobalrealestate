@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import {
   Users,
   UserCheck,
-  Headphones,
   Camera,
   Video,
   PenTool,
@@ -18,7 +17,6 @@ import {
   Star,
   Shield,
   Award,
-  CheckCircle2,
   Brain,
   FileText,
   BarChart3,
@@ -35,86 +33,28 @@ import {
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-  }
+    transition: { staggerChildren: 0.08, delayChildren: 0.15 },
+  },
 };
 
-// Support Team Members
 const SUPPORT_TEAM = [
-  {
-    role: 'HR Manager',
-    name: 'Jessica',
-    description: 'One-on-one support for recruitment, training, and career development.',
-    icon: UserCheck,
-    color: 'text-pink-400',
-    bgColor: 'bg-pink-500/10',
-  },
-  {
-    role: 'Admin / Receptionist',
-    name: 'JBJ Admin Team',
-    description: 'Handles listings, documentation, and client coordination.',
-    icon: Shield,
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/10',
-  },
-  {
-    role: 'Property Coach',
-    name: 'Senior Mentor',
-    description: 'Dedicated mentor for deal closing and performance improvement.',
-    icon: Target,
-    color: 'text-green-400',
-    bgColor: 'jj-surface-emerald-soft',
-  },
-  {
-    role: 'Photographer',
-    name: 'Visual Team',
-    description: 'Professional listing photography for your properties.',
-    icon: Camera,
-    color: 'text-[#1A1A1A]',
-    bgColor: 'bg-amber-500/10',
-  },
-  {
-    role: 'Video Producer',
-    name: 'Oliver Wright',
-    description: 'Cinematic property tours and brand documentaries.',
-    icon: Video,
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/10',
-  },
-  {
-    role: 'Content Editor',
-    name: 'Henry Crawford',
-    description: 'Post-production editing, color grading, and visual effects.',
-    icon: PenTool,
-    color: 'text-red-400',
-    bgColor: 'bg-red-500/10',
-  },
-  {
-    role: 'Marketing Team',
-    name: 'Digital Marketing',
-    description: 'Ad management, campaigns, and lead generation support.',
-    icon: Megaphone,
-    color: 'text-orange-400',
-    bgColor: 'bg-orange-500/10',
-  },
-  {
-    role: 'Personal Assistant',
-    name: 'Layla',
-    description: 'Task scheduling, follow-ups, and daily coordination.',
-    icon: Calendar,
-    color: 'text-cyan-400',
-    bgColor: 'bg-cyan-500/10',
-  },
+  { role: 'HR Manager', name: 'Jessica', description: 'One-on-one support for recruitment, training, and career development.', icon: UserCheck },
+  { role: 'Admin / Receptionist', name: 'JBJ Admin Team', description: 'Handles listings, documentation, and client coordination.', icon: Shield },
+  { role: 'Property Coach', name: 'Senior Mentor', description: 'Dedicated mentor for deal closing and performance improvement.', icon: Target },
+  { role: 'Photographer', name: 'Visual Team', description: 'Professional listing photography for your properties.', icon: Camera },
+  { role: 'Video Producer', name: 'Oliver Wright', description: 'Cinematic property tours and brand documentaries.', icon: Video },
+  { role: 'Content Editor', name: 'Henry Crawford', description: 'Post-production editing, color grading, and visual effects.', icon: PenTool },
+  { role: 'Marketing Team', name: 'Digital Marketing', description: 'Ad management, campaigns, and lead generation support.', icon: Megaphone },
+  { role: 'Personal Assistant', name: 'Layla', description: 'Task scheduling, follow-ups, and daily coordination.', icon: Calendar },
 ];
 
-// AI Tools List
 const AI_TOOLS = [
   { name: 'AI Business Card Scanner', description: 'Scan and extract contact info instantly', icon: CreditCard },
   { name: 'Smart Lead Tracker', description: 'AI-powered lead management and scoring', icon: TrendingUp },
@@ -128,10 +68,29 @@ const AI_TOOLS = [
   { name: 'Design Studio', description: 'AI-powered marketing material creation', icon: Palette },
 ];
 
+// Reusable emerald metallic icon tile (white glyph on emerald) — matches sidebar standard.
+const EmeraldTile = ({ icon: Icon, size = 'md' }: { icon: any; size?: 'sm' | 'md' | 'lg' }) => {
+  const dims = size === 'lg' ? 'w-14 h-14' : size === 'sm' ? 'w-10 h-10' : 'w-12 h-12';
+  const iconDims = size === 'lg' ? 'h-7 w-7' : size === 'sm' ? 'h-5 w-5' : 'h-6 w-6';
+  return (
+    <div
+      className={`${dims} rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br from-[#0B5A43] via-[#064E3B] to-[#053929] border border-[#B89555]/40 shadow-[0_8px_22px_-10px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.18)]`}
+    >
+      <Icon className={`${iconDims} text-white`} strokeWidth={2.1} />
+    </div>
+  );
+};
+
 const BrokerCircleSection = () => {
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-b from-black via-zinc-950 to-black">
-      <div className="container mx-auto px-4">
+    <section className="py-20 md:py-28 bg-gradient-to-b from-[#050B09] via-[#07140F] to-[#050B09] relative overflow-hidden">
+      {/* Ambient emerald glow */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full bg-[#064E3B]/25 blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-[420px] h-[420px] rounded-full bg-[#B89555]/10 blur-[120px]" />
+      </div>
+
+      <div className="container mx-auto px-4 relative">
         {/* Section Header */}
         <motion.div
           className="text-center max-w-3xl mx-auto mb-16"
@@ -140,16 +99,19 @@ const BrokerCircleSection = () => {
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 mb-4 shadow-sm">
-            <Star className="w-3 h-3 mr-1 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A]">JBJ</span>
-            <span className="text-[#1A1A1A] ml-1">Broker Circle</span>
+          <Badge className="bg-gradient-to-br from-[#0B5A43] via-[#064E3B] to-[#053929] text-white border border-[#B89555]/40 mb-4 shadow-md">
+            <Star className="w-3 h-3 mr-1 text-white" />
+            <span className="text-white">JBJ Broker Circle</span>
           </Badge>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Ready to Join the <span className="text-[#1A1A1A]">Broker Circle</span>?
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+            Ready to join the{' '}
+            <span className="bg-gradient-to-r from-[#B89555] via-[#D4B26A] to-[#B89555] bg-clip-text text-transparent">
+              Broker Circle
+            </span>
+            ?
           </h2>
-          <p className="text-white/70 text-lg">
-            Join JBJ Global Real Estate and unlock instant access to a dedicated support team, 
+          <p className="text-white/75 text-lg">
+            Join JBJ Global Real Estate and unlock instant access to a dedicated support team,
             professional tools, and AI-powered technology — all completely free.
           </p>
         </motion.div>
@@ -162,22 +124,19 @@ const BrokerCircleSection = () => {
           viewport={{ once: true }}
           variants={staggerContainer}
         >
-          <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-            <Users className="h-5 w-5 text-[#1A1A1A]" />
-            Your Dedicated Support Team
+          <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-3">
+            <EmeraldTile icon={Users} size="sm" />
+            Your dedicated support team
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {SUPPORT_TEAM.map((member, index) => (
               <motion.div key={index} variants={fadeInUp}>
-                <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A] hover:border-[#B89555]/40 transition-all duration-300 h-full">
+                <Card className="bg-white/[0.04] backdrop-blur-sm border border-[#B89555]/30 hover:border-[#B89555]/60 hover:bg-white/[0.06] transition-all duration-300 h-full rounded-2xl">
                   <CardContent className="p-5">
-                    {/* Icon container with white/gold/champagne pearl fill */}
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl flex items-center justify-center mb-4 border border-[#B89555]/30 shadow-md shadow-gold/20">
-                      <member.icon className="h-6 w-6 text-[#1A1A1A]" />
-                    </div>
-                    <h4 className="text-white font-semibold mb-1">{member.role}</h4>
-                    <p className="text-[#1A1A1A] text-sm mb-2">{member.name}</p>
-                    <p className="text-white/90 text-sm">{member.description}</p>
+                    <EmeraldTile icon={member.icon} />
+                    <h4 className="text-white font-semibold mt-4 mb-1">{member.role}</h4>
+                    <p className="text-[#D4B26A] text-sm mb-2 font-medium">{member.name}</p>
+                    <p className="text-white/70 text-sm leading-relaxed">{member.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -194,32 +153,30 @@ const BrokerCircleSection = () => {
           variants={staggerContainer}
         >
           <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-            <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-              <Bot className="h-5 w-5 text-purple-400" />
-              Explore Our AI Tools
+            <h3 className="text-xl font-semibold text-white flex items-center gap-3">
+              <EmeraldTile icon={Bot} size="sm" />
+              Explore our AI tools
             </h3>
             <Link to="/ai-hub">
-              <Button variant="secondary" className="gap-2">
-                <Brain className="h-4 w-4" />
-                Visit JBJ Hub
-                <ArrowRight className="h-4 w-4" />
+              <Button className="gap-2 jj-pill-emerald-metallic">
+                <Brain className="h-4 w-4 text-white" />
+                <span className="text-white">Visit JBJ Hub</span>
+                <ArrowRight className="h-4 w-4 text-white" />
               </Button>
             </Link>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-3">
             {AI_TOOLS.map((tool, index) => (
               <motion.div key={index} variants={fadeInUp}>
                 <Link to="/ai-hub">
-                  <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A] hover:border-purple-500/40 transition-all duration-300 h-full group">
+                  <Card className="bg-white/[0.04] backdrop-blur-sm border border-[#B89555]/30 hover:border-[#B89555]/60 hover:bg-white/[0.07] transition-all duration-300 h-full group rounded-xl">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                          <tool.icon className="h-5 w-5 text-purple-400" />
-                        </div>
+                        <EmeraldTile icon={tool.icon} size="sm" />
                         <div className="flex-1 min-w-0">
                           <h4 className="text-white text-sm font-medium truncate">{tool.name}</h4>
-                          <p className="text-white/90 text-xs truncate">{tool.description}</p>
+                          <p className="text-white/65 text-xs truncate">{tool.description}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -230,35 +187,27 @@ const BrokerCircleSection = () => {
           </div>
         </motion.div>
 
-        {/* Benefits Highlights */}
+        {/* Benefits Highlights — Emerald frame */}
         <motion.div
-          className="bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border border-[#B89555]/30 rounded-2xl p-8 mb-12"
+          className="rounded-3xl p-[1.5px] mb-12 bg-gradient-to-br from-[#B89555]/60 via-[#064E3B]/40 to-[#B89555]/60"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <GraduationCap className="h-8 w-8 text-[#1A1A1A]" />
-              </div>
-              <h4 className="text-white font-semibold mb-2">Free Training</h4>
-              <p className="text-white/70 text-sm">Access all courses, guides, and educational materials at no cost.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Bot className="h-8 w-8 text-[#1A1A1A]" />
-              </div>
-              <h4 className="text-white font-semibold mb-2">Free AI Tools</h4>
-              <p className="text-white/70 text-sm">Use all 10+ AI-powered tools without any subscription fees.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-[#1A1A1A]" />
-              </div>
-              <h4 className="text-white font-semibold mb-2">Full Team Support</h4>
-              <p className="text-white/70 text-sm">Dedicated HR, marketing, and admin support for your success.</p>
+          <div className="rounded-3xl bg-gradient-to-br from-[#07140F] via-[#0A1E16] to-[#07140F] p-8">
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                { icon: GraduationCap, title: 'Free training', text: 'Access all courses, guides, and educational materials at no cost.' },
+                { icon: Bot, title: 'Free AI tools', text: 'Use all 10+ AI-powered tools without any subscription fees.' },
+                { icon: Users, title: 'Full team support', text: 'Dedicated HR, marketing, and admin support for your success.' },
+              ].map((b, i) => (
+                <div key={i} className="text-center flex flex-col items-center">
+                  <EmeraldTile icon={b.icon} size="lg" />
+                  <h4 className="text-white font-semibold mt-4 mb-2">{b.title}</h4>
+                  <p className="text-white/70 text-sm">{b.text}</p>
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>
@@ -273,27 +222,30 @@ const BrokerCircleSection = () => {
         >
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/broker-toolkit">
-              <Button variant="primary" className="gap-2 px-8 py-6 text-lg">
-                <Award className="h-5 w-5" />
-                Join Broker Circle — It's Free
-                <ArrowUpRight className="h-5 w-5 text-[#1A1A1A]" />
+              <Button className="gap-2 px-8 py-6 text-lg jj-pill-emerald-metallic">
+                <Award className="h-5 w-5 text-white" />
+                <span className="text-white">Join Broker Circle — It's Free</span>
+                <ArrowUpRight className="h-5 w-5 text-white" />
               </Button>
             </Link>
             <Link to="/ai-hub">
-              <Button variant="secondary" className="gap-2 px-8 py-6 text-lg">
-                <Brain className="h-5 w-5" />
-                Explore Free Tools
+              <Button
+                variant="outline"
+                className="gap-2 px-8 py-6 text-lg bg-transparent border-[#B89555]/50 text-white hover:bg-white/5 hover:border-[#B89555]"
+              >
+                <Brain className="h-5 w-5 text-[#D4B26A]" />
+                <span className="text-white">Explore Free Tools</span>
               </Button>
             </Link>
           </div>
-          
+
           {/* Contact Info */}
-          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/90">
-            <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/80 flex-wrap">
+            <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-[#D4B26A] transition-colors">
               <Mail className="h-4 w-4" />
               CONTACT@JBJ.AE
             </a>
-            <a href="tel:+971547167107" className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+            <a href="tel:+971547167107" className="flex items-center gap-2 hover:text-[#D4B26A] transition-colors">
               <Phone className="h-4 w-4" />
               +971 54 716 7107
             </a>
