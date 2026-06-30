@@ -25,6 +25,8 @@ interface Row {
 const PAGE_SIZE = 60;
 
 const normalizeDeveloperKey = (row: Row) => {
+  const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
+  const nameKey = row.name.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim().toLowerCase();
   const host = (() => {
     if (!row.website_url) return "";
     try {
@@ -33,7 +35,7 @@ const normalizeDeveloperKey = (row: Row) => {
       return row.website_url.toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0];
     }
   })();
-  return (row.slug || host || row.name).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return (host || nameKey || row.slug || row.name).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 };
 
 const preferRicherDeveloperRow = (a: Row, b: Row) => {
